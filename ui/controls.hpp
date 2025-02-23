@@ -329,21 +329,21 @@ class rearmMenu
 			w = 0.144375 * safezoneW;
 			h = 0.198 * safezoneH;
 		};
-		class MRTMRearmCustomAmmoClassified: RscPictureMRTM
-		{
-			idc = 69691;
-			text = "img\classified_ca.paa";
-			sizeEx = "0.021 / (getResolution select 5)";
-			style = ST_MULTI + ST_TITLE_BAR + ST_KEEP_ASPECT_RATIO;
-			x = 0.422656 * safezoneW + safezoneX;
-			y = 0.530 * safezoneH + safezoneY;
-			w = 0.139219 * safezoneW;
-			h = 0.187 * safezoneH;
-		};
+		// class MRTMRearmCustomAmmoClassified: RscPictureMRTM
+		// {
+		// 	idc = 69691;
+		// 	text = "src\img\classified_ca.paa";
+		// 	sizeEx = "0.021 / (getResolution select 5)";
+		// 	style = ST_MULTI + ST_TITLE_BAR + ST_KEEP_ASPECT_RATIO;
+		// 	x = 0.422656 * safezoneW + safezoneX;
+		// 	y = 0.530 * safezoneH + safezoneY;
+		// 	w = 0.139219 * safezoneW;
+		// 	h = 0.187 * safezoneH;
+		// };
 		/*class MRTMRearmLiveryClassified: RscPictureMRTM
 		{
 			idc = 69691;
-			text = "img\classified_ca.paa";
+			text = "src\img\classified_ca.paa";
 			sizeEx = "0.021 / (getResolution select 5)";
 			style = ST_MULTI + ST_TITLE_BAR + ST_KEEP_ASPECT_RATIO;
 			x = 0.577344 * safezoneW + safezoneX;
@@ -416,7 +416,7 @@ class MRTM_settingsMenu
 		class MRTMdiscordImg: RscPictureMRTM
 		{
 			idc = -1;
-			text = "img\discord_ca.paa";
+			text = "src\img\discord_ca.paa";
 			style = ST_MULTI + ST_TITLE_BAR;
 			x = 0.493344 * safezoneW + safezoneX;
 			y = 0.236 * safezoneH + safezoneY;

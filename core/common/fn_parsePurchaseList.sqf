@@ -380,7 +380,7 @@ private _strategyArr = [
 		0,
 		[],
 		localize "STR_A3_WL_infoScreen",
-		"img\wl_logo_ca.paa",
+		"src\img\wl_logo_ca.paa",
 		""
 	], [
 		"ForfeitVote",
