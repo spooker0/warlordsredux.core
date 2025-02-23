@@ -41,7 +41,7 @@ private _i = 0;
 	if !(BIS_WL_playerSide in _revealedBy) then {
 		_mrkrMain setMarkerTypeLocal "u_installation";
 		_mrkrMain setMarkerColorLocal "ColorUNKNOWN";
-		_mrkrArea setMarkerColorLocal "ColorUNKNOWN";
+		_mrkrArea setMarkerColorLocal "ColorOrange";
 	};
 
 	_sector spawn WL2_fnc_sectorRevealHandle;

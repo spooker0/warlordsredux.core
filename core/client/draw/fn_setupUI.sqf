@@ -331,8 +331,14 @@ if (_displayClass == "OSD") then {
 			params ["_control", "_selectedIndex"];
 			private _display = uiNamespace getVariable ["BIS_WL_purchaseMenuDisplay", displayNull];
 			private _purchase_category = _display displayCtrl 100;
-
+			private _category = WL_REQUISITION_CATEGORIES # ((lbCurSel _purchase_category) max 0);
+			private _cost = _control lbValue _selectedIndex;
+			if (isNil "_cost") then {
+				_cost = 0;
+			};
 			private _assetDetails = (_control lbData _selectedIndex) splitString "|||";
+			_assetDetails pushBack _cost;
+			_assetDetails pushBack _category;
 			_assetDetails call WL2_fnc_purchaseFromMenu;
 		}];
 
@@ -375,7 +381,13 @@ if (_displayClass == "OSD") then {
 			private _category = WL_REQUISITION_CATEGORIES # ((lbCurSel _purchase_category) max 0);
 			private _purchase_items = _display displayCtrl 101;
 			private _curSel = (lbCurSel _purchase_items) max 0;
+			private _cost = _purchase_items lbValue _curSel;
+			if (isNil "_cost") then {
+				_cost = 0;
+			};
 			private _assetDetails = (_purchase_items lbData _curSel) splitString "|||";
+			_assetDetails pushBack _cost;
+			_assetDetails pushBack _category;
 			_assetDetails call WL2_fnc_purchaseFromMenu;
 		}];
 

@@ -1,5 +1,5 @@
 #include "constants.inc"
-params ["_projectile", "_unit"];
+params ["_projectile", "_unit", ["_fov", 0.75], ["_defaultOpticsMode", 0], ["_controllable", false]];
 
 private _disableCamera = profileNamespace getVariable ["MRTM_disableMissileCameras", false];
 private _isDisconnected = unitIsUAV _unit && isNull (getConnectedUAV player);
@@ -19,6 +19,6 @@ if (!_disableCamera && !_isDisconnected && !_pipDisabled) then {
         "APS_Camera" cutFadeOut 0;
     };
 
-    private _missileCamera = [_projectile, _unit] spawn DIS_fnc_missileCamera;
+    private _missileCamera = [_projectile, _unit, _fov, _defaultOpticsMode, _controllable] spawn DIS_fnc_missileCamera;
     uiNamespace setVariable ["APS_Camera_Process", _missileCamera];
 };

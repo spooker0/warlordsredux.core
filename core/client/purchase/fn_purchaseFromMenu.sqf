@@ -6,15 +6,12 @@ params [
     "_displayName",
     "_picture",
     "_text",
-    "_offset"
+    "_offset",
+    "_cost",
+    "_category"
 ];
 
 _requirements = call compile _requirements;
-private _category = WL_REQUISITION_CATEGORIES # ((lbCurSel _purchase_category) max 0);
-private _cost = _control lbValue _selectedIndex;
-if (isNil "_cost") then {
-    _cost = 0;
-};
 
 private _purchaseDetails = [_className, _requirements, _displayName, _picture, _text, _offset, _cost, _category];
 private _availability = _purchaseDetails call WL2_fnc_purchaseMenuAssetAvailability;

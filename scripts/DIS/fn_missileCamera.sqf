@@ -1,6 +1,6 @@
 #include "constants.inc"
 
-params ["_projectile", "_unit"];
+params ["_projectile", "_unit", "_fov", "_defaultOpticsMode", "_controllable"];
 
 private _originalPipViewDistance = getPiPViewDistance;
 setPiPViewDistance viewDistance;
@@ -38,20 +38,24 @@ private _lastKnownPosition = position _unit;
 private _lastKnownDirection = _projectile modelToWorld [0, 1000, 0];
 private _startTime = time;
 
+_camera camSetFov _fov;
 _camera camSetTarget _projectile;
 _camera camSetRelPos [0, -3, 0.4];
 _camera camCommit 0;
 
 _camera attachTo [_projectile];
 
-[_camera, _titleBar, _pictureControl, _defaultTitlePosition, _defaultPicturePosition] spawn {
-    params ["_camera", "_titleBar", "_pictureControl", "_defaultTitlePosition", "_defaultPicturePosition"];
-    private _opticsMode = 0;
+[_camera, _titleBar, _pictureControl, _defaultTitlePosition, _defaultPicturePosition, _defaultOpticsMode] spawn {
+    params ["_camera", "_titleBar", "_pictureControl", "_defaultTitlePosition", "_defaultPicturePosition", "_defaultOpticsMode"];
+    private _opticsMode = _defaultOpticsMode;
+    private _changed = true;
     while { !isNull _camera } do {
         if (inputAction "opticsMode" > 0) then {
             waitUntil {inputAction "opticsMode" == 0};
             _opticsMode = (_opticsMode + 1) % 3;
-
+            _changed = true;
+        };
+        if (_changed) then {
             switch (_opticsMode) do {
                 case 0: {
                     _titleBar ctrlShow true;
@@ -70,9 +74,50 @@ _camera attachTo [_projectile];
                     _pictureControl ctrlShow false;
                 };
             };
-
             _titleBar ctrlCommit 0;
             _pictureControl ctrlCommit 0;
+            _changed = false;
+        };
+    };
+};
+
+if (_controllable) then {
+    [_camera, _projectile] spawn {
+        params ["_camera","_projectile"];
+
+        [_camera, _projectile] spawn {
+            params ["_camera","_projectile"];
+            private _yaw = getDir _projectile;
+            private _pitch = -80;
+            while { !isNull _camera && alive _projectile } do {
+                private _pitchInput = inputAction "AimHeadUp" - inputAction "AimHeadDown";
+                private _yawInput = inputAction "AimHeadLeft" - inputAction "AimHeadRight";
+                _pitchInput = _pitchInput * 0.2;
+                _yawInput = _yawInput * 0.2;
+                _yaw = _yaw - _yawInput;
+                _pitch = _pitch + _pitchInput;
+                _pitch = 89 min (_pitch max -80);
+
+                private _cosPitch = cos _pitch;
+                private _sinPitch = sin _pitch;
+                private _cosYaw   = cos _yaw;
+                private _sinYaw   = sin _yaw;
+
+                private _forward = [
+                    _cosPitch * _sinYaw,
+                    _cosPitch * _cosYaw,
+                    _sinPitch
+                ];
+
+                private _right = _forward vectorCrossProduct [0,0,1];
+                _right = vectorNormalized _right;
+
+                private _up = _right vectorCrossProduct _forward;
+                _up = vectorNormalized _up;
+
+                _projectile setVectorDirAndUp [_forward, _up];
+                sleep 0.001;
+            };
         };
     };
 };
