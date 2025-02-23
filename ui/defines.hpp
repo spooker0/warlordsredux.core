@@ -1244,16 +1244,16 @@ class RscCheckBoxMRTM
 		0,
 		0
 	};
-	textureChecked = "Img\toggle-right_ca.paa";
-	textureUnChecked = "Img\toggle-left_ca.paa";
-	textureFocusedChecked = "Img\toggle-right_ca.paa";
-	textureFocusedUnchecked = "Img\toggle-left_ca.paa";
-	textureHoverChecked = "Img\toggle-right_ca.paa";
-	textureHoverUnchecked = "Img\toggle-left_ca.paa";
-	texturePressedChecked = "Img\toggle-right_ca.paa";
-	texturePressedUnchecked = "Img\toggle-left_ca.paa";
-	textureDisabledChecked = "Img\toggle-right_ca.paa";
-	textureDisabledUnchecked = "Img\toggle-left_ca.paa";
+	textureChecked = "img\toggle-right_ca.paa";
+	textureUnChecked = "img\toggle-left_ca.paa";
+	textureFocusedChecked = "img\toggle-right_ca.paa";
+	textureFocusedUnchecked = "img\toggle-left_ca.paa";
+	textureHoverChecked = "img\toggle-right_ca.paa";
+	textureHoverUnchecked = "img\toggle-left_ca.paa";
+	texturePressedChecked = "img\toggle-right_ca.paa";
+	texturePressedUnchecked = "img\toggle-left_ca.paa";
+	textureDisabledChecked = "img\toggle-right_ca.paa";
+	textureDisabledUnchecked = "img\toggle-left_ca.paa";
 	tooltipColorText[] =
 	{
 		1,

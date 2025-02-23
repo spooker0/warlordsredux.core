@@ -127,12 +127,12 @@ _customTexturesList pushBack [format ["--- %1 ---", localize "STR_WLM_CUSTOM"], 
 
 private _pushCustomTexture = {
     params ["_textureName", "_customTexturesList"];
-    private _texturePath = format ["Img\camo\%1\%2.paa", (toLower format ["%1", _side]), toLower _textureName];
+    private _texturePath = format ["img\camo\%1\%2.paa", (toLower format ["%1", _side]), toLower _textureName];
     if !(fileExists _texturePath) exitWith {};
     _customTexturesList pushBack [_textureName, _texturePath, localize "STR_WLM_CUSTOM"];
 };
 
-private _dir = "Img\camo\" + (toLower format ["%1", _side]) + "\";
+private _dir = "img\camo\" + (toLower format ["%1", _side]) + "\";
 {
     private _textureName = _x;
     [_textureName, _customTexturesList] call _pushCustomTexture;
