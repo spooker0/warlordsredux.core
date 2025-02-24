@@ -1,16 +1,8 @@
 #include "..\..\warlords_constants.inc"
 
-params ["_asset", "_actionId", "_awacs", "_iteration"];
+params ["_asset", "_actionId", "_awacs", "_iteration", ["_radiusOverride", -1]];
 
 private _scannerOn = _asset getVariable ["WL_scannerOn", false];
-
-if (local _asset) then {
-    if (_scannerOn) then {
-        (driver _asset) action ["ActiveSensorsOn", _asset];
-    } else {
-        (driver _asset) action ["ActiveSensorsOff", _asset];
-    };
-};
 
 private _actionColor = if (_scannerOn) then {
     "#4bff58";
@@ -53,6 +45,9 @@ private _scanRadius = if (_awacs) then {
     10000;
 } else {
     ((_assetHeight * 2) min 1000) max 150;
+};
+if (_radiusOverride > 0) then {
+    _scanRadius = _radiusOverride;
 };
 _asset setVariable ["WL_scanRadius", _scanRadius];
 

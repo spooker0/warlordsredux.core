@@ -337,8 +337,8 @@ if (_displayClass == "OSD") then {
 				_cost = 0;
 			};
 			private _assetDetails = (_control lbData _selectedIndex) splitString "|||";
-			_assetDetails pushBack _cost;
-			_assetDetails pushBack _category;
+			_assetDetails set [6, _cost];
+			_assetDetails set [7, _category];
 			_assetDetails call WL2_fnc_purchaseFromMenu;
 		}];
 
@@ -386,8 +386,8 @@ if (_displayClass == "OSD") then {
 				_cost = 0;
 			};
 			private _assetDetails = (_purchase_items lbData _curSel) splitString "|||";
-			_assetDetails pushBack _cost;
-			_assetDetails pushBack _category;
+			_assetDetails set [6, _cost];
+			_assetDetails set [7, _category];
 			_assetDetails call WL2_fnc_purchaseFromMenu;
 		}];
 

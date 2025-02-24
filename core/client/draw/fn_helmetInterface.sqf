@@ -451,6 +451,12 @@ addMissionEventHandler ["Draw3D", {
     while { !BIS_WL_missionEnd } do {
         sleep 1;
 
+        private _override = player getVariable ["WL_hmdOverride", -1];
+        if (_override > 0) then {
+            WL_HelmetInterface = _override;
+            continue;
+        };
+
         private _vehicle = getConnectedUAV player;
         if (isNull _vehicle) then {
             _vehicle = vehicle player;

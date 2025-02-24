@@ -106,4 +106,10 @@ class CfgSounds {
         sound[]={"src\sounds\critical_missileRuss09.ogg", 1, 1};
         titles[] = {};
     };
+
+    class hitmarker {
+        name = "hitmarker";
+        sound[] = {"src\sounds\hitmarker.ogg", 1, 1};
+        titles[] = {};
+    };
 };

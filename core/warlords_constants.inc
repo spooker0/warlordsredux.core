@@ -9,6 +9,7 @@
 #define WL_SPECTATOR_ENABLED 0
 #define WL_STRONGHOLD_DEBUG 0
 #define WL_QUICK_CAPTURE 0
+#define WL_EASTER_EGG 1
 #define WL_ZEUS_ENABLED 1
 
 // Live: 1

@@ -44,6 +44,15 @@ class CfgFunctions {
 			class earplugs {};
 		};
 	};
+	class KST {
+		class Default {
+			file = "src\scripts\KST";
+			class actions {};
+			class explode {};
+			class rocket {};
+			class setParent {};
+		};
+	};
 	class MRTM {
 		class Default {
 			file = "src\scripts\MRTM";

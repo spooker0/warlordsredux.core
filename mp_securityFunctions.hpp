@@ -8,6 +8,9 @@ class CfgRemoteExec {
 		class APS_fnc_report {allowedTargets = 0;};
 		class APS_fnc_serverHandleAPS {allowedTargets = 2;};
 		class APS_fnc_setupProjectiles {allowedTargets = 0;};
+		class KST_fnc_explode {allowedTargets = 0;};
+		class KST_fnc_rocket {allowedTargets = 0;};
+		class KST_fnc_setParent {allowedTargets = 0;};
 		class MRTM_fnc_execCode {allowedTargets = 2;};
 		class POLL_fnc_openPoll {allowedTargets = 0;};
 		class POLL_fnc_vote {allowedTargets = 0;};

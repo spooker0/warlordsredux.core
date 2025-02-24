@@ -64,3 +64,5 @@ if (player getVariable ["WL_hasGoggles", false]) then {
 } else {
 	removeGoggles player;
 };
+
+0 spawn KST_fnc_actions;

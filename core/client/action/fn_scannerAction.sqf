@@ -1,6 +1,8 @@
 #include "..\..\warlords_constants.inc"
 params ["_asset", "_awacs"];
 
+_asset enableVehicleSensor ["ActiveRadarSensorComponent", false];
+
 private _actionId = _asset addAction [
 	"SCANNER: INITIALIZING",
 	{

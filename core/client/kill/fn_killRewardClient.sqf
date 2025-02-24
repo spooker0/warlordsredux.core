@@ -41,7 +41,11 @@ uiNamespace setVariable ["WL_killRewardMap", _killRewardMap];
 WAS_score = true;
 
 if (profileNamespace getVariable ["MRTM_playKillSound", true] && _customColor == "#228b22") then {
-	playSoundUI ["AddItemOK", 1, 1];
+	if (missionNamespace getVariable ["WL_easterEggOverride", false]) then {
+		playSoundUI ["hitmarker", 1, 1];
+	} else {
+		playSoundUI ["AddItemOK", 1, 1];
+	};
 };
 
 // WLC
