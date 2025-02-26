@@ -30,7 +30,7 @@ if (BIS_WL_playerSide in (_sector getVariable ["BIS_WL_revealedBy", []]) || BIS_
 		private _previousOwners = _sector getVariable ["BIS_WL_previousOwners", []];
 		private _vulnerable = count (_previousOwners - [_owner]) > 0 || _sector == WL_TARGET_ENEMY || _sector == WL_TARGET_FRIENDLY;
 		if (_vulnerable) then {
-			_mrkrMain setMarkerTypeLocal (["b_service", "o_service"] select _ownerIndex);
+			_mrkrMain setMarkerTypeLocal (["b_service", "o_service", "n_installation"] select _ownerIndex);
 		} else {
 			_mrkrMain setMarkerTypeLocal (["b_installation", "o_installation", "n_installation"] select _ownerIndex);
 		};

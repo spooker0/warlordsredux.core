@@ -95,7 +95,9 @@ _customTexturesList pushBack [format ["--- %1 ---", localize "STR_WLM_OFFICIAL"]
 */
 
 private _defaultIncluded = false;
-private _defaultTextures = getObjectTextures _asset;
+private _textureHashmap = missionNamespace getVariable ["WL2_textures", createHashMap];
+private _orderedClass = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+private _defaultTextures = _textureHashmap getOrDefault [_orderedClass, getArray (_assetConfig >> "hiddenSelectionsTextures")];
 
 private _comparePaths = {
     params ["_input1", "_input2"];

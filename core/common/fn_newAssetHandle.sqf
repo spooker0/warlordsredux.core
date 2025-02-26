@@ -129,6 +129,23 @@ if (_asset isKindOf "Man") then {
 		[_asset, true] remoteExec ["WL2_fnc_scannerAction", 0, true];
 	};
 
+	private _loadoutDefaults = profileNamespace getVariable ["WLM_loadoutDefaults", createHashmap];
+	if (_assetActualType in _loadoutDefaults) then {
+    	private _lastLoadout = _loadoutDefaults getOrDefault [_assetActualType, []];
+
+		private _magTurretsToRemove = [];
+		private _turrets = [[-1]] + allTurrets _asset;
+		{
+			private _turretPath = _x;
+			private _magazinesTurret = _asset magazinesTurret _turretPath;
+			{
+				_magTurretsToRemove pushBack [_x, _turretPath];
+			} forEach _magazinesTurret;
+		} forEach _turrets;
+
+		[_asset, _magTurretsToRemove, _lastLoadout, true] remoteExec ["WLM_fnc_applyVehicle", 0];
+	};
+
 	// handle WLT
 	switch (_assetActualType) do {
 		case "B_Quadbike_01_F";

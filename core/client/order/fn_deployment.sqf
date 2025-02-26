@@ -71,8 +71,8 @@ private _deployKeyHandle = (findDisplay 46) displayAddEventHandler ["KeyDown", {
 uiNamespace setVariable ["BIS_WL_deployKeyHandle", _deployKeyHandle];
 private _originalPosition = getPosATL player;
 
-[_asset, _offset] spawn {
-    params ["_asset", "_offset"];
+[_asset, _offset, _range] spawn {
+    params ["_asset", "_offset", "_range"];
 
     _offset set [2, 0.2];
 
@@ -87,6 +87,14 @@ private _originalPosition = getPosATL player;
     _asset setPosASL _assetPos;
 
     while { !(isNull _asset) && !(BIS_WL_spacePressed) && !(BIS_WL_backspacePressed) } do {
+        private _distance = player distance _asset;
+        if (_distance > _range) then {
+            detach _asset;
+            deleteVehicle _asset;
+            BIS_WL_backspacePressed = true;
+            break;
+        };
+
         detach _asset;
 
         if (_toggleLock) then {

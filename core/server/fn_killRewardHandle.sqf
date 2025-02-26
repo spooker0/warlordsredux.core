@@ -7,6 +7,7 @@ private _killRewardMap = serverNamespace getVariable ["WL2_killRewards", createH
 private _killReward = _killRewardMap getOrDefault [_assetActualType, 0];
 
 if (_unit isKindOf "Building" && _killReward == 0) exitWith {};
+if (_unit isKindOf "Building" && _unit getVariable ["BIS_WL_ownerAsset", "123"] == "123") exitWith {};
 
 private _killerSide = side group _responsibleLeader;
 private _unitSide = [_unit] call WL2_fnc_getAssetSide;

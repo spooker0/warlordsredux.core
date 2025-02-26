@@ -8,7 +8,7 @@ params ["_asset", "_magTurretsToRemove", "_magTurretsToAdd", "_eligibleFreeRearm
     _asset addMagazineTurret _x;
 } forEach _magTurretsToAdd;
 
-_asset setVariable ["WLM_savedDefaultMags", _magTurretsToAdd, true];
+_asset setVariable ["WLM_savedDefaultMags", _magTurretsToAdd];
 _asset setVehicleAmmo 0;
 
 if (_eligibleFreeRearm) then {
