@@ -7,8 +7,8 @@ params ["_asset"];
     "<t color='#ff0000'>Begin Demolition</t>",
     "\a3\ui_f\data\IGUI\Cfg\holdactions\holdAction_secure_ca.paa",
     "\a3\ui_f\data\IGUI\Cfg\holdactions\holdAction_secure_ca.paa",
-    "speed player < 1 && _target getVariable ['WL_demolishTime', -1] < 0 && vehicle player == player",
-    "speed player < 1 && _target getVariable ['WL_demolishTime', -1] < 0 && vehicle player == player",
+    "speed player < 1 && vehicle player == player",
+    "speed player < 1 && vehicle player == player",
     {},
     {
         params ["_target", "_caller", "_actionId", "_arguments", "_frame", "_maxFrame"];
@@ -111,7 +111,8 @@ params ["_asset"];
         _charge setObjectScale 3;
         _charge setVariable ["WL_demolishable", _target, true];
 
-        private _targetChildren = [_charge];
+        private _targetChildren = _target getVariable ["WL2_children", []];
+        _targetChildren pushBack _charge;
         _target setVariable ["WL2_children", _targetChildren, true];
 
         [
@@ -122,12 +123,32 @@ params ["_asset"];
             "speed player < 1",
             "speed player < 1",
             {},
-            {},
+            {
+                private _disarmSounds = [
+                    "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_01.wss",
+                    "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_02.wss",
+                    "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_03.wss",
+                    "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_04.wss",
+                    "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_soft_01.wss",
+                    "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_soft_02.wss",
+                    "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_soft_03.wss",
+                    "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_01.wss",
+                    "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_02.wss",
+                    "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_03.wss",
+                    "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_04.wss",
+                    "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_01.wss",
+                    "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_02.wss",
+                    "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_03.wss",
+                    "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_04.wss"
+                ];
+                playSound3D [selectRandom _disarmSounds, _target, false, getPosASL _target, 2, 1, 200, 0];
+            },
             {
                 params ["_target", "_caller", "_actionId", "_arguments"];
                 private _demolishable = _target getVariable ["WL_demolishable", objNull];
-                _demolishable setVariable ["WL_demolishTime", -1, true];
-                _demolishable setVariable ["WL_demolisher", objNull, true];
+                private _charges = _target getVariable ["WL2_children", []];
+                _charges = _charges - [_demolishable];
+                _target setVariable ["WL2_children", _charges, true];
                 deleteVehicle _target;
             },
             {},
@@ -138,8 +159,10 @@ params ["_asset"];
             false
         ] call BIS_fnc_holdActionAdd;
 
-        _target setVariable ["WL_demolishTime", serverTime, true];
-        _target setVariable ["WL_demolisher", _caller, true];
+        _charge setVariable ["WL_demolishTime", serverTime, true];
+        _charge setVariable ["WL_demolisher", _caller, true];
+
+        [_charge] remoteExec ["WL2_fnc_chargeAction", 0];
     },
     {},
     [],
@@ -149,23 +172,24 @@ params ["_asset"];
     false
 ] call BIS_fnc_holdActionAdd;
 
-private _lightToggle = false;
-private _lightPos = getPosASL _asset;
-_lightPos set [2, _lightPos # 2 + 3];
-private _lightPoint = "#lightpoint" createVehicle _lightPos;
-_lightPoint setLightAttenuation [0.5, 0, 100, 0];
-_lightPoint setLightDayLight true;
-_lightPoint setLightFlareMaxDistance 500;
-_lightPoint setLightColor[1, 0, 0];
-_lightPoint setLightAmbient[1, 0, 0];
-_lightPoint setLightIntensity 0;
+WL2_fnc_chargeAction = {
+    params ["_charge"];
+    private _lightToggle = false;
+    private _lightPos = getPosASL _charge;
+    _lightPos set [2, _lightPos # 2 + 0.1];
+    private _lightPoint = "#lightpoint" createVehicle _lightPos;
+    _lightPoint setLightAttenuation [0.5, 0, 100, 0];
+    _lightPoint setLightDayLight true;
+    _lightPoint setLightFlareMaxDistance 500;
+    _lightPoint setLightColor[1, 0, 0];
+    _lightPoint setLightAmbient[1, 0, 0];
+    _lightPoint setLightIntensity 0;
 
-while { alive _asset } do {
-    private _sleepTime = 0.5;
-    private _demolishTime = _asset getVariable ["WL_demolishTime", -1];
-    private _demolishing = _demolishTime > 0;
+    private _asset = _charge getVariable ["WL_demolishable", objNull];
+    while { alive _charge && alive _asset } do {
+        private _sleepTime = 0.5;
+        private _demolishTime = _charge getVariable ["WL_demolishTime", -1];
 
-    if (_demolishing) then {
         if (_lightToggle) then {
             _lightPoint setLightIntensity 100000;
         } else {
@@ -173,25 +197,22 @@ while { alive _asset } do {
         };
         _lightToggle = !_lightToggle;
 
-        private _childCharges = _asset getVariable ["WL2_children", []];
-        if (count _childCharges > 0) then {
-            private _childCharge = _childCharges # 0;
-            // play sound locally
-            playSound3D ["\a3\sounds_f\arsenal\tools\minedetector_beep_01.wss", _childCharge, false, getPosASL _childCharge, 2, 1, 200, 0, true];
-            _lightPoint setPosASL getPosASL _childCharge;
-        };
+        playSound3D ["\a3\sounds_f\arsenal\tools\minedetector_beep_01.wss", _charge, false, getPosASL _charge, 2, 1, 200, 0, true];
 
         private _timeRemaining = (_demolishTime + WL_DEMOLISH_TIME) - serverTime;
         if (_timeRemaining <= 0) then {
-            private _demolisher = _asset getVariable ["WL_demolisher", objNull];
+            private _demolisher = _charge getVariable ["WL_demolisher", objNull];
             if (local _demolisher) then {
                 [_asset, _demolisher] remoteExec ["WL2_fnc_killRewardHandle", 2];
-                private _explosion = createVehicle ["IEDUrbanBig_Remote_Ammo", getPos _asset, [], 0, "FLY"];
-                triggerAmmo _explosion;
-                sleep 1;
+                private _explosion = createVehicle ["Bo_Mk82", getPosASL _charge, [], 0, "FLY"];
+                _explosion setPosASL getPosASL _charge;
+                hideObject _explosion;
+                triggerAmmo _charge;
+                sleep 0.5;
                 // don't call FF script, this prevents runway griefing
-                _asset setDamage [1, true, _demolisher];
+                _asset setDamage 1;
             };
+            deleteVehicle _charge;
             deleteVehicle _lightPoint;
             sleep 3;
             deleteVehicle _asset;
@@ -199,11 +220,9 @@ while { alive _asset } do {
         } else {
             _sleepTime = (_timeRemaining / WL_DEMOLISH_TIME) max 0.1;
         };
-    } else {
-        _lightPoint setLightIntensity 0;
+
+        sleep _sleepTime;
     };
 
-    sleep _sleepTime;
+    deleteVehicle _lightPoint;
 };
-
-deleteVehicle _lightPoint;
