@@ -204,7 +204,7 @@ WL2_fnc_chargeAction = {
             private _demolisher = _charge getVariable ["WL_demolisher", objNull];
             if (local _demolisher) then {
                 [_asset, _demolisher] remoteExec ["WL2_fnc_killRewardHandle", 2];
-                private _explosion = createVehicle ["Bo_Mk82", getPosASL _charge, [], 0, "FLY"];
+                private _explosion = createVehicle ["M_Air_AA", getPosASL _charge, [], 0, "FLY"];
                 _explosion setPosASL getPosASL _charge;
                 hideObject _explosion;
                 triggerAmmo _charge;
@@ -214,7 +214,7 @@ WL2_fnc_chargeAction = {
             };
             deleteVehicle _charge;
             deleteVehicle _lightPoint;
-            sleep 3;
+            sleep 2;
             deleteVehicle _asset;
             playSound3D ["a3\sounds_f\sfx\special_sfx\building_destroy_01.wss", objNull, false, _lightPos, 2, 1, 200, 0, true];
         } else {
