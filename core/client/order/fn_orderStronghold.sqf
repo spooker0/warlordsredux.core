@@ -48,6 +48,8 @@ if (_hasOldSectorBuilding) then {
 private _markerName = format ["WL_stronghold_%1", _sectorName];
 private _markerTextName = format ["WL_strongholdText_%1", _sectorName];
 
+_sectorBuilding setVariable ["WL_strongholdOwner", player, true];
+
 private _strongholdRadius = (boundingBoxReal _sectorBuilding) # 2;
 
 private _strongholdMarker = createMarkerLocal [_markerName, _sectorBuilding];

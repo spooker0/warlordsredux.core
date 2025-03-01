@@ -1,4 +1,5 @@
 params ["_asset"];
+if (isDedicated) exitWith {};
 
 private _actionID = _asset addAction [
 	"",

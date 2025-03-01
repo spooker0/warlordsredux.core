@@ -206,21 +206,34 @@ addMissionEventHandler ["Draw3D", {
             if (_findLockedUav != -1) then {
                 private _lockedUav = _uavsInRange # _findLockedUav;
                 private _distance = _lockedUav distance player;
-                (_spectrumIcons # _findLockedUav) set [0, if (_distance < _lockRange) then {
+
+                private _uavSide = [_lockedUav] call WL2_fnc_getAssetSide;
+                private _activeVehicles = vehicles select {
+                    alive _x &&
+                    isEngineOn _x
+                };
+                private _ewNetworkUnits = _activeVehicles + ("Land_Communication_F" allObjects 0) select {
+                    _x getVariable ["WL_ewNetActive", false] &&
+                    [_x] call WL2_fnc_getAssetSide == _uavSide &&
+                    _x distance2D _lockedUav < WL_JAMMER_RANGE_OUTER
+                };
+
+                private _jammable = _distance < _lockRange && count _ewNetworkUnits == 0;
+                (_spectrumIcons # _findLockedUav) set [0, if (_jammable) then {
                     "\A3\ui_f\data\IGUI\Cfg\Targeting\HitConfirm_ca.paa"
                 } else {
                     "\A3\ui_f\data\IGUI\Cfg\Targeting\MarkedTargetNoLos_ca.paa"
                 }];
 
-                private _assetTypeName = [_lockedUav] call WL2_fnc_getAssetTypeName;
-                private _distanceText = if (_distance < _lockRange) then {
-                    format ["%1 KM", (round (_distance / 100)) / 10]
+                private _distanceText = if (_jammable || (floor serverTime) % 2 == 0) then {
+                    private _assetTypeName = [_lockedUav] call WL2_fnc_getAssetTypeName;
+                    format ["%1 (%2 KM)", _assetTypeName, (round (_distance / 100)) / 10];
                 } else {
-                    "OUT OF RANGE"
+                    "UNJAMMABLE"
                 };
-                (_spectrumIcons # _findLockedUav) set [6, format ["%1 (%2)", _assetTypeName, _distanceText]];
+                (_spectrumIcons # _findLockedUav) set [6, _distanceText];
 
-                if (_distance < _lockRange && inputAction "defaultAction" > 0) then {
+                if (_jammable && inputAction "defaultAction" > 0) then {
                     _lockStatus = _lockStatus + 1;
                     missionNamespace setVariable ["#EM_Transmit", true];
                     missionNamespace setVariable ["#EM_Progress", _lockStatus / (4 * _weaponModifier)];

@@ -167,6 +167,14 @@ if !(isNil "_deployKeyHandle") then {
     (findDisplay 46) displayRemoveEventHandler ["KeyDown", _deployKeyHandle];
 };
 uiNamespace setVariable ['BIS_WL_deployKeyHandle', nil];
+
+// Lock finally
+private _assetPos = _asset modelToWorld [0, 0, 0];
+_asset setPosASL [_assetPos # 0, _assetPos # 1, 500];
+_asset setVehiclePosition [_assetPos, [], 0, "CAN_COLLIDE"];
+private _assetPosHeight = (getPosASL _asset) # 2;
+_asset setPosASL [_assetPos # 0, _assetPos # 1, _assetPosHeight];
+
 detach _asset;
 private _finalPosition = getPosATL _asset;
 private _finalDirection = direction _asset;

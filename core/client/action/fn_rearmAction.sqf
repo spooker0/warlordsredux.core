@@ -1,6 +1,7 @@
 #include "..\..\warlords_constants.inc"
-
 params ["_asset"];
+
+if (isDedicated) exitWith {};
 
 _index = _asset addAction [
 	format ["Modify/%1", localize "STR_rearm"],

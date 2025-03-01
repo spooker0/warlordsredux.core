@@ -188,6 +188,17 @@ switch (_className) do {
             };
         } forEach allMapMarkers;
     };
+    case "AIGetIn": {
+        private _vehicle = cursorObject;
+        if (isNull _vehicle) exitWith {};
+        "RequestMenu_close" call WL2_fnc_setupUI;
+
+        {
+            if (!(isPlayer _x) && alive _x && _x distance2D player < 50) then {
+                _x moveInAny _vehicle;
+            };
+        } forEach (units group player);
+    };
     case "RespawnVic": {"RequestMenu_close" call WL2_fnc_setupUI; [player, "orderFTVehicle"] remoteExec ["WL2_fnc_handleClientRequest", 2]};
     case "RespawnVicFT": {0 spawn WL2_fnc_orderFTVehicleFT};
     case "RespawnPod" : {"RequestMenu_close" call WL2_fnc_setupUI; [player, "orderFTPod"] remoteExec ["WL2_fnc_handleClientRequest", 2]};

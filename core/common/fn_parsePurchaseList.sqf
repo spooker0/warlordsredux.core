@@ -369,6 +369,13 @@ private _strategyArr = [
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"Wipes all user-defined markers from your own map locally. This includes your own."
 	], [
+		"AIGetIn",
+		50,
+		[],
+		"AI Get In",
+		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
+		"Your AI within 30m radius will be forced into the vehicle you are pointing at."
+	], [
 		"RemoveUnits",
 		0,
 		[],

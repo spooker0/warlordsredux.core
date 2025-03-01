@@ -171,6 +171,12 @@ if (_ret) then {
 				[WL2_fnc_checkSelectedUnits]
 			]
 		};
+		case "AIGetIn": {
+			[
+				[WL2_fnc_checkResetVehicle],
+				[WL2_fnc_checkPlayerInVehicle]
+			]
+		};
 		case "RespawnVic": {
 			[
 				[WL2_fnc_checkIndependents],
@@ -244,7 +250,11 @@ if (_ret) then {
 			[]
 		};
 		case "BuyGlasses": {
-			[]
+			[
+				[WL2_fnc_checkInFriendlySector],
+				[WL2_fnc_checkPlayerInVehicle],
+				[WL2_fnc_checkNearbyEnemies]
+			]
 		};
 		case "SwitchToGreen": {
 			[

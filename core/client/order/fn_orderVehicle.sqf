@@ -28,7 +28,7 @@ if (_class isKindOf "Man") then {
 
 		// Griefer check
 		private _uid = getPlayerUID player;
-		private _nearbyEntities = [_class, ATLToASL [_pos # 0, _pos # 1, 0], direction player, _uid, []] call WL2_fnc_grieferCheck;
+		private _nearbyEntities = [_class, ATLToASL _pos, direction player, _uid, []] call WL2_fnc_grieferCheck;
 
 		if (count _nearbyEntities > 0) then {
 			private _nearbyObject = _nearbyEntities # 0;
@@ -40,7 +40,7 @@ if (_class isKindOf "Man") then {
 			player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 		} else {
 			playSound "assemble_target";
-			[player, "orderAsset", "vehicle", [_pos # 0, _pos # 1, 0], _orderedClass, _deploymentResult # 3] remoteExec ["WL2_fnc_handleClientRequest", 2];
+			[player, "orderAsset", "vehicle", _pos, _orderedClass, _deploymentResult # 3] remoteExec ["WL2_fnc_handleClientRequest", 2];
 		};
 	} else {
 		"Canceled" call WL2_fnc_announcer;

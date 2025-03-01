@@ -1,5 +1,6 @@
 #include "..\..\warlords_constants.inc"
 params ["_asset", "_awacs"];
+if (isDedicated) exitWith {};
 
 _asset enableVehicleSensor ["ActiveRadarSensorComponent", false];
 

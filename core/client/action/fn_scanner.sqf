@@ -40,6 +40,9 @@ private _assetHeight = _assetPos # 2;
 if (!_awacs && _assetHeight > 2000) exitWith {
     _asset setVariable ["WL_scannedObjects", []];
 };
+if (_awacs && _assetHeight < 50) exitWith {
+    _asset setVariable ["WL_scannedObjects", []];
+};
 
 private _scanRadius = if (_awacs) then {
     10000;

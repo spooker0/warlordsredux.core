@@ -1,6 +1,6 @@
 #include "..\..\warlords_constants.inc"
-
 params ["_asset"];
+if (isDedicated) exitWith {};
 
 private _deployActionId = _asset addAction [
 	"",

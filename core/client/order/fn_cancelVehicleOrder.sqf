@@ -1,37 +1,53 @@
 params ["_originalPosition", "_limitDistance", "_ignoreSector"];
 
-private _enemiesNearPlayer = (allPlayers inAreaArray [player, 100, 100]) select {
-    _x != player && BIS_WL_playerSide != side group _x && alive _x && lifeState _x != "INCAPACITATED"
+if (vehicle player != player) exitWith {
+    true
 };
-private _homeBase = BIS_WL_playerSide call WL2_fnc_getSideBase;
-private _isInHomeBase = player inArea (_homeBase getVariable "objectAreaComplete");
-private _nearbyEnemies = count _enemiesNearPlayer > 0 && !_isInHomeBase;
-private _ownedSector = (BIS_WL_sectorsArray # 0) select {
+if (!alive player || lifeState player == "INCAPACITATED") exitWith {
+    true
+};
+if ((_originalPosition distance2D player) > _limitDistance) exitWith {
+    true
+};
+
+private _sectors = (BIS_WL_sectorsArray # 0) select {
     player inArea (_x getVariable "objectAreaComplete")
 };
-private _isOutOfSector = count _ownedSector == 0;
-private _isInCarrierSector = count (BIS_WL_allSectors select {
-    player inArea (_x getVariable "objectAreaComplete") && count (_x getVariable ["WL_aircraftCarrier", []]) > 0
-}) > 0;
+if (count _sectors == 0 && !_ignoreSector) exitWith {
+    true
+};
+private _sector = _sectors # 0;
 
-private _movedTooFar = if (_isInCarrierSector) then {
-    count (BIS_WL_allSectors select {
-        _originalPosition inArea (_x getVariable "objectAreaComplete") && count (_x getVariable ["WL_aircraftCarrier", []]) > 0
-    }) == 0
+private _enemiesNearPlayer = (allPlayers inAreaArray [player, 100, 100]) select {
+    _x != player &&
+    BIS_WL_playerSide != side group _x &&
+    alive _x &&
+    lifeState _x != "INCAPACITATED"
+};
+private _homeBase = BIS_WL_playerSide call WL2_fnc_getSideBase;
+private _isInHomeBase = _sector == _homeBase;
+private _nearbyEnemies = if (_isInHomeBase || _ignoreSector) then {
+    false
 } else {
-    (_originalPosition distance2D player) > _limitDistance
+    count _enemiesNearPlayer > 0
+};
+if (_nearbyEnemies) exitWith {
+    true
 };
 
-private _isInvalidPosition = if (_isInCarrierSector) then {
-    (getPosASL player) # 2 < 5
+private _sectorStronghold = _sector getVariable ["WL_strongholdMarker", ""];
+private _isInvalidPosition = if (player inArea _sectorStronghold) then {
+    false;
 } else {
-    (getPosATL player) # 2 > 1
+    private _isInCarrierSector = count (_sector getVariable ["WL_aircraftCarrier", []]) > 0;
+    if (_isInCarrierSector) then {
+        ((getPosASL player) select 2) < 5
+    } else {
+        ((getPosATL player) select 2) > 1
+    };
+};
+if (_isInvalidPosition) exitWith {
+    true
 };
 
-vehicle player != player ||
-!alive player ||
-lifeState player == "INCAPACITATED" ||
-(_nearbyEnemies && !_ignoreSector) ||
-_isInvalidPosition ||
-(_isOutOfSector && !_ignoreSector) ||
-_movedTooFar;
+false;

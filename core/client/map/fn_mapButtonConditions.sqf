@@ -28,11 +28,16 @@ switch (_conditionName) do {
     };
     case "fastTravelSL": {
         private _mySquadLeader = ['getMySquadLeader'] call SQD_fnc_client;
-        private _isMySquadLeader = getPlayerID _target == _mySquadLeader;
+        private _isMySquadLeader = getPlayerID _target == _mySquadLeader || getPlayerID (vehicle _target) == _mySquadLeader;
         isPlayer _target && _isMySquadLeader;
     };
     case "fastTravelSquad": {
-        private _areInSquad = ["areInSquad", [getPlayerID _target, getPlayerID player]] call SQD_fnc_client;
+        private _squadMember = if (vehicle _target == _target) then {
+            _target
+        } else {
+            vehicle _target
+        };
+        private _areInSquad = ["areInSquad", [getPlayerID _squadMember, getPlayerID player]] call SQD_fnc_client;
         isPlayer _target && _areInSquad;
     };
     case "fastTravelStronghold": {
@@ -42,9 +47,21 @@ switch (_conditionName) do {
         count _findIsStronghold > 0;
     };
     case "fastTravelStrongholdTarget": {
-        private _eligibleSectors = (BIS_WL_sectorsArray # 2) select {
-            !isNull (_x getVariable ["WL_stronghold", objNull])
+        private _findIsStronghold = (BIS_WL_sectorsArray # 2) select {
+            !isNull (_x getVariable ["WL_stronghold", objNull]) && _x == _target
         };
-        _target in _eligibleSectors;
+        count _findIsStronghold > 0;
+    };
+    case "removeStronghold": {
+        private _findIsStronghold = (BIS_WL_sectorsArray # 2) select {
+            private _strongholdBuilding = _x getVariable ["WL_stronghold", objNull];
+            if (_strongholdBuilding != _target) then {
+                false
+            } else {
+                private _owner = _strongholdBuilding getVariable ["WL_strongholdOwner", objNull];
+                isNull _owner || _owner == player;
+            };
+        };
+        count _findIsStronghold > 0;
     };
 };

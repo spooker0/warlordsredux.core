@@ -22,5 +22,5 @@ while {!BIS_WL_missionEnd} do {
 		};
 	} forEach _collectables;
 
-	sleep 300;
+	sleep 5;
 };

@@ -16,6 +16,7 @@ class CfgRemoteExec {
 		class POLL_fnc_vote {allowedTargets = 0;};
 		class SQD_fnc_server {allowedTargets = 2;};
 		class WL2_fnc_attachDetach {allowedTargets = 0;};
+		class WL2_fnc_catapultAction {allowedTargets = 0;};
 		class WL2_fnc_claimAction {allowedTargets = 1;};
 		class WL2_fnc_controlGunnerAction {allowedTargets = 0;};
 		class WL2_fnc_dazzlerAction {allowedTargets = 1;};

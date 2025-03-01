@@ -229,6 +229,37 @@ private _fastTravelStrongholdExecute = {
     ]
 ] call WL2_fnc_addTargetMapButton;
 
+// Remove Stronghold button
+private _removeStrongholdExecute = {
+    params ["_asset"];
+    private _findSector = (BIS_WL_sectorsArray # 2) select {
+        (_x getVariable ["WL_stronghold", objNull]) == _asset
+    };
+    private _sector = (_findSector # 0);
+    private _oldSectorBuilding = _sector getVariable ["WL_stronghold", objNull];
+
+    [_oldSectorBuilding, false] remoteExec ["WL2_fnc_protectStronghold", 0, true];
+    deleteMarker (_sector getVariable ["WL_strongholdMarker", ""]);
+    deleteMarker (_sector getVariable ["WL_strongholdTextMarker", ""]);
+
+    _sector setVariable ["WL_stronghold", objNull, true];
+    _sector setVariable ["WL_strongholdMarker", "", true];
+    _sector setVariable ["WL_strongholdTextMarker", "", true];
+
+    [player, "buyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+};
+[
+    "REMOVE STRONGHOLD",
+    _removeStrongholdExecute,
+    true,
+    "removeStronghold",
+    [
+        500,
+        "RemoveStronghold",
+        "Remove Stronghold"
+    ]
+] call WL2_fnc_addTargetMapButton;
+
 #if WL_STRONGHOLD_DEBUG
 // Fast Travel Stronghold Test
 private _fastTravelStrongholdTestExecute = {
