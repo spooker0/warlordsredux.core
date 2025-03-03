@@ -94,7 +94,9 @@ if ((call BIS_fnc_admin) == 0) then {
 #endif
 
 #if WL_SPECTATOR_ENABLED
-if ((call BIS_fnc_admin) == 0) then {
+private _uid = getPlayerUID player;
+private _isSpectator = _uid in (getArray (missionConfigFile >> "spectatorIDs"));
+if (_isSpectator) then {
 	player addAction [
 		"<t color='#ff0000'>Spectate</t>",
 		{
