@@ -250,7 +250,7 @@ WL_LoadingState = 11;
 };
 
 [player, "maintenance", {
-	private _nearbyVehicles = (player nearObjects ["All", WL_MAINTENANCE_RADIUS]) select {
+	private _nearbyVehicles = (player nearEntities WL_MAINTENANCE_RADIUS) select {
 		private _config = configFile >> "CfgVehicles" >> typeOf _x;
 		private _isRepair = getNumber (_config >> "transportRepair") > 0;
 		private _isAmmo = getNumber (_config >> "transportAmmo") > 0;

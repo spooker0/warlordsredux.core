@@ -489,7 +489,7 @@ _asset spawn {
     private _rearmButtonControl = _display displayCtrl WLM_REARM_BUTTON;
 	while {!isNull _display} do {
 		private _cooldown = (((_asset getVariable "BIS_WL_nextRearm") - serverTime) max 0);
-		private _nearbyVehicles = (_asset nearObjects ["All", WL_MAINTENANCE_RADIUS]) select { alive _x };
+		private _nearbyVehicles = (_asset nearEntities WL_MAINTENANCE_RADIUS) select { alive _x };
 		private _rearmVehicleIndex = _nearbyVehicles findIf { getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "transportAmmo") > 0 };
 		private _amount = (_nearbyVehicles # _rearmVehicleIndex) getVariable ["WLM_ammoCargo", 0];
 

@@ -12,28 +12,31 @@ private _endEffect = {
 while { !BIS_WL_missionEnd } do {
     sleep 0.5;
 
+    private _pos = getPosASL player;
     private _findCurrentSector = (BIS_WL_allSectors - (BIS_WL_sectorsArray # 3)) select {
-        player inArea (_x getVariable "objectAreaComplete")
+        _pos inArea (_x getVariable "objectAreaComplete")
     };
 
     if (count _findCurrentSector == 0) then {
-        call _endEffect;
-        continue;
-    };
-
-    private _currentSector = _findCurrentSector # 0;
-    private _isCarrierSector = count (_currentSector getVariable ["WL_aircraftCarrier", []]) > 0;
-
-    private _altOk = if (_isCarrierSector) then {
-        private _heightASL = getPosASL player # 2;
-        _heightASL < 20 || _heightASL > 75;
+        if (_pos # 0 > 0 && _pos # 0 < worldSize && _pos # 1 > 0 && _pos # 1 < worldSize) then {
+            call _endEffect;
+            continue;
+        };
     } else {
-        getPosATL player # 2 > 50;
-    };
+        private _currentSector = _findCurrentSector # 0;
+        private _isCarrierSector = count (_currentSector getVariable ["WL_aircraftCarrier", []]) > 0;
 
-    if (_altOk) then {
-        call _endEffect;
-        continue;
+        private _altOk = if (_isCarrierSector) then {
+            private _heightASL = getPosASL player # 2;
+            _heightASL < 20 || _heightASL > 75;
+        } else {
+            getPosATL player # 2 > 50;
+        };
+
+        if (_altOk) then {
+            call _endEffect;
+            continue;
+        };
     };
 
     if (player getVariable ["WL_zoneRestrictKillTime", -1] == -1) then {

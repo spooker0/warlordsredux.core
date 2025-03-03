@@ -13,7 +13,7 @@ if !(_access # 0) exitWith {
 };
 
 private _cooldown = ((_asset getVariable "BIS_WL_nextRearm") - serverTime) max 0;
-private _nearbyVehicles = (_asset nearObjects ["All", WL_MAINTENANCE_RADIUS]) select { alive _x };
+private _nearbyVehicles = (_asset nearEntities WL_MAINTENANCE_RADIUS) select { alive _x };
 private _rearmVehicleIndex = _nearbyVehicles findIf {getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "transportAmmo") > 0};
 private _rearmSource = _nearbyVehicles # _rearmVehicleIndex;
 

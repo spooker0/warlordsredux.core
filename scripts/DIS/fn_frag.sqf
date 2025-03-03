@@ -43,7 +43,7 @@ private _projectilePosition = getPos _projectile;
 if (!(isNull _target) && _lastDistance < _proxRange) then {
 	systemChat format ["SAM detonated %1 meters from target.", round _lastDistance];
 } else {
-	private _objectsNearby = _projectile nearObjects _proxRange;
+	private _objectsNearby = _projectile nearEntities _proxRange;
 	if (count _objectsNearby > 0) then {
 		_target = _objectsNearby # 0;
 		systemChat format ["SAM detonated %1 meters from target.", round (_projectile distance _target)];

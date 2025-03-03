@@ -31,7 +31,7 @@ player addEventHandler ["InventoryOpened",{
 	_allUnitBackpackContainers = (player nearEntities ["Man", 50]) select {isPlayer _x} apply {backpackContainer _x};
 
 	if (_container in _allUnitBackpackContainers) then {
-		systemchat "Access denied!";
+		systemChat "Access denied!";
 		_override = true;
 	};
 	_override;
