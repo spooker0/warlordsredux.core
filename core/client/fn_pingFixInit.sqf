@@ -26,7 +26,7 @@
 			private _sortedEnemies = [_enemiesNear, [], { _posAGL distance _x }, "ASCEND"] call BIS_fnc_sortBy;
 			if (count _sortedEnemies > 0) then {
 				private _closestEnemy = _sortedEnemies # 0;
-				if (closestEnemy getVariable ["WL_lastSpotted", objNull] != player) then {
+				if (_closestEnemy getVariable ["WL_lastSpotted", objNull] != player) then {
 					_closestEnemy setVariable ["WL_lastSpotted", player, [2, clientOwner]];
 				};
 			};
