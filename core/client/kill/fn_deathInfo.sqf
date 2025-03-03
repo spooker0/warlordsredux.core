@@ -192,6 +192,7 @@ private _distanceItemText = format ["<t size='1' color='#ffffff'>%1</t><br/><t s
 _rightDisplayText ctrlSetStructuredText parseText _distanceItemText;
 _rightDisplayText ctrlShow true;
 
+missionNamespace setVariable ["WL_killsInRow", 0];
 private _lastScore = missionNamespace getVariable ["WL_lastScore", 0];
 private _score = score player;
 private _scoreChange = _score - _lastScore;

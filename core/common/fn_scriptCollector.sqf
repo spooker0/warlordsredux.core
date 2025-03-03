@@ -56,6 +56,7 @@ private _message = [];
 _message pushBack _messageTemplate;
 
 _message append [
+    format ["UTC: %1", systemTimeUTC joinString ","],
     format ["FPS: %1", _fps],
     format ["Min FPS: %1", _fpsMin],
     format ["Entities: %1", _entitiesCount]

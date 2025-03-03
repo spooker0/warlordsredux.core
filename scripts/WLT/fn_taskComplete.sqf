@@ -43,8 +43,6 @@ if (_init) then {
     } else {
         _taskNotFound = true;
     };
-
-    0 spawn WL2_fnc_updateLevelDisplay;
 };
 
 if (_taskNotFound) exitWith {};

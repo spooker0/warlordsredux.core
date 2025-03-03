@@ -43,6 +43,11 @@ WAS_score = true;
 if (profileNamespace getVariable ["MRTM_playKillSound", true] && _customColor == "#228b22") then {
 	if (missionNamespace getVariable ["WL_easterEggOverride", false]) then {
 		playSoundUI ["hitmarker", 1, 1];
+
+		private _killsInRow = missionNamespace getVariable ["WL_killsInRow", 0];
+		_killsInRow = _killsInRow + 1;
+		[_killsInRow] call KST_fnc_actions;
+		missionNamespace setVariable ["WL_killsInRow", _killsInRow];
 	} else {
 		playSoundUI ["AddItemOK", 1, 1];
 	};

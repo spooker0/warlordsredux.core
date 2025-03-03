@@ -15,7 +15,7 @@ private _indicator2 = _display displayCtrl 10002;
 private _indicator3 = _display displayCtrl 10003;
 private _indicator4 = _display displayCtrl 10004;
 
-private _messagesPerColumn = floor (safeZoneH / (ctrlFontHeight _indicator1)) - 1;
+private _messagesPerColumn = floor ((safeZoneH * 0.8) / (ctrlFontHeight _indicator1)) - 1;
 
 private _message1 = [_message, 0, _messagesPerColumn] call BIS_fnc_subSelect;
 private _message2 = [_message, _messagesPerColumn, _messagesPerColumn * 2] call BIS_fnc_subSelect;

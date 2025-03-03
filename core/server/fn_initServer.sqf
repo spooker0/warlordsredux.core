@@ -115,3 +115,10 @@ if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
 };
 
 ["server_init"] call BIS_fnc_endLoadingScreen;
+
+#if WL_EASTER_EGG
+private _systemTime = systemTimeUTC;
+if (_systemTime # 1 == 3 && _systemTime # 2 <= 1) then {
+	missionNamespace setVariable ["WL_easterEggOverride", true];
+};
+#endif

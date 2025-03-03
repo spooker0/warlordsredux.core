@@ -11,6 +11,7 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
     private _projectileDazzleable = getNumber (_x >> "dazzleable") == 1;
     private _projectileSam = getNumber (_x >> "sam") == 1;
     private _projectileSead = getNumber (_x >> "sead") == 1;
+    private _projectileTv = getNumber (_x >> "tv") == 1;
 
     {
         private _ammo = _x;
@@ -21,7 +22,8 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
             ["consumption", _projectileConsumption],
             ["dazzleable", _projectileDazzleable],
             ["sam", _projectileSam],
-            ["sead", _projectileSead]
+            ["sead", _projectileSead],
+            ["tv", _projectileTv]
         ];
 
         APS_projectileConfig set [_ammo, _projectileConfig];

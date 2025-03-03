@@ -4,7 +4,8 @@ private _firedPosition = getPosATL _gunner;
 private _minDistSqr = getMissionConfigValue ["BIS_WL_minAPSDist", 400];
 private _maxDistSqr = getMissionConfigValue ["BIS_WL_maxAPSDist", 1600];
 
-private _apsProjectileConfig = APS_projectileConfig getOrDefault [typeOf _projectile, createHashMap];
+private _apsProjectileType = _projectile getVariable ["APS_ammoOverride", typeOf _projectile];
+private _apsProjectileConfig = APS_projectileConfig getOrDefault [_apsProjectileType, createHashMap];
 private _projectileAPSType = _apsProjectileConfig getOrDefault ["aps", 10];
 private _projectileAPSConsumption = _apsProjectileConfig getOrDefault ["consumption", 1];
 private _dazzleable = _apsProjectileConfig getOrDefault ["dazzleable", false];

@@ -23,4 +23,6 @@ private _levelDisplay = if (_isDev) then {
 		format ["Level %1", _playerLevel];
 	};
 };
+
+if (player getVariable ["WL_playerLevel", "Recruit"] == _levelDisplay) exitWith {};
 player setVariable ["WL_playerLevel", _levelDisplay, true];

@@ -91,7 +91,9 @@ private _scannedObjects = _vehiclesInRadius select {
 } forEach _scannedObjects;
 
 {
-    _x setVariable ["WL_lastSpotted", player, 2];
+    if (_x getVariable ["WL_lastSpotted", objNull] != player) then {
+        _x setVariable ["WL_lastSpotted", player, [2, clientOwner]];
+    };
 } forEach (_scannedObjects select {
     _x getVariable ["BIS_WL_ownerAsset", "123"] != "123"
 });

@@ -11,14 +11,26 @@ _this addEventHandler ["Fired", {
 	// [_projectile] spawn APS_fnc_lagProtection;
 	[_projectile] spawn APS_fnc_projectileStateUpdate;
 
-	if !((typeOf _projectile) in APS_projectileConfig) exitWith { true };
-	_this spawn APS_fnc_firedProjectile;
-
-	private _projectileConfig = APS_projectileConfig getOrDefault [typeOf _projectile, createHashMap];
-	private _projectileMissileCamera = _projectileConfig getOrDefault ["camera", false];
-	if (_projectileMissileCamera) then {
-		[_projectile, _unit] call DIS_fnc_startMissileCamera;
+	private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
+	if (_assetActualType == "O_Mortar_01_TV_F") then {
+		_projectile setVariable ["APS_ammoOverride", "M_127mm_Firefist_ATTV"];
 	};
+
+	private _apsProjectileType = _projectile getVariable ["APS_ammoOverride", typeOf _projectile];
+	if !(_apsProjectileType in APS_projectileConfig) exitWith { true };
+
+	private _projectileConfig = APS_projectileConfig getOrDefault [_apsProjectileType, createHashMap];
+	private _projectileTV = _projectileConfig getOrDefault ["tv", false];
+	if (_projectileTV) then {
+		[_projectile, _unit, 0.3, 3] call DIS_fnc_startMissileCamera;
+	} else {
+		private _projectileMissileCamera = _projectileConfig getOrDefault ["camera", false];
+		if (_projectileMissileCamera) then {
+			[_projectile, _unit] call DIS_fnc_startMissileCamera;
+		};
+	};
+
+	_this spawn APS_fnc_firedProjectile;
 
 	private _projectileSam = _projectileConfig getOrDefault ["sam", false];
 	if (_projectileSam) then {
