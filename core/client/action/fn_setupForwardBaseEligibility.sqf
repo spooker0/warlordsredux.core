@@ -14,7 +14,7 @@ if (_caller != _caller) exitWith {
 };
 
 private _playerFunds = (missionNamespace getVariable "fundsDatabaseClients") get (getPlayerUID player);
-if (_upgrading && _playerFunds < 1000) exitWith {
+if (_upgrading && _playerFunds < WL_FOB_UPGRADE_COST) exitWith {
     false
 };
 

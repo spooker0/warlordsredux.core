@@ -29,7 +29,7 @@ player addAction [
 
 private _moneySign = [BIS_WL_playerSide] call WL2_fnc_getMoneySign;
 player addAction [
-    format ["<t color='#00ff00'>Upgrade Forward Base (Cost: %1%2)</t>", _moneySign, 1000],
+    format ["<t color='#00ff00'>Upgrade Forward Base (Cost: %1%2)</t>", _moneySign, WL_FOB_UPGRADE_COST],
     {
         private _forwardBase = cursorObject;
         systemChat format ["Forward base upgrading. %1 seconds remaining.", WL_FOB_UPGRADE_TIME];

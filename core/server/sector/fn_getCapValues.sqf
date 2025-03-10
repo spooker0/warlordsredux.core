@@ -30,7 +30,10 @@ private _sideCaptureModifier = createHashMap;
 		continue;
 	};
 
-	_sideCaptureModifier set [_side, (count _connectedNeighboringSectors) min 3];
+	private _multipler = ((count _connectedNeighboringSectors) - 1) * 0.5 + 1;
+	_multiplier = _multipler min 2;
+
+	_sideCaptureModifier set [_side, _multipler];
 } forEach _sideArr;
 
 private _relevantEntities = entities [["LandVehicle", "Man"], ["Logic"], true, true];

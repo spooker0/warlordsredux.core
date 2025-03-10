@@ -92,6 +92,10 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		default { [1, 1, 1, 0] };
 	};
 
+	if (_baseOwner != _side && player distance2D _base < 100) then {
+		continue;
+	};
+
 	private _baseTime = _base getVariable ["WL2_forwardBaseTime", -1];
 	private _baseLevel = _base getVariable ["WL2_forwardBaseLevel", 0];
 

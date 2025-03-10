@@ -51,7 +51,7 @@ while { !BIS_WL_missionEnd } do {
 	};
 
 	private _scoreGap = _winningScore - _secondScore;
-	private _movementMultiplier = linearConversion [0, 30, _scoreGap, 0.1, 1.5, true];
+	private _movementMultiplier = linearConversion [1, 20, _scoreGap, 0.1, 1, true];
 	private _movement = _progressMovement * _movementMultiplier;
 
 	if (_winner == _capturingTeam) then {

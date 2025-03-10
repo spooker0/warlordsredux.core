@@ -5,6 +5,8 @@ if !(isServer) exitWith {};
 if (remoteExecutedOwner != (owner _sender)) exitWith {};
 
 #include "..\server_macros.inc"
+#include "..\warlords_constants.inc"
+
 _uid = getPlayerUID _sender;
 
 private _broadcastActionToSide = {
@@ -204,7 +206,7 @@ if (_action == "orderFTPod") exitWith {
 };
 
 if (_action == "upgradeFOB") exitWith {
-	_cost = 1000;
+	_cost = WL_FOB_UPGRADE_COST;
 	_hasFunds = (playerFunds >= _cost);
 	if (_hasFunds) then {
 		(-_cost) call WL2_fnc_fundsDatabaseWrite;
