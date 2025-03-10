@@ -92,7 +92,8 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		default { [1, 1, 1, 0] };
 	};
 
-	if (_baseOwner != _side && player distance2D _base < 100) then {
+	private _basePos = getPosATL _base;
+	if (_baseOwner != _side && (player distance2D _basePos > 100)) then {
 		continue;
 	};
 
@@ -130,7 +131,6 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		};
 	};
 
-	private _basePos = getPosATL _base;
 	_m drawIcon [
 		"\A3\ui_f\data\map\mapcontrol\Tourism_CA.paa",
 		_baseColor,

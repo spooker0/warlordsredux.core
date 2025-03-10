@@ -15,7 +15,9 @@ player addAction [
 		_forwardBase setDir (getDir _forwardBaseSupplies);
 		deleteVehicle _forwardBaseSupplies;
 
-		[_forwardBase, serverTime, _endTime, player, false] remoteExec ["WL2_fnc_setupForwardBaseMp", 0, true];
+		private _side = side group player;
+
+		[_forwardBase, serverTime, _endTime, _side, false] remoteExec ["WL2_fnc_setupForwardBaseMp", 0, true];
 	},
 	[],
 	6,
