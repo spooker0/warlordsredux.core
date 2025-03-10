@@ -17,6 +17,7 @@
 #define WLC_ENABLED 1
 #define WL_SPECTATOR_ENABLED 1
 #define WL_FOB_ENABLED 1
+#define WL_FOB_SQUAD_REQUIREMENT 0
 
 // Live: do not change
 #define WL_RESPAWN_MARKERS_CNT 20

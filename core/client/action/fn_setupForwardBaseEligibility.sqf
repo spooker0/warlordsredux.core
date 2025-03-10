@@ -18,8 +18,15 @@ if (_upgrading && _playerFunds < 1000) exitWith {
     false
 };
 
+private _squadMembersNeeded =
+#if WL_FOB_SQUAD_REQUIREMENT
+    3;
+#else
+    1;
+#endif
+
 if (!_upgrading && typeof _cursorObject == "VirtualReammoBox_camonet_F") exitWith {
-    ["isSquadLeaderOfSize", [getPlayerID player, 3]] call SQD_fnc_client &&
+    ["isSquadLeaderOfSize", [getPlayerID player, _squadMembersNeeded]] call SQD_fnc_client &&
     alive _cursorObject &&
     player distance _cursorObject < WL_MAINTENANCE_RADIUS &&
     _cursorObject getVariable ["WL2_forwardBaseLevel", 0] == 0
