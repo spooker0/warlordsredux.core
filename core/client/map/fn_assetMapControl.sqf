@@ -55,7 +55,20 @@ addMissionEventHandler ["Map", {
 					(_x distance2D _pos) < _radius
 				};
 
-				private _nearbyAssets = _selectableVehicles + _selectableUnits + _selectableBuildings;
+				private _tent = player getVariable ["WL2_respawnBag", objNull];
+				private _selectableTent = [_tent] select {
+					alive _x &&
+					(_x distance2D _pos) < _radius
+				};
+
+				private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
+				private _selectableForwardBases = _forwardBases select {
+					alive _x &&
+					(_x distance2D _pos) < _radius &&
+					_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
+				};
+
+				private _nearbyAssets = _selectableVehicles + _selectableUnits + _selectableBuildings + _selectableTent + _selectableForwardBases;
 				_nearbyAssets = [_nearbyAssets, [_pos], { _input0 distance2D _x }, "ASCEND"] call BIS_fnc_sortBy;
 
 				if (count _nearbyAssets > 0) then {
@@ -118,10 +131,12 @@ addMissionEventHandler ["Map", {
 				if (count WL_MapBusy > 0) exitWith {};
 
 				if !(isNull WL_AssetActionTarget) then {
+					uiNamespace setVariable ["WL2_assetTargetSelected", WL_AssetActionTarget];
 					call WL2_fnc_assetMapButtons;
 				};
 
 				if !(isNull WL_SectorActionTarget) then {
+					uiNamespace setVariable ["WL2_assetTargetSelected", WL_SectorActionTarget];
 					call WL2_fnc_sectorMapButtons;
 				};
 			}];

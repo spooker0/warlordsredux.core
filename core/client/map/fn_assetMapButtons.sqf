@@ -11,8 +11,7 @@ private _menuButtons = [];
 
 WL2_TargetButtonSetup = [_dialog, _menuButtons, _offsetX, _offsetY];
 
-private _asset = WL_AssetActionTarget;
-WL_ActionTarget = WL_AssetActionTarget;
+private _asset = uiNamespace getVariable ["WL2_assetTargetSelected", objNull];
 
 private _titleBar = _dialog ctrlCreate ["RscStructuredText", -1];
 _titleBar ctrlSetPosition [_offsetX, _offsetY - 0.05, 0.5, 0.05];
@@ -21,7 +20,7 @@ _titleBar ctrlSetTextColor [0.7, 0.7, 1, 1];
 private _assetName = if (isPlayer _asset) then {
     name _asset;
 } else {
-    [WL_AssetActionTarget] call WL2_fnc_getAssetTypeName;
+    [_asset] call WL2_fnc_getAssetTypeName;
 };
 _titleBar ctrlSetStructuredText parseText format ["<t align='center' font='PuristaBold'>%1</t>", toUpper _assetName];
 _titleBar ctrlCommit 0;
@@ -158,6 +157,47 @@ if (_hasRadar) then {
         // return
         [_asset] call WL2_fnc_assetButtonRadarOperate;
     }, false] call WL2_fnc_addTargetMapButton;
+};
+
+if (typeof _asset == "Land_TentA_F") then {
+    ["FAST TRAVEL TENT", {
+        [4, ""] spawn WL2_fnc_executeFastTravel;
+    }, true] call WL2_fnc_addTargetMapButton;
+};
+
+if (typeof _asset in ["B_Truck_01_medical_F", "O_Truck_03_medical_F"]) then {
+    ["FAST TRAVEL TRUCK", {
+        0 spawn WL2_fnc_orderFTVehicleFT;
+    }, true] call WL2_fnc_addTargetMapButton;
+};
+
+if (typeof _asset in ["B_Slingload_01_Medevac_F", "Land_Pod_Heli_Transport_04_medevac_F"]) then {
+    ["FAST TRAVEL POD", {
+        0 spawn WL2_fnc_orderFTPodFT;
+    }, true] call WL2_fnc_addTargetMapButton;
+};
+
+if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
+    private _fastTravelFOBExecute = {
+        params ["_asset"];
+        private _marker = createMarkerLocal ["WL2_fastTravelFOBMarker", getPosATL _asset];
+        _marker setMarkerShapeLocal "ELLIPSE";
+        _marker setMarkerSizeLocal [100, 100];
+        _marker setMarkerAlphaLocal 0;
+
+        [6, "WL2_fastTravelFOBMarker"] spawn WL2_fnc_executeFastTravel;
+    };
+    [
+        "FAST TRAVEL FOB",
+        _fastTravelFOBExecute,
+        true,
+        "fastTravelFOB",
+        [
+            0,
+            "FTSeized",
+            "Fast Travel"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
 };
 
 private _access = [_asset, player, "driver"] call WL2_fnc_accessControl;
@@ -307,7 +347,7 @@ private _fastTravelStrongholdTestExecute = {
         };
     };
 
-    WL_ActionTarget = objNull;
+    uiNamespace setVariable ["WL2_assetTargetSelected", objNull];
     _dialog closeDisplay 1;
 };
 

@@ -1,5 +1,14 @@
 params ["_fastTravelMode", "_marker"];
 
+// Fast Travel Modes
+// 0: Seized Sector
+// 1: Contested Sector
+// 2: Air Assault
+// 3: Vehicle Paradrop
+// 4: Tent
+// 5: Stronghold
+// 6: Forward Base
+
 titleCut ["", "BLACK OUT", 1];
 openMap [false, false];
 
@@ -61,6 +70,16 @@ switch (_fastTravelMode) do {
 		} else {
 			getPosATL _stronghold;
 		};
+	};
+	case 6: {
+		private _spawnPositions = [_marker, 0, true] call WL2_fnc_findSpawnPositions;
+		_destination = if (count _spawnPositions > 0) then {
+			selectRandom _spawnPositions;
+		} else {
+			markerPos _marker;
+		};
+
+		deleteMarker _marker;
 	};
 };
 
@@ -147,7 +166,8 @@ switch (_fastTravelMode) do {
             player setVariable ["WL2_respawnBag", objNull, [2, clientOwner]];
         };
 	};
-	case 5: {
+	case 5;
+	case 6: {
 		{
 			_x setVehiclePosition [_destination, [], 3, "NONE"];
 		} forEach _tagAlong;

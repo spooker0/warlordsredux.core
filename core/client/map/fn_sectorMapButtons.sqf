@@ -11,8 +11,7 @@ private _menuButtons = [];
 
 WL2_TargetButtonSetup = [_display, _menuButtons, _offsetX, _offsetY];
 
-private _sector = WL_SectorActionTarget;
-WL_ActionTarget = WL_SectorActionTarget;
+private _sector = uiNamespace getVariable ["WL2_assetTargetSelected", objNull];
 
 private _titleBar = _display ctrlCreate ["RscStructuredText", -1];
 _titleBar ctrlSetPosition [_offsetX, _offsetY - 0.05, 0.5, 0.05];
@@ -166,6 +165,7 @@ private _scanExecute = {
     };
 
     WL_AssetActionTarget = objNull;
+    uiNamespace setVariable ["WL2_assetTargetSelected", objNull];
     _display closeDisplay 1;
 };
 

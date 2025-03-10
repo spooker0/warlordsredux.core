@@ -395,3 +395,18 @@ if (!isServer) then {
 removeGoggles player;
 
 0 spawn WL2_fnc_restrictedArea;
+
+
+#if WL_FOB_ENABLED
+0 spawn {
+	while { !BIS_WL_missionEnd } do {
+		private _currentForwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
+		_currentForwardBases = _currentForwardBases select {
+			alive _x
+		};
+		missionNamespace setVariable ["WL2_forwardBases", _currentForwardBases];
+		sleep 5;
+	};
+};
+call WL2_fnc_setupForwardBaseAction;
+#endif

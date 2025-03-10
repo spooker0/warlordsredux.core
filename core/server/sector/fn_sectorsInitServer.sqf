@@ -11,6 +11,9 @@ private _baseData =
 
 #if WL_BASE_SELECTION_DEBUG
 private _baseProbabilityTable = [];
+private _minDistance = 10000;
+private _minDistanceBase1 = objNull;
+private _minDistanceBase2 = objNull;
 for "_i" from 0 to 10000 do {
 	private _testData = [] call WL2_fnc_calcHomeBases;
 	private _firstBase = _testData # 0;
@@ -33,7 +36,16 @@ for "_i" from 0 to 10000 do {
 	} else {
 		(_baseProbabilityTable # _secondEntry) set [1, (_baseProbabilityTable # _secondEntry) # 1 + 1];
 	};
+
+	private _distance = _firstBase distance2D _secondBase;
+	if (_distance < _minDistance) then {
+		_minDistance = _distance;
+		_minDistanceBase1 = _firstBase;
+		_minDistanceBase2 = _secondBase;
+	};
 };
+
+diag_log format ["Min distance: %1, Bases: %2, %3", _minDistance, _minDistanceBase1 getVariable ["BIS_WL_name", ""], _minDistanceBase2 getVariable ["BIS_WL_name", ""]];
 
 private _sortedSectorsArray = [_baseProbabilityTable, [], { _x # 1 }, "DESCEND"] call BIS_fnc_sortBy;
 

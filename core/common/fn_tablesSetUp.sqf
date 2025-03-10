@@ -12,6 +12,7 @@ private _categoryHashMap = createHashMap;
 
 private _capValueHashMap = createHashMap;
 private _apsHashMap = createHashMap;
+private _ammoOverridesHashMap = createHashMap;
 private _garbageCollectHashMap = createHashMap;
 private _demolishableHashMap = createHashMap;
 private _loadableHashMap = createHashMap;
@@ -52,6 +53,7 @@ private _requisitionPresets = BIS_WL_purchaseListTemplate;
 
 				private _requisitionCapValue = getNumber (_x >> "capValue");
 				private _requisitionAps = getNumber (_x >> "aps");
+				private _requisitionAmmoOverrides = getArray (_x >> "ammoOverrides");
 
 				private _requisitionGarbageCollect = getNumber (_x >> "garbageCollect");
 				private _requisitionDemolishable = getNumber (_x >> "demolishable");
@@ -172,6 +174,14 @@ private _requisitionPresets = BIS_WL_purchaseListTemplate;
 				if (count _requisitionTurretOverrides > 0) then {
 					_turretOverridesHashMap set [_requisitonName, _requisitionTurretOverrides];
 				};
+
+				if (count _requisitionAmmoOverrides > 0) then {
+					private _ammoOverridesMap = createHashMap;
+					{
+						_ammoOverridesMap set [_x # 0, _x # 1];
+					} forEach _requisitionAmmoOverrides;
+					_ammoOverridesHashMap set [_requisitonName, _ammoOverridesMap];
+				};
 			} forEach _requisitionClasses;
 		} forEach _requisitionCategories;
 	} forEach _requisitionSides;
@@ -230,3 +240,4 @@ missionNamespace setVariable ["WL2_hasScanner", _hasScanner];
 missionNamespace setVariable ["WL2_hasAWACS", _hasAWACS];
 missionNamespace setVariable ["WL2_rearmTimers", _rearmTimerHashMap];
 missionNamespace setVariable ["WL2_turretOverrides", _turretOverridesHashMap];
+missionNamespace setVariable ["WL2_ammoOverrides", _ammoOverridesHashMap];

@@ -164,13 +164,4 @@ class CfgDisabledCommands
             args[] = {{"OBJECT"},{"ARRAY"}};
         };
     };
-
-    class SETPOSATL
-    {
-        class SYNTAX1
-        {
-            targets[] = {1,0,0};
-            args[] = {{"OBJECT"},{"ARRAY"}};
-        };
-    };
 };

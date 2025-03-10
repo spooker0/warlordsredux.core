@@ -293,12 +293,25 @@ private _fastTravelArr = [
 		"Purchase Sector Stronghold",
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
 		""
+	], [
+		"BuyFOB",
+		500,
+		[],
+		"Purchase Forward Base Supplies",
+		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
+		"Purchases equipment that can be airlifted or deployed into a forward position and setup into a base by a squad leader of a squad with 3 or more members."
 	]
 ];
 
 #if WL_STRONGHOLD_ENABLE == 0
 _fastTravelArr = _fastTravelArr select {
 	!(_x # 0 in ["StrongholdFT", "BuyStronghold"])
+};
+#endif
+
+#if WL_FOB_ENABLED == 0
+_fastTravelArr = _fastTravelArr select {
+	!(_x # 0 in ["BuyFOB"])
 };
 #endif
 

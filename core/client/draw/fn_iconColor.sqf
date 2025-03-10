@@ -1,24 +1,45 @@
-if (_x == player || player in crew _x) exitWith {
+params [["_unit", objNull]];
+
+if (isNull _unit) exitWith {
+    switch (BIS_WL_playerSide) do {
+        case west: {
+            [0, 0.3, 0.6, 0.8]
+        };
+        case east: {
+            [0.5, 0, 0, 0.8]
+        };
+        case resistance: {
+            [0, 0.6, 0, 0.8]
+        };
+        default {
+            [0.4, 0, 0.5, 0.8]
+        }
+    };
+};
+
+if (_unit == player || player in crew _unit) exitWith {
     [1, 1, 0, 0.8]
 };
 
-if ((getPlayerChannel _x) in [1, 2]) exitWith {
+if ((getPlayerChannel _unit) in [1, 2]) exitWith {
     [0, 0.8, 0, 0.8]
 };
 
-if (_x in (units player) && _x != player) exitWith {
+if (_unit in (units player) && _unit != player) exitWith {
     [0, 0.4, 0, 0.8]
 };
 
-private _areInSquad = if (isPlayer _x) then {
-    ["areInSquad", [getPlayerID _x, getPlayerID player]] call SQD_fnc_client;
+private _playerID = getPlayerID player;
+
+private _areInSquad = if (isPlayer _unit) then {
+    ["areInSquad", [getPlayerID _unit, _playerID]] call SQD_fnc_client;
 } else {
-    private _playerCrew = (crew _x) select {
+    private _playerCrew = (crew _unit) select {
         isPlayer _x
     };
     private _anyInSquad = false;
     {
-        private _crewInSquad = ["areInSquad", [getPlayerID _x, getPlayerID player]] call SQD_fnc_client;
+        private _crewInSquad = ["areInSquad", [getPlayerID _x, _playerID]] call SQD_fnc_client;
         if (_crewInSquad) then {
             _anyInSquad = true;
             break;

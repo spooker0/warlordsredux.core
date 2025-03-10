@@ -161,7 +161,7 @@ if (_action == "orderFTVehicle") exitWith {
 		(-_cost) call WL2_fnc_fundsDatabaseWrite;
 
 		if ((count ((entities getFTVehicle) select {alive _x})) == 0) then {
-			_asset = createVehicle [getFTVehicle, _sender, [], 0, "NONE"];
+			private _asset = createVehicle [getFTVehicle, _sender, [], 0, "NONE"];
 			_asset setVariable ["BIS_WL_ownerAsset", _uid, [2, (owner _sender)]];
 			_asset setVariable ["BIS_WL_rewardedStack", createHashMap];
 
@@ -186,7 +186,7 @@ if (_action == "orderFTPod") exitWith {
 		(-_cost) call WL2_fnc_fundsDatabaseWrite;
 
 		if ((count (entities getFTPod)) == 0) then {
-			_asset = createVehicle [getFTPod, _sender, [], 0, "NONE"];
+			private _asset = createVehicle [getFTPod, _sender, [], 0, "NONE"];
 			_asset setVariable ["BIS_WL_ownerAsset", _uid, [2, (owner _sender)]];
 			_asset setVariable ["BIS_WL_rewardedStack", createHashMap];
 
@@ -200,6 +200,14 @@ if (_action == "orderFTPod") exitWith {
 
 			[_asset, _sender] remoteExec ["WL2_fnc_newAssetHandle", remoteExecutedOwner];
 		};
+	};
+};
+
+if (_action == "upgradeFOB") exitWith {
+	_cost = 1000;
+	_hasFunds = (playerFunds >= _cost);
+	if (_hasFunds) then {
+		(-_cost) call WL2_fnc_fundsDatabaseWrite;
 	};
 };
 

@@ -74,6 +74,10 @@ switch (_className) do {
     case "StrongholdFT": {
         5 spawn WL2_fnc_orderFastTravel;
     };
+    case "BuyFOB": {
+        ["ForwardBaseSupplies", 500, "Fast Travel", [], [0, 3, 0]] call WL2_fnc_requestPurchase;
+        [player, "orderFOB"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+    };
     case "FundsTransfer": {
         call WL2_fnc_orderFundsTransfer;
         [player, "fundsTransferBill"] remoteExec ["WL2_fnc_handleClientRequest", 2]
@@ -199,10 +203,20 @@ switch (_className) do {
             };
         } forEach (units group player);
     };
-    case "RespawnVic": {"RequestMenu_close" call WL2_fnc_setupUI; [player, "orderFTVehicle"] remoteExec ["WL2_fnc_handleClientRequest", 2]};
-    case "RespawnVicFT": {0 spawn WL2_fnc_orderFTVehicleFT};
-    case "RespawnPod" : {"RequestMenu_close" call WL2_fnc_setupUI; [player, "orderFTPod"] remoteExec ["WL2_fnc_handleClientRequest", 2]};
-    case "RespawnPodFT" : {0 spawn WL2_fnc_orderFTPodFT};
+    case "RespawnVic": {
+        "RequestMenu_close" call WL2_fnc_setupUI;
+        [player, "orderFTVehicle"] remoteExec ["WL2_fnc_handleClientRequest", 2]
+    };
+    case "RespawnVicFT": {
+        0 spawn WL2_fnc_orderFTVehicleFT;
+    };
+    case "RespawnPod" : {
+        "RequestMenu_close" call WL2_fnc_setupUI;
+        [player, "orderFTPod"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+    };
+    case "RespawnPodFT" : {
+        0 spawn WL2_fnc_orderFTPodFT;
+    };
     case "RespawnBag": {
         [player, "orderRespawnBag"] remoteExec ["WL2_fnc_handleClientRequest", 2];
         call WL2_fnc_respawnBagAction;

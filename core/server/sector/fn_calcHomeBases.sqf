@@ -2,26 +2,29 @@
 
 params [["_overrideFirstBase", objNull]];
 
-private _potBases = BIS_WL_allSectors select {
+private _canBeBase = {
+    params ["_sector"];
 #if WL_AIRPORT_BASES
-    "A" in (_x getVariable ["BIS_WL_services", []])
+    "A" in (_sector getVariable ["BIS_WL_services", []])
 #else
-    _x getVariable ["BIS_WL_canBeBase", true]
+    _sector getVariable ["BIS_WL_canBeBase", true]
 #endif
 };
 
 // Eliminate last bases
-_potBases = _potBases - (profileNamespace getVariable ["BIS_WL_lastBases", []]);
+// _potBases = _potBases - (profileNamespace getVariable ["BIS_WL_lastBases", []]);
 
 private _firstBase = if (isNull _overrideFirstBase) then {
-    selectRandom _potBases
+    selectRandom (BIS_WL_allSectors select {
+        [_x] call _canBeBase;
+    })
 } else {
     _overrideFirstBase
 };
 private _baseMap = createHashMap;
 {
     _baseMap set [hashValue _x, true];
-} forEach _potBases;
+} forEach BIS_WL_allSectors;
 
 private _basesToRemove = createHashMapFromArray [
     [hashValue _firstBase, _firstBase]
@@ -57,8 +60,9 @@ while { _iterations <= _maxIterations } do {
     _iterations = _iterations + 1;
 };
 
-private _finalPot = _potBases select {
-    _baseMap getOrDefault [hashValue _x, false]
+private _finalPot = BIS_WL_allSectors select {
+    _baseMap getOrDefault [hashValue _x, false] &&
+    [_x] call _canBeBase;
 };
 
 // diag_log format ["Iterations: %1, Final bases: %2", _iterations, _potBases apply { _x getVariable ["BIS_WL_name", ""] }];

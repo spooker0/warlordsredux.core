@@ -2,8 +2,9 @@ params ["_textLabel", "_action", "_actionClose", ["_actionCondition", ""], ["_co
 // _costCondition = [amount, name, category]
 
 scopeName "targetButtonScope";
+private _actionTarget = uiNamespace getVariable ["WL2_assetTargetSelected", objNull];
 if (_actionCondition != "") then {
-    private _result = [WL_ActionTarget, _actionCondition] call WL2_fnc_mapButtonConditions;
+    private _result = [_actionTarget, _actionCondition] call WL2_fnc_mapButtonConditions;
     if (!_result) then {
         breakOut "targetButtonScope";
     };
@@ -51,8 +52,7 @@ _button setVariable ["WL2_targetButtonSetupCostCondition", _costCondition];
 _button ctrlAddEventHandler ["ButtonClick", {
     params ["_control"];
     scopeName "buttonClickScope";
-
-    private _target = WL_ActionTarget;
+    private _actionTarget = uiNamespace getVariable ["WL2_assetTargetSelected", objNull];
     private _targetButtonSetupActionClose = _control getVariable "WL2_targetButtonSetupActionClose";
     private _costCondition = _control getVariable "WL2_targetButtonSetupCostCondition";
     private _actionCondition = _control getVariable "WL2_targetButtonSetupActionCondition";
@@ -70,7 +70,7 @@ _button ctrlAddEventHandler ["ButtonClick", {
     };
 
     if (_actionCondition != "") then {
-        private _result = [_target, _actionCondition] call WL2_fnc_mapButtonConditions;
+        private _result = [_actionTarget, _actionCondition] call WL2_fnc_mapButtonConditions;
         if (!_result) then {
             playSoundUI ["AddItemFailed"];
             systemChat "Action expired.";
@@ -78,18 +78,18 @@ _button ctrlAddEventHandler ["ButtonClick", {
         };
     };
 
-    if !(isNull _target) then {
+    if !(isNull _actionTarget) then {
         private _targetButtonSetupAction = _control getVariable "WL2_targetButtonSetupAction";
         if (_targetButtonSetupActionClose) then {
-            [_target] spawn _targetButtonSetupAction;
+            [_actionTarget] spawn _targetButtonSetupAction;
         } else {
-            private _actionResult = [_target] call _targetButtonSetupAction;
+            private _actionResult = [_actionTarget] call _targetButtonSetupAction;
             _control ctrlSetStructuredText parseText format ["<t align='center' font='PuristaBold'>%1</t>", _actionResult];
         };
     };
 
     if (_targetButtonSetupActionClose) then {
-        WL_ActionTarget = objNull;
+        uiNamespace setVariable ["WL2_assetTargetSelected", objNull];
         private _dialog = ctrlParent _control;
         _dialog closeDisplay 1;
     };

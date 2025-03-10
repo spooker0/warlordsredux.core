@@ -13,10 +13,26 @@ if ((_originalPosition distance2D player) > _limitDistance) exitWith {
 private _sectors = (BIS_WL_sectorsArray # 0) select {
     player inArea (_x getVariable "objectAreaComplete")
 };
-if (count _sectors == 0 && !_ignoreSector) exitWith {
+private _potentialBases = missionNamespace getVariable ["WL2_forwardBases", []];
+private _forwardBases = _potentialBases select {
+    player distance2D _x < 100 &&
+    _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
+};
+private _inRange = count _forwardBases > 0 || count _sectors > 0;
+
+if (!_inRange && !_ignoreSector) exitWith {
     true
 };
-private _sector = _sectors # 0;
+
+private _sector = if (count _sectors > 0) then {
+    _sectors # 0;
+} else {
+    if (count _forwardBases > 0) then {
+        _forwardBases # 0;
+    } else {
+        objNull;
+    };
+};
 
 private _enemiesNearPlayer = (allPlayers inAreaArray [player, 100, 100]) select {
     _x != player &&

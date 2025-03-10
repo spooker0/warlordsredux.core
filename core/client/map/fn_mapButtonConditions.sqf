@@ -64,4 +64,7 @@ switch (_conditionName) do {
         };
         count _findIsStronghold > 0;
     };
+    case "fastTravelFOB": {
+        alive _target && _target getVariable ["WL2_forwardBaseLevel", 0] > 0;
+    };
 };

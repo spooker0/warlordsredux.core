@@ -22,6 +22,7 @@ class CfgRemoteExec {
 		class WL2_fnc_dazzlerAction {allowedTargets = 1;};
 		class WL2_fnc_dazzlerOn {allowedTargets = 2;};
 		class WL2_fnc_demolish {allowedTargets = 0;};
+		class WL2_fnc_demolishChargeAction {allowedTargets = 0;};
 		class WL2_fnc_deployableAddAction {allowedTargets = 1;};
 		class WL2_fnc_forfeitHandle {allowedTargets = 0;};
 		class WL2_fnc_forfeitHandleServer {allowedTargets = 2;};
@@ -42,6 +43,7 @@ class CfgRemoteExec {
 		class WL2_fnc_repairAction {allowedTargets = 1;};
 		class WL2_fnc_revive {allowedTargets = 0;};
 		class WL2_fnc_scannerAction {allowedTargets = 0;};
+		class WL2_fnc_setupForwardBaseMp {allowedTargets = 0;};
 		class WL2_fnc_slingAddAction {allowedTargets = 1;};
 		class WL2_fnc_slingloadInit {allowedTargets = 0;};
 		class WL2_fnc_uavConnectRefresh {allowedTargets = 0;};

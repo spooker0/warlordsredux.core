@@ -8,12 +8,14 @@ _this addEventHandler ["Fired", {
 	WAS_fired = true;
 
 	if !(local _projectile) exitWith { true };
-	// [_projectile] spawn APS_fnc_lagProtection;
 	[_projectile] spawn APS_fnc_projectileStateUpdate;
 
 	private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
-	if (_assetActualType == "O_Mortar_01_TV_F") then {
-		_projectile setVariable ["APS_ammoOverride", "M_127mm_Firefist_ATTV"];
+	private _ammoOverridesHashMap = missionNamespace getVariable ["WL2_ammoOverrides", createHashMap];
+	private _assetAmmoOverrides = _ammoOverridesHashMap getOrDefault [_assetActualType, createHashMap];
+	private _projectileAmmoOverride = _assetAmmoOverrides getOrDefault [_ammo, _ammo];
+	if (_projectileAmmoOverride != _ammo) then {
+		_projectile setVariable ["APS_ammoOverride", _projectileAmmoOverride];
 	};
 
 	private _apsProjectileType = _projectile getVariable ["APS_ammoOverride", typeOf _projectile];

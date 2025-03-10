@@ -64,3 +64,5 @@ if (player getVariable ["WL_hasGoggles", false]) then {
 } else {
 	removeGoggles player;
 };
+
+call WL2_fnc_setupForwardBaseAction;

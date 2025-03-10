@@ -28,6 +28,7 @@ class CfgFunctions {
 			class maneuver {};
 			class missileCamera {};
 			class startMissileCamera {};
+			class tvMunition {};
 		};
 	};
 	class FXR {
@@ -143,6 +144,7 @@ class CfgFunctions {
 			class dazzlerToggle {};
 			class dazzlerUpdate {};
 			class demolish {};
+			class demolishChargeAction {};
 			class deployableAddAction {};
 			class deployableEligibility {};
 			class jammerAction {};
@@ -163,6 +165,9 @@ class CfgFunctions {
 			class reviveAction {};
 			class scanner {};
 			class scannerAction {};
+			class setupForwardBaseAction {};
+			class setupForwardBaseEligibility {};
+			class setupForwardBaseMp {};
 			class slingAddAction {};
 			class stabilizeBoatAction {};
 			class vehicleLockAction {};

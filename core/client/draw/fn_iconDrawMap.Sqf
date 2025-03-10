@@ -42,11 +42,11 @@ if (BIS_WL_currentSelection == 4) then {
 	];
 };
 
-// Draw delete asset selector
+// Draw asset selector
 if (!isNull WL_AssetActionTarget) then {
 	_m drawIcon [
 		"A3\ui_f\data\map\groupicons\selector_selectedMission_ca.paa",
-		call WL2_fnc_iconColor,
+		[] call WL2_fnc_iconColor,
 		WL_AssetActionTarget,
 		40,
 		40,
@@ -58,7 +58,7 @@ if (!isNull WL_AssetActionTarget) then {
 if (!isNull WL_SectorActionTarget && isNull BIS_WL_highlightedSector && WL_SectorActionTargetActive) then {
 	_m drawIcon [
 		"A3\ui_f\data\map\groupicons\selector_selectedMission_ca.paa",
-		call WL2_fnc_iconColor,
+		[] call WL2_fnc_iconColor,
 		WL_SectorActionTarget,
 		50,
 		50,
@@ -66,6 +66,90 @@ if (!isNull WL_SectorActionTarget && isNull BIS_WL_highlightedSector && WL_Secto
 	];
 };
 
+// Draw player tent
+private _respawnBag = player getVariable ["WL2_respawnBag", objNull];
+if (alive _respawnBag) then {
+	_m drawIcon [
+		"\A3\ui_f\data\map\markers\military\triangle_CA.paa",
+		[player] call WL2_fnc_iconColor,
+		getPosATL _respawnBag,
+		50,
+		50,
+		0,
+		"Tent"
+	];
+};
+
+// Draw forward bases
+private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
+{
+	private _base = _x;
+	private _baseOwner = _base getVariable ["WL2_forwardBaseOwner", sideUnknown];
+	private _baseColor = switch (_baseOwner) do {
+		case west: { [0, 0.3, 0.6, 0.9] };
+		case east: { [0.5, 0, 0, 0.9] };
+		case independent: { [0, 0.6, 0, 0.9] };
+		default { [1, 1, 1, 0] };
+	};
+
+	private _baseTime = _base getVariable ["WL2_forwardBaseTime", -1];
+	private _baseLevel = _base getVariable ["WL2_forwardBaseLevel", 0];
+
+	private _waitText = if (serverTime < _baseTime) then {
+		private _timeRemaining = _baseTime - serverTime;
+		private _timeString = [_timeRemaining, "MM:SS"] call BIS_fnc_secondsToString;
+		private _infoString = if (_baseLevel == 0) then {
+			"Constructing"
+		} else {
+			"Upgrading"
+		};
+		format ["(%1 %2)", _infoString, _timeString];
+	} else {
+		""
+	};
+
+	private _baseType = switch (_baseLevel) do {
+		case 0: {
+			"Forward Construction Site"
+		};
+		case 1: {
+			"Forward Outpost"
+		};
+		case 2: {
+			"Forward Base"
+		};
+		case 3: {
+			"Forward HQ"
+		};
+		default {
+			"Forward Outpost"
+		};
+	};
+
+	private _basePos = getPosATL _base;
+	_m drawIcon [
+		"\A3\ui_f\data\map\mapcontrol\Tourism_CA.paa",
+		_baseColor,
+		_basePos,
+		30,
+		30,
+		0,
+		format ["%1 %2", _baseType, _waitText]
+	];
+
+	if (_waitText == "" || _baseLevel > 0) then {
+		_m drawEllipse [
+			_basePos,
+			100,
+			100,
+			0,
+			_baseColor,
+			""
+		];
+	};
+} forEach _forwardBases;
+
+// Draw sector scans
 {
 	private _revealTrigger = _x getVariable "BIS_WL_revealTrigger";
 	{
@@ -93,6 +177,7 @@ if (!isNull WL_SectorActionTarget && isNull BIS_WL_highlightedSector && WL_Secto
 	} forEach (((list _revealTrigger) - (missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], []])) select {(side group _x != _side) && {(alive _x) && {((side group _x) in BIS_WL_sidesArray)}}});
 } forEach BIS_WL_currentlyScannedSectors;
 
+// Draw EW networks
 private _activeVehicles = vehicles select {
 	alive _x &&
 	isEngineOn _x
@@ -123,6 +208,7 @@ private _ewNetworkUnits = _activeVehicles + ("Land_Communication_F" allObjects 0
 	];
 } forEach _ewNetworkUnits;
 
+// Draw scanner and scanned units
 private _scannerUnits = _activeVehicles select {
 	_x getVariable ["WL_scannerOn", false] &&
 	([_x] call WL2_fnc_getAssetSide) == _side
@@ -209,6 +295,8 @@ _allScannedObjects = _allScannedObjects arrayIntersect _allScannedObjects; // el
 
 private _control = (findDisplay 12) displayCtrl 51;
 private _draw = (ctrlMapScale _control) < 0.3;
+
+// Dead players
 {
 	_m drawIcon [
 		"\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa",
@@ -224,6 +312,8 @@ private _draw = (ctrlMapScale _control) < 0.3;
 		"right"
 	];
 } forEach (allPlayers select {(!alive _x) && {(side group _x == _side)}});
+
+// Teammates
 {
 	_size = call WL2_fnc_iconSize;
 	if (_x == player) then {
@@ -244,7 +334,7 @@ private _draw = (ctrlMapScale _control) < 0.3;
 
 	_m drawIcon [
 		call WL2_fnc_iconType,
-		call WL2_fnc_iconColor,
+		[_x] call WL2_fnc_iconColor,
 		call WL2_fnc_getPos,
 		_size,
 		_size,
@@ -260,11 +350,13 @@ private _draw = (ctrlMapScale _control) < 0.3;
 		"right"
 	];
 } forEach (allPlayers select {(side group _x == _side) && {(isNull objectParent _x) && {(alive _x)}}});
+
+// AI in vehicle
 {
 	_size = call WL2_fnc_iconSize;
 	_m drawIcon [
 		call WL2_fnc_iconType,
-		call WL2_fnc_iconColor,
+		[_x] call WL2_fnc_iconColor,
 		call WL2_fnc_getPos,
 		_size,
 		_size,
@@ -276,11 +368,13 @@ private _draw = (ctrlMapScale _control) < 0.3;
 		"right"
 	];
 } forEach ((allUnits) select {(side group (crew _x select 0) == _side) && {(alive _x) && {(isNull objectParent _x) && {typeOf _x != "Logic" && {!(isPlayer _x)}}}}});
+
+// AI
 {
 	_size = call WL2_fnc_iconSize;
 	_m drawIcon [
 		call WL2_fnc_iconType,
-		call WL2_fnc_iconColor,
+		[_x] call WL2_fnc_iconColor,
 		call WL2_fnc_getPos,
 		_size,
 		_size,
@@ -293,6 +387,7 @@ private _draw = (ctrlMapScale _control) < 0.3;
 	];
 } forEach ((units player) select {(alive _x) && {(isNull objectParent _x) && {_x != player}}});
 
+// Draw squad lines
 private _allSquadmates = allPlayers select {
 	["areInSquad", [getPlayerID _x, getPlayerID player]] call SQD_fnc_client
 };
@@ -313,6 +408,7 @@ if (count _squadLeader > 0) then {
 	} forEach _allSquadmates;
 };
 
+// Draw vehicles
 private _teamVariable = switch (_side) do {
 	case west: { "BIS_WL_westOwnedVehicles" };
 	case east: { "BIS_WL_eastOwnedVehicles" };
@@ -331,7 +427,7 @@ _sideVehicles = _sideVehicles arrayIntersect _sideVehicles;
 	_size = call WL2_fnc_iconSize;
 	_m drawIcon [
 		call WL2_fnc_iconType,
-		call WL2_fnc_iconColor,
+		[_x] call WL2_fnc_iconColor,
 		call WL2_fnc_getPos,
 		_size,
 		_size,

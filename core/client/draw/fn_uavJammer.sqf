@@ -94,10 +94,11 @@ private _side = side _owner;
         private _jammerStrength = linearConversion [WL_JAMMER_RANGE_OUTER, WL_JAMMER_RANGE_INNER, _closestJammerDistance, 0, 1, true];
         _asset setVariable ["BIS_WL_jammerStrength", _jammerStrength];
 
-        if (_jammerStrength >= 1) then {
+        private _isTvMunition = _asset getVariable ["WL_tvMunition", false];
+        if (_jammerStrength >= 1 && !_isTvMunition) then {
             if (getPosATL _asset # 2 > 1) then {
                 // flyers take damage
-                _asset setDamage [(damage _asset + 0.1), true, _closestJammer];
+                _asset setDamage [damage _asset + 0.1, true, _closestJammer];
             } else {
                 // all others, disable control
                 if (isAutonomous _asset) then {
@@ -140,6 +141,8 @@ private _side = side _owner;
     _indicator ctrlSetPosition [1, 0, _indicatorWidth + 0.05, 0.1];
     _indicator ctrlCommit 0;
 
+    private _isTvMunition = _asset getVariable ["WL_tvMunition", false];
+
     private _sensors = (listVehicleSensors _asset) apply { _x # 0 };
     private _sensorsDisabled = false;
     while { alive _asset } do {
@@ -151,21 +154,27 @@ private _side = side _owner;
 
         private _jammerStrength = _asset getVariable ["BIS_WL_jammerStrength", 0];
 
-        if (!isRemoteControlling player) then {
+        if (!isRemoteControlling player && !_isTvMunition) then {
             _filmGrain ppEffectEnable false;
 
             _indicator ctrlSetText "";
             _indicator ctrlSetBackgroundColor [0, 0, 0, 0];
         } else {
             private _isControllingThisAsset = (UAVControl _asset) # 1 != "";
-            if (_isControllingThisAsset) then {
+            if (_isControllingThisAsset || _isTvMunition) then {
                 if (_jammerStrength > 0) then {
                     private _indicatorText = format [localize "STR_A3_jammer_strength", round (_jammerStrength * 100)];
                     _indicator ctrlSetText _indicatorText;
                     _indicator ctrlSetBackgroundColor [0, 0, 0, 0.5];
 
                     _filmGrain ppEffectEnable true;
-                    _filmGrain ppEffectAdjust [1, (1 - _jammerStrength)];
+
+                    private _filmGrainStrength = if (_isTvMunition) then {
+                        (1 - _jammerStrength * 0.1)
+                    } else {
+                        1 - _jammerStrength
+                    };
+                    _filmGrain ppEffectAdjust [1, _filmGrainStrength];
                 } else {
                     _filmGrain ppEffectEnable false;
 
@@ -185,10 +194,12 @@ private _side = side _owner;
         if (_jammerStrength > WL_JAMMER_SENSOR_THRESHOLD && !_thermalDisabled) then {
             _asset disableTIEquipment true;
             _sensorsDisabled = true;
+            _asset setVariable ["WL_sensorsDisabled", true];
         } else {
             if (_jammerStrength <= WL_JAMMER_SENSOR_THRESHOLD && _thermalDisabled) then {
                 _asset disableTIEquipment false;
                 _sensorsDisabled = false;
+                _asset setVariable ["WL_sensorsDisabled", false];
             };
         };
 

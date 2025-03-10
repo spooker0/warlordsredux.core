@@ -240,6 +240,13 @@ if (_ret) then {
 				[WL2_fnc_checkStrongholdFT]
 			]
 		};
+		case "BuyFOB": {
+			[
+				[WL2_fnc_checkPlayerInVehicle],
+				[WL2_fnc_checkNearbyEnemies],
+				[WL2_fnc_checkInFriendlySector]
+			]
+		};
 		case "ResetVehicle": {
 			[
 				[WL2_fnc_checkResetVehicle],
@@ -273,7 +280,7 @@ if (_ret) then {
 					[WL2_fnc_checkAssetLimit],
 					[WL2_fnc_checkNearbyEnemies],
 					[WL2_fnc_checkPlayerInVehicle, [_requirements]],
-					[WL2_fnc_checkInFriendlySector, [_requirements]],
+					[WL2_fnc_checkInFriendlySector, [_requirements, _category]],
 					[WL2_fnc_checkIsOrdering],
 					[WL2_fnc_checkUAVLimit, [_class]],
 					[WL2_fnc_checkCommTower, [_class]]

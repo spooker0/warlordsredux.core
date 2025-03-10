@@ -60,4 +60,4 @@ private _actionId = player addAction [
     "_this == player && vehicle player == player && typeof (unitBackpack player) in ['B_Carryall_mcamo', 'B_Carryall_ocamo']"
 ];
 
-player setUserActionText [_actionId, _tentActionText, "<img size='2' image='\A3\ui_f\data\map\mapcontrol\Tourism_CA.paa'/>"];
+player setUserActionText [_actionId, _tentActionText, "<img size='2' image='\A3\ui_f\data\map\markers\military\triangle_CA.paa'/>"];

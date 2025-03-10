@@ -118,7 +118,7 @@ if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
 
 #if WL_EASTER_EGG
 private _systemTime = systemTimeUTC;
-if (_systemTime # 1 == 3 && _systemTime # 2 <= 1) then {
-	missionNamespace setVariable ["WL_easterEggOverride", true];
+if (_systemTime # 1 == 4 && _systemTime # 2 <= 2) then {
+	missionNamespace setVariable ["WL_easterEggOverride", true, true];
 };
 #endif
