@@ -26,6 +26,12 @@ private _squadMembersNeeded =
 #endif
 
 if (!_upgrading && typeof _cursorObject == "VirtualReammoBox_camonet_F") exitWith {
+    private _currentForwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
+    private _teamForwardBases = _currentForwardBases select {
+        _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
+    };
+
+    count _teamForwardBases < 2 &&
     ["isSquadLeaderOfSize", [getPlayerID player, _squadMembersNeeded]] call SQD_fnc_client &&
     alive _cursorObject &&
     player distance _cursorObject < WL_MAINTENANCE_RADIUS &&

@@ -14,7 +14,7 @@ if (!_upgrading) then {
 _forwardBase setVariable ["WL2_forwardBaseTime", _endTime];
 _forwardBase setVariable ["WL_spawnedAsset", true];
 
-playSound3D ["a3\data_f_curator\sound\cfgsounds\air_raid.wss", _forwardBase, false, getPosASL _forwardBase, 5, 0.375, 2500];
+playSound3D ["a3\data_f_curator\sound\cfgsounds\air_raid.wss", _forwardBase, false, getPosASL _forwardBase, 5, 0.375, 2500, 0, true];
 
 waitUntil {
     sleep 1;

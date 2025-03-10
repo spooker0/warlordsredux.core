@@ -30,10 +30,7 @@ private _sideCaptureModifier = createHashMap;
 		continue;
 	};
 
-	private _multipler = ((count _connectedNeighboringSectors) - 1) * 0.5 + 1;
-	_multiplier = _multipler min 2;
-
-	_sideCaptureModifier set [_side, _multipler];
+	_sideCaptureModifier set [_side, (count _connectedNeighboringSectors) min 3];
 } forEach _sideArr;
 
 private _relevantEntities = entities [["LandVehicle", "Man"], ["Logic"], true, true];
@@ -81,11 +78,13 @@ private _sideCapValues = createHashMap;
 	private _side = side group _unit;
 
 	private _points = if (_unit isKindOf "Man" && !(typeOf _unit in _disallowManList)) then {
-		if (_unit inArea _strongholdMarker && vehicle _unit == _unit) then {
+		private _sideModifier = _sideCaptureModifier getOrDefault [_side, 0];
+		private _score = if (_unit inArea _strongholdMarker && vehicle _unit == _unit) then {
 			5;
 		} else {
 			1;
 		};
+		_score * _sideModifier;
 	} else {
 		private _aliveCrew = (crew _unit) select { alive _x && !(typeOf _x in _disallowManList) };
 		private _crewCount = count _aliveCrew;
@@ -113,9 +112,8 @@ private _info = _sideArr apply {
         0;
     };
     private _sideScore = _sideCapValues getOrDefault [_side, 0];
-	private _sideModifier = _sideCaptureModifier getOrDefault [_side, 0];
 
-	[_side, _sideScore * _sideModifier + _tiebreaker];
+	[_side, _sideScore + _tiebreaker];
 };
 private _sortedInfo = [_info, [], { _x # 1 }, "DESCEND"] call BIS_fnc_sortBy;
 _sortedInfo;
