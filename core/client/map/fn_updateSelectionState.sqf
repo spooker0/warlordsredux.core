@@ -105,11 +105,19 @@ private _sectorLinks = WL_linkSectorMarkers getOrDefault [hashValue _targetedSec
     private _markers = _x getVariable ["BIS_WL_markers", []];
     (_markers # 0) setMarkerAlphaLocal _alpha;
     (_markers # 1) setMarkerAlphaLocal _alpha;
-    (_markers # 1) setMarkerBrushLocal "Border";
 } forEach BIS_WL_allSectors;
 
 private _markers = _targetedSector getVariable ["BIS_WL_markers", []];
 if (count _markers > 1) then {
     private _markerArea = _markers # 1;
-    _markerArea setMarkerBrushLocal "Solid";
+    private _highlightMarker = createMarkerLocal ["WL_highlightSector", getMarkerPos _markerArea];
+    _highlightMarker setMarkerShapeLocal (markerShape _markerArea);
+    _highlightMarker setMarkerTypeLocal (markerType _markerArea);
+    _highlightMarker setMarkerColorLocal (markerColor _markerArea);
+    _highlightMarker setMarkerSizeLocal (markerSize _markerArea);
+    _highlightMarker setMarkerDirLocal (markerDir _markerArea);
+    _highlightMarker setMarkerBrushLocal "Solid";
+    _highlightMarker setMarkerAlphaLocal 1;
+} else {
+    deleteMarkerLocal "WL_highlightSector";
 };

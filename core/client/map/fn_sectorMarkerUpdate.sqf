@@ -2,6 +2,8 @@
 
 params ["_sector", "_owner", ["_specialStateArray", []]];
 
+if (isDedicated) exitWith {};
+
 private _ownerIndex = [WEST, EAST, RESISTANCE] find _owner;
 private _area = _sector getVariable "objectArea";
 private _previousOwners = _sector getVariable "BIS_WL_previousOwners";
@@ -10,8 +12,10 @@ private _mrkrArea = (_sector getVariable "BIS_WL_markers") # 1;
 
 if (isNil "_mrkrArea") exitWith {};
 
-if (_owner == BIS_WL_playerSide || {BIS_WL_playerSide in _previousOwners}) then {
+if (_owner == BIS_WL_playerSide || BIS_WL_playerSide in _previousOwners) then {
 	_mrkrArea setMarkerBrushLocal "Border";
+} else {
+	_mrkrArea setMarkerBrushLocal "Solid";
 };
 
 if (BIS_WL_playerSide in (_sector getVariable ["BIS_WL_revealedBy", []]) || BIS_WL_playerSide == independent) then {

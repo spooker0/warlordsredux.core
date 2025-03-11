@@ -80,6 +80,14 @@ if (_action == "buyStronghold") exitWith {
 	};
 };
 
+if (_action == "fortifyStronghold") exitWith {
+	private _cost = 2000;
+	private _hasFunds = playerFunds >= _cost;
+	if (_hasFunds) then {
+		(-_cost) call WL2_fnc_fundsDatabaseWrite;
+	};
+};
+
 if (_action == "revived") exitWith {
 	private _reward = 50;
 	_reward call WL2_fnc_fundsDatabaseWrite;

@@ -64,6 +64,25 @@ switch (_conditionName) do {
         };
         count _findIsStronghold > 0;
     };
+    case "fortifyStronghold": {
+        private _sectorHasValidStronghold = (BIS_WL_sectorsArray # 2) select {
+            private _strongholdBuilding = _x getVariable ["WL_stronghold", objNull];
+            if (_strongholdBuilding != _target) then {
+                false
+            } else {
+                private _owner = _strongholdBuilding getVariable ["WL_strongholdOwner", objNull];
+                isNull _owner || _owner == player;
+            };
+        };
+        if (count _sectorHasValidStronghold == 0) then {
+            false;
+        } else {
+            private _sector = _sectorHasValidStronghold # 0;
+            private _sectorIsFortifying = _sector getVariable ["WL_fortificationTime", -1] > serverTime;
+            private _sectorAlreadyFortified = _sector getVariable ["WL_strongholdFortified", false];
+            _sectorIsFortifying && !_sectorAlreadyFortified;
+        };
+    };
     case "fastTravelFOB": {
         alive _target && _target getVariable ["WL2_forwardBaseLevel", 0] > 0;
     };

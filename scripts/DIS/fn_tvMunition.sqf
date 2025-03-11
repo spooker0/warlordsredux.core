@@ -1,4 +1,6 @@
 params ["_projectile", "_camera"];
+_projectile setMissileTarget [objNull, true];
+
 private _yaw = getDir _projectile;
 
 private _dir = vectorDir _projectile;
@@ -83,19 +85,30 @@ while {alive _projectile && alive player} do {
     private _elapsedTime = serverTime - _lastTime;
     _lastTime = serverTime;
 
-    private _pitchInput = (inputAction "AimHeadUp") - (inputAction "AimHeadDown");
-    private _yawInput = (inputAction "AimHeadLeft") - (inputAction "AimHeadRight");
-    if (serverTime - _startTime < 2) then {
-        _pitchInput = if (abs _pitch > 5) then {
-            if (_pitch > 0) then {
-                -5
-            } else {
-                5
-            };
-        } else {
-            0
-        };
+    private _pitchInput = (inputAction "AimUp") - (inputAction "AimDown");
+    private _yawInput = (inputAction "AimLeft") - (inputAction "AimRight");
 
+    private _altitude = (_projectile modelToWorld [0, 0, 0]) # 2;
+
+    private _desiredPitch = -1;
+    if (serverTime - _startTime < 2) then {
+        _desiredPitch = 0;
+    };
+    private _followInput = inputAction "turbo";
+    if (_followInput > 0) then {
+        private _pos = getPosASL _projectile;
+        private _dir = getDir _projectile;
+        private _terrainGrad = if (surfaceIsWater _pos) then {
+            0
+        } else {
+            [_pos, _dir] call BIS_fnc_terrainGradAngle;
+        };
+        _desiredPitch = _terrainGrad;
+    };
+
+    if (_desiredPitch != -1) then {
+        private _pitchError = _desiredPitch - _pitch;
+        _pitchInput = (_pitchError min 10) max -10;
     };
 
     private _inputFactor = _inputPerTime * _elapsedTime;
@@ -148,8 +161,9 @@ while {alive _projectile && alive player} do {
     };
 
     _fuelDisplay ctrlSetStructuredText parseText format [
-        "<t align='center' size='2'>Fuel: %1%%</t>",
-        round (100 * (_timeToLive - (serverTime - _startTime + 1)) / _timeToLive)
+        "<t align='center' size='2'>Fuel: %1%%</t><t align='right' size='1.5'>ALT: %2M</t>",
+        round (100 * (_timeToLive - (serverTime - _startTime + 1)) / _timeToLive),
+        round _altitude
     ];
     sleep 0.001;
 };

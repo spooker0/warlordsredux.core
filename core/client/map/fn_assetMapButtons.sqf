@@ -121,7 +121,7 @@ if (typeof _asset in ["O_T_Truck_03_device_ghex_F", "O_Truck_03_device_F"]) then
     }, true] call WL2_fnc_addTargetMapButton;
 };
 
-if (typeof _asset in ["O_T_Truck_03_device_ghex_F", "O_Truck_03_device_F", "Land_Communication_F"]) then {
+if (typeof _asset in ["O_T_Truck_03_device_ghex_F", "O_Truck_03_device_F", "Land_MobileRadar_01_radar_F"]) then {
     private _jammerText = [_asset] call WL2_fnc_assetButtonJammer;
 
     [_jammerText, {
@@ -297,6 +297,33 @@ private _removeStrongholdExecute = {
         500,
         "RemoveStronghold",
         "Remove Stronghold"
+    ]
+] call WL2_fnc_addTargetMapButton;
+
+// Fortify Stronghold button
+private _fortifyStrongholdExecute = {
+    params ["_asset"];
+    private _findSector = (BIS_WL_sectorsArray # 2) select {
+        (_x getVariable ["WL_stronghold", objNull]) == _asset
+    };
+    private _sector = (_findSector # 0);
+    private _fortificationTime = _sector getVariable ["WL_fortificationTime", -1];
+    if (_fortificationTime < serverTime) exitWith {};
+    private _fortificationTimeRemaining = _fortificationTime - serverTime;
+    _sector setVariable ["WL_fortificationTime", serverTime + _fortificationTimeRemaining / 3, true];
+    _sector setVariable ["WL_strongholdFortified", true, true];
+
+    [player, "fortifyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+};
+[
+    "FORTIFY STRONGHOLD",
+    _fortifyStrongholdExecute,
+    true,
+    "fortifyStronghold",
+    [
+        2000,
+        "FortifyStronghold",
+        "Fortify Stronghold"
     ]
 ] call WL2_fnc_addTargetMapButton;
 

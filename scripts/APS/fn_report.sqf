@@ -29,6 +29,10 @@ if (_assetApsType == 3) then {
 	private _apsAmmo = _vehicle getVariable ["apsAmmo", 0];
 	_apsAmmo = _apsAmmo max 0;
 	_text = _text + format[" Charges: %1/%2", _apsAmmo, _vehicle call APS_fnc_getMaxAmmo];
+
+	if (_apsAmmo == 0) then {
+		playSoundUI ["a3\sounds_f\vehicles\air\noises\heli_alarm_rotor_low.wss", 1.5, 0.5];
+	};
 };
 
 private _apsDisplay = uiNamespace getVariable ["RscWLAPSDisplay", objNull];

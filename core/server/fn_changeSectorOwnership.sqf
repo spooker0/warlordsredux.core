@@ -1,3 +1,5 @@
+#include "..\warlords_constants.inc"
+
 params ["_sector", "_owner"];
 
 _sector setVariable ["BIS_WL_owner", _owner, true];
@@ -25,6 +27,8 @@ if !(_owner in _previousOwners) then {
 
 _previousOwners pushBackUnique _owner;
 _sector setVariable ["BIS_WL_previousOwners", _previousOwners, true];
+_sector setVariable ["WL_fortificationTime", serverTime + WL_FORTIFICATION_TIME, true];
+_sector setVariable ["WL_strongholdFortified", false, true];
 
 _detectionTrgs = (_sector getVariable "BIS_WL_detectionTrgs");
 {

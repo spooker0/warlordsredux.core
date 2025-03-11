@@ -182,15 +182,15 @@ if (_asset isKindOf "Man") then {
 			[_asset] remoteExec ["WL2_fnc_dazzlerAction", 0, true];
 			[_asset] remoteExec ["WL2_fnc_jammerAction", 0, true];
 		};
-		case "Land_Communication_F": {
+		case "Land_MobileRadar_01_radar_F": {
 			_asset setVariable ["WL_ewNetActive", false, true];
 
 			// reduce height for demolish action
-			private _assetPos = getPosATL _asset;
-			_asset setPosATL [_assetPos # 0, _assetPos # 1, _assetPos # 2 - 8];
+			// private _assetPos = getPosATL _asset;
+			// _asset setPosATL [_assetPos # 0, _assetPos # 1, _assetPos # 2 - 8];
 
 			// too hardy otherwise, start off at 10% health
-			_asset setDamage 0.9;
+			// _asset setDamage 0.9;
 			[_asset] remoteExec ["WL2_fnc_jammerAction", 0, true];
 		};
 

@@ -12,8 +12,9 @@ private _side = side _owner;
             alive _x &&
             isEngineOn _x
         };
-        private _enemyJammers = _activeVehicles + ("Land_Communication_F" allObjects 0) select {
-            [_x] call WL2_fnc_getAssetSide != _side
+        private _enemyJammers = _activeVehicles + ("Land_MobileRadar_01_radar_F" allObjects 0) select {
+            [_x] call WL2_fnc_getAssetSide != _side &&
+            alive _x
         };
         private _enemyJammersActive = _enemyJammers select {
             _x getVariable ["WL_ewNetActive", false];
@@ -154,6 +155,27 @@ private _side = side _owner;
 
         private _jammerStrength = _asset getVariable ["BIS_WL_jammerStrength", 0];
 
+        if (_isTvMunition) then {
+            private _nearAir = _asset nearEntities ["Air", 300];
+            _nearAir = _nearAir select {
+                getPosATL _x # 2 > 20;
+            };
+            private _airJammerStrength = if (count _nearAir > 0) then {
+                private _nearestAirDistance = 300;
+                {
+                    private _distanceToAir = _asset distance _x;
+                    _nearestAirDistance = _distanceToAir min _nearestAirDistance;
+                } forEach _nearAir;
+                linearConversion [300, 100, _nearestAirDistance, 0.5, 1, true];
+            } else {
+                0;
+            };
+            _jammerStrength = (_jammerStrength * 0.1) max _airJammerStrength;
+            if (_jammerStrength >= 0.99) then {
+                triggerAmmo _asset;
+            };
+        };
+
         if (!isRemoteControlling player && !_isTvMunition) then {
             _filmGrain ppEffectEnable false;
 
@@ -168,13 +190,7 @@ private _side = side _owner;
                     _indicator ctrlSetBackgroundColor [0, 0, 0, 0.5];
 
                     _filmGrain ppEffectEnable true;
-
-                    private _filmGrainStrength = if (_isTvMunition) then {
-                        (1 - _jammerStrength * 0.1)
-                    } else {
-                        1 - _jammerStrength
-                    };
-                    _filmGrain ppEffectAdjust [1, _filmGrainStrength];
+                    _filmGrain ppEffectAdjust [1, 1 - _jammerStrength];
                 } else {
                     _filmGrain ppEffectEnable false;
 
@@ -190,16 +206,16 @@ private _side = side _owner;
             _filmGrain = call _initFilmGrain;
         };
 
+        _asset setVariable ["WL_sensorsDisabled", _jammerStrength > WL_JAMMER_SENSOR_THRESHOLD];
+
         private _thermalDisabled = equipmentDisabled _asset # 1;
         if (_jammerStrength > WL_JAMMER_SENSOR_THRESHOLD && !_thermalDisabled) then {
             _asset disableTIEquipment true;
             _sensorsDisabled = true;
-            _asset setVariable ["WL_sensorsDisabled", true];
         } else {
             if (_jammerStrength <= WL_JAMMER_SENSOR_THRESHOLD && _thermalDisabled) then {
                 _asset disableTIEquipment false;
                 _sensorsDisabled = false;
-                _asset setVariable ["WL_sensorsDisabled", false];
             };
         };
 
@@ -219,7 +235,7 @@ private _side = side _owner;
             _asset setVehicleReportRemoteTargets true;
         };
 
-        sleep 1;
+        sleep 0.1;
     };
 
     _indicator ctrlSetText "";

@@ -84,6 +84,17 @@ while { !BIS_WL_missionEnd } do {
 		_sector setVariable ["BIS_WL_capturingTeam", _capturingTeam, true];
 	};
 
+	private _previousOwners = _sector getVariable ["BIS_WL_previousOwners", []];
+	if (count _previousOwners > 1) then {
+		private _fortificationTime = _sector getVariable ["WL_fortificationTime", -1];
+		if (_fortificationTime > 0 && serverTime > _fortificationTime) then {
+			_sector setVariable ["WL_fortificationTime", -1, true];
+			private _currentOwner = _sector getVariable ["BIS_WL_owner", independent];
+			_sector setVariable ["BIS_WL_previousOwners", [_currentOwner], true];
+			[_sector, _currentOwner] remoteExec ["WL2_fnc_sectorMarkerUpdate", 0, true];
+		};
+	};
+
 	if ((_winner == _originalOwner) && (_captureProgress <= 0) || ((_originalOwner != independent) && _winner == independent)) then {
 		sleep 2;
 	} else {

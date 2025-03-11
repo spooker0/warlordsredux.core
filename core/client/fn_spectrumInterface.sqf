@@ -212,7 +212,7 @@ addMissionEventHandler ["Draw3D", {
                     alive _x &&
                     isEngineOn _x
                 };
-                private _ewNetworkUnits = _activeVehicles + ("Land_Communication_F" allObjects 0) select {
+                private _ewNetworkUnits = _activeVehicles + ("Land_MobileRadar_01_radar_F" allObjects 0) select {
                     _x getVariable ["WL_ewNetActive", false] &&
                     [_x] call WL2_fnc_getAssetSide == _uavSide &&
                     _x distance2D _lockedUav < WL_JAMMER_RANGE_OUTER

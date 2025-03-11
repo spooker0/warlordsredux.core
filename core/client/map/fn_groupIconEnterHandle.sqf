@@ -113,10 +113,12 @@ private _scanCooldownText = [
 private _sectorIsOwned = (_sector getVariable "BIS_WL_owner") == BIS_WL_playerSide;
 
 private _enemyCaptureText = if (_revealed) then {
-	private _previousOwners = _sector getVariable "BIS_WL_previousOwners";
-	private _enemyCanCapture = BIS_WL_enemySide in _previousOwners || _sector == WL_TARGET_ENEMY;
-	if (_enemyCanCapture && _sectorIsOwned) then {
-		"<t color='#ff4b4b'>Vulnerable to enemy capture.</t><br/>"
+	private _previousOwners = _sector getVariable ["BIS_WL_previousOwners", []];
+	if (count _previousOwners > 1) then {
+		private _fortificationTime = _sector getVariable ["WL_fortificationTime", -1];
+		private _fortificationETA = ceil (_fortificationTime - serverTime);
+		_fortifactionETA = _fortificationETA max 0;
+		format ["<t color='#ff4b4b'>Fortifying %1</t><br/>", [_fortifactionETA, "MM:SS"] call BIS_fnc_secondsToString];
 	} else {
 		""
 	}

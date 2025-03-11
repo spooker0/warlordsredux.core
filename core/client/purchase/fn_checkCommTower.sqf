@@ -2,11 +2,11 @@
 
 params ["_class"];
 
-if (_class != "Land_Communication_F") exitWith {
+if (_class != "Land_MobileRadar_01_radar_F") exitWith {
     [true, ""];
 };
 
-private _allTowersOnTeam = ("Land_Communication_F" allObjects 0) select {
+private _allTowersOnTeam = ("Land_MobileRadar_01_radar_F" allObjects 0) select {
     [_x] call WL2_fnc_getAssetSide != BIS_WL_playerSide
 };
 private _jammersNear = _allTowersOnTeam select { player distance _x < (WL_JAMMER_RANGE_OUTER * 2) };

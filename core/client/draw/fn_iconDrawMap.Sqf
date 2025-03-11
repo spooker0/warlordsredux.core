@@ -187,9 +187,10 @@ private _activeVehicles = vehicles select {
 	isEngineOn _x
 };
 
-private _ewNetworkUnits = _activeVehicles + ("Land_Communication_F" allObjects 0) select {
-	_x getVariable ["WL_ewNetActive", false] ||
-	_x getVariable ["WL_ewNetActivating", false]
+private _ewNetworkUnits = _activeVehicles + ("Land_MobileRadar_01_radar_F" allObjects 0) select {
+	(_x getVariable ["WL_ewNetActive", false] ||
+	_x getVariable ["WL_ewNetActivating", false]) &&
+	alive _x
 };
 
 {
