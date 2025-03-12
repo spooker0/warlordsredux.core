@@ -57,7 +57,6 @@ private _currentAssetPylonInfo = getAllPylonsInfo _asset;
     {
         private _magazine = configfile >> "CfgMagazines" >> _x;
         private _magazineName = getText (_magazine >> "displayName");
-        private _description = getText (_magazine >> "descriptionShort");
         private _magSize = getNumber (_magazine >> "count");
 
         private _magSizeInName = [format["%1x", _magSize], _magazineName] call BIS_fnc_inString;
@@ -69,7 +68,8 @@ private _currentAssetPylonInfo = getAllPylonsInfo _asset;
         };
 
         private _selectBoxItem = _selectBox lbAdd _displayName;
-        _selectBox lbSetTooltip [_selectBoxItem, _description];
+
+        _selectBox lbSetTooltip [_selectBoxItem, [_x] call WLM_fnc_getMagazineTooltip];
         _selectBox lbSetData [_selectBoxItem, _x];
 
         if (_currentPylonInfo # 3 == (configName _magazine)) then {

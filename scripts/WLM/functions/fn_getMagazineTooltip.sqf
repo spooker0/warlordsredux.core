@@ -182,6 +182,48 @@ if (_magDescTracersEvery != 0) then {
     _magDesc pushBack ["Tracers Every", format ["%1", _magDescTracersEvery]];
 };
 
+private _asset = uiNamespace getVariable ["WLM_asset", objNull];
+private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+private _ammoOverridesHashMap = missionNamespace getVariable ["WL2_ammoOverrides", createHashMap];
+private _assetAmmoOverrides = _ammoOverridesHashMap getOrDefault [_assetActualType, createHashMap];
+private _actualAmmoType = _assetAmmoOverrides getOrDefault [_magAmmoType, _magAmmoType];
+private _ammoAPSConfig = APS_projectileConfig getOrDefault [_actualAmmoType, createHashMap];
+if (count _ammoAPSConfig > 0) then {
+    private _magDescAPS = [];
+
+    private _magDescAPSType = _ammoAPSConfig getOrDefault ["aps", -1];
+    private _typeString = switch (_magDescAPSType) do {
+        case 0: {"All APS"};
+        case 1: {"Medium, Heavy APS"};
+        case 2: {"Heavy APS"};
+        case 3: {"Nothing"};
+        default {"Nothing"};
+    };
+    _magDescAPS pushBack ["Intercepted By", _typeString];
+
+    private _magDescAPSConsumption = _ammoAPSConfig getOrDefault ["consumption", 1];
+    if (_magDescAPSConsumption != 0) then {
+        _magDescAPS pushBack ["APS Ammo Consumption", format ["%1", _magDescAPSConsumption]];
+    };
+
+    private _magDescAPSDazzleable = _ammoAPSConfig getOrDefault ["dazzleable", false];
+    _magDescAPS pushBack ["Affected by Dazzler", if (_magDescAPSDazzleable) then {"Yes"} else {"No"}];
+
+    private _magDescAPSCamera = _ammoAPSConfig getOrDefault ["camera", false];
+    if (_magDescAPSCamera) then {
+        _magDescAPS pushBack ["Missile Camera", "Yes"];
+    };
+
+    private _magDescTVGuidance = _ammoAPSConfig getOrDefault ["tv", false];
+    if (_magDescTVGuidance) then {
+        _magDescAPS pushBack ["TV Guidance", "Yes"];
+    };
+
+    _magDesc pushBack ["break"];
+    _magDesc append _magDescAPS;
+};
+
+
 private _magDescFinal = [];
 {
     if (_x # 0 == "break") then {

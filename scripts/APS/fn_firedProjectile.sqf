@@ -90,6 +90,9 @@ while {_continue && alive _projectile} do {
 			};
 
 			if (_dazzleable && _isGuided) exitWith {
+				_continue = false;
+				private _dazzlerFuel = fuel _x;
+				_x setFuel (_dazzlerFuel - 0.03 * _projectileAPSConsumption);
 				[_x, true] call _interception;
 			};
 		} else {
