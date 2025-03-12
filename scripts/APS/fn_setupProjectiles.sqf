@@ -8,6 +8,7 @@ _this addEventHandler ["Fired", {
 	WAS_fired = true;
 
 	if !(local _projectile) exitWith { true };
+	if !(local _gunner) exitWith { true };
 	[_projectile] spawn APS_fnc_projectileStateUpdate;
 
 	private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
