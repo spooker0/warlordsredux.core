@@ -10,7 +10,6 @@ class CfgFunctions {
 			class hasCharges {};
 			class lagProtection {};
 			class lagProtectionServer {};
-			class misguideMissile {};
 			class projectileStateUpdate {};
 			class rearmAPS {};
 			class registerVehicle {};

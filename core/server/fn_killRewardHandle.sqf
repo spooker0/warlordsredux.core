@@ -1,3 +1,4 @@
+#include "..\warlords_constants.inc"
 params ["_unit", "_responsibleLeader"];
 
 if (!isPlayer _responsibleLeader) exitWith {};
@@ -6,8 +7,25 @@ private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
 private _killRewardMap = serverNamespace getVariable ["WL2_killRewards", createHashMap];
 private _killReward = _killRewardMap getOrDefault [_assetActualType, 0];
 
-if (_unit isKindOf "Building" && _killReward == 0) exitWith {};
-if (_unit isKindOf "Building" && _unit getVariable ["BIS_WL_ownerAsset", "123"] == "123") exitWith {};
+if (typeof _unit == "RuggedTerminal_01_communications_hub_F") then {
+	private _fobCooldownVar = format ["WL2_forwardBaseCooldowns_%1", BIS_WL_playerSide];
+	private _fobCooldowns = missionNamespace getVariable [_fobCooldownVar, []];
+	_fobCooldowns pushBack (serverTime + WL_FOB_COOLDOWN);
+	_fobCooldowns = _fobCooldowns select {
+		_x > serverTime
+	};
+	missionNamespace setVariable [_fobCooldownVar, _fobCooldowns, true];
+
+	_killReward = 500;
+	private _unitOwnerSide = _unit getVariable ["WL2_forwardBaseOwner", sideUnknown];
+	if (_unitOwnerSide != BIS_WL_playerSide) then {
+		_unit setVariable ["BIS_WL_ownerAsset", "0000"];
+	};
+};
+
+private _isBuilding = _unit isKindOf "Building";
+if (_isBuilding && _killReward == 0) exitWith {};
+if (_isBuilding && _unit getVariable ["BIS_WL_ownerAsset", "123"] == "123") exitWith {};
 
 private _killerSide = side group _responsibleLeader;
 private _unitSide = [_unit] call WL2_fnc_getAssetSide;

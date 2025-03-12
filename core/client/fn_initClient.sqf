@@ -405,6 +405,13 @@ removeGoggles player;
 			alive _x
 		};
 		missionNamespace setVariable ["WL2_forwardBases", _currentForwardBases];
+
+		private _fobCooldownVar = format ["WL2_forwardBaseCooldowns_%1", BIS_WL_playerSide];
+		private _fobCooldowns = missionNamespace getVariable [_fobCooldownVar, []];
+		_fobCooldowns = _fobCooldowns select {
+			_x > serverTime
+		};
+		missionNamespace setVariable [_fobCooldownVar, _fobCooldowns];
 		sleep 5;
 	};
 };

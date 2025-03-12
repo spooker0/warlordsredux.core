@@ -39,11 +39,11 @@ addMissionEventHandler ["HandleChatMessage", {
 			};
 		};
 
-		if (_text == "!happyaprilfools") then {
-			if (missionNamespace getVariable ["WL_easterEggOverride", false]) then {
-				missionNamespace setVariable ["WL_easterEggOverride", false, true];
-			};
-		};
+		// if (_text == "!happyaprilfools") then {
+		// 	if (missionNamespace getVariable ["WL_easterEggOverride", false]) then {
+		// 		missionNamespace setVariable ["WL_easterEggOverride", false, true];
+		// 	};
+		// };
 
 		if (_isAdmin || _isPollster) then {
 			[_text] call POLL_fnc_chatCommand;

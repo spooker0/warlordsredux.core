@@ -93,7 +93,7 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 	};
 
 	private _basePos = getPosATL _base;
-	if (_baseOwner != _side && (player distance2D _basePos > 100)) then {
+	if (_baseOwner != _side && (player distance2D _basePos > 250)) then {
 		continue;
 	};
 

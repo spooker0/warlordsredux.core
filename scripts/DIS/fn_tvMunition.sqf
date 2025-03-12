@@ -15,6 +15,7 @@ private _damping       = 0.95;
 private _inputPerTime = 60;
 
 private _nightVision = false;
+private _projectileIsShell = _projectile isKindOf "ShellCore";
 
 uiNamespace setVariable ["WL_waypointPosition", customWaypointPosition];
 
@@ -60,15 +61,30 @@ _fuelDisplay ctrlSetPosition [0, 0, 1, 0.2];
 _fuelDisplay ctrlSetTextColor [1, 1, 1, 1];
 _fuelDisplay ctrlCommit 0;
 
+private _unlockControls = if (_projectileIsShell) then {
+    format ["[%1] Lock/Unlock Controls<br/>", (actionKeysNames ["lockTarget", 1, "Combo"]) regexReplace ["""", ""]];
+} else {
+    "";
+};
+
 private _instructionsDisplay = _display ctrlCreate ["RscStructuredText", -1];
 _instructionsDisplay ctrlSetPosition [0.7, 0.9, 0.5, 0.2];
 _instructionsDisplay ctrlSetTextColor [1, 1, 1, 1];
 _instructionsDisplay ctrlSetStructuredText parseText format [
-    "<t align='left' size='1.2'>[%1] Detonate<br/>[%2] Thermal Vision</t>",
+    "<t align='left' size='1.2'>[%1] Detonate<br/>%2[%3] Thermal Vision</t>",
     (actionKeysNames ["defaultAction", 1, "Combo"]) regexReplace ["""", ""],
+    _unlockControls,
     (actionKeysNames ["nightVision", 1, "Combo"]) regexReplace ["""", ""]
 ];
 _instructionsDisplay ctrlCommit 0;
+
+private _mapDisplay = _display ctrlCreate ["RscMapControl", -1];
+_mapDisplay ctrlCommit 0;
+_mapDisplay ctrlMapSetPosition [safeZoneX + 0.1, 0.5, 0.6, 0.8];
+_mapDisplay ctrlMapAnimAdd [0, 0.2, getPosASL _projectile];
+ctrlMapAnimCommit _mapDisplay;
+_mapDisplay mapCenterOnCamera true;
+_mapDisplay ctrlAddEventHandler ["Draw", WL2_fnc_iconDrawMap];
 
 sleep 1;
 
@@ -81,39 +97,51 @@ _projectile setVariable ["BIS_WL_ownerAssetSide", BIS_WL_playerSide];
 _projectile setVariable ["WL_tvMunition", true];
 [_projectile, player] spawn WL2_fnc_uavJammer;
 
-while {alive _projectile && alive player} do {
+private _fuelUsed = 0;
+private _controlUnlocked = false;
+while { alive _projectile && alive player } do {
     private _elapsedTime = serverTime - _lastTime;
     _lastTime = serverTime;
 
     private _pitchInput = (inputAction "AimUp") - (inputAction "AimDown");
     private _yawInput = (inputAction "AimLeft") - (inputAction "AimRight");
 
-    private _altitude = (_projectile modelToWorld [0, 0, 0]) # 2;
+    private _projectilePosition = _projectile modelToWorld [0, 0, 0];
+    private _altitude = _projectilePosition # 2;
 
-    private _desiredPitch = -1;
-    if (serverTime - _startTime < 2) then {
-        _desiredPitch = 0;
-    };
-    private _followInput = inputAction "turbo";
-    if (_followInput > 0) then {
-        private _pos = getPosASL _projectile;
-        private _dir = getDir _projectile;
-        private _terrainGrad = if (surfaceIsWater _pos) then {
-            0
-        } else {
-            [_pos, _dir] call BIS_fnc_terrainGradAngle;
-        };
-        _desiredPitch = _terrainGrad;
-    };
-
-    if (_desiredPitch != -1) then {
+    if (serverTime - _startTime < 1 && !_projectileIsShell) then {
+        private _desiredPitch = 0;
         private _pitchError = _desiredPitch - _pitch;
         _pitchInput = (_pitchError min 10) max -10;
     };
 
+    private _fuelRemaining = if (_projectileIsShell) then {
+        100 - _fuelUsed;
+    } else {
+        100 * (_timeToLive - (serverTime - _startTime + 1)) / _timeToLive;
+    };
+    if (_fuelRemaining <= 0) then {
+        _fuelRemaining = 0;
+        _pitchInput = 0;
+        _yawInput = 0;
+        _controlUnlocked = false;
+    };
+
     private _inputFactor = _inputPerTime * _elapsedTime;
-    _pitchVel = _pitchVel + (_pitchInput * _acceleration * _inputFactor);
-    _yawVel = _yawVel + (_yawInput * _acceleration * _inputFactor);
+
+    private _pitchFinalInput = (_pitchInput * _acceleration * _inputFactor);
+    private _yawFinalInput = (_yawInput * _acceleration * _inputFactor);
+
+    _pitchVel = _pitchVel + _pitchFinalInput;
+    _yawVel = _yawVel + _yawFinalInput;
+
+    if (_projectileIsShell && _controlUnlocked) then {
+        private _fuelUsage = ((abs _pitchFinalInput) + (abs _yawFinalInput)) * 10;
+        if (_altitude > 500 || _pitch > 0) then {
+            _fuelUsage = _fuelUsage * 10;
+        };
+        _fuelUsed = _fuelUsed + (_fuelUsage max 0.1);
+    };
 
     _pitchVel = _pitchVel max (-_maxRotSpeed) min _maxRotSpeed;
     _yawVel = _yawVel max (-_maxRotSpeed) min _maxRotSpeed;
@@ -142,8 +170,46 @@ while {alive _projectile && alive player} do {
     private _up = _right vectorCrossProduct _forward;
     _up = vectorNormalized _up;
 
-    _projectile setVectorDirAndUp [_forward, _up];
-    _projectile setVelocityModelSpace [0, _projectileSpeed, 0];
+    private _unlockInput = inputAction "lockTarget";
+    if (_unlockInput > 0) then {
+        waitUntil {
+            inputAction "lockTarget" == 0
+        };
+        _controlUnlocked = !_controlUnlocked;
+    };
+
+    private _zoomInMap = inputAction "zoomIn";
+    if (_zoomInMap > 0) then {
+        waitUntil {
+            inputAction "zoomIn" == 0
+        };
+        private _currentZoom = ctrlMapScale _mapDisplay;
+        _mapDisplay ctrlMapAnimAdd [0, _currentZoom / 2, getPosASL _projectile];
+        ctrlMapAnimCommit _mapDisplay;
+    };
+    private _zoomOutMap = inputAction "zoomOut";
+    if (_zoomOutMap > 0) then {
+        waitUntil {
+            inputAction "zoomOut" == 0
+        };
+        private _currentZoom = ctrlMapScale _mapDisplay;
+        _mapDisplay ctrlMapAnimAdd [0, _currentZoom * 2, getPosASL _projectile];
+        ctrlMapAnimCommit _mapDisplay;
+    };
+
+    if (_projectileIsShell && !_controlUnlocked) then {
+        _dir = vectorDir _projectile;
+        _pitch = (_dir select 2) atan2 (sqrt ((_dir select 0)^2 + (_dir select 1)^2));
+        _yaw = getDir _projectile;
+
+        _pitchVel = 0;
+        _yawVel = 0;
+
+        _projectileSpeed = velocityModelSpace _projectile # 1;
+    } else {
+        _projectile setVectorDirAndUp [_forward, _up];
+        _projectile setVelocityModelSpace [0, _projectileSpeed, 0];
+    };
 
     if (inputAction "nightVision" > 0) then {
         waitUntil {inputAction "nightVision" == 0};
@@ -158,17 +224,28 @@ while {alive _projectile && alive player} do {
 
     if (inputAction "defaultAction" > 0) then {
         triggerAmmo _projectile;
+        break;
+    };
+
+    private _altitudeColor = if (_projectileIsShell && (_altitude > 500 || _pitch > 0)) then {
+        " color = '#ff0000'";
+    } else {
+        ""
     };
 
     _fuelDisplay ctrlSetStructuredText parseText format [
-        "<t align='center' size='2'>Fuel: %1%%</t><t align='right' size='1.5'>ALT: %2M</t>",
-        round (100 * (_timeToLive - (serverTime - _startTime + 1)) / _timeToLive),
+        "<t align='left' size='1.2'>GPS: %1</t><t align='center' size='2'>Fuel: %2%%</t><t align='right' size='1.2'%3>ALT: %4M</t>",
+        mapGridPosition _projectile,
+        round _fuelRemaining,
+        _altitudeColor,
         round _altitude
     ];
+
     sleep 0.001;
 };
 
 sleep 3;
+deleteVehicle _projectile;
 
 removeMissionEventHandler ["Draw3D", _waypointDrawer];
 switchCamera player;

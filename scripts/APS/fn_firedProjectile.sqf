@@ -20,6 +20,36 @@ private _safeMaxDistSqr = _maxDistSqr;
 
 private _unitSide = side group _unit;
 
+private _interception = {
+	params ["_target", "_dazzled"];
+	private _projectilePosition = getPosATL _projectile;
+	private _projectileDirection = _firedPosition getDir _target;
+	private _relativeDirection = [_projectileDirection, _target] call APS_fnc_relDir2;
+
+	_projectile setPosWorld [0, 0, 0];
+	deleteVehicle _projectile;
+
+	private _projectileRelDir = _target getRelDir _firedPosition;
+	private _explosionPosition = _target getRelPos [sqrt _maxDistSqr, _projectileRelDir];
+	private _explosionHeight = (_projectilePosition # 2) min (sqrt _maxDistSqr);
+	_explosionPosition set [2, _explosionHeight];
+	createVehicle ["SmallSecondary", _explosionPosition, [], 0, "FLY"];
+
+	[_target, _relativeDirection, true, _gunner] remoteExec ["APS_fnc_report", _target];
+
+	private _ownerSide = _x getVariable ["BIS_WL_ownerAssetSide", sideUnknown];
+	if (side _unit == _ownerSide) then {
+		0 spawn {
+			sleep 0.5;
+
+			playSoundUI ["alarm", 2];
+			hint localize "STR_A3_WL_aps_friendly_warning";
+		};
+	} else {
+		[_gunner, _dazzled] remoteExec ["APS_fnc_serverHandleAPS", 2];
+	};
+};
+
 private _continue = alive _projectile;
 while {_continue && alive _projectile} do {
 	private _currentPos = getPosWorld _projectile;
@@ -60,13 +90,7 @@ while {_continue && alive _projectile} do {
 			};
 
 			if (_dazzleable && _isGuided) exitWith {
-				private _projectilePosition = getPosATL _projectile;
-				private _projectileDirection = _firedPosition getDir _x;
-				private _relativeDirection = [_projectileDirection, _x] call APS_fnc_relDir2;
-
-				_projectile spawn APS_fnc_misguideMissile;
-
-				[_x, _relativeDirection, true] remoteExec ["APS_fnc_report", _x];
+				[_x, true] call _interception;
 			};
 		} else {
 			if (_vehicleAPSType >= _projectileAPSType && {
@@ -84,33 +108,7 @@ while {_continue && alive _projectile} do {
 				private _ammo = _x getVariable "apsAmmo";
 				_x setVariable ["apsAmmo", _ammo - _projectileAPSConsumption, true];
 
-				private _projectilePosition = getPosATL _projectile;
-				private _projectileDirection = _firedPosition getDir _x;
-				private _relativeDirection = [_projectileDirection, _x] call APS_fnc_relDir2;
-
-				_projectile setPosWorld [0, 0, 0];
-				deleteVehicle _projectile;
-
-				private _projectileRelDir = _x getRelDir _firedPosition;
-				private _explosionPosition = _x getRelPos [sqrt _maxDistSqr, _projectileRelDir];
-				private _explosionHeight = (_projectilePosition # 2) min (sqrt _maxDistSqr);
-				_explosionPosition set [2, _explosionHeight];
-				createVehicle ["SmallSecondary", _explosionPosition, [], 0, "FLY"];
-
-				[_x, _relativeDirection, true, _gunner] remoteExec ["APS_fnc_report", _x];
-
-				private _ownerSide = _x getVariable ["BIS_WL_ownerAssetSide", sideUnknown];
-				if (side _unit == _ownerSide) then {
-					0 spawn {
-						sleep 0.5;
-
-						playSound "alarm";
-						playSound "alarm";
-						hint localize "STR_A3_WL_aps_friendly_warning";
-					};
-				} else {
-					[_gunner] remoteExec ["APS_fnc_serverHandleAPS", 2];
-				};
+				[_x, false] call _interception;
 			};
 		};
 	} forEach _sortedEligibleList;
