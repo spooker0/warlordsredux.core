@@ -145,6 +145,8 @@ private _originalPosition = getPosATL player;
         sleep 0.1;
         [_originalPosition, _range, _ignoreSector] call WL2_fnc_cancelVehicleOrder;
     };
+
+    WL_DeploymentEnd = true;
 };
 
 waitUntil {
