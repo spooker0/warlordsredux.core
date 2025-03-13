@@ -41,7 +41,7 @@ if (!_upgrading && typeof _cursorObject == "VirtualReammoBox_camonet_F") exitWit
         case (player distance _cursorObject > WL_MAINTENANCE_RADIUS): {
             _result = [false];
         };
-        case (!isNull attachedTo _cursorObject): {
+        case (!isNull attachedTo _cursorObject || !isNull ropeAttachedTo _cursorObject): {
             _result = [false];
         };
         case (count _teamForwardBases + count _fobCooldowns >= 3): {

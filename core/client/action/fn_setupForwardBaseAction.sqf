@@ -14,16 +14,44 @@ private _setupActionId = player addAction [
 			systemChat (_eligibility # 1);
 		};
 
-		systemChat format ["Forward base under construction. %1 seconds remaining.", WL_FOB_SETUP_TIME];
-		private _endTime = serverTime + WL_FOB_SETUP_TIME;
+		[_forwardBaseSupplies] spawn {
+			params ["_forwardBaseSupplies"];
 
-        private _forwardBase = createVehicle ["RuggedTerminal_01_communications_hub_F", getPosATL _forwardBaseSupplies, [], 0, "CAN_COLLIDE"];
-		_forwardBase setDir (getDir _forwardBaseSupplies);
-		deleteVehicle _forwardBaseSupplies;
+			private _terminalClass = "RuggedTerminal_01_communications_hub_F";
+			private _deploymentResult = [
+				_terminalClass,
+				_terminalClass,
+				[0, 5, 0],
+				20,
+				true
+			] call WL2_fnc_deployment;
 
-		private _side = side group player;
+			if !(_deploymentResult # 0) exitWith {
+				playSound "AddItemFailed";
+			};
 
-		[_forwardBase, serverTime, _endTime, _side, false] remoteExec ["WL2_fnc_setupForwardBaseMp", 0, true];
+			private _position =  _deploymentResult # 1;
+			private _offset = _deploymentResult # 2;
+			private _direction = _deploymentResult # 3;
+			private _nearbyEntities = [_terminalClass, _position, _direction, "dontcheckuid", [_forwardBaseSupplies]] call WL2_fnc_grieferCheck;
+
+			if (count _nearbyEntities > 0) exitWith {
+				private _nearbyObjectName = [_nearbyEntities # 0] call WL2_fnc_getAssetTypeName;
+				systemChat format ["Deploying too close to %1!", _nearbyObjectName];
+				playSound "AddItemFailed";
+			};
+
+			systemChat format ["Forward base under construction. %1 seconds remaining.", WL_FOB_SETUP_TIME];
+			private _endTime = serverTime + WL_FOB_SETUP_TIME;
+
+			private _forwardBase = createVehicle [_terminalClass, _position, [], 0, "CAN_COLLIDE"];
+			_forwardBase setVectorDirAndUp _direction;
+			_forwardBase setPosWorld _position;
+			deleteVehicle _forwardBaseSupplies;
+
+			private _side = side group player;
+			[_forwardBase, serverTime, _endTime, _side, false] remoteExec ["WL2_fnc_setupForwardBaseMp", 0, true];
+		};
 	},
 	[],
 	6,

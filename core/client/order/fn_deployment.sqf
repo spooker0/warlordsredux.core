@@ -65,6 +65,11 @@ private _originalPosition = getPosATL player;
 [_asset, _offset, _range] spawn {
     params ["_asset", "_offset", "_range"];
 
+    waitUntil {
+        sleep 0.001;
+        inputAction "BuldSelect" == 0 && inputAction "navigateMenu" == 0;
+    };
+
     _offset set [2, 0.2];
 
     WL_DeploymentLock = false;
