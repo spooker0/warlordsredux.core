@@ -1,6 +1,8 @@
 params ["_class", "_position", "_direction", "_uid", "_objsToIgnore"];
 
-private _simulatedObject = [_class, _position, _direction, true, false, true] call BIS_fnc_createSimpleObject;
+private _simulatedObject = [_class, _position, 0, true, false, true] call BIS_fnc_createSimpleObject;
+_simulatedObject setVectorDirAndUp _direction;
+_simulatedObject setPosWorld _position;
 
 private _circleA = boundingBoxReal [_simulatedObject, "FireGeometry"];
 private _radiusA = _circleA select 2;

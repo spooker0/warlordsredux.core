@@ -1,16 +1,20 @@
+params ["_giveTent"];
+
 private _tentActionText = "<t color='#ff0000'>Place Fast Travel Tent</t>";
 
-private _backpack = if (side group player == west) then {
-    "B_Carryall_mcamo"
-} else {
-    "B_Carryall_ocamo"
-};
+if (_giveTent) then {
+    private _backpack = if (side group player == west) then {
+        "B_Carryall_mcamo"
+    } else {
+        "B_Carryall_ocamo"
+    };
 
-private _oldBackpackItems = backpackItems player;
-player addBackpack _backpack;
-{
-    player addItemToBackpack _x;
-} forEach _oldBackpackItems;
+    private _oldBackpackItems = backpackItems player;
+    player addBackpack _backpack;
+    {
+        player addItemToBackpack _x;
+    } forEach _oldBackpackItems;
+};
 
 private _actionId = player addAction [
     _tentActionText,
@@ -22,7 +26,7 @@ private _actionId = player addAction [
 
         if !(_deploymentResult # 0) exitWith {
             playSound "AddItemFailed";
-            call WL2_fnc_respawnBagAction;
+            [false] call WL2_fnc_respawnBagAction;
         };
 
         ["TaskPlaceTent"] call WLT_fnc_taskComplete;
@@ -36,16 +40,8 @@ private _actionId = player addAction [
         private _pos = _deploymentResult # 1;
 
         private _freshTent = createVehicle ["Land_TentA_F", _pos, [], 0, "NONE"];
-        _freshTent setDir (_deploymentResult # 3);
-        _freshTent setVehiclePosition [_pos, [], 0, "CAN_COLLIDE"];
-
-        private _newPos = getPosATL _freshTent;
-        if (abs ((_pos # 2) - (_newPos # 2)) > 5) exitWith {
-            deleteVehicle _freshTent;
-            systemChat "Failed to place tent. Please try again in an open spot outside.";
-            playSound "AddItemFailed";
-            call WL2_fnc_respawnBagAction;
-        };
+        _freshTent setVectorDirAndUp (_deploymentResult # 3);
+        _freshTent setPosWorld _pos;
 
         player setVariable ["WL2_respawnBag", _freshTent, [2, clientOwner]];
 

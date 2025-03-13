@@ -158,8 +158,16 @@ private _side = side _owner;
         if (_isTvMunition) then {
             private _nearAir = _asset nearEntities ["Air", 300];
             _nearAir = _nearAir select {
-                getPosATL _x # 2 > 20;
+                getPosATL _x # 2 > 20
             };
+            _nearAir = _nearAir select {
+                private _weapons = _x weaponsTurret [-1];
+                private _countermeasures = _weapons select {
+                    _x in ["CMFlareLauncher", "CMFlareLauncher_Singles", "CMFlareLauncher_Triples"];
+                };
+                count _countermeasures > 0;
+            };
+
             private _airJammerStrength = if (count _nearAir > 0) then {
                 private _nearestAirDistance = 300;
                 {

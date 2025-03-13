@@ -4,7 +4,7 @@ _pos params ["_posX", "_posY", "_posZ"];
 if !(isServer) exitWith {};
 
 _asset = createVehicle [_class, [_posX, _posY, _posZ - 50], [], 0, "CAN_COLLIDE"];
-_asset setDir _direction;
+_asset setVectorDirAndUp _direction;
 
 private _isInCarrierSector = count (BIS_WL_allSectors select {
 	_pos inArea (_x getVariable "objectAreaComplete") && count (_x getVariable ["WL_aircraftCarrier", []]) > 0
@@ -12,13 +12,13 @@ private _isInCarrierSector = count (BIS_WL_allSectors select {
 if (_isInCarrierSector) then {
 	_asset setVehiclePosition [[_posX, _posY, 50], [], 0, "CAN_COLLIDE"];
 } else {
-	_asset setVehiclePosition [_pos, [], 0, "CAN_COLLIDE"];
+	_asset setVehiclePosition [[_posX, _posY, 0], [], 0, "CAN_COLLIDE"];
 };
 
 private _demolishableHashMap = missionNamespace getVariable ["WL2_demolishable", createHashMap];
 if (_demolishableHashMap getOrDefault [_orderedClass, false]) then {
-	private _height = getPosASL _asset # 2;
-	_asset setPosASL [_posX, _posY, _height];
+	_asset setVectorDirAndUp _direction;
+	_asset setPosWorld _pos;
 };
 
 _asset setDamage 0;

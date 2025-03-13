@@ -51,15 +51,25 @@ if (_nearbyEnemies) exitWith {
     true
 };
 
+// any sector regardless
+_sectors = BIS_WL_allSectors select {
+    player inArea (_x getVariable "objectAreaComplete")
+};
+_sector = if (count _sectors > 0) then {
+    _sectors # 0;
+} else {
+    objNull;
+};
+
 private _sectorStronghold = _sector getVariable ["WL_strongholdMarker", ""];
 private _isInvalidPosition = if (player inArea _sectorStronghold) then {
     false;
 } else {
     private _isInCarrierSector = count (_sector getVariable ["WL_aircraftCarrier", []]) > 0;
     if (_isInCarrierSector) then {
-        ((getPosASL player) select 2) < 5
+        ((getPosASL player) # 2) < 5
     } else {
-        ((getPosATL player) select 2) > 1
+        ((getPosATL player) # 2) > 1
     };
 };
 if (_isInvalidPosition) exitWith {

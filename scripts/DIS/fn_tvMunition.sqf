@@ -1,5 +1,6 @@
 params ["_projectile", "_camera"];
 _projectile setMissileTarget [objNull, true];
+player setVariable ["WL_hmdOverride", 1];
 
 private _yaw = getDir _projectile;
 
@@ -52,8 +53,10 @@ _background ctrlSetText "\a3\weapons_f\Reticle\data\optika_tv_CA.paa";
 _background ctrlCommit 0;
 
 private _reticle = _display ctrlCreate ["RscPicture", -1];
-_reticle ctrlSetPosition [1 / 8, 0, 3 / 4, 1];
-_reticle ctrlSetText "\a3\weapons_f\Reticle\data\Optics_Gunner_MBT_02_M_CA.paa";
+_reticle ctrlSetText "\a3\weapons_f_beta\Reticle\Data\reticle_horizon2_CA.paa";
+private _reticleWidth = 0.09;
+private _reticleHeight = 0.12;
+_reticle ctrlSetPosition [0.5 - _reticleWidth, 0.5 - _reticleHeight, _reticleWidth * 2, _reticleHeight * 2];
 _reticle ctrlCommit 0;
 
 private _fuelDisplay = _display ctrlCreate ["RscStructuredText", -1];
@@ -61,20 +64,30 @@ _fuelDisplay ctrlSetPosition [0, 0, 1, 0.2];
 _fuelDisplay ctrlSetTextColor [1, 1, 1, 1];
 _fuelDisplay ctrlCommit 0;
 
-private _unlockControls = if (_projectileIsShell) then {
-    format ["[%1] Lock/Unlock Controls<br/>", (actionKeysNames ["lockTarget", 1, "Combo"]) regexReplace ["""", ""]];
-} else {
-    "";
+private _instructionsDisplay = _display ctrlCreate ["RscStructuredText", -1];
+_instructionsDisplay ctrlSetPosition [0.25, 1 - safeZoneY - 0.3, 0.5, 0.3];
+_instructionsDisplay ctrlSetTextColor [1, 1, 1, 1];
+
+private _instructionStages = [
+    ["defaultAction", "Detonate"],
+    ["nightVision", "Thermal Vision"],
+    ["zoomIn", "Map Zoom In"],
+    ["zoomOut", "Map Zoom Out"]
+];
+if (_projectileIsShell) then {
+    _instructionStages pushBack ["lockTarget", "Lock/Unlock Controls"];
 };
 
-private _instructionsDisplay = _display ctrlCreate ["RscStructuredText", -1];
-_instructionsDisplay ctrlSetPosition [0.7, 0.9, 0.5, 0.2];
-_instructionsDisplay ctrlSetTextColor [1, 1, 1, 1];
+_instructionStages = _instructionStages apply {
+    private _action = _x # 0;
+    private _text = _x # 1;
+    format ["<t align='left'>%1</t><t align='right'>[%2]</t>", _text, (actionKeysNames [_action, 1, "Combo"]) regexReplace ["""", ""]];
+};
+private _instructionText = _instructionStages joinString "<br/>";
+
 _instructionsDisplay ctrlSetStructuredText parseText format [
-    "<t align='left' size='1.2'>[%1] Detonate<br/>%2[%3] Thermal Vision</t>",
-    (actionKeysNames ["defaultAction", 1, "Combo"]) regexReplace ["""", ""],
-    _unlockControls,
-    (actionKeysNames ["nightVision", 1, "Combo"]) regexReplace ["""", ""]
+    "<t size='1.2'>%1</t>",
+    _instructionText
 ];
 _instructionsDisplay ctrlCommit 0;
 
@@ -137,7 +150,7 @@ while { alive _projectile && alive player } do {
 
     if (_projectileIsShell && _controlUnlocked) then {
         private _fuelUsage = ((abs _pitchFinalInput) + (abs _yawFinalInput)) * 10;
-        if (_altitude > 500 || _pitch > 0) then {
+        if (_altitude > 1000 || _pitch > 0) then {
             _fuelUsage = _fuelUsage * 10;
         };
         _fuelUsed = _fuelUsed + (_fuelUsage max 0.1);
@@ -227,7 +240,7 @@ while { alive _projectile && alive player } do {
         break;
     };
 
-    private _altitudeColor = if (_projectileIsShell && (_altitude > 500 || _pitch > 0)) then {
+    private _altitudeColor = if (_projectileIsShell && (_altitude > 1000 || _pitch > 0)) then {
         " color = '#ff0000'";
     } else {
         ""
@@ -244,9 +257,10 @@ while { alive _projectile && alive player } do {
     sleep 0.001;
 };
 
-sleep 3;
+sleep 1;
 deleteVehicle _projectile;
 
+player setVariable ["WL_hmdOverride", -1];
 removeMissionEventHandler ["Draw3D", _waypointDrawer];
 switchCamera player;
 "missileCamera" cutText ["", "PLAIN"];

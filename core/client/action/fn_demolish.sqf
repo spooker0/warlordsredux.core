@@ -27,28 +27,12 @@ params ["_asset"];
         private _surfaceNormal = [];
         private _cancelCharge = false;
 
-        BIS_WL_spacePressed = false;
-        BIS_WL_backspacePressed = false;
-        private _deployKeyHandle = (findDisplay 46) displayAddEventHandler ["KeyDown", {
-            if (_this # 1 == 57) then {
-                if !(BIS_WL_backspacePressed) then {
-                    BIS_WL_spacePressed = true;
-                };
-            };
-            if (_this # 1 == 14) then {
-                if !(BIS_WL_spacePressed) then {
-                    BIS_WL_backspacePressed = true;
-                };
-            };
-        }];
-        uiNamespace setVariable ["BIS_WL_deployKeyHandle", _deployKeyHandle];
-
         private _radius = boundingBoxReal _target # 2;
         while { alive _caller && alive _target } do {
-            if (BIS_WL_spacePressed) then {
+            if (inputAction "BuldSelect" > 0) then {
                 break;
             };
-            if (BIS_WL_backspacePressed) then {
+            if (inputAction "navigateMenu" > 0) then {
                 _cancelCharge = true;
                 break;
             };
@@ -99,12 +83,6 @@ params ["_asset"];
             deleteVehicle _charge;
             [player, "placeCharge", false] call WL2_fnc_hintHandle;
         };
-
-        private _deployKeyHandle = uiNamespace getVariable ["BIS_WL_deployKeyHandle", nil];
-        if !(isNil "_deployKeyHandle") then {
-            (findDisplay 46) displayRemoveEventHandler ["KeyDown", _deployKeyHandle];
-        };
-        uiNamespace setVariable ['BIS_WL_deployKeyHandle', nil];
 
         [player, "placeCharge", false] call WL2_fnc_hintHandle;
 

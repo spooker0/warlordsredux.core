@@ -1,10 +1,14 @@
 params ["_class", "_orderedClass", "_offset", "_range", "_ignoreSector", ["_originalAsset", objNull]];
 
-private _asset = createVehicleLocal [_class, AGLToASL (player modelToWorld _offset), [], 0, "NONE"];
+private _asset = createVehicleLocal [_class, player modelToWorld _offset, [], 0, "NONE"];
 _asset setPhysicsCollisionFlag false;
 _asset enableSimulation false;
 
 _asset setVectorDirAndUp [vectorDir player, vectorUp player];
+_asset setVehiclePosition [player modelToWorld _offset, [], 0, "CAN_COLLIDE"];
+private _newAssetPos = player modelToWorldWorld _offset;
+private _assetPosHeight = (getPosWorld _asset) # 2;
+_asset setPosWorld [_newAssetPos # 0, _newAssetPos # 1, _assetPosHeight];
 _asset attachTo [player];
 
 _asset allowDamage false;
@@ -46,29 +50,16 @@ private _turretOverridesForVehicle = _turretOverrides getOrDefault [_orderedClas
 	private _turretOverride = _x;
 	private _hideTurret = getNumber (_turretOverride >> "hideTurret");
 	if (_hideTurret != 0) then {
-		_asset animateSource ["HideTurret", 1, true];
+		[_asset] spawn {
+            params ["_asset"];
+            sleep 0.5;
+            _asset animateSource ["HideTurret", 1, true];
+        };
 	};
 } forEach _turretOverridesForVehicle;
 
 [player, "assembly"] call WL2_fnc_hintHandle;
 
-BIS_WL_spacePressed = false;
-BIS_WL_backspacePressed = false;
-
-private _deployKeyHandle = (findDisplay 46) displayAddEventHandler ["KeyDown", {
-    if (_this # 1 == 57) then {
-        if !(BIS_WL_backspacePressed) then {
-            BIS_WL_spacePressed = true;
-        };
-    };
-    if (_this # 1 == 14) then {
-        if !(BIS_WL_spacePressed) then {
-            BIS_WL_backspacePressed = true;
-        };
-    };
-}];
-
-uiNamespace setVariable ["BIS_WL_deployKeyHandle", _deployKeyHandle];
 private _originalPosition = getPosATL player;
 
 [_asset, _offset, _range] spawn {
@@ -76,28 +67,23 @@ private _originalPosition = getPosATL player;
 
     _offset set [2, 0.2];
 
-    private _isInCarrierSector = count (BIS_WL_allSectors select {
-        player inArea (_x getVariable "objectAreaComplete") && count (_x getVariable ["WL_aircraftCarrier", []]) > 0
-    }) > 0;
-
-    private _toggleLock = false;
+    WL_DeploymentLock = false;
+    WL_DeploymentEnd = false;
+    WL_DeploymentSuccess = false;
     private _directionOffset = 0;
 
-    private _assetPos = player modelToWorldWorld _offset;
-    _asset setPosASL _assetPos;
-
-    while { !(isNull _asset) && !(BIS_WL_spacePressed) && !(BIS_WL_backspacePressed) } do {
+    while { !(isNull _asset) } do {
         private _distance = player distance _asset;
         if (_distance > _range) then {
+            systemChat format ["Out of range: %1", _distance];
             detach _asset;
             deleteVehicle _asset;
-            BIS_WL_backspacePressed = true;
             break;
         };
 
-        detach _asset;
+        if (WL_DeploymentLock) then {
+            detach _asset;
 
-        if (_toggleLock) then {
             if (inputAction "prevAction" > 0) then {
                 _asset setDir (direction _asset - 5);
             };
@@ -118,9 +104,10 @@ private _originalPosition = getPosATL player;
                 sleep 0.001;
                 inputAction "lockTarget" == 0;
             };
-            _toggleLock = !_toggleLock;
-            if (_toggleLock) then {
-                private _assetPos = _asset modelToWorld [0, 0, 0];
+            detach _asset;
+            WL_DeploymentLock = !WL_DeploymentLock;
+            if (WL_DeploymentLock) then {
+                _assetPos = _asset modelToWorld [0, 0, 0];
                 _asset setPosASL [_assetPos # 0, _assetPos # 1, 500];
                 _asset setVehiclePosition [_assetPos, [], 0, "CAN_COLLIDE"];
                 private _assetPosHeight = (getPosASL _asset) # 2;
@@ -132,14 +119,23 @@ private _originalPosition = getPosATL player;
             };
         };
 
-        if (!_toggleLock) then {
-            _asset attachTo [player];
+        if (!WL_DeploymentLock) then {
             _asset setDir _directionOffset;
-            _asset attachTo [player]; // twice, yes
+        };
+
+        if (inputAction "BuldSelect" > 0) then {
+            WL_DeploymentSuccess = true;
+            break;
+        };
+        if (inputAction "navigateMenu" > 0) then {
+            WL_DeploymentSuccess = false;
+            break;
         };
 
         sleep 0.001;
     };
+
+    WL_DeploymentEnd = true;
 };
 
 [_originalPosition, _range, _ignoreSector] spawn {
@@ -147,42 +143,31 @@ private _originalPosition = getPosATL player;
 
     waitUntil {
         sleep 0.1;
-        BIS_WL_spacePressed ||
-        BIS_WL_backspacePressed ||
         [_originalPosition, _range, _ignoreSector] call WL2_fnc_cancelVehicleOrder;
-    };
-
-    if !(BIS_WL_spacePressed) then {
-        BIS_WL_backspacePressed = true;
     };
 };
 
 waitUntil {
     sleep 0.1;
-    BIS_WL_spacePressed || BIS_WL_backspacePressed;
+    WL_DeploymentEnd;
 };
 
-private _deployKeyHandle = uiNamespace getVariable ["BIS_WL_deployKeyHandle", nil];
-if !(isNil "_deployKeyHandle") then {
-    (findDisplay 46) displayRemoveEventHandler ["KeyDown", _deployKeyHandle];
+if (!WL_DeploymentLock) then {
+    private _assetPos = _asset modelToWorld [0, 0, 0];
+    _asset setPosASL [_assetPos # 0, _assetPos # 1, 500];
+    _asset setVehiclePosition [_assetPos, [], 0, "CAN_COLLIDE"];
+    private _assetPosHeight = (getPosASL _asset) # 2;
+    _asset setPosASL [_assetPos # 0, _assetPos # 1, _assetPosHeight];
 };
-uiNamespace setVariable ['BIS_WL_deployKeyHandle', nil];
 
-// Lock finally
-private _assetPos = _asset modelToWorld [0, 0, 0];
-_asset setPosASL [_assetPos # 0, _assetPos # 1, 500];
-_asset setVehiclePosition [_assetPos, [], 0, "CAN_COLLIDE"];
-private _assetPosHeight = (getPosASL _asset) # 2;
-_asset setPosASL [_assetPos # 0, _assetPos # 1, _assetPosHeight];
+private _finalPosition = getPosWorldVisual _asset;
+private _finalDirection = [vectorDir _asset, vectorUp _asset];
 
 detach _asset;
-private _finalPosition = getPosATL _asset;
-private _finalDirection = direction _asset;
-
 deleteVehicle _asset;
 
 [player, "assembly", false] call WL2_fnc_hintHandle;
 
 private _canStillOrderVehicle = !([_originalPosition, _range, _ignoreSector] call WL2_fnc_cancelVehicleOrder);
 
-[BIS_WL_spacePressed && _canStillOrderVehicle, _finalPosition, _offset, _finalDirection];
+[WL_DeploymentSuccess && _canStillOrderVehicle, _finalPosition, _offset, _finalDirection];

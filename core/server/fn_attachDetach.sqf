@@ -19,7 +19,7 @@ if (_attach) then {
 
     _load attachTo [_asset, _offset];
     detach _load;
-    _load setDir _direction;
+    _load setVectorDirAndUp _direction;
     _load setVehiclePosition [_position, [], 0, "CAN_COLLIDE"];
 
     _asset setVariable ["WL2_loadingAsset", false, true];

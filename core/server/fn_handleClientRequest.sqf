@@ -62,8 +62,15 @@ if (_action == "resetVehicle") exitWith {
 	private _direction = _param3;
 	if (_hasFunds) then {
 		(-_cost) call WL2_fnc_fundsDatabaseWrite;
-		_asset setDir _direction;
-		_asset setVehiclePosition [_position, [], 0, "CAN_COLLIDE"];
+		_asset setVectorDirAndUp _direction;
+
+		private _orderedClass = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+		private _demolishableHashMap = missionNamespace getVariable ["WL2_demolishable", createHashMap];
+		if (_demolishableHashMap getOrDefault [_orderedClass, false]) then {
+			_asset setPosWorld _position;
+		} else {
+			_asset setVehiclePosition [_position, [], 0, "CAN_COLLIDE"];
+		};
 	};
 };
 

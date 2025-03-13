@@ -119,16 +119,15 @@ switch (_className) do {
             params ["_vehicle"];
             private _class = typeOf _vehicle;
             private _orderedClass = _vehicle getVariable ["WL2_orderedClass", _class];
-            private _distanceToVehicle = player distance2D _vehicle;
-            private _offset = [0, _distanceToVehicle, 0];
+            private _offset = player worldToModel (getPosATL _vehicle);
 
-            private _deploymentResult = [_class, _orderedClass, _offset, 10, true] call WL2_fnc_deployment;
+            private _deploymentResult = [_class, _orderedClass, _offset, 20, true] call WL2_fnc_deployment;
 
             if (_deploymentResult # 0) then {
                 private _position =  _deploymentResult # 1;
                 private _direction = _deploymentResult # 3;
                 private _uid = getPlayerUID player;
-                private _nearbyEntities = [_class, ATLToASL _position, _direction, _uid, []] call WL2_fnc_grieferCheck;
+                private _nearbyEntities = [_class, _position, _direction, _uid, []] call WL2_fnc_grieferCheck;
                 if (count _nearbyEntities > 0) then {
                     private _nearbyObject = _nearbyEntities # 0;
                     private _nearbyObjectName = [_nearbyObject] call WL2_fnc_getAssetTypeName;
@@ -219,7 +218,7 @@ switch (_className) do {
     };
     case "RespawnBag": {
         [player, "orderRespawnBag"] remoteExec ["WL2_fnc_handleClientRequest", 2];
-        call WL2_fnc_respawnBagAction;
+        [true] call WL2_fnc_respawnBagAction;
         "RequestMenu_close" call WL2_fnc_setupUI;
         ["TaskBuyTent"] call WLT_fnc_taskComplete;
     };

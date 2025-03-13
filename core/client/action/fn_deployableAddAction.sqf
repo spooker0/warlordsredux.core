@@ -53,7 +53,7 @@ private _deployActionId = _asset addAction [
                 private _position =  _deploymentResult # 1;
                 private _direction = _deploymentResult # 3;
                 private _class = typeOf _assetLoadedItem;
-                private _nearbyEntities = [_assetLoadedItemClass, AGLtoASL _position, _direction, "dontcheckuid", [_assetLoadedItem]] call WL2_fnc_grieferCheck;
+                private _nearbyEntities = [_assetLoadedItemClass, _position, _direction, "dontcheckuid", [_assetLoadedItem]] call WL2_fnc_grieferCheck;
 
                 if (count _nearbyEntities > 0) exitWith {
                     private _nearbyObjectName = [_nearbyEntities # 0] call WL2_fnc_getAssetTypeName;

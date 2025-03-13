@@ -41,6 +41,9 @@ if (!_upgrading && typeof _cursorObject == "VirtualReammoBox_camonet_F") exitWit
         case (player distance _cursorObject > WL_MAINTENANCE_RADIUS): {
             _result = [false];
         };
+        case (!isNull attachedTo _cursorObject): {
+            _result = [false];
+        };
         case (count _teamForwardBases + count _fobCooldowns >= 3): {
             private _limitReached = format ["Forward base limit reached. Current: %1, Cooldown: %2", count _teamForwardBases, count _fobCooldowns];
             _result = [true, _limitReached];
@@ -60,6 +63,7 @@ if (!_upgrading && typeof _cursorObject == "VirtualReammoBox_camonet_F") exitWit
 
 if (_upgrading && typeof _cursorObject == "RuggedTerminal_01_communications_hub_F") exitWith {
     private _playerFunds = (missionNamespace getVariable "fundsDatabaseClients") get (getPlayerUID player);
+    private _sideOwner = _cursorObject getVariable ["WL2_forwardBaseOwner", sideUnknown];
 
     private _result = [];
     switch (true) do {
@@ -67,6 +71,9 @@ if (_upgrading && typeof _cursorObject == "RuggedTerminal_01_communications_hub_
             _result = [false];
         };
         case (player distance _cursorObject > WL_MAINTENANCE_RADIUS): {
+            _result = [false];
+        };
+        case (_sideOwner != BIS_WL_playerSide): {
             _result = [false];
         };
         case (_cursorObject getVariable ["WL2_forwardBaseTime", -1] > serverTime): {

@@ -457,7 +457,7 @@ addMissionEventHandler ["Draw3D", {
             continue;
         };
 
-        private _vehicle = getConnectedUAV player;
+        private _vehicle = vehicle (getConnectedUAVUnit player);
         if (isNull _vehicle) then {
             _vehicle = vehicle player;
         };
