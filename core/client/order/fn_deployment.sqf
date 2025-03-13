@@ -80,7 +80,6 @@ private _originalPosition = getPosATL player;
     while { !(isNull _asset) } do {
         private _distance = player distance _asset;
         if (_distance > _range) then {
-            systemChat format ["Out of range: %1", _distance];
             detach _asset;
             deleteVehicle _asset;
             break;
@@ -143,12 +142,12 @@ private _originalPosition = getPosATL player;
     WL_DeploymentEnd = true;
 };
 
-[_originalPosition, _range, _ignoreSector] spawn {
-    params ["_originalPosition", "_range", "_ignoreSector"];
+[_originalPosition, _range, _ignoreSector, _asset] spawn {
+    params ["_originalPosition", "_range", "_ignoreSector", "_asset"];
 
     waitUntil {
         sleep 0.1;
-        [_originalPosition, _range, _ignoreSector] call WL2_fnc_cancelVehicleOrder;
+        [_originalPosition, _range, _ignoreSector, _asset] call WL2_fnc_cancelVehicleOrder;
     };
 
     WL_DeploymentEnd = true;
@@ -170,11 +169,11 @@ if (!WL_DeploymentLock) then {
 private _finalPosition = getPosWorldVisual _asset;
 private _finalDirection = [vectorDir _asset, vectorUp _asset];
 
+private _canStillOrderVehicle = !([_originalPosition, _range, _ignoreSector, _asset] call WL2_fnc_cancelVehicleOrder);
+
 detach _asset;
 deleteVehicle _asset;
 
 [player, "assembly", false] call WL2_fnc_hintHandle;
-
-private _canStillOrderVehicle = !([_originalPosition, _range, _ignoreSector] call WL2_fnc_cancelVehicleOrder);
 
 [WL_DeploymentSuccess && _canStillOrderVehicle, _finalPosition, _offset, _finalDirection];
