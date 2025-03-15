@@ -44,6 +44,9 @@ if (!_upgrading && typeof _cursorObject == "VirtualReammoBox_camonet_F") exitWit
         case (!isNull attachedTo _cursorObject || !isNull ropeAttachedTo _cursorObject): {
             _result = [false];
         };
+        case ((getPosASL _cursorObject) # 2 < -10): {
+            _result = [false];
+        };
         case (count _teamForwardBases + count _fobCooldowns >= 3): {
             private _limitReached = format ["Forward base limit reached. Current: %1, Cooldown: %2", count _teamForwardBases, count _fobCooldowns];
             _result = [true, _limitReached];

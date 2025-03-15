@@ -4,6 +4,7 @@ class CfgRemoteExec {
 		mode = 1;
 		jip = 1;
 
+		class APS_fnc_dazzle {allowedTargets = 0;};
 		class APS_fnc_lagProtectionServer {allowedTargets = 2;};
 		class APS_fnc_report {allowedTargets = 0;};
 		class APS_fnc_serverHandleAPS {allowedTargets = 2;};

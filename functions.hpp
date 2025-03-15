@@ -3,6 +3,7 @@ class CfgFunctions {
 		class Default {
 			file = "src\scripts\APS";
 			class active {};
+			class dazzle {};
 			class defineVehicles {};
 			class firedProjectile {};
 			class getDirection {};
@@ -146,6 +147,7 @@ class CfgFunctions {
 			class demolishChargeAction {};
 			class deployableAddAction {};
 			class deployableEligibility {};
+			class disarmAction {};
 			class jammerAction {};
 			class jammerToggle {};
 			class jammerUpdate {};

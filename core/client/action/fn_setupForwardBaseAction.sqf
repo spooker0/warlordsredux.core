@@ -41,6 +41,14 @@ private _setupActionId = player addAction [
 				playSound "AddItemFailed";
 			};
 
+			private _sectors = BIS_WL_allSectors select {
+				_position inArea (_x getVariable "objectAreaComplete")
+			};
+			if (count _sectors > 0) exitWith {
+				systemChat "Forward base must be deployed outside of sectors!";
+				playSound "AddItemFailed";
+			};
+
 			systemChat format ["Forward base under construction. %1 seconds remaining.", WL_FOB_SETUP_TIME];
 			private _endTime = serverTime + WL_FOB_SETUP_TIME;
 

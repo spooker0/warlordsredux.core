@@ -7,8 +7,8 @@ params ["_asset"];
     "<t color='#ff0000'>Begin Demolition</t>",
     "\a3\ui_f\data\IGUI\Cfg\holdactions\holdAction_secure_ca.paa",
     "\a3\ui_f\data\IGUI\Cfg\holdactions\holdAction_secure_ca.paa",
-    "speed player < 1 && vehicle player == player",
-    "speed player < 1 && vehicle player == player",
+    "speed player < 1 && vehicle player == player && isNull (cursorObject getVariable [""WL_demolishable"", objNull])",
+    "speed player < 1 && vehicle player == player && isNull (cursorObject getVariable [""WL_demolishable"", objNull])",
     {},
     {
         params ["_target", "_caller", "_actionId", "_arguments", "_frame", "_maxFrame"];
@@ -46,6 +46,8 @@ params ["_asset"];
                 break;
             };
 
+            detach _charge;
+
             private _targetIntersections = lineIntersectsSurfaces [
                 AGLToASL positionCameraToWorld [0, 0, 0],
                 AGLToASL positionCameraToWorld [0, 0, 20],
@@ -72,19 +74,19 @@ params ["_asset"];
                 _dummyVector = [1, 0, 0];
             };
             _forward = vectorNormalized (_surfaceNormal vectorCrossProduct _dummyVector);
-            private _up = vectorNormalized (_forward vectorCrossProduct _surfaceNormal);
             _charge setVectorDirAndUp [_forward, _surfaceNormal];
 
+            [_charge, _target] call BIS_fnc_attachToRelative;
+            _charge setObjectScale 3;
             sleep 0.001;
         };
+
+        [player, "placeCharge", false] call WL2_fnc_hintHandle;
 
         if (_cancelCharge) exitWith {
             playSoundUI ["AddItemFailed"];
             deleteVehicle _charge;
-            [player, "placeCharge", false] call WL2_fnc_hintHandle;
         };
-
-        [player, "placeCharge", false] call WL2_fnc_hintHandle;
 
         [_charge, serverTime, _caller, _target] remoteExec ["WL2_fnc_demolishChargeAction", 0];
     },

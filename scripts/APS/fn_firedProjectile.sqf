@@ -92,7 +92,7 @@ while {_continue && alive _projectile} do {
 			if (_dazzleable && _isGuided) exitWith {
 				_continue = false;
 				private _dazzlerFuel = fuel _x;
-				_x setFuel (_dazzlerFuel - 0.03 * _projectileAPSConsumption);
+				[_x, _projectileAPSConsumption] remoteExec ["APS_fnc_dazzle", _x];
 				[_x, true] call _interception;
 			};
 		} else {

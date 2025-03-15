@@ -316,7 +316,7 @@ addMissionEventHandler ["Draw3D", {
         _targets = _targets select {
             alive _x &&
             lifeState _x != "INCAPACITATED" &&
-            _x getVariable ["WL_spawnedAsset", false] &&
+            (_x getVariable ["WL_spawnedAsset", false] || isPlayer _x) &&
             _x distance _vehicle < _maxDistance &&
             _x != _vehicle;
         };

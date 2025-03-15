@@ -417,3 +417,5 @@ removeGoggles player;
 };
 call WL2_fnc_setupForwardBaseAction;
 #endif
+
+call WL2_fnc_disarmAction;

@@ -162,7 +162,11 @@ while { alive _projectile && alive player } do {
     _pitch = _pitch + _pitchVel;
     _yaw = _yaw - _yawVel;
 
-    _pitch = 89 min (_pitch max -80);
+    if (_projectileIsShell) then {
+        _pitch = 89 min (_pitch max -89);
+    } else {
+        _pitch = 89 min (_pitch max -80);
+    };
 
     _pitchVel = _pitchVel * _damping;
     _yawVel = _yawVel * _damping;

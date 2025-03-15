@@ -1,5 +1,6 @@
-params ["_killer", "_victim", ["_assetType", ""]];
+params ["_killer", "_victim"];
 
+private _assetType = [_victim] call WL2_fnc_getAssetTypeName;
 if (isNil "WL2_ffBuffer") then {
 	WL2_ffBuffer = [];
 	0 spawn {
@@ -13,27 +14,28 @@ if (isNil "WL2_ffBuffer") then {
 			private _victim = _params # 1;
 			private _assetType = _params # 2;
 
-			if (isPlayer _victim) then {
+			private _result = if (isPlayer _victim) then {
 				private _askForgiveness = [
 					"Forgive Friendly Fire",
 					format ["Choose to forgive %1?", name _killer],
 					"Forgive", "Don't forgive"
 				] call WL2_fnc_prompt;
-				[_killer, player, _askForgiveness, name player] remoteExec ["WL2_fnc_forgiveTeamkill", 2];
 
 				WL2_ffBuffer deleteAt 0;
 				_busy = false;
+				_askForgiveness;
 			} else {
 				private _askForgiveness = [
 					"Forgive Friendly Fire",
 					format ["Choose to forgive %1 for killing %2?", name _killer, _assetType],
 					"Forgive", "Don't forgive"
 				] call WL2_fnc_prompt;
-				[_killer, player, _askForgiveness, _assetType] remoteExec ["WL2_fnc_forgiveTeamkill", 2];
 
 				WL2_ffBuffer deleteAt 0;
 				_busy = false;
+				_askForgiveness;
 			};
+			[_killer, player, _result, _victim] remoteExec ["WL2_fnc_forgiveTeamkill", 2];
 		};
 		WL2_ffBuffer = nil;
 	};

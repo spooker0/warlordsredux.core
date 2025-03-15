@@ -24,4 +24,11 @@ if (!_isActive && !_isActivating) then {
     _asset setFuelConsumptionCoef 5;
 };
 
+private _rotationState = _asset animationSourcePhase "Radar_Rotation";
+if (_isActive || _isActivating) then {
+    _asset animateSource ["Radar_Rotation", _rotationState + 1, 1];
+} else {
+    _asset animateSource ["Radar_Rotation", _rotationState, 1];
+};
+
 _asset setUserActionText [_actionID, format ["<t color = '%1'>%2</t>", _actionColor, _actionText]];
