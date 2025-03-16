@@ -15,10 +15,10 @@ addMissionEventHandler ["Draw3D", {
         drawIcon3D _x;
     } forEach _laserIcons;
 
-    private _flareIcons = uiNamespace getVariable ["WL_HelmetInterfaceFlareIcons", []];
-    {
-        drawIcon3D _x;
-    } forEach _flareIcons;
+    // private _flareIcons = uiNamespace getVariable ["WL_HelmetInterfaceFlareIcons", []];
+    // {
+    //     drawIcon3D _x;
+    // } forEach _flareIcons;
 
     private _munitionIcons = uiNamespace getVariable ["WL_HelmetInterfaceMunitionIcons", []];
     {
@@ -210,29 +210,29 @@ addMissionEventHandler ["Draw3D", {
             continue;
         };
 
-        private _flares = (8 allObjects 2) select {
-            typeof _x == "CMflare_Chaff_Ammo"
-        };
-        private _flareIcons = [];
-        {
-            private _flare = _x;
-            private _flarePos = _flare modelToWorldVisual [0, 0, 0];
-            private _distance = _vehicle distance _flare;
+        // private _flares = (8 allObjects 2) select {
+        //     typeof _x == "CMflare_Chaff_Ammo"
+        // };
+        // private _flareIcons = [];
+        // {
+        //     private _flare = _x;
+        //     private _flarePos = _flare modelToWorldVisual [0, 0, 0];
+        //     private _distance = _vehicle distance _flare;
 
-            if (_distance > 4000) then {
-                continue;
-            };
+        //     if (_distance > 4000) then {
+        //         continue;
+        //     };
 
-            _flareIcons pushBack [
-                "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missileAlt_ca.paa",
-                [1, 1, 1, 1],
-                _flare modelToWorldVisual [0, 0, 0],
-                0.8,
-                0.8,
-                0
-            ];
-        } forEach _flares;
-        uiNamespace setVariable ["WL_HelmetInterfaceFlareIcons", _flareIcons];
+        //     _flareIcons pushBack [
+        //         "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missileAlt_ca.paa",
+        //         [1, 1, 1, 1],
+        //         _flare modelToWorldVisual [0, 0, 0],
+        //         0.8,
+        //         0.8,
+        //         0
+        //     ];
+        // } forEach _flares;
+        // uiNamespace setVariable ["WL_HelmetInterfaceFlareIcons", _flareIcons];
 
         private _targets = [];
 

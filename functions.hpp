@@ -5,6 +5,7 @@ class CfgFunctions {
 			class active {};
 			class dazzle {};
 			class defineVehicles {};
+			class deviceJammer {};
 			class firedProjectile {};
 			class getDirection {};
 			class getMaxAmmo {};
@@ -347,7 +348,6 @@ class CfgFunctions {
 			class changeSectorOwnership {};
 			class createUAVCrew {};
 			class createVehicleCorrectly {};
-			class dazzlerOn {};
 			class detectNewPlayers {};
 			class forfeitHandleServer {};
 			class forgiveTeamkill {};
@@ -364,6 +364,7 @@ class CfgFunctions {
 			class processRunways {};
 			class selectTarget {};
 			class serverEHs {};
+			class setDazzlerState {};
 			class setupNewWarlord {};
 			class targetResetHandleServer {};
 			class targetSelectionHandleServer {};

@@ -43,6 +43,7 @@ private _turretOverridesForVehicle = _turretOverrides getOrDefault [_orderedClas
 	private _addWeapons = getArray (_turretOverride >> "addWeapons");
 	private _reloadOverride = getNumber (_turretOverride >> "reloadOverride");
 	private _hideTurret = getNumber (_turretOverride >> "hideTurret");
+	private _deviceJammer = getNumber (_turretOverride >> "deviceJammer");
 
 	{
 		_asset removeMagazinesTurret [_x, _turret];
@@ -104,6 +105,10 @@ private _turretOverridesForVehicle = _turretOverrides getOrDefault [_orderedClas
 
 	if (_hideTurret != 0) then {
 		_asset animateSource ["HideTurret", 1, true];
+	};
+
+	if (_deviceJammer != 0) then {
+		[_asset, _turret] remoteExec ["APS_fnc_deviceJammer", _asset];
 	};
 } forEach _turretOverridesForVehicle;
 

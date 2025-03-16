@@ -5,6 +5,7 @@ class CfgRemoteExec {
 		jip = 1;
 
 		class APS_fnc_dazzle {allowedTargets = 0;};
+		class APS_fnc_deviceJammer {allowedTargets = 0;};
 		class APS_fnc_lagProtectionServer {allowedTargets = 2;};
 		class APS_fnc_report {allowedTargets = 0;};
 		class APS_fnc_serverHandleAPS {allowedTargets = 2;};
@@ -21,7 +22,6 @@ class CfgRemoteExec {
 		class WL2_fnc_claimAction {allowedTargets = 1;};
 		class WL2_fnc_controlGunnerAction {allowedTargets = 0;};
 		class WL2_fnc_dazzlerAction {allowedTargets = 1;};
-		class WL2_fnc_dazzlerOn {allowedTargets = 2;};
 		class WL2_fnc_demolish {allowedTargets = 0;};
 		class WL2_fnc_demolishChargeAction {allowedTargets = 0;};
 		class WL2_fnc_deployableAddAction {allowedTargets = 1;};
@@ -44,6 +44,7 @@ class CfgRemoteExec {
 		class WL2_fnc_repairAction {allowedTargets = 1;};
 		class WL2_fnc_revive {allowedTargets = 0;};
 		class WL2_fnc_scannerAction {allowedTargets = 0;};
+		class WL2_fnc_setDazzlerState {allowedTargets = 2;};
 		class WL2_fnc_setupForwardBaseMp {allowedTargets = 0;};
 		class WL2_fnc_slingAddAction {allowedTargets = 1;};
 		class WL2_fnc_slingloadInit {allowedTargets = 0;};
@@ -76,6 +77,7 @@ class CfgRemoteExec {
 		class diag_log {allowedTargets = 2;};
 		class lock {allowedTargets = 0;};
 		class lookAt {allowedTargets = 0;};
+		class playSoundUI {allowedTargets = 0;};
 		class removeWeaponGlobal {allowedTargets = 0;};
 		class reportRemoteTarget {allowedTargets = 0;};
 		class selectLeader {allowedTargets = 0;};

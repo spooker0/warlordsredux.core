@@ -11,9 +11,10 @@ if !(_hasHMDMap getOrDefault [_assetActualType, false]) exitWith {};
 
 while { alive _projectile } do {
     private _currentState = (missileState _projectile) # 1;
-    if (_currentState == "LOST") then {
-        _projectile setVariable ["APS_missileLost", true, owner _missileTarget];
-        break;
+    private _missileLost = _currentState == "LOST";
+    private _missileVarState = _projectile getVariable ["APS_missileLost", false];
+    if (_missileLost != _missileVarState) then {
+        _projectile setVariable ["APS_missileLost", _missileLost, [owner _missileTarget, clientOwner]];
     };
 
     sleep 0.1;

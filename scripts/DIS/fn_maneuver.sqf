@@ -47,7 +47,7 @@ while { alive _projectile } do {
     ];
     _projectile setVelocityModelSpace _newVector;
     private _angularVector = angularVelocityModelSpace _projectile;
-    private _newAngularVector = _angularVector vectorMultiply 2.0;
+    private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
     _projectile setAngularVelocityModelSpace _newAngularVector;
     sleep 0.001;
 };

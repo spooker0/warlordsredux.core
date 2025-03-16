@@ -13,7 +13,7 @@ if (_asset getVariable ["WL_ewNetActive", false] && isEngineOn _asset) then {
     _asset setVariable ["WL_ewNetActivating", true, true];
 
     if (!isEngineOn _asset) then {
-        [_asset] remoteExec ["WL2_fnc_dazzlerOn", 2];
+        [_asset, true] remoteExec ["WL2_fnc_setDazzlerState", 2];
     };
 
     [_asset] spawn {

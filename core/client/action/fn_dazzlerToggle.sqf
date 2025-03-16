@@ -6,7 +6,7 @@ if ([_asset] call APS_fnc_active) then {
 } else {
     _asset setVariable ["BIS_WL_dazzlerActivated", true, true];
     if (!isEngineOn _asset) then {
-        [_asset] remoteExec ["WL2_fnc_dazzlerOn", 2];
+        [_asset, true] remoteExec ["WL2_fnc_setDazzlerState", 2];
     };
     playSoundUI ["a3\sounds_f_bootcamp\sfx\vr\simulation_restart.wss"];
 };
