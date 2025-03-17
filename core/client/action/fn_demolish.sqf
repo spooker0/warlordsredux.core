@@ -39,9 +39,9 @@ params ["_asset"];
         };
 
         private _radius = boundingBoxReal _target # 2;
-        sleep 0.5;
+        sleep 0.1;
         waitUntil {
-            sleep 0.001;
+            sleep 0.01;
             inputAction "BuldSelect" == 0 && inputAction "navigateMenu" == 0;
         };
         while { alive _caller && alive _target } do {
@@ -97,9 +97,11 @@ params ["_asset"];
             sleep 0.001;
         };
 
+        deleteVehicle _dummy;
+
         [player, "placeCharge", false] call WL2_fnc_hintHandle;
 
-        if (_cancelCharge) exitWith {
+        if (_cancelCharge || !alive _target || !alive _caller) exitWith {
             playSoundUI ["AddItemFailed"];
             deleteVehicle _charge;
         };
