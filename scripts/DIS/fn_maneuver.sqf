@@ -24,9 +24,13 @@ params ["_projectile", "_unit"];
     params ["_projectile", "_unit"];
     sleep 1;
     private _originalTarget = missileTarget _projectile;
+    private _inDeathZone = _originalTarget distance _unit < 4000;
     while { alive _projectile } do {
-        _projectile setMissileTarget [_originalTarget, true];
-        sleep 0.5;
+        sleep 0.2;
+        if (_inDeathZone) then {
+            _projectile setMissileTarget [_originalTarget, true];
+        };
+
         private _missileTarget = missileTarget _projectile;
         private _missileTargetSide = _missileTarget getVariable ["BIS_WL_ownerAssetSide", side _missileTarget];
         private _projectileSide = side (group _unit);
