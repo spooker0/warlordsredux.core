@@ -276,16 +276,7 @@ private _removeStrongholdExecute = {
         (_x getVariable ["WL_stronghold", objNull]) == _asset
     };
     private _sector = (_findSector # 0);
-    private _oldSectorBuilding = _sector getVariable ["WL_stronghold", objNull];
-
-    [_oldSectorBuilding, false] remoteExec ["WL2_fnc_protectStronghold", 0, true];
-    deleteMarker (_sector getVariable ["WL_strongholdMarker", ""]);
-    deleteMarker (_sector getVariable ["WL_strongholdTextMarker", ""]);
-
-    _sector setVariable ["WL_stronghold", objNull, true];
-    _sector setVariable ["WL_strongholdMarker", "", true];
-    _sector setVariable ["WL_strongholdTextMarker", "", true];
-
+    [_sector] call WL2_fnc_removeStronghold;
     [player, "buyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 };
 [

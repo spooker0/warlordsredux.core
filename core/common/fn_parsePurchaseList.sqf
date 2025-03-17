@@ -229,7 +229,7 @@ private _fastTravelArr = [
 		[],
 		"Fast Travel Vehicle Paradrop",
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-		"Move your vehicle to a friendly sector from a helipad/airfield sector by paradropping it."
+		"Move your vehicle to a friendly sector from a helipad/airfield sector by paradropping it.<br/>Requirements:<br/>1. In an owned sector.<br/>2. In a vehicle as the driver.<br/>3. No enemies nearby.<br/>4. Cooldown: 5 minutes."
 	], [
 		"RespawnVicFT",
 		0,
@@ -287,19 +287,19 @@ private _fastTravelArr = [
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
 		"Buy a deployable sleeping bag that respawns you at its location."
 	], [
-		"BuyStronghold",
-		500,
-		[],
-		"Purchase Sector Stronghold",
-		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-		""
-	], [
 		"BuyFOB",
 		500,
 		[],
 		"Purchase Forward Base Supplies",
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-		"Purchases equipment that can be airlifted or deployed into a forward position and setup into a base by a squad leader of a squad with 3 or more members."
+		format ["Purchases equipment that can be airlifted or deployed into a forward position and setup into a base.<br/>Deploy requirements:<br/>1. Must be squad leader.<br/>2. Squad size >= 3.<br/>3. Outside of sectors.<br/>4. At least %1 away from other forward bases.<br/>5. Can have 3 total at once, including cooldown.", WL_FOB_MIN_DISTANCE]
+	], [
+		"BuyStronghold",
+		500,
+		[],
+		"Purchase Sector Stronghold",
+		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
+		"Fortifies the nearest building in your sector with a stronghold (one per sector at a time). This will replace the current stronghold if one exists. Strongholds provide a 5x bonus to infantry capture power in its small area, regardless of owner. Assets can be deployed onto strongholds. Strongholds can be used to speed up sector fortification process to reduce backcapping."
 	]
 ];
 

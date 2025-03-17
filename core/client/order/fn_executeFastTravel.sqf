@@ -107,11 +107,13 @@ switch (_fastTravelMode) do {
 		{
 			_x setPosASL _destination;
 			_x setDir _directionToSector;
+			_x setVelocityModelSpace [0, 30, 0];
 			[_x] spawn WL2_fnc_parachuteSetup;
 		} forEach _tagAlong;
 
 		player setPosASL _destination;
 		player setDir _directionToSector;
+		player setVelocityModelSpace [0, 30, 0];
 		[player] spawn WL2_fnc_parachuteSetup;
 	};
 	case 3: {

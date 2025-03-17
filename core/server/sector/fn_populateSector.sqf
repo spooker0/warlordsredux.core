@@ -5,67 +5,73 @@ params ["_sector", "_owner"];
 private _vehicleUnits = [];
 if (count (_sector getVariable ["BIS_WL_vehiclesToSpawn", []]) == 0) then {
 	private _roads = ((_sector nearRoads 400) select {count roadsConnectedTo _x > 0}) inAreaArray (_sector getVariable "objectAreaComplete");
-	if (count _roads > 0) then {
-		private _hasRadar = false;
-		private _hardAIMode = WL_HARD_AI_MODE == 1;
-		private _numVehicleSpawn = if (_hardAIMode) then {
-			private _sectorValue = _sector getVariable ["BIS_WL_value", 50];
-			((_sectorValue / 5) max 1) min 4;
-		} else {
-			1;
-		};
 
-		for "_i" from 1 to _numVehicleSpawn do {
+	private _hasRadar = false;
+	private _hardAIMode = WL_HARD_AI_MODE == 1;
+	private _numVehicleSpawn = if (_hardAIMode) then {
+		private _sectorValue = _sector getVariable ["BIS_WL_value", 50];
+		((_sectorValue / 5) max 1) min 4;
+	} else {
+		1;
+	};
+
+	private _randomSpots = [_sector] call WL2_fnc_findSpawnPositions;
+	for "_i" from 1 to _numVehicleSpawn do {
+		private _posRoad = selectRandom _randomSpots;
+		private _dirRoad = random 360;
+		if (count _roads > 0) then {
 			private _road = selectRandom _roads;
-			private _posRoad = position _road;
-			_vehicleArray = [_posRoad, _road getDir selectRandom (roadsConnectedTo _road), selectRandom (serverNamespace getVariable "WL2_populateVehiclePoolList"), _owner] call BIS_fnc_spawnVehicle;
-			_vehicleArray params ["_vehicle", "_crew", "_group"];
-
-			_vehicleUnits pushBack _vehicle;
-
-			{
-				_x call WL2_fnc_newAssetHandle;
-				_vehicleUnits pushBack _x;
-			} forEach _crew;
-
-			[_vehicle, driver _vehicle, typeof _vehicle] call WL2_fnc_processOrder;
-
-			[_group, 0] setWaypointPosition [position _vehicle, 100];
-			_group setBehaviour "COMBAT";
-			_group deleteGroupWhenEmpty true;
-
-			_wp = _group addWaypoint [_posRoad, 100];
-			_wp setWaypointType "SAD";
-
-			_wp = _group addWaypoint [_posRoad, 100];
-			_wp setWaypointType "CYCLE";
-
-			_vehicle allowCrewInImmobile [true, true];
-
-			if (typeOf _vehicle == "I_LT_01_scout_F") then {
-				_hasRadar = true;
-
-				_vehicle setVehicleReportRemoteTargets true;
-				_vehicle setVehicleReceiveRemoteTargets true;
-				_vehicle setVehicleReportOwnPosition true;
-			};
+			_posRoad = position _road;
+			_dirRoad = _road getDir selectRandom (roadsConnectedTo _road);
 		};
 
-		if (_hasRadar && _hardAIMode) then {
-			private _samLocation = selectRandom ([_sector, 0, true] call WL2_fnc_findSpawnPositions);
-			private _createSamResult = [_samLocation, 0, "I_E_SAM_System_03_F", resistance] call BIS_fnc_spawnVehicle;
-			private _sam = _createSamResult select 0;
-			for "_i" from 1 to 10 do {
-				_sam addMagazineTurret ["magazine_Missile_mim145_x4", [0]];
-			};
+		_vehicleArray = [_posRoad, _dirRoad, selectRandom (serverNamespace getVariable "WL2_populateVehiclePoolList"), _owner] call BIS_fnc_spawnVehicle;
+		_vehicleArray params ["_vehicle", "_crew", "_group"];
 
-			_sam setVehicleReportRemoteTargets true;
-			_sam setVehicleReceiveRemoteTargets true;
-			_sam setVehicleReportOwnPosition true;
+		_vehicleUnits pushBack _vehicle;
 
-			_sam call WL2_fnc_newAssetHandle;
-			_vehicleUnits pushBack _sam;
+		{
+			_x call WL2_fnc_newAssetHandle;
+			_vehicleUnits pushBack _x;
+		} forEach _crew;
+
+		[_vehicle, driver _vehicle, typeof _vehicle] call WL2_fnc_processOrder;
+
+		[_group, 0] setWaypointPosition [position _vehicle, 100];
+		_group setBehaviour "COMBAT";
+		_group deleteGroupWhenEmpty true;
+
+		_wp = _group addWaypoint [_posRoad, 100];
+		_wp setWaypointType "SAD";
+
+		_wp = _group addWaypoint [_posRoad, 100];
+		_wp setWaypointType "CYCLE";
+
+		_vehicle allowCrewInImmobile [true, true];
+
+		if (typeOf _vehicle == "I_LT_01_scout_F") then {
+			_hasRadar = true;
+
+			_vehicle setVehicleReportRemoteTargets true;
+			_vehicle setVehicleReceiveRemoteTargets true;
+			_vehicle setVehicleReportOwnPosition true;
 		};
+	};
+
+	if (_hasRadar && _hardAIMode) then {
+		private _samLocation = selectRandom ([_sector, 0, true] call WL2_fnc_findSpawnPositions);
+		private _createSamResult = [_samLocation, 0, "I_E_SAM_System_03_F", resistance] call BIS_fnc_spawnVehicle;
+		private _sam = _createSamResult select 0;
+		for "_i" from 1 to 10 do {
+			_sam addMagazineTurret ["magazine_Missile_mim145_x4", [0]];
+		};
+
+		_sam setVehicleReportRemoteTargets true;
+		_sam setVehicleReceiveRemoteTargets true;
+		_sam setVehicleReportOwnPosition true;
+
+		_sam call WL2_fnc_newAssetHandle;
+		_vehicleUnits pushBack _sam;
 	};
 } else {
 	{
@@ -167,7 +173,9 @@ while {_i < _garrisonSize} do {
 	private _i2 = 0;
 	for "_i2" from 0 to _grpSize do {
 		private _newUnit = _newGrp createUnit [selectRandom _unitsPool, _pos, [], 100, "NONE"];
-		_newUnit setVehiclePosition [getPosATL _newUnit, [], 0, "CAN_COLLIDE"];
+		private _posAboveGround = getPosATL _newUnit;
+		_posAboveGround set [2, 100];
+		_newUnit setVehiclePosition [_posAboveGround, [], 0, "CAN_COLLIDE"];
 		_newUnit call WL2_fnc_newAssetHandle;
 		_infantryUnits pushBack _newUnit;
 
@@ -180,13 +188,8 @@ while {_i < _garrisonSize} do {
 	[_newGrp, 0] setWaypointPosition [_pos, 0];
 	_newGrp deleteGroupWhenEmpty true;
 
-	_i3 = 0;
-	for "_i3" from 0 to 5 do {
-		_newGrp addWaypoint [selectRandom _spawnPosArr, 0];
-	};
-
 	_newWP = _newGrp addWaypoint [_pos, 0];
-	_newWP setWaypointType "CYCLE";
+	_newWP setWaypointType "HOLD";
 	sleep 0.001;
 };
 

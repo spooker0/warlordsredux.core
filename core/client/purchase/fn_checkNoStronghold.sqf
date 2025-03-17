@@ -8,29 +8,9 @@ if (count _findCurrentSector == 0) exitWith {
     [false, localize "STR_A3_WL_menu_arsenal_restr1"];
 };
 
-private _buildings = nearestObjects [player, ["House", "Building"], 20, true];
-_buildings = _buildings select {
-    (_x getVariable ["BIS_WL_ownerAsset", "123"]) == "123"
-};
-
-if (count _buildings == 0) exitWith {
-    [false, "You are not in or near a building."];
-};
-
-private _sectorBuilding = _buildings # 0;
-
-private _buildingBounds = boundingBoxReal _sectorBuilding;
-private _strongholdRadius = _buildingBounds # 2;
-private _distanceToSectorBuilding = player distance2D _sectorBuilding;
-if (_distanceToSectorBuilding > _strongholdRadius) exitWith {
-    [false, "You are not in or near a building."];
-};
-
-private _minBound = _buildingBounds # 0;
-private _maxBound = _buildingBounds # 1;
-private _buildingArea = (_maxBound # 0 - _minBound # 0) * (_maxBound # 1 - _minBound # 1);
-if (_buildingArea < 100) exitWith {
-    [false, "The building you are nearest to is too small to be a Sector Stronghold."];
+private _findStrongholdBuildings = call WL2_fnc_findStrongholdBuilding;
+if (count _findStrongholdBuildings == 0) exitWith {
+    [false, "You are not in/near a building that can be made into a stronghold."];
 };
 
 [true, ""];

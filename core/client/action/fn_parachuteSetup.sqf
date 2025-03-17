@@ -7,9 +7,15 @@ private _parachuteActionId = _unit addAction [
     100
 ];
 
+private _parachuteAutoDeploy = profileNamespace getVariable ["MRTM_parachuteAutoDeploy", false];
 waitUntil {
     sleep 0.2;
-    !alive _unit || (getPosATL _unit # 2) < 100 || (getPosASL _unit # 2) < 100 || vehicle _unit != _unit;
+    private _isBelowThreshold = if (_parachuteAutoDeploy) then {
+        (getPosATL _unit # 2) < 100 || (getPosASL _unit # 2) < 100;
+    } else {
+        false;
+    };
+    !alive _unit || _isBelowThreshold || vehicle _unit != _unit;
 };
 
 _unit removeAction _parachuteActionId;

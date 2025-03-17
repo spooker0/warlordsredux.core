@@ -7,25 +7,36 @@ params ["_asset"];
     "<t color='#ff0000'>Begin Demolition</t>",
     "\a3\ui_f\data\IGUI\Cfg\holdactions\holdAction_secure_ca.paa",
     "\a3\ui_f\data\IGUI\Cfg\holdactions\holdAction_secure_ca.paa",
-    "speed player < 1 && vehicle player == player && isNull (cursorObject getVariable [""WL_demolishable"", objNull])",
-    "speed player < 1 && vehicle player == player && isNull (cursorObject getVariable [""WL_demolishable"", objNull])",
+    "call WL2_fnc_demolishEligibility",
+    "call WL2_fnc_demolishEligibility",
     {},
     {
         params ["_target", "_caller", "_actionId", "_arguments", "_frame", "_maxFrame"];
         if (_frame % 4 == 0) then {
-            playSound3D ["\a3\sounds_f\arsenal\tools\minedetector_beep_01.wss", _target, false, getPosASL _target, 2, 1, 200];
+            playSound3D ["\a3\sounds_f\arsenal\tools\minedetector_beep_01.wss", player, false, getPosASL player, 2, 1, 200];
         };
     },
     {
         params ["_target", "_caller", "_actionId", "_arguments"];
-        private _charge = createVehicle ["DemoCharge_F", getPosATL _target, [], 0, "FLY"];
-        _charge setPosASL (getPosASL _target);
+        private _dummy = createVehicle ["DemoCharge_F", getPosATL _target, [], 0, "FLY"];
+        _dummy setPosASL (getPosASL _target);
+        _dummy allowDamage false;
+
+        private _charge = createVehicle ["DemoCharge_F", getPosATL _dummy, [], 0, "FLY"];
+        _charge setPosASL (getPosASL _dummy);
         _charge allowDamage false;
 
         [player, "placeCharge"] call WL2_fnc_hintHandle;
         private _forward = [];
         private _surfaceNormal = [];
         private _cancelCharge = false;
+
+        private _strongholdSector = _target getVariable ["WL_strongholdSector", objNull];
+        private _objectScale = if (isNull _strongholdSector) then {
+            3
+        } else {
+            5
+        };
 
         private _radius = boundingBoxReal _target # 2;
         while { alive _caller && alive _target } do {
@@ -55,7 +66,7 @@ params ["_asset"];
                 _charge,
                 true,
                 1,
-                "FIRE",
+                "VIEW",
                 "",
                 true
             ];
@@ -76,8 +87,8 @@ params ["_asset"];
             _forward = vectorNormalized (_surfaceNormal vectorCrossProduct _dummyVector);
             _charge setVectorDirAndUp [_forward, _surfaceNormal];
 
-            [_charge, _target] call BIS_fnc_attachToRelative;
-            _charge setObjectScale 3;
+            [_charge, _dummy] call BIS_fnc_attachToRelative;
+            _charge setObjectScale _objectScale;
             sleep 0.001;
         };
 

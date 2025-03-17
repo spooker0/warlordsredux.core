@@ -1005,6 +1005,20 @@ class MRTM_settingsMenu
 						shadow = 0;
 					};
 				};
+				class MRTMOtherText11: RscStructuredTextMRTM
+				{
+					idc = -1;
+					text = "Parachute Auto Deploy:";
+					x = 0.327969 * safezoneW + safezoneX;
+					y = 1.048 * safezoneH + safezoneY;
+					w = 0.23 * safezoneW;
+					h = 0.033 * safezoneH;
+					class Attributes
+					{
+						align = "right";
+						shadow = 0;
+					};
+				};
 				class MRTMOtherButton1: RscCheckboxMRTM
 				{
 					idc = 8024;
@@ -1092,6 +1106,15 @@ class MRTM_settingsMenu
 					action = "profileNamespace setVariable ['MRTM_muteTaskNotifications', !(profileNamespace getVariable ['MRTM_muteTaskNotifications', false])];";
 					x = 0.560969 * safezoneW + safezoneX;
 					y = 1.012 * safezoneH + safezoneY;
+					w = 0.0204688 * safezoneW;
+					h = 0.028 * safezoneH;
+				};
+				class MRTMOtherButton11: RscCheckboxMRTM
+				{
+					idc = 8034;
+					action = "profileNamespace setVariable ['MRTM_parachuteAutoDeploy', !(profileNamespace getVariable ['MRTM_parachuteAutoDeploy', true])];";
+					x = 0.560969 * safezoneW + safezoneX;
+					y = 1.047 * safezoneH + safezoneY;
 					w = 0.0204688 * safezoneW;
 					h = 0.028 * safezoneH;
 				};

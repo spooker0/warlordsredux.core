@@ -1,7 +1,7 @@
-params ["_sectorBuilding"];
+params ["_stronghold", "_currentSector"];
 
-_sectorBuilding setDamage 0;
-private _hitPoints = getAllHitPointsDamage _sectorBuilding;
+_stronghold setDamage 0;
+private _hitPoints = getAllHitPointsDamage _stronghold;
 private _allHitPointNames = if (count _hitPoints > 0) then {
     _hitPoints # 0;
 } else {
@@ -9,9 +9,11 @@ private _allHitPointNames = if (count _hitPoints > 0) then {
 };
 private _windowHitPointNames = _allHitPointNames select { "glass" in toLower _x || "window" in toLower _x };
 {
-    _sectorBuilding setHitPointDamage [_x, 1];
+    _stronghold setHitPointDamage [_x, 1];
 } forEach _windowHitPointNames;
 
-[_sectorBuilding, true] remoteExec ["WL2_fnc_protectStronghold", 0, true];
+[_stronghold, true] remoteExec ["WL2_fnc_protectStronghold", 0, true];
 
-forceHitPointsDamageSync _sectorBuilding;
+forceHitPointsDamageSync _stronghold;
+
+_stronghold setVariable ["WL_strongholdSector", _currentSector, true];

@@ -36,12 +36,14 @@ private _assetSide = [_asset] call WL2_fnc_getAssetSide;
 if (_assetSide != side group player) exitWith {};
 
 private _assetPos = _asset modelToWorldVisual [0, 0, 0];
-private _assetHeight = _assetPos # 2;
+private _assetHeight = (_assetPos # 2) min (getPosASL _asset # 2);
 if (!_awacs && _assetHeight > 2000) exitWith {
     _asset setVariable ["WL_scannedObjects", []];
+    _asset setVariable ["WL_scanRadius", 0];
 };
 if (_awacs && _assetHeight < 50) exitWith {
     _asset setVariable ["WL_scannedObjects", []];
+    _asset setVariable ["WL_scanRadius", 0];
 };
 
 private _scanRadius = if (_awacs) then {

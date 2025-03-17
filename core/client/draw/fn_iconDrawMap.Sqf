@@ -92,11 +92,6 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		default { [1, 1, 1, 0] };
 	};
 
-	private _basePos = getPosATL _base;
-	if (_baseOwner != _side && (player distance2D _basePos > 250)) then {
-		continue;
-	};
-
 	private _baseTime = _base getVariable ["WL2_forwardBaseTime", -1];
 	private _baseLevel = _base getVariable ["WL2_forwardBaseLevel", 0];
 
@@ -111,6 +106,18 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		format ["(%1 %2)", _infoString, _timeString];
 	} else {
 		""
+	};
+
+	private _basePos = getPosATL _base;
+	private _baseDetectionRadius = switch (_baseLevel) do {
+		case 0: { 100 };
+		case 1: { 150 };
+		case 2: { 250 };
+		case 3: { 500 };
+		default { 100 };
+	};
+	if (_baseOwner != _side && (player distance2D _basePos > _baseDetectionRadius)) then {
+		continue;
 	};
 
 	private _baseType = switch (_baseLevel) do {
@@ -232,6 +239,7 @@ private _scale = 6.4 * worldSize / 8192 * ctrlMapScale _m;
 	if (isNull _x) then { continue; };
 	private _assetPos = _x modelToWorldVisual [0, 0, 0];
     private _scanRadius = _x getVariable ["WL_scanRadius", 100];
+	if (_scanRadius == 0) then { continue; };
     private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
 	if (_hasAWACSMap getOrDefault [_assetActualType, false]) then {
 		private _size = _scanRadius / _scale;

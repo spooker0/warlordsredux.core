@@ -229,6 +229,7 @@ if (_ret) then {
 		case "BuyStronghold": {
 			[
 				[WL2_fnc_checkPlayerInVehicle],
+				[WL2_fnc_checkNearbyEnemies],
 				[WL2_fnc_checkNoStronghold]
 			]
 		};

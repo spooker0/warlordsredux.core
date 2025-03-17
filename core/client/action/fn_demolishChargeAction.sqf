@@ -41,9 +41,15 @@ while { alive _charge && alive _asset } do {
     private _holdChargeExplosion = _charge getVariable ["WL_holdChargeExplosion", false];
     if (_timeRemaining <= 0 && !_holdChargeExplosion) then {
         private _demolisher = _charge getVariable ["WL_demolisher", objNull];
-        systemChat str _demolisher;
-        systemChat str (local _demolisher);
         if (local _demolisher) then {
+            private _strongholdSector = _asset getVariable ["WL_strongholdSector", objNull];
+            if !(isNull _strongholdSector) then {
+                private _strongholdSectorCheck = _strongholdSector getVariable ["WL_stronghold", objNull];
+                if (_asset == _strongholdSectorCheck) then {
+                    [_strongholdSector] call WL2_fnc_removeStronghold;
+                };
+            };
+
             [_asset, _demolisher] remoteExec ["WL2_fnc_killRewardHandle", 2];
             private _explosion = createVehicle ["M_Air_AA", getPosASL _charge, [], 0, "FLY"];
             _explosion setPosASL getPosASL _charge;

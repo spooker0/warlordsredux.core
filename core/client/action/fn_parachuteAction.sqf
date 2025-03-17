@@ -9,9 +9,11 @@ _parachute setDir (getDir _caller);
 [_parachute, _caller] spawn {
     params ["_parachute", "_caller"];
     waitUntil {
-        sleep 1;
-        !alive _parachute || !alive _caller || {lifeState _caller == "INCAPACITATED"}
+        sleep 0.2;
+        private _cutting = inputAction "GetOver" == 1;
+        _cutting || !alive _parachute || !alive _caller || {lifeState _caller == "INCAPACITATED"}
     };
+    moveOut _caller;
     deleteVehicle _parachute;
 };
 

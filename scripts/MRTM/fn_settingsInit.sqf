@@ -29,6 +29,7 @@ if !(profileNamespace getVariable ["preferencesInitialzed", false]) then {
 	profileNamespace setVariable ["MRTM_showMarkers", true];
 	profileNamespace setVariable ["MRTM_noVoiceSpeaker", false];
 	profileNamespace setVariable ["MRTM_muteTaskNotifications", false];
+	profileNamespace setVariable ["MRTM_parachuteAutoDeploy", true];
 	profileNamespace setVariable ["preferencesInitialzed", true];
 };
 player setVariable ["MRTM_3rdPersonDisabled", (profileNamespace getVariable ["MRTM_3rdPersonDisabled", true]), [2, clientOwner]];

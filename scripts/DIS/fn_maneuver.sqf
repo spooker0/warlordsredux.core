@@ -36,7 +36,7 @@ params ["_projectile", "_unit"];
 
 private _maxAcceleration = (getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "thrust")) / 10.0 * WL_SAM_ACCELERATION_FACTOR;
 private _maxSpeed = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "maxSpeed") * WL_SAM_MAX_SPEED_FACTOR;
-sleep 1;
+
 while { alive _projectile } do {
     private _currentVector = velocityModelSpace _projectile;
     private _currentSpeed = (_currentVector # 1) + ((_maxAcceleration * 0.01) min _maxSpeed);
@@ -46,8 +46,22 @@ while { alive _projectile } do {
         0
     ];
     _projectile setVelocityModelSpace _newVector;
+
+    private _target = missileTarget _projectile;
+    private _targetHeight = if (isNull _target) then {
+        100;
+    } else {
+        getPosATL _target # 2;
+    };
+    private _minHeight = 100 min _targetHeight;
     private _angularVector = angularVelocityModelSpace _projectile;
-    private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
-    _projectile setAngularVelocityModelSpace _newAngularVector;
+    private _projectileHeight = (getPosATL _projectile # 2) min (getPosASL _projectile # 2);
+    if (_projectileHeight < _minHeight) then {
+        _projectile setAngularVelocityModelSpace [-10, _angularVector # 1, _angularVector # 2];
+    } else {
+        private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
+        _projectile setAngularVelocityModelSpace _newAngularVector;
+    };
+
     sleep 0.001;
 };

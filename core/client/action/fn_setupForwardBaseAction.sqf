@@ -49,6 +49,18 @@ private _setupActionId = player addAction [
 				playSound "AddItemFailed";
 			};
 
+			private _currentForwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
+			private _teamForwardBases = _currentForwardBases select {
+				_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
+			};
+			private _nearbyTeamForwardBases = _teamForwardBases select {
+				_position distance2D _x < WL_FOB_MIN_DISTANCE
+			};
+			if (count _nearbyTeamForwardBases > 0) exitWith {
+				systemChat format ["Forward base must be deployed at least %1m away from other forward bases!", WL_FOB_MIN_DISTANCE];
+				playSound "AddItemFailed";
+			};
+
 			systemChat format ["Forward base under construction. %1 seconds remaining.", WL_FOB_SETUP_TIME];
 			private _endTime = serverTime + WL_FOB_SETUP_TIME;
 

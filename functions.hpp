@@ -146,6 +146,7 @@ class CfgFunctions {
 			class dazzlerUpdate {};
 			class demolish {};
 			class demolishChargeAction {};
+			class demolishEligibility {};
 			class deployableAddAction {};
 			class deployableEligibility {};
 			class disarmAction {};
@@ -161,6 +162,7 @@ class CfgFunctions {
 			class radarRotateUpdate {};
 			class rearmAction {};
 			class removeAction {};
+			class removeStronghold {};
 			class repairAction {};
 			class repairActionEligibility {};
 			class respawnBagAction {};
@@ -249,6 +251,7 @@ class CfgFunctions {
 			class deployment {};
 			class executeFastTravel {};
 			class fastTravelConflictMarker {};
+			class findStrongholdBuilding {};
 			class orderAircraft {};
 			class orderArsenal {};
 			class orderFastTravel {};
