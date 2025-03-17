@@ -23,7 +23,9 @@ params ["_projectile", "_unit"];
 [_projectile, _unit] spawn {
     params ["_projectile", "_unit"];
     sleep 1;
+    private _originalTarget = missileTarget _projectile;
     while { alive _projectile } do {
+        _projectile setMissileTarget [_originalTarget, true];
         sleep 0.5;
         private _missileTarget = missileTarget _projectile;
         private _missileTargetSide = _missileTarget getVariable ["BIS_WL_ownerAssetSide", side _missileTarget];

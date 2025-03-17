@@ -23,7 +23,7 @@ while { alive _asset } do {
         continue;
     };
 
-    _devicesInRange = [_devicesInRange, [], { _asset distance _x }, "ASCEND"] call BIS_fnc_sortBy;
+    _devicesInRange = [_devicesInRange, [_asset], { _input0 distance _x }, "ASCEND"] call BIS_fnc_sortBy;
 
     private _deviceTarget = _devicesInRange # 0;
 
@@ -31,6 +31,6 @@ while { alive _asset } do {
         _deviceTarget setVariable ["BIS_WL_dazzlerActivated", false, true];
         [_deviceTarget, false] remoteExec ["WL2_fnc_setDazzlerState", 2];
         [["a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", 1, 0.5, true]] remoteExec ["playSoundUI", _controllingUnit];
-        _controllingUnit forceWeaponFire ["Laserdesignator_mounted","Laserdesignator_mounted"];
+        // _controllingUnit forceWeaponFire ["Laserdesignator_mounted","Laserdesignator_mounted"];
     };
 };

@@ -39,7 +39,12 @@ params ["_asset"];
         };
 
         private _radius = boundingBoxReal _target # 2;
+        sleep 0.5;
         while { alive _caller && alive _target } do {
+            waitUntil {
+                sleep 0.001;
+                inputAction "BuldSelect" == 0 && inputAction "navigateMenu" == 0;
+            };
             if (inputAction "BuldSelect" > 0) then {
                 break;
             };
