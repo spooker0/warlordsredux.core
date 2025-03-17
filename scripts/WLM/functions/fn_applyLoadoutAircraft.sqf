@@ -63,7 +63,12 @@ private _attachments = [];
 
 _asset setVariable ["WLM_assetAttachments", _attachments, true];
 
-[_asset, _eligibleFreeRearm] remoteExec ["WLM_fnc_applyPylon", [_asset, player]];
+private _owners = if (owner _asset == owner player) then {
+    _asset;
+} else {
+    [_asset, player]
+};
+[_asset, _eligibleFreeRearm] remoteExec ["WLM_fnc_applyPylon", _owners];
 
 [_attachments, _asset] spawn {
     params ["_attachments", "_asset"];

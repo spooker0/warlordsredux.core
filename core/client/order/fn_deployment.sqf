@@ -62,6 +62,7 @@ private _turretOverridesForVehicle = _turretOverrides getOrDefault [_orderedClas
 
 private _originalPosition = getPosATL player;
 
+WL_DeploymentEnd = false;
 [_asset, _offset, _range] spawn {
     params ["_asset", "_offset", "_range"];
 
@@ -73,7 +74,6 @@ private _originalPosition = getPosATL player;
     _offset set [2, 0.2];
 
     WL_DeploymentLock = false;
-    WL_DeploymentEnd = false;
     WL_DeploymentSuccess = false;
     private _directionOffset = 0;
 
