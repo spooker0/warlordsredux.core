@@ -3,7 +3,7 @@
 private _baseData =
 #if WL_OVERRIDE_BASES
 	BIS_WL_allSectors select {
-		_x getVariable ["BIS_WL_name", ""] in ["Airbase", "Nifi Solar"];
+		_x getVariable ["BIS_WL_name", ""] in ["Airbase", "AAC Airfield"];
 	};
 #else
 	[] call WL2_fnc_calcHomeBases;

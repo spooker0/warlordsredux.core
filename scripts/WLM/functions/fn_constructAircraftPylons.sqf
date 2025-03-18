@@ -5,7 +5,7 @@ params ["_asset"];
 private _assetConfig = configFile >> "CfgVehicles" >> typeOf _asset;
 private _pylonConfig = _assetConfig >> "Components" >> "TransportPylonsComponent";
 private _pylonsInfo = configProperties [_pylonConfig >> "pylons"];
-private _currentAssetPylonInfo = getAllPylonsInfo _asset;
+private _currentAssetPylonInfo = _asset getVariable ["WLM_pylonInfo", getAllPylonsInfo _asset];
 
 {
     private _uiPosition = getArray (_x >> "uiPosition");
