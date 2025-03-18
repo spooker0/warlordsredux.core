@@ -16,12 +16,6 @@ private _uid = "";
 private _simulateOneBrokenCommand = true;
 
 while { _uid == "" } do {
-    if (_simulateOneBrokenCommand) then {
-        _simulateOneBrokenCommand = false;
-        sleep 1;
-        continue;
-    };
-
     if (serverTime - _startTime > 30) then {
         ["Cannot find player UID for over 30 seconds. Aborting."] call _initLog;
 		break;
@@ -48,7 +42,7 @@ while { _uid == "" } do {
         };
 	};
 
-    sleep 1;
+    uiSleep 1;
 };
 
 if (_uid == "") exitWith {
