@@ -63,7 +63,7 @@ private _attachments = [];
 
 _asset setVariable ["WLM_assetAttachments", _attachments, true];
 
-[_asset, _attachments, _eligibleFreeRearm] remoteExec ["WLM_fnc_applyPylon", _asset];
+[_asset, _attachments, _eligibleFreeRearm] remoteExec ["WLM_fnc_applyPylon", [2, _asset]];
 
 [_attachments, _asset] spawn {
     params ["_attachments", "_asset"];
