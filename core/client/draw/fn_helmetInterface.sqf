@@ -56,8 +56,6 @@ addMissionEventHandler ["Draw3D", {
         ];
     } forEach _targetInfantryIcons;
 
-    if (WL_HelmetInterface == 1) exitWith {};
-
     private _vehicle = getConnectedUAV player;
     if (isNull _vehicle) then {
         _vehicle = vehicle player;

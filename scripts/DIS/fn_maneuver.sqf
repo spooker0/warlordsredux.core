@@ -30,7 +30,6 @@ params ["_projectile", "_unit"];
     while { alive _projectile } do {
         sleep 0.2;
         if (_inDangerZone) then {
-            systemChat "Enemy target in death zone.";
             _projectile setMissileTarget [_originalTarget, true];
         };
 
