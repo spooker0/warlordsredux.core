@@ -1,8 +1,4 @@
-params ["_asset", "_rearm"];
-
-diag_log "Applying pylons...";
-
-private _attachments = _asset getVariable ["WLM_assetAttachments", []];
+params ["_asset", "_attachments", "_rearm"];
 
 private _pylonConfig = configFile >> "CfgVehicles" >> typeOf _asset >> "Components" >> "TransportPylonsComponent";
 private _pylonsInfo = configProperties [_pylonConfig >> "pylons"];
