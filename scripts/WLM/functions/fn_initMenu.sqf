@@ -20,6 +20,11 @@ uiNamespace setVariable ["WLM_assetIsAircraft", _isAircraft];
 
 disableSerialization;
 
+private _rearmButtonControl = _display displayCtrl WLM_REARM_BUTTON;
+private _applyButtonControl = _display displayCtrl WLM_APPLY_BUTTON;
+_rearmButtonControl ctrlEnable false;
+_applyButtonControl ctrlEnable false;
+
 private _assetTypeName = [_asset] call WL2_fnc_getAssetTypeName;
 
 if (_isAircraft) then {
@@ -60,7 +65,6 @@ _wipeButtonControl ctrlAddEventHandler ["ButtonClick", {
     [true] call WLM_fnc_wipePylonSaves;
 }];
 
-private _applyButtonControl = _display displayCtrl WLM_APPLY_BUTTON;
 _applyButtonControl ctrlAddEventHandler ["ButtonClick", {
     private _isAircraft = uiNamespace getVariable "WLM_assetIsAircraft";
     if (_isAircraft) then {
@@ -70,7 +74,6 @@ _applyButtonControl ctrlAddEventHandler ["ButtonClick", {
     };
 }];
 
-private _rearmButtonControl = _display displayCtrl WLM_REARM_BUTTON;
 _rearmButtonControl ctrlSetText "Rearm";
 _rearmButtonControl ctrlAddEventHandler ["ButtonClick", {
     private _isAircraft = uiNamespace getVariable "WLM_assetIsAircraft";
