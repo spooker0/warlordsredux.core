@@ -12,7 +12,7 @@ WL_LoadingState = 0;
 	private _stepText = "";
 	private _totalLoadSteps = 12;
 	waitUntil {
-		sleep 0.1;
+		uiSleep 0.1;
 		_stepText = format ["Client Loading Step %1/%2", WL_LoadingState, _totalLoadSteps];
 		_indicator ctrlSetText _stepText;
 		serverTime - _startTime > 60 || WL_LoadingState >= _totalLoadSteps
@@ -50,7 +50,7 @@ waitUntil {
 #if WL_STOP_TEAM_SWITCH
 if ((call BIS_fnc_admin) == 0) then {
 	private _uid = getPlayerUID player;
-	private _switch = format ["teamBlocked_%1", _uid];
+	private _switch = format ["WL2_teamBlocked_%1", _uid];
 	waitUntil {
 		!isNil {
 			missionNamespace getVariable _switch
@@ -65,15 +65,15 @@ if ((call BIS_fnc_admin) == 0) then {
 		forceEnd;
 	};
 
-	private _imb = format ["balanceBlocked_%1", _uid];
+	private _imbalanced = format ["WL2_balanceBlocked_%1", _uid];
 	waitUntil {
 		!isNil {
-			missionNamespace getVariable _imb
+			missionNamespace getVariable _imbalanced
 		}
 	};
 	WL_LoadingState = 3;
 
-	if (missionNamespace getVariable _imb) exitWith {
+	if (missionNamespace getVariable _imbalanced) exitWith {
 		["client_init"] call BIS_fnc_endLoadingScreen;
 		"BlockScreen" setDebriefingText ["Switch Teams", "It seems that the teams are not balanced, please head back to the lobby and join the other team, Thank you.", "Teams are imbalanced."];
 		endMission "BlockScreen";
@@ -114,21 +114,6 @@ if !(BIS_WL_playerSide in BIS_WL_sidesArray) exitWith {
 	"BlockScreen" setDebriefingText ["Error", "Your unit is not a Warlords competitor", "Warlords Mission Error."];
 	endMission "BlockScreen";
 	forceEnd;
-};
-
-private _penaltyCheck = profileNameSpace getVariable ["teamkill_penalty", createHashMap];
-private _sessionID = missionNamespace getVariable ["sessionID", -1];
-
-if !((count _penaltyCheck) == 0) then {
-	private _penaltyEnd = _penaltyCheck getorDefault ["penaltyEndTime", 0];
-	private _penaltySessionID = _penaltyCheck getorDefault ["sessionID", 0];
-	if (_penaltySessionID != _sessionID) then {
-		profileNameSpace setVariable ["teamkill_penalty", nil];
-		saveProfileNamespace;
-	};
-	if ((_penaltySessionID == _sessionID ) && (_penaltyEnd > 0)) exitWith {
-		_penaltyEnd spawn WL2_fnc_friendlyFireHandleClient;
-	};
 };
 
 enableRadio true;

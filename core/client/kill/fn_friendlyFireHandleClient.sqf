@@ -1,33 +1,22 @@
-params ["_penalty"];
+params ["_friendlyFireIncidents"];
 
-private _penaltyCheck = profileNameSpace getVariable ["teamkill_penalty", createHashMap];
-if ((count _penaltyCheck) == 0) then {
-	private _sessionID = missionNamespace getVariable ["sessionID", -1];
-	if (_sessionID > 0) then {
-		private _penaltyHash = createHashMapFromArray [
-			["sessionID", _sessionID],
-			["penaltyEndTime", _penalty]
-		];
-		profileNameSpace setVariable ["teamkill_penalty", _penaltyHash];
-		saveProfileNamespace;
-	};
-};
+private _incidentCount = count _friendlyFireIncidents;
 
-if (_penalty <= serverTime) then {
-	waitUntil {
-		sleep 0.1;
-		alive player
-	};
-	forceRespawn player;
+if (_incidentCount < 3) exitWith {};
 
-	player setVariable ["BIS_WL_friendlyKillTimestamps", [], [2, clientOwner]];
-	profileNameSpace setVariable ["teamkill_penalty", nil];
-	saveProfileNamespace;
-} else {
-	private _timeRemaining = [(_penalty - serverTime) max 0, "MM:SS"] call BIS_fnc_secondsToString;
-	private _penaltyText = format ["You are blocked from rejoining the game for %1.", _timeRemaining];
+// Ensure that the last 3 were committed within 30 minutes
+private _lastIncident = _friendlyFireIncidents # (_incidentCount - 1);
+private _threeIncidentsAgo = _friendlyFireIncidents # (_incidentCount - 3);
+if (_lastIncident - _threeIncidentsAgo > 30 * 60) exitWith {};
 
-	"BlockScreen" setDebriefingText ["Punished", _penaltyText, "Friendly fire punished."];
-	endMission "BlockScreen";
-	forceEnd;
-};
+private _message = format ["%1 has been temporarily kicked/blocked from the game for teamkilling.", name player];
+[_message] remoteExec ["systemChat", 0];
+
+private _penaltyEnd = _lastIncident + 30 * 60;
+
+private _timeRemaining = [(_penaltyEnd - serverTime) max 0, "MM:SS"] call BIS_fnc_secondsToString;
+private _penaltyText = format ["You are blocked from rejoining the game for %1.", _timeRemaining];
+
+"BlockScreen" setDebriefingText ["Punished", _penaltyText, "Friendly fire punished."];
+endMission "BlockScreen";
+forceEnd;

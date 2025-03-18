@@ -368,7 +368,7 @@ class CfgFunctions {
 			class selectTarget {};
 			class serverEHs {};
 			class setDazzlerState {};
-			class setupNewWarlord {};
+			class setupNewPlayer {};
 			class targetResetHandleServer {};
 			class targetSelectionHandleServer {};
 			class uavJammed {};

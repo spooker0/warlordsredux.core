@@ -1,7 +1,7 @@
 params ["_unit", "_responsibleLeader"];
 
 private _uid = _unit getVariable ["BIS_WL_ownerAsset", "123"];
-if (_uid == "123" || {_uid == (getPlayerUID _responsibleLeader)}) exitWith {};
+// if (_uid == "123" || {_uid == (getPlayerUID _responsibleLeader)}) exitWith {};
 private _victim = _uid call BIS_fnc_getUnitByUid;
 private _owner = owner _victim;
 if (_owner <= 2) exitWith {};

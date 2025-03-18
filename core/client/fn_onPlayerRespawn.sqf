@@ -38,21 +38,6 @@ player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 [] call WL2_fnc_factionBasedClientInit;
 [] spawn WLC_fnc_onRespawn;
 
-private _penaltyCheck = profileNameSpace getVariable ["teamkill_penalty", createHashMap];
-private _sessionID = missionNamespace getVariable ["sessionID", -1];
-
-if !((count _penaltyCheck) == 0) then {
-	_penaltyEnd = _penaltyCheck getorDefault ["penaltyEndTime", 0];
-	_penaltySessionID = _penaltyCheck getorDefault ["sessionID", 0];
-	if (_penaltySessionID != _sessionID) then {
-		profileNameSpace setVariable ["teamkill_penalty", nil];
-		saveProfileNamespace;
-	};
-	if ((_penaltySessionID == _sessionID ) && (_penaltyEnd > 0)) then {
-		_penaltyEnd spawn WL2_fnc_friendlyFireHandleClient;
-	};
-};
-
 0 spawn MRTM_fnc_settingsMenu;
 
 player spawn APS_fnc_setupProjectiles;

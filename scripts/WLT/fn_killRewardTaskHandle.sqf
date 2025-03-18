@@ -1,5 +1,7 @@
 params ["_customText", "_unitType"];
 
+if (isNil "WLT_stats") exitWith {};
+
 if (_customText == "Revived Teammate") then {
 	WLT_stats set ["Revives", (WLT_stats getOrDefault ["Revives", 0]) + 1];
 };

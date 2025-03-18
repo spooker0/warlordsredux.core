@@ -12,7 +12,7 @@ private _isInCarrierSector = count (BIS_WL_allSectors select {
 if (_isInCarrierSector) then {
 	_asset setVehiclePosition [[_posX, _posY, 50], [], 0, "CAN_COLLIDE"];
 } else {
-	_asset setVehiclePosition [[_posX, _posY, 0], [], 0, "CAN_COLLIDE"];
+	_asset setVehiclePosition [_pos, [], 0, "CAN_COLLIDE"];
 };
 
 private _demolishableHashMap = missionNamespace getVariable ["WL2_demolishable", createHashMap];

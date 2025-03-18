@@ -10,7 +10,7 @@ private _endEffect = {
 };
 
 while { !BIS_WL_missionEnd } do {
-    sleep 0.5;
+    sleep 0.3;
 
     private _pos = getPosASL player;
     private _findCurrentSector = (BIS_WL_allSectors - (BIS_WL_sectorsArray # 3)) select {

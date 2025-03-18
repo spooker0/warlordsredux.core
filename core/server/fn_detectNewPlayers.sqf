@@ -1,11 +1,12 @@
 private _previousAIMax = -1;
 while { !BIS_WL_missionEnd } do {
-	private _newPlayers = allPlayers select {
-		(!isNull _x) && !(_x getVariable ["BIS_WL_detectedByServer", false])
+	private _allPlayers = call BIS_fnc_listPlayers;
+	private _newPlayers = _allPlayers select {
+		(!isNull _x) && !(_x getVariable ["WL2_playerSetupStarted", false])
 	};
 
 	{
-		_x call WL2_fnc_setupNewWarlord;
+		_x spawn WL2_fnc_setupNewPlayer;
 	} forEach _newPlayers;
 
 	private _thresholds = [8, 15, 20, 30, 40];
@@ -23,7 +24,9 @@ while { !BIS_WL_missionEnd } do {
 	};
 	_previousAIMax = _value;
 
+#if WL_FACTION_THREE_ENABLED
 	missionNamespace setVariable ["BIS_WL_maxSubordinates_guer", 12, true];
+#endif
 
 	uiSleep 1;
 };

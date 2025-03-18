@@ -24,13 +24,13 @@ params ["_projectile", "_unit"];
     params ["_projectile", "_unit"];
     sleep 1;
     private _originalTarget = missileTarget _projectile;
-    private _ammoType = typeOf _projectile;
-    private _ammoConfig = configfile >> "CfgAmmo" >> _ammoType;
-    private _thrust = getNumber (_ammoConfig >> "thrust");
-    private _dangerZone = _originalTarget distance _unit < (3000 + _thrust * 5);
+    private _thrust = getNumber (configfile >> "CfgAmmo" >> (typeOf _projectile) >> "thrust");
+    private _dangerZone = 3000 + _thrust * 5;
+    private _inDangerZone = (_projectile distance _originalTarget) < _dangerZone;
     while { alive _projectile } do {
         sleep 0.2;
-        if (_dangerZone) then {
+        if (_inDangerZone) then {
+            systemChat "Enemy target in death zone.";
             _projectile setMissileTarget [_originalTarget, true];
         };
 
@@ -56,17 +56,21 @@ while { alive _projectile } do {
     ];
     _projectile setVelocityModelSpace _newVector;
 
-    private _target = missileTarget _projectile;
-    private _targetHeight = if (isNull _target) then {
-        100;
-    } else {
-        getPosATL _target # 2 - 10;
-    };
-    private _minHeight = 100 min _targetHeight;
     private _angularVector = angularVelocityModelSpace _projectile;
-    private _projectileHeight = (getPosATL _projectile # 2) min (getPosASL _projectile # 2);
-    if (_projectileHeight < _minHeight) then {
-        _projectile setAngularVelocityModelSpace [-5, _angularVector # 1, _angularVector # 2];
+    private _start = getPosASL _projectile;
+    private _end = _projectile modelToWorldWorld [0, 2000, -100];
+    private _intersectPosition = terrainIntersectAtASL [_start, _end];
+    private _target = missileTarget _projectile;
+    private _targetHeightATL = if !(isNull _target) then {
+        (getPosATL _target # 2) min (getPosASL _projectile # 2);
+    } else {
+        100;
+    };
+    private _projectileHeightATL = (getPosATL _projectile # 2) min (getPosASL _projectile # 2);
+    private _belowTargetATL = _projectileHeightATL < _targetHeightATL;
+    if (!(_intersectPosition isEqualTo [0, 0, 0]) && _belowTargetATL) then {
+        private _distanceToGround = _intersectPosition distance _start;
+        _projectile setAngularVelocityModelSpace [-20 * (2000 -_distanceToGround) / 2000, _angularVector # 1, _angularVector # 2];
     } else {
         private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
         _projectile setAngularVelocityModelSpace _newAngularVector;
