@@ -95,7 +95,7 @@ if (count _attachments > 0 && (_attachments # 0 # 0 == "default")) then {
     _attachments = _defaultAttachments;
 };
 
-[_asset, _attachments, true] remoteExec ["WLM_fnc_applyPylon", [2, _asset]];
+[_asset, _attachments, true] remoteExec ["WLM_fnc_applyPylon", _asset];
 
 private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
 private _rearmTime = (missionNamespace getVariable "WL2_rearmTimers") getOrDefault [_assetActualType, 600];

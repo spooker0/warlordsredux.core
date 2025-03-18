@@ -418,6 +418,7 @@ class CfgFunctions {
 			class applyLoadoutVehicle {};
 			class applyTexture {};
 			class applyPylon {};
+			class applyPylonTurret {};
 			class applyVehicle {};
 			class calculateFreeRearmEligibility {};
 			class changeHorn {};
