@@ -5,7 +5,7 @@ private _pylonConfig = _assetConfig >> "Components" >> "TransportPylonsComponent
 private _isAircraft = !(isNull _pylonConfig);
 
 if (!_isAircraft) exitWith {
-    _asset getVariable ["WLM_assetCanRearm", true, true];
+    _asset setVariable ["WLM_assetCanRearm", true, true];
 };
 
 private _turrets = [[-1]] + allTurrets _asset;
@@ -28,5 +28,5 @@ while { alive _asset } do {
         _asset setVariable ["WLM_assetCanRearm", _turretLocalityMatch, true];
     };
 
-    sleep 1;
+    sleep 0.5;
 };

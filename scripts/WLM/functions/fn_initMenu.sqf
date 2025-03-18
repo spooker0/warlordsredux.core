@@ -466,10 +466,6 @@ _asset spawn {
     private _rearmOriginalTooltip = ctrlTooltip _rearmButtonControl;
 
     while {!isNull _display} do {
-        // private _nonLocalCrew = (crew _asset) select {
-        //     !(local _x) && !(typeof _x in ["B_UAV_AI", "O_UAV_AI", "I_UAV_AI"])
-        // };
-
         private _assetCanRearm = _asset getVariable ["WLM_assetCanRearm", false];
 
         if (_assetCanRearm) then {
@@ -478,8 +474,8 @@ _asset spawn {
             _applyButtonControl ctrlEnable true;
             _rearmButtonControl ctrlEnable true;
         } else {
-            _applyButtonControl ctrlSetTooltip "Can't rearm at this time.";
-            _rearmButtonControl ctrlSetTooltip "Can't rearm at this time.";
+            _applyButtonControl ctrlSetTooltip "Can't rearm at this time. If issue persists, get in both the driver/turret of this vehicle and try again.";
+            _rearmButtonControl ctrlSetTooltip "Can't rearm at this time. If issue persists, get in both the driver/turret of this vehicle and try again.";
             _applyButtonControl ctrlEnable false;
             _rearmButtonControl ctrlEnable false;
         };
