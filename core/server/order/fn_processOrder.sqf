@@ -136,6 +136,8 @@ private _defaultMags = magazinesAllTurrets _asset;
 _asset setVariable ["BIS_WL_defaultMagazines", _defaultMags, true];
 _asset setVariable ["WLM_savedDefaultMags", _defaultMags, true];
 
+[_asset] spawn WLM_fnc_checkTurretLocality;
+
 _asset lock false;
 
 private _owner = owner _sender;

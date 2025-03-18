@@ -466,20 +466,22 @@ _asset spawn {
     private _rearmOriginalTooltip = ctrlTooltip _rearmButtonControl;
 
     while {!isNull _display} do {
-        private _nonLocalCrew = (crew _asset) select {
-            !(local _x) && !(typeof _x in ["B_UAV_AI", "O_UAV_AI", "I_UAV_AI"])
-        };
+        // private _nonLocalCrew = (crew _asset) select {
+        //     !(local _x) && !(typeof _x in ["B_UAV_AI", "O_UAV_AI", "I_UAV_AI"])
+        // };
 
-        if (count _nonLocalCrew > 0) then {
-            _applyButtonControl ctrlSetTooltip "Remove player gunners before rearming.";
-            _rearmButtonControl ctrlSetTooltip "Remove player gunners before rearming.";
-            _applyButtonControl ctrlEnable false;
-            _rearmButtonControl ctrlEnable false;
-        } else {
+        private _assetCanRearm = _asset getVariable ["WLM_assetCanRearm", false];
+
+        if (_assetCanRearm) then {
             _applyButtonControl ctrlSetTooltip _applyOriginalTooltip;
             _rearmButtonControl ctrlSetTooltip _rearmOriginalTooltip;
             _applyButtonControl ctrlEnable true;
             _rearmButtonControl ctrlEnable true;
+        } else {
+            _applyButtonControl ctrlSetTooltip "Can't rearm at this time.";
+            _rearmButtonControl ctrlSetTooltip "Can't rearm at this time.";
+            _applyButtonControl ctrlEnable false;
+            _rearmButtonControl ctrlEnable false;
         };
 
         sleep 1;

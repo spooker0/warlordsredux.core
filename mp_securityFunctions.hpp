@@ -54,7 +54,6 @@ class CfgRemoteExec {
 		class WL2_fnc_vehicleLockAction {allowedTargets = 1;};
 		class WL2_fnc_vehicleLockUpdate {allowedTargets = 0;};
 		class WLM_fnc_applyPylon {allowedTargets = 0;};
-		class WLM_fnc_applyPylonTurret {allowedTargets = 0;};
 		class WLM_fnc_applyVehicle {allowedTargets = 0;};
 		class WLM_fnc_changeHorn {allowedTargets = 0;};
 		class WLM_fnc_moveSmokes {allowedTargets = 0;};

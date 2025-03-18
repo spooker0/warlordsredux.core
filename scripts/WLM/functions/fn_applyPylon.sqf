@@ -25,9 +25,7 @@ private _ammoToSet = if (_rearm) then {
     private _magazineName = _x select 1;
     private _turret = _x select 2;
 
-    private _pylonLoadout = [_pylonName, _magazineName, true, _turret];
-    _asset setPylonLoadout _pylonLoadout;
-    [_asset, _pylonLoadout] remoteExec ["WLM_fnc_applyPylonTurret", 2];
+    _asset setPylonLoadout [_pylonName, _magazineName, true, _turret];
     _asset setAmmoOnPylon [_pylonName, _ammoToSet];
 
     // [_asset, [_pylonName, _magazineName, true, _turret]] remoteExec ["setPylonLoadout", 0, true];
