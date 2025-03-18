@@ -112,8 +112,7 @@ WL_DeploymentEnd = false;
             WL_DeploymentLock = !WL_DeploymentLock;
             if (WL_DeploymentLock) then {
                 _assetPos = _asset modelToWorld [0, 0, 0];
-                _assetPos set [2, 500];
-                _asset setPosATL _assetPos;
+                _asset setPosASL [_assetPos # 0, _assetPos # 1, 500];
                 _asset setVehiclePosition [_assetPos, [], 0, "CAN_COLLIDE"];
                 private _assetPosHeight = (getPosASL _asset) # 2;
                 _asset setPosASL [_assetPos # 0, _assetPos # 1, _assetPosHeight];
