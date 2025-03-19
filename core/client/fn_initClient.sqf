@@ -404,3 +404,4 @@ call WL2_fnc_setupForwardBaseAction;
 
 call WL2_fnc_disarmAction;
 call WL2_fnc_rappelAction;
+call WL2_fnc_createInfoMarkers;

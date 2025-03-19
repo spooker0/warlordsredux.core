@@ -221,6 +221,7 @@ class CfgFunctions {
 			class assetMapButtons {};
 			class assetMapControl {};
 			class captureList {};
+			class createInfoMarkers {};
 			class deleteAssetFromMap {};
 			class getRespawnMarkers {};
 			class getSideBase {};
