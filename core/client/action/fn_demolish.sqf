@@ -97,6 +97,7 @@ params ["_asset"];
             sleep 0.001;
         };
 
+        detach _charge;
         deleteVehicle _dummy;
 
         [player, "placeCharge", false] call WL2_fnc_hintHandle;
