@@ -192,13 +192,13 @@ switch (_className) do {
         } forEach allMapMarkers;
     };
     case "AIGetIn": {
-        private _vehicle = cursorObject;
-        if (isNull _vehicle) exitWith {};
+        private _vehicle = vehicle player;
         "RequestMenu_close" call WL2_fnc_setupUI;
+        if (isNull _vehicle) exitWith {};
 
         {
             if (!(isPlayer _x) && alive _x && _x distance2D player < 50) then {
-                _x moveInAny _vehicle;
+                _x moveInGunner _vehicle;
             };
         } forEach (units group player);
     };

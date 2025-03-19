@@ -1,4 +1,4 @@
-params [["_sender", objNull, [objNull]], ["_action", "", [""]], "_param1", "_param2", "_param3", "_param4"];
+params [["_sender", objNull, [objNull]], ["_action", "", [""]], "_param1", "_param2", "_param3", "_param4", "_param5"];
 
 if (isNull _sender) exitWith {};
 if !(isServer) exitWith {};
@@ -20,6 +20,7 @@ if (_action == "orderAsset") exitWith {
 	private _orderType = _param1;
 	private _position = _param2;
 	private _orderedClass = _param3;
+	private _exactPosition = _param5;
 
 	private _cost = ((serverNamespace getVariable "WL2_costs") getOrDefault [_orderedClass, 50001]);
 	private _hasFunds = (playerFunds >= _cost);
@@ -48,7 +49,7 @@ if (_action == "orderAsset") exitWith {
 			};
 			default {
 				private _direction = _param4;
-				[_sender, _position, _orderedClass, _direction] spawn WL2_fnc_orderGround;
+				[_sender, _position, _orderedClass, _direction, _exactPosition] spawn WL2_fnc_orderGround;
 			};
 		};
 	};

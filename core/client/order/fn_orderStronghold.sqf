@@ -13,7 +13,9 @@ if (count _buildings == 0) exitWith {
     playSoundUI ["AddItemFailed"];
 };
 private _stronghold = _buildings # 0;
-WL_strongholdIconPos = getPosATL _stronghold;
+private _strongholdPosMarkerATL = getPosATL _stronghold;
+_strongholdPosMarkerATL set [2, getPosATL player # 2 + 2];
+WL_strongholdIconPos = _strongholdPosMarkerATL;
 private _drawIconId = addMissionEventHandler ["draw3D", {
 	drawIcon3D [
 		"\A3\ui_f\data\map\mapcontrol\Ruin_CA.paa",
@@ -31,12 +33,6 @@ private _drawIconId = addMissionEventHandler ["draw3D", {
 	];
 }];
 
-[_drawIconId] spawn {
-    params ["_drawIconId"];
-    sleep 5;
-    removeMissionEventHandler ["draw3D", _drawIconId];
-};
-
 private _sectorName = _currentSector getVariable ["BIS_WL_name", "sector"];
 private _strongholdType = getText (configFile >> "CfgVehicles" >> typeOf _stronghold >> "displayName");
 private _message = format ["Are you sure you want to create a Sector Stronghold in %1 from: %2?", _sectorName, _strongholdType];
@@ -44,7 +40,7 @@ if (_hasOldStronghold) then {
     _message = format ["%1<br/><br/><t color='#ff0000'>This will replace the current Sector Stronghold.</t>", _message];
 };
 private _result = [_message, "Create Sector Stronghold", "Create", "Cancel"] call BIS_fnc_guiMessage;
-
+removeMissionEventHandler ["draw3D", _drawIconId];
 if (!_result) exitWith {
     playSoundUI ["AddItemFailed"];
 };

@@ -1,4 +1,4 @@
-params ["_class", "_orderedClass", "_pos", "_direction"];
+params ["_class", "_orderedClass", "_pos", "_direction", "_exactPosition"];
 _pos params ["_posX", "_posY", "_posZ"];
 
 if !(isServer) exitWith {};
@@ -15,8 +15,7 @@ if (_isInCarrierSector) then {
 	_asset setVehiclePosition [[_posX, _posY, 0], [], 0, "CAN_COLLIDE"];
 };
 
-private _demolishableHashMap = missionNamespace getVariable ["WL2_demolishable", createHashMap];
-if (_demolishableHashMap getOrDefault [_orderedClass, false]) then {
+if (_exactPosition) then {
 	_asset setVectorDirAndUp _direction;
 	_asset setPosWorld _pos;
 };

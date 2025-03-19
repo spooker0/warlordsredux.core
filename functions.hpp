@@ -116,7 +116,6 @@ class CfgFunctions {
 			class playerEventHandlers {};
 			class prepareRappel {};
 			class prompt {};
-			class rappel {};
 			class repackMagazines {};
 			class restrictedArea {};
 			class revive {};
@@ -160,6 +159,8 @@ class CfgFunctions {
 			class radarOperateUpdate {};
 			class radarRotateAction {};
 			class radarRotateUpdate {};
+			class rappelAction {};
+			class rappelActionEligibility {};
 			class rearmAction {};
 			class removeAction {};
 			class removeStronghold {};

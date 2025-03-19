@@ -1,5 +1,7 @@
 #include "..\..\warlords_constants.inc"
 
+params [["_requireGround", true]];
+
 private _vehicle = vehicle player;
 private _isInVehicle = _vehicle != player;
 if (!_isInVehicle) exitWith {
@@ -7,7 +9,7 @@ if (!_isInVehicle) exitWith {
 };
 
 private _isGroundVehicle = _vehicle isKindOf "LandVehicle";
-if (!_isGroundVehicle) exitWith {
+if (_requireGround && !_isGroundVehicle) exitWith {
     [false, "You must be in a ground vehicle."];
 };
 
@@ -19,7 +21,7 @@ if (!_isInDriverSeat) exitWith {
 private _isAttached = !isNull attachedTo _vehicle;
 private _hasAttachment = count attachedObjects _vehicle > 0;
 if (_isAttached || _hasAttachment) exitWith {
-    [false, "Your vehicle must not be already attached to something."];
+    [false, "Your vehicle must not be attached to something."];
 };
 
 [true, ""];

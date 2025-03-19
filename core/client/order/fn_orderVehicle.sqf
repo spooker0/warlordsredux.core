@@ -41,7 +41,27 @@ if (_class isKindOf "Man") then {
 			player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 		} else {
 			playSound "assemble_target";
-			[player, "orderAsset", "vehicle", _pos, _orderedClass, _direction] remoteExec ["WL2_fnc_handleClientRequest", 2];
+			private _isExactPosition = false;
+
+			private _demolishableHashMap = missionNamespace getVariable ["WL2_demolishable", createHashMap];
+			private _isDemolishable = _demolishableHashMap getOrDefault [_orderedClass, false];
+			if (_isDemolishable) then {
+				_isExactPosition = true;
+			};
+
+			private _sectors = BIS_WL_allSectors select {
+				_pos inArea (_x getVariable "objectAreaComplete")
+			};
+			if (count _sectors > 0) then {
+				private _sector = _sectors # 0;
+				private _sectorStronghold = _sector getVariable ["WL_strongholdMarker", ""];
+				private _assetInStronghold = _pos inArea _sectorStronghold;
+				if (_assetInStronghold) then {
+					_isExactPosition = true;
+				};
+			};
+
+			[player, "orderAsset", "vehicle", _pos, _orderedClass, _direction, _isExactPosition] remoteExec ["WL2_fnc_handleClientRequest", 2];
 		};
 	} else {
 		"Canceled" call WL2_fnc_announcer;

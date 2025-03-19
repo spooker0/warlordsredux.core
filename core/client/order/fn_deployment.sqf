@@ -1,6 +1,6 @@
 params ["_class", "_orderedClass", "_offset", "_range", "_ignoreSector", ["_originalAsset", objNull]];
 
-private _asset = createVehicleLocal [_class, player modelToWorld _offset, [], 0, "NONE"];
+private _asset = createVehicleLocal [_class, player modelToWorld [0, 0, 1000], [], 0, "NONE"];
 _asset setPhysicsCollisionFlag false;
 _asset enableSimulation false;
 
@@ -63,8 +63,8 @@ private _turretOverridesForVehicle = _turretOverrides getOrDefault [_orderedClas
 private _originalPosition = getPosATL player;
 
 WL_DeploymentEnd = false;
-[_asset, _offset, _range] spawn {
-    params ["_asset", "_offset", "_range"];
+[_asset, _offset, _originalPosition, _range, _ignoreSector] spawn {
+    params ["_asset", "_offset", "_originalPosition", "_range", "_ignoreSector"];
 
     waitUntil {
         sleep 0.001;
@@ -76,15 +76,9 @@ WL_DeploymentEnd = false;
     WL_DeploymentLock = false;
     WL_DeploymentSuccess = false;
     private _directionOffset = 0;
+    private _lastTime = serverTime;
 
     while { !(isNull _asset) } do {
-        private _distance = player distance _asset;
-        if (_distance > _range) then {
-            detach _asset;
-            deleteVehicle _asset;
-            break;
-        };
-
         if (WL_DeploymentLock) then {
             detach _asset;
 
@@ -113,6 +107,8 @@ WL_DeploymentEnd = false;
             if (WL_DeploymentLock) then {
                 _assetPos = _asset modelToWorld [0, 0, 0];
                 _asset setPosASL [_assetPos # 0, _assetPos # 1, 500];
+                private _playerPos = getPosATL player;
+                _assetPos set [2, _playerPos # 2];
                 _asset setVehiclePosition [_assetPos, [], 0, "CAN_COLLIDE"];
                 private _assetPosHeight = (getPosASL _asset) # 2;
                 _asset setPosASL [_assetPos # 0, _assetPos # 1, _assetPosHeight];
@@ -136,18 +132,17 @@ WL_DeploymentEnd = false;
             break;
         };
 
+        if (serverTime - _lastTime > 0.1) then {
+            _lastTime = serverTime;
+            private _cancel = [_originalPosition, _range, _ignoreSector, _asset] call WL2_fnc_cancelVehicleOrder;
+            if (_cancel # 0) then {
+                systemChat format ["Deployment cancelled: %1.", _cancel # 1];
+                WL_DeploymentSuccess = false;
+                break;
+            };
+        };
+
         sleep 0.001;
-    };
-
-    WL_DeploymentEnd = true;
-};
-
-[_originalPosition, _range, _ignoreSector, _asset] spawn {
-    params ["_originalPosition", "_range", "_ignoreSector", "_asset"];
-
-    waitUntil {
-        sleep 0.1;
-        [_originalPosition, _range, _ignoreSector, _asset] call WL2_fnc_cancelVehicleOrder;
     };
 
     WL_DeploymentEnd = true;
@@ -169,7 +164,8 @@ if (!WL_DeploymentLock) then {
 private _finalPosition = getPosWorldVisual _asset;
 private _finalDirection = [vectorDir _asset, vectorUp _asset];
 
-private _canStillOrderVehicle = !([_originalPosition, _range, _ignoreSector, _asset] call WL2_fnc_cancelVehicleOrder);
+private _finalCancel = [_originalPosition, _range, _ignoreSector, _asset] call WL2_fnc_cancelVehicleOrder;
+private _canStillOrderVehicle = !(_finalCancel # 0);
 
 detach _asset;
 deleteVehicle _asset;

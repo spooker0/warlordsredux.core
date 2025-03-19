@@ -40,7 +40,7 @@ if (isNull BIS_WL_targetSector) exitWith {
 
 [toUpper localize "STR_A3_WL_asset_dispatched_TODO_REWRITE"] spawn WL2_fnc_smoothText;
 
-[player, "orderAsset", "air", BIS_WL_targetSector, _orderedClass] remoteExec ["WL2_fnc_handleClientRequest", 2];
+[player, "orderAsset", "air", BIS_WL_targetSector, _orderedClass, false] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
 sleep 1;
 WL_MapBusy = WL_MapBusy - ["orderAircraft"];

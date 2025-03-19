@@ -18,11 +18,11 @@ private _changeAttackStatus = {
 
     if (_isUnderAttack) then {
         {
-            _x setMarkerAlphaLocal 1;
+            (_x # 0) setMarkerAlphaLocal 1;
         } forEach _markers;
     } else {
         {
-            _x setMarkerAlphaLocal 0;
+            (_x # 0) setMarkerAlphaLocal 0;
         } forEach _markers;
     };
 };

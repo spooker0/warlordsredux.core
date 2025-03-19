@@ -62,7 +62,7 @@ BIS_WL_waterDropPos set [2, 0];
 [toUpper localize "STR_A3_WL_airdrop_underway"] spawn WL2_fnc_smoothText;
 playSound "AddItemOK";
 
-[player, "orderAsset", "naval", BIS_WL_waterDropPos, _class] remoteExec ["WL2_fnc_handleClientRequest", 2];
+[player, "orderAsset", "naval", BIS_WL_waterDropPos, _class, false] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
 sleep 1;
 WL_MapBusy = WL_MapBusy - ["orderNaval"];

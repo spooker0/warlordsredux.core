@@ -182,7 +182,7 @@ addMissionEventHandler ["Draw3D", {
             private _responsiblePlayer = _target getVariable ["WL_laserPlayer", objNull];
             private _playerName = name _responsiblePlayer;
             if (_playerName == "Error: No vehicle") then {
-                _playerName = "";
+                continue;
             };
             _laserIcons pushBack [
                 "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\LaserTarget_ca.paa",

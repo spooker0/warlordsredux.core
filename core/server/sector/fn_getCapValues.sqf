@@ -77,8 +77,15 @@ private _sideCapValues = createHashMap;
 	private _unit = _x;
 	private _side = side group _unit;
 
-	private _points = if (_unit isKindOf "Man" && !(typeOf _unit in _disallowManList)) then {
-		private _sideModifier = _sideCaptureModifier getOrDefault [_side, 0];
+	if (typeOf _unit in _disallowManList) then {
+		continue;
+	};
+	private _sideModifier = _sideCaptureModifier getOrDefault [_side, 0];
+	if (_sideModifier == 0) then {
+		continue;
+	};
+
+	private _points = if (_unit isKindOf "Man") then {
 		private _score = if (_unit inArea _strongholdMarker && vehicle _unit == _unit) then {
 			5;
 		} else {

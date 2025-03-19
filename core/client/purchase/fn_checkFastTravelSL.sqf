@@ -23,7 +23,7 @@ private _squadLeader = allPlayers select {
     getPlayerID _x == _squadLeaderID
 } select 0;
 
-if (!alive _squadLeader || lifeState _squadLeader == "INCAPACITATED") exitWith {
+if (!alive _squadLeader || lifeState _squadLeader == "INCAPACITATED" || speed _squadLeader > 15) exitWith {
     [false, localize "STR_SQUADS_fastTravelSquadLeaderUnavailable"];
 };
 

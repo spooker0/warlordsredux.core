@@ -25,7 +25,11 @@ params ["_projectile", "_unit"];
     sleep 1;
     private _originalTarget = missileTarget _projectile;
     private _thrust = getNumber (configfile >> "CfgAmmo" >> (typeOf _projectile) >> "thrust");
-    private _dangerZone = 3000 + _thrust * 5;
+    private _dangerZone = if (_originalTarget isKindOf "Helicopter") then {
+        1750 + _thrust * 5;
+    } else {
+        2750 + _thrust * 5;
+    };
     private _inDangerZone = (_projectile distance _originalTarget) < _dangerZone;
     while { alive _projectile } do {
         sleep 0.2;

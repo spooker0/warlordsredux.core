@@ -387,7 +387,7 @@ private _strategyArr = [
 		[],
 		"AI Get In",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"Your AI within 30m radius will be forced into the vehicle you are pointing at."
+		"Your AI within 50m radius will be forced into the vehicle you are driving."
 	], [
 		"RemoveUnits",
 		0,

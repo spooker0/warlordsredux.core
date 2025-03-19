@@ -276,6 +276,14 @@ private _removeStrongholdExecute = {
         (_x getVariable ["WL_stronghold", objNull]) == _asset
     };
     private _sector = (_findSector # 0);
+
+    private _sectorName = _sector getVariable ["BIS_WL_name", ""];
+    private _message = format ["Are you sure you want to pay to remove the Sector Stronghold in %1?", _sectorName];
+    private _result = [_message, "Remove Sector Stronghold", "Remove", "Cancel"] call BIS_fnc_guiMessage;
+    if (!_result) exitWith {
+        playSoundUI ["AddItemFailed"];
+    };
+
     [_sector] call WL2_fnc_removeStronghold;
     [player, "buyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 };
