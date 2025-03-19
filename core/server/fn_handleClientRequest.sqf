@@ -20,7 +20,6 @@ if (_action == "orderAsset") exitWith {
 	private _orderType = _param1;
 	private _position = _param2;
 	private _orderedClass = _param3;
-	private _exactPosition = _param5;
 
 	private _cost = ((serverNamespace getVariable "WL2_costs") getOrDefault [_orderedClass, 50001]);
 	private _hasFunds = (playerFunds >= _cost);
@@ -49,6 +48,7 @@ if (_action == "orderAsset") exitWith {
 			};
 			default {
 				private _direction = _param4;
+				private _exactPosition = _param5;
 				[_sender, _position, _orderedClass, _direction, _exactPosition] spawn WL2_fnc_orderGround;
 			};
 		};

@@ -25,6 +25,8 @@ _this addEventHandler ["Fired", {
 	private _projectileConfig = APS_projectileConfig getOrDefault [_apsProjectileType, createHashMap];
 	private _projectileTV = _projectileConfig getOrDefault ["tv", false];
 	if (_projectileTV) then {
+		private _projectileSpeed = _projectileConfig getOrDefault ["speed", 0];
+		_projectile setVariable ["APS_speedOverride", _projectileSpeed];
 		[_projectile, _unit, 0.3, 3] call DIS_fnc_startMissileCamera;
 	} else {
 		private _projectileMissileCamera = _projectileConfig getOrDefault ["camera", false];

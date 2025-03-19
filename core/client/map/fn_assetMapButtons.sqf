@@ -165,16 +165,46 @@ if (typeof _asset == "Land_TentA_F") then {
     }, true] call WL2_fnc_addTargetMapButton;
 };
 
-if (typeof _asset in ["B_Truck_01_medical_F", "O_Truck_03_medical_F"]) then {
+private _spawnTruckTypes = ["B_Truck_01_medical_F", "O_Truck_03_medical_F"];
+private _spawnPodTypes = ["B_Slingload_01_Medevac_F", "Land_Pod_Heli_Transport_04_medevac_F"];
+
+if (typeof _asset in _spawnTruckTypes) then {
     ["FAST TRAVEL TRUCK", {
         0 spawn WL2_fnc_orderFTVehicleFT;
     }, true] call WL2_fnc_addTargetMapButton;
 };
 
-if (typeof _asset in ["B_Slingload_01_Medevac_F", "Land_Pod_Heli_Transport_04_medevac_F"]) then {
+if (typeof _asset in _spawnPodTypes) then {
     ["FAST TRAVEL POD", {
         0 spawn WL2_fnc_orderFTPodFT;
     }, true] call WL2_fnc_addTargetMapButton;
+};
+
+if (typeof _asset in (_spawnTruckTypes + _spawnPodTypes)) then {
+    if ((_asset getVariable ["BIS_WL_ownerAsset", "123"]) != getPlayerUID player) then {
+        // Delete fast travel truck button
+        private _deleteTeamAssetExecute = {
+            params ["_asset"];
+            private _displayName = [_asset] call WL2_fnc_getAssetTypeName;
+            private _result = ["Delete team asset", format ["Are you sure you would like to delete: %1", _displayName], "Yes", "Cancel"] call WL2_fnc_prompt;
+
+            if (_result) then {
+                deleteVehicle _asset;
+                playSound "AddItemOK";
+            };
+        };
+        [
+            "DELETE TEAM ASSET",
+            _deleteTeamAssetExecute,
+            true,
+            "deleteTeamAsset",
+            [
+                200,
+                "deleteTeamAsset",
+                "Fast Travel"
+            ]
+        ] call WL2_fnc_addTargetMapButton;
+    };
 };
 
 if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {

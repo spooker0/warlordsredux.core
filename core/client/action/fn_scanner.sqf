@@ -49,7 +49,7 @@ if (_awacs && _assetHeight < 50) exitWith {
 private _scanRadius = if (_awacs) then {
     10000;
 } else {
-    ((_assetHeight * 2) min 1000) max 150;
+    ((_assetHeight * 2) min 1000) max 250;
 };
 if (_radiusOverride > 0) then {
     _scanRadius = _radiusOverride;

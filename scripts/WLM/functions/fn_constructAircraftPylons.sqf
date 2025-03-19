@@ -33,15 +33,9 @@ private _currentAssetPylonInfo = _asset getVariable ["WLM_pylonInfo", getAllPylo
 
     private _allowedMagazines = _asset getCompatiblePylonMagazines _pylonConfigName;
 
-    private _allowListForPylon = missionNamespace getVariable ["WL2_allowPylonMagazines", createHashMap];
     private _disallowListForPylon = missionNamespace getVariable ["WL2_disallowMagazinesForVehicle", createHashMap];
     private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
     private _disallowListForAsset = _disallowListForPylon getOrDefault [_assetActualType, []];
-    {
-        if !(_x in _allowedMagazines) then {
-            _allowedMagazines pushBack _x;
-        };
-    } forEach (_allowListForPylon getOrDefault [_assetActualType, []]);
 
     private _bannedWords = ["leaflet", "bombcluster"];
     _allowedMagazines = _allowedMagazines select {
@@ -53,6 +47,18 @@ private _currentAssetPylonInfo = _asset getVariable ["WLM_pylonInfo", getAllPylo
         private _isDisallowed = _mag in _disallowListForAsset;
         !_isBannedByWord && !_isDisallowed;
     };
+
+    if (count _allowedMagazines == 0) then {
+        _selectBox ctrlShow false;
+        continue;
+    };
+
+    private _allowListForPylon = missionNamespace getVariable ["WL2_allowPylonMagazines", createHashMap];
+    {
+        if !(_x in _allowedMagazines) then {
+            _allowedMagazines pushBack _x;
+        };
+    } forEach (_allowListForPylon getOrDefault [_assetActualType, []]);
 
     {
         private _magazine = configfile >> "CfgMagazines" >> _x;
@@ -94,10 +100,4 @@ private _currentAssetPylonInfo = _asset getVariable ["WLM_pylonInfo", getAllPylo
 
     _selectUserBox ctrlAddEventHandler ["ButtonClick", "_this call WLM_fnc_switchUser"];
     _selectUserBox ctrlCommit 0;
-
-    if (count _allowedMagazines == 0) then {
-        _selectBox ctrlShow false;
-        _selectUserBox ctrlShow false;
-        continue;
-    };
 } forEach _pylonsInfo;

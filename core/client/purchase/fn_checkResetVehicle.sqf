@@ -10,8 +10,8 @@ if (_outOfRange) exitWith {
     [false, "Please point at a vehicle within 15 meters."];
 };
 
-private _accessControl = _vehicle getVariable ["WL2_accessControl", -1];
-private _hasNoLock = _accessControl == -1;
+private _accessControl = _vehicle getVariable ["WL2_accessControl", -2];
+private _hasNoLock = _accessControl == -2;
 if (_hasNoLock) exitWith {
     [false, "Please point at a valid vehicle."];
 };

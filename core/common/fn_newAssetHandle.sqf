@@ -335,6 +335,7 @@ if (_asset isKindOf "Man") then {
 				sleep 5;
 			};
 		};
+		_asset setVariable ["WL2_accessControl", -1, true];
 	} else {
 		if (_asset isKindOf "ReammoBox_F") then {
 			_asset setVariable ["WL2_accessControl", 2, true];

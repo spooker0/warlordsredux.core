@@ -65,11 +65,11 @@ private _changeAttackStatus = {
     params ["_carriers", "_changeAttackStatus"];
 
     while { !BIS_WL_missionEnd } do {
-        sleep 30;
         {
             private _carrier = _x;
             [_carrier] call _changeAttackStatus;
         } forEach _carriers;
+        sleep 30;
     };
 };
 

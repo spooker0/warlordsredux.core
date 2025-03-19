@@ -158,7 +158,8 @@ private _side = side _owner;
         if (_isTvMunition) then {
             private _nearAir = _asset nearEntities ["Air", 300];
             _nearAir = _nearAir select {
-                getPosATL _x # 2 > 20
+                getPosATL _x # 2 > 20 &&
+                [_x] call WL2_fnc_getAssetSide != BIS_WL_playerSide
             };
             _nearAir = _nearAir select {
                 private _weapons = _x weaponsTurret [-1];

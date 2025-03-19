@@ -1,5 +1,4 @@
 params ["_projectile", "_camera"];
-_projectile setMissileTarget [objNull, true];
 player setVariable ["WL_hmdOverride", 1];
 
 private _yaw = getDir _projectile;
@@ -19,6 +18,24 @@ private _nightVision = false;
 private _projectileIsShell = _projectile isKindOf "ShellCore";
 
 uiNamespace setVariable ["WL_waypointPosition", customWaypointPosition];
+
+private _side = BIS_WL_playerSide;
+private _dummyGroup = createGroup _side;
+private _aiUnit = switch (_side) do {
+	case west: {
+		"B_Soldier_VR_F"
+	};
+	case east: {
+		"O_Soldier_VR_F"
+	};
+	case independent: {
+		"I_Soldier_VR_F"
+	};
+};
+_dummyGroup deleteGroupWhenEmpty true;
+private _dummy = _dummyGroup createUnit [_aiUnit, [0, 0, 0], [], 0, "CAN_COLLIDE"];
+_dummy allowDamage false;
+player remoteControl _dummy;
 
 _camera switchCamera "INTERNAL";
 cameraEffectEnableHUD true;
@@ -104,7 +121,7 @@ sleep 1;
 private _lastTime = serverTime;
 private _startTime = serverTime;
 private _timeToLive = getNumber (configFile >> "CfgAmmo" >> (typeOf _projectile) >> "timeToLive");
-private _projectileSpeed = getNumber (configFile >> "CfgAmmo" >> (typeOf _projectile) >> "maxSpeed");
+private _projectileSpeed = _projectile getVariable ["APS_speedOverride", 100];
 
 _projectile setVariable ["BIS_WL_ownerAssetSide", BIS_WL_playerSide];
 _projectile setVariable ["WL_tvMunition", true];
@@ -268,3 +285,6 @@ player setVariable ["WL_hmdOverride", -1];
 removeMissionEventHandler ["Draw3D", _waypointDrawer];
 switchCamera player;
 "missileCamera" cutText ["", "PLAIN"];
+
+deleteVehicle _dummy;
+player remoteControl objNull;
