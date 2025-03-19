@@ -18,12 +18,13 @@ params ["_asset"];
     },
     {
         params ["_target", "_caller", "_actionId", "_arguments"];
-        private _dummy = createVehicle ["DemoCharge_F", getPosATL _target, [], 0, "FLY"];
+        private _dummy = createVehicle ["VR_GroundIcon_01_F", [0, 0, 0], [], 0, "FLY"];
         _dummy setPosASL (getPosASL _target);
         _dummy allowDamage false;
+        hideObject _dummy;
 
-        private _charge = createVehicle ["DemoCharge_F", getPosATL _dummy, [], 0, "FLY"];
-        _charge setPosASL (getPosASL _dummy);
+        private _charge = createVehicle ["DemoCharge_F", getPosATL player, [], 0, "FLY"];
+        _charge setPosASL (getPosASL player);
         _charge allowDamage false;
 
         [player, "placeCharge"] call WL2_fnc_hintHandle;
@@ -71,7 +72,7 @@ params ["_asset"];
                 _charge,
                 true,
                 1,
-                "VIEW",
+                "GEOM",
                 "",
                 true
             ];
@@ -97,9 +98,6 @@ params ["_asset"];
             sleep 0.001;
         };
 
-        detach _charge;
-        deleteVehicle _dummy;
-
         [player, "placeCharge", false] call WL2_fnc_hintHandle;
 
         if (_cancelCharge || !alive _target || !alive _caller) exitWith {
@@ -107,7 +105,12 @@ params ["_asset"];
             deleteVehicle _charge;
         };
 
-        [_charge, serverTime, _caller, _target] remoteExec ["WL2_fnc_demolishChargeAction", 0];
+        private _finalPosition = getPosASL _charge;
+        private _finalDirAndUp = [vectorDir _charge, vectorUp _charge];
+
+        deleteVehicle _charge;
+
+        [_finalPosition, _finalDirAndUp, serverTime, _caller, _target, _dummy] remoteExec ["WL2_fnc_demolishChargeAction", 0];
     },
     {},
     [],

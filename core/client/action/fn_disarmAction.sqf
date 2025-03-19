@@ -33,7 +33,7 @@
         private _charges = cursorObject getVariable ["WL2_children", []];
         _charges = _charges - [_demolishable];
         cursorObject setVariable ["WL2_children", _charges, true];
-        deleteVehicle cursorObject;
+        deleteVehicle (attachedTo cursorObject);
     },
     {
         cursorObject setVariable ["WL_holdChargeExplosion", false, true];

@@ -1,6 +1,13 @@
 #include "..\..\warlords_constants.inc"
 
-params ["_charge", "_timer", "_caller", "_target"];
+params ["_position", "_dirAndUp", "_timer", "_caller", "_target", "_dummy"];
+
+private _charge = createVehicleLocal ["DemoCharge_F", _position, [], 0, "FLY"];
+_charge allowDamage false;
+_charge setPosASL _position;
+_charge setVectorDirAndUp _dirAndUp;
+[_charge, _dummy] call BIS_fnc_attachToRelative;
+_charge setObjectScale 3;
 
 _charge setVariable ["WL_demolishTime", _timer];
 _charge setVariable ["WL_demolisher", _caller];
@@ -11,6 +18,8 @@ _targetChildren pushBack _charge;
 _target setVariable ["WL2_children", _targetChildren];
 
 if (isDedicated) exitWith {};
+
+private _dummyTarget = attachedTo _charge;
 
 private _lightToggle = false;
 private _lightPos = getPosATL _charge;
@@ -24,7 +33,7 @@ _lightPoint setLightAmbient[1, 0, 0];
 _lightPoint setLightIntensity 0;
 
 private _asset = _charge getVariable ["WL_demolishable", objNull];
-while { alive _charge && alive _asset } do {
+while { alive _charge && alive _asset && alive _dummyTarget } do {
     private _sleepTime = 0.5;
     private _demolishTime = _charge getVariable ["WL_demolishTime", -1];
 
@@ -60,6 +69,7 @@ while { alive _charge && alive _asset } do {
             _asset setDamage 1;
         };
         deleteVehicle _charge;
+        deleteVehicle _dummyTarget;
         deleteVehicle _lightPoint;
         sleep 2;
         deleteVehicle _asset;
@@ -71,4 +81,6 @@ while { alive _charge && alive _asset } do {
     sleep _sleepTime;
 };
 
+deleteVehicle _charge;
+deleteVehicle _dummyTarget;
 deleteVehicle _lightPoint;
