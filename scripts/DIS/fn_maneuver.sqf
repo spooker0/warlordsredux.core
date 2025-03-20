@@ -3,11 +3,10 @@
 params ["_projectile", "_unit"];
 
 private _originalTarget = missileTarget _projectile;
-private _thrust = getNumber (configfile >> "CfgAmmo" >> (typeOf _projectile) >> "thrust");
 private _dangerZone = if (_originalTarget isKindOf "Helicopter") then {
-    1750 + _thrust * 5;
+    3000;
 } else {
-    2750 + _thrust * 5;
+    4000;
 };
 private _inDangerZone = (_projectile distance _originalTarget) < _dangerZone;
 
@@ -39,9 +38,9 @@ private _inDangerZone = (_projectile distance _originalTarget) < _dangerZone;
     sleep 1;
     while { alive _projectile } do {
         sleep 0.2;
-        if (_inDangerZone) then {
-            _projectile setMissileTarget [_originalTarget, true];
-        };
+        // if (_inDangerZone) then {
+        //     _projectile setMissileTarget [_originalTarget, true];
+        // };
 
         private _missileTarget = missileTarget _projectile;
         private _missileTargetSide = _missileTarget getVariable ["BIS_WL_ownerAssetSide", side _missileTarget];
