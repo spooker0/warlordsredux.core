@@ -92,6 +92,7 @@ while { alive _asset && (_asset getVariable ["WL2_linkedPlayer", objNull]) == pl
         _projectile setPosASL _projectileASL;
         _projectile setVectorDirAndUp _projectileVectorDirAndUp;
         _projectile setVelocityModelSpace _projectileVelocity;
+        [_projectile, [player, player]] remoteExec ["setShotParents", 2];
 
         _projectile setVariable ["APS_speedOverride", 400];
 

@@ -3,10 +3,12 @@
     "<t color='#00ff00'>Stop Demolition</t>",
     "\a3\ui_f\data\IGUI\Cfg\holdactions\holdAction_secure_ca.paa",
     "\a3\ui_f\data\IGUI\Cfg\holdactions\holdAction_secure_ca.paa",
-    "speed player < 1 && !isNull (cursorObject getVariable [""WL_demolishable"", objNull])",
-    "speed player < 1 && !isNull (cursorObject getVariable [""WL_demolishable"", objNull])",
+    "speed player < 1 && !isNull (cursorObject getVariable [""WL_demolishable"", objNull]) && player distance cursorObject < 15",
+    "speed player < 1 && !isNull (cursorObject getVariable [""WL_demolishable"", objNull]) && player distance cursorObject < 15",
     {
-        (attachedTo cursorObject) setVariable ["WL_holdChargeExplosion", true, true];
+        private _charge = cursorObject;
+        uiNamespace setVariable ["WL_holdChargeObject", _charge];
+        (attachedTo _charge) setVariable ["WL_holdChargeExplosion", true, true];
     },
     {
         private _disarmSounds = [
@@ -29,15 +31,17 @@
         playSound3D [selectRandom _disarmSounds, cursorObject, false, getPosASL cursorObject, 2, 1, 200, 0];
     },
     {
-        private _demolishable = cursorObject getVariable ["WL_demolishable", objNull];
-        private _charges = cursorObject getVariable ["WL2_children", []];
+        private _charge = uiNamespace getVariable ["WL_holdChargeObject", objNull];
+        private _demolishable = _charge getVariable ["WL_demolishable", objNull];
+        private _charges = _charge getVariable ["WL2_children", []];
         _charges = _charges - [_demolishable];
-        cursorObject setVariable ["WL2_children", _charges, true];
-        deleteVehicle (attachedTo cursorObject);
-        deleteVehicle cursorObject;
+        _charge setVariable ["WL2_children", _charges, true];
+        deleteVehicle (attachedTo _charge);
+        deleteVehicle _charge;
     },
     {
-        (attachedTo cursorObject) setVariable ["WL_holdChargeExplosion", false, true];
+        private _charge = uiNamespace getVariable ["WL_holdChargeObject", objNull];
+        (attachedTo _charge) setVariable ["WL_holdChargeExplosion", false, true];
     },
     [],
     10,

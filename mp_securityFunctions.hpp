@@ -93,6 +93,7 @@ class CfgRemoteExec {
 		class setAmmoOnPylon {allowedTargets = 0;};
 		class setPylonsPriority {allowedTargets = 0;};
 		class setRepairCargo {allowedTargets = 0;};
+		class setShotParents {allowedTargets = 0;};
 		class setVehicleAmmoDef {allowedTargets = 0;};
 		class setVehicleRadar {allowedTargets = 0;};
 		class setVehicleReceiveRemoteTargets {allowedTargets = 0;};

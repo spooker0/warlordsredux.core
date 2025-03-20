@@ -81,7 +81,7 @@ if (side group player == independent && _asset isKindOf "Man" && !isPlayer _asse
 };
 
 private _accessControl = _asset getVariable ["WL2_accessControl", -1];
-if (_accessControl != -1 && !(_asset isKindOf "Man")) then {
+if (_ownsVehicle && _accessControl != -1 && !(_asset isKindOf "Man")) then {
     private _lockText = [_accessControl] call WL2_fnc_assetButtonAccessControl;
 
     [_lockText, {
@@ -380,8 +380,7 @@ private _fortifyStrongholdExecute = {
     private _fortificationTime = _sector getVariable ["WL_fortificationTime", -1];
     if (_fortificationTime < serverTime) exitWith {};
     private _fortificationTimeRemaining = _fortificationTime - serverTime;
-    // _sector setVariable ["WL_fortificationTime", serverTime + _fortificationTimeRemaining / 3, true];
-    _sector setVariable ["WL_fortificationTime", serverTime + 10, true];
+    _sector setVariable ["WL_fortificationTime", serverTime + _fortificationTimeRemaining / 3, true];
     _sector setVariable ["WL_strongholdFortified", true, true];
 
     [player, "fortifyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
