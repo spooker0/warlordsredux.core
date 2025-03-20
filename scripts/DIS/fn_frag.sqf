@@ -13,43 +13,48 @@ private _target = missileTarget _projectile;
 sleep 0.5;
 while { alive _projectile } do {
 	sleep 0.01;
-	if (isNull _target) then {
-		_target = missileTarget _projectile;
-		continue;
+
+	private _objectsNearby = _projectile nearEntities ["Air", _proxRange];
+	if (count _objectsNearby > 0) then {
+		break;
 	};
 
-	private _distanceToTarget = _projectile distance _target;
+	// if (isNull _target) then {
+	// 	_target = missileTarget _projectile;
+	// 	continue;
+	// };
 
-	if (_distanceToTarget < _proxRange) then {
-		_frag = true;
+	// private _distanceToTarget = _projectile distance _target;
 
-		// Don't detonate prematurely if we're still approaching target
-		if (_distanceToTarget > _lastDistance) then {
-			break;
-		};
-		if (_distanceToTarget < _range) then {
-			break;
-		};
-	};
+	// if (_distanceToTarget < _proxRange) then {
+	// 	_frag = true;
 
-	_lastDistance = _distanceToTarget min _lastDistance;
+	// 	// Don't detonate prematurely if we're still approaching target
+	// 	if (_distanceToTarget > _lastDistance) then {
+	// 		break;
+	// 	};
+	// 	if (_distanceToTarget < _range) then {
+	// 		break;
+	// 	};
+	// };
+
+	// _lastDistance = _distanceToTarget min _lastDistance;
 };
 
-if (!_frag) exitWith {};
+// if (!_frag) exitWith {};
+
+// if (!(isNull _target) && _lastDistance < _proxRange) then {
+// 	systemChat format ["SAM detonated %1 meters from target.", round _lastDistance];
+// } else {
+// 	private _objectsNearby = _projectile nearEntities _proxRange;
+// 	if (count _objectsNearby > 0) then {
+// 		_target = _objectsNearby # 0;
+// 		systemChat format ["SAM detonated %1 meters from target.", round (_projectile distance _target)];
+// 	};
+// };
 
 // Vanilla explosion
 private _projectilePosition = getPos _projectile;
-
-if (!(isNull _target) && _lastDistance < _proxRange) then {
-	systemChat format ["SAM detonated %1 meters from target.", round _lastDistance];
-} else {
-	private _objectsNearby = _projectile nearEntities _proxRange;
-	if (count _objectsNearby > 0) then {
-		_target = _objectsNearby # 0;
-		systemChat format ["SAM detonated %1 meters from target.", round (_projectile distance _target)];
-	};
-};
-
 triggerAmmo _projectile;
 
 // Burst Explosion
