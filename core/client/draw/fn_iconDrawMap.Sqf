@@ -162,30 +162,29 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 
 // Draw sector scans
 {
-	private _revealTrigger = _x getVariable "BIS_WL_revealTrigger";
+	private _sector = _x;
+	private _detected = _sector getVariable ["WL2_detectedUnits", []];
 	{
-		if (!isNull _x) then {
-			_size = call WL2_fnc_iconSize;
-			_m drawIcon [
-				call WL2_fnc_iconType,
-				switch (side group _x) do {
-					case west: { [0, 0.3, 0.6, 0.9] };
-					case east: { [0.5, 0, 0, 0.9] };
-					case independent: { [0, 0.6, 0, 0.9] };
-					default { [1, 1, 1, 0] };
-				},
-				call WL2_fnc_getPos,
-				_size,
-				_size,
-				call WL2_fnc_getDir,
-				_x call WL2_fnc_iconTextSectorScan,
-				1,
-				0.043,
-				"PuristaBold",
-				"right"
-			];
-		};
-	} forEach (((list _revealTrigger) - (missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], []])) select {(side group _x != _side) && {(alive _x) && {((side group _x) in BIS_WL_sidesArray)}}});
+		private _size = call WL2_fnc_iconSize;
+		_m drawIcon [
+			call WL2_fnc_iconType,
+			switch ([_x] call WL2_fnc_getAssetSide) do {
+				case west: { [0, 0.3, 0.6, 0.9] };
+				case east: { [0.5, 0, 0, 0.9] };
+				case independent: { [0, 0.6, 0, 0.9] };
+				default { [1, 1, 1, 1] };
+			},
+			call WL2_fnc_getPos,
+			_size,
+			_size,
+			call WL2_fnc_getDir,
+			_x call WL2_fnc_iconTextSectorScan,
+			1,
+			0.043,
+			"PuristaBold",
+			"right"
+		];
+	} forEach _detected;
 } forEach BIS_WL_currentlyScannedSectors;
 
 // Draw EW networks

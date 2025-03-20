@@ -44,7 +44,7 @@ private _i = 0;
 		_mrkrArea setMarkerColorLocal "ColorOrange";
 	};
 
-	_sector spawn WL2_fnc_sectorRevealHandle;
+	[_sector] spawn WL2_fnc_sectorRevealHandle;
 
 	_neighbors = (synchronizedObjects _sector) select {typeOf _x == "Logic"};
 	_sector setVariable ["BIS_WL_pairedWith", []];

@@ -150,9 +150,8 @@ WL_LoadingState = 7;
 ["client", true] call WL2_fnc_updateSectorArrays;
 WL_LoadingState = 8;
 
-private _specialStateArray = (BIS_WL_sectorsArray # 6) + (BIS_WL_sectorsArray # 7);
 {
-	[_x, _x getVariable "BIS_WL_owner", _specialStateArray] call WL2_fnc_sectorMarkerUpdate;
+	[_x, _x getVariable "BIS_WL_owner"] call WL2_fnc_sectorMarkerUpdate;
 } forEach BIS_WL_allSectors;
 
 if !(isServer) then {
@@ -402,6 +401,7 @@ removeGoggles player;
 call WL2_fnc_setupForwardBaseAction;
 #endif
 
+call WL2_fnc_demolishAction;
 call WL2_fnc_disarmAction;
 call WL2_fnc_rappelAction;
 call WL2_fnc_createInfoMarkers;

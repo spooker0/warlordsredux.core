@@ -1,9 +1,7 @@
 #include "..\..\warlords_constants.inc"
 
-params ["_asset"];
-
 [
-    _asset,
+    player,
     "<t color='#ff0000'>Begin Demolition</t>",
     "\a3\ui_f\data\IGUI\Cfg\holdactions\holdAction_secure_ca.paa",
     "\a3\ui_f\data\IGUI\Cfg\holdactions\holdAction_secure_ca.paa",
@@ -17,13 +15,14 @@ params ["_asset"];
         };
     },
     {
-        params ["_target", "_caller", "_actionId", "_arguments"];
+        // params ["_target", "_caller", "_actionId", "_arguments"];
+        private _target = cursorObject;
         private _dummy = createVehicle ["VR_GroundIcon_01_F", [0, 0, 0], [], 0, "FLY"];
         _dummy setPosASL (getPosASL _target);
         _dummy allowDamage false;
         hideObject _dummy;
 
-        private _charge = createVehicle ["DemoCharge_F", getPosATL player, [], 0, "FLY"];
+        private _charge = createVehicleLocal ["DemoCharge_F", getPosATL player, [], 0, "FLY"];
         _charge setPosASL (getPosASL player);
         _charge allowDamage false;
 
@@ -33,10 +32,11 @@ params ["_asset"];
         private _cancelCharge = false;
 
         private _strongholdSector = _target getVariable ["WL_strongholdSector", objNull];
-        private _objectScale = if (isNull _strongholdSector) then {
-            3
+        private _isStrongholdDemolish = !isNull _strongholdSector;
+        private _objectScale = if (_isStrongholdDemolish) then {
+            6
         } else {
-            5
+            3
         };
 
         private _radius = boundingBoxReal _target # 2;
@@ -55,10 +55,6 @@ params ["_asset"];
             };
             if (_charge distance2D _target > (_radius + 2)) then {
                 systemChat format ["Distance too far: %1m", round (_charge distance2D _target)];
-                _cancelCharge = true;
-                break;
-            };
-            if (_target getVariable ["WL_demolishTime", -1] >= 0) then {
                 _cancelCharge = true;
                 break;
             };
@@ -110,7 +106,7 @@ params ["_asset"];
 
         deleteVehicle _charge;
 
-        [_finalPosition, _finalDirAndUp, serverTime, _caller, _target, _dummy] remoteExec ["WL2_fnc_demolishChargeAction", 0];
+        [_finalPosition, _finalDirAndUp, _caller, _target, _dummy, _isStrongholdDemolish] remoteExec ["WL2_fnc_demolishChargeAction", 0];
     },
     {},
     [],

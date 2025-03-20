@@ -1,8 +1,10 @@
 #include "..\..\warlords_constants.inc"
 
-params ["_sector"];
+params ["_sector", ["_side", sideUnknown]];
 
-if ((side (group player)) in (_sector getVariable ["BIS_WL_revealedBy", []]) && {!(isNil {BIS_WL_sectorsArray # 6}) && {!(isNil {BIS_WL_sectorsArray # 7})}}) then {
-	private _specialStateArray = (BIS_WL_sectorsArray # 6) + (BIS_WL_sectorsArray # 7);
-	[_sector, _sector getVariable "BIS_WL_owner", _specialStateArray] call WL2_fnc_sectorMarkerUpdate;
+if (isDedicated) exitWith {};
+
+private _revealedBy = _sector getVariable ["BIS_WL_revealedBy", []];
+if (_side in _revealedBy || _side == sideUnknown) then {
+	[_sector, _sector getVariable "BIS_WL_owner"] call WL2_fnc_sectorMarkerUpdate;
 };

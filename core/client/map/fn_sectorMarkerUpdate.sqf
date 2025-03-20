@@ -1,8 +1,12 @@
 #include "..\..\warlords_constants.inc"
 
-params ["_sector", "_owner", ["_specialStateArray", []]];
+params ["_sector", "_owner"];
 
 if (isDedicated) exitWith {};
+
+private _specialStateArray = if (isNil "BIS_WL_sectorsArray") then { [] } else {
+	(BIS_WL_sectorsArray # 6) + (BIS_WL_sectorsArray # 7);
+ };
 
 private _ownerIndex = [WEST, EAST, RESISTANCE] find _owner;
 private _area = _sector getVariable "objectArea";
@@ -44,3 +48,5 @@ if (BIS_WL_playerSide in (_sector getVariable ["BIS_WL_revealedBy", []]) || BIS_
 if (_sector == WL_TARGET_FRIENDLY) then {
 	call WL2_fnc_refreshCurrentTargetData;
 };
+
+["client", true] call WL2_fnc_updateSectorArrays;

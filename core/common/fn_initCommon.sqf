@@ -8,7 +8,8 @@ if !(isDedicated) then {
 BIS_WL_allSectors = (entities "Logic") select {count synchronizedObjects _x > 0};
 
 {
-	_x setVariable ["objectArea", triggerArea ((_x nearObjects ["EmptyDetector", 100]) # 0)];
+	private _sectorBounds = (_x nearObjects ["EmptyDetector", 100]) # 0;
+	_x setVariable ["objectArea", triggerArea _sectorBounds];
 	if (isNil {_x getVariable "BIS_WL_services"}) then {
 		_x setVariable ["BIS_WL_services", []];
 	};
@@ -25,11 +26,12 @@ call WLC_fnc_init;
 
 {
 	private _sector = _x;
+	private _sectorArea = _sector getVariable "objectArea";
 	_sector setVariable ["BIS_WL_connectedSectors", (synchronizedObjects _sector) select {typeOf _x == "Logic"}];
-	_sector setVariable ["objectAreaComplete", [position _sector] + (_sector getVariable "objectArea")];
-	private _axisA = (_sector getVariable "objectArea") # 0;
-	private _axisB = (_sector getVariable "objectArea") # 1;
-	_sector setVariable ["BIS_WL_maxAxis", if ((_sector getVariable "objectArea") # 3) then {sqrt ((_axisA ^ 2) + (_axisB ^ 2))} else {_axisA max _axisB}];
+	_sector setVariable ["objectAreaComplete", [position _sector] + _sectorArea];
+	private _axisA = _sectorArea # 0;
+	private _axisB = _sectorArea # 1;
+	_sector setVariable ["BIS_WL_maxAxis", if (_sectorArea # 3) then {sqrt ((_axisA ^ 2) + (_axisB ^ 2))} else {_axisA max _axisB}];
 } forEach BIS_WL_allSectors;
 
 if (isServer) then {

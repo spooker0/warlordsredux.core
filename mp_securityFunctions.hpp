@@ -22,7 +22,7 @@ class CfgRemoteExec {
 		class WL2_fnc_claimAction {allowedTargets = 1;};
 		class WL2_fnc_controlGunnerAction {allowedTargets = 0;};
 		class WL2_fnc_dazzlerAction {allowedTargets = 1;};
-		class WL2_fnc_demolish {allowedTargets = 0;};
+		class WL2_fnc_demolishAction {allowedTargets = 0;};
 		class WL2_fnc_demolishChargeAction {allowedTargets = 0;};
 		class WL2_fnc_deployableAddAction {allowedTargets = 1;};
 		class WL2_fnc_forfeitHandle {allowedTargets = 0;};
@@ -40,8 +40,10 @@ class CfgRemoteExec {
 		class WL2_fnc_radarRotateAction {allowedTargets = 1;};
 		class WL2_fnc_rearmAction {allowedTargets = 1;};
 		class WL2_fnc_reloadOverride {allowedTargets = 0;};
+		class WL2_fnc_remoteControlAction {allowedTargets = 0;};
 		class WL2_fnc_removeAction {allowedTargets = 1;};
 		class WL2_fnc_repairAction {allowedTargets = 1;};
+		class WL2_fnc_sectorRevealHandle {allowedTargets = 0;};
 		class WL2_fnc_revive {allowedTargets = 0;};
 		class WL2_fnc_scannerAction {allowedTargets = 0;};
 		class WL2_fnc_setDazzlerState {allowedTargets = 2;};

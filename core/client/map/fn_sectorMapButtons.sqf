@@ -165,7 +165,6 @@ private _scanExecute = {
     };
 
     WL_AssetActionTarget = objNull;
-    uiNamespace setVariable ["WL2_assetTargetSelected", objNull];
     _display closeDisplay 1;
 };
 

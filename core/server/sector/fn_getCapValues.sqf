@@ -10,9 +10,10 @@ private _sideCaptureModifier = createHashMap;
 		continue;
 	};
 
+	private _sideLinkedSectors = BIS_WL_sectorsArrays # (BIS_WL_competingSides find _side) # 2;
 	private _neighboringSectors = synchronizedObjects _sector;
 	private _connectedNeighboringSectors = _neighboringSectors select {
-		typeof _x == "Logic" && _side == _x getVariable "BIS_WL_owner"
+		typeof _x == "Logic" && _side == _x getVariable "BIS_WL_owner" && _x in _sideLinkedSectors;
 	};
 	private _hasConnection = count _connectedNeighboringSectors > 0;
 	if (!_hasConnection) then {

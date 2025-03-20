@@ -12,6 +12,7 @@ private _menuButtons = [];
 WL2_TargetButtonSetup = [_dialog, _menuButtons, _offsetX, _offsetY];
 
 private _asset = uiNamespace getVariable ["WL2_assetTargetSelected", objNull];
+private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
 
 private _titleBar = _dialog ctrlCreate ["RscStructuredText", -1];
 _titleBar ctrlSetPosition [_offsetX, _offsetY - 0.05, 0.5, 0.05];
@@ -25,7 +26,8 @@ private _assetName = if (isPlayer _asset) then {
 _titleBar ctrlSetStructuredText parseText format ["<t align='center' font='PuristaBold'>%1</t>", toUpper _assetName];
 _titleBar ctrlCommit 0;
 
-if (!isPlayer _asset && (_asset getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player) then {
+private _ownsVehicle = (_asset getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player;
+if (!isPlayer _asset && _ownsVehicle) then {
     ["DELETE", {
         params ["_asset"];
         if ((_asset getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player) then {
@@ -98,7 +100,7 @@ private _hasCrew = count ((crew _asset) select {
     !(typeof _x in ["B_UAV_AI", "O_UAV_AI", "I_UAV_AI"]) && getPlayerUID player != (_x getVariable ["BIS_WL_ownerAsset", "123"])
 }) > 0;
 private _isNotFlying = (getPosATL _asset # 2) < 10;
-if (_hasCrew && _isNotFlying && !(_asset isKindOf "Man")) then {
+if (_hasCrew && _isNotFlying && !(_asset isKindOf "Man") && _ownsVehicle) then {
     ["KICK", {
         params ["_asset"];
         if ((getPosATL _asset # 2) < 10) then {
@@ -112,7 +114,8 @@ if (_hasCrew && _isNotFlying && !(_asset isKindOf "Man")) then {
     }, true] call WL2_fnc_addTargetMapButton;
 };
 
-if (typeof _asset in ["O_T_Truck_03_device_ghex_F", "O_Truck_03_device_F"]) then {
+private _operateAccess = ([_asset, player, "driver"] call WL2_fnc_accessControl) # 0;
+if (_operateAccess && typeof _asset in ["O_T_Truck_03_device_ghex_F", "O_Truck_03_device_F"]) then {
     private _dazzlerText = [_asset] call WL2_fnc_assetButtonDazzler;
 
     [_dazzlerText, {
@@ -121,7 +124,7 @@ if (typeof _asset in ["O_T_Truck_03_device_ghex_F", "O_Truck_03_device_F"]) then
     }, true] call WL2_fnc_addTargetMapButton;
 };
 
-if (typeof _asset in ["O_T_Truck_03_device_ghex_F", "O_Truck_03_device_F", "Land_MobileRadar_01_radar_F"]) then {
+if (_operateAccess && typeof _asset in ["O_T_Truck_03_device_ghex_F", "O_Truck_03_device_F", "Land_MobileRadar_01_radar_F"]) then {
     private _jammerText = [_asset] call WL2_fnc_assetButtonJammer;
 
     [_jammerText, {
@@ -130,7 +133,7 @@ if (typeof _asset in ["O_T_Truck_03_device_ghex_F", "O_Truck_03_device_F", "Land
     }, true] call WL2_fnc_addTargetMapButton;
 };
 
-if (typeof _asset in ["B_Radar_System_01_F", "O_Radar_System_01_F", "I_E_Radar_System_01_F"]) then {
+if (_operateAccess && typeof _asset in ["B_Radar_System_01_F", "O_Radar_System_01_F", "I_E_Radar_System_01_F"]) then {
     private _radarRotateText = [_asset] call WL2_fnc_assetButtonRadarRotate;
 
     [_radarRotateText, {
@@ -146,7 +149,7 @@ if (typeof _asset in ["B_Radar_System_01_F", "O_Radar_System_01_F", "I_E_Radar_S
 private _crewPosition = (fullCrew [_asset, "", true]) select {!("cargo" in _x)};
 private _radarSensor = (listVehicleSensors _asset) select {{"ActiveRadarSensorComponent" in _x} forEach _x};
 private _hasRadar = count _radarSensor > 0 && (count _crewPosition > 1 || unitIsUAV _asset);
-if (_hasRadar) then {
+if (_operateAccess && _hasRadar) then {
     private _radarOperateText = [_asset] call WL2_fnc_assetButtonRadarOperate;
 
     [_radarOperateText, {
@@ -207,6 +210,45 @@ if (typeof _asset in (_spawnTruckTypes + _spawnPodTypes)) then {
     };
 };
 
+if (_operateAccess && _assetActualType == "O_Plane_Fighter_02_Standoff_F") then {
+    private _linkToAssetExecute = {
+        params ["_asset"];
+        player setVariable ["WL2_linkedAsset", _asset];
+        _asset setVariable ["WL2_linkedPlayer", player, true];
+        playSound "AddItemOK";
+    };
+    [
+        "LINK TO ASSET",
+        _linkToAssetExecute,
+        true,
+        "linkAsset",
+        [
+            0,
+            "linkAsset",
+            "Strategy"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
+};
+
+if (_ownsVehicle && _assetActualType == "O_Plane_Fighter_02_Standoff_F") then {
+    private _unlinkAllExecute = {
+        params ["_asset"];
+        _asset setVariable ["WL2_linkedPlayer", objNull, true];
+        playSound "AddItemOK";
+    };
+    [
+        "UNLINK ALL",
+        _unlinkAllExecute,
+        true,
+        "unlinkAsset",
+        [
+            0,
+            "unlinkAsset",
+            "Strategy"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
+};
+
 if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     private _fastTravelFOBExecute = {
         params ["_asset"];
@@ -230,8 +272,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     ] call WL2_fnc_addTargetMapButton;
 };
 
-private _access = [_asset, player, "driver"] call WL2_fnc_accessControl;
-if (unitIsUAV _asset && getConnectedUAV player != _asset && _access # 0) then {
+if (_operateAccess && unitIsUAV _asset && getConnectedUAV player != _asset) then {
     ["CONNECT TO UAV", {
         params ["_asset"];
         _access = [_asset, player, "driver"] call WL2_fnc_accessControl;
@@ -339,7 +380,8 @@ private _fortifyStrongholdExecute = {
     private _fortificationTime = _sector getVariable ["WL_fortificationTime", -1];
     if (_fortificationTime < serverTime) exitWith {};
     private _fortificationTimeRemaining = _fortificationTime - serverTime;
-    _sector setVariable ["WL_fortificationTime", serverTime + _fortificationTimeRemaining / 3, true];
+    // _sector setVariable ["WL_fortificationTime", serverTime + _fortificationTimeRemaining / 3, true];
+    _sector setVariable ["WL_fortificationTime", serverTime + 10, true];
     _sector setVariable ["WL_strongholdFortified", true, true];
 
     [player, "fortifyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
@@ -403,7 +445,6 @@ private _fastTravelStrongholdTestExecute = {
         };
     };
 
-    uiNamespace setVariable ["WL2_assetTargetSelected", objNull];
     _dialog closeDisplay 1;
 };
 

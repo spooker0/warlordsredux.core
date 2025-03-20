@@ -25,9 +25,11 @@ class CfgFunctions {
 	class DIS {
 		class Default {
 			file = "src\scripts\DIS";
+			class controlMunition {};
 			class frag {};
 			class maneuver {};
 			class missileCamera {};
+			class remoteMunition {};
 			class startMissileCamera {};
 			class tvMunition {};
 		};
@@ -143,7 +145,7 @@ class CfgFunctions {
 			class dazzlerAction {};
 			class dazzlerToggle {};
 			class dazzlerUpdate {};
-			class demolish {};
+			class demolishAction {};
 			class demolishChargeAction {};
 			class demolishEligibility {};
 			class deployableAddAction {};
@@ -162,6 +164,7 @@ class CfgFunctions {
 			class rappelAction {};
 			class rappelActionEligibility {};
 			class rearmAction {};
+			class remoteControlAction {};
 			class removeAction {};
 			class removeStronghold {};
 			class repairAction {};

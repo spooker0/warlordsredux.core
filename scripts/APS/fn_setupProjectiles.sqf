@@ -34,6 +34,10 @@ _this addEventHandler ["Fired", {
 			[_projectile, _unit] call DIS_fnc_startMissileCamera;
 		};
 	};
+	private _projectileRemote = _projectileConfig getOrDefault ["remote", false];
+	if (_projectileRemote) then {
+		_unit setVariable ["APS_remoteControlled", _projectile, true];
+	};
 
 	_this spawn APS_fnc_firedProjectile;
 

@@ -4,11 +4,19 @@ private _asset = createVehicleLocal [_class, player modelToWorld [0, 0, 1000], [
 _asset setPhysicsCollisionFlag false;
 _asset enableSimulation false;
 
-_asset setVectorDirAndUp [vectorDir player, vectorUp player];
-_asset setVehiclePosition [player modelToWorld _offset, [], 0, "CAN_COLLIDE"];
-private _newAssetPos = player modelToWorldWorld _offset;
-private _assetPosHeight = (getPosWorld _asset) # 2;
-_asset setPosWorld [_newAssetPos # 0, _newAssetPos # 1, _assetPosHeight];
+// _asset setVectorDirAndUp [vectorDir player, vectorUp player];
+// _asset setVehiclePosition [player modelToWorld _offset, [], 0, "CAN_COLLIDE"];
+// private _newAssetPos = player modelToWorldWorld _offset;
+// private _assetPosHeight = (getPosWorld _asset) # 2;
+// _asset setPosWorld [_newAssetPos # 0, _newAssetPos # 1, _assetPosHeight];
+
+private _assetPos = player modelToWorld _offset;
+_asset setPosASL [_assetPos # 0, _assetPos # 1, 500];
+private _playerPos = getPosATL player;
+_assetPos set [2, _playerPos # 2];
+_asset setVehiclePosition [_assetPos, [], 0, "CAN_COLLIDE"];
+private _assetPosHeight = (getPosASL _asset) # 2;
+_asset setPosASL [_assetPos # 0, _assetPos # 1, _assetPosHeight];
 _asset attachTo [player];
 
 _asset allowDamage false;
@@ -76,7 +84,7 @@ WL_DeploymentEnd = false;
     WL_DeploymentLock = false;
     WL_DeploymentSuccess = false;
     private _directionOffset = 0;
-    private _lastTime = serverTime;
+    private _lastTime = serverTime + 2;
 
     while { !(isNull _asset) } do {
         if (WL_DeploymentLock) then {
@@ -105,7 +113,7 @@ WL_DeploymentEnd = false;
             detach _asset;
             WL_DeploymentLock = !WL_DeploymentLock;
             if (WL_DeploymentLock) then {
-                _assetPos = _asset modelToWorld [0, 0, 0];
+                private _assetPos = _asset modelToWorld [0, 0, 0];
                 _asset setPosASL [_assetPos # 0, _assetPos # 1, 500];
                 private _playerPos = getPosATL player;
                 _assetPos set [2, _playerPos # 2];
@@ -154,7 +162,7 @@ waitUntil {
 };
 
 if (!WL_DeploymentLock) then {
-    private _assetPos = _asset modelToWorld [0, 0, 0];
+    _assetPos = _asset modelToWorld [0, 0, 0];
     _asset setPosASL [_assetPos # 0, _assetPos # 1, 500];
     _asset setVehiclePosition [_assetPos, [], 0, "CAN_COLLIDE"];
     private _assetPosHeight = (getPosASL _asset) # 2;

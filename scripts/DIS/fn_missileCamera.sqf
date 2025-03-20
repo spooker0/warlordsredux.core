@@ -49,8 +49,32 @@ _camera camCommit 0;
 
 _camera attachTo [_projectile];
 
-[_camera, _titleBar, _pictureControl, _defaultTitlePosition, _defaultPicturePosition, _defaultOpticsMode] spawn {
-    params ["_camera", "_titleBar", "_pictureControl", "_defaultTitlePosition", "_defaultPicturePosition", "_defaultOpticsMode"];
+uiNamespace setVariable ["APS_Camera_Projectile", _projectile];
+private _targetDrawer = addMissionEventHandler ["Draw3D", {
+    private _projectile = uiNamespace getVariable ["APS_Camera_Projectile", objNull];
+    if (isNull _projectile) exitWith {};
+    private _target = missileTarget _projectile;
+    if (isNull _target) exitWith {};
+    drawIcon3D [
+        "\A3\ui_f\data\IGUI\RscIngameUI\RscOptics\AzimuthMark.paa",
+        [1, 0, 0, 1],
+        _target modelToWorld [0, 0, 0],
+        1,
+        1,
+        180,
+        "TARGET",
+        0,
+        0.02,
+        "TahomaB",
+        "center",
+        true,
+        0,
+        0.01
+    ];
+}];
+
+[_camera, _titleBar, _pictureControl, _defaultOpticsMode] spawn {
+    params ["_camera", "_titleBar", "_pictureControl", "_defaultOpticsMode"];
     private _opticsMode = _defaultOpticsMode;
     if (_opticsMode == 3) exitWith {
         _titleBar ctrlShow false;
@@ -59,6 +83,13 @@ _camera attachTo [_projectile];
         _pictureControl ctrlCommit 0;
     };
     private _changed = true;
+    private _originalCamera = cameraOn;
+    private _originalCamView = cameraView;
+    private _originalRemote = if (isRemoteControlling player) then {
+        getConnectedUAVUnit player;
+    } else {
+        objNull
+    };
     while { !isNull _camera } do {
         if (inputAction "opticsMode" > 0) then {
             waitUntil {inputAction "opticsMode" == 0};
@@ -70,18 +101,22 @@ _camera attachTo [_projectile];
                 case 0: {
                     _titleBar ctrlShow true;
                     _pictureControl ctrlShow true;
-                    _titleBar ctrlSetPosition _defaultTitlePosition;
-                    _pictureControl ctrlSetPosition _defaultPicturePosition;
                 };
                 case 1: {
-                    _titleBar ctrlShow true;
-                    _pictureControl ctrlShow true;
-                    _titleBar ctrlSetPosition [safeZoneX / 2, safeZoneY / 2 - 0.05, 1 - safeZoneX, 0.05];
-                    _pictureControl ctrlSetPosition [safeZoneX / 2, safeZoneY / 2, 1 - safeZoneX, 1 - safeZoneY];
+                    _titleBar ctrlShow false;
+                    _pictureControl ctrlShow false;
+
+                    _camera switchCamera "INTERNAL";
+                    cameraEffectEnableHUD true;
+                    showHUD [true, true, true, true, true, true, true, true, true, true, true];
                 };
                 case 2: {
                     _titleBar ctrlShow false;
                     _pictureControl ctrlShow false;
+                    _originalCamera switchCamera _originalCamView;
+                    if (!isNull _originalRemote) then {
+                        player remoteControl _originalRemote;
+                    };
                 };
             };
             _titleBar ctrlCommit 0;
@@ -93,6 +128,14 @@ _camera attachTo [_projectile];
 
 if (_defaultOpticsMode == 3) then {
     [_projectile, _camera] spawn DIS_fnc_tvMunition;
+};
+
+private _originalCamera = cameraOn;
+private _originalCamView = cameraView;
+private _originalRemote = if (isRemoteControlling player) then {
+    getConnectedUAVUnit player;
+} else {
+    objNull
 };
 
 while { !_stop } do {
@@ -123,5 +166,11 @@ sleep 1.5;
 _camera cameraEffect ["Terminate", "BACK TOP"];
 camDestroy _camera;
 "APS_Camera" cutFadeOut 0;
+removeMissionEventHandler ["Draw3D", _targetDrawer];
+
+_originalCamera switchCamera _originalCamView;
+if (!isNull _originalRemote) then {
+    player remoteControl _originalRemote;
+};
 
 setPiPViewDistance _originalPipViewDistance;

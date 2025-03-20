@@ -89,9 +89,14 @@ while { !BIS_WL_missionEnd } do {
 		private _fortificationTime = _sector getVariable ["WL_fortificationTime", -1];
 		if (_fortificationTime > 0 && serverTime > _fortificationTime) then {
 			_sector setVariable ["WL_fortificationTime", -1, true];
+
 			private _currentOwner = _sector getVariable ["BIS_WL_owner", independent];
 			_sector setVariable ["BIS_WL_previousOwners", [_currentOwner], true];
 			[_sector, _currentOwner] remoteExec ["WL2_fnc_sectorMarkerUpdate", 0, true];
+			["server", true] call WL2_fnc_updateSectorArrays;
+
+			_sector setVariable ["BIS_WL_simulated", false];
+			break;
 		};
 	};
 

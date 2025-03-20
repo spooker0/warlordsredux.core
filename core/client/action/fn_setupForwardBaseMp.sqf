@@ -1,7 +1,8 @@
 params ["_forwardBase", "_startTime", "_endTime", "_side", "_upgrading"];
 
 if (!_upgrading) then {
-    [_forwardBase] call WL2_fnc_demolish;
+    _forwardBase setVariable ["WL2_canDemolish", true];
+
     _forwardBase animateSource ["Terminal_source", 100, true];
     _forwardBase setVariable ["WL2_forwardBaseOwner", _side];
     _forwardBase setVariable ["WL2_forwardBaseLevel", 0];

@@ -154,21 +154,14 @@ if (_action == "scan") exitWith {
 	_hasFunds = (playerFunds >= _cost);
 	if (_hasFunds) then {
 		(-_cost) call WL2_fnc_fundsDatabaseWrite;
+		private _sector = _param2;
 
-		private _sectorName = _param2 getVariable ["BIS_WL_name", "???"];
+		private _sectorName = _sector getVariable ["BIS_WL_name", "???"];
 		private _message = format ["%1 has initiated sector scan on %2.", name _sender, _sectorName];
 		[_side, _message] call _broadcastActionToSide;
 
-		_param2 setVariable [format ["BIS_WL_lastScanEnd_%1", _side], (serverTime + 30), true];
-		_revealTrigger = createTrigger ["EmptyDetector", position _param2];
-		_revealTrigger setTriggerArea (_param2 getVariable "objectArea");
-		_revealTrigger setTriggerActivation ["ANY", "PRESENT", false];
-		_param2 setVariable ["BIS_WL_revealTrigger", _revealTrigger, true];
-		[_param2, _side] remoteExec ["WL2_fnc_sectorScanHandle", [0, -2] select isDedicated];
-
-		waitUntil {sleep 0.25; BIS_WL_competingSides findIf {(_param2 getVariable [format ["BIS_WL_lastScanEnd_%1", _x], -9999]) > serverTime} == -1};
-		deleteVehicle _revealTrigger;
-		_param2 setVariable ["BIS_WL_revealTrigger", nil, true];
+		private _scanEnd = serverTime + 30;
+		[_sector, _scanEnd] remoteExec ["WL2_fnc_sectorScanHandle", _side];
 	};
 };
 

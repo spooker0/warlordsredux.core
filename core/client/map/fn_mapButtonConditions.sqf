@@ -86,4 +86,10 @@ switch (_conditionName) do {
     case "fastTravelFOB": {
         alive _target && _target getVariable ["WL2_forwardBaseLevel", 0] > 0;
     };
+    case "linkAsset": {
+        alive _target && isNull (_target getVariable ["WL2_linkedPlayer", objNull]);
+    };
+    case "unlinkAsset": {
+        alive _target && !(isNull (_target getVariable ["WL2_linkedPlayer", objNull]));
+    };
 };

@@ -27,7 +27,10 @@ addMissionEventHandler ["Map", {
 
 				private _teamVehicles = missionNamespace getVariable [format ["BIS_WL_%1ownedVehicles", side group player], []];
 				private _selectableVehicles = _teamVehicles select {
-					(_x getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player &&
+					(
+						(_x getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player ||
+						([_x, player, 'cargo'] call WL2_fnc_accessControl) # 0
+					) &&
 					alive _x &&
 					(_x distance2D _pos) < _radius
 				};

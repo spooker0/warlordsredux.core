@@ -7,23 +7,38 @@ private _endEffect = {
         stopSound _soundId;
         _soundId = -1;
     };
+    sleep 2;
 };
 
-while { !BIS_WL_missionEnd } do {
-    sleep 0.3;
+private _side = BIS_WL_playerSide;
 
+while { !BIS_WL_missionEnd } do {
     private _pos = getPosASL player;
-    private _findCurrentSector = (BIS_WL_allSectors - (BIS_WL_sectorsArray # 3)) select {
+    private _findCurrentSector = BIS_WL_allSectors select {
         _pos inArea (_x getVariable "objectAreaComplete")
     };
 
-    if (count _findCurrentSector == 0) then {
+    private _availableSectors = BIS_WL_sectorsArray # 3;
+    private _currentSector = objNull;
+    {
+        if (_x in _availableSectors) then {
+            private _revealedBy = _x getVariable ["BIS_WL_revealedBy", []];
+            if !(_side in _revealedBy) then {
+                _revealedBy pushBackUnique _side;
+                _x setVariable ["BIS_WL_revealedBy", _revealedBy, true];
+                [_x, _side] remoteExec ["WL2_fnc_sectorRevealHandle", 0];
+            };
+        } else {
+            _currentSector = _x;
+        };
+    } forEach _findCurrentSector;
+
+    if (isNull _currentSector) then {
         if (_pos # 0 > 0 && _pos # 0 < worldSize && _pos # 1 > 0 && _pos # 1 < worldSize) then {
             call _endEffect;
             continue;
         };
     } else {
-        private _currentSector = _findCurrentSector # 0;
         private _isCarrierSector = count (_currentSector getVariable ["WL_aircraftCarrier", []]) > 0;
 
         private _altOk = if (_isCarrierSector) then {
@@ -61,4 +76,6 @@ while { !BIS_WL_missionEnd } do {
         player setDamage 1;
         call _endEffect;
     };
+
+    sleep 0.3;
 };

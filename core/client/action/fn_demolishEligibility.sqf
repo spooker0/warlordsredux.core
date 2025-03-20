@@ -1,7 +1,9 @@
-if (speed player > 1) exitWith { false };
 if (vehicle player != player) exitWith { false };
+if (isNull cursorObject) exitWith { false };
 
 private _demolishTarget = cursorObject;
+if !(_demolishTarget getVariable ["WL2_canDemolish", false]) exitWith { false };
+
 private _strongholdSector = _demolishTarget getVariable ["WL_strongholdSector", objNull];
 if (isNull _strongholdSector) exitWith { true }; // Not a stronghold
 

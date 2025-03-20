@@ -13,9 +13,9 @@ if (count _buildings == 0) exitWith {
     playSoundUI ["AddItemFailed"];
 };
 private _stronghold = _buildings # 0;
-private _strongholdPosMarkerATL = getPosATL _stronghold;
-_strongholdPosMarkerATL set [2, getPosATL player # 2 + 2];
-WL_strongholdIconPos = _strongholdPosMarkerATL;
+private _strongholdPosMarkerAGL = getPosASL _stronghold;
+_strongholdPosMarkerAGL set [2, (player modelToWorld [0, 0, 0]) # 2 + 2];
+WL_strongholdIconPos = _strongholdPosMarkerAGL;
 private _drawIconId = addMissionEventHandler ["draw3D", {
 	drawIcon3D [
 		"\A3\ui_f\data\map\mapcontrol\Ruin_CA.paa",

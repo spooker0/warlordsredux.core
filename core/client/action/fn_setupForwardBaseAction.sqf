@@ -112,7 +112,7 @@ private _upgradeActionId = player addAction [
 [_setupActionId, _upgradeActionId] spawn {
 	params ["_setupActionId", "_upgradeActionId"];
 	private _moneySign = [BIS_WL_playerSide] call WL2_fnc_getMoneySign;
-    while { alive player } do {
+    while { alive player && lifeState player != "INCAPACITATED" } do {
 		private _setupMessage = [player, player, false] call WL2_fnc_setupForwardBaseEligibility;
 		if (_setupMessage # 0) then {
 			private _message = _setupMessage # 1;

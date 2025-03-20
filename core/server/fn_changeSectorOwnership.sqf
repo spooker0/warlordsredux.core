@@ -30,13 +30,6 @@ _sector setVariable ["BIS_WL_previousOwners", _previousOwners, true];
 _sector setVariable ["WL_fortificationTime", serverTime + WL_FORTIFICATION_TIME, true];
 _sector setVariable ["WL_strongholdFortified", false, true];
 
-_detectionTrgs = (_sector getVariable "BIS_WL_detectionTrgs");
-{
-	if ((_x getVariable "BIS_WL_handledSide") == _owner) then {
-		deleteVehicle _x;
-	};
-} forEach _detectionTrgs;
-
 if (_sector == (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", _owner])) then {[_owner, objNull] call WL2_fnc_selectTarget};
 
 ["server", true] call WL2_fnc_updateSectorArrays;

@@ -3,7 +3,7 @@
 private _baseData =
 #if WL_OVERRIDE_BASES
 	BIS_WL_allSectors select {
-		_x getVariable ["BIS_WL_name", ""] in ["Airbase", "Kavala"];
+		_x getVariable ["BIS_WL_name", ""] in ["Airbase", "AAC Airfield"];
 	};
 #else
 	[] call WL2_fnc_calcHomeBases;
@@ -112,18 +112,6 @@ waitUntil {!isNil "BIS_WL_base1" && {!isNil "BIS_WL_base2"}};
 		_sector setVariable ["BIS_WL_value", round (_size / 13000)];
 	};
 
-	_detectionTrg1 = createTrigger ["EmptyDetector", _sectorPos, false];
-	_detectionTrg2 = createTrigger ["EmptyDetector", _sectorPos, false];
-	_sector setVariable ["BIS_WL_detectionTrgs", [_detectionTrg1, _detectionTrg2]];
-	{
-		_handledSide = BIS_WL_competingSides # _forEachIndex;
-		_x setVariable ["BIS_WL_handledSide", _handledSide];
-		_x setVariable ["BIS_WL_sector", _sector];
-		_x setTriggerArea _area;
-		_x setTriggerActivation [["WEST", "EAST", "GUER"] # (BIS_WL_sidesArray find _handledSide), "PRESENT", false];
-		_x setTriggerStatements [format ["this && ((thisTrigger getVariable 'BIS_WL_sector') in ((BIS_WL_sectorsArrays # %1) # 3))", _forEachIndex], format ["[(thisTrigger getVariable 'BIS_WL_sector')] remoteExec ['WL2_fnc_sectorRevealHandle', [0, -2] select isDedicated]; (thisTrigger getVariable 'BIS_WL_sector') setVariable ['BIS_WL_revealedBy', ((thisTrigger getVariable 'BIS_WL_sector') getVariable ['BIS_WL_revealedBy', []]) + [%1], true]", _handledSide], ""];
-	} forEach [_detectionTrg1, _detectionTrg2];
-
 	private _sectorVehicles = vehicles inAreaArray (_sector getVariable "objectAreaComplete");
 	private _sectorVehiclesArray = [];
 	{
@@ -169,12 +157,12 @@ waitUntil {!isNil "BIS_WL_base1" && {!isNil "BIS_WL_base2"}};
 	};
 	{
 		_x setVariable ["BIS_WL_revealedBy", [west], true];
-		[_x] call WL2_fnc_sectorRevealHandle;
+		[_x, west] call WL2_fnc_sectorRevealHandle;
 		[_x, west] call WL2_fnc_changeSectorOwnership;
 	} forEach _westSectors;
 	{
 		_x setVariable ["BIS_WL_revealedBy", [east], true];
-		[_x] call WL2_fnc_sectorRevealHandle;
+		[_x, east] call WL2_fnc_sectorRevealHandle;
 		[_x, east] call WL2_fnc_changeSectorOwnership;
 	} forEach _eastSectors;
 };

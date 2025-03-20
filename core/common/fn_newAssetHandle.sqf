@@ -248,6 +248,12 @@ if (_asset isKindOf "Man") then {
 			};
 		};
 
+		case "RuggedTerminal_01_communications_F": {
+			[_asset] remoteExec ["WL2_fnc_remoteControlAction", 0, true];
+			_asset animateSource ["Terminal_source", 100, true];
+			_asset setObjectTextureGlobal [0, "#(argb,8,8,3)color(0,0,1,1)"];
+		};
+
 		// Suicide drones
 		case "B_UAV_06_F";
 		case "O_UAV_06_F";
@@ -419,7 +425,7 @@ if (_asset isKindOf "Man") then {
 	private _demolishable = missionNamespace getVariable ["WL2_demolishable", createHashMap];
 	if (_demolishable getOrDefault [_assetActualType, false]) then {
 		_asset setVariable ["WL_demolishTurnsLeft", 4, true];
-		[_asset] remoteExec ["WL2_fnc_demolish", 0, true];
+		_asset setVariable ["WL2_canDemolish", true, true];
 	};
 
 	private _parachuteCount = count ((backpackCargo _asset) select {_x == "B_Parachute"});

@@ -2,7 +2,7 @@ params ["_vehicle", "_angle", "_indicator", ["_gunner", objNull]];
 
 if (!isNull _gunner) then {
 	{
-		_x reveal [vehicle _gunner, 1.5];
+		_x reveal [vehicle _gunner, 4];
 	} forEach (crew _vehicle);
 };
 
@@ -31,7 +31,7 @@ if (_assetApsType == 3) then {
 	_text = _text + format[" Charges: %1/%2", _apsAmmo, _vehicle call APS_fnc_getMaxAmmo];
 
 	if (_apsAmmo == 0) then {
-		playSoundUI ["a3\sounds_f\vehicles\air\noises\heli_alarm_rotor_low.wss", 1.5, 0.5];
+		playSoundUI ["a3\sounds_f\vehicles\air\noises\heli_alarm_rotor_low.wss", 1, 0.5];
 	};
 };
 

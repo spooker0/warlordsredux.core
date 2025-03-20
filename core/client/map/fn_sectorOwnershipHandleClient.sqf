@@ -25,9 +25,8 @@ if (_owner == BIS_WL_playerSide) then {
 "client" call WL2_fnc_updateSectorArrays;
 [_sector, _owner] call WL2_fnc_sectorMarkerUpdate;
 
-private _specialStateArray = (BIS_WL_sectorsArray # 6) + (BIS_WL_sectorsArray # 7);
 {
-	[_x, _x getVariable "BIS_WL_owner", _specialStateArray] call WL2_fnc_sectorMarkerUpdate;
+	[_x, _x getVariable "BIS_WL_owner"] call WL2_fnc_sectorMarkerUpdate;
 } forEach (BIS_WL_allSectors select {_x != _sector});
 
 if (BIS_WL_playerSide in (_sector getVariable ["BIS_WL_revealedBy", []])) then {

@@ -13,7 +13,7 @@ waitUntil {
     private _isBelowThreshold = if (_parachuteAutoDeploy) then {
         (getPosATL _unit # 2) < 100 || (getPosASL _unit # 2) < 100;
     } else {
-        false;
+        isTouchingGround (vehicle _unit)
     };
     !alive _unit || _isBelowThreshold || vehicle _unit != _unit;
 };

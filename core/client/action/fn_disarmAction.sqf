@@ -6,7 +6,7 @@
     "speed player < 1 && !isNull (cursorObject getVariable [""WL_demolishable"", objNull])",
     "speed player < 1 && !isNull (cursorObject getVariable [""WL_demolishable"", objNull])",
     {
-        cursorObject setVariable ["WL_holdChargeExplosion", true, true];
+        (attachedTo cursorObject) setVariable ["WL_holdChargeExplosion", true, true];
     },
     {
         private _disarmSounds = [
@@ -34,9 +34,10 @@
         _charges = _charges - [_demolishable];
         cursorObject setVariable ["WL2_children", _charges, true];
         deleteVehicle (attachedTo cursorObject);
+        deleteVehicle cursorObject;
     },
     {
-        cursorObject setVariable ["WL_holdChargeExplosion", false, true];
+        (attachedTo cursorObject) setVariable ["WL_holdChargeExplosion", false, true];
     },
     [],
     10,
