@@ -40,6 +40,7 @@ switch (_className) do {
             _asset setSkill 1;
             _asset disableAI "SUPPRESSION";
             _asset disableAI "AIMINGERROR";
+            _asset setUnitTrait ["engineer", true];
         };
     };
     case "Arsenal": {if (isNull (findDisplay 602)) then {"RequestMenu_close" call WL2_fnc_setupUI; [player, "orderArsenal"] remoteExec ["WL2_fnc_handleClientRequest", 2]} else {playSound "AddItemFailed"}};

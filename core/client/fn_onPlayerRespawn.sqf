@@ -35,8 +35,8 @@ private _squadActionId = player addAction[_squadActionText, { [true] call SQD_fn
 player setUserActionText [_squadActionId, _squadActionText, "<img size='2' image='\a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa'/>"];
 
 player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
+[] call WLC_fnc_onRespawn;
 [] call WL2_fnc_factionBasedClientInit;
-[] spawn WLC_fnc_onRespawn;
 
 0 spawn MRTM_fnc_settingsMenu;
 

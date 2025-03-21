@@ -46,6 +46,7 @@ switch (side group player) do {
 _unit linkItem "Integrated_NVG_TI_0_F";
 _unit addPrimaryWeaponItem "muzzle_snds_H";
 _unit addPrimaryWeaponItem "muzzle_snds_M";
+_unit addMagazines ["HandGrenade", 2];
 _unit addMagazines ["SmokeShell", 1];
 _unit addItem "FirstAidKit";
 _unit addItem "FirstAidKit";

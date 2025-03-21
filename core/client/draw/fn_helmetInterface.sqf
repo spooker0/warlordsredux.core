@@ -1,7 +1,7 @@
 #include "..\..\warlords_constants.inc"
 
 uiNamespace setVariable ["WL_HelmetInterfaceLaserIcons", []];
-uiNamespace setVariable ["WL_HelmetInterfaceFlareIcons", []];
+// uiNamespace setVariable ["WL_HelmetInterfaceFlareIcons", []];
 uiNamespace setVariable ["WL_HelmetInterfaceMunitionIcons", []];
 uiNamespace setVariable ["WL_HelmetInterfaceTargetVehicleIcons", []];
 uiNamespace setVariable ["WL_HelmetInterfaceTargetInfantryIcons", []];
@@ -163,25 +163,33 @@ addMissionEventHandler ["Draw3D", {
             continue;
         };
 
-        private _side = BIS_WL_playerSide;
-        private _laserTargetSide = switch (_side) do {
-            case west: {
-                "LaserTargetW"
-            };
-            case east: {
-                "LaserTargetE"
-            };
-            case independent: {
-                "LaserTargetI"
-            };
+        private _vehicle = getConnectedUAV player;
+        if (isNull _vehicle) then {
+            _vehicle = vehicle player;
         };
-        private _laserTargets = entities _laserTargetSide;
+        if (!alive _vehicle) then {
+            sleep 1;
+            continue;
+        };
+
+        private _side = BIS_WL_playerSide;
+        private _laserTargets = entities "LaserTarget";
         private _laserIcons = [];
         {
             private _target = _x;
+            if (_target distance _vehicle > 7000) then {
+                continue;
+            };
+
             private _responsiblePlayer = _target getVariable ["WL_laserPlayer", objNull];
+            if (isNull _responsiblePlayer) then {
+                continue;
+            };
             private _playerName = name _responsiblePlayer;
             if (_playerName == "Error: No vehicle") then {
+                continue;
+            };
+            if ([_responsiblePlayer] call WL2_fnc_getAssetSide != _side) then {
                 continue;
             };
             _laserIcons pushBack [
@@ -198,15 +206,6 @@ addMissionEventHandler ["Draw3D", {
             ];
         } forEach _laserTargets;
         uiNamespace setVariable ["WL_HelmetInterfaceLaserIcons", _laserIcons];
-
-        private _vehicle = getConnectedUAV player;
-        if (isNull _vehicle) then {
-            _vehicle = vehicle player;
-        };
-        if (!alive _vehicle) then {
-            sleep 1;
-            continue;
-        };
 
         // private _flares = (8 allObjects 2) select {
         //     typeof _x == "CMflare_Chaff_Ammo"
@@ -471,7 +470,7 @@ addMissionEventHandler ["Draw3D", {
         private _friendlyNetwork = _sideVehicles select {
             private _distance = _vehicle distance _x;
             private _activated = _x getVariable ["WL_ewNetActive", false] && isEngineOn _x;
-            private _inJamRange = _distance < WL_JAMMER_RANGE_OUTER;
+            private _inJamRange = _distance < _x getVariable ["WL_ewNetRange", 0];
 
             private _scannerRange = _x getVariable ["WL_scanRadius", 0];
             private _isScanner = _scannerRange > 100;

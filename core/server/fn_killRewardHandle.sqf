@@ -9,15 +9,6 @@ private _killReward = _killRewardMap getOrDefault [_assetActualType, 0];
 
 if (typeof _unit == "RuggedTerminal_01_communications_hub_F") then {
 	private _unitOwnerSide = _unit getVariable ["WL2_forwardBaseOwner", sideUnknown];
-
-	private _fobCooldownVar = format ["WL2_forwardBaseCooldowns_%1", _unitOwnerSide];
-	private _fobCooldowns = missionNamespace getVariable [_fobCooldownVar, []];
-	_fobCooldowns pushBack (serverTime + WL_FOB_COOLDOWN);
-	_fobCooldowns = _fobCooldowns select {
-		_x > serverTime
-	};
-	missionNamespace setVariable [_fobCooldownVar, _fobCooldowns, true];
-
 	_killReward = 500;
 	if (_unitOwnerSide != side group _responsibleLeader) then {
 		_unit setVariable ["BIS_WL_ownerAsset", "0000"];

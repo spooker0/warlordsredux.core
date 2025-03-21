@@ -29,8 +29,6 @@ if (!_upgrading && typeof _cursorObject == "VirtualReammoBox_camonet_F") exitWit
     private _teamForwardBases = _currentForwardBases select {
         _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
     };
-    private _fobCooldownVar = format ["WL2_forwardBaseCooldowns_%1", BIS_WL_playerSide];
-    private _fobCooldowns = missionNamespace getVariable [_fobCooldownVar, []];
     private _isQualifyingSL = ["isSquadLeaderOfSize", [getPlayerID player, _squadMembersNeeded]] call SQD_fnc_client;
 
     private _result = [];
@@ -47,8 +45,8 @@ if (!_upgrading && typeof _cursorObject == "VirtualReammoBox_camonet_F") exitWit
         case ((getPosASL _cursorObject) # 2 < -10): {
             _result = [false];
         };
-        case (count _teamForwardBases + count _fobCooldowns >= 3): {
-            private _limitReached = format ["Forward base limit reached. Current: %1, Cooldown: %2", count _teamForwardBases, count _fobCooldowns];
+        case (count _teamForwardBases >= 3): {
+            private _limitReached = format ["Forward base limit reached. Current: %1", count _teamForwardBases];
             _result = [true, _limitReached];
         };
         case (!_isQualifyingSL): {

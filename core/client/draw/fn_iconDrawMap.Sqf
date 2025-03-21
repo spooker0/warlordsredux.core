@@ -209,10 +209,11 @@ private _ewNetworkUnits = _activeVehicles + ("Land_MobileRadar_01_radar_F" allOb
 		case independent: { [0, 0.6, 0, 0.9] };
 		default { [1, 1, 1, 0] };
 	};
+	private _range = _x getVariable ["WL_ewNetRange", 0];
 	_m drawEllipse [
 		_assetPos,
-		WL_JAMMER_RANGE_OUTER,
-		WL_JAMMER_RANGE_OUTER,
+		_range,
+		_range,
 		0,
 		_assetColor,
 		""

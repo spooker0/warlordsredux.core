@@ -87,9 +87,10 @@ player addEventHandler ["HandleDamage", {
 		0;
 	} else {
 		if (_damage >= 1) then {
+			moveOut _unit;
+
 			_unit setUnconscious true;
 			_unit setCaptive true;
-			moveOut _unit;
 			[_unit] spawn {
 				params ["_unit"];
 				private _unconsciousTime = _unit getVariable ["WL_unconsciousTime", 0];
@@ -99,6 +100,14 @@ player addEventHandler ["HandleDamage", {
 				private _downTime = 0;
 				while { alive _unit && lifeState _unit == "INCAPACITATED" && _downTime < 90 } do {
 					_downTime = serverTime - _startTime;
+
+					if (_downTime > 5) then {
+						private _vehicle = objectParent _unit;
+						if (!(isNull _vehicle) && !alive _vehicle) then {
+							deleteVehicle _vehicle;
+						};
+					};
+
 					hintSilent format ["Downed for %1", round _downTime];
 					_unit setVariable ["WL_unconsciousTime", _downTime];
 					sleep 1;

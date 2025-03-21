@@ -381,23 +381,6 @@ removeGoggles player;
 0 spawn WL2_fnc_restrictedArea;
 
 #if WL_FOB_ENABLED
-0 spawn {
-	while { !BIS_WL_missionEnd } do {
-		private _currentForwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
-		_currentForwardBases = _currentForwardBases select {
-			alive _x
-		};
-		missionNamespace setVariable ["WL2_forwardBases", _currentForwardBases];
-
-		private _fobCooldownVar = format ["WL2_forwardBaseCooldowns_%1", BIS_WL_playerSide];
-		private _fobCooldowns = missionNamespace getVariable [_fobCooldownVar, []];
-		_fobCooldowns = _fobCooldowns select {
-			_x > serverTime
-		};
-		missionNamespace setVariable [_fobCooldownVar, _fobCooldowns];
-		sleep 5;
-	};
-};
 call WL2_fnc_setupForwardBaseAction;
 #endif
 

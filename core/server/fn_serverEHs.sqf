@@ -55,28 +55,3 @@ addMissionEventHandler ["MarkerCreated", {
 		deleteMarker _marker;
 	};
 }];
-
-addMissionEventHandler ["EntityCreated", {
-    params ["_entity"];
-    if !(_entity isKindOf "LaserTarget") exitWith {};
-    scopeName "MainEntityCreated";
-	{
-		private _laserTarget = laserTarget _x;
-		if (_laserTarget isEqualTo _entity) then {
-			private _ownerPlayer = (_x getVariable ["BIS_WL_ownerAsset", "123"]) call BIS_fnc_getUnitByUID;
-			_laserTarget setVariable ["WL_laserPlayer", _ownerPlayer, true];
-			breakTo "MainEntityCreated";
-		};
-	} forEach (call BIS_fnc_listPlayers);
-	{
-		private _vehicle = _x;
-		{
-			private _laserTarget = _vehicle laserTarget _x;
-			if (_laserTarget isEqualTo _entity) then {
-				private _ownerPlayer = (_vehicle getVariable ["BIS_WL_ownerAsset", "123"]) call BIS_fnc_getUnitByUID;
-				_laserTarget setVariable ["WL_laserPlayer", _ownerPlayer, true];
-				breakTo "MainEntityCreated";
-			};
-		} forEach (allTurrets _vehicle);
-	} forEach vehicles;
-}];

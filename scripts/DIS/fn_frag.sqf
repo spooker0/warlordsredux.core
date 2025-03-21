@@ -20,9 +20,10 @@ while { alive _projectile } do {
 };
 
 // Vanilla explosion
-private _projectilePosition = getPos _projectile;
+private _projectilePosition = getPosASL _projectile;
 triggerAmmo _projectile;
 
 // Burst Explosion
 private _burst = createVehicle [_projectileClass, _projectilePosition, [], 50, "FLY"];
+_burst setPosASL _projectilePosition;
 triggerAmmo _burst;

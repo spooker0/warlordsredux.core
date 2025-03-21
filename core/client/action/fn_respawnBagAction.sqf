@@ -10,6 +10,7 @@ if (_giveTent) then {
     };
 
     private _oldBackpackItems = backpackItems player;
+    removeBackpack player;
     player addBackpack _backpack;
     {
         player addItemToBackpack _x;

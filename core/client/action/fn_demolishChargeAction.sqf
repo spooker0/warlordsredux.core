@@ -71,6 +71,7 @@ while { alive _charge && alive _target && alive _dummy } do {
             } else {
                 "SatchelCharge_Remote_Ammo_Scripted"
             };
+            _target setVariable ["WL_lastHitter", _caller, 2];
 
             private _explosion = createVehicle [_explosive, _lightPos, [], 0, "FLY"];
             triggerAmmo _explosion;

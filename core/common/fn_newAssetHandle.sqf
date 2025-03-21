@@ -101,23 +101,20 @@ if (_asset isKindOf "Man") then {
 	[_asset, true] remoteExec ["setVehicleReportRemoteTargets", _asset, true];
 	[_asset, true] remoteExec ["setVehicleReportOwnPosition", _asset, true];
 
-	private _hasHMDMap = missionNamespace getVariable ["WL2_hasHMD", createHashMap];
-	if (_hasHMDMap getOrDefault [_assetActualType, false]) then {
-		// HMD missile alert system
-		_asset addEventHandler ["IncomingMissile", {
-			params ["_target", "_ammo", "_vehicle", "_instigator", "_missile"];
-			if (isNull _missile) exitWith {};
-			private _incomingMissiles = _target getVariable ["WL_incomingMissiles", []];
-			private _originalIncomingMissiles = +_incomingMissiles;
-			_incomingMissiles pushBackUnique _missile;
-			_incomingMissiles = _incomingMissiles select {
-				!(isNull _x) && alive _x;
-			};
-			if (_incomingMissiles isEqualTo _originalIncomingMissiles) exitWith {};
-			_target setVariable ["WL_incomingMissiles", _incomingMissiles, owner _target];
-			_target setVariable ["WL_incomingLauncherLastKnown", _vehicle, owner _target];
-		}];
-	};
+	// HMD missile alert system
+	_asset addEventHandler ["IncomingMissile", {
+		params ["_target", "_ammo", "_vehicle", "_instigator", "_missile"];
+		if (isNull _missile) exitWith {};
+		private _incomingMissiles = _target getVariable ["WL_incomingMissiles", []];
+		private _originalIncomingMissiles = +_incomingMissiles;
+		_incomingMissiles pushBackUnique _missile;
+		_incomingMissiles = _incomingMissiles select {
+			!(isNull _x) && alive _x;
+		};
+		if (_incomingMissiles isEqualTo _originalIncomingMissiles) exitWith {};
+		_target setVariable ["WL_incomingMissiles", _incomingMissiles];
+		_target setVariable ["WL_incomingLauncherLastKnown", _vehicle];
+	}];
 
 	private _hasScannerMap = missionNamespace getVariable ["WL2_hasScanner", createHashMap];
 	if (_hasScannerMap getOrDefault [_assetActualType, false]) then {
@@ -144,6 +141,10 @@ if (_asset isKindOf "Man") then {
 		} forEach _turrets;
 
 		[_asset, _magTurretsToRemove, _lastLoadout, true] remoteExec ["WLM_fnc_applyVehicle", 0];
+	};
+
+	if !("ToolKit" in (itemCargo _asset)) then {
+		_asset addItemCargoGlobal ["ToolKit", 1];
 	};
 
 	// handle WLT
@@ -178,12 +179,14 @@ if (_asset isKindOf "Man") then {
 		case "O_Truck_03_device_F": {
 			_asset setVariable ["BIS_WL_dazzlerActivated", false, true];
 			_asset setVariable ["WL_ewNetActive", false, true];
+			_asset setVariable ["WL_ewNetRange", WL_JAMMER_RANGE_OUTER, true];
 
 			[_asset] remoteExec ["WL2_fnc_dazzlerAction", 0, true];
 			[_asset] remoteExec ["WL2_fnc_jammerAction", 0, true];
 		};
 		case "Land_MobileRadar_01_radar_F": {
 			_asset setVariable ["WL_ewNetActive", false, true];
+			_asset setVariable ["WL_ewNetRange", WL_JAMMER_RANGE_OUTER * 2, true];
 
 			// reduce height for demolish action
 			// private _assetPos = getPosATL _asset;

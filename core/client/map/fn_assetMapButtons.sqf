@@ -381,7 +381,35 @@ private _fortifyStrongholdExecute = {
     if (_fortificationTime < serverTime) exitWith {};
     private _fortificationTimeRemaining = _fortificationTime - serverTime;
     _sector setVariable ["WL_fortificationTime", serverTime + _fortificationTimeRemaining / 3, true];
+
+#if WL_QUICK_CAPTURE
+    _sector setVariable ["WL_fortificationTime", serverTime + 10, true];
+#endif
+
     _sector setVariable ["WL_strongholdFortified", true, true];
+
+    private _impactSounds = [
+        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_01.wss",
+        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_02.wss",
+        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_03.wss",
+        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_04.wss",
+        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_soft_01.wss",
+        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_soft_02.wss",
+        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_soft_03.wss",
+        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_01.wss",
+        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_02.wss",
+        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_03.wss",
+        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_04.wss",
+        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_01.wss",
+        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_02.wss",
+        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_03.wss",
+        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_04.wss"
+    ];
+
+    for "_i" from 1 to 10 do {
+        playSound3D [selectRandom _impactSounds, player, false, getPosASL player, 2, 1, 200, 0];
+        sleep 0.3;
+    };
 
     [player, "fortifyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 };

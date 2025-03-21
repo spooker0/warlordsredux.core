@@ -25,12 +25,14 @@ private _side = side _owner;
 
         private _jammersInRange = _enemyJammersActive select {
             private _distanceToJammer = _asset distanceSqr _x;
-            _distanceToJammer < (WL_JAMMER_RANGE_OUTER * WL_JAMMER_RANGE_OUTER);
+            private _range = _x getVariable ["WL_ewNetRange", 0];
+            _distanceToJammer < (_range * _range);
         };
 
         private _activatingInRange = _enemyJammersActivating select {
             private _distanceToJammer = _asset distanceSqr _x;
-            _distanceToJammer < (WL_JAMMER_RANGE_OUTER * WL_JAMMER_RANGE_OUTER);
+            private _range = _x getVariable ["WL_ewNetRange", 0];
+            _distanceToJammer < (_range * _range);
         };
 
         _asset setVariable ["BIS_WL_relevantJammers", _jammersInRange];

@@ -94,9 +94,6 @@ while { !BIS_WL_missionEnd } do {
 			_sector setVariable ["BIS_WL_previousOwners", [_currentOwner], true];
 			[_sector, _currentOwner] remoteExec ["WL2_fnc_sectorMarkerUpdate", 0, true];
 			["server", true] call WL2_fnc_updateSectorArrays;
-
-			_sector setVariable ["BIS_WL_simulated", false];
-			break;
 		};
 	};
 

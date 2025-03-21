@@ -369,6 +369,7 @@ class CfgFunctions {
 			class initServer {};
 			class killRewardHandle {};
 			class lagMessageHandler {};
+			class laserTracker {};
 			class processRunways {};
 			class selectTarget {};
 			class serverEHs {};
