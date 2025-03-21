@@ -44,6 +44,7 @@ class CfgRemoteExec {
 		class WL2_fnc_removeAction {allowedTargets = 1;};
 		class WL2_fnc_repairAction {allowedTargets = 1;};
 		class WL2_fnc_sectorRevealHandle {allowedTargets = 0;};
+		class WL2_fnc_setupGPSMunition {allowedTargets = 0;};
 		class WL2_fnc_revive {allowedTargets = 0;};
 		class WL2_fnc_scannerAction {allowedTargets = 0;};
 		class WL2_fnc_setDazzlerState {allowedTargets = 2;};

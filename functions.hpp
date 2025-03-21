@@ -27,9 +27,11 @@ class CfgFunctions {
 			file = "src\scripts\DIS";
 			class controlMunition {};
 			class frag {};
+			class gpsMunition {};
 			class maneuver {};
 			class missileCamera {};
 			class remoteMunition {};
+			class setupGPSMunition {};
 			class startMissileCamera {};
 			class tvMunition {};
 		};

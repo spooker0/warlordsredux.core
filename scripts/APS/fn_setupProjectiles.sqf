@@ -39,6 +39,16 @@ _this addEventHandler ["Fired", {
 		_unit setVariable ["APS_remoteControlled", _projectile, true];
 	};
 
+	private _projectileGPS = _projectileConfig getOrDefault ["gps", false];
+	if (_projectileGPS) then {
+		private _lon = uiNamespace getVariable ["DIS_GPS_LON", 0];
+		private _lat = uiNamespace getVariable ["DIS_GPS_LAT", 0];
+		private _coordinates = [_lon * 10, _lat * 10, 0];
+
+		_unit setVariable ["APS_targetCoordinates", _coordinates];
+		[_projectile, _unit] spawn DIS_fnc_gpsMunition;
+	};
+
 	_this spawn APS_fnc_firedProjectile;
 
 	private _projectileSam = _projectileConfig getOrDefault ["sam", false];

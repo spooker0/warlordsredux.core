@@ -1,7 +1,5 @@
 #include "constants.inc"
 
-import RscListBox;
-
 class WLCListBox: RscListBox {
     deletable = 0;
     canDrag = 0;

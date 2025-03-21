@@ -9,6 +9,7 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
     private _projectileCamera = getNumber (_x >> "camera") == 1;
     private _projectileConsumption = getNumber (_x >> "consumption");
     private _projectileDazzleable = getNumber (_x >> "dazzleable") == 1;
+    private _projectileGPS = getNumber (_x >> "gps") == 1;
     private _projectileRemote = getNumber (_x >> "remote") == 1;
     private _projectileSam = getNumber (_x >> "sam") == 1;
     private _projectileSead = getNumber (_x >> "sead") == 1;
@@ -23,6 +24,7 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
             ["camera", _projectileCamera],
             ["consumption", _projectileConsumption],
             ["dazzleable", _projectileDazzleable],
+            ["gps", _projectileGPS],
             ["remote", _projectileRemote],
             ["sam", _projectileSam],
             ["sead", _projectileSead],
