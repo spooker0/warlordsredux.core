@@ -11,6 +11,46 @@ DIS_fnc_setGpsNumber = {
     private _num3 = floor ((_number - _num1 * 1000 - _num2 * 100) / 10);
     private _num4 = _number % 10;
     _display ctrlSetText format ["%1%2%3.%4", _num1, _num2, _num3, _num4];
+
+    private _lon = uiNamespace getVariable ["DIS_GPS_LON", 0];
+    private _lat = uiNamespace getVariable ["DIS_GPS_LAT", 0];
+    private _posATL = [_lon * 10, _lat * 10, 0];
+    private _posASL = ATLToASL _posATL;
+    private _heightASL = _posASL # 2;
+
+    private _display = ctrlParent _display;
+    private _heightDisplay = _display displayCtrl DIS_GPS_SEALEVEL;
+    private _color = if (_heightASL > 0) then {
+        "#00ff00"
+    } else {
+        "#ff0000"
+    };
+    _heightDisplay ctrlSetStructuredText parseText format [
+        "<t color='%1' size='2' align='center'>%2 M</t><br/><t align='center' size='0.7'>ABOVE SEA LEVEL</t>",
+        _color,
+        round _heightASL
+    ];
+
+    private _sectorDisplay = _display displayCtrl DIS_GPS_SECTOR;
+    private _closestSector = [BIS_WL_allSectors, [_posATL], {
+        ((_x getVariable "objectAreaComplete") # 0) distance2D _input0
+    }, "ASCEND"] call BIS_fnc_sortBy;
+    _closestSector = _closestSector # 0;
+    private _sectorPos = _closestSector getVariable "objectAreaComplete";
+
+    private _prefix = "INSIDE";
+    private _color = "#00ff00";
+    if !(_posATL inArea _sectorPos) then {
+        private _distance = _posATL distance2D (_sectorPos # 0);
+        _prefix = format ["%1 KM FROM", (_distance / 1000) toFixed 1];
+        _color = "#ff0000";
+    };
+    _sectorDisplay ctrlSetStructuredText parseText format [
+        "<t align='center' size='1'>%1</t><br/><t align='center' size='1.2' color='%2'>%3</t>",
+        _prefix,
+        _color,
+        toUpper (_closestSector getVariable ["BIS_WL_name", "UNKNOWN"])
+    ];
 };
 
 private _setupMenu = {
@@ -50,6 +90,12 @@ private _setupMenu = {
 
         _display ctrlSetTextColor [1, 0, 0, 1];
         ((ctrlParent _display) displayCtrl DIS_GPS_INPUTLON) ctrlSetTextColor [1, 1, 1, 1];
+    }];
+
+    private _closeButton = _display displayCtrl DIS_GPS_CLOSE_BUTTON;
+    _closeButton ctrlAddEventHandler ["ButtonClick", {
+        params ["_control", "_button"];
+        closeDialog 0;
     }];
 
     _display displayAddEventHandler ["KeyDown", {
@@ -118,6 +164,8 @@ private _setupMenu = {
         private _targetLonLat = _control lbData _lbCurSel;
         private _targetLonLatSplit = _targetLonLat splitString ":";
 
+        if (count _targetLonLatSplit != 2) exitWith {};
+
         private _lon = _targetLonLatSplit # 0;
         _lon = parseNumber _lon;
         private _lat = _targetLonLatSplit # 1;
@@ -140,13 +188,21 @@ private _setupMenu = {
         while { !isNull _display } do {
             private _datalinkList = _display displayCtrl DIS_GPS_DATALINK_LIST;
             lbClear _datalinkList;
-            {
+
+            private _targets = (listRemoteTargets BIS_WL_playerSide) select {
                 private _target = _x # 0;
                 private _targetSide = [_target] call WL2_fnc_getAssetSide;
-                if (_targetSide == BIS_WL_playerSide) then {
-                    continue;
-                };
 
+                private _targetTime = _x # 1;
+                _targetTime >= 0 && _targetSide != BIS_WL_playerSide;
+            };
+
+            if (count _targets == 0) then {
+                _datalinkList lbAdd "No targets on datalink.";
+            };
+
+            {
+                private _target = _x # 0;
                 private _assetType = [_target] call WL2_fnc_getAssetTypeName;
                 private _lbId = _datalinkList lbAdd _assetType;
 
@@ -164,9 +220,9 @@ private _setupMenu = {
                 _datalinkList lbSetPicture [_lbId, _listPic];
 
                 _datalinkList lbSetData [_lbId, format ["%1:%2", _targetPos # 0 / 10, _targetPos # 1 / 10]];
-            } forEach (listRemoteTargets BIS_WL_playerSide);
+            } forEach _targets;
 
-            sleep 1;
+            sleep 2;
         };
     };
 
@@ -180,7 +236,7 @@ private _actionID = _asset addAction [
 	true,
 	false,
 	"",
-	"true",
+	"vehicle _this == _target",
 	50,
 	false
 ];

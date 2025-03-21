@@ -217,5 +217,31 @@ class DIS_GPS_MenuUI {
             };
             style = LB_TEXTURES;
         };
+
+        class DIS_GPS_SeaLevel: RscStructuredText {
+            idc = DIS_GPS_SEALEVEL;
+            x = 0.75;
+            y = 0.02;
+            w = 0.25;
+            h = 0.2;
+
+            shadow = 0;
+            style = ST_CENTER;
+            text = "???";
+            sizeEx = 0.02;
+        };
+
+        class DIS_GPS_Sector: RscStructuredText {
+            idc = DIS_GPS_SECTOR;
+            x = 0.75;
+            y = 0.14;
+            w = 0.25;
+            h = 0.1;
+
+            shadow = 0;
+            style = ST_CENTER;
+            text = "???";
+            sizeEx = 0.015;
+        };
     };
 };
