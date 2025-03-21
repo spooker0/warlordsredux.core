@@ -10,6 +10,7 @@ class CfgRemoteExec {
 		class APS_fnc_report {allowedTargets = 0;};
 		class APS_fnc_serverHandleAPS {allowedTargets = 2;};
 		class APS_fnc_setupProjectiles {allowedTargets = 0;};
+		class DIS_fnc_setupGPSMunition {allowedTargets = 0;};
 		class KST_fnc_explode {allowedTargets = 0;};
 		class KST_fnc_rocket {allowedTargets = 0;};
 		class KST_fnc_setParent {allowedTargets = 0;};
@@ -44,7 +45,6 @@ class CfgRemoteExec {
 		class WL2_fnc_removeAction {allowedTargets = 1;};
 		class WL2_fnc_repairAction {allowedTargets = 1;};
 		class WL2_fnc_sectorRevealHandle {allowedTargets = 0;};
-		class WL2_fnc_setupGPSMunition {allowedTargets = 0;};
 		class WL2_fnc_revive {allowedTargets = 0;};
 		class WL2_fnc_scannerAction {allowedTargets = 0;};
 		class WL2_fnc_setDazzlerState {allowedTargets = 2;};
