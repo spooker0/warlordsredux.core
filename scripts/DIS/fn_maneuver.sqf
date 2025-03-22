@@ -3,24 +3,13 @@
 params ["_projectile", "_unit"];
 
 private _originalTarget = missileTarget _projectile;
-// private _dangerZone = if (_originalTarget isKindOf "Helicopter") then {
-//     2000;
-// } else {
-//     2500;
-// };
-// private _inDangerZone = (_projectile distance _originalTarget) < _dangerZone;
-
 [_projectile, _originalTarget] spawn {
     params ["_projectile", "_originalTarget"];
     private _startTime = time;
     private _isLOAL = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "autoSeekTarget") == 1;
 
     while { alive _projectile } do {
-        sleep 0.5;
-
-        // if (_inDangerZone) then {
-        //     _projectile setMissileTarget [_originalTarget, true];
-        // };
+        sleep 0.2;
 
         private _inFrontAngle = [getPosASL _projectile, getDir _projectile, 180, getPosASL _originalTarget] call BIS_fnc_inAngleSector;
         if (!_inFrontAngle) then {
@@ -84,11 +73,6 @@ while { alive _projectile } do {
     if (!(_intersectPosition isEqualTo [0, 0, 0]) && _belowTargetATL) then {
         _projectile setAngularVelocityModelSpace [-30 * (_terrainTest -_distanceToGround) / _terrainTest, _angularVector # 1, _angularVector # 2];
     } else {
-        // private _accelerationFactor = if (_inDangerZone) then {
-        //     5 * WL_SAM_ANGULAR_ACCELERATION;
-        // } else {
-        //     WL_SAM_ANGULAR_ACCELERATION;
-        // };
         private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
         _projectile setAngularVelocityModelSpace _newAngularVector;
     };
