@@ -4,7 +4,7 @@ private _target = objNull;
 private _frag = false;
 private _projectileClass = typeOf _projectile;
 private _range = getNumber (configfile >> "CfgAmmo" >> _projectileClass >> "indirectHitRange");
-private _proxRange = _range * 4;
+private _proxRange = _range * 2.5;
 
 private _objectsNearby = [];
 sleep 0.5;
