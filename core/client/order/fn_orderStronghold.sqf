@@ -56,21 +56,21 @@ _stronghold setVariable ["WL_strongholdOwner", player, true];
 
 private _strongholdRadius = (boundingBoxReal _stronghold) # 2;
 
-private _strongholdMarker = createMarkerLocal [_markerName, _stronghold];
-_strongholdMarker setMarkerShapeLocal "ELLIPSE";
-_strongholdMarker setMarkerSizeLocal [_strongholdRadius, _strongholdRadius];
-_strongholdMarker setMarkerColorLocal "colorCivilian";
-_strongholdMarker setMarkerAlpha 0.3;
+createMarkerLocal [_markerName, _stronghold];
+_markerName setMarkerShapeLocal "ELLIPSE";
+_markerName setMarkerSizeLocal [_strongholdRadius, _strongholdRadius];
+_markerName setMarkerColorLocal "colorCivilian";
+_markerName setMarkerAlpha 0.3;
 
-private _strongholdTextMarker = createMarkerLocal [_markerTextName, _stronghold];
-_strongholdTextMarker setMarkerShapeLocal "ICON";
-_strongholdTextMarker setMarkerTypeLocal "loc_Ruin";
-_strongholdTextMarker setMarkerColorLocal "colorCivilian";
-_strongholdTextMarker setMarkerText "STRONGHOLD";
+createMarkerLocal [_markerTextName, _stronghold];
+_markerTextName setMarkerShapeLocal "ICON";
+_markerTextName setMarkerTypeLocal "loc_Ruin";
+_markerTextName setMarkerColorLocal "colorCivilian";
+_markerTextName setMarkerText "STRONGHOLD";
 
 _currentSector setVariable ["WL_stronghold", _stronghold, true];
-_currentSector setVariable ["WL_strongholdMarker", _strongholdMarker, true];
-_currentSector setVariable ["WL_strongholdTextMarker", _strongholdTextMarker, true];
+_currentSector setVariable ["WL_strongholdMarker", _markerName, true];
+_currentSector setVariable ["WL_strongholdTextMarker", _markerTextName, true];
 
 [player, "buyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 [_stronghold, _currentSector] remoteExec ["WL2_fnc_prepareStronghold", 2];

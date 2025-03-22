@@ -21,7 +21,8 @@ if (_action == "orderAsset") exitWith {
 	private _position = _param2;
 	private _orderedClass = _param3;
 
-	private _cost = ((serverNamespace getVariable "WL2_costs") getOrDefault [_orderedClass, 50001]);
+	private _costMap = missionNamespace getVariable ["WL2_costs", createHashMap];
+	private _cost = _costMap getOrDefault [_orderedClass, 50001];
 	private _hasFunds = (playerFunds >= _cost);
 	if (_hasFunds) then {
 		(-_cost) call WL2_fnc_fundsDatabaseWrite;
@@ -273,7 +274,7 @@ if (_action == "targetReset") exitWith {
 };
 
 if (_action == "orderAI") exitWith {
-	_cost = ((serverNamespace getVariable "WL2_costs") getOrDefault [_param1, 150]);
+	_cost = ((missionNamespace getVariable "WL2_costs") getOrDefault [_param1, 150]);
 	(-_cost) call WL2_fnc_fundsDatabaseWrite;
 };
 

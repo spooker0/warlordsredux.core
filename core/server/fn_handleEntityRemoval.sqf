@@ -49,7 +49,8 @@ if (!isNull _responsiblePlayer && { isPlayer _responsiblePlayer }) then {
         private _killReward = if (_unit isKindOf "Man") then {
             if (isPlayer _unit) then {60} else {30};
         } else {
-            (serverNamespace getVariable "WL2_killRewards") getOrDefault [_assetActualType, 0];
+            private _killRewardMap = missionNamespace getVariable ["WL2_killRewards", createHashMap];
+            _killRewardMap getOrDefault [_assetActualType, 0];
         };
 
         private _spotReward = round (_killReward / 8.0);

@@ -428,6 +428,9 @@ if (_asset isKindOf "Man") then {
 	if (_assetActualType == "B_Plane_Fighter_01_standoff_F") then {
 		[_asset] remoteExec ["DIS_fnc_setupGPSMunition", 0, true];
 	};
+	if (_assetActualType == "O_Plane_Fighter_02_Standoff_F") then {
+		[_asset] remoteExec ["DIS_fnc_setupRemoteMunition", 0, true];
+	};
 
 	private _demolishable = missionNamespace getVariable ["WL2_demolishable", createHashMap];
 	if (_demolishable getOrDefault [_assetActualType, false]) then {

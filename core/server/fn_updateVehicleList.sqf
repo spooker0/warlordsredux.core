@@ -17,6 +17,9 @@ private _guerOwnedVehicles = [];
     };
 } forEach allPlayers;
 
+_westOwnedVehicles = _westOwnedVehicles select { alive _x };
+_eastOwnedVehicles = _eastOwnedVehicles select { alive _x };
+
 missionNamespace setVariable ["BIS_WL_westOwnedVehicles", _westOwnedVehicles, true];
 missionNamespace setVariable ["BIS_WL_eastOwnedVehicles", _eastOwnedVehicles, true];
 

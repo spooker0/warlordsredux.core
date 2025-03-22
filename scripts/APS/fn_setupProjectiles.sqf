@@ -42,10 +42,16 @@ _this addEventHandler ["Fired", {
 	if (_projectileGPS) then {
 		private _lon = uiNamespace getVariable ["DIS_GPS_LON", 0];
 		private _lat = uiNamespace getVariable ["DIS_GPS_LAT", 0];
-		private _coordinates = [_lon * 10, _lat * 10, 0];
+		private _coordinates = [_lon * 100, _lat * 100, 0];
 
-		_projectile setVariable ["DIS_targetCoordinates", _coordinates];
-		[_projectile, _unit] spawn DIS_fnc_gpsMunition;
+		private _inRangeCalculation = [_coordinates, getPosASL _unit, velocity _unit] call DIS_fnc_calculateInRange;
+		private _inRange = _inRangeCalculation # 0;
+		if (_inRange) then {
+			_projectile setVariable ["DIS_targetCoordinates", _coordinates];
+			[_projectile, _unit] spawn DIS_fnc_gpsMunition;
+		} else {
+			systemChat "GPS target out of range.";
+		};
 	};
 
 	_this spawn APS_fnc_firedProjectile;

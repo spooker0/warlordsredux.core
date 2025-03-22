@@ -25,6 +25,7 @@ class CfgFunctions {
 	class DIS {
 		class Default {
 			file = "src\scripts\DIS";
+			class calculateInRange {};
 			class controlMunition {};
 			class frag {};
 			class gpsMunition {};
@@ -34,6 +35,8 @@ class CfgFunctions {
 			class setGPSNumber {};
 			class setupGPSMenu {};
 			class setupGPSMunition {};
+			class setupRemoteMenu {};
+			class setupRemoteMunition {};
 			class startMissileCamera {};
 			class tvMunition {};
 		};
@@ -188,6 +191,7 @@ class CfgFunctions {
 		class ClientDraw {
 			file = "src\core\client\draw";
 			class drawAssetName {};
+			class drawRadarName {};
 			class getDir {};
 			class getPos {};
 			class helmetInterface {};

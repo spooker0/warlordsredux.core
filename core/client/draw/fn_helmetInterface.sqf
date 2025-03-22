@@ -58,10 +58,7 @@ addMissionEventHandler ["Draw3D", {
         ];
     } forEach _targetInfantryIcons;
 
-    private _vehicle = getConnectedUAV player;
-    if (isNull _vehicle) then {
-        _vehicle = vehicle player;
-    };
+    private _vehicle = cameraOn;
     if (!alive _vehicle) exitWith {};
 
     private _incomingMissiles = _vehicle getVariable ["WL_incomingMissiles", []];
@@ -106,7 +103,7 @@ addMissionEventHandler ["Draw3D", {
             0.8,
             0.8,
             0,
-            format ["%1 KM", (round (_distance / 100)) / 10],
+            format ["%1 KM (%2)", (round (_distance / 100)) / 10, _missileState],
             true,
             0.035,
             "RobotoCondensedBold",
@@ -171,10 +168,7 @@ addMissionEventHandler ["Draw3D", {
             continue;
         };
 
-        private _vehicle = getConnectedUAV player;
-        if (isNull _vehicle) then {
-            _vehicle = vehicle player;
-        };
+        private _vehicle = cameraOn;
         if (!alive _vehicle) then {
             sleep 1;
             continue;
@@ -462,10 +456,11 @@ addMissionEventHandler ["Draw3D", {
             continue;
         };
 
-        private _vehicle = vehicle (getConnectedUAVUnit player);
-        if (isNull _vehicle) then {
-            _vehicle = vehicle player;
-        };
+        // private _vehicle = vehicle (getConnectedUAVUnit player);
+        // if (isNull _vehicle) then {
+        //     _vehicle = vehicle player;
+        // };
+        private _vehicle = cameraOn;
 
         private _allowedVehicles = missionNamespace getVariable ["WL2_hasHMD", createHashMap];
         private _vehicleActualType = _vehicle getVariable ["WL2_orderedClass", typeOf _vehicle];

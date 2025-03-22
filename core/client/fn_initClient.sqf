@@ -388,3 +388,4 @@ call WL2_fnc_demolishAction;
 call WL2_fnc_disarmAction;
 call WL2_fnc_rappelAction;
 call WL2_fnc_createInfoMarkers;
+0 spawn WL2_fnc_drawRadarName;

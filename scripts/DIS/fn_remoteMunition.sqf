@@ -1,4 +1,6 @@
-params ["_asset"];
+params ["_asset", "_controlStation"];
+
+_controlStation setVariable ["DIS_remoteInUse", true, true];
 
 private _camera = "camera" camCreate (position _asset);
 
@@ -46,14 +48,14 @@ call _prepareInterface;
 _camera switchCamera "INTERNAL";
 cameraEffectEnableHUD true;
 showHUD [true, true, true, true, true, true, true, true, true, true, true];
-player setVariable ["WL_hmdOverride", 1];
+player setVariable ["WL_hmdOverride", 2];
 
 waitUntil {
     sleep 0.001;
     inputAction "ActionContext" == 0
 };
 
-while { alive _asset && (_asset getVariable ["WL2_linkedPlayer", objNull]) == player } do {
+while { alive _asset && (_asset getVariable ["DIS_remoteControlStation", objNull]) == _controlStation } do {
     if (inputAction "ActionContext" > 0) then {
         break;
     };
@@ -93,6 +95,7 @@ while { alive _asset && (_asset getVariable ["WL2_linkedPlayer", objNull]) == pl
         _projectile setVectorDirAndUp _projectileVectorDirAndUp;
         _projectile setVelocityModelSpace _projectileVelocity;
         [_projectile, [player, player]] remoteExec ["setShotParents", 2];
+        [_projectile, driver _asset] remoteExec ["DIS_fnc_startMissileCamera", _asset];
 
         _projectile setVariable ["APS_speedOverride", 400];
 
@@ -106,6 +109,8 @@ while { alive _asset && (_asset getVariable ["WL2_linkedPlayer", objNull]) == pl
 
     sleep 0.001;
 };
+
+_controlStation setVariable ["DIS_remoteInUse", false, true];
 
 player setVariable ["WL_hmdOverride", -1];
 switchCamera player;

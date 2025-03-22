@@ -1,5 +1,5 @@
 params ["_projectile", "_camera"];
-player setVariable ["WL_hmdOverride", 1];
+player setVariable ["WL_hmdOverride", 2];
 
 private _nightVision = false;
 private _projectileIsShell = _projectile isKindOf "ShellCore";

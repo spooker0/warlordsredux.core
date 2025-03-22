@@ -59,6 +59,7 @@ private _targetDrawer = addMissionEventHandler ["Draw3D", {
     } else {
         _coordinates
     };
+    if (_targetPosATL isEqualTo [0, 0, 0]) exitWith {};
     drawIcon3D [
         "\A3\ui_f\data\IGUI\RscIngameUI\RscOptics\AzimuthMark.paa",
         [1, 0, 0, 1],
@@ -77,8 +78,16 @@ private _targetDrawer = addMissionEventHandler ["Draw3D", {
     ];
 }];
 
-[_camera, _titleBar, _pictureControl, _defaultOpticsMode] spawn {
-    params ["_camera", "_titleBar", "_pictureControl", "_defaultOpticsMode"];
+private _originalCamera = cameraOn;
+private _originalCamView = cameraView;
+private _originalRemote = if (isRemoteControlling player) then {
+    getConnectedUAVUnit player;
+} else {
+    objNull
+};
+
+[_camera, _titleBar, _pictureControl, _defaultOpticsMode, _originalCamera, _originalCamView, _originalRemote] spawn {
+    params ["_camera", "_titleBar", "_pictureControl", "_defaultOpticsMode", "_originalCamera", "_originalCamView", "_originalRemote"];
     private _opticsMode = _defaultOpticsMode;
     if (_opticsMode == 3) exitWith {
         _titleBar ctrlShow false;
@@ -87,13 +96,6 @@ private _targetDrawer = addMissionEventHandler ["Draw3D", {
         _pictureControl ctrlCommit 0;
     };
     private _changed = true;
-    private _originalCamera = cameraOn;
-    private _originalCamView = cameraView;
-    private _originalRemote = if (isRemoteControlling player) then {
-        getConnectedUAVUnit player;
-    } else {
-        objNull
-    };
     while { !isNull _camera } do {
         if (inputAction "opticsMode" > 0) then {
             waitUntil {inputAction "opticsMode" == 0};
@@ -113,11 +115,13 @@ private _targetDrawer = addMissionEventHandler ["Draw3D", {
                     _camera switchCamera "INTERNAL";
                     cameraEffectEnableHUD true;
                     showHUD [true, true, true, true, true, true, true, true, true, true, true];
+                    player setVariable ["WL_hmdOverride", 2];
                 };
                 case 2: {
                     _titleBar ctrlShow false;
                     _pictureControl ctrlShow false;
                     _originalCamera switchCamera _originalCamView;
+                    player setVariable ["WL_hmdOverride", -1];
                     if (!isNull _originalRemote) then {
                         player remoteControl _originalRemote;
                     };
@@ -132,14 +136,6 @@ private _targetDrawer = addMissionEventHandler ["Draw3D", {
 
 if (_defaultOpticsMode == 3) then {
     [_projectile, _camera] spawn DIS_fnc_tvMunition;
-};
-
-private _originalCamera = cameraOn;
-private _originalCamView = cameraView;
-private _originalRemote = if (isRemoteControlling player) then {
-    getConnectedUAVUnit player;
-} else {
-    objNull
 };
 
 while { !_stop } do {
@@ -172,10 +168,13 @@ _camera cameraEffect ["Terminate", "BACK TOP"];
 camDestroy _camera;
 "APS_Camera" cutFadeOut 0;
 removeMissionEventHandler ["Draw3D", _targetDrawer];
+player setVariable ["WL_hmdOverride", -1];
 
-_originalCamera switchCamera _originalCamView;
 if (!isNull _originalRemote) then {
     player remoteControl _originalRemote;
+    _originalCamera switchCamera _originalCamView;
+} else {
+    switchCamera player;
 };
 
 setPiPViewDistance _originalPipViewDistance;

@@ -80,16 +80,11 @@ switch (_conditionName) do {
             private _sector = _sectorHasValidStronghold # 0;
             private _sectorIsFortifying = _sector getVariable ["WL_fortificationTime", -1] > serverTime;
             private _sectorAlreadyFortified = _sector getVariable ["WL_strongholdFortified", false];
-            _sectorIsFortifying && !_sectorAlreadyFortified;
+            private _sectorIsVulnerable = count (_sector getVariable ["BIS_WL_previousOwners", []]) > 1;
+            _sectorIsFortifying && !_sectorAlreadyFortified && _sectorIsVulnerable;
         };
     };
     case "fastTravelFOB": {
         alive _target && _target getVariable ["WL2_forwardBaseLevel", 0] > 0;
-    };
-    case "linkAsset": {
-        alive _target && isNull (_target getVariable ["WL2_linkedPlayer", objNull]);
-    };
-    case "unlinkAsset": {
-        alive _target && !(isNull (_target getVariable ["WL2_linkedPlayer", objNull]));
     };
 };

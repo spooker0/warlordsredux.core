@@ -4,7 +4,7 @@ params ["_unit", "_responsibleLeader"];
 if (!isPlayer _responsibleLeader) exitWith {};
 
 private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
-private _killRewardMap = serverNamespace getVariable ["WL2_killRewards", createHashMap];
+private _killRewardMap = missionNamespace getVariable ["WL2_killRewards", createHashMap];
 private _killReward = _killRewardMap getOrDefault [_assetActualType, 0];
 
 if (typeof _unit == "RuggedTerminal_01_communications_hub_F") then {

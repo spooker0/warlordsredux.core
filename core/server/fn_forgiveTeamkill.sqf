@@ -10,7 +10,7 @@ if (!_forgive) then {
 	private _teamkillerUid = getPlayerUID _teamkiller;
 
 	private _victimActualType = _victim getVariable ["WL2_orderedClass", typeof _victim];
-	private _costDB = serverNamespace getVariable ["WL2_costs", createHashMap];
+	private _costDB = missionNamespace getVariable ["WL2_costs", createHashMap];
 	private _itemCost = _costDB getOrDefault [_victimActualType, 100];
 
 	private _fundsDB = serverNamespace getVariable "fundsDatabase";

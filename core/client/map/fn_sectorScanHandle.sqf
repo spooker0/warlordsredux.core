@@ -18,9 +18,11 @@ waitUntil {
     sleep 1;
 
     private _allDetected = (allUnits + vehicles) select {
+        alive _x &&
         _x inArea _sectorArea &&
         [_x] call WL2_fnc_getAssetSide != _side &&
         !(_x isKindOf "Logic") &&
+        !(_x isKindOf "WeaponHolderSimulated") &&
         vehicle _x == _x
     };
 

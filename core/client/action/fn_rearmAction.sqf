@@ -2,6 +2,7 @@
 params ["_asset"];
 
 if (isDedicated) exitWith {};
+if (_asset isKindOf "Building") exitWith {};
 
 _index = _asset addAction [
 	format ["Modify/%1", localize "STR_rearm"],

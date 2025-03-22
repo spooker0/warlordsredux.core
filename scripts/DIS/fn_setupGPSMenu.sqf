@@ -5,7 +5,7 @@ params ["_asset", "_target"];
 private _display = findDisplay DIS_GPS_DISPLAY;
 
 if (isNull _display) then {
-    _display = createDialog ["DIS_GPS_MenuUI", true];
+    _display = (findDisplay 46) createDisplay "DIS_GPS_MenuUI";
 };
 
 private _lon = uiNamespace getVariable ["DIS_GPS_LON", 0];
@@ -41,8 +41,8 @@ _latDisplay ctrlAddEventHandler ["MouseButtonDown", {
 
 private _closeButton = _display displayCtrl DIS_GPS_CLOSE_BUTTON;
 _closeButton ctrlAddEventHandler ["ButtonClick", {
-    params ["_control", "_button"];
-    closeDialog 0;
+    params ["_control"];
+    (ctrlParent _control) closeDisplay 1;
 }];
 
 _display displayAddEventHandler ["KeyDown", {
@@ -54,7 +54,14 @@ _display displayAddEventHandler ["KeyDown", {
 
     private _closeKeys = actionKeys "binocular";
     if (_key in _closeKeys) exitWith {
-        closeDialog 0;
+        [_display] spawn {
+            params ["_display"];
+            waitUntil {
+                sleep 0.001;
+                inputAction "binocular" == 0;
+            };
+            _display closeDisplay 1;
+        };
     };
 
     private _numericInput = switch (_key) do {
@@ -92,7 +99,7 @@ _display displayAddEventHandler ["KeyDown", {
         };
 
         private _lon = _lon * 10 + _numericInput;
-        if (_lon > 9999) exitWith {};
+        if (_lon > 999) exitWith {};
         uiNamespace setVariable ["DIS_GPS_LON", _lon];
         [_control, _lon] call DIS_fnc_setGpsNumber;
     } else {
@@ -104,7 +111,7 @@ _display displayAddEventHandler ["KeyDown", {
         };
 
         private _lat = _lat * 10 + _numericInput;
-        if (_lat > 9999) exitWith {};
+        if (_lat > 999) exitWith {};
         uiNamespace setVariable ["DIS_GPS_LAT", _lat];
         [_control, _lat] call DIS_fnc_setGpsNumber;
     };
@@ -138,6 +145,46 @@ _datalinkList ctrlAddEventHandler ["LBSelChanged", {
 [_display, _asset] spawn {
     params ["_display", "_asset"];
     while { !isNull _display } do {
+        private _lon = uiNamespace getVariable ["DIS_GPS_LON", 0];
+        private _lat = uiNamespace getVariable ["DIS_GPS_LAT", 0];
+        private _posATL = [_lon * 100, _lat * 100, 0];
+        private _posASL = ATLToASL _posATL;
+
+        // Max range calculation
+        private _inRangeCalculation = [_posASL, getPosASL _asset, velocity _asset] call DIS_fnc_calculateInRange;
+
+        private _inRange = _inRangeCalculation # 0;
+        private _range = _inRangeCalculation # 1;
+        private _distanceNeeded = _inRangeCalculation # 2;
+
+        private _rangeDisplay = _display displayCtrl DIS_GPS_RANGE;
+
+        private _color = if (_inRange) then {
+            "#00ff00"
+        } else {
+            "#ff0000"
+        };
+        private _inRangeText = if (_inRange) then {
+            "IN RANGE"
+        } else {
+            "OUT OF RANGE"
+        };
+
+        _rangeDisplay ctrlSetStructuredText parseText format [
+            "<t align='center'>Target Distance: %1 KM</t><br/><t align='center'>Projected Travel: %2 KM</t><br/><t align='center' color='%3' size='1.5'>%4</t>",
+            (_distanceNeeded / 1000) toFixed 1,
+            (_range / 1000) toFixed 1,
+            _color,
+            _inRangeText
+        ];
+
+        sleep 0.5;
+    };
+};
+
+[_display, _asset] spawn {
+    params ["_display", "_asset"];
+    while { !isNull _display } do {
         private _datalinkList = _display displayCtrl DIS_GPS_DATALINK_LIST;
         lbClear _datalinkList;
 
@@ -159,8 +206,8 @@ _datalinkList ctrlAddEventHandler ["LBSelChanged", {
             private _lbId = _datalinkList lbAdd _targetType;
 
             private _targetPos = getPosASL _target;
-            private _lon = (_targetPos # 0 / 100) toFixed 1;
-            private _lat = (_targetPos # 1 / 100) toFixed 1;
+            private _lon = round (_targetPos # 0 / 100);
+            private _lat = round (_targetPos # 1 / 100);
 
             private _assetPos = getPosASL _asset;
             private _distance = _assetPos distance _targetPos;
@@ -198,7 +245,7 @@ _datalinkList ctrlAddEventHandler ["LBSelChanged", {
             };
             _datalinkList lbSetPicture [_lbId, _listPic];
 
-            _datalinkList lbSetData [_lbId, format ["%1:%2", _targetPos # 0 / 10, _targetPos # 1 / 10]];
+            _datalinkList lbSetData [_lbId, format ["%1:%2", round (_targetPos # 0 / 100), round (_targetPos # 1 / 100)]];
         } forEach _targets;
 
         lbSortByValue _datalinkList;

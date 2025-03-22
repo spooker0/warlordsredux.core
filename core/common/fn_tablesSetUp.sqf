@@ -192,8 +192,6 @@ if (isServer) then {
 	serverNamespace setVariable ["fundsDatabase", createHashMap];
 	serverNamespace setVariable ["playerList", createHashMap];
 
-	serverNamespace setVariable ["WL2_costs", _costHashMap];
-	serverNamespace setVariable ["WL2_killRewards", _killRewardHashMap];
 	serverNamespace setVariable ["WL2_cappingValues", _capValueHashMap];
 
 	serverNamespace setVariable ["WL2_populateUnitPoolList", _populateUnitPoolList];
@@ -220,6 +218,8 @@ if (isServer) then {
 	];
 };
 
+missionNamespace setVariable ["WL2_killRewards", _killRewardHashMap];
+missionNamespace setVariable ["WL2_costs", _costHashMap];
 missionNamespace setVariable ["WL2_categories", _categoryHashMap];
 
 missionNamespace setVariable ["WL2_nameOverrides", _nameHashMap];

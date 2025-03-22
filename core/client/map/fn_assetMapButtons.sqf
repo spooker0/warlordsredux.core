@@ -210,45 +210,6 @@ if (typeof _asset in (_spawnTruckTypes + _spawnPodTypes)) then {
     };
 };
 
-if (_operateAccess && _assetActualType == "O_Plane_Fighter_02_Standoff_F") then {
-    private _linkToAssetExecute = {
-        params ["_asset"];
-        player setVariable ["WL2_linkedAsset", _asset];
-        _asset setVariable ["WL2_linkedPlayer", player, true];
-        playSound "AddItemOK";
-    };
-    [
-        "LINK TO ASSET",
-        _linkToAssetExecute,
-        true,
-        "linkAsset",
-        [
-            0,
-            "linkAsset",
-            "Strategy"
-        ]
-    ] call WL2_fnc_addTargetMapButton;
-};
-
-if (_ownsVehicle && _assetActualType == "O_Plane_Fighter_02_Standoff_F") then {
-    private _unlinkAllExecute = {
-        params ["_asset"];
-        _asset setVariable ["WL2_linkedPlayer", objNull, true];
-        playSound "AddItemOK";
-    };
-    [
-        "UNLINK ALL",
-        _unlinkAllExecute,
-        true,
-        "unlinkAsset",
-        [
-            0,
-            "unlinkAsset",
-            "Strategy"
-        ]
-    ] call WL2_fnc_addTargetMapButton;
-};
-
 if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     private _fastTravelFOBExecute = {
         params ["_asset"];
