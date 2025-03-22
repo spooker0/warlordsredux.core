@@ -1,5 +1,7 @@
 #include "..\..\warlords_constants.inc"
 
+if (isDedicated) exitWith {};
+
 uiNamespace setVariable ["WL_HelmetInterfaceLaserIcons", []];
 // uiNamespace setVariable ["WL_HelmetInterfaceFlareIcons", []];
 uiNamespace setVariable ["WL_HelmetInterfaceMunitionIcons", []];
@@ -73,11 +75,17 @@ addMissionEventHandler ["Draw3D", {
 
         private _relDir = _missile getRelDir _vehicle;
         private _missileApproaching = _relDir < 90 || _relDir > 270;
+        private _missileUpdateInitialized = _missile getVariable ["WL_missileUpdateInitialized", false];
+        if (!_missileUpdateInitialized) then {
+            _missile setVariable ["WL_missileUpdateInitialized", true];
+            [_missile] remoteExec ["APS_fnc_projectileStateUpdate", 0];
+        };
         _missile setVariable ["WL_missileApproaching", _missileApproaching];
 
-        private _missileLost = _missile getVariable ["APS_missileLost", false];
+        private _missileState = _missile getVariable ["APS_missileState", "LOCKED"];
+        private _missileNotLocked = _missileState != "LOCKED";
         private _color = switch true do {
-            case (!_missileApproaching || _missileLost): {
+            case (!_missileApproaching || _missileNotLocked): {
                 [0, 0, 0, 1]
             };
             case (_distance > 5000): {

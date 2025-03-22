@@ -31,6 +31,8 @@ class CfgFunctions {
 			class maneuver {};
 			class missileCamera {};
 			class remoteMunition {};
+			class setGPSNumber {};
+			class setupGPSMenu {};
 			class setupGPSMunition {};
 			class startMissileCamera {};
 			class tvMunition {};

@@ -53,12 +53,16 @@ uiNamespace setVariable ["APS_Camera_Projectile", _projectile];
 private _targetDrawer = addMissionEventHandler ["Draw3D", {
     private _projectile = uiNamespace getVariable ["APS_Camera_Projectile", objNull];
     if (isNull _projectile) exitWith {};
-    private _target = missileTarget _projectile;
-    if (isNull _target) exitWith {};
+    private _coordinates = _projectile getVariable ["DIS_targetCoordinates", []];
+    private _targetPosATL = if (count _coordinates == 0) then {
+        (missileTarget _projectile) modelToWorld [0, 0, 0]
+    } else {
+        _coordinates
+    };
     drawIcon3D [
         "\A3\ui_f\data\IGUI\RscIngameUI\RscOptics\AzimuthMark.paa",
         [1, 0, 0, 1],
-        _target modelToWorld [0, 0, 0],
+        _targetPosATL,
         1,
         1,
         180,
@@ -146,8 +150,9 @@ while { !_stop } do {
     private _isDestroyed = _projectilePosition isEqualTo [0, 0, 0] || _projectileDirection isEqualTo [0, 0, 0];
     private _expired = (time - _startTime) > WL_SAM_TIMEOUT;
     private _disconnected = unitIsUAV _unit && isNull (getConnectedUAV player);
+    private _playerDown = !alive player || lifeState player == "INCAPACITATED";
 
-    _stop = isNull _projectile || !alive _projectile || _isDestroyed || _expired || _disconnected || _projectile getEntityInfo 14;
+    _stop = isNull _projectile || !alive _projectile || _isDestroyed || _expired || _disconnected || _projectile getEntityInfo 14 || _playerDown;
 
     "rtt1" setPiPEffect [currentVisionMode player];
 

@@ -9,7 +9,6 @@ _this addEventHandler ["Fired", {
 
 	if !(local _projectile) exitWith { true };
 	if !(local _gunner) exitWith { true };
-	[_projectile] spawn APS_fnc_projectileStateUpdate;
 
 	private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
 	private _ammoOverridesHashMap = missionNamespace getVariable ["WL2_ammoOverrides", createHashMap];
@@ -45,7 +44,7 @@ _this addEventHandler ["Fired", {
 		private _lat = uiNamespace getVariable ["DIS_GPS_LAT", 0];
 		private _coordinates = [_lon * 10, _lat * 10, 0];
 
-		_unit setVariable ["APS_targetCoordinates", _coordinates];
+		_projectile setVariable ["DIS_targetCoordinates", _coordinates];
 		[_projectile, _unit] spawn DIS_fnc_gpsMunition;
 	};
 

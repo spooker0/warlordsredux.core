@@ -4,13 +4,14 @@ private _target = objNull;
 private _frag = false;
 private _projectileClass = typeOf _projectile;
 private _range = getNumber (configfile >> "CfgAmmo" >> _projectileClass >> "indirectHitRange");
-private _proxRange = _range * 1.5;
+private _proxRange = _range * 4 * 2;
 
+private _objectsNearby = [];
 sleep 0.5;
 while { alive _projectile } do {
 	sleep 0.001;
 
-	private _objectsNearby = _projectile nearEntities ["Air", _proxRange];
+	_objectsNearby = _projectile nearEntities ["Air", _proxRange];
 	_objectsNearby = _objectsNearby select {
 		[_x] call WL2_fnc_getAssetSide != side group _unit
 	};
@@ -23,7 +24,23 @@ while { alive _projectile } do {
 private _projectilePosition = getPosASL _projectile;
 triggerAmmo _projectile;
 
+if (count _objectsNearby == 0) exitWith {};
+
+{
+	_x setVariable ["WL_lastHitter", _unit, 2];
+	{
+		_x setVariable ["WL_lastHitter", _unit, 2];
+	} forEach (crew _x);
+} forEach _objectsNearby;
+
+private _targetDetected = _objectsNearby # 0;
+private _targetPosition = getPosASL _targetDetected;
+private _detonationPoint = vectorLinearConversion [0, 1, 0.875, _projectilePosition, _targetPosition];
+
 // Burst Explosion
-private _burst = createVehicle [_projectileClass, _projectilePosition, [], 50, "FLY"];
-_burst setPosASL _projectilePosition;
+private _burst = createVehicle [_projectileClass, _detonationPoint, [], 50, "FLY"];
+_burst setPosASL _detonationPoint;
 triggerAmmo _burst;
+
+private _finalDistance = _targetPosition distance _detonationPoint;
+systemChat format ["SAM detonation %1M away from target.", round _finalDistance];

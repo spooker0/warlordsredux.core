@@ -1,3 +1,5 @@
+#include "..\warlords_constants.inc"
+
 private _soundId = -1;
 
 private _endEffect = {
@@ -34,7 +36,11 @@ while { !BIS_WL_missionEnd } do {
     } forEach _findCurrentSector;
 
     if (isNull _currentSector) then {
-        if (_pos # 0 > 0 && _pos # 0 < worldSize && _pos # 1 > 0 && _pos # 1 < worldSize) then {
+        private _buffer = 5000;
+        if (_pos # 0 > -WL_MAP_RESTRICTION_BUFFER &&
+            _pos # 0 < worldSize + WL_MAP_RESTRICTION_BUFFER &&
+            _pos # 1 > -WL_MAP_RESTRICTION_BUFFER &&
+            _pos # 1 < worldSize + WL_MAP_RESTRICTION_BUFFER) then {
             call _endEffect;
             continue;
         };

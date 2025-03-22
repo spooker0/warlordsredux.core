@@ -10,21 +10,26 @@ private _dangerZone = if (_originalTarget isKindOf "Helicopter") then {
 };
 private _inDangerZone = (_projectile distance _originalTarget) < _dangerZone;
 
-[_projectile] spawn {
-    params ["_projectile"];
+[_projectile, _originalTarget, _inDangerZone] spawn {
+    params ["_projectile", "_originalTarget", "_inDangerZone"];
     private _startTime = time;
     private _isLOAL = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "autoSeekTarget") == 1;
 
     while { alive _projectile } do {
-        sleep 7;
+        sleep 0.5;
 
-        private _inFrontAngle = [getPosASL _projectile, getDir _projectile, 180, getPosASL (missileTarget _projectile)] call BIS_fnc_inAngleSector;
+        if (_inDangerZone) then {
+            _projectile setMissileTarget [_originalTarget, true];
+        };
+
+        private _inFrontAngle = [getPosASL _projectile, getDir _projectile, 180, getPosASL _originalTarget] call BIS_fnc_inAngleSector;
         if (!_inFrontAngle) then {
             triggerAmmo _projectile;
         };
 
         // Ghost missile relocking check.
-        if (_isLOAL && !(alive missileTarget _projectile)) exitWith {
+        private _currentMissileTarget = missileTarget _projectile;
+        if (_isLOAL && alive _currentMissileTarget && _currentMissileTarget != _originalTarget) then {
             triggerAmmo _projectile;
         };
         if (time > (_startTime + WL_SAM_TIMEOUT)) exitWith {
@@ -33,17 +38,14 @@ private _inDangerZone = (_projectile distance _originalTarget) < _dangerZone;
     };
 };
 
-[_projectile, _unit, _inDangerZone, _originalTarget] spawn {
-    params ["_projectile", "_unit", "_inDangerZone", "_originalTarget"];
+// Friendly fire check.
+[_projectile, _unit] spawn {
+    params ["_projectile", "_unit"];
     sleep 1;
     while { alive _projectile } do {
         sleep 0.2;
-        if (_inDangerZone) then {
-            _projectile setMissileTarget [_originalTarget, true];
-        };
-
         private _missileTarget = missileTarget _projectile;
-        private _missileTargetSide = _missileTarget getVariable ["BIS_WL_ownerAssetSide", side _missileTarget];
+        private _missileTargetSide = [_missileTarget] call WL2_fnc_getAssetSide;
         private _projectileSide = side (group _unit);
         if (_missileTargetSide == _projectileSide) exitWith {
             triggerAmmo _projectile;

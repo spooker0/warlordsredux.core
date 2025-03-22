@@ -187,9 +187,9 @@ class DIS_GPS_MenuUI {
         class DIS_GPS_DatalinkList: RscListBox {
             idc = DIS_GPS_DATALINK_LIST;
 
-            x = 0.1;
+            x = 0.05;
             y = 0.3;
-            w = 0.8;
+            w = 0.9;
             h = 0.6;
             rowHeight = 0.05;
 
@@ -236,7 +236,7 @@ class DIS_GPS_MenuUI {
             x = 0.75;
             y = 0.14;
             w = 0.25;
-            h = 0.1;
+            h = 0.2;
 
             shadow = 0;
             style = ST_CENTER;
