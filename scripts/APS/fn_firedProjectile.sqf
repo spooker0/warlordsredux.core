@@ -50,6 +50,8 @@ private _interception = {
 	};
 };
 
+private _smokeScriptReady = true;
+
 private _continue = alive _projectile;
 while {_continue && alive _projectile} do {
 	private _currentPos = getPosWorld _projectile;
@@ -74,6 +76,25 @@ while {_continue && alive _projectile} do {
 			(_projectile distanceSqr _x) < _maxDistSqr;
 		} else {
 			true;
+		};
+	};
+
+	if (_dazzleable && _smokeScriptReady) then {
+		private _missileTarget = missileTarget _projectile;
+		if !(isNull _missileTarget) then {
+			private _smokesNear = _missileTarget nearObjects ["SmokeShellVehicle", 50];
+			private _numberSmokes = count _smokesNear;
+			if (_numberSmokes > 0) then {
+				// 1 smoke grenade = 50% hit chance
+				// 2 smoke grenades = 25% hit chance
+				// 8 smoke grenades = 6.25% hit chance
+				// 16 smoke grenades = 3.125% hit chance
+				private _misdirect = random _numberSmokes >= 0.5;
+				if (_misdirect) then {
+					_projectile setMissileTarget objNull;
+				};
+				_smokeScriptReady = false;
+			};
 		};
 	};
 

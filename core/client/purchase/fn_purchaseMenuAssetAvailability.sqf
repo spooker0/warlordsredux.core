@@ -259,7 +259,8 @@ if (_ret) then {
 			[
 				[WL2_fnc_checkInFriendlySector],
 				[WL2_fnc_checkPlayerInVehicle],
-				[WL2_fnc_checkNearbyEnemies]
+				[WL2_fnc_checkNearbyEnemies],
+				[WL2_fnc_checkGlasses]
 			]
 		};
 		case "SwitchToGreen": {

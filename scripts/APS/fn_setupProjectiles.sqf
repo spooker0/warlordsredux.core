@@ -40,13 +40,10 @@ _this addEventHandler ["Fired", {
 
 	private _projectileGPS = _projectileConfig getOrDefault ["gps", false];
 	if (_projectileGPS) then {
-		private _lon = uiNamespace getVariable ["DIS_GPS_LON", 0];
-		private _lat = uiNamespace getVariable ["DIS_GPS_LAT", 0];
-		private _coordinates = [_lon * 100, _lat * 100, 0];
-
-		private _inRangeCalculation = [_coordinates, getPosASL _unit, velocity _unit] call DIS_fnc_calculateInRange;
+		private _inRangeCalculation = [_unit] call DIS_fnc_calculateInRange;
 		private _inRange = _inRangeCalculation # 0;
 		if (_inRange) then {
+			private _coordinates = _inRangeCalculation # 3;
 			_projectile setVariable ["DIS_targetCoordinates", _coordinates];
 			[_projectile, _unit] spawn DIS_fnc_gpsMunition;
 		} else {

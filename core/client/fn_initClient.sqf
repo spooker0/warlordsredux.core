@@ -287,14 +287,16 @@ WL_LoadingState = 12;
 			private _lastActiveTime = _x getVariable ["BIS_WL_lastActive", 0];
 			if (_lastActiveTime < serverTime && _lastActiveTime > 1 && count (crew _x) == 0) then {
 				deleteVehicle _x;
-				0 remoteExec ["WL2_fnc_updateVehicleList", 2];
 			};
 		} forEach _vehicles;
 
-		_vehicles = _vehicles select {
+		private _newVehicles = _vehicles select {
 			alive _x && _x getVariable ["BIS_WL_ownerAsset", "123"] == getPlayerUID player
 		};
-		missionNamespace setVariable [_ownedVehicleVar, _vehicles, [2, clientOwner]];
+		if !(_vehicles isEqualTo _newVehicles) then {
+			missionNamespace setVariable [_ownedVehicleVar, _newVehicles, [2, clientOwner]];
+			0 remoteExec ["WL2_fnc_updateVehicleList", 2];
+		};
 		sleep 10;
 	};
 };

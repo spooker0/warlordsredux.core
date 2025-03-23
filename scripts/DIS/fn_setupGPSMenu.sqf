@@ -151,7 +151,7 @@ _datalinkList ctrlAddEventHandler ["LBSelChanged", {
         private _posASL = ATLToASL _posATL;
 
         // Max range calculation
-        private _inRangeCalculation = [_posASL, getPosASL _asset, velocity _asset] call DIS_fnc_calculateInRange;
+        private _inRangeCalculation = [_asset] call DIS_fnc_calculateInRange;
 
         private _inRange = _inRangeCalculation # 0;
         private _range = _inRangeCalculation # 1;
@@ -171,7 +171,7 @@ _datalinkList ctrlAddEventHandler ["LBSelChanged", {
         };
 
         _rangeDisplay ctrlSetStructuredText parseText format [
-            "<t align='center'>Target Distance: %1 KM</t><br/><t align='center'>Projected Travel: %2 KM</t><br/><t align='center' color='%3' size='1.5'>%4</t>",
+            "<t align='center'>Target Coordinate Distance: %1 KM</t><br/><t align='center'>Munition Range Toward Target: %2 KM</t><br/><t align='center' color='%3' size='1.5'>%4</t>",
             (_distanceNeeded / 1000) toFixed 1,
             (_range / 1000) toFixed 1,
             _color,
