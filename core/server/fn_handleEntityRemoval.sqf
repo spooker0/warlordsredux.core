@@ -1,5 +1,8 @@
 params ["_unit", "_killer", "_instigator"];
 
+private _isSpawnedAsset = _unit getVariable ["WL_spawnedAsset", false];
+if (!_isSpawnedAsset) exitWith {};
+
 private _alreadyHandled = _unit getVariable ["WL2_alreadyHandled", false];
 if (_alreadyHandled) exitWith {};
 _unit setVariable ["WL2_alreadyHandled", true];
@@ -32,6 +35,23 @@ if (isPlayer _unit && _unit isKindOf "Man" && _unit != _responsiblePlayer) then 
     [_killMessage] remoteExec ["systemChat", 0];
 };
 
+private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
+private _unitCost = if (_unit isKindOf "Man") then {
+    if (isPlayer _unit) then { 60 } else { 30 };
+} else {
+    private _costMap = missionNamespace getVariable ["WL2_costs", createHashMap];
+    _costMap getOrDefault [_assetActualType, 0];
+};
+
+private _stats = missionNamespace getVariable ["WL_stats", createHashMap];
+private _killerActualType = _killer getVariable ["WL2_orderedClass", typeOf _killer];
+private _killerStats = _stats getOrDefault [_killerActualType, createHashMap];
+private _killerKillValue = _killerStats getOrDefault ["killValue", 0];
+if (_unitCost > 0) then {
+    _killerStats set ["killValue", _killerKillValue + _unitCost];
+    _stats set [_killerActualType, _killerStats];
+};
+
 if (!isNull _responsiblePlayer && { isPlayer _responsiblePlayer }) then {
     _unit setVariable ["WL_lastHitter", objNull];
 
@@ -45,9 +65,8 @@ if (!isNull _responsiblePlayer && { isPlayer _responsiblePlayer }) then {
 
     private _lastSpotted = _unit getVariable ["WL_lastSpotted", objNull];
     if (!isNull _lastSpotted && {_lastSpotted != _responsiblePlayer}) then {
-        private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
         private _killReward = if (_unit isKindOf "Man") then {
-            if (isPlayer _unit) then {60} else {30};
+            if (isPlayer _unit) then { 60 } else { 30 };
         } else {
             private _killRewardMap = missionNamespace getVariable ["WL2_killRewards", createHashMap];
             _killRewardMap getOrDefault [_assetActualType, 0];

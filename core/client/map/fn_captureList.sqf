@@ -57,7 +57,7 @@ while { !BIS_WL_missionEnd } do {
 				_defendBar = _defendBar + "=";
 			};
 			if (_i == _barProgress) then {
-				_attackBar = _attackBar + ">";
+				_attackBar = _attackBar + "|";
 			};
 		};
 		_captureBar = format ["<t font='EtelkaMonospaceProBold' size='0.9'>[<t color='%1'>%2</t><t color='%3'>%4</t>]</t>", _captureColor, _attackBar, _defendColor, _defendBar];

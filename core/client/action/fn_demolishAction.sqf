@@ -15,7 +15,7 @@
         };
     },
     {
-        // params ["_target", "_caller", "_actionId", "_arguments"];
+        params ["_target", "_caller", "_actionId", "_arguments"];
         private _target = cursorObject;
         private _dummy = createVehicle ["VR_GroundIcon_01_F", [0, 0, 0], [], 0, "FLY"];
         _dummy setPosASL (getPosASL _target);
@@ -74,7 +74,13 @@
             ];
 
             private _targetData = if (count _targetIntersections > 0) then {
-                [_targetIntersections # 0 # 0, _targetIntersections # 0 # 1];
+                private _firstIntersect = _targetIntersections # 0;
+                private _isInWalls = lineIntersects [_firstIntersect # 0, getPosASL _caller, _caller, _charge];
+                if (!_isInWalls) then {
+                    [_firstIntersect # 0, _firstIntersect # 1];
+                } else {
+                    [getPosASL _caller, [0, 0, 1]];
+                };
             } else {
                 [getPosASL _caller, [0, 0, 1]];
             };

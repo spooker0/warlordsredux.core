@@ -284,6 +284,7 @@ class CfgFunctions {
 		};
 		class ClientPurchase {
 			file = "src\core\client\purchase";
+			class checkAAPlacement {};
 			class checkAlliedPlayers {};
 			class checkAssetLimit {};
 			class checkBuyRespawn {};

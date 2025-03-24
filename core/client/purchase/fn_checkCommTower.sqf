@@ -15,10 +15,4 @@ if (count _jammersNear > 0) exitWith {
     [false, localize "STR_A3_WL_jammer_restr"];
 };
 
-private _homeBase = BIS_WL_playerSide call WL2_fnc_getSideBase;
-private _isInHomeBase = player inArea (_homeBase getVariable "objectAreaComplete");
-if (_isInHomeBase) exitWith {
-    [false, localize "STR_A3_WL_jammer_home_restr"];
-};
-
 [true, ""]

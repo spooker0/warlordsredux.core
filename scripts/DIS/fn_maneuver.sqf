@@ -48,6 +48,7 @@ private _maxAcceleration = (getNumber (configfile >> "CfgAmmo" >> typeOf _projec
 private _maxSpeed = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "maxSpeed") * WL_SAM_MAX_SPEED_FACTOR;
 
 private _terrainTest = 4000;
+private _isHelo = _originalTarget isKindOf "Helicopter";
 while { alive _projectile } do {
     private _currentVector = velocityModelSpace _projectile;
     private _currentSpeed = (_currentVector # 1) + ((_maxAcceleration * 0.01) min _maxSpeed);
@@ -59,24 +60,31 @@ while { alive _projectile } do {
     _projectile setVelocityModelSpace _newVector;
 
     private _angularVector = angularVelocityModelSpace _projectile;
-    private _start = getPosASL _projectile;
-    private _end = _projectile modelToWorldWorld [0, _terrainTest, -100];
-    private _intersectPosition = terrainIntersectAtASL [_start, _end];
-    private _target = missileTarget _projectile;
-    private _targetHeightATL = if !(isNull _target) then {
-        (getPosATL _target # 2) min (getPosASL _projectile # 2);
-    } else {
-        100;
-    };
-    private _projectileHeightATL = (getPosATL _projectile # 2) min (getPosASL _projectile # 2);
-    private _distanceToGround = _intersectPosition distance _start;
-    _projectileHeightATL = _projectileHeightATL min _distanceToGround;
-    private _belowTargetATL = _projectileHeightATL < _targetHeightATL;
-    if (!(_intersectPosition isEqualTo [0, 0, 0]) && _belowTargetATL) then {
-        _projectile setAngularVelocityModelSpace [-30 * (_terrainTest -_distanceToGround) / _terrainTest, _angularVector # 1, _angularVector # 2];
-    } else {
+    if (_isHelo) then {
         private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
         _projectile setAngularVelocityModelSpace _newAngularVector;
+    } else {
+        private _start = getPosASL _projectile;
+        private _end = _projectile modelToWorldWorld [0, _terrainTest, -100];
+        private _intersectPosition = terrainIntersectAtASL [_start, _end];
+        private _target = missileTarget _projectile;
+        private _targetHeightATL = if !(isNull _target) then {
+            (getPosATL _target # 2) min (getPosASL _projectile # 2);
+        } else {
+            100;
+        };
+        private _projectileHeightATL = (getPosATL _projectile # 2) min (getPosASL _projectile # 2);
+        private _distanceToGround = _intersectPosition distance _start;
+        _projectileHeightATL = _projectileHeightATL min _distanceToGround;
+        private _belowTargetATL = _projectileHeightATL < _targetHeightATL;
+        private _groundAvoid = !(_intersectPosition isEqualTo [0, 0, 0]) && _belowTargetATL;
+
+        if (_groundAvoid) then {
+            _projectile setAngularVelocityModelSpace [-30 * (_terrainTest -_distanceToGround) / _terrainTest, _angularVector # 1, _angularVector # 2];
+        } else {
+            private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
+            _projectile setAngularVelocityModelSpace _newAngularVector;
+        };
     };
 
     private _vectorUp = vectorUp _projectile;

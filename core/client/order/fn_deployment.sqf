@@ -4,15 +4,9 @@ private _asset = createVehicleLocal [_class, player modelToWorld [0, 0, 1000], [
 _asset setPhysicsCollisionFlag false;
 _asset enableSimulation false;
 
-// _asset setVectorDirAndUp [vectorDir player, vectorUp player];
-// _asset setVehiclePosition [player modelToWorld _offset, [], 0, "CAN_COLLIDE"];
-// private _newAssetPos = player modelToWorldWorld _offset;
-// private _assetPosHeight = (getPosWorld _asset) # 2;
-// _asset setPosWorld [_newAssetPos # 0, _newAssetPos # 1, _assetPosHeight];
-
 private _assetPos = player modelToWorld _offset;
 _asset setPosASL [_assetPos # 0, _assetPos # 1, 500];
-private _playerPos = getPosATL player;
+private _playerPos = ASLtoAGL eyePos player;
 _assetPos set [2, _playerPos # 2];
 _asset setVehiclePosition [_assetPos, [], 0, "CAN_COLLIDE"];
 private _assetPosHeight = (getPosASL _asset) # 2;
@@ -115,7 +109,7 @@ WL_DeploymentEnd = false;
             if (WL_DeploymentLock) then {
                 private _assetPos = _asset modelToWorld [0, 0, 0];
                 _asset setPosASL [_assetPos # 0, _assetPos # 1, 500];
-                private _playerPos = getPosATL player;
+                private _playerPos = ASLtoAGL eyePos player;
                 _assetPos set [2, _playerPos # 2];
                 _asset setVehiclePosition [_assetPos, [], 0, "CAN_COLLIDE"];
                 private _assetPosHeight = (getPosASL _asset) # 2;

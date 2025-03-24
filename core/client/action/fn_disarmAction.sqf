@@ -44,7 +44,7 @@
         (attachedTo _charge) setVariable ["WL_holdChargeExplosion", false, true];
     },
     [],
-    10,
+    5,
     100,
     false,
     false
