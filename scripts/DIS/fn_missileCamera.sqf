@@ -27,6 +27,7 @@ _pictureControl ctrlSetText "#(argb,512,512,1)r2t(rtt1,1.0)";
 _pictureControl ctrlCommit 0;
 
 private _camera = "camera" camCreate (position _projectile);
+_camera cameraEffect ["Terminate", "BACK TOP", "rtt1"];
 _camera cameraEffect ["Internal", "BACK TOP", "rtt1"];
 
 "rtt1" setPiPEffect [currentVisionMode player];
@@ -144,11 +145,10 @@ while { !_stop } do {
     private _projectilePosition = position _projectile;
     private _projectileDirection = _projectile modelToWorld [0, 1000, 0];
     private _isDestroyed = _projectilePosition isEqualTo [0, 0, 0] || _projectileDirection isEqualTo [0, 0, 0];
-    private _expired = (time - _startTime) > WL_SAM_TIMEOUT;
     private _disconnected = unitIsUAV _unit && isNull (getConnectedUAV player);
     private _playerDown = !alive player || lifeState player == "INCAPACITATED";
 
-    _stop = isNull _projectile || !alive _projectile || _isDestroyed || _expired || _disconnected || _projectile getEntityInfo 14 || _playerDown;
+    _stop = isNull _projectile || !alive _projectile || _isDestroyed || _disconnected || _projectile getEntityInfo 14 || _playerDown;
 
     "rtt1" setPiPEffect [currentVisionMode player];
 
@@ -164,7 +164,6 @@ _camera camCommit 0;
 
 sleep 1.5;
 
-_camera cameraEffect ["Terminate", "BACK TOP"];
 camDestroy _camera;
 "APS_Camera" cutFadeOut 0;
 removeMissionEventHandler ["Draw3D", _targetDrawer];

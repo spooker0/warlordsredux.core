@@ -39,9 +39,14 @@ private _i = 0;
 	_sector setVariable ["BIS_WL_markers", [_mrkrMain, _mrkrArea]];
 
 	if !(BIS_WL_playerSide in _revealedBy) then {
-		_mrkrMain setMarkerTypeLocal "u_installation";
-		_mrkrMain setMarkerColorLocal "ColorUNKNOWN";
-		_mrkrArea setMarkerColorLocal "ColorOrange";
+		if (_sector getVariable ["BIS_WL_name", "Sector"] == "Wait") then {
+			_mrkrMain setMarkerTypeLocal "respawn_unknown";
+			_mrkrMain setMarkerColorLocal "ColorWhite";
+		} else {
+			_mrkrMain setMarkerTypeLocal "u_installation";
+			_mrkrMain setMarkerColorLocal "ColorUNKNOWN";
+			_mrkrArea setMarkerColorLocal "ColorOrange";
+		};
 	};
 
 	[_sector] spawn WL2_fnc_sectorRevealHandle;

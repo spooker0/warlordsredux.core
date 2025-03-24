@@ -12,7 +12,7 @@ params ["_asset"];
 	{
 		params ["_target", "_caller", "_actionId", "_arguments", "_frame", "_maxFrame"];
 		// playSound3D ["\a3\sounds_f\arsenal\tools\minedetector_beep_01.wss", _target, false, getPosASL _target, 2, 1, 200];
-		if (_frame % 5 == 1) then {
+		if (_frame % 10 == 1) then {
 			playSound3D ["\a3\sounds_f\sfx\alarmcar.wss", _target, false, getPosASL _target, 2, 1, 200];
 		};
 	},
@@ -30,15 +30,10 @@ params ["_asset"];
 		private _vehicles = missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID _caller], []];
 		_vehicles pushBack _asset;
 		missionNamespace setVariable [_ownedVehicleVar, _vehicles, [2, owner _caller]];
-
-		0 spawn {
-			sleep 10;
-			0 remoteExec ["WL2_fnc_updateVehicleList", 2];
-		};
 	},
 	{},
 	[],
-	10,
+	5,
 	-98,
 	false,
 	false

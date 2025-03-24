@@ -31,7 +31,6 @@ addMissionEventHandler ["HandleDisconnect", {
 		deleteVehicle _tent;
 	};
 
-	call WL2_fnc_updateVehicleList;
 	call WL2_fnc_calcImbalance;
 }];
 

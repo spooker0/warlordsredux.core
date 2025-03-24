@@ -295,7 +295,6 @@ WL_LoadingState = 12;
 		};
 		if !(_vehicles isEqualTo _newVehicles) then {
 			missionNamespace setVariable [_ownedVehicleVar, _newVehicles, [2, clientOwner]];
-			0 remoteExec ["WL2_fnc_updateVehicleList", 2];
 		};
 		sleep 10;
 	};
@@ -391,3 +390,4 @@ call WL2_fnc_disarmAction;
 call WL2_fnc_rappelAction;
 call WL2_fnc_createInfoMarkers;
 0 spawn WL2_fnc_drawRadarName;
+[BIS_WL_playerSide] spawn WL2_fnc_strongholdScanner;

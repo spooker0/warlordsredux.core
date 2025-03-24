@@ -126,15 +126,25 @@ private _enemyCaptureText = if (_revealed) then {
 	""
 };
 
+private _sectorName = _sector getVariable ["BIS_WL_name", "Sector"];
+
+private _sectorIncome = if (_sectorName != "Wait") then {
+	[
+		[_side] call WL2_fnc_getMoneySign,
+		_sector getVariable "BIS_WL_value",
+		"/",
+		localize "STR_A3_rscmpprogress_min",
+		_linebreak
+	] joinString ""
+} else {
+	""
+};
+
 private _sectorInfoText = [
-	_sector getVariable ["BIS_WL_name", "Sector"],
+	_sectorName,
 	_linebreak,
 
-	[_side] call WL2_fnc_getMoneySign,
-	_sector getVariable "BIS_WL_value",
-	"/",
-	localize "STR_A3_rscmpprogress_min",
-	_linebreak,
+	_sectorIncome,
 
 	if (count _servicesText > 0) then {
 		(_servicesText joinString ", ") + _linebreak

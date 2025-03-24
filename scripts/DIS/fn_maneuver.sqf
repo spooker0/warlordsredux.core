@@ -3,15 +3,17 @@
 params ["_projectile", "_unit"];
 
 private _originalTarget = missileTarget _projectile;
-[_projectile, _originalTarget] spawn {
-    params ["_projectile", "_originalTarget"];
+private _originalPosition = getPosASL _unit;
+[_projectile, _originalTarget, _originalPosition] spawn {
+    params ["_projectile", "_originalTarget", "_originalPosition"];
     private _startTime = time;
     private _isLOAL = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "autoSeekTarget") == 1;
 
     while { alive _projectile } do {
         sleep 0.2;
 
-        private _inFrontAngle = [getPosASL _projectile, getDir _projectile, 180, getPosASL _originalTarget] call BIS_fnc_inAngleSector;
+        private _projectilePosition = getPosASL _projectile;
+        private _inFrontAngle = [_projectilePosition, getDir _projectile, 180, getPosASL _originalTarget] call WL2_fnc_inAngleCheck;
         if (!_inFrontAngle) then {
             triggerAmmo _projectile;
         };
@@ -21,7 +23,7 @@ private _originalTarget = missileTarget _projectile;
         if (_isLOAL && alive _currentMissileTarget && _currentMissileTarget != _originalTarget) then {
             triggerAmmo _projectile;
         };
-        if (time > (_startTime + WL_SAM_TIMEOUT)) exitWith {
+        if (_originalPosition distance _projectilePosition > WL_SAM_MAX_DISTANCE) then {
             triggerAmmo _projectile;
         };
     };

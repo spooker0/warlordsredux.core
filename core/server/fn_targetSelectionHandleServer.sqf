@@ -95,14 +95,20 @@
 
 				if !(missionNamespace getVariable [_votingResetVar, false]) then {
 					_calculation = call _calculateMostVotedSector;
-					[_side, _calculation # 0] call WL2_fnc_selectTarget;
+					private _selectedSector = _calculation # 0;
+					if (_selectedSector getVariable ["BIS_WL_name", "Sector"] != "Wait") then {
+						[_side, _selectedSector] call WL2_fnc_selectTarget;
+					};
 
 					call _wipeVotes;
 					missionNamespace setVariable [format ["BIS_WL_sectorVoteTallyDisplay_%1", _side], [], true];
 
-					["server", TRUE] call WL2_fnc_updateSectorArrays;
+					["server", true] call WL2_fnc_updateSectorArrays;
 
-					waitUntil {sleep WL_TIMEOUT_STANDARD; isNull (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", _side], objNull])};
+					waitUntil {
+						sleep WL_TIMEOUT_STANDARD;
+						isNull (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", _side], objNull])
+					};
 				};
 			};
 		};

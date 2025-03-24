@@ -132,6 +132,7 @@ class CfgFunctions {
 			class spectator {};
 			class sideToFaction {};
 			class spectrumInterface {};
+			class strongholdScanner {};
 			class teammatesAvailability {};
 			class timer {};
 			class triggerPurchase {};
@@ -234,6 +235,7 @@ class CfgFunctions {
 			class captureList {};
 			class createInfoMarkers {};
 			class deleteAssetFromMap {};
+			class detectUnits {};
 			class getRespawnMarkers {};
 			class getSideBase {};
 			class groupIconClickHandle {};
@@ -339,6 +341,7 @@ class CfgFunctions {
 			class grieferCheck {};
 			class handleInstigator {};
 			class handleRespawnMarkers {};
+			class inAngleCheck {};
 			class income {};
 			class initCommon {};
 			class lastHitHandler {};

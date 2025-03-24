@@ -22,7 +22,7 @@ if (isNull (missileTarget _projectile)) then {
     private _sensorThreats = getSensorThreats _unit;
     {
         _x params ["_threat", "_type", "_sensors"];
-        private _isInAngle = [getPosATL _projectile, getDir _projectile, 120, getPosATL _threat] call BIS_fnc_inAngleSector;
+        private _isInAngle = [getPosATL _projectile, getDir _projectile, 120, getPosATL _threat] call WL2_fnc_inAngleCheck;
         if (_isInAngle && _type in ["locked", "marked"] && "radar" in _sensors) then {
             _samTargets pushBack (vehicle _threat);
         };
@@ -36,7 +36,7 @@ if (isNull (missileTarget _projectile)) then {
     private _allAssetTargets = getSensorTargets _unit;
     {
         _x params ["_target", "_type", "_relationship", "_detectionSource"];
-        private _isInAngle = [getPosATL _projectile, getDir _projectile, 120, getPosATL _target] call BIS_fnc_inAngleSector;
+        private _isInAngle = [getPosATL _projectile, getDir _projectile, 120, getPosATL _target] call WL2_fnc_inAngleCheck;
         if (_isInAngle && _type == "ground" && _relationship != "friendly" && "passiveradar" in _detectionSource) then {
             _samTargets pushBack (_x # 0);
         };

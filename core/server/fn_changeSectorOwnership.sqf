@@ -30,7 +30,9 @@ _sector setVariable ["BIS_WL_previousOwners", _previousOwners, true];
 _sector setVariable ["WL_fortificationTime", serverTime + WL_FORTIFICATION_TIME, true];
 _sector setVariable ["WL_strongholdFortified", false, true];
 
-if (_sector == (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", _owner])) then {[_owner, objNull] call WL2_fnc_selectTarget};
+if (_sector == (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", _owner])) then {
+	missionNamespace setVariable [format ["BIS_WL_currentTarget_%1", _owner], objNull];
+};
 
 ["server", true] call WL2_fnc_updateSectorArrays;
 

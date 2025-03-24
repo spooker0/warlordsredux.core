@@ -14,9 +14,16 @@ _closeButton ctrlAddEventHandler ["ButtonClick", {
     closeDialog 0;
 }];
 
+private _cameraView = _display displayCtrl DIS_REMOTE_CONTROL_STATION_PREVIEW;
+_cameraView ctrlShow false;
+
 [_display, _asset] spawn {
     params ["_display", "_asset"];
     private _remoteControlList = _display displayCtrl DIS_REMOTE_CONTROL_STATION_LIST;
+    private _camera = "camera" camCreate [0, 0, 0];
+    _camera cameraEffect ["Terminate", "BACK TOP", "rtt2"];
+    _camera cameraEffect ["Internal", "BACK TOP", "rtt2"];
+    uiNamespace setVariable ["DIS_remoteControlCamera", _camera];
 
     _remoteControlList ctrlAddEventHandler ["LBSelChanged", {
         params ["_control", "_index"];
@@ -27,19 +34,32 @@ _closeButton ctrlAddEventHandler ["ButtonClick", {
 
         private _netId = _control lbData _index;
         private _existingValue = _asset getVariable ["DIS_remoteControlStation", objNull];
+
+        private _camera = uiNamespace getVariable ["DIS_remoteControlCamera", objNull];
+        private _display = ctrlParent _control;
+        private _cameraView = _display displayCtrl DIS_REMOTE_CONTROL_STATION_PREVIEW;
+
         if (_netId == "none") then {
             if (!isNull _existingValue) then {
                 _asset setVariable ["DIS_remoteControlStation", objNull, true];
             };
+            _cameraView ctrlShow false;
         } else {
             private _controlStation = objectFromNetId _netId;
             if (_existingValue != _controlStation) then {
                 _asset setVariable ["DIS_remoteControlStation", _controlStation, true];
             };
+
+            _camera camSetTarget _controlStation;
+            _camera camSetRelPos [0, -4, 2];
+            _camera camCommit 0;
+
+            _cameraView ctrlShow true;
         };
     }];
 
-    while { !isNull _display } do {
+    private _firstRun = true;
+    while { alive _asset && !isNull _display } do {
         lbClear _remoteControlList;
 
         private _teamVehiclesVar = format ["BIS_WL_%1OwnedVehicles", BIS_WL_playerSide];
@@ -49,7 +69,7 @@ _closeButton ctrlAddEventHandler ["ButtonClick", {
         };
         if (count _controlStations == 0) then {
             _remoteControlList lbAdd "No ground support stations. They can be built in: Buy Menu >> Remote Control >> Ground Support Terminal.";
-            sleep 0.5;
+            sleep 1;
             continue;
         };
 
@@ -72,12 +92,15 @@ _closeButton ctrlAddEventHandler ["ButtonClick", {
             _remoteControlList lbSetValue [_lbId, _distance];
             _remoteControlList lbSetData [_lbId, netId _station];
 
-            if (_currentStation == _station) then {
+            if (_currentStation == _station && _firstRun) then {
                 _remoteControlList lbSetCurSel _lbId;
             };
         } forEach _controlStations;
+        _firstRun = false;
 
         lbSortByValue _remoteControlList;
-        sleep 0.5;
+        sleep 1;
     };
+
+    camDestroy _camera;
 };

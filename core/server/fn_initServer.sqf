@@ -72,27 +72,7 @@ call WL2_fnc_processRunways;
 	};
 };
 
-{
-	_x spawn {
-		_side = _this;
-		while {!BIS_WL_missionEnd} do {
-			private _currentSideTargetVar = format ["BIS_WL_currentTarget_%1", _side];
-			private _currentSideTarget = missionNamespace getVariable [_currentSideTargetVar, objNull];
-			private _currentSideTargetOwner = objNull;
-			waitUntil {
-				sleep 5;
-				_currentSideTarget = missionNamespace getVariable [_currentSideTargetVar, objNull];
-				_currentSideTargetOwner = _currentSideTarget getVariable ["BIS_WL_owner", sideUnknown];
-				_currentSideTargetOwner != _side;
-			};
-
-			sleep 5;
-			if (_currentSideTargetOwner == _side) then {
-				[_side, objNull] call WL2_fnc_selectTarget;
-			};
-		};
-	};
-} forEach BIS_WL_competingSides;
+0 spawn WL2_fnc_updateVehicleList;
 
 #if WL_ZEUS_ENABLED == 0
 {

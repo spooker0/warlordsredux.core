@@ -75,6 +75,10 @@ _currentSector setVariable ["WL_strongholdTextMarker", _markerTextName, true];
 [player, "buyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 [_stronghold, _currentSector] remoteExec ["WL2_fnc_prepareStronghold", 2];
 
+private _allStrongholds = missionNamespace getVariable ["WL_strongholds", []];
+_allStrongholds pushBack _stronghold;
+missionNamespace setVariable ["WL_strongholds", _allStrongholds, true];
+
 for "_i" from 1 to 10 do {
     if (random 1 > 0.5) then {
         continue;

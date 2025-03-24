@@ -8,7 +8,7 @@ _this addEventHandler ["Fired", {
 	WAS_fired = true;
 
 	if !(local _projectile) exitWith { true };
-	if !(local _gunner) exitWith { true };
+	if (!(local _gunner) && !(isManualFire _unit)) exitWith { true };
 
 	private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
 	private _ammoOverridesHashMap = missionNamespace getVariable ["WL2_ammoOverrides", createHashMap];

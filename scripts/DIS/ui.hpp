@@ -380,7 +380,7 @@ class DIS_Remote_MenuUI {
             x = 0.05;
             y = 0.05;
             w = 0.9;
-            h = 0.6;
+            h = 0.4;
             rowHeight = 0.05;
 
             deletable = 0;
@@ -406,6 +406,15 @@ class DIS_Remote_MenuUI {
                 border = "\A3\ui_f\data\gui\cfg\scrollbar\border_ca.paa";
             };
             style = LB_TEXTURES;
+        };
+
+        class DIS_Remote_ControlStationPreview: RscPicture {
+            idc = DIS_REMOTE_CONTROL_STATION_PREVIEW;
+            x = 0.275;
+            y = 0.5;
+            w = 0.45;
+            h = 0.45;
+            text = "#(argb,512,512,1)r2t(rtt2,1.0)";
         };
     };
 };

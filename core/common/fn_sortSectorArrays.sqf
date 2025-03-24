@@ -50,6 +50,9 @@ while {count _knots > 0} do {
 	if ((_sector getVariable ["BIS_WL_owner", sideUnknown]) != _side && _linked findIf {_sector in (_x getVariable ["BIS_WL_connectedSectors", []])} >= 0) then {
 		_available pushBack _sector;
 	};
+	if (_sector getVariable ["BIS_WL_name", "Sector"] == "Wait") then {
+		_available pushBack _sector;
+	};
 } forEach (_pool - _owned);
 
 [_owned, _available, _linked, _unlocked, _income, _services, _owned - _linked, (_unlocked - _owned) - _available];

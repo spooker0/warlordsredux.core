@@ -95,7 +95,6 @@ if (_asset isKindOf "Man") then {
 	_vehicles = missionNamespace getVariable [_var, []];
 	_vehicles pushBack _asset;
 	missionNamespace setVariable [_var, _vehicles, [2, clientOwner]];
-	0 remoteExec ["WL2_fnc_updateVehicleList", 2];
 
 	[_asset, true] remoteExec ["setVehicleReceiveRemoteTargets", _asset, true];
 	[_asset, true] remoteExec ["setVehicleReportRemoteTargets", _asset, true];

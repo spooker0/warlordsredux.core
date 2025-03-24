@@ -161,31 +161,34 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 } forEach _forwardBases;
 
 // Draw sector scans
+private _sectorScannedUnits = [];
 {
-	private _sector = _x;
-	private _detected = _sector getVariable ["WL2_detectedUnits", []];
-	{
-		private _size = call WL2_fnc_iconSize;
-		_m drawIcon [
-			call WL2_fnc_iconType,
-			switch ([_x] call WL2_fnc_getAssetSide) do {
-				case west: { [0, 0.3, 0.6, 0.9] };
-				case east: { [0.5, 0, 0, 0.9] };
-				case independent: { [0, 0.6, 0, 0.9] };
-				default { [1, 1, 1, 1] };
-			},
-			call WL2_fnc_getPos,
-			_size,
-			_size,
-			call WL2_fnc_getDir,
-			_x call WL2_fnc_iconTextSectorScan,
-			1,
-			0.043,
-			"PuristaBold",
-			"right"
-		];
-	} forEach _detected;
+	private _detectedUnits = _x getVariable ["WL2_detectedUnits", []];
+	_sectorScannedUnits append _detectedUnits;
 } forEach BIS_WL_currentlyScannedSectors;
+
+private _strongholdScannedUnits = missionNamespace getVariable ["WL2_strongholdDetectedUnits", []];
+{
+	private _size = call WL2_fnc_iconSize;
+	_m drawIcon [
+		call WL2_fnc_iconType,
+		switch ([_x] call WL2_fnc_getAssetSide) do {
+			case west: { [0, 0.3, 0.6, 0.9] };
+			case east: { [0.5, 0, 0, 0.9] };
+			case independent: { [0, 0.6, 0, 0.9] };
+			default { [1, 1, 1, 1] };
+		},
+		call WL2_fnc_getPos,
+		_size,
+		_size,
+		call WL2_fnc_getDir,
+		_x call WL2_fnc_iconTextSectorScan,
+		1,
+		0.043,
+		"PuristaBold",
+		"right"
+	];
+} forEach (_sectorScannedUnits + _strongholdScannedUnits);
 
 // Draw EW networks
 private _activeVehicles = vehicles select {

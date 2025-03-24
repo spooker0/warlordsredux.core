@@ -59,14 +59,14 @@ _asset setVariable ["WL_scanRadius", _scanRadius];
 private _relevantVehicles = if (_awacs) then {
     private _munitions = (8 allObjects 2) select {
         [_x] call WL2_fnc_isScannerMunition &&
-    	[_assetPos, getDir _asset, 120, getPosATL _x] call BIS_fnc_inAngleSector;
+    	[_assetPos, getDir _asset, 120, getPosATL _x] call WL2_fnc_inAngleCheck;
     };
     private _airVehicles = vehicles select {
         private _vehiclePos = _x modelToWorldVisual [0, 0, 0];
         _x isKindOf "Air" &&
         _vehiclePos # 2 > 50 &&
         _assetHeight > _vehiclePos # 2 &&
-        [_assetPos, getDir _asset, 120, _vehiclePos] call BIS_fnc_inAngleSector;
+        [_assetPos, getDir _asset, 120, _vehiclePos] call WL2_fnc_inAngleCheck;
     };
     _munitions + _airVehicles
 } else {
