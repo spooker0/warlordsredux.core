@@ -42,5 +42,5 @@ private _burst = createVehicle [_projectileClass, _detonationPoint, [], 50, "FLY
 _burst setPosASL _detonationPoint;
 triggerAmmo _burst;
 
-// private _finalDistance = _targetPosition distance _detonationPoint;
-// systemChat format ["SAM detonation %1M away from target.", round _finalDistance];
+private _finalDistance = _targetPosition distance _detonationPoint;
+systemChat format ["SAM detonation %1M away from target.", round _finalDistance];
