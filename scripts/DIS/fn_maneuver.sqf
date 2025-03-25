@@ -13,9 +13,11 @@ private _originalPosition = getPosASL _unit;
         sleep 0.2;
 
         private _projectilePosition = getPosASL _projectile;
-        private _inFrontAngle = [_projectilePosition, getDir _projectile, 180, getPosASL _originalTarget] call WL2_fnc_inAngleCheck;
-        if (!_inFrontAngle) then {
-            triggerAmmo _projectile;
+        if !(isNull _originalTarget) then {
+            private _inFrontAngle = [_projectilePosition, getDir _projectile, 180, getPosASL _originalTarget] call WL2_fnc_inAngleCheck;
+            if (!_inFrontAngle) then {
+                triggerAmmo _projectile;
+            };
         };
 
         // Ghost missile relocking check.
@@ -48,7 +50,11 @@ private _maxAcceleration = (getNumber (configfile >> "CfgAmmo" >> typeOf _projec
 private _maxSpeed = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "maxSpeed") * WL_SAM_MAX_SPEED_FACTOR;
 
 private _terrainTest = 4000;
-private _isHelo = _originalTarget isKindOf "Helicopter";
+private _useGroundAvoid = _originalTarget isKindOf "Helicopter";
+#if WL_NO_GROUND_AVOID
+_useGroundAvoid = false;
+#endif
+
 while { alive _projectile } do {
     private _currentVector = velocityModelSpace _projectile;
     private _currentSpeed = (_currentVector # 1) + ((_maxAcceleration * 0.01) min _maxSpeed);
@@ -60,7 +66,7 @@ while { alive _projectile } do {
     _projectile setVelocityModelSpace _newVector;
 
     private _angularVector = angularVelocityModelSpace _projectile;
-    if (_isHelo) then {
+    if (_useGroundAvoid || _projectile distance _originalPosition > 5000) then {
         private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
         _projectile setAngularVelocityModelSpace _newAngularVector;
     } else {
@@ -85,12 +91,12 @@ while { alive _projectile } do {
             private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
             _projectile setAngularVelocityModelSpace _newAngularVector;
         };
-    };
 
-    private _vectorUp = vectorUp _projectile;
-    _vectorUp set [0, 0];
-    _vectorUp set [1, 0];
-    _projectile setVectorDirAndUp [vectorDir _projectile, _vectorUp];
+        private _vectorUp = vectorUp _projectile;
+        _vectorUp set [0, 0];
+        _vectorUp set [1, 0];
+        _projectile setVectorDirAndUp [vectorDir _projectile, _vectorUp];
+    };
 
     sleep 0.001;
 };

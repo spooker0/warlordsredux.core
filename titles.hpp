@@ -655,4 +655,63 @@ class RscTitles {
 			};
 		};
 	};
+
+	class RscWLIncomingMissileDisplay {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		name = "RscWLIncomingMissileDisplay";
+		onLoad = "uiNamespace setVariable ['RscWLIncomingMissileDisplay', _this select 0];";
+		class controls {
+			class RscWLIncomingMissileDisplay_Missile: RscStructuredText {
+				idc = 25000;
+				x = safeZoneX + 0.1;
+				y = 0;
+				w = 0.18;
+				h = 1;
+				text = "";
+				style = ST_MULTI;
+				shadow = 0;
+				size = 0.05;
+				class Attributes {
+					font = "LucidaConsoleB";
+					color = "#33ff33";
+					align = "left";
+				};
+			};
+			class RscWLIncomingMissileDisplay_Status: RscStructuredText {
+				idc = 25001;
+				x = safeZoneX + 0.28;
+				y = 0;
+				w = 0.15;
+				h = 1;
+				text = "";
+				style = ST_MULTI;
+				shadow = 0;
+				size = 0.05;
+				class Attributes {
+					font = "LucidaConsoleB";
+					color = "#33ff33";
+					align = "left";
+				};
+			};
+			class RscWLIncomingMissileDisplay_Distance: RscStructuredText {
+				idc = 25002;
+				x = safeZoneX + 0.43;
+				y = 0;
+				w = 0.08;
+				h = 1;
+				text = "";
+				style = ST_MULTI;
+				shadow = 0;
+				size = 0.05;
+				class Attributes {
+					font = "LucidaConsoleB";
+					color = "#33ff33";
+					align = "left";
+				};
+			};
+		};
+	};
 };

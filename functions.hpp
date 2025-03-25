@@ -192,6 +192,7 @@ class CfgFunctions {
 		class ClientDraw {
 			file = "src\core\client\draw";
 			class drawAssetName {};
+			class drawIncomingMissiles {};
 			class drawRadarName {};
 			class getDir {};
 			class getPos {};

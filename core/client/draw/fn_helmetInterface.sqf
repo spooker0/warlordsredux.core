@@ -80,9 +80,8 @@ addMissionEventHandler ["Draw3D", {
         _missile setVariable ["WL_missileApproaching", _missileApproaching];
 
         private _missileState = _missile getVariable ["APS_missileState", "LOCKED"];
-        private _missileNotLocked = _missileState != "LOCKED";
         private _color = switch true do {
-            case (!_missileApproaching || _missileNotLocked): {
+            case (!_missileApproaching || _missileState == "LOST"): {
                 [0, 0, 0, 1]
             };
             case (_distance > 5000): {
@@ -96,6 +95,12 @@ addMissionEventHandler ["Draw3D", {
             };
         };
 
+        private _missileStateText = if (_missileState == "") then {
+            ""
+        } else {
+            format [" [%1]", _missileState]
+        };
+
         drawIcon3D [
             "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missile_ca.paa",
             _color,
@@ -103,7 +108,7 @@ addMissionEventHandler ["Draw3D", {
             0.8,
             0.8,
             0,
-            format ["%1 KM (%2)", (round (_distance / 100)) / 10, _missileState],
+            format ["%1 KM%2", (round (_distance / 100)) / 10, _missileStateText],
             true,
             0.035,
             "RobotoCondensedBold",
@@ -409,11 +414,12 @@ addMissionEventHandler ["Draw3D", {
 
             private _assetName = if (_targetSide == _side) then {
                 private _ownerPlayer = (_target getVariable ["BIS_WL_ownerAsset", "123"]) call BIS_fnc_getUnitByUID;
-                private _ownerName = name _ownerPlayer;
-                if (_ownerName == "Error: No vehicle") then {
-                    _ownerName = "";
+                private _ownerName = if (name _ownerPlayer == "Error: No vehicle") then {
+                    "";
+                } else {
+                    format [" (%1)", name _ownerPlayer];
                 };
-                format ["%1 (%2)", _assetTypeName, _ownerName];
+                format ["%1%2", _assetTypeName, _ownerName];
             } else {
                 _assetTypeName;
             };
