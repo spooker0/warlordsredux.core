@@ -13,7 +13,7 @@ if (_assetCost <= 1000) exitWith {
     [true, ""]
 };
 
-private _entitiesInRange = player nearEntities ["Air", 3500];
+private _entitiesInRange = player nearEntities ["Air", 2000];
 _entitiesInRange = _entitiesInRange select {
     private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
     private _assetCost = _costMap getOrDefault [_assetActualType, 0];
