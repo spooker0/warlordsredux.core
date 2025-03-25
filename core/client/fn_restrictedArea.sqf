@@ -58,6 +58,13 @@ while { !BIS_WL_missionEnd } do {
             call _endEffect;
             continue;
         };
+
+        private _speed = speed player;
+        private _speedOk = _speed > 75;
+        if (_speedOk) then {
+            call _endEffect;
+            continue;
+        };
     };
 
     if (player getVariable ["WL_zoneRestrictKillTime", -1] == -1) then {
