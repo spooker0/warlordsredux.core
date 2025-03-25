@@ -39,11 +39,13 @@ while { !BIS_WL_missionEnd } do {
 #endif
 
     {
+        private _side = _x;
         private _currentSideTargetVar = format ["BIS_WL_currentTarget_%1", _side];
         private _currentSideTarget = missionNamespace getVariable [_currentSideTargetVar, objNull];
         private _currentSideTargetOwner = _currentSideTarget getVariable ["BIS_WL_owner", sideUnknown];;
         if (_currentSideTargetOwner == _side) then {
             missionNamespace setVariable [_currentSideTargetVar, objNull, true];
+            [_currentSideTarget, _currentSideTargetOwner] remoteExec ["WL2_fnc_sectorMarkerUpdate", 0, true];
         };
     } forEach BIS_WL_competingSides;
 

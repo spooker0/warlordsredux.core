@@ -50,9 +50,9 @@ private _maxAcceleration = (getNumber (configfile >> "CfgAmmo" >> typeOf _projec
 private _maxSpeed = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "maxSpeed") * WL_SAM_MAX_SPEED_FACTOR;
 
 private _terrainTest = 4000;
-private _useGroundAvoid = _originalTarget isKindOf "Helicopter";
+private _disableGroundAvoid = _originalTarget isKindOf "Helicopter";
 #if WL_NO_GROUND_AVOID
-_useGroundAvoid = false;
+_disableGroundAvoid = true;
 #endif
 
 while { alive _projectile } do {
@@ -66,7 +66,7 @@ while { alive _projectile } do {
     _projectile setVelocityModelSpace _newVector;
 
     private _angularVector = angularVelocityModelSpace _projectile;
-    if (_useGroundAvoid || _projectile distance _originalPosition > 5000) then {
+    if (_disableGroundAvoid || _projectile distance _originalPosition > 5000) then {
         private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
         _projectile setAngularVelocityModelSpace _newAngularVector;
     } else {
