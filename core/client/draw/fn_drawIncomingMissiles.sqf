@@ -32,6 +32,7 @@ while { !BIS_WL_missionEnd } do {
     private _incomingMissiles = _asset getVariable ["WL_incomingMissiles", []];
     _incomingMissiles = _incomingMissiles select { alive _x };
 
+    private _targetVector = velocity _asset;
     private _missilesData = _incomingMissiles apply {
         private _missile = _x;
         private _missileState = _missile getVariable ["APS_missileState", "LOCKED"];
@@ -39,7 +40,12 @@ while { !BIS_WL_missionEnd } do {
         private _relDir = _missile getRelDir _asset;
         private _missileApproaching = (_relDir < 90 || _relDir > 270) && !(_missileState in ["LOST", "NOTCHED"]);
         private _missileType = _missileTypeData getOrDefault [typeof _missile, "MISSILE"];
-        private _missileRelDir = _asset getRelDir _missile;
+
+        private _projectileRelativeVelocity = _missile vectorWorldToModel _targetVector;
+        _projectileRelativeVelocity set [2, 0];
+        private _normalizedVelocity = vectorNormalized _projectileRelativeVelocity;
+        private _missileRelDir = (_normalizedVelocity # 1) atan2 (_normalizedVelocity # 0);
+        _missileRelDir = (_missileRelDir + 90 + 360) % 360;
 
         [_missileState, _distance, _missileApproaching, _missileType, _missileRelDir];
     };

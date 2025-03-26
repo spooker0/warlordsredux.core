@@ -23,10 +23,11 @@ private _targetTrackSpeed = if (_target isKindOf "Helicopter") then {
 private _flaresNearby = count (_target nearObjects ["CMflare_Chaff_Ammo", 300]);
 
 private _actualTolerance = WL_SAM_NOTCH_TOLERANCE - (_flaresNearby * 0.01);
+private _actualMaxRange = WL_SAM_NOTCH_MAX_RANGE - (_flaresNearby * 50);
 
 private _kinematicEligible = _perpendicularVelocity > _targetTrackSpeed &&
 _normalizedVelocity > _actualTolerance &&
-_distanceRemaining > WL_SAM_NOTCH_MAX_RANGE &&
+_distanceRemaining > _actualMaxRange &&
 _distanceTraveled > WL_SAM_NOTCH_ACTIVE_DIST;
 
 if !(_kinematicEligible) exitWith { false };

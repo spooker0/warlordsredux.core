@@ -2,9 +2,6 @@ params ["_projectile"];
 
 if !(_projectile isKindOf "MissileCore") exitWith {};
 
-private _missileTarget = missileTarget _projectile;
-if (isNull _missileTarget) exitWith {};
-
 private _missileUpdateInitialized = _projectile getVariable ["WL_missileUpdateInitializedRemote", false];
 if (_missileUpdateInitialized) exitWith {
     _projectile setVariable ["WL_missileUpdateInitializedRemote", true];

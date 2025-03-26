@@ -42,7 +42,7 @@ _asset addAction [
 	true,
 	false,
 	"",
-	"([_target, _this, 'full'] call WL2_fnc_accessControl) # 0",
+	"([_target, _this, 'driver'] call WL2_fnc_accessControl) # 0",
 	WL_MAINTENANCE_RADIUS,
 	false
 ];

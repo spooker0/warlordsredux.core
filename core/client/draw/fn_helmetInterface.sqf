@@ -75,7 +75,8 @@ addMissionEventHandler ["Draw3D", {
         private _missileUpdateInitialized = _missile getVariable ["WL_missileUpdateInitialized", false];
         if (!_missileUpdateInitialized) then {
             _missile setVariable ["WL_missileUpdateInitialized", true];
-            [_missile] remoteExec ["APS_fnc_projectileStateUpdate", 0];
+            private _launcher = _missile getVariable ["WL_launcher", objNull];
+            [_missile] remoteExec ["APS_fnc_projectileStateUpdate", _launcher];
         };
         _missile setVariable ["WL_missileApproaching", _missileApproaching];
 

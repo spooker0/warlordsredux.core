@@ -104,6 +104,7 @@ if (_asset isKindOf "Man") then {
 	_asset addEventHandler ["IncomingMissile", {
 		params ["_target", "_ammo", "_vehicle", "_instigator", "_missile"];
 		if (isNull _missile) exitWith {};
+		_missile setVariable ["WL_launcher", _vehicle];
 		private _incomingMissiles = _target getVariable ["WL_incomingMissiles", []];
 		private _originalIncomingMissiles = +_incomingMissiles;
 		_incomingMissiles pushBackUnique _missile;
