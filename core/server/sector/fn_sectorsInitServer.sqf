@@ -171,10 +171,14 @@ waitUntil {!isNil "BIS_WL_base1" && {!isNil "BIS_WL_base2"}};
 #if WL_AA_TEST
 private _airDefenseToSpawn = [
 	[
+		["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_E_F"],
+		["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_E_F"],
 		["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_UP_F"],
 		["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_UP_F"]
 	],
 	[
+		["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_E_F"],
+		["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_E_F"],
 		["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_M_F"],
 		["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_M_F"]
 	]
@@ -209,14 +213,16 @@ private _airDefenseToSpawn = [
 					(side _asset) reportRemoteTarget [_x, 10];
 				} forEach (_asset nearEntities [["Air"], 11000]);
 				private _targets = getSensorTargets _asset;
-				private _priorityTarget = objNull;
-				{
-					if (_x # 1 == "air" && _x # 2 != "friendly") then {
-						_priorityTarget = _x # 0;
-					};
-				} forEach _targets;
-				if !(isNull _priorityTarget) then {
-					_asset doFire _priorityTarget;
+				_targets = _targets select {
+					_x # 1 == "air" && _x # 2 != "friendly";
+				};
+				_targets = _targets apply {
+					_x # 0;
+				};
+				private _targetQueue = [_targets, [_asset], { _input0 distance _x }, "ASCEND"] call BIS_fnc_sortBy;
+
+				if (count _targetQueue > 0) then {
+					_asset doFire (_targetQueue # 0);
 
 				};
 				sleep 5;
