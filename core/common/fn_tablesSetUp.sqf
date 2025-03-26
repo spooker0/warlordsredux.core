@@ -24,7 +24,9 @@ private _populateAircraftPoolList = [];
 
 private _disallowMagazinesForVehicle = createHashMap;
 private _allowPylonMagazines = createHashMap;
+private _hasGPSMunition = createHashMap;
 private _hasHMD = createHashMap;
+private _hasRemoteBomb = createHashMap;
 private _hasScanner = createHashMap;
 private _hasAWACS = createHashMap;
 
@@ -63,7 +65,9 @@ private _requisitionPresets = BIS_WL_purchaseListTemplate;
 
 				private _requisitionDisallowMagazines = getArray (_x >> "disallowMagazines");
 				private _requisitionAllowPylonMagazines = getArray (_x >> "allowPylonMagazines");
+				private _requisitionHasGPSMunition = getNumber (_x >> "hasGPSMunition");
 				private _requisitionHasHMD = getNumber (_x >> "hasHMD");
+				private _requisitionHasRemoteBomb = getNumber (_x >> "hasRemoteBomb");
 				private _requisitionHasScanner = getNumber (_x >> "hasScanner");
 				private _requisitionHasAWACS = getNumber (_x >> "hasAWACS");
 
@@ -159,8 +163,16 @@ private _requisitionPresets = BIS_WL_purchaseListTemplate;
 					_allowPylonMagazines set [_requisitonName, _allowListForAircraft];
 				};
 
+				if (_requisitionHasGPSMunition != 0) then {
+					_hasGPSMunition set [_requisitonName, true];
+				};
+
 				if (_requisitionHasHMD != 0) then {
 					_hasHMD set [_requisitonName, true];
+				};
+
+				if (_requisitionHasRemoteBomb != 0) then {
+					_hasRemoteBomb set [_requisitonName, true];
 				};
 
 				if (_requisitionHasScanner != 0) then {
@@ -236,7 +248,9 @@ missionNamespace setVariable ["WL2_flagOffsets", _flagOffsetHashMap];
 
 missionNamespace setVariable ["WL2_disallowMagazinesForVehicle", _disallowMagazinesForVehicle];
 missionNamespace setVariable ["WL2_allowPylonMagazines", _allowPylonMagazines];
+missionNamespace setVariable ["WL2_hasGPSMunition", _hasGPSMunition];
 missionNamespace setVariable ["WL2_hasHMD", _hasHMD];
+missionNamespace setVariable ["WL2_hasRemoteBomb", _hasRemoteBomb];
 missionNamespace setVariable ["WL2_hasScanner", _hasScanner];
 missionNamespace setVariable ["WL2_hasAWACS", _hasAWACS];
 missionNamespace setVariable ["WL2_rearmTimers", _rearmTimerHashMap];

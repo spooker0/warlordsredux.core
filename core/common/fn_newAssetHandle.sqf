@@ -424,10 +424,12 @@ if (_asset isKindOf "Man") then {
 		}];
 	};
 
-	if (_assetActualType in ["B_Plane_Fighter_01_standoff_F", "O_Plane_Fighter_02_GPS_F"]) then {
+	private _hasGPSMunitionMap = missionNamespace getVariable ["WL2_hasGPSMunition", createHashMap];
+	if (_hasGPSMunitionMap getOrDefault [_assetActualType, false]) then {
 		[_asset] remoteExec ["DIS_fnc_setupGPSMunition", 0, true];
 	};
-	if (_assetActualType in ["O_Plane_Fighter_02_Standoff_F"]) then {
+	private _hasRemoteBombMap = missionNamespace getVariable ["WL2_hasRemoteBomb", createHashMap];
+	if (_hasRemoteBombMap getOrDefault [_assetActualType, false]) then {
 		[_asset] remoteExec ["DIS_fnc_setupRemoteMunition", 0, true];
 	};
 

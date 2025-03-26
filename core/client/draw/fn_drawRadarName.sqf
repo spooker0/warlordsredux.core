@@ -24,7 +24,7 @@ while { alive player } do {
     private _targetTypeName = [_target] call WL2_fnc_getAssetTypeName;
     private _assetPrimitiveName = getText (configFile >> "CfgVehicles" >> typeof _target >> "displayName");
     private _existingText = ctrlText _existingControl;
-    if (_existingText == _targetTypeName || _existingText == "--" || _existingText != _assetPrimitiveName) then {
+    if (_existingText == _targetTypeName || _existingText == "--" || _existingText != _assetPrimitiveName || _targetTypeName == "") then {
         _newControl ctrlShow false;
     } else {
         _newControl ctrlShow true;

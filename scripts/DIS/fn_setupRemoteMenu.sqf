@@ -64,11 +64,14 @@ _cameraView ctrlShow false;
 
         private _teamVehiclesVar = format ["BIS_WL_%1OwnedVehicles", BIS_WL_playerSide];
         private _teamVehicles = missionNamespace getVariable [_teamVehiclesVar, []];
+        _teamVehicles = _teamVehicles arrayIntersect _teamVehicles;
         private _controlStations = _teamVehicles select {
             typeOf _x == "RuggedTerminal_01_communications_F"
         };
         if (count _controlStations == 0) then {
-            _remoteControlList lbAdd "No ground support stations. They can be built in: Buy Menu >> Remote Control >> Ground Support Terminal.";
+            private _notFoundId = _remoteControlList lbAdd "No ground support terminals found. Buy Menu >> Remote Control >> Ground Support Terminal.";
+            _remoteControlList lbSetValue [_notFoundId, -1];
+            _remoteControlList lbSetData [_notFoundId, "none"];
             sleep 1;
             continue;
         };

@@ -8,20 +8,37 @@ private _originalPosition = getPosASL _unit;
     params ["_projectile", "_originalTarget", "_originalPosition"];
     private _startTime = time;
     private _isLOAL = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "autoSeekTarget") == 1;
+    private _targetMaxSpeed = getNumber (configfile >> "CfgVehicle" >> typeOf _originalTarget >> "maxSpeed");
+    _targetMaxSpeed = _targetMaxSpeed * WL_SAM_NOTCH_MIN_SPEED;
 
     while { alive _projectile } do {
-        sleep 0.2;
+        sleep 0.05;
 
         private _projectilePosition = getPosASL _projectile;
+        private _targetPosition = getPosASL _originalTarget;
         if !(isNull _originalTarget) then {
-            private _inFrontAngle = [_projectilePosition, getDir _projectile, 180, getPosASL _originalTarget] call WL2_fnc_inAngleCheck;
+            private _inFrontAngle = [_projectilePosition, getDir _projectile, 180, _targetPosition] call WL2_fnc_inAngleCheck;
             if (!_inFrontAngle) then {
                 triggerAmmo _projectile;
             };
         };
 
-        // Ghost missile relocking check.
+        // Notching mechanic
+        private _targetVelocity = velocity _originalTarget;
+        private _projectileRelativeVelocity = _projectile vectorWorldToModel _targetVelocity;
+        private _normalizedVelocity = abs ((vectorNormalized _projectileRelativeVelocity) # 0);
+        private _perpendicularVelocity = abs (_projectileRelativeVelocity # 0);
+        private _distanceRemaining = _projectilePosition distance _targetPosition;
+
+        if (_perpendicularVelocity > _targetMaxSpeed && _normalizedVelocity > WL_SAM_NOTCH_TOLERANCE && _distanceRemaining < WL_SAM_NOTCH_RANGE) then {
+            private _flaresNearby = count (_originalTarget nearObjects ["CMflare_Chaff_Ammo", 150]);
+            if (_flaresNearby >= 5) then {
+                triggerAmmo _projectile;
+            };
+        };
+
         private _currentMissileTarget = missileTarget _projectile;
+        // Ghost missile relocking check.
         if (_isLOAL && alive _currentMissileTarget && _currentMissileTarget != _originalTarget) then {
             triggerAmmo _projectile;
         };
@@ -50,7 +67,7 @@ private _maxAcceleration = (getNumber (configfile >> "CfgAmmo" >> typeOf _projec
 private _maxSpeed = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "maxSpeed") * WL_SAM_MAX_SPEED_FACTOR;
 
 private _terrainTest = 4000;
-private _disableGroundAvoid = _originalTarget isKindOf "Helicopter";
+private _disableGroundAvoid = false;
 #if WL_NO_GROUND_AVOID
 _disableGroundAvoid = true;
 #endif

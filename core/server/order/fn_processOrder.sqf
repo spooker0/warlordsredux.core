@@ -33,6 +33,7 @@ if (!_isAircraft && _variant != 0) then {
 
 private _turretOverrides = missionNamespace getVariable ["WL2_turretOverrides", createHashMap];
 private _turretOverridesForVehicle = _turretOverrides getOrDefault [_orderedClass, []];
+private _pylonInfo = getAllPylonsInfo _asset;
 
 {
 	private _turretOverride = _x;
@@ -57,10 +58,16 @@ private _turretOverridesForVehicle = _turretOverrides getOrDefault [_orderedClas
 	private _existingWeapons = _asset weaponsTurret _turret;
 
 	// exclude pylons
-	private _pylonInfo = getAllPylonsInfo _asset;
-	_existingMagazines = _existingMagazines - (_pylonInfo apply {_x # 3});
-	_existingWeapons = _existingWeapons select {
-		private _intersection = (compatibleMagazines _x) arrayIntersect _existingMagazines;
+	// private _pylonInfo = getAllPylonsInfo _asset;
+	// _existingMagazines = _existingMagazines - (_pylonInfo apply {_x # 3});
+	// _existingWeapons = _existingWeapons select {
+	// 	private _intersection = (compatibleMagazines _x) arrayIntersect _existingMagazines;
+	// 	count _intersection != 0;
+	// };
+
+	private _removePylonMagazines = _pylonInfo apply {_x # 3};
+	private _removePylonWeapons = _existingWeapons select {
+		private _intersection = (compatibleMagazines _x) arrayIntersect _removePylonMagazines;
 		count _intersection != 0;
 	};
 
@@ -74,19 +81,27 @@ private _turretOverridesForVehicle = _turretOverrides getOrDefault [_orderedClas
 
 	{
 		_asset addMagazineTurret [_x, _turret];
+	} forEach _existingMagazines;
+
+	{
+		_asset addMagazineTurret [_x, _turret];
 	} forEach _addMagazines;
+
+	{
+		_asset addWeaponTurret [_x, _turret];
+	} forEach _existingWeapons;
 
 	{
 		_asset addWeaponTurret [_x, _turret];
 	} forEach _addWeapons;
 
 	{
-		_asset addMagazineTurret [_x, _turret];
-	} forEach _existingMagazines;
+		_asset removeMagazineTurret [_x, _turret];
+	} forEach _removePylonMagazines;
 
 	{
-		_asset addWeaponTurret [_x, _turret];
-	} forEach _existingWeapons;
+		_asset removeWeaponTurret [_x, _turret];
+	} forEach _removePylonWeapons;
 
 	if (_reloadOverride != 0) then {
 		_asset setVariable ["WL2_reloadOverride", [_reloadOverride, _turret]];
@@ -111,6 +126,11 @@ private _turretOverridesForVehicle = _turretOverrides getOrDefault [_orderedClas
 		[_asset, _turret] remoteExec ["APS_fnc_deviceJammer", _asset];
 	};
 } forEach _turretOverridesForVehicle;
+
+private _attachments = _pylonInfo apply {
+	[_x # 3, _x # 2];
+};
+[_asset, _attachments, true] call WLM_fnc_applyPylon;
 
 private _disallowListForPylon = missionNamespace getVariable ["WL2_disallowMagazinesForVehicle", createHashMap];
 private _disallowListForAsset = _disallowListForPylon getOrDefault [_orderedClass, []];

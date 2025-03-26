@@ -64,7 +64,7 @@ if (count _spawnPos == 0) exitWith {
 
 private _isUav = getNumber (configFile >> "CfgVehicles" >> _class >> "isUav") == 1;
 private _asset = if (_isUav) then {
-	[_spawnPos, _class, _orderedClass, 0, _sender] call WL2_fnc_createUAVCrew;
+	[_spawnPos, _class, _orderedClass, [[0, 0, 1], [0, 1, 0]], false, _sender] call WL2_fnc_createUAVCrew;
 } else {
 	createVehicle [_class, _spawnPos, [], 0, "NONE"];
 };
