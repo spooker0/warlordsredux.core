@@ -29,8 +29,12 @@ private _originalPosition = getPosASL _unit;
         private _normalizedVelocity = abs ((vectorNormalized _projectileRelativeVelocity) # 0);
         private _perpendicularVelocity = abs (_projectileRelativeVelocity # 0);
         private _distanceRemaining = _projectilePosition distance _targetPosition;
+        private _distanceTraveled = _originalPosition distance _projectilePosition;
 
-        if (_perpendicularVelocity > _targetMaxSpeed && _normalizedVelocity > WL_SAM_NOTCH_TOLERANCE && _distanceRemaining < WL_SAM_NOTCH_RANGE) then {
+        if (_perpendicularVelocity > _targetMaxSpeed &&
+            _normalizedVelocity > WL_SAM_NOTCH_TOLERANCE &&
+            _distanceRemaining > WL_SAM_NOTCH_MAX_RANGE &&
+            _distanceTraveled > WL_SAM_NOTCH_ACTIVE_DIST) then {
             private _flaresNearby = count (_originalTarget nearObjects ["CMflare_Chaff_Ammo", 150]);
             if (_flaresNearby >= 5) then {
                 triggerAmmo _projectile;
@@ -42,7 +46,7 @@ private _originalPosition = getPosASL _unit;
         if (_isLOAL && alive _currentMissileTarget && _currentMissileTarget != _originalTarget) then {
             triggerAmmo _projectile;
         };
-        if (_originalPosition distance _projectilePosition > WL_SAM_MAX_DISTANCE) then {
+        if (_distanceTraveled > WL_SAM_MAX_DISTANCE) then {
             triggerAmmo _projectile;
         };
     };
