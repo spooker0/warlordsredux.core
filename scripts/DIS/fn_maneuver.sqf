@@ -4,15 +4,13 @@ params ["_projectile", "_unit"];
 
 private _originalTarget = missileTarget _projectile;
 private _originalPosition = getPosASL _unit;
-[_projectile, _originalTarget, _originalPosition] spawn {
-    params ["_projectile", "_originalTarget", "_originalPosition"];
+[_projectile, _originalTarget, _unit] spawn {
+    params ["_projectile", "_originalTarget", "_unit"];
     private _startTime = time;
     private _isLOAL = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "autoSeekTarget") == 1;
-    private _targetMaxSpeed = getNumber (configfile >> "CfgVehicle" >> typeOf _originalTarget >> "maxSpeed");
-    _targetMaxSpeed = _targetMaxSpeed * WL_SAM_NOTCH_MIN_SPEED;
 
     while { alive _projectile } do {
-        sleep 0.05;
+        sleep 0.1;
 
         private _projectilePosition = getPosASL _projectile;
         private _targetPosition = getPosASL _originalTarget;
@@ -24,21 +22,9 @@ private _originalPosition = getPosASL _unit;
         };
 
         // Notching mechanic
-        private _targetVelocity = velocity _originalTarget;
-        private _projectileRelativeVelocity = _projectile vectorWorldToModel _targetVelocity;
-        private _normalizedVelocity = abs ((vectorNormalized _projectileRelativeVelocity) # 0);
-        private _perpendicularVelocity = abs (_projectileRelativeVelocity # 0);
-        private _distanceRemaining = _projectilePosition distance _targetPosition;
-        private _distanceTraveled = _originalPosition distance _projectilePosition;
-
-        if (_perpendicularVelocity > _targetMaxSpeed &&
-            _normalizedVelocity > WL_SAM_NOTCH_TOLERANCE &&
-            _distanceRemaining > WL_SAM_NOTCH_MAX_RANGE &&
-            _distanceTraveled > WL_SAM_NOTCH_ACTIVE_DIST) then {
-            private _flaresNearby = count (_originalTarget nearObjects ["CMflare_Chaff_Ammo", 150]);
-            if (_flaresNearby >= 5) then {
-                triggerAmmo _projectile;
-            };
+        private _notchResult = [_originalTarget, _projectile, _unit] call DIS_fnc_getNotchResult;
+        if (_notchResult) then {
+            _projectile setVariable ["DIS_notched", true];
         };
 
         private _currentMissileTarget = missileTarget _projectile;
@@ -46,7 +32,9 @@ private _originalPosition = getPosASL _unit;
         if (_isLOAL && alive _currentMissileTarget && _currentMissileTarget != _originalTarget) then {
             triggerAmmo _projectile;
         };
-        if (_distanceTraveled > WL_SAM_MAX_DISTANCE) then {
+
+        private _launcherPosition = getPosASL _unit;
+        if (_launcherPosition distance _projectilePosition > WL_SAM_MAX_DISTANCE) then {
             triggerAmmo _projectile;
         };
     };

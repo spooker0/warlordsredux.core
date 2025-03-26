@@ -28,6 +28,7 @@ class CfgFunctions {
 			class calculateInRange {};
 			class controlMunition {};
 			class frag {};
+			class getNotchResult {};
 			class gpsMunition {};
 			class maneuver {};
 			class missileCamera {};

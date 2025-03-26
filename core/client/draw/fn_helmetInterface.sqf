@@ -81,7 +81,7 @@ addMissionEventHandler ["Draw3D", {
 
         private _missileState = _missile getVariable ["APS_missileState", "LOCKED"];
         private _color = switch true do {
-            case (!_missileApproaching || _missileState == "LOST"): {
+            case (!_missileApproaching || _missileState in ["LOST", "NOTCHED"]): {
                 [0, 0, 0, 1]
             };
             case (_distance > 5000): {

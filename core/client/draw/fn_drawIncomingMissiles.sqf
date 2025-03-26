@@ -37,9 +37,11 @@ while { !BIS_WL_missionEnd } do {
         private _missileState = _missile getVariable ["APS_missileState", "LOCKED"];
         private _distance = _missile distance _asset;
         private _relDir = _missile getRelDir _asset;
-        private _missileApproaching = _relDir < 90 || _relDir > 270;
+        private _missileApproaching = (_relDir < 90 || _relDir > 270) && !(_missileState in ["LOST", "NOTCHED"]);
         private _missileType = _missileTypeData getOrDefault [typeof _missile, "MISSILE"];
-        [_missileState, _distance, _missileApproaching, _missileType];
+        private _missileRelDir = _asset getRelDir _missile;
+
+        [_missileState, _distance, _missileApproaching, _missileType, _missileRelDir];
     };
     _missilesData = [_missilesData, [], {
         _x # 1 + (if (_x # 2) then { 0 } else { 100000 })
@@ -55,7 +57,7 @@ while { !BIS_WL_missionEnd } do {
         private _missileApproaching = _x # 2;
         private _missileType = _x # 3;
         private _color = switch true do {
-            case (!_missileApproaching || _missileState == "LOST"): {
+            case (!_missileApproaching): {
                 "#000000"
             };
             case (_distance > 5000): {
@@ -68,10 +70,11 @@ while { !BIS_WL_missionEnd } do {
                 "#ff0000"
             };
         };
+        private _relDirText = format ["%1", round (_x # 4)];
 
         _missileTypes pushBack format ["<t color='%1'>%2</t>", _color, _missileType];
         _missileStates pushBack format ["<t color='%1'>%2</t>", _color, _missileState];
-        _missileDistances pushBack format ["<t color='%1'>%2</t>", _color, (_distance / 1000) toFixed 1];
+        _missileDistances pushBack format ["<t color='%1'>%2 [%3]</t>", _color, (_distance / 1000) toFixed 1, _relDirText];
     } forEach _missilesData;
 
     _indicatorMissile ctrlSetStructuredText parseText format ["<t size='0.6'>%1</t>", _missileTypes joinString "<br/>"];

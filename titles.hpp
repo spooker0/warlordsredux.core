@@ -700,7 +700,7 @@ class RscTitles {
 				idc = 25002;
 				x = safeZoneX + 0.43;
 				y = 0;
-				w = 0.08;
+				w = 0.2;
 				h = 1;
 				text = "";
 				style = ST_MULTI;
