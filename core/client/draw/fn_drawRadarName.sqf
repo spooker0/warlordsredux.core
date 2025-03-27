@@ -3,11 +3,8 @@ private _existingControl = _radarDisplay displayCtrl 107;
 private _existingPosition = ctrlPosition _existingControl;
 
 private _newControl = _radarDisplay ctrlCreate ["RscText", -1];
-_existingPosition set [2, _existingPosition # 2 / 2];
-
-_newControl ctrlSetPosition _existingPosition;
-_newControl ctrlSetBackgroundColor [0.5, 0.5, 0.5, 1];
-_newControl ctrlSetTextColor (ctrlTextColor _existingControl);
+_newControl ctrlSetPosition [0, -0.06, 1, 0.1];
+_newControl ctrlSetTextColor [0.2, 1, 0.2, 1];
 _newControl ctrlSetFontHeight (ctrlFontHeight _existingControl);
 _newControl ctrlSetShadow 0;
 _newControl ctrlCommit 0;
@@ -24,15 +21,11 @@ while { alive player } do {
     private _targetTypeName = [_target] call WL2_fnc_getAssetTypeName;
     private _assetPrimitiveName = getText (configFile >> "CfgVehicles" >> typeof _target >> "displayName");
     private _existingText = ctrlText _existingControl;
-    if (_existingText == _targetTypeName || _existingText == "--" || _existingText != _assetPrimitiveName || _targetTypeName == "") then {
+    if (_existingText == _targetTypeName || _existingText == "--" || _targetTypeName == "" || _existingText != _assetPrimitiveName) then {
         _newControl ctrlShow false;
     } else {
         _newControl ctrlShow true;
-        private _oldTextWidth = ctrlTextWidth _existingControl;
-        _newControl ctrlSetText _targetTypeName;
-        private _newTextWidth = ctrlTextWidth _newControl;
-        _existingPosition set [2, _oldTextWidth max _newTextWidth];
-        _newControl ctrlSetPosition _existingPosition;
+        _newControl ctrlSetText format ["Variant: %1", _targetTypeName];
         _newControl ctrlCommit 0;
     };
 };

@@ -173,6 +173,8 @@ class CfgFunctions {
 			class rappelAction {};
 			class rappelActionEligibility {};
 			class rearmAction {};
+			class refuelAction {};
+			class refuelActionEligibility {};
 			class remoteControlAction {};
 			class removeAction {};
 			class removeStronghold {};

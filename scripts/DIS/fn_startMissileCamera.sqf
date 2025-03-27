@@ -1,6 +1,8 @@
 #include "constants.inc"
 params ["_projectile", "_unit", ["_fov", 0.75], ["_defaultOpticsMode", 0]];
 
+if (isDedicated) exitWith {};
+
 private _disableCamera = profileNamespace getVariable ["MRTM_disableMissileCameras", false];
 private _isDisconnected = unitIsUAV _unit && isNull (getConnectedUAV player);
 private _pipDisabled = (getVideoOptions getOrDefault ["pipQualityName", "None"]) == "Disabled";

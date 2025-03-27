@@ -73,3 +73,10 @@ _asset setVehiclePosition [_spawnPos, [], 0, "CAN_COLLIDE"];
 _asset setDir _dir;
 
 [_asset, _sender, _orderedClass] call WL2_fnc_processOrder;
+
+if (!_isUav) then {
+	private _memoryPoint = getText (configFile >> "CfgVehicles" >> _class >> "memoryPointsGetInDriver");
+	private _memoryPointPosition = _asset selectionPosition _memoryPoint;
+	private _actualPosition = _asset modelToWorld _memoryPointPosition;
+	_sender setVehiclePosition [_actualPosition, [], 0, "CAN_COLLIDE"];
+};

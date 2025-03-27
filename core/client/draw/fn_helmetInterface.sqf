@@ -4,6 +4,7 @@ if (isDedicated) exitWith {};
 
 uiNamespace setVariable ["WL_HelmetInterfaceLaserIcons", []];
 // uiNamespace setVariable ["WL_HelmetInterfaceFlareIcons", []];
+uiNamespace setVariable ["WL_HelmetInterfaceSAMIcons", []];
 uiNamespace setVariable ["WL_HelmetInterfaceMunitionIcons", []];
 uiNamespace setVariable ["WL_HelmetInterfaceTargetVehicleIcons", []];
 uiNamespace setVariable ["WL_HelmetInterfaceTargetInfantryIcons", []];
@@ -21,6 +22,11 @@ addMissionEventHandler ["Draw3D", {
     // {
     //     drawIcon3D _x;
     // } forEach _flareIcons;
+
+    private _samIcons = uiNamespace getVariable ["WL_HelmetInterfaceSAMIcons", []];
+    {
+        drawIcon3D _x;
+    } forEach _samIcons;
 
     private _munitionIcons = uiNamespace getVariable ["WL_HelmetInterfaceMunitionIcons", []];
     {
@@ -210,6 +216,16 @@ addMissionEventHandler ["Draw3D", {
 
 0 spawn {
     private _categoryMap = missionNamespace getVariable ["WL2_categories", createHashMap];
+    private _missileTypeData = createHashMapFromArray [
+        ["M_Zephyr", "ZEPHYR"],
+        ["M_Titan_AA_long", "TITAN"],
+        ["ammo_Missile_mim145", "DEFENDER"],
+        ["ammo_Missile_s750", "RHEA"],
+        ["ammo_Missile_rim116", "SPARTAN"],
+        ["ammo_Missile_rim162", "CENTURION"],
+        ["M_70mm_SAAMI", "SAAMI"]
+    ];
+    private _apsProjectileConfig = APS_projectileConfig;
 
     while { !BIS_WL_missionEnd } do {
         if (WL_HelmetInterface == 2) then {
@@ -286,6 +302,40 @@ addMissionEventHandler ["Draw3D", {
         //     ];
         // } forEach _flares;
         // uiNamespace setVariable ["WL_HelmetInterfaceFlareIcons", _flareIcons];
+
+        private _vehicleActualType = _vehicle getVariable ["WL2_orderedClass", typeOf _vehicle];
+        private _vehicleCategory = _categoryMap getOrDefault [_vehicleActualType, "Other"];
+        if (_vehicleCategory == "AirDefense") then {
+            private _samMissiles = (8 allObjects 2) select {
+                if !(_x isKindOf "MissileCore") then {
+                    false;
+                } else {
+                    private _projectile = _x;
+                    private _projectileConfig = _apsProjectileConfig getOrDefault [typeOf _projectile, createHashMap];
+                    private _projectileSAM = _projectileConfig getOrDefault ["sam", false];
+                    _projectileSAM && _projectile distance _vehicle < 8000;
+                };
+            };
+
+            private _samIcons = [];
+            {
+                _samIcons pushBack [
+                    "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missileAlt_ca.paa",
+                    [1, 0, 0, 1],
+                    _x modelToWorldVisual [0, 0, 0],
+                    0.8,
+                    0.8,
+                    0,
+                    _missileTypeData getOrDefault [typeof _x, "MISSILE"],
+                    true,
+                    0.035,
+                    "RobotoCondensedBold",
+                    "center",
+                    true
+                ];
+            } forEach _samMissiles;
+            uiNamespace setVariable ["WL_HelmetInterfaceSAMIcons", _samIcons];
+        };
 
         private _targets = [];
 

@@ -31,6 +31,12 @@ if (!_isAircraft && _variant != 0) then {
 	};
 };
 
+private _textureHashmap = missionNamespace getVariable ["WL2_textures", createHashMap];
+private _assetTextures = _textureHashmap getOrDefault [_orderedClass, []];
+{
+	_asset setObjectTextureGlobal [_forEachIndex, _x];
+} forEach _assetTextures;
+
 private _turretOverrides = missionNamespace getVariable ["WL2_turretOverrides", createHashMap];
 private _turretOverridesForVehicle = _turretOverrides getOrDefault [_orderedClass, []];
 private _pylonInfo = getAllPylonsInfo _asset;

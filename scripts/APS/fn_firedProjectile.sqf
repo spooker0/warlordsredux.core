@@ -38,7 +38,7 @@ private _interception = {
 	[_target, _relativeDirection, true, _gunner] remoteExec ["APS_fnc_report", _target];
 
 	private _ownerSide = _x getVariable ["BIS_WL_ownerAssetSide", sideUnknown];
-	if (side _unit == _ownerSide) then {
+	if (side group _unit == _ownerSide) then {
 		0 spawn {
 			sleep 0.5;
 

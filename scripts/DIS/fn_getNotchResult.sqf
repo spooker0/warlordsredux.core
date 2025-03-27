@@ -20,18 +20,18 @@ private _targetTrackSpeed = if (_target isKindOf "Helicopter") then {
 } else {
     80;
 };
-private _flaresNearby = count (_target nearObjects ["CMflare_Chaff_Ammo", 300]);
+private _flaresNearby = count (("CMflare_Chaff_Ammo" allObjects 2) select {
+    (getShotParents _x) # 0 == _target || _x distance _target < 2000;
+});
 
-private _actualTolerance = WL_SAM_NOTCH_TOLERANCE - (_flaresNearby * 0.01);
+private _actualTrackSpeed = _targetTrackSpeed - (_flaresNearby * 1.5);
+private _actualTolerance = WL_SAM_NOTCH_TOLERANCE - (_flaresNearby * 0.02);
 private _actualMaxRange = WL_SAM_NOTCH_MAX_RANGE - (_flaresNearby * 50);
-
-private _kinematicEligible = _perpendicularVelocity > _targetTrackSpeed &&
-_normalizedVelocity > _actualTolerance &&
-_distanceRemaining > _actualMaxRange &&
-_distanceTraveled > WL_SAM_NOTCH_ACTIVE_DIST;
-
-if !(_kinematicEligible) exitWith { false };
-
+_actualMaxRange = _actualMaxRange max 500;
 private _excessSpeed = _perpendicularVelocity / _targetTrackSpeed;
 
-_flaresNearby >= 5 || _excessSpeed > 2.5;
+_perpendicularVelocity > _actualTrackSpeed &&
+_normalizedVelocity > _actualTolerance &&
+_distanceRemaining > _actualMaxRange &&
+_distanceTraveled > WL_SAM_NOTCH_ACTIVE_DIST &&
+(_flaresNearby >= 5 || _excessSpeed > 2.5);

@@ -24,11 +24,5 @@ _asset setDamage 0;
 _asset lock true;
 _asset enableWeaponDisassembly false;
 
-private _textureHashmap = missionNamespace getVariable ["WL2_textures", createHashMap];
-private _assetTextures = _textureHashmap getOrDefault [_orderedClass, []];
-{
-	_asset setObjectTextureGlobal [_forEachIndex, _x];
-} forEach _assetTextures;
-
 sleep 0.5;
 _asset;

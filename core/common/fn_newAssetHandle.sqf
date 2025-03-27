@@ -85,9 +85,10 @@ if (_asset isKindOf "Man") then {
 	_asset remoteExec ["APS_fnc_setupProjectiles", 0, true];
 	[_asset] remoteExec ["WL2_fnc_rearmAction", 0, true];
 	[_asset] remoteExec ["WL2_fnc_repairAction", 0, true];
+	[_asset] remoteExec ["WL2_fnc_refuelAction", 0, true];
 	[_asset] remoteExec ["WL2_fnc_claimAction", 0, true];
 
-	_asset setVariable ["BIS_WL_nextRepair", 0, true];
+	_asset setVariable ["WL2_nextRepair", 0, true];
 	_asset setVariable ["BIS_WL_ownerAssetSide", _side, true];
 	_asset setVariable ["WL2_massDefault", getMass _asset];
 
@@ -380,8 +381,11 @@ if (_asset isKindOf "Man") then {
 	if (getNumber (configFile >> "CfgVehicles" >> typeOf _asset >> "transportRepair") > 0) then {
 		[_asset, 0] remoteExec ["setRepairCargo", 0];
 	};
+	if (getNumber (configFile >> "CfgVehicles" >> typeOf _asset >> "transportFuel") > 0) then {
+		[_asset, 0] remoteExec ["setFuelCargo", 0];
+	};
 
-	private _rearmTime = (missionNamespace getVariable "WL2_rearmTimers") getOrDefault [(typeOf _asset), 600];
+	private _rearmTime = (missionNamespace getVariable ["WL2_rearmTimers", createHashMap]) getOrDefault [typeOf _asset, 600];
 	_asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
 
 	private _crewPosition = (fullCrew [_asset, "", true]) select {!("cargo" in _x)};
@@ -471,15 +475,17 @@ if (_asset isKindOf "Man") then {
 		_asset animateSource ["hide_rail", 0];
 	};
 
-	private _appearanceDefaults = profileNamespace getVariable ["WLM_appearanceDefaults", createHashmap];
-	private _assetAppearanceDefaults = _appearanceDefaults getOrDefault [_assetActualType, createHashmap];
-	{
-		if (_x == "camo") then {
-			[_asset, _y] call WLM_fnc_applyTexture;
-		} else {
-			[_x, _y, _asset] call WLM_fnc_applyCustomization;
-		};
-	} forEach _assetAppearanceDefaults;
+	if (isPlayer _owner) then {
+		private _appearanceDefaults = profileNamespace getVariable ["WLM_appearanceDefaults", createHashmap];
+		private _assetAppearanceDefaults = _appearanceDefaults getOrDefault [_assetActualType, createHashmap];
+		{
+			if (_x == "camo") then {
+				[_asset, _y] call WLM_fnc_applyTexture;
+			} else {
+				[_x, _y, _asset] call WLM_fnc_applyCustomization;
+			};
+		} forEach _assetAppearanceDefaults;
+	};
 };
 
 [_asset] remoteExec ["WL2_fnc_removeAction", 0, true];

@@ -42,5 +42,7 @@ if (isNull BIS_WL_targetSector) exitWith {
 
 [player, "orderAsset", "air", BIS_WL_targetSector, _orderedClass, false] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
+openMap [false, false];
+
 sleep 1;
 WL_MapBusy = WL_MapBusy - ["orderAircraft"];

@@ -44,13 +44,6 @@ switch (BIS_WL_currentSelection) do {
             "A" in (_x getVariable "BIS_WL_services");
         };
 
-        private _categoryMap = missionNamespace getVariable ["WL2_categories", createHashMap];
-        if (_categoryMap getOrDefault [WL_orderingClass, ""] == "RemoteControl") then {
-            _airfieldSectors = _airfieldSectors select {
-                count (_x getVariable ["WL_aircraftCarrier", []]) == 0;
-            };
-        };
-
         BIS_WL_selection_availableSectors = _airfieldSectors;
         BIS_WL_selection_showLinks = false;
         BIS_WL_selection_dimSectors = true;

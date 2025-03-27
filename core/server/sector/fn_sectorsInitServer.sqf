@@ -169,65 +169,65 @@ waitUntil {!isNil "BIS_WL_base1" && {!isNil "BIS_WL_base2"}};
 #endif
 
 #if WL_AA_TEST
-private _airDefenseToSpawn = [
-	[
-		["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_E_F"],
-		["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_E_F"],
-		["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_UP_F"],
-		["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_UP_F"]
-	],
-	[
-		["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_E_F"],
-		["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_E_F"],
-		["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_M_F"],
-		["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_M_F"]
-	]
-];
-{
-	private _sector = _x;
-	private _randomSpots = [_sector] call WL2_fnc_findSpawnPositions;
+[_firstBase, _secondBase] spawn {
+	private _airDefenseToSpawn = [
+		[
+			["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_E_F"],
+			["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_E_F"],
+			["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_UP_F"]
+		],
+		[
+			["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_E_F"],
+			["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_M_F"],
+			["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_M_F"]
+		]
+	];
 	{
-		private _pos = selectRandom _randomSpots;
-		private _direction = [[0, 0, 1], [0, 1, 0]];
-		private _realClass = _x # 0;
-		private _orderedClass = _x # 1;
-
-		private _asset = [_realClass, _orderedClass, _pos, _direction, false] call WL2_fnc_createVehicleCorrectly;
-		waitUntil {
-			sleep 0.1;
-			!(isNull _asset)
-		};
-		private _assetCrewGroup = createVehicleCrew _asset;
-		_asset allowDamage false;
+		private _sector = _x;
+		private _randomSpots = [_sector] call WL2_fnc_findSpawnPositions;
 		{
-			_x setSkill 1;
-			_x call WL2_fnc_newAssetHandle;
-		} forEach (units _assetCrewGroup);
-		[_asset, driver _asset, _orderedClass] call WL2_fnc_processOrder;
+			private _pos = selectRandom _randomSpots;
+			private _direction = [[0, 0, 1], [0, 1, 0]];
+			private _realClass = _x # 0;
+			private _orderedClass = _x # 1;
 
-		[_asset] spawn {
-			params ["_asset"];
-			while {alive _asset} do {
-				_asset setVehicleAmmo 1;
-				{
-					(side _asset) reportRemoteTarget [_x, 10];
-				} forEach (_asset nearEntities [["Air"], 11000]);
-				private _targets = getSensorTargets _asset;
-				_targets = _targets select {
-					_x # 1 == "air" && _x # 2 != "friendly";
-				};
-				_targets = _targets apply {
-					_x # 0;
-				};
-				private _targetQueue = [_targets, [_asset], { _input0 distance _x }, "ASCEND"] call BIS_fnc_sortBy;
-
-				if (count _targetQueue > 0) then {
-					_asset doFire (_targetQueue # 0);
-
-				};
-				sleep 5;
+			private _asset = [_realClass, _orderedClass, _pos, _direction, false] call WL2_fnc_createVehicleCorrectly;
+			waitUntil {
+				sleep 0.1;
+				!(isNull _asset)
 			};
-		};
-	} forEach (_airDefenseToSpawn # _forEachIndex);
-} forEach [_firstBase, _secondBase];
+			private _assetCrewGroup = createVehicleCrew _asset;
+			// _asset allowDamage false;
+			{
+				_x setSkill 1;
+				_x call WL2_fnc_newAssetHandle;
+			} forEach (units _assetCrewGroup);
+			[_asset, driver _asset, _orderedClass] call WL2_fnc_processOrder;
+
+			[_asset] spawn {
+				params ["_asset"];
+				while {alive _asset} do {
+					_asset setVehicleAmmo 1;
+					{
+						(side _asset) reportRemoteTarget [_x, 10];
+					} forEach (_asset nearEntities [["Air"], 11000]);
+					private _targets = getSensorTargets _asset;
+					_targets = _targets select {
+						_x # 1 == "air" && _x # 2 != "friendly";
+					};
+					_targets = _targets apply {
+						_x # 0;
+					};
+					private _targetQueue = [_targets, [_asset], { _input0 distance _x }, "ASCEND"] call BIS_fnc_sortBy;
+
+					if (count _targetQueue > 0) then {
+						_asset doFire (_targetQueue # 0);
+
+					};
+					sleep 5;
+				};
+			};
+		} forEach (_airDefenseToSpawn # _forEachIndex);
+	} forEach _this;
+};
 #endif
