@@ -35,8 +35,7 @@ if (_key in actionKeys "Gear" && !BIS_WL_gearKeyPressed) exitWith {
 };
 
 private _zeusKey = actionKeys "curatorInterface";
-private _viewKey = actionKeys "tacticalView";
-private _adminKeyPressed = _key in _viewKey || _key in _zeusKey;
+private _adminKeyPressed = _key in _zeusKey;
 private _isAdmin = (getPlayerUID player) in (getArray (missionConfigFile >> "adminIDs"));
 if (_adminKeyPressed && !_isAdmin) exitWith {
     true;

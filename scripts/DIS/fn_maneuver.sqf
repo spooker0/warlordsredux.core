@@ -74,6 +74,13 @@ while { alive _projectile } do {
     ];
     _projectile setVelocityModelSpace _newVector;
 
+
+    private _notched = _projectile getVariable ["DIS_notched", false];
+    if (_notched) then {
+        sleep 0.1;
+        continue;
+    };
+
     private _angularVector = angularVelocityModelSpace _projectile;
     if (_disableGroundAvoid || _projectile distance _originalPosition > 5000) then {
         private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;

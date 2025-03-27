@@ -1,15 +1,15 @@
 params ["_asset", "_controlStation"];
 
-_controlStation setVariable ["DIS_remoteInUse", true, true];
+_controlStation setVariable ["DIS_remoteInUseBy", player, true];
 
 private _camera = "camera" camCreate (position _asset);
-
-"controlStation" cutRsc ["RscTitleDisplayEmpty", "PLAIN"];
-private _display = uiNamespace getVariable ["RscTitleDisplayEmpty", displayNull];
-private _instructionsDisplay = _display ctrlCreate ["RscStructuredText", -1];
-private _mapDisplay = _display ctrlCreate ["RscMapControl", -1];
-
+private _mapDisplay = controlNull;
 private _prepareInterface = {
+    "controlStation" cutRsc ["RscTitleDisplayEmpty", "PLAIN"];
+    private _display = uiNamespace getVariable ["RscTitleDisplayEmpty", displayNull];
+    private _instructionsDisplay = _display ctrlCreate ["RscStructuredText", -1];
+    _mapDisplay = _display ctrlCreate ["RscMapControl", -1];
+
     _camera setVectorDirAndUp [vectorDir _asset, vectorUp _asset];
     _camera attachTo [_asset, [0, -5, 3]];
 
@@ -41,6 +41,10 @@ private _prepareInterface = {
     ctrlMapAnimCommit _mapDisplay;
     _mapDisplay mapCenterOnCamera true;
     _mapDisplay ctrlAddEventHandler ["Draw", WL2_fnc_iconDrawMap];
+};
+
+private _killInterface = {
+    "controlStation" cutText ["", "PLAIN"];
 };
 
 call _prepareInterface;
@@ -102,6 +106,8 @@ while { alive _asset && (_asset getVariable ["DIS_remoteControlStation", objNull
         _camera setVectorDirAndUp [vectorDir _projectile, vectorUp _projectile];
         _camera attachTo [_projectile, [0, -3, 0.4]];
 
+        call _killInterface;
+
         [_projectile, 3] call DIS_fnc_controlMunition;
 
         call _prepareInterface;
@@ -110,10 +116,10 @@ while { alive _asset && (_asset getVariable ["DIS_remoteControlStation", objNull
     sleep 0.001;
 };
 
-_controlStation setVariable ["DIS_remoteInUse", false, true];
+_controlStation setVariable ["DIS_remoteInUseBy", objNull, true];
 
 player setVariable ["WL_hmdOverride", -1];
 switchCamera player;
 camDestroy _camera;
 
-"controlStation" cutText ["", "PLAIN"];
+call _killInterface;

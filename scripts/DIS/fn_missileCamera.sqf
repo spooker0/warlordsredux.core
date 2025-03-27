@@ -96,6 +96,9 @@ private _originalRemote = if (isRemoteControlling player) then {
         _titleBar ctrlCommit 0;
         _pictureControl ctrlCommit 0;
     };
+    if (_opticsMode == -1) then {
+        _opticsMode = missionNamespace getVariable ["DIS_missileCameraOpticsMode", 0];
+    };
     private _changed = true;
     while { !isNull _camera } do {
         if (inputAction "opticsMode" > 0) then {
@@ -131,6 +134,7 @@ private _originalRemote = if (isRemoteControlling player) then {
             _titleBar ctrlCommit 0;
             _pictureControl ctrlCommit 0;
             _changed = false;
+            missionNamespace setVariable ["DIS_missileCameraOpticsMode", _opticsMode];
         };
     };
 };

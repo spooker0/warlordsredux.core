@@ -7,8 +7,8 @@ _asset addAction [
     "<t color='#ff0000'>Control Station</t>",
     {
         params ["_asset", "_caller", "_actionId", "_arguments"];
-        _asset getVariable ["DIS_remoteInUse", false];
-        if (_asset getVariable ["DIS_remoteInUse", false]) exitWith {
+        private _inUseBy = _asset getVariable ["DIS_remoteInUseBy", objNull];
+        if !(isNull _inUseBy) exitWith {
             systemChat "This station is already in use!";
             playSound "AddItemFailed";
         };

@@ -25,6 +25,9 @@ while { alive player } do {
     if (cameraView == "EXTERNAL" && profileNamespace getVariable ["MRTM_3rdPersonDisabled", false]) then {
         (vehicle player) switchCamera "Internal";
     };
+    if (cameraView == "GROUP") then {
+        (vehicle player) switchCamera "Internal";
+    };
 
     sleep 0.1;
 };
