@@ -100,7 +100,7 @@ addMissionEventHandler ["Draw3D", {
 
             private _spectrumData = switch (_spectrumAttachment) do {
                 case "muzzle_antenna_01_f": {
-                    [70, 90, 2.5, 1.75] call _setSpectrum;
+                    [70, 90, 2.25, 1.75] call _setSpectrum;
                 };
                 case "muzzle_antenna_02_f": {
                     [350, 500, 1.5, 0.5] call _setSpectrum;
