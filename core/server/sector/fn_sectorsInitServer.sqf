@@ -197,7 +197,6 @@ waitUntil {!isNil "BIS_WL_base1" && {!isNil "BIS_WL_base2"}};
 				!(isNull _asset)
 			};
 			private _assetCrewGroup = createVehicleCrew _asset;
-			// _asset allowDamage false;
 			{
 				_x setSkill 1;
 				_x call WL2_fnc_newAssetHandle;

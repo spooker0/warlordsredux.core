@@ -20,11 +20,13 @@ private _targetTrackSpeed = if (_target isKindOf "Helicopter") then {
 } else {
     80;
 };
+private _flareEffectRatio = (vectorMagnitude _targetVelocity) / (_targetTrackSpeed * 2.5);
 private _flaresNearby = count (("CMflare_Chaff_Ammo" allObjects 2) select {
     (getShotParents _x) # 0 == _target || _x distance _target < 2000;
 });
+_flaresNearby = _flaresNearby * _flareEffectRatio;
 
-private _actualTrackSpeed = _targetTrackSpeed - (_flaresNearby * 1.5);
+private _actualTrackSpeed = _targetTrackSpeed - (_flaresNearby * 1.1);
 private _actualTolerance = WL_SAM_NOTCH_TOLERANCE - (_flaresNearby * 0.02);
 private _actualMaxRange = WL_SAM_NOTCH_MAX_RANGE - (_flaresNearby * 50);
 _actualMaxRange = _actualMaxRange max 500;
@@ -34,4 +36,4 @@ _perpendicularVelocity > _actualTrackSpeed &&
 _normalizedVelocity > _actualTolerance &&
 _distanceRemaining > _actualMaxRange &&
 _distanceTraveled > WL_SAM_NOTCH_ACTIVE_DIST &&
-(_flaresNearby >= 5 || _excessSpeed > 2.5);
+(_flaresNearby >= 4 || _excessSpeed > 2.5);
