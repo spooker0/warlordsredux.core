@@ -8,18 +8,10 @@ _projectileRelativeVelocity set [2, 0];
 private _normalizedVelocity = abs ((vectorNormalized _projectileRelativeVelocity) # 0);
 private _perpendicularVelocity = abs (_projectileRelativeVelocity # 0);
 
-private _targetPosition = getPosASL _originalTarget;
-private _projectilePosition = getPosASL _projectile;
-private _launcherPosition = getPosASL _launcher;
+private _distanceRemaining = _projectile distance _target;
+private _distanceTraveled = _launcher distance _projectile;
 
-private _distanceRemaining = _projectilePosition distance _targetPosition;
-private _distanceTraveled = _launcherPosition distance _projectilePosition;
-
-private _targetTrackSpeed = if (_target isKindOf "Helicopter") then {
-    25;
-} else {
-    80;
-};
+private _targetTrackSpeed = if (_target isKindOf "Helicopter") then { 25 } else { 80 };
 private _flareEffectRatio = (vectorMagnitude _targetVelocity) / (_targetTrackSpeed * 2.5);
 private _flaresNearby = count (("CMflare_Chaff_Ammo" allObjects 2) select {
     (getShotParents _x) # 0 == _target || _x distance _target < 2000;

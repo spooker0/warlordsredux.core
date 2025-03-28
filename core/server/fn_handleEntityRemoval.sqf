@@ -1,7 +1,8 @@
 params ["_unit", "_killer", "_instigator"];
 
 private _isSpawnedAsset = _unit getVariable ["WL_spawnedAsset", false];
-if (!_isSpawnedAsset) exitWith {};
+private _isUnitPlayer = isPlayer [_unit];
+if !(_isSpawnedAsset || _isUnitPlayer) exitWith {};
 
 private _alreadyHandled = _unit getVariable ["WL2_alreadyHandled", false];
 if (_alreadyHandled) exitWith {};
@@ -18,9 +19,9 @@ if (isNull _responsiblePlayer || { _responsiblePlayer == _unit }) then {
     _responsiblePlayer = _lastHitter;
 };
 
-if (isPlayer _unit && _unit isKindOf "Man" && _unit != _responsiblePlayer) then {
+if (_isUnitPlayer && _unit isKindOf "Man") then {
     _unit addPlayerScores [0, 0, 0, 0, 1];
-    private _killMessage = if (isPlayer _responsiblePlayer) then {
+    private _killMessage = if (isPlayer [_responsiblePlayer]) then {
         private _ffText = if (side group _unit == side group _responsiblePlayer) then {
             _responsiblePlayer addPlayerScores [-1, 0, 0, 0, 0];
             " (Friendly fire)"
@@ -37,7 +38,7 @@ if (isPlayer _unit && _unit isKindOf "Man" && _unit != _responsiblePlayer) then 
 
 private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
 private _unitCost = if (_unit isKindOf "Man") then {
-    if (isPlayer _unit) then { 60 } else { 30 };
+    if (_isUnitPlayer) then { 60 } else { 30 };
 } else {
     private _costMap = missionNamespace getVariable ["WL2_costs", createHashMap];
     _costMap getOrDefault [_assetActualType, 0];
@@ -52,21 +53,21 @@ if (_unitCost > 0) then {
     _stats set [_killerActualType, _killerStats];
 };
 
-if (!isNull _responsiblePlayer && { isPlayer _responsiblePlayer }) then {
+if (!isNull _responsiblePlayer && { isPlayer [_responsiblePlayer] }) then {
     _unit setVariable ["WL_lastHitter", objNull];
 
     // must be sync calls, type info may disappear in next frame
     [_unit, _responsiblePlayer] call WL2_fnc_killRewardHandle;
     [_unit, _responsiblePlayer] call WL2_fnc_friendlyFireHandleServer;
 
-    if (isPlayer _unit) then {
+    if (_isUnitPlayer) then {
         diag_log format["PvP kill: %1_%2 was killed by %3_%4 from %5m", name _unit, getPlayerUID _unit, name _responsiblePlayer, getPlayerUID _responsiblePlayer, _unit distance _responsiblePlayer];
     };
 
     private _lastSpotted = _unit getVariable ["WL_lastSpotted", objNull];
     if (!isNull _lastSpotted && {_lastSpotted != _responsiblePlayer}) then {
         private _killReward = if (_unit isKindOf "Man") then {
-            if (isPlayer _unit) then { 60 } else { 30 };
+            if (_isUnitPlayer) then { 60 } else { 30 };
         } else {
             private _killRewardMap = missionNamespace getVariable ["WL2_killRewards", createHashMap];
             _killRewardMap getOrDefault [_assetActualType, 0];
@@ -79,7 +80,7 @@ if (!isNull _responsiblePlayer && { isPlayer _responsiblePlayer }) then {
     };
 };
 
-if (isPlayer [_unit]) then {	// use alt syntax to exclude vehicle kills
+if (_isUnitPlayer) then {	// use alt syntax to exclude vehicle kills
     [_unit, _responsiblePlayer, _killer] remoteExec ["WL2_fnc_deathInfo", _unit];
 };
 

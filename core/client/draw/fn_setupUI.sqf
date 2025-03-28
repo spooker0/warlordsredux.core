@@ -173,11 +173,13 @@ if (_displayClass == "OSD") then {
 		private _purchase_frame_bottomleft = _myDisplay ctrlCreate ["RscPicture", -1];
 		private _purchase_frame_bottomright = _myDisplay ctrlCreate ["RscPicture", -1];
 
+		private _purchase_info_asset_container = _myDisplay ctrlCreate ["RscControlsGroup", 106];
+
 		private _purchase_category = _myDisplay ctrlCreate ["RscListBox", 100];
 		private _purchase_items = _myDisplay ctrlCreate ["RscListBox", 101];
 		private _purchase_pic = _myDisplay ctrlCreate ["RscStructuredText", 102];
 		private _purchase_info = _myDisplay ctrlCreate ["RscStructuredText", 103];
-		private _purchase_info_asset = _myDisplay ctrlCreate ["RscStructuredText", 105];
+		private _purchase_info_asset = _myDisplay ctrlCreate ["RscStructuredText", 105, _purchase_info_asset_container];
 		private _purchase_request = _myDisplay ctrlCreate ["RscStructuredText", 107];
 		private _purchase_transfer_background = _myDisplay ctrlCreate ["RscText", 115];
 		private _purchase_transfer_units = _myDisplay ctrlCreate ["RscListBox", 116];
@@ -202,11 +204,13 @@ if (_displayClass == "OSD") then {
 		_purchase_frame_bottomleft ctrlSetPosition [_xDef + (_wDef * 0.227), _yDef + (_hDef * 0.834), _wDef * 0.035, _hDef * 0.05];
 		_purchase_frame_bottomright ctrlSetPosition [_xDef + (_wDef * 0.739), _yDef + (_hDef * 0.834), _wDef * 0.035, _hDef * 0.05];
 
+		_purchase_info_asset_container ctrlSetPosition [_xDef + (_wDef * 0.5), _yDef + (_hDef * 0.425), _wDef * 0.25, _hDef * 0.27];
+
 		_purchase_category ctrlSetPosition [_xDef + (_wDef / 4), _yDef + (_hDef * 0.195), _wDef * 3 / 32, _hDef * 0.5];
 		_purchase_items ctrlSetPosition [_xDef + (_wDef * 11 / 32), _yDef + (_hDef * 0.195), _wDef * 5 / 32, _hDef * 0.5];
 		_purchase_info ctrlSetPosition [_xDef + (_wDef / 4), _yDef + (_hDef * 0.695), _wDef / 2, _hDef * 0.11];
 		_purchase_pic ctrlSetPosition [_xDef + (_wDef * 0.5), _yDef + (_hDef * 0.195), _wDef * 0.25, _hDef * 0.23];
-		_purchase_info_asset ctrlSetPosition [_xDef + (_wDef * 0.5), _yDef + (_hDef * 0.425), _wDef * 0.25, _hDef * 0.27];
+		_purchase_info_asset ctrlSetPosition [0, 0, _wDef * 0.25, 1];
 		_purchase_request ctrlSetPosition [_xDef + (_wDef / 4), _yDef + (_hDef * 0.805), _wDef / 2, _hDef * 0.045];
 		_purchase_transfer_background ctrlSetPosition [_xDef + (_wDef / 3), _yDef + (_hDef / 3), _wDef / 3, _hDef / 3];
 		_purchase_transfer_units ctrlSetPosition [_xDef + (_wDef / 3), _yDef + (_hDef / 3), _wDef / 6, _hDef / 3];
@@ -262,7 +266,8 @@ if (_displayClass == "OSD") then {
 		{_x ctrlCommit 0} forEach [
 			_purchase_category,
 			_purchase_items,
-			_purchase_request
+			_purchase_request,
+			_purchase_info_asset_container
 		];
 
 		_purchase_background ctrlSetBackgroundColor [0.2, 0.2, 0.2, 1];

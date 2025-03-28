@@ -79,7 +79,7 @@ addMissionEventHandler ["Draw3D", {
         private _targets = (vehicles + allUnits) select {
             alive _x &&
             lifeState _x != "INCAPACITATED" &&
-            _x getVariable ["WL_spawnedAsset", false] &&
+            (_x getVariable ["WL_spawnedAsset", false] || isPlayer _x) &&
             _cameraPos distance2D _x < 5000;
         };
 
