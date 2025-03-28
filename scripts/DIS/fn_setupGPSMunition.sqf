@@ -29,12 +29,12 @@ while { alive _asset } do {
 	};
 	private _currentMagazine = currentMagazine _asset;
 	private _currentAmmo = getText (configFile >> "CfgMagazines" >> _currentMagazine >> "ammo");
-	private _currentAmmoActual = _assetAmmoOverrides getOrDefault [_currentAmmo, _currentAmmo];
-	if !(_currentAmmoActual in _projectileConfigMap) then {
+	private _currentAmmoActual = _assetAmmoOverrides getOrDefault [_currentAmmo, [_currentAmmo]];
+	if !(_currentAmmoActual # 0 in _projectileConfigMap) then {
 		continue;
 	};
 
-	private _projectileConfig = _projectileConfigMap getOrDefault [_currentAmmoActual, createHashMap];
+	private _projectileConfig = _projectileConfigMap getOrDefault [_currentAmmoActual # 0, createHashMap];
 	if (_projectileConfig getOrDefault ["gps", false]) then {
 		private _inRangeCalculation = [_asset] call DIS_fnc_calculateInRange;
 		uiNamespace setVariable ["WL2_gpsTargetingLastUpdate", serverTime];

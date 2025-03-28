@@ -186,8 +186,8 @@ private _asset = uiNamespace getVariable ["WLM_asset", objNull];
 private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
 private _ammoOverridesHashMap = missionNamespace getVariable ["WL2_ammoOverrides", createHashMap];
 private _assetAmmoOverrides = _ammoOverridesHashMap getOrDefault [_assetActualType, createHashMap];
-private _actualAmmoType = _assetAmmoOverrides getOrDefault [_magAmmoType, _magAmmoType];
-private _ammoAPSConfig = APS_projectileConfig getOrDefault [_actualAmmoType, createHashMap];
+private _actualAmmoType = _assetAmmoOverrides getOrDefault [_magAmmoType, [_magAmmoType]];
+private _ammoAPSConfig = APS_projectileConfig getOrDefault [_actualAmmoType # 0, createHashMap];
 if (count _ammoAPSConfig > 0) then {
     private _magDescAPS = [];
 

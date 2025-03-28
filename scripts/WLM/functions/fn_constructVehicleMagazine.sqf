@@ -40,6 +40,9 @@ private _assetDefaultMagazines = _asset getVariable ["BIS_WL_defaultMagazines", 
 private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
 private _disallowListForVehicle = missionNamespace getVariable ["WL2_disallowMagazinesForVehicle", createHashMap];
 
+private _ammoOverridesHashMap = missionNamespace getVariable ["WL2_ammoOverrides", createHashMap];
+private _assetAmmoOverrides = _ammoOverridesHashMap getOrDefault [_assetActualType, createHashMap];
+
 {
     private _turretPath = _x;
 
@@ -138,7 +141,6 @@ private _disallowListForVehicle = missionNamespace getVariable ["WL2_disallowMag
             };
 
             private _magazineClass = _x;
-            private _magazineName = [_magazineClass] call WL2_fnc_getMagazineName;
             private _selectBox = _display ctrlCreate ["WLM_PylonSelect", WLM_PYLON_START + _index, _ctrlGroup];
 
             private _firstSelectBoxItem = _selectBox lbAdd "EMPTY";
@@ -152,8 +154,15 @@ private _disallowListForVehicle = missionNamespace getVariable ["WL2_disallowMag
             {
                 private _magSize = getNumber (configFile >> "CfgMagazines" >> _x >> "count");
                 if (_magSize <= _ammoRemaining) then {
-                    private _allowedMagazine = [_x] call WL2_fnc_getMagazineName;
-                    private _selectBoxItem = _selectBox lbAdd _allowedMagazine;
+                    private _ammoType = getText (configFile >> "CfgMagazines" >> _x >> "ammo");
+                    private _actualAmmoType = _assetAmmoOverrides getOrDefault [_ammoType, [_ammoType]];
+
+                    private _magazineName = if (_actualAmmoType # 0 == _ammoType) then {
+                        [_x] call WL2_fnc_getMagazineName;
+                    } else {
+                        _actualAmmoType # 1;
+                    };
+                    private _selectBoxItem = _selectBox lbAdd _magazineName;
                     _selectBox lbSetTooltip [_selectBoxItem, [_x] call WLM_fnc_getMagazineTooltip];
                     _selectBox lbSetData [_selectBoxItem, _x];
 

@@ -13,9 +13,9 @@ _this addEventHandler ["Fired", {
 	private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
 	private _ammoOverridesHashMap = missionNamespace getVariable ["WL2_ammoOverrides", createHashMap];
 	private _assetAmmoOverrides = _ammoOverridesHashMap getOrDefault [_assetActualType, createHashMap];
-	private _projectileAmmoOverride = _assetAmmoOverrides getOrDefault [_ammo, _ammo];
-	if (_projectileAmmoOverride != _ammo) then {
-		_projectile setVariable ["APS_ammoOverride", _projectileAmmoOverride];
+	private _projectileAmmoOverride = _assetAmmoOverrides getOrDefault [_ammo, [_ammo]];
+	if (_projectileAmmoOverride # 0 != _ammo) then {
+		_projectile setVariable ["APS_ammoOverride", _projectileAmmoOverride # 0];
 	};
 
 	private _apsProjectileType = _projectile getVariable ["APS_ammoOverride", typeOf _projectile];

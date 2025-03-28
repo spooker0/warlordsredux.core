@@ -28,7 +28,8 @@ private _currentAssetPylonInfo = _asset getVariable ["WLM_pylonInfo", getAllPylo
     private _pylonConfigName = configName _x;
     private _currentPylonInfo = _currentAssetPylonInfo select { _pylonConfigName == (_x # 1) } select 0;
 
-    _selectBox lbAdd (localize "STR_WLM_EMPTY");
+    private _emptyId = _selectBox lbAdd (localize "STR_WLM_EMPTY");
+    _selectBox lbSetTooltip [_emptyId, _pylonConfigName];
     _selectBox lbSetCurSel 0;
 
     private _allowedMagazines = _asset getCompatiblePylonMagazines _pylonConfigName;
@@ -53,16 +54,40 @@ private _currentAssetPylonInfo = _asset getVariable ["WLM_pylonInfo", getAllPylo
         continue;
     };
 
-    private _allowListForPylon = missionNamespace getVariable ["WL2_allowPylonMagazines", createHashMap];
+    private _allowListForPylonMap = missionNamespace getVariable ["WL2_allowPylonMagazines", createHashMap];
+    private _allowListForPylon = _allowListForPylonMap getOrDefault [_assetActualType, []];
     {
-        if !(_x in _allowedMagazines) then {
-            _allowedMagazines pushBack _x;
+        if (typeName _x == "STRING") then {
+            if !(_x in _allowedMagazines) then {
+                _allowedMagazines pushBack _x;
+            };
+        } else {
+            private _mag = _x # 0;
+            if (_mag in _allowedMagazines) then {
+                continue;
+            };
+            private _allowedPylons = _x # 1;
+
+            if (_pylonConfigName in _allowedPylons) then {
+                _allowedMagazines pushBack _mag;
+            };
         };
-    } forEach (_allowListForPylon getOrDefault [_assetActualType, []]);
+    } forEach _allowListForPylon;
+
+    private _ammoOverridesHashMap = missionNamespace getVariable ["WL2_ammoOverrides", createHashMap];
+    private _assetAmmoOverrides = _ammoOverridesHashMap getOrDefault [_assetActualType, createHashMap];
 
     {
         private _magazine = configfile >> "CfgMagazines" >> _x;
-        private _magazineName = getText (_magazine >> "displayName");
+        private _ammoType = getText (_magazine >> "ammo");
+        private _actualAmmoType = _assetAmmoOverrides getOrDefault [_ammoType, [_ammoType]];
+
+        private _magazineName = if (_actualAmmoType # 0 == _ammoType) then {
+            getText (_magazine >> "displayName");
+        } else {
+            _actualAmmoType # 1;
+        };
+
         private _magSize = getNumber (_magazine >> "count");
 
         private _magSizeInName = [format["%1x", _magSize], _magazineName] call BIS_fnc_inString;

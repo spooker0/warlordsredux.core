@@ -38,7 +38,7 @@ while { alive _projectile } do {
         _projectile setVelocityModelSpace [0, _speed max 100, 0];
     };
 
-    if (_projectile distance2D _laserTarget < 200) then {
+    if (_projectile distance2D _laserTarget < 200 && !_terminalManeuver) then {
         _terminalManeuver = true;
 
         _coordinates set [2, 0];
