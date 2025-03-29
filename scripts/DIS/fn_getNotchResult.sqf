@@ -11,21 +11,23 @@ private _perpendicularVelocity = abs (_projectileRelativeVelocity # 0);
 private _distanceRemaining = _projectile distance _target;
 private _distanceTraveled = _launcher distance _projectile;
 
-private _targetTrackSpeed = if (_target isKindOf "Helicopter") then { 25 } else { 80 };
-private _flareEffectRatio = (vectorMagnitude _targetVelocity) / (_targetTrackSpeed * 2.5);
+private _targetAltitude = ASLtoAGL (getPosASL _target) # 2;
+private _targetTrackSpeed = linearConversion [0, 4000, _targetAltitude, 40, 440, true];
+
+private _launcherNoLos = terrainIntersectASL [getPosASL _launcher, getPosASL _target];
 private _flaresNearby = count (("CMflare_Chaff_Ammo" allObjects 2) select {
     (getShotParents _x) # 0 == _target || _x distance _target < 2000;
 });
-_flaresNearby = _flaresNearby * _flareEffectRatio;
+if (_launcherNoLos) then {
+    _flaresNearby = _flaresNearby * 2;
+};
 
-private _actualTrackSpeed = _targetTrackSpeed - (_flaresNearby * 1.1);
-private _actualTolerance = WL_SAM_NOTCH_TOLERANCE - (_flaresNearby * 0.02);
-private _actualMaxRange = WL_SAM_NOTCH_MAX_RANGE - (_flaresNearby * 50);
+private _actualTrackSpeed = _targetTrackSpeed - (_flaresNearby * 15);       // 30 flares max
+private _actualTolerance = WL_SAM_NOTCH_TOLERANCE - (_flaresNearby * 0.03); // 33 flares max
+private _actualMaxRange = WL_SAM_NOTCH_MAX_RANGE - (_flaresNearby * 100);   // 20 flares max
 _actualMaxRange = _actualMaxRange max 500;
-private _excessSpeed = _perpendicularVelocity / _targetTrackSpeed;
 
 _perpendicularVelocity > _actualTrackSpeed &&
 _normalizedVelocity > _actualTolerance &&
 _distanceRemaining > _actualMaxRange &&
-_distanceTraveled > WL_SAM_NOTCH_ACTIVE_DIST &&
-(_flaresNearby >= 4 || _excessSpeed > 2.5);
+_distanceTraveled > WL_SAM_NOTCH_ACTIVE_DIST;

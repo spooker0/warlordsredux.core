@@ -429,6 +429,10 @@ if (_asset isKindOf "Man") then {
 		}];
 	};
 
+	if (_assetActualType == "B_LSV_01_AT_TV_F") then {
+		_asset setTurretLimits [[0], -360, 360, 0, 30];
+	};
+
 	private _hasGPSMunitionMap = missionNamespace getVariable ["WL2_hasGPSMunition", createHashMap];
 	if (_hasGPSMunitionMap getOrDefault [_assetActualType, false]) then {
 		[_asset] remoteExec ["DIS_fnc_setupGPSMunition", 0, true];

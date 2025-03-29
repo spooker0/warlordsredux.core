@@ -9,10 +9,8 @@ setPiPViewDistance viewDistance;
 
 private _display = uiNamespace getVariable "RscTitleDisplayEmpty";
 
-private _pictureSize = 1.5;
-
-private _defaultTitlePosition = [safezoneX + 0.2, safezoneY + 0.1, 0.4 * _pictureSize, 0.05];
-private _defaultPicturePosition = [safezoneX + 0.2, safeZoneY + 0.15, 0.4 * _pictureSize, 0.4 * _pictureSize];
+private _defaultTitlePosition = [safezoneX + 0.2, safezoneY + 0.1, safeZoneW / 4, 0.05];
+private _defaultPicturePosition = [safezoneX + 0.2, safeZoneY + 0.15, safeZoneW / 4, safeZoneW / 4];
 
 private _titleBar = _display ctrlCreate ["RscText", -1];
 _titleBar ctrlSetPosition _defaultTitlePosition;

@@ -33,8 +33,7 @@ private _originalPosition = getPosASL _unit;
             triggerAmmo _projectile;
         };
 
-        private _launcherPosition = getPosASL _unit;
-        if (_launcherPosition distance _projectilePosition > WL_SAM_MAX_DISTANCE) then {
+        if (_unit distance _projectilePosition > WL_SAM_MAX_DISTANCE) then {
             triggerAmmo _projectile;
         };
     };
@@ -77,7 +76,7 @@ while { alive _projectile } do {
 
     private _notched = _projectile getVariable ["DIS_notched", false];
     if (_notched) then {
-        sleep 0.1;
+        sleep 0.001;
         continue;
     };
 
