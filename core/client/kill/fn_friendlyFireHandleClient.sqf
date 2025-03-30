@@ -10,7 +10,7 @@ private _threeIncidentsAgo = _friendlyFireIncidents # (_incidentCount - 3);
 if (_lastIncident - _threeIncidentsAgo > 30 * 60) exitWith {};
 
 private _message = format ["%1 has been temporarily kicked/blocked from the game for teamkilling.", name player];
-[_message] remoteExec ["systemChat", 0];
+[name player] remoteExec ["WL2_fnc_teamkillerMessage", 0];
 
 private _penaltyEnd = _lastIncident + 30 * 60;
 

@@ -1,5 +1,12 @@
 params ["_projectile", "_flightMode"];
 
+if (inputAction "defaultAction" > 0) then {
+    waitUntil {
+        sleep 0.001;
+        inputAction "defaultAction" == 0
+    };
+};
+
 "missileCamera" cutRsc ["RscTitleDisplayEmpty", "PLAIN"];
 private _display = uiNamespace getVariable ["RscTitleDisplayEmpty", displayNull];
 private _background = _display ctrlCreate ["RscPicture", -1];
@@ -73,13 +80,6 @@ private _timeToLive = getNumber (configFile >> "CfgAmmo" >> (typeOf _projectile)
 private _projectileSpeed = _projectile getVariable ["APS_speedOverride", 100];
 private _nightVision = false;
 private _fuelUsed = 0;
-
-if (inputAction "defaultAction" > 0) then {
-    waitUntil {
-        sleep 0.001;
-        inputAction "defaultAction" == 0
-    };
-};
 
 while { alive _projectile && alive player && lifeState player != "INCAPACITATED" } do {
     private _elapsedTime = serverTime - _lastTime;
@@ -247,7 +247,7 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
         false setCamUseTI 0;
     };
 
-    if (inputAction "defaultAction" > 0) then {
+    if (inputAction "defaultAction" > 0 && serverTime - _startTime > 2) then {
         triggerAmmo _projectile;
         break;
     };

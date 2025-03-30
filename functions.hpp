@@ -224,6 +224,7 @@ class CfgFunctions {
 			class friendlyFireHandleClient {};
 			class handleKillFeedUpdate {};
 			class killRewardClient {};
+			class teamkillerMessage {};
 			class updateKillFeed {};
 		};
 		class ClientMap {

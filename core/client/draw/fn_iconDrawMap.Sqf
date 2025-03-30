@@ -109,14 +109,14 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 	};
 
 	private _basePos = getPosATL _base;
-	private _baseDetectionRadius = switch (_baseLevel) do {
+	private _baseRadius = switch (_baseLevel) do {
 		case 0: { 100 };
 		case 1: { 150 };
 		case 2: { 250 };
 		case 3: { 500 };
 		default { 100 };
 	};
-	if (_baseOwner != _side && (player distance2D _basePos > _baseDetectionRadius)) then {
+	if (_baseOwner != _side && (player distance2D _basePos > _baseRadius)) then {
 		continue;
 	};
 
@@ -148,16 +148,14 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		format ["%1 %2", _baseType, _waitText]
 	];
 
-	if (_waitText == "" || _baseLevel > 0) then {
-		_m drawEllipse [
-			_basePos,
-			100,
-			100,
-			0,
-			_baseColor,
-			""
-		];
-	};
+	_m drawEllipse [
+		_basePos,
+		_baseRadius,
+		_baseRadius,
+		0,
+		_baseColor,
+		""
+	];
 } forEach _forwardBases;
 
 // Draw sector scans
@@ -404,24 +402,24 @@ private _draw = (ctrlMapScale _control) < 0.3;
 } forEach ((units player) select {(alive _x) && {(isNull objectParent _x) && {_x != player}}});
 
 // Draw squad lines
-private _allSquadmates = allPlayers select {
-	["areInSquad", [getPlayerID _x, getPlayerID player]] call SQD_fnc_client
-};
-private _squadLeader = _allSquadmates select {
-	["isSquadLeader", [getPlayerID _x]] call SQD_fnc_client;
-};
+private _allSquadmates = ["getAllInSquad"] call SQD_fnc_client;
+if (WL_AssetActionTarget in _allSquadmates) then {
+	private _squadLeader = _allSquadmates select {
+		["isSquadLeader", [getPlayerID _x]] call SQD_fnc_client;
+	};
 
-if (count _squadLeader > 0) then {
-	_squadLeader = _squadLeader # 0;
-	_allSquadmates = _allSquadmates - [_squadLeader];
-	{
-		_m drawLine [
-			_squadLeader,
-			_x,
-			[0, 1, 1, 0.8],
-			6
-		];
-	} forEach _allSquadmates;
+	if (count _squadLeader > 0) then {
+		_squadLeader = _squadLeader # 0;
+		_allSquadmates = _allSquadmates - [_squadLeader];
+		{
+			_m drawLine [
+				_squadLeader,
+				_x,
+				[0, 1, 1, 0.8],
+				6
+			];
+		} forEach _allSquadmates;
+	};
 };
 
 // Draw vehicles

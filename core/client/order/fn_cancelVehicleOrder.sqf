@@ -15,7 +15,15 @@ private _sectors = (BIS_WL_sectorsArray # 0) select {
 };
 private _potentialBases = missionNamespace getVariable ["WL2_forwardBases", []];
 private _forwardBases = _potentialBases select {
-    _asset distance2D _x < 100 &&
+    private _fobLevel = _x getVariable ["WL2_forwardBaseLevel", 0];
+    private _baseRadius = switch (_fobLevel) do {
+        case 0: { 100 };
+        case 1: { 150 };
+        case 2: { 250 };
+        case 3: { 500 };
+        default { 100 };
+    };
+    _asset distance2D _x < _baseRadius &&
     _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
 };
 private _inRange = count _forwardBases > 0 || count _sectors > 0;

@@ -15,7 +15,14 @@ private _forwardBaseCategoryMap = [
 ];
 private _forwardBases = _potentialBases select {
     private _fobLevel = _x getVariable ["WL2_forwardBaseLevel", 0];
-    player distance2D _x < 100 &&
+    private _baseRadius = switch (_fobLevel) do {
+		case 0: { 100 };
+		case 1: { 150 };
+		case 2: { 250 };
+		case 3: { 500 };
+		default { 100 };
+	};
+    player distance2D _x < _baseRadius &&
     _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide &&
     _fobLevel > 0 &&
     _category in (_forwardBaseCategoryMap # _fobLevel)

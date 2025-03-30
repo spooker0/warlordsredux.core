@@ -54,6 +54,7 @@ class CfgRemoteExec {
 		class WL2_fnc_setupForwardBaseMp {allowedTargets = 0;};
 		class WL2_fnc_slingAddAction {allowedTargets = 1;};
 		class WL2_fnc_slingloadInit {allowedTargets = 0;};
+		class WL2_fnc_teamkillerMessage {allowedTargets = 0;};
 		class WL2_fnc_uavConnectRefresh {allowedTargets = 0;};
 		class WL2_fnc_uavJammed {allowedTargets = 2;};
 		class WL2_fnc_updateVehicleList {allowedTargets = 2;};

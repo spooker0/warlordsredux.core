@@ -93,5 +93,4 @@ while { alive _charge && alive _target && alive _dummy } do {
 
 deleteVehicle _charge;
 deleteVehicle _lightPoint;
-
 deleteVehicle _dummy;

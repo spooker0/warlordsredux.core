@@ -324,6 +324,20 @@ switch (_action) do {
             };
         };
     };
+    case "getAllInSquad": {
+        private _playerId = getPlayerID player;
+        private _squads = SQUAD_MANAGER select {(_x select 2) find _playerId > -1};
+        if (count _squads == 0) then {
+            _return = [];
+        } else {
+            private _squad = _squads select 0;
+            private _squadmateIds = _squad select 2;
+            private _squadmates = _allPlayers select {
+                getPlayerID _x in _squadmateIds;
+            };
+            _return = _squadmates;
+        };
+    };
 };
 
 if (isNil "_return") exitWith { };

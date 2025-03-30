@@ -17,7 +17,7 @@ private _assetUses = [];
     private _costMap = missionNamespace getVariable ["WL2_costs", createHashMap];
     private _assetCost = _costMap getOrDefault [_asset, 0];
     _assetCost = _assetCost max 1;
-    private _killCostRatio = _killValue / _assetCost * 100;
+    private _killCostRatio = _killValue / _assetCost / _totalBuys * 100;
 
     if (_totalBuys > 0) then {
         private _actualTypeName = [objNull, _asset] call WL2_fnc_getAssetTypeName;

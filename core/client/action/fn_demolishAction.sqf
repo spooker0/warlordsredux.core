@@ -20,7 +20,7 @@
         private _dummy = createVehicle ["VR_GroundIcon_01_F", [0, 0, 0], [], 0, "FLY"];
         _dummy setPosASL (getPosASL _target);
         _dummy allowDamage false;
-        hideObject _dummy;
+        hideObjectGlobal _dummy;
 
         private _charge = createVehicleLocal ["DemoCharge_F", getPosATL player, [], 0, "FLY"];
         _charge setPosASL (getPosASL player);

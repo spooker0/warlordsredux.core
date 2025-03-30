@@ -38,7 +38,6 @@ addMissionEventHandler ["Map", {
 				private _selectableUnits = allUnits select {
 					!(typeOf _x in ["B_UAV_AI", "O_UAV_AI", "I_UAV_AI"]) &&
 					isNull objectParent _x &&
-					_x != player &&
 					alive _x &&
 					(_x distance2D _pos) < _radius &&
 					(
