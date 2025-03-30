@@ -385,7 +385,7 @@ if (_asset isKindOf "Man") then {
 		[_asset, 0] remoteExec ["setFuelCargo", 0];
 	};
 
-	private _rearmTime = (missionNamespace getVariable ["WL2_rearmTimers", createHashMap]) getOrDefault [typeOf _asset, 600];
+	private _rearmTime = (missionNamespace getVariable ["WL2_rearmTimers", createHashMap]) getOrDefault [_assetActualType, 600];
 	_asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
 
 	private _crewPosition = (fullCrew [_asset, "", true]) select {!("cargo" in _x)};
