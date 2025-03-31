@@ -51,6 +51,11 @@ _this addEventHandler ["Fired", {
 		};
 	};
 
+	private _projectileESam = _projectileConfig getOrDefault ["esam", false];
+	if (_projectileESam) then {
+		[_projectile, _unit] spawn DIS_fnc_extendedSam;
+	};
+
 	_this spawn APS_fnc_firedProjectile;
 
 	private _projectileSam = _projectileConfig getOrDefault ["sam", false];

@@ -74,8 +74,9 @@ while { alive _charge && alive _target && alive _dummy } do {
             _target setVariable ["WL_lastHitter", _caller, 2];
 
             private _explosion = createVehicle [_explosive, _lightPos, [], 0, "FLY"];
-            triggerAmmo _explosion;
+            [_explosion, [_caller, _caller]] remoteExec ["setShotParents", 2];
             sleep 0.5;
+            triggerAmmo _explosion;
             // don't call FF script, this prevents runway griefing
             _target setDamage 1;
         };

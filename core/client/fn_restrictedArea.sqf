@@ -1,14 +1,8 @@
 #include "..\warlords_constants.inc"
 
-private _soundId = -1;
-
 private _endEffect = {
     "Restrict" cutText ["", "PLAIN"];
     player setVariable ["WL_zoneRestrictKillTime", -1];
-    if (_soundId != -1) then {
-        stopSound _soundId;
-        _soundId = -1;
-    };
     sleep 2;
 };
 
@@ -69,10 +63,6 @@ while { !BIS_WL_missionEnd } do {
 
     if (player getVariable ["WL_zoneRestrictKillTime", -1] == -1) then {
         player setVariable ["WL_zoneRestrictKillTime", serverTime + 80];
-    };
-
-    if (_soundId == -1 || count (soundParams _soundId) == 0) then {
-        _soundId = playSoundUI ["air_raid", 3];
     };
 
     private _restrictDisplay = uiNamespace getVariable ["RscWLZoneRestrictionDisplay", displayNull];

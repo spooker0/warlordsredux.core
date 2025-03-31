@@ -25,7 +25,7 @@ if !(profileNamespace getVariable ["preferencesInitialzed", false]) then {
 	profileNamespace setVariable ["MRTM_smallAnnouncerText", false];
 	profileNamespace setVariable ["MRTM_spawnEmpty", false];
 	profileNamespace setVariable ["MRTM_enableAuto", true];
-	profileNamespace setVariable ["MRTM_disableMissileCameras", true];
+	profileNamespace setVariable ["MRTM_disableMissileCameras", false];
 	profileNamespace setVariable ["MRTM_showMarkers", true];
 	profileNamespace setVariable ["MRTM_noVoiceSpeaker", false];
 	profileNamespace setVariable ["MRTM_muteTaskNotifications", false];

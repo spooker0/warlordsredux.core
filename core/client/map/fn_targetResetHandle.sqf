@@ -39,7 +39,8 @@ BIS_WL_playerSide spawn {
 			};
 
 			if !(isServer) then {
-				["client", TRUE] call WL2_fnc_updateSectorArrays;
+				private _currentOwner = _sector getVariable ["BIS_WL_owner", independent];
+				[_target, _currentOwner] call WL2_fnc_sectorMarkerUpdate;
 			};
 		};
 	};
@@ -47,7 +48,7 @@ BIS_WL_playerSide spawn {
 
 BIS_WL_enemySide spawn {
 	_varName = format ["BIS_WL_targetResetOrderedBy_%1", _this];
-	_target = objNull;
+	private _target = objNull;
 
 	while {!BIS_WL_missionEnd} do {
 		waitUntil {sleep WL_TIMEOUT_STANDARD; !isNull WL_TARGET_ENEMY};
@@ -59,6 +60,9 @@ BIS_WL_enemySide spawn {
 		waitUntil {sleep WL_TIMEOUT_SHORT; serverTime > _t || {(_target getVariable "BIS_WL_owner") == BIS_WL_playerSide || {((missionNamespace getVariable [_varName, ""]) != "")}}};
 
 		if ((missionNamespace getVariable [_varName, ""]) != "") then {
+			private _currentOwner = _sector getVariable ["BIS_WL_owner", independent];
+			[_target, _currentOwner] call WL2_fnc_sectorMarkerUpdate;
+
 			missionNamespace setVariable [_varName, ""];
 			[toUpper format [localize "STR_A3_WL_popup_voting_reset_user", _this call WL2_fnc_sideToFaction]] spawn WL2_fnc_SmoothText;
 			missionNamespace setVariable [_varName, ""];

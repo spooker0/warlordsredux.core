@@ -310,7 +310,13 @@ if (_asset isKindOf "Man") then {
 		};
 	};
 
-	if (unitIsUAV _asset) then {
+	private _hasESAMMap = missionNamespace getVariable ["WL2_hasESAM", createHashMap];
+	private _isESAM = _hasESAMMap getOrDefault [_assetActualType, false];
+	if (_isESAM) then {
+		[_asset] remoteExec ["DIS_fnc_setupExtendedSam", 0, true];
+	};
+
+	if (unitIsUAV _asset && !_isESAM) then {
 		if (profileNamespace getVariable ["MRTM_enableAuto", true] && !isDedicated) then {
 			[_asset, false] remoteExec ["setAutonomous", 0];
 		} else {

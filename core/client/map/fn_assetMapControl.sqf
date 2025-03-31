@@ -78,7 +78,7 @@ addMissionEventHandler ["Map", {
 					_ctrlAssetInfoBox ctrlSetPosition [(getMousePosition # 0) + safeZoneW / 100, (getMousePosition # 1) + safeZoneH / 50, safeZoneW, safeZoneH];
 					_ctrlAssetInfoBox ctrlCommit 0;
 					_ctrlAssetInfoBox ctrlSetStructuredText parseText format [
-						"<t shadow = '2' size = '%1'>%2</t>",
+						"<t shadow='2' size='%1'>%2</t>",
 						1 call WL2_fnc_purchaseMenuGetUIScale,
 						format [
 							"Click for options:<br/><t color='#ff4b4b'>%1</t>",
@@ -91,10 +91,12 @@ addMissionEventHandler ["Map", {
 					];
 					_ctrlAssetInfoBox ctrlShow true;
 					_ctrlAssetInfoBox ctrlEnable true;
+					WL_CONTROL_MAP ctrlMapCursor ["Track", "HC_overFriendly"];
 				} else {
 					WL_AssetActionTarget = objNull;
 					_ctrlAssetInfoBox ctrlShow false;
 					_ctrlAssetInfoBox ctrlEnable false;
+					WL_CONTROL_MAP ctrlMapCursor ["Track", "Track"];
 				};
 
 				if (isNull (findDisplay 160 displayCtrl 51)) then {

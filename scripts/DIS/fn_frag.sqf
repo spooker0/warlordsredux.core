@@ -22,9 +22,10 @@ while { alive _projectile } do {
 
 // Vanilla explosion
 private _projectilePosition = getPosASL _projectile;
-triggerAmmo _projectile;
 
-if (count _objectsNearby == 0) exitWith {};
+if (count _objectsNearby == 0) exitWith {
+	triggerAmmo _projectile;
+};
 
 {
 	_x setVariable ["WL_lastHitter", _unit, 2];
@@ -41,6 +42,5 @@ private _finalDistance = _targetPosition distance _detonationPoint;
 systemChat format ["SAM detonation %1M away from target.", round _finalDistance];
 
 // Burst Explosion
-private _burst = createVehicle [_projectileClass, _detonationPoint, [], 50, "FLY"];
-_burst setPosASL _detonationPoint;
-triggerAmmo _burst;
+_projectile setPosASL _detonationPoint;
+triggerAmmo _projectile;

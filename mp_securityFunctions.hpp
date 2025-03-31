@@ -11,6 +11,7 @@ class CfgRemoteExec {
 		class APS_fnc_report {allowedTargets = 0;};
 		class APS_fnc_serverHandleAPS {allowedTargets = 2;};
 		class APS_fnc_setupProjectiles {allowedTargets = 0;};
+		class DIS_fnc_setupExtendedSam {allowedTargets = 0;};
 		class DIS_fnc_setupGPSMunition {allowedTargets = 0;};
 		class DIS_fnc_setupRemoteMunition {allowedTargets = 0;};
 		class DIS_fnc_startMissileCamera {allowedTargets = 0;};

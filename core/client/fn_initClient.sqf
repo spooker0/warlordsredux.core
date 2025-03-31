@@ -39,6 +39,9 @@ waitUntil {
 };
 WL_LoadingState = 1;
 
+private _uid = getPlayerUID player;
+private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
+
 missionNamespace setVariable ["voteLocked", false];
 player setVariable ["voteLocked", false, true];
 
@@ -48,7 +51,7 @@ waitUntil {
 };
 
 #if WL_STOP_TEAM_SWITCH
-if ((call BIS_fnc_admin) == 0) then {
+if (!_isAdmin) then {
 	private _uid = getPlayerUID player;
 	private _switch = format ["WL2_teamBlocked_%1", _uid];
 	waitUntil {
@@ -94,7 +97,6 @@ if ((call BIS_fnc_admin) == 0) then {
 #endif
 
 #if WL_SPECTATOR_ENABLED
-private _uid = getPlayerUID player;
 private _isSpectator = _uid in (getArray (missionConfigFile >> "spectatorIDs"));
 if (_isSpectator) then {
 	player addAction [
@@ -134,8 +136,7 @@ uiNamespace setVariable ["BIS_WL_purchaseMenuLastSelection", [0, 0, 0]];
 uiNamespace setVariable ["activeControls", []];
 uiNamespace setVariable ["control", 10000];
 
-private _uid = getPlayerUID player;
-if !(_uid in (getArray (missionConfigFile >> "adminIDs"))) then {
+if (!_isAdmin) then {
 	0 spawn WL2_fnc_wasMain;
 };
 

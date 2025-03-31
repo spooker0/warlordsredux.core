@@ -30,7 +30,7 @@ if (_assetApsType == 3) then {
 	_apsAmmo = _apsAmmo max 0;
 	_text = _text + format[" Charges: %1/%2", _apsAmmo, _vehicle call APS_fnc_getMaxAmmo];
 
-	if (_apsAmmo == 0) then {
+	if (_apsAmmo == 0 && _indicator) then {
 		playSoundUI ["a3\sounds_f\vehicles\air\noises\heli_alarm_rotor_low.wss", 1, 0.5];
 	};
 };

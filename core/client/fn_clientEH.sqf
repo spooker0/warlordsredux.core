@@ -16,7 +16,7 @@ addMissionEventHandler ["GroupIconOverLeave", WL2_fnc_groupIconLeaveHandle];
 call WL2_fnc_playerEventHandlers;
 
 addMissionEventHandler ["HandleChatMessage", {
-	params ["_channel", "_owner", "_from", "_text", "_person", "_name"];
+	params ["_channel", "_owner", "_from", "_text", "_person", "_name", "_strID", "_forcedDisplay", "_isPlayerMessage", "_sentenceType", "_chatMessageType", "_params"];
 
 	if (_owner == clientOwner) then {
 		private _uid = getPlayerUID player;
@@ -71,12 +71,13 @@ addMissionEventHandler ["HandleChatMessage", {
 		false;
 	};
 
-	private _block = _containsBannedWord || _senderLocked || _outOfSquad;
+	private _killMessaage = _chatMessageType == 2;
+	private _block = _containsBannedWord || _senderLocked || _outOfSquad || _killMessaage;
 	if (_block) then {
 		true;
 	} else {
 		if (_channel == 1) then {
-			private _playerLevel = _person getVariable ["WL_playerLevel", ""];
+			private _playerLevel = _person getVariable ["WL_playerLevel", "Recruit"];
 			private _newFrom = format ["[%1] %2", _playerLevel, _name];
 			[_newFrom, _text];
 		} else {

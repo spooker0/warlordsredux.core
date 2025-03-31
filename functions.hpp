@@ -27,12 +27,15 @@ class CfgFunctions {
 			file = "src\scripts\DIS";
 			class calculateInRange {};
 			class controlMunition {};
+			class extendedSam {};
 			class frag {};
 			class getNotchResult {};
 			class gpsMunition {};
 			class maneuver {};
 			class missileCamera {};
 			class remoteMunition {};
+			class setupExtendedSam {};
+			class setupExtendedSamMenu {};
 			class setGPSNumber {};
 			class setupGPSMenu {};
 			class setupGPSMunition {};
@@ -203,6 +206,7 @@ class CfgFunctions {
 			class iconColor {};
 			class iconDrawGPS {};
 			class iconDrawMap {};
+			class iconDrawMapPrepare {};
 			class iconSize {};
 			class iconText {};
 			class iconTextSectorScan {};
