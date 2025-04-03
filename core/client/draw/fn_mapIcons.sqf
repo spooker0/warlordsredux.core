@@ -25,7 +25,6 @@
 				_map ctrlAddEventHandler ["Draw", WL2_fnc_iconDrawMap];
 				_map setVariable ["WL2_mapDrawn", true];
 			};
-
 		} forEach _maps;
 
 		uiSleep 10;
@@ -37,7 +36,11 @@
 0 spawn {
 	while { !BIS_WL_missionEnd } do {
 		private _mainMap = (findDisplay 12) displayCtrl 51;
-		[_mainMap] call WL2_fnc_iconDrawMapPrepare;
-		uiSleep 0.5;
+		[_mainMap] spawn WL2_fnc_iconDrawMapPrepare;
+
+		private _refreshRate = profileNamespace getVariable ["MRTM_mapRefresh", 4];
+		_refreshRate = _refreshRate max 1;
+		private _refreshSleepTime = 1 / _refreshRate;
+		uiSleep _refreshSleepTime;
 	};
 };

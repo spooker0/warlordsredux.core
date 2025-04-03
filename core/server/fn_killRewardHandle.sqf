@@ -57,14 +57,14 @@ private _squadReward = round (_killReward * 0.5 / (sqrt (count _squadmatesIDs) m
 	};
 	_uid = _userInfo # 2;
 	_squadReward call WL2_fnc_fundsDatabaseWrite;
-	[_unit, _squadReward, "Squad assist", "#7a7ab9"] remoteExec ["WL2_fnc_killRewardClient", (getUserInfo _x) # 1];
+	[_unit, _squadReward, "Squad assist", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", (getUserInfo _x) # 1];
 } forEach _squadmatesIDs;
 
 _uid = getPlayerUID _responsibleLeader;
 _killReward = round _killReward;
 _killReward call WL2_fnc_fundsDatabaseWrite;
 
-[_unit, _killReward, _customText, "#228b22", _assetActualType] remoteExec ["WL2_fnc_killRewardClient", _responsibleLeader];
+[_unit, _killReward, _customText, "#de0808", _assetActualType] remoteExec ["WL2_fnc_killRewardClient", _responsibleLeader];
 
 ["earnPoints", [_uid, _killReward]] call SQD_fnc_server;
 

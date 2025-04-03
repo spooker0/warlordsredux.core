@@ -11,9 +11,9 @@
 #define WL_AA_TEST 0
 #define WL_QUICK_CAPTURE 0
 #define WL_ZEUS_ENABLED 0
+#define WL_EASTER_EGG 0
 
 // Live: 1
-#define WL_EASTER_EGG 1
 #define WL_STRONGHOLD_ENABLE 1
 #define WL_STOP_TEAM_SWITCH 1
 #define WLC_ENABLED 1

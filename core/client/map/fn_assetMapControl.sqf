@@ -25,56 +25,26 @@ addMissionEventHandler ["Map", {
 				private _radius = (((ctrlMapScale _map) * 500) min 30) max 3;
 				private _pos = _map ctrlMapScreenToWorld getMousePosition;
 
-				private _teamVehicles = missionNamespace getVariable [format ["BIS_WL_%1ownedVehicles", side group player], []];
-				private _selectableVehicles = _teamVehicles select {
-					(
-						(_x getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player ||
-						([_x, player, 'cargo'] call WL2_fnc_accessControl) # 0
-					) &&
-					alive _x &&
-					(_x distance2D _pos) < _radius
-				};
+				private _selectableBuildings = [];
+				{
+					private _stronghold = _x getVariable ["WL_stronghold", objNull];
+					private _strongholdPos = getPosATL _stronghold;
+					private _strongholdDistance = (_strongholdPos distance2D _pos) < _radius;
+					if (!isNull _stronghold) then {
+						_selectableBuildings pushBack [_stronghold, _strongholdPos];
+					};
+				} forEach (BIS_WL_sectorsArray # 0);
 
-				private _selectableUnits = allUnits select {
-					!(typeOf _x in ["B_UAV_AI", "O_UAV_AI", "I_UAV_AI"]) &&
-					isNull objectParent _x &&
-					alive _x &&
-					(_x distance2D _pos) < _radius &&
-					(
-						// independent units (unclaimed)
-						(side group player == independent && _x isKindOf "Man" && (_x getVariable ["BIS_WL_ownerAsset", "123"]) == "123") ||
-						// is a regular player
-						(isPlayer _x && (side group _x == side group player)) ||
-						// my units
-						(_x getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player
-					)
+				private _drawIconsSelectable = uiNamespace getVariable ["WL2_drawIconsSelectable", []];
+				private _nearbyAssets = (_drawIconsSelectable + _selectableBuildings) select {
+					private _asset = _x # 0;
+					private _assetPos = _x # 1;
+					(_assetPos distance2D _pos) < _radius
 				};
-
-				private _selectableBuildings = ((BIS_WL_sectorsArray # 0) apply {
-					_x getVariable ["WL_stronghold", objNull]
-				}) select {
-					!isNull _x &&
-					(_x distance2D _pos) < _radius
-				};
-
-				private _tent = player getVariable ["WL2_respawnBag", objNull];
-				private _selectableTent = [_tent] select {
-					alive _x &&
-					(_x distance2D _pos) < _radius
-				};
-
-				private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
-				private _selectableForwardBases = _forwardBases select {
-					alive _x &&
-					(_x distance2D _pos) < _radius &&
-					_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
-				};
-
-				private _nearbyAssets = _selectableVehicles + _selectableUnits + _selectableBuildings + _selectableTent + _selectableForwardBases;
-				_nearbyAssets = [_nearbyAssets, [_pos], { _input0 distance2D _x }, "ASCEND"] call BIS_fnc_sortBy;
+				_nearbyAssets = [_nearbyAssets, [_pos], { _input0 distance2D (_x # 1) }, "ASCEND"] call BIS_fnc_sortBy;
 
 				if (count _nearbyAssets > 0) then {
-					WL_AssetActionTarget = _nearbyAssets # 0;
+					WL_AssetActionTarget = _nearbyAssets # 0 # 0;
 					_ctrlAssetInfoBox ctrlSetPosition [(getMousePosition # 0) + safeZoneW / 100, (getMousePosition # 1) + safeZoneH / 50, safeZoneW, safeZoneH];
 					_ctrlAssetInfoBox ctrlCommit 0;
 					_ctrlAssetInfoBox ctrlSetStructuredText parseText format [
@@ -122,35 +92,36 @@ addMissionEventHandler ["Map", {
 						};
 					} forEach BIS_WL_allSectors;
 				};
+
+				private _mapMouseActionComplete = uiNamespace getVariable ["WL2_mapMouseActionComplete", true];
+				if (inputAction "defaultAction" > 0 && _mapMouseActionComplete && inputAction "BuldTurbo" == 0) then {
+					uiNamespace setVariable ["WL2_mapMouseActionComplete", false];
+					0 spawn {
+						waitUntil {
+							inputAction "defaultAction" == 0
+						};
+
+						if (count WL_MapBusy > 0) exitWith {};
+						uiNamespace setVariable ["WL2_assetTargetSelectedTime", serverTime];
+
+						if !(isNull WL_AssetActionTarget) then {
+							uiNamespace setVariable ["WL2_assetTargetSelected", WL_AssetActionTarget];
+							call WL2_fnc_assetMapButtons;
+						};
+
+						if !(isNull WL_SectorActionTarget) then {
+							uiNamespace setVariable ["WL2_assetTargetSelected", WL_SectorActionTarget];
+							call WL2_fnc_sectorMapButtons;
+						};
+
+						uiNamespace setVariable ["WL2_mapMouseActionComplete", true];
+					};
+				};
 			};
 		}];
-		0 spawn {
-			sleep 1;
-			MAP_CONTROL_CLICK = addMissionEventHandler ["MapSingleClick", {
-				params ["_units", "_pos", "_alt", "_shift"];
-				if (_shift) exitWith {};
-				if (!alive player) exitWith {};
-				if (lifeState player == "INCAPACITATED") exitWith {};
-
-				if (count WL_MapBusy > 0) exitWith {};
-
-				if !(isNull WL_AssetActionTarget) then {
-					uiNamespace setVariable ["WL2_assetTargetSelected", WL_AssetActionTarget];
-					call WL2_fnc_assetMapButtons;
-				};
-
-				if !(isNull WL_SectorActionTarget) then {
-					uiNamespace setVariable ["WL2_assetTargetSelected", WL_SectorActionTarget];
-					call WL2_fnc_sectorMapButtons;
-				};
-			}];
-		};
 	} else {
 		removeMissionEventHandler ["EachFrame", MAP_CONTROL];
 		MAP_CONTROL = -1;
-		if !(isNil "MAP_CONTROL_CLICK") then {
-			removeMissionEventHandler ["MapSingleClick", MAP_CONTROL_CLICK];
-		};
 
 		BIS_WL_highlightedSector = objNull;
 		BIS_WL_hoverSamplePlayed = false;

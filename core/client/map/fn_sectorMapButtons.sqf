@@ -1,6 +1,6 @@
 #include "..\..\warlords_constants.inc"
 
-private _display = findDisplay 46 createDisplay "RscDisplayEmpty";
+private _display = (findDisplay 12) createDisplay "WL_MapButtonDisplay";
 
 getMousePosition params ["_mouseX", "_mouseY"];
 
@@ -166,10 +166,10 @@ private _scanExecute = {
 
     WL_AssetActionTarget = objNull;
     _display closeDisplay 1;
+    WL2_TargetButtonSetup = [objNull, [], 0, 0];
 };
 
 if (count _menuButtons == 0) then {
     _display closeDisplay 1;
+    WL2_TargetButtonSetup = [objNull, [], 0, 0];
 };
-
-WL2_TargetButtonSetup = [obNull, [], 0, 0];

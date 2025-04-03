@@ -43,6 +43,7 @@ disableSerialization;
         _treeEntries = createHashMap;
         private _treeControl = displayCtrl TREE;
 
+        private _allPlayers = call BIS_fnc_listPlayers;
         {
             private _squad = _x;
             private _squadItem = tvAdd [TREE, [], _squad select 0];
@@ -51,13 +52,17 @@ disableSerialization;
             private _squadPoints = 0;
             {
                 private _playerId = _x;
-                private _player = allPlayers select {getPlayerID _x == _playerId} select 0;
+                private _player = _allPlayers select {getPlayerID _x == _playerId} select 0;
                 if (isNil "_player") exitWith {};
+
                 private _playerName = name _player;
 
                 if (_playerId == (_squad select 1)) then {
                     _playerName = format ["%1 (SL)", _playerName];
                 };
+
+                private _playerLevel = _player getVariable ["WL_playerLevel", "Recruit"];
+                _playerName = format ["[%1] %2", _playerLevel, _playerName];
 
                 private _playerItem = tvAdd [TREE, [_squadItem], _playerName];
                 tvSetData [TREE, [_squadItem, _playerItem], format ["%1", _playerId]];
@@ -82,7 +87,7 @@ disableSerialization;
                 _treeEntries set [format ["%1", _playerId], [_squadItem, _playerItem]];
             } forEach (_squad select 2);
 
-            private _squadLeader = name (allPlayers select {getPlayerID _x == (_squad select 1)} select 0);
+            private _squadLeader = name (_allPlayers select {getPlayerID _x == (_squad select 1)} select 0);
             if (isNil "_squadLeader") then {
                 _squadLeader = "???";
             };
@@ -116,10 +121,19 @@ disableSerialization;
         lbClear PLAYER_LIST;
         _listEntries = createHashMap;
 
-        private _unsquaddedPlayers = allPlayers select {!(getPlayerID _x in _squaddedPlayers) && side _x == side player && _x != player && !(_x getVariable ["voteLocked", true])};
+        private _allPlayers = call BIS_fnc_listPlayers;
+
+        private _unsquaddedPlayers = _allPlayers select {
+            !(getPlayerID _x in _squaddedPlayers) &&
+            side group _x == side group player &&
+            _x != player &&
+            !(_x getVariable ["voteLocked", true])
+        };
+
         {
             private _player = _x;
-            private _playerName = name _player;
+            private _playerLevel = _player getVariable ["WL_playerLevel", "Recruit"];
+            private _playerName = format ["[%1] %2", _playerLevel, name _player];
 
             private _playerItem = lbAdd [PLAYER_LIST, _playerName];
             lbSetData [PLAYER_LIST, _playerItem, format ["%1", getPlayerID _player]];
@@ -163,7 +177,8 @@ disableSerialization;
 
         private _getPictureForPlayerId = {
             params ["_playerId"];
-            private _player = allPlayers select {getPlayerID _x == _playerId} select 0;
+            private _allPlayers = call BIS_fnc_listPlayers;
+            private _player = _allPlayers select {getPlayerID _x == _playerId} select 0;
 
             if (isNil "_player") exitWith {
                 ""
@@ -182,10 +197,11 @@ disableSerialization;
         };
 
         private _treeControl = displayCtrl TREE;
+        private _allPlayers = call BIS_fnc_listPlayers;
         {
             private _treePath = [_y select 0, _y select 1];
             private _playerId = _x;
-            private _player = allPlayers select {getPlayerID _x == _playerId} select 0;
+            private _player = _allPlayers select {getPlayerID _x == _playerId} select 0;
 
             if (isNil "_player") then {
                 continue;
@@ -195,7 +211,7 @@ disableSerialization;
             tvSetPicture [TREE, _treePath, _picture];
 
             private _points = WL_PlayerSquadContribution getOrDefault [getPlayerUID _player, 0];
-            tvSetTooltip [TREE, _treePath, format [localize "STR_SQUADS_squadMemberTooltip", name (allPlayers select {getPlayerID _x == _playerId} select 0), _points]];
+            tvSetTooltip [TREE, _treePath, format [localize "STR_SQUADS_squadMemberTooltip", name (_allPlayers select {getPlayerID _x == _playerId} select 0), _points]];
 
             private _tvColor = if (_playerId == (getPlayerID player)) then {
                 [0.4, 0.6, 1.0, 1];
@@ -213,7 +229,7 @@ disableSerialization;
 
         {
             private _playerId = _x;
-            private _player = allPlayers select {getPlayerID _x == _playerId} select 0;
+            private _player = _allPlayers select {getPlayerID _x == _playerId} select 0;
             if (isNil "_player") then {
                 continue;
             };
@@ -222,7 +238,8 @@ disableSerialization;
             lbSetPicture [PLAYER_LIST, _y, _picture];
 
             private _points = WL_PlayerSquadContribution getOrDefault [getPlayerUID _player, 0];
-            lbSetTooltip [PLAYER_LIST, _y, format [localize "STR_SQUADS_squadMemberTooltip", name (allPlayers select {getPlayerID _x == _playerId} select 0), _points]];
+            private _playerName = name (_allPlayers select {getPlayerID _x == _playerId} select 0);
+            lbSetTooltip [PLAYER_LIST, _y, format [localize "STR_SQUADS_squadMemberTooltip", _allPlayers, _points]];
         } forEach _listEntries;
     };
 

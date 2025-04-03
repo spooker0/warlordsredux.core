@@ -1,4 +1,4 @@
-params ["_unit", "_reward", ["_customText", ""], ["_customColor", "#228b22"], ["_unitTypeName", ""]];
+params ["_unit", "_reward", ["_customText", ""], ["_customColor", "#de0808"], ["_unitTypeName", ""]];
 
 if (isDedicated) exitWith {};
 
@@ -40,16 +40,13 @@ uiNamespace setVariable ["WL_killRewardMap", _killRewardMap];
 
 WAS_score = true;
 
-if (profileNamespace getVariable ["MRTM_playKillSound", true] && _customColor == "#228b22") then {
+if (profileNamespace getVariable ["MRTM_playKillSound", true] && _customColor == "#de0808") then {
+	playSoundUI ["hitmarker", 1, 1];
 	if (missionNamespace getVariable ["WL_easterEggOverride", false]) then {
-		playSoundUI ["hitmarker", 1, 1];
-
 		private _killsInRow = missionNamespace getVariable ["WL_killsInRow", 0];
 		_killsInRow = _killsInRow + 1;
 		[_killsInRow] call KST_fnc_actions;
 		missionNamespace setVariable ["WL_killsInRow", _killsInRow];
-	} else {
-		playSoundUI ["AddItemOK", 1, 1];
 	};
 };
 

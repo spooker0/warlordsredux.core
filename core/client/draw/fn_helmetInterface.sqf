@@ -305,6 +305,7 @@ addMissionEventHandler ["Draw3D", {
 
         private _vehicleActualType = _vehicle getVariable ["WL2_orderedClass", typeOf _vehicle];
         private _vehicleCategory = _categoryMap getOrDefault [_vehicleActualType, "Other"];
+        private _samIcons = [];
         if (_vehicleCategory == "AirDefense") then {
             private _samMissiles = (8 allObjects 2) select {
                 if !(_x isKindOf "MissileCore") then {
@@ -317,7 +318,6 @@ addMissionEventHandler ["Draw3D", {
                 };
             };
 
-            private _samIcons = [];
             {
                 _samIcons pushBack [
                     "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missileAlt_ca.paa",
@@ -334,8 +334,8 @@ addMissionEventHandler ["Draw3D", {
                     true
                 ];
             } forEach _samMissiles;
-            uiNamespace setVariable ["WL_HelmetInterfaceSAMIcons", _samIcons];
         };
+        uiNamespace setVariable ["WL_HelmetInterfaceSAMIcons", _samIcons];
 
         private _targets = [];
 

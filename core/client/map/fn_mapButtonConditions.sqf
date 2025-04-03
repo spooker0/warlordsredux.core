@@ -18,6 +18,9 @@ switch (_conditionName) do {
         private _isCarrierSector = count (_target getVariable ["WL_aircraftCarrier", []]) > 0;
         _sectorAvailable && !_isCarrierSector;
     };
+    case "vehicleParadropFOB": {
+        alive _target && _target getVariable ["WL2_forwardBaseLevel", 0] == 3;
+    };
     case "scan": {
         private _allScannableSectors = BIS_WL_sectorsArray # 3;
         private _lastScanEligible = serverTime - (getMissionConfigValue ["BIS_WL_scanCooldown", 300]);
@@ -29,7 +32,7 @@ switch (_conditionName) do {
     case "fastTravelSL": {
         private _mySquadLeader = ['getMySquadLeader'] call SQD_fnc_client;
         private _isMySquadLeader = getPlayerID _target == _mySquadLeader || getPlayerID (vehicle _target) == _mySquadLeader;
-        isPlayer _target && _isMySquadLeader && alive _target && lifeState _target != "INCAPACITATED" && speed _target < 5;
+        isPlayer _target && _isMySquadLeader && alive _target && lifeState _target != "INCAPACITATED" && speed _target < 30;
     };
     case "fastTravelSquad": {
         private _squadMember = if (vehicle _target == _target) then {
@@ -38,7 +41,7 @@ switch (_conditionName) do {
             vehicle _target
         };
         private _areInSquad = ["areInSquad", [getPlayerID _squadMember, getPlayerID player]] call SQD_fnc_client;
-        isPlayer _target && _areInSquad && alive _target && lifeState _target != "INCAPACITATED" && speed _target < 5;
+        isPlayer _target && _areInSquad && alive _target && lifeState _target != "INCAPACITATED" && speed _target < 30;
     };
     case "fastTravelStronghold": {
         private _findIsStronghold = (BIS_WL_sectorsArray # 2) select {

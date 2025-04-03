@@ -133,10 +133,12 @@ private _pylonInfo = getAllPylonsInfo _asset;
 	};
 } forEach _turretOverridesForVehicle;
 
-private _attachments = _pylonInfo apply {
-	[_x # 3, _x # 2];
+if (count (_pylonInfo) > 0) then {
+	private _attachments = _pylonInfo apply {
+		[_x # 3, _x # 2];
+	};
+	[_asset, _attachments, true] call WLM_fnc_applyPylon;
 };
-[_asset, _attachments, true] call WLM_fnc_applyPylon;
 
 private _disallowListForPylon = missionNamespace getVariable ["WL2_disallowMagazinesForVehicle", createHashMap];
 private _disallowListForAsset = _disallowListForPylon getOrDefault [_orderedClass, []];

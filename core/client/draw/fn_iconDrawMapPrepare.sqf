@@ -4,6 +4,7 @@ params [["_map", controlNull]];
 
 private _drawIcons = [];
 private _drawIconsAnimated = [];
+private _drawIconsSelectable = [];
 private _drawEllipses = [];
 private _drawLines = [];
 
@@ -60,6 +61,7 @@ if (!isNull WL_SectorActionTarget && isNull BIS_WL_highlightedSector && WL_Secto
 // Draw player tent
 private _respawnBag = player getVariable ["WL2_respawnBag", objNull];
 if (alive _respawnBag) then {
+	private _bagPos = getPosATL _respawnBag;
 	_drawIcons pushBack [
 		"\A3\ui_f\data\map\markers\military\triangle_CA.paa",
 		[player] call WL2_fnc_iconColor,
@@ -69,6 +71,7 @@ if (alive _respawnBag) then {
 		0,
 		"Tent"
 	];
+	_drawIconsSelectable pushBack [_respawnBag, _bagPos];
 };
 
 // Draw forward bases
@@ -138,6 +141,7 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		0,
 		format ["%1 %2", _baseType, _waitText]
 	];
+	_drawIconsSelectable pushBack [_base, _basePos];
 
 	_drawEllipses pushBack [
 		_basePos,
@@ -298,9 +302,7 @@ _allScannedObjects = _allScannedObjects arrayIntersect _allScannedObjects; // el
 	];
 } forEach _allScannedObjects;
 
-private _control = (findDisplay 12) displayCtrl 51;
-private _draw = (ctrlMapScale _control) < 0.3;
-
+private _draw = (ctrlMapScale _map) < 0.3;
 // Dead players
 {
 	_drawIcons pushBack [
@@ -316,7 +318,9 @@ private _draw = (ctrlMapScale _control) < 0.3;
 		"PuristaBold",
 		"right"
 	];
-} forEach (allPlayers select {(!alive _x) && {(side group _x == _side)}});
+} forEach (allPlayers select {
+	(!alive _x) && (side group _x == _side)
+});
 
 // Teammates
 {
@@ -337,10 +341,11 @@ private _draw = (ctrlMapScale _control) < 0.3;
 		];
 	};
 
+	private _teammatePos = call WL2_fnc_getPos;
 	_drawIcons pushBack [
 		call WL2_fnc_iconType,
 		[_x] call WL2_fnc_iconColor,
-		call WL2_fnc_getPos,
+		_teammatePos,
 		_size,
 		_size,
 		call WL2_fnc_getDir,
@@ -354,6 +359,7 @@ private _draw = (ctrlMapScale _control) < 0.3;
 		"PuristaBold",
 		"right"
 	];
+	_drawIconsSelectable pushBack [_x, _teammatePos];
 } forEach (allPlayers select {(side group _x == _side) && {(isNull objectParent _x) && {(alive _x)}}});
 
 // AI in vehicle
@@ -377,10 +383,11 @@ private _draw = (ctrlMapScale _control) < 0.3;
 // AI
 {
 	_size = call WL2_fnc_iconSize;
+	private _aiPos = call WL2_fnc_getPos;
 	_drawIcons pushBack [
 		call WL2_fnc_iconType,
 		[_x] call WL2_fnc_iconColor,
-		call WL2_fnc_getPos,
+		_aiPos,
 		_size,
 		_size,
 		call WL2_fnc_getDir,
@@ -390,10 +397,14 @@ private _draw = (ctrlMapScale _control) < 0.3;
 		"PuristaBold",
 		"right"
 	];
+	_drawIconsSelectable pushBack [_x, _aiPos];
 } forEach ((units player) select {(alive _x) && {(isNull objectParent _x) && {_x != player}}});
 
 // Draw squad lines
 private _allSquadmates = ["getAllInSquad"] call SQD_fnc_client;
+_allSquadmates = _allSquadmates apply {
+	vehicle _x;
+};
 if (WL_AssetActionTarget in _allSquadmates) then {
 	private _squadLeader = _allSquadmates select {
 		["isSquadLeader", [getPlayerID _x]] call SQD_fnc_client;
@@ -430,10 +441,11 @@ _sideVehicles = _sideVehicles + _vehiclesOnSide;
 _sideVehicles = _sideVehicles arrayIntersect _sideVehicles;
 {
 	_size = call WL2_fnc_iconSize;
+	private _vehiclePos = call WL2_fnc_getPos;
 	_drawIcons pushBack [
 		call WL2_fnc_iconType,
 		[_x] call WL2_fnc_iconColor,
-		call WL2_fnc_getPos,
+		_vehiclePos,
 		_size,
 		_size,
 		call WL2_fnc_getDir,
@@ -443,9 +455,11 @@ _sideVehicles = _sideVehicles arrayIntersect _sideVehicles;
 		"PuristaBold",
 		"right"
 	];
+	_drawIconsSelectable pushBack [_x, _vehiclePos];
 } forEach (_sideVehicles select { alive _x });
 
 uiNamespace setVariable ["WL2_drawIcons", _drawIcons];
 uiNamespace setVariable ["WL2_drawIconsAnimated", _drawIconsAnimated];
+uiNamespace setVariable ["WL2_drawIconsSelectable", _drawIconsSelectable];
 uiNamespace setVariable ["WL2_drawEllipses", _drawEllipses];
 uiNamespace setVariable ["WL2_drawLines", _drawLines];

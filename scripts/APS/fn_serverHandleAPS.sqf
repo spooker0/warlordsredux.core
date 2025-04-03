@@ -15,5 +15,5 @@ private _responsiblePlayer = _shooter getVariable ["BIS_WL_ownerAsset", "123"] c
 if (isPlayer _responsiblePlayer) then {
     private _uid = getPlayerUID _responsiblePlayer;
     _reward call WL2_fnc_fundsDatabaseWrite;
-    [objNull, _reward, _rewardText] remoteExec ["WL2_fnc_killRewardClient", _responsiblePlayer];
+    [objNull, _reward, _rewardText, "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _responsiblePlayer];
 };

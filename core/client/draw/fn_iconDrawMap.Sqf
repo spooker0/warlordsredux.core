@@ -10,8 +10,10 @@ private _drawEllipses = uiNamespace getVariable ["WL2_drawEllipses", []];
 {
 	_m drawIcon _x;
 } forEach _drawIcons;
+
+private _angle = (serverTime * 75) % 360;
 {
-	_x set [5, (serverTime * 75) % 360];
+	_x set [5, _angle];
 	_m drawIcon _x;
 } forEach _drawIconsAnimated;
 {

@@ -100,7 +100,7 @@ if (_action == "fortifyStronghold") exitWith {
 if (_action == "revived") exitWith {
 	private _reward = 50;
 	_reward call WL2_fnc_fundsDatabaseWrite;
-	[objNull, _reward, "Revived Teammate"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+	[objNull, _reward, "Revived Teammate", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
 if (_action == "lastLoadout") exitWith {

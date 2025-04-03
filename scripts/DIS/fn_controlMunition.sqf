@@ -200,8 +200,7 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
 
     switch (_flightMode) do {
         case 0;
-        case 2;
-        case 3: {
+        case 2: {
             _projectile setVectorDirAndUp [_forward, _up];
             _projectile setVelocityModelSpace [0, _projectileSpeed, 0];
         };
@@ -214,6 +213,11 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
             _yawVel = 0;
 
             _projectileSpeed = velocityModelSpace _projectile # 1;
+        };
+        case 3: {
+            private _projectileSpeedDragged = _projectileSpeed - (serverTime - _startTime) * 5;
+            _projectile setVectorDirAndUp [_forward, _up];
+            _projectile setVelocityModelSpace [0, _projectileSpeedDragged, 0];
         };
     };
 

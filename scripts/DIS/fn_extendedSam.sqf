@@ -4,7 +4,11 @@ params ["_projectile", "_unit"];
 
 private _target = _unit getVariable ["WL2_selectedAircraft", objNull];
 
-if (isNull _target) exitWith {};
+if (isNull _target) exitWith {
+    sleep 5;
+    systemChat "No target found! Launch using the Extended SAM interface.";
+    triggerAmmo _projectile;
+};
 
 private _altitude = getPosASL _projectile # 2;
 private _targetAltitude = getPosASL _target # 2;

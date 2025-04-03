@@ -45,7 +45,20 @@ private _displayText = format ["<t size='1.8' align='center'>%1</t><br/>%2<br/>"
     } else {
         '#ffff00';
     };
-    _displayText = _displayText + format ["<t size='1.2' align='center' color='%1' shadow='2'>%2: %3 pts</t><br/>", _color, _vote getVariable "BIS_WL_name", _voteCount];
+
+    _voteCount = if (_voteCount < 1000) then {
+        _voteCount;
+    } else {
+        if (_voteCount < 9500) then {
+            format ["%1K", (_voteCount / 1000) toFixed 1];
+        } else {
+            format ["%1K", round (_voteCount / 1000)];
+        };
+    };
+    _displayText = _displayText + format [
+        "<t size='1.2' align='center' color='%1' shadow='2'>%2: %3 pts</t><br/>",
+        _color, _vote getVariable ["BIS_WL_name", "Sector"], _voteCount
+    ];
 } forEach _sortedVoteList;
 
 _indicator ctrlSetStructuredText (parseText _displayText);

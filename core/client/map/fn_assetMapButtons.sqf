@@ -1,6 +1,6 @@
 #include "..\..\warlords_constants.inc"
 
-private _dialog = findDisplay 46 createDisplay "RscDisplayEmpty";
+private _dialog = (findDisplay 12) createDisplay "WL_MapButtonDisplay";
 
 getMousePosition params ["_mouseX", "_mouseY"];
 
@@ -21,7 +21,12 @@ _titleBar ctrlSetTextColor [0.7, 0.7, 1, 1];
 private _assetName = if (isPlayer _asset) then {
     name _asset;
 } else {
-    [_asset] call WL2_fnc_getAssetTypeName;
+    private _isStronghold = !isNull (_asset getVariable ["WL_strongholdSector", objNull]);
+    if (_isStronghold) then {
+        "Stronghold";
+    } else {
+        [_asset] call WL2_fnc_getAssetTypeName;
+    };
 };
 _titleBar ctrlSetStructuredText parseText format ["<t align='center' font='PuristaBold'>%1</t>", toUpper _assetName];
 _titleBar ctrlCommit 0;
@@ -241,6 +246,27 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
             "Fast Travel"
         ]
     ] call WL2_fnc_addTargetMapButton;
+
+    // Vehicle Paradrop Button
+    private _vehicleParadropFOBExecute = {
+        params ["_asset"];
+        private _marker = createMarkerLocal ["WL2_fastTravelFOBMarker", getPosATL _asset];
+        _marker setMarkerShapeLocal "ELLIPSE";
+        _marker setMarkerSizeLocal [500, 500];
+        _marker setMarkerAlphaLocal 0;
+        [7, "WL2_fastTravelFOBMarker"] spawn WL2_fnc_executeFastTravel;
+    };
+    [
+        "VEHICLE PARADROP",
+        _vehicleParadropFOBExecute,
+        true,
+        "vehicleParadropFOB",
+        [
+            getMissionConfigValue ["WL_vehicleParadropCost", 1000],
+            "FTParadropVehicle",
+            "Fast Travel"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
 };
 
 if (_operateAccess && unitIsUAV _asset && getConnectedUAV player != _asset) then {
@@ -444,10 +470,10 @@ private _fastTravelStrongholdTestExecute = {
     };
 
     _dialog closeDisplay 1;
+    WL2_TargetButtonSetup = [objNull, [], 0, 0];
 };
 
 if (count _menuButtons == 0) then {
     _dialog closeDisplay 1;
+    WL2_TargetButtonSetup = [objNull, [], 0, 0];
 };
-
-WL2_TargetButtonSetup = [obNull, [], 0, 0];

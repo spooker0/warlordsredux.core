@@ -91,7 +91,7 @@ while { alive _asset && (_asset getVariable ["DIS_remoteControlStation", objNull
         "controlStation" cutText ["", "PLAIN"];
         private _projectileASL = getPosASL _controlledProjectile;
         private _projectileVectorDirAndUp = [vectorDir _controlledProjectile, vectorUp _controlledProjectile];
-        private _projectileVelocity = (velocityModelSpace _controlledProjectile) vectorMultiply 3;
+        private _projectileVelocity = velocityModelSpace _controlledProjectile;
         deleteVehicle _controlledProjectile;
 
         private _projectile = createVehicle ["ammo_Bomb_SDB", [0, 0, 0], [], 0, "FLY"];
@@ -101,7 +101,7 @@ while { alive _asset && (_asset getVariable ["DIS_remoteControlStation", objNull
         [_projectile, [player, player]] remoteExec ["setShotParents", 2];
         [_projectile, driver _asset] remoteExec ["DIS_fnc_startMissileCamera", _asset];
 
-        _projectile setVariable ["APS_speedOverride", 400];
+        _projectile setVariable ["APS_speedOverride", vectorMagnitude _projectileVelocity];
 
         _camera setVectorDirAndUp [vectorDir _projectile, vectorUp _projectile];
         _camera attachTo [_projectile, [0, -3, 0.4]];

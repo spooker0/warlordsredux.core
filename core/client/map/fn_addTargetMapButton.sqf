@@ -56,6 +56,7 @@ _button ctrlAddEventHandler ["ButtonClick", {
     private _targetButtonSetupActionClose = _control getVariable "WL2_targetButtonSetupActionClose";
     private _costCondition = _control getVariable "WL2_targetButtonSetupCostCondition";
     private _actionCondition = _control getVariable "WL2_targetButtonSetupActionCondition";
+    private _actionSelectTime = uiNamespace setVariable ["WL2_assetTargetSelectedTime", -1];
 
     if (count _costCondition > 0) then {
         private _amount = _costCondition # 0;
@@ -69,7 +70,7 @@ _button ctrlAddEventHandler ["ButtonClick", {
         };
     };
 
-    if (_actionCondition != "") then {
+    if (_actionCondition != "" && serverTime - _actionSelectTime > 5) then {
         private _result = [_actionTarget, _actionCondition] call WL2_fnc_mapButtonConditions;
         if (!_result) then {
             playSoundUI ["AddItemFailed"];

@@ -496,7 +496,7 @@ class MRTM_settingsMenu
 				class MRTMViewInfEdit: RscEditMRTM
 				{
 					idc = 8004;
-					onKeyUp = "[_this select 0, 'inf'] call MRTM_fnc_onChar;";
+					onEditChanged = "[_this select 0, 'inf', 0] call MRTM_fnc_onChar;";
 					x = 0.667969 * safezoneW + safezoneX;
 					y = 0.258 * safezoneH + safezoneY;
 					w = 0.03525 * safezoneW;
@@ -529,7 +529,7 @@ class MRTM_settingsMenu
 				class MRTMViewVehiclesEdit: RscEditMRTM
 				{
 					idc = 8006;
-					onKeyUp = "[_this select 0, 'ground'] call MRTM_fnc_onChar;";
+					onEditChanged = "[_this select 0, 'ground', 0] call MRTM_fnc_onChar;";
 					x = 0.667969 * safezoneW + safezoneX;
 					y = 0.293 * safezoneH + safezoneY;
 					w = 0.03525 * safezoneW;
@@ -562,7 +562,7 @@ class MRTM_settingsMenu
 				class MRTMViewAirEdit: RscEditMRTM
 				{
 					idc = 8008;
-					onKeyUp = "[_this select 0, 'air'] call MRTM_fnc_onChar;";
+					onEditChanged = "[_this select 0, 'air', 0] call MRTM_fnc_onChar;";
 					x = 0.667969 * safezoneW + safezoneX;
 					y = 0.328 * safezoneH + safezoneY;
 					w = 0.03525 * safezoneW;
@@ -595,7 +595,7 @@ class MRTM_settingsMenu
 				class MRTMViewDronesEdit: RscEditMRTM
 				{
 					idc = 8010;
-					onKeyUp = "[_this select 0, 'drones'] call MRTM_fnc_onChar;";
+					onEditChanged = "[_this select 0, 'drones', 0] call MRTM_fnc_onChar;";
 					x = 0.667969 * safezoneW + safezoneX;
 					y = 0.363 * safezoneH + safezoneY;
 					w = 0.03525 * safezoneW;
@@ -651,7 +651,7 @@ class MRTM_settingsMenu
 				class MRTMViewObjectsEdit: RscEditMRTM
 				{
 					idc = 8014;
-					onKeyUp = "[_this select 0, 'objects'] call MRTM_fnc_onChar;";
+					onEditChanged = "[_this select 0, 'objects', 0] call MRTM_fnc_onChar;";
 					x = 0.667969 * safezoneW + safezoneX;
 					y = 0.433 * safezoneH + safezoneY;
 					w = 0.03525 * safezoneW;
@@ -732,7 +732,7 @@ class MRTM_settingsMenu
 				class MRTMRWREdit1: RscEditMRTM
 				{
 					idc = 8016;
-					onKeyUp = "[_this select 0, 'RWR1'] call MRTM_fnc_onChar;";
+					onEditChanged = "[_this select 0, 'RWR1', 1] call MRTM_fnc_onChar;";
 					x = 0.667969 * safezoneW + safezoneX;
 					y = 0.533 * safezoneH + safezoneY;
 					w = 0.03525 * safezoneW;
@@ -765,7 +765,7 @@ class MRTM_settingsMenu
 				class MRTMRWREdit2: RscEditMRTM
 				{
 					idc = 8018;
-					onKeyUp = "[_this select 0, 'RWR2'] call MRTM_fnc_onChar;";
+					onEditChanged = "[_this select 0, 'RWR2', 1] call MRTM_fnc_onChar;";
 					x = 0.667969 * safezoneW + safezoneX;
 					y = 0.568 * safezoneH + safezoneY;
 					w = 0.03525 * safezoneW;
@@ -800,7 +800,7 @@ class MRTM_settingsMenu
 				class MRTMRWREdit3: RscEditMRTM
 				{
 					idc = 8020;
-					onKeyUp = "[_this select 0, 'RWR3'] call MRTM_fnc_onChar;";
+					onEditChanged = "[_this select 0, 'RWR3', 1] call MRTM_fnc_onChar;";
 					onLoad =  "(_this # 0) ctrlEnable false;";
 					x = 0.667969 * safezoneW + safezoneX;
 					y = 0.603 * safezoneH + safezoneY;
@@ -834,7 +834,7 @@ class MRTM_settingsMenu
 				class MRTMRWREdit4: RscEditMRTM
 				{
 					idc = 8022;
-					onKeyUp = "[_this select 0, 'RWR4'] call MRTM_fnc_onChar;";
+					onEditChanged = "[_this select 0, 'RWR4', 1] call MRTM_fnc_onChar;";
 					x = 0.667969 * safezoneW + safezoneX;
 					y = 0.638 * safezoneH + safezoneY;
 					w = 0.03525 * safezoneW;
@@ -1019,6 +1019,20 @@ class MRTM_settingsMenu
 						shadow = 0;
 					};
 				};
+				class MRTMOtherText12: RscStructuredTextMRTM
+				{
+					idc = -1;
+					text = "Map Refresh Rate:";
+					x = 0.327969 * safezoneW + safezoneX;
+					y = 1.083 * safezoneH + safezoneY;
+					w = 0.23 * safezoneW;
+					h = 0.033 * safezoneH;
+					class Attributes
+					{
+						align = "right";
+						shadow = 0;
+					};
+				};
 				class MRTMOtherButton1: RscCheckboxMRTM
 				{
 					idc = 8024;
@@ -1117,6 +1131,25 @@ class MRTM_settingsMenu
 					y = 1.047 * safezoneH + safezoneY;
 					w = 0.0204688 * safezoneW;
 					h = 0.028 * safezoneH;
+				};
+				class MRTMOtherSlider12: RscXSliderHMRTM
+				{
+					idc = 8035;
+					text = "";
+					onSliderPosChanged = "[9, _this select 1] call MRTM_fnc_onSliderChanged;";
+					x = 0.562969 * safezoneW + safezoneX;
+					y = 1.082 * safezoneH + safezoneY;
+					w = 0.1 * safezoneW;
+					h = 0.026 * safezoneH;
+				};
+				class MRTMOtherEdit12: RscEditMRTM
+				{
+					idc = 8036;
+					onEditChanged = "[_this select 0, 'mapRefresh', 2] call MRTM_fnc_onChar;";
+					x = 0.667969 * safezoneW + safezoneX;
+					y = 1.082 * safezoneH + safezoneY;
+					w = 0.03525 * safezoneW;
+					h = 0.025 * safezoneH;
 				};
 			};
 
@@ -1468,4 +1501,10 @@ class WL_Prompt_Dialog {
 			colorBackground[] = {0, 0, 0, 1};
 		};
 	};
+};
+
+class WL_MapButtonDisplay {
+	idd = -1;
+	movingEnable = false;
+	class controls {};
 };

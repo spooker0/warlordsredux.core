@@ -4,7 +4,7 @@ if !(BIS_WL_playerSide in BIS_WL_competingSides) exitWith {};
 
 BIS_WL_playerSide spawn {
 	_varName = format ["BIS_WL_recentTargetReset_%1", _this];
-	_target = objNull;
+	private _target = objNull;
 
 	while {!BIS_WL_missionEnd} do {
 		if !(BIS_WL_playerSide in BIS_WL_competingSides) exitWith {};
@@ -13,12 +13,14 @@ BIS_WL_playerSide spawn {
 			sleep WL_TIMEOUT_STANDARD;
 			!isNull WL_TARGET_FRIENDLY
 		};
-
-		private _target = WL_TARGET_FRIENDLY;
+		_target = WL_TARGET_FRIENDLY;
 		waitUntil {
 			sleep WL_TIMEOUT_STANDARD;
 			isNull WL_TARGET_FRIENDLY
 		};
+
+		private _currentOwner = _target getVariable ["BIS_WL_owner", independent];
+		[_target, _currentOwner] call WL2_fnc_sectorMarkerUpdate;
 
 		private _timeout = serverTime + 3;
 		waitUntil {
@@ -37,11 +39,6 @@ BIS_WL_playerSide spawn {
 			if !(BIS_WL_playerSide in _enemySectorPreviousOwners) then {
 				"BIS_WL_targetEnemy" setMarkerAlphaLocal 0;
 			};
-
-			if !(isServer) then {
-				private _currentOwner = _sector getVariable ["BIS_WL_owner", independent];
-				[_target, _currentOwner] call WL2_fnc_sectorMarkerUpdate;
-			};
 		};
 	};
 };
@@ -51,18 +48,23 @@ BIS_WL_enemySide spawn {
 	private _target = objNull;
 
 	while {!BIS_WL_missionEnd} do {
-		waitUntil {sleep WL_TIMEOUT_STANDARD; !isNull WL_TARGET_ENEMY};
-
+		waitUntil {
+			sleep WL_TIMEOUT_STANDARD;
+			!isNull WL_TARGET_ENEMY
+		};
 		_target = WL_TARGET_ENEMY;
-		waitUntil {sleep WL_TIMEOUT_STANDARD; isNull WL_TARGET_ENEMY};
+		waitUntil {
+			sleep WL_TIMEOUT_STANDARD;
+			isNull WL_TARGET_ENEMY
+		};
+
+		private _currentOwner = _target getVariable ["BIS_WL_owner", independent];
+		[_target, _currentOwner] call WL2_fnc_sectorMarkerUpdate;
 
 		_t = serverTime + 3;
 		waitUntil {sleep WL_TIMEOUT_SHORT; serverTime > _t || {(_target getVariable "BIS_WL_owner") == BIS_WL_playerSide || {((missionNamespace getVariable [_varName, ""]) != "")}}};
 
 		if ((missionNamespace getVariable [_varName, ""]) != "") then {
-			private _currentOwner = _sector getVariable ["BIS_WL_owner", independent];
-			[_target, _currentOwner] call WL2_fnc_sectorMarkerUpdate;
-
 			missionNamespace setVariable [_varName, ""];
 			[toUpper format [localize "STR_A3_WL_popup_voting_reset_user", _this call WL2_fnc_sideToFaction]] spawn WL2_fnc_SmoothText;
 			missionNamespace setVariable [_varName, ""];

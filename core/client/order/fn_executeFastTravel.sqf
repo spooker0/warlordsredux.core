@@ -8,6 +8,7 @@ params ["_fastTravelMode", "_marker"];
 // 4: Tent
 // 5: Stronghold
 // 6: Forward Base
+// 7: Vehicle Paradrop FOB
 
 titleCut ["", "BLACK OUT", 1];
 openMap [false, false];
@@ -71,15 +72,20 @@ switch (_fastTravelMode) do {
 			getPosATL _stronghold;
 		};
 	};
-	case 6: {
+	case 6;
+	case 7: {
 		private _spawnPositions = [_marker, 0, true] call WL2_fnc_findSpawnPositions;
 		_destination = if (count _spawnPositions > 0) then {
 			selectRandom _spawnPositions;
 		} else {
 			markerPos _marker;
 		};
-
+		_destination = [_destination # 0, _destination # 1, 50];
 		deleteMarker _marker;
+
+		private _paradropNextUseVar = format ["WL_paradropNextUse_%1", getPlayerUID player];
+        missionNamespace setVariable [_paradropNextUseVar, serverTime + 600];
+		[player, "fastTravelContested", getMissionConfigValue ["WL_vehicleParadropCost", 1000]] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	};
 };
 
@@ -116,7 +122,8 @@ switch (_fastTravelMode) do {
 		player setVelocityModelSpace [0, 30, 0];
 		[player] spawn WL2_fnc_parachuteSetup;
 	};
-	case 3: {
+	case 3;
+	case 7: {
 		private _vehicle = vehicle player;
 
 		private _parachuteClass = switch (BIS_WL_playerSide) do {
