@@ -76,6 +76,9 @@ _currentSector setVariable ["WL_strongholdTextMarker", _markerTextName, true];
 [_stronghold, _currentSector] remoteExec ["WL2_fnc_prepareStronghold", 2];
 
 private _allStrongholds = missionNamespace getVariable ["WL_strongholds", []];
+_allStrongholds = _allStrongholds select {
+    _x != _oldStronghold
+ };
 _allStrongholds pushBack _stronghold;
 missionNamespace setVariable ["WL_strongholds", _allStrongholds, true];
 

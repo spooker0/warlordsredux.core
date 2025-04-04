@@ -164,7 +164,6 @@ private _scanExecute = {
         };
     };
 
-    WL_AssetActionTarget = objNull;
     _display closeDisplay 1;
     WL2_TargetButtonSetup = [objNull, [], 0, 0];
 };

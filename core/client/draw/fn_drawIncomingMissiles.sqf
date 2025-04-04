@@ -24,6 +24,9 @@ private _missileTypeData = createHashMapFromArray [
 
 while { !BIS_WL_missionEnd } do {
     if (WL_HelmetInterface == 0) then {
+        _indicatorMissile ctrlSetText "";
+        _indicatorStatus ctrlSetText "";
+        _indicatorDistance ctrlSetText "";
         sleep 5;
         continue;
     };

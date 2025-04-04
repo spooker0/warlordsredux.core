@@ -61,26 +61,23 @@
 
             detach _charge;
 
+            private _camOrigin = AGLToASL positionCameraToWorld [0, 0, 0];
+
             private _targetIntersections = lineIntersectsSurfaces [
-                AGLToASL positionCameraToWorld [0, 0, 0],
+                _camOrigin,
                 AGLToASL positionCameraToWorld [0, 0, 20],
                 _caller,
                 _charge,
                 true,
                 1,
-                "GEOM",
+                "FIRE",
                 "",
                 true
             ];
 
             private _targetData = if (count _targetIntersections > 0) then {
                 private _firstIntersect = _targetIntersections # 0;
-                private _isInWalls = lineIntersects [_firstIntersect # 0, getPosASL _caller, _caller, _charge];
-                if (!_isInWalls) then {
-                    [_firstIntersect # 0, _firstIntersect # 1];
-                } else {
-                    [getPosASL _caller, [0, 0, 1]];
-                };
+                [_firstIntersect # 0, _firstIntersect # 1];
             } else {
                 [getPosASL _caller, [0, 0, 1]];
             };

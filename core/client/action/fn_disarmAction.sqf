@@ -3,10 +3,19 @@
     "<t color='#00ff00'>Stop Demolition</t>",
     "\a3\ui_f\data\IGUI\Cfg\holdactions\holdAction_secure_ca.paa",
     "\a3\ui_f\data\IGUI\Cfg\holdactions\holdAction_secure_ca.paa",
-    "speed player < 1 && !isNull (cursorObject getVariable [""WL_demolishable"", objNull]) && player distance cursorObject < 15",
-    "speed player < 1 && !isNull (cursorObject getVariable [""WL_demolishable"", objNull]) && player distance cursorObject < 15",
+    "[true] call WL2_fnc_disarmEligibility",
+    "[false] call WL2_fnc_disarmEligibility",
     {
+
         private _charge = cursorObject;
+        private _target = _charge getVariable ["WL_demolishable", objNull];
+        if (isNull _target) then {
+            private _nearbyCharges = player nearObjects ["DemoCharge_F", 5];
+            if (count _nearbyCharges > 0) then {
+                _charge = _nearbyCharges # 0;
+            };
+        };
+
         uiNamespace setVariable ["WL_holdChargeObject", _charge];
         (attachedTo _charge) setVariable ["WL_holdChargeExplosion", true, true];
     },
@@ -28,7 +37,8 @@
             "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_03.wss",
             "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_04.wss"
         ];
-        playSound3D [selectRandom _disarmSounds, cursorObject, false, getPosASL cursorObject, 2, 1, 200, 0];
+        private _charge = uiNamespace getVariable ["WL_holdChargeObject", objNull];
+        playSound3D [selectRandom _disarmSounds, _charge, false, getPosASL _charge, 2, 1, 200, 0];
     },
     {
         private _charge = uiNamespace getVariable ["WL_holdChargeObject", objNull];

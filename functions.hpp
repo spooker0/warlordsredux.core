@@ -163,6 +163,7 @@ class CfgFunctions {
 			class deployableAddAction {};
 			class deployableEligibility {};
 			class disarmAction {};
+			class disarmEligibility {};
 			class jammerAction {};
 			class jammerToggle {};
 			class jammerUpdate {};
@@ -378,6 +379,7 @@ class CfgFunctions {
 			class changeSectorOwnership {};
 			class createUAVCrew {};
 			class createVehicleCorrectly {};
+			class demolishComplete {};
 			class detectNewPlayers {};
 			class forfeitHandleServer {};
 			class forgiveTeamkill {};

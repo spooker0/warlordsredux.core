@@ -15,6 +15,8 @@ addMissionEventHandler ["Map", {
 	} forEach allMapMarkers;
 
 	if (_mapIsOpened) then {
+		uiNamespace setVariable ["WL2_mapMouseActionComplete", true];
+
 		MAP_CONTROL = addMissionEventHandler ["EachFrame", {
 			private _map = uiNamespace getVariable ["BIS_WL_mapControl", controlNull];
 
@@ -101,17 +103,21 @@ addMissionEventHandler ["Map", {
 							inputAction "defaultAction" == 0
 						};
 
-						if (count WL_MapBusy > 0) exitWith {};
+						if (count WL_MapBusy > 0) exitWith {
+							uiNamespace setVariable ["WL2_mapMouseActionComplete", true];
+						};
 						uiNamespace setVariable ["WL2_assetTargetSelectedTime", serverTime];
 
 						if !(isNull WL_AssetActionTarget) then {
 							uiNamespace setVariable ["WL2_assetTargetSelected", WL_AssetActionTarget];
 							call WL2_fnc_assetMapButtons;
+							WL_AssetActionTarget = objNull;
 						};
 
 						if !(isNull WL_SectorActionTarget) then {
 							uiNamespace setVariable ["WL2_assetTargetSelected", WL_SectorActionTarget];
 							call WL2_fnc_sectorMapButtons;
+							WL_SectorActionTarget = objNull;
 						};
 
 						uiNamespace setVariable ["WL2_mapMouseActionComplete", true];

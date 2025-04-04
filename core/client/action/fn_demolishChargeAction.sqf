@@ -64,26 +64,17 @@ while { alive _charge && alive _target && alive _dummy } do {
                 };
             };
 
-            [_target, _caller] remoteExec ["WL2_fnc_killRewardHandle", 2];
-
             private _explosive = if (_isStrongholdDemolish) then {
                 "Bo_Mk82"
             } else {
                 "SatchelCharge_Remote_Ammo_Scripted"
             };
-            _target setVariable ["WL_lastHitter", _caller, 2];
 
-            private _explosion = createVehicle [_explosive, _lightPos, [], 0, "FLY"];
-            [_explosion, [_caller, _caller]] remoteExec ["setShotParents", 2];
-            sleep 0.5;
-            triggerAmmo _explosion;
-            // don't call FF script, this prevents runway griefing
-            _target setDamage 1;
+            [_target, _caller, _explosive, _lightPos] remoteExec ["WL2_fnc_demolishComplete", 2];
         };
         deleteVehicle _charge;
         deleteVehicle _lightPoint;
         sleep 2;
-        deleteVehicle _target;
         playSound3D ["a3\sounds_f\sfx\special_sfx\building_destroy_01.wss", objNull, false, _lightPos, 2, 1, 200, 0, true];
     } else {
         _sleepTime = (_timeRemaining / WL_DEMOLISH_TIME) max 0.1;

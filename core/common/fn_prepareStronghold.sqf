@@ -14,5 +14,3 @@ private _windowHitPointNames = _allHitPointNames select { "glass" in toLower _x 
 forceHitPointsDamageSync _stronghold;
 
 [_stronghold, true] remoteExec ["WL2_fnc_protectStronghold", 0, true];
-
-_stronghold setVariable ["WL_strongholdSector", _currentSector, true];
