@@ -22,7 +22,11 @@ if (!_forgive) then {
 	_uid = getPlayerUID _forgiver;
 	(round (_compensation * 0.5)) call WL2_fnc_fundsDatabaseWrite;
 
-	private _assetType = [_victim] call WL2_fnc_getAssetTypeName;
+	private _assetType = if (isPlayer [_victim]) then {
+		name _victim
+	} else {
+		[_victim] call WL2_fnc_getAssetTypeName;
+	};
 	private _displayMsgTeamkiller = format ["You have been punished for killing friendly %1. [-%2]", _assetType, _compensation];
 	[_displayMsgTeamkiller] remoteExec ["systemChat", _teamkillerOwner];
 	[["a3\dubbing_f_bootcamp\boot_m04\50_friendly\boot_m04_50_friendly_ada_0.ogg"]] remoteExec ["playSoundUI", _teamkillerOwner];

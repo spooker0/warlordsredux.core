@@ -1,5 +1,9 @@
 params ["_friendlyFireIncidents"];
 
+private _uid = getPlayerUID player;
+private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
+if (_isAdmin) exitWith {};
+
 private _incidentCount = count _friendlyFireIncidents;
 
 if (_incidentCount < 3) exitWith {};
@@ -10,7 +14,7 @@ private _threeIncidentsAgo = _friendlyFireIncidents # (_incidentCount - 3);
 if (_lastIncident - _threeIncidentsAgo > 30 * 60) exitWith {};
 
 private _penaltyEnd = _lastIncident + 30 * 60;
-if (_penaltyEnd > serverTime) exitWith {};
+if (_penaltyEnd < serverTime) exitWith {};
 
 private _message = format ["%1 has been temporarily kicked/blocked from the game for teamkilling.", name player];
 [name player] remoteExec ["WL2_fnc_teamkillerMessage", 0];
