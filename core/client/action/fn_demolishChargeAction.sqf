@@ -8,6 +8,8 @@ _charge setPosASL _position;
 _charge setVectorDirAndUp _dirAndUp;
 [_charge, _dummy] call BIS_fnc_attachToRelative;
 
+hideObject _dummy;
+
 private _objectScale = if (_isStrongholdDemolish) then {
     6
 } else {

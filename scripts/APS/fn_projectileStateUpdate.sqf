@@ -12,7 +12,6 @@ while { alive _projectile } do {
     private _currentState = (missileState _projectile) # 1;
     private _notched = _projectile getVariable ["DIS_notched", false];
     if (_notched) then {
-        _projectile setMissileTarget objNull;
         _currentState = "BLIND";
     };
     private _missileVarState = _projectile getVariable ["APS_missileState", "LOCKED"];

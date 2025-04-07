@@ -60,8 +60,14 @@ if (count BIS_onScreenMessagesVisible > 1) then {
 	} forEach (BIS_onScreenMessagesVisible - [_messageID]);
 };
 
-_announcerPositionRatio = if (profileNamespace getVariable ["MRTM_smallAnnouncerText", false]) then { 8 } else { 4 };
-_announcerSizeRatio = if (profileNamespace getVariable ["MRTM_smallAnnouncerText", false]) then {(30 call WL2_fnc_purchaseMenuGetUIScale)} else {(23 call WL2_fnc_purchaseMenuGetUIScale)};
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _useSmallText = _settingsMap getOrDefault ["smallAnnouncerText", true];
+private _announcerPositionRatio = if (_useSmallText) then { 8 } else { 4 };
+private _announcerSizeRatio = if (_useSmallText) then {
+	30 call WL2_fnc_purchaseMenuGetUIScale;
+} else {
+	23 call WL2_fnc_purchaseMenuGetUIScale
+};
 
 _box ctrlSetPosition [_xDef, _yDef + (_hDef / _announcerPositionRatio), _wDef, _hDef / _announcerSizeRatio];
 _box ctrlSetBackgroundColor [0, 0, 0, 0];

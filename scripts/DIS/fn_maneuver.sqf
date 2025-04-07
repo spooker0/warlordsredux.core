@@ -25,6 +25,12 @@ private _originalPosition = getPosASL _unit;
         private _notchResult = [_originalTarget, _projectile, _unit] call DIS_fnc_getNotchResult;
         if (_notchResult) then {
             _projectile setVariable ["DIS_notched", true];
+            _projectile setMissileTarget objNull;
+        } else {
+            // If not already notched and not notching
+            if (_projectile getVariable ["DIS_notched", false]) then {
+                _projectile setMissileTarget [_originalTarget, true];
+            };
         };
 
         private _currentMissileTarget = missileTarget _projectile;

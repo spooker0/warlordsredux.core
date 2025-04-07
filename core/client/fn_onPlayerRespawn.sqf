@@ -37,7 +37,7 @@ player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 [] call WLC_fnc_onRespawn;
 [] call WL2_fnc_factionBasedClientInit;
 
-0 spawn MRTM_fnc_settingsMenu;
+0 spawn MENU_fnc_settingsMenu;
 
 player spawn APS_fnc_setupProjectiles;
 

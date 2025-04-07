@@ -7,10 +7,11 @@ private _parachuteActionId = _unit addAction [
     100
 ];
 
-private _parachuteAutoDeploy = profileNamespace getVariable ["MRTM_parachuteAutoDeploy", false];
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _parachuteAutoDeploy = _settingsMap getOrDefault ["parachuteAutoDeploy", true];
 waitUntil {
     sleep 0.2;
-    private _isBelowThreshold = if (_parachuteAutoDeploy) then {
+    private _isBelowThreshold = if (_parachuteAutoDeploy || !(isPlayer _unit)) then {
         (getPosATL _unit # 2) < 100 || (getPosASL _unit # 2) < 100;
     } else {
         isTouchingGround (vehicle _unit)

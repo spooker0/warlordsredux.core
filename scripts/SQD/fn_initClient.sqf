@@ -1,5 +1,3 @@
-SQD_HAS_INVITE = false;
-
 if (side group player == independent) exitWith {};
 
 0 spawn {

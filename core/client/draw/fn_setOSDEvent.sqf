@@ -38,10 +38,12 @@ if (_action == "voting") then {
 } else {
 	if (_action == "seizing") then {
 		BIS_WL_OSDEventArr set [1, _actionParams];
-		if (count _actionParams == 0) exitWith {BIS_WL_terminateOSDEvent_seizing = TRUE};
-		BIS_WL_terminateOSDEvent_trespassing = TRUE;
-		BIS_WL_terminateOSDEvent_seizingDisabled = TRUE;
-		BIS_WL_terminateOSDEvent_seizing = FALSE;
+		if (count _actionParams == 0) exitWith {
+			BIS_WL_terminateOSDEvent_seizing = true
+		};
+		BIS_WL_terminateOSDEvent_trespassing = true;
+		BIS_WL_terminateOSDEvent_seizingDisabled = true;
+		BIS_WL_terminateOSDEvent_seizing = false;
 		_actionParams params ["_sector", "_capturingTeam", "_captureProgress"];
 
 		_osd_progress_background ctrlSetBackgroundColor (BIS_WL_colorsArray # (BIS_WL_sidesArray find (_sector getVariable "BIS_WL_owner")));
@@ -50,13 +52,16 @@ if (_action == "voting") then {
 		_osd_progress ctrlSetTextColor _color;
 
 		while {_captureProgress > 0 && _captureProgress < 1.0 && !BIS_WL_terminateOSDEvent_seizing} do {
-			_osd_action_title ctrlSetStructuredText parseText format ["<t shadow = '2' align = 'center' size = '%2'>%1</t>", _sector getVariable "BIS_WL_name", 1 call WL2_fnc_purchaseMenuGetUIScale];
+			_osd_action_title ctrlSetStructuredText parseText format ["<t shadow='2' align='center' size='%2'>%1</t>", _sector getVariable "BIS_WL_name", 1 call WL2_fnc_purchaseMenuGetUIScale];
 			_osd_progress progressSetPosition _captureProgress;
 			sleep WL_TIMEOUT_MIN;
 
 			_captureProgress = _sector getVariable ["BIS_WL_captureProgress", 0];
+			if !(player inArea (_sector getVariable "objectAreaComplete")) then {
+				break;
+			};
 		};
-		BIS_WL_terminateOSDEvent_seizing = TRUE;
+		BIS_WL_terminateOSDEvent_seizing = true;
 		if (BIS_WL_terminateOSDEvent_trespassing) then {
 			_osd_progress_background ctrlSetBackgroundColor [0, 0, 0, 0];
 			_osd_action_title ctrlSetStructuredText parseText "";

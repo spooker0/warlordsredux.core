@@ -18,7 +18,7 @@ while { !BIS_WL_missionEnd } do {
 	private _side = BIS_WL_playerSide;
 	private _sectorsBeingCaptured = BIS_WL_allSectors select {
 		private _isBeingCaptured = _x getVariable ["BIS_WL_captureProgress", 0] > 0;
-		private _revealed = _side in (_x getVariable ["BIS_WL_revealedBy", []]) || _side == independent;
+		private _revealed = _side in (_x getVariable ["BIS_WL_revealedBy", []]) || _side == independent || WL_IsSpectator;
 		_isBeingCaptured && _revealed;
 	};
 

@@ -68,7 +68,8 @@ _indicatorBackground ctrlSetPositionH _indicatorHeight;
 _indicatorBackground ctrlSetBackgroundColor [0, 0, 0, 0.7];
 _indicatorBackground ctrlCommit 0;
 
-if !(profileNamespace getVariable ["MRTM_muteVoiceInformer", false]) then {
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+if !(_settingsMap getOrDefault ["muteVoiceInformer", false]) then {
     if (_eta <= 10 && _eta >= 0) then {
         playSoundUI ["a3\ui_f\data\sound\readout\readouthideclick1.wss", 6 - (_eta / 2)];
     };

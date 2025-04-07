@@ -51,7 +51,11 @@ if (_areInSquad) exitWith {
     [0, 1, 1, 0.8]
 };
 
-switch (BIS_WL_playerSide) do {
+private _unitSide = [_unit] call WL2_fnc_getAssetSide;
+if (_unitSide == sideUnknown) then {
+    _unitSide = BIS_WL_playerSide;
+};
+switch (_unitSide) do {
     case west: {
         [0, 0.3, 0.6, 0.8]
     };

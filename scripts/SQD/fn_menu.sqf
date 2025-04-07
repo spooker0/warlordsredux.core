@@ -238,8 +238,8 @@ disableSerialization;
             lbSetPicture [PLAYER_LIST, _y, _picture];
 
             private _points = WL_PlayerSquadContribution getOrDefault [getPlayerUID _player, 0];
-            private _playerName = name (_allPlayers select {getPlayerID _x == _playerId} select 0);
-            lbSetTooltip [PLAYER_LIST, _y, format [localize "STR_SQUADS_squadMemberTooltip", _allPlayers, _points]];
+            private _playerName = name _player;
+            lbSetTooltip [PLAYER_LIST, _y, format [localize "STR_SQUADS_squadMemberTooltip", _playerName, _points]];
         } forEach _listEntries;
     };
 

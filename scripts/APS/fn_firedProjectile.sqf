@@ -24,7 +24,11 @@ private _interception = {
 	params ["_target", "_dazzled"];
 	private _projectilePosition = getPosATL _projectile;
 	private _projectileDirection = _firedPosition getDir _target;
-	private _relativeDirection = [_projectileDirection, _target] call APS_fnc_relDir2;
+	private _relativeDirection = if (isNull _target) then {
+		0;
+	} else {
+		[_projectileDirection, _target] call APS_fnc_relDir2;
+	};
 
 	_projectile setPosWorld [0, 0, 0];
 	deleteVehicle _projectile;

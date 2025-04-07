@@ -64,6 +64,10 @@ while { alive _newProjectile && alive _target } do {
     _vectorUp set [1, 0];
     _newProjectile setVectorDirAndUp [vectorDir _newProjectile, _vectorUp];
 
+    private _angularVector = angularVelocityModelSpace _newProjectile;
+    private _newAngularVector = _angularVector vectorMultiply 10;
+    _newProjectile setAngularVelocityModelSpace _newAngularVector;
+
     if (_target distance _newProjectile < 300) then {
         private _detonationPoint = vectorLinearConversion [0, 1, 0.95, getPosASL _newProjectile, getPosASL _target];
         _projectile setPosASL _detonationPoint;

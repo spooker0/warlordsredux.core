@@ -110,7 +110,7 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		case 3: { 500 };
 		default { 100 };
 	};
-	if (_baseOwner != _side && (player distance2D _basePos > _baseRadius)) then {
+	if (_baseOwner != _side && (player distance2D _basePos > _baseRadius) && !WL_IsSpectator) then {
 		continue;
 	};
 
@@ -219,7 +219,7 @@ private _ewNetworkUnits = _activeVehicles + ("Land_MobileRadar_01_radar_F" allOb
 // Draw scanner and scanned units
 private _scannerUnits = _activeVehicles select {
 	_x getVariable ["WL_scannerOn", false] &&
-	([_x] call WL2_fnc_getAssetSide) == _side
+	(([_x] call WL2_fnc_getAssetSide) == _side || WL_IsSpectator)
 };
 
 private _mySideColor = switch (_side) do {
@@ -319,7 +319,7 @@ private _draw = (ctrlMapScale _map) < 0.3;
 		"right"
 	];
 } forEach (allPlayers select {
-	(!alive _x) && (side group _x == _side)
+	(!alive _x) && (side group _x == _side || WL_IsSpectator)
 });
 
 // Teammates
@@ -378,7 +378,7 @@ private _draw = (ctrlMapScale _map) < 0.3;
 		"PuristaBold",
 		"right"
 	];
-} forEach ((allUnits) select {(side group (crew _x select 0) == _side) && {(alive _x) && {(isNull objectParent _x) && {typeOf _x != "Logic" && {!(isPlayer _x)}}}}});
+} forEach ((allUnits) select {(side group (crew _x select 0) == _side || WL_IsSpectator) && {(alive _x) && {(isNull objectParent _x) && {typeOf _x != "Logic" && {!(isPlayer _x)}}}}});
 
 // AI
 {
@@ -439,6 +439,13 @@ private _sideVehicles = if (_teamVariable != "") then {
 private _vehiclesOnSide = vehicles select { count crew _x > 0 && side _x == _side };
 _sideVehicles = _sideVehicles + _vehiclesOnSide;
 _sideVehicles = _sideVehicles arrayIntersect _sideVehicles;
+
+if (WL_IsSpectator) then {
+	_sideVehicles = vehicles select {
+		_x getVariable ["WL_spawnedAsset", false]
+	};
+};
+
 {
 	_size = call WL2_fnc_iconSize;
 	private _vehiclePos = call WL2_fnc_getPos;
@@ -457,6 +464,53 @@ _sideVehicles = _sideVehicles arrayIntersect _sideVehicles;
 	];
 	_drawIconsSelectable pushBack [_x, _vehiclePos];
 } forEach (_sideVehicles select { alive _x });
+
+// Spectator draw
+if (WL_IsSpectator) then {
+	private _camera = missionNamespace getVariable ["BIS_EGSpectatorCamera_camera", objNull];
+
+	if !(isNull _camera) then {
+		private _center = _camera screenToWorld [0.5, 0.5];
+		private _distance = if (_center isEqualTo [0, 0, 0]) then {
+			viewDistance;
+		} else {
+			_camera distance2D _center;
+		};
+
+		_drawIcons pushBack [
+			"a3\Ui_f\data\GUI\Rsc\RscDisplayEGSpectator\cameraTexture_ca.paa",
+			[1, 1, 1, 1],
+			getPosASL _camera,
+			40,
+			50,
+			getDirVisual _camera
+		];
+		private _cameraPos = getPosASL _camera;
+		private _angle = 30;
+		private _sideDistance = _distance / cos _angle;
+		private _sideA = _camera getRelPos [_sideDistance, _angle];
+		private _sideB = _camera getRelPos [_sideDistance, -_angle];
+
+		_drawLines pushBack [
+			_cameraPos,
+			_sideA,
+			[1, 1, 1, 1],
+			10
+		];
+		_drawLines pushBack [
+			_cameraPos,
+			_sideB,
+			[1, 1, 1, 1],
+			10
+		];
+		_drawLines pushBack [
+			_sideA,
+			_sideB,
+			[1, 1, 1, 1],
+			10
+		];
+	};
+};
 
 uiNamespace setVariable ["WL2_drawIcons", _drawIcons];
 uiNamespace setVariable ["WL2_drawIconsAnimated", _drawIconsAnimated];

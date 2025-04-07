@@ -55,10 +55,15 @@ switch (_action) do {
         // input: inviter id
         private _inviter = _params select 0;
 
-        if (isNil "SQD_HAS_INVITE" || {SQD_HAS_INVITE}) exitWith {
+        if (WL_IsSpectator) exitWith {
             _return = 1;
         };
-        SQD_HAS_INVITE = true;
+
+        private _squadHasInvite = missionNamespace getVariable ["SQD_playerHasInvite", false];
+        if (_squadHasInvite) exitWith {
+            _return = 1;
+        };
+        missionNamespace setVariable ["SQD_playerHasInvite", true];
 
         private _squad = _squadManager select { (_x select 2) find _inviter > -1 } select 0;
         if (isNil "_squad") exitWith {
@@ -75,7 +80,7 @@ switch (_action) do {
             localize "STR_SQUADS_joinSquadDecline"
         ] call WL2_fnc_prompt;
 
-        SQD_HAS_INVITE = false;
+        missionNamespace setVariable ["SQD_playerHasInvite", false];
 
         if (_acceptInvite) then {
             ["add", [_inviter, getPlayerID player]] remoteExec ["SQD_fnc_server", 2];

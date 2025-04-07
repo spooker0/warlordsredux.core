@@ -3,7 +3,8 @@ params ["_projectile", "_unit", ["_fov", 0.75], ["_defaultOpticsMode", -1]];
 
 if (isDedicated) exitWith {};
 
-private _disableCamera = profileNamespace getVariable ["MRTM_disableMissileCameras", false];
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _disableCamera = _settingsMap getOrDefault ["disableMissileCameras", false];
 private _isDisconnected = unitIsUAV _unit && isNull (getConnectedUAV player);
 private _pipDisabled = (getVideoOptions getOrDefault ["pipQualityName", "None"]) == "Disabled";
 

@@ -316,8 +316,9 @@ if (_asset isKindOf "Man") then {
 		[_asset] remoteExec ["DIS_fnc_setupExtendedSam", 0, true];
 	};
 
+	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 	if (unitIsUAV _asset && !_isESAM) then {
-		if (profileNamespace getVariable ["MRTM_enableAuto", true] && !isDedicated) then {
+		if (_settingsMap getOrDefault ["enableAuto", false] && !isDedicated) then {
 			[_asset, false] remoteExec ["setAutonomous", 0];
 		} else {
 			[_asset, true] remoteExec ["setAutonomous", 0];
@@ -365,8 +366,8 @@ if (_asset isKindOf "Man") then {
 		[_asset] remoteExec ["WL2_fnc_catapultAction", 0];
 	};
 
-	if (profileNamespace getVariable ["MRTM_spawnEmpty", false]) then {
-		if (typeOf _asset != "B_supplyCrate_F" && {typeOf _asset != "O_supplyCrate_F"}) then {
+	if (_settingsMap getOrDefault ["spawnEmpty", false]) then {
+		if (typeOf _asset != "B_supplyCrate_F" && typeOf _asset != "O_supplyCrate_F") then {
 			if !((typeOf _asset) in (getArray (missionConfigFile >> "logisticsConfig" >> "cargoTypes" >> "Cargo"))) then {
 				clearMagazineCargoGlobal _asset;
 				clearItemCargoGlobal _asset;

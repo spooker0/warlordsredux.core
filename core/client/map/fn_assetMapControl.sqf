@@ -3,7 +3,8 @@
 addMissionEventHandler ["Map", {
 	params ["_mapIsOpened", "_mapIsForced"];
 
-	private _userMarkerAlpha = if (profileNamespace getVariable ["MRTM_showMarkers", true]) then {
+	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+	private _userMarkerAlpha = if (_settingsMap getOrDefault ["showMarkers", true]) then {
 		1;
 	} else {
 		0;

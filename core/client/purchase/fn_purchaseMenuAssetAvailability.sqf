@@ -154,8 +154,8 @@ if (_ret) then {
 		};
 		case "ForfeitVote": {
 			[
-				// [WL2_fnc_checkIndependents],
-				// [WL2_fnc_checkSurrender]
+				[WL2_fnc_checkIndependents],
+				[WL2_fnc_checkSurrender]
 			]
 		};
 		case "Arsenal": {

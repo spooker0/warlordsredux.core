@@ -19,8 +19,6 @@ if (isNull _responsiblePlayer || { _responsiblePlayer == _unit }) then {
     _responsiblePlayer = _lastHitter;
 };
 
-if (isNull _responsiblePlayer) exitWith {};
-
 if (_isUnitPlayer && _unit isKindOf "Man") then {
     _unit addPlayerScores [0, 0, 0, 0, 1];
     private _killMessage = if (isPlayer [_responsiblePlayer]) then {
@@ -37,6 +35,8 @@ if (_isUnitPlayer && _unit isKindOf "Man") then {
     };
     [_killMessage] remoteExec ["systemChat", 0];
 };
+
+if (isNull _responsiblePlayer) exitWith {};
 
 private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
 private _unitCost = if (_unit isKindOf "Man") then {

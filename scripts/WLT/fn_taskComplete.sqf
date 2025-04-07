@@ -82,7 +82,8 @@ if (_taskNotFound) exitWith {};
 } forEach (simpleTasks player);
 
 if (_init) then {
-    private _mute = profileNamespace getVariable ["MRTM_muteTaskNotifications", false];
+    private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+    private _mute = _settingsMap getOrDefault ["muteTaskNotifications", false];
     if (!_mute) then {
         private _tasks = (simpleTasks player) select {
             taskState _x == "Assigned" && count (taskChildren _x) == 0

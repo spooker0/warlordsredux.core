@@ -25,9 +25,9 @@ _assetDetails params [
 
 _requirements = call compile _requirements;
 
-_purchase_pic ctrlSetStructuredText parseText format ["<img image = '%1' size = '%2' align = 'center' shadow = '0'></img>", _picture, (7.693 call WL2_fnc_purchaseMenuGetUIScale)];
+_purchase_pic ctrlSetStructuredText parseText format ["<img image='%1' size='%2' align='center' shadow='0'></img>", _picture, (7.693 call WL2_fnc_purchaseMenuGetUIScale)];
 _id = _purchase_category lbValue lbCurSel _purchase_category;
-_purchase_info_asset ctrlSetStructuredText parseText format ["<t align = 'left' size = '%2'>%1</t>", _text, 0.75 call WL2_fnc_purchaseMenuGetUIScale];
+_purchase_info_asset ctrlSetStructuredText parseText format ["<t align='left' size='%2'>%1</t>", _text, 0.75 call WL2_fnc_purchaseMenuGetUIScale];
 _cost = _purchase_items lbValue lbCurSel _purchase_items;
 
 private _infoAssetHeight = ctrlTextHeight _purchase_info_asset;
@@ -38,5 +38,24 @@ private _side = side player;
 private _moneySign = [_side] call WL2_fnc_getMoneySign;
 private _scale = 1.5 call WL2_fnc_purchaseMenuGetUIScale;
 private _costDisplay = (_cost call BIS_fnc_numberText) regexReplace [" ", ","];
-_purchase_request ctrlSetStructuredText parseText format ["<t font = 'PuristaLight' align = 'center' shadow = '2' size = '%1'>%2 (%3%4)", _scale, localize "STR_A3_WL_menu_request", _moneySign, _costDisplay];
+
+private _spawnClassMap = missionNamespace getVariable ["WL2_spawnClass", createHashMap];
+private _spawnClass = _spawnClassMap getOrDefault [_className, _className];
+private _dlcInfo = getAssetDLCInfo [_spawnClass];
+private _isDLC = _dlcInfo # 0;
+private _isAvailable = _dlcInfo # 3;
+private _dlcString = if (_isAvailable || !_isDLC) then {
+	""
+} else {
+	format ["<t align='right'>DLC Missing: %1</t>", _dlcInfo # 5];
+};
+
+_purchase_request ctrlSetStructuredText parseText format [
+	"<t font='PuristaLight' align='center' shadow='2' size='%1'>%2 (%3%4)</t>%5",
+	_scale,
+	localize "STR_A3_WL_menu_request",
+	_moneySign,
+	_costDisplay,
+	_dlcString
+];
 call WL2_fnc_purchaseMenuRefresh;

@@ -21,7 +21,8 @@ private _trackers = _taskData getOrDefault ["progressTrackers", []];
 private _task = player createSimpleTask [_taskName, _category];
 _task setTaskState "Assigned";
 
-private _mute = profileNamespace getVariable ["MRTM_muteTaskNotifications", false];
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _mute = _settingsMap getOrDefault ["muteTaskNotifications", false];
 if (!_mute && !_init) then {
     [_taskName] call WLT_fnc_addNotification;
 };

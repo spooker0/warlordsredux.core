@@ -552,7 +552,7 @@ addMissionEventHandler ["Draw3D", {
 };
 
 0 spawn {
-    while { !BIS_WL_missionEnd } do {
+    while { !BIS_WL_missionEnd && !WL_IsSpectator } do {
         sleep 1;
 
         private _override = player getVariable ["WL_hmdOverride", -1];
@@ -630,7 +630,7 @@ addMissionEventHandler ["Draw3D", {
 
     [_helmetInterfaceDistances # _helmetInterfaceIndex] call _setNewRange;
 
-	while { !BIS_WL_missionEnd } do {
+	while { !BIS_WL_missionEnd && !WL_IsSpectator } do {
         private _hasGoggles = player getVariable ["WL_hasHelmetDisplay", false];
         if (_hasGoggles) then {
             sleep 0.01;

@@ -31,10 +31,11 @@ _v addEventHandler ["Killed", {
 0 spawn {
 	while {((typeOf (objectParent player) == "B_Plane_Fighter_01_F" || {typeOf (objectParent player) == "B_Plane_CAS_01_dynamicLoadout_F" || {typeOf (objectParent player) == "B_T_VTOL_01_armed_F" || {typeOf (objectParent player) == "B_T_VTOL_01_vehicle_F" || {typeOf (objectParent player) == "B_T_VTOL_01_infantry_F"}}}}) && {alive player})} do {
 		_v = (objectParent player);
-		if ((profileNamespace getVariable ["MRTM_EnableRWR", true]) && {!(_v getVariable "isBettyBitching")}) then {
+		private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+		if ((_settingsMap getOrDefault ["rwrEnabled", true]) && {!(_v getVariable "isBettyBitching")}) then {
 			if (getPosATL player select 2 <= _v getVariable "altCeiling" && {getPosATL player select 2 > 100 && {!(_v getVariable "landingGear")}}) then {
 				if (asin (vectorDir _v select 2) < - (((getPosATL player select 2) * 40) / speed _v)) then {
-					playSoundUI ["pullUp", (profileNamespace getVariable ["MRTM_rwr1", 0.3]), 1];
+					playSoundUI ["pullUp", _settingsMap getOrDefault ["rwr1", 0.3], 1];
 					_v setVariable ["isBettyBitching", true];
 					private _startTime = serverTime + 1.33;
 					waitUntil {serverTime > _startTime};
@@ -42,60 +43,63 @@ _v addEventHandler ["Killed", {
 				};
 			};
 		};
-		private _startTime1 = serverTime + 0.2;  
+		private _startTime1 = serverTime + 0.2;
 		waitUntil {serverTime > _startTime1};
 	};
 };
 
 //Altitude warning
 0 spawn {
+	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 	while {((typeOf (objectParent player) == "B_Plane_Fighter_01_F" || {typeOf (objectParent player) == "B_Plane_CAS_01_dynamicLoadout_F" || {typeOf (objectParent player) == "B_T_VTOL_01_armed_F" || {typeOf (objectParent player) == "B_T_VTOL_01_vehicle_F" || {typeOf (objectParent player) == "B_T_VTOL_01_infantry_F"}}}}) && {alive player})} do {
 		_v = (objectParent player);
-		if ((profileNamespace getVariable ["MRTM_EnableRWR", true]) && {!(_v getVariable "isBettyBitching")}) then {
+		if ((_settingsMap getOrDefault ["rwrEnabled", true]) && {!(_v getVariable "isBettyBitching")}) then {
 			if ((getPosATL player select 2) < 100 && {!(_v getVariable "landingGear")}) then {
-				playSoundUI ["altWarning", (profileNamespace getVariable ["MRTM_rwr2", 0.3]), 1];
+				playSoundUI ["altWarning", _settingsMap getOrDefault ["rwr2", 0.3], 1];
 				_v setVariable ["isBettyBitching", true];
-				private _startTime = serverTime + 3; 
+				private _startTime = serverTime + 3;
 				waitUntil {serverTime > _startTime};
 				_v setVariable ["isBettyBitching", false];
 			};
 		};
-		private _startTime1 = serverTime + 1;  
+		private _startTime1 = serverTime + 1;
 		waitUntil {serverTime > _startTime1};
 	};
 };
 
 //Bingo fuel
 0 spawn {
+	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 	while {((typeOf (objectParent player) == "B_Plane_Fighter_01_F" || {typeOf (objectParent player) == "B_Plane_CAS_01_dynamicLoadout_F" || {typeOf (objectParent player) == "B_Heli_Attack_01_dynamicLoadout_F" || {typeOf (objectParent player) == "B_T_VTOL_01_armed_F" || {typeOf (objectParent player) == "B_T_VTOL_01_vehicle_F" || {typeOf (objectParent player) == "B_T_VTOL_01_infantry_F"}}}}}) && {alive player})} do {
 		_v = (objectParent player);
-		if ((profileNamespace getVariable ["MRTM_EnableRWR", true])) then {
+		if ((_settingsMap getOrDefault ["rwrEnabled", true])) then {
 			if (fuel _v < 0.2) then {
-				playSoundUI ["bingoFuel", (profileNamespace getVariable ["MRTM_rwr4", 0.3]), 1];
+				playSoundUI ["bingoFuel", _settingsMap getOrDefault ["rwr3", 0.3], 1];
 				_v setVariable ["isBettyBitching", true];
-				private _startTime1 = serverTime + 1.6;  
+				private _startTime1 = serverTime + 1.6;
 				waitUntil {serverTime > _startTime1};
-				_v setVariable ["isBettyBitching", false];				
+				_v setVariable ["isBettyBitching", false];
 			};
 		};
-		private _startTime1 = serverTime + 2;  
+		private _startTime1 = serverTime + 2;
 		waitUntil {serverTime > _startTime1};
 	};
 };
 
 //Sensor targets
 0 spawn {
+	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 	while {((typeOf (objectParent player) == "B_Plane_Fighter_01_F" || {typeOf (objectParent player) == "B_Plane_CAS_01_dynamicLoadout_F" || {typeOf (objectParent player) == "B_Heli_Attack_01_dynamicLoadout_F" || {typeOf (objectParent player) == "B_T_VTOL_01_armed_F" || {typeOf (objectParent player) == "B_T_VTOL_01_vehicle_F" || {typeOf (objectParent player) == "B_T_VTOL_01_infantry_F"}}}}}) && {alive player})} do {
 		_v = (objectParent player);
 		_v setVariable ["newTargets", getSensorTargets _v];
-		if (profileNamespace getVariable ["MRTM_EnableRWR", true]) then {
+		if (_settingsMap getOrDefault ["rwrEnabled", true]) then {
 			if (count (_v getVariable "newTargets") > count (_v getVariable "currentTargets")) then {
-				playSoundUI ["radarTargetNew", (profileNamespace getVariable ["MRTM_rwr4", 0.3]), 1];
+				playSoundUI ["radarTargetNew", _settingsMap getOrDefault ["rwr3", 0.3], 1];
 				sleep 0.1;
 			};
 
 			if (count (_v getVariable "newTargets") < count (_v getVariable "currentTargets")) then {
-				playSoundUI ["radarTargetLost", (profileNamespace getVariable ["MRTM_rwr4", 0.3]), 1];
+				playSoundUI ["radarTargetLost", _settingsMap getOrDefault ["rwr3", 0.3], 1];
 				sleep 0.1;
 			};
 		};
@@ -105,9 +109,10 @@ _v addEventHandler ["Killed", {
 };
 
 0 spawn {
+	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 	while {((typeOf (objectParent player) == "B_Plane_Fighter_01_F" || {typeOf (objectParent player) == "B_Plane_CAS_01_dynamicLoadout_F" || {typeOf (objectParent player) == "B_Heli_Attack_01_dynamicLoadout_F" || {typeOf (objectParent player) == "B_T_VTOL_01_armed_F" || {typeOf (objectParent player) == "B_T_VTOL_01_vehicle_F" || {typeOf (objectParent player) == "B_T_VTOL_01_infantry_F"}}}}}) && {alive player})} do {
 		_v = (objectParent player);
-		if ((profileNamespace getVariable ["MRTM_EnableRWR", true]) && {!(_v getVariable "isBettyBitching")}) then {
+		if ((_settingsMap getOrDefault ["rwrEnabled", true]) && {!(_v getVariable "isBettyBitching")}) then {
 			if (count (_v getVariable ["Incomming", []]) > 0) then {
 				_v setVariable ["isBettyBitching", true];
 				_incomming = ((_v getVariable "Incomming") # 0);
@@ -131,7 +136,7 @@ _v addEventHandler ["Killed", {
 					};
 				};
 				_sound = format ["incMissile_%1", _fDir];
-				playSoundUI [_sound, ((profileNamespace getVariable ["MRTM_rwr4", 0.3]) + 0.3), 1];
+				playSoundUI [_sound, (_settingsMap getOrDefault ["rwr3", 0.3] + 0.3), 1];
 				sleep 2.3;
 				_v setVariable ["isBettyBitching", false];
 			};

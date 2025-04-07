@@ -32,4 +32,9 @@ private _asset = uiNamespace getVariable "WLM_asset";
 private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
 private _variableName = format ["WLM_savedLoadout_%1", _assetActualType];
 profileNamespace setVariable [_variableName, []];
+
+private _loadoutDefaults = profileNamespace getVariable ["WLM_loadoutDefaults", createHashmap];
+_loadoutDefaults deleteAt _assetActualType;
+profileNamespace setVariable ["WLM_loadoutDefaults", _loadoutDefaults];
+
 call WLM_fnc_constructPresetMenu;

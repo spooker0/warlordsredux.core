@@ -9,31 +9,38 @@ private _message = format ["%1 has initiated a vote to forfeit the game.", _forf
 	[[_side, "Base"], _message] remoteExec ["commandChat", owner _x];
 } forEach (allPlayers select {side group _x == _side});
 
+private _voteSucceeded = false;
+
 while { serverTime < ((missionNamespace getVariable [_varName, -1]) + 30) } do {
 	sleep 0.25;
 
-	private _warlords = allPlayers select {
-		side group _x == _side &&
+	private _eligibleVoters = (allPlayers select {side group _x == _side}) select {
 		!(_x getVariable ["BIS_WL_incomeBlocked", false])
 	};
-	private _limit = ceil ((count _warlords) / 2);
+	private _limit = ceil ((count _eligibleVoters) / 2);
 	private _votedYes = {
 		_x getVariable ["BIS_WL_forfeitVote", -1] == 1
-	} count _warlords;
+	} count _eligibleVoters;
 
-	if (_votedYes >= _limit && serverTime >= 180) then {
-		missionNamespace setVariable ["BIS_WL_ffTeam", _side, true];
-		missionNamespace setVariable ["BIS_WL_missionEnd", true, true];
-
-		0 spawn WL2_fnc_calculateEndResults;
-		0 remoteExec ["WL2_fnc_missionEndHandle", 0];
-
+	if (_votedYes >= _limit) then {
+		_voteSucceeded = true;
 		break;
 	};
 };
 
-{
-	if ((_x getVariable ["BIS_WL_forfeitVote", -1]) != -1) then {
-		_x setVariable ["BIS_WL_forfeitVote", nil, [2, (owner _x)]];
-	};
-} forEach (allPlayers select {side group _x == _side});
+if (_voteSucceeded) then {
+	missionNamespace setVariable ["BIS_WL_ffTeam", _side, true];
+	missionNamespace setVariable ["BIS_WL_missionEnd", true, true];
+
+	0 spawn WL2_fnc_calculateEndResults;
+	0 remoteExec ["WL2_fnc_missionEndHandle", 0];
+} else {
+	{
+		private _owner = owner _x;
+		if ((_x getVariable ["BIS_WL_forfeitVote", -1]) != -1) then {
+			_x setVariable ["BIS_WL_forfeitVote", nil, [2, _owner]];
+		};
+
+		[[_side, "Base"], "Surrender vote failed."] remoteExec ["commandChat", _owner];
+	} forEach (allPlayers select {side group _x == _side});
+};

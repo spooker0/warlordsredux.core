@@ -27,18 +27,18 @@
 			};
 		} forEach _maps;
 
-		uiSleep 10;
+		uiSleep 3;
 	};
 };
 
-
 // Fast loop
 0 spawn {
+	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 	while { !BIS_WL_missionEnd } do {
 		private _mainMap = (findDisplay 12) displayCtrl 51;
 		[_mainMap] spawn WL2_fnc_iconDrawMapPrepare;
 
-		private _refreshRate = profileNamespace getVariable ["MRTM_mapRefresh", 4];
+		private _refreshRate = _settingsMap getOrDefault ["mapRefresh", 4];
 		_refreshRate = _refreshRate max 1;
 		private _refreshSleepTime = 1 / _refreshRate;
 		uiSleep _refreshSleepTime;

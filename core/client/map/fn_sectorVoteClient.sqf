@@ -3,8 +3,8 @@
 // Ongoing checks for sector target
 0 spawn {
     private _lastTargetFriendly = objNull;
-    while {!BIS_WL_missionEnd} do {
-        if !(BIS_WL_playerSide in BIS_WL_competingSides) exitWith {
+    while { !BIS_WL_missionEnd } do {
+        if (!(BIS_WL_playerSide in BIS_WL_competingSides) || WL_IsSpectator) exitWith {
             WL_VotePhase = 0;
             private _voteDisplay = uiNamespace getVariable ["RscWLVoteDisplay", objNull];
             if (!isNull _voteDisplay) then {
@@ -44,7 +44,7 @@
 
 // Checks for voting phase
 while {!BIS_WL_missionEnd} do {
-    if !(BIS_WL_playerSide in BIS_WL_competingSides) exitWith {
+    if (!(BIS_WL_playerSide in BIS_WL_competingSides) || WL_IsSpectator) exitWith {
         WL_VotePhase = 0;
     };
 

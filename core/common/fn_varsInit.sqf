@@ -60,5 +60,6 @@ switch (_locality) do {
 		WL_HelmetInterface = 0;
 		WL_ScannerUnits = [];
 		WL_SpectrumInterface = false;
+		WL_IsSpectator = false;
 	};
 };

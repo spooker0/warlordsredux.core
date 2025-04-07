@@ -42,7 +42,11 @@ private _button = _dialog ctrlCreate ["RscButtonMenu", -1];
 _button ctrlSetPosition [_offsetX, _offsetY + (count _menuButtons * 0.05), 0.5, 0.05];
 _button ctrlSetStructuredText parseText format ["<t align='center' font='PuristaBold'>%1%2</t>", _textLabel, _costText];
 _button ctrlCommit 0;
-_button ctrlEnable _buttonEnabled;
+if (_buttonEnabled) then {
+    _button ctrlSetTextColor [1, 1, 1, 1];
+} else {
+    _button ctrlSetTextColor [1, 1, 1, 0.2];
+};
 _menuButtons pushBack _button;
 
 _button setVariable ["WL2_targetButtonSetupAction", _action];

@@ -129,7 +129,6 @@ enableSentences true;
 setCurrentChannel 1;
 enableEnvironment [false, true];
 
-call MRTM_fnc_settingsInit;
 WL_LoadingState = 5;
 
 uiNamespace setVariable ["BIS_WL_purchaseMenuLastSelection", [0, 0, 0]];
@@ -251,7 +250,7 @@ WL_LoadingState = 11;
 0 spawn WL2_fnc_assetMapControl;
 0 spawn WL2_fnc_mapIcons;
 
-0 spawn GFE_fnc_earplugs;
+[46] spawn GFE_fnc_earplugs;
 WL_LoadingState = 12;
 
 ["client_init"] call BIS_fnc_endLoadingScreen;
@@ -269,9 +268,10 @@ WL_LoadingState = 12;
 
 0 spawn {
 	WL_ORIGINAL_SPEAKER = speaker player;
+	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 	while { !BIS_WL_missionEnd } do {
 		sleep 5;
-		private _noVoice = profileNamespace getVariable ["MRTM_noVoiceSpeaker", false];
+		private _noVoice = _settingsMap getOrDefault ["noVoiceSpeaker", false];
 		if (_noVoice) then {
 			player setSpeaker "NoVoice";
 		} else {
@@ -326,7 +326,8 @@ call SQD_fnc_initClient;
 
 call WL2_fnc_pingFixInit;
 
-0 spawn MRTM_fnc_settingsMenu;
+0 spawn MENU_fnc_settingsMenu;
+
 missionNamespace setVariable [format ["BIS_WL2_minesDB_%1", getPlayerUID player],
 	createHashMapFromArray [
 		// ***Automatic mines***/
@@ -365,7 +366,7 @@ player spawn APS_fnc_setupProjectiles;
 0 spawn WL2_fnc_handleKillFeedUpdate;
 0 spawn {
 	sleep 5;
-	[] call MRTM_fnc_updateViewDistance;
+	[] call MENU_fnc_updateViewDistance;
 };
 0 spawn WL2_fnc_interceptAction;
 0 spawn WL2_fnc_avTerminal;

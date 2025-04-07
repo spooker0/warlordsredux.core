@@ -4,22 +4,22 @@
 	Description: Opens the Report menu.
 */
 
-if (isNull (findDisplay 73000)) then {	
+if (isNull (findDisplay 73000)) then {
 	_display = createDialog "Fxr_ReportDialog";
 	_playerList = ((findDisplay 73000) displayCtrl 73004);
-	disableSerialization;	
-	
-	private _players = allPlayers - entities "HeadlessClient_F"; 
+	disableSerialization;
+
+	private _players = allPlayers - entities "HeadlessClient_F";
 	{
 		//for coloring
 		_side = ([west, east, civilian] find (side group _x));
 		//_color = [[0, 0.3, 0.5, 1], [0.5, 0, 0, 1]] select _side;,
 		//https://community.bistudio.com/wiki/Arma_3:_CfgMarkerColors
 		_color = [[0, 0.3, 0.5, 1], [0.5, 0, 0, 1],	[0.4,0,0.5,1] ] select _side;
-		
+
 		_idx = _playerList lbAdd name _x;
 		_playerList lbSetColor [_idx, _color];
-	} forEach _players;	
+	} forEach _players;
 
 	lbSort _playerList; //so its not in the order of people joining..
 
@@ -48,14 +48,14 @@ if (isNull (findDisplay 73000)) then {
 								private _UKTime = format["%1/%2/%3 -%4:%5:%6", _day, _month, _year, _hour, _minute, _second];
 								private _lsText = format["Name[%1] beId[%2] at %3 UTC", _passedname, _beId, _UKTime];
 								diag_log _lsText;
-								_editCtrl = ((findDisplay 73000) displayCtrl 73006);
+								private _editCtrl = ((findDisplay 73000) displayCtrl 73006);
 								if (isNull _editCtrl) then {
-									w = (0.20375 * safezoneW)+(pixelW * pixelGrid*30);
-									h = 0.025 * safezoneH;
-									x = (0.38836 * safezoneW + safezoneX)-(pixelW * pixelGrid*15);
-									y = (0.235 * safezoneH + safezoneY) - h;
-									_editCtrl = (findDisplay 73000) ctrlCreate ["RscEditReadOnly",73006];
-									_editCtrl ctrlSetPosition [x,y,w,h]; 							
+									private _w = (0.20375 * safezoneW) + (pixelW * pixelGrid * 30);
+									private _h = 0.025 * safezoneH;
+									private _x = (0.38836 * safezoneW + safezoneX) - (pixelW * pixelGrid * 15);
+									private _y = (0.235 * safezoneH + safezoneY) - _h;
+									_editCtrl = (findDisplay 73000) ctrlCreate ["RscEditReadOnly", 73006];
+									_editCtrl ctrlSetPosition [_x, _y, _w, _h];
 								};
 								_editCtrl ctrlSetText _lsText;
 								_editCtrl ctrlSetBackgroundColor [1, 1, 1, 0.8];
@@ -64,15 +64,15 @@ if (isNull (findDisplay 73000)) then {
 								_lsText;
 							}else{
 								_text;
-							};							
+							};
 						}else{
 							_text;
-						};						
+						};
 					}else{
 						_text;
 					};
-					//true; // /don't let message results show up in chat					
-				}, 
+					//true; // /don't let message results show up in chat
+				},
 				[]//[_name]
 				];
 				localNamespace setVariable ["ChatEHId", _ChatEHId];

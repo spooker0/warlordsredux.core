@@ -193,7 +193,7 @@ if (_kills == 5) then {
 			_uav setVariable ["WL_scannerOn", false];
 			deleteVehicle _uav;
 
-			[] call MRTM_fnc_updateViewDistance;
+			[] call MENU_fnc_updateViewDistance;
 		},
 		[],
 		150

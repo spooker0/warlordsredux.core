@@ -40,7 +40,8 @@ uiNamespace setVariable ["WL_killRewardMap", _killRewardMap];
 
 WAS_score = true;
 
-if (profileNamespace getVariable ["MRTM_playKillSound", true] && _customColor == "#de0808") then {
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+if (_settingsMap getOrDefault ["playKillSound", true] && _customColor == "#de0808") then {
 	playSoundUI ["hitmarker", 1, 1];
 	if (missionNamespace getVariable ["WL_easterEggOverride", false]) then {
 		private _killsInRow = missionNamespace getVariable ["WL_killsInRow", 0];

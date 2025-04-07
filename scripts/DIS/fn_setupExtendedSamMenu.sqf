@@ -31,6 +31,7 @@ _launchButton ctrlAddEventHandler ["ButtonClick", {
     };
 
     (getConnectedUAVUnit player) forceWeaponFire ["weapon_VLS_01", "Cruise"];
+    closeDialog 0;
 }];
 
 [_display, _asset] spawn {

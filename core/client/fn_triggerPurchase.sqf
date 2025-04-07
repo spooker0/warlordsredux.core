@@ -128,7 +128,11 @@ switch (_className) do {
                 private _position =  _deploymentResult # 1;
                 private _direction = _deploymentResult # 3;
                 private _uid = getPlayerUID player;
+
+                _vehicle enableSimulation false;
                 private _nearbyEntities = [_class, _position, _direction, _uid, []] call WL2_fnc_grieferCheck;
+                _vehicle enableSimulation true;
+
                 if (count _nearbyEntities > 0) then {
                     private _nearbyObject = _nearbyEntities # 0;
                     private _nearbyObjectName = [_nearbyObject] call WL2_fnc_getAssetTypeName;

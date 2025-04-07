@@ -38,6 +38,12 @@ switch (_action) do {
             _return = 1;
         };
 
+        private _inviteeSquad = SQUAD_MANAGER select {(_x select 2) find _playerId > -1};
+        if (count _inviteeSquad > 0) exitWith {
+            _message = format ["Player %1 is already in a squad", _playerId];
+            _return = 1;
+        };
+
         private _squadLeader = _squad select 1;
         if (_squadLeader != _inviter) then {
             private _inviterInfo = getUserInfo _inviter;

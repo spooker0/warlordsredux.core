@@ -51,11 +51,6 @@ switch (_fastTravelMode) do {
 	case 3: {
 		private _safeSpot = selectRandom ([BIS_WL_targetSector, 0, true] call WL2_fnc_findSpawnPositions);
 		_destination = [_safeSpot # 0, _safeSpot # 1, 50];
-
-        private _paradropNextUseVar = format ["WL_paradropNextUse_%1", getPlayerUID player];
-        missionNamespace setVariable [_paradropNextUseVar, serverTime + 600];
-
-		[player, "fastTravelContested", getMissionConfigValue ["WL_vehicleParadropCost", 1000]] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	};
 	case 4: {
 		private _respawnBag = player getVariable ["WL2_respawnBag", objNull];
@@ -82,10 +77,6 @@ switch (_fastTravelMode) do {
 		};
 		_destination = [_destination # 0, _destination # 1, 50];
 		deleteMarker _marker;
-
-		private _paradropNextUseVar = format ["WL_paradropNextUse_%1", getPlayerUID player];
-        missionNamespace setVariable [_paradropNextUseVar, serverTime + 600];
-		[player, "fastTravelContested", getMissionConfigValue ["WL_vehicleParadropCost", 1000]] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	};
 };
 
@@ -151,7 +142,14 @@ switch (_fastTravelMode) do {
 			};
 			detach _vehicle;
 			deleteVehicle _parachute;
+
+			sleep 0.5;
+			_vehicle setVehiclePosition [getPosATL _vehicle, [], 0, "NONE"];
 		};
+
+		private _paradropNextUseVar = format ["WL_paradropNextUse_%1", getPlayerUID player];
+        missionNamespace setVariable [_paradropNextUseVar, serverTime + 600];
+		[player, "fastTravelContested", getMissionConfigValue ["WL_vehicleParadropCost", 1000]] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	};
 	case 4: {
         if (count _destination > 0) then {

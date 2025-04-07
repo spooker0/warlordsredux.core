@@ -159,11 +159,13 @@ waitUntil {!isNil "BIS_WL_base1" && {!isNil "BIS_WL_base2"}};
 		_x setVariable ["BIS_WL_revealedBy", [west], true];
 		[_x, west] call WL2_fnc_sectorRevealHandle;
 		[_x, west] call WL2_fnc_changeSectorOwnership;
+		_x spawn WL2_fnc_sectorCaptureHandle;
 	} forEach _westSectors;
 	{
 		_x setVariable ["BIS_WL_revealedBy", [east], true];
 		[_x, east] call WL2_fnc_sectorRevealHandle;
 		[_x, east] call WL2_fnc_changeSectorOwnership;
+		_x spawn WL2_fnc_sectorCaptureHandle;
 	} forEach _eastSectors;
 };
 #endif

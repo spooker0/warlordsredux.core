@@ -18,7 +18,7 @@ class CfgRemoteExec {
 		class KST_fnc_explode {allowedTargets = 0;};
 		class KST_fnc_rocket {allowedTargets = 0;};
 		class KST_fnc_setParent {allowedTargets = 0;};
-		class MRTM_fnc_execCode {allowedTargets = 2;};
+		class MENU_fnc_execCode {allowedTargets = 2;};
 		class POLL_fnc_openPoll {allowedTargets = 0;};
 		class POLL_fnc_vote {allowedTargets = 0;};
 		class SQD_fnc_server {allowedTargets = 2;};

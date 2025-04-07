@@ -218,7 +218,7 @@ addMissionEventHandler ["Draw3D", {
                     _x distance2D _lockedUav < _x getVariable ["WL_ewNetRange", 0]
                 };
 
-                private _jammable = _distance < _lockRange && count _ewNetworkUnits == 0;
+                private _jammable = _distance < _lockRange && (count _ewNetworkUnits == 0 || _spectrumAttachment == "muzzle_antenna_03_f");
                 (_spectrumIcons # _findLockedUav) set [0, if (_jammable) then {
                     "\A3\ui_f\data\IGUI\Cfg\Targeting\HitConfirm_ca.paa"
                 } else {

@@ -1,4 +1,4 @@
-params ["_class", "_orderedClass", "_offset", "_range", "_ignoreSector", ["_originalAsset", objNull]];
+params ["_class", "_orderedClass", "_offset", "_range", "_ignoreSector"];
 
 private _asset = createVehicleLocal [_class, player modelToWorld [0, 0, 1000], [], 0, "NONE"];
 _asset setPhysicsCollisionFlag false;

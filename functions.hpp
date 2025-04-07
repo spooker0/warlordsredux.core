@@ -68,18 +68,14 @@ class CfgFunctions {
 			class setParent {};
 		};
 	};
-	class MRTM {
+	class MENU {
 		class Default {
-			file = "src\scripts\MRTM";
+			file = "src\scripts\MENU";
+			class debugMenu {};
 			class execCode {};
-			class onChar {};
-			class onSliderChanged {};
-			class openDebugMenu {};
-			class openMenu {};
 			class setReturnValue {};
-			class settingsInit {};
 			class settingsMenu {};
-			class updateSettings {};
+			class settingsMenuInit {};
 			class updateViewDistance {};
 		};
 	};

@@ -130,6 +130,7 @@ while {dialog} do {
 			localize "STR_MRTM_welcomeInteract_17", lineBreak,
 			"- Weasley Wells", lineBreak,
 			"- Rook", lineBreak,
+			"- MONGCHAW", lineBreak,
 			"", lineBreak,
 			localize "STR_MRTM_welcomeInteract_22", lineBreak,
 			"- MrThomasM", lineBreak,
