@@ -4,15 +4,14 @@ if !(getPlayerUID player in getArray (missionConfigFile >> "adminIDs")) exitWith
 
 private _display = findDisplay DEBUG_DISPLAY;
 if (isNull _display) then {
-    _display = (findDisplay 46) createDisplay "MENU_DebugConsole";
+    _display = createDialog ["MENU_DebugConsole", true];
 };
 
 disableSerialization;
 
 private _closeButton = _display displayCtrl DEBUG_CLOSE_BUTTON;
 _closeButton ctrlAddEventHandler ["ButtonClick", {
-    params ["_control"];
-    (ctrlParent _control) closeDisplay 1;
+    closeDialog 0;
 }];
 
 private _execServerButton = _display displayCtrl DEBUG_SERVER_EXEC_BUTTON;

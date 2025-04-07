@@ -2,7 +2,7 @@
 
 private _display = findDisplay MENU_DISPLAY;
 if (isNull _display) then {
-    _display = (findDisplay 46) createDisplay "MENU_Settings";
+    _display = createDialog ["MENU_Settings", true];
 };
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
@@ -12,8 +12,7 @@ disableSerialization;
 
 private _closeButton = _display displayCtrl MENU_CLOSE_BUTTON;
 _closeButton ctrlAddEventHandler ["ButtonClick", {
-    params ["_control"];
-    (ctrlParent _control) closeDisplay 1;
+    closeDialog 0;
 }];
 
 private _controlGroup = _display displayCtrl MENU_CONTROLS_GROUP;
@@ -22,23 +21,17 @@ private _buttonPositionX = 0.05;
 
 private _buttons = [
     ["SQUADS", {
-        params ["_control"];
-        private _display = ctrlParent _control;
-        _display closeDisplay 1;
+        closeDialog 0;
         [true] call SQD_fnc_menu;
     }],
     ["REPORT", {
-        params ["_control"];
-        private _display = ctrlParent _control;
-        _display closeDisplay 1;
+        closeDialog 0;
         0 spawn FXR_fnc_openReportMenu;
     }]
 ];
 if (getPlayerUID player in getArray (missionConfigFile >> "adminIDs")) then {
     _buttons pushBack ["DEBUG", {
-        params ["_control"];
-        private _display = ctrlParent _control;
-        _display closeDisplay 1;
+        closeDialog 0;
         0 call MENU_fnc_debugMenu;
     }];
 };
