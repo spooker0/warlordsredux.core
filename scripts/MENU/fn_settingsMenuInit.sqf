@@ -5,10 +5,7 @@ if (isNull _display) then {
     _display = (findDisplay 46) createDisplay "MENU_Settings";
 };
 
-private _settingsMap = profileNamespace getVariable "WL2_settings";
-if (isNil "_settingsMap") then {
-    profileNamespace setVariable ["WL2_settings", createHashMap];
-};
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 
 ["TaskThirdPerson"] call WLT_fnc_taskComplete;
 disableSerialization;

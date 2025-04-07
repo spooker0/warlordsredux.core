@@ -57,7 +57,7 @@ addMissionEventHandler ["Draw3D", {
                 if (!WL_IsSpectator) exitWith {};
                 private _projectiles = uiNamespace getVariable ["WL2_projectiles", []];
                 _unit setVariable ["WL2_spectateLastFired", serverTime];
-                if (_projectile isKindOf "MissileBase") then {
+                if ([_projectile] call WL2_fnc_isScannerMunition) then {
                     _projectiles pushBack _projectile;
                 };
             }];
@@ -85,6 +85,7 @@ addMissionEventHandler ["Draw3D", {
         };
 
         if (inputAction "GetOver" > 0) then {
+            waitUntil { inputAction "GetOver" == 0 };
             private _volume = getPlayerVoNVolume _spectatingPlayer;
             if (_volume == -1) then {
                 continue;

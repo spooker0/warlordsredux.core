@@ -135,6 +135,11 @@ uiNamespace setVariable ["BIS_WL_purchaseMenuLastSelection", [0, 0, 0]];
 uiNamespace setVariable ["activeControls", []];
 uiNamespace setVariable ["control", 10000];
 
+private _settingsMap = profileNamespace getVariable "WL2_settings";
+if (isNil "_settingsMap") then {
+    profileNamespace setVariable ["WL2_settings", createHashMap];
+};
+
 if (!_isAdmin) then {
 	0 spawn WL2_fnc_wasMain;
 };
