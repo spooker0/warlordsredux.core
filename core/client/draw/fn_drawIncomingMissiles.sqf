@@ -41,7 +41,7 @@ while { !BIS_WL_missionEnd } do {
         private _missileState = _missile getVariable ["APS_missileState", "LOCKED"];
         private _distance = _missile distance _asset;
         private _relDir = _missile getRelDir _asset;
-        private _missileApproaching = (_relDir < 90 || _relDir > 270) && !(_missileState in ["LOST", "BLIND"]);
+        private _missileApproaching = (_relDir < 90 || _relDir > 270) && !(_missileState == "BLIND");
         private _missileType = _missile getVariable ["WL2_missileNameOverride", _missileTypeData getOrDefault [typeof _missile, "MISSILE"]];
 
         private _projectileRelativeVelocity = _missile vectorWorldToModel _targetVector;

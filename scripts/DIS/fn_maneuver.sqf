@@ -25,7 +25,6 @@ private _originalPosition = getPosASL _unit;
         private _notchResult = [_originalTarget, _projectile, _unit] call DIS_fnc_getNotchResult;
         if (_notchResult) then {
             _projectile setVariable ["DIS_notched", true];
-            _projectile setMissileTarget objNull;
         } else {
             // If not already notched and not notching
             if (_projectile getVariable ["DIS_notched", false]) then {
@@ -106,11 +105,16 @@ while { alive _projectile } do {
         private _belowTargetATL = _projectileHeightATL < _targetHeightATL;
         private _groundAvoid = !(_intersectPosition isEqualTo [0, 0, 0]) && _belowTargetATL;
 
-        if (_groundAvoid) then {
-            _projectile setAngularVelocityModelSpace [-30 * (_terrainTest -_distanceToGround) / _terrainTest, _angularVector # 1, _angularVector # 2];
+        private _notched = _projectile getVariable ["DIS_notched", false];
+        if (_notched) then {
+            _projectile setAngularVelocityModelSpace [0, 0, 0];
         } else {
-            private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
-            _projectile setAngularVelocityModelSpace _newAngularVector;
+            if (_groundAvoid) then {
+                _projectile setAngularVelocityModelSpace [-30 * (_terrainTest -_distanceToGround) / _terrainTest, _angularVector # 1, _angularVector # 2];
+            } else {
+                private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
+                _projectile setAngularVelocityModelSpace _newAngularVector;
+            };
         };
 
         private _vectorUp = vectorUp _projectile;
