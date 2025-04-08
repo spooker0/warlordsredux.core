@@ -1,3 +1,5 @@
+#include "..\warlords_constants.inc"
+
 WL_IsSpectator = true;
 
 player setVariable ["ShowHeader", false];
@@ -11,24 +13,10 @@ private _displayId = 60492;
 // hide spectator on land
 player setPosASL [2304.97, 9243.11, 11.5];
 player allowDamage false;
-
-private _sectors = [BIS_WL_allSectors, [], { _x getVariable "BIS_WL_name" }, "ASCEND"] call BIS_fnc_sortBy;
+[player] remoteExec ["WL2_fnc_hideObjectOnAll", 2];
 
 private _osdDisplay = uiNamespace getVariable "RscTitleDisplayEmpty";
 _osdDisplay closeDisplay 0;
-
-addMissionEventHandler ["Draw3D", {
-    private _drawIcons = uiNamespace getVariable ["WL2_spectatorDrawIcons", []];
-    // private _drawLines = uiNamespace getVariable ["WL2_spectatorDrawLines", []];
-
-    {
-        drawIcon3D _x;
-    } forEach _drawIcons;
-
-    // {
-    //     drawLine3D _x;
-    // } forEach _drawLines;
-}];
 
 0 spawn {
     private _projectiles = [];
@@ -59,9 +47,124 @@ addMissionEventHandler ["Draw3D", {
                 _unit setVariable ["WL2_spectateLastFired", serverTime];
                 if ([_projectile] call WL2_fnc_isScannerMunition) then {
                     _projectiles pushBack _projectile;
+                    _projectiles = _projectiles select { alive _x };
+
+                    if (uiNamespace getVariable ["WL2_spectateProjectile", objNull] == _unit) then {
+                        uiNamespace setVariable ["WL2_spectateProjectile", objNull];
+                        [_projectile] spawn {
+                            params ["_projectile"];
+                            private _cameraScript = missionNamespace getVariable ["BIS_fnc_EGSpectatorCamera", {}];
+                            private _cameraResetScript = missionNamespace getVariable ["BIS_fnc_EGSpectatorCameraResetTarget", {}];
+                            ["SetCameraMode", ["free"]] call _cameraScript;
+                            [] call _cameraResetScript;
+                            private _focus = uiNamespace getVariable ["RscEGSpectator_focus", objNull];
+                            uiNamespace setVariable ["RscEGSpectator_focus", objNull];
+
+                            private _camera = missionNamespace getVariable ["BIS_EGSpectatorCamera_camera", objNull];
+                            if (!isNull _camera) then {
+                                _camera attachTo [_projectile, [0, 1, 0]];
+                                _camera camSetTarget _projectile;
+                                _camera camCommit 0;
+                            };
+
+                            while { alive _projectile } do {
+                                sleep 1;
+                            };
+
+                            uiNamespace setVariable ["RscEGSpectator_focus", _focus];
+                            ["SetCameraMode", ["follow"]] call _cameraScript;
+                        };
+                    };
                 };
             }];
         } forEach _allVehicles;
+
+        private _spectatorDisplay = findDisplay 60492;
+        private _entitiesList = _spectatorDisplay displayCtrl 43109;
+        for "_sideId" from 0 to ((_entitiesList tvCount []) - 1) do {   // Sides
+            for "_groupId" from 0 to ((_entitiesList tvCount [_sideId]) - 1) do {   // Groups
+                for "_unitId" from 0 to ((_entitiesList tvCount [_sideId, _groupId]) - 1) do {  // Units
+                    private _path = [_sideId, _groupId, _unitId];
+                    private _tvData = _entitiesList tvData _path;
+                    private _entity = missionNamespace getVariable [_tvData, objNull];
+
+                    private _entityVehicle = vehicle _entity;
+                    if (_entityVehicle != _entity && alive _entityVehicle) then {
+                        _entitiesList tvSetText [_path, format [
+                            "%1: %2",
+                            [_entityVehicle] call WL2_fnc_getAssetTypeName,
+                            [_entity, true] call BIS_fnc_getName
+                        ]];
+
+                        private _targetIcon = getText (configFile >> "CfgVehicles" >> typeOf _entityVehicle >> "picture");
+                        if (_targetIcon in ["", "picturething", "pictureThing", "picturelogic", "pictureLogic"]) then {
+                            _targetIcon = "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\Air_ca.paa";
+                        };
+
+                        _entitiesList tvSetPicture [_path, _targetIcon];
+                    };
+                };
+            };
+        };
+
+        private _locations = [];
+        private _relevantSectors = BIS_WL_allSectors select {
+            _x == BIS_WL_base1 || _x == BIS_WL_base2 ||
+            _x == WL_TARGET_ENEMY || _x == WL_TARGET_FRIENDLY ||
+            _x getVariable ["BIS_WL_owner", independent] != independent
+        };
+
+        _relevantSectors = [_relevantSectors, [], { ((_x getVariable "objectAreaComplete") # 0) distance BIS_WL_base1 }, "ASCEND"] call BIS_fnc_sortBy;
+
+        {
+            private _id = format ["loc%1", _forEachIndex];
+            private _name = _x getVariable ["BIS_WL_name", "Sector"];
+            private _owner = _x getVariable ["BIS_WL_owner", sideUnknown];
+            private _description = switch (_owner) do {
+                case west: {
+                    "BLUFOR"
+                };
+                case east: {
+                    "OPFOR"
+                };
+                case independent: {
+                    "INDEPENDENT"
+                };
+            };
+            private _texture = switch (_owner) do {
+                case west: {
+                    "\A3\ui_f\data\map\markers\nato\b_installation.paa";
+                };
+                case east: {
+                    "\A3\ui_f\data\map\markers\nato\o_installation.paa";
+                };
+                case independent: {
+                    "\A3\ui_f\data\map\markers\nato\n_installation.paa";
+                };
+            };
+            private _sectorPos = (_x getVariable "objectAreaComplete") # 0;
+            _sectorPos set [2, 200];
+
+            private _cameraTransform = [
+                _sectorPos,
+                [0, 1, 0],
+                [0, 0, -1]
+            ];
+            _locations pushBack [_id, _name, _description, _texture, _cameraTransform, 0];
+        } forEach _relevantSectors;
+        missionNamespace setVariable ["BIS_EGSpectator_locations", _locations];
+
+        {
+            private _owner = _x getVariable ["BIS_WL_owner", independent];
+            [_x, _owner] call WL2_fnc_sectorMarkerUpdate;
+        } forEach BIS_WL_allSectors;
+
+        "BIS_WL_targetEnemy" setMarkerPosLocal getPosASL WL_TARGET_ENEMY;
+		"BIS_WL_targetEnemy" setMarkerAlphaLocal 1;
+		"BIS_WL_targetEnemy" setMarkerDirLocal 45;
+		"BIS_WL_targetFriendly" setMarkerPosLocal getPosASL WL_TARGET_FRIENDLY;
+		"BIS_WL_targetFriendly" setMarkerAlphaLocal 1;
+
         sleep 5;
     };
 };
@@ -69,6 +172,7 @@ addMissionEventHandler ["Draw3D", {
 0 spawn {
     private _spectatingPlayer = objNull;
     private _spectatingPlayerScore = -1;
+    private _camSetTargetScript = missionNamespace getVariable ["BIS_fnc_EGSpectatorCameraSetTarget", {}];
     while { WL_IsSpectator } do {
         private _spectatorFocus = uiNamespace getVariable ["RscEGSpectator_focus", objNull];
         private _currentSpectatingPlayer = [_spectatorFocus, _spectatorFocus] call WL2_fnc_handleInstigator;
@@ -96,6 +200,11 @@ addMissionEventHandler ["Draw3D", {
                     _spectatingPlayer setPlayerVoNVolume 0;
                 };
             };
+        };
+
+        if (inputAction "binocular" > 0) then {
+            waitUntil { inputAction "binocular" == 0 };
+            uiNamespace setVariable ["WL2_spectateProjectile", vehicle _spectatorFocus];
         };
 
         sleep 0.001;
@@ -128,9 +237,24 @@ addMissionEventHandler ["Draw3D", {
     };
     [_hudRangeDistances # _hudRangeIndex] call _setNewRange;
 
-    private _spectatorDisplay = findDisplay 60492;
-    private _spectatorDisplayMap = _spectatorDisplay displayCtrl 62609;
-    private _mapGroup = ctrlParentControlsGroup _spectatorDisplayMap;
+    private _findMap = {
+        private _spectatorDisplay = findDisplay 60492;
+        private _spectatorDisplayMap = _spectatorDisplay displayCtrl 62609;
+        private _mapGroup = ctrlParentControlsGroup _spectatorDisplayMap;
+
+        [_spectatorDisplay, _spectatorDisplayMap, _mapGroup]
+    };
+
+    private _spectatorDisplay = displayNull;
+    private _spectatorDisplayMap = controlNull;
+    private _mapGroup = controlNull;
+
+    while { isNull _mapGroup } do {
+        _spectatorDisplay = findDisplay 60492;
+        _spectatorDisplayMap = _spectatorDisplay displayCtrl 62609;
+        _mapGroup = ctrlParentControlsGroup _spectatorDisplayMap;
+        sleep 0.1;
+    };
 
     _mapGroup ctrlShow false;
     _mapGroup ctrlSetPosition [0, 0, 0, 0];
@@ -139,8 +263,6 @@ addMissionEventHandler ["Draw3D", {
     _spectatorDisplayMap ctrlShow false;
     _spectatorDisplayMap ctrlSetPosition [0, 0, 0, 0];
     _spectatorDisplayMap ctrlCommit 0;
-
-    private _spectatorDisplay = findDisplay 60492;
 
     private _camera = missionNamespace getVariable ["BIS_EGSpectatorCamera_camera", objNull];
     _camera camCommand "speedMax 4";
@@ -215,7 +337,7 @@ addMissionEventHandler ["Draw3D", {
     private _instructionsDisplay = _spectatorDisplay ctrlCreate ["RscStructuredText", -1];
     _instructionsDisplay ctrlSetPosition [
         1 - safeZoneX - 0.4 - 0.05,
-        1 - safeZoneY - 0.5 - 0.05,
+        1 - safeZoneY - 0.55 - 0.05,
         0.4,
         0.6
     ];
@@ -231,6 +353,7 @@ addMissionEventHandler ["Draw3D", {
         ["ALT", "Slower"],
         ["SPACE", "Camera mode"],
         ["=/-", "HUD range"],
+        ["B", "Follow next projectile"],
         ["V", "Mute targeted player"],
         ["BACK", "Toggle interface"],
         ["F1", "Toggle help"],
@@ -305,6 +428,7 @@ addMissionEventHandler ["Draw3D", {
     };
 };
 
+// Target detection loop
 0 spawn {
     while { WL_IsSpectator } do {
         private _maxDistance = uiNamespace getVariable ["WL_SpectatorHudMaxDistance", 10000];
@@ -355,27 +479,12 @@ addMissionEventHandler ["Draw3D", {
                 };
             };
 
-            private _assetTypeName = [_target] call WL2_fnc_getAssetTypeName;
-
-            private _ownerPlayer = (_target getVariable ["BIS_WL_ownerAsset", "123"]) call BIS_fnc_getUnitByUID;
-            private _ownerName = if (isNull _ownerPlayer) then {
-                "";
-            } else {
-                name _ownerPlayer;
-            };
-            if (_ownerName == "Error: No vehicle") then {
-                _ownerName = "";
-            };
-            private _assetName = if (_ownerName == "") then {
-                _assetTypeName
-            } else {
-                format ["%1 (%2)", _assetTypeName, _ownerName]
-            };
-
             private _distance = _cameraPos distance _target;
             if (_target isKindOf "Man") then {
-                if (_distance > 50) then {
-                    _assetName = "";
+                private _assetName = if (_distance < 100) then {
+                    [_target, true] call BIS_fnc_getName;
+                } else {
+                    ""
                 };
                 if (_distance > 500) then {
                     continue;
@@ -386,7 +495,19 @@ addMissionEventHandler ["Draw3D", {
                     _assetName
                 ];
             } else {
-                _assetName = format ["%1 [%2 KM]", _assetName, (round (_distance / 100)) / 10];
+                private _assetTypeName = [_target] call WL2_fnc_getAssetTypeName;
+                private _ownerPlayer = (_target getVariable ["BIS_WL_ownerAsset", "123"]) call BIS_fnc_getUnitByUID;
+                private _ownerName = if (isNull _ownerPlayer) then {
+                    "";
+                } else {
+                    [_ownerPlayer, true] call BIS_fnc_getName
+                };
+                private _assetName = if (_ownerName == "") then {
+                    _assetTypeName
+                } else {
+                    format ["%1 (%2)", _assetTypeName, _ownerName]
+                };
+                _assetName = format ["%1 [%2 KM]", _assetName, (_distance / 1000) toFixed 1];
 
                 private _assetActualType = _target getVariable ["WL2_orderedClass", typeof _target];
 
@@ -476,129 +597,127 @@ addMissionEventHandler ["Draw3D", {
     };
 };
 
-0 spawn {
-    while { WL_IsSpectator } do {
-        private _drawIcons = [];
+addMissionEventHandler ["Draw3D", {
+    private _laserTargets = uiNamespace getVariable ["WL2_spectatorDrawLasers", []];
+    private _infantry = uiNamespace getVariable ["WL2_spectatorDrawInfantry", []];
+    private _vehicles = uiNamespace getVariable ["WL2_spectatorDrawVehicles", []];
+    private _projectiles = uiNamespace getVariable ["WL2_spectatorDrawProjectiles", []];
+    private _sectors = uiNamespace getVariable ["WL2_spectatorDrawSectors", []];
 
-        private _laserTargets = uiNamespace getVariable ["WL2_spectatorDrawLasers", []];
-        private _infantry = uiNamespace getVariable ["WL2_spectatorDrawInfantry", []];
-        private _vehicles = uiNamespace getVariable ["WL2_spectatorDrawVehicles", []];
-        private _projectiles = uiNamespace getVariable ["WL2_spectatorDrawProjectiles", []];
-        private _sectors = uiNamespace getVariable ["WL2_spectatorDrawSectors", []];
+    {
+        private _target = _x # 0;
+        private _playerName = _x # 1;
+        drawIcon3D [
+            "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\LaserTarget_ca.paa",
+            [1, 0, 0, 1],
+            _target modelToWorldVisual [0, 0, 0],
+            1,
+            1,
+            45,
+            _playerName,
+            0,
+            0.05,
+            "RobotoCondensedBold"
+        ];
+    } forEach _laserTargets;
 
-        {
-            private _target = _x # 0;
-            private _playerName = _x # 1;
-            _drawIcons pushBack [
-                "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\LaserTarget_ca.paa",
-                [1, 0, 0, 1],
-                _target modelToWorldVisual [0, 0, 0],
-                1,
-                1,
-                45,
-                _playerName,
-                0,
-                0.05,
-                "RobotoCondensedBold"
-            ];
-        } forEach _laserTargets;
+    {
+        private _target = _x # 0;
+        private _targetColor = _x # 1;
+        private _assetName = _x # 2;
 
-        {
-            private _target = _x # 0;
-            private _targetColor = _x # 1;
-            private _assetName = _x # 2;
+        private _lastFiredTime = _target getVariable ["WL2_spectateLastFired", -1];
+        private _opacity = linearConversion [0, 0.5, serverTime - _lastFiredTime, 0, 1, true];
+        _targetColor set [3, _opacity];
 
-            private _lastFiredTime = _target getVariable ["WL2_spectateLastFired", -1];
-            private _opacity = linearConversion [0, 0.5, serverTime - _lastFiredTime, 0, 1, true];
-            _targetColor set [3, _opacity];
+        private _centerOfMass = _target selectionPosition "spine2";
+        _centerOfMass set [2, _centerOfMass # 2 + 1];
 
-            _drawIcons pushBack [
-                "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\UnknownGround_ca.paa",
-                _targetColor,
-                _target modelToWorldVisual (_target selectionPosition "spine2"),
-                0.5,
-                0.5,
-                45,
-                _assetName,
-                true,
-                0.03,
-                "RobotoCondensedBold"
-            ];
-        } forEach _infantry;
+        drawIcon3D [
+            "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\UnknownGround_ca.paa",
+            _targetColor,
+            _target modelToWorldVisual _centerOfMass,
+            0.5,
+            0.5,
+            45,
+            _assetName,
+            true,
+            0.032,
+            "RobotoCondensedBold"
+        ];
+    } forEach _infantry;
 
-        {
-            private _target = _x # 0;
-            private _targetIcon = _x # 1;
-            private _targetColor = _x # 2;
-            private _iconSize = _x # 3;
-            private _targetIconRatio = _x # 4;
-            private _assetName = _x # 5;
-            private _iconTextSize = _x # 6;
+    {
+        private _target = _x # 0;
+        private _targetIcon = _x # 1;
+        private _targetColor = _x # 2;
+        private _iconSize = _x # 3;
+        private _targetIconRatio = _x # 4;
+        private _assetName = _x # 5;
+        private _iconTextSize = _x # 6;
 
-            private _lastFiredTime = _target getVariable ["WL2_spectateLastFired", -1];
-            private _opacity = linearConversion [0, 0.5, serverTime - _lastFiredTime, 0, 0.6, true];
-            _targetColor set [3, _opacity];
+        private _lastFiredTime = _target getVariable ["WL2_spectateLastFired", -1];
+        private _opacity = linearConversion [0, 0.5, serverTime - _lastFiredTime, 0, 0.6, true];
+        _targetColor set [3, _opacity];
 
-            _drawIcons pushBack [
-                _targetIcon,
-                _targetColor,
-                _target modelToWorldVisual (getCenterOfMass _target),
-                _iconSize * _targetIconRatio,
-                _iconSize,
-                0,
-                _assetName,
-                true,
-                _iconTextSize,
-                "RobotoCondensedBold",
-                "center",
-                true
-            ];
-        } forEach _vehicles;
+        private _centerOfMass = getCenterOfMass _target;
+        _centerOfMass set [2, _centerOfMass # 2 + 3];
 
-        {
-            _drawIcons pushBack [
-                "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missile_ca.paa",
-                [1, 0, 0, 1],
-                _x modelToWorldVisual [0, 0, 0],
-                0.8,
-                0.8,
-                0,
-                "",
-                true,
-                0.035,
-                "RobotoCondensedBold",
-                "center",
-                true
-            ];
-        } forEach _projectiles;
+        drawIcon3D [
+            _targetIcon,
+            _targetColor,
+            _target modelToWorldVisual _centerOfMass,
+            _iconSize * _targetIconRatio,
+            _iconSize,
+            0,
+            _assetName,
+            true,
+            _iconTextSize,
+            "RobotoCondensedBold",
+            "center",
+            true
+        ];
+    } forEach _vehicles;
 
-        private _cameraPos = positionCameraToWorld [0, 0, 0];
-        {
-            private _sector = _x # 0;
-            private _sectorIcon = _x # 1;
-            private _sectorColor = _x # 2;
-            private _sectorPos = _x # 3;
-            private _sectorName = _x # 4;
+    {
+        _drawIcons pushBack [
+            "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missile_ca.paa",
+            [1, 0, 0, 1],
+            _x modelToWorldVisual [0, 0, 0],
+            0.8,
+            0.8,
+            0,
+            "",
+            true,
+            0.035,
+            "RobotoCondensedBold",
+            "center",
+            true
+        ];
+    } forEach _projectiles;
 
-            private _distance = _cameraPos distance _sectorPos;
-            private _sectorIconSize = linearConversion [200, 2000, _distance, 1.2, 0.3, true];
+    private _cameraPos = positionCameraToWorld [0, 0, 0];
+    {
+        private _sector = _x # 0;
+        private _sectorIcon = _x # 1;
+        private _sectorColor = _x # 2;
+        private _sectorPos = _x # 3;
+        private _sectorName = _x # 4;
 
-            _drawIcons pushBack [
-                _sectorIcon,
-                _sectorColor,
-                _sectorPos,
-                _sectorIconSize,
-                _sectorIconSize,
-                0,
-                _sectorName,
-                true,
-                0.04 * _sectorIconSize,
-                "RobotoCondensedBold"
-            ];
-        } forEach _sectors;
+        private _distance = _cameraPos distance _sectorPos;
+        private _sectorIconSize = linearConversion [200, 2000, _distance, 1.2, 0.3, true];
 
-        uiNamespace setVariable ["WL2_spectatorDrawIcons", _drawIcons];
-
-        sleep 0.001;
-    };
-};
+        drawIcon3D [
+            _sectorIcon,
+            _sectorColor,
+            _sectorPos,
+            _sectorIconSize,
+            _sectorIconSize,
+            0,
+            _sectorName,
+            true,
+            0.04 * _sectorIconSize,
+            "RobotoCondensedBold"
+        ];
+    } forEach _sectors;
+}];

@@ -73,6 +73,10 @@ if (WL_VotePhase == 1) then {
     BIS_WL_selection_dimSectors = true;
 };
 
+if (WL_IsSpectator) then {
+    BIS_WL_selection_showLinks = true;
+};
+
 if (BIS_WL_selection_showLinks) then {
     {
         _x setMarkerAlphaLocal WL_CONNECTING_LINE_ALPHA_MAX;

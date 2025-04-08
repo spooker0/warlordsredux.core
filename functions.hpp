@@ -385,6 +385,7 @@ class CfgFunctions {
 			class garbageCollector {};
 			class handleClientRequest {};
 			class handleEntityRemoval {};
+			class hideObjectOnAll {};
 			class incomePayoff {};
 			class initServer {};
 			class killRewardHandle {};

@@ -48,7 +48,7 @@ private _projectilePos = getPosASL _projectile;
 _projectilePos set [2, _projectilePos # 2 + 10];
 private _newProjectile = createVehicle ["ammo_Missile_mim145", _projectilePos, [], 0, "NONE"];
 _newProjectile setVariable ["WL2_missileNameOverride", "DEATH", true];
-hideObjectGlobal _newProjectile;
+[_newProjectile] remoteExec ["WL2_fnc_hideObjectOnAll", 2];
 [_newProjectile, [player, player]] remoteExec ["setShotParents", 2];
 
 _projectile attachTo [_newProjectile, [0, 0, 2]];

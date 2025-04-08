@@ -360,7 +360,9 @@ private _draw = (ctrlMapScale _map) < 0.3;
 		"right"
 	];
 	_drawIconsSelectable pushBack [_x, _teammatePos];
-} forEach (allPlayers select {(side group _x == _side) && {(isNull objectParent _x) && {(alive _x)}}});
+} forEach (allPlayers select {
+	side group _x == _side && isNull objectParent _x && alive _x && !(isObjectHidden _x)
+});
 
 // AI in vehicle
 {

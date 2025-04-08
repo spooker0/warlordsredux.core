@@ -1,4 +1,11 @@
-params ["_projectile", "_camera"];
+params ["_projectile"];
+
+private _camera = "camera" camCreate (position _projectile);
+_camera camSetTarget _projectile;
+_camera camSetRelPos [0, 1, 0];
+_camera camCommit 0;
+_camera attachTo [_projectile];
+
 player setVariable ["WL_hmdOverride", 2];
 
 private _nightVision = false;

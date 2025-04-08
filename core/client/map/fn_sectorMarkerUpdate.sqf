@@ -16,7 +16,7 @@ private _mrkrArea = (_sector getVariable "BIS_WL_markers") # 1;
 
 if (isNil "_mrkrArea") exitWith {};
 
-if (_owner == BIS_WL_playerSide || BIS_WL_playerSide in _previousOwners || _sector == WL_TARGET_FRIENDLY) then {
+if (_owner == BIS_WL_playerSide || BIS_WL_playerSide in _previousOwners || _sector == WL_TARGET_FRIENDLY || WL_IsSpectator) then {
 	_mrkrArea setMarkerBrushLocal "Border";
 } else {
 	_mrkrArea setMarkerBrushLocal "Solid";

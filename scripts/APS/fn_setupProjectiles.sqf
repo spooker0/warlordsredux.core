@@ -26,7 +26,7 @@ _this addEventHandler ["Fired", {
 	if (_projectileTV) then {
 		private _projectileSpeed = _projectileConfig getOrDefault ["speed", 0];
 		_projectile setVariable ["APS_speedOverride", _projectileSpeed];
-		[_projectile, _unit, 0.3, 3] call DIS_fnc_startMissileCamera;
+		[_projectile] spawn DIS_fnc_tvMunition;
 	} else {
 		private _projectileMissileCamera = _projectileConfig getOrDefault ["camera", false];
 		if (_projectileMissileCamera) then {

@@ -137,10 +137,6 @@ private _originalRemote = if (isRemoteControlling player) then {
     };
 };
 
-if (_defaultOpticsMode == 3) then {
-    [_projectile, _camera] spawn DIS_fnc_tvMunition;
-};
-
 while { !_stop } do {
     sleep 0.5;
 
