@@ -96,19 +96,6 @@ if (!_isAdmin) then {
 };
 #endif
 
-#if WL_SPECTATOR_ENABLED
-private _isSpectator = _uid in (getArray (missionConfigFile >> "spectatorIDs"));
-if (_isSpectator) then {
-	player addAction [
-		"<t color='#ff0000'>Spectate</t>",
-		{
-			0 spawn WL2_fnc_spectator;
-		},
-		[],
-		-200
-	];
-};
-#endif
 WL_LoadingState = 4;
 
 if !(BIS_WL_playerSide in BIS_WL_sidesArray) exitWith {

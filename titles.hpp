@@ -597,6 +597,33 @@ class RscTitles {
 		};
 	};
 
+	class RscWLSpectatorProjectileDisplay {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		onLoad = "uiNamespace setVariable ['RscWLSpectatorProjectileDisplay', _this select 0];";
+		class controls {
+			class RscWLSpectatorProjectileDisplay_Icon {
+				idc = 8600;
+				type = 0;
+				style = ST_PICTURE;
+				tileH = 1;
+				tileW = 1;
+				x = 0.87 * safezoneW + safezoneX;
+				y = 0.17  * safezoneH + safezoneY;
+				w = 0.06;
+				h = 0.08;
+				font = "EtelkaNarrowMediumPro";
+				sizeEx = 1;
+				colorBackground[] = {0, 0, 0, 0};
+				colorText[] = {0.3, 1, 1, 1};
+				text = "\a3\Ui_f\data\IGUI\Cfg\CommandBar\imageCommander_ca.paa";
+				lineSpacing = 0;
+			};
+		};
+	};
+
 	class RscWLZoneRestrictionDisplay {
 		idd = -1;
 		duration = 1000000000;

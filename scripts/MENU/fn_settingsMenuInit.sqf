@@ -16,6 +16,7 @@ _closeButton ctrlAddEventHandler ["ButtonClick", {
 }];
 
 private _controlGroup = _display displayCtrl MENU_CONTROLS_GROUP;
+_controlGroup ctrlShow false;
 
 private _buttonPositionX = 0.05;
 
@@ -26,20 +27,37 @@ private _buttons = [
     }],
     ["REPORT", {
         closeDialog 0;
-        0 spawn FXR_fnc_openReportMenu;
+        [false] call MENU_fnc_moderatorMenu;
     }]
 ];
-if (getPlayerUID player in getArray (missionConfigFile >> "adminIDs")) then {
+
+private _playerUid = getPlayerUID player;
+private _isAdmin = _playerUid in getArray (missionConfigFile >> "adminIDs");
+private _isSpectator = _playerUid in getArray (missionConfigFile >> "spectatorIDs");
+private _isModerator = _playerUid in getArray (missionConfigFile >> "moderatorIDs");
+if (_isAdmin) then {
     _buttons pushBack ["DEBUG", {
         closeDialog 0;
-        0 call MENU_fnc_debugMenu;
+        [""] call MENU_fnc_debugMenu;
+    }];
+};
+if (_isAdmin || _isSpectator) then {
+    _buttons pushBack ["SPECTATE", {
+        closeDialog 0;
+        0 spawn SPEC_fnc_spectator;
+    }];
+};
+if (_isAdmin || _isModerator) then {
+    _buttons pushBack ["MODERATE", {
+        closeDialog 0;
+        [true] call MENU_fnc_moderatorMenu;
     }];
 };
 
 {
     private _text = _x # 0;
     private _item = _display ctrlCreate ["MENU_MenuItemButton", -1, _controlGroup];
-    _item ctrlSetPosition [_buttonPositionX + _forEachIndex * 0.22, 0.03, 0.2, 0.07];
+    _item ctrlSetPosition [_buttonPositionX + _forEachIndex * 0.17, 0.03, 0.15, 0.07];
     _item ctrlSetText _text;
     _item ctrlCommit 0;
     _item ctrlAddEventHandler ["ButtonClick", _x # 1];
@@ -210,3 +228,5 @@ private _positionY = 0.11;
     ["checkbox", "Mute task notifications", ["muteTaskNotifications", false]],
     ["checkbox", "Parachute auto deploy", ["parachuteAutoDeploy", true]]
 ];
+
+_controlGroup ctrlShow true;

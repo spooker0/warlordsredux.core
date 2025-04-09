@@ -217,8 +217,6 @@ private _side = side _owner;
             _filmGrain = call _initFilmGrain;
         };
 
-        _asset setVariable ["WL_sensorsDisabled", _jammerStrength > WL_JAMMER_SENSOR_THRESHOLD];
-
         private _thermalDisabled = equipmentDisabled _asset # 1;
         if (_jammerStrength > WL_JAMMER_SENSOR_THRESHOLD && !_thermalDisabled) then {
             _asset disableTIEquipment true;

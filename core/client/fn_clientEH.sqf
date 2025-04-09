@@ -21,7 +21,7 @@ addMissionEventHandler ["HandleChatMessage", {
 	if (_owner == clientOwner) then {
 		private _uid = getPlayerUID player;
 		private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
-		private _isPollster = _uid in (getArray (missionConfigFile >> "pollstersIDs"));
+		private _isModerator = _uid in (getArray (missionConfigFile >> "moderatorIDs"));
 
 		if (_isAdmin && _text == "!updateZeus") then {
 			[player, 'updateZeus'] remoteExec ['WL2_fnc_handleClientRequest', 2];
@@ -45,8 +45,21 @@ addMissionEventHandler ["HandleChatMessage", {
 		// 	};
 		// };
 
-		if (_isAdmin || _isPollster) then {
+		if (_isAdmin || _isModerator) then {
 			[_text] call POLL_fnc_chatCommand;
+		};
+	};
+
+	private _passedName = uiNamespace getVariable ["MODR_passedName", ""];
+	if (_channel == 16 || _channel == 17) then {
+		private _regexMatches = _text regexMatch "[\s]?.*[\d]+[\s]+([\w]{32,32})[\s]{1,1}(.*)$";
+		private _hasName = [_passedName, _text] call BIS_fnc_inString;
+		if (_regexMatches && _hasName) then {
+			private _reportLine = _text regexFind ["([\w]{32})[\s]{1}(.*)$",10];
+			if (count _reportLine > 0) then {
+				private _beId = _reportLine # 0 # 1 # 0;
+				uiNamespace setVariable ["MODR_returnedBeId", _beId];
+			};
 		};
 	};
 

@@ -45,13 +45,6 @@ class CfgFunctions {
 			class tvMunition {};
 		};
 	};
-	class FXR {
-		class Default {
-			file = "src\scripts\FXR";
-			class closeReportMenu {};
-			class openReportMenu {};
-		};
-	};
 	class GFE {
 		class Default {
 			file = "src\scripts\GFE";
@@ -73,6 +66,7 @@ class CfgFunctions {
 			file = "src\scripts\MENU";
 			class debugMenu {};
 			class execCode {};
+			class moderatorMenu {};
 			class setReturnValue {};
 			class settingsMenu {};
 			class settingsMenuInit {};
@@ -81,10 +75,26 @@ class CfgFunctions {
 	};
 	class POLL {
 		class Default {
-			file = "src\scripts\Poll";
+			file = "src\scripts\POLL";
 			class chatCommand {};
 			class openPoll {};
 			class vote {};
+		};
+	};
+	class SPEC {
+		class Default {
+			file = "src\scripts\SPEC";
+			class spectator {};
+			class spectatorDraw3d {};
+			class spectatorFeedback {};
+			class spectatorGetIcon {};
+			class spectatorMap {};
+			class spectatorOnFired {};
+			class spectatorSetup {};
+			class spectatorTarget {};
+			class spectatorUpdateBinocularIcon {};
+			class spectatorUpdateList {};
+			class spectatorUpdateProjectiles {};
 		};
 	};
 	class SQD {
@@ -129,7 +139,6 @@ class CfgFunctions {
 			class restrictedArea {};
 			class revive {};
 			class rita {};
-			class spectator {};
 			class sideToFaction {};
 			class spectrumInterface {};
 			class strongholdScanner {};
@@ -225,7 +234,8 @@ class CfgFunctions {
 			class friendlyFireHandleClient {};
 			class handleKillFeedUpdate {};
 			class killRewardClient {};
-			class teamkillerMessage {};
+			class punishmentClient {};
+			class punishMessage {};
 			class updateKillFeed {};
 		};
 		class ClientMap {
@@ -392,6 +402,7 @@ class CfgFunctions {
 			class lagMessageHandler {};
 			class laserTracker {};
 			class processRunways {};
+			class punishPlayer {};
 			class selectTarget {};
 			class serverEHs {};
 			class setDazzlerState {};

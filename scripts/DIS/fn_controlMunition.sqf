@@ -78,7 +78,6 @@ private _lastTime = serverTime;
 private _startTime = serverTime;
 private _timeToLive = getNumber (configFile >> "CfgAmmo" >> (typeOf _projectile) >> "timeToLive");
 private _projectileSpeed = _projectile getVariable ["APS_speedOverride", 100];
-private _nightVision = false;
 private _fuelUsed = 0;
 
 while { alive _projectile && alive player && lifeState player != "INCAPACITATED" } do {
@@ -238,17 +237,6 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
         private _currentZoom = ctrlMapScale _mapDisplay;
         _mapDisplay ctrlMapAnimAdd [0, _currentZoom * 2, getPosASL _projectile];
         ctrlMapAnimCommit _mapDisplay;
-    };
-
-    if (inputAction "nightVision" > 0) then {
-        waitUntil {inputAction "nightVision" == 0};
-        _nightVision = !_nightVision;
-    };
-    private _sensorsDisabled = _projectile getVariable ["WL_sensorsDisabled", false];
-    if (_nightVision && !_sensorsDisabled) then {
-        true setCamUseTI 0;
-    } else {
-        false setCamUseTI 0;
     };
 
     if (inputAction "defaultAction" > 0 && serverTime - _startTime > 2) then {

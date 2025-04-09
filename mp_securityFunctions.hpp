@@ -40,6 +40,7 @@ class CfgRemoteExec {
 		class WL2_fnc_jammerAction {allowedTargets = 1;};
 		class WL2_fnc_killRewardHandle {allowedTargets = 2;};
 		class WL2_fnc_lagMessageHandler {allowedTargets = 2;};
+		class WL2_fnc_punishPlayer {allowedTargets = 2;};
 		class WL2_fnc_pingFix {allowedTargets = 1;};
 		class WL2_fnc_prepareStronghold {allowedTargets = 0;};
 		class WL2_fnc_protectStronghold {allowedTargets = 0;};
@@ -58,7 +59,7 @@ class CfgRemoteExec {
 		class WL2_fnc_setupForwardBaseMp {allowedTargets = 0;};
 		class WL2_fnc_slingAddAction {allowedTargets = 1;};
 		class WL2_fnc_slingloadInit {allowedTargets = 0;};
-		class WL2_fnc_teamkillerMessage {allowedTargets = 0;};
+		class WL2_fnc_punishMessage {allowedTargets = 0;};
 		class WL2_fnc_uavConnectRefresh {allowedTargets = 0;};
 		class WL2_fnc_uavJammed {allowedTargets = 2;};
 		class WL2_fnc_updateVehicleList {allowedTargets = 2;};

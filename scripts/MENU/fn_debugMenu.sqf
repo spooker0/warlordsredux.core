@@ -1,5 +1,7 @@
 #include "constants.inc"
 
+params ["_text"];
+
 if !(getPlayerUID player in getArray (missionConfigFile >> "adminIDs")) exitWith {};
 
 private _display = findDisplay DEBUG_DISPLAY;
@@ -36,3 +38,8 @@ _execClientButton ctrlAddEventHandler ["ButtonClick", {
 
     [player, _executionText] spawn MENU_fnc_execCode;
 }];
+
+if (_text != "") then {
+    private _execEdit = _display displayCtrl DEBUG_EXEC_EDIT;
+    _execEdit ctrlSetText _text;
+};

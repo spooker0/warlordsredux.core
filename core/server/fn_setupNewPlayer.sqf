@@ -68,6 +68,7 @@ if (_playerFunds == -1) then {
 private _teamBlockVar = format ["WL2_teamBlocked_%1", _uid];
 private _balanceBlockVar = format ["WL2_balanceBlocked_%1", _uid];
 private _friendlyFireVar = format ["WL2_friendlyFire_%1", _uid];
+private _punishVar = format ["WL2_punish_%1", _uid];
 
 private _lockedToTeam = _playerList getOrDefault [_uid, sideUnknown];
 private _currentSide = side group _warlord;
@@ -83,6 +84,8 @@ if (_lockedToTeam != sideUnknown) then {
 
         private _friendlyFireIncidents = serverNamespace getVariable [_friendlyFireVar, []];
         [_friendlyFireIncidents] remoteExec ["WL2_fnc_friendlyFireHandleClient", _owner];
+        private _punishTime = serverNamespace getVariable [_punishVar, []];
+        [_punishTime] remoteExec ["WL2_fnc_punishmentClient", _owner];
     };
 } else {
     private _exceedGracePeriod = (missionNamespace getVariable ["gameStart", 0]) + 300 < serverTime;
