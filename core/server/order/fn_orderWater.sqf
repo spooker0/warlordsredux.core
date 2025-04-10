@@ -8,6 +8,6 @@ private _asset = createVehicle [_class, (_pos vectorAdd [0,0,3]), [], 0, "CAN_CO
 _asset setDir (getDir _sender);
 [_asset, _sender, _orderedClass] call WL2_fnc_processOrder;
 
-if (_sender distance2D _asset < 1000) then {
+if (_sender distance2D _asset < 100) then {
     _sender moveInAny _asset;
 };

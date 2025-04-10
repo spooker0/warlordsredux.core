@@ -111,7 +111,7 @@ private _cameraPos = positionCameraToWorld [0, 0, 0];
     private _sectorName = _x # 4;
 
     private _distance = _cameraPos distance _sectorPos;
-    private _sectorIconSize = linearConversion [200, 2000, _distance, 1.2, 0.3, true];
+    private _sectorIconSize = linearConversion [200, 5000, _distance, 1.2, 0.3, true];
 
     drawIcon3D [
         _sectorIcon,

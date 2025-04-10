@@ -1,10 +1,11 @@
 #include "..\server_macros.inc"
 
-while {!BIS_WL_missionEnd} do {
+while { !BIS_WL_missionEnd } do {
 	sleep 60;
 
 	private _notBlocked = allPlayers select {
-		!(_x getVariable ["BIS_WL_incomeBlocked", false])
+		!(_x getVariable ["BIS_WL_incomeBlocked", false]) &&
+		_x getVariable ["WL2_setupComplete", false]
 	};
 
 	{

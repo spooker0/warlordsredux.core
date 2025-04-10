@@ -19,7 +19,7 @@ while { !BIS_WL_missionEnd } do {
         for "_i" from 1 to (_size - 1) do {
             private _text = ((_selectBox lbText _i) splitString ",") # 0;
             // private _data = _text splitString "#";
-            private _assetGroups = (allGroups select { groupID _x == _text });
+            private _assetGroups = (allGroups select { side _x == BIS_WL_playerSide && groupID _x == _text });
             if (count _assetGroups == 0) then { continue; };
 
             private _assetGroup = _assetGroups # 0;

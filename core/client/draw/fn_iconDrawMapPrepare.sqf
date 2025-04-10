@@ -361,7 +361,9 @@ private _draw = (ctrlMapScale _map) < 0.3;
 	];
 	_drawIconsSelectable pushBack [_x, _teammatePos];
 } forEach (allPlayers select {
-	side group _x == _side && isNull objectParent _x && alive _x && !(isObjectHidden _x)
+	(side group _x == _side || WL_IsSpectator) &&
+	isNull objectParent _x &&
+	alive _x && !isObjectHidden _x
 });
 
 // AI in vehicle
@@ -380,7 +382,12 @@ private _draw = (ctrlMapScale _map) < 0.3;
 		"PuristaBold",
 		"right"
 	];
-} forEach ((allUnits) select {(side group (crew _x select 0) == _side || WL_IsSpectator) && {(alive _x) && {(isNull objectParent _x) && {typeOf _x != "Logic" && {!(isPlayer _x)}}}}});
+} forEach (allUnits select {
+	(side group (crew _x select 0) == _side || WL_IsSpectator) &&
+	alive _x && (isNull objectParent _x) &&
+	typeOf _x != "Logic" &&
+	!isPlayer _x
+});
 
 // AI
 {
@@ -444,7 +451,10 @@ _sideVehicles = _sideVehicles arrayIntersect _sideVehicles;
 
 if (WL_IsSpectator) then {
 	_sideVehicles = vehicles select {
-		_x getVariable ["WL_spawnedAsset", false]
+		private _targetSide = [_x] call WL2_fnc_getAssetSide;
+        (_targetSide in [west, east, independent]) &&
+		simulationEnabled _x &&
+        !(_x isKindOf "LaserTarget")
 	};
 };
 

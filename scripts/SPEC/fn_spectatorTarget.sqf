@@ -112,7 +112,7 @@ while { WL_IsSpectator } do {
         private _sectorPos = _sectorArea # 0;
         _sectorPos set [2, 200];
         private _distance = _cameraPos distance _sectorPos;
-        if (_distance > _maxDistance / 2) then {
+        if (_distance > _maxDistance) then {
             continue;
         };
         private _sectorName = _sector getVariable ["BIS_WL_name", "Sector"];

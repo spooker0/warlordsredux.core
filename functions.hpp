@@ -393,6 +393,7 @@ class CfgFunctions {
 			class fundsDatabaseUpdate {};
 			class fundsDatabaseWrite {};
 			class garbageCollector {};
+			class generateEndResultPage {};
 			class handleClientRequest {};
 			class handleEntityRemoval {};
 			class hideObjectOnAll {};

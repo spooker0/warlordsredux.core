@@ -114,3 +114,5 @@ if (_lockedToTeam != sideUnknown) then {
 };
 
 call WL2_fnc_calcImbalance;
+
+_warlord setVariable ["WL2_setupComplete", true];

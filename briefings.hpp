@@ -21,8 +21,12 @@ class CfgDebriefing
 };
 
 class CfgDebriefingSections {
-	class CfgWLEndScreen {
-		title = "End Results";
+	class CfgWLRoundStats {
+		title = "Round Stats";
 		variable = "WL_endScreen";
+	};
+	class CfgWLTotalStats {
+		title = "Total Stats";
+		variable = "WL_endScreen2";
 	};
 };

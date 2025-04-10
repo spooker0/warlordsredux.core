@@ -1,11 +1,14 @@
 #include "..\warlords_constants.inc"
 
-private _results = [];
-_results pushBack "<t size='1.5'>Purchase Summary</t>";
-
 private _stats = missionNamespace getVariable ["WL_stats", createHashMap];
+private _roundStats = [_stats, "Round Stats"] call WL2_fnc_generateEndResultPage;
+missionNamespace setVariable ["WL_endScreen", _roundStats, true];
 
-private _assetUses = [];
+private _endResultCalculated = missionNamespace getVariable ["WL_hasCalculatedEndResults", false];
+if (_endResultCalculated) exitWith {};
+missionNamespace setVariable ["WL_hasCalculatedEndResults", true];
+
+private _serverStats = profileNamespace getVariable ["WL_stats", createHashMap];
 {
     private _asset = _x;
     private _assetStats = _y;
@@ -13,32 +16,20 @@ private _assetUses = [];
     private _westBuys = _assetStats getOrDefault ["westBuys", 0];
     private _eastBuys = _assetStats getOrDefault ["eastBuys", 0];
     private _killValue = _assetStats getOrDefault ["killValue", 0];
-    private _totalBuys = _westBuys + _eastBuys;
-    private _costMap = missionNamespace getVariable ["WL2_costs", createHashMap];
-    private _assetCost = _costMap getOrDefault [_asset, 0];
-    _assetCost = _assetCost max 1;
-    private _killCostRatio = _killValue / _assetCost / _totalBuys * 100;
 
-    if (_totalBuys > 0) then {
-        private _actualTypeName = [objNull, _asset] call WL2_fnc_getAssetTypeName;
-        _assetUses pushBack [_actualTypeName, _totalBuys, _westBuys, _eastBuys, _killValue, _killCostRatio toFixed 2];
-    };
+    private _serverAsset = _serverStats getOrDefault [_asset, createHashMap];
+    private _serverWestBuys = _serverAsset getOrDefault ["westBuys", 0];
+    private _serverEastBuys = _serverAsset getOrDefault ["eastBuys", 0];
+    private _serverKillValue = _serverAsset getOrDefault ["killValue", 0];
+
+    _serverAsset set ["westBuys", _serverWestBuys + _westBuys];
+    _serverAsset set ["eastBuys", _serverEastBuys + _eastBuys];
+    _serverAsset set ["killValue", _serverKillValue + _killValue];
+
+    _serverStats set [_asset, _serverAsset];
 } forEach _stats;
+profileNamespace setVariable ["WL_stats", _serverStats];
+saveProfileNamespace;
 
-_assetUses = [_assetUses, [], { _x # 4 }, "DESCEND"] call BIS_fnc_sortBy;
-{
-    private _displayString = format [
-        "Bought: <t>%1</t> (<t color='#0000ff'>BLUFOR: %2</t>, <t color='#ff0000'>OPFOR: %3</t>), Kill Value: %4 (KVR: %5%6) <t align='right'>%7</t>",
-        _x # 1,
-        _x # 2,
-        _x # 3,
-        _x # 4,
-        _x # 5,
-        "%",
-        _x # 0
-    ];
-
-    _results pushBack _displayString;
-} forEach _assetUses;
-
-missionNamespace setVariable ["WL_endScreen", _results joinString "<br/>", true];
+private _totalStats = [_serverStats, "Total Stats"] call WL2_fnc_generateEndResultPage;
+missionNamespace setVariable ["WL_endScreen2", _totalStats, true];
