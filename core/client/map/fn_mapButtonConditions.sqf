@@ -19,7 +19,7 @@ switch (_conditionName) do {
         _sectorAvailable && !_isCarrierSector;
     };
     case "vehicleParadropFOB": {
-        alive _target && _target getVariable ["WL2_forwardBaseLevel", 0] == 3;
+        alive _target && _target getVariable ["WL2_forwardBaseTime", serverTime] < serverTime;
     };
     case "scan": {
         private _allScannableSectors = BIS_WL_sectorsArray # 3;
@@ -88,6 +88,6 @@ switch (_conditionName) do {
         };
     };
     case "fastTravelFOB": {
-        alive _target && _target getVariable ["WL2_forwardBaseLevel", 0] > 0;
+        alive _target && _target getVariable ["WL2_forwardBaseTime", serverTime] < serverTime;
     };
 };

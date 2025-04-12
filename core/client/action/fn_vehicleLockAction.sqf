@@ -28,6 +28,9 @@ private _lockActionId = _asset addAction [
     params ["_asset", "_lockActionId"];
     while { alive _asset } do {
 		[_asset, _lockActionId] call WL2_fnc_vehicleLockUpdate;
+		if (locked _asset != 0) then {
+			_asset lock false;
+		};
         sleep 1;
     };
 };

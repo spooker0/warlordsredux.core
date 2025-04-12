@@ -1,6 +1,6 @@
 #include "constants.inc"
 
-params ["_data", "_side", "_lastLoadout", "_unit", "_paidFor"];
+params ["_data", "_side", "_lastLoadout", "_unit", "_paidFor", "_collaborator"];
 
 private _playerFunds = (missionNamespace getVariable "fundsDatabaseClients") get (getPlayerUID player);
 
@@ -180,6 +180,9 @@ private _secondary = _equipment getOrDefault ["Secondary", createHashMap];
 private _secondaryWeapon = _secondary getOrDefault ["item", ""];
 private _secondaryMagazines = _secondary getOrDefault ["magazines", []];
 private _secondaryAttachments = _secondary getOrDefault ["attachments", []];
+if (_collaborator) then {
+    _secondaryWeapon = "";
+};
 
 if (_secondaryWeapon != "") then {
     {
@@ -250,18 +253,27 @@ if (_launcherWeapon != "") then {
 private _uniform = _equipment getOrDefault ["Uniform", createHashMap];
 private _uniformItem = _uniform getOrDefault ["item", uniform _unit];
 removeUniform _unit;
+if (_collaborator) then {
+    _uniformItem = "U_I_OfficerUniform";
+};
 _unit forceAddUniform _uniformItem;
 
 // Vest
 private _vest = _equipment getOrDefault ["Vest", createHashMap];
 private _vestItem = _vest getOrDefault ["item", vest _unit];
 removeVest _unit;
+if (_collaborator) then {
+    _vestItem = "V_PlateCarrierIA1_dgtl";
+};
 _unit addVest _vestItem;
 
 // Helmet
 private _helmet = _equipment getOrDefault ["Helmet", createHashMap];
 private _helmetItem = _helmet getOrDefault ["item", headgear _unit];
 removeHeadgear _unit;
+if (_collaborator) then {
+    _helmetItem = "H_MilCap_dgtl";
+};
 _unit addHeadgear _helmetItem;
 
 // Finish loading

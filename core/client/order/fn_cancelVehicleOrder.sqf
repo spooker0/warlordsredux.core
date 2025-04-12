@@ -1,3 +1,5 @@
+#include "..\..\warlords_constants.inc"
+
 params ["_originalPosition", "_limitDistance", "_ignoreSector", "_asset"];
 
 if (vehicle player != player) exitWith {
@@ -15,15 +17,7 @@ private _sectors = (BIS_WL_sectorsArray # 0) select {
 };
 private _potentialBases = missionNamespace getVariable ["WL2_forwardBases", []];
 private _forwardBases = _potentialBases select {
-    private _fobLevel = _x getVariable ["WL2_forwardBaseLevel", 0];
-    private _baseRadius = switch (_fobLevel) do {
-        case 0: { 100 };
-        case 1: { 150 };
-        case 2: { 250 };
-        case 3: { 500 };
-        default { 100 };
-    };
-    _asset distance2D _x < _baseRadius &&
+    _asset distance2D _x < WL_FOB_RANGE &&
     _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
 };
 private _inRange = count _forwardBases > 0 || count _sectors > 0;
@@ -70,7 +64,7 @@ _sector = if (count _sectors > 0) then {
 };
 
 private _sectorStronghold = _sector getVariable ["WL_strongholdMarker", ""];
-private _isInvalidPosition = if (_asset inArea _sectorStronghold) then {
+private _isInvalidPosition = if (_asset inArea _sectorStronghold || count _forwardBases > 0) then {
     false;
 } else {
     private _isInCarrierSector = count (_sector getVariable ["WL_aircraftCarrier", []]) > 0;

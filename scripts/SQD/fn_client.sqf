@@ -90,9 +90,14 @@ switch (_action) do {
     };
     case "newjoin": {
         private _joinerId = _params select 0;
-        private _joiner = _allPlayers select { getPlayerID _x == _joinerId } select 0;
+        private _joiner = _allPlayers select { getPlayerID _x == _joinerId };
 
         playSoundUI ["a3\animals_f_beta\sheep\data\sound\sheep3.wss"];
+
+        if (count _joiner == 0) exitWith {
+            _return = 1;
+        };
+        _joiner = _joiner # 0;
 
         if (_joiner == player) then {
             systemChat "You have joined a squad.";
@@ -343,8 +348,26 @@ switch (_action) do {
             _return = _squadmates;
         };
     };
+    case "showInSquadChat": {
+        private _person = _params select 0;
+        private _channel = _params select 1;
+
+        private _voiceChannels = missionNamespace getVariable ["SQD_VoiceChannels", [-1, -1]];
+        private _sideCustomChannel = if (side group _person == WEST) then {
+            _voiceChannels # 0
+        } else {
+            _voiceChannels # 1
+        };
+        if (_channel != (_sideCustomChannel + 5)) exitWith {
+            _return = true;
+        };
+
+        private _playerId = getPlayerID _person;
+        private _isInMySquad = ["isInMySquad", [_playerId]] call SQD_fnc_client;
+        _return = _isInMySquad;
+    };
 };
 
-if (isNil "_return") exitWith { };
+if (isNil "_return") exitWith {};
 
 _return;

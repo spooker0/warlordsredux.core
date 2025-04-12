@@ -293,6 +293,19 @@ WL_LoadingState = 12;
 	};
 };
 
+0 spawn {
+	while { !BIS_WL_missionEnd } do {
+		sleep 1;
+		if (alive player && lifeState player == "INCAPACITATED") then {
+			if (animationState player != "acts_staticdeath_01") then {
+				systemChat "Die.";
+				player setVelocityModelSpace [0, 0, 0];
+				[player, ["Acts_StaticDeath_01", 1]] remoteExec ["switchMove", 0];
+			};
+		};
+	};
+};
+
 if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
 	player addAction [
 		"+$10K",
@@ -307,6 +320,9 @@ private _squadActionId = player addAction[_squadActionText, {
 	[true] call SQD_fnc_menu
 }, [], -100, false, false, "", ""];
 player setUserActionText [_squadActionId, _squadActionText, "<img size='2' image='\a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa'/>"];
+
+uiNamespace setVariable ["WL2_canBuy", true];
+uiNamespace setVariable ["WL2_chatHistory", []];
 
 [] spawn WL2_fnc_factionBasedClientInit;
 0 spawn WL2_fnc_captureList;
@@ -375,14 +391,12 @@ removeGoggles player;
 
 0 spawn WL2_fnc_restrictedArea;
 
-#if WL_FOB_ENABLED
-call WL2_fnc_setupForwardBaseAction;
-#endif
-
 call WL2_fnc_demolishAction;
 call WL2_fnc_disarmAction;
 call WL2_fnc_rappelAction;
 call WL2_fnc_createInfoMarkers;
 0 spawn WL2_fnc_drawRadarName;
-0 spawn WL2_fnc_strongholdScanner;
+0 spawn WL2_fnc_locationScanner;
 0 spawn WL2_fnc_drawIncomingMissiles;
+
+call POLL_fnc_pollAction;

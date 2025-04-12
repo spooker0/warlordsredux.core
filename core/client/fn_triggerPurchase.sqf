@@ -196,6 +196,50 @@ switch (_className) do {
             };
         } forEach allMapMarkers;
     };
+    case "ControlCollaborator": {
+        private _potentialCollaboratorsInRange = allUnits select {
+            side group _x == independent &&
+            _x getVariable ["BIS_WL_ownerAsset", "123"] == "123" &&
+            _x distance player < 4000 &&
+            vehicle _x == _x;
+        };
+
+        if (count _potentialCollaboratorsInRange == 0) exitWith {
+            playSoundUI ["AddItemFailed"];
+            systemChat "No collaborators in range!";
+        };
+
+        missionNamespace setVariable ["WL2_collaboratorCooldown", serverTime + 600];
+        [player, "controlCollaborator"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+
+        private _selectedCollaborator = selectRandom _potentialCollaboratorsInRange;
+
+        _selectedCollaborator setVariable ["BIS_WL_ownerAsset", getPlayerUID player, true];
+        _selectedCollaborator setVariable ["BIS_WL_ownerAssetSide", side group player, true];
+
+        [_selectedCollaborator] call WL2_fnc_factionBasedClientInit;
+        [_selectedCollaborator, [], true, true] spawn WLC_fnc_onRespawn;
+
+        switchCamera _selectedCollaborator;
+        player remoteControl _selectedCollaborator;
+
+        uiNamespace setVariable ["WL2_canBuy", false];
+
+        [_selectedCollaborator] spawn {
+            params ["_collaborator"];
+            private _startTime = serverTime;
+            while {
+                alive _collaborator && lifeState _collaborator != "INCAPACITATED" &&
+                alive player && lifeState player != "INCAPACITATED"
+            } do {
+                sleep 1;
+            };
+
+            sleep 5;
+            player remoteControl objNull;
+            uiNamespace setVariable ["WL2_canBuy", true];
+        };
+    };
     case "AIGetIn": {
         private _vehicle = vehicle player;
         "RequestMenu_close" call WL2_fnc_setupUI;

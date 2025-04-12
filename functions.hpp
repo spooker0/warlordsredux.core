@@ -3,6 +3,7 @@ class CfgFunctions {
 		class Default {
 			file = "src\scripts\APS";
 			class active {};
+			class ciws {};
 			class dazzle {};
 			class defineVehicles {};
 			class deviceJammer {};
@@ -67,6 +68,7 @@ class CfgFunctions {
 			class debugMenu {};
 			class execCode {};
 			class moderatorMenu {};
+			class printSystemTime {};
 			class setReturnValue {};
 			class settingsMenu {};
 			class settingsMenuInit {};
@@ -76,9 +78,10 @@ class CfgFunctions {
 	class POLL {
 		class Default {
 			file = "src\scripts\POLL";
-			class chatCommand {};
-			class openPoll {};
-			class vote {};
+			class pollAction {};
+			class pollMenu {};
+			class selectOption {};
+			class updatePollMenu {};
 		};
 	};
 	class SPEC {
@@ -122,11 +125,13 @@ class CfgFunctions {
 			class factionBasedClientInit {};
 			class forfeitHandle {};
 			class handleBuyMenuKeypress {};
+			class handleChatMessages {};
 			class handleKeypress {};
 			class hintHandle {};
 			class initClient {};
 			class interceptAction {};
 			class lagMessageDisplay {};
+			class locationScanner {};
 			class mineLimitHint {};
 			class onPause {};
 			class onPlayerRespawn {};
@@ -141,7 +146,6 @@ class CfgFunctions {
 			class rita {};
 			class sideToFaction {};
 			class spectrumInterface {};
-			class strongholdScanner {};
 			class teammatesAvailability {};
 			class timer {};
 			class triggerPurchase {};
@@ -305,6 +309,7 @@ class CfgFunctions {
 			class checkAssetLimit {};
 			class checkBuyRespawn {};
 			class checkCarrierLimits {};
+			class checkCollaborator {};
 			class checkCommTower {};
 			class checkDead {};
 			class checkFastTravelRespawn {};

@@ -6,6 +6,7 @@
 	[_x, _forEachIndex] spawn {
 		params ["_side", "_sideIndex"];
 		private _votingResetVar = format ["BIS_WL_resetTargetSelection_server_%1", _side];
+		private _waitVar = format ["WL2_waitsInRow_%1", _side];
 
 		private _calculateMostVotedSector = {
 			private _allPlayers = call BIS_fnc_listPlayers;
@@ -34,10 +35,24 @@
 			_sortedVoteList = [_sortedVoteList, [], { _x # 1  }, "DESCEND"] call BIS_fnc_sortBy;
 
 			private _maxVotedSector = if (count _sortedVoteList > 0) then {
-				_firstSector  = _sortedVoteList # 0;
-				_firstSector # 0 // return sector object
+				_firstSector = _sortedVoteList # 0;
+				_firstSector = _firstSector # 0; // return sector object
+
+				if (_firstSector getVariable ["BIS_WL_name", "Sector"] != "Wait") then {
+					_firstSector;
+				} else {
+					private _waitsInRow = missionNamespace getVariable [_waitVar, 0];
+
+					if (_waitsInRow >= 3 && count _sortedVoteList > 1) then {
+						private _secondSector = _sortedVoteList # 1;
+						_secondSector = _secondSector # 0;
+						_secondSector;
+					} else {
+						_firstSector;
+					};
+				};
 			} else {
-				objNull
+				objNull;
 			};
 
 			[_maxVotedSector, _sortedVoteList];
@@ -96,8 +111,14 @@
 				if !(missionNamespace getVariable [_votingResetVar, false]) then {
 					_calculation = call _calculateMostVotedSector;
 					private _selectedSector = _calculation # 0;
+
 					if (_selectedSector getVariable ["BIS_WL_name", "Sector"] != "Wait") then {
+						missionNamespace setVariable [_waitVar, 0];
 						[_side, _selectedSector] call WL2_fnc_selectTarget;
+					} else {
+						private _waitsInRow = missionNamespace getVariable [_waitVar, 0];
+						_waitsInRow = _waitsInRow + 1;
+						missionNamespace setVariable [_waitVar, _waitsInRow];
 					};
 
 					call _wipeVotes;

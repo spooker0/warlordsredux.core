@@ -40,8 +40,7 @@ if (_unit isKindOf "Man" && !(_unit in _noRewardList)) then {
 
 private _targets = [missionNamespace getVariable "BIS_WL_currentTarget_west", missionNamespace getVariable "BIS_WL_currentTarget_east"] select {!(isNull _x)};
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-if (_settingsMap getOrDefault ["3rdPersonDisabled", true]) then {
+if (_responsibleLeader getVariable ["WL2_3rdPersonDisabled", true]) then {
 	_killReward = _killReward * 2;
 };
 if ((_targets findIf {_unit inArea (_x getVariable "objectAreaComplete")}) != -1) then {

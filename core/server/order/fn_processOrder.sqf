@@ -1,6 +1,30 @@
+#include "..\..\warlords_constants.inc"
+
 params ["_asset", "_sender", "_orderedClass"];
 
 private _side = side group _sender;
+
+private _currentSector = BIS_WL_allSectors select {
+	_asset inArea (_x getVariable "objectAreaComplete") &&
+	_x getVariable ["BIS_WL_owner", sideUnknown] == _side
+};
+
+if (count _currentSector == 0) then {
+	private _potentialBases = missionNamespace getVariable ["WL2_forwardBases", []];
+	private _forwardBases = _potentialBases select {
+		_asset distance2D _x < WL_FOB_RANGE &&
+		_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side
+	};
+
+	if (count _forwardBases > 0) then {
+		private _forwardBase = _forwardBases # 0;
+		private _forwardBaseSupplies = _forwardBase getVariable ["WL2_forwardBaseSupplies", 0];
+		private _costMap = missionNamespace getVariable ["WL2_costs", createHashMap];
+		private _cost = _costMap getOrDefault [_orderedClass, 0];
+		_forwardBase setVariable ["WL2_forwardBaseSupplies", _forwardBaseSupplies - _cost, true];
+	};
+};
+
 private _isAircraft = _asset isKindOf "Air";
 private _variant = missionNamespace getVariable ["WL2_variant", createHashMap] getOrDefault [_orderedClass, 0];
 if (!_isAircraft && _variant != 0) then {
@@ -169,7 +193,10 @@ _asset setVariable ["WLM_savedDefaultMags", _defaultMags, true];
 _asset lock false;
 
 private _owner = owner _sender;
-_asset setVariable ["BIS_WL_ownerAsset", getPlayerUID _sender, true];
+private _ownerUid = getPlayerUID _sender;
+if (_ownerUid != "") then {
+	_asset setVariable ["BIS_WL_ownerAsset", _ownerUid, true];
+};
 _asset setVariable ["BIS_WL_lastActive", 0, _owner];
 [_asset] call WL2_fnc_lastHitHandler;
 _asset setVariable ["WL2_orderedClass", _orderedClass, true];

@@ -79,6 +79,11 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 {
 	private _base = _x;
 	private _baseOwner = _base getVariable ["WL2_forwardBaseOwner", sideUnknown];
+	private _showOnMap = _base getVariable ["WL2_forwardBaseShowOnMap", false];
+	if (_baseOwner != _side && !WL_IsSpectator && !_showOnMap) then {
+		continue;
+	};
+
 	private _baseColor = switch (_baseOwner) do {
 		case west: { [0, 0.3, 0.6, 0.9] };
 		case east: { [0.5, 0, 0, 0.9] };
@@ -87,70 +92,60 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 	};
 
 	private _baseTime = _base getVariable ["WL2_forwardBaseTime", -1];
-	private _baseLevel = _base getVariable ["WL2_forwardBaseLevel", 0];
 
-	private _waitText = if (serverTime < _baseTime) then {
+	private _baseText = if (serverTime < _baseTime) then {
 		private _timeRemaining = _baseTime - serverTime;
 		private _timeString = [_timeRemaining, "MM:SS"] call BIS_fnc_secondsToString;
-		private _infoString = if (_baseLevel == 0) then {
-			"Constructing"
-		} else {
-			"Upgrading"
-		};
-		format ["(%1 %2)", _infoString, _timeString];
+		format ["(Constructing %1)", _timeString];
 	} else {
-		""
+		if (_baseOwner == _side) then {
+			private _supplies = _base getVariable ["WL2_forwardBaseSupplies", -1];
+			_supplies = (round _supplies) max 0;
+			format ["(%1 Supplies)", (_supplies call BIS_fnc_numberText) regexReplace [" ", ","]];
+		} else {
+			"";
+		};
 	};
 
 	private _basePos = getPosATL _base;
-	private _baseRadius = switch (_baseLevel) do {
-		case 0: { 100 };
-		case 1: { 150 };
-		case 2: { 250 };
-		case 3: { 500 };
-		default { 100 };
-	};
-	if (_baseOwner != _side && (player distance2D _basePos > _baseRadius) && !WL_IsSpectator) then {
-		continue;
-	};
-
-	private _baseType = switch (_baseLevel) do {
-		case 0: {
-			"Forward Construction Site"
-		};
-		case 1: {
-			"Forward Outpost"
-		};
-		case 2: {
-			"Forward Base"
-		};
-		case 3: {
-			"Forward HQ"
-		};
-		default {
-			"Forward Outpost"
-		};
-	};
 
 	_drawIcons pushBack [
-		"\A3\ui_f\data\map\mapcontrol\Tourism_CA.paa",
+		"\A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_requestLeadership_ca.paa",
 		_baseColor,
 		_basePos,
-		30,
-		30,
+		40,
+		40,
 		0,
-		format ["%1 %2", _baseType, _waitText]
+		format ["Forward Base %1", _baseText]
 	];
 	_drawIconsSelectable pushBack [_base, _basePos];
 
 	_drawEllipses pushBack [
 		_basePos,
-		_baseRadius,
-		_baseRadius,
+		WL_FOB_RANGE,
+		WL_FOB_RANGE,
 		0,
 		_baseColor,
 		""
 	];
+
+	private _sectorsInRange = _x getVariable ["WL2_forwardBaseSectors", []];
+	{
+		private _sectorPos = getPosASL _x;
+
+		private _startPointDirection = _base getRelDir _sectorPos;
+		private _startPoint = _base getRelPos [100, _startPointDirection];
+
+		private _endPointDirection = _x getRelDir _basePos;
+		private _endPoint = _x getRelPos [100, _endPointDirection];
+
+		_drawLines pushBack [
+			_startPoint,
+			_endPoint,
+			_baseColor,
+			8
+		];
+	} forEach _sectorsInRange;
 } forEach _forwardBases;
 
 // Draw sector scans
@@ -160,7 +155,7 @@ private _sectorScannedUnits = [];
 	_sectorScannedUnits append _detectedUnits;
 } forEach BIS_WL_currentlyScannedSectors;
 
-private _strongholdScannedUnits = missionNamespace getVariable ["WL2_strongholdDetectedUnits", []];
+private _locationScannedUnits = missionNamespace getVariable ["WL2_detectedUnits", []];
 {
 	private _size = call WL2_fnc_iconSize;
 	_drawIcons pushBack [
@@ -181,7 +176,7 @@ private _strongholdScannedUnits = missionNamespace getVariable ["WL2_strongholdD
 		"PuristaBold",
 		"right"
 	];
-} forEach (_sectorScannedUnits + _strongholdScannedUnits);
+} forEach (_sectorScannedUnits + _locationScannedUnits);
 
 // Draw EW networks
 private _activeVehicles = vehicles select {

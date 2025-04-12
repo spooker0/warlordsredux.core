@@ -27,4 +27,15 @@ while { !BIS_WL_missionEnd } do {
 		_list pushBackUnique _playerUID;
 	} foreach _blocked;
 	serverNamespace setVariable ["BIS_WL_incomeBlockedList", _list];
+
+	private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
+	_forwardBases = _forwardBases select {
+		alive _x &&
+		_x getVariable ["WL2_forwardBaseTime", 0] < serverTime
+	};
+
+    {
+		private _supplies = _x getVariable ["WL2_forwardBaseSupplies", 0];
+		_x setVariable ["WL2_forwardBaseSupplies", _supplies + 1000, true];
+    } forEach _forwardBases;
 };

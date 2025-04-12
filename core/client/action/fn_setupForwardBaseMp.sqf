@@ -1,21 +1,21 @@
-params ["_forwardBase", "_startTime", "_endTime", "_side", "_upgrading"];
+#include "..\..\warlords_constants.inc"
 
-if (!_upgrading) then {
-    _forwardBase setVariable ["WL2_canDemolish", true];
+params ["_forwardBase", "_startTime", "_endTime", "_side"];
 
-    _forwardBase animateSource ["Terminal_source", 100, true];
-    _forwardBase setVariable ["WL2_forwardBaseOwner", _side];
-    _forwardBase setVariable ["WL2_forwardBaseLevel", 0];
+_forwardBase setVariable ["WL2_canDemolish", true];
+_forwardBase animateSource ["Terminal_source", 100, true];
+_forwardBase setVariable ["WL2_forwardBaseOwner", _side];
 
-    private _currentForwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
-    _currentForwardBases pushBack _forwardBase;
-    missionNamespace setVariable ["WL2_forwardBases", _currentForwardBases];
+private _currentForwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
+_currentForwardBases pushBack _forwardBase;
+_currentForwardBases = _currentForwardBases select {
+    alive _x;
 };
+missionNamespace setVariable ["WL2_forwardBases", _currentForwardBases];
 
 _forwardBase setVariable ["WL2_forwardBaseTime", _endTime];
 _forwardBase setVariable ["WL_spawnedAsset", true];
-
-playSound3D ["a3\data_f_curator\sound\cfgsounds\air_raid.wss", _forwardBase, false, getPosASL _forwardBase, 5, 0.375, 2500, 0, true];
+_forwardBase setVariable ["WL2_forwardBaseSupplies", -1];
 
 waitUntil {
     sleep 1;
@@ -26,5 +26,9 @@ waitUntil {
     serverTime >= _endTime || !alive _forwardBase
 };
 
-private _previousLevel = _forwardBase getVariable ["WL2_forwardBaseLevel", 0];
-_forwardBase setVariable ["WL2_forwardBaseLevel", (_previousLevel + 1) min 3];
+_forwardBase setVariable ["WL2_forwardBaseSupplies", 2000];
+
+private _sectorsInRange = BIS_WL_allSectors select {
+    _x distance2D _forwardBase < WL_FOB_CAPTURE_RANGE
+};
+_forwardBase setVariable ["WL2_forwardBaseSectors", _sectorsInRange];

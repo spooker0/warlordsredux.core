@@ -3,12 +3,12 @@
     "<t color='#00ff00'>Revive<t>",
     "\a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa",
     "\a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa",
-    "isPlayer cursorTarget && lifeState cursorTarget == 'INCAPACITATED' && side group cursorTarget == side group player && cursorTarget distance2D player < 3",
-    "speed player < 1",
+    "isPlayer cursorObject && lifeState cursorObject == 'INCAPACITATED' && side group cursorObject == side group player && cursorObject distance2D player < 3",
+    "speed player < 5",
     {
         private _soundId = playSound3D ["a3\sounds_f\characters\ingame\ainvpknlmstpslaywrfldnon_medic.wss", player];
         player setVariable ["WL_reviveSound", _soundId];
-        player setVariable ["WL_reviveTarget", cursorTarget];
+        player setVariable ["WL_reviveTarget", cursorObject];
     },
     {},
     {

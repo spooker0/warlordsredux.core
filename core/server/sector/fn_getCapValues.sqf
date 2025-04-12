@@ -1,3 +1,5 @@
+#include "..\..\warlords_constants.inc"
+
 params ["_sector"];
 
 private _sideArr = [west, east, independent];
@@ -31,7 +33,19 @@ private _sideCaptureModifier = createHashMap;
 		continue;
 	};
 
-	_sideCaptureModifier set [_side, (count _connectedNeighboringSectors) min 3];
+	private _connections = count _connectedNeighboringSectors;
+
+	private _currentForwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
+	private _teamForwardBases = _currentForwardBases select {
+		_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side
+	};
+	private _inRangeTeamForwardBases = _teamForwardBases select {
+		_sector distance2D _x < WL_FOB_CAPTURE_RANGE &&
+		_x getVariable ["WL2_forwardBaseTime", 0] < serverTime
+	};
+	_connections = _connections + count _inRangeTeamForwardBases;
+
+	_sideCaptureModifier set [_side, _connections min 3];
 } forEach _sideArr;
 
 private _relevantEntities = entities [["LandVehicle", "Man"], ["Logic"], true, true];

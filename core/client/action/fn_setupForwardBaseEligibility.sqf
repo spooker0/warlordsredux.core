@@ -1,20 +1,52 @@
 #include "..\..\warlords_constants.inc"
-params ["_target", "_caller", "_upgrading"];
 
-private _cursorObject = cursorObject;
+params ["_target", "_caller", ["_addSupplies", false]];
 
-private _spawned = _cursorObject getVariable ["WL_spawnedAsset", false];
-
-if (!_spawned) exitWith {
-    [false];
+if (!alive _target) exitWith {
+    "Destroyed.";
 };
 
-if (_caller != _caller) exitWith {
-    [false];
+if (!isNull attachedTo _target || !isNull ropeAttachedTo _target) exitWith {
+    "Can't be used while attached to another object.";
 };
 
-if !(typeof _cursorObject in ["VirtualReammoBox_camonet_F", "RuggedTerminal_01_communications_hub_F"]) exitWith {
-    [false];
+if ((getPosASL _target) # 2 < -10) exitWith {
+    "Can't be used underwater.";
+};
+
+if (_target getVariable ["WL2_deploying", false]) exitWith {
+    "Deploying.";
+};
+
+private _currentForwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
+private _teamForwardBases = _currentForwardBases select {
+    _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
+};
+private _inRangeTeamForwardBases = _teamForwardBases select {
+    _caller distance2D _x < WL_FOB_RANGE
+};
+private _inRangeTeamFob = if (count _inRangeTeamForwardBases > 0) then {
+    _inRangeTeamForwardBases # 0
+} else {
+    objNull
+};
+if (!isNull _inRangeTeamFob && _inRangeTeamFob getVariable ["WL2_forwardBaseTime", 0] > serverTime) exitWith {
+    "Can't add supplies to forward base while it's under construction.";
+};
+if (_addSupplies && isNull _inRangeTeamFob) exitWith {
+    "No friendly forward base in range.";
+};
+if (_addSupplies && !isNull _inRangeTeamFob) exitWith {
+    "";
+};
+
+if (count _teamForwardBases >= 3) exitWith {
+    format ["Forward base limit reached. Current: %1", count _teamForwardBases];
+};
+
+private _isSquadLeader = ["isSquadLeader", [getPlayerID _caller]] call SQD_fnc_client;
+if (!_isSquadLeader) exitWith {
+    "You need to be a squad leader to set up a forward base.";
 };
 
 private _squadMembersNeeded =
@@ -23,74 +55,47 @@ private _squadMembersNeeded =
 #else
     1;
 #endif
-
-if (!_upgrading && typeof _cursorObject == "VirtualReammoBox_camonet_F") exitWith {
-    private _currentForwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
-    private _teamForwardBases = _currentForwardBases select {
-        _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
-    };
-    private _isQualifyingSL = ["isSquadLeaderOfSize", [getPlayerID player, _squadMembersNeeded]] call SQD_fnc_client;
-
-    private _result = [];
-    switch (true) do {
-        case (!alive _cursorObject): {
-            _result = [false];
-        };
-        case (player distance _cursorObject > WL_MAINTENANCE_RADIUS): {
-            _result = [false];
-        };
-        case (!isNull attachedTo _cursorObject || !isNull ropeAttachedTo _cursorObject): {
-            _result = [false];
-        };
-        case ((getPosASL _cursorObject) # 2 < -10): {
-            _result = [false];
-        };
-        case (count _teamForwardBases >= 3): {
-            private _limitReached = format ["Forward base limit reached. Current: %1", count _teamForwardBases];
-            _result = [true, _limitReached];
-        };
-        case (!_isQualifyingSL): {
-            _result = [true, "You need at least 3 squad members to set up a forward base."];
-        };
-        case (_cursorObject getVariable ["WL2_forwardBaseLevel", 0] != 0): {
-            _result = [true, "This forward base is still constructing."];
-        };
-        default {
-            _result = [true, ""];
-        };
-    };
-    _result;
+private _isQualifyingSL = ["isSquadLeaderOfSize", [getPlayerID _caller, _squadMembersNeeded]] call SQD_fnc_client;
+if (!_isQualifyingSL) exitWith {
+    "You need at least 3 squad members to set up a forward base.";
 };
 
-if (_upgrading && typeof _cursorObject == "RuggedTerminal_01_communications_hub_F") exitWith {
-    private _playerFunds = (missionNamespace getVariable "fundsDatabaseClients") get (getPlayerUID player);
-    private _sideOwner = _cursorObject getVariable ["WL2_forwardBaseOwner", sideUnknown];
-
-    private _result = [];
-    switch (true) do {
-        case (!alive _cursorObject): {
-            _result = [false];
-        };
-        case (player distance _cursorObject > WL_MAINTENANCE_RADIUS): {
-            _result = [false];
-        };
-        case (_sideOwner != BIS_WL_playerSide): {
-            _result = [false];
-        };
-        case (_cursorObject getVariable ["WL2_forwardBaseTime", -1] > serverTime): {
-            _result = [true, "This forward base is still upgrading."];
-        };
-        case (_cursorObject getVariable ["WL2_forwardBaseLevel", 0] >= 3): {
-            _result = [true, "This forward base is already at maximum level."];
-        };
-        case (_playerFunds < WL_FOB_UPGRADE_COST): {
-            _result = [true, format ["%1%2 required to upgrade.", [BIS_WL_playerSide] call WL2_fnc_getMoneySign, WL_FOB_UPGRADE_COST]];
-        };
-        default {
-            _result = [true, ""];
-        };
+private _calculateAxis = {
+    params ["_sector"];
+    private _sectorArea = _sector getVariable "objectArea";
+    private _axis = if (_sectorArea # 3) then {
+        private _axisA = _sectorArea # 0;
+        private _axisB = _sectorArea # 1;
+        sqrt ((_axisA ^ 2) + (_axisB ^ 2));
+    } else {
+        (_sectorArea # 0) max (_sectorArea # 1);
     };
-    _result;
+    _axis;
 };
 
-[false];
+private _overlappingSectors = BIS_WL_allSectors select {
+    private _axis = [_x] call _calculateAxis;
+    _x distance2D _caller < (_axis + WL_FOB_RANGE + 20)
+
+};
+if (count _overlappingSectors > 0) exitWith {
+    _overlappingSectors = _overlappingSectors apply {
+        private _axis = [_x] call _calculateAxis;
+        private _distanceToCircleEdge = (_x distance2D _caller) -_axis - 20;
+        format ["%1 (%2 M)", _x getVariable ["BIS_WL_name", "Sector"], round (WL_FOB_RANGE - _distanceToCircleEdge)];
+    };
+    format ["Forward base must be deployed completely outside of sectors: %1", _overlappingSectors joinString ", "];
+};
+
+private _nearbyTeamForwardBases = _teamForwardBases select {
+    _caller distance2D _x < WL_FOB_MIN_DISTANCE
+};
+if (count _nearbyTeamForwardBases > 0) exitWith {
+    format ["Forward base must be deployed at least %1 M away from other forward bases.", WL_FOB_MIN_DISTANCE];
+};
+
+if (_caller distance _target > 10) exitWith {
+    "You are too far away.";
+};
+
+"";

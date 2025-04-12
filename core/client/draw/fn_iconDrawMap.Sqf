@@ -16,9 +16,11 @@ private _angle = (serverTime * 75) % 360;
 	_x set [5, _angle];
 	_m drawIcon _x;
 } forEach _drawIconsAnimated;
+
 {
 	_m drawLine _x;
 } forEach _drawLines;
+
 {
 	_m drawEllipse _x;
 } forEach _drawEllipses;

@@ -215,14 +215,6 @@ if (_action == "orderFTPod") exitWith {
 	};
 };
 
-if (_action == "upgradeFOB") exitWith {
-	_cost = WL_FOB_UPGRADE_COST;
-	_hasFunds = (playerFunds >= _cost);
-	if (_hasFunds) then {
-		(-_cost) call WL2_fnc_fundsDatabaseWrite;
-	};
-};
-
 if (_action == "ftSupportPoints") exitWith {
 	private _ftVehicle = _param1;
 	private _reward = 5;
@@ -330,6 +322,14 @@ if (_action == "fundsTransferBill") exitWith {
 if (_action == "repair") exitWith {
 	if ((!isNil {_param1}) && {_param1 <= serverTime}) then {
 		_param3 setDamage _param2;
+	};
+};
+
+if (_action == "controlCollaborator") exitWith {
+	private _cost = 500;
+	private _hasFunds = playerFunds >= _cost;
+	if (_hasFunds) then {
+		(-_cost) call WL2_fnc_fundsDatabaseWrite;
 	};
 };
 

@@ -6,9 +6,8 @@ private _servicesInSector = _sector getVariable ["BIS_WL_services", []];
 if ("H" in _requirements && !("H" in _servicesInSector)) exitWith {
     private _potentialBases = missionNamespace getVariable ["WL2_forwardBases", []];
     private _forwardBases = _potentialBases select {
-        player distance2D _x < 500 &&
-        _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide &&
-        _x getVariable ["WL2_forwardBaseLevel", 0] >= 3
+        player distance2D _x < WL_FOB_RANGE &&
+        _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
     };
 
     if (count _forwardBases > 0) then {

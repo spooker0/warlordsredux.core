@@ -3,9 +3,10 @@
 
 params ["_key"];
 
+private _canBuy = uiNamespace getVariable ["WL2_canBuy", true];
 private _tempBuyKey = actionKeys "User5";
 _tempBuyKey pushBack DIK_NUMPADSLASH;
-if (_key in _tempBuyKey) exitWith {
+if (_key in _tempBuyKey && _canBuy) exitWith {
     WL_TEMP_BUY_MENU = true;
     hint "Entering buy code...";
     ["TaskQuickBuyShortcut"] call WLT_fnc_taskComplete;

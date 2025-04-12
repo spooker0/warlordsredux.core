@@ -19,13 +19,17 @@ if (!_isInDriverSeat) exitWith {
 };
 
 private _isAttached = !isNull attachedTo _vehicle;
-if (_isAttached) exitWith {
-    [false, format ["Your vehicle is attached to: %1", [attachedTo _vehicle] call WL2_fnc_getAssetTypeName]];
+private _attachedObject = "";
+if (_isAttached) then {
+    _attachedObject = [attachedTo _vehicle] call WL2_fnc_getAssetTypeName;
+};
+private _hasAttachment = count attachedObjects _vehicle > 0;
+if (_hasAttachment) then {
+    _attachedObject = [attachedObjects _vehicle # 0] call WL2_fnc_getAssetTypeName;
 };
 
-private _hasAttachment = count attachedObjects _vehicle > 0;
-if (_hasAttachment) exitWith {
-    [false, format ["Your vehicle is attached to: %1", [attachedObjects _vehicle # 0] call WL2_fnc_getAssetTypeName]];
+if (_attachedObject != "") exitWith {
+    [false, format ["Your vehicle is attached to: %1", _attachedObject]];
 };
 
 [true, ""];

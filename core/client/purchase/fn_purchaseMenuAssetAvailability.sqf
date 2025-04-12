@@ -104,7 +104,7 @@ if (_ret) then {
 		case "FTParadropVehicle": {
 			[
 				[WL2_fnc_checkIndependents],
-				[WL2_fnc_checkInFriendlySector],
+				[WL2_fnc_checkInFriendlySector, [_cost, []]],
 				[WL2_fnc_checkGroundVehicleDriver, [true]],
 				[WL2_fnc_checkNearbyEnemies],
 				[WL2_fnc_checkParadropCooldown]
@@ -128,7 +128,7 @@ if (_ret) then {
 			[
 				[WL2_fnc_checkPlayerInVehicle],
 				[WL2_fnc_checkLastLoadout],
-				[WL2_fnc_checkInFriendlySector],
+				[WL2_fnc_checkInFriendlySector, [_cost, []]],
 				[WL2_fnc_checkNearbyEnemies]
 			]
 		};
@@ -136,7 +136,7 @@ if (_ret) then {
 			[
 				[WL2_fnc_checkPlayerInVehicle],
 				[WL2_fnc_checkSavedLoadout],
-				[WL2_fnc_checkInFriendlySector],
+				[WL2_fnc_checkInFriendlySector, [_cost, []]],
 				[WL2_fnc_checkNearbyEnemies]
 			]
 		};
@@ -161,7 +161,7 @@ if (_ret) then {
 		case "Arsenal": {
 			[
 				[WL2_fnc_checkPlayerInVehicle],
-				[WL2_fnc_checkInFriendlySector],
+				[WL2_fnc_checkInFriendlySector, [_cost, []]],
 				[WL2_fnc_checkInventoryOpen],
 				[WL2_fnc_checkNearbyEnemies]
 			]
@@ -176,12 +176,17 @@ if (_ret) then {
 				[WL2_fnc_checkGroundVehicleDriver, [false]]
 			]
 		};
+		case "ControlCollaborator": {
+			[
+				[WL2_fnc_checkCollaborator]
+			]
+		};
 		case "RespawnVic": {
 			[
 				[WL2_fnc_checkIndependents],
 				[WL2_fnc_checkPlayerInVehicle],
 				[WL2_fnc_checkNearbyEnemies],
-				[WL2_fnc_checkInFriendlySector],
+				[WL2_fnc_checkInFriendlySector, [_cost, []]],
 				[WL2_fnc_checkBuyRespawn, [false]]
 			]
 		};
@@ -198,7 +203,7 @@ if (_ret) then {
 				[WL2_fnc_checkIndependents],
 				[WL2_fnc_checkPlayerInVehicle],
 				[WL2_fnc_checkNearbyEnemies],
-				[WL2_fnc_checkInFriendlySector],
+				[WL2_fnc_checkInFriendlySector, [_cost, []]],
 				[WL2_fnc_checkBuyRespawn, [true]]
 			]
 		};
@@ -214,7 +219,7 @@ if (_ret) then {
 			[
 				[WL2_fnc_checkPlayerInVehicle],
 				[WL2_fnc_checkNearbyEnemies],
-				[WL2_fnc_checkInFriendlySector],
+				[WL2_fnc_checkInFriendlySector, [_cost, []]],
 				[WL2_fnc_checkTentAction]
 			]
 		};
@@ -243,7 +248,7 @@ if (_ret) then {
 			[
 				[WL2_fnc_checkPlayerInVehicle],
 				[WL2_fnc_checkNearbyEnemies],
-				[WL2_fnc_checkInFriendlySector]
+				[WL2_fnc_checkInFriendlySector, [-1, []]]
 			]
 		};
 		case "ResetVehicle": {
@@ -257,7 +262,7 @@ if (_ret) then {
 		};
 		case "BuyGlasses": {
 			[
-				[WL2_fnc_checkInFriendlySector],
+				[WL2_fnc_checkInFriendlySector, [_cost, []]],
 				[WL2_fnc_checkPlayerInVehicle],
 				[WL2_fnc_checkNearbyEnemies],
 				[WL2_fnc_checkGlasses]
@@ -280,7 +285,7 @@ if (_ret) then {
 					[WL2_fnc_checkAssetLimit],
 					[WL2_fnc_checkNearbyEnemies],
 					[WL2_fnc_checkPlayerInVehicle, [_requirements]],
-					[WL2_fnc_checkInFriendlySector, [_requirements, _category]],
+					[WL2_fnc_checkInFriendlySector, [_cost, _requirements]],
 					[WL2_fnc_checkIsOrdering],
 					[WL2_fnc_checkUAVLimit, [_class]],
 					[WL2_fnc_checkCommTower, [_class]],

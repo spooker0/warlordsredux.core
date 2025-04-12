@@ -1,6 +1,6 @@
 #include "constants.inc"
 
-params [["_unit", player], ["_lastLoadout", BIS_WL_lastLoadout], ["_paidFor", false]];
+params [["_unit", player], ["_lastLoadout", BIS_WL_lastLoadout], ["_paidFor", false], ["_collaborator", false]];
 
 if (WLC_ENABLED == 0) exitWith {};
 
@@ -21,4 +21,4 @@ private _data = createHashMap;
     _data set [_type + "Ammo", _ammoData];
 } forEach ["Primary", "Secondary", "Launcher"];
 
-[_data, _side, _lastLoadout, _unit, _paidFor] call WLC_fnc_processSelection;
+[_data, _side, _lastLoadout, _unit, _paidFor, _collaborator] call WLC_fnc_processSelection;

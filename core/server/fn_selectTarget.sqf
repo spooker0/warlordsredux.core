@@ -11,10 +11,6 @@ missionNamespace setVariable [format ["BIS_WL_sectorSelectedTimestamp_%1", _side
 
 private _isHomeBase = _sector in (profileNamespace getVariable "BIS_WL_lastBases");
 if (_isHomeBase) then {
-	private _previousValue = _sector getVariable ["BIS_WL_baseUnderAttack", false];
-	if (!_previousValue) then {
-		_sector setVariable ["BIS_WL_baseUnderAttack", true, true];
-	};
 	["base_vulnerable", _sector getVariable "BIS_WL_originalOwner"] call WL2_fnc_handleRespawnMarkers;
 } else {
 	private _owner = _sector getVariable ["BIS_WL_owner", sideUnknown];
@@ -29,10 +25,6 @@ if (_isHomeBase) then {
 	};
 
 	if (_prevSector in (profileNamespace getVariable "BIS_WL_lastBases")) then {
-		private _previousValue = _sector getVariable ["BIS_WL_baseUnderAttack", true];
-		if (_previousValue) then {
-			_sector setVariable ["BIS_WL_baseUnderAttack", false, true];
-		};
 		["base_safe", _prevSector getVariable "BIS_WL_originalOwner"] call WL2_fnc_handleRespawnMarkers;
 	};
 };

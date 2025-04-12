@@ -52,8 +52,11 @@ disableSerialization;
             private _squadPoints = 0;
             {
                 private _playerId = _x;
-                private _player = _allPlayers select {getPlayerID _x == _playerId} select 0;
-                if (isNil "_player") exitWith {};
+                private _player = _allPlayers select {getPlayerID _x == _playerId};
+                if (count _player == 0) then {
+                    continue;
+                };
+                _player = _player # 0;
 
                 private _playerName = name _player;
 

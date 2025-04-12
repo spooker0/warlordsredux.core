@@ -569,11 +569,11 @@ class MODR_Menu {
             x = 0.05;
             y = 0.05;
             w = 0.3;
-            h = 0.9;
+            h = 0.6;
             colorBackground[] = {0, 0, 0, 0.4};
             font = "PuristaMedium";
             sizeEx = 0.035;
-            rowHeight = 0.08;
+            rowHeight = 0.04;
         };
         class MODR_InfoDisplay: RscEdit {
             idc = MODR_INFO_DISPLAY;
@@ -606,6 +606,7 @@ class MODR_Menu {
             colorBackground[] = {0, 0, 0, 0.4};
             font = "PuristaMedium";
             sizeEx = 0.035;
+            text = "unsportsmanlike conduct";
         };
         class MODR_TimeoutTime: RscStructuredText {
             idc = MODR_TIMEOUT_TIME;
@@ -634,6 +635,28 @@ class MODR_Menu {
             text = "Timeout";
             sizeEx = 0.04;
             colorBackground[] = {1, 0, 0, 1};
+        };
+
+        class MODR_ChatHistory: RscListBox {
+            idc = MODR_CHAT_HISTORY;
+            x = 0.05;
+            y = 0.68;
+            w = 0.9;
+            h = 0.25;
+            colorBackground[] = {0, 0, 0, 0.4};
+            font = "PuristaMedium";
+            sizeEx = 0.03;
+            rowHeight = 0.03;
+        };
+        class MODR_CopyChat: RscButton {
+            idc = MODR_CHAT_HISTORY_COPY;
+            x = 0.75;
+            y = 0.93;
+            w = 0.2;
+            h = 0.04;
+            text = "Full Chat Log";
+            sizeEx = 0.035;
+            colorBackground[] = {0, 0, 0, 0.2};
         };
     };
 };

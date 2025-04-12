@@ -8,3 +8,4 @@ if (serverTime < _paradropNextUse) exitWith {
     private _timeoutDisplay = [_paradropNextUse - serverTime, "MM:SS"] call BIS_fnc_secondsToString;
     [false, format [_cooldownText, _timeoutDisplay]];
 };
+[true, ""];

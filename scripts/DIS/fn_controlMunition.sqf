@@ -32,7 +32,6 @@ _instructionsDisplay ctrlSetTextColor [1, 1, 1, 1];
 
 private _instructionStages = [
     ["defaultAction", "Detonate"],
-    ["nightVision", "Thermal Vision"],
     ["zoomIn", "Map Zoom In"],
     ["zoomOut", "Map Zoom Out"]
 ];

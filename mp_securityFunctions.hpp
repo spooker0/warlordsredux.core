@@ -19,8 +19,7 @@ class CfgRemoteExec {
 		class KST_fnc_rocket {allowedTargets = 0;};
 		class KST_fnc_setParent {allowedTargets = 0;};
 		class MENU_fnc_execCode {allowedTargets = 2;};
-		class POLL_fnc_openPoll {allowedTargets = 0;};
-		class POLL_fnc_vote {allowedTargets = 0;};
+		class POLL_fnc_selectOption {allowedTargets = 0;};
 		class SQD_fnc_server {allowedTargets = 2;};
 		class WL2_fnc_attachDetach {allowedTargets = 0;};
 		class WL2_fnc_catapultAction {allowedTargets = 0;};
@@ -56,6 +55,7 @@ class CfgRemoteExec {
 		class WL2_fnc_revive {allowedTargets = 0;};
 		class WL2_fnc_scannerAction {allowedTargets = 0;};
 		class WL2_fnc_setDazzlerState {allowedTargets = 2;};
+		class WL2_fnc_setupForwardBaseAction {allowedTargets = 0;};
 		class WL2_fnc_setupForwardBaseMp {allowedTargets = 0;};
 		class WL2_fnc_slingAddAction {allowedTargets = 1;};
 		class WL2_fnc_slingloadInit {allowedTargets = 0;};
@@ -101,6 +101,7 @@ class CfgRemoteExec {
 		class setMass {allowedTargets = 0;};
 		class setPylonLoadOut {allowedTargets = 0;};
 		class setAmmoOnPylon {allowedTargets = 0;};
+		class setPhysicsCollisionFlag {allowedTargets = 0;};
 		class setPylonsPriority {allowedTargets = 0;};
 		class setRepairCargo {allowedTargets = 0;};
 		class setShotParents {allowedTargets = 0;};
@@ -110,6 +111,7 @@ class CfgRemoteExec {
 		class setVehicleReportOwnPosition {allowedTargets = 0;};
 		class setVehicleReportRemoteTargets {allowedTargets = 0;};
 		class setVelocityModelSpace {allowedTargets = 2;};
+		class switchMove {allowedTargets = 0;};
 		class systemChat {allowedTargets = 0;};
 	};
 };

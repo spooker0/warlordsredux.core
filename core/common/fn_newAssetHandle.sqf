@@ -214,9 +214,17 @@ if (_asset isKindOf "Man") then {
 			[_asset] remoteExec ["WL2_fnc_slingAddAction", 0, true];
 		};
 
+		case "VirtualReammoBox_camonet_F": {
+			[_asset] remoteExec ["WL2_fnc_setupForwardBaseAction", 0, true];
+		};
+
 		case "B_Boat_Armed_01_minigun_F";
 		case "O_Boat_Armed_01_hmg_F": {
 			[_asset] spawn WL2_fnc_stabilizeBoatAction;
+		};
+
+		case "B_AAA_System_01_F": {
+			[_asset] spawn APS_fnc_ciws;
 		};
 
 		// case "I_Heli_light_03_dynamicLoadout_F";

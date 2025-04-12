@@ -131,7 +131,7 @@ private _instructionStages = [
     ["SPACE", "Camera mode"],
     ["=/-", "HUD range"],
     ["B", "Follow next projectile"],
-    ["V", "Mute targeted player"],
+    ["V", "Toggle mute VON"],
     ["BACK", "Toggle interface"],
     ["F1", "Toggle help"],
     ["K", "Settings menu"]

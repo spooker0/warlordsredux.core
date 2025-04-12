@@ -220,17 +220,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         params ["_asset"];
         private _marker = createMarkerLocal ["WL2_fastTravelFOBMarker", getPosATL _asset];
         _marker setMarkerShapeLocal "ELLIPSE";
-
-        private _baseLevel = _asset getVariable ["WL2_forwardBaseLevel", 0];
-        private _baseRadius = switch (_baseLevel) do {
-            case 0: { 100 };
-            case 1: { 150 };
-            case 2: { 250 };
-            case 3: { 500 };
-            default { 100 };
-        };
-
-        _marker setMarkerSizeLocal [_baseRadius, _baseRadius];
+        _marker setMarkerSizeLocal [WL_FOB_RANGE, WL_FOB_RANGE];
         _marker setMarkerAlphaLocal 0;
 
         [6, "WL2_fastTravelFOBMarker"] spawn WL2_fnc_executeFastTravel;

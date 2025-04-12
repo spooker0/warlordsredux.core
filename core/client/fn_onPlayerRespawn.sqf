@@ -33,6 +33,11 @@ private _squadActionText = format ["<t color='#00FFFF'>%1</t>", localize "STR_SQ
 private _squadActionId = player addAction[_squadActionText, { [true] call SQD_fnc_menu }, [], -100, false, false, "", ""];
 player setUserActionText [_squadActionId, _squadActionText, "<img size='2' image='\a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa'/>"];
 
+uiNamespace setVariable ["WL2_canBuy", true];
+if (isRemoteControlling player) then {
+	player remoteControl objNull;
+};
+
 player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 [] call WLC_fnc_onRespawn;
 [] call WL2_fnc_factionBasedClientInit;
@@ -49,9 +54,10 @@ if (player getVariable ["WL_hasGoggles", false]) then {
 	removeGoggles player;
 };
 
-call WL2_fnc_setupForwardBaseAction;
 call WL2_fnc_rappelAction;
 call WL2_fnc_demolishAction;
 call WL2_fnc_disarmAction;
 
 0 spawn WL2_fnc_drawRadarName;
+
+call POLL_fnc_pollAction;

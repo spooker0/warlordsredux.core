@@ -40,12 +40,16 @@ private _timeoutReasonLabel = _display displayCtrl MODR_TIMEOUT_REASON_LABEL;
 private _timeoutReasonEdit = _display displayCtrl MODR_TIMEOUT_REASON;
 private _timeoutTime = _display displayCtrl MODR_TIMEOUT_TIME;
 private _timeoutButton = _display displayCtrl MODR_TIMEOUT_BUTTON;
+private _chatHistoryList = _display displayCtrl MODR_CHAT_HISTORY;
+private _copyChatButton = _display displayCtrl MODR_CHAT_HISTORY_COPY;
 
 _infoDisplay ctrlShow false;
 _timeoutReasonLabel ctrlShow false;
 _timeoutReasonEdit ctrlShow false;
 _timeoutTime ctrlShow false;
 _timeoutButton ctrlShow false;
+_chatHistoryList ctrlShow false;
+_copyChatButton ctrlShow false;
 
 if (_elevatedPrivilege) then {
     _timeoutTime ctrlAddEventHandler ["SliderPosChanged", {
@@ -79,6 +83,74 @@ if (_elevatedPrivilege) then {
 
         [player, _selectedUid, _reasonText, _timeoutValue] remoteExec ["WL2_fnc_punishPlayer", 2];
     }];
+
+    _chatHistoryList ctrlShow true;
+    private _chatHistory = uiNamespace getVariable ["WL2_chatHistory", []];
+    private _squadChannels = missionNamespace getVariable ["SQD_VoiceChannels", [-1, -1]];
+    private _historyLength = -(count _chatHistory) max -50;
+    {
+        private _channel = _x # 0;
+        private _name = _x # 1;
+        private _text = _x # 2;
+        private _systemTime = _x # 3;
+
+        private _channelDisplay = switch (_channel) do {
+            case 0: { "GLOBAL" };
+            case 1: { "SIDE" };
+            case 2: { "COMMAND" };
+            case 3: { "GROUP" };
+            case 4: { "VEHICLE" };
+            case 5: { "DIRECT" };
+            case 6;
+            case 16: { "SYSTEM" };
+            case (_squadChannels # 0 + 5);
+            case (_squadChannels # 1 + 5): { "SQUAD" };
+            default { "UNKNOWN" };
+        };
+        private _chatHistoryEntry = format ["[%1] %2: %3", _channelDisplay, _name, _text];
+        private _lbIndex = _chatHistoryList lbAdd _chatHistoryEntry;
+
+        private _systemTimeDisplay = [_systemTime] call MENU_fnc_printSystemTime;
+        _chatHistoryList lbSetTextRight [_lbIndex, format ["%1 UTC", _systemTimeDisplay]];
+    } forEach ([_chatHistory, _historyLength] call BIS_fnc_subSelect);
+
+    _copyChatButton ctrlShow true;
+    _copyChatButton ctrlAddEventHandler ["ButtonClick", {
+        params ["_control"];
+        private _display = ctrlParent _control;
+        private _chatHistory = uiNamespace getVariable ["WL2_chatHistory", []];
+        private _squadChannels = missionNamespace getVariable ["SQD_VoiceChannels", [-1, -1]];
+        private _chatHistoryLog = "";
+        {
+            private _channel = _x # 0;
+            private _name = _x # 1;
+            private _text = _x # 2;
+            private _systemTime = _x # 3;
+
+            private _channelDisplay = switch (_channel) do {
+                case 0: { "GLOBAL" };
+                case 1: { "SIDE" };
+                case 2: { "COMMAND" };
+                case 3: { "GROUP" };
+                case 4: { "VEHICLE" };
+                case 5: { "DIRECT" };
+                case 6;
+                case 16: { "SYSTEM" };
+                case (_squadChannels # 0 + 5);
+                case (_squadChannels # 1 + 5): { "SQUAD" };
+                default { "UNKNOWN" };
+            };
+
+            private _systemTimeDisplay = [_systemTime] call MENU_fnc_printSystemTime;
+            _chatHistoryLog = format ["(%1) [%2] %3: %4%5", _systemTimeDisplay, _channelDisplay, _name, _text, endl] + _chatHistoryLog;
+        } forEach _chatHistory;
+
+        uiNamespace setVariable ["display3DENCopy_data", ["Full Chat Log", _chatHistoryLog]];
+        _display createDisplay "display3denCopy";
+    }];
+} else {
+    _playerList ctrlSetPositionH 0.9;
+    _playerList ctrlCommit 0;
 };
 
 _playerList ctrlAddEventHandler ["LBSelChanged", {
@@ -114,17 +186,8 @@ _playerList ctrlAddEventHandler ["LBSelChanged", {
         private _timeoutButton = _display displayCtrl MODR_TIMEOUT_BUTTON;
         _timeoutButton ctrlSetText format["Timeout %1 for %2 minutes", _playerName, sliderPosition _timeoutTime];
 
-        private _systemTimeUtc = systemTimeUTC apply {
-            if (_x < 10) then {
-                format ["0%1", _x];
-            } else {
-                str _x;
-            };
-        };
-        _systemTimeUtc params ["_year", "_month", "_day", "_hour", "_minute", "_second"];
-
-        private _gmtTimeString = format["%1/%2/%3 %4:%5:%6", _year, _month, _day, _hour, _minute, _second];
-        private _fullDisplayString = format["[Name] %1%5[BEID] %2%5[GUID] %3%5[UTC] %4", _playerName, "Loading...", _playerGuid, _gmtTimeString, endl];
+        private _systemTimeDisplay = [systemTimeUTC] call MENU_fnc_printSystemTime;
+        private _fullDisplayString = format["[Name] %1%5[BEID] %2%5[GUID] %3%5[UTC] %4", _playerName, "Loading...", _playerGuid, _systemTimeDisplay, endl];
         _infoDisplay ctrlSetText _fullDisplayString;
 
         private _beIdReply = "";
@@ -138,7 +201,7 @@ _playerList ctrlAddEventHandler ["LBSelChanged", {
             _beIdReply = "Failed to load Battleye info...";
         };
 
-        _fullDisplayString = format["[Name] %1%5[BEID] %2%5[GUID] %3%5[UTC] %4", _playerName, _beIdReply, _playerGuid, _gmtTimeString, endl];
+        _fullDisplayString = format["[Name] %1%5[BEID] %2%5[GUID] %3%5[UTC] %4", _playerName, _beIdReply, _playerGuid, _systemTimeDisplay, endl];
         _infoDisplay ctrlSetText _fullDisplayString;
 
         private _elevated = _display getVariable ["MODR_elevatedPrivilege", false];

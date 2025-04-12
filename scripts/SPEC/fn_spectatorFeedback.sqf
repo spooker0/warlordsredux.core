@@ -4,6 +4,7 @@ private _spectatingPlayer = objNull;
 private _spectatingPlayerScore = -1;
 
 uiNamespace setVariable ["SPEC_spectateProjectile", false];
+private _vonMuted = false;
 
 while { WL_IsSpectator } do {
     private _spectatorFocus = uiNamespace getVariable [SPEC_VAR_FOCUS, objNull];
@@ -22,16 +23,18 @@ while { WL_IsSpectator } do {
 
     if (inputAction "GetOver" > 0) then {
         waitUntil { inputAction "GetOver" == 0 };
-        private _volume = getPlayerVoNVolume _spectatingPlayer;
-        if (_volume == -1) then {
-            continue;
+        if (_vonMuted) then {
+            playSoundUI ["a3\sounds_f_bootcamp\sfx\vr\simulation_restart.wss"];
+            {
+                _x setPlayerVoNVolume 1;
+            } forEach allPlayers;
         } else {
-            if (_volume == 0) then {
-                _spectatingPlayer setPlayerVoNVolume 1;
-            } else {
-                _spectatingPlayer setPlayerVoNVolume 0;
-            };
+            playSoundUI ["a3\sounds_f_bootcamp\sfx\vr\simulation_fatal.wss"];
+            {
+                _x setPlayerVoNVolume 0;
+            } forEach allPlayers;
         };
+        _vonMuted = !_vonMuted;
     };
 
     if (inputAction "binocular" > 0) then {

@@ -12,10 +12,10 @@ private _punishReason = _punishIncident # 1;
 
 if (_punishEndTime < serverTime) exitWith {};
 
-[name player, _punishReason] remoteExec ["WL2_fnc_punishMessage", 0];
-
 private _timeRemaining = [(_punishEndTime - serverTime) max 0, "MM:SS"] call BIS_fnc_secondsToString;
 private _penaltyText = format ["You are blocked from rejoining the game for %1.", _timeRemaining];
+
+[name player, _timeRemaining, _punishReason] remoteExec ["WL2_fnc_punishMessage", 0];
 
 "BlockScreen" setDebriefingText ["Punished", _penaltyText, format ["Reason: %1", _punishReason]];
 endMission "BlockScreen";

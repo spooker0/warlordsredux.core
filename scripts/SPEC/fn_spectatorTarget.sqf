@@ -59,7 +59,7 @@ while { WL_IsSpectator } do {
             } else {
                 ""
             };
-            if (_distance > 500) then {
+            if (_distance > (_maxDistance / 5)) then {
                 continue;
             };
             _infantry pushBack [

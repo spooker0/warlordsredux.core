@@ -75,36 +75,30 @@ player addEventHandler ["Killed", {
 	closeDialog 2;
 }];
 
-player addEventHandler ["AnimStateChanged", {
-	params ["_unit", "_anim"];
-	if (lifeState _unit == "INCAPACITATED") then {
-		_unit switchMove ["Acts_StaticDeath_01"];
-	};
-}];
-
 player addEventHandler ["HandleDamage", {
 	params ["_unit", "_selection", "_damage", "_source", "_projectile", "_hitIndex", "_instigator", "_hitPoint", "_directHit"];
 	private _homeBase = ([BIS_WL_base1, BIS_WL_base2] select {
 		(_x getVariable "BIS_WL_owner") == (side group _unit)
 	}) # 0;
-	private _baseUnderAttack = _homeBase getVariable ["BIS_WL_baseUnderAttack", false];
+	private _baseSafe = _homeBase != WL_TARGET_ENEMY;
 	private _inHomeBase = _unit inArea (_homeBase getVariable "objectAreaComplete");
 
 	if (lifeState _unit == "INCAPACITATED") then {
 		0.99;
 	} else {
-		if (_inHomeBase && !_baseUnderAttack) then {
+		if (_inHomeBase && _baseSafe) then {
 			0;
 		} else {
 			if (_damage >= 1) then {
 				moveOut _unit;
 				switchCamera player;
 
-				_unit setUnconscious true;
-				_unit setCaptive true;
-
 				[_unit] spawn {
 					params ["_unit"];
+
+					_unit setCaptive true;
+					_unit setUnconscious true;
+					[_unit, false] remoteExec ["setPhysicsCollisionFlag", 0];
 
 					private _unconsciousTime = _unit getVariable ["WL_unconsciousTime", 0];
 					if (_unconsciousTime > 0) exitWith {};

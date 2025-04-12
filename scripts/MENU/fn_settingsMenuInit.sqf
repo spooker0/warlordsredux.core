@@ -28,6 +28,10 @@ private _buttons = [
     ["REPORT", {
         closeDialog 0;
         [false] call MENU_fnc_moderatorMenu;
+    }],
+    ["POLL", {
+        closeDialog 0;
+        call POLL_fnc_pollMenu;
     }]
 ];
 
@@ -57,7 +61,7 @@ if (_isAdmin || _isModerator) then {
 {
     private _text = _x # 0;
     private _item = _display ctrlCreate ["MENU_MenuItemButton", -1, _controlGroup];
-    _item ctrlSetPosition [_buttonPositionX + _forEachIndex * 0.17, 0.03, 0.15, 0.07];
+    _item ctrlSetPosition [_buttonPositionX + _forEachIndex * 0.15, 0.03, 0.14, 0.07];
     _item ctrlSetText _text;
     _item ctrlCommit 0;
     _item ctrlAddEventHandler ["ButtonClick", _x # 1];

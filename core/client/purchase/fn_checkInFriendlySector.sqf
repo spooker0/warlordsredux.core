@@ -1,31 +1,29 @@
 #include "..\..\warlords_constants.inc"
 
-params [["_requirements", []], ["_category", ""]];
+params [["_cost", 0], ["_requirements", []]];
 
 private _findCurrentSector = (BIS_WL_sectorsArray # 0) select {
     player inArea (_x getVariable "objectAreaComplete")
 };
 
 private _potentialBases = missionNamespace getVariable ["WL2_forwardBases", []];
-private _forwardBaseCategoryMap = [
-    [""],
-    ["", "Infantry", "Gear"],
-    ["", "Infantry", "Gear", "Light Vehicles", "Sector Defense"],
-    ["", "Infantry", "Gear", "Light Vehicles", "Sector Defense", "Heavy Vehicles", "Rotary Wing", "Air Defense", "Remote Control"]
-];
-private _forwardBases = _potentialBases select {
-    private _fobLevel = _x getVariable ["WL2_forwardBaseLevel", 0];
-    private _baseRadius = switch (_fobLevel) do {
-		case 0: { 100 };
-		case 1: { 150 };
-		case 2: { 250 };
-		case 3: { 500 };
-		default { 100 };
-	};
-    player distance2D _x < _baseRadius &&
-    _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide &&
-    _fobLevel > 0 &&
-    _category in (_forwardBaseCategoryMap # _fobLevel)
+private _forwardBases = if (_cost != -1) then {
+    _potentialBases select {
+        player distance2D _x < WL_FOB_RANGE &&
+        _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
+    };
+} else {
+    [];
+};
+
+private _forwardBase = if (count _forwardBases > 0) then {
+    _forwardBases # 0
+} else {
+    objNull
+};
+
+if (!isNull _forwardBase && _forwardBase getVariable ["WL2_forwardBaseSupplies", -1] < _cost) exitWith {
+    [false, "Insufficient supplies in forward base."];
 };
 
 private _inRange = count _forwardBases > 0 || count _findCurrentSector > 0;

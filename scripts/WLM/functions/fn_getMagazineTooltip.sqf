@@ -1,8 +1,13 @@
 params ["_magazine"];
 
 private _magazineTooltipCache = uiNamespace getVariable ["WLM_magazineTooltipCache", createHashMap];
+
+private _asset = uiNamespace getVariable ["WLM_asset", objNull];
+private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+private _cachedAssetType = uiNamespace getVariable ["WLM_magazineTooltipCacheAssetType", ""];
+
 private _cacheResponse = _magazineTooltipCache getOrDefault [_magazine, ""];
-if (_cacheResponse != "") exitWith {
+if (_cachedAssetType == _assetActualType && _cacheResponse != "") exitWith {
     _cacheResponse;
 };
 
@@ -182,8 +187,6 @@ if (_magDescTracersEvery != 0) then {
     _magDesc pushBack ["Tracers Every", format ["%1", _magDescTracersEvery]];
 };
 
-private _asset = uiNamespace getVariable ["WLM_asset", objNull];
-private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
 private _ammoOverridesHashMap = missionNamespace getVariable ["WL2_ammoOverrides", createHashMap];
 private _assetAmmoOverrides = _ammoOverridesHashMap getOrDefault [_assetActualType, createHashMap];
 private _actualAmmoType = _assetAmmoOverrides getOrDefault [_magAmmoType, [_magAmmoType]];

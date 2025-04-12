@@ -1,6 +1,8 @@
 #include "constants.inc"
 
-class RscPollOption: RscShortcutButtonMRTM {
+import RscShortcutButton;
+
+class RscPollOption: RscShortcutButton {
     animTextureNormal = "#(argb,8,8,3)color(1,1,1,1)";
 	animTextureDisabled = "#(argb,8,8,3)color(1,1,1,1)";
 	animTextureOver = "#(argb,8,8,3)color(1,1,1,1)";
@@ -17,16 +19,28 @@ class RscPollOption: RscShortcutButtonMRTM {
 	colorDisabled[] = {1,1,1,0.25};
 
     sizeEx = 0.05;
-    w = 0.38;
-    h = 0.18;
+    w = 0.9;
+    h = 0.13;
     font = "PuristaMedium";
 
     class Attributes {
 		font = "PuristaLight";
 		color = "#E5E5E5";
-		align = "center";
+		align = "left";
 		shadow = "false";
 	};
+};
+
+class RscPollEdit: RscEdit {
+    colorBackground[] = {0, 0, 0, 0.8};
+	color[] = {1, 1, 1, 1};
+	colorText[] = {1, 1, 1, 1};
+	colorDisabled[] = {1, 1, 1, 0.25};
+
+    sizeEx = 0.05;
+    w = 0.9;
+    h = 0.13;
+    font = "PuristaMedium";
 };
 
 class POLL_MenuUI {
@@ -175,7 +189,7 @@ class POLL_MenuUI {
             x = 0.05;
             y = 0.02;
             w = 0.9;
-            h = 0.18;
+            h = 0.15;
             text = "Question:";
             sizeEx = 0.05;
             style = ST_MULTI;
@@ -183,30 +197,67 @@ class POLL_MenuUI {
 
         class POLL_Option1: RscPollOption {
             idc = POLL_OPTION_1;
-            x = 0.1;
-            y = 0.25;
+            x = 0.05;
+            y = 0.20;
             text = "Option 1";
         };
-
         class POLL_Option2: RscPollOption {
             idc = POLL_OPTION_2;
-            x = 0.5;
-            y = 0.25;
+            x = 0.05;
+            y = 0.35;
             text = "Option 2";
         };
-
         class POLL_Option3: RscPollOption {
             idc = POLL_OPTION_3;
-            x = 0.1;
-            y = 0.45;
+            x = 0.05;
+            y = 0.50;
             text = "Option 3";
         };
-
         class POLL_Option4: RscPollOption {
             idc = POLL_OPTION_4;
-            x = 0.5;
-            y = 0.45;
+            x = 0.05;
+            y = 0.65;
             text = "Option 4";
+        };
+
+        class POLL_EditQuestion: RscPollEdit {
+            idc = POLL_OPTION_EDIT_QUESTION;
+            x = 0.05;
+            y = 0.02;
+            text = "Question";
+        };
+        class POLL_EditOption1: RscPollEdit {
+            idc = POLL_OPTION_EDIT_1;
+            x = 0.05;
+            y = 0.20;
+            text = "Option 1";
+        };
+        class POLL_EditOption2: RscPollEdit {
+            idc = POLL_OPTION_EDIT_2;
+            x = 0.05;
+            y = 0.35;
+            text = "Option 2";
+        };
+        class POLL_EditOption3: RscPollEdit {
+            idc = POLL_OPTION_EDIT_3;
+            x = 0.05;
+            y = 0.50;
+            text = "Option 3";
+        };
+        class POLL_EditOption4: RscPollEdit {
+            idc = POLL_OPTION_EDIT_4;
+            x = 0.05;
+            y = 0.65;
+            text = "Option 4";
+        };
+        class POLL_EditOptionSubmit: RscButton {
+            idc = POLL_OPTION_EDIT_SUBMIT;
+            x = 0.3;
+            y = 0.80;
+            w = 0.4;
+            h = 0.08;
+            sizeEx = 0.05;
+            text = "Create Poll";
         };
     };
 };
