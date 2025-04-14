@@ -15,7 +15,7 @@ if (isServer) then {
 };
 
 if (isPlayer _owner) then {
-	WAS_store = true;
+	missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_AFK_TIMER];
 };
 
 if (_asset isKindOf "Man") then {
@@ -321,11 +321,11 @@ if (_asset isKindOf "Man") then {
 	private _hasESAMMap = missionNamespace getVariable ["WL2_hasESAM", createHashMap];
 	private _isESAM = _hasESAMMap getOrDefault [_assetActualType, false];
 	if (_isESAM) then {
-		[_asset] remoteExec ["DIS_fnc_setupExtendedSam", 0, true];
+		[_asset, _side] remoteExec ["DIS_fnc_setupExtendedSam", 0, true];
 	};
 
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-	if (unitIsUAV _asset && !_isESAM) then {
+	if (unitIsUAV _asset) then {
 		if (_settingsMap getOrDefault ["enableAuto", false] && !isDedicated) then {
 			[_asset, false] remoteExec ["setAutonomous", 0];
 		} else {

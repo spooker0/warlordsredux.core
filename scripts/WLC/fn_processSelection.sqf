@@ -152,9 +152,21 @@ if (_primaryWeapon != "") then {
     if (count _primaryMagazines > 0) then {
         private _firstMag = _primaryMagazines # 0;
         _unit addMagazine _firstMag;
-
-        _unit addWeapon _primaryWeapon;
         _primaryMagazines deleteAt 0;
+
+        {
+            if (_x == "3Rnd_HE_Grenade_shell") then {
+                _unit addMagazine "3Rnd_HE_Grenade_shell";
+                _primaryMagazines deleteAt _forEachIndex;
+                break;
+            };
+            if (_x == "1Rnd_HE_Grenade_shell") then {
+                _unit addMagazine "1Rnd_HE_Grenade_shell";
+                _primaryMagazines deleteAt _forEachIndex;
+                break;
+            };
+        } forEach _primaryMagazines;
+        _unit addWeapon _primaryWeapon;
 
         {
             _itemsToAdd pushBack _x;
@@ -340,7 +352,6 @@ private _addItems = {
 
 [_itemsToAdd] call _addItems;
 _unit selectWeapon _primaryWeapon;
-reload _unit;
 
 if (count (backpackItems _unit) == 0) then {
     removeBackpack _unit;

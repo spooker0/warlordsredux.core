@@ -21,8 +21,7 @@ if !(_owner in _previousOwners) then {
 				_reward call WL2_fnc_fundsDatabaseWrite;
 				[objNull, _reward, localize "STR_A3_sector_captured", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _x];
 			} forEach (allPlayers select {
-				side group _x == _owner &&
-				_x getVariable ["WL2_setupComplete", false]
+				side group _x == _owner
 			});
 		};
 	};

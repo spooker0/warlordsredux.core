@@ -2,10 +2,13 @@ if !(isServer) exitWith {};
 
 params ["_amount"];
 
-private _incomeBlocked = serverNamespace getVariable ["BIS_WL_incomeBlockedList", []];
+private _incomeBlocked = serverNamespace getVariable ["WL2_afkList", []];
 if (_uid in _incomeBlocked) then {
     _amount = _amount min 0;
 };
+
+private _readyList = missionNamespace getVariable ["WL2_readyList", []];
+if !(_uid in _readyList) exitWith {};
 
 if (isNil {_uid}) exitWith {};
 

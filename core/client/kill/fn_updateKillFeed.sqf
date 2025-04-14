@@ -10,7 +10,7 @@ private _killFeed = "";
 	private _killRewardPoints = _y # 1;
 	private _killRewardColor = _y # 2;
 	private _killText = if (_repetitions > 1) then {
-		format ["<t size='%1' align='right' color='%2'><t color='#fff'>(x%3)</t>    %4    %5%6</t>", _scale, _killRewardColor, _repetitions, _killRewardText, _moneySign, _killRewardPoints];
+		format ["<t size='%1' align='right' color='%2'><t color='%2'>(x%3)</t>    %4    %5%6</t>", _scale, _killRewardColor, _repetitions, _killRewardText, _moneySign, _killRewardPoints];
 	} else {
 		format ["<t size='%1' align='right' color='%2'>%3    %4%5</t>", _scale, _killRewardColor, _killRewardText, _moneySign, _killRewardPoints];
 	};

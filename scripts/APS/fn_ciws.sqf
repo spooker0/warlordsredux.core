@@ -3,77 +3,148 @@ params ["_asset"];
 [_asset] spawn {
     params ["_asset"];
     private _muzzleVelocity = getNumber (configFile >> "CfgMagazines" >> currentMagazine _asset >> "initSpeed");
+    private _target = objNull;
+    private _laserTarget = objNull;
     while { alive _asset } do {
-        private _currentTarget = _asset getVariable ["WL2_target", objNull];
-        if (!alive _currentTarget) then {
+        _asset setVariable ["WL2_target", _target];
+
+        if (isNull _laserTarget) then {
+            _laserTarget = createVehicle ["LaserTargetC", getPosASL _asset, [], 0, "NONE"];
+        };
+
+        if (!alive _target) then {
             private _munitions = (8 allObjects 2) select {
                 alive _x &&
-                _x distance _asset < 3000 &&
                 getPosATL _x # 2 > 50 &&
-                [_x] call WL2_fnc_isScannerMunition &&
-                !(_x getVariable ["WL2_targetEngaged", false])
+                (_x isKindOf "ShellCore" || _x isKindOf "SubmunitionCore") &&
+                !(_x getVariable ["WL2_targetEngaged", false]) &&
+                _x distance _asset < 3000
             };
 
             if (count _munitions > 0) then {
                 _munitions = [_munitions, [_asset], { _input0 distance _x }, "ASCEND"] call BIS_fnc_sortBy;
-                private _target = _munitions # 0;
-                _asset setVariable ["WL2_target", _target];
-                _currentTarget = _target;
+                _target = _munitions # 0;
                 _target setVariable ["WL2_targetEngaged", true];
-
-                _target addEventHandler ["SubmunitionCreated", {
-                    params ["_projectile", "_submunitionProjectile", "_pos", "_velocity"];
-                    private _asset = _projectile getVariable ["WL2_tracker", objNull];
-                    _asset setVariable ["WL2_target", _submunitionProjectile];
-                    private _projectileDestroyTime = _projectile getVariable ["WL2_targetDestroyTime", -1];
-                    _submunitionProjectile setVariable ["WL2_targetEngaged", true];
-                    _submunitionProjectile setVariable ["WL2_targetDestroyTime", _projectileDestroyTime];
-                }];
             };
         };
 
-        if (!isNull _currentTarget) then {
-            private _target = _currentTarget;
+        if (!isNull _target) then {
             private _targetPos = getPosASL _target;
+            if (_targetPos # 2 < 50) then {
+                continue;
+            };
+
             private _targetVelocity = velocity _target;
             private _distanceToTarget = _targetPos distance _asset;
+            if (_distanceToTarget > 3000) then {
+                continue;
+            };
+
             private _timeToTarget = _distanceToTarget / _muzzleVelocity;
-            _timeToTarget = _timeToTarget + random [-0.3, 0, 0.3];
+            _timeToTarget = _timeToTarget + 0.5;
             _targetPos = _targetPos vectorAdd (_targetVelocity vectorMultiply _timeToTarget);
-            _asset lockCameraTo [_targetPos, [0], false];
+
+            _laserTarget setPosASL _targetPos;
+
+            private _lockedTarget = _asset lockedCameraTo [0];
+            if (isNil "_lockedTarget" || {_lockedTarget != _laserTarget}) then {
+                [_asset, [_laserTarget, [0], false]] remoteExec ["lockCameraTo", 0];
+            };
+
             _asset setVariable ["WL2_firing", true];
+            _asset setVariable ["WL2_targetPos", _targetPos];
 
-            private _targetDestroyTime = _target getVariable ["WL2_targetDestroyTime", -1];
-            if (_targetDestroyTime == -1) then {
-                private _weaponDir = _asset weaponDirection (currentWeapon _asset);
-                private _targetDir = _targetPos vectorDiff (getPosASL _asset);
-                private _dotProduct = (vectorNormalized _weaponDir) vectorDotProduct (vectorNormalized _targetDir);
-                private _angle = acos (_dotProduct min 1);
+            private _interceptChance = _target getVariable ["WL2_interceptionChance", -1];
+            private _weaponDir = _asset weaponDirection (currentWeapon _asset);
+            private _targetDir = _targetPos vectorDiff (getPosASL _asset);
+            private _dotProduct = (vectorNormalized _weaponDir) vectorDotProduct (vectorNormalized _targetDir);
+            private _angle = acos (_dotProduct min 1);
 
+            if (someAmmo _asset) then {
                 if (_angle < 5) then {
-                    _target setVariable ["WL2_targetDestroyTime", serverTime + 3.5];
-                    _target setVariable ["WL2_tracker", _asset];
+                    _target setVariable ["WL2_interceptionChance", _interceptChance + 1];
                 };
-            } else {
-                if (serverTime > _targetDestroyTime && someAmmo _asset) then {
-                    triggerAmmo _target;
+
+                if (_interceptChance >= 300) then {
+                    createVehicle ["SmallSecondary", ASLtoAGL (getPosASL _target), [], 0, "FLY"];
+                    deleteVehicle _target;
                 };
             };
         } else {
             _asset setVariable ["WL2_firing", false];
-            _asset lockCameraTo [objNull, [0], true];
+            private _lockedTarget = _asset lockedCameraTo [0];
+            if !(isNil "_lockedTarget") then {
+                _asset lockCameraTo [objNull, [0], true];
+            };
         };
-        sleep 0.1;
+        sleep 0.01;
     };
 };
 
 [_asset] spawn {
     params ["_asset"];
+    private _soundId = -1;
     while { alive _asset } do {
         if (_asset getVariable ["WL2_firing", false]) then {
             private _gunner = gunner _asset;
+
+            if (_soundId == -1) then {
+                _soundId = playSound3D [getMissionPath "src\sounds\incoming.ogg", _asset, false, getPosASL _asset, 5, 1, 0, 0, false];
+            } else {
+                if ((soundParams _soundId) isEqualTo []) then {
+                    _soundId = -1;
+                };
+            };
+
             _gunner forceWeaponFire [currentWeapon _asset, "close"];
         };
         sleep 0.01;
     };
 };
+
+addMissionEventHandler ["Draw3D", {
+    private _asset = objectFromNetId (_thisArgs # 0);
+    if (getConnectedUAV player != _asset) exitWith {};
+
+    private _target = _asset getVariable ["WL2_target", objNull];
+    if (isNull _target) exitWith {};
+
+    private _interceptChance = _target getVariable ["WL2_interceptionChance", -1];
+    private _displayText = if (_interceptChance == -1) then {
+        "INCOMING"
+    } else {
+        format ["INTERCEPT %1%%", round (_interceptChance / 3)];
+    };
+
+    drawIcon3D [
+        "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missileAlt_ca.paa",
+        [1, 0, 0, 1],
+        _target modelToWorldVisual [0, 0, 0],
+        1,
+        1,
+        0,
+        _displayText,
+        true,
+        0.035,
+        "RobotoCondensedBold",
+        "center",
+        true
+    ];
+
+    // private _targetPos = _asset getVariable ["WL2_targetPos", []];
+    // if (count _targetPos == 0) exitWith {};
+    // drawIcon3D [
+    //     "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\UnknownGround_ca.paa",
+    //     [1, 0, 0, 1],
+    //     ASLtoAGL _targetPos,
+    //     0.5,
+    //     0.5,
+    //     0,
+    //     _displayText,
+    //     true,
+    //     0.03,
+    //     "RobotoCondensedBold",
+    //     "center",
+    //     true
+    // ];
+}, [netid _asset]];

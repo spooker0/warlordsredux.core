@@ -14,7 +14,7 @@ if (_isModerator || _isAdmin) then {
     if (_text != "") then {
         private _chatMessage = [
             _channel,
-            _from,
+            _name,
             _text,
             systemTimeUTC
         ];

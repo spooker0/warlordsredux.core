@@ -13,8 +13,6 @@ private _initLog = {
 private _startTime = serverTime;
 private _uid = "";
 
-private _simulateOneBrokenCommand = true;
-
 while { _uid == "" } do {
     if (serverTime - _startTime > 30) then {
         ["Cannot find player UID for over 30 seconds. Aborting."] call _initLog;
@@ -58,12 +56,6 @@ private _playerList = serverNamespace getVariable "playerList";
 if (isNil "_playerList") exitWith {
     ["Cannot find playerList. Aborting."] call _initLog;
 };
-
-private _playerFunds = _playerFundsDB getOrDefault [_uid, -1];
-if (_playerFunds == -1) then {
-    1000 call WL2_fnc_fundsDatabaseWrite;
-};
-[_playerFundsDB] call WL2_fnc_fundsDatabaseUpdate;
 
 private _teamBlockVar = format ["WL2_teamBlocked_%1", _uid];
 private _balanceBlockVar = format ["WL2_balanceBlocked_%1", _uid];
@@ -115,4 +107,11 @@ if (_lockedToTeam != sideUnknown) then {
 
 call WL2_fnc_calcImbalance;
 
-_warlord setVariable ["WL2_setupComplete", true];
+private _readyList = missionNamespace getVariable ["WL2_readyList", []];
+_readyList pushBackUnique _uid;
+
+private _playerFunds = _playerFundsDB getOrDefault [_uid, -1];
+if (_playerFunds == -1) then {
+    1000 call WL2_fnc_fundsDatabaseWrite;
+};
+[_playerFundsDB] call WL2_fnc_fundsDatabaseUpdate;

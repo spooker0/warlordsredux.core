@@ -215,7 +215,7 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
         case 3: {
             private _projectileSpeedDragged = _projectileSpeed - (serverTime - _startTime) * 5;
             _projectile setVectorDirAndUp [_forward, _up];
-            _projectile setVelocityModelSpace [0, _projectileSpeedDragged, 0];
+            _projectile setVelocityModelSpace [0, _projectileSpeedDragged max 0, 0];
         };
     };
 

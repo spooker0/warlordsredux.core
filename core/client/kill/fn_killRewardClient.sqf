@@ -1,3 +1,5 @@
+#include "..\..\warlords_constants.inc"
+
 params ["_unit", "_reward", ["_customText", ""], ["_customColor", "#de0808"], ["_unitTypeName", ""]];
 
 if (isDedicated) exitWith {};
@@ -38,16 +40,19 @@ _killRewardMap set [_displayText, [_repetitions + 1, _points + _reward, _customC
 uiNamespace setVariable ["WL_killRewardMap", _killRewardMap];
 [_killRewardMap] call WL2_fnc_updateKillFeed;
 
-WAS_score = true;
+if (_customColor == "#de0808") then {
+	missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_AFK_TIMER];
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-if (_settingsMap getOrDefault ["playKillSound", true] && _customColor == "#de0808") then {
-	playSoundUI ["hitmarker", 1, 1];
-	if (missionNamespace getVariable ["WL_easterEggOverride", false]) then {
-		private _killsInRow = missionNamespace getVariable ["WL_killsInRow", 0];
-		_killsInRow = _killsInRow + 1;
-		[_killsInRow] call KST_fnc_actions;
-		missionNamespace setVariable ["WL_killsInRow", _killsInRow];
+	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+	private _playKillSound = _settingsMap getOrDefault ["playKillSound", true];
+	if (_playKillSound) then {
+		playSoundUI ["hitmarker", 1, 1];
+		if (missionNamespace getVariable ["WL_easterEggOverride", false]) then {
+			private _killsInRow = missionNamespace getVariable ["WL_killsInRow", 0];
+			_killsInRow = _killsInRow + 1;
+			[_killsInRow] call KST_fnc_actions;
+			missionNamespace setVariable ["WL_killsInRow", _killsInRow];
+		};
 	};
 };
 

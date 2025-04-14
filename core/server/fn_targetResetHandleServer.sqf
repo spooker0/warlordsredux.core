@@ -8,7 +8,7 @@ _terminate = false;
 while {!_terminate && {serverTime < ((missionNamespace getVariable [_varName, -1]) + WL_TARGET_RESET_VOTING_TIME)}} do {
 	sleep WL_TIMEOUT_SHORT;
 
-	_warlords = (allPlayers select {(side group _x == _side) && {!(_x getVariable ["BIS_WL_incomeBlocked", false])}});
+	_warlords = (allPlayers select {(side group _x == _side) && {!(_x getVariable ["WL2_afk", false])}});
 	_limit = ceil ((count _warlords) / 4);
 	_votedYes = count (_warlords select {(_x getVariable ["BIS_WL_targetResetVote", -1]) == 1});
 	_votedNo = count (_warlords select {(_x getVariable ["BIS_WL_targetResetVote", -1]) == 0});

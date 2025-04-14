@@ -7,6 +7,10 @@ if (leader _newGroup != _newUnit) then {
 	[_newGroup, _newUnit] remoteExec ["selectLeader", groupOwner _newGroup];
 };
 
+{
+	_x enableAI "ALL";
+} forEach (units _newGroup);
+
 #if WL_FACTION_THREE_ENABLED
 if (side group player == independent) then {
 	"respawn_guerrila" setMarkerPosLocal ([independent] call WL2_fnc_getSideBase);
@@ -61,3 +65,5 @@ call WL2_fnc_disarmAction;
 0 spawn WL2_fnc_drawRadarName;
 
 call POLL_fnc_pollAction;
+
+0 spawn WL2_fnc_afk;

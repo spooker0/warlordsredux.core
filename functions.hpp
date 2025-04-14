@@ -65,10 +65,12 @@ class CfgFunctions {
 	class MENU {
 		class Default {
 			file = "src\scripts\MENU";
+			class copyChat {};
 			class debugMenu {};
 			class execCode {};
 			class moderatorMenu {};
 			class printSystemTime {};
+			class refreshChat {};
 			class setReturnValue {};
 			class settingsMenu {};
 			class settingsMenuInit {};
@@ -116,6 +118,7 @@ class CfgFunctions {
 	class WL2 {
 		class Client {
 			file = "src\core\client";
+			class afk {};
 			class airburst {};
 			class announcer {};
 			class avTerminal {};
@@ -150,7 +153,6 @@ class CfgFunctions {
 			class timer {};
 			class triggerPurchase {};
 			class updateLevelDisplay {};
-			class wasMain {};
 			class welcome {};
 		};
 		class ClientAction {
@@ -214,7 +216,6 @@ class CfgFunctions {
 			class getPos {};
 			class helmetInterface {};
 			class iconColor {};
-			class iconDrawGPS {};
 			class iconDrawMap {};
 			class iconDrawMapPrepare {};
 			class iconSize {};

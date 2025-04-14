@@ -683,6 +683,30 @@ class RscTitles {
 		};
 	};
 
+	class RscWLExtendedSamWarningDisplay {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		name = "RscWLExtendedSamWarningDisplay";
+		onLoad = "uiNamespace setVariable ['RscWLExtendedSamWarningDisplay', _this select 0];";
+		class controls {
+			class RscWLExtendedSamWarningDisplay_Text: RscStructuredText {
+				idc = 14300;
+				style = ST_CENTER + ST_MULTI;
+				x = 0;
+				y = safeZoneY + 0.1;
+				w = 1;
+				h = 0.5;
+				font = "EtelkaNarrowMediumPro";
+				sizeEx = 0.08;
+				colorBackground[] = {0, 0, 0, 0};
+				colorText[] = {1, 1, 1, 1};
+				text = "ENEMY LONG-RANGE AIR DEFENSE DETECTED!";
+			};
+		};
+	};
+
 	class RscWLIncomingMissileDisplay {
 		idd = -1;
 		duration = 1000000000;

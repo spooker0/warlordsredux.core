@@ -5,8 +5,6 @@ _this setVariable ["APS_fireEventHandlerAdded", true];
 _this addEventHandler ["Fired", {
 	params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
 
-	WAS_fired = true;
-
 	if !(local _projectile) exitWith { true };
 	if (!(local _gunner) && !(isManualFire _unit)) exitWith { true };
 

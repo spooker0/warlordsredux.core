@@ -127,10 +127,6 @@ if (isNil "_settingsMap") then {
     profileNamespace setVariable ["WL2_settings", createHashMap];
 };
 
-if (!_isAdmin) then {
-	0 spawn WL2_fnc_wasMain;
-};
-
 if !(isServer) then {
 	"setup" call WL2_fnc_handleRespawnMarkers;
 };
@@ -298,7 +294,6 @@ WL_LoadingState = 12;
 		sleep 1;
 		if (alive player && lifeState player == "INCAPACITATED") then {
 			if (animationState player != "acts_staticdeath_01") then {
-				systemChat "Die.";
 				player setVelocityModelSpace [0, 0, 0];
 				[player, ["Acts_StaticDeath_01", 1]] remoteExec ["switchMove", 0];
 			};
@@ -400,3 +395,6 @@ call WL2_fnc_createInfoMarkers;
 0 spawn WL2_fnc_drawIncomingMissiles;
 
 call POLL_fnc_pollAction;
+
+missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_AFK_TIMER];
+0 spawn WL2_fnc_afk;

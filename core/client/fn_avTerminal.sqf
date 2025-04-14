@@ -17,7 +17,9 @@ while { !BIS_WL_missionEnd } do {
         private _allPlayers = call BIS_fnc_listPlayers;
 
         for "_i" from 1 to (_size - 1) do {
-            private _text = ((_selectBox lbText _i) splitString ",") # 0;
+            private _text = ((_selectBox lbText _i) splitString ",");
+            if (count _text == 0) then { continue; };
+            _text = _text # 0;
             // private _data = _text splitString "#";
             private _assetGroups = (allGroups select { side _x == BIS_WL_playerSide && groupID _x == _text });
             if (count _assetGroups == 0) then { continue; };

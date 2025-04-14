@@ -637,26 +637,48 @@ class MODR_Menu {
             colorBackground[] = {1, 0, 0, 1};
         };
 
-        class MODR_ChatHistory: RscListBox {
+        class MODR_ChatHistory: RscEdit {
             idc = MODR_CHAT_HISTORY;
             x = 0.05;
             y = 0.68;
             w = 0.9;
-            h = 0.25;
+            h = 0.28;
             colorBackground[] = {0, 0, 0, 0.4};
             font = "PuristaMedium";
+            style = ST_MULTI;
+            canModify = 0;
             sizeEx = 0.03;
-            rowHeight = 0.03;
         };
-        class MODR_CopyChat: RscButton {
-            idc = MODR_CHAT_HISTORY_COPY;
-            x = 0.75;
-            y = 0.93;
-            w = 0.2;
+
+        class MODR_CopyChat5: RscButton {
+            idc = MODR_CHAT_HISTORY_COPY_5;
+            x = 0.63;
+            y = 0.96;
+            w = 0.10;
             h = 0.04;
-            text = "Full Chat Log";
+            text = "COPY 5";
             sizeEx = 0.035;
-            colorBackground[] = {0, 0, 0, 0.2};
+            colorBackground[] = {0, 0, 0, 0.6};
+        };
+        class MODR_CopyChat20: RscButton {
+            idc = MODR_CHAT_HISTORY_COPY_20;
+            x = 0.74;
+            y = 0.96;
+            w = 0.10;
+            h = 0.04;
+            text = "COPY 20";
+            sizeEx = 0.035;
+            colorBackground[] = {0, 0, 0, 0.6};
+        };
+        class MODR_CopyChatAll: RscButton {
+            idc = MODR_CHAT_HISTORY_COPY_ALL;
+            x = 0.85;
+            y = 0.96;
+            w = 0.10;
+            h = 0.04;
+            text = "COPY ALL";
+            sizeEx = 0.035;
+            colorBackground[] = {0, 0, 0, 0.6};
         };
     };
 };

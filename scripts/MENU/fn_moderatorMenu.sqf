@@ -1,3 +1,7 @@
+/*
+    Adapted from old report menu. Original Author: f1x1t
+*/
+
 #include "constants.inc"
 
 params ["_elevatedPrivilege"];
@@ -41,7 +45,10 @@ private _timeoutReasonEdit = _display displayCtrl MODR_TIMEOUT_REASON;
 private _timeoutTime = _display displayCtrl MODR_TIMEOUT_TIME;
 private _timeoutButton = _display displayCtrl MODR_TIMEOUT_BUTTON;
 private _chatHistoryList = _display displayCtrl MODR_CHAT_HISTORY;
-private _copyChatButton = _display displayCtrl MODR_CHAT_HISTORY_COPY;
+
+private _chatHistoryCopy5 = _display displayCtrl MODR_CHAT_HISTORY_COPY_5;
+private _chatHistoryCopy20 = _display displayCtrl MODR_CHAT_HISTORY_COPY_20;
+private _chatHistoryCopyAll = _display displayCtrl MODR_CHAT_HISTORY_COPY_ALL;
 
 _infoDisplay ctrlShow false;
 _timeoutReasonLabel ctrlShow false;
@@ -49,7 +56,10 @@ _timeoutReasonEdit ctrlShow false;
 _timeoutTime ctrlShow false;
 _timeoutButton ctrlShow false;
 _chatHistoryList ctrlShow false;
-_copyChatButton ctrlShow false;
+
+_chatHistoryCopy5 ctrlShow false;
+_chatHistoryCopy20 ctrlShow false;
+_chatHistoryCopyAll ctrlShow false;
 
 if (_elevatedPrivilege) then {
     _timeoutTime ctrlAddEventHandler ["SliderPosChanged", {
@@ -85,68 +95,24 @@ if (_elevatedPrivilege) then {
     }];
 
     _chatHistoryList ctrlShow true;
-    private _chatHistory = uiNamespace getVariable ["WL2_chatHistory", []];
-    private _squadChannels = missionNamespace getVariable ["SQD_VoiceChannels", [-1, -1]];
-    private _historyLength = -(count _chatHistory) max -50;
-    {
-        private _channel = _x # 0;
-        private _name = _x # 1;
-        private _text = _x # 2;
-        private _systemTime = _x # 3;
+    [_display] spawn MENU_fnc_refreshChat;
 
-        private _channelDisplay = switch (_channel) do {
-            case 0: { "GLOBAL" };
-            case 1: { "SIDE" };
-            case 2: { "COMMAND" };
-            case 3: { "GROUP" };
-            case 4: { "VEHICLE" };
-            case 5: { "DIRECT" };
-            case 6;
-            case 16: { "SYSTEM" };
-            case (_squadChannels # 0 + 5);
-            case (_squadChannels # 1 + 5): { "SQUAD" };
-            default { "UNKNOWN" };
-        };
-        private _chatHistoryEntry = format ["[%1] %2: %3", _channelDisplay, _name, _text];
-        private _lbIndex = _chatHistoryList lbAdd _chatHistoryEntry;
-
-        private _systemTimeDisplay = [_systemTime] call MENU_fnc_printSystemTime;
-        _chatHistoryList lbSetTextRight [_lbIndex, format ["%1 UTC", _systemTimeDisplay]];
-    } forEach ([_chatHistory, _historyLength] call BIS_fnc_subSelect);
-
-    _copyChatButton ctrlShow true;
-    _copyChatButton ctrlAddEventHandler ["ButtonClick", {
+    _chatHistoryCopy5 ctrlShow true;
+    _chatHistoryCopy5 ctrlAddEventHandler ["ButtonClick", {
         params ["_control"];
-        private _display = ctrlParent _control;
-        private _chatHistory = uiNamespace getVariable ["WL2_chatHistory", []];
-        private _squadChannels = missionNamespace getVariable ["SQD_VoiceChannels", [-1, -1]];
-        private _chatHistoryLog = "";
-        {
-            private _channel = _x # 0;
-            private _name = _x # 1;
-            private _text = _x # 2;
-            private _systemTime = _x # 3;
+        [_control, 5] spawn MENU_fnc_copyChat;
+    }];
 
-            private _channelDisplay = switch (_channel) do {
-                case 0: { "GLOBAL" };
-                case 1: { "SIDE" };
-                case 2: { "COMMAND" };
-                case 3: { "GROUP" };
-                case 4: { "VEHICLE" };
-                case 5: { "DIRECT" };
-                case 6;
-                case 16: { "SYSTEM" };
-                case (_squadChannels # 0 + 5);
-                case (_squadChannels # 1 + 5): { "SQUAD" };
-                default { "UNKNOWN" };
-            };
+    _chatHistoryCopy20 ctrlShow true;
+    _chatHistoryCopy20 ctrlAddEventHandler ["ButtonClick", {
+        params ["_control"];
+        [_control, 20] spawn MENU_fnc_copyChat;
+    }];
 
-            private _systemTimeDisplay = [_systemTime] call MENU_fnc_printSystemTime;
-            _chatHistoryLog = format ["(%1) [%2] %3: %4%5", _systemTimeDisplay, _channelDisplay, _name, _text, endl] + _chatHistoryLog;
-        } forEach _chatHistory;
-
-        uiNamespace setVariable ["display3DENCopy_data", ["Full Chat Log", _chatHistoryLog]];
-        _display createDisplay "display3denCopy";
+    _chatHistoryCopyAll ctrlShow true;
+    _chatHistoryCopyAll ctrlAddEventHandler ["ButtonClick", {
+        params ["_control"];
+        [_control, -1] spawn MENU_fnc_copyChat;
     }];
 } else {
     _playerList ctrlSetPositionH 0.9;

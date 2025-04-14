@@ -284,7 +284,7 @@ if (_action == "orderRespawnBag") exitWith {
 };
 
 if (_action == "fundsTransfer") exitWith {
-	private _incomeBlocked = serverNamespace getVariable ["BIS_WL_incomeBlockedList", []];
+	private _incomeBlocked = serverNamespace getVariable ["WL2_afkList", []];
 	private _transferCost = getMissionConfigValue ["BIS_WL_fundsTransferCost", 2000];
 	private _transferAmount = _param1;
 	private _recipient = _param2;

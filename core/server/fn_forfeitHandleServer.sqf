@@ -15,7 +15,7 @@ while { serverTime < ((missionNamespace getVariable [_varName, -1]) + 30) } do {
 	sleep 0.25;
 
 	private _eligibleVoters = (allPlayers select {side group _x == _side}) select {
-		!(_x getVariable ["BIS_WL_incomeBlocked", false])
+		!(_x getVariable ["WL2_afk", false])
 	};
 	private _limit = ceil ((count _eligibleVoters) / 2);
 	private _votedYes = {

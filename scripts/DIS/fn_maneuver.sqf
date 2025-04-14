@@ -59,8 +59,13 @@ private _originalPosition = getPosASL _unit;
     };
 };
 
-private _maxAcceleration = (getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "thrust")) / 10.0 * WL_SAM_ACCELERATION_FACTOR;
-private _maxSpeed = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "maxSpeed") * WL_SAM_MAX_SPEED_FACTOR;
+private _projectileType = typeOf _projectile;
+private _projectileActualType = _projectile getVariable ["APS_ammoOverride", _projectileType];
+private _projectileConfig = APS_projectileConfig getOrDefault [_projectileActualType, createHashMap];
+private _projectileSpeedOverride = _projectileConfig getOrDefault ["speed", 1];
+_projectileSpeedOverride = _projectileSpeedOverride max 1;
+private _maxAcceleration = (getNumber (configfile >> "CfgAmmo" >> _projectileType >> "thrust"));
+private _maxSpeed = getNumber (configfile >> "CfgAmmo" >> _projectileType >> "maxSpeed") * WL_SAM_MAX_SPEED_FACTOR * _projectileSpeedOverride;
 
 private _terrainTest = 4000;
 private _disableGroundAvoid = false;
@@ -68,16 +73,19 @@ private _disableGroundAvoid = false;
 _disableGroundAvoid = true;
 #endif
 
+private _lastLoopTime = serverTime;
 while { alive _projectile } do {
     private _currentVector = velocityModelSpace _projectile;
-    private _currentSpeed = (_currentVector # 1) + ((_maxAcceleration * 0.01) min _maxSpeed);
+    private _elapsedTime = serverTime - _lastLoopTime;
+    private _currentSpeed = ((_currentVector # 1) + (_maxAcceleration * 4 * _elapsedTime)) min _maxSpeed;
     private _newVector = [
         0,
         _currentSpeed,
         0
     ];
-    _projectile setVelocityModelSpace _newVector;
+    systemChat str [_currentSpeed, _maxSpeed];
 
+    _projectile setVelocityModelSpace _newVector;
 
     private _notched = _projectile getVariable ["DIS_notched", false];
     if (_notched) then {
@@ -123,5 +131,6 @@ while { alive _projectile } do {
         _projectile setVectorDirAndUp [vectorDir _projectile, _vectorUp];
     };
 
+    _lastLoopTime = serverTime;
     sleep 0.001;
 };

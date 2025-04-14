@@ -7,7 +7,6 @@ player addEventHandler ["HandleRating", {
 
 player addEventHandler ["GetInMan", {
 	params ["_unit", "_role", "_vehicle", "_turret"];
-	VIC_ENTERED = true;
 	if ((typeOf _vehicle == "B_Plane_Fighter_01_F") || {(typeOf _vehicle == "B_Plane_CAS_01_dynamicLoadout_F") || {(typeOf _vehicle == "B_Heli_Attack_01_dynamicLoadout_F") || {(typeOf _vehicle == "B_T_VTOL_01_armed_F") || {(typeOf _vehicle == "B_T_VTOL_01_vehicle_F") || {(typeOf _vehicle == "B_T_VTOL_01_infantry_F")}}}}}) then  {
 		0 spawn WL2_fnc_betty;
 	};
@@ -96,8 +95,13 @@ player addEventHandler ["HandleDamage", {
 				[_unit] spawn {
 					params ["_unit"];
 
+					{
+						_x disableAI "ALL";
+					} forEach (units _unit);
+
 					_unit setCaptive true;
 					_unit setUnconscious true;
+
 					[_unit, false] remoteExec ["setPhysicsCollisionFlag", 0];
 
 					private _unconsciousTime = _unit getVariable ["WL_unconsciousTime", 0];
@@ -149,11 +153,6 @@ player addEventHandler ["InventoryOpened", {
     } else {
         false;
     };
-}];
-
-player addEventHandler ["Fired", {
-	params ["_unit", "_object", "_score"];
-	WAS_fired = true;
 }];
 
 player addEventHandler ["Respawn", {

@@ -1,9 +1,9 @@
 params ["_sector"];
 
-_marker = (_sector getVariable "BIS_WL_markers") # 1;
-_nextPossibleWarn = 0;
-_playerSide = BIS_WL_playerSide;
-_enemySide = [west, east];
+private _marker = (_sector getVariable "BIS_WL_markers") # 1;
+private _nextPossibleWarn = 0;
+private _playerSide = side group player;
+private _enemySide = [west, east];
 _enemySide deleteAt (_enemySide find _playerSide);
 _enemySide = _enemySide # 0;
 

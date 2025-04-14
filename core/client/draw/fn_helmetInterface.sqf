@@ -35,7 +35,12 @@ addMissionEventHandler ["Draw3D", {
 
     private _targetVehicleIcons = uiNamespace getVariable ["WL_HelmetInterfaceTargetVehicleIcons", []];
     {
-        drawIcon3D _x;
+        private _target = _x # 2;
+        private _icon = +_x;
+        private _centerOfMass = getCenterOfMass _target;
+        _centerOfMass set [2, _centerOfMass # 2 + 3];
+        _icon set [2, _target modelToWorldVisual _centerOfMass];
+        drawIcon3D _icon;
     } forEach _targetVehicleIcons;
 
     private _targetInfantryIcons = uiNamespace getVariable ["WL_HelmetInterfaceTargetInfantryIcons", []];
@@ -43,7 +48,7 @@ addMissionEventHandler ["Draw3D", {
         private _targetPos = _x # 2;
         private _screenPos = worldToScreen _targetPos;
         private _isInViewRadius = count _screenPos == 2 && {
-            (_screenPos distance2D [0.5, 0.5]) < 0.2
+            (_screenPos distance2D [0.5, 0.5]) < 0.4
         };
         private _displayName = if (_isInViewRadius) then {
             _x # 6;
@@ -231,7 +236,7 @@ addMissionEventHandler ["Draw3D", {
         if (WL_HelmetInterface == 2) then {
             sleep 0.1;
         } else {
-            sleep 0.5;
+            sleep 1;
         };
 
         if (WL_HelmetInterface == 0) then {
@@ -476,10 +481,13 @@ addMissionEventHandler ["Draw3D", {
             };
 
             if (_targetIsInfantry) then {
+                private _centerOfMass = _target selectionPosition "spine2";
+                _centerOfMass set [2, _centerOfMass # 2 + 1];
+
                 _targetInfantryIcons pushBack [
                     "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\UnknownGround_ca.paa",
                     _targetColor,
-                    _target modelToWorldVisual (_target selectionPosition "head_hit"),
+                    _target modelToWorldVisual _centerOfMass,
                     0.5,
                     0.5,
                     45,
@@ -493,27 +501,32 @@ addMissionEventHandler ["Draw3D", {
                 private _assetCategory = _categoryMap getOrDefault [_assetActualType, "Other"];
 
                 private _targetIcon = "";
-                private _targetIconSize = 1.6;
+                private _targetIconSize = 1;
                 if (_assetCategory == "AirDefense") then {
                     _targetIcon = "\A3\ui_f\data\map\markers\nato\b_antiair.paa";
-                    _targetIconSize = 1.2;
+                    _targetIconSize = 0.8;
                 } else {
                     _targetIcon = "\A3\ui_f\data\IGUI\Cfg\Cursors\lock_target_ca.paa";
                 };
 
+                private _vehicleColor = +_targetColor;
+                _vehicleColor set [3, 0.8];
+
                 _targetVehicleIcons pushBack [
                     _targetIcon,
-                    _targetColor,
-                    _target modelToWorldVisual (getCenterOfMass _target),
+                    _vehicleColor,
+                    _target,    // convert to position later
                     _targetIconSize,
                     _targetIconSize,
                     0,
                     _assetName,
                     true,
-                    0.035,
+                    0.032,
                     "RobotoCondensedBold",
                     "center",
-                    true
+                    true,
+                    0,
+                    -0.05
                 ];
             };
         } forEach _targets;

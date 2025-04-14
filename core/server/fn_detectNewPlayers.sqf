@@ -1,4 +1,5 @@
 private _previousAIMax = -1;
+missionNamespace setVariable ["WL2_readyList", []];
 while { !BIS_WL_missionEnd } do {
 	private _allPlayers = call BIS_fnc_listPlayers;
 	private _newPlayers = _allPlayers select {

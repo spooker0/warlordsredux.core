@@ -218,6 +218,8 @@ if (typeof _asset in (_spawnTruckTypes + _spawnPodTypes)) then {
 if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     private _fastTravelFOBExecute = {
         params ["_asset"];
+        BIS_WL_targetSector = nil;
+
         private _marker = createMarkerLocal ["WL2_fastTravelFOBMarker", getPosATL _asset];
         _marker setMarkerShapeLocal "ELLIPSE";
         _marker setMarkerSizeLocal [WL_FOB_RANGE, WL_FOB_RANGE];
