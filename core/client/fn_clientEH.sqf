@@ -1,10 +1,5 @@
 #include "..\warlords_constants.inc"
 
-private _voteLocked = missionNamespace getVariable ["voteLocked", true];
-private _start = serverTime + 10;
-waitUntil {sleep 0.1; !_voteLocked || (_start < serverTime);};
-if (_voteLocked) exitwith {};
-
 "fundsDatabaseClients" addPublicVariableEventHandler {
 	false spawn WL2_fnc_refreshOSD;
 };

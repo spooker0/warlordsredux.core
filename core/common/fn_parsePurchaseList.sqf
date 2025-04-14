@@ -43,7 +43,14 @@ private _savedLoadoutHandled = FALSE;
 			if (_category == "Gear") then {
 				_data pushBack ["Arsenal", (getMissionConfigValue ["BIS_WL_arsenalCost", 1000]), [], (localize "STR_A3_Arsenal"), "\A3\Data_F_Warlords\Data\preview_arsenal.jpg", localize "STR_A3_WL_arsenal_open"];
 				_data pushBack ["Customization", 0, [], "Customization", "\A3\Data_F_Warlords\Data\preview_arsenal.jpg", "Customization menu for respawn loadout."];
-				_data pushBack ["BuyGlasses", 1000, [], "Buy AR Glasses", "\A3\Data_F_Warlords\Data\preview_arsenal.jpg", "Buy AR glasses."];
+				_data pushBack [
+					"BuyGlasses",
+					1000,
+					[],
+					"Buy AR Glasses",
+					"\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
+					"Buy AR glasses, which show you enemies spotted by friendly datalink, as long as you are in range of an EW network."
+				];
 			};
 
 			if (_category == "Gear" && !_lastLoadoutHandled) then {

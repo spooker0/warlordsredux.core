@@ -368,13 +368,7 @@ addMissionEventHandler ["Draw3D", {
 
         private _maxDistance = switch (WL_HelmetInterface) do {
             case 0: { 0 };
-            case 1: {
-                if (vehicle player == player) then {
-                    1000;
-                } else {
-                    5000;
-                };
-            };
+            case 1: { 5000 };
             case 2: { 5000 };
             default { 5000 };
         };

@@ -129,8 +129,7 @@ disableSerialization;
         private _unsquaddedPlayers = _allPlayers select {
             !(getPlayerID _x in _squaddedPlayers) &&
             side group _x == side group player &&
-            _x != player &&
-            !(_x getVariable ["voteLocked", true])
+            _x != player
         };
 
         {

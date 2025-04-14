@@ -1,10 +1,5 @@
 #include "..\..\warlords_constants.inc"
 
-private _voteLocked = missionNamespace getVariable ["voteLocked", true];
-if (_voteLocked) then {
-    break;
-};
-
 private _mostVotedVar = format ["BIS_WL_mostVoted_%1", BIS_WL_playerSide];
 private _voteTallyDisplayVar = format ["BIS_WL_sectorVoteTallyDisplay_%1", BIS_WL_playerSide];
 

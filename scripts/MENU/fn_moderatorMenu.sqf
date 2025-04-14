@@ -25,9 +25,23 @@ _closeButton ctrlAddEventHandler ["ButtonClick", {
 
 private _playerList = _display displayCtrl MODR_PLAYER_LIST;
 private _allPlayers = call BIS_fnc_listPlayers;
+private _playerAliases = profileNamespace getVariable ["WL2_playerAliases", createHashMap];
 {
-    private _lbIndex = _playerList lbAdd ([_x] call BIS_fnc_getName);
+    private _playerName = [_x] call BIS_fnc_getName;
+    private _lbIndex = _playerList lbAdd _playerName;
     _playerList lbSetData [_lbIndex, getPlayerUID _x];
+
+    if (_elevatedPrivilege) then {
+        private _playerUid = getPlayerUID _x;
+        private _playerNames = _playerAliases getOrDefault [_playerUid, []];
+        _playerNames = _playerNames select {
+            _x != _playerName
+        };
+        if (count _playerNames > 0) then {
+            private _playerNameDisplay = format["Aliases:%1%2", endl, _playerNames joinString endl];
+            _playerList lbSetTooltip [_lbIndex, _playerNameDisplay];
+        };
+    };
 } forEach _allPlayers;
 
 _display setVariable ["MODR_elevatedPrivilege", _elevatedPrivilege];

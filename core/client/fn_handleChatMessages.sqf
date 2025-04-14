@@ -59,11 +59,6 @@ if (_channel == 16 || _channel == 17) then {
     };
 };
 
-private _senderLocked = _person getVariable ["voteLocked", false];
-if (_senderLocked) exitWith {
-    true;
-};
-
 private _showInSquadChat = ["showInSquadChat", [_person, _channel]] call SQD_fnc_client;
 if (!_showInSquadChat) exitWith {
     true;
