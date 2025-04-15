@@ -201,12 +201,13 @@ switch (_className) do {
             side group _x == independent &&
             _x getVariable ["BIS_WL_ownerAsset", "123"] == "123" &&
             _x distance player < 4000 &&
-            vehicle _x == _x;
+            vehicle _x == _x &&
+            _x distance WL_TARGET_FRIENDLY > 1000
         };
 
         if (count _potentialCollaboratorsInRange == 0) exitWith {
             playSoundUI ["AddItemFailed"];
-            systemChat "No collaborators in range!";
+            systemChat "No eligible collaborators in range!";
         };
 
         missionNamespace setVariable ["WL2_collaboratorCooldown", serverTime + 600];

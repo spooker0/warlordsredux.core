@@ -284,13 +284,12 @@ if (_action == "orderRespawnBag") exitWith {
 };
 
 if (_action == "fundsTransfer") exitWith {
-	private _incomeBlocked = serverNamespace getVariable ["WL2_afkList", []];
 	private _transferCost = getMissionConfigValue ["BIS_WL_fundsTransferCost", 2000];
 	private _transferAmount = _param1;
 	private _recipient = _param2;
 	if (playerFunds >= (_transferAmount + _transferCost)) then {
 		_uid = getPlayerUID _recipient;
-		if !(_uid in _incomeBlocked) then {
+		if !(_sender getVariable ["WL2_afk", false]) then {
 			_transferAmount call WL2_fnc_fundsDatabaseWrite;
 
       		private _oldTransfer = serverNamespace getVariable [format ["BIS_WL_WLAC_%1", _uid], 0];
@@ -326,7 +325,7 @@ if (_action == "repair") exitWith {
 };
 
 if (_action == "controlCollaborator") exitWith {
-	private _cost = 500;
+	private _cost = 2000;
 	private _hasFunds = playerFunds >= _cost;
 	if (_hasFunds) then {
 		(-_cost) call WL2_fnc_fundsDatabaseWrite;

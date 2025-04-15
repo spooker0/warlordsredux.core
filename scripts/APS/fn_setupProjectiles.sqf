@@ -6,7 +6,7 @@ _this addEventHandler ["Fired", {
 	params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
 
 	if !(local _projectile) exitWith { true };
-	if (!(local _gunner) && !(isManualFire _unit)) exitWith { true };
+	if (!(local _gunner) && !(isManualFire _unit)) exitWith { true };	// Disable and restrict for cwis
 
 	private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
 	private _ammoOverridesHashMap = missionNamespace getVariable ["WL2_ammoOverrides", createHashMap];
@@ -53,6 +53,11 @@ _this addEventHandler ["Fired", {
 	if (_projectileESam) then {
 		[_projectile, _unit] spawn DIS_fnc_extendedSam;
 	};
+
+	// private _projectileCRAM = _projectileConfig getOrDefault ["cram", false];
+	// if (_projectileCRAM) then {
+	// 	[_projectile, local _gunner] spawn APS_fnc_cram;
+	// };
 
 	_this spawn APS_fnc_firedProjectile;
 

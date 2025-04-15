@@ -83,7 +83,6 @@ while { alive _projectile } do {
         _currentSpeed,
         0
     ];
-    systemChat str [_currentSpeed, _maxSpeed];
 
     _projectile setVelocityModelSpace _newVector;
 

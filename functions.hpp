@@ -4,6 +4,7 @@ class CfgFunctions {
 			file = "src\scripts\APS";
 			class active {};
 			class ciws {};
+			class cram {};
 			class dazzle {};
 			class defineVehicles {};
 			class deviceJammer {};
@@ -157,6 +158,7 @@ class CfgFunctions {
 		};
 		class ClientAction {
 			file = "src\core\client\action";
+			class afkAction {};
 			class arsenalSetup {};
 			class attachVehicle {};
 			class catapultAction {};

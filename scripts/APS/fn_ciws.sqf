@@ -5,6 +5,7 @@ params ["_asset"];
     private _muzzleVelocity = getNumber (configFile >> "CfgMagazines" >> currentMagazine _asset >> "initSpeed");
     private _target = objNull;
     private _laserTarget = objNull;
+
     while { alive _asset } do {
         _asset setVariable ["WL2_target", _target];
 
@@ -16,7 +17,7 @@ params ["_asset"];
             private _munitions = (8 allObjects 2) select {
                 alive _x &&
                 getPosATL _x # 2 > 50 &&
-                (_x isKindOf "ShellCore" || _x isKindOf "SubmunitionCore") &&
+                _x getVariable ["WL2_isShell", false] &&
                 !(_x getVariable ["WL2_targetEngaged", false]) &&
                 _x distance _asset < 3000
             };
@@ -39,6 +40,7 @@ params ["_asset"];
             if (_distanceToTarget > 3000) then {
                 continue;
             };
+            _asset setVariable ["WL2_firing", true];
 
             private _timeToTarget = _distanceToTarget / _muzzleVelocity;
             _timeToTarget = _timeToTarget + 0.5;
@@ -51,31 +53,25 @@ params ["_asset"];
                 [_asset, [_laserTarget, [0], false]] remoteExec ["lockCameraTo", 0];
             };
 
-            _asset setVariable ["WL2_firing", true];
-            _asset setVariable ["WL2_targetPos", _targetPos];
-
-            private _interceptChance = _target getVariable ["WL2_interceptionChance", -1];
             private _weaponDir = _asset weaponDirection (currentWeapon _asset);
             private _targetDir = _targetPos vectorDiff (getPosASL _asset);
             private _dotProduct = (vectorNormalized _weaponDir) vectorDotProduct (vectorNormalized _targetDir);
             private _angle = acos (_dotProduct min 1);
 
-            if (someAmmo _asset) then {
-                if (_angle < 5) then {
-                    _target setVariable ["WL2_interceptionChance", _interceptChance + 1];
-                };
-
-                if (_interceptChance >= 300) then {
-                    createVehicle ["SmallSecondary", ASLtoAGL (getPosASL _target), [], 0, "FLY"];
-                    deleteVehicle _target;
-                };
+            // todo: test LoS
+            private _isIntercepting = _angle < 5 && someAmmo _asset;
+            if (_isIntercepting) then {
+                _asset setVariable ["WL2_targetRealPosition", _targetPos, true];
+            } else {
+                _asset setVariable ["WL2_targetRealPosition", [], true];
             };
         } else {
             _asset setVariable ["WL2_firing", false];
             private _lockedTarget = _asset lockedCameraTo [0];
             if !(isNil "_lockedTarget") then {
-                _asset lockCameraTo [objNull, [0], true];
+                [_asset, [objNull, [0], true]] remoteExec ["lockCameraTo", 0];
             };
+            _asset setVariable ["WL2_targetRealPosition", [], true];
         };
         sleep 0.01;
     };
@@ -109,11 +105,11 @@ addMissionEventHandler ["Draw3D", {
     private _target = _asset getVariable ["WL2_target", objNull];
     if (isNull _target) exitWith {};
 
-    private _interceptChance = _target getVariable ["WL2_interceptionChance", -1];
+    private _interceptChance = _target getVariable ["WL2_interceptChance", -1];
     private _displayText = if (_interceptChance == -1) then {
         "INCOMING"
     } else {
-        format ["INTERCEPT %1%%", round (_interceptChance / 3)];
+        format ["INTERCEPT %1%%", round (_interceptChance * 10 / 3)];
     };
 
     drawIcon3D [

@@ -223,9 +223,9 @@ if (_asset isKindOf "Man") then {
 			[_asset] spawn WL2_fnc_stabilizeBoatAction;
 		};
 
-		case "B_AAA_System_01_F": {
-			[_asset] spawn APS_fnc_ciws;
-		};
+		// case "B_AAA_System_01_F": {
+		// 	[_asset] spawn APS_fnc_ciws;
+		// };
 
 		// case "I_Heli_light_03_dynamicLoadout_F";
 		// case "B_Heli_Attack_01_dynamicLoadout_F";

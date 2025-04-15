@@ -44,8 +44,7 @@ if (!isRemoteExecutedJIP && side group player != _side) then {
 	};
 };
 
-private _assetCrew = (crew _asset # 0);
-private _waitActionId = _assetCrew addAction [
+private _waitActionId = _asset addAction [
 	"<t color='#00ffcc'>WAIT</t>",
 	{},
 	[],
@@ -53,7 +52,7 @@ private _waitActionId = _assetCrew addAction [
 	true,
 	false,
 	"",
-	"true",
+	"_target == cameraOn",
 	50,
 	false
 ];
@@ -61,7 +60,7 @@ private _waitActionId = _assetCrew addAction [
 sleep 120;
 _assetCrew removeAction _waitActionId;
 
-private _actionID = _assetCrew addAction [
+private _actionID = _asset addAction [
 	"<t color='#00ffcc'>Extended SAM Configuration</t>",
 	DIS_fnc_setupExtendedSamMenu,
 	[],
@@ -69,7 +68,7 @@ private _actionID = _assetCrew addAction [
 	true,
 	false,
 	"",
-	"true",
+	"_target == cameraOn",
 	50,
 	false
 ];
