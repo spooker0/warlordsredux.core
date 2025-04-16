@@ -17,10 +17,8 @@ if (!_forgive) then {
 	private _teamkillerFunds = _fundsDB getOrDefault [_teamkillerUid, 0];
 
 	private _compensation = round (_itemCost min _teamkillerFunds);
-	private _uid = _teamkillerUid;
-	(-_compensation) call WL2_fnc_fundsDatabaseWrite;
-	_uid = getPlayerUID _forgiver;
-	(round (_compensation * 0.5)) call WL2_fnc_fundsDatabaseWrite;
+	[-_compensation, _teamkillerUid] call WL2_fnc_fundsDatabaseWrite;
+	[round (_compensation * 0.5), getPlayerUID _forgiver] call WL2_fnc_fundsDatabaseWrite;
 
 	private _assetType = if (isPlayer [_victim]) then {
 		name _victim

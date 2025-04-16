@@ -65,15 +65,16 @@ private _punishVar = format ["WL2_punish_%1", _uid];
 private _lockedToTeam = _playerList getOrDefault [_uid, sideUnknown];
 private _currentSide = side group _warlord;
 private _owner = owner _warlord;
+
+_warlord setVariable ["BIS_WL_ownerAsset", _uid, true];
+_warlord setVariable ["WL2_accessControl", 0, true];
+
 if (_lockedToTeam != sideUnknown) then {
     private _correctSide = _lockedToTeam == _currentSide;
     missionNamespace setVariable [_teamBlockVar, !_correctSide, _owner];
 	missionNamespace setVariable [_balanceBlockVar, false, _owner];
 
     if (_correctSide) then {
-        _warlord setVariable ["BIS_WL_ownerAsset", _uid, true];
-		_warlord setVariable ["WL2_accessControl", 0, true];
-
         private _friendlyFireIncidents = serverNamespace getVariable [_friendlyFireVar, []];
         [_friendlyFireIncidents] remoteExec ["WL2_fnc_friendlyFireHandleClient", _owner];
         private _punishTime = serverNamespace getVariable [_punishVar, []];
@@ -96,8 +97,6 @@ if (_lockedToTeam != sideUnknown) then {
     };
 
     if (!_isImbalanced) then {
-        _warlord setVariable ["BIS_WL_ownerAsset", _uid, true];
-        _warlord setVariable ["WL2_accessControl", 0, true];
         _playerList set [_uid, _currentSide];
     };
 
@@ -112,6 +111,6 @@ _readyList pushBackUnique _uid;
 
 private _playerFunds = _playerFundsDB getOrDefault [_uid, -1];
 if (_playerFunds == -1) then {
-    1000 call WL2_fnc_fundsDatabaseWrite;
+    [1000, _uid] call WL2_fnc_fundsDatabaseWrite;
 };
 [_playerFundsDB] call WL2_fnc_fundsDatabaseUpdate;

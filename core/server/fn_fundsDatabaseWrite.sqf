@@ -1,11 +1,10 @@
 if !(isServer) exitWith {};
 
-params ["_amount"];
+params ["_amount", "_uid"];
 
 private _readyList = missionNamespace getVariable ["WL2_readyList", []];
 if !(_uid in _readyList) exitWith {};
-
-if (isNil {_uid}) exitWith {};
+if (_uid == "") exitWith {};
 
 private _fundsDB = (serverNamespace getVariable "fundsDatabase");
 private _playerFunds = _fundsDB getOrDefault [_uid, 0];

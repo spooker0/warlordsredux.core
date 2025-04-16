@@ -1,5 +1,7 @@
 params ["_side", "_sector"];
 
+if (isNull _sector) exitWith {};
+
 if !(_sector getVariable ["BIS_WL_simulated", false]) then {
 	_sector setVariable ["BIS_WL_simulated", true];
 	_sector spawn WL2_fnc_sectorCaptureHandle;

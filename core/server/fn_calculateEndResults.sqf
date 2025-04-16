@@ -13,21 +13,27 @@ private _serverStats = profileNamespace getVariable ["WL_stats", createHashMap];
     private _asset = _x;
     private _assetStats = _y;
 
-    private _westBuys = _assetStats getOrDefault ["westBuys", 0];
-    private _eastBuys = _assetStats getOrDefault ["eastBuys", 0];
+    private _buys = _assetStats getOrDefault ["buys", 0];
     private _killValue = _assetStats getOrDefault ["killValue", 0];
 
     private _serverAsset = _serverStats getOrDefault [_asset, createHashMap];
-    private _serverWestBuys = _serverAsset getOrDefault ["westBuys", 0];
-    private _serverEastBuys = _serverAsset getOrDefault ["eastBuys", 0];
+    private _serverBuys = _serverAsset getOrDefault ["buys", 0];
     private _serverKillValue = _serverAsset getOrDefault ["killValue", 0];
 
-    _serverAsset set ["westBuys", _serverWestBuys + _westBuys];
-    _serverAsset set ["eastBuys", _serverEastBuys + _eastBuys];
+    _serverAsset set ["buys", _serverBuys + _buys];
     _serverAsset set ["killValue", _serverKillValue + _killValue];
 
     _serverStats set [_asset, _serverAsset];
 } forEach _stats;
+
+private _gameWinner = missionNamespace getVariable ["WL2_gameWinner", sideUnknown];
+if (_gameWinner == west) then {
+    _serverStats set ["westWins", (_serverStats getOrDefault ["westWins", 0]) + 1];
+};
+if (_gameWinner == east) then {
+   _serverStats set ["eastWins", (_serverStats getOrDefault ["eastWins", 0]) + 1];
+};
+
 profileNamespace setVariable ["WL_stats", _serverStats];
 saveProfileNamespace;
 

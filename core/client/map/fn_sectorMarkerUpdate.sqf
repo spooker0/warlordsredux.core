@@ -16,13 +16,14 @@ private _mrkrArea = (_sector getVariable "BIS_WL_markers") # 1;
 
 if (isNil "_mrkrArea") exitWith {};
 
-if (_owner == BIS_WL_playerSide || BIS_WL_playerSide in _previousOwners || _sector == WL_TARGET_FRIENDLY || WL_IsSpectator) then {
+private _canSeeAll = WL_IsSpectator || WL_IsReplaying;
+if (_owner == BIS_WL_playerSide || BIS_WL_playerSide in _previousOwners || _sector == WL_TARGET_FRIENDLY || _canSeeAll) then {
 	_mrkrArea setMarkerBrushLocal "Border";
 } else {
 	_mrkrArea setMarkerBrushLocal "Solid";
 };
 
-if (BIS_WL_playerSide in (_sector getVariable ["BIS_WL_revealedBy", []]) || BIS_WL_playerSide == independent || WL_IsSpectator) then {
+if (BIS_WL_playerSide in (_sector getVariable ["BIS_WL_revealedBy", []]) || BIS_WL_playerSide == independent || _canSeeAll) then {
 	if (_sector in WL_BASES) then {
 		_mrkrMain setMarkerSizeLocal [WL_BASE_ICON_SIZE, WL_BASE_ICON_SIZE];
 	};
@@ -43,6 +44,10 @@ if (BIS_WL_playerSide in (_sector getVariable ["BIS_WL_revealedBy", []]) || BIS_
 			_mrkrMain setMarkerTypeLocal (["b_installation", "o_installation", "n_installation"] select _ownerIndex);
 		};
 	};
+} else {
+	_mrkrMain setMarkerColorLocal "ColorUNKNOWN";
+	_mrkrMain setMarkerTypeLocal "u_installation";
+	_mrkrArea setMarkerColorLocal "ColorOrange";
 };
 
 if (_sector == WL_TARGET_FRIENDLY) then {

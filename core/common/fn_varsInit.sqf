@@ -61,5 +61,6 @@ switch (_locality) do {
 		WL_ScannerUnits = [];
 		WL_SpectrumInterface = false;
 		WL_IsSpectator = false;
+		WL_IsReplaying = false;
 	};
 };

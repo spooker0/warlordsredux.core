@@ -1,6 +1,8 @@
 #include "..\..\warlords_constants.inc"
 
-params [["_map", controlNull]];
+// _drawMode: 0 = normal, 1 = spectator, 2 = stored
+params [["_map", controlNull], ["_drawMode", 0]];
+private _drawAll = _drawMode == 1 || _drawMode == 2;
 
 private _drawIcons = [];
 private _drawIconsAnimated = [];
@@ -15,7 +17,7 @@ if !(isNull BIS_WL_highlightedSector) then {
 	_drawIconsAnimated pushBack [
 		"A3\ui_f\data\map\groupicons\selector_selectedMission_ca.paa",
 		[1,1,1,0.5],
-		BIS_WL_highlightedSector,
+		getPosASL BIS_WL_highlightedSector,
 		60,
 		60,
 		0
@@ -27,7 +29,7 @@ if !(isNull BIS_WL_targetVote) then {
 	_drawIcons pushBack [
 		"A3\ui_f\data\map\groupicons\selector_selectedMission_ca.paa",
 		[0.8, 0.8, 0.8, 1],
-		BIS_WL_targetVote,
+		getPosASL BIS_WL_targetVote,
 		60,
 		60,
 		0
@@ -35,11 +37,11 @@ if !(isNull BIS_WL_targetVote) then {
 };
 
 // Draw asset selector
-if (!isNull WL_AssetActionTarget) then {
+if !(isNull WL_AssetActionTarget) then {
 	_drawIconsAnimated pushBack [
 		"A3\ui_f\data\map\groupicons\selector_selectedMission_ca.paa",
 		[] call WL2_fnc_iconColor,
-		WL_AssetActionTarget,
+		getPosASL WL_AssetActionTarget,
 		40,
 		40,
 		0
@@ -51,7 +53,7 @@ if (!isNull WL_SectorActionTarget && isNull BIS_WL_highlightedSector && WL_Secto
 	_drawIconsAnimated pushBack [
 		"A3\ui_f\data\map\groupicons\selector_selectedMission_ca.paa",
 		[] call WL2_fnc_iconColor,
-		WL_SectorActionTarget,
+		getPosASL WL_SectorActionTarget,
 		50,
 		50,
 		0
@@ -80,7 +82,7 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 	private _base = _x;
 	private _baseOwner = _base getVariable ["WL2_forwardBaseOwner", sideUnknown];
 	private _showOnMap = _base getVariable ["WL2_forwardBaseShowOnMap", false];
-	if (_baseOwner != _side && !WL_IsSpectator && !_showOnMap) then {
+	if (_baseOwner != _side && !_drawAll && !_showOnMap) then {
 		continue;
 	};
 
@@ -166,7 +168,7 @@ private _locationScannedUnits = missionNamespace getVariable ["WL2_detectedUnits
 			case independent: { [0, 0.6, 0, 0.9] };
 			default { [1, 1, 1, 1] };
 		},
-		call WL2_fnc_getPos,
+		getPosASL _x,
 		_size,
 		_size,
 		call WL2_fnc_getDir,
@@ -214,7 +216,7 @@ private _ewNetworkUnits = _activeVehicles + ("Land_MobileRadar_01_radar_F" allOb
 // Draw scanner and scanned units
 private _scannerUnits = _activeVehicles select {
 	_x getVariable ["WL_scannerOn", false] &&
-	(([_x] call WL2_fnc_getAssetSide) == _side || WL_IsSpectator)
+	(([_x] call WL2_fnc_getAssetSide) == _side || _drawAll)
 };
 
 private _mySideColor = switch (_side) do {
@@ -285,7 +287,7 @@ _allScannedObjects = _allScannedObjects arrayIntersect _allScannedObjects; // el
 			case independent: { [0, 0.6, 0, 0.9] };
 			default { [1, 1, 1, 1] };
 		},
-		call WL2_fnc_getPos,
+		getPosASL _x,
 		_size,
 		_size,
 		call WL2_fnc_getDir,
@@ -297,13 +299,13 @@ _allScannedObjects = _allScannedObjects arrayIntersect _allScannedObjects; // el
 	];
 } forEach _allScannedObjects;
 
-private _draw = (ctrlMapScale _map) < 0.3;
+private _draw = (ctrlMapScale _map) < 0.3 || _drawMode == 2;
 // Dead players
 {
 	_drawIcons pushBack [
 		"\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa",
 		[1, 0, 0, 0.8],
-		call WL2_fnc_getPos,
+		getPosASL _x,
 		20,
 		20,
 		0,
@@ -314,7 +316,7 @@ private _draw = (ctrlMapScale _map) < 0.3;
 		"right"
 	];
 } forEach (allPlayers select {
-	(!alive _x) && (side group _x == _side || WL_IsSpectator)
+	(!alive _x) && (side group _x == _side || _drawAll)
 });
 
 // Teammates
@@ -324,7 +326,7 @@ private _draw = (ctrlMapScale _map) < 0.3;
 		_drawIcons pushBack [
 			'a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca.paa',
 			[1,0,0,1],
-			call WL2_fnc_getPos,
+			getPosASL _x,
 			_size,
 			_size,
 			0,
@@ -336,7 +338,7 @@ private _draw = (ctrlMapScale _map) < 0.3;
 		];
 	};
 
-	private _teammatePos = call WL2_fnc_getPos;
+	private _teammatePos = getPosASL _x;
 	_drawIcons pushBack [
 		call WL2_fnc_iconType,
 		[_x] call WL2_fnc_iconColor,
@@ -356,7 +358,7 @@ private _draw = (ctrlMapScale _map) < 0.3;
 	];
 	_drawIconsSelectable pushBack [_x, _teammatePos];
 } forEach (allPlayers select {
-	(side group _x == _side || WL_IsSpectator) &&
+	(side group _x == _side || _drawAll) &&
 	isNull objectParent _x &&
 	alive _x && !isObjectHidden _x
 });
@@ -367,7 +369,7 @@ private _draw = (ctrlMapScale _map) < 0.3;
 	_drawIcons pushBack [
 		call WL2_fnc_iconType,
 		[_x] call WL2_fnc_iconColor,
-		call WL2_fnc_getPos,
+		getPosASL _x,
 		_size,
 		_size,
 		call WL2_fnc_getDir,
@@ -378,7 +380,7 @@ private _draw = (ctrlMapScale _map) < 0.3;
 		"right"
 	];
 } forEach (allUnits select {
-	(side group (crew _x select 0) == _side || WL_IsSpectator) &&
+	(side group (crew _x select 0) == _side || _drawAll) &&
 	alive _x && (isNull objectParent _x) &&
 	typeOf _x != "Logic" &&
 	!isPlayer _x
@@ -387,7 +389,7 @@ private _draw = (ctrlMapScale _map) < 0.3;
 // AI
 {
 	_size = call WL2_fnc_iconSize;
-	private _aiPos = call WL2_fnc_getPos;
+	private _aiPos = getPosASL _x;
 	_drawIcons pushBack [
 		call WL2_fnc_iconType,
 		[_x] call WL2_fnc_iconColor,
@@ -419,8 +421,8 @@ if (WL_AssetActionTarget in _allSquadmates) then {
 		_allSquadmates = _allSquadmates - [_squadLeader];
 		{
 			_drawLines pushBack [
-				_squadLeader,
-				_x,
+				getPosASL _squadLeader,
+				getPosASL _x,
 				[0, 1, 1, 0.8],
 				6
 			];
@@ -444,7 +446,7 @@ private _vehiclesOnSide = vehicles select { count crew _x > 0 && side _x == _sid
 _sideVehicles = _sideVehicles + _vehiclesOnSide;
 _sideVehicles = _sideVehicles arrayIntersect _sideVehicles;
 
-if (WL_IsSpectator) then {
+if (_drawAll) then {
 	_sideVehicles = vehicles select {
 		private _targetSide = [_x] call WL2_fnc_getAssetSide;
         (_targetSide in [west, east, independent]) &&
@@ -455,7 +457,7 @@ if (WL_IsSpectator) then {
 
 {
 	_size = call WL2_fnc_iconSize;
-	private _vehiclePos = call WL2_fnc_getPos;
+	private _vehiclePos = getPosASL _x;
 	_drawIcons pushBack [
 		call WL2_fnc_iconType,
 		[_x] call WL2_fnc_iconColor,
@@ -463,7 +465,7 @@ if (WL_IsSpectator) then {
 		_size,
 		_size,
 		call WL2_fnc_getDir,
-		_x call WL2_fnc_iconText,
+		[_x, _draw] call WL2_fnc_iconText,
 		1,
 		0.043,
 		"PuristaBold",
@@ -473,7 +475,7 @@ if (WL_IsSpectator) then {
 } forEach (_sideVehicles select { alive _x });
 
 // Spectator draw
-if (WL_IsSpectator) then {
+if (_drawAll) then {
 	private _camera = missionNamespace getVariable ["BIS_EGSpectatorCamera_camera", objNull];
 
 	if !(isNull _camera) then {
@@ -519,8 +521,52 @@ if (WL_IsSpectator) then {
 	};
 };
 
-uiNamespace setVariable ["WL2_drawIcons", _drawIcons];
-uiNamespace setVariable ["WL2_drawIconsAnimated", _drawIconsAnimated];
-uiNamespace setVariable ["WL2_drawIconsSelectable", _drawIconsSelectable];
-uiNamespace setVariable ["WL2_drawEllipses", _drawEllipses];
-uiNamespace setVariable ["WL2_drawLines", _drawLines];
+private _drawSectorIcons = [];
+if (_drawMode == 2) then {
+	{
+		private _sectorName = _x getVariable ["BIS_WL_name", ""];
+		private _sectorPos = getPosASL _x;
+		private _sectorOwner = _x getVariable ["BIS_WL_owner", independent];
+		private _sectorColor = switch (_sectorOwner) do {
+			case west: { [0, 0.3, 0.6, 0.9] };
+			case east: { [0.5, 0, 0, 0.9] };
+			case independent: { [0, 0.6, 0, 0.9] };
+			default { [1, 1, 1, 1] };
+		};
+		private _sectorIcon = switch (_sectorOwner) do {
+			case west: { "\A3\ui_f\data\map\markers\nato\b_installation.paa" };
+			case east: { "\A3\ui_f\data\map\markers\nato\o_installation.paa" };
+			case independent: { "\A3\ui_f\data\map\markers\nato\n_installation.paa" };
+			default { "" };
+		};
+		_drawSectorIcons pushBack [
+			_sectorIcon,
+			_sectorColor,
+			_sectorPos,
+			50,
+			50,
+			0,
+			_sectorName,
+			1,
+			0.043,
+			"PuristaBold",
+			"right"
+		];
+	} forEach BIS_WL_allSectors;
+};
+
+if (_drawMode == 2) then {
+	private _storedDrawIcons = missionNamespace getVariable ["WL2_drawIcons", []];
+	private _storedDrawEllipses = missionNamespace getVariable ["WL2_drawEllipses", []];
+	private _storedSectorIcons = missionNamespace getVariable ["WL2_drawSectorIcons", []];
+
+	_storedDrawIcons pushBack _drawIcons;
+	_storedDrawEllipses pushBack _drawEllipses;
+	_storedSectorIcons pushBack _drawSectorIcons;
+} else {
+	uiNamespace setVariable ["WL2_drawIcons", _drawIcons];
+	uiNamespace setVariable ["WL2_drawIconsAnimated", _drawIconsAnimated];
+	uiNamespace setVariable ["WL2_drawIconsSelectable", _drawIconsSelectable];
+	uiNamespace setVariable ["WL2_drawEllipses", _drawEllipses];
+	uiNamespace setVariable ["WL2_drawLines", _drawLines];
+};

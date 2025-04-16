@@ -18,8 +18,6 @@ _closeButton ctrlAddEventHandler ["ButtonClick", {
 private _controlGroup = _display displayCtrl MENU_CONTROLS_GROUP;
 _controlGroup ctrlShow false;
 
-private _buttonPositionX = 0.05;
-
 private _buttons = [
     ["SQUADS", {
         closeDialog 0;
@@ -58,16 +56,36 @@ if (_isAdmin || _isModerator) then {
     }];
 };
 
+private _profileDrawIcons = profileNamespace getVariable ["WL2_drawIcons", ""];
+if (_profileDrawIcons != "") then {
+    _buttons pushBack ["REPLAY", {
+        closeDialog 0;
+        0 spawn WL2_fnc_replayMap;
+    }];
+    _buttons pushBack ["CLEAR REPLAY", {
+        closeDialog 0;
+        0 spawn WL2_fnc_replayMapClear;
+    }];
+};
+
+private _buttonPositionX = 0.05;
+private _positionY = 0.03;
 {
     private _text = _x # 0;
     private _item = _display ctrlCreate ["MENU_MenuItemButton", -1, _controlGroup];
-    _item ctrlSetPosition [_buttonPositionX + _forEachIndex * 0.15, 0.03, 0.14, 0.07];
+    _item ctrlSetPosition [_buttonPositionX, _positionY, 0.17, 0.07];
     _item ctrlSetText _text;
     _item ctrlCommit 0;
     _item ctrlAddEventHandler ["ButtonClick", _x # 1];
+
+    _buttonPositionX = _buttonPositionX + 0.18;
+    if (_buttonPositionX > (1 - 0.17) && _forEachIndex != (count _buttons - 1)) then {
+        _buttonPositionX = 0.05;
+        _positionY = _positionY + 0.08;
+    };
 } forEach _buttons;
 
-private _positionY = 0.11;
+_positionY = _positionY + 0.08;
 {
     private _category = _x # 0;
     private _text = _x # 1;

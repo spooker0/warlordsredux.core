@@ -62,7 +62,7 @@ _launchButton ctrlAddEventHandler ["ButtonClick", {
             private _targetSide = [_target] call WL2_fnc_getAssetSide;
             private _targetAltitude = (ASLtoAGL (getPosASL _target)) # 2;
             private _targetTime = _x # 1;
-            _targetTime >= -10 && _targetSide != BIS_WL_playerSide && alive _target && _targetAltitude > 20;
+            _targetTime >= -10 && _targetSide != BIS_WL_playerSide && alive _target && _targetAltitude > 50;
         };
 
 

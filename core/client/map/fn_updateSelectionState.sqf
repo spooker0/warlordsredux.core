@@ -73,7 +73,7 @@ if (WL_VotePhase == 1) then {
     BIS_WL_selection_dimSectors = true;
 };
 
-if (WL_IsSpectator) then {
+if (WL_IsSpectator || WL_IsReplaying) then {
     BIS_WL_selection_showLinks = true;
 };
 

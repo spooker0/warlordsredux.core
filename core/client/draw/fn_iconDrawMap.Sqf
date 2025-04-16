@@ -24,3 +24,10 @@ private _angle = (serverTime * 75) % 360;
 {
 	_m drawEllipse _x;
 } forEach _drawEllipses;
+
+if (WL_IsReplaying) then {
+	private _drawSectorIcons = uiNamespace getVariable ["WL2_drawSectorIcons", []];
+	{
+		_m drawIcon _x;
+	} forEach _drawSectorIcons;
+};

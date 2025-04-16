@@ -1,3 +1,5 @@
+#include "..\..\warlords_constants.inc"
+
 // Slow loop
 0 spawn {
 	while { !BIS_WL_missionEnd } do {
@@ -35,8 +37,14 @@
 0 spawn {
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 	while { !BIS_WL_missionEnd } do {
+		if (WL_IsReplaying) then {
+			uiSleep 5;
+			continue;
+		};
+
 		private _mainMap = (findDisplay 12) displayCtrl 51;
-		[_mainMap] spawn WL2_fnc_iconDrawMapPrepare;
+		private _drawMode = if (WL_IsSpectator) then { 1 } else { 0 };
+		[_mainMap, _drawMode] spawn WL2_fnc_iconDrawMapPrepare;
 
 		private _refreshRate = _settingsMap getOrDefault ["mapRefresh", 4];
 		_refreshRate = _refreshRate max 1;
@@ -44,3 +52,18 @@
 		uiSleep _refreshSleepTime;
 	};
 };
+
+#if WL_REPLAYS
+// Store game data
+0 spawn {
+	missionNamespace setVariable ["WL2_drawIcons", []];
+	missionNamespace setVariable ["WL2_drawEllipses", []];
+	missionNamespace setVariable ["WL2_drawSectorIcons", []];
+
+	while { !BIS_WL_missionEnd } do {
+		private _mainMap = (findDisplay 12) displayCtrl 51;
+		[_mainMap, 2] spawn WL2_fnc_iconDrawMapPrepare;
+		sleep 30;
+	};
+};
+#endif

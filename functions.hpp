@@ -215,7 +215,6 @@ class CfgFunctions {
 			class drawIncomingMissiles {};
 			class drawRadarName {};
 			class getDir {};
-			class getPos {};
 			class helmetInterface {};
 			class iconColor {};
 			class iconDrawMap {};
@@ -268,6 +267,8 @@ class CfgFunctions {
 			class handleSelectionState {};
 			class mapButtonConditions {};
 			class mapControlHandle {};
+			class replayMap {};
+			class replayMapClear {};
 			class sectorCaptureStatus {};
 			class sectorMapButtons {};
 			class sectorMarkerUpdate {};

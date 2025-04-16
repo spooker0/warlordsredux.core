@@ -12,6 +12,7 @@
 #define WL_QUICK_CAPTURE 0
 #define WL_ZEUS_ENABLED 1
 #define WL_EASTER_EGG 0
+#define WL_REPLAYS 1
 
 // Live: 1
 #define WL_STRONGHOLD_ENABLE 1

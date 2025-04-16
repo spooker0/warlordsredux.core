@@ -4,10 +4,10 @@ params ["_side", ["_fullRecalc", false]];
 
 private _base = objNull;
 private _pool = BIS_WL_allSectors;
-private _owned = _pool select {((_x getVariable ["BIS_WL_owner", sideUnknown]) == _side)};
-if !(isNil {BIS_WL_sectorsArrays}) then {
-	_owned = _pool select {((_x getVariable ["BIS_WL_owner", sideUnknown]) == _side) && (_x in ((BIS_WL_sectorsArrays # (BIS_WL_competingSides find _side)) # 2))};
+private _owned = _pool select {
+	(_x getVariable ["BIS_WL_owner", sideUnknown]) == _side
 };
+
 private _available = [];
 private _income = 0;
 private _services = [];
@@ -38,8 +38,11 @@ while {count _knots > 0} do {
 	_knots = [];
 	{
 		{
-			_link = _x;
-			if (!(_link in _linked) && (_link in _owned)) then {_linked pushBack _link; _knots pushBack _link}
+			private _link = _x;
+			if (!(_link in _linked) && (_link in _owned)) then {
+				_linked pushBack _link;
+				_knots pushBack _link;
+			};
 		} forEach (_x getVariable ["BIS_WL_connectedSectors", []]);
 	} forEach _knotsCurrent;
 	sleep 0.0001;

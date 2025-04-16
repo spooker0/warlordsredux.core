@@ -18,7 +18,7 @@ if !(_owner in _previousOwners) then {
 			private _reward = ((round (_closestNeighborDistance / 3)) min 1000) max 100;
 			{
 				private _uid = getPlayerUID _x;
-				_reward call WL2_fnc_fundsDatabaseWrite;
+				[_reward, _uid] call WL2_fnc_fundsDatabaseWrite;
 				[objNull, _reward, localize "STR_A3_sector_captured", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _x];
 			} forEach (allPlayers select {
 				side group _x == _owner
@@ -54,8 +54,17 @@ if (isNull (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", _ene
 	};
 };
 
-waitUntil {sleep 0.01; (_sector getVariable ["BIS_WL_owner", civilian]) == _owner};
-if ((((profileNamespace getVariable "BIS_WL_lastBases") # 0) getVariable ["BIS_WL_owner", civilian]) == (((profileNamespace getVariable "BIS_WL_lastBases") # 1) getVariable ["BIS_WL_owner", independent])) then {
+waitUntil {
+	sleep 0.01;
+	(_sector getVariable ["BIS_WL_owner", civilian]) == _owner
+};
+
+private _base1 = missionNamespace getVariable ["BIS_WL_base1", objNull];
+private _base2 = missionNamespace getVariable ["BIS_WL_base2", objNull];
+private _base1Owner = _base1 getVariable ["BIS_WL_owner", civilian];
+private _base2Owner = _base2 getVariable ["BIS_WL_owner", independent];
+if (_base1Owner == _base2Owner) then {
+	missionNamespace setVariable ["WL2_gameWinner", _base1Owner, true];
 	0 spawn WL2_fnc_calculateEndResults;
 	0 remoteExec ["WL2_fnc_missionEndHandle", 0];
 };

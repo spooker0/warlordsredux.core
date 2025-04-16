@@ -3,8 +3,7 @@ params ["_sender", "_pos", "_orderedClass", "_cost"];
 if !(isServer) exitWith {};
 private _class = missionNamespace getVariable ["WL2_spawnClass", createHashMap] getOrDefault [_orderedClass, _orderedClass];
 
-private _owner = owner _sender;
-_uid = getPlayerUID _sender;
+private _owner = owner _sender;;
 
 private _spawnPos = [];
 private _dir = 0;
@@ -59,7 +58,7 @@ if (count _spawnPos == 0) exitWith {
 	_sender setVariable ["BIS_WL_isOrdering", false, [2, _owner]];
 
 	// refund if nothing spawned
-	(_cost) call WL2_fnc_fundsDatabaseWrite;
+	[_cost, getPlayerUID _sender] call WL2_fnc_fundsDatabaseWrite;
 };
 
 private _isUav = getNumber (configFile >> "CfgVehicles" >> _class >> "isUav") == 1;
