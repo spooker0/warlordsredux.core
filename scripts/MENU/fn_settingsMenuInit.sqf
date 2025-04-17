@@ -56,6 +56,7 @@ if (_isAdmin || _isModerator) then {
     }];
 };
 
+#if WL_REPLAYS
 private _profileDrawIcons = profileNamespace getVariable ["WL2_drawIcons", ""];
 if (_profileDrawIcons != "") then {
     _buttons pushBack ["REPLAY", {
@@ -67,6 +68,7 @@ if (_profileDrawIcons != "") then {
         0 spawn WL2_fnc_replayMapClear;
     }];
 };
+#endif
 
 private _buttonPositionX = 0.05;
 private _positionY = 0.03;

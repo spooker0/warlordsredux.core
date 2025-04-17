@@ -10,7 +10,8 @@ private _drawIconsSelectable = [];
 private _drawEllipses = [];
 private _drawLines = [];
 
-private _side = BIS_WL_playerSide;
+private _mapData = missionNamespace getVariable ["WL2_mapData", createHashMap];
+private _side = _mapData getOrDefault ["side", sideUnknown];
 
 // Draw white hover selector
 if !(isNull BIS_WL_highlightedSector) then {
@@ -151,23 +152,11 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 } forEach _forwardBases;
 
 // Draw sector scans
-private _sectorScannedUnits = [];
-{
-	private _detectedUnits = _x getVariable ["WL2_detectedUnits", []];
-	_sectorScannedUnits append _detectedUnits;
-} forEach BIS_WL_currentlyScannedSectors;
-
-private _locationScannedUnits = missionNamespace getVariable ["WL2_detectedUnits", []];
 {
 	private _size = call WL2_fnc_iconSize;
 	_drawIcons pushBack [
 		call WL2_fnc_iconType,
-		switch ([_x] call WL2_fnc_getAssetSide) do {
-			case west: { [0, 0.3, 0.6, 0.9] };
-			case east: { [0.5, 0, 0, 0.9] };
-			case independent: { [0, 0.6, 0, 0.9] };
-			default { [1, 1, 1, 1] };
-		},
+		[_x] call WL2_fnc_iconColor,
 		getPosASL _x,
 		_size,
 		_size,
@@ -178,56 +167,32 @@ private _locationScannedUnits = missionNamespace getVariable ["WL2_detectedUnits
 		"PuristaBold",
 		"right"
 	];
-} forEach (_sectorScannedUnits + _locationScannedUnits);
+} forEach (_mapData getOrDefault ["scannedUnits", []]);
 
 // Draw EW networks
-private _activeVehicles = vehicles select {
-	alive _x &&
-	isEngineOn _x
-};
-
-private _ewNetworkUnits = _activeVehicles + ("Land_MobileRadar_01_radar_F" allObjects 0) select {
-	(_x getVariable ["WL_ewNetActive", false] ||
-	_x getVariable ["WL_ewNetActivating", false]) &&
-	alive _x
-};
-
 {
 	if (isNull _x) then { continue; };
 	private _assetPos = _x modelToWorldVisual [0, 0, 0];
-	private _assetSide = [_x] call WL2_fnc_getAssetSide;
-	private _assetColor = switch (_assetSide) do {
-		case west: { [0, 0.3, 0.6, 0.9] };
-		case east: { [0.5, 0, 0, 0.9] };
-		case independent: { [0, 0.6, 0, 0.9] };
-		default { [1, 1, 1, 0] };
-	};
 	private _range = _x getVariable ["WL_ewNetRange", 0];
 	_drawEllipses pushBack [
 		_assetPos,
 		_range,
 		_range,
 		0,
-		_assetColor,
+		[_x] call WL2_fnc_iconColor,
 		""
 	];
-} forEach _ewNetworkUnits;
+} forEach (_mapData getOrDefault ["ewNetworks", []]);
 
 // Draw scanner and scanned units
-private _scannerUnits = _activeVehicles select {
-	_x getVariable ["WL_scannerOn", false] &&
-	(([_x] call WL2_fnc_getAssetSide) == _side || _drawAll)
-};
-
-private _mySideColor = switch (_side) do {
-	case west: { [0, 0.3, 0.6, 0.9] };
-	case east: { [0.5, 0, 0, 0.9] };
-	case independent: { [0, 0.6, 0, 0.9] };
-	default { [1, 1, 1, 0] };
-};
-
 private _hasAWACSMap = missionNamespace getVariable ["WL2_hasAWACS", createHashMap];
 private _scale = 6.4 * worldSize / 8192 * ctrlMapScale _map;
+
+private _scanners = if (_drawAll) then {
+	_mapData getOrDefault ["scannersAll", []]
+} else {
+	_mapData getOrDefault ["scannersTeam", []]
+};
 {
 	if (isNull _x) then { continue; };
 	private _assetPos = _x modelToWorldVisual [0, 0, 0];
@@ -249,7 +214,7 @@ private _scale = 6.4 * worldSize / 8192 * ctrlMapScale _map;
 			_scanRadius,
 			_scanRadius,
 			0,
-			_mySideColor,
+			[_x] call WL2_fnc_iconColor,
 			""
 		];
 	} else {
@@ -262,14 +227,7 @@ private _scale = 6.4 * worldSize / 8192 * ctrlMapScale _map;
 			"#(rgb,1,1,1)color(0,1,1,0.15)"
 		];
 	};
-} forEach _scannerUnits;
-
-private _allScannedObjects = [];
-{
-	private _scannedObjects = _x getVariable ["WL_scannedObjects", []];
-	_allScannedObjects append _scannedObjects;
-} forEach _scannerUnits;
-_allScannedObjects = _allScannedObjects arrayIntersect _allScannedObjects; // eliminate duplicates
+} forEach _scanners;
 
 {
 	if (isNull _x) then { continue; };
@@ -281,12 +239,7 @@ _allScannedObjects = _allScannedObjects arrayIntersect _allScannedObjects; // el
 	};
 	_drawIcons pushBack [
 		call WL2_fnc_iconType,
-		switch ([_objToColor] call WL2_fnc_getAssetSide) do {
-			case west: { [0, 0.3, 0.6, 0.9] };
-			case east: { [0.5, 0, 0, 0.9] };
-			case independent: { [0, 0.6, 0, 0.9] };
-			default { [1, 1, 1, 1] };
-		},
+		[_objToColor] call WL2_fnc_iconColor,
 		getPosASL _x,
 		_size,
 		_size,
@@ -297,10 +250,16 @@ _allScannedObjects = _allScannedObjects arrayIntersect _allScannedObjects; // el
 		"PuristaBold",
 		"right"
 	];
-} forEach _allScannedObjects;
+} forEach (_mapData getOrDefault ["scannedObjects", []]);
 
 private _draw = (ctrlMapScale _map) < 0.3 || _drawMode == 2;
+
 // Dead players
+private _deadPlayers = if (_drawAll) then {
+	_mapData getOrDefault ["deadPlayersAll", []]
+} else {
+	_mapData getOrDefault ["deadPlayers", []]
+};
 {
 	_drawIcons pushBack [
 		"\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa",
@@ -315,11 +274,14 @@ private _draw = (ctrlMapScale _map) < 0.3 || _drawMode == 2;
 		"PuristaBold",
 		"right"
 	];
-} forEach (allPlayers select {
-	(!alive _x) && (side group _x == _side || _drawAll)
-});
+} forEach _deadPlayers;
 
 // Teammates
+private _teammates = if (_drawAll) then {
+	_mapData getOrDefault ["livePlayersAll", []]
+} else {
+	_mapData getOrDefault ["teammates", []]
+};
 {
 	_size = call WL2_fnc_iconSize;
 	if (_x == player) then {
@@ -357,15 +319,16 @@ private _draw = (ctrlMapScale _map) < 0.3 || _drawMode == 2;
 		"right"
 	];
 	_drawIconsSelectable pushBack [_x, _teammatePos];
-} forEach (allPlayers select {
-	(side group _x == _side || _drawAll) &&
-	isNull objectParent _x &&
-	alive _x && !isObjectHidden _x
-});
+} forEach _teammates;
 
 // AI in vehicle
+private _aiInVehicle = if (_drawAll) then {
+	_mapData getOrDefault ["aiInVehicleAll", []]
+} else {
+	_mapData getOrDefault ["aiInVehicle", []]
+};
 {
-	_size = call WL2_fnc_iconSize;
+	private _size = call WL2_fnc_iconSize;
 	_drawIcons pushBack [
 		call WL2_fnc_iconType,
 		[_x] call WL2_fnc_iconColor,
@@ -379,16 +342,11 @@ private _draw = (ctrlMapScale _map) < 0.3 || _drawMode == 2;
 		"PuristaBold",
 		"right"
 	];
-} forEach (allUnits select {
-	(side group (crew _x select 0) == _side || _drawAll) &&
-	alive _x && (isNull objectParent _x) &&
-	typeOf _x != "Logic" &&
-	!isPlayer _x
-});
+} forEach _aiInVehicle;
 
 // AI
 {
-	_size = call WL2_fnc_iconSize;
+	private _size = call WL2_fnc_iconSize;
 	private _aiPos = getPosASL _x;
 	_drawIcons pushBack [
 		call WL2_fnc_iconType,
@@ -404,13 +362,10 @@ private _draw = (ctrlMapScale _map) < 0.3 || _drawMode == 2;
 		"right"
 	];
 	_drawIconsSelectable pushBack [_x, _aiPos];
-} forEach ((units player) select {(alive _x) && {(isNull objectParent _x) && {_x != player}}});
+} forEach (_mapData getOrDefault ["playerAi", []]);
 
 // Draw squad lines
-private _allSquadmates = ["getAllInSquad"] call SQD_fnc_client;
-_allSquadmates = _allSquadmates apply {
-	vehicle _x;
-};
+private _allSquadmates = _mapData getOrDefault ["allSquadmates", []];
 if (WL_AssetActionTarget in _allSquadmates) then {
 	private _squadLeader = _allSquadmates select {
 		["isSquadLeader", [getPlayerID _x]] call SQD_fnc_client;
@@ -431,28 +386,10 @@ if (WL_AssetActionTarget in _allSquadmates) then {
 };
 
 // Draw vehicles
-private _teamVariable = switch (_side) do {
-	case west: { "BIS_WL_westOwnedVehicles" };
-	case east: { "BIS_WL_eastOwnedVehicles" };
-	case independent: { "BIS_WL_guerOwnedVehicles" };
-	default { "" };
-};
-private _sideVehicles = if (_teamVariable != "") then {
-	missionNamespace getVariable [_teamVariable, []];
+private _sideVehicles = if (_drawAll) then {
+	_mapData getOrDefault ["sideVehiclesAll", []]
 } else {
-	[]
-};
-private _vehiclesOnSide = vehicles select { count crew _x > 0 && side _x == _side };
-_sideVehicles = _sideVehicles + _vehiclesOnSide;
-_sideVehicles = _sideVehicles arrayIntersect _sideVehicles;
-
-if (_drawAll) then {
-	_sideVehicles = vehicles select {
-		private _targetSide = [_x] call WL2_fnc_getAssetSide;
-        (_targetSide in [west, east, independent]) &&
-		simulationEnabled _x &&
-        !(_x isKindOf "LaserTarget")
-	};
+	_mapData getOrDefault ["sideVehicles", []]
 };
 
 {
@@ -472,7 +409,7 @@ if (_drawAll) then {
 		"right"
 	];
 	_drawIconsSelectable pushBack [_x, _vehiclePos];
-} forEach (_sideVehicles select { alive _x });
+} forEach _sideVehicles;
 
 // Spectator draw
 if (_drawAll) then {
@@ -543,12 +480,12 @@ if (_drawMode == 2) then {
 			_sectorIcon,
 			_sectorColor,
 			_sectorPos,
-			50,
-			50,
+			20,
+			20,
 			0,
 			_sectorName,
 			1,
-			0.043,
+			0.05,
 			"PuristaBold",
 			"right"
 		];

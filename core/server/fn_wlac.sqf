@@ -18,7 +18,7 @@ while {!BIS_WL_missionEnd && _serverCheck} do {
 			diag_log format ["WLAC: Name: %1 UID: %2 earned %3 points within %4 seconds", name _player, _uid, _diff, _sleep];
 			"You have been flagged for cheating and your points have been reverted" remoteExec ["hint", owner _player];
 			_fundsDB set [_uid, _oldPlayerFunds];
-			(serverNamespace getVariable "fundsDatabase") call WL2_fnc_fundsDatabaseUpdate;
+			[serverNamespace getVariable "fundsDatabase", _uid] call WL2_fnc_fundsDatabaseUpdate;
 		};
 
 		serverNamespace setVariable [format ["BIS_WL_WLAC_%1", _uid], nil];

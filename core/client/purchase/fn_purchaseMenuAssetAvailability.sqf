@@ -288,7 +288,6 @@ if (_ret) then {
 					[WL2_fnc_checkInFriendlySector, [_cost, _requirements]],
 					[WL2_fnc_checkIsOrdering],
 					[WL2_fnc_checkUAVLimit, [_class]],
-					[WL2_fnc_checkCommTower, [_class]],
 					[WL2_fnc_checkAAPlacement, [_category, _class]]
 				];
 

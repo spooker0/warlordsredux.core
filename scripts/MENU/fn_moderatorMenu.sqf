@@ -76,6 +76,9 @@ _chatHistoryCopy20 ctrlShow false;
 _chatHistoryCopyAll ctrlShow false;
 
 if (_elevatedPrivilege) then {
+    if (!_isAdmin) then {
+        _timeoutTime sliderSetRange [1, 30];
+    };
     _timeoutTime ctrlAddEventHandler ["SliderPosChanged", {
         params ["_control", "_newPosition"];
         private _display = ctrlParent _control;

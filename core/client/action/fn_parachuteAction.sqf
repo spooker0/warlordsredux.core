@@ -15,6 +15,7 @@ _parachute setDir (getDir _caller);
     };
     moveOut _caller;
     deleteVehicle _parachute;
+    _caller allowDamage true;
 };
 
 _caller removeAction _actionId;

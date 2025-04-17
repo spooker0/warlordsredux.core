@@ -131,6 +131,7 @@ class CfgFunctions {
 			class handleBuyMenuKeypress {};
 			class handleChatMessages {};
 			class handleKeypress {};
+			class handlePlayerDamage {};
 			class hintHandle {};
 			class initClient {};
 			class interceptAction {};
@@ -314,7 +315,6 @@ class CfgFunctions {
 			class checkBuyRespawn {};
 			class checkCarrierLimits {};
 			class checkCollaborator {};
-			class checkCommTower {};
 			class checkDead {};
 			class checkFastTravelRespawn {};
 			class checkFastTravelSL {};

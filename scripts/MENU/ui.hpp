@@ -619,7 +619,7 @@ class MODR_Menu {
             shadow = 0;
             color[] = {1, 1, 1, 1};
             sliderPosition = 10;
-            sliderRange[] = {1, 30};
+            sliderRange[] = {1, 600};
             sliderStep = 1;
             arrowEmpty = "\A3\ui_f\data\gui\cfg\slider\arrowEmpty_ca.paa";
             arrowFull = "\A3\ui_f\data\gui\cfg\slider\arrowFull_ca.paa";
