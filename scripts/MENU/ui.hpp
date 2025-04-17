@@ -680,5 +680,17 @@ class MODR_Menu {
             sizeEx = 0.035;
             colorBackground[] = {0, 0, 0, 0.6};
         };
+
+        class MODR_ReportTable: RscListBox {
+            idc = MODR_REPORT_TABLE;
+            x = 0.38;
+            y = 0.42;
+            w = 0.57;
+            h = 0.23;
+            colorBackground[] = {0, 0, 0, 0.4};
+            font = "PuristaMedium";
+            sizeEx = 0.035;
+            rowHeight = 0.04;
+        };
     };
 };

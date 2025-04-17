@@ -70,8 +70,11 @@ class CfgFunctions {
 			class debugMenu {};
 			class execCode {};
 			class moderatorMenu {};
+			class playerDataRefresh {};
+			class playerReported {};
 			class printSystemTime {};
 			class refreshChat {};
+			class reportPlayer {};
 			class setReturnValue {};
 			class settingsMenu {};
 			class settingsMenuInit {};

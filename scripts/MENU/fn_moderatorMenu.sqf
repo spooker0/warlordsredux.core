@@ -64,6 +64,8 @@ private _chatHistoryCopy5 = _display displayCtrl MODR_CHAT_HISTORY_COPY_5;
 private _chatHistoryCopy20 = _display displayCtrl MODR_CHAT_HISTORY_COPY_20;
 private _chatHistoryCopyAll = _display displayCtrl MODR_CHAT_HISTORY_COPY_ALL;
 
+private _reportTable = _display displayCtrl MODR_REPORT_TABLE;
+
 _infoDisplay ctrlShow false;
 _timeoutReasonLabel ctrlShow false;
 _timeoutReasonEdit ctrlShow false;
@@ -74,6 +76,8 @@ _chatHistoryList ctrlShow false;
 _chatHistoryCopy5 ctrlShow false;
 _chatHistoryCopy20 ctrlShow false;
 _chatHistoryCopyAll ctrlShow false;
+
+_reportTable ctrlShow false;
 
 if (_elevatedPrivilege) then {
     if (!_isAdmin) then {
@@ -134,6 +138,25 @@ if (_elevatedPrivilege) then {
 } else {
     _playerList ctrlSetPositionH 0.9;
     _playerList ctrlCommit 0;
+
+    _timeoutButton ctrlAddEventHandler ["ButtonClick", {
+        params ["_control"];
+        private _display = ctrlParent _control;
+
+        private _playerList = _display displayCtrl MODR_PLAYER_LIST;
+        private _selectedIndex = lbCurSel _playerList;
+        private _selectedUid = _playerList lbData _selectedIndex;
+
+        private _reasonEdit = _display displayCtrl MODR_TIMEOUT_REASON;
+        private _reasonText = ctrlText _reasonEdit;
+
+        [player, _selectedUid, _reasonText] remoteExec ["MENU_fnc_reportPlayer", 2];
+
+        playSoundUI ["AddItemOk"];
+        private _selectedPlayer = [_selectedUid] call BIS_fnc_getUnitByUID;
+        private _playerName = [_selectedPlayer, true] call BIS_fnc_getName;
+        systemChat format["Reported %1 for %2", _playerName, _reasonText];
+    }];
 };
 
 _playerList ctrlAddEventHandler ["LBSelChanged", {
@@ -167,7 +190,6 @@ _playerList ctrlAddEventHandler ["LBSelChanged", {
 
         private _timeoutTime = _display displayCtrl MODR_TIMEOUT_TIME;
         private _timeoutButton = _display displayCtrl MODR_TIMEOUT_BUTTON;
-        _timeoutButton ctrlSetText format["Timeout %1 for %2 minutes", _playerName, sliderPosition _timeoutTime];
 
         private _systemTimeDisplay = [systemTimeUTC] call MENU_fnc_printSystemTime;
         private _fullDisplayString = format["[Name] %1%5[BEID] %2%5[GUID] %3%5[UTC] %4", _playerName, "Loading...", _playerGuid, _systemTimeDisplay, endl];
@@ -178,7 +200,7 @@ _playerList ctrlAddEventHandler ["LBSelChanged", {
         waitUntil {
             sleep 0.1;
             _beIdReply = uiNamespace getVariable ["MODR_returnedBeId", ""];
-            _beIdReply != "" || serverTime - _startTime > 10;
+            _beIdReply != "" || serverTime - _startTime > 3;
         };
         if (_beIdReply == "") then {
             _beIdReply = "Failed to load Battleye info...";
@@ -191,17 +213,31 @@ _playerList ctrlAddEventHandler ["LBSelChanged", {
 
         private _timeoutReasonLabel = _display displayCtrl MODR_TIMEOUT_REASON_LABEL;
         private _timeoutReasonEdit = _display displayCtrl MODR_TIMEOUT_REASON;
+        private _reportTable = _display displayCtrl MODR_REPORT_TABLE;
 
         if (_elevated) then {
             _timeoutReasonLabel ctrlShow true;
             _timeoutReasonEdit ctrlShow true;
             _timeoutTime ctrlShow true;
             _timeoutButton ctrlShow true;
+
+            _timeoutButton ctrlSetText format["Timeout %1 for %2 minutes", _playerName, sliderPosition _timeoutTime];
+
+            _reportTable ctrlShow true;
+            private _playerReports = _selectedPlayer getVariable ["WL2_playerReports", createHashMap];
+            {
+                private _reporterName = _x;
+                private _reportReason = _y;
+                private _reportId = _reportTable lbAdd _reportReason;
+                _reportTable lbSetTextRight [_reportId, _reporterName];
+            } forEach _playerReports;
         } else {
-            _timeoutReasonLabel ctrlShow false;
-            _timeoutReasonEdit ctrlShow false;
+            _timeoutReasonLabel ctrlShow true;
+            _timeoutReasonEdit ctrlShow true;
             _timeoutTime ctrlShow false;
-            _timeoutButton ctrlShow false;
+            _timeoutButton ctrlShow true;
+
+            _timeoutButton ctrlSetText format["Report %1", _playerName];
         };
     };
 }];

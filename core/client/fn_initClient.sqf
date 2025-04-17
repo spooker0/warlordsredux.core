@@ -43,23 +43,6 @@ private _uid = getPlayerUID player;
 private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
 private _isModerator = _uid in (getArray (missionConfigFile >> "moderatorIDs"));
 
-if (_isAdmin || _isModerator) then {
-	0 spawn {
-		while { !BIS_WL_missionEnd } do {
-			private _allPlayers = call BIS_fnc_listPlayers;
-			private _playerAliases = profileNamespace getVariable ["WL2_playerAliases", createHashMap];
-			{
-				private _uid = getPlayerUID _x;
-				private _existingAliases = _playerAliases getOrDefault [_uid, []];
-				_existingAliases pushBackUnique ([_x] call BIS_fnc_getName);
-				_playerAliases set [_uid, _existingAliases];
-			} forEach _allPlayers;
-			profileNamespace setVariable ["WL2_playerAliases", _playerAliases];
-			sleep 10;
-		};
-	};
-};
-
 "client" call WL2_fnc_varsInit;
 waitUntil {
 	!(isNil "BIS_WL_playerSide")
@@ -345,6 +328,7 @@ call SQD_fnc_initClient;
 call WL2_fnc_pingFixInit;
 
 0 spawn MENU_fnc_settingsMenu;
+0 spawn MENU_fnc_playerDataRefresh;
 
 missionNamespace setVariable [format ["BIS_WL2_minesDB_%1", getPlayerUID player],
 	createHashMapFromArray [
