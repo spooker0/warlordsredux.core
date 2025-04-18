@@ -125,6 +125,7 @@ class CfgFunctions {
 			class afk {};
 			class airburst {};
 			class announcer {};
+			class announcerInit {};
 			class avTerminal {};
 			class betty {};
 			class clientEH {};
@@ -151,7 +152,6 @@ class CfgFunctions {
 			class repackMagazines {};
 			class restrictedArea {};
 			class revive {};
-			class rita {};
 			class sideToFaction {};
 			class spectrumInterface {};
 			class teammatesAvailability {};

@@ -32,6 +32,5 @@ if (_start) then {
         };
     };
 } else {
-    private _charge = uiNamespace getVariable ["WL_holdChargeObject", objNull];
-    player distance _charge < 15;
+    true;
 };

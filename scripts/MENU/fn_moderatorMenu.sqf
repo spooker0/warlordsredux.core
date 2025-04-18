@@ -200,7 +200,7 @@ _playerList ctrlAddEventHandler ["LBSelChanged", {
         waitUntil {
             sleep 0.1;
             _beIdReply = uiNamespace getVariable ["MODR_returnedBeId", ""];
-            _beIdReply != "" || serverTime - _startTime > 3;
+            _beIdReply != "" || serverTime - _startTime > 10;
         };
         if (_beIdReply == "") then {
             _beIdReply = "Failed to load Battleye info...";

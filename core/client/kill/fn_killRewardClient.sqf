@@ -44,15 +44,14 @@ if (_customColor == "#de0808") then {
 	missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_AFK_TIMER];
 
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-	private _playKillSound = _settingsMap getOrDefault ["playKillSound", true];
-	if (_playKillSound) then {
-		playSoundUI ["hitmarker", 1, 1];
-		if (missionNamespace getVariable ["WL_easterEggOverride", false]) then {
-			private _killsInRow = missionNamespace getVariable ["WL_killsInRow", 0];
-			_killsInRow = _killsInRow + 1;
-			[_killsInRow] call KST_fnc_actions;
-			missionNamespace setVariable ["WL_killsInRow", _killsInRow];
-		};
+	private _hitmarkerVolume = _settingsMap getOrDefault ["hitmarkerVolume", 0.5];
+	playSoundUI ["hitmarker", _hitmarkerVolume * 2, 1];
+
+	if (missionNamespace getVariable ["WL_easterEggOverride", false]) then {
+		private _killsInRow = missionNamespace getVariable ["WL_killsInRow", 0];
+		_killsInRow = _killsInRow + 1;
+		[_killsInRow] call KST_fnc_actions;
+		missionNamespace setVariable ["WL_killsInRow", _killsInRow];
 	};
 };
 

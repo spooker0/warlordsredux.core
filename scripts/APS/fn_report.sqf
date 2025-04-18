@@ -11,6 +11,9 @@ if (vehicle player != _vehicle) exitWith {};
 private _assetApsType = _vehicle getVariable ["apsType", -1];
 if (_assetApsType == -1) exitWith {};
 
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _apsVolume = _settingsMap getOrDefault ["apsVolume", 1];
+
 private _type = switch (_vehicle getVariable "apsType") do {
 	case 2: { "Heavy APS" };
 	case 1: { "Medium APS" };
@@ -31,7 +34,7 @@ if (_assetApsType == 3) then {
 	_text = _text + format[" Charges: %1/%2", _apsAmmo, _vehicle call APS_fnc_getMaxAmmo];
 
 	if (_apsAmmo == 0 && _indicator) then {
-		playSoundUI ["a3\sounds_f\vehicles\air\noises\heli_alarm_rotor_low.wss", 1, 0.5];
+		playSoundUI ["a3\sounds_f\vehicles\air\noises\heli_alarm_rotor_low.wss", _apsVolume, 0.5];
 	};
 };
 
@@ -51,7 +54,7 @@ if (_angle < 1) then{
 };
 
 if (_indicator) then {
-	playSound"Alarm";
+	playSoundUI ["Alarm", _apsVolume];
 
 	_indicatorDanger ctrlSetText "\a3\ui_f\data\IGUI\Cfg\Radar\danger_ca.paa";
 

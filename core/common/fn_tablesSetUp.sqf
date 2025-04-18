@@ -9,6 +9,7 @@ private _killRewardHashMap = createHashMap;
 private _texturesHashMap = createHashMap;
 private _variantHashMap = createHashMap;
 private _categoryHashMap = createHashMap;
+private _containerHashMap = createHashMap;
 
 private _capValueHashMap = createHashMap;
 private _apsHashMap = createHashMap;
@@ -53,6 +54,7 @@ private _requisitionPresets = BIS_WL_purchaseListTemplate;
 				private _requisitionRearmTime = getNumber (_x >> "rearm");
 				private _requisitionKillReward = getNumber (_x >> "killReward");
 				private _requisitionTextures = getArray (_x >> "textures");
+				private _requisitionContainer = getArray (_x >> "container");
 
 				private _requisitionCapValue = getNumber (_x >> "capValue");
 				private _requisitionAps = getNumber (_x >> "aps");
@@ -111,6 +113,10 @@ private _requisitionPresets = BIS_WL_purchaseListTemplate;
 
 				if (count _requisitionTextures > 0) then {
 					_texturesHashMap set [_requisitonName, _requisitionTextures];
+				};
+
+				if (count _requisitionContainer > 0) then {
+					_containerHashMap set [_requisitonName, _requisitionContainer];
 				};
 
 				if (_requisitionCapValue != 0) then {
@@ -239,6 +245,7 @@ if (isServer) then {
 missionNamespace setVariable ["WL2_killRewards", _killRewardHashMap];
 missionNamespace setVariable ["WL2_costs", _costHashMap];
 missionNamespace setVariable ["WL2_categories", _categoryHashMap];
+missionNamespace setVariable ["WL2_container", _containerHashMap];
 
 missionNamespace setVariable ["WL2_nameOverrides", _nameHashMap];
 missionNamespace setVariable ["WL2_descriptions", _descriptionHashMap];

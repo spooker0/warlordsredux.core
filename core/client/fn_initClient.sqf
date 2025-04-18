@@ -240,7 +240,8 @@ WL_LoadingState = 11;
 WL_LoadingState = 12;
 
 ["client_init"] call BIS_fnc_endLoadingScreen;
-"Initialized" call WL2_fnc_announcer;
+
+0 spawn WL2_fnc_announcerInit;
 [toUpper localize "STR_A3_WL_popup_init"] spawn WL2_fnc_smoothText;
 
 0 spawn {

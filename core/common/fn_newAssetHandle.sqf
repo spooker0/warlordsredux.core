@@ -374,13 +374,25 @@ if (_asset isKindOf "Man") then {
 		[_asset] remoteExec ["WL2_fnc_catapultAction", 0];
 	};
 
-	if (_settingsMap getOrDefault ["spawnEmpty", false]) then {
-		if (typeOf _asset != "B_supplyCrate_F" && typeOf _asset != "O_supplyCrate_F") then {
-			if !((typeOf _asset) in (getArray (missionConfigFile >> "logisticsConfig" >> "cargoTypes" >> "Cargo"))) then {
-				clearMagazineCargoGlobal _asset;
-				clearItemCargoGlobal _asset;
-				clearWeaponCargoGlobal _asset;
+	if (typeOf _asset == "CargoNet_01_box_F") then {
+		private _containerMap = missionNamespace getVariable ["WL2_container", createHashMap];
+		private _containerItems = _containerMap getOrDefault [_assetActualType, []];
+		{
+			private _containerItemType = _x # 0;
+			private _containerItemCount = _x # 1;
+
+			private _isBackpack = _containerItemType isKindOf "Bag_Base";
+			if (_isBackpack) then {
+				_asset addBackpackCargoGlobal [_containerItemType, _containerItemCount];
+			} else {
+				_asset addItemCargoGlobal [_containerItemType, _containerItemCount];
 			};
+		} forEach _containerItems;
+	} else {
+		if (_settingsMap getOrDefault ["spawnEmpty", false]) then {
+			clearMagazineCargoGlobal _asset;
+			clearItemCargoGlobal _asset;
+			clearWeaponCargoGlobal _asset;
 		};
 	};
 

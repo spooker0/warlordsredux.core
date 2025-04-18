@@ -37,7 +37,8 @@ if (!isNull _playerVehicle) then {
 	};
 };
 
-private _rearm_possible = uiNamespace getVariable "BIS_WL_osd_rearm_possible";
+private _rearm_possible = uiNamespace getVariable ["BIS_WL_osd_rearm_possible", controlNull];
+if (isNull _rearm_possible) exitWith {};
 if !(_accessControl # 0) then {
 	private _vehicleOwner = _playerVehicle getVariable ["BIS_WL_ownerAsset", "123"];
 	private _vehicleOwnerUnit = _vehicleOwner call BIS_fnc_getUnitByUid;

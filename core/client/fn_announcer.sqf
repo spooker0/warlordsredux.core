@@ -1,21 +1,7 @@
-if (isNil "BIS_WL_soundMsgBuffer") then {
-	BIS_WL_soundMsgBuffer = [];
-	0 spawn {
-		while {!BIS_WL_missionEnd &&  {(count BIS_WL_soundMsgBuffer) > 0}} do {
-			waitUntil {sleep 0.1; count BIS_WL_soundMsgBuffer > 0};
-			_msg = BIS_WL_soundMsgBuffer # 0;
-			_length = getNumber (configFile >> "CfgSounds" >> _msg >> "duration");
-			if (_length == 0) then {_length = 2};
-			playSound (BIS_WL_soundMsgBuffer # 0);
-			BIS_WL_soundMsgBuffer deleteAt 0;
-			sleep (_length + 0.5);
-		};
-		BIS_WL_soundMsgBuffer = nil;
-	};
-};
+if (isNil "WL2_announcerQueue") exitWith {};
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-private _muteSetting = _settingsMap getOrDefault ["muteVoiceInformer", false];
-if !(_muteSetting) then {
-	BIS_WL_soundMsgBuffer pushBack format ["BIS_WL_%1_%2", _this, BIS_WL_sidesArray # ((BIS_WL_sidesArray find BIS_WL_playerSide) min 1)];
+private _announcerVolume = _settingsMap getOrDefault ["announcerVolume", 1];
+if (_announcerVolume > 0) then {
+	WL2_announcerQueue pushBack format ["BIS_WL_%1_%2", _this, BIS_WL_sidesArray # ((BIS_WL_sidesArray find BIS_WL_playerSide) min 1)];
 };

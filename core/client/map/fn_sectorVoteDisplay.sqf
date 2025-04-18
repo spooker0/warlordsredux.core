@@ -64,8 +64,10 @@ _indicatorBackground ctrlSetBackgroundColor [0, 0, 0, 0.7];
 _indicatorBackground ctrlCommit 0;
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-if !(_settingsMap getOrDefault ["muteVoiceInformer", false]) then {
+private _voteVolume = _settingsMap getOrDefault ["voteVolume", 1];
+if (_voteVolume > 0) then {
     if (_eta <= 10 && _eta >= 0) then {
-        playSoundUI ["a3\ui_f\data\sound\readout\readouthideclick1.wss", 6 - (_eta / 2)];
+        private _volume = 6 - (_eta / 2);
+        playSoundUI ["a3\ui_f\data\sound\readout\readouthideclick1.wss", _volume * _voteVolume];
     };
 };

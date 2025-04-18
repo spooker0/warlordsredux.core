@@ -7,13 +7,10 @@ player addEventHandler ["HandleRating", {
 
 player addEventHandler ["GetInMan", {
 	params ["_unit", "_role", "_vehicle", "_turret"];
-	if ((typeOf _vehicle == "B_Plane_Fighter_01_F") || {(typeOf _vehicle == "B_Plane_CAS_01_dynamicLoadout_F") || {(typeOf _vehicle == "B_Heli_Attack_01_dynamicLoadout_F") || {(typeOf _vehicle == "B_T_VTOL_01_armed_F") || {(typeOf _vehicle == "B_T_VTOL_01_vehicle_F") || {(typeOf _vehicle == "B_T_VTOL_01_infantry_F")}}}}}) then  {
+	if (_vehicle isKindOf "Air") then {
 		0 spawn WL2_fnc_betty;
 	};
-	if ((typeOf _vehicle == "O_Plane_Fighter_02_F") || {(typeOf _vehicle == "O_Plane_CAS_02_dynamicLoadout_F") || {(typeOf _vehicle == "O_Heli_Attack_02_dynamicLoadout_F") || {(typeOf _vehicle == "O_T_VTOL_02_vehicle_dynamicLoadout_F")}}}) then {
-		0 spawn WL2_fnc_rita;
-	};
-	if ((_vehicle getVariable "BIS_WL_ownerAsset") == (getPlayerUID player)) then {
+	if ((_vehicle getVariable ["BIS_WL_ownerAsset", "123"]) == (getPlayerUID player)) then {
 		_vehicle setVariable ["BIS_WL_lastActive", 0];
 	};
 	[_vehicle] spawn WL2_fnc_drawAssetName;
