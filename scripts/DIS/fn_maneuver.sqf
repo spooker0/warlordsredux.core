@@ -22,8 +22,8 @@ private _originalPosition = getPosASL _unit;
         };
 
         // Notching mechanic
-        private _notchResult = [_originalTarget, _projectile, _unit] call DIS_fnc_getNotchResult;
-        if (_notchResult) then {
+        private _notchResult = [_originalTarget, _unit, _projectile] call DIS_fnc_getNotchResult;
+        if (_notchResult == 4) then {
             _projectile setVariable ["DIS_notched", true];
         } else {
             // If not already notched and not notching
@@ -88,6 +88,7 @@ while { alive _projectile } do {
 
     private _notched = _projectile getVariable ["DIS_notched", false];
     if (_notched) then {
+        _projectile setAngularVelocityModelSpace [0, 0, 0];
         sleep 0.001;
         continue;
     };
@@ -112,16 +113,11 @@ while { alive _projectile } do {
         private _belowTargetATL = _projectileHeightATL < _targetHeightATL;
         private _groundAvoid = !(_intersectPosition isEqualTo [0, 0, 0]) && _belowTargetATL;
 
-        private _notched = _projectile getVariable ["DIS_notched", false];
-        if (_notched) then {
-            _projectile setAngularVelocityModelSpace [0, 0, 0];
+        if (_groundAvoid) then {
+            _projectile setAngularVelocityModelSpace [-30 * (_terrainTest -_distanceToGround) / _terrainTest, _angularVector # 1, _angularVector # 2];
         } else {
-            if (_groundAvoid) then {
-                _projectile setAngularVelocityModelSpace [-30 * (_terrainTest -_distanceToGround) / _terrainTest, _angularVector # 1, _angularVector # 2];
-            } else {
-                private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
-                _projectile setAngularVelocityModelSpace _newAngularVector;
-            };
+            private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
+            _projectile setAngularVelocityModelSpace _newAngularVector;
         };
 
         private _vectorUp = vectorUp _projectile;

@@ -77,7 +77,6 @@ private _positionY = 0.03;
     private _item = _display ctrlCreate ["MENU_MenuItemButton", -1, _controlGroup];
     _item ctrlSetPosition [_buttonPositionX, _positionY, 0.17, 0.07];
     _item ctrlSetText _text;
-    _item ctrlCommit 0;
     _item ctrlAddEventHandler ["ButtonClick", _x # 1];
 
     _buttonPositionX = _buttonPositionX + 0.18;
@@ -100,14 +99,12 @@ _positionY = _positionY + 0.08;
             _item ctrlSetPosition [0.05, _positionY + 0.02, 0.9, _itemHeight - 0.02];
             _positionY = _positionY + _itemHeight;
             _item ctrlSetStructuredText parseText format ["<t size='1.2' color='#00cccc' align='center'>%1</t>", _text];
-            _item ctrlCommit 0;
         };
         case "slider": {
             private _itemHeight = 0.06;
             private _textItem = _display ctrlCreate ["MENU_MenuItemLabel", -1, _controlGroup];
             _textItem ctrlSetPosition [0.05, _positionY + 0.01, 0.3, _itemHeight - 0.02];
             _textItem ctrlSetStructuredText parseText format ["<t size='1'>%1</t>", _text];
-            _textItem ctrlCommit 0;
 
             private _currentPosition = _settingsMap getOrDefault [_params # 4, _params # 3];
 
@@ -116,12 +113,10 @@ _positionY = _positionY + 0.08;
             _sliderItem sliderSetRange [_params # 0, _params # 1];
             _sliderItem sliderSetSpeed [_params # 2, _params # 2, _params # 2];
             _sliderItem sliderSetPosition _currentPosition;
-            _sliderItem ctrlCommit 0;
 
             private _entryItem = _display ctrlCreate ["MENU_MenuItemSliderEntry", -1, _controlGroup];
             _entryItem ctrlSetPosition [0.85, _positionY + 0.01, 0.1, _itemHeight - 0.02];
             _entryItem ctrlSetText str _currentPosition;
-            _entryItem ctrlCommit 0;
 
             _sliderItem setVariable ["WL2_sliderEntry", _entryItem];
             _sliderItem setVariable ["WL2_sliderParams", _params];
@@ -180,12 +175,10 @@ _positionY = _positionY + 0.08;
 
             private _checkboxItem = _display ctrlCreate ["MENU_MenuItemCheckbox", -1, _controlGroup];
             _checkboxItem ctrlSetPosition [0.05, _positionY, (_itemHeight - 0.02) * 3 / 4, _itemHeight - 0.02];
-            _checkboxItem ctrlCommit 0;
 
             private _textItem = _display ctrlCreate ["MENU_MenuItemLabel", -1, _controlGroup];
             _textItem ctrlSetPosition [0.1, _positionY + 0.003, 0.7, _itemHeight - 0.01];
             _textItem ctrlSetStructuredText parseText format ["<t size='1'>%1</t>", _text];
-            _textItem ctrlCommit 0;
 
             private _currentSetting = _settingsMap getOrDefault [_params # 0, _params # 1];
             _checkboxItem cbSetChecked _currentSetting;
@@ -245,16 +238,21 @@ _positionY = _positionY + 0.08;
     ["slider", "Cockpit: Altitude", [0, 1, 0.1, 0.3, "rwr2"]],
     ["slider", "Cockpit: Fuel", [0, 1, 0.1, 0.3, "rwr3"]],
     ["slider", "Cockpit: Targeting", [0, 1, 0.1, 1, "rwr4"]],
+    ["category", "Adjustable settings"],
+    ["slider", "Parachute auto deploy height", [0, 500, 5, 100, "parachuteAutoDeployHeight"]],
+    ["slider", "Announcer text size", [0.1, 1, 0.1, 0.5, "announcerTextSize"]],
     ["category", "General settings"],
     ["checkbox", "Disable 3rd person view (2x reward)", ["3rdPersonDisabled", true, 360]],
     ["checkbox", "Autonomous mode off by default", ["enableAuto", false]],
-    ["checkbox", "Small announcer text", ["smallAnnouncerText", true]],
     ["checkbox", "Spawn vehicles with empty inventory", ["spawnEmpty", false]],
     ["checkbox", "Disable missile cameras", ["disableMissileCameras", false]],
     ["checkbox", "Show user-defined markers", ["showMarkers", true]],
     ["checkbox", "No voice speaker", ["noVoiceSpeaker", false]],
-    ["checkbox", "Mute task notifications", ["muteTaskNotifications", false]],
-    ["checkbox", "Parachute auto deploy", ["parachuteAutoDeploy", true]]
+    ["checkbox", "Mute task notifications", ["muteTaskNotifications", false]]
 ];
+
+{
+    _x ctrlCommit 0;
+} forEach (allControls _controlGroup);
 
 _controlGroup ctrlShow true;

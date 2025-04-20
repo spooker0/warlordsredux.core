@@ -1,14 +1,30 @@
 params ["_asset", "_caller", "_slingloading"];
+if (!alive _asset) exitWith {
+    [false, [], [0, 0, 0]];
+};
+
 private _isLoading = _asset getVariable ["WL2_loadingAsset", false];
+if (_isLoading) exitWith {
+    [false, [], [0, 0, 0]];
+};
+
 private _isPointing = cursorObject == _asset || _slingloading;
+if (!_isPointing) exitWith {
+    [false, [], [0, 0, 0]];
+};
+
 private _hasAccess = ([_asset, _caller, "full"] call WL2_fnc_accessControl) # 0;
+if (!_hasAccess) exitWith {
+    [false, [], [0, 0, 0]];
+};
+
 private _callerID = getPlayerID _caller;
 private _loadedItem = _asset getVariable ["WL2_loadedItem", objNull];
 private _loadedVehicles = getVehicleCargo _asset;
 private _slingLoadedVehicle = getSlingLoad _asset;
 private _hasLoadedItem = !isNull _loadedItem || count _loadedVehicles > 0 || !isNull _slingLoadedVehicle;
 
-private _nearLoadableEntities = (_asset nearEntities 30) select {
+private _nearLoadableEntities = (_asset nearObjects 30) select {
     (isNull attachedTo _x) && (count ropesAttachedTo _x == 0);
 };
 private _loadableHashmap = missionNamespace getVariable ["WL2_loadable", createHashMap];
@@ -38,4 +54,4 @@ private _offset = if (_hasNearLoadable) then {
 // 0: eligible
 // 1: near loadables
 // 2: offset
-[_isPointing && _hasAccess && !_isLoading && alive _asset && (_hasLoadedItem || _hasNearLoadable), _sortedNearLoadable, _offset];
+[_hasLoadedItem || _hasNearLoadable, _sortedNearLoadable, _offset];

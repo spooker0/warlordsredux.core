@@ -150,6 +150,7 @@ class CfgFunctions {
 			class prepareRappel {};
 			class prompt {};
 			class repackMagazines {};
+			class resetVehicle {};
 			class restrictedArea {};
 			class revive {};
 			class sideToFaction {};

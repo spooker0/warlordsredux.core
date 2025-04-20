@@ -62,10 +62,14 @@ BIS_WL_enemySide spawn {
 		[_target, _currentOwner] call WL2_fnc_sectorMarkerUpdate;
 
 		_t = serverTime + 3;
-		waitUntil {sleep WL_TIMEOUT_SHORT; serverTime > _t || {(_target getVariable "BIS_WL_owner") == BIS_WL_playerSide || {((missionNamespace getVariable [_varName, ""]) != "")}}};
+		waitUntil {
+			sleep WL_TIMEOUT_SHORT;
+			serverTime > _t ||
+			(_target getVariable ["BIS_WL_owner", sideUnknown]) == BIS_WL_playerSide ||
+			(missionNamespace getVariable [_varName, ""]) != "";
+		};
 
-		if ((missionNamespace getVariable [_varName, ""]) != "") then {
-			missionNamespace setVariable [_varName, ""];
+		if ((missionNamespace getVariable [_varName, ""]) != "" && _currentOwner != _this) then {
 			[toUpper format [localize "STR_A3_WL_popup_voting_reset_user", _this call WL2_fnc_sideToFaction]] spawn WL2_fnc_SmoothText;
 			missionNamespace setVariable [_varName, ""];
 		};

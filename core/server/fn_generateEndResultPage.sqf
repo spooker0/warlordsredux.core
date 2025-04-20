@@ -30,6 +30,7 @@ private _assetUses = [];
     _assetCost = _assetCost max 1;
 
     if (_buys > 0) then {
+        _buys = _buys max 1;
         private _kvr = _killValue / _assetCost / _buys * 100;
         private _actualTypeName = [objNull, _asset] call WL2_fnc_getAssetTypeName;
         private _color = "#ffffff";

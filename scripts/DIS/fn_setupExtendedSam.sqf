@@ -58,7 +58,7 @@ private _waitActionId = _asset addAction [
 ];
 
 sleep 120;
-_assetCrew removeAction _waitActionId;
+_asset removeAction _waitActionId;
 
 private _actionID = _asset addAction [
 	"<t color='#00ffcc'>Extended SAM Configuration</t>",

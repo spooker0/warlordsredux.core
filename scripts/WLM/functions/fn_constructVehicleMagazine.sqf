@@ -22,6 +22,7 @@ _magazineSelectBoxes = [];
 {
     ctrlDelete _x;
 } forEach (allControls _ctrlGroup);
+_ctrlGroup ctrlShow false;
 
 // Save magazines
 private _savedMagazines = _asset getVariable ["WLM_savedMagazines", []];
@@ -100,7 +101,6 @@ private _assetAmmoOverrides = _ammoOverridesHashMap getOrDefault [_assetActualTy
     _turretLabel ctrlSetFontHeight 0.06;
     _turretLabel ctrlSetFont "PuristaMedium";
     _turretLabel ctrlSetPosition [0.02, _yPos  - 0.1, 0.7, 0.035];
-    _turretLabel ctrlCommit 0;
 
     {
         private _magazinesInWeapon = _x # 0;
@@ -112,7 +112,6 @@ private _assetAmmoOverrides = _ammoOverridesHashMap getOrDefault [_assetActualTy
         private _weaponName = getText (configFile >> "CfgWeapons" >> _weaponClass >> "displayName");
         _weaponLabel ctrlSetFont "PuristaMedium";
         _weaponLabel ctrlSetPosition [0.04, _yPos  - 0.04, 0.7, 0.035];
-        _weaponLabel ctrlCommit 0;
 
         private _defaultAmmoCount = 0;
         {
@@ -163,7 +162,6 @@ private _assetAmmoOverrides = _ammoOverridesHashMap getOrDefault [_assetActualTy
                         _actualAmmoType # 1;
                     };
                     private _selectBoxItem = _selectBox lbAdd _magazineName;
-                    _selectBox lbSetTooltip [_selectBoxItem, [_x] call WLM_fnc_getMagazineTooltip];
                     _selectBox lbSetData [_selectBoxItem, _x];
 
                     if (_x == _magazineClass) then {
@@ -201,6 +199,19 @@ private _assetAmmoOverrides = _ammoOverridesHashMap getOrDefault [_assetActualTy
             _selectBox ctrlSetPosition [_xPos, _yPos, _textWidth, 0.035];
 
             _xPos = _xPos + _textWidth + 0.02;
+
+            _selectBox ctrlAddEventHandler ["SetFocus", {
+                params ["_control", "_lbCurSel"];
+
+                for "_i" from 0 to (lbSize _control - 1) do {
+                    private _selectBoxItem = _control lbData _i;
+                    if (_selectBoxItem == "EMPTY") then {
+                        continue;
+                    };
+                    private _tooltip = [_selectBoxItem] call WLM_fnc_getMagazineTooltip;
+                    _control lbSetTooltip [_i, _tooltip];
+                };
+            }];
 
             _selectBox ctrlAddEventHandler ["LBSelChanged", {
                 params ["_control", "_lbCurSel", "_lbSelection"];
@@ -251,7 +262,6 @@ private _assetAmmoOverrides = _ammoOverridesHashMap getOrDefault [_assetActualTy
                 0 spawn WLM_fnc_constructVehicleMagazine;
             }];
 
-            _selectBox ctrlCommit 0;
             _magazineSelectBoxes pushBack [_selectBox, _turretPath];
 
             _index = _index + 1;
@@ -273,6 +283,10 @@ private _assetAmmoOverrides = _ammoOverridesHashMap getOrDefault [_assetActualTy
 private _emptyCtrl = _display ctrlCreate ["RscText", -1, _ctrlGroup];
 _emptyCtrl ctrlSetText "";
 _emptyCtrl ctrlSetPosition [0, _yPos, 0.01, 0.01];
-_emptyCtrl ctrlCommit 0;
+
+{
+    _x ctrlCommit 0;
+} forEach (allControls _ctrlGroup);
+_ctrlGroup ctrlShow true;
 
 uiNamespace setVariable ["WLM_magazineSelectBoxes", _magazineSelectBoxes];

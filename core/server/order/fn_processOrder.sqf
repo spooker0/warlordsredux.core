@@ -3,6 +3,7 @@
 params ["_asset", "_sender", "_orderedClass"];
 
 private _side = side group _sender;
+private _owner = owner _sender;
 
 private _currentSector = BIS_WL_allSectors select {
 	_asset inArea (_x getVariable "objectAreaComplete") &&
@@ -21,6 +22,11 @@ if (count _currentSector == 0) then {
 		private _forwardBaseSupplies = _forwardBase getVariable ["WL2_forwardBaseSupplies", 0];
 		private _costMap = missionNamespace getVariable ["WL2_costs", createHashMap];
 		private _cost = _costMap getOrDefault [_orderedClass, 0];
+		if (_cost > _forwardBaseSupplies) exitWith {
+			deleteVehicle _asset;
+			["Not enough supplies in forward base."] remoteExec ["systemChat", _sender];
+			_sender setVariable ["BIS_WL_isOrdering", false, [2, _owner]];
+		};
 		_forwardBase setVariable ["WL2_forwardBaseSupplies", _forwardBaseSupplies - _cost, true];
 	};
 };
@@ -192,7 +198,6 @@ _asset setVariable ["WLM_savedDefaultMags", _defaultMags, true];
 
 _asset lock false;
 
-private _owner = owner _sender;
 private _ownerUid = getPlayerUID _sender;
 if (_ownerUid != "") then {
 	_asset setVariable ["BIS_WL_ownerAsset", _ownerUid, true];

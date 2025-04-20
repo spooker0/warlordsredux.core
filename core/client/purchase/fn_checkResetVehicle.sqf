@@ -1,34 +1,20 @@
 #include "..\..\warlords_constants.inc"
 
-private _vehicle = cursorObject;
-if (isNull _vehicle) exitWith {
-    [false, "Please point at a valid vehicle."];
+private _vehicles = (nearestObjects [player, [], 20, true]) select {
+    alive _x;
+} select {
+    (_x getVariable ["WL2_accessControl", -2]) != -2;
+} select {
+    !(_x getVariable ["WL2_transporting", false]);
+} select {
+    !(_x isKindOf "Man");
+} select {
+    private _access = [_x, player, "driver"] call WL2_fnc_accessControl;
+    _access # 0;
 };
 
-private _outOfRange = player distance2D _vehicle > 15;
-if (_outOfRange) exitWith {
-    [false, "Please point at a vehicle within 15 meters."];
-};
-
-private _accessControl = _vehicle getVariable ["WL2_accessControl", -2];
-private _hasNoLock = _accessControl == -2;
-if (_hasNoLock) exitWith {
-    [false, "Please point at a valid vehicle."];
-};
-
-private _isTransporting = _vehicle getVariable ["WL2_transporting", false];
-if (_isTransporting) exitWith {
-    [false, "Please point at a valid vehicle."];
-};
-
-private _isMan = _vehicle isKindOf "Man";
-if (_isMan) exitWith {
-    [false, "Please point at a valid vehicle."];
-};
-
-private _access = [_vehicle, player, "driver"] call WL2_fnc_accessControl;
-if !(_access # 0) exitWith {
-    [false, format ["You do not have access to this vehicle. %1", _access # 1]];
+if (count _vehicles == 0) exitWith {
+    [false, "No valid, accessible vehicles within 20 meters."];
 };
 
 [true, ""];

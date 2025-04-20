@@ -3,13 +3,13 @@
 params ["_originalPosition", "_limitDistance", "_ignoreSector", "_asset"];
 
 if (vehicle player != player) exitWith {
-    [true, "player is in vehicle"]
+    [true, "Player is in vehicle."];
 };
 if (!alive player || lifeState player == "INCAPACITATED") exitWith {
-    [true, "player is dead"]
+    [true, "Player is dead."];
 };
 if ((_originalPosition distance2D _asset) > _limitDistance) exitWith {
-    [true, "distance to target is too far"]
+    [true, "Moved too far from original position."];
 };
 
 private _sectors = (BIS_WL_sectorsArray # 0) select {
@@ -23,7 +23,7 @@ private _forwardBases = _potentialBases select {
 private _inRange = count _forwardBases > 0 || count _sectors > 0;
 
 if (!_inRange && !_ignoreSector) exitWith {
-    [true, "target is not in a sector"]
+    [true, "Asset must be within a sector or forward base."];
 };
 
 private _sector = if (count _sectors > 0) then {
@@ -50,7 +50,7 @@ private _nearbyEnemies = if (_isInHomeBase || _ignoreSector) then {
     count _enemiesNearPlayer > 0
 };
 if (_nearbyEnemies) exitWith {
-    [true, "enemies are nearby"]
+    [true, "Enemies are nearby."];
 };
 
 // any sector regardless
@@ -75,7 +75,7 @@ private _isInvalidPosition = if (_asset inArea _sectorStronghold || count _forwa
     };
 };
 if (_isInvalidPosition) exitWith {
-    [true, "target is in an invalid position"]
+    [true, "Asset is in an invalid position."];
 };
 
 [false, ""]

@@ -26,6 +26,32 @@ _asset setVariable ["WLM_ammoCargo", 0];
 private _appearanceDefaults = profileNamespace getVariable ["WLM_appearanceDefaults", createHashmap];
 private _assetAppearanceDefaults = _appearanceDefaults getOrDefault [_orderedClass, createHashmap];
 
+uiNamespace setVariable ["WL2_vehicleOrderAsset", _asset];
+private _drawRestrictionId = addMissionEventHandler ["Draw3D", {
+	private _asset = uiNamespace getVariable ["WL2_vehicleOrderAsset", objNull];
+	if (!alive _asset) exitWith {};
+	if (cameraOn distance _asset > 50) exitWith {};
+	private _restriction = _asset getVariable ["WL2_vehicleOrderError", ""];
+	if (_restriction == "") exitWith {};
+
+	drawIcon3D [
+        "\a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca.paa",
+        [1, 0, 0, 1],
+        _asset modelToWorld [0, 0, 1],
+        0.8,
+		0.8,
+        0,
+        _restriction,
+        true,
+        0.035,
+        "TahomaB",
+        "center",
+        false,
+		0,
+		0.01
+    ];
+}];
+
 private _camo = _assetAppearanceDefaults getOrDefault ["camo", createHashmap];
 if (count _camo == 0) then {
     private _textureHashmap = missionNamespace getVariable ["WL2_textures", createHashMap];
@@ -85,17 +111,17 @@ WL_DeploymentEnd = false;
             detach _asset;
 
             if (inputAction "prevAction" > 0) then {
-                _asset setDir (direction _asset - 5);
+                _asset setDir (direction _asset - 15);
             };
             if (inputAction "nextAction" > 0) then {
-                _asset setDir (direction _asset + 5);
+                _asset setDir (direction _asset + 15);
             };
         } else {
             if (inputAction "prevAction" > 0) then {
-                _directionOffset = _directionOffset - 5;
+                _directionOffset = _directionOffset - 15;
             };
             if (inputAction "nextAction" > 0) then {
-                _directionOffset = _directionOffset + 5;
+                _directionOffset = _directionOffset + 15;
             };
         };
 
@@ -138,9 +164,9 @@ WL_DeploymentEnd = false;
             _lastTime = serverTime;
             private _cancel = [_originalPosition, _range, _ignoreSector, _asset] call WL2_fnc_cancelVehicleOrder;
             if (_cancel # 0) then {
-                systemChat format ["Deployment cancelled: %1.", _cancel # 1];
-                WL_DeploymentSuccess = false;
-                break;
+                _asset setVariable ["WL2_vehicleOrderError", _cancel # 1];
+            } else {
+                _asset setVariable ["WL2_vehicleOrderError", ""];
             };
         };
 
@@ -171,6 +197,7 @@ private _canStillOrderVehicle = !(_finalCancel # 0);
 
 detach _asset;
 deleteVehicle _asset;
+removeMissionEventHandler ["Draw3D", _drawRestrictionId];
 
 [player, "assembly", false] call WL2_fnc_hintHandle;
 

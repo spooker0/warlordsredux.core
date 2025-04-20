@@ -8,15 +8,13 @@ private _parachuteActionId = _unit addAction [
 ];
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-private _parachuteAutoDeploy = _settingsMap getOrDefault ["parachuteAutoDeploy", true];
+private _parachuteAutoDeployHeight = _settingsMap getOrDefault ["parachuteAutoDeployHeight", 100];
 waitUntil {
-    sleep 0.2;
-    private _isBelowThreshold = if (_parachuteAutoDeploy || !(isPlayer _unit)) then {
-        (getPosATL _unit # 2) < 100 || (getPosASL _unit # 2) < 100;
-    } else {
-        isTouchingGround (vehicle _unit)
-    };
-    !alive _unit || _isBelowThreshold || vehicle _unit != _unit;
+    sleep 0.01;
+    (getPosATL _unit # 2) < _parachuteAutoDeployHeight ||
+    (getPosASL _unit # 2) < _parachuteAutoDeployHeight ||
+    isTouchingGround (vehicle _unit) ||
+    !alive _unit || vehicle _unit != _unit;
 };
 
 _unit removeAction _parachuteActionId;

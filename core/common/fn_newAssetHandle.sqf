@@ -214,7 +214,7 @@ if (_asset isKindOf "Man") then {
 			[_asset] remoteExec ["WL2_fnc_slingAddAction", 0, true];
 		};
 
-		case "VirtualReammoBox_camonet_F": {
+		case "RuggedTerminal_01_F": {
 			[_asset] remoteExec ["WL2_fnc_setupForwardBaseAction", 0, true];
 		};
 
@@ -374,7 +374,7 @@ if (_asset isKindOf "Man") then {
 		[_asset] remoteExec ["WL2_fnc_catapultAction", 0];
 	};
 
-	if (typeOf _asset == "CargoNet_01_box_F") then {
+	if (typeOf _asset == "VirtualReammoBox_camonet_F") then {
 		private _containerMap = missionNamespace getVariable ["WL2_container", createHashMap];
 		private _containerItems = _containerMap getOrDefault [_assetActualType, []];
 		{

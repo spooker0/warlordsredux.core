@@ -50,3 +50,4 @@ _unit addMagazines ["HandGrenade", 2];
 _unit addMagazines ["SmokeShell", 1];
 _unit addItem "FirstAidKit";
 _unit addItem "FirstAidKit";
+_unit setUnitTrait ["loadCoef", 0.8];

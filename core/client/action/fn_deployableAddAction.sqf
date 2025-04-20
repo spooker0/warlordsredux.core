@@ -13,25 +13,17 @@ private _deployActionId = _asset addAction [
             playSound "AddItemFailed";
         };
 
+        private _eligibilityQuery = [_asset, _caller, false] call WL2_fnc_deployableEligibility;
         _asset setVariable ["WL2_loadingAsset", true, true];
 
         private _assetLoadedItem = _asset getVariable ["WL2_loadedItem", objNull];
         if (isNull _assetLoadedItem) then {
-            private _eligibilityQuery = [_asset, _caller, false] call WL2_fnc_deployableEligibility;
             private _nearLoadableEntities = _eligibilityQuery # 1;
-
             if (count _nearLoadableEntities > 0) then {
                 ['TaskLoadDeployable'] call WLT_fnc_taskComplete;
                 private _assetToLoad = _nearLoadableEntities select 0;
 
-                private _offset = if ((_asset canVehicleCargo _assetToLoad) # 0) then {
-                    _asset setVehicleCargo _assetToLoad;
-                    private _offset = _asset getRelPos _assetToLoad;
-                    objNull setVehicleCargo _assetToLoad;
-                    _offset;
-                } else {
-                    _eligibilityQuery # 2;
-                };
+                private _offset = _eligibilityQuery # 2;
 
                 [true, [_asset, _assetToLoad, _offset]] remoteExec ["WL2_fnc_attachDetach", _assetToLoad];
             };
@@ -43,7 +35,7 @@ private _deployActionId = _asset addAction [
                 private _orderedClass = _assetLoadedItem getVariable ["WL2_orderedClass", _assetLoadedItemClass];
                 private _distanceToVehicle = player distance2D _asset;
                 private _offset = [0, _distanceToVehicle, 0];
-                private _deploymentResult = [_assetLoadedItemClass, _orderedClass, _offset, 10, true, _asset] call WL2_fnc_deployment;
+                private _deploymentResult = [_assetLoadedItemClass, _orderedClass, _offset, 30, true, _asset] call WL2_fnc_deployment;
 
                 if !(_deploymentResult # 0) exitWith {
                     playSound "AddItemFailed";

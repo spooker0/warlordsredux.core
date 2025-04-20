@@ -7,7 +7,7 @@ player addEventHandler ["HandleRating", {
 
 player addEventHandler ["GetInMan", {
 	params ["_unit", "_role", "_vehicle", "_turret"];
-	if (_vehicle isKindOf "Air") then {
+	if (_vehicle isKindOf "Air" && typeof _vehicle != "Steerable_Parachute_F") then {
 		0 spawn WL2_fnc_betty;
 	};
 	if ((_vehicle getVariable ["BIS_WL_ownerAsset", "123"]) == (getPlayerUID player)) then {
@@ -77,6 +77,11 @@ player addEventHandler ["HandleDamage", {
 
 player addEventHandler ["GetOutMan", {
 	params ["_unit", "_role", "_vehicle", "_turret", "_isEject"];
+	[_unit] spawn {
+		params ["_unit"];
+		sleep 5;
+		_unit allowDamage true;
+	};
 	if (((_vehicle getVariable "BIS_WL_ownerAsset") == (getPlayerUID player)) && (pricehash getOrDefault [typeOf _vehicle, 300] <= 200)) then {
 		_vehicle setVariable ["BIS_WL_lastActive", serverTime + 600];
 	};

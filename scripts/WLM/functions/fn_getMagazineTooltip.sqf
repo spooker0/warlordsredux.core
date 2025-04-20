@@ -1,15 +1,7 @@
 params ["_magazine"];
 
-private _magazineTooltipCache = uiNamespace getVariable ["WLM_magazineTooltipCache", createHashMap];
-
 private _asset = uiNamespace getVariable ["WLM_asset", objNull];
 private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
-private _cachedAssetType = uiNamespace getVariable ["WLM_magazineTooltipCacheAssetType", ""];
-
-private _cacheResponse = _magazineTooltipCache getOrDefault [_magazine, ""];
-if (_cachedAssetType == _assetActualType && _cacheResponse != "") exitWith {
-    _cacheResponse;
-};
 
 private _magazineName = [_magazine] call WL2_fnc_getMagazineName;
 private _magazineConfig = configFile >> "CfgMagazines" >> _magazine;
@@ -226,7 +218,6 @@ if (count _ammoAPSConfig > 0) then {
     _magDesc append _magDescAPS;
 };
 
-
 private _magDescFinal = [];
 {
     if (_x # 0 == "break") then {
@@ -260,7 +251,4 @@ private _magazineDescription = "";
     };
 } forEach _magDescFinal;
 
-private _return = _magazineDescription;
-_magazineTooltipCache set [_magazine, _return];
-uiNamespace setVariable ["WLM_magazineTooltipCache", _magazineTooltipCache];
-_return;
+_magazineDescription;

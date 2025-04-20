@@ -47,29 +47,31 @@ if (count BIS_onScreenMessagesVisible >= _maxLines) then {
 
 BIS_onScreenMessagesVisible pushBack _messageID;
 
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _announcerTextSize = _settingsMap getOrDefault ["announcerTextSize", 1];
+_announcerTextSize = linearConversion [0.1, 1, _announcerTextSize, 0.5, 1, true];
+private _boxHeight = _hDef * (_announcerTextSize / (25 call WL2_fnc_purchaseMenuGetUIScale));
+
 if (count BIS_onScreenMessagesVisible > 1) then {
 	{
-		_ctrlID = 9990000 + _x;
-		_ctrl = (findDisplay 46) displayCtrl _ctrlID;
-		waitUntil {ctrlCommitted _ctrl || {ctrlFade _ctrl > 0}};
-		_ctrl ctrlSetPosition [_xDef, ((ctrlPosition _ctrl) # 1) + (_hDef / 25), _wDef, _hDef / 25];
+		private _ctrlID = 9990000 + _x;
+		private _ctrl = (findDisplay 46) displayCtrl _ctrlID;
+		waitUntil {
+			ctrlCommitted _ctrl || ctrlFade _ctrl > 0
+		};
+
+		private _boxPositionY = ((ctrlPosition _ctrl) # 1) + _boxHeight;
+		_ctrl ctrlSetPosition [_xDef, _boxPositionY, _wDef, _boxHeight];
 		_ctrl ctrlCommit 0.25;
 	} forEach (BIS_onScreenMessagesVisible - [_messageID]);
 };
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-private _useSmallText = _settingsMap getOrDefault ["smallAnnouncerText", true];
-private _announcerPositionRatio = if (_useSmallText) then { 8 } else { 4 };
-private _announcerSizeRatio = if (_useSmallText) then {
-	30 call WL2_fnc_purchaseMenuGetUIScale;
-} else {
-	23 call WL2_fnc_purchaseMenuGetUIScale
-};
+private _boxPositionY = _yDef + _boxHeight;
 
-_box ctrlSetPosition [_xDef, _yDef + (_hDef / _announcerPositionRatio), _wDef, _hDef / _announcerSizeRatio];
+_box ctrlSetPosition [_xDef, _boxPositionY, _wDef, _boxHeight];
 _box ctrlSetBackgroundColor [0, 0, 0, 0];
 _box ctrlSetTextColor _color;
-_box ctrlSetFontHeight (_hDef / _announcerSizeRatio);
+_box ctrlSetFontHeight _boxHeight;
 _box ctrlCommit 0;
 
 _textArr = toArray _text;
