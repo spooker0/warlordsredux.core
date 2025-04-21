@@ -62,5 +62,6 @@ switch (_locality) do {
 		WL_SpectrumInterface = false;
 		WL_IsSpectator = false;
 		WL_IsReplaying = false;
+		BIS_WL_highlightedSector = objNull;
 	};
 };

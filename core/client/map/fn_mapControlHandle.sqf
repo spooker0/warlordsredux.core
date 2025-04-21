@@ -1,34 +1,9 @@
 #include "..\..\warlords_constants.inc"
 
-BIS_WL_highlightedSector = objNull;
-
-addMissionEventHandler ["Map", {
-	BIS_WL_highlightedSector = objNull;
-	BIS_WL_hoverSamplePlayed = false;
-}];
-
-while {!BIS_WL_missionEnd} do {
-	if (time == 0) then {
-		if (isMultiplayer) then {
-			if (isServer) then {
-				waitUntil {!isNull (findDisplay 52)};
-				uiNamespace setVariable ["BIS_WL_mapControl", (findDisplay 52) displayCtrl 51];
-			} else {
-				waitUntil {!isNull (findDisplay 53)};
-				uiNamespace setVariable ["BIS_WL_mapControl", (findDisplay 53) displayCtrl 51];
-			};
-		} else {
-			waitUntil {!isNull (findDisplay 37) || {time > 0}};
-			if (time > 0) exitWith {uiNamespace setVariable ["BIS_WL_mapControl", (findDisplay 52) displayCtrl 54]};
-			uiNamespace setVariable ["BIS_WL_mapControl", (findDisplay 37) displayCtrl 51];
-		};
-	} else {
-		waitUntil {!isNull (findDisplay 12) || {!isNull (findDisplay 160)}};
-		if !(isNull (findDisplay 12)) then {
-			uiNamespace setVariable ["BIS_WL_mapControl", (findDisplay 12) displayCtrl 51];
-		} else {
-			uiNamespace setVariable ["BIS_WL_mapControl", (findDisplay 160) displayCtrl 51];
-		};
+while { !BIS_WL_missionEnd } do {
+	if (isNull WL_CONTROL_MAP) then {
+		uiSleep 0.01;
+		continue;
 	};
 
 	private _controlMap = ctrlParent WL_CONTROL_MAP;
@@ -50,5 +25,5 @@ while {!BIS_WL_missionEnd} do {
 		_assetInfoBox ctrlEnable false;
 	};
 
-	uiSleep WL_TIMEOUT_STANDARD;
+	uiSleep 0.01;
 };

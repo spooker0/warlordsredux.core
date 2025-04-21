@@ -90,4 +90,8 @@ switch (_conditionName) do {
     case "fastTravelFOB": {
         alive _target && _target getVariable ["WL2_forwardBaseTime", serverTime] < serverTime;
     };
+    case "markSector": {
+        private _revealedBy = _target getVariable ["BIS_WL_revealedBy", []];
+        !(BIS_WL_playerSide in _revealedBy);
+    };
 };

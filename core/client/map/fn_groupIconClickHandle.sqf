@@ -1,7 +1,7 @@
 #include "..\..\warlords_constants.inc"
 
-if (isNil "MAP_CONTROL") exitWith {};
-if (MAP_CONTROL == -1) exitWith {};
+private _map = uiNamespace getVariable ["BIS_WL_mapControl", controlNull];
+if (isNull _map) exitWith {};
 
 private _orderSelectionActive = BIS_WL_currentSelection in [
 	WL_ID_SELECTION_ORDERING_AIRCRAFT,
@@ -26,7 +26,7 @@ if (isNull _sector) exitWith {};
 private _availableSectors = BIS_WL_selection_availableSectors;
 
 if !(_sector in _availableSectors) exitWith {
-	playSound "AddItemFailed";
+	// playSound "AddItemFailed";
 };
 
 if (WL_VotePhase == 1) exitWith {

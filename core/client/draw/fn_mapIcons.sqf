@@ -130,7 +130,26 @@
 		};
 		_mapData set ["sideVehiclesAll", _sideVehiclesAll];
 
-		uiSleep 1;
+		private _teamSectorMarkers = [];
+		private _allSectorMarkers = [];
+		{
+			private _sector = _x;
+			private _sectorMarkerTeam = [_sector, _side] call WL2_fnc_sectorButtonMark;
+			private _sectorMarkerEnemy = [_sector, BIS_WL_enemySide] call WL2_fnc_sectorButtonMark;
+
+			private _revealedBy = _sector getVariable ["BIS_WL_revealedBy", []];
+
+			if (_sectorMarkerTeam # 1 != "NONE" && !(_side in _revealedBy)) then {
+				_teamSectorMarkers pushBack [_sector, _sectorMarkerTeam];
+			};
+			if (_sectorMarkerEnemy # 1 != "NONE" && !(BIS_WL_enemySide in _revealedBy)) then {
+				_allSectorMarkers pushBack [_sector, _sectorMarkerEnemy];
+			};
+		} forEach BIS_WL_allSectors;
+		_mapData set ["teamSectorMarkers", _teamSectorMarkers];
+		_mapData set ["enemySectorMarkers", _allSectorMarkers];
+
+		uiSleep 0.5;
 	};
 };
 
@@ -145,7 +164,7 @@
 
 		private _mainMap = (findDisplay 12) displayCtrl 51;
 		private _drawMode = if (WL_IsSpectator) then { 1 } else { 0 };
-		[_mainMap, _drawMode] spawn WL2_fnc_iconDrawMapPrepare;
+		[WL_CONTROL_MAP, _drawMode] spawn WL2_fnc_iconDrawMapPrepare;
 
 		private _refreshRate = _settingsMap getOrDefault ["mapRefresh", 4];
 		_refreshRate = _refreshRate max 1;

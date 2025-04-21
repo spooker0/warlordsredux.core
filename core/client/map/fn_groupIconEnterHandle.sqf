@@ -1,7 +1,7 @@
 #include "..\..\warlords_constants.inc"
 
-if (isNil "MAP_CONTROL") exitWith {};
-if (MAP_CONTROL == -1) exitWith {};
+private _map = uiNamespace getVariable ["BIS_WL_mapControl", controlNull];
+if (isNull _map) exitWith {};
 
 private _sector = (_this # 1) getVariable ["BIS_WL_sector", objNull];
 
@@ -110,8 +110,6 @@ private _scanCooldownText = [
 	_linebreak
 ];
 
-private _sectorIsOwned = (_sector getVariable "BIS_WL_owner") == BIS_WL_playerSide;
-
 private _enemyCaptureText = if (_revealed) then {
 	private _previousOwners = _sector getVariable ["BIS_WL_previousOwners", []];
 	if (count _previousOwners > 1) then {
@@ -178,22 +176,15 @@ WL_SectorActionTarget = _sector;
 call WL2_fnc_updateSelectionState;
 
 if !(_selectionActive || _votingActive) exitWith {
-	if (_sectorIsOwned) then {
-		WL_CONTROL_MAP ctrlMapCursor ["Track", "HC_overFriendly"];
-	} else {
-		WL_CONTROL_MAP ctrlMapCursor ["Track", "HC_overEnemy"];
-	};
 	BIS_WL_highlightedSector = objNull;
 };
 
 if (_sector in BIS_WL_selection_availableSectors) then {
-	WL_CONTROL_MAP ctrlMapCursor ["Track", "HC_overMission"];
 	BIS_WL_highlightedSector = _sector;
 	if !(BIS_WL_hoverSamplePlayed) then {
 		playSound "clickSoft";
 		BIS_WL_hoverSamplePlayed = TRUE;
 	};
 } else {
-	WL_CONTROL_MAP ctrlMapCursor ["Track", "HC_unsel"];
 	BIS_WL_highlightedSector = objNull;
 };

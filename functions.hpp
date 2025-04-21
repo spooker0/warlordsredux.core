@@ -272,8 +272,10 @@ class CfgFunctions {
 			class handleSelectionState {};
 			class mapButtonConditions {};
 			class mapControlHandle {};
+			class mapEachFrame {};
 			class replayMap {};
 			class replayMapClear {};
+			class sectorButtonMark {};
 			class sectorCaptureStatus {};
 			class sectorMapButtons {};
 			class sectorMarkerUpdate {};

@@ -2,6 +2,9 @@
 
 // _drawMode: 0 = normal, 1 = spectator, 2 = stored
 params [["_map", controlNull], ["_drawMode", 0]];
+
+if (isNull _map) exitWith {};
+
 private _drawAll = _drawMode == 1 || _drawMode == 2;
 
 private _drawIcons = [];
@@ -410,6 +413,79 @@ private _sideVehicles = if (_drawAll) then {
 	];
 	_drawIconsSelectable pushBack [_x, _vehiclePos];
 } forEach _sideVehicles;
+
+private _drawSectorMarker = {
+	params ["_sectorMarkerPair", "_drawSide"];
+	private _sector = _sectorMarkerPair # 0;
+	private _marker = _sectorMarkerPair # 1;
+
+	private _sectorMarker = _marker # 1;
+
+	private _sectorIcon = switch (_sectorMarker) do {
+		case "ENEMY": {
+			private _sectorServices = _sector getVariable ["BIS_WL_services", []];
+			if ("A" in _sectorServices) then {
+				"\a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa"
+			} else {
+				if ("H" in _sectorServices) then {
+					"\a3\ui_f\data\igui\cfg\simpletasks\types\Heli_ca.paa"
+				} else {
+					"\A3\ui_f\data\map\markers\handdrawn\flag_CA.paa"
+				};
+			};
+		};
+		case "INDEPENDENT": { "\A3\ui_f\data\map\markers\handdrawn\flag_CA.paa" };
+		case "ENEMY BASE": { "\A3\ui_f_orange\data\cfgmarkers\redcrystal_ca.paa" };
+		default { "" };
+	};
+
+	private _sectorColorRGB = switch (_sectorMarker) do {
+		case "ENEMY";
+		case "ENEMY BASE": {
+			if (_drawSide == west) then {
+				[0.5, 0, 0, 1]
+			} else {
+				[0, 0.3, 0.6, 1]
+			}
+		};
+		case "INDEPENDENT": { [0, 0.5, 0, 1] };
+		default { [1, 1, 1] };
+	};
+
+	private _sectorPosition = getPosASL _sector;
+	_sectorPosition set [1, (_sectorPosition # 1) + 50];
+
+    private _sectorMarkedByVar = format ["WL2_MapMarkedBy_%1", _drawSide];
+	private _sectorMarkedBy = _sector getVariable [_sectorMarkedByVar, ""];
+	private _sectorMarkedTimeVar = format ["WL2_MapMarkedTime_%1", _drawSide];
+	private _sectorMarkedTime = _sector getVariable [_sectorMarkedTimeVar, ""];
+
+	_drawIcons pushBack [
+		_sectorIcon,
+		_sectorColorRGB,
+		_sectorPosition,
+		32,
+		32,
+		0,
+		format ["%1 (Marked by %2 %3)", _sectorMarker, _sectorMarkedBy, _sectorMarkedTime],
+		0,
+		0.04,
+		"PuristaBold",
+		"right"
+	];
+};
+
+private _sectorMarkers = _mapData getOrDefault ["teamSectorMarkers", []];
+{
+	[_x, BIS_WL_playerSide] call _drawSectorMarker;
+} forEach _sectorMarkers;
+
+if (_drawAll) then {
+	private _sectorMarkers = _mapData getOrDefault ["enemySectorMarkers", []];
+	{
+		[_x, BIS_WL_enemySide] call _drawSectorMarker;
+	} forEach _sectorMarkers;
+};
 
 // Spectator draw
 if (_drawAll) then {

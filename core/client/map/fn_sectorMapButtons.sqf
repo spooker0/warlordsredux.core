@@ -144,6 +144,44 @@ private _scanExecute = {
     ]
 ] call WL2_fnc_addTargetMapButton;
 
+// Mark Sector button
+private _markSectorExecute = {
+    params ["_sector"];
+    private _side = BIS_WL_playerSide;
+    private _mapMarkerVar = format ["WL2_MapMarker_%1", _side];
+    private _mapMarkedByVar = format ["WL2_MapMarkedBy_%1", _side];
+    private _mapMarkedTimeVar = format ["WL2_MapMarkedTime_%1", _side];
+
+    private _currentMarker = _sector getVariable [_mapMarkerVar, "unknown"];
+    private _nextMarker = switch (_currentMarker) do {
+        case "unknown": { "enemy" };
+        case "enemy": { "enemyhome" };
+        case "enemyhome": { "green" };
+        case "green": { "unknown" };
+        default { "enemy" };
+    };
+
+    private _markedByLast = _sector getVariable [_mapMarkedByVar, ""];
+    private _playerName = [player, true] call BIS_fnc_getName;
+    if (_markedByLast != _playerName) then {
+        _sector setVariable [_mapMarkedByVar, _playerName, true];
+
+        private _start = missionNamespace getVariable ["gameStart", 0];
+        private _gameTimer = [36000 - (serverTime - _start), "HH:MM"] call BIS_fnc_secondsToString;
+        _sector setVariable [_mapMarkedTimeVar, _gameTimer, true];
+    };
+    _sector setVariable [_mapMarkerVar, _nextMarker, true];
+
+    // return new text and color
+    ([_sector, _side] call WL2_fnc_sectorButtonMark) # 0;
+};
+[
+    ([_sector, BIS_WL_playerSide] call WL2_fnc_sectorButtonMark) # 0,
+    _markSectorExecute,
+    false,
+    "markSector"
+] call WL2_fnc_addTargetMapButton;
+
 [_display, _offsetX, _offsetY, _menuButtons] spawn {
     params ["_display", "_originalMouseX", "_originalMouseY", "_menuButtons"];
     private _keepDialog = true;

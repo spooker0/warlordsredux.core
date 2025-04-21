@@ -42,6 +42,7 @@ private _i = 0;
 		if (_sector getVariable ["BIS_WL_name", "Sector"] == "Wait") then {
 			_mrkrMain setMarkerTypeLocal "respawn_unknown";
 			_mrkrMain setMarkerColorLocal "ColorWhite";
+			_sector setVariable ["BIS_WL_revealedBy", [west, east, independent]];
 		} else {
 			_mrkrMain setMarkerTypeLocal "u_installation";
 			_mrkrMain setMarkerColorLocal "ColorUNKNOWN";
