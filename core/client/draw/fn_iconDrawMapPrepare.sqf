@@ -414,6 +414,9 @@ private _sideVehicles = if (_drawAll) then {
 	_drawIconsSelectable pushBack [_x, _vehiclePos];
 } forEach _sideVehicles;
 
+private _drawSectorMarkerThreshold = _mapData getOrDefault ["sectorMarkerThreshold", 0.4];
+private _drawSectorMarkerText = (ctrlMapScale _map) < _drawSectorMarkerThreshold;
+
 private _drawSectorMarker = {
 	params ["_sectorMarkerPair", "_drawSide"];
 	private _sector = _sectorMarkerPair # 0;
@@ -467,7 +470,9 @@ private _drawSectorMarker = {
 		32,
 		32,
 		0,
-		format ["%1 (Marked by %2 %3)", _sectorMarker, _sectorMarkedBy, _sectorMarkedTime],
+		if (_drawSectorMarkerText) then {
+			format ["%1 (Marked by %2 %3)", _sectorMarker, _sectorMarkedBy, _sectorMarkedTime]
+		} else {""},
 		0,
 		0.04,
 		"PuristaBold",

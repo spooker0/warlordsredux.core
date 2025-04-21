@@ -130,6 +130,12 @@
 		};
 		_mapData set ["sideVehiclesAll", _sideVehiclesAll];
 
+		private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+		private _sectorMarkerThreshold = _settingsMap getOrDefault ["sectorMarkerTextThreshold", 0.4];
+		_sectorMarkerThreshold = linearConversion [0, 1, _sectorMarkerThreshold, -3, 0];
+		_sectorMarkerThreshold = 10 ^ _sectorMarkerThreshold;
+		_mapData set ["sectorMarkerThreshold", _sectorMarkerThreshold];
+
 		private _teamSectorMarkers = [];
 		private _allSectorMarkers = [];
 		{

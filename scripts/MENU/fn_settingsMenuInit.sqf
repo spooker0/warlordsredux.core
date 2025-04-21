@@ -241,6 +241,7 @@ _positionY = _positionY + 0.08;
     ["category", "Adjustable settings"],
     ["slider", "Parachute auto deploy height", [0, 500, 5, 100, "parachuteAutoDeployHeight"]],
     ["slider", "Announcer text size", [0.1, 1, 0.1, 0.5, "announcerTextSize"]],
+    ["slider", "Map marker scale threshold", [0, 1, 0.05, 0.4, "sectorMarkerTextThreshold"]],
     ["category", "General settings"],
     ["checkbox", "Disable 3rd person view (2x reward)", ["3rdPersonDisabled", true, 360]],
     ["checkbox", "Autonomous mode off by default", ["enableAuto", false]],

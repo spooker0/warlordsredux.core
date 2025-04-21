@@ -177,9 +177,5 @@ while { !BIS_WL_missionEnd } do {
         2 enableChannel [false, false];
     };
 
-    if (!SQD_DISABLE_SIDE) then {
-        1 enableChannel [true, true];
-    };
-
     sleep 1;
 };

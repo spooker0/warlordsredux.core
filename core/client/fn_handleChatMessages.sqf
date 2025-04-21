@@ -22,27 +22,58 @@ if (_isModerator || _isAdmin) then {
     };
 };
 
-if (_sentLocally && _text == "!lag") exitWith {
-    [player] remoteExec ["WL2_fnc_lagMessageHandler", 2];
-    true;
+if (_sentLocally && _channel in [0, 1, 3]) then {
+    private _spamHistory = uiNamespace getVariable ["WL2_spamHistory", []];
+    private _spammedMessages = _spamHistory select {
+        _x # 0 == _text &&
+        serverTime - (_x # 1) < 120
+    };
+
+    if (count _spammedMessages >= 3) then {
+        {
+            private _vonStatus = (channelEnabled _x) # 1;
+            _x enableChannel [false, _vonStatus];
+        } forEach [0, 1, 3];
+
+        systemChat "Spam protection triggered. Chat disabled for 30s.";
+        0 spawn {
+            sleep 30;
+            {
+                private _vonStatus = (channelEnabled _x) # 1;
+                _x enableChannel [true, _vonStatus];
+            } forEach [0, 1, 3];
+        };
+    };
+
+    _spamHistory pushBack [_text, serverTime];
+    _spamHistory = _spamHistory select {
+        serverTime - (_x # 1) < 120
+    };
+    uiNamespace setVariable ["WL2_spamHistory", _spamHistory];
 };
 
-if (_sentLocally && _text == "!lowfps") exitWith {
-    0 spawn {
-        private _messageTemplate = "Client Script Collector";
-        private _message = [_messageTemplate] call WL2_fnc_scriptCollector;
-        [_message] call WL2_fnc_lagMessageDisplay;
+if (_text == "!lag") exitWith {
+    if (_sentLocally) then {
+        [player] remoteExec ["WL2_fnc_lagMessageHandler", 2];
     };
     true;
 };
 
-if (_sentLocally && _isAdmin && _text == "!updateZeus") exitWith {
-    [player, 'updateZeus'] remoteExec ['WL2_fnc_handleClientRequest', 2];
+if (_text == "!lowfps") exitWith {
+    if (_sentLocally) then {
+        0 spawn {
+            private _messageTemplate = "Client Script Collector";
+            private _message = [_messageTemplate] call WL2_fnc_scriptCollector;
+            [_message] call WL2_fnc_lagMessageDisplay;
+        };
+    };
     true;
 };
 
-// Hide for remote players
-if (_text in ["!lag", "!lowfps", "!updateZeus"]) exitWith {
+if (_text == "!updateZeus") exitWith {
+    if (_sentLocally && _isAdmin) then {
+        [player, 'updateZeus'] remoteExec ['WL2_fnc_handleClientRequest', 2];
+    };
     true;
 };
 

@@ -179,7 +179,7 @@ waitUntil {!isNil "BIS_WL_base1" && {!isNil "BIS_WL_base2"}};
 			["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_UP_F"]
 		],
 		[
-			["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_E_F"],
+			["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_M_F"],
 			["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_M_F"],
 			["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_M_F"]
 		]
