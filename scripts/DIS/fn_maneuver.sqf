@@ -64,7 +64,7 @@ private _projectileActualType = _projectile getVariable ["APS_ammoOverride", _pr
 private _projectileConfig = APS_projectileConfig getOrDefault [_projectileActualType, createHashMap];
 private _projectileSpeedOverride = _projectileConfig getOrDefault ["speed", 1];
 _projectileSpeedOverride = _projectileSpeedOverride max 1;
-private _maxAcceleration = (getNumber (configfile >> "CfgAmmo" >> _projectileType >> "thrust"));
+private _maxAcceleration = (getNumber (configfile >> "CfgAmmo" >> _projectileType >> "thrust")) * WL_SAM_ACCELERATION;
 private _maxSpeed = getNumber (configfile >> "CfgAmmo" >> _projectileType >> "maxSpeed") * WL_SAM_MAX_SPEED_FACTOR * _projectileSpeedOverride;
 
 private _terrainTest = 4000;
@@ -77,7 +77,7 @@ private _lastLoopTime = serverTime;
 while { alive _projectile } do {
     private _currentVector = velocityModelSpace _projectile;
     private _elapsedTime = serverTime - _lastLoopTime;
-    private _currentSpeed = ((_currentVector # 1) + (_maxAcceleration * 4 * _elapsedTime)) min _maxSpeed;
+    private _currentSpeed = ((_currentVector # 1) + (_maxAcceleration * _elapsedTime)) min _maxSpeed;
     private _newVector = [
         0,
         _currentSpeed,

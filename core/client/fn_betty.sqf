@@ -35,7 +35,7 @@ _vehicle addEventHandler ["Killed", {
 }];
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-while { _vehicle isKindOf "Air" && alive player } do {
+while { _vehicle isKindOf "Air" && alive player && alive _vehicle } do {
 	private _landingGear = _vehicle getVariable ["WL2_landingGear", false];
 	private _altitude = getPosATL _vehicle # 2;
 

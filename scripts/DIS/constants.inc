@@ -1,6 +1,7 @@
 #include "..\..\core\warlords_constants.inc"
 
 #define WL_SAM_ANGULAR_ACCELERATION 2.0
+#define WL_SAM_ACCELERATION 2.0
 #define WL_SAM_MAX_SPEED_FACTOR 1.0
 #define WL_SAM_MAX_DISTANCE 12000
 

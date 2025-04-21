@@ -471,7 +471,6 @@ if (_asset isKindOf "Man") then {
 
 	private _demolishable = missionNamespace getVariable ["WL2_demolishable", createHashMap];
 	if (_demolishable getOrDefault [_assetActualType, false]) then {
-		_asset setVariable ["WL_demolishTurnsLeft", 4, true];
 		_asset setVariable ["WL2_canDemolish", true, true];
 	};
 

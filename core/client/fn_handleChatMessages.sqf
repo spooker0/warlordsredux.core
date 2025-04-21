@@ -22,7 +22,7 @@ if (_isModerator || _isAdmin) then {
     };
 };
 
-if (_sentLocally && _channel in [0, 1, 3]) then {
+if (_sentLocally && _channel in [0, 1, 3] && _text != "") then {
     private _spamHistory = uiNamespace getVariable ["WL2_spamHistory", []];
     private _spammedMessages = _spamHistory select {
         _x # 0 == _text &&
