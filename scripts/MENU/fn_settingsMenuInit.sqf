@@ -20,16 +20,17 @@ _controlGroup ctrlShow false;
 
 private _buttons = [
     ["SQUADS", {
-        closeDialog 0;
         [true] call SQD_fnc_menu;
     }],
     ["REPORT", {
-        closeDialog 0;
         [false] call MENU_fnc_moderatorMenu;
     }],
     ["POLL", {
-        closeDialog 0;
         call POLL_fnc_pollMenu;
+    }],
+    ["PERFORMANCE", {
+        closeDialog 0;
+        0 spawn PERF_fnc_perfMenuInit;
     }]
 ];
 
@@ -39,7 +40,6 @@ private _isSpectator = _playerUid in getArray (missionConfigFile >> "spectatorID
 private _isModerator = _playerUid in getArray (missionConfigFile >> "moderatorIDs");
 if (_isAdmin) then {
     _buttons pushBack ["DEBUG", {
-        closeDialog 0;
         [""] call MENU_fnc_debugMenu;
     }];
 };
@@ -51,7 +51,6 @@ if (_isAdmin || _isSpectator) then {
 };
 if (_isAdmin || _isModerator) then {
     _buttons pushBack ["MODERATE", {
-        closeDialog 0;
         [true] call MENU_fnc_moderatorMenu;
     }];
 };
@@ -249,7 +248,8 @@ _positionY = _positionY + 0.08;
     ["checkbox", "Disable missile cameras", ["disableMissileCameras", false]],
     ["checkbox", "Show user-defined markers", ["showMarkers", true]],
     ["checkbox", "No voice speaker", ["noVoiceSpeaker", false]],
-    ["checkbox", "Mute task notifications", ["muteTaskNotifications", false]]
+    ["checkbox", "Mute task notifications", ["muteTaskNotifications", false]],
+    ["checkbox", "Disable incoming missile indicator", ["disableIncomingMissileDisplay", false]]
 ];
 
 {

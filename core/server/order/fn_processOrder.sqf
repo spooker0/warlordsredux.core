@@ -203,7 +203,6 @@ if (_ownerUid != "") then {
 	_asset setVariable ["BIS_WL_ownerAsset", _ownerUid, true];
 };
 _asset setVariable ["BIS_WL_lastActive", 0, _owner];
-[_asset] call WL2_fnc_lastHitHandler;
 _asset setVariable ["WL2_orderedClass", _orderedClass, true];
 [_asset, _sender] remoteExec ["WL2_fnc_newAssetHandle", _owner];
 _sender setVariable ["BIS_WL_isOrdering", false, [2, _owner]];

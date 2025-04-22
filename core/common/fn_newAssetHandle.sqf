@@ -122,6 +122,11 @@ if (_asset isKindOf "Man") then {
 		[_asset, false] remoteExec ["WL2_fnc_scannerAction", 0, true];
 	};
 
+	private _hasReconOpticsMap = missionNamespace getVariable ["WL2_hasReconOptics", createHashMap];
+	if (_hasReconOpticsMap getOrDefault [_assetActualType, false]) then {
+		[_asset, false] remoteExec ["WL2_fnc_reconOpticsAction", 0, true];
+	};
+
 	private _hasAWACSMap = missionNamespace getVariable ["WL2_hasAWACS", createHashMap];
 	if (_hasAWACSMap getOrDefault [_assetActualType, false]) then {
 		[_asset, true] remoteExec ["WL2_fnc_scannerAction", 0, true];

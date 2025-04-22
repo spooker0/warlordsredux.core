@@ -81,6 +81,12 @@ class CfgFunctions {
 			class updateViewDistance {};
 		};
 	};
+	class PERF {
+		class Default {
+			file = "src\scripts\PERF";
+			class perfMenuInit {};
+		};
+	};
 	class POLL {
 		class Default {
 			file = "src\scripts\POLL";
@@ -195,6 +201,7 @@ class CfgFunctions {
 			class rappelAction {};
 			class rappelActionEligibility {};
 			class rearmAction {};
+			class reconOpticsAction {};
 			class refuelAction {};
 			class refuelActionEligibility {};
 			class remoteControlAction {};

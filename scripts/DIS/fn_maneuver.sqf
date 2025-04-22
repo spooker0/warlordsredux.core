@@ -94,7 +94,8 @@ while { alive _projectile } do {
     };
 
     private _angularVector = angularVelocityModelSpace _projectile;
-    if (_disableGroundAvoid || _projectile distance _originalPosition > 5000) then {
+    private _distanceTraveled = _projectile distance _originalPosition;
+    if (_disableGroundAvoid || _distanceTraveled > 5000) then {
         private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
         _projectile setAngularVelocityModelSpace _newAngularVector;
     } else {

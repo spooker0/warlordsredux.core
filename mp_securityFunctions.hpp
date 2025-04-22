@@ -47,6 +47,7 @@ class CfgRemoteExec {
 		class WL2_fnc_radarOperateAction {allowedTargets = 1;};
 		class WL2_fnc_radarRotateAction {allowedTargets = 1;};
 		class WL2_fnc_rearmAction {allowedTargets = 1;};
+		class WL2_fnc_reconOpticsAction {allowedTargets = 0;};
 		class WL2_fnc_refuelAction {allowedTargets = 0;};
 		class WL2_fnc_reloadOverride {allowedTargets = 0;};
 		class WL2_fnc_remoteControlAction {allowedTargets = 0;};

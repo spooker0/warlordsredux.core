@@ -24,6 +24,5 @@ waitUntil {
 };
 
 private _copyButton = _copyInterface displayCtrl 204;
-_copyButton ctrlActivate true;
-
-_copyInterface closeDisplay 1;
+_copyButton ctrlSetTooltip "Can't copy text to clipboard in MP.";
+_copyButton ctrlEnable false;
