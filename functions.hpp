@@ -149,7 +149,7 @@ class CfgFunctions {
 			class playerEventHandlers {};
 			class prepareRappel {};
 			class prompt {};
-			class repackMagazines {};
+			// class repackMagazines {};
 			class resetVehicle {};
 			class restrictedArea {};
 			class revive {};
