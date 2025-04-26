@@ -7,6 +7,7 @@ _unit switchMove "AidlPpneMstpSnonWnonDnon_AI";
 _unit setVariable ["WL2_alreadyHandled", false, 2];
 _unit setVariable ["WL_unconsciousTime", 0];
 [_unit, true] remoteExec ["setPhysicsCollisionFlag", 0];
+enableSentences true;
 
 private _group = group _unit;
 if (leader _group != _unit) then {

@@ -59,8 +59,10 @@ class CfgFunctions {
 			file = "src\scripts\KST";
 			class actions {};
 			class explode {};
+			class jetpack {};
 			class rocket {};
 			class setParent {};
+			class tracers {};
 		};
 	};
 	class MENU {

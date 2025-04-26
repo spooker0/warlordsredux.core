@@ -10,6 +10,7 @@ if (leader _newGroup != _newUnit) then {
 {
 	_x enableAI "ALL";
 } forEach (units _newGroup);
+enableSentences true;
 
 #if WL_FACTION_THREE_ENABLED
 if (side group player == independent) then {
@@ -67,3 +68,7 @@ call WL2_fnc_disarmAction;
 call POLL_fnc_pollAction;
 
 0 spawn WL2_fnc_afk;
+
+#ifdef WL_MAYFOURTH
+call KST_fnc_jetpack;
+#endif

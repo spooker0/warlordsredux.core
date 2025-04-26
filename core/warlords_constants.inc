@@ -15,6 +15,7 @@
 #define WL_REPLAYS 0
 
 // Live: 1
+#define WL_MAYFOURTH_ENABLE 1
 #define WL_STRONGHOLD_ENABLE 1
 #define WL_STOP_TEAM_SWITCH 1
 #define WLC_ENABLED 1
@@ -84,3 +85,11 @@
 #define WL_FORTIFICATION_TIME 2700
 #define WL_MAP_RESTRICTION_BUFFER 5000
 #define WL_AFK_TIMER 300
+
+#if WL_MAYFOURTH_ENABLE
+#if __MONTH__ == 5
+#if __DAY__ == 4
+#define WL_MAYFOURTH 1
+#endif
+#endif
+#endif

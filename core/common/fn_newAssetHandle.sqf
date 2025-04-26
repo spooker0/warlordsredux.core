@@ -465,6 +465,73 @@ if (_asset isKindOf "Man") then {
 		_asset setTurretLimits [[0], -360, 360, 0, 30];
 	};
 
+	if (_assetActualType == "O_MBT_02_imperial_F") then {
+		_asset setVariable ["BIS_WL_dazzlerActivated", false, true];
+		[_asset] remoteExec ["WL2_fnc_dazzlerAction", 0, true];
+
+		_asset addEventHandler ["Fired", {
+			params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
+			if (!local _gunner) exitWith {};
+			if !(_ammo in ["B_40mm_GPR_Tracer_Red", "B_40mm_APFSDS_Tracer_Red", "Sh_105mm_HEAT_MP_T_Red"]) exitWith {};
+
+			private _blasterSound = getMissionPath format ["src\sounds\blaster%1.ogg", ceil (random 4)];
+			playSound3D [_blasterSound, _unit, false, getPosASL _unit, 2];
+			playSound3D [_blasterSound, _unit, false, getPosASL _unit, 2];
+
+			if (_ammo == "Sh_105mm_HEAT_MP_T_Red") then {
+				private _shotIterator = _unit getVariable ["WL_shotIteratorCannon", 0];
+				if (_shotIterator % 2 == 0) then {
+					_unit setWeaponReloadingTime [gunner _unit, "cannon_105mm_VTOL_01", 0.05];
+				};
+				_unit setVariable ["WL_shotIteratorCannon", _shotIterator + 1];
+			} else {
+				private _shotIterator = _unit getVariable ["WL_shotIterator", 0];
+				if (_shotIterator % 5 == 4) then {
+					[_unit] spawn {
+						params ["_unit"];
+						private _startTime = serverTime;
+						while { serverTime - _startTime < 1 } do {
+							sleep 0.1;
+							_unit setWeaponReloadingTime [gunner _unit, "HE", 1];
+							_unit setWeaponReloadingTime [gunner _unit, "AP", 1];
+						};
+					};
+				} else {
+					_unit setWeaponReloadingTime [gunner _unit, "HE", 0.4];
+					_unit setWeaponReloadingTime [gunner _unit, "AP", 0.4];
+				};
+				_unit setVariable ["WL_shotIterator", _shotIterator + 1];
+			};
+
+			_unit setMagazineTurretAmmo ["60Rnd_40mm_GPR_Tracer_Red_shells", 60, [0]];
+			_unit setMagazineTurretAmmo ["40Rnd_40mm_APFSDS_Tracer_Red_shells", 40, [0]];
+			_unit setMagazineTurretAmmo ["20Rnd_105mm_HEAT_MP_T_Red", 20, [0]];
+		}];
+	};
+	if (_assetActualType == "B_Scoutbike_01_F") then {
+		_asset addEventHandler ["Fired", {
+			params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
+			if (!local _gunner) exitWith {};
+			if (_ammo != "B_20mm") exitWith {};
+			_unit setMagazineTurretAmmo ["60Rnd_20mm_HE_shells", 60, [0]];
+
+			private _shotIterator = _unit getVariable ["WL_shotIterator", 0];
+			if (_shotIterator % 10 == 9) then {
+				[_unit] spawn {
+					params ["_unit"];
+					private _startTime = serverTime;
+					while { serverTime - _startTime < 2 } do {
+						sleep 0.1;
+						_unit setWeaponReloadingTime [gunner _unit, currentMuzzle gunner _unit, 1];
+					};
+				};
+			} else {
+				_unit setWeaponReloadingTime [gunner _unit, currentMuzzle gunner _unit, 0.4];
+			};
+			_unit setVariable ["WL_shotIterator", _shotIterator + 1];
+		}];
+	};
+
 	private _hasGPSMunitionMap = missionNamespace getVariable ["WL2_hasGPSMunition", createHashMap];
 	if (_hasGPSMunitionMap getOrDefault [_assetActualType, false]) then {
 		[_asset] remoteExec ["DIS_fnc_setupGPSMunition", 0, true];

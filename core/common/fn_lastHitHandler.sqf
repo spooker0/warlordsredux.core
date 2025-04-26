@@ -26,6 +26,8 @@ _asset addEventHandler ["Hit", {
 	} forEach _crew;
 }];
 
+if (isPlayer _asset) exitWith {};
+
 _asset addEventHandler ["HandleDamage", {
 	params ["_unit", "_selection", "_damage", "_source", "_projectile", "_hitIndex", "_instigator", "_hitPoint", "_directHit", "_context"];
 	if (_projectile == "FuelExplosion") then {

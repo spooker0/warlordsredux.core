@@ -765,4 +765,36 @@ class RscTitles {
 			};
 		};
 	};
+
+	class RscWLReconOpticsDisplay {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		name = "RscWLReconOpticsDisplay";
+		onLoad = "uiNamespace setVariable ['RscWLReconOpticsDisplay', _this select 0];";
+		class controls {
+			class RscWLReconOpticsDisplay_ActiveText: RscStructuredText {
+				idc = 26000;
+				x = 0;
+				y = 0;
+				w = 1;
+				h = 0.1;
+				text = "<t color='#33ff33' align='center'>RECON OPTICS ACTIVE</t>";
+				style = ST_MULTI;
+				shadow = 0;
+				size = 0.05;
+			};
+			class RscWLReconOpticsDisplay_Instructions: RscStructuredText {
+				idc = 26001;
+				x = 0.25;
+				y = 1 - safeZoneY - 0.3;
+				w = 0.5;
+				h = 0.3;
+				text = "";
+				style = ST_MULTI;
+				shadow = 0;
+			};
+		};
+	};
 };

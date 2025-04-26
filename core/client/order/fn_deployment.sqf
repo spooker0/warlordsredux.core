@@ -80,6 +80,7 @@ private _turretOverridesForVehicle = _turretOverrides getOrDefault [_orderedClas
 	if (_hideTurret != 0) then {
 		[_asset] spawn {
             params ["_asset"];
+            _asset animateSource ["HideTurret", 1, true];
             sleep 0.5;
             _asset animateSource ["HideTurret", 1, true];
         };

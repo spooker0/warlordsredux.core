@@ -24,14 +24,14 @@ private _assetUses = [];
     };
 
     private _buys = _assetStats getOrDefault ["buys", 0];
+    private _deaths = _assetStats getOrDefault ["deaths", 0];
     private _killValue = _assetStats getOrDefault ["killValue", 0];
     private _costMap = missionNamespace getVariable ["WL2_costs", createHashMap];
     private _assetCost = _costMap getOrDefault [_asset, 0];
-    _assetCost = _assetCost max 1;
 
     if (_buys > 0) then {
-        _buys = _buys max 1;
-        private _kvr = _killValue / _assetCost / _buys * 100;
+        _assetCost = _assetCost max 1;
+        private _kvr = _killValue / (_assetCost * (_deaths max 1)) * 100;
         private _actualTypeName = [objNull, _asset] call WL2_fnc_getAssetTypeName;
         private _color = "#ffffff";
         private _firstLetter = _asset select [0, 1];
@@ -41,17 +41,18 @@ private _assetUses = [];
         if (_firstLetter == "O") then {
             _color = "#800000";
         };
-        _assetUses pushBack [_color, _buys, _killValue, _kvr, _actualTypeName];
+        _assetUses pushBack [_color, _buys, _deaths, _killValue, _kvr, _actualTypeName];
     };
 } forEach _inputStats;
 
 _assetUses = [_assetUses, [], { _x # 2 }, "DESCEND"] call BIS_fnc_sortBy;
 {
-    _x params ["_color", "_buys", "_killValue", "_kvr", "_actualTypeName"];
+    _x params ["_color", "_buys", "_deaths", "_killValue", "_kvr", "_actualTypeName"];
     private _displayString = format [
-        "<t color='%1'>Bought: <t>%2</t>, Kill Value: %3 (KVR: %4%%) <t align='right'>%5</t></t>",
+        "<t color='%1'>Bought: <t>%2</t>, Deaths: %3, Kill Value: %4 (KVR: %5%%) <t align='right'>%6</t></t>",
         _color,
         _buys,
+        _deaths,
         _killValue,
         _kvr toFixed 2,
         _actualTypeName

@@ -56,6 +56,11 @@ call WL2_fnc_processRunways;
 0 spawn WL2_fnc_cleanupCarrier;
 0 spawn WL2_fnc_laserTracker;
 
+#ifdef WL_MAYFOURTH
+0 setOvercast 1;
+forceWeatherChange;
+skipTime 21;
+#else
 0 spawn {
 	while {!BIS_WL_missionEnd} do {
 		_overcastPreset = random 1;
@@ -71,6 +76,7 @@ call WL2_fnc_processRunways;
 		};
 	};
 };
+#endif
 
 0 spawn WL2_fnc_updateVehicleList;
 

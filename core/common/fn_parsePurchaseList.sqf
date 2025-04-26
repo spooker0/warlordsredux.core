@@ -67,6 +67,13 @@ private _savedLoadoutHandled = FALSE;
 
 			{
 				_className = configName _x;
+
+				#ifndef WL_MAYFOURTH
+					if (_className in ["O_MBT_02_imperial_F", "B_Scoutbike_01_F"]) then {
+						continue;
+					};
+				#endif
+
 				_actualClassName = getText (_x >> "spawn");
 				if (_actualClassName == "") then {_actualClassName = _className};
 				_class = configFile >> "CfgVehicles" >> _actualClassName;

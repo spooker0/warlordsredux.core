@@ -3,15 +3,45 @@ params ["_asset"];
 
 if (isDedicated) exitWith {};
 
+private _clearReconOptics = {
+    "reconOptics" cutText ["", "PLAIN"];
+    _display = objNull;
+};
+
+private _display = objNull;
+
+private _addReconOptics = {
+    if !(isNull _display) exitWith {};
+    "reconOptics" cutRsc ["RscWLReconOpticsDisplay", "PLAIN"];
+    _display = uiNamespace getVariable ["RscWLReconOpticsDisplay", displayNull];
+
+    private _instructionsDisplay = _display displayCtrl 26001;
+    _instructionsDisplay ctrlSetStructuredText parseText format [
+        "<t size='1.2'><t align='left'>Scan</t><t align='right'>[%1] or [%2]</t></t>",
+        (actionKeysNames ["defaultAction", 1, "Combo"]) regexReplace ["""", ""],
+        (actionKeysNames ["lockTarget", 1, "Combo"]) regexReplace ["""", ""]
+    ];
+    _instructionsDisplay ctrlCommit 0;
+};
+
 while { alive _asset } do {
     if (vehicle player != _asset) then {
+        call _clearReconOptics;
         sleep 5;
         continue;
     };
 
-	if (inputAction "defaultAction" > 0) then {
+    if (cameraView != "GUNNER") then {
+        call _clearReconOptics;
+        sleep 0.1;
+        continue;
+    };
+
+    call _addReconOptics;
+
+	if (inputAction "defaultAction" > 0 || inputAction "lockTarget" > 0) then {
         waitUntil {
-            inputAction "defaultAction" == 0;
+            inputAction "defaultAction" == 0 && inputAction "lockTarget" == 0
         };
 
         private _targetIntersections = lineIntersectsSurfaces [
@@ -74,3 +104,5 @@ while { alive _asset } do {
 
     sleep 0.001;
 };
+
+call _clearReconOptics;

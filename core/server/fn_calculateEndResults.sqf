@@ -15,12 +15,15 @@ private _serverStats = profileNamespace getVariable ["WL_stats", createHashMap];
 
     private _buys = _assetStats getOrDefault ["buys", 0];
     private _killValue = _assetStats getOrDefault ["killValue", 0];
+    private _deaths = _assetStats getOrDefault ["deaths", 0];
 
     private _serverAsset = _serverStats getOrDefault [_asset, createHashMap];
     private _serverBuys = _serverAsset getOrDefault ["buys", 0];
+    private _serverDeaths = _serverAsset getOrDefault ["deaths", 0];
     private _serverKillValue = _serverAsset getOrDefault ["killValue", 0];
 
     _serverAsset set ["buys", _serverBuys + _buys];
+    _serverAsset set ["deaths", _serverDeaths + _deaths];
     _serverAsset set ["killValue", _serverKillValue + _killValue];
 
     _serverStats set [_asset, _serverAsset];
