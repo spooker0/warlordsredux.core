@@ -76,8 +76,14 @@ switch (_className) do {
         5 spawn WL2_fnc_orderFastTravel;
     };
     case "BuyFOB": {
-        ["ForwardBaseSupplies", 500, "Fast Travel", [], [0, 3, 0]] call WL2_fnc_requestPurchase;
-        [player, "orderFOB"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+        switch (BIS_WL_playerSide) do {
+            case west: {
+                ["Land_Cargo10_blue_F", 500, "Fast Travel", [], [0, 3, 0]] call WL2_fnc_requestPurchase;
+            };
+            case east: {
+                ["Land_Cargo10_red_F", 500, "Fast Travel", [], [0, 3, 0]] call WL2_fnc_requestPurchase;
+            };
+        };
     };
     case "FundsTransfer": {
         call WL2_fnc_orderFundsTransfer;

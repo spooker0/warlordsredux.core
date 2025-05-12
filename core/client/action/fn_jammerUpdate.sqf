@@ -24,8 +24,7 @@ if (!_isActive && !_isActivating) then {
     _asset setFuelConsumptionCoef 5;
 };
 
-private _assetOwner = _asset getVariable ["BIS_WL_ownerAsset", "123"];
-if (getPlayerUID player == _assetOwner) then {
+if (isServer) then {
     private _rotationState = _asset animationSourcePhase "Radar_Rotation";
     if (_isActive || _isActivating) then {
         _asset animateSource ["Radar_Rotation", _rotationState + 1, 1];

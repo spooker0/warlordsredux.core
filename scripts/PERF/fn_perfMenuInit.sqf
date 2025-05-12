@@ -13,9 +13,18 @@ _closeButton ctrlAddEventHandler ["ButtonClick", {
 }];
 
 private _errorText = _display displayCtrl PERF_ERROR_TEXT;
+private _clearFrameButton = _display displayCtrl PERF_LOWFPS_CLEAR_BUTTON;
+private _captureButton = _display displayCtrl PERF_CAPTURE_BUTTON;
+private _captureEntry = _display displayCtrl PERF_CAPTURE_ENTRY_TEXT;
+private _lowfpsDisplay = _display displayCtrl PERF_LOWFPS_TEXT;
+
 private _buildType = productVersion # 4;
 if (_buildType != "Profile") exitWith {
     _errorText ctrlSetText "Profile build not detected. This feature is only available for Profiling builds.";
+    _clearFrameButton ctrlShow false;
+    _captureButton ctrlShow false;
+    _captureEntry ctrlShow false;
+    _lowfpsDisplay ctrlShow false;
 };
 
 uiNamespace setVariable ["PERF_longestFrame", 0];
@@ -31,12 +40,10 @@ uiNamespace setVariable ["PERF_longestFrame", 0];
     };
 };
 
-private _clearFrameButton = _display displayCtrl PERF_LOWFPS_CLEAR_BUTTON;
 _clearFrameButton ctrlAddEventHandler ["ButtonClick", {
     uiNamespace setVariable ["PERF_longestFrame", 0];
 }];
 
-private _captureButton = _display displayCtrl PERF_CAPTURE_BUTTON;
 _captureButton ctrlAddEventHandler ["ButtonClick", {
     params ["_control"];
     private _display = ctrlParent _control;
@@ -50,6 +57,7 @@ _captureButton ctrlAddEventHandler ["ButtonClick", {
 
     systemChat format ["Capture frame slower than: %1", _captureFrameTime];
     closeDialog 0;
+#if __A3_PROFILING__
     diag_captureSlowFrame ["total", _captureFrameTime];
+#endif
 }];
-

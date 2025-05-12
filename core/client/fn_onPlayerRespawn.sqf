@@ -68,7 +68,3 @@ call WL2_fnc_disarmAction;
 call POLL_fnc_pollAction;
 
 0 spawn WL2_fnc_afk;
-
-#ifdef WL_MAYFOURTH
-call KST_fnc_jetpack;
-#endif

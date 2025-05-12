@@ -65,13 +65,7 @@ private _yaw = getDir _projectile;
 private _dir = vectorDir _projectile;
 private _pitch = (_dir select 2) atan2 (sqrt ((_dir select 0)^2 + (_dir select 1)^2));
 
-private _pitchVel = 0;
-private _yawVel   = 0;
-
-private _maxRotSpeed = 1;
-private _acceleration = 0.01;
-private _damping = 0.95;
-private _inputPerTime = 60;
+private _inputPerTime = 20;
 
 private _lastTime = serverTime;
 private _startTime = serverTime;
@@ -119,16 +113,11 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
         };
     };
 
-    private _inputFactor = _inputPerTime * _elapsedTime;
-
-    private _pitchFinalInput = (_pitchInput * _acceleration * _inputFactor);
-    private _yawFinalInput = (_yawInput * _acceleration * _inputFactor);
-
-    _pitchVel = _pitchVel + _pitchFinalInput;
-    _yawVel = _yawVel + _yawFinalInput;
+    private _pitchFinalInput = (_pitchInput * _elapsedTime * _inputPerTime);
+    private _yawFinalInput = (_yawInput * _elapsedTime * _inputPerTime);
 
     if (_flightMode == 2) then {
-        private _fuelUsage = ((abs _pitchFinalInput) + (abs _yawFinalInput)) * 10;
+        private _fuelUsage = ((abs _pitchFinalInput) + (abs _yawFinalInput)) * 1;
         if (_altitude > 1000 || _pitch > 0) then {
             _fuelUsage = _fuelUsage * 10;
         };
@@ -139,11 +128,8 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
         _fuelUsed = _fuelUsed + _elapsedTime * 2;
     };
 
-    _pitchVel = _pitchVel max (-_maxRotSpeed) min _maxRotSpeed;
-    _yawVel = _yawVel max (-_maxRotSpeed) min _maxRotSpeed;
-
-    _pitch = _pitch + _pitchVel;
-    _yaw = _yaw - _yawVel;
+    _pitch = _pitch + _pitchFinalInput;
+    _yaw = _yaw - _yawFinalInput;
 
     switch (_flightMode) do {
         case 0: {
@@ -159,9 +145,6 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
             _pitch = 10 min (_pitch max -40);
         };
     };
-
-    _pitchVel = _pitchVel * _damping;
-    _yawVel = _yawVel * _damping;
 
     private _cosPitch = cos _pitch;
     private _sinPitch = sin _pitch;
@@ -206,9 +189,6 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
             _dir = vectorDir _projectile;
             _pitch = (_dir # 2) atan2 (sqrt ((_dir # 0)^2 + (_dir # 1)^2));
             _yaw = getDir _projectile;
-
-            _pitchVel = 0;
-            _yawVel = 0;
 
             _projectileSpeed = velocityModelSpace _projectile # 1;
         };

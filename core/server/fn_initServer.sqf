@@ -2,19 +2,25 @@
 
 ["server_init"] call BIS_fnc_startLoadingScreen;
 
-{createCenter _x} forEach [west, east, resistance, civilian];
+{
+	createCenter _x;
+} forEach [west, east, resistance, civilian];
+
 west setFriend [east, 0];
-east setFriend [west, 0];
-resistance setFriend [west, 0];
 west setFriend [resistance, 0];
-resistance setFriend [east, 0];
+west setFriend [civilian, 1];
+
+east setFriend [west, 0];
 east setFriend [resistance, 0];
+east setFriend [civilian, 1];
+
+resistance setFriend [west, 0];
+resistance setFriend [east, 0];
+resistance setFriend [civilian, 1];
+
 civilian setFriend [west, 1];
 civilian setFriend [east, 1];
 civilian setFriend [resistance, 1];
-west setFriend [civilian, 1];
-east setFriend [civilian, 1];
-resistance setFriend [civilian, 1];
 
 #if WL_FACTION_THREE_ENABLED
 {
@@ -36,7 +42,11 @@ missionNamespace setVariable ["BIS_WL_wrongTeamGroup", _group, true];
 _group deleteGroupWhenEmpty false;
 missionNamespace setVariable ["gameStart", serverTime, true];
 
-if !(isDedicated) then {waitUntil {!isNull player && {isPlayer player}}};
+if !(isDedicated) then {
+	waitUntil {
+		!isNull player && {isPlayer player}
+	};
+};
 
 call WL2_fnc_sectorsInitServer;
 "setup" call WL2_fnc_handleRespawnMarkers;
@@ -56,11 +66,6 @@ call WL2_fnc_processRunways;
 0 spawn WL2_fnc_cleanupCarrier;
 0 spawn WL2_fnc_laserTracker;
 
-#ifdef WL_MAYFOURTH
-0 setOvercast 1;
-forceWeatherChange;
-skipTime 21;
-#else
 0 spawn {
 	while {!BIS_WL_missionEnd} do {
 		_overcastPreset = random 1;
@@ -76,7 +81,6 @@ skipTime 21;
 		};
 	};
 };
-#endif
 
 0 spawn WL2_fnc_updateVehicleList;
 

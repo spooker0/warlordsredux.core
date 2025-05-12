@@ -70,10 +70,11 @@ switch (_fastTravelMode) do {
 	case 6;
 	case 7: {
 		private _spawnPositions = [_marker, 0, true] call WL2_fnc_findSpawnPositions;
-		_destination = if (count _spawnPositions > 0) then {
-			selectRandom _spawnPositions;
-		} else {
-			markerPos _marker;
+		if (count _spawnPositions > 0) then {
+			_destination = selectRandom _spawnPositions;
+		};
+		if !(_destination inArea _marker) then {
+			_destination = markerPos _marker;
 		};
 		_destination = [_destination # 0, _destination # 1, 50];
 		deleteMarker _marker;

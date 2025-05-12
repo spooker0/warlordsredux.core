@@ -9,16 +9,19 @@ private _clearReconOptics = {
 };
 
 private _display = objNull;
+private _instructionsDisplay = controlNull;
+private _reconOpticsLabel = controlNull;
 
 private _addReconOptics = {
     if !(isNull _display) exitWith {};
     "reconOptics" cutRsc ["RscWLReconOpticsDisplay", "PLAIN"];
     _display = uiNamespace getVariable ["RscWLReconOpticsDisplay", displayNull];
 
-    private _instructionsDisplay = _display displayCtrl 26001;
+    _reconOpticsLabel = _display displayCtrl 26000;
+
+    _instructionsDisplay = _display displayCtrl 26001;
     _instructionsDisplay ctrlSetStructuredText parseText format [
-        "<t size='1.2'><t align='left'>Scan</t><t align='right'>[%1] or [%2]</t></t>",
-        (actionKeysNames ["defaultAction", 1, "Combo"]) regexReplace ["""", ""],
+        "<t size='1.2'><t align='left'>Scan</t><t align='right'>[%1]</t></t>",
         (actionKeysNames ["lockTarget", 1, "Combo"]) regexReplace ["""", ""]
     ];
     _instructionsDisplay ctrlCommit 0;
@@ -38,11 +41,15 @@ while { alive _asset } do {
     };
 
     call _addReconOptics;
+    _reconOpticsLabel ctrlSetStructuredText parseText "<t color='#33ff33' align='center'>RECON OPTICS READY</t>";
 
-	if (inputAction "defaultAction" > 0 || inputAction "lockTarget" > 0) then {
+	if (inputAction "lockTarget" > 0) then {
         waitUntil {
-            inputAction "defaultAction" == 0 && inputAction "lockTarget" == 0
+            inputAction "lockTarget" == 0
         };
+
+        _reconOpticsLabel ctrlSetStructuredText parseText "<t color='#ff3333' align='center'>RECON OPTICS WAIT</t>";
+        playSoundUI ["a3\sounds_f\arsenal\weapons\launchers\titan\dry_titan.wss", 1, 1, true];
 
         private _targetIntersections = lineIntersectsSurfaces [
             AGLToASL positionCameraToWorld [0, 0, 10],
@@ -51,13 +58,13 @@ while { alive _asset } do {
             objNull,
             true,
             1,
-            "FIRE",
+            "VIEW",
             "",
             true
         ];
 
         if (count _targetIntersections == 0) then {
-            sleep 0.001;
+            sleep 1;
             continue;
         };
 
@@ -75,6 +82,7 @@ while { alive _asset } do {
         };
         if (count _unitsInArea > 0) then {
             playSoundUI ["a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", 1, 0.5, true];
+            _instructionsDisplay ctrlShow false;
         };
 
         private _newTargets = _unitsInArea select {
@@ -100,6 +108,8 @@ while { alive _asset } do {
         {
             _x setVariable ["WL_scannedByPlayer", true];
         } forEach _newTargets;
+
+        sleep 1;
     };
 
     sleep 0.001;

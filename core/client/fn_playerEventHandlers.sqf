@@ -115,10 +115,3 @@ player addEventHandler ["Respawn", {
         };
     };
 }];
-
-#ifdef WL_MAYFOURTH
-addMissionEventHandler ["ProjectileCreated", {
-	params ["_projectile"];
-	[_projectile] spawn KST_fnc_tracers;
-}];
-#endif

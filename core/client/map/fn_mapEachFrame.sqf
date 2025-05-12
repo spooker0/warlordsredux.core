@@ -98,9 +98,12 @@ if (_mouseClicked && _mapMouseActionComplete && inputAction "BuldTurbo" == 0) th
         };
 
         if !(isNull WL_SectorActionTarget) then {
-            uiNamespace setVariable ["WL2_assetTargetSelected", WL_SectorActionTarget];
-            call WL2_fnc_sectorMapButtons;
-            playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss", 0.15, 1];
+            private _isVotingThisSector = WL_SectorActionTarget in BIS_WL_selection_availableSectors;
+            if (!_isVotingThisSector) then {
+                uiNamespace setVariable ["WL2_assetTargetSelected", WL_SectorActionTarget];
+                call WL2_fnc_sectorMapButtons;
+                playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss", 0.15, 1];
+            };
         };
 
         WL_AssetActionTarget = objNull;

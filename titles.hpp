@@ -780,7 +780,7 @@ class RscTitles {
 				y = 0;
 				w = 1;
 				h = 0.1;
-				text = "<t color='#33ff33' align='center'>RECON OPTICS ACTIVE</t>";
+				text = "<t color='#33ff33' align='center'>RECON OPTICS READY</t>";
 				style = ST_MULTI;
 				shadow = 0;
 				size = 0.05;
