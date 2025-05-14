@@ -36,14 +36,14 @@ private _drawRestrictionId = addMissionEventHandler ["Draw3D", {
 
 	drawIcon3D [
         "\a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca.paa",
-        [1, 0, 0, 1],
-        _asset modelToWorld [0, 0, 1],
-        0.8,
-		0.8,
+        [1, 0.2, 0.2, 1],
+        _asset modelToWorld [0, 0, 0],
+        1.0,
+		1.0,
         0,
         _restriction,
         true,
-        0.035,
+        0.045,
         "TahomaB",
         "center",
         false,
@@ -80,6 +80,7 @@ private _turretOverridesForVehicle = _turretOverrides getOrDefault [_orderedClas
 	if (_hideTurret != 0) then {
 		[_asset] spawn {
             params ["_asset"];
+            _asset animateSource ["HideTurret", 1, true];
             sleep 0.5;
             _asset animateSource ["HideTurret", 1, true];
         };

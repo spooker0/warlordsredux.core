@@ -103,13 +103,19 @@ switch (_action) do {
             _squad set [2, _members];
 
             if (_playerId == (_squad select 1)) then {
-                private _hasAnyRemaining = count _members > 0;
-                if (_hasAnyRemaining) then {
+                if (count _members > 0) then {
+                    private _playerContribution = missionNamespace getVariable ["WL_PlayerSquadContribution", createHashMap];
+                    _members = [_members, [_playerContribution], {
+                        private _playerUid = _x getUserInfo 2;
+                        _input0 getOrDefault [_playerUid, 0];
+                    }, "DESCEND"] call BIS_fnc_sortBy;
+
                     private _newSquadLeader = _members select 0;
-                    private _newSLPlayer = (_allPlayers select { getPlayerID _x == _newSquadLeader }) # 0;
-                    if (!isNil "_newSLPlayer" && {!isNull _newSLPlayer}) then {
-                        ["promoted", []] remoteExec ["SQD_fnc_client", _newSLPlayer];
-                        _squad set [1, _newSquadLeader];
+                    _squad set [1, _newSquadLeader];
+
+                    private _newSLOwner = _newSquadLeader getUserInfo 1;
+                    if (_newSLOwner > 2) then {
+                        ["promoted", []] remoteExec ["SQD_fnc_client", _newSLOwner];
                     };
                 };
             };

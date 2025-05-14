@@ -10,6 +10,7 @@ if (leader _newGroup != _newUnit) then {
 {
 	_x enableAI "ALL";
 } forEach (units _newGroup);
+enableSentences true;
 
 #if WL_FACTION_THREE_ENABLED
 if (side group player == independent) then {

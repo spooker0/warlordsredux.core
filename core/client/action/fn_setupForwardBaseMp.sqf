@@ -19,10 +19,12 @@ _forwardBase setVariable ["WL2_forwardBaseSupplies", -1];
 
 waitUntil {
     sleep 1;
-    private _timeRemaining = _endTime - serverTime;
-    private _totalTime = _endTime - _startTime;
-    private _progress = 1 - (_timeRemaining / _totalTime);
-    _forwardBase animateSource ["Progress_source", _progress * 100, true];
+    if (isServer) then {
+        private _timeRemaining = _endTime - serverTime;
+        private _totalTime = _endTime - _startTime;
+        private _progress = 1 - (_timeRemaining / _totalTime);
+        _forwardBase animateSource ["Progress_source", _progress * 100, true];
+    };
     serverTime >= _endTime || !alive _forwardBase
 };
 

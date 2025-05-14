@@ -9,7 +9,7 @@ private _i = 0;
 	_sectorPos = position _sector;
 	_area = _sector getVariable "objectArea";
 
-	if (_sector in WL_BASES && ((_sector getVariable "BIS_WL_owner") == (side player))) then {
+	if (_sector in WL_BASES && ((_sector getVariable "BIS_WL_owner") == (side group player))) then {
 		_sector setVariable ["BIS_WL_value", (getMissionConfigValue ["BIS_WL_baseValue", 50])];
 	} else {
 		_area params ["_a", "_b", "_angle", "_isRectangle"];

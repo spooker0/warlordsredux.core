@@ -1,0 +1,9 @@
+#include "..\..\core\warlords_constants.inc"
+
+#define PERF_DISPLAY 46000
+#define PERF_CLOSE_BUTTON 46001
+#define PERF_ERROR_TEXT 46002
+#define PERF_LOWFPS_TEXT 46003
+#define PERF_LOWFPS_CLEAR_BUTTON 46004
+#define PERF_CAPTURE_ENTRY_TEXT 46005
+#define PERF_CAPTURE_BUTTON 46006

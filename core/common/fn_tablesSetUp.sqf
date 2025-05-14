@@ -28,6 +28,7 @@ private _allowPylonMagazines = createHashMap;
 private _hasESAM = createHashMap;
 private _hasGPSMunition = createHashMap;
 private _hasHMD = createHashMap;
+private _hasReconOptics = createHashMap;
 private _hasRemoteBomb = createHashMap;
 private _hasScanner = createHashMap;
 private _hasAWACS = createHashMap;
@@ -71,6 +72,7 @@ private _requisitionPresets = BIS_WL_purchaseListTemplate;
 				private _requisitionHasESAM = getNumber (_x >> "hasESAM");
 				private _requisitionHasGPSMunition = getNumber (_x >> "hasGPSMunition");
 				private _requisitionHasHMD = getNumber (_x >> "hasHMD");
+				private _requisitionHasReconOptics = getNumber (_x >> "hasReconOptics");
 				private _requisitionHasRemoteBomb = getNumber (_x >> "hasRemoteBomb");
 				private _requisitionHasScanner = getNumber (_x >> "hasScanner");
 				private _requisitionHasAWACS = getNumber (_x >> "hasAWACS");
@@ -183,6 +185,10 @@ private _requisitionPresets = BIS_WL_purchaseListTemplate;
 					_hasHMD set [_requisitonName, true];
 				};
 
+				if (_requisitionHasReconOptics != 0) then {
+					_hasReconOptics set [_requisitonName, true];
+				};
+
 				if (_requisitionHasRemoteBomb != 0) then {
 					_hasRemoteBomb set [_requisitonName, true];
 				};
@@ -264,6 +270,7 @@ missionNamespace setVariable ["WL2_allowPylonMagazines", _allowPylonMagazines];
 missionNamespace setVariable ["WL2_hasESAM", _hasESAM];
 missionNamespace setVariable ["WL2_hasGPSMunition", _hasGPSMunition];
 missionNamespace setVariable ["WL2_hasHMD", _hasHMD];
+missionNamespace setVariable ["WL2_hasReconOptics", _hasReconOptics];
 missionNamespace setVariable ["WL2_hasRemoteBomb", _hasRemoteBomb];
 missionNamespace setVariable ["WL2_hasScanner", _hasScanner];
 missionNamespace setVariable ["WL2_hasAWACS", _hasAWACS];

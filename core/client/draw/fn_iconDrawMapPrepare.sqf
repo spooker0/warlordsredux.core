@@ -473,7 +473,7 @@ private _drawSectorMarker = {
 		if (_drawSectorMarkerText) then {
 			format ["%1 (Marked by %2 %3)", _sectorMarker, _sectorMarkedBy, _sectorMarkedTime]
 		} else {""},
-		0,
+		true,
 		0.04,
 		"PuristaBold",
 		"right"

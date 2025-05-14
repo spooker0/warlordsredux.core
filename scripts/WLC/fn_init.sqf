@@ -69,8 +69,3 @@ private _customizationConfig = missionConfigFile >> "CfgWLCCustomization";
         missionNamespace setVariable [format ["WLC_%1_%2", _type, _side], _customization];
     } forEach ["Primary", "Secondary", "Launcher", "Uniform", "Vest", "Helmet"];
 } forEach [west, east];
-
-if (isServer) then {
-    // Clean up last patch
-    profileNamespace setVariable ["WLC_Scores", createHashMap];
-};

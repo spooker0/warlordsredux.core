@@ -6,9 +6,9 @@ if (lifeState _unit == "INCAPACITATED") exitWith {
     0.99;
 };
 
-private _homeBase = ([BIS_WL_base1, BIS_WL_base2] select {
+private _homeBase = [BIS_WL_base1, BIS_WL_base2] select {
     (_x getVariable ["BIS_WL_owner", independent]) == (side group _unit)
-});
+};
 if (count _homeBase == 0) exitWith {    // should not happen, will kill without downing
     _damage;
 };
@@ -29,6 +29,7 @@ if (_damage < 1) exitWith {
 // Downed
 moveOut _unit;
 switchCamera player;
+enableSentences false;
 
 [_unit] spawn {
     params ["_unit"];

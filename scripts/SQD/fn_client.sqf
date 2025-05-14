@@ -65,11 +65,17 @@ switch (_action) do {
         };
         missionNamespace setVariable ["SQD_playerHasInvite", true];
 
-        private _squad = _squadManager select { (_x select 2) find _inviter > -1 } select 0;
-        if (isNil "_squad") exitWith {
+        private _squad = _squadManager select { (_x select 2) find _inviter > -1 };
+        if (count _squad == 0) exitWith {
             _return = 1;
         };
-        private _inviterName = name (_allPlayers select {getPlayerID _x == _inviter} select 0);
+        _squad = _squad # 0;
+        private _inviterPlayer = _allPlayers select { getPlayerID _x == _inviter };
+        private _inviterName = if (count _inviterPlayer == 0) then {
+            "???"
+        } else {
+            name (_inviterPlayer # 0)
+        };
 
         playSoundUI ["a3\sounds_f\sfx\blip1.wss"];
 
@@ -155,27 +161,24 @@ switch (_action) do {
     case "getMySquadLeader": {
         private _playerId = getPlayerID player;
 
-        private _squad = _squadManager select {(_x select 2) find _playerId > -1} select 0;
-
-        if (isNil "_squad") then {
+        private _squad = _squadManager select {(_x select 2) find _playerId > -1};
+        if (count _squad == 0) exitWith {
             _return = "-1";
-        } else {
-            private _squadLeaderID = _squad select 1;
-            _message = format ["Squad Leader of %1: %2", _playerId, _squadLeaderID];
-            _return = _squadLeaderID;
         };
+
+        _squad = _squad # 0;
+        private _squadLeaderID = _squad select 1;
+        _message = format ["Squad Leader of %1: %2", _playerId, _squadLeaderID];
+        _return = _squadLeaderID;
     };
     case "ftSquadLeader": {
         // call this async
         private _sl = ['getMySquadLeader'] call SQD_fnc_client;
-        private _squadLeader = _allPlayers select {getPlayerID _x == _sl} select 0;
-
-        if (isNil "_squadLeader") exitWith {
+        private _squadLeader = _allPlayers select {getPlayerID _x == _sl};
+        if (count _squadLeader == 0) exitWith {
             _return = 1;
         };
-        if (!alive _squadLeader) exitWith {
-            _return = 2;
-        };
+        _squadLeader = _squadLeader # 0;
 
         [player, "fastTravelSquadLeader"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
@@ -288,51 +291,56 @@ switch (_action) do {
         private _playerId = _params select 0;
 
         private _sl = ['getMySquadLeader'] call SQD_fnc_client;
-        private _squad = _squadManager select {(_x select 2) find _playerId > -1} select 0;
-
-        if (isNil "_squad") then {
+        private _squad = _squadManager select {(_x select 2) find _playerId > -1};
+        if (count _squad == 0) exitWith {
             _return = false;
-        } else {
-            private _squadLeaderID = _squad select 1;
-            _return = (_squadLeaderID == _playerId);
         };
+
+        _squad = _squad # 0;
+        private _squadLeaderID = _squad select 1;
+        _return = (_squadLeaderID == _playerId);
     };
     case "isSquadLeaderOfSize": {
         // Check if player is squad leader of a squad of a certain size or greater
         private _playerId = _params select 0;
         private _size = _params select 1;
 
-        private _squad = _squadManager select { (_x select 1) == _playerId } select 0;
-        private _isLeader = !isNil "_squad";
-        private _squadSize = if (isNil "_squad") then { 1 } else {count (_squad select 2)};
+        private _squad = _squadManager select { (_x select 1) == _playerId };
+        if (count _squad == 0) exitWith {
+            _return = false;
+        };
 
-        _return = _isLeader && (_squadSize >= _size);
+        _squad = _squad # 0;
+        private _squadSize = count (_squad select 2);
+        _return = _squadSize >= _size;
     };
     case "getSquadNameOfPlayer": {
         private _playerId = _params select 0;
 
-        private _squad = _squadManager select { (_x select 2) find _playerId > -1 } select 0;
-        if (isNil "_squad") then {
+        private _squad = _squadManager select { (_x select 2) find _playerId > -1 };
+        if (count _squad == 0) exitWith {
             _return = "No Squad";
-        } else {
-            _return = _squad select 0;
         };
+
+        _squad = _squad # 0;
+        _return = _squad select 0;
     };
     case "areInSquad": {
         private _player1 = _params select 0;
         private _player2 = _params select 1;
 
-        if (_player1 == _player2) then {
+        if (_player1 == _player2) exitWith {
             _return = true;
-        } else {
-            private _squad = _squadManager select { (_x select 2) find _player1 > -1 } select 0;
-            if (isNil "_squad") then {
-                _return = false;
-            } else {
-                private _squadMembers = _squad select 2;
-                _return = _squadMembers find _player2 > -1;
-            };
         };
+
+        private _squad = _squadManager select { (_x select 2) find _player1 > -1 };
+        if (count _squad == 0) exitWith {
+            _return = false;
+        };
+
+        _squad = _squad # 0;
+        private _squadMembers = _squad select 2;
+        _return = _squadMembers find _player2 > -1;
     };
     case "getAllInSquad": {
         private _playerId = getPlayerID player;

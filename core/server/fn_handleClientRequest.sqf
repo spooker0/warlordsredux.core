@@ -99,6 +99,12 @@ if (_action == "revived") exitWith {
 	[objNull, _reward, "Revived Teammate", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
+if (_action == "spot") exitWith {
+	private _reward = _param1;
+	[_reward, _uid] call WL2_fnc_fundsDatabaseWrite;
+	[objNull, _reward, "Recon", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+};
+
 if (_action == "lastLoadout") exitWith {
 	_cost = (getMissionConfigValue ["BIS_WL_lastLoadoutCost", 100]);
 	_hasFunds = (playerFunds >= _cost);
