@@ -87,7 +87,9 @@ if (_eligibleFreeRearm) then {
 
     private _loadoutDefaults = profileNamespace getVariable ["WLM_loadoutDefaults", createHashmap];
     _loadoutDefaults set [_assetActualType, _magTurretsToAdd];
-    profileNamespace setVariable ["WLM_loadoutDefaults", _loadoutDefaults];
+    if (count _magTurretsToRemove > 0) then {
+        profileNamespace setVariable ["WLM_loadoutDefaults", _loadoutDefaults];
+    };
 
     playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Rearm.wss", _asset, false, getPosASL _asset, 2, 1, 75];
     [toUpper localize "STR_A3_WL_popup_asset_rearmed"] spawn WL2_fnc_smoothText;

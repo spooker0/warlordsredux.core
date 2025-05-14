@@ -59,3 +59,4 @@ _purchase_request ctrlSetStructuredText parseText format [
 	_dlcString
 ];
 call WL2_fnc_purchaseMenuRefresh;
+ctrlSetFocus _purchase_request;

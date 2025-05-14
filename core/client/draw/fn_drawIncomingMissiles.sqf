@@ -22,8 +22,10 @@ private _missileTypeData = createHashMapFromArray [
     ["M_70mm_SAAMI", "SAAMI"]
 ];
 
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 while { !BIS_WL_missionEnd } do {
-    if (WL_HelmetInterface == 0) then {
+    private _disableIncomingMissileDisplay = _settingsMap getOrDefault ["disableIncomingMissileDisplay", false];
+    if (WL_HelmetInterface == 0 || _disableIncomingMissileDisplay) then {
         _indicatorMissile ctrlSetText "";
         _indicatorStatus ctrlSetText "";
         _indicatorDistance ctrlSetText "";

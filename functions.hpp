@@ -59,8 +59,10 @@ class CfgFunctions {
 			file = "src\scripts\KST";
 			class actions {};
 			class explode {};
+			class jetpack {};
 			class rocket {};
 			class setParent {};
+			class tracers {};
 		};
 	};
 	class MENU {
@@ -79,6 +81,12 @@ class CfgFunctions {
 			class settingsMenu {};
 			class settingsMenuInit {};
 			class updateViewDistance {};
+		};
+	};
+	class PERF {
+		class Default {
+			file = "src\scripts\PERF";
+			class perfMenuInit {};
 		};
 	};
 	class POLL {
@@ -195,6 +203,7 @@ class CfgFunctions {
 			class rappelAction {};
 			class rappelActionEligibility {};
 			class rearmAction {};
+			class reconOpticsAction {};
 			class refuelAction {};
 			class refuelActionEligibility {};
 			class remoteControlAction {};

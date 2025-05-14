@@ -259,6 +259,34 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
             "Fast Travel"
         ]
     ] call WL2_fnc_addTargetMapButton;
+
+#if WL_STRONGHOLD_DEBUG
+    // Fast Travel FOB Test
+    private _fastTravelFOBTestExecute = {
+        params ["_asset"];
+        systemChat "Testing Sector Stronghold spawns. Force respawn to end test.";
+        while { alive player } do {
+            private _marker = createMarkerLocal ["WL2_fastTravelFOBMarker", getPosATL _asset];
+            _marker setMarkerShapeLocal "ELLIPSE";
+            _marker setMarkerSizeLocal [WL_FOB_RANGE, WL_FOB_RANGE];
+            _marker setMarkerAlphaLocal 0;
+
+            [6, "WL2_fastTravelFOBMarker"] spawn WL2_fnc_executeFastTravel;
+            sleep 3;
+        };
+    };
+    [
+        "FOB SPAWN TEST",
+        _fastTravelFOBTestExecute,
+        true,
+        "fastTravelFOB",
+        [
+            0,
+            "FTSeized",
+            "Fast Travel"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
+#endif
 };
 
 if (_operateAccess && unitIsUAV _asset && getConnectedUAV player != _asset) then {

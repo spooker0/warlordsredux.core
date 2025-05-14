@@ -18,8 +18,8 @@ _vehicle setVariable ["WL2_rwr1Played", 0];
 _vehicle setVariable ["WL2_rwr2Played", 0];
 _vehicle setVariable ["WL2_rwr3Played", 0];
 
-private _soundLandingGear = getArray (configFile >> "CfgVehicles" >> typeOf _vehicle >> "soundGearUp");
-private _hasLandingGear = count _soundLandingGear > 0 && { _soundLandingGear # 0 != "" };
+private _landingGearUpTime = getNumber (configFile >> "CfgVehicles" >> typeOf _vehicle >> "gearUpTime");
+private _hasLandingGear = _landingGearUpTime > 0;
 
 _vehicle setVariable ["WL2_landingGear", _hasLandingGear];
 _vehicle addEventHandler ["Gear", {

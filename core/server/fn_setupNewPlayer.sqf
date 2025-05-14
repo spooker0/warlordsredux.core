@@ -68,6 +68,7 @@ private _owner = owner _warlord;
 
 _warlord setVariable ["BIS_WL_ownerAsset", _uid, true];
 _warlord setVariable ["WL2_accessControl", 0, true];
+[_warlord] call WL2_fnc_lastHitHandler;
 
 if (_lockedToTeam != sideUnknown) then {
     private _correctSide = _lockedToTeam == _currentSide;

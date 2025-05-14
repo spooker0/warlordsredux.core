@@ -66,20 +66,26 @@ private _savedLoadoutHandled = FALSE;
 			private _descriptionMap = missionNamespace getVariable ["WL2_descriptions", createHashMap];
 
 			{
-				_className = configName _x;
-				_actualClassName = getText (_x >> "spawn");
-				if (_actualClassName == "") then {_actualClassName = _className};
-				_class = configFile >> "CfgVehicles" >> _actualClassName;
-				_cost = getNumber (_x >> "cost");
-				_requirements = getArray (_x >> "requirements");
-				_offset = getArray (_x >> "offset");
-				_notForAIUse = getNumber (_x >> "blacklistAI");
-				_displayName = getText (_x >> "name");
+				private _className = configName _x;
+				private _actualClassName = getText (_x >> "spawn");
+
+				if (_actualClassName == "") then {
+					_actualClassName = _className;
+				};
+
+				private _class = configFile >> "CfgVehicles" >> _actualClassName;
+				private _cost = getNumber (_x >> "cost");
+				private _requirements = getArray (_x >> "requirements");
+				private _offset = getArray (_x >> "offset");
+				private _notForAIUse = getNumber (_x >> "blacklistAI");
+
+				private _displayName = getText (_x >> "name");
 				if (_displayName == "") then {
 					_displayName = getText (_class >> "displayName");
 				};
-				_picture = getText (_class >> "editorPreview");
-				_text = "";
+
+				private _picture = getText (_class >> "editorPreview");
+				private _text = "";
 
 				if (_cost == 0) then {
 					continue;

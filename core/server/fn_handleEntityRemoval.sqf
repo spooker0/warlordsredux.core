@@ -13,6 +13,14 @@ private _children = _unit getVariable ["WL2_children", []];
     deleteVehicle _x;
 } forEach _children;
 
+private _stats = missionNamespace getVariable ["WL_stats", createHashMap];
+
+private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
+private _deathStats = _stats getOrDefault [_assetActualType, createHashMap];
+private _deathValue = _deathStats getOrDefault ["deaths", 0];
+_deathStats set ["deaths", _deathValue + 1];
+_stats set [_assetActualType, _deathStats];
+
 private _responsiblePlayer = [_killer, _instigator] call WL2_fnc_handleInstigator;
 if (isNull _responsiblePlayer || { _responsiblePlayer == _unit }) then {
     private _lastHitter = _unit getVariable ["WL_lastHitter", objNull];
@@ -38,7 +46,6 @@ if (_isUnitPlayer && _unit isKindOf "Man") then {
 
 if (isNull _responsiblePlayer) exitWith {};
 
-private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
 private _unitCost = if (_unit isKindOf "Man") then {
     if (_isUnitPlayer) then { 60 } else { 30 };
 } else {
@@ -46,7 +53,6 @@ private _unitCost = if (_unit isKindOf "Man") then {
     _costMap getOrDefault [_assetActualType, 0];
 };
 
-private _stats = missionNamespace getVariable ["WL_stats", createHashMap];
 private _killerActualType = _killer getVariable ["WL2_orderedClass", typeOf _killer];
 private _killerStats = _stats getOrDefault [_killerActualType, createHashMap];
 private _killerKillValue = _killerStats getOrDefault ["killValue", 0];

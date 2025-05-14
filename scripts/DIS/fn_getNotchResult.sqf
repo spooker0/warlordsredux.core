@@ -44,7 +44,7 @@ if (_launcherNoLos) then {
 };
 
 private _actualTrackSpeed = _targetTrackSpeed - (_flaresNearby * 15);           // 30 flares max
-private _actualTolerance = WL_SAM_NOTCH_TOLERANCE - (_flaresNearby * 0.015);    // 59 flares max
+private _actualTolerance = WL_SAM_NOTCH_TOLERANCE - (_flaresNearby * 0.012);    // 74 flares max
 private _actualMaxRange = WL_SAM_NOTCH_MAX_RANGE - (_flaresNearby * 50);        // 40 flares max
 _actualTrackSpeed = _actualTrackSpeed max 1;
 _actualTolerance = _actualTolerance max 0.1;

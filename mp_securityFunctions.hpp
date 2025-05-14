@@ -37,7 +37,7 @@ class CfgRemoteExec {
 		class WL2_fnc_handleClientRequest {allowedTargets = 2;};
 		class WL2_fnc_handleEntityRemoval {allowedTargets = 2;};
 		class WL2_fnc_hideObjectOnAll {allowedTargets = 0;};
-		class WL2_fnc_jammerAction {allowedTargets = 1;};
+		class WL2_fnc_jammerAction {allowedTargets = 0;};
 		class WL2_fnc_killRewardHandle {allowedTargets = 2;};
 		class WL2_fnc_lagMessageHandler {allowedTargets = 2;};
 		class WL2_fnc_punishPlayer {allowedTargets = 2;};
@@ -47,6 +47,7 @@ class CfgRemoteExec {
 		class WL2_fnc_radarOperateAction {allowedTargets = 1;};
 		class WL2_fnc_radarRotateAction {allowedTargets = 1;};
 		class WL2_fnc_rearmAction {allowedTargets = 1;};
+		class WL2_fnc_reconOpticsAction {allowedTargets = 0;};
 		class WL2_fnc_refuelAction {allowedTargets = 0;};
 		class WL2_fnc_reloadOverride {allowedTargets = 0;};
 		class WL2_fnc_remoteControlAction {allowedTargets = 0;};

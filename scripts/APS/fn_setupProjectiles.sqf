@@ -1,3 +1,5 @@
+#include "..\..\core\warlords_constants.inc"
+
 private _alreadyAdded = _this getVariable ["APS_fireEventHandlerAdded", false];
 if (_alreadyAdded) exitWith {};
 _this setVariable ["APS_fireEventHandlerAdded", true];

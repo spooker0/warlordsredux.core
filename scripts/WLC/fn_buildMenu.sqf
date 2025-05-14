@@ -29,7 +29,7 @@ private _score = ["getScore"] call WLC_fnc_getLevelInfo;
 private _nextLevelScore = ["getNextLevelScore"] call WLC_fnc_getLevelInfo;
 
 private _levelDisplay = _display displayCtrl WLC_LEVEL_TEXT;
-_levelDisplay ctrlSetText format ["Level %1 (%2/%3)", _level, _score, _nextLevelScore];
+_levelDisplay ctrlSetText format ["Level %1 (%2/%3)", _level, _score toFixed 0, _nextLevelScore toFixed 0];
 
 private _moneySign = [_side] call WL2_fnc_getMoneySign;
 
