@@ -1,7 +1,6 @@
 #include "constants.inc"
 
 import RscShortcutButton;
-import RscEdit;
 
 class RscPollOption: RscShortcutButton {
     animTextureNormal = "#(argb,8,8,3)color(1,1,1,1)";
