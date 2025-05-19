@@ -58,7 +58,7 @@ while { alive _asset } do {
             objNull,
             true,
             1,
-            "VIEW",
+            "FIRE",
             "",
             true
         ];
@@ -69,7 +69,7 @@ while { alive _asset } do {
         };
 
         private _targetIntersection = _targetIntersections # 0 # 0;
-        private _area = [ASLtoAGL _targetIntersection, 50, 50, 0, false];
+        private _area = [ASLtoAGL _targetIntersection, 125, 125, 0, false];
         private _unitsInArea = [BIS_WL_playerSide, _area] call WL2_fnc_detectUnits;
         private _remoteTargets = (listRemoteTargets BIS_WL_playerSide) select { _x # 1 > -10 } apply { _x # 0 };
 
