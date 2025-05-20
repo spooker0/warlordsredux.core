@@ -1,32 +1,10 @@
-_countFaction0 = playersNumber west;
-_fac0Percentage = 0.1;
-if ((count allPlayers) > 0) then {
-	_fac0Percentage = (1.6 * _countFaction0 / count allPlayers) + 0.2;
-};
-_multiBlu = 2 - _fac0Percentage;
-missionNamespace setVariable ["blanceMultilplierBlu", _multiBlu];
-publicVariable "blanceMultilplierBlu";
-_multiOpf = _fac0Percentage;
-missionNamespace setVariable ["blanceMultilplierOpf", _multiOpf];
-publicVariable "blanceMultilplierOpf";
-{
-	private _multiplier = switch (_x) do {
-		case (west): {
-			missionNamespace getVariable "blanceMultilplierBlu"
-		};
-		case (east): {
-			missionNamespace getVariable "blanceMultilplierOpf"
-		};
-	};
+private _playersWest = allPlayers select { side group _x == west } select { !(_x getVariable ["WL2_afk", false]) };
+private _playersEast = allPlayers select { side group _x == east } select { !(_x getVariable ["WL2_afk", false]) };
+_playersWest = (count _playersWest) max 1;
+_playersEast = (count _playersEast) max 1;
+private _multiplier = _playersWest / (_playersWest + _playersEast) * 2;
 
-	private _incomeStandard = _x call WL2_fnc_income;
-	private _actualIncome = round (_incomeStandard * _multiplier);
-	switch (_x) do {
-		case (west): {
-			serverNamespace setVariable ["actualIncomeBlu", _actualIncome]
-		};
-		case (east): {
-			serverNamespace setVariable ["actualIncomeOpf", _actualIncome]
-		};
-	};
-} forEach BIS_WL_competingSides;
+private _incomeWest = round ((west call WL2_fnc_income) * (2 - _multiplier));
+private _incomeEast = round ((east call WL2_fnc_income) * _multiplier);
+missionNamespace setVariable ["WL2_actualIncome_west", _incomeWest max 50, true];
+missionNamespace setVariable ["WL2_actualIncome_east", _incomeEast max 50, true];

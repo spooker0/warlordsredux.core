@@ -25,7 +25,10 @@ addMissionEventHandler ["Draw3D", {
 
     private _samIcons = uiNamespace getVariable ["WL_HelmetInterfaceSAMIcons", []];
     {
-        drawIcon3D _x;
+        private _icon = +_x;
+        private _location = (_x # 2) modelToWorldVisual [0, 0, 0];
+        _icon set [2, _location];
+        drawIcon3D _icon;
     } forEach _samIcons;
 
     private _munitionIcons = uiNamespace getVariable ["WL_HelmetInterfaceMunitionIcons", []];
@@ -327,7 +330,7 @@ addMissionEventHandler ["Draw3D", {
                 _samIcons pushBack [
                     "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missileAlt_ca.paa",
                     [1, 0, 0, 1],
-                    _x modelToWorldVisual [0, 0, 0],
+                    _x,
                     0.8,
                     0.8,
                     0,
@@ -352,7 +355,7 @@ addMissionEventHandler ["Draw3D", {
                     } else {
                         [1, 0, 0, 1]
                     },
-                    _targetLock # 0 modelToWorldVisual [0, 0, 0],
+                    _targetLock # 0,
                     0.8,
                     0.8,
                     0,
@@ -363,7 +366,7 @@ addMissionEventHandler ["Draw3D", {
                     "center",
                     true,
                     0,
-                    -0.05
+                    0.02
                 ];
             };
         };

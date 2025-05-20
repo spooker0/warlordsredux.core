@@ -12,8 +12,10 @@ private _maxSubordinates = missionNamespace getVariable [format ["BIS_WL_maxSubo
 (uiNamespace getVariable "BIS_WL_osd_income_side_2") ctrlSetStructuredText parseText format ["<t size = '%3' shadow = '2'>%1/%2</t>", BIS_WL_matesAvailable, _maxSubordinates, _scale];
 
 if (_fullRefresh) then {
-	(uiNamespace getVariable "BIS_WL_osd_sectors_side_1") ctrlSetStructuredText parseText format ["<t size = '%2' align = 'center' shadow = '2'>%1</t>", count (BIS_WL_sectorsArray # 0), 0.6 call WL2_fnc_purchaseMenuGetUIScale];
-	(uiNamespace getVariable "BIS_WL_osd_income_side_1") ctrlSetStructuredText parseText format ["<t size = '%2' shadow = '2'>+%1</t>", BIS_WL_playerSide call WL2_fnc_income, _scale];
+	(uiNamespace getVariable "BIS_WL_osd_sectors_side_1") ctrlSetStructuredText parseText format ["<t size='%2' align='center' shadow='2'>%1</t>", count (BIS_WL_sectorsArray # 0), 0.6 call WL2_fnc_purchaseMenuGetUIScale];
+
+	private _actualIncome = missionNamespace getVariable [format ["WL2_actualIncome_%1", _side], 0];
+	(uiNamespace getVariable "BIS_WL_osd_income_side_1") ctrlSetStructuredText parseText format ["<t size='%2' shadow='2'>+%1</t>", _actualIncome, _scale];
 };
 
 private _cdText = "";

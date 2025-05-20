@@ -232,29 +232,6 @@ private _scanners = if (_drawAll) then {
 	};
 } forEach _scanners;
 
-{
-	if (isNull _x) then { continue; };
-	private _size = call WL2_fnc_iconSize * 1.2;
-	private _objToColor = if ([_x] call WL2_fnc_isScannerMunition) then {
-		getShotParents _x # 0;
-	} else {
-		_x
-	};
-	_drawIcons pushBack [
-		call WL2_fnc_iconType,
-		[_objToColor] call WL2_fnc_iconColor,
-		getPosASL _x,
-		_size,
-		_size,
-		call WL2_fnc_getDir,
-		_x call WL2_fnc_iconTextSectorScan,
-		1,
-		0.06,
-		"PuristaBold",
-		"right"
-	];
-} forEach (_mapData getOrDefault ["scannedObjects", []]);
-
 private _draw = (ctrlMapScale _map) < 0.3 || _drawMode == 2;
 
 // Dead players

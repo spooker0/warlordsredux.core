@@ -41,14 +41,14 @@
 		private _side = BIS_WL_playerSide;
 		_mapData set ["side", _side];
 
-		private _sectorScannedUnits = [];
-		{
-			private _detectedUnits = _x getVariable ["WL2_detectedUnits", []];
-			_sectorScannedUnits append _detectedUnits;
-		} forEach BIS_WL_currentlyScannedSectors;
-		private _locationScannedUnits = missionNamespace getVariable ["WL2_detectedUnits", []];
-		private _scannedUnits = _sectorScannedUnits + _locationScannedUnits;
-		_mapData set ["scannedUnits", _scannedUnits];
+		private _targetsOnDatalink = (listRemoteTargets _side) select {
+            private _target = _x # 0;
+            private _targetSide = [_target] call WL2_fnc_getAssetSide;
+
+            private _targetTime = _x # 1;
+            _targetTime >= -10 && _targetSide != _side && alive _target;
+        } apply { _x # 0 };
+		_mapData set ["scannedUnits", _targetsOnDatalink];
 
 		private _vehicles = vehicles select { alive _x };
 		private _activeVehicles = _vehicles select { isEngineOn _x };
@@ -69,13 +69,6 @@
 			([_x] call WL2_fnc_getAssetSide) == _side
 		};
 		_mapData set ["scannersTeam", _scannerUnitTeam];
-
-		private _allScannedObjects = [];
-		{
-			private _scannedObjects = _x getVariable ["WL_scannedObjects", []];
-			_allScannedObjects insert [-1, _scannedObjects, true];
-		} forEach _scannerUnits;
-		_mapData set ["scannedObjects", _allScannedObjects];
 
 		private _allPlayers = allPlayers;
 

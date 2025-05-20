@@ -137,7 +137,6 @@ class CfgFunctions {
 			class avTerminal {};
 			class betty {};
 			class clientEH {};
-			class cpBalance {};
 			class factionBasedClientInit {};
 			class forfeitHandle {};
 			class handleBuyMenuKeypress {};

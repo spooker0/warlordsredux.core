@@ -8,13 +8,14 @@ while { !BIS_WL_missionEnd } do {
 	};
 
 	{
-		private _calculatedIncome = if (side group _x == independent) then {
-			200;
-		} else {
-			serverNamespace getVariable [variable, 40];
+		private _calculatedIncome = switch (side group _x) do {
+			case west: { missionNamespace getVariable ["WL2_actualIncome_west", 40] };
+			case east: { missionNamespace getVariable ["WL2_actualIncome_east", 40] };
+			case independent: { 200 };
+			default { 0 };
 		};
 
-		[_calculatedIncome max 50, getPlayerUID _x] call WL2_fnc_fundsDatabaseWrite;
+		[_calculatedIncome, getPlayerUID _x] call WL2_fnc_fundsDatabaseWrite;
 	} forEach _notBlocked;
 
 	private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
