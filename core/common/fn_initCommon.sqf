@@ -7,6 +7,11 @@ if !(isDedicated) then {
 
 if (isServer) then {
 	call WL2_fnc_initSectors;
+} else {
+	waitUntil {
+		sleep 1;
+		missionNamespace getVariable ["WL2_sectorsInitializationComplete", false];
+	};
 };
 
 BIS_WL_allSectors = (entities "Logic") select {count synchronizedObjects _x > 0};

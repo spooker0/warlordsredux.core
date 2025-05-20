@@ -45,3 +45,5 @@ private _connections = getArray (_sectorConfig >> "connections");
 
     _fromSector synchronizeObjectsAdd [_toSector];
 } forEach _connections;
+
+missionNamespace setVariable ["WL2_sectorsInitializationComplete", true, true];
