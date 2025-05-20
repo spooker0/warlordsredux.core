@@ -5,11 +5,18 @@ if !(isDedicated) then {
 	waitUntil { !isNull player };
 };
 
+if (isServer) then {
+	call WL2_fnc_initSectors;
+};
+
 BIS_WL_allSectors = (entities "Logic") select {count synchronizedObjects _x > 0};
 
 {
-	private _sectorBounds = (_x nearObjects ["EmptyDetector", 100]) # 0;
-	_x setVariable ["objectArea", triggerArea _sectorBounds];
+	if (count (_x getVariable ["objectArea", []]) == 0) then {
+		private _nearDetectors = _x nearObjects ["EmptyDetector", 100];
+		_x setVariable ["objectArea", triggerArea (_nearDetectors # 0)];
+	};
+
 	if (isNil {_x getVariable "BIS_WL_services"}) then {
 		_x setVariable ["BIS_WL_services", []];
 	};

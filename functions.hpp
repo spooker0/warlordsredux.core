@@ -384,6 +384,7 @@ class CfgFunctions {
 			class inAngleCheck {};
 			class income {};
 			class initCommon {};
+			class initSectors {};
 			class lastHitHandler {};
 			class missionEndHandle {};
 			class newAssetHandle {};
