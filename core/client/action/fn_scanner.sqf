@@ -49,7 +49,7 @@ if (_awacs && _assetHeight < 50) exitWith {
 private _scanRadius = if (_awacs) then {
     10000;
 } else {
-    ((_assetHeight * 2) min 1000) max 250;
+    ((_assetHeight * 2) min 1000) max 350;
 };
 if (_radiusOverride > 0) then {
     _scanRadius = _radiusOverride;
@@ -72,8 +72,7 @@ private _relevantVehicles = if (_awacs) then {
 } else {
     (vehicles + allUnits) select {
         private _vehiclePos = _x modelToWorldVisual [0, 0, 0];
-        (_x getVariable ["WL_spawnedAsset", false] || isPlayer _x) &&
-        _vehiclePos # 2 < _assetHeight
+        (_x getVariable ["WL_spawnedAsset", false] || isPlayer _x)
     };
 };
 
@@ -81,7 +80,7 @@ private _vehiclesInRadius = _relevantVehicles select {
     private _vehiclePos = _x modelToWorldVisual [0, 0, 0];
     _vehiclePos distance2D _assetPos < _scanRadius &&
     alive _x &&
-    isNull objectParent _x;
+    vehicle _x == _x;
 };
 private _scannedObjects = _vehiclesInRadius select {
     private _vehicleSide = [_x] call WL2_fnc_getAssetSide;

@@ -39,6 +39,7 @@ if (isNull BIS_WL_targetSector) exitWith {
 };
 
 [toUpper localize "STR_A3_WL_asset_dispatched_TODO_REWRITE"] spawn WL2_fnc_smoothText;
+player setPosATL (getPosATL player);
 
 [player, "orderAsset", "air", BIS_WL_targetSector, _orderedClass, false] remoteExec ["WL2_fnc_handleClientRequest", 2];
 

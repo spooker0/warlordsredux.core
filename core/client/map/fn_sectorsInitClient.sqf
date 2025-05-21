@@ -68,6 +68,7 @@ private _i = 0;
 			_dir = _pos1 getDir _pos2;
 			private _linkMarker = createMarkerLocal [format ["BIS_WL_linkMrkr_%1", _i], _center];
 			_linkMarker setMarkerAlphaLocal WL_CONNECTING_LINE_ALPHA_MAX;
+			_linkMarker setMarkerColorLocal "ColorBlack";
 			_linkMarker setMarkerShapeLocal "RECTANGLE";
 			_linkMarker setMarkerDirLocal _dir;
 			_linkMarker setMarkerSizeLocal [WL_CONNECTING_LINE_AXIS, _size];
