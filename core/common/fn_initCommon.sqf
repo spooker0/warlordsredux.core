@@ -8,8 +8,10 @@ if !(isDedicated) then {
 if (isServer) then {
 	call WL2_fnc_initSectors;
 } else {
+	["client_init"] call BIS_fnc_startLoadingScreen;
+
 	waitUntil {
-		sleep 1;
+		sleep 0.1;
 		missionNamespace getVariable ["WL2_sectorsInitializationComplete", false];
 	};
 };

@@ -1,7 +1,5 @@
 #include "..\warlords_constants.inc"
 
-["client_init"] call BIS_fnc_startLoadingScreen;
-
 WL_LoadingState = 0;
 0 spawn {
 	private _startTime = serverTime;
