@@ -122,6 +122,15 @@ switch (_className) do {
         "RequestMenu_close" call WL2_fnc_setupUI;
         0 spawn WL2_fnc_resetVehicle;
     };
+    case "Camouflage": {
+        "RequestMenu_close" call WL2_fnc_setupUI;
+        private _loc = getPosASL player;
+        _loc set [2, _loc # 2 + 4.3];
+        [player, "camouflage"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+
+        private _camo = createSimpleObject ["a3\plants_f\Bush\b_ArundoD3s_F.p3d", _loc];
+        _camo setVariable ["WL2_placedTime", serverTime, 2];
+    };
     case "PruneAssets": {
         "RequestMenu_close" call WL2_fnc_setupUI;
 

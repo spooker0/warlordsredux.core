@@ -171,6 +171,12 @@ if (_ret) then {
 				[WL2_fnc_checkSelectedUnits]
 			]
 		};
+		case "Camouflage": {
+			[
+				[WL2_fnc_checkPlayerInVehicle],
+				[WL2_fnc_checkNearbyEnemies]
+			]
+		};
 		case "AIGetIn": {
 			[
 				[WL2_fnc_checkGroundVehicleDriver, [false]]

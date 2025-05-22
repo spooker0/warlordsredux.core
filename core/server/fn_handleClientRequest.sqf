@@ -329,6 +329,14 @@ if (_action == "controlCollaborator") exitWith {
 	};
 };
 
+if (_action == "camouflage") exitWith {
+	private _cost = 200;
+	private _hasFunds = playerFunds >= _cost;
+	if (_hasFunds) then {
+		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
+	};
+};
+
 if (_action == "kill") exitWith {
 	_sender setDamage 1;
 };
