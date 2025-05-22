@@ -114,7 +114,7 @@
     {},
     [],
     5,
-    100,
+    80,
     false,
     false
 ] call BIS_fnc_holdActionAdd;

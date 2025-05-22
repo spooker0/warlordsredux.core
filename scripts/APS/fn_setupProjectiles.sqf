@@ -25,6 +25,7 @@ _this addEventHandler ["Fired", {
 	private _projectileTV = _projectileConfig getOrDefault ["tv", false];
 	if (_projectileTV) then {
 		private _projectileSpeed = _projectileConfig getOrDefault ["speed", 0];
+		_projectileSpeed = _projectileSpeed + (speed _unit) / 3.6;
 		_projectile setVariable ["APS_speedOverride", _projectileSpeed];
 		[_projectile] spawn DIS_fnc_tvMunition;
 	} else {

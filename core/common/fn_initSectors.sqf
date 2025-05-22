@@ -5,6 +5,7 @@ private _logicCenter = createCenter sideLogic;
 private _logicGroup = createGroup _logicCenter;
 
 private _createdSectors = createHashMap;
+private _initializedSectors = [];
 {
     private _sector = _x;
     private _sectorClass = configName _sector;
@@ -31,6 +32,7 @@ private _createdSectors = createHashMap;
     };
 
     _createdSectors set [_sectorClass, _logic];
+    _initializedSectors pushBack _logic;
 } forEach _sectors;
 
 private _connections = getArray (_sectorConfig >> "connections");
@@ -46,4 +48,4 @@ private _connections = getArray (_sectorConfig >> "connections");
     _fromSector synchronizeObjectsAdd [_toSector];
 } forEach _connections;
 
-missionNamespace setVariable ["WL2_sectorsInitializationComplete", true, true];
+missionNamespace setVariable ["WL2_sectorsInitializationComplete", _initializedSectors, true];

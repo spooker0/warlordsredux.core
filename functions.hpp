@@ -211,6 +211,7 @@ class CfgFunctions {
 			class repairAction {};
 			class repairActionEligibility {};
 			class respawnBagAction {};
+			class restockAction {};
 			class reviveAction {};
 			class scanner {};
 			class scannerAction {};
@@ -358,7 +359,6 @@ class CfgFunctions {
 			class checkTargetSelected {};
 			class checkTargetUnlinked {};
 			class checkTent {};
-			class checkTentAction {};
 			class checkUAVLimit {};
 			class purchaseFromMenu {};
 			class purchaseMenuAssetAvailability {};

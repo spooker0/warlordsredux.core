@@ -20,6 +20,7 @@ showHUD [true, true, true, true, true, true, true, true, true, true, true];
 private _waypointDrawer = addMissionEventHandler ["Draw3D", {
     private _waypointPosition = uiNamespace getVariable ["WL_waypointPosition", []];
     if (count _waypointPosition == 0) exitWith {};
+    private _distance = _waypointPosition distance cameraOn;
     drawIcon3D [
         "\A3\ui_f\data\IGUI\RscIngameUI\RscOptics\square.paa",
         [1, 1, 1, 1],
@@ -27,7 +28,7 @@ private _waypointDrawer = addMissionEventHandler ["Draw3D", {
         0.3,
         0.3,
         0,
-        "WAYPOINT",
+        format ["WAYPOINT %1KM", (_distance / 1000) toFixed 1],
         0,
         0.02,
         "TahomaB",

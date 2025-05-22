@@ -130,6 +130,8 @@ private _backpacks = if (BIS_WL_playerSide == west) then {
     ];
 };
 
+removeBackpack _unit;
+
 private _largestBackpack = _backpacks # (count _backpacks - 1);
 _unit addBackpack _largestBackpack;
 

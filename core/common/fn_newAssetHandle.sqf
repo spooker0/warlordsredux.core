@@ -179,15 +179,15 @@ if (_asset isKindOf "Man") then {
 		};
 	};
 
-	switch (typeOf _asset) do {
+	// Vehicle special actions
+	switch (_assetActualType) do {
 		// Dazzlers
-		case "O_T_Truck_03_device_ghex_F";
+		case "B_T_Truck_03_device_F";
 		case "O_Truck_03_device_F": {
 			_asset setVariable ["BIS_WL_dazzlerActivated", false, true];
 			_asset setVariable ["WL_ewNetActive", false, true];
 			_asset setVariable ["WL_ewNetRange", WL_JAMMER_RANGE_OUTER, true];
 
-			[_asset] remoteExec ["WL2_fnc_dazzlerAction", 0, true];
 			[_asset] remoteExec ["WL2_fnc_jammerAction", 0, true];
 		};
 		case "Land_MobileRadar_01_radar_F": {
@@ -204,17 +204,21 @@ if (_asset isKindOf "Man") then {
 		};
 
 		// Logistics
-		case "B_Truck_01_flatbed_F": {
+		case "B_Truck_01_flatbed_F";
+		case "O_Truck_01_flatbed_F": {
 			[_asset] remoteExec ["WL2_fnc_deployableAddAction", 0, true];
 		};
 		case "B_T_VTOL_01_vehicle_F": {
 			_asset call WL2_fnc_logisticsAddAction;
 		};
 		case "B_Heli_Transport_01_F";
+		case "B_Heli_Transport_01_UP_F";
 		case "B_Heli_Transport_03_F";
 		case "O_Heli_Light_02_unarmed_F";
 		case "O_Heli_Light_02_dynamicLoadout_F";
 		case "O_Heli_Transport_04_F";
+		case "O_Heli_Transport_02_F";
+		case "O_Heli_Transport_02_ATGM_F";
 		case "I_Heli_Transport_02_F": {
 			[_asset] remoteExec ["WL2_fnc_slingAddAction", 0, true];
 		};
@@ -225,6 +229,8 @@ if (_asset isKindOf "Man") then {
 		};
 
 		case "B_Boat_Armed_01_minigun_F";
+		case "B_Boat_Armed_01_autocannon_F";
+		case "O_Boat_Armed_01_autocannon_F";
 		case "O_Boat_Armed_01_hmg_F": {
 			[_asset] spawn WL2_fnc_stabilizeBoatAction;
 		};
@@ -324,6 +330,10 @@ if (_asset isKindOf "Man") then {
 		};
 	};
 
+	if (_asset getVariable ["apsType", -1] == 3) then {
+		[_asset] remoteExec ["WL2_fnc_dazzlerAction", 0, true];
+	};
+
 	private _hasESAMMap = missionNamespace getVariable ["WL2_hasESAM", createHashMap];
 	private _isESAM = _hasESAMMap getOrDefault [_assetActualType, false];
 	if (_isESAM) then {
@@ -394,6 +404,8 @@ if (_asset isKindOf "Man") then {
 				_asset addItemCargoGlobal [_containerItemType, _containerItemCount];
 			};
 		} forEach _containerItems;
+
+		[_asset] remoteExec ["WL2_fnc_restockAction", 0, true];
 	} else {
 		if (_settingsMap getOrDefault ["spawnEmpty", false]) then {
 			clearMagazineCargoGlobal _asset;

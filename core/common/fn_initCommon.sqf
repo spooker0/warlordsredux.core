@@ -10,13 +10,28 @@ if (isServer) then {
 } else {
 	["client_init"] call BIS_fnc_startLoadingScreen;
 
-	waitUntil {
-		sleep 0.1;
-		missionNamespace getVariable ["WL2_sectorsInitializationComplete", false];
+	private _sectorsReady = false;
+	while { !_sectorsReady } do {
+		sleep 0.01;
+		private _expectedSectors = missionNamespace getVariable "WL2_sectorsInitializationComplete";
+		if (isNil "_expectedSectors") then {
+			continue;
+		};
+		_expectedSectors = _expectedSectors apply { _x getVariable ["BIS_WL_name", ""] };
+		private _foundSectors = (entities "Logic") select { _x getVariable ["BIS_WL_name", ""] != "" } apply { _x getVariable ["BIS_WL_name", ""] };
+		private _foundAllSectors = true;
+		{
+			if !(_x in _foundSectors) then {
+				_foundAllSectors = false;
+			};
+		} forEach _expectedSectors;
+		if (_foundAllSectors) then {
+			_sectorsReady = true;
+		};
 	};
 };
 
-BIS_WL_allSectors = (entities "Logic") select {count synchronizedObjects _x > 0};
+BIS_WL_allSectors = (entities "Logic") select { _x getVariable ["BIS_WL_name", ""] != "" };
 
 {
 	if (count (_x getVariable ["objectArea", []]) == 0) then {
@@ -73,5 +88,5 @@ if (isServer) then {
 };
 
 if (!isDedicated && hasInterface) then {
-	call WL2_fnc_initClient
+	call WL2_fnc_initClient;
 };

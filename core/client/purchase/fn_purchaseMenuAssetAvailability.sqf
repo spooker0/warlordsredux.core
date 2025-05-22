@@ -225,8 +225,7 @@ if (_ret) then {
 			[
 				[WL2_fnc_checkPlayerInVehicle],
 				[WL2_fnc_checkNearbyEnemies],
-				[WL2_fnc_checkInFriendlySector, [_cost, []]],
-				[WL2_fnc_checkTentAction]
+				[WL2_fnc_checkInFriendlySector, [_cost, []]]
 			]
 		};
 		case "RespawnBagFT": {
