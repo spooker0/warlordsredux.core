@@ -18,7 +18,9 @@ private _baseArr = WL_BASES select {(_x getVariable ["BIS_WL_owner", sideUnknown
 {
 	private _sector = _x;
 	_income = _income + (_sector getVariable ["BIS_WL_value", 0]);
-	{_services pushBackUnique _x} forEach (_sector getVariable ["BIS_WL_services", []]);
+	{
+		_services pushBackUnique _x;
+	} forEach (_sector getVariable ["BIS_WL_services", []]);
 } forEach _owned;
 
 if (_side == independent) exitWith {

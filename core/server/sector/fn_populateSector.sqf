@@ -106,7 +106,8 @@ if (count (_sector getVariable ["BIS_WL_vehiclesToSpawn", []]) == 0) then {
 };
 
 _connectedToBase = count ((profileNamespace getVariable "BIS_WL_lastBases") arrayIntersect (_sector getVariable "BIS_WL_connectedSectors")) > 0;
-if (!_connectedToBase && {"H" in (_sector getVariable "BIS_WL_services")}) then {
+private _services = _sector getVariable ["BIS_WL_services", []];
+if (!_connectedToBase && "H" in _services) then {
 	private _neighbors = (_sector getVariable "BIS_WL_connectedSectors") select {(_x getVariable "BIS_WL_owner") == _owner};
 
 	if (count _neighbors > 0) then {

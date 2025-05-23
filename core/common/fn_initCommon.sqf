@@ -34,14 +34,22 @@ if (isServer) then {
 BIS_WL_allSectors = (entities "Logic") select { _x getVariable ["BIS_WL_name", ""] != "" };
 
 {
+	private _sector = _x;
+
 	if (count (_x getVariable ["objectArea", []]) == 0) then {
 		private _nearDetectors = _x nearObjects ["EmptyDetector", 100];
 		_x setVariable ["objectArea", triggerArea (_nearDetectors # 0)];
 	};
 
-	if (isNil {_x getVariable "BIS_WL_services"}) then {
-		_x setVariable ["BIS_WL_services", []];
-	};
+	private _sectorArea = _sector getVariable "objectArea";
+	private _connections = _sector getVariable ["BIS_WL_connectedSectors", []];
+	{
+		if (typeof _x == "Logic") then {
+			_connections pushBackUnique _x;
+		};
+	} forEach (synchronizedObjects _sector);
+	_sector setVariable ["BIS_WL_connectedSectors", _connections];
+	_sector setVariable ["objectAreaComplete", [position _sector] + _sectorArea];
 } forEach BIS_WL_allSectors;
 
 {_x enableSimulation false} forEach allMissionObjects "EmptyDetector";
@@ -52,16 +60,6 @@ enableSaving [false, false];
 
 call WL2_fnc_tablesSetUp;
 call WLC_fnc_init;
-
-{
-	private _sector = _x;
-	private _sectorArea = _sector getVariable "objectArea";
-	_sector setVariable ["BIS_WL_connectedSectors", (synchronizedObjects _sector) select {typeOf _x == "Logic"}];
-	_sector setVariable ["objectAreaComplete", [position _sector] + _sectorArea];
-	private _axisA = _sectorArea # 0;
-	private _axisB = _sectorArea # 1;
-	_sector setVariable ["BIS_WL_maxAxis", if (_sectorArea # 3) then {sqrt ((_axisA ^ 2) + (_axisB ^ 2))} else {_axisA max _axisB}];
-} forEach BIS_WL_allSectors;
 
 if (isServer) then {
 	call WL2_fnc_initServer;

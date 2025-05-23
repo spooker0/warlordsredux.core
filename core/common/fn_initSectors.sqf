@@ -46,6 +46,20 @@ private _connections = getArray (_sectorConfig >> "connections");
     private _toSector = _createdSectors getOrDefault [_to, objNull];
 
     _fromSector synchronizeObjectsAdd [_toSector];
+
+    private _fromSectorConnections = _fromSector getVariable ["BIS_WL_connectedSectors", []];
+    _fromSectorConnections pushBackUnique _toSector;
+    _fromSector setVariable ["BIS_WL_connectedSectors", _fromSectorConnections];
+
+    private _toSectorConnections = _toSector getVariable ["BIS_WL_connectedSectors", []];
+    _toSectorConnections pushBackUnique _fromSector;
+    _toSector setVariable ["BIS_WL_connectedSectors", _toSectorConnections];
 } forEach _connections;
+
+// Set on clients
+{
+    private _sectorConnections = _x getVariable ["BIS_WL_connectedSectors", []];
+    _x setVariable ["BIS_WL_connectedSectors", _sectorConnections, true];
+} forEach _initializedSectors;
 
 missionNamespace setVariable ["WL2_sectorsInitializationComplete", _initializedSectors, true];
