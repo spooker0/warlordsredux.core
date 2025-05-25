@@ -9,7 +9,7 @@ if (!alive player || lifeState player == "INCAPACITATED") exitWith {
     [true, "Player is dead."];
 };
 if ((_originalPosition distance2D _asset) > _limitDistance) exitWith {
-    [true, "Moved too far from original position."];
+    [true, "Asset moved too far from original position."];
 };
 
 private _sectors = (BIS_WL_sectorsArray # 0) select {
@@ -63,19 +63,30 @@ _sector = if (count _sectors > 0) then {
     objNull;
 };
 
-private _sectorStronghold = _sector getVariable ["WL_strongholdMarker", ""];
-private _isInvalidPosition = if (_asset inArea _sectorStronghold || count _forwardBases > 0) then {
-    false;
-} else {
-    private _isInCarrierSector = count (_sector getVariable ["WL_aircraftCarrier", []]) > 0;
-    if (_isInCarrierSector) then {
-        ((getPosASL _asset) # 2) < 5
-    } else {
-        ((getPosATL _asset) # 2) > 1 || surfaceIsWater (getPosATL _asset)
-    };
+if (count _forwardBases > 0) exitWith {
+    [false, ""]
 };
-if (_isInvalidPosition) exitWith {
-    [true, "Asset is in an invalid position."];
+
+private _sectorStronghold = _sector getVariable ["WL_strongholdMarker", ""];
+if (_asset inArea _sectorStronghold) exitWith {
+    false;
+};
+
+private _isInCarrierSector = count (_sector getVariable ["WL_aircraftCarrier", []]) > 0;
+if (_isInCarrierSector && ((getPosASL _asset) # 2) < 5) exitWith {
+    [true, "Asset cannot be deployed so close to water."];
+};
+
+if (_isInCarrierSector) exitWith {
+    [false, ""];
+};
+
+if (((getPosATL _asset) # 2) > 1) exitWith {
+    [true, "Asset cannot be deployed too far above ground."];
+};
+
+if (surfaceIsWater (getPosATL _asset)) exitWith {
+    [true, "Asset cannot be deployed on water."];
 };
 
 [false, ""]

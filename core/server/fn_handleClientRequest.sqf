@@ -4,7 +4,6 @@ if (isNull _sender) exitWith {};
 if !(isServer) exitWith {};
 if (remoteExecutedOwner != (owner _sender)) exitWith {};
 
-#include "..\server_macros.inc"
 #include "..\warlords_constants.inc"
 
 private _uid = getPlayerUID _sender;
@@ -16,6 +15,8 @@ private _broadcastActionToSide = {
 	} forEach (allPlayers select {side group _x == _side});
 };
 
+private _playerFunds = (serverNamespace getVariable "fundsDatabase") getOrDefault [getPlayerUID _sender, 0];
+
 if (_action == "orderAsset") exitWith {
 	private _orderType = _param1;
 	private _position = _param2;
@@ -23,7 +24,7 @@ if (_action == "orderAsset") exitWith {
 
 	private _costMap = missionNamespace getVariable ["WL2_costs", createHashMap];
 	private _cost = _costMap getOrDefault [_orderedClass, 50001];
-	private _hasFunds = (playerFunds >= _cost);
+	private _hasFunds = (_playerFunds >= _cost);
 	if (_hasFunds) then {
 		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
 
@@ -54,7 +55,7 @@ if (_action == "orderAsset") exitWith {
 
 if (_action == "resetVehicle") exitWith {
 	private _cost = 10;
-	private _hasFunds = playerFunds >= _cost;
+	private _hasFunds = _playerFunds >= _cost;
 	private _asset = _param1;
 	private _position = _param2;
 	private _direction = _param3;
@@ -79,7 +80,7 @@ if (_action == "equip") exitWith {
 
 if (_action == "buyStronghold") exitWith {
 	private _cost = 500;
-	private _hasFunds = playerFunds >= _cost;
+	private _hasFunds = _playerFunds >= _cost;
 	if (_hasFunds) then {
 		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
 	};
@@ -87,7 +88,7 @@ if (_action == "buyStronghold") exitWith {
 
 if (_action == "fortifyStronghold") exitWith {
 	private _cost = 2000;
-	private _hasFunds = playerFunds >= _cost;
+	private _hasFunds = _playerFunds >= _cost;
 	if (_hasFunds) then {
 		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
 	};
@@ -107,7 +108,7 @@ if (_action == "spot") exitWith {
 
 if (_action == "lastLoadout") exitWith {
 	_cost = (getMissionConfigValue ["BIS_WL_lastLoadoutCost", 100]);
-	_hasFunds = (playerFunds >= _cost);
+	_hasFunds = (_playerFunds >= _cost);
 	if (_hasFunds) then {
 		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
 		0 remoteExec ["WL2_fnc_orderLastLoadout", remoteExecutedOwner];
@@ -116,7 +117,7 @@ if (_action == "lastLoadout") exitWith {
 
 if (_action == "savedLoadout") exitWith {
 	_cost = (getMissionConfigValue ["BIS_WL_savedLoadoutCost", 500]);
-	_hasFunds = (playerFunds >= _cost);
+	_hasFunds = (_playerFunds >= _cost);
 	if (_hasFunds) then {
 		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
 		["apply"] remoteExec ["WL2_fnc_orderSavedLoadout", remoteExecutedOwner];
@@ -125,7 +126,7 @@ if (_action == "savedLoadout") exitWith {
 
 if (_action == "orderArsenal") exitWith {
 	_cost = (getMissionConfigValue ["BIS_WL_arsenalCost", 1000]);
-	_hasFunds = (playerFunds >= _cost);
+	_hasFunds = (_playerFunds >= _cost);
 	if (_hasFunds) then {
 		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
 		0 remoteExec ["WL2_fnc_orderArsenal", remoteExecutedOwner];
@@ -134,7 +135,7 @@ if (_action == "orderArsenal") exitWith {
 
 if (_action == "fastTravelContested") exitWith {
 	_cost = _param1;
-	_hasFunds = (playerFunds >= _cost);
+	_hasFunds = (_playerFunds >= _cost);
 	if (_hasFunds) then {
 		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
 	};
@@ -142,7 +143,7 @@ if (_action == "fastTravelContested") exitWith {
 
 if (_action == "fastTravelSquadLeader") exitWith {
 	_cost = (getMissionConfigValue ["BIS_WL_fastTravelCostSquadLeader", 10]);
-	_hasFunds = (playerFunds >= _cost);
+	_hasFunds = (_playerFunds >= _cost);
 	if (_hasFunds) then {
 		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
 	};
@@ -151,7 +152,7 @@ if (_action == "fastTravelSquadLeader") exitWith {
 private _side = side group _sender;
 if (_action == "scan") exitWith {
 	_cost = (getMissionConfigValue ["BIS_WL_scanCost", 750]);
-	_hasFunds = (playerFunds >= _cost);
+	_hasFunds = (_playerFunds >= _cost);
 	if (_hasFunds) then {
 		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
 		private _sector = _param2;
@@ -165,58 +166,10 @@ if (_action == "scan") exitWith {
 	};
 };
 
-if (_action == "orderFTVehicle") exitWith {
-	_cost = (getMissionConfigValue ["BIS_WL_orderFTVehicleCost", 200]);
-	_hasFunds = (playerFunds >= _cost);
-	if (_hasFunds) then {
-		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
-
-		if ((count ((entities getFTVehicle) select {alive _x})) == 0) then {
-			private _asset = createVehicle [getFTVehicle, _sender, [], 0, "NONE"];
-			_asset setVariable ["BIS_WL_ownerAsset", _uid, [2, (owner _sender)]];
-			_asset setVariable ["BIS_WL_rewardedStack", createHashMap];
-
-			_asset spawn {
-				_asset = _this;
-				while {alive _asset} do {
-					// wipe the reward stack every 2 minutes
-					sleep 120;
-					_asset setVariable ["BIS_WL_rewardedStack", createHashMap];
-				};
-			};
-
-			[_asset, _sender] remoteExec ["WL2_fnc_newAssetHandle", remoteExecutedOwner];
-		};
-	};
-};
-
-if (_action == "orderFTPod") exitWith {
-	_cost = (getMissionConfigValue ["BIS_WL_orderFTVehicleCost", 200]);
-	_hasFunds = (playerFunds >= _cost);
-	if (_hasFunds) then {
-		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
-
-		if ((count (entities getFTPod)) == 0) then {
-			private _asset = createVehicle [getFTPod, _sender, [], 0, "NONE"];
-			_asset setVariable ["BIS_WL_ownerAsset", _uid, [2, (owner _sender)]];
-			_asset setVariable ["BIS_WL_rewardedStack", createHashMap];
-
-			_asset spawn {
-				_asset = _this;
-				while {alive _asset} do {
-					sleep 120;
-					_asset setVariable ["BIS_WL_rewardedStack", createHashMap];
-				};
-			};
-
-			[_asset, _sender] remoteExec ["WL2_fnc_newAssetHandle", remoteExecutedOwner];
-		};
-	};
-};
-
 if (_action == "ftSupportPoints") exitWith {
 	private _ftVehicle = _param1;
-	private _reward = 5;
+	private _unitsToMove = _param2;
+	private _reward = 20;
 
 	private _targets = [
 		missionNamespace getVariable "BIS_WL_currentTarget_west",
@@ -226,27 +179,30 @@ if (_action == "ftSupportPoints") exitWith {
 	};
 
 	if ((_targets findIf {_sender inArea (_x getVariable "objectAreaComplete")}) != -1) then {
-		_reward = 10;
+		_reward = _reward * 2;
 	};
+	_reward = _reward * _unitsToMove;
 
 	private _ftVehicleOwner = _ftVehicle getVariable ["BIS_WL_ownerAsset", "123"];
 	private _rewardStack = _ftVehicle getVariable ["BIS_WL_rewardedStack", createHashMap];
-	private _ftOwnerPlayer = (allPlayers select {getPlayerUID _x == _ftVehicleOwner}) # 0;
+	private _ftOwnerPlayer = _ftVehicleOwner call BIS_fnc_getUnitByUID;
 
-	private _eligible = !(_rewardStack getOrDefault [getPlayerUID _sender, false]) && _ftVehicleOwner != _uid;
+	private _senderLastReward = _rewardStack getOrDefault [getPlayerUID _sender, -1000];
+
+	private _eligible = _senderLastReward + 60 <= serverTime && _ftVehicleOwner != _uid;
 	if (_eligible) then {
 		[_reward, _ftVehicleOwner] call WL2_fnc_fundsDatabaseWrite;
 
-		_rewardStack set [getPlayerUID _sender, true];
+		_rewardStack set [getPlayerUID _sender, serverTime];
 		_ftVehicle setVariable ["BIS_WL_rewardedStack", _rewardStack];
 
-		[objNull, _reward, localize "STR_A3_spawn_reward", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _ftOwnerPlayer];
+		[objNull, _reward, localize "STR_A3_spawn_reward", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _ftOwnerPlayer];
 	};
 };
 
 if (_action == "targetReset") exitWith {
 	_cost = (getMissionConfigValue ["BIS_WL_targetResetCost", 500]);
-	_hasFunds = (playerFunds >= _cost);
+	_hasFunds = (_playerFunds >= _cost);
 	if (_hasFunds) then {
 		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
 
@@ -274,7 +230,7 @@ if (_action == "buildABear") exitWith {
 
 if (_action == "orderRespawnBag") exitWith {
 	_cost = 50;
-	_hasFunds = (playerFunds >= _cost);
+	_hasFunds = (_playerFunds >= _cost);
 	if (_hasFunds) then {
 		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
 	};
@@ -284,7 +240,7 @@ if (_action == "fundsTransfer") exitWith {
 	private _transferCost = getMissionConfigValue ["BIS_WL_fundsTransferCost", 2000];
 	private _transferAmount = _param1;
 	private _recipient = _param2;
-	if (playerFunds >= (_transferAmount + _transferCost)) then {
+	if (_playerFunds >= (_transferAmount + _transferCost)) then {
 		if !(_sender getVariable ["WL2_afk", false]) then {
 			private _recipientUid = getPlayerUID _recipient;
 			[_transferAmount, _recipientUid] call WL2_fnc_fundsDatabaseWrite;
@@ -323,15 +279,15 @@ if (_action == "repair") exitWith {
 
 if (_action == "controlCollaborator") exitWith {
 	private _cost = 2000;
-	private _hasFunds = playerFunds >= _cost;
+	private _hasFunds = _playerFunds >= _cost;
 	if (_hasFunds) then {
 		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
 	};
 };
 
 if (_action == "camouflage") exitWith {
-	private _cost = 200;
-	private _hasFunds = playerFunds >= _cost;
+	private _cost = 500;
+	private _hasFunds = _playerFunds >= _cost;
 	if (_hasFunds) then {
 		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
 	};

@@ -1,5 +1,3 @@
-#include "..\server_macros.inc"
-
 while { !BIS_WL_missionEnd } do {
 	sleep 60;
 

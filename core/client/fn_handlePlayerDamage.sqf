@@ -22,6 +22,14 @@ if (_homeBase != _enemyTarget && _inHomeBase) exitWith {
     0;
 };
 
+private _isImpactDamage = isNull _source && _projectile == "";
+private _playerVehicle = vehicle _unit;
+private _isInVehicle = _playerVehicle != _unit && alive _playerVehicle;
+private _vehicleMaxAps = _playerVehicle call APS_fnc_getMaxAmmo;
+if (_isImpactDamage && _isInVehicle && _vehicleMaxAps > 0) exitWith {
+    0;
+};
+
 if (_damage < 1) exitWith {
     _damage;
 };

@@ -474,8 +474,8 @@ _asset spawn {
             _applyButtonControl ctrlEnable true;
             _rearmButtonControl ctrlEnable true;
         } else {
-            _applyButtonControl ctrlSetTooltip "Can't rearm at this time. If issue persists, get in both the driver/turret of this vehicle and try again.";
-            _rearmButtonControl ctrlSetTooltip "Can't rearm at this time. If issue persists, get in both the driver/turret of this vehicle and try again.";
+            _applyButtonControl ctrlSetTooltip "Cannot rearm at this time. If issue persists, get in both the driver/turret of this vehicle and try again.";
+            _rearmButtonControl ctrlSetTooltip "Cannot rearm at this time. If issue persists, get in both the driver/turret of this vehicle and try again.";
             _applyButtonControl ctrlEnable false;
             _rearmButtonControl ctrlEnable false;
         };

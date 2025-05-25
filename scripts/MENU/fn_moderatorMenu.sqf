@@ -65,6 +65,9 @@ private _chatHistoryCopy20 = _display displayCtrl MODR_CHAT_HISTORY_COPY_20;
 private _chatHistoryCopyAll = _display displayCtrl MODR_CHAT_HISTORY_COPY_ALL;
 
 private _reportTable = _display displayCtrl MODR_REPORT_TABLE;
+private _clearReports = _display displayCtrl MODR_CLEAR_REPORTS;
+private _clearTimeout = _display displayCtrl MODR_CLEAR_TIMEOUT;
+private _rebalance = _display displayCtrl MODR_REBALANCE;
 
 _infoDisplay ctrlShow false;
 _timeoutReasonLabel ctrlShow false;
@@ -78,11 +81,25 @@ _chatHistoryCopy20 ctrlShow false;
 _chatHistoryCopyAll ctrlShow false;
 
 _reportTable ctrlShow false;
+_clearReports ctrlShow false;
+_rebalance ctrlShow false;
+
+_clearTimeout ctrlShow false;
 
 if (_elevatedPrivilege) then {
     if (!_isAdmin) then {
         _timeoutTime sliderSetRange [1, 30];
     };
+
+    for "_i" from 0 to (lbSize _playerList - 1) do {
+        private _uid = _playerList lbData _i;
+        private _selectedPlayer = [_uid] call BIS_fnc_getUnitByUID;
+        if (isNull _selectedPlayer) exitWith {};
+
+        private _playerReports = _selectedPlayer getVariable ["WL2_playerReports", createHashMap];
+        _playerList lbSetTextRight [_i, str count _playerReports];
+    };
+
     _timeoutTime ctrlAddEventHandler ["SliderPosChanged", {
         params ["_control", "_newPosition"];
         private _display = ctrlParent _control;
@@ -135,6 +152,35 @@ if (_elevatedPrivilege) then {
         params ["_control"];
         [_control, -1] spawn MENU_fnc_copyChat;
     }];
+
+    _clearReports ctrlAddEventHandler ["ButtonClick", {
+        params ["_control"];
+        private _display = ctrlParent _control;
+
+        private _playerList = _display displayCtrl MODR_PLAYER_LIST;
+        private _selectedIndex = lbCurSel _playerList;
+        private _selectedUid = _playerList lbData _selectedIndex;
+
+        private _selectedPlayer = [_selectedUid] call BIS_fnc_getUnitByUID;
+
+        if (isNull _selectedPlayer) exitWith {};
+        [] remoteExec ["WL2_fnc_clearPlayerReports", _selectedPlayer];
+    }];
+    _rebalance ctrlAddEventHandler ["ButtonClick", {
+        params ["_control"];
+        private _display = ctrlParent _control;
+
+        private _playerList = _display displayCtrl MODR_PLAYER_LIST;
+        private _selectedIndex = lbCurSel _playerList;
+        private _selectedUid = _playerList lbData _selectedIndex;
+
+        [player, _selectedUid] remoteExec ["WL2_fnc_rebalance", 2];
+    }];
+
+    _clearTimeout ctrlAddEventHandler ["ButtonClick", {
+        [player] remoteExec ["WL2_fnc_clearAllTimeouts", 2];
+    }];
+    _clearTimeout ctrlShow true;
 } else {
     _playerList ctrlSetPositionH 0.9;
     _playerList ctrlCommit 0;
@@ -165,6 +211,7 @@ _playerList ctrlAddEventHandler ["LBSelChanged", {
     private _selectedPlayer = [_selectedUid] call BIS_fnc_getUnitByUID;
     private _playerName = [_selectedPlayer, true] call BIS_fnc_getName;
 
+    uiNamespace setVariable ["MODR_selectedPlayer", _selectedPlayer];
     uiNamespace setVariable ["MODR_passedName", _playerName];
     uiNamespace setVariable ["MODR_returnedBeId", ""];
 
@@ -177,67 +224,5 @@ _playerList ctrlAddEventHandler ["LBSelChanged", {
     //     uiNamespace setVariable ["MODR_returnedBeId", "8ea8a9d51cc24705b60dcab0152b0905"];
     // };
 
-    [_selectedPlayer] spawn {
-        params ["_selectedPlayer"];
-        private _display = findDisplay MODR_DISPLAY;
-        if (isNull _display) exitWith {};
-
-        private _infoDisplay = _display displayCtrl MODR_INFO_DISPLAY;
-        _infoDisplay ctrlShow true;
-
-        private _playerName = [_selectedPlayer, true] call BIS_fnc_getName;
-        private _playerGuid = getPlayerUID _selectedPlayer;
-
-        private _timeoutTime = _display displayCtrl MODR_TIMEOUT_TIME;
-        private _timeoutButton = _display displayCtrl MODR_TIMEOUT_BUTTON;
-
-        private _systemTimeDisplay = [systemTimeUTC] call MENU_fnc_printSystemTime;
-        private _fullDisplayString = format["[Name] %1%5[BEID] %2%5[GUID] %3%5[UTC] %4", _playerName, "Loading...", _playerGuid, _systemTimeDisplay, endl];
-        _infoDisplay ctrlSetText _fullDisplayString;
-
-        private _beIdReply = "";
-        private _startTime = serverTime;
-        waitUntil {
-            sleep 0.1;
-            _beIdReply = uiNamespace getVariable ["MODR_returnedBeId", ""];
-            _beIdReply != "" || serverTime - _startTime > 10;
-        };
-        if (_beIdReply == "") then {
-            _beIdReply = "Failed to load Battleye info...";
-        };
-
-        _fullDisplayString = format["[Name] %1%5[BEID] %2%5[GUID] %3%5[UTC] %4", _playerName, _beIdReply, _playerGuid, _systemTimeDisplay, endl];
-        _infoDisplay ctrlSetText _fullDisplayString;
-
-        private _elevated = _display getVariable ["MODR_elevatedPrivilege", false];
-
-        private _timeoutReasonLabel = _display displayCtrl MODR_TIMEOUT_REASON_LABEL;
-        private _timeoutReasonEdit = _display displayCtrl MODR_TIMEOUT_REASON;
-        private _reportTable = _display displayCtrl MODR_REPORT_TABLE;
-
-        if (_elevated) then {
-            _timeoutReasonLabel ctrlShow true;
-            _timeoutReasonEdit ctrlShow true;
-            _timeoutTime ctrlShow true;
-            _timeoutButton ctrlShow true;
-
-            _timeoutButton ctrlSetText format["Timeout %1 for %2 minutes", _playerName, sliderPosition _timeoutTime];
-
-            _reportTable ctrlShow true;
-            private _playerReports = _selectedPlayer getVariable ["WL2_playerReports", createHashMap];
-            {
-                private _reporterName = _x;
-                private _reportReason = _y;
-                private _reportId = _reportTable lbAdd _reportReason;
-                _reportTable lbSetTextRight [_reportId, _reporterName];
-            } forEach _playerReports;
-        } else {
-            _timeoutReasonLabel ctrlShow true;
-            _timeoutReasonEdit ctrlShow true;
-            _timeoutTime ctrlShow false;
-            _timeoutButton ctrlShow true;
-
-            _timeoutButton ctrlSetText format["Report %1", _playerName];
-        };
-    };
+    [_selectedPlayer] spawn MENU_fnc_moderatorLoaded;
 }];

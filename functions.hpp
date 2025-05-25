@@ -71,6 +71,7 @@ class CfgFunctions {
 			class copyChat {};
 			class debugMenu {};
 			class execCode {};
+			class moderatorLoaded {};
 			class moderatorMenu {};
 			class playerDataRefresh {};
 			class playerReported {};
@@ -220,6 +221,7 @@ class CfgFunctions {
 			class setupForwardBaseMp {};
 			class slingAddAction {};
 			class stabilizeBoatAction {};
+			class tireChangeEligibility {};
 			class vehicleLockAction {};
 			class vehicleLockUpdate {};
 		};
@@ -305,14 +307,13 @@ class CfgFunctions {
 			class cancelVehicleOrder {};
 			class deployment {};
 			class executeFastTravel {};
+			class executeFastTravelVehicle {};
 			class fastTravelConflictMarker {};
 			class findStrongholdBuilding {};
 			class orderAircraft {};
 			class orderArsenal {};
 			class orderFastTravel {};
 			class orderForfeit {};
-			class orderFTPodFT {};
-			class orderFTVehicleFT {};
 			class orderFundsTransfer {};
 			class orderLastLoadout {};
 			class orderNaval {};
@@ -327,11 +328,9 @@ class CfgFunctions {
 			class checkAAPlacement {};
 			class checkAlliedPlayers {};
 			class checkAssetLimit {};
-			class checkBuyRespawn {};
 			class checkCarrierLimits {};
 			class checkCollaborator {};
 			class checkDead {};
-			class checkFastTravelRespawn {};
 			class checkFastTravelSL {};
 			class checkFastTravelSquad {};
 			class checkFunds {};
@@ -407,6 +406,8 @@ class CfgFunctions {
 			class calcImbalance {};
 			class calculateEndResults {};
 			class changeSectorOwnership {};
+			class clearAllTimeouts {};
+			class clearPlayerReports {};
 			class createUAVCrew {};
 			class createVehicleCorrectly {};
 			class demolishComplete {};
@@ -428,6 +429,7 @@ class CfgFunctions {
 			class laserTracker {};
 			class processRunways {};
 			class punishPlayer {};
+			class rebalance {};
 			class selectTarget {};
 			class serverEHs {};
 			class setDazzlerState {};

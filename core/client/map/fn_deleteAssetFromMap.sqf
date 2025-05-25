@@ -15,7 +15,7 @@ private _result = ["Delete asset", format ["Are you sure you would like to delet
 if (_result) then {
 	private _access = [_target, player, "full"] call WL2_fnc_accessControl;
 	if !(_access # 0) exitWith {
-		systemChat format ["Can't remove: %1", _access # 1];
+		systemChat format ["Cannot remove: %1", _access # 1];
 		playSound "AddItemFailed";
 	};
 

@@ -235,6 +235,10 @@ if (_asset isKindOf "Man") then {
 			[_asset] spawn WL2_fnc_stabilizeBoatAction;
 		};
 
+		case "B_APC_Wheeled_01_light_F": {
+			[_asset, 15000] remoteExec ["setMass", 0];
+		};
+
 		// case "B_AAA_System_01_F": {
 		// 	[_asset] spawn APS_fnc_ciws;
 		// };
@@ -358,33 +362,12 @@ if (_asset isKindOf "Man") then {
 		[_asset] call WL2_fnc_uavConnectRefresh;
 	};
 
-	private _respawnVehicles = createHashMapFromArray [
-		["B_Truck_01_medical_F", true],
-		["O_Truck_03_medical_F", true],
-		["Land_Pod_Heli_Transport_04_medevac_F", true],
-		["B_Slingload_01_Medevac_F", true]
-	];
-	if (_respawnVehicles getOrDefault [typeOf _asset, false]) then {
-		[_asset] spawn {
-			params ["_asset"];
-			while { alive _asset } do {
-				private _assetPos = getPosASL _asset;
-				private _altitude = _assetPos # 2;
-				if (_altitude < 0 && surfaceIsWater _assetPos) then {
-					deleteVehicle _asset;
-				};
-				sleep 5;
-			};
-		};
-		_asset setVariable ["WL2_accessControl", -1, true];
+	if (_asset isKindOf "ReammoBox_F") then {
+		_asset setVariable ["WL2_accessControl", 2, true];
 	} else {
-		if (_asset isKindOf "ReammoBox_F") then {
-			_asset setVariable ["WL2_accessControl", 2, true];
-		} else {
-			_asset setVariable ["WL2_accessControl", 4, true];
-		};
-		[_asset] remoteExec ["WL2_fnc_vehicleLockAction", 0, true];
+		_asset setVariable ["WL2_accessControl", 4, true];
 	};
+	[_asset] remoteExec ["WL2_fnc_vehicleLockAction", 0, true];
 
 	if (_asset isKindOf "Plane") then {
 		[_asset] remoteExec ["WL2_fnc_catapultAction", 0];

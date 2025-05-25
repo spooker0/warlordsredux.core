@@ -105,7 +105,7 @@ WL_DeploymentEnd = false;
     WL_DeploymentLock = false;
     WL_DeploymentSuccess = false;
     private _directionOffset = 0;
-    private _lastTime = serverTime + 2;
+    private _lastTime = serverTime;
 
     while { !(isNull _asset) } do {
         if (WL_DeploymentLock) then {

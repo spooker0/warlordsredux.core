@@ -31,11 +31,8 @@ if (isPlayer _asset) exitWith {};
 _asset addEventHandler ["HandleDamage", {
 	params ["_unit", "_selection", "_damage", "_source", "_projectile", "_hitIndex", "_instigator", "_hitPoint", "_directHit", "_context"];
 	if (_projectile == "FuelExplosion") then {
-		private _apsType = missionNamespace getVariable ["WL2_aps", createHashMap];
-		private _unitActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
-		private _unitApsType = _apsType getOrDefault [_unitActualType, -1];
-		private _sourceActualType = _source getVariable ["WL2_orderedClass", typeOf _source];
-		private _sourceApsType = _apsType getOrDefault [_sourceActualType, -1];
+		private _unitApsType = _unit call APS_fnc_getMaxAmmo;
+		private _sourceApsType = _source call APS_fnc_getMaxAmmo;
 		if (_unitApsType > _sourceApsType) then {
 			0;
 		} else {

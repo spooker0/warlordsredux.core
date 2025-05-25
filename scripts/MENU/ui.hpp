@@ -655,7 +655,7 @@ class MODR_Menu {
             x = 0.63;
             y = 0.96;
             w = 0.10;
-            h = 0.04;
+            h = 0.035;
             text = "COPY 5";
             sizeEx = 0.035;
             colorBackground[] = {0, 0, 0, 0.6};
@@ -665,7 +665,7 @@ class MODR_Menu {
             x = 0.74;
             y = 0.96;
             w = 0.10;
-            h = 0.04;
+            h = 0.035;
             text = "COPY 20";
             sizeEx = 0.035;
             colorBackground[] = {0, 0, 0, 0.6};
@@ -675,7 +675,7 @@ class MODR_Menu {
             x = 0.85;
             y = 0.96;
             w = 0.10;
-            h = 0.04;
+            h = 0.035;
             text = "COPY ALL";
             sizeEx = 0.035;
             colorBackground[] = {0, 0, 0, 0.6};
@@ -686,11 +686,42 @@ class MODR_Menu {
             x = 0.38;
             y = 0.42;
             w = 0.57;
-            h = 0.23;
+            h = 0.19;
             colorBackground[] = {0, 0, 0, 0.4};
             font = "PuristaMedium";
             sizeEx = 0.035;
             rowHeight = 0.04;
+        };
+        class MODR_ClearReports: RscButton {
+            idc = MODR_CLEAR_REPORTS;
+            x = 0.38;
+            y = 0.62;
+            w = 0.17;
+            h = 0.04;
+            text = "CLEAR REPORTS";
+            sizeEx = 0.035;
+            colorBackground[] = {1, 0, 0, 1};
+        };
+        class MODR_Rebalance: RscButton {
+            idc = MODR_REBALANCE;
+            x = 0.78;
+            y = 0.62;
+            w = 0.17;
+            h = 0.04;
+            text = "REBALANCE";
+            sizeEx = 0.035;
+            colorBackground[] = {1, 0, 0, 1};
+        };
+
+        class MODR_ClearTimeout: RscButton {
+            idc = MODR_CLEAR_TIMEOUT;
+            x = 0.05;
+            y = 0.96;
+            w = 0.25;
+            h = 0.035;
+            text = "CLEAR ALL TIMEOUTS";
+            sizeEx = 0.035;
+            colorBackground[] = {1, 0, 0, 1};
         };
     };
 };

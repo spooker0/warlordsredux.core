@@ -8,9 +8,16 @@ if (count _findCurrentSector == 0) exitWith {
     [false, localize "STR_A3_WL_menu_arsenal_restr1"];
 };
 
-private _isCarrierSector = count (_findCurrentSector # 0 getVariable ["WL_aircraftCarrier", []]) > 0;
+private _currentSector = _findCurrentSector # 0;
+
+private _isCarrierSector = count (_currentSector getVariable ["WL_aircraftCarrier", []]) > 0;
 if (_isCarrierSector) exitWith {
-    [false, "Can't put stronghold in carrier sector."];
+    [false, "You cannot put a stronghold in a carrier sector."];
+};
+
+private _isHomeBase = _currentSector in [BIS_WL_base1, BIS_WL_base2];
+if (_isHomeBase) exitWith {
+    [false, "You cannot put a stronghold in your home base."];
 };
 
 private _findStrongholdBuildings = call WL2_fnc_findStrongholdBuilding;

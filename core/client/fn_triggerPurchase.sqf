@@ -233,20 +233,6 @@ switch (_className) do {
             };
         } forEach (units group player);
     };
-    case "RespawnVic": {
-        "RequestMenu_close" call WL2_fnc_setupUI;
-        [player, "orderFTVehicle"] remoteExec ["WL2_fnc_handleClientRequest", 2]
-    };
-    case "RespawnVicFT": {
-        0 spawn WL2_fnc_orderFTVehicleFT;
-    };
-    case "RespawnPod" : {
-        "RequestMenu_close" call WL2_fnc_setupUI;
-        [player, "orderFTPod"] remoteExec ["WL2_fnc_handleClientRequest", 2];
-    };
-    case "RespawnPodFT" : {
-        0 spawn WL2_fnc_orderFTPodFT;
-    };
     case "RespawnBag": {
         [player, "orderRespawnBag"] remoteExec ["WL2_fnc_handleClientRequest", 2];
         [true] call WL2_fnc_respawnBagAction;

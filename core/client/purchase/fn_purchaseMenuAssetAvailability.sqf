@@ -173,6 +173,7 @@ if (_ret) then {
 		};
 		case "Camouflage": {
 			[
+				[WL2_fnc_checkInFriendlySector, [_cost, []]],
 				[WL2_fnc_checkPlayerInVehicle],
 				[WL2_fnc_checkNearbyEnemies]
 			]
@@ -185,40 +186,6 @@ if (_ret) then {
 		case "ControlCollaborator": {
 			[
 				[WL2_fnc_checkCollaborator]
-			]
-		};
-		case "RespawnVic": {
-			[
-				[WL2_fnc_checkIndependents],
-				[WL2_fnc_checkPlayerInVehicle],
-				[WL2_fnc_checkNearbyEnemies],
-				[WL2_fnc_checkInFriendlySector, [_cost, []]],
-				[WL2_fnc_checkBuyRespawn, [false]]
-			]
-		};
-		case "RespawnVicFT": {
-			[
-				[WL2_fnc_checkIndependents],
-				[WL2_fnc_checkPlayerInVehicle],
-				[WL2_fnc_checkNearbyEnemies],
-				[WL2_fnc_checkFastTravelRespawn, [false, 15]]
-			]
-		};
-		case "RespawnPod": {
-			[
-				[WL2_fnc_checkIndependents],
-				[WL2_fnc_checkPlayerInVehicle],
-				[WL2_fnc_checkNearbyEnemies],
-				[WL2_fnc_checkInFriendlySector, [_cost, []]],
-				[WL2_fnc_checkBuyRespawn, [true]]
-			]
-		};
-		case "RespawnPodFT": {
-			[
-				[WL2_fnc_checkIndependents],
-				[WL2_fnc_checkPlayerInVehicle],
-				[WL2_fnc_checkNearbyEnemies],
-				[WL2_fnc_checkFastTravelRespawn, [true, 4]]
 			]
 		};
 		case "RespawnBag": {

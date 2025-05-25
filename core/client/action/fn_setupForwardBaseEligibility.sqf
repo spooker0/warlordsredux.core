@@ -7,11 +7,11 @@ if (!alive _target) exitWith {
 };
 
 if (!isNull attachedTo _target || !isNull ropeAttachedTo _target) exitWith {
-    "Can't be used while attached to another object.";
+    "Cannot be used while attached to another object.";
 };
 
 if ((getPosASL _target) # 2 < -10) exitWith {
-    "Can't be used underwater.";
+    "Cannot be used underwater.";
 };
 
 if (_target getVariable ["WL2_deploying", false]) exitWith {
@@ -31,7 +31,7 @@ private _inRangeTeamFob = if (count _inRangeTeamForwardBases > 0) then {
     objNull
 };
 if (!isNull _inRangeTeamFob && _inRangeTeamFob getVariable ["WL2_forwardBaseTime", 0] > serverTime) exitWith {
-    "Can't add supplies to forward base while it's under construction.";
+    "Cannot add supplies to forward base while it's under construction.";
 };
 if (_addSupplies && isNull _inRangeTeamFob) exitWith {
     "No friendly forward base in range.";

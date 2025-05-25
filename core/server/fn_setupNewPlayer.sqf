@@ -78,8 +78,8 @@ if (_lockedToTeam != sideUnknown) then {
     if (_correctSide) then {
         private _friendlyFireIncidents = serverNamespace getVariable [_friendlyFireVar, []];
         [_friendlyFireIncidents] remoteExec ["WL2_fnc_friendlyFireHandleClient", _owner];
-        private _punishTime = serverNamespace getVariable [_punishVar, []];
-        [_punishTime] remoteExec ["WL2_fnc_punishmentClient", _owner];
+        private _punishIncident = serverNamespace getVariable [_punishVar, []];
+        [_punishIncident] remoteExec ["WL2_fnc_punishmentClient", _owner];
     };
 } else {
     private _exceedGracePeriod = (missionNamespace getVariable ["gameStart", 0]) + 300 < serverTime;

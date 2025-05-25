@@ -17,14 +17,15 @@ private _clearFrameButton = _display displayCtrl PERF_LOWFPS_CLEAR_BUTTON;
 private _captureButton = _display displayCtrl PERF_CAPTURE_BUTTON;
 private _captureEntry = _display displayCtrl PERF_CAPTURE_ENTRY_TEXT;
 private _lowfpsDisplay = _display displayCtrl PERF_LOWFPS_TEXT;
+private _msLabel = _display displayCtrl PERF_CAPTURE_MS_LABEL;
 
-private _buildType = productVersion # 4;
-if (_buildType != "Profile") exitWith {
-    _errorText ctrlSetText "Profile build not detected. This feature is only available for Profiling builds.";
+if (productVersion # 4 != "Profile") exitWith {
+    _errorText ctrlSetStructuredText parseText "Profile build not detected. This feature is only available for Profiling builds. If you are using the launcher, you need to replace the arma3_x64.exe with the arma3profiling_x64.exe file in your ArmA 3 folder.";
     _clearFrameButton ctrlShow false;
     _captureButton ctrlShow false;
     _captureEntry ctrlShow false;
     _lowfpsDisplay ctrlShow false;
+    _msLabel ctrlShow false;
 };
 
 uiNamespace setVariable ["PERF_longestFrame", 0];
@@ -56,8 +57,5 @@ _captureButton ctrlAddEventHandler ["ButtonClick", {
     _captureFrameTime = format ["%1ms", _captureFrameTime];
 
     systemChat format ["Capture frame slower than: %1", _captureFrameTime];
-    closeDialog 0;
-#if __A3_PROFILING__
-    diag_captureSlowFrame ["total", _captureFrameTime];
-#endif
+    call compile "diag_captureSlowFrame ['total', _captureFrameTime]";
 }];

@@ -49,7 +49,7 @@ private _savedLoadoutHandled = FALSE;
 					[],
 					"Buy AR Glasses",
 					"\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
-					"Buy AR glasses, which show you enemies spotted by friendly datalink, as long as you are in range of an EW network."
+					"Buy AR glasses, which show you enemies spotted by friendly datalink, while you are in range of an EW network. Use +/- keys to increase/decrease range."
 				];
 			};
 
@@ -61,6 +61,11 @@ private _savedLoadoutHandled = FALSE;
 			if (_category == "Gear" && !_savedLoadoutHandled) then {
 				_savedLoadoutHandled = TRUE;
 				_data pushBack ["SavedLoadout", (getMissionConfigValue ["BIS_WL_savedLoadoutCost", 500]), [], (localize "STR_A3_WL_saved_loadout"), "\A3\Data_F_Warlords\Data\preview_loadout.jpg", format [localize "STR_A3_WL_saved_loadout_info", "<br/>"]];
+			};
+
+			if (_category == "Gear" && !_saveLoadoutHandled) then {
+				_saveLoadoutHandled = TRUE;
+				_data pushBack ["SaveLoadout", 0, [], (localize "STR_A3_WL_save_loadout"), "\A3\Data_F_Warlords\Data\preview_loadout.jpg", localize "STR_A3_WL_save_loadout_info"];
 			};
 
 			private _descriptionMap = missionNamespace getVariable ["WL2_descriptions", createHashMap];
@@ -202,11 +207,6 @@ private _savedLoadoutHandled = FALSE;
 				_data pushBack [_className, _cost, _requirements, _displayName, _picture, _text, _offset, _notForAIUse];
 			} forEach (configProperties [_preset >> str _side >> _category, "isClass _x"]);
 
-			if (_category == "Gear" && !_saveLoadoutHandled) then {
-				_saveLoadoutHandled = TRUE;
-				_data pushBack ["SaveLoadout", 0, [], (localize "STR_A3_WL_save_loadout"), "\A3\Data_F_Warlords\Data\preview_loadout.jpg", localize "STR_A3_WL_save_loadout_info"];
-			};
-
 			_sortedArray set [_index, _data];
 		} forEach WL_REQUISITION_CATEGORIES;
 	} else {
@@ -244,20 +244,6 @@ private _fastTravelArr = [
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
 		"Move your vehicle to a friendly sector from a helipad/airfield sector by paradropping it.<br/>Requirements:<br/>1. In an owned sector.<br/>2. In a vehicle as the driver.<br/>3. No enemies nearby.<br/>4. Cooldown: 5 minutes."
 	], [
-		"RespawnVicFT",
-		0,
-		[],
-		localize "STR_A3_WL_respawn_vicFT_ft",
-		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-		""
-	], [
-		"RespawnPodFT",
-		0,
-		[],
-		"Fast Travel to Medical Pod (Free)",
-		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-		""
-	], [
 		"FTSquadLeader",
 		getMissionConfigValue ["BIS_WL_fastTravelCostSquadLeader", 10],
 		[],
@@ -279,20 +265,6 @@ private _fastTravelArr = [
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
 		""
 	], [
-		"RespawnVic",
-		getMissionConfigValue ["BIS_WL_orderFTVehicleCost", 200],
-		[],
-		localize "STR_A3_WL_respawn_vicFT_order",
-		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-		""
-	], [
-		"RespawnPod",
-		getMissionConfigValue ["BIS_WL_orderFTVehicleCost", 200],
-		[],
-		"Purchase Fast Travel Pod",
-		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-		"Order medical pod"
-	], [
 		"RespawnBag",
 		50,
 		[],
@@ -305,7 +277,7 @@ private _fastTravelArr = [
 		[],
 		"Purchase Forward Base Supplies",
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-		format ["Purchases equipment that can be airlifted or deployed into a forward position and setup into a base.<br/>Deploy requirements:<br/>1. Must be squad leader.<br/>2. Squad size >= 3.<br/>3. Outside of sectors.<br/>4. At least %1 away from other forward bases.<br/>5. Can have 3 total at once. Can also be used to add 20,000 supplies to the FOB.", WL_FOB_MIN_DISTANCE]
+		format ["Purchases equipment that can be airlifted or deployed into a forward position and setup into a base.<br/>Deploy requirements:<br/>1. Must be squad leader.<br/>2. Squad size >= 3.<br/>3. Outside of sectors.<br/>4. At least %1 away from other forward bases.<br/>5. Can have 3 total at once.<br/>Can also be used to add 20,000 supplies to an existing FOB.", WL_FOB_MIN_DISTANCE]
 	], [
 		"BuyStronghold",
 		500,
@@ -382,7 +354,7 @@ private _strategyArr = [
 		"Reset vehicle. Must be within 15m and looking at the vehicle."
 	], [
 		"Camouflage",
-		200,
+		500,
 		[],
 		"Camouflage",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",

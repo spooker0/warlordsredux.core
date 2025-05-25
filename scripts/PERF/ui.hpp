@@ -141,12 +141,12 @@ class PERF_Menu {
             moving = 1;
         };
 
-        class PERF_ERROR: RscText {
+        class PERF_ERROR: RscStructuredText {
             idc = PERF_ERROR_TEXT;
             x = 0.05;
             y = 0.05;
             w = 0.9;
-            h = 0.05;
+            h = 0.15;
             text = "";
             style = ST_CENTER;
             colorText[] = {1, 1, 1, 1};
@@ -185,7 +185,7 @@ class PERF_Menu {
             colorBackground[] = {0.2, 0.2, 0.2, 1};
         };
         class PERF_CAPTURE_ENTRY_LABEL: RscText {
-            idc = -1;
+            idc = PERF_CAPTURE_MS_LABEL;
             x = 0.32;
             y = 0.35;
             w = 0.1;

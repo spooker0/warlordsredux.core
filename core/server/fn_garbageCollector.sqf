@@ -29,7 +29,7 @@ while {!BIS_WL_missionEnd} do {
 		private _modelName = _modelInfo # 0;
 		if (_modelName == "b_ArundoD3s_F.p3d") then {
 			private _placedTime = _x getVariable ["WL2_placedTime", 0];
-			if ((serverTime - _placedTime) > 600) then {
+			if ((serverTime - _placedTime) > 300) then {
 				deleteVehicle _x;
 			};
 		};

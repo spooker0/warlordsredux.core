@@ -1,3 +1,5 @@
+if (isDedicated) exitWith {};
+
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 
 private _objectViewDistance = getObjectViewDistance # 0;

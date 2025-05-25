@@ -198,7 +198,7 @@ _positionY = _positionY + 0.08;
 
                     if (_rateLimitValue > serverTime) then {
                         systemChat format [
-                            "You can't change this setting so often! You must wait %1 seconds before changing this setting again.",
+                            "You cannot change this setting so often! You must wait %1 seconds before changing this setting again.",
                             round (_rateLimitValue - serverTime)
                         ];
                         playSound "AddItemFailed";

@@ -91,7 +91,7 @@ private _repairWheels = _asset addAction [
 	true,
 	true,
 	"",
-	"local _target && alive _target && player == _this && cursorObject == _target && vehicle _this == _this",
+	"[_target, _this] call WL2_fnc_tireChangeEligibility",
 	WL_MAINTENANCE_RADIUS,
 	false
 ];

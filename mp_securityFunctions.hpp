@@ -25,6 +25,8 @@ class CfgRemoteExec {
 		class WL2_fnc_attachDetach {allowedTargets = 0;};
 		class WL2_fnc_catapultAction {allowedTargets = 0;};
 		class WL2_fnc_claimAction {allowedTargets = 1;};
+		class WL2_fnc_clearAllTimeouts {allowedTargets = 2;};
+		class WL2_fnc_clearPlayerReports {allowedTargets = 2;};
 		class WL2_fnc_controlGunnerAction {allowedTargets = 0;};
 		class WL2_fnc_dazzlerAction {allowedTargets = 1;};
 		class WL2_fnc_demolishAction {allowedTargets = 0;};
@@ -47,6 +49,7 @@ class CfgRemoteExec {
 		class WL2_fnc_radarOperateAction {allowedTargets = 1;};
 		class WL2_fnc_radarRotateAction {allowedTargets = 1;};
 		class WL2_fnc_rearmAction {allowedTargets = 1;};
+		class WL2_fnc_rebalance {allowedTargets = 2;};
 		class WL2_fnc_reconOpticsAction {allowedTargets = 0;};
 		class WL2_fnc_refuelAction {allowedTargets = 0;};
 		class WL2_fnc_reloadOverride {allowedTargets = 0;};
