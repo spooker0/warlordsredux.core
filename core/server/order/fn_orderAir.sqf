@@ -8,7 +8,7 @@ private _owner = owner _sender;;
 private _spawnPos = [];
 private _dir = 0;
 
-private _sector = (_pos nearObjects ["Logic", 10]) # 0;
+private _sector = (_pos nearObjects ["Logic", 10]) select { _x in BIS_WL_allSectors } select 0;
 
 if (_sector getVariable ["WL2_isAircraftCarrier", false]) then {
 	private _carrierSettings = _sector getVariable ["WL2_aircraftCarrierAir", []];

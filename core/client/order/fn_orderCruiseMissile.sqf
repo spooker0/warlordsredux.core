@@ -53,7 +53,7 @@ systemChat format ["Launching %1 cruise missiles from %2.", count _targets, _lau
 // Launch
 private _missiles = [];
 {
-    private _missile = createVehicle ["ammo_Missile_Cruise_01", [0, 0, 1000], [], 0, "NONE"];
+    private _missile = createVehicle ["ammo_Missile_Cruise_01", _launchPosition, [], 0, "NONE"];
     private _laser = createVehicleLocal ["LaserTargetC", [0, 0, 0], [], 0, "NONE"];
 
     [_missile, [player, player]] remoteExec ["setShotParents", 2];
@@ -71,6 +71,7 @@ private _missiles = [];
                 _laser = createVehicleLocal ["LaserTargetC", [0, 0, 0], [], 0, "NONE"];
             };
             _missile setMissileTarget [_laser, true];
+            _missile setVelocityModelSpace [0, 300, 0];
 
             if (alive _target) then {
                 private _targetPos = getPosASL _target;
