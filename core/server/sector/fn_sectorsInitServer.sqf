@@ -150,10 +150,10 @@ waitUntil {!isNil "BIS_WL_base1" && {!isNil "BIS_WL_base2"}};
 0 spawn {
 	sleep 5;
 	private _westSectors = BIS_WL_allSectors select {
-		_x getVariable ["BIS_WL_name", ""] in ["Poliakko", "Alikampos", "Lakka", "Lakka Factory"];
+		_x getVariable ["BIS_WL_name", ""] in ["Poliakko", "Alikampos", "Lakka"];
 	};
 	private _eastSectors = BIS_WL_allSectors select {
-		_x getVariable ["BIS_WL_name", ""] in ["Stavros", "Neochori", "Katalaki"];
+		_x getVariable ["BIS_WL_name", ""] in ["Stavros", "Neochori", "Katalaki", "USS Freedom"];
 	};
 	{
 		_x setVariable ["BIS_WL_revealedBy", [west], true];

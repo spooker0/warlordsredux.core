@@ -70,5 +70,4 @@ call WL2_fnc_disarmAction;
 0 spawn WL2_fnc_drawRadarName;
 
 call POLL_fnc_pollAction;
-
-0 spawn WL2_fnc_afk;
+call WL2_fnc_afkAction;

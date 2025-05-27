@@ -58,23 +58,33 @@ private _missiles = [];
 
     [_missile, [player, player]] remoteExec ["setShotParents", 2];
 
+    if (!alive _x) then {
+        continue;
+    };
+
     [_missile, _laser, _x] spawn {
         params ["_missile", "_laser", "_target"];
         private _terminal = false;
+        private _lastTargetPos = getPosASL _target;
         while { alive _missile } do {
             if (!alive _laser) then {
                 _laser = createVehicleLocal ["LaserTargetC", [0, 0, 0], [], 0, "NONE"];
             };
-            private _targetPos = getPosASL _target;
-
             _missile setMissileTarget [_laser, true];
 
-            if (_missile distance _laser > 300 && !_terminal) then {
-                _laser setPosASL (_targetPos vectorAdd [0, 0, 500]);
+            if (alive _target) then {
+                private _targetPos = getPosASL _target;
+                if (_missile distance _laser > 500 && !_terminal) then {
+                    _laser setPosASL (_targetPos vectorAdd [0, 0, 500]);
+                } else {
+                    _terminal = true;
+                    _laser setPosASL _targetPos;
+                };
+                _lastTargetPos = _targetPos;
             } else {
-                _terminal = true;
-                _laser setPosASL (getPosASL _target);
+                _laser setPosASL _lastTargetPos;
             };
+
             sleep 1;
         };
 

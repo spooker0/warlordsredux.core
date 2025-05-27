@@ -395,3 +395,4 @@ call POLL_fnc_pollAction;
 
 missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_AFK_TIMER];
 0 spawn WL2_fnc_afk;
+call WL2_fnc_afkAction;
