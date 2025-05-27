@@ -178,6 +178,11 @@ if (_ret) then {
 				[WL2_fnc_checkNearbyEnemies]
 			]
 		};
+		case "CruiseMissiles": {
+			[
+				[WL2_fnc_checkCruiseMissileAvailable]
+			]
+		};
 		case "AIGetIn": {
 			[
 				[WL2_fnc_checkGroundVehicleDriver, [false]]

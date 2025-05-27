@@ -313,6 +313,7 @@ class CfgFunctions {
 			class findStrongholdBuilding {};
 			class orderAircraft {};
 			class orderArsenal {};
+			class orderCruiseMissile {};
 			class orderFastTravel {};
 			class orderForfeit {};
 			class orderFundsTransfer {};
@@ -330,6 +331,7 @@ class CfgFunctions {
 			class checkAlliedPlayers {};
 			class checkAssetLimit {};
 			class checkCarrierLimits {};
+			class checkCruiseMissileAvailable {};
 			class checkCollaborator {};
 			class checkDead {};
 			class checkFastTravelSL {};

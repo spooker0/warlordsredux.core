@@ -131,6 +131,10 @@ switch (_className) do {
         private _camo = createSimpleObject ["a3\plants_f\Bush\b_ArundoD3s_F.p3d", _loc];
         _camo setVariable ["WL2_placedTime", serverTime, 2];
     };
+    case "CruiseMissiles": {
+        "RequestMenu_close" call WL2_fnc_setupUI;
+        0 spawn WL2_fnc_orderCruiseMissile;
+    };
     case "PruneAssets": {
         "RequestMenu_close" call WL2_fnc_setupUI;
 
