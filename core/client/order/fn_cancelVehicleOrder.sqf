@@ -72,7 +72,7 @@ if (_asset inArea _sectorStronghold) exitWith {
     false;
 };
 
-private _isInCarrierSector = count (_sector getVariable ["WL_aircraftCarrier", []]) > 0;
+private _isInCarrierSector = _sector getVariable ["WL2_isAircraftCarrier", false];
 if (_isInCarrierSector && ((getPosASL _asset) # 2) < 5) exitWith {
     [true, "Asset cannot be deployed so close to water."];
 };

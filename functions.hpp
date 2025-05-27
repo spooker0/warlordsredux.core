@@ -78,6 +78,7 @@ class CfgFunctions {
 			class printSystemTime {};
 			class refreshChat {};
 			class reportPlayer {};
+			class resetDefault {};
 			class setReturnValue {};
 			class settingsMenu {};
 			class settingsMenuInit {};
@@ -155,12 +156,12 @@ class CfgFunctions {
 			class pingFix {};
 			class pingFixInit {};
 			class playerEventHandlers {};
-			class prepareRappel {};
 			class prompt {};
 			// class repackMagazines {};
 			class resetVehicle {};
 			class restrictedArea {};
 			class revive {};
+			class setupCarrier {};
 			class sideToFaction {};
 			class spectrumInterface {};
 			class teammatesAvailability {};

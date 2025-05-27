@@ -14,7 +14,9 @@ private _magazineTypes = [
 	"SmokeShell",
 	"SmokeShellRed",
 	"Chemlight_green",
-	"Chemlight_red"
+	"Chemlight_red",
+	"HandGrenade",
+	"MiniGrenade"
 ];
 
 {
@@ -44,10 +46,32 @@ switch (side group player) do {
 } forEach _magazineTypes;
 
 _unit linkItem "Integrated_NVG_TI_0_F";
+
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+
+private _respawnSmokeGrenades = _settingsMap getOrDefault ["respawnSmokeGrenades", 1];
+_unit addMagazines ["SmokeShell", _respawnSmokeGrenades];
+
+private _respawnFragGrenades = _settingsMap getOrDefault ["respawnFragGrenades", 2];
+_unit addMagazines ["HandGrenade", _respawnFragGrenades];
+
 _unit addPrimaryWeaponItem "muzzle_snds_H";
 _unit addPrimaryWeaponItem "muzzle_snds_M";
-_unit addMagazines ["HandGrenade", 2];
-_unit addMagazines ["SmokeShell", 1];
-_unit addItem "FirstAidKit";
-_unit addItem "FirstAidKit";
+
+private _respawnFirstAidKits = _settingsMap getOrDefault ["respawnFirstAidKits", 3];
+switch (_respawnFirstAidKits) do {
+	case 0: {
+		_unit removeItems "FirstAidKit";
+	};
+	case 1: {
+	};
+	case 2: {
+		_unit addItem "FirstAidKit";
+	};
+	case 3: {
+		_unit addItem "FirstAidKit";
+		_unit addItem "FirstAidKit";
+	};
+};
+
 _unit setUnitTrait ["loadCoef", 0.8];

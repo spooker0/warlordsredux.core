@@ -85,6 +85,13 @@ player addEventHandler ["GetOutMan", {
 	if (((_vehicle getVariable "BIS_WL_ownerAsset") == (getPlayerUID player)) && (pricehash getOrDefault [typeOf _vehicle, 300] <= 200)) then {
 		_vehicle setVariable ["BIS_WL_lastActive", serverTime + 600];
 	};
+
+	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+	if (_settingsMap getOrDefault ["deleteQuadBike", true]) then {
+		if (typeof _vehicle in ["B_Quadbike_01_F", "O_Quadbike_01_F"]) then {
+			deleteVehicle _vehicle;
+		};
+	};
 }];
 
 player addEventHandler ["InventoryOpened", {

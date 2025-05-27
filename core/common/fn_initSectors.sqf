@@ -26,9 +26,9 @@ private _initializedSectors = [];
     _area set [3, _area # 3 == 1];
     _logic setVariable ["objectArea", _area, true];
 
-    private _carrier = getText (_sector >> "carrier");
-    if (_carrier != "") then {
-        _logic setVariable ["WL_aircraftCarrier", call compile _carrier, true];
+    private _carrier = getNumber (_sector >> "carrier");
+    if (_carrier == 1) then {
+        _logic setVariable ["WL2_isAircraftCarrier", true, true];
     };
 
     _createdSectors set [_sectorClass, _logic];

@@ -233,14 +233,14 @@ private _fastTravelArr = [
 		"FTAirAssault",
 		getMissionConfigValue ["WL_airAssaultCost", 100],
 		[],
-		"Fast Travel Air Assault",
+		"Fast travel air assault",
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
 		"Attack the contested sector by dropping into it with a parachute."
 	], [
 		"FTParadropVehicle",
 		getMissionConfigValue ["WL_vehicleParadropCost", 1000],
 		[],
-		"Fast Travel Vehicle Paradrop",
+		"Fast travel vehicle paradrop",
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
 		"Move your vehicle to a friendly sector from a helipad/airfield sector by paradropping it.<br/>Requirements:<br/>1. In an owned sector.<br/>2. In a vehicle as the driver.<br/>3. No enemies nearby.<br/>4. Cooldown: 5 minutes."
 	], [
@@ -254,35 +254,35 @@ private _fastTravelArr = [
 		"RespawnBagFT",
 		0,
 		[],
-		"Fast Travel to Tent (Free)",
+		"Fast travel to tent",
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
 		""
 	], [
 		"StrongholdFT",
 		0,
 		[],
-		"Fast Travel to Sector Stronghold",
+		"Fast travel to sector stronghold",
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
 		""
 	], [
 		"RespawnBag",
 		50,
 		[],
-		"Purchase Fast Travel Tent",
+		"Purchase fast travel tent",
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
 		"Buy a deployable sleeping bag that respawns you at its location."
 	], [
 		"BuyFOB",
 		500,
 		[],
-		"Purchase Forward Base Supplies",
+		"Purchase forward base supplies",
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
 		format ["Purchases equipment that can be airlifted or deployed into a forward position and setup into a base.<br/>Deploy requirements:<br/>1. Must be squad leader.<br/>2. Squad size >= 3.<br/>3. Outside of sectors.<br/>4. At least %1 away from other forward bases.<br/>5. Can have 3 total at once.<br/>Can also be used to add 20,000 supplies to an existing FOB.", WL_FOB_MIN_DISTANCE]
 	], [
 		"BuyStronghold",
 		500,
 		[],
-		"Purchase Sector Stronghold",
+		"Purchase sector stronghold",
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
 		"Fortifies the nearest building in your sector with a stronghold (one per sector at a time). This will replace the current stronghold if one exists. Strongholds provide a 5x bonus to infantry capture power in its small area, regardless of owner. Assets can be deployed onto strongholds. Strongholds can be used to speed up sector fortification process to reduce backcapping."
 	]
@@ -363,28 +363,28 @@ private _strategyArr = [
 		"PruneAssets",
 		0,
 		[],
-		"List/Prune Assets",
+		"Prune assets",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"List all your assets in the game and decide whether to take action to delete some of them."
 	], [
 		"WipeMap",
 		0,
 		[],
-		"Wipe Map",
+		"Wipe map",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"Wipes all user-defined markers from your own map locally. This includes your own."
 	], [
 		"ControlCollaborator",
 		2000,
 		[],
-		"Control Collaborator",
+		"Control collaborator",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"Find and control a collaborator in the local population within 4km, that is not in the sector your team is attacking."
 	], [
 		"AIGetIn",
 		50,
 		[],
-		"AI Get In",
+		"AI get in",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"Your AI within 50m radius will be forced into the vehicle you are driving."
 	], [
@@ -416,7 +416,7 @@ private _strategyArr = [
 		"SwitchToGreen",
 		0,
 		[],
-		"Switch to Green",
+		"Switch to green",
 		"\a3\data_f\flags\flag_green_co.paa",
 		"Switch to Green side"
 	];

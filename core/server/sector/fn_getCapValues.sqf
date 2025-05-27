@@ -74,7 +74,7 @@ private _eligibleEntitiesInArea = _allInArea select {
 	// Climbing ladder = altitude above ground
 	// Flying = altitude above ground
 
-	private _isCarrierSector = count (_sector getVariable ["WL_aircraftCarrier", []]) > 0;
+	private _isCarrierSector = _sector getVariable ["WL2_isAircraftCarrier", false];
 
 	if (_isCarrierSector) then {
 		getPosASL _unit # 2 > 10;

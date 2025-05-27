@@ -8,19 +8,13 @@ private _owner = owner _sender;;
 private _spawnPos = [];
 private _dir = 0;
 
-private _sector = _pos nearObjects ["Logic", 10];
+private _sector = (_pos nearObjects ["Logic", 10]) # 0;
 
-private _carrierSectors = _sector select {
-	count (_x getVariable ["WL_aircraftCarrier", []]) > 0
-};
-if (count _carrierSectors > 0) then {
-	_sector = _carrierSectors # 0;
-
-	private _carrierSettings = (_sector getVariable ["WL_aircraftCarrier", []]) # 0;
+if (_sector getVariable ["WL2_isAircraftCarrier", false]) then {
+	private _carrierSettings = _sector getVariable ["WL2_aircraftCarrierAir", []];
 	{
-		private _potentialSpawn = _x;
-		private _potentialSpawnPos = getPosATL _potentialSpawn;
-		private _potentialSpawnDir = getDir _potentialSpawn;
+		private _potentialSpawnPos = _x # 0;
+		private _potentialSpawnDir = _x # 1;
 
 		private _potentialSpawnPosASL = ATLtoASL _potentialSpawnPos;
 		private _collisionObjects = (_potentialSpawnPosASL nearObjects ["AllVehicles", 20]) select {
@@ -33,8 +27,6 @@ if (count _carrierSectors > 0) then {
 		};
 	} forEach (_carrierSettings call BIS_fnc_arrayShuffle);
 } else {
-	_sector = (_sector select {count (_x getVariable ["BIS_WL_runwaySpawnPosArr", []]) > 0}) # 0;
-
 	private _taxiNodes = _sector getVariable "BIS_WL_runwaySpawnPosArr";
 	private _taxiNodesCnt = count _taxiNodes;
 	private _checks = 0;

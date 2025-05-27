@@ -31,13 +31,13 @@ while { alive player } do {
         player connectTerminalToUAV objNull;
     };
 
-    private _thirdPersonDisabled = _settingsMap getOrDefault ["3rdPersonDisabled", true];
+    private _thirdPersonDisabled = _settingsMap getOrDefault ["3rdPersonDisabled", false];
     if (_thirdPersonDisabled) then {
         if (cameraView == "EXTERNAL") then {
             _currentVehicle switchCamera "Internal";
         };
     };
-    private _playerThirdPersonDisabled = player getVariable ["WL2_3rdPersonDisabled", true];
+    private _playerThirdPersonDisabled = player getVariable ["WL2_3rdPersonDisabled", false];
     if (_playerThirdPersonDisabled != _thirdPersonDisabled) then {
         player setVariable ["WL2_3rdPersonDisabled", _thirdPersonDisabled, true];
     };

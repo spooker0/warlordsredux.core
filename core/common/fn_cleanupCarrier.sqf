@@ -12,19 +12,6 @@ private _changeAttackStatus = {
     {
         _x hideObject !_isUnderAttack;
     } forEach _carrierProps;
-
-    private _carrierData = _sector getVariable ["WL_aircraftCarrier", []];
-    private _markers = _carrierData # 3;
-
-    if (_isUnderAttack) then {
-        {
-            (_x # 0) setMarkerAlphaLocal 1;
-        } forEach _markers;
-    } else {
-        {
-            (_x # 0) setMarkerAlphaLocal 0;
-        } forEach _markers;
-    };
 };
 
 {
@@ -39,25 +26,7 @@ private _changeAttackStatus = {
     };
     _carrier setVariable ["WL_carrierProps", _carrierProps];
 
-    private _carrierData = _sector getVariable ["WL_aircraftCarrier", []];
-    private _carrierMarkers = _carrierData # 2;
-
-    private _carrierMarkerPos = _carrierMarkers apply {getMarkerPos _x};
-    private _carrierLines = [];
-    for "_i" from 0 to (count _carrierMarkers - 1) do {
-        private _markerPos = _carrierMarkerPos # _i;
-        _carrierLines pushBack (_markerPos # 0);
-        _carrierLines pushBack (_markerPos # 1);
-    };
-    _carrierLines pushBack (_carrierMarkerPos # 0 # 0);
-    _carrierLines pushBack (_carrierMarkerPos # 0 # 1);
-
-    private _lineMarker = createMarkerLocal [format ["carrierPolyline_%1", _forEachIndex], _carrier];
-    _lineMarker setMarkerShapeLocal "POLYLINE";
-    _lineMarker setMarkerColorLocal "ColorRed";
-    _lineMarker setMarkerPolylineLocal _carrierLines;
-
-    [_carrierData] call WL2_fnc_prepareRappel;
+    [_x, _forEachIndex] call WL2_fnc_setupCarrier;
 } forEach _carriers;
 
 // Ensure sync

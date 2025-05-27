@@ -39,7 +39,7 @@ while { !BIS_WL_missionEnd } do {
             continue;
         };
     } else {
-        private _isCarrierSector = count (_currentSector getVariable ["WL_aircraftCarrier", []]) > 0;
+        private _isCarrierSector = _currentSector getVariable ["WL2_isAircraftCarrier", false];
 
         private _altOk = if (_isCarrierSector) then {
             private _heightASL = getPosASL player # 2;

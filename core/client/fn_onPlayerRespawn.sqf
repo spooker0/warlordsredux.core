@@ -34,9 +34,13 @@ if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
 
 0 spawn WL2_fnc_reviveAction;
 
-private _squadActionText = format ["<t color='#00FFFF'>%1</t>", localize "STR_SQUADS_squads"];
-private _squadActionId = player addAction[_squadActionText, { [true] call SQD_fnc_menu }, [], -100, false, false, "", ""];
-player setUserActionText [_squadActionId, _squadActionText, "<img size='2' image='\a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa'/>"];
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _hideSquadMenu = _settingsMap getOrDefault ["hideSquadMenu", false];
+if (!_hideSquadMenu) then {
+	private _squadActionText = format ["<t color='#00FFFF'>%1</t>", localize "STR_SQUADS_squads"];
+	private _squadActionId = player addAction[_squadActionText, { [true] call SQD_fnc_menu }, [], -100, false, false, "", ""];
+	player setUserActionText [_squadActionId, _squadActionText, "<img size='2' image='\a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa'/>"];
+};
 
 uiNamespace setVariable ["WL2_canBuy", true];
 if (isRemoteControlling player) then {

@@ -38,7 +38,9 @@ while {_assetsRemain} do {
 
 	sleep 30;
 
-	_soldierList = _soldierList select {alive _x};
+	_soldierList = _soldierList select {
+		alive _x && _x getVariable ["BIS_WL_ownerAsset", "123"] == "123"
+	};
 	_vehicleList = _vehicleList select {
 		alive _x && _x getVariable ["BIS_WL_ownerAsset", "123"] == "123"
 	};

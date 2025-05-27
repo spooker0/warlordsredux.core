@@ -10,7 +10,7 @@ if (count _findCurrentSector == 0) exitWith {
 
 private _currentSector = _findCurrentSector # 0;
 
-private _isCarrierSector = count (_currentSector getVariable ["WL_aircraftCarrier", []]) > 0;
+private _isCarrierSector = _currentSector getVariable ["WL2_isAircraftCarrier", false];
 if (_isCarrierSector) exitWith {
     [false, "You cannot put a stronghold in a carrier sector."];
 };

@@ -15,7 +15,7 @@ switch (_conditionName) do {
     };
     case "vehicleParadrop": {
         private _sectorAvailable = _target in (BIS_WL_sectorsArray # 2);
-        private _isCarrierSector = count (_target getVariable ["WL_aircraftCarrier", []]) > 0;
+        private _isCarrierSector = _target getVariable ["WL2_isAircraftCarrier", false];
         _sectorAvailable && !_isCarrierSector;
     };
     case "vehicleParadropFOB": {

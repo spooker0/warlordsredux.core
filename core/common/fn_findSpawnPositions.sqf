@@ -34,7 +34,7 @@ switch (typeName _center) do {
 				_axisA = _area # 1;
 				_axisB = _area # 2;
 
-				if (count (_center getVariable ["WL_aircraftCarrier", []]) > 0) then {
+				if (_center getVariable ["WL2_isAircraftCarrier", false]) then {
 					_carrierSector = _center;
 				};
 			}
@@ -44,9 +44,12 @@ switch (typeName _center) do {
 };
 
 if (!isNull _carrierSector) exitWith {
-	private _carrierInfo = _carrierSector getVariable ["WL_aircraftCarrier", []];
-	private _baseSpots = (_carrierInfo # 1) apply { getPosATL _x };
-	_baseSpots + _baseSpots + _baseSpots;
+	private _spawnLocations = _carrierSector getVariable ["WL2_aircraftCarrierInf", []];
+	if (count _spawnLocations == 0) then {
+		[getPosATL _carrierSector];
+	} else {
+		_spawnLocations + _spawnLocations + _spawnLocations;
+	};
 };
 
 _rimArea = [];

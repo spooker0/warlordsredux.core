@@ -3,7 +3,7 @@ if (isDedicated) exitWith {};
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 
 private _objectViewDistance = getObjectViewDistance # 0;
-private _targetViewDistance = _settingsMap getOrDefault ["objectViewDistance", 2000];
+private _targetViewDistance = _settingsMap getOrDefault ["objectViewDistance", 4000];
 
 private _terrainGridSetting = _settingsMap getOrDefault ["terrainDetails", 3];
 private _terrainGrid = switch (_terrainGridSetting) do {
@@ -34,7 +34,7 @@ if (player getVariable ["WL_ViewRangeReduced", false]) exitWith {
 };
 
 if !((UAVControl getConnectedUAV player # 1) isEqualTo "") exitWith {
-    private _targetViewDistance = _settingsMap getOrDefault ["droneViewDistance", 2000];
+    private _targetViewDistance = _settingsMap getOrDefault ["droneViewDistance", 4000];
     if (_targetViewDistance != viewDistance) then {
         setViewDistance _targetViewDistance;
     };
@@ -49,14 +49,14 @@ if (_vehicle isKindOf "Man") exitWith {
 };
 
 if (_vehicle isKindOf "LandVehicle" || _vehicle isKindOf "Ship") exitWith {
-    private _targetViewDistance = _settingsMap getOrDefault ["groundViewDistance", 2000];
+    private _targetViewDistance = _settingsMap getOrDefault ["groundViewDistance", 4000];
     if (_targetViewDistance != viewDistance) then {
         setViewDistance _targetViewDistance;
     };
 };
 
 if (_vehicle isKindOf "Air") exitWith {
-    private _targetViewDistance = _settingsMap getOrDefault ["airViewDistance", 2000];
+    private _targetViewDistance = _settingsMap getOrDefault ["airViewDistance", 4000];
     if (_targetViewDistance != viewDistance) then {
         setViewDistance _targetViewDistance;
     };

@@ -31,6 +31,9 @@ private _buttons = [
     ["PERFORMANCE", {
         closeDialog 0;
         0 spawn PERF_fnc_perfMenuInit;
+    }],
+    ["RESET ALL", {
+        0 spawn MENU_fnc_resetDefault;
     }]
 ];
 
@@ -218,10 +221,10 @@ _positionY = _positionY + 0.08;
 } forEach [
     ["category", "View distance"],
     ["slider", "Infantry", [200, 4000, 50, 2000, "infantryViewDistance"]],
-    ["slider", "Ground vehicle", [200, 4000, 50, 2000, "groundViewDistance"]],
-    ["slider", "Air vehicle", [200, 4000, 50, 2000, "airViewDistance"]],
-    ["slider", "Drone", [200, 4000, 50, 2000, "droneViewDistance"]],
-    ["slider", "Object distance", [200, 4000, 50, 2000, "objectViewDistance"]],
+    ["slider", "Ground vehicle", [200, 4000, 50, 4000, "groundViewDistance"]],
+    ["slider", "Air vehicle", [200, 4000, 50, 4000, "airViewDistance"]],
+    ["slider", "Drone", [200, 4000, 50, 4000, "droneViewDistance"]],
+    ["slider", "Object distance", [200, 4000, 50, 4000, "objectViewDistance"]],
     ["slider", "CQB mode (DELETE key)", [200, 2000, 50, 200, "cqbViewDistance"]],
     ["category", "Performance"],
     ["slider", "Map refresh rate", [1, 100, 1, 4, "mapRefresh"]],
@@ -241,15 +244,20 @@ _positionY = _positionY + 0.08;
     ["slider", "Parachute auto deploy height", [0, 500, 5, 100, "parachuteAutoDeployHeight"]],
     ["slider", "Announcer text size", [0.1, 1, 0.1, 0.5, "announcerTextSize"]],
     ["slider", "Map marker scale threshold", [0, 1, 0.05, 0.4, "sectorMarkerTextThreshold"]],
+    ["slider", "Respawn: smoke grenades", [0, 2, 1, 1, "respawnSmokeGrenades"]],
+    ["slider", "Respawn: frag grenades", [0, 3, 1, 2, "respawnFragGrenades"]],
+    ["slider", "Respawn: first air kits ", [0, 3, 1, 3, "respawnFirstAidKits"]],
     ["category", "General settings"],
-    ["checkbox", "Disable 3rd person view (2x reward)", ["3rdPersonDisabled", true, 360]],
+    ["checkbox", "Disable 3rd person view (2x reward)", ["3rdPersonDisabled", false, 360]],
     ["checkbox", "Autonomous mode off by default", ["enableAuto", false]],
     ["checkbox", "Spawn vehicles with empty inventory", ["spawnEmpty", false]],
     ["checkbox", "Disable missile cameras", ["disableMissileCameras", false]],
     ["checkbox", "Show user-defined markers", ["showMarkers", true]],
     ["checkbox", "No voice speaker", ["noVoiceSpeaker", false]],
     ["checkbox", "Mute task notifications", ["muteTaskNotifications", false]],
-    ["checkbox", "Disable incoming missile indicator", ["disableIncomingMissileDisplay", false]]
+    ["checkbox", "Disable incoming missile indicator", ["disableIncomingMissileDisplay", false]],
+    ["checkbox", "Hide squad menu in scroll menu", ["hideSquadMenu", false]],
+    ["checkbox", "Delete quad bikes on exit", ["deleteQuadBike", true]]
 ];
 
 {
