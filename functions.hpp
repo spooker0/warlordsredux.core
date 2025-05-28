@@ -157,7 +157,7 @@ class CfgFunctions {
 			class pingFixInit {};
 			class playerEventHandlers {};
 			class prompt {};
-			// class repackMagazines {};
+			class repackMagazines {};
 			class resetVehicle {};
 			class restrictedArea {};
 			class revive {};

@@ -191,7 +191,7 @@ WL_LoadingState = 11;
 ["OSD"] spawn WL2_fnc_setupUI;
 0 spawn WL2_fnc_timer;
 
-// 0 spawn WL2_fnc_repackMagazines;
+0 spawn WL2_fnc_repackMagazines;
 
 0 spawn {
 	_uid = getPlayerUID player;

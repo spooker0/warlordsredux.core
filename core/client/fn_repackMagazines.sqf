@@ -1,12 +1,13 @@
 comment "Magazine Repack";
 // Event Listener to Detect Inventory UI Open
-// This script has been taken and modified from MAZ_Enhacement_Pack_Core to fit in to the usecase of WL Redux thus none of the original names have been onCommandModeChanged
+// This script has been taken and modified from MAZ_Enhacement_Pack_Core to fit in to the usecase of WL Redux thus none of the original names have been changed
 // Feel free to use this in your usecase as well
 
 uiNamespace setVariable ["WL2_canRepack", true];
 
 ["MAZ_inventoryUIOpened", "onEachFrame", {
-    if (!isNull (findDisplay 602)) then {
+	private _display = findDisplay 602;
+    if (!isNull _display && isNull (_display displayCtrl 1600)) exitWith {
         ["inventoryOpened"] call MAZ_fnc_initializeUI;
     };
 }] call BIS_fnc_addStackedEventHandler;
