@@ -235,10 +235,6 @@ if (_asset isKindOf "Man") then {
 			[_asset] spawn WL2_fnc_stabilizeBoatAction;
 		};
 
-		case "B_APC_Wheeled_01_light_F": {
-			[_asset, 15000] remoteExec ["setMass", 0];
-		};
-
 		// case "B_AAA_System_01_F": {
 		// 	[_asset] spawn APS_fnc_ciws;
 		// };
@@ -336,6 +332,13 @@ if (_asset isKindOf "Man") then {
 
 	if (_asset getVariable ["apsType", -1] == 3) then {
 		[_asset] remoteExec ["WL2_fnc_dazzlerAction", 0, true];
+	};
+
+	private _isLightweightMap = missionNamespace getVariable ["WL2_isLightweight", createHashMap];
+	private _isLightweight = _isLightweightMap getOrDefault [_assetActualType, false];
+	if (_isLightweight) then {
+		private _originalMass = getMass _asset;
+		[_asset, _originalMass * 0.65] remoteExec ["setMass", 0];
 	};
 
 	private _hasESAMMap = missionNamespace getVariable ["WL2_hasESAM", createHashMap];

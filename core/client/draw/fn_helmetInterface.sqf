@@ -234,6 +234,7 @@ addMissionEventHandler ["Draw3D", {
         ["M_70mm_SAAMI", "SAAMI"]
     ];
     private _apsProjectileConfig = APS_projectileConfig;
+    private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 
     while { !BIS_WL_missionEnd } do {
         if (WL_HelmetInterface == 2) then {
@@ -562,7 +563,8 @@ addMissionEventHandler ["Draw3D", {
         private _lockedMissiles = _incomingMissiles select {
             alive _x && _x getVariable ["WL_missileApproaching", true];
         };
-        if (count _lockedMissiles > 0 && serverTime - _warningPlayed > 1.5) then {
+        private _threatVolume = _settingsMap getOrDefault ["rwr5", 1];
+        if (count _lockedMissiles > 0 && serverTime - _warningPlayed > 1.5 && _threatVolume > 0) then {
             private _lastMissile = _lockedMissiles # (count _lockedMissiles - 1);
             private _relDir = _vehicle getRelDir _lastMissile;
             private _angleReadout = switch (true) do {
@@ -581,7 +583,7 @@ addMissionEventHandler ["Draw3D", {
             };
 
             private _soundFile = format ["incMissile_%1", _angleReadout];
-            playSoundUI [_soundFile, 5];
+            playSoundUI [_soundFile, 5 * _threatVolume];
 
             player setVariable ["WL_missileWarningPlayed", serverTime];
         };

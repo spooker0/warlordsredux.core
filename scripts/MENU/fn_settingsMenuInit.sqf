@@ -240,6 +240,7 @@ _positionY = _positionY + 0.08;
     ["slider", "Cockpit: Altitude", [0, 1, 0.1, 0.3, "rwr2"]],
     ["slider", "Cockpit: Fuel", [0, 1, 0.1, 0.3, "rwr3"]],
     ["slider", "Cockpit: Targeting", [0, 1, 0.1, 1, "rwr4"]],
+    ["slider", "Cockpit: Threats", [0, 1, 0.1, 1, "rwr5"]],
     ["category", "Adjustable settings"],
     ["slider", "Parachute auto deploy height", [0, 500, 5, 100, "parachuteAutoDeployHeight"]],
     ["slider", "Announcer text size", [0.1, 1, 0.1, 0.5, "announcerTextSize"]],

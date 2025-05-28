@@ -32,6 +32,7 @@ private _hasReconOptics = createHashMap;
 private _hasRemoteBomb = createHashMap;
 private _hasScanner = createHashMap;
 private _hasAWACS = createHashMap;
+private _isLight = createHashMap;
 
 private _turretOverridesHashMap = createHashMap;
 
@@ -76,6 +77,7 @@ private _requisitionPresets = BIS_WL_purchaseListTemplate;
 				private _requisitionHasRemoteBomb = getNumber (_x >> "hasRemoteBomb");
 				private _requisitionHasScanner = getNumber (_x >> "hasScanner");
 				private _requisitionHasAWACS = getNumber (_x >> "hasAWACS");
+				private _requisitionIsLight = getNumber (_x >> "isLight");
 
 				private _requisitionUnitSpawn = getNumber (_x >> "unitSpawn");
 				private _requisitionVehicleSpawn = getNumber (_x >> "vehicleSpawn");
@@ -201,6 +203,10 @@ private _requisitionPresets = BIS_WL_purchaseListTemplate;
 					_hasAWACS set [_requisitonName, true];
 				};
 
+				if (_requisitionIsLight != 0) then {
+					_isLight set [_requisitonName, true];
+				};
+
 				if (count _requisitionTurretOverrides > 0) then {
 					_turretOverridesHashMap set [_requisitonName, _requisitionTurretOverrides];
 				};
@@ -275,6 +281,7 @@ missionNamespace setVariable ["WL2_hasReconOptics", _hasReconOptics];
 missionNamespace setVariable ["WL2_hasRemoteBomb", _hasRemoteBomb];
 missionNamespace setVariable ["WL2_hasScanner", _hasScanner];
 missionNamespace setVariable ["WL2_hasAWACS", _hasAWACS];
+missionNamespace setVariable ["WL2_isLightweight", _isLight];
 missionNamespace setVariable ["WL2_rearmTimers", _rearmTimerHashMap];
 missionNamespace setVariable ["WL2_turretOverrides", _turretOverridesHashMap];
 missionNamespace setVariable ["WL2_ammoOverrides", _ammoOverridesHashMap];

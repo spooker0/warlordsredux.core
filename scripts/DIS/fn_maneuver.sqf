@@ -67,6 +67,12 @@ _projectileSpeedOverride = _projectileSpeedOverride max 1;
 private _maxAcceleration = (getNumber (configfile >> "CfgAmmo" >> _projectileType >> "thrust")) * WL_SAM_ACCELERATION;
 private _maxSpeed = getNumber (configfile >> "CfgAmmo" >> _projectileType >> "maxSpeed") * WL_SAM_MAX_SPEED_FACTOR * _projectileSpeedOverride;
 
+// Sound barrier
+if (speed _unit > 1100) then {
+    _maxSpeed = _maxSpeed * 3;
+    _maxAcceleration = _maxAcceleration * 3;
+};
+
 private _terrainTest = 4000;
 private _disableGroundAvoid = false;
 #if WL_NO_GROUND_AVOID

@@ -294,7 +294,7 @@ if (_action == "camouflage") exitWith {
 };
 
 if (_action == "cruiseMissiles") exitWith {
-	private _cost = 7000;
+	private _cost = 15000;
 	private _hasFunds = _playerFunds >= _cost;
 	if (_hasFunds) then {
 		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;

@@ -361,7 +361,7 @@ private _strategyArr = [
 		"Camouflage your current position with tall plants. Disappears after 10 minutes."
 	], [
 		"CruiseMissiles",
-		7000,
+		15000,
 		[],
 		"Call missile strike",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
