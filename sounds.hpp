@@ -113,27 +113,21 @@ class CfgSounds {
         titles[] = {};
     };
 
-    class blaster1 {
-        name = "blaster1";
-        sound[] = {"src\sounds\blaster1.ogg", 1, 1};
+    class vlslaunch01 {
+        name = "vlslaunch01";
+        sound[] = {"src\sounds\vlslaunch_01.ogg", 1, 1};
         titles[] = {};
     };
 
-    class blaster2 {
-        name = "blaster2";
-        sound[] = {"src\sounds\blaster2.ogg", 1, 1};
+    class vlslaunch02 {
+        name = "vlslaunch02";
+        sound[] = {"src\sounds\vlslaunch_02.ogg", 1, 1};
         titles[] = {};
     };
 
-    class blaster3 {
-        name = "blaster3";
-        sound[] = {"src\sounds\blaster3.ogg", 1, 1};
-        titles[] = {};
-    };
-
-    class blaster4 {
-        name = "blaster4";
-        sound[] = {"src\sounds\blaster4.ogg", 1, 1};
+    class vlslaunch03 {
+        name = "vlslaunch03";
+        sound[] = {"src\sounds\vlslaunch_03.ogg", 1, 1};
         titles[] = {};
     };
 };

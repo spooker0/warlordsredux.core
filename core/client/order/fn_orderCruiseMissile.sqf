@@ -7,7 +7,7 @@ private _targetsOnDatalink = (listRemoteTargets _side) select {
     private _targetSide = [_target] call WL2_fnc_getAssetSide;
 
     private _targetTime = _x # 1;
-    _targetTime >= -10 && _targetSide != _side && alive _target && _position distance _target < 1500;
+    _targetTime >= -10 && _targetSide != _side && alive _target && _position distance _target < 2000;
 } apply { _x # 0 };
 
 private _vehiclesOnDatalink = _targetsOnDatalink select {
@@ -40,6 +40,8 @@ private _carrierSectors = (BIS_WL_sectorsArray # 0) select {
 if (count _carrierSectors == 0) exitWith {
     systemChat "No aircraft carriers available for cruise missile strike.";
 };
+
+player sideRadio "mp_groundsupport_70_tacticalstrikeinbound_BHQ_1";
 
 private _sortedCarriers = [_carrierSectors, [], { _x distance player }, "ASCEND"] call BIS_fnc_sortBy;
 private _launchCarrier = _sortedCarriers # 0;
@@ -94,9 +96,17 @@ private _missiles = [];
         deleteVehicle _missile;
     };
     _missiles pushBack _missile;
+
+    private _soundFiles = [
+        "vlslaunch01",
+        "vlslaunch02",
+        "vlslaunch03"
+    ];
+    playSoundUI [selectRandom _soundFiles, 1, 1, true];
     sleep 2;
 } forEach _targets;
 
 systemChat format ["Launch complete.", count _missiles];
+playSoundUI ["a3\dubbing_f\modules\supports\artillery_rounds_complete.ogg", 1, 1, true];
 
 [_missiles # 0, player] spawn DIS_fnc_startMissileCamera;
