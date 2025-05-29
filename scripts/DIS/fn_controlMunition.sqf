@@ -54,7 +54,7 @@ _instructionsDisplay ctrlCommit 0;
 
 private _mapDisplay = _display ctrlCreate ["RscMapControl", -1];
 _mapDisplay ctrlCommit 0;
-_mapDisplay ctrlMapSetPosition [safeZoneX + 0.1, 0.5, 0.6, 0.8];
+_mapDisplay ctrlMapSetPosition [safeZoneX + 0.1, safeZoneY + 0.1, 0.3, 0.4];
 _mapDisplay ctrlMapAnimAdd [0, 0.2, getPosASL _projectile];
 ctrlMapAnimCommit _mapDisplay;
 _mapDisplay mapCenterOnCamera true;

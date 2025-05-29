@@ -44,7 +44,7 @@ switch (_fastTravelMode) do {
 		private _distance = _randomPos distance2D BIS_WL_targetSector;
 		private _height = _sectorPos # 2;
 		_height = _height max 250;
-		_destination = [_randomPos # 0, _randomPos # 1, _height + _distance * 0.5];
+		_destination = [_randomPos # 0, _randomPos # 1, _height + _distance * 0.75];
 
 		[player, "fastTravelContested", getMissionConfigValue ["WL_airAssaultCost", 100]] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	};

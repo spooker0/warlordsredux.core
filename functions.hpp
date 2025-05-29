@@ -189,6 +189,7 @@ class CfgFunctions {
 			class demolishEligibility {};
 			class deployableAddAction {};
 			class deployableEligibility {};
+			class deployCrateAction {};
 			class disarmAction {};
 			class disarmEligibility {};
 			class jammerAction {};

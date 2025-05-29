@@ -17,22 +17,40 @@ sleep WL_TIMEOUT_SHORT;
 
 _mapClickEH = addMissionEventHandler ["MapSingleClick", {
 	params ["_units", "_pos", "_alt", "_shift"];
-	_thisArgs params ["_cost"];
+	_thisArgs params ["_class"];
 
-	private _nearOwnedSectors = (BIS_WL_sectorsArray # 0) select {
-		_pos distance _x < 4000;
-	};
-	if (count _nearOwnedSectors == 0 && _cost > 1000) then {
-		playSound "AddItemFailed";
-		systemChat "Heavy boat must be within 4km of an owned sector.";
-	} else {
-		if (surfaceIsWater _pos) then {
-			BIS_WL_waterDropPos = _pos;
-		} else {
-			playSound "AddItemFailed";
+	private _cancel = false;
+	switch (_class) do {
+		case "B_Boat_Armed_01_autocannon_F";
+		case "O_Boat_Armed_01_autocannon_F": {
+			private _sectorsInRange = (BIS_WL_sectorsArray # 0) findIf {
+				_pos distance _x < 4000 && "W" in (_x getVariable ["BIS_WL_services", []]);
+			};
+			if (_sectorsInRange == -1) then {
+				playSound "AddItemFailed";
+				systemChat "Heavy attack boat must be within 4 km of an owned harbor.";
+				_cancel = true;
+			};
+		};
+		case "B_Boat_Transport_02_F";
+		case "O_Boat_Transport_02_F": {
+			private _sectorsInRange = (BIS_WL_sectorsArray # 0) findIf {
+				_pos distance _x < 1500;
+			};
+			if (_sectorsInRange == -1) then {
+				playSound "AddItemFailed";
+				systemChat "Supply boat must be within 1.5 km of an owned harbor.";
+				_cancel = true;
+			};
 		};
 	};
-}, [_cost]];
+
+	if (surfaceIsWater _pos && !_cancel) then {
+		BIS_WL_waterDropPos = _pos;
+	} else {
+		playSound "AddItemFailed";
+	};
+}, [_class]];
 
 waitUntil {
 	sleep WL_TIMEOUT_MIN;

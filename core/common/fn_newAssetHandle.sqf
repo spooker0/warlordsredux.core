@@ -235,6 +235,12 @@ if (_asset isKindOf "Man") then {
 			[_asset] spawn WL2_fnc_stabilizeBoatAction;
 		};
 
+		case "B_Boat_Transport_02_F";
+		case "O_Boat_Transport_02_F": {
+			_asset setVariable ["WL2_deployCrates", 1, true];
+			[_asset] remoteExec ["WL2_fnc_deployCrateAction", 0, true];
+		};
+
 		// case "B_AAA_System_01_F": {
 		// 	[_asset] spawn APS_fnc_ciws;
 		// };

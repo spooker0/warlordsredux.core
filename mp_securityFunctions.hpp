@@ -33,6 +33,7 @@ class CfgRemoteExec {
 		class WL2_fnc_demolishChargeAction {allowedTargets = 0;};
 		class WL2_fnc_demolishComplete {allowedTargets = 0;};
 		class WL2_fnc_deployableAddAction {allowedTargets = 1;};
+		class WL2_fnc_deployCrateAction {allowedTargets = 1;};
 		class WL2_fnc_forfeitHandle {allowedTargets = 0;};
 		class WL2_fnc_forfeitHandleServer {allowedTargets = 2;};
 		class WL2_fnc_forgiveTeamkill {allowedTargets = 2;};

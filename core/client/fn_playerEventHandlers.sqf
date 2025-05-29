@@ -87,8 +87,12 @@ player addEventHandler ["GetOutMan", {
 	};
 
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-	if (_settingsMap getOrDefault ["deleteQuadBike", true]) then {
-		if (typeof _vehicle in ["B_Quadbike_01_F", "O_Quadbike_01_F"]) then {
+	if (_settingsMap getOrDefault ["deleteSmallTransports", true]) then {
+		if (typeof _vehicle in [
+			"B_Quadbike_01_F",
+			"O_Quadbike_01_F",
+			"C_Scooter_Transport_01_F"
+		]) then {
 			deleteVehicle _vehicle;
 		};
 	};

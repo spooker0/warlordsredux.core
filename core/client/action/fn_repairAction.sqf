@@ -48,14 +48,24 @@ private _actionID = _asset addAction [
 
 private _allHitPoints = getAllHitPointsDamage _asset;
 if (count _allHitPoints == 0) exitWith {};
-private _validHitPoints = _allHitPoints select 0 select {
+private _validWheels = _allHitPoints select 0 select {
     _x regexMatch "hit.*wheel";
 };
+private _validTracks = _allHitPoints select 0 select {
+    _x regexMatch "hit.*track";
+};
+private _validHitPoints = _validWheels + _validTracks;
 
 if (count _validHitPoints == 0) exitWith {};
 
+private _repairTitle = if (count _validTracks > 0) then {
+    "Track Repair"
+} else {
+    "Tire Change"
+};
+
 private _repairWheels = _asset addAction [
-	"<t color='#4bff58'>Tire Change</t>",
+	format ["<t color = '#4bff58'>%1</t>", _repairTitle],
 	{
         params ["_asset", "_caller", "_actionId", "_arguments"];
         private _validHitPoints = _arguments select 0;

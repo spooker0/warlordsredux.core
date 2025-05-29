@@ -5,6 +5,8 @@ private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashM
 private _objectViewDistance = getObjectViewDistance # 0;
 private _targetViewDistance = _settingsMap getOrDefault ["objectViewDistance", 4000];
 
+private _cqbMode = player getVariable ["WL_ViewRangeReduced", false];
+
 private _terrainGridSetting = _settingsMap getOrDefault ["terrainDetails", 3];
 private _terrainGrid = switch (_terrainGridSetting) do {
     case 1: {
@@ -20,13 +22,16 @@ private _terrainGrid = switch (_terrainGridSetting) do {
         3.125;
     };
 };
+if (_cqbMode) then {
+    _terrainGrid = 25;
+};
 setTerrainGrid _terrainGrid;
 
 if (_objectViewDistance != _targetViewDistance) then {
     setObjectViewDistance [_targetViewDistance, getObjectViewDistance # 1];
 };
 
-if (player getVariable ["WL_ViewRangeReduced", false]) exitWith {
+if (_cqbMode) exitWith {
     private _targetViewDistance = _settingsMap getOrDefault ["cqbViewDistance", 200];
     if (_targetViewDistance != viewDistance) then {
         setViewDistance _targetViewDistance;

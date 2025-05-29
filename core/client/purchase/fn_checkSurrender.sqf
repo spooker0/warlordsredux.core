@@ -1,7 +1,8 @@
 #include "..\..\warlords_constants.inc"
-
-if (serverTime < 180) exitWith {
-	[false, "Fighter harder! The game just started."];
+private _gameStartTime = missionNamespace getVariable ["gameStart", 0];
+private _surrenderTime = _gameStartTime + 60 * 60 * 3;
+if (serverTime < _surrenderTime) exitWith {
+	[false, format ["Surrender voting timer: %1", [_surrenderTime - serverTime, "MM:SS"] call BIS_fnc_secondsToString]];
 };
 
 // private _countSide = playersNumber BIS_WL_playerSide;
@@ -19,7 +20,7 @@ private _forfeitVoting = missionNamespace getVariable [_forfeitVotingVar, 0];
 private _forfeitVotingTimer = _forfeitVoting + 60;
 if (serverTime < _forfeitVotingTimer) exitWith {
 	private _timeLeft = [_forfeitVotingTimer - serverTime, "MM:SS"] call BIS_fnc_secondsToString;
-	[false, format ["Surrender Voting Timer: %1", _timeLeft]];
+	[false, format ["Surrender voting timer: %1", _timeLeft]];
 };
 
 [true, ""];

@@ -19,8 +19,11 @@ private _ropeDirections = [-140, -234, -238, -60];
     private _marker = format ["carrier%1_rappel%2", _carrierIndex, _forEachIndex];
     createMarkerLocal [_marker, _ropePosition];
     _marker setMarkerTypeLocal "loc_Quay";
-    _marker setMarkerTextLocal "Rappel";
+    if (_forEachIndex == 0) then {
+        _marker setMarkerTextLocal "Rappels";
+    };
     _marker setMarkerAlphaLocal 0.4;
+    _marker setMarkerSizeLocal [0.7, 0.7];
 
     private _existingRopes = missionNamespace getVariable ["WL2_rappelRopes", []];
     _existingRopes pushBack _rope;

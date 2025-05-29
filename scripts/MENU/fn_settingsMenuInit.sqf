@@ -227,7 +227,7 @@ _positionY = _positionY + 0.08;
     ["slider", "Object distance", [200, 4000, 50, 4000, "objectViewDistance"]],
     ["slider", "CQB mode (DELETE key)", [200, 2000, 50, 200, "cqbViewDistance"]],
     ["category", "Performance"],
-    ["slider", "Map refresh rate", [1, 100, 1, 4, "mapRefresh"]],
+    ["slider", "Map icon refresh rate", [1, 100, 1, 4, "mapRefresh"]],
     ["slider", "Terrain details", [1, 4, 1, 3, "terrainDetails"]],
     ["category", "Volume settings"],
     ["slider", "Announcer", [0, 1, 0.1, 1, "announcerVolume"]],
@@ -258,7 +258,7 @@ _positionY = _positionY + 0.08;
     ["checkbox", "Mute task notifications", ["muteTaskNotifications", false]],
     ["checkbox", "Disable incoming missile indicator", ["disableIncomingMissileDisplay", false]],
     ["checkbox", "Hide squad menu in scroll menu", ["hideSquadMenu", false]],
-    ["checkbox", "Delete quad bikes on exit", ["deleteQuadBike", true]]
+    ["checkbox", "Delete quad bike/water scooter on exit", ["deleteSmallTransports", true]]
 ];
 
 {
