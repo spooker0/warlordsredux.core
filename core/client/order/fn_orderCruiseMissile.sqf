@@ -72,16 +72,16 @@ private _missiles = [];
             if (!alive _laser) then {
                 _laser = createVehicleLocal ["LaserTargetC", [0, 0, 0], [], 0, "NONE"];
             };
-            _missile setMissileTarget [_laser, true];
             _missile setVelocityModelSpace [0, 300, 0];
 
             if (alive _target) then {
                 private _targetPos = getPosASL _target;
                 if (_missile distance _laser > 500 && !_terminal) then {
                     _laser setPosASL (_targetPos vectorAdd [0, 0, 500]);
+                    _missile setMissileTarget [_laser, true];
                 } else {
                     _terminal = true;
-                    _laser setPosASL _targetPos;
+                    _missile setMissileTarget [_target, true];
                 };
                 _lastTargetPos = _targetPos;
             } else {

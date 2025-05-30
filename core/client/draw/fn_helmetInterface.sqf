@@ -10,6 +10,8 @@ uiNamespace setVariable ["WL_HelmetInterfaceTargetVehicleIcons", []];
 uiNamespace setVariable ["WL_HelmetInterfaceTargetInfantryIcons", []];
 uiNamespace setVariable ["WL_HelmetInterfaceMaxDistance", 5000];
 
+uiNamespace setVariable ["WL2_gpsTargetingLastUpdate", 0];
+
 addMissionEventHandler ["Draw3D", {
     if (WL_HelmetInterface == 0) exitWith {};
 

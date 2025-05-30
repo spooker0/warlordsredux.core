@@ -68,7 +68,7 @@ private _maxAcceleration = (getNumber (configfile >> "CfgAmmo" >> _projectileTyp
 private _maxSpeed = getNumber (configfile >> "CfgAmmo" >> _projectileType >> "maxSpeed") * WL_SAM_MAX_SPEED_FACTOR * _projectileSpeedOverride;
 
 // Sound barrier
-if (speed _unit > 1100) then {
+if (speed _unit > 950) then {
     _maxSpeed = _maxSpeed * 3;
     _maxAcceleration = _maxAcceleration * 3;
 };

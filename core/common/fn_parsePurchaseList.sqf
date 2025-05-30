@@ -357,7 +357,7 @@ private _strategyArr = [
 		"Find and control a collaborator in the local population within 4km, that is not in the sector your team is attacking."
 	], [
 		"AIGetIn",
-		50,
+		0,
 		[],
 		"AI get in",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
@@ -396,6 +396,8 @@ private _strategyArr = [
 		"Switch to Green side"
 	];
 #endif
+
+_strategyArr = [_strategyArr, [], { _x # 1 }, "ASCEND"] call BIS_fnc_sortBy;
 
 _purchaseable pushBack _strategyArr;
 

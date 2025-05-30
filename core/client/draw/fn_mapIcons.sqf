@@ -46,7 +46,7 @@
             private _targetSide = [_target] call WL2_fnc_getAssetSide;
 
             private _targetTime = _x # 1;
-            _targetTime >= -10 && _targetSide != _side && alive _target;
+            _targetTime >= -10 && _targetSide != _side && alive _target && !(_target isKindOf "LaserTarget")
         } apply { _x # 0 };
 		_mapData set ["scannedUnits", _targetsOnDatalink];
 
