@@ -33,7 +33,7 @@ switch (_conditionName) do {
     case "fastTravelSL": {
         private _mySquadLeader = ['getMySquadLeader'] call SQD_fnc_client;
         private _isMySquadLeader = getPlayerID _target == _mySquadLeader || getPlayerID (vehicle _target) == _mySquadLeader;
-        isPlayer _target && _isMySquadLeader && alive _target && lifeState _target != "INCAPACITATED" && speed _target < 30;
+        _target != player && isPlayer _target && _isMySquadLeader && alive _target && lifeState _target != "INCAPACITATED" && speed _target < 30;
     };
     case "fastTravelSquad": {
         private _squadMember = if (vehicle _target == _target) then {
@@ -42,7 +42,7 @@ switch (_conditionName) do {
             vehicle _target
         };
         private _areInSquad = ["areInSquad", [getPlayerID _squadMember, getPlayerID player]] call SQD_fnc_client;
-        isPlayer _target && _areInSquad && alive _target && lifeState _target != "INCAPACITATED" && speed _target < 30;
+        _target != player && isPlayer _target && _areInSquad && alive _target && lifeState _target != "INCAPACITATED" && speed _target < 30;
     };
     case "fastTravelStronghold": {
         private _findIsStronghold = (BIS_WL_sectorsArray # 2) select {
