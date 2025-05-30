@@ -182,7 +182,8 @@ private _spawnVehicleTypes = createHashMapFromArray [
     ["O_Truck_03_medical_F", true],
     ["O_Truck_03_transport_F", true],
     ["Land_Pod_Heli_Transport_04_medevac_F", true],
-    ["O_Truck_01_flatbed_F", true]
+    ["O_Truck_01_flatbed_F", true],
+    ["O_Heli_Transport_04_medevac_F", true]
 ];
 
 if (_assetActualType in _spawnVehicleTypes) then {
@@ -342,7 +343,7 @@ private _removeStrongholdExecute = {
     };
     private _sector = (_findSector # 0);
 
-    private _sectorName = _sector getVariable ["BIS_WL_name", ""];
+    private _sectorName = _sector getVariable ["WL2_name", ""];
     private _message = format ["Are you sure you want to pay to remove the Sector Stronghold in %1?", _sectorName];
     private _result = [_message, "Remove Sector Stronghold", "Remove", "Cancel"] call BIS_fnc_guiMessage;
     if (!_result) exitWith {

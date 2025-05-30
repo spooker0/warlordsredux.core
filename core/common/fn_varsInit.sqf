@@ -4,11 +4,10 @@ switch (_locality) do {
 	case "common": {
 		BIS_WL_sidesArray = [west, east, resistance];
 		BIS_WL_competingSides = [west, east];
-		BIS_WL_missionEnd = FALSE;
+		BIS_WL_missionEnd = false;
 		BIS_WL_mapSize = getNumber (configFile >> "cfgWorlds" >> worldName >> "mapSize");
 		if (BIS_WL_mapSize == 0) then {BIS_WL_mapSize = getNumber (configFile >> "cfgWorlds" >> worldName >> "Grid" >> "OffsetY")};
-		BIS_WL_mapAreaArray = [[BIS_WL_mapSize / 2, BIS_WL_mapSize / 2], BIS_WL_mapSize / 2, BIS_WL_mapSize / 2, 0, TRUE];
-		BIS_WL_purchaseListTemplate = call compile "['A3ReduxAll']";
+		BIS_WL_mapAreaArray = [[BIS_WL_mapSize / 2, BIS_WL_mapSize / 2], BIS_WL_mapSize / 2, BIS_WL_mapSize / 2, 0, true];
 	};
 	case "client": {
 		BIS_WL_playerSide = side group player;
@@ -17,19 +16,19 @@ switch (_locality) do {
 		BIS_WL_colorMarkerFriendly = ["colorBLUFOR", "colorOPFOR", "colorIndependent"] # (BIS_WL_sidesArray find BIS_WL_playerSide);
 		BIS_WL_colorMarkerEnemy = ["colorBLUFOR", "colorOPFOR", "colorIndependent"] # (BIS_WL_sidesArray find BIS_WL_enemySide);
 		BIS_WL_targetVote = objNull;
-		BIS_WL_terminateOSDEvent_voting = FALSE;
-		BIS_WL_terminateOSDEvent_seizing = FALSE;
-		BIS_WL_terminateOSDEvent_trespassing = FALSE;
-		BIS_WL_terminateOSDEvent_seizingDisabled = FALSE;
-		BIS_WL_resetTargetSelection_client = FALSE;
+		BIS_WL_terminateOSDEvent_voting = false;
+		BIS_WL_terminateOSDEvent_seizing = false;
+		BIS_WL_terminateOSDEvent_trespassing = false;
+		BIS_WL_terminateOSDEvent_seizingDisabled = false;
+		BIS_WL_resetTargetSelection_client = false;
 		BIS_WL_localized_m = localize "STR_A3_rscdisplayarcademap_meters";
 		BIS_WL_localized_km = localize "STR_A3_WL_unit_km";
-		BIS_WL_gearKeyPressed = FALSE;
+		BIS_WL_gearKeyPressed = false;
 		BIS_WL_currentSelection = 0;
 		BIS_WL_matesAvailable = 0;
 		BIS_WL_lastLoadout = [];
 		BIS_WL_savedLoadout = [];
-		BIS_WL_loadoutApplied = FALSE;
+		BIS_WL_loadoutApplied = false;
 		BIS_WL_selectionMapManager = [];
 		BIS_WL_currentlyScannedSectors = [];
 		BIS_WL_currentTargetData = [

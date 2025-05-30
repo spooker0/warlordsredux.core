@@ -14,17 +14,17 @@ private _initializedSectors = [];
     private _logic = _logicGroup createUnit ["Logic", _location, [], 0, "NONE"];
 
     private _name = getText (_sector >> "name");
-    _logic setVariable ["BIS_WL_name", _name, true];
+    _logic setVariable ["WL2_name", _name, true];
 
     private _disableHome = getNumber (_sector >> "disableHome");
-    _logic setVariable ["BIS_WL_canBeBase", _disableHome != 1];
+    _logic setVariable ["WL2_canBeBase", _disableHome != 1];
 
     private _services = getArray (_sector >> "services");
-    _logic setVariable ["BIS_WL_services", _services, true];
+    _logic setVariable ["WL2_services", _services, true];
 
     private _area = getArray (_sector >> "area");
     _area set [3, _area # 3 == 1];
-    _logic setVariable ["objectArea", _area, true];
+    _logic setVariable ["WL2_objectArea", _area, true];
 
     private _carrier = getNumber (_sector >> "carrier");
     if (_carrier == 1) then {
@@ -47,19 +47,19 @@ private _connections = getArray (_sectorConfig >> "connections");
 
     _fromSector synchronizeObjectsAdd [_toSector];
 
-    private _fromSectorConnections = _fromSector getVariable ["BIS_WL_connectedSectors", []];
+    private _fromSectorConnections = _fromSector getVariable ["WL2_connectedSectors", []];
     _fromSectorConnections pushBackUnique _toSector;
-    _fromSector setVariable ["BIS_WL_connectedSectors", _fromSectorConnections];
+    _fromSector setVariable ["WL2_connectedSectors", _fromSectorConnections];
 
-    private _toSectorConnections = _toSector getVariable ["BIS_WL_connectedSectors", []];
+    private _toSectorConnections = _toSector getVariable ["WL2_connectedSectors", []];
     _toSectorConnections pushBackUnique _fromSector;
-    _toSector setVariable ["BIS_WL_connectedSectors", _toSectorConnections];
+    _toSector setVariable ["WL2_connectedSectors", _toSectorConnections];
 } forEach _connections;
 
 // Set on clients
 {
-    private _sectorConnections = _x getVariable ["BIS_WL_connectedSectors", []];
-    _x setVariable ["BIS_WL_connectedSectors", _sectorConnections, true];
+    private _sectorConnections = _x getVariable ["WL2_connectedSectors", []];
+    _x setVariable ["WL2_connectedSectors", _sectorConnections, true];
 } forEach _initializedSectors;
 
 missionNamespace setVariable ["WL2_sectorsInitializationComplete", _initializedSectors, true];

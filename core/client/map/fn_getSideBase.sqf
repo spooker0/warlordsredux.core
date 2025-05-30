@@ -6,9 +6,9 @@ if !(_side in [west, east]) then {
 	};
 	selectRandom _independentSectors;
 } else {
-	if ((BIS_WL_base1 getVariable "BIS_WL_originalOwner") == _side) then {
-		BIS_WL_base1;
+	if ((WL2_base1 getVariable "BIS_WL_originalOwner") == _side) then {
+		WL2_base1;
 	} else {
-		BIS_WL_base2;
+		WL2_base2;
 	};
 };

@@ -3,7 +3,7 @@
 private _baseData =
 #if WL_OVERRIDE_BASES
 	BIS_WL_allSectors select {
-		_x getVariable ["BIS_WL_name", ""] in ["Airbase", "AAC Airfield"];
+		_x getVariable ["WL2_name", ""] in ["Airbase", "AAC Airfield"];
 	};
 #else
 	[] call WL2_fnc_calcHomeBases;
@@ -45,14 +45,14 @@ for "_i" from 0 to 10000 do {
 	};
 };
 
-diag_log format ["Min distance: %1, Bases: %2, %3", _minDistance, _minDistanceBase1 getVariable ["BIS_WL_name", ""], _minDistanceBase2 getVariable ["BIS_WL_name", ""]];
+diag_log format ["Min distance: %1, Bases: %2, %3", _minDistance, _minDistanceBase1 getVariable ["WL2_name", ""], _minDistanceBase2 getVariable ["WL2_name", ""]];
 
 private _sortedSectorsArray = [_baseProbabilityTable, [], { _x # 1 }, "DESCEND"] call BIS_fnc_sortBy;
 
 diag_log "Base probability table:";
 {
 	private _getPairs = ([_x # 0] call WL2_fnc_calcHomeBases) # 2;
-	diag_log format ["%1: %2%%, Pairs: %3", (_x # 0) getVariable ["BIS_WL_name", ""], (_x # 1) / 20000 * 100, count _getPairs];
+	diag_log format ["%1: %2%%, Pairs: %3", (_x # 0) getVariable ["WL2_name", ""], (_x # 1) / 20000 * 100, count _getPairs];
 } forEach _sortedSectorsArray;
 #endif
 
@@ -60,14 +60,14 @@ private _firstBase = _baseData # 0;
 private _secondBase = _baseData # 1;
 
 #if WL_BASE_SELECTION_DEBUG
-systemChat format ["First base: %1", _firstBase getVariable ["BIS_WL_name", ""]];
-systemChat format ["Second base: %1", _secondBase getVariable ["BIS_WL_name", ""]];
+systemChat format ["First base: %1", _firstBase getVariable ["WL2_name", ""]];
+systemChat format ["Second base: %1", _secondBase getVariable ["WL2_name", ""]];
 #endif
 
-missionNamespace setVariable ["BIS_WL_base1", _firstBase, true];
-missionNamespace setVariable ["BIS_WL_base2", _secondBase, true];
+missionNamespace setVariable ["WL2_base1", _firstBase, true];
+missionNamespace setVariable ["WL2_base2", _secondBase, true];
 profileNamespace setVariable ["BIS_WL_lastBases", [_firstBase, _secondBase]];
-waitUntil {!isNil "BIS_WL_base1" && {!isNil "BIS_WL_base2"}};
+waitUntil {!isNil "WL2_base1" && {!isNil "WL2_base2"}};
 
 {
 	_side = [west, east] # _forEachIndex;
@@ -101,7 +101,7 @@ waitUntil {!isNil "BIS_WL_base1" && {!isNil "BIS_WL_base2"}};
 		[_sector] remoteExec ['WL2_fnc_sectorRevealHandle', [0, -2] select isDedicated];
 	};
 
-	_area = _sector getVariable "objectArea";
+	_area = _sector getVariable "WL2_objectArea";
 	_area set [4, 38];
 	_area params ["_a", "_b", "_angle", "_isRectangle"];
 	_size = _a * _b * (if (_isRectangle) then {4} else {pi});
@@ -150,10 +150,10 @@ waitUntil {!isNil "BIS_WL_base1" && {!isNil "BIS_WL_base2"}};
 0 spawn {
 	sleep 5;
 	private _westSectors = BIS_WL_allSectors select {
-		_x getVariable ["BIS_WL_name", ""] in ["Poliakko", "Alikampos", "Lakka"];
+		_x getVariable ["WL2_name", ""] in ["Poliakko", "Alikampos", "Lakka"];
 	};
 	private _eastSectors = BIS_WL_allSectors select {
-		_x getVariable ["BIS_WL_name", ""] in ["Stavros", "Neochori", "Katalaki", "USS Freedom"];
+		_x getVariable ["WL2_name", ""] in ["Stavros", "Neochori", "Katalaki", "USS Freedom"];
 	};
 	{
 		_x setVariable ["BIS_WL_revealedBy", [west], true];

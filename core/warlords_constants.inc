@@ -1,4 +1,7 @@
-// Live: 0
+// Live: update to latest version
+#define WL_VERSION "2.6.11"
+
+// Live: set all to 0
 #define WL_HARD_AI_MODE 0
 #define WL_FACTION_THREE_ENABLED 0
 #define WLC_DEBUG 0
@@ -14,14 +17,11 @@
 #define WL_EASTER_EGG 0
 #define WL_REPLAYS 0
 
-// Live: 1
-#define WL_STRONGHOLD_ENABLE 1
+// Live: set all to 1
 #define WL_STOP_TEAM_SWITCH 1
-#define WLC_ENABLED 1
-#define WL_FOB_ENABLED 1
 #define WL_FOB_SQUAD_REQUIREMENT 1
 
-// Live: do not change
+// Configuration
 #define WL_RESPAWN_MARKERS_CNT 20
 #define WL_TIMEOUT_MIN 0.055 //25, 55 = 20 FPS + 3 MS + 2ms(for slop) to safely run scripts at 20 fps.
 #define WL_TIMEOUT_SHORT 0.25
@@ -46,26 +46,16 @@
 #define WL_FAST_TRAVEL_OFFSET 110
 #define WL_FAST_TRAVEL_RANGE_AXIS 100
 #define WL_FAST_TRAVEL_SQUAD_TIMER 60
-#define WL_TARGET_RESET_ZONE_RESTRICTION_TOLERANCE 30
 #define WL_MAINTENANCE_RADIUS 30
 #define WL_MAINTENANCE_COOLDOWN_REPAIR 600
 #define WL_MAINTENANCE_COOLDOWN_REARM 600
-#define WL_MAINTENANCE_COOLDOWN_REARM_Helicopter 600
-#define WL_MAINTENANCE_COOLDOWN_REARM_Jets 1200
-#define WL_MAINTENANCE_COOLDOWN_REARM_Mortar 900
-#define WL_MAINTENANCE_COOLDOWN_REARM_Preatorian 300
-#define WL_MAINTENANCE_COOLDOWN_REARM_Spartan 600
-#define WL_MAINTENANCE_COOLDOWN_REARM_DefenderRhea 750
-#define WL_MAINTENANCE_COOLDOWN_REARM_Centurion 900
-#define WL_MAINTENANCE_COOLDOWN_REARM_Artillery 1800
-#define WL_MAINTENANCE_COOLDOWN_REARM_VLS 2700
 #define WL_TARGET_RESET_VOTING_TIME 60
 #define WL_TARGET_FRIENDLY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_playerSide], objNull])
 #define WL_TARGET_ENEMY (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", BIS_WL_enemySide])
 #define WL_CONTROL_MAP (uiNamespace getVariable ["BIS_WL_mapControl", controlNull])
-#define WL_PLAYER_REQUISITION_LIST (missionNamespace getVariable format ["BIS_WL_purchasable_%1", BIS_WL_playerSide])
+#define WL_PLAYER_REQUISITION_LIST (missionNamespace getVariable format ["WL2_purchasable_%1", BIS_WL_playerSide])
 #define WL_REQUISITION_CATEGORIES ["Infantry", "Light Vehicles", "Heavy Vehicles", "Rotary Wing", "Fixed Wing", "Remote Control", "Air Defense", "Sector Defense", "Naval", "Gear", "Fast Travel", "Strategy"]
-#define WL_BASES [BIS_WL_base1, BIS_WL_base2]
+#define WL_BASES [WL2_base1, WL2_base2]
 #define WL_JAMMER_RANGE_OUTER 3000
 #define WL_JAMMER_RANGE_INNER 500
 #define WL_JAMMER_SPECTRUM_RANGE 2000
@@ -77,7 +67,6 @@
 #define WL_DEMOLISH_TIME 45
 #define WL_DEMOLISH_FOB_TIME 60
 #define WL_FOB_SETUP_TIME 30
-#define WL_FOB_COOLDOWN 300
 #define WL_FOB_MIN_DISTANCE 3000
 #define WL_FOB_RANGE 100
 #define WL_FOB_CAPTURE_RANGE 1500

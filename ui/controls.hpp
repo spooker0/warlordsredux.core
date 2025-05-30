@@ -1,4 +1,5 @@
 import RscStructuredText;
+import RscButtonMenu;
 
 class welcomeScreen
 {
@@ -265,4 +266,24 @@ class WL_MapButtonDisplay {
 	idd = -1;
 	movingEnable = false;
 	class controls {};
+};
+
+class WLRscButtonMenu: RscButtonMenu {
+	soundClick[] = {"", 0, 1};
+
+	colorBackground[] = {0, 0, 0, 1};
+	colorBackground2[] = {0, 0, 0, 0.8};
+	colorBackgroundFocused[] = {0, 0, 0, 1};
+	colorBackgroundDisabled[] = {0, 0, 0, 1};
+
+	color[] = {1, 1, 1, 1};
+	color2[] = {1, 1, 1, 1};
+	colorText[] = {1, 1, 1, 1};
+	colorActive[] = {1, 1, 1, 1};
+	colorActive2[] = {1, 1, 1, 1};
+	colorFocused[] = {1, 1, 1, 1};
+	colorFocused2[] = {1, 1, 1, 1};
+	colorHover[] = {1, 1, 1, 1};
+	colorPressed[] = {1, 1, 1, 1};
+	colorDisabled[] = {1, 1, 1, 0.2};
 };

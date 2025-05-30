@@ -4,14 +4,14 @@ params ["_sector", "_owner"];
 
 if (isDedicated) exitWith {};
 
-if (_sector getVariable ["BIS_WL_name", "Sector"] == "Wait") exitWith {};
+if (_sector getVariable ["WL2_name", "Sector"] == "Wait") exitWith {};
 
 private _specialStateArray = if (isNil "BIS_WL_sectorsArray") then { [] } else {
 	(BIS_WL_sectorsArray # 6) + (BIS_WL_sectorsArray # 7);
  };
 
 private _ownerIndex = [WEST, EAST, RESISTANCE] find _owner;
-private _area = _sector getVariable "objectArea";
+private _area = _sector getVariable "WL2_objectArea";
 private _previousOwners = _sector getVariable "BIS_WL_previousOwners";
 private _mrkrMain = (_sector getVariable "BIS_WL_markers") # 0;
 private _mrkrArea = (_sector getVariable "BIS_WL_markers") # 1;

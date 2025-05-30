@@ -2,7 +2,7 @@
 
 params ["_sector"];
 
-private _area = _sector getVariable "objectArea";
+private _area = _sector getVariable "WL2_objectArea";
 private _sectorValue = _sector getVariable ["BIS_WL_value", 50];
 private _sectorCaptureValue = _sectorValue min 10;
 
@@ -108,5 +108,5 @@ while { !BIS_WL_missionEnd } do {
 	} else {
 		sleep 0.2;
 	};
-	// systemChat format ["Sector %1 | Owner: %2, Capturing Team: %3, Progress: %4", _sector getVariable ["BIS_WL_name", "Unknown"], _sector getVariable ["BIS_WL_owner", "Unknown"], _sector getVariable ["BIS_WL_capturingTeam", "Unknown"], _sector getVariable ["BIS_WL_captureProgress", 0]];
+	// systemChat format ["Sector %1 | Owner: %2, Capturing Team: %3, Progress: %4", _sector getVariable ["WL2_name", "Unknown"], _sector getVariable ["BIS_WL_owner", "Unknown"], _sector getVariable ["BIS_WL_capturingTeam", "Unknown"], _sector getVariable ["BIS_WL_captureProgress", 0]];
 };

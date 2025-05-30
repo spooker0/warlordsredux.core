@@ -157,7 +157,7 @@ if (_action == "scan") exitWith {
 		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
 		private _sector = _param2;
 
-		private _sectorName = _sector getVariable ["BIS_WL_name", "???"];
+		private _sectorName = _sector getVariable ["WL2_name", "???"];
 		private _message = format ["%1 has initiated sector scan on %2.", name _sender, _sectorName];
 		[_side, _message] call _broadcastActionToSide;
 

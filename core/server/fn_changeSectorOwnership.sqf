@@ -59,8 +59,8 @@ waitUntil {
 	(_sector getVariable ["BIS_WL_owner", civilian]) == _owner
 };
 
-private _base1 = missionNamespace getVariable ["BIS_WL_base1", objNull];
-private _base2 = missionNamespace getVariable ["BIS_WL_base2", objNull];
+private _base1 = missionNamespace getVariable ["WL2_base1", objNull];
+private _base2 = missionNamespace getVariable ["WL2_base2", objNull];
 private _base1Owner = _base1 getVariable ["BIS_WL_owner", civilian];
 private _base2Owner = _base2 getVariable ["BIS_WL_owner", independent];
 if (_base1Owner == _base2Owner) then {

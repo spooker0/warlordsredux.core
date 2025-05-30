@@ -46,7 +46,7 @@ addMissionEventHandler ["HandleChatMessage", {
 
 //***Fetch price from requisitions.hpp using "priceHash getOrDefault [typeOf _asset, 200]"***/
 priceHash = createHashMap;
-_fullList = (missionNamespace getVariable (format ["BIS_WL_purchasable_%1", side player]));
+_fullList = (missionNamespace getVariable (format ["WL2_purchasable_%1", side player]));
 {
 	if (_forEachIndex < 7) then {
 		_category = _x;

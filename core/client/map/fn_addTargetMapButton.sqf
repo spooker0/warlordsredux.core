@@ -38,23 +38,23 @@ private _costText = if (count _costCondition > 0) then {
     "";
 };
 
-private _button = _dialog ctrlCreate ["RscButtonMenu", -1];
+private _button = _dialog ctrlCreate ["WLRscButtonMenu", -1];
 _button ctrlSetPosition [_offsetX, _offsetY + (count _menuButtons * 0.05), 0.5, 0.05];
 _button ctrlSetStructuredText parseText format ["<t align='center' font='PuristaBold'>%1%2</t>", _textLabel, _costText];
 _button ctrlCommit 0;
-if (_buttonEnabled) then {
-    _button ctrlSetTextColor [1, 1, 1, 1];
-} else {
-    _button ctrlSetTextColor [1, 1, 1, 0.2];
-};
+// if (_buttonEnabled) then {
+//     _button ctrlSetTextColor [1, 1, 1, 1];
+// } else {
+//     _button ctrlSetTextColor [1, 1, 1, 0.2];
+// };
 _menuButtons pushBack _button;
 
 _button setVariable ["WL2_targetButtonSetupAction", _action];
 _button setVariable ["WL2_targetButtonSetupActionClose", _actionClose];
 _button setVariable ["WL2_targetButtonSetupActionCondition", _actionCondition];
 _button setVariable ["WL2_targetButtonSetupCostCondition", _costCondition];
-_button ctrlAddEventHandler ["ButtonClick", {
-    params ["_control"];
+_button ctrlAddEventHandler ["MouseButtonDown", {
+    params ["_control", "_button"];
     scopeName "buttonClickScope";
     private _actionTarget = uiNamespace getVariable ["WL2_assetTargetSelected", objNull];
     private _targetButtonSetupActionClose = _control getVariable "WL2_targetButtonSetupActionClose";
@@ -85,12 +85,17 @@ _button ctrlAddEventHandler ["ButtonClick", {
 
     if !(isNull _actionTarget) then {
         private _targetButtonSetupAction = _control getVariable "WL2_targetButtonSetupAction";
+        if (typeName _targetButtonSetupAction == "ARRAY") then {
+            _targetButtonSetupAction = _targetButtonSetupAction # _button;
+        };
         if (_targetButtonSetupActionClose) then {
             [_actionTarget] spawn _targetButtonSetupAction;
         } else {
             private _actionResult = [_actionTarget] call _targetButtonSetupAction;
             _control ctrlSetStructuredText parseText format ["<t align='center' font='PuristaBold'>%1</t>", _actionResult];
         };
+        ctrlSetFocus controlNull;
+        playSoundUI ["\A3\ui_f\data\sound\RscButtonMenu\soundClick.wss", 0.1];
     };
 
     if (_targetButtonSetupActionClose) then {

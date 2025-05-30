@@ -15,7 +15,7 @@ if (_isCarrierSector) exitWith {
     [false, "You cannot put a stronghold in a carrier sector."];
 };
 
-private _isHomeBase = _currentSector in [BIS_WL_base1, BIS_WL_base2];
+private _isHomeBase = _currentSector in [WL2_base1, WL2_base2];
 if (_isHomeBase) exitWith {
     [false, "You cannot put a stronghold in your home base."];
 };

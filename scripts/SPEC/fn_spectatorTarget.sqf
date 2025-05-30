@@ -115,7 +115,7 @@ while { WL_IsSpectator } do {
         if (_distance > _maxDistance) then {
             continue;
         };
-        private _sectorName = _sector getVariable ["BIS_WL_name", "Sector"];
+        private _sectorName = _sector getVariable ["WL2_name", "Sector"];
         private _captureProgress = _sector getVariable ["BIS_WL_captureProgress", 0];
         if (_captureProgress > 0) then {
             _sectorName = format ["%1 [%2%%]", _sectorName, round (_captureProgress * 100)]

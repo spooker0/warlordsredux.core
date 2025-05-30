@@ -8,7 +8,7 @@ if (_side != BIS_WL_playerSide) exitWith {
 
 		if ((_sector getVariable "BIS_WL_owner") == BIS_WL_playerSide || {_sector == WL_TARGET_FRIENDLY}) then {
 			"Incoming" call WL2_fnc_announcer;
-			[toUpper format [localize "STR_A3_WL_incoming", _sector getVariable "BIS_WL_name", BIS_WL_enemySide call WL2_fnc_sideToFaction]] spawn WL2_fnc_smoothText;
+			[toUpper format [localize "STR_A3_WL_incoming", _sector getVariable "WL2_name", BIS_WL_enemySide call WL2_fnc_sideToFaction]] spawn WL2_fnc_smoothText;
 		};
 
 		if (_sector == (BIS_WL_playerSide call WL2_fnc_getSideBase)) then {

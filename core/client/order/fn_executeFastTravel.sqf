@@ -21,7 +21,7 @@ private _destination = [];
 private _sectorPos = if (isNil "BIS_WL_targetSector") then {
 	[0, 0, 0];
 } else {
-	[toUpper format [localize "STR_A3_WL_popup_travelling", BIS_WL_targetSector getVariable "BIS_WL_name"], nil, 3] spawn WL2_fnc_smoothText;
+	[toUpper format [localize "STR_A3_WL_popup_travelling", BIS_WL_targetSector getVariable "WL2_name"], nil, 3] spawn WL2_fnc_smoothText;
 	(BIS_WL_targetSector getVariable "objectAreaComplete") # 0;
 };
 

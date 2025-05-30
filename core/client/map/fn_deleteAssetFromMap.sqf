@@ -5,7 +5,7 @@ params ["_target"];
 private _displayName = [_target] call WL2_fnc_getAssetTypeName;
 private _assetSector = BIS_WL_allSectors select { _target inArea (_x getVariable "objectAreaComplete") };
 private _assetLocation = if (count _assetSector > 0) then {
-	(_assetSector # 0) getVariable ["BIS_WL_name", str (mapGridPosition _target)];
+	(_assetSector # 0) getVariable ["WL2_name", str (mapGridPosition _target)];
 } else {
 	mapGridPosition _target;
 };

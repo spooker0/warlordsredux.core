@@ -31,7 +31,7 @@ private _displayText = format ["<t size='1.8' align='center'>%1</t><br/>%2<br/>"
     private _vote = _x # 0;
     private _voteCount = _x # 1;
 
-    private _sectorName = _vote getVariable ["BIS_WL_name", "???"];
+    private _sectorName = _vote getVariable ["WL2_name", "???"];
     private _isSectorRevealed = BIS_WL_playerSide in (_vote getVariable ["BIS_WL_revealedBy", []]);
 
     private _color = if (_isSectorRevealed) then {
@@ -52,7 +52,7 @@ private _displayText = format ["<t size='1.8' align='center'>%1</t><br/>%2<br/>"
     };
     _displayText = _displayText + format [
         "<t size='1.2' align='center' color='%1' shadow='2'>%2: %3 pts</t><br/>",
-        _color, _vote getVariable ["BIS_WL_name", "Sector"], _voteCount
+        _color, _vote getVariable ["WL2_name", "Sector"], _voteCount
     ];
 } forEach _sortedVoteList;
 

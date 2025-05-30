@@ -2,8 +2,6 @@
 
 params ["_score"];
 
-if (WLC_ENABLED == 0) exitWith {};
-
 private _previousLevel = ["getLevel"] call WLC_fnc_getLevelInfo;
 profileNamespace setVariable ["WLC_Score", _score];
 private _newLevel = ["getLevel"] call WLC_fnc_getLevelInfo;

@@ -104,8 +104,8 @@ if (count _assetDetails > 0) then {
 		};
 	};
 	if (_availability # 0 && {ctrlEnabled _purchase_request}) then {
-		uiNamespace setVariable ["BIS_WL_purchaseMenuItemAffordable", TRUE];
-		if (uiNamespace getVariable ["BIS_WL_purchaseMenuButtonHover", FALSE]) then {
+		uiNamespace setVariable ["BIS_WL_purchaseMenuItemAffordable", true];
+		if (uiNamespace getVariable ["BIS_WL_purchaseMenuButtonHover", false]) then {
 			_color = BIS_WL_colorFriendly;
 			_purchase_request ctrlSetBackgroundColor [(_color # 0) * 1.25, (_color # 1) * 1.25, (_color # 2) * 1.25, _color # 3];
 		} else {
@@ -121,7 +121,7 @@ if (count _assetDetails > 0) then {
 			_purchase_request ctrlSetTooltipColorBox [1, 0, 0, 1];
 		};
 	} else {
-		uiNamespace setVariable ["BIS_WL_purchaseMenuItemAffordable", FALSE];
+		uiNamespace setVariable ["BIS_WL_purchaseMenuItemAffordable", false];
 		_purchase_request ctrlSetBackgroundColor [(_color # 0) * 0.5, (_color # 1) * 0.5, (_color # 2) * 0.5, _color # 3];
 		_purchase_request ctrlSetTextColor [0.5, 0.5, 0.5, 1];
 		_purchase_request ctrlSetTooltip ((_availability # 1) joinString "\n");

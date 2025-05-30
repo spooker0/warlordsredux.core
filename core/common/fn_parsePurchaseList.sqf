@@ -2,217 +2,197 @@
 
 params ["_side"];
 
-private _sortedArray = [];
-private _lastLoadoutHandled = FALSE;
-private _saveLoadoutHandled = FALSE;
-private _savedLoadoutHandled = FALSE;
+private _purchaseable = [];
 
 {
-	_presetName = _x;
-	_preset = configNull;
+	private _category = (_x splitString " ") joinString "";
+	if (_category in ["FastTravel", "Strategy"]) then {
+		continue;
+	};
 
-	if (isClass (missionConfigFile >> "CfgWLRequisitionPresets" >> _presetName)) then {
-		_preset = missionConfigFile >> "CfgWLRequisitionPresets" >> _presetName;
-	} else {
-		if (isClass (configFile >> "CfgWLRequisitionPresets" >> _presetName)) then {
-			_preset = configFile >> "CfgWLRequisitionPresets" >> _presetName;
-		} else {
-			[format ["Warlords error: Input preset class '%1' not found in any configs.", _presetName]] call BIS_fnc_error;
+	private _categoryData = [];
+
+	switch (_category) do {
+		case "Infantry": {
+			_categoryData pushBack [
+				"BuildABear",
+				300,
+				[],
+				"Customized Unit",
+				"\A3\Data_F_Warlords\Data\preview_loadout.jpg",
+				"Buy infantry with your customized loadout."
+			];
+		};
+		case "Gear": {
+			_categoryData pushBack [
+				"Arsenal",
+				getMissionConfigValue ["BIS_WL_arsenalCost", 1000],
+				[],
+				localize "STR_A3_Arsenal",
+				"\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
+				localize "STR_A3_WL_arsenal_open"
+			];
+			_categoryData pushBack [
+				"Customization",
+				0,
+				[],
+				"Customization",
+				"\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
+				"Customization menu for respawn loadout."
+			];
+			_categoryData pushBack [
+				"BuyGlasses",
+				1000,
+				[],
+				"Buy AR Glasses",
+				"\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
+				"Buy AR glasses, which show you enemies spotted by friendly datalink, while you are in range of an EW network. Use +/- keys to increase/decrease range."
+			];
+			_categoryData pushBack [
+				"LastLoadout",
+				getMissionConfigValue ["BIS_WL_lastLoadoutCost", 100],
+				[],
+				localize "STR_A3_WL_last_loadout",
+				"\A3\Data_F_Warlords\Data\preview_loadout.jpg",
+				localize "STR_A3_WL_last_loadout_info"
+			];
+			_categoryData pushBack [
+				"SavedLoadout",\
+				getMissionConfigValue ["BIS_WL_savedLoadoutCost", 500],
+				[],
+				localize "STR_A3_WL_saved_loadout",
+				"\A3\Data_F_Warlords\Data\preview_loadout.jpg",
+				format [localize "STR_A3_WL_saved_loadout_info", "<br/>"]
+			];
+			_categoryData pushBack [
+				"SaveLoadout",
+				0,
+				[],
+				localize "STR_A3_WL_save_loadout",
+				"\A3\Data_F_Warlords\Data\preview_loadout.jpg",
+				localize "STR_A3_WL_save_loadout_info"
+			];
 		};
 	};
 
-	if (isNull _preset) exitWith {};
+	private _descriptionMap = missionNamespace getVariable ["WL2_descriptions", createHashMap];
 
-	if (isClass (_preset >> str _side)) then {
-		{
-			if (_x in ["Fast Travel", "Strategy"]) exitWith {};
+	private _preset = missionConfigFile >> "CfgWLRequisitionPresets" >> "A3ReduxAll";
+	{
+		private _className = configName _x;
+		private _actualClassName = getText (_x >> "spawn");
 
-			_index = _forEachIndex;
-			_category = _x;
-			_category = (_category splitString " ") joinString "";
-			_data = [];
-			if (count _sortedArray >= (_index + 1)) then {
-				_data = _sortedArray # _index
-			};
+		if (_actualClassName == "") then {
+			_actualClassName = _className;
+		};
 
-			if (_category == "Infantry") then {
-				private _buildABear = ["BuildABear", 300, [], "Customized Unit", "\A3\Data_F_Warlords\Data\preview_loadout.jpg", "Buy infantry with your customized loadout."];
-				_data insert [0, [_buildABear]];
-			};
+		private _class = configFile >> "CfgVehicles" >> _actualClassName;
+		private _cost = getNumber (_x >> "cost");
+		private _requirements = getArray (_x >> "requirements");
+		private _offset = getArray (_x >> "offset");
 
-			if (_category == "Gear") then {
-				_data pushBack ["Arsenal", (getMissionConfigValue ["BIS_WL_arsenalCost", 1000]), [], (localize "STR_A3_Arsenal"), "\A3\Data_F_Warlords\Data\preview_arsenal.jpg", localize "STR_A3_WL_arsenal_open"];
-				_data pushBack ["Customization", 0, [], "Customization", "\A3\Data_F_Warlords\Data\preview_arsenal.jpg", "Customization menu for respawn loadout."];
-				_data pushBack [
-					"BuyGlasses",
-					1000,
-					[],
-					"Buy AR Glasses",
-					"\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
-					"Buy AR glasses, which show you enemies spotted by friendly datalink, while you are in range of an EW network. Use +/- keys to increase/decrease range."
-				];
-			};
+		private _displayName = getText (_x >> "name");
+		if (_displayName == "") then {
+			_displayName = getText (_class >> "displayName");
+		};
 
-			if (_category == "Gear" && !_lastLoadoutHandled) then {
-				_lastLoadoutHandled = TRUE;
-				_data pushBack ["LastLoadout", (getMissionConfigValue ["BIS_WL_lastLoadoutCost", 100]), [], (localize "STR_A3_WL_last_loadout"), "\A3\Data_F_Warlords\Data\preview_loadout.jpg", localize "STR_A3_WL_last_loadout_info"];
-			};
+		private _picture = getText (_class >> "editorPreview");
 
-			if (_category == "Gear" && !_savedLoadoutHandled) then {
-				_savedLoadoutHandled = TRUE;
-				_data pushBack ["SavedLoadout", (getMissionConfigValue ["BIS_WL_savedLoadoutCost", 500]), [], (localize "STR_A3_WL_saved_loadout"), "\A3\Data_F_Warlords\Data\preview_loadout.jpg", format [localize "STR_A3_WL_saved_loadout_info", "<br/>"]];
-			};
+		if (_cost == 0) then {
+			continue;
+		};
 
-			if (_category == "Gear" && !_saveLoadoutHandled) then {
-				_saveLoadoutHandled = TRUE;
-				_data pushBack ["SaveLoadout", 0, [], (localize "STR_A3_WL_save_loadout"), "\A3\Data_F_Warlords\Data\preview_loadout.jpg", localize "STR_A3_WL_save_loadout_info"];
-			};
-
-			private _descriptionMap = missionNamespace getVariable ["WL2_descriptions", createHashMap];
-
-			{
-				private _className = configName _x;
-				private _actualClassName = getText (_x >> "spawn");
-
-				if (_actualClassName == "") then {
-					_actualClassName = _className;
-				};
-
-				private _class = configFile >> "CfgVehicles" >> _actualClassName;
-				private _cost = getNumber (_x >> "cost");
-				private _requirements = getArray (_x >> "requirements");
-				private _offset = getArray (_x >> "offset");
-				private _notForAIUse = getNumber (_x >> "blacklistAI");
-
-				private _displayName = getText (_x >> "name");
-				if (_displayName == "") then {
-					_displayName = getText (_class >> "displayName");
-				};
-
-				private _picture = getText (_class >> "editorPreview");
-				private _text = "";
-
-				if (_cost == 0) then {
-					continue;
-				};
-
-				if (_category == "Infantry") then {
-					_wpns = getArray (_class >> "weapons");
-					_wpnArrPrimary = _wpns select {getNumber (configFile >> "CfgWeapons" >> _x >> "type") == 1};
-					_wpnArrSecondary = _wpns select {getNumber (configFile >> "CfgWeapons" >> _x >> "type") == 4};
-					_wpnArrHandgun = _wpns select {getNumber (configFile >> "CfgWeapons" >> _x >> "type") == 2};
-					_wpn = if (count _wpnArrSecondary > 0) then {
-						_wpnArrSecondary # 0;
+		private _text = switch (_category) do {
+			case "Infantry": {
+				private _wpns = getArray (_class >> "weapons");
+				private _wpnArrPrimary = _wpns select { getNumber (configFile >> "CfgWeapons" >> _x >> "type") == 1 };
+				private _wpnArrSecondary = _wpns select { getNumber (configFile >> "CfgWeapons" >> _x >> "type") == 4 };
+				private _wpnArrHandgun = _wpns select { getNumber (configFile >> "CfgWeapons" >> _x >> "type") == 2 };
+				private _wpn = if (count _wpnArrSecondary > 0) then {
+					_wpnArrSecondary # 0;
+				} else {
+					if (count _wpnArrPrimary > 0) then {
+						_wpnArrPrimary # 0;
 					} else {
-						if (count _wpnArrPrimary > 0) then {
+						if (count _wpnArrHandgun > 0) then {
 							_wpnArrPrimary # 0;
 						} else {
-							if (count _wpnArrHandgun > 0) then {
-								_wpnArrPrimary # 0;
-							} else {
-								""
-							};
-						};
-					};
-					{
-						_text = _text + (getText (configFile >> "CfgWeapons" >> _x >> "displayName")) + "<br/>";
-					} forEach (_wpnArrPrimary + _wpnArrSecondary + _wpnArrHandgun);
-					_text = _text + "<br/>";
-					_linked = getArray (_class >> "linkedItems");
-					if (count _linked > 0) then {
-						_text = _text + (getText (configFile >> "CfgWeapons" >> _linked # 0 >> "displayName")) + "<br/>";
-					};
-					_backpack = getText (_class >> "backpack");
-					if (_backpack != "") then {_text = _text + (getText (configFile >> "CfgVehicles" >> _backpack >> "displayName"))};
-				} else {
-					if (_category in ["LightVehicles", "HeavyVehicles", "RotaryWing", "FixedWing", "RemoteControl", "AirDefense", "SectorDefense", "Naval"]) then {
-						_text = getText (_class >> "Library" >> "LibTextDesc");
-						if (_text == "") then {
-							_text = getText (_class >> "Armory" >> "description");
-						};
-						if (_text == "") then {
-							_validClassArr = "toLower getText (_x >> 'vehicle') == toLower _entryClass" configClasses (configFile >> "CfgHints");
-							if (count _validClassArr > 0) then {
-								_hintLibClass = ("toLower getText (_x >> 'vehicle') == toLower _entryClass" configClasses (configFile >> "CfgHints")) # 0;
-								_text = getText (_hintLibClass >> "description");
-								if (count _text > 0) then {
-									if (((toArray _text) # 0) == 37) then {
-										_text = localize (((getArray (_hintLibClass >> "arguments")) # 1) # 0);
-									};
-								};
-							};
-						};
-					} else {
-						if (_category == "Gear") then {
-							_transportWeapons = _class >> "TransportWeapons";
-							_weaponsCnt = count _transportWeapons;
-							_i = 0;
-							for "_i" from 0 to (_weaponsCnt - 1) do {
-								_item = getText ((_transportWeapons select _i) >> "weapon");
-								_text = _text + format ["%3%2x %1", getText (configFile >> "CfgWeapons" >> _item >> "displayName"), getNumber ((_transportWeapons select _i) >> "count"), if (_text == "") then {""} else {", "}];
-							};
-
-							_transportItems = _class >> "TransportItems";
-							_itemsCnt = count _transportItems;
-							_i = 0;
-							for "_i" from 0 to (_itemsCnt - 1) do {
-								_item = getText ((_transportItems select _i) >> "name");
-								_text = _text + format ["%3%2x %1", getText (configFile >> "CfgWeapons" >> _item >> "displayName"), getNumber ((_transportItems select _i) >> "count"), if (_text == "") then {""} else {", "}];
-							};
-
-							_transportMags = _class >> "TransportMagazines";
-							_magsCnt = count _transportMags;
-							_i = 0;
-							for "_i" from 0 to (_magsCnt - 1) do {
-								_item = getText ((_transportMags select _i) >> "magazine");
-								_text = _text + format ["%3%2x %1", getText (configFile >> "CfgMagazines" >> _item >> "displayName"), getNumber ((_transportMags select _i) >> "count"), if (_text == "") then {""} else {", "}];
-							};
-
-							_transportBPacks = _class >> "TransportBackpacks";
-							_bPacksCnt = count _transportBPacks;
-							_i = 0;
-							for "_i" from 0 to (_bPacksCnt - 1) do {
-								_item = getText ((_transportBPacks select _i) >> "backpack");
-								_text = _text + format ["%3%2x %1", getText (configFile >> "CfgVehicles" >> _item >> "displayName"), getNumber ((_transportBPacks select _i) >> "count"), if (_text == "") then {""} else {", "}];
-							};
+							""
 						};
 					};
 				};
 
-				if (_text != "") then {
-					_textNew = (_text splitString "$") # 0;
-					if (_textNew != _text) then {
-						_text = localize _textNew
-					} else {
-						_text = _textNew
+				private _infText = "";
+				{
+					_infText = format ["%1%2<br/>", _infText, getText (configFile >> "CfgWeapons" >> _x >> "displayName")];
+				} forEach (_wpnArrPrimary + _wpnArrSecondary + _wpnArrHandgun);
+				_infText = _infText + "<br/>";
+
+				private _linked = getArray (_class >> "linkedItems");
+				if (count _linked > 0) then {
+					_infText = format ["%1%2<br/>", _infText, getText (configFile >> "CfgWeapons" >> _linked # 0 >> "displayName")];
+				};
+
+				private _backpack = getText (_class >> "backpack");
+				if (_backpack != "") then {
+					_infText = format ["%1%2<br/>", _infText, getText (configFile >> "CfgVehicles" >> _backpack >> "displayName")];
+				};
+
+				_infText;
+			};
+			case "LightVehicles";
+			case "HeavyVehicles";
+			case "RotaryWing";
+			case "FixedWing";
+			case "RemoteControl";
+			case "AirDefense";
+			case "SectorDefense";
+			case "Naval": {
+				private _assetText = getText (_class >> "Library" >> "LibTextDesc");
+				if (_assetText == "") then {
+					_assetText = getText (_class >> "Armory" >> "description");
+				};
+				if (_assetText == "") then {
+					private _validClassArr = "toLower getText (_x >> 'vehicle') == toLower _entryClass" configClasses (configFile >> "CfgHints");
+					if (count _validClassArr > 0) then {
+						private _hintLibClass = ("toLower getText (_x >> 'vehicle') == toLower _entryClass" configClasses (configFile >> "CfgHints")) # 0;
+						_assetText = getText (_hintLibClass >> "description");
 					};
-					_text = _text regexReplace ["\. ", "="];
-					_text = ((_text splitString "=") # 0) + ".";
+				};
+
+				if (_assetText != "") then {
+					_textNew = (_assetText splitString "$") # 0;
+					if (_textNew != _assetText) then {
+						_assetText = localize _textNew
+					};
+					_assetText = _assetText regexReplace ["\. ", "="];
+					_assetText = ((_assetText splitString "=") # 0) + ".";
 				};
 
 				private _description = _descriptionMap getOrDefault [_className, ""];
 				if (_description != "") then {
-					_text = _description;
+					_assetText = _description;
 				};
 
-				if (_category in ["LightVehicles", "HeavyVehicles", "RotaryWing", "FixedWing", "RemoteControl", "AirDefense", "SectorDefense", "Naval"]) then {
-					private _vehicleWeapons = [_className, _actualClassName] call WL2_fnc_getVehicleWeapons;
-					private _scale = 1 call WL2_fnc_purchaseMenuGetUIScale;
-					_text = _text + format ["<br/><t color='#ffffff' shadow='0' size='%1'>Armament</t><br/>%2", _scale, _vehicleWeapons];
-				};
+				private _vehicleWeapons = [_className, _actualClassName] call WL2_fnc_getVehicleWeapons;
+				private _scale = 1 call WL2_fnc_purchaseMenuGetUIScale;
+				_assetText = format ["%1<br/><t color='#ffffff' shadow='0' size='%2'>Armament</t><br/>%3", _assetText, _scale, _vehicleWeapons];
 
-				if (_text == "") then {_text = " "};
-				if (_picture == "") then {_picture = " "};
+				_assetText;
+			};
+			default {
+				_descriptionMap getOrDefault [_className, ""];
+			};
+		};
 
-				_data pushBack [_className, _cost, _requirements, _displayName, _picture, _text, _offset, _notForAIUse];
-			} forEach (configProperties [_preset >> str _side >> _category, "isClass _x"]);
+		if (_text == "") then {_text = " "};
+		if (_picture == "") then {_picture = " "};
 
-			_sortedArray set [_index, _data];
-		} forEach WL_REQUISITION_CATEGORIES;
-	} else {
-		[format ["Warlords warning: Input preset class '%1' does not contain any data for side '%2'", _presetName, _side]] call BIS_fnc_error;
-	};
-} forEach BIS_WL_purchaseListTemplate;
+		_categoryData pushBack [_className, _cost, _requirements, _displayName, _picture, _text, _offset];
+	} forEach (configProperties [_preset >> str _side >> _category, "isClass _x"]);
+
+	_purchaseable pushBack _categoryData;
+} forEach WL_REQUISITION_CATEGORIES;
 
 private _fastTravelArr = [
 	[
@@ -288,19 +268,7 @@ private _fastTravelArr = [
 	]
 ];
 
-#if WL_STRONGHOLD_ENABLE == 0
-_fastTravelArr = _fastTravelArr select {
-	!(_x # 0 in ["StrongholdFT", "BuyStronghold"])
-};
-#endif
-
-#if WL_FOB_ENABLED == 0
-_fastTravelArr = _fastTravelArr select {
-	!(_x # 0 in ["BuyFOB"])
-};
-#endif
-
-_sortedArray pushBack _fastTravelArr;
+_purchaseable pushBack _fastTravelArr;
 
 private _strategyArr = [
 	[
@@ -358,7 +326,7 @@ private _strategyArr = [
 		[],
 		"Camouflage",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"Camouflage your current position with tall plants. Disappears after 10 minutes."
+		"Camouflage your current position with tall plants. Disappears after 5 minutes."
 	], [
 		"CruiseMissiles",
 		15000,
@@ -429,6 +397,6 @@ private _strategyArr = [
 	];
 #endif
 
-_sortedArray pushBack _strategyArr;
+_purchaseable pushBack _strategyArr;
 
-missionNamespace setVariable [format ["BIS_WL_purchasable_%1", _side], _sortedArray];
+missionNamespace setVariable [format ["WL2_purchasable_%1", _side], _purchaseable];

@@ -34,11 +34,11 @@ player addEventHandler ["InventoryOpened",{
 }];
 
 player addEventHandler ["Killed", {
-	BIS_WL_loadoutApplied = FALSE;
+	BIS_WL_loadoutApplied = false;
 	"RequestMenu_close" call WL2_fnc_setupUI;
 
 	BIS_WL_lastLoadout = +getUnitLoadout player;
-	private _varName = format ["BIS_WL_purchasable_%1", BIS_WL_playerSide];
+	private _varName = format ["WL2_purchasable_%1", BIS_WL_playerSide];
 	private _gearArr = (missionNamespace getVariable _varName) # 5;
 	private _lastLoadoutArr = _gearArr # 1;
 	private _text = localize "STR_A3_WL_last_loadout_info";

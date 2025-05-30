@@ -403,7 +403,7 @@ private _drawSectorMarker = {
 
 	private _sectorIcon = switch (_sectorMarker) do {
 		case "ENEMY": {
-			private _sectorServices = _sector getVariable ["BIS_WL_services", []];
+			private _sectorServices = _sector getVariable ["WL2_services", []];
 			if ("A" in _sectorServices) then {
 				"\a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa"
 			} else {
@@ -416,6 +416,9 @@ private _drawSectorMarker = {
 		};
 		case "INDEPENDENT": { "\A3\ui_f\data\map\markers\handdrawn\flag_CA.paa" };
 		case "ENEMY BASE": { "\A3\ui_f_orange\data\cfgmarkers\redcrystal_ca.paa" };
+		case "ATTACK";
+		case "ATTACK 2": { "\a3\ui_f\data\igui\cfg\simpletasks\types\attack_ca.paa" };
+		case "CAMPED": { "\A3\ui_f\data\map\markers\handdrawn\warning_CA.paa" };
 		default { "" };
 	};
 
@@ -429,6 +432,9 @@ private _drawSectorMarker = {
 			}
 		};
 		case "INDEPENDENT": { [0, 0.5, 0, 1] };
+		case "ATTACK": { [1, 1, 1, 1] };
+		case "ATTACK 2": { [0.1, 0.1, 0.1, 1] };
+		case "CAMPED": { [1, 0, 0, 1] };
 		default { [1, 1, 1] };
 	};
 
@@ -519,7 +525,7 @@ if (_drawAll) then {
 private _drawSectorIcons = [];
 if (_drawMode == 2) then {
 	{
-		private _sectorName = _x getVariable ["BIS_WL_name", ""];
+		private _sectorName = _x getVariable ["WL2_name", ""];
 		private _sectorPos = getPosASL _x;
 		private _sectorOwner = _x getVariable ["BIS_WL_owner", independent];
 		private _sectorColor = switch (_sectorOwner) do {

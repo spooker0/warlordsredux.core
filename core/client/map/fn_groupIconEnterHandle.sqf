@@ -24,8 +24,8 @@ WL_SectorActionTargetActive = _sectorHasOptions;
 private _sectorInfoBox = (ctrlParent WL_CONTROL_MAP) getVariable "BIS_sectorInfoBox";
 if (isNull _sector) exitWith {
 	BIS_WL_highlightedSector = objNull;
-	_sectorInfoBox ctrlShow FALSE;
-	_sectorInfoBox ctrlEnable FALSE
+	_sectorInfoBox ctrlShow false;
+	_sectorInfoBox ctrlEnable false
 };
 
 private _selectionActive = BIS_WL_currentSelection in [
@@ -37,7 +37,7 @@ private _selectionActive = BIS_WL_currentSelection in [
 	WL_ID_SELECTION_SCAN
 ];
 private _votingActive = WL_VotePhase != 0;
-private _services = _sector getVariable ["BIS_WL_services", []];
+private _services = _sector getVariable ["WL2_services", []];
 private _airstrip = "A" in _services;
 private _helipad = "H" in _services;
 private _harbor = "W" in _services;
@@ -124,7 +124,7 @@ private _enemyCaptureText = if (_revealed) then {
 	""
 };
 
-private _sectorName = _sector getVariable ["BIS_WL_name", "Sector"];
+private _sectorName = _sector getVariable ["WL2_name", "Sector"];
 
 private _sectorIncome = if (_sectorName != "Wait") then {
 	[
@@ -183,7 +183,7 @@ if (_sector in BIS_WL_selection_availableSectors) then {
 	BIS_WL_highlightedSector = _sector;
 	if !(BIS_WL_hoverSamplePlayed) then {
 		playSound "clickSoft";
-		BIS_WL_hoverSamplePlayed = TRUE;
+		BIS_WL_hoverSamplePlayed = true;
 	};
 } else {
 	BIS_WL_highlightedSector = objNull;

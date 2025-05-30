@@ -33,16 +33,16 @@ while { WL_IsSpectator } do {
 
     private _locations = [];
     private _relevantSectors = BIS_WL_allSectors select {
-        _x == BIS_WL_base1 || _x == BIS_WL_base2 ||
+        _x == WL2_base1 || _x == WL2_base2 ||
         _x == WL_TARGET_ENEMY || _x == WL_TARGET_FRIENDLY ||
         _x getVariable ["BIS_WL_owner", independent] != independent
     };
 
-    _relevantSectors = [_relevantSectors, [], { ((_x getVariable "objectAreaComplete") # 0) distance BIS_WL_base1 }, "ASCEND"] call BIS_fnc_sortBy;
+    _relevantSectors = [_relevantSectors, [], { ((_x getVariable "objectAreaComplete") # 0) distance WL2_base1 }, "ASCEND"] call BIS_fnc_sortBy;
 
     {
         private _id = format ["loc%1", _forEachIndex];
-        private _name = _x getVariable ["BIS_WL_name", "Sector"];
+        private _name = _x getVariable ["WL2_name", "Sector"];
         private _owner = _x getVariable ["BIS_WL_owner", independent];
         private _description = switch (_owner) do {
             case west: {

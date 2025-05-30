@@ -45,7 +45,7 @@ if (_sector getVariable ["WL2_isAircraftCarrier", false]) then {
 };
 
 if (count _spawnPos == 0) exitWith {
-	diag_log format ["Ordering aircraft failed. Spawn position not found in sector %1.", _sector getVariable "BIS_WL_name"];
+	diag_log format ["Ordering aircraft failed. Spawn position not found in sector %1.", _sector getVariable "WL2_name"];
 	"No suitable spawn position found. Clear the runways." remoteExec ["systemChat", _owner];
 	_sender setVariable ["BIS_WL_isOrdering", false, [2, _owner]];
 

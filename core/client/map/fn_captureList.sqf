@@ -28,7 +28,7 @@ while { !BIS_WL_missionEnd } do {
 
 	private _captureIndicatorText = format ["<t size='1.8'>%1</t><br/>", localize "STR_WL2_CAPTURE_PROGRESS"];
 	{
-		private _sectorName = _x getVariable "BIS_WL_name";
+		private _sectorName = _x getVariable "WL2_name";
 		private _capturingTeam = _x getVariable ["BIS_WL_capturingTeam", independent];
 		private _captureProgress = _x getVariable ["BIS_WL_captureProgress", 0];
 		private _defendingTeam = _x getVariable ["BIS_WL_owner", independent];

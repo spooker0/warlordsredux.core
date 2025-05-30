@@ -33,7 +33,7 @@
                 };
 
                 "Selected" call WL2_fnc_announcer;
-                [toUpper format [localize "STR_A3_WL_popup_voting_done", WL_TARGET_FRIENDLY getVariable "BIS_WL_name"]] spawn WL2_fnc_smoothText;
+                [toUpper format [localize "STR_A3_WL_popup_voting_done", WL_TARGET_FRIENDLY getVariable "WL2_name"]] spawn WL2_fnc_smoothText;
             };
         };
 

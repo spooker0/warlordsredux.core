@@ -2,8 +2,6 @@
 
 params [["_unit", player], ["_lastLoadout", BIS_WL_lastLoadout], ["_paidFor", false], ["_collaborator", false]];
 
-if (WLC_ENABLED == 0) exitWith {};
-
 private _side = BIS_WL_playerSide;
 
 private _data = createHashMap;

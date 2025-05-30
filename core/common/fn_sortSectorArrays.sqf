@@ -20,7 +20,7 @@ private _baseArr = WL_BASES select {(_x getVariable ["BIS_WL_owner", sideUnknown
 	_income = _income + (_sector getVariable ["BIS_WL_value", 0]);
 	{
 		_services pushBackUnique _x;
-	} forEach (_sector getVariable ["BIS_WL_services", []]);
+	} forEach (_sector getVariable ["WL2_services", []]);
 } forEach _owned;
 
 if (_side == independent) exitWith {
@@ -45,17 +45,17 @@ while {count _knots > 0} do {
 				_linked pushBack _link;
 				_knots pushBack _link;
 			};
-		} forEach (_x getVariable ["BIS_WL_connectedSectors", []]);
+		} forEach (_x getVariable ["WL2_connectedSectors", []]);
 	} forEach _knotsCurrent;
 	sleep 0.0001;
 };
 
 {
 	private _sector = _x;
-	if ((_sector getVariable ["BIS_WL_owner", sideUnknown]) != _side && _linked findIf {_sector in (_x getVariable ["BIS_WL_connectedSectors", []])} >= 0) then {
+	if ((_sector getVariable ["BIS_WL_owner", sideUnknown]) != _side && _linked findIf {_sector in (_x getVariable ["WL2_connectedSectors", []])} >= 0) then {
 		_available pushBack _sector;
 	};
-	if (_sector getVariable ["BIS_WL_name", "Sector"] == "Wait") then {
+	if (_sector getVariable ["WL2_name", "Sector"] == "Wait") then {
 		_available pushBack _sector;
 	};
 } forEach (_pool - _owned);

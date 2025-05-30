@@ -38,7 +38,7 @@
 				_firstSector = _sortedVoteList # 0;
 				_firstSector = _firstSector # 0; // return sector object
 
-				if (_firstSector getVariable ["BIS_WL_name", "Sector"] != "Wait") then {
+				if (_firstSector getVariable ["WL2_name", "Sector"] != "Wait") then {
 					_firstSector;
 				} else {
 					private _waitsInRow = missionNamespace getVariable [_waitVar, 0];
@@ -69,7 +69,7 @@
 
 		while {!BIS_WL_missionEnd} do {
 			_t = serverTime + 10 + random 10;
-			missionNamespace setVariable [_votingResetVar, FALSE];
+			missionNamespace setVariable [_votingResetVar, false];
 			call _wipeVotes;
 
 			_calculation = call _calculateMostVotedSector;
@@ -112,7 +112,7 @@
 					_calculation = call _calculateMostVotedSector;
 					private _selectedSector = _calculation # 0;
 
-					if (_selectedSector getVariable ["BIS_WL_name", "Sector"] != "Wait") then {
+					if (_selectedSector getVariable ["WL2_name", "Sector"] != "Wait") then {
 						missionNamespace setVariable [_waitVar, 0];
 						[_side, _selectedSector] call WL2_fnc_selectTarget;
 					} else {

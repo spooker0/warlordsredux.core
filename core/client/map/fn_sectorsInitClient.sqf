@@ -7,7 +7,7 @@ private _i = 0;
 {
 	_sector = _x;
 	_sectorPos = position _sector;
-	_area = _sector getVariable "objectArea";
+	_area = _sector getVariable "WL2_objectArea";
 
 	if (_sector in WL_BASES && ((_sector getVariable "BIS_WL_owner") == (side group player))) then {
 		_sector setVariable ["BIS_WL_value", (getMissionConfigValue ["BIS_WL_baseValue", 50])];
@@ -39,7 +39,7 @@ private _i = 0;
 	_sector setVariable ["BIS_WL_markers", [_mrkrMain, _mrkrArea]];
 
 	if !(BIS_WL_playerSide in _revealedBy) then {
-		if (_sector getVariable ["BIS_WL_name", "Sector"] == "Wait") then {
+		if (_sector getVariable ["WL2_name", "Sector"] == "Wait") then {
 			_mrkrMain setMarkerTypeLocal "respawn_unknown";
 			_mrkrMain setMarkerColorLocal "ColorWhite";
 			_sector setVariable ["BIS_WL_revealedBy", [west, east, independent]];
@@ -52,7 +52,7 @@ private _i = 0;
 
 	[_sector] spawn WL2_fnc_sectorRevealHandle;
 
-	private _neighbors = _sector getVariable ["BIS_WL_connectedSectors", []];
+	private _neighbors = _sector getVariable ["WL2_connectedSectors", []];
 	_sector setVariable ["BIS_WL_pairedWith", []];
 	_pairedWith = _sector getVariable "BIS_WL_pairedWith";
 
@@ -92,5 +92,5 @@ private _i = 0;
 	_agentGrp = _sector getVariable "BIS_WL_agentGrp";
 	_agentGrp setVariable ["BIS_WL_sector", _sector];
 	_agentGrp addGroupIcon ["selector_selectable", [0, 0]];
-	_agentGrp setGroupIconParams [[0,0,0,0], "", 1, FALSE];
+	_agentGrp setGroupIconParams [[0,0,0,0], "", 1, false];
 } forEach BIS_WL_allSectors;

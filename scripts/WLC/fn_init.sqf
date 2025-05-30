@@ -1,7 +1,5 @@
 #include "constants.inc"
 
-if (WLC_ENABLED == 0) exitWith {};
-
 private _customizationConfig = missionConfigFile >> "CfgWLCCustomization";
 
 {

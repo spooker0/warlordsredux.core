@@ -2,7 +2,7 @@
 
 params ["_sector", "_requirements"];
 
-private _servicesInSector = _sector getVariable ["BIS_WL_services", []];
+private _servicesInSector = _sector getVariable ["WL2_services", []];
 if ("H" in _requirements && !("H" in _servicesInSector)) exitWith {
     private _potentialBases = missionNamespace getVariable ["WL2_forwardBases", []];
     private _forwardBases = _potentialBases select {

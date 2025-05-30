@@ -29,7 +29,7 @@ switch (_mode) do {
 		_sideID = ["west", "east", "guerrila"] select (BIS_WL_sidesArray find _side);
 		_respawnMarkerFormat = format ["respawn_%1_", _sideID];
 		_base = _side call WL2_fnc_getSideBase;
-		_baseArea = +(_base getVariable "objectArea");
+		_baseArea = +(_base getVariable "WL2_objectArea");
 		_markerLocArr = [[_base, (_baseArea # 0) + WL_BASE_DANGER_SPAWN_RANGE, (_baseArea # 1) + WL_BASE_DANGER_SPAWN_RANGE, _baseArea # 2, _baseArea # 3], 50] call WL2_fnc_findSpawnPositions;
 
 		_i = 1;

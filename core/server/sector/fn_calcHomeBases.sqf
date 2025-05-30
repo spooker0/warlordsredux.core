@@ -5,9 +5,9 @@ params [["_overrideFirstBase", objNull]];
 private _canBeBase = {
     params ["_sector"];
 #if WL_AIRPORT_BASES
-    "A" in (_sector getVariable ["BIS_WL_services", []])
+    "A" in (_sector getVariable ["WL2_services", []]);
 #else
-    _sector getVariable ["BIS_WL_canBeBase", true]
+    _sector getVariable ["WL2_canBeBase", true];
 #endif
 };
 
@@ -35,7 +35,7 @@ private _maxIterations = getMissionConfigValue ["WL2_MinBaseDistance", 6];
 while { _iterations <= _maxIterations } do {
     private _nextBasesToRemove = createHashMap;
     {
-        private _neighbors = _y getVariable ["BIS_WL_connectedSectors", []];
+        private _neighbors = _y getVariable ["WL2_connectedSectors", []];
         {
             private _neighbor = hashValue _x;
             if  (_baseMap getOrDefault [_neighbor, false]) then {
@@ -65,7 +65,7 @@ private _finalPot = BIS_WL_allSectors select {
     [_x] call _canBeBase;
 };
 
-// diag_log format ["Iterations: %1, Final bases: %2", _iterations, _potBases apply { _x getVariable ["BIS_WL_name", ""] }];
+// diag_log format ["Iterations: %1, Final bases: %2", _iterations, _potBases apply { _x getVariable ["WL2_name", ""] }];
 
 private _secondBase = selectRandom _finalPot;
 

@@ -26,7 +26,7 @@ switch (typeName _center) do {
 			_axisB = (triggerArea _center) # 1;
 		} else {
 			if (_center isKindOf "Man") then {
-				_area append [250, 250, 0, FALSE];
+				_area append [250, 250, 0, false];
 				_axisA = _area # 1;
 				_axisB = _area # 2;
 			} else {
@@ -104,7 +104,7 @@ for [{_axisYSpawnCheck = _areaStart # 1}, {_axisYSpawnCheck < (_areaEnd # 1)}, {
 		_spawnCheckPos = [_axisXSpawnCheck, _axisYSpawnCheck, 0];
 		if (_spawnCheckPos call _areaCheck) then {
 			if !(isOnRoad _spawnCheckPos || surfaceIsWater _spawnCheckPos || !(_spawnCheckPos inArea BIS_WL_mapAreaArray)) then {
-				_finalPos = _spawnCheckPos isFlatEmpty [3, -1, 0.35, 6, 0, FALSE, objNull];
+				_finalPos = _spawnCheckPos isFlatEmpty [3, -1, 0.35, 6, 0, false, objNull];
 				if !(_finalPos isEqualTo []) then {
 					_finalPos = ASLToATL _finalPos;
 					_nearObjs = _finalPos nearObjects ["AllVehicles", 6];

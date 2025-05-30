@@ -46,6 +46,9 @@ if (_responsibleLeader getVariable ["WL2_3rdPersonDisabled", false]) then {
 if ((_targets findIf {_unit inArea (_x getVariable "objectAreaComplete")}) != -1) then {
 	_killReward = _killReward * 1.2;
 };
+if (_unitSide != independent && _unitSide != sideUnknown) then {
+	_killReward = _killReward * 3.0;
+};
 
 private _playerId = getPlayerID _responsibleLeader;
 private _squadmatesIDs = ["getSquadmates", [_playerId]] call SQD_fnc_server;

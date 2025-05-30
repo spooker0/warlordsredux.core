@@ -133,15 +133,15 @@
 		private _allSectorMarkers = [];
 		{
 			private _sector = _x;
-			private _sectorMarkerTeam = [_sector, _side] call WL2_fnc_sectorButtonMark;
-			private _sectorMarkerEnemy = [_sector, BIS_WL_enemySide] call WL2_fnc_sectorButtonMark;
+			private _sectorMarkerTeam = [_sector, _side] call WL2_fnc_sectorButtonMarker;
+			private _sectorMarkerEnemy = [_sector, BIS_WL_enemySide] call WL2_fnc_sectorButtonMarker;
 
 			private _revealedBy = _sector getVariable ["BIS_WL_revealedBy", []];
 
-			if (_sectorMarkerTeam # 1 != "NONE" && !(_side in _revealedBy)) then {
+			if (_sectorMarkerTeam # 1 != "NONE") then {
 				_teamSectorMarkers pushBack [_sector, _sectorMarkerTeam];
 			};
-			if (_sectorMarkerEnemy # 1 != "NONE" && !(BIS_WL_enemySide in _revealedBy)) then {
+			if (_sectorMarkerEnemy # 1 != "NONE") then {
 				_allSectorMarkers pushBack [_sector, _sectorMarkerEnemy];
 			};
 		} forEach BIS_WL_allSectors;

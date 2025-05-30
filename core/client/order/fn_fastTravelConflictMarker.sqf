@@ -26,7 +26,7 @@ _startArr = _startArr apply {
 _startArr sort true;
 
 private _start = (_startArr # 0) # 1;
-private _area = WL_TARGET_FRIENDLY getVariable "objectArea";
+private _area = WL_TARGET_FRIENDLY getVariable "WL2_objectArea";
 private _size = if (_area # 3) then {
     sqrt (((_area # 0) ^ 2) + ((_area # 1) ^ 2));
 } else {

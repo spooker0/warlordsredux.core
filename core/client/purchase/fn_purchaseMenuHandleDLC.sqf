@@ -8,7 +8,7 @@ _parentDLC = getText (configFile >> "CfgVehicles" >> _class >> "DLC");
 switch (_this # 1) do {
 	case "IsOwned": {
 		if (_parentDLC == "") then {
-			_ret = TRUE;
+			_ret = true;
 		} else {
 			_DLCID = getNumber (configFile >> "CfgMods" >> _parentDLC >> "appId");
 			_ownedDLCs = getDLCs 1;

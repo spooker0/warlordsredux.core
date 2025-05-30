@@ -41,7 +41,7 @@ switch (BIS_WL_currentSelection) do {
     };
     case WL_ID_SELECTION_ORDERING_AIRCRAFT: {
         private _airfieldSectors = (BIS_WL_sectorsArray # 2) select {
-            private _services = _x getVariable ["BIS_WL_services", []];
+            private _services = _x getVariable ["WL2_services", []];
             "A" in _services;
         };
 

@@ -22,7 +22,7 @@ while {(_sector getVariable "BIS_WL_owner") == _playerSide} do {
 		if (serverTime > _nextPossibleWarn) then {
 			_nextPossibleWarn = serverTime + 30;
 			"under_attack" call WL2_fnc_announcer;
-			[toUpper format [localize "STR_A3_WL_popup_losing_sector", _enemySide call WL2_fnc_sideToFaction, _sector getVariable "BIS_WL_name"]] spawn WL2_fnc_smoothText;
+			[toUpper format [localize "STR_A3_WL_popup_losing_sector", _enemySide call WL2_fnc_sideToFaction, _sector getVariable "WL2_name"]] spawn WL2_fnc_smoothText;
 		};
 
 		while {_captureProgress > 0 && (_sector getVariable "BIS_WL_owner") == _playerSide} do {

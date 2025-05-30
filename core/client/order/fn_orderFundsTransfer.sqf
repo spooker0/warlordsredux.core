@@ -18,11 +18,11 @@ _purchase_transfer_background ctrlSetFade 0;
 _purchase_transfer_background ctrlCommit 0;
 
 _purchase_transfer_units ctrlSetFade 0;
-_purchase_transfer_units ctrlEnable TRUE;
+_purchase_transfer_units ctrlEnable true;
 _purchase_transfer_units ctrlCommit 0;
 
 _purchase_transfer_amount ctrlSetFade 0;
-_purchase_transfer_amount ctrlEnable TRUE;
+_purchase_transfer_amount ctrlEnable true;
 _purchase_transfer_amount ctrlCommit 0;
 
 private _existingMoney = (missionNamespace getVariable "fundsDatabaseClients") get (getPlayerUID player);

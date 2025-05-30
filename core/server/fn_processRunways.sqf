@@ -1,5 +1,5 @@
 private _sectorsWithRunways = BIS_WL_allSectors select {
-	private _services = _x getVariable ["BIS_WL_services", []];
+	private _services = _x getVariable ["WL2_services", []];
 	"A" in _services;
 };
 
@@ -24,5 +24,5 @@ if (count _sectorsWithRunways > 0) then {
 			private _sectorsWithRunwaysSorted = [_sectorsWithRunways, [], {_x distance2D _runwayPos}, "ASCEND"] call BIS_fnc_sortBy;
 			(_sectorsWithRunwaysSorted # 0) setVariable ["BIS_WL_runwaySpawnPosArr", _spawnPosArr];
 		};
-	} forEach ([configFile >> "CfgWorlds" >> worldName] + ("TRUE" configClasses (configFile >> "CfgWorlds" >> worldName >> "SecondaryAirports")));
+	} forEach ([configFile >> "CfgWorlds" >> worldName] + ("true" configClasses (configFile >> "CfgWorlds" >> worldName >> "SecondaryAirports")));
 };

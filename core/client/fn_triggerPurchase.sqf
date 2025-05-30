@@ -92,15 +92,17 @@ switch (_className) do {
     case "TargetReset": {"RequestMenu_close" call WL2_fnc_setupUI; [player, "targetReset"] remoteExec ["WL2_fnc_handleClientRequest", 2]};
     case "ForfeitVote": {0 spawn WL2_fnc_orderForfeit};
     case "LockVehicles": {
+        private _ownedVehicles = missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], []];
         {
             _x setVariable ["WL2_accessControl", 6, true];
-        } forEach ((missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], []]) select {alive _x && {(!(typeOf _x == "B_Truck_01_medical_F")) && {!(typeOf _x == "O_Truck_03_medical_F") && {!(typeOf _x == "B_Slingload_01_Medevac_F") && {!(typeOf _x == "Land_Pod_Heli_Transport_04_medevac_F")}}}}});
+        } forEach (_ownedVehicles select { alive _x });
         [toUpper localize "STR_A3_WL_feature_lock_all_msg"] spawn WL2_fnc_smoothText;
     };
     case "UnlockVehicles": {
+        private _ownedVehicles = missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], []];
         {
             _x setVariable ["WL2_accessControl", 1, true];
-        } forEach ((missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], []]) select {alive _x});
+        } forEach (_ownedVehicles select { alive _x });
         [toUpper localize "STR_A3_WL_feature_unlock_all_msg"] spawn WL2_fnc_smoothText;
     };
     case "ClearVehicles": {
@@ -149,7 +151,7 @@ switch (_className) do {
                 private _displayName = [_asset] call WL2_fnc_getAssetTypeName;
                 private _assetSector = BIS_WL_allSectors select { _asset inArea (_x getVariable "objectAreaComplete") };
                 private _assetLocation = if (count _assetSector > 0) then {
-                    (_assetSector # 0) getVariable ["BIS_WL_name", str (mapGridPosition _asset)];
+                    (_assetSector # 0) getVariable ["WL2_name", str (mapGridPosition _asset)];
                 } else {
                     mapGridPosition _asset;
                 };

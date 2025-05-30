@@ -105,10 +105,10 @@ if (count (_sector getVariable ["BIS_WL_vehiclesToSpawn", []]) == 0) then {
 	_sector setVariable ["BIS_WL_vehiclesToSpawn", nil];
 };
 
-_connectedToBase = count ((profileNamespace getVariable "BIS_WL_lastBases") arrayIntersect (_sector getVariable "BIS_WL_connectedSectors")) > 0;
-private _services = _sector getVariable ["BIS_WL_services", []];
+_connectedToBase = count ((profileNamespace getVariable "BIS_WL_lastBases") arrayIntersect (_sector getVariable "WL2_connectedSectors")) > 0;
+private _services = _sector getVariable ["WL2_services", []];
 if (!_connectedToBase && "H" in _services) then {
-	private _neighbors = (_sector getVariable "BIS_WL_connectedSectors") select {(_x getVariable "BIS_WL_owner") == _owner};
+	private _neighbors = (_sector getVariable "WL2_connectedSectors") select {(_x getVariable "BIS_WL_owner") == _owner};
 
 	if (count _neighbors > 0) then {
 		_vehicleArray = [position selectRandom _neighbors, 0, selectRandom (serverNamespace getVariable "WL2_populateAircraftPoolList"), _owner] call BIS_fnc_spawnVehicle;

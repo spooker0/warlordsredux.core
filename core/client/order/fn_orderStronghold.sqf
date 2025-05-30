@@ -33,7 +33,7 @@ private _drawIconId = addMissionEventHandler ["draw3D", {
 	];
 }];
 
-private _sectorName = _currentSector getVariable ["BIS_WL_name", "sector"];
+private _sectorName = _currentSector getVariable ["WL2_name", "sector"];
 private _strongholdType = getText (configFile >> "CfgVehicles" >> typeOf _stronghold >> "displayName");
 private _message = format ["Are you sure you want to create a Sector Stronghold in %1 from: %2?", _sectorName, _strongholdType];
 if (_hasOldStronghold) then {

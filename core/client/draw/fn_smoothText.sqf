@@ -93,20 +93,20 @@ _shadow = if (_shadow) then {2} else {0};
 _textStructured = "<t size = '" + str ((1.01 call WL2_fnc_purchaseMenuGetUIScale)) + "' align = 'center' shadow = '" + (str _shadow) + "'>" + _textStructured + "</t>";
 _textStructuredFormat = [_textStructured];
 
-_done = FALSE;
+_done = false;
 _startTime = time;
 
 while {!_done} do {
 	_oldTick = time;
 	waitUntil {time > _oldTick + 0.04};
 
-	_done = TRUE;
+	_done = true;
 	_newLetterColor = [];
 
 	{
 		_letterFadeInStart = _startTime + (_forEachIndex * _popupDelay);
 		if (time >= _letterFadeInStart && time <= (_letterFadeInStart + _fadeDuration)) then {
-			_done = FALSE;
+			_done = false;
 			_newAlpha = linearConversion [_letterFadeInStart, _letterFadeInStart + _fadeDuration, time, 0, _finalAlpha];
 			_newLetterColor = +_baseColor;
 			_newLetterColor set [3, _newAlpha];

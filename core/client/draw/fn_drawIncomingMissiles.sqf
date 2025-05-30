@@ -14,7 +14,9 @@ private _indicatorDistance = _incomingMissileDisplay displayCtrl 25002;
 
 private _missileTypeData = createHashMapFromArray [
     ["M_Zephyr", "ZEPHYR"],
-    ["M_Titan_AA_long", "TITAN"],
+    ["M_Titan_AA", "TITAN"],
+    ["M_Titan_AA_static", "TITAN"],
+    ["M_Titan_AA_long", "TITAN UP"],
     ["ammo_Missile_mim145", "DEFENDER"],
     ["ammo_Missile_s750", "RHEA"],
     ["ammo_Missile_rim116", "SPARTAN"],

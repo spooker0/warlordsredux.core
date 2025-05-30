@@ -289,6 +289,7 @@ class CfgFunctions {
 			class replayMap {};
 			class replayMapClear {};
 			class sectorButtonMark {};
+			class sectorButtonMarker {};
 			class sectorCaptureStatus {};
 			class sectorMapButtons {};
 			class sectorMarkerUpdate {};

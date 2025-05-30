@@ -15,20 +15,20 @@ if ((player getVariable ["BIS_WL_forfeitVote", -1]) == -1) then {
 	[player, "forfeitVoting"] call WL2_fnc_hintHandle;
 };
 
-BIS_WL_ctrlDown = FALSE;
+BIS_WL_ctrlDown = false;
 
 BIS_WL_forfeitVoteEH1 = (findDisplay 46) displayAddEventHandler ["KeyUp", {
 	params ["_display", "_key"];
 
-	if (_key == 29) then {BIS_WL_ctrlDown = FALSE};
+	if (_key == 29) then {BIS_WL_ctrlDown = false};
 }];
 
 BIS_WL_forfeitVoteEH2 = (findDisplay 46) displayAddEventHandler ["KeyDown", {
 	params ["_display", "_key"];
 
-	if (_key == 29) then {BIS_WL_ctrlDown = TRUE};
-	if (_key == 21) then {if (BIS_WL_ctrlDown) then {_remove = TRUE; playSound "AddItemOK"; player setVariable ["BIS_WL_forfeitVote", 1, [2, clientOwner]]}};
-	if (_key == 49) then {if (BIS_WL_ctrlDown) then {_remove = TRUE; playSound "AddItemFailed"; player setVariable ["BIS_WL_forfeitVote", 0, [2, clientOwner]]}};
+	if (_key == 29) then {BIS_WL_ctrlDown = true};
+	if (_key == 21) then {if (BIS_WL_ctrlDown) then {_remove = true; playSound "AddItemOK"; player setVariable ["BIS_WL_forfeitVote", 1, [2, clientOwner]]}};
+	if (_key == 49) then {if (BIS_WL_ctrlDown) then {_remove = true; playSound "AddItemFailed"; player setVariable ["BIS_WL_forfeitVote", 0, [2, clientOwner]]}};
 	if (_remove) then {
 		(findDisplay 46) displayRemoveEventHandler ["KeyUp", BIS_WL_forfeitVoteEH1];
 		(findDisplay 46) displayRemoveEventHandler ["KeyDown", BIS_WL_forfeitVoteEH2];
@@ -40,4 +40,4 @@ waitUntil {
 	serverTime >= ((missionNamespace getVariable _varNameVoting) + 30) || {(player getVariable ["BIS_WL_forfeitVote", -1]) != -1}
 };
 
-[player, "forfeitVoting", FALSE] call WL2_fnc_hintHandle;
+[player, "forfeitVoting", false] call WL2_fnc_hintHandle;

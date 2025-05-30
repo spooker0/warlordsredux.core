@@ -12,7 +12,7 @@ addMissionEventHandler ["Draw3D", {
 			0,
 			"RobotoCondensedBold",
 			"center",
-			TRUE
+			true
 		];
 		// _droneView = getConnectedUAVUnit player;
 		_pos = positionCameraToWorld [0, 0, 0];

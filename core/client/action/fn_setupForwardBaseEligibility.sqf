@@ -62,7 +62,7 @@ if (!_isQualifyingSL) exitWith {
 
 private _calculateAxis = {
     params ["_sector"];
-    private _sectorArea = _sector getVariable "objectArea";
+    private _sectorArea = _sector getVariable "WL2_objectArea";
     private _axis = if (_sectorArea # 3) then {
         private _axisA = _sectorArea # 0;
         private _axisB = _sectorArea # 1;
@@ -82,7 +82,7 @@ if (count _overlappingSectors > 0) exitWith {
     _overlappingSectors = _overlappingSectors apply {
         private _axis = [_x] call _calculateAxis;
         private _distanceToCircleEdge = (_x distance2D _caller) -_axis - 20;
-        format ["%1 (%2 M)", _x getVariable ["BIS_WL_name", "Sector"], round (WL_FOB_RANGE - _distanceToCircleEdge)];
+        format ["%1 (%2 M)", _x getVariable ["WL2_name", "Sector"], round (WL_FOB_RANGE - _distanceToCircleEdge)];
     };
     format ["Forward base must be deployed completely outside of sectors: %1", _overlappingSectors joinString ", "];
 };

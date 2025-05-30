@@ -24,7 +24,7 @@ _mapClickEH = addMissionEventHandler ["MapSingleClick", {
 		case "B_Boat_Armed_01_autocannon_F";
 		case "O_Boat_Armed_01_autocannon_F": {
 			private _sectorsInRange = (BIS_WL_sectorsArray # 0) findIf {
-				_pos distance _x < 4000 && "W" in (_x getVariable ["BIS_WL_services", []]);
+				_pos distance _x < 4000 && "W" in (_x getVariable ["WL2_services", []]);
 			};
 			if (_sectorsInRange == -1) then {
 				playSound "AddItemFailed";
@@ -72,7 +72,7 @@ if (count BIS_WL_waterDropPos == 0) exitWith {
 };
 
 if (BIS_WL_waterDropPos distance2D player <= 300) then {
-	playSound3D ["A3\Data_F_Warlords\sfx\flyby.wss", objNull, FALSE, [BIS_WL_waterDropPos # 0, BIS_WL_waterDropPos # 1, 100]];
+	playSound3D ["A3\Data_F_Warlords\sfx\flyby.wss", objNull, false, [BIS_WL_waterDropPos # 0, BIS_WL_waterDropPos # 1, 100]];
 };
 
 BIS_WL_waterDropPos set [2, 0];
