@@ -234,6 +234,7 @@ private _missiles = [];
                 _lastTargetPos = _targetPos;
             } else {
                 _laser setPosASL _lastTargetPos;
+                _missile setMissileTarget [_laser, true];
             };
 
             sleep 1;
