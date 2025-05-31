@@ -74,7 +74,7 @@ while { alive _asset } do {
         private _remoteTargets = (listRemoteTargets BIS_WL_playerSide) select { _x # 1 > -10 } apply { _x # 0 };
 
         {
-            BIS_WL_playerSide reportRemoteTarget [_x, 20];
+            [BIS_WL_playerSide, [_x, 20]] remoteExec ["reportRemoteTarget", BIS_WL_playerSide];
         } forEach _unitsInArea;
 
         _unitsInArea = _unitsInArea select {
