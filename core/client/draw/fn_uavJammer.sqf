@@ -38,9 +38,7 @@ private _side = side _owner;
         _asset setVariable ["BIS_WL_relevantJammers", _jammersInRange];
         _asset setVariable ["BIS_WL_relevantJammersActivating", _activatingInRange];
 
-        {
-            [BIS_WL_enemySide, [_asset, 10]] remoteExec ["reportRemoteTarget", BIS_WL_enemySide];
-        } forEach _jammersInRange;
+        [_jammersInRange, 10] remoteExec ["WL2_fnc_reportTargets", BIS_WL_enemySide];
 
         sleep 5;
     };

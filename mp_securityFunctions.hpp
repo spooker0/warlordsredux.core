@@ -58,6 +58,7 @@ class CfgRemoteExec {
 		class WL2_fnc_remoteControlAction {allowedTargets = 0;};
 		class WL2_fnc_removeAction {allowedTargets = 1;};
 		class WL2_fnc_repairAction {allowedTargets = 1;};
+		class WL2_fnc_reportTargets {allowedTargets = 0;};
 		class WL2_fnc_restockAction {allowedTargets = 0;};
 		class WL2_fnc_sectorRevealHandle {allowedTargets = 0;};
 		class WL2_fnc_revive {allowedTargets = 0;};
@@ -100,7 +101,6 @@ class CfgRemoteExec {
 		class lookAt {allowedTargets = 0;};
 		class playSoundUI {allowedTargets = 0;};
 		class removeWeaponGlobal {allowedTargets = 0;};
-		class reportRemoteTarget {allowedTargets = 0;};
 		class selectLeader {allowedTargets = 0;};
 		class setAmmoCargo {allowedTargets = 0;};
 		class setAutonomous {allowedTargets = 0;};

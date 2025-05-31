@@ -73,9 +73,7 @@ while { alive _asset } do {
         private _unitsInArea = [BIS_WL_playerSide, _area] call WL2_fnc_detectUnits;
         private _remoteTargets = (listRemoteTargets BIS_WL_playerSide) select { _x # 1 > -10 } apply { _x # 0 };
 
-        {
-            [BIS_WL_playerSide, [_x, 20]] remoteExec ["reportRemoteTarget", BIS_WL_playerSide];
-        } forEach _unitsInArea;
+        [_unitsInArea, 20] remoteExec ["WL2_fnc_reportTargets", BIS_WL_playerSide];
 
         _unitsInArea = _unitsInArea select {
             !(_x in _remoteTargets)

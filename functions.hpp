@@ -158,6 +158,7 @@ class CfgFunctions {
 			class playerEventHandlers {};
 			class prompt {};
 			class repackMagazines {};
+			class reportTargets {};
 			class resetVehicle {};
 			class restrictedArea {};
 			class revive {};
