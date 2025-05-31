@@ -397,7 +397,7 @@ private _strategyArr = [
 	];
 #endif
 
-_strategyArr = [_strategyArr, [], { _x # 1 }, "ASCEND"] call BIS_fnc_sortBy;
+_strategyArr = [_strategyArr, [], { _x # 3 }, "ASCEND"] call BIS_fnc_sortBy;
 
 _purchaseable pushBack _strategyArr;
 

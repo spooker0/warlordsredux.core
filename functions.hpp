@@ -229,6 +229,7 @@ class CfgFunctions {
 		};
 		class ClientDraw {
 			file = "src\core\client\draw";
+			class cruiseMissileWarning {};
 			class drawAssetName {};
 			class drawIncomingMissiles {};
 			class drawRadarName {};

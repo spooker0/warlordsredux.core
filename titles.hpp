@@ -797,4 +797,38 @@ class RscTitles {
 			};
 		};
 	};
+
+	class RscWLCruiseMissileDisplay {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		name = "RscWLCruiseMissileDisplay";
+		onLoad = "uiNamespace setVariable ['RscWLCruiseMissileDisplay', _this select 0];";
+		class controls {
+			class RscWLCruiseMissileDisplay_EnemyText: RscStructuredText {
+				idc = 31001;
+				x = 0;
+				y = safeZoneY + 0.1;
+				w = 1;
+				h = 0.3;
+				text = "<t color='#ff3333' align='center'>ENEMY CRUISE MISSILE LAUNCH DETECTED</t>";
+				style = ST_MULTI;
+				shadow = 0;
+				size = 0.08;
+			};
+
+			class RscWLCruiseMissileDisplay_Instruction: RscStructuredText {
+				idc = 31002;
+				x = 0;
+				y = safeZoneY + 0.1;
+				w = 1;
+				h = 0.3;
+				text = "<t color='#ff3333' align='center'>HOLD LEFT CLICK TO LOCK MISSILE TARGETS<br/>BACKSPACE TO CANCEL</t>";
+				style = ST_MULTI;
+				shadow = 0;
+				size = 0.08;
+			};
+		};
+	};
 };
