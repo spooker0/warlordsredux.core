@@ -64,12 +64,12 @@ _sector = if (count _sectors > 0) then {
 };
 
 if (count _forwardBases > 0) exitWith {
-    [false, ""]
+    [false, ""];
 };
 
 private _sectorStronghold = _sector getVariable ["WL_strongholdMarker", ""];
 if (_asset inArea _sectorStronghold) exitWith {
-    false;
+    [false, ""];
 };
 
 private _isInCarrierSector = _sector getVariable ["WL2_isAircraftCarrier", false];

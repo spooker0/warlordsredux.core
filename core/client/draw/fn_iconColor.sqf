@@ -1,7 +1,7 @@
 params [["_unit", objNull]];
 
 if (isNull _unit) exitWith {
-    switch (BIS_WL_playerSide) do {
+    switch (side group player) do {
         case west: {
             [0, 0.3, 0.6, 0.8]
         };
@@ -53,7 +53,7 @@ if (_areInSquad) exitWith {
 
 private _unitSide = [_unit] call WL2_fnc_getAssetSide;
 if (_unitSide == sideUnknown) then {
-    _unitSide = BIS_WL_playerSide;
+    _unitSide = side group player;
 };
 switch (_unitSide) do {
     case west: {

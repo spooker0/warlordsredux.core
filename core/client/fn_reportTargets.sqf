@@ -1,5 +1,6 @@
 #include "..\warlords_constants.inc"
 params ["_targets", "_timeout"];
+private _side = side group player;
 {
-    BIS_WL_playerSide reportRemoteTarget [_x, _timeout];
+    _side reportRemoteTarget [_x, _timeout];
 } forEach _targets;
