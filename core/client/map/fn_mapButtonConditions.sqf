@@ -89,7 +89,9 @@ switch (_conditionName) do {
         };
     };
     case "fastTravelFOB": {
-        alive _target && _target getVariable ["WL2_forwardBaseTime", serverTime] < serverTime;
+        alive _target &&
+        _target getVariable ["WL2_forwardBaseTime", serverTime] < serverTime &&
+        _target getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
     };
     case "markSector": {
         true;

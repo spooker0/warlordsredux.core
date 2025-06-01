@@ -69,9 +69,7 @@ while { !BIS_WL_missionEnd } do {
             _sectorsInRange = _sectorsInRange select {
                 _x getVariable ["BIS_WL_owner", independent] == _side
             };
-            if (count _sectorsInRange > 0) then {
-                _forwardBase setVariable ["WL2_forwardBaseShowOnMap", true];
-            };
+            _forwardBase setVariable ["WL2_forwardBaseShowOnMap", count _sectorsInRange > 0];
         };
     } forEach _forwardBases;
 

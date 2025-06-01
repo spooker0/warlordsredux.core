@@ -126,7 +126,7 @@ private _setupActionId = [
     while { alive _asset } do {
 		private _currentForwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		private _teamForwardBases = _currentForwardBases select {
-			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
+			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == side group player
 		};
 		private _inRangeTeamForwardBases = _teamForwardBases select {
 			_asset distance2D _x < WL_FOB_RANGE
