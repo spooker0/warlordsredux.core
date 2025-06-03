@@ -37,9 +37,6 @@ call SQD_fnc_initServer;
 
 call WL2_fnc_serverEHs;
 
-_group = createGroup civilian;
-missionNamespace setVariable ["BIS_WL_wrongTeamGroup", _group, true];
-_group deleteGroupWhenEmpty false;
 missionNamespace setVariable ["gameStart", serverTime, true];
 
 if !(isDedicated) then {

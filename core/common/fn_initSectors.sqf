@@ -31,6 +31,8 @@ private _initializedSectors = [];
         _logic setVariable ["WL2_isAircraftCarrier", true, true];
     };
 
+    _logic enableSimulationGlobal false;
+
     _createdSectors set [_sectorClass, _logic];
     _initializedSectors pushBack _logic;
 } forEach _sectors;

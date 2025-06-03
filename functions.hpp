@@ -234,6 +234,7 @@ class CfgFunctions {
 			class drawAssetName {};
 			class drawIncomingMissiles {};
 			class drawRadarName {};
+			class drawSectorMarker {};
 			class getDir {};
 			class helmetInterface {};
 			class iconColor {};
@@ -380,6 +381,7 @@ class CfgFunctions {
 			class cleanupCarrier {};
 			class findSpawnPositions {};
 			class getAssetSide {};
+			class getAssetOwnerName {};
 			class getAssetTypeName {};
 			class getMagazineName {};
 			class getMoneySign {};

@@ -33,3 +33,5 @@ if (WL_IsReplaying) then {
 		_m drawIcon _x;
 	} forEach _drawSectorIcons;
 };
+
+uiNamespace setVariable ["WL2_drawingMap", true];

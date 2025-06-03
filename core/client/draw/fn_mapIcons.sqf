@@ -52,12 +52,11 @@
 
 		private _vehicles = vehicles select { alive _x };
 		private _activeVehicles = _vehicles select { isEngineOn _x };
-		private _mobileRadars = "Land_MobileRadar_01_radar_F" allObjects 0;
-		_mobileRadars = _mobileRadars select {
+		_activeVehicles append ("Land_MobileRadar_01_radar_F" allObjects 0);
+		private _ewNetworkUnits = _activeVehicles select {
 			_x getVariable ["WL_ewNetActive", false] ||
 			_x getVariable ["WL_ewNetActivating", false]
 		};
-		private _ewNetworkUnits = _activeVehicles + _mobileRadars;
 		_mapData set ["ewNetworks", _ewNetworkUnits];
 
 		private _scannerUnits = _activeVehicles select {
@@ -160,15 +159,22 @@
 			uiSleep 5;
 			continue;
 		};
+		private _isMapBeingDrawn = uiNamespace getVariable ["WL2_drawingMap", false];
+		if (!_isMapBeingDrawn) then {
+			sleep 0.01;
+			continue;
+		};
 
 		private _mainMap = (findDisplay 12) displayCtrl 51;
 		private _drawMode = if (WL_IsSpectator) then { 1 } else { 0 };
-		[WL_CONTROL_MAP, _drawMode] spawn WL2_fnc_iconDrawMapPrepare;
+		[WL_CONTROL_MAP, _drawMode] call WL2_fnc_iconDrawMapPrepare;
 
 		private _refreshRate = _settingsMap getOrDefault ["mapRefresh", 4];
 		_refreshRate = _refreshRate max 1;
 		private _refreshSleepTime = 1 / _refreshRate;
-		uiSleep _refreshSleepTime;
+
+		uiNamespace setVariable ["WL2_drawingMap", false];
+		sleep _refreshSleepTime;
 	};
 };
 
@@ -181,7 +187,7 @@
 
 	while { !BIS_WL_missionEnd } do {
 		private _mainMap = (findDisplay 12) displayCtrl 51;
-		[_mainMap, 2] spawn WL2_fnc_iconDrawMapPrepare;
+		[_mainMap, 2] call WL2_fnc_iconDrawMapPrepare;
 		sleep 30;
 	};
 };

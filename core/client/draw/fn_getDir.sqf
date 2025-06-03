@@ -1,3 +1,7 @@
-if (lifeState _x == "INCAPACITATED") exitWith {0};
-_dir = getDirVisual _x;
-_dir;
+params ["_unit"];
+
+if (lifeState _unit == "INCAPACITATED") then {
+    0;
+} else {
+    getDirVisual _unit;
+};

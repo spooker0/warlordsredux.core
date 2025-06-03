@@ -250,6 +250,48 @@ switch (_className) do {
         "RequestMenu_close" call WL2_fnc_setupUI;
     };
     case "WelcomeScreen": {0 spawn WL2_fnc_welcome};
+    case "StressTestSector": {
+        0 spawn {
+            private _direction = [vectorDir player, vectorUp player];
+            private _costMap = missionNamespace getVariable ["WL2_costs", createHashMap];
+            private _costArray = keys _costMap;
+            private _sector = BIS_WL_allSectors select {
+                player inArea (_x getVariable "objectAreaComplete")
+            } select 0;
+
+            for "_i" from 0 to 50 do {
+                private _orderedClass = selectRandom _costArray;
+                private _pos = selectRandom ([_sector, 0, true] call WL2_fnc_findSpawnPositions);
+                if (_orderedClass isKindOf "Man") then {
+                    continue;
+                };
+                [player, "orderAsset", "vehicle", _pos, _orderedClass, _direction, false] remoteExec ["WL2_fnc_handleClientRequest", 2];
+                [player, "10K"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+                sleep 0.1;
+            };
+        };
+    };
+    case "StressTestMap": {
+        0 spawn {
+            private _direction = [vectorDir player, vectorUp player];
+            private _costMap = missionNamespace getVariable ["WL2_costs", createHashMap];
+            private _costArray = keys _costMap;
+
+            {
+                private _sector = _x;
+                for "_i" from 0 to 5 do {
+                    private _orderedClass = selectRandom _costArray;
+                    private _pos = selectRandom ([_sector, 0, true] call WL2_fnc_findSpawnPositions);
+                    if (_orderedClass isKindOf "Man") then {
+                        continue;
+                    };
+                    [player, "orderAsset", "vehicle", _pos, _orderedClass, _direction, false] remoteExec ["WL2_fnc_handleClientRequest", 2];
+                    [player, "10K"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+                    sleep 0.1;
+                };
+            } forEach BIS_WL_allSectors;
+        };
+    };
     case "SwitchToGreen": {
         private _greenUnits = allUnits select {
             (_x getVariable ["WL2_isPlayableGreen", false]) && !isPlayer _x;

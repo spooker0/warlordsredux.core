@@ -496,13 +496,8 @@ addMissionEventHandler ["Draw3D", {
             private _assetTypeName = [_target] call WL2_fnc_getAssetTypeName;
 
             private _assetName = if (_targetSide == _side) then {
-                private _ownerPlayer = (_target getVariable ["BIS_WL_ownerAsset", "123"]) call BIS_fnc_getUnitByUID;
-                private _ownerName = if (name _ownerPlayer == "Error: No vehicle") then {
-                    "";
-                } else {
-                    format [" (%1)", name _ownerPlayer];
-                };
-                format ["%1%2", _assetTypeName, _ownerName];
+                private _ownerName = [_target] call WL2_fnc_getAssetOwnerName;
+                format ["%1 %2", _assetTypeName, _ownerName];
             } else {
                 _assetTypeName;
             };

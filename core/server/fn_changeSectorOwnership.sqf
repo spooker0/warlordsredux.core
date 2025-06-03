@@ -37,6 +37,7 @@ if (_sector == (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", 
 };
 
 ["server", true] call WL2_fnc_updateSectorArrays;
+call WL2_fnc_calcImbalance;
 
 _side = [west, east];
 _side deleteAt (_side find _owner);

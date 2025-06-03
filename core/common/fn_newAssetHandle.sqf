@@ -92,10 +92,10 @@ if (_asset isKindOf "Man") then {
 	_asset setVariable ["BIS_WL_ownerAssetSide", _side, true];
 	_asset setVariable ["WL2_massDefault", getMass _asset];
 
-	_var = format ["BIS_WL_ownedVehicles_%1", _playerUID];
-	_vehicles = missionNamespace getVariable [_var, []];
-	_vehicles pushBack _asset;
-	missionNamespace setVariable [_var, _vehicles, [2, clientOwner]];
+	private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", _playerUID];
+	private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
+	_ownedVehicles pushBack _asset;
+	missionNamespace setVariable [_ownedVehicleVar, _ownedVehicles, [2, clientOwner]];
 
 	[_asset, true] remoteExec ["setVehicleReceiveRemoteTargets", _asset, true];
 	[_asset, true] remoteExec ["setVehicleReportRemoteTargets", _asset, true];

@@ -5,7 +5,24 @@ params [["_map", controlNull], ["_drawMode", 0]];
 
 if (isNull _map) exitWith {};
 
+private _controlPosition = ctrlPosition _map;
+private _mapX = _controlPosition # 0;
+private _mapY = _controlPosition # 1;
+private _mapW = _controlPosition # 2;
+private _mapH = _controlPosition # 3;
+private _bottomLeftCorner = _map ctrlMapScreenToWorld [_mapX, _mapY + _mapH];
+private _topRightCorner = _map ctrlMapScreenToWorld [_mapX + _mapW, _mapY];
+
+private _cullItem = {
+	params ["_itemPosition"];
+	_itemPosition # 0 < _bottomLeftCorner # 0 ||
+	_itemPosition # 0 > _topRightCorner # 0 ||
+	_itemPosition # 1 < _bottomLeftCorner # 1 ||
+	_itemPosition # 1 > _topRightCorner # 1
+};
+
 private _drawAll = _drawMode == 1 || _drawMode == 2;
+private _draw = (ctrlMapScale _map) < 0.3 || _drawMode == 2;
 
 private _drawIcons = [];
 private _drawIconsAnimated = [];
@@ -71,7 +88,7 @@ if (alive _respawnBag) then {
 	_drawIcons pushBack [
 		"\A3\ui_f\data\map\markers\military\triangle_CA.paa",
 		[player] call WL2_fnc_iconColor,
-		getPosATL _respawnBag,
+		_bagPos,
 		50,
 		50,
 		0,
@@ -84,6 +101,9 @@ if (alive _respawnBag) then {
 private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 {
 	private _base = _x;
+	private _position = getPosATL _base;
+	if ([_position] call _cullItem) then { continue; };
+
 	private _baseOwner = _base getVariable ["WL2_forwardBaseOwner", sideUnknown];
 	private _showOnMap = _base getVariable ["WL2_forwardBaseShowOnMap", false];
 	if (_baseOwner != _side && !_drawAll && !_showOnMap) then {
@@ -113,21 +133,19 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		};
 	};
 
-	private _basePos = getPosATL _base;
-
 	_drawIcons pushBack [
 		"\A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_requestLeadership_ca.paa",
 		_baseColor,
-		_basePos,
+		_position,
 		40,
 		40,
 		0,
 		format ["Forward Base %1", _baseText]
 	];
-	_drawIconsSelectable pushBack [_base, _basePos];
+	_drawIconsSelectable pushBack [_base, _position];
 
 	_drawEllipses pushBack [
-		_basePos,
+		_position,
 		WL_FOB_RANGE,
 		WL_FOB_RANGE,
 		0,
@@ -142,7 +160,7 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		private _startPointDirection = _base getRelDir _sectorPos;
 		private _startPoint = _base getRelPos [100, _startPointDirection];
 
-		private _endPointDirection = _x getRelDir _basePos;
+		private _endPointDirection = _x getRelDir _position;
 		private _endPoint = _x getRelPos [100, _endPointDirection];
 
 		_drawLines pushBack [
@@ -154,17 +172,19 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 	} forEach _sectorsInRange;
 } forEach _forwardBases;
 
-// Draw sector scans
+// Draw scanned units
 {
-	private _size = call WL2_fnc_iconSize;
+	private _position = getPosASL _x;
+	if ([_position] call _cullItem) then { continue; };
+	private _size = [_x] call WL2_fnc_iconSize;
 	_drawIcons pushBack [
-		call WL2_fnc_iconType,
+		[_x] call WL2_fnc_iconType,
 		[_x] call WL2_fnc_iconColor,
-		getPosASL _x,
+		_position,
 		_size,
 		_size,
-		call WL2_fnc_getDir,
-		_x call WL2_fnc_iconTextSectorScan,
+		[_x] call WL2_fnc_getDir,
+		[_x] call WL2_fnc_iconTextSectorScan,
 		1,
 		0.043,
 		"PuristaBold",
@@ -175,10 +195,13 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 // Draw EW networks
 {
 	if (isNull _x) then { continue; };
-	private _assetPos = _x modelToWorldVisual [0, 0, 0];
+
+	private _position = getPosASL _x;
+	if ([_position] call _cullItem) then { continue; };
+
 	private _range = _x getVariable ["WL_ewNetRange", 0];
 	_drawEllipses pushBack [
-		_assetPos,
+		_position,
 		_range,
 		_range,
 		0,
@@ -198,7 +221,10 @@ private _scanners = if (_drawAll) then {
 };
 {
 	if (isNull _x) then { continue; };
-	private _assetPos = _x modelToWorldVisual [0, 0, 0];
+
+	private _position = getPosASL _x;
+	if ([_position] call _cullItem) then { continue; };
+
     private _scanRadius = _x getVariable ["WL_scanRadius", 100];
 	if (_scanRadius == 0) then { continue; };
     private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
@@ -207,13 +233,13 @@ private _scanners = if (_drawAll) then {
 		_drawIcons pushBack [
 			"\a3\ui_f\data\IGUI\RscCustomInfo\Sensors\Sectors\sector120_ca.paa",
 			[1, 1, 1, 0.3],
-			_assetPos,
+			_position,
 			_size,
 			_size,
 			getDirVisual _x
 		];
 		_drawEllipses pushBack [
-			_assetPos,
+			_position,
 			_scanRadius,
 			_scanRadius,
 			0,
@@ -222,7 +248,7 @@ private _scanners = if (_drawAll) then {
 		];
 	} else {
 		_drawEllipses pushBack [
-			_assetPos,
+			_position,
 			_scanRadius,
 			_scanRadius,
 			0,
@@ -231,8 +257,6 @@ private _scanners = if (_drawAll) then {
 		];
 	};
 } forEach _scanners;
-
-private _draw = (ctrlMapScale _map) < 0.3 || _drawMode == 2;
 
 // Dead players
 private _deadPlayers = if (_drawAll) then {
@@ -263,12 +287,15 @@ private _teammates = if (_drawAll) then {
 	_mapData getOrDefault ["teammates", []]
 };
 {
-	_size = call WL2_fnc_iconSize;
+	private _position = getPosASL _x;
+	if ([_position] call _cullItem) then { continue; };
+
+	private _size = [_x] call WL2_fnc_iconSize;
 	if (_x == player) then {
 		_drawIcons pushBack [
 			'a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca.paa',
 			[1,0,0,1],
-			getPosASL _x,
+			_position,
 			_size,
 			_size,
 			0,
@@ -280,14 +307,13 @@ private _teammates = if (_drawAll) then {
 		];
 	};
 
-	private _teammatePos = getPosASL _x;
 	_drawIcons pushBack [
-		call WL2_fnc_iconType,
+		[_x] call WL2_fnc_iconType,
 		[_x] call WL2_fnc_iconColor,
-		_teammatePos,
+		_position,
 		_size,
 		_size,
-		call WL2_fnc_getDir,
+		[_x] call WL2_fnc_getDir,
 		if (_draw) then {
 			private _levelDisplay = _x getVariable ["WL_playerLevel", "Recruit"];
 			private _displayName = format ["%1 [%2]", name _x, _levelDisplay];
@@ -298,7 +324,7 @@ private _teammates = if (_drawAll) then {
 		"PuristaBold",
 		"right"
 	];
-	_drawIconsSelectable pushBack [_x, _teammatePos];
+	_drawIconsSelectable pushBack [_x, _position];
 } forEach _teammates;
 
 // AI in vehicle
@@ -308,14 +334,17 @@ private _aiInVehicle = if (_drawAll) then {
 	_mapData getOrDefault ["aiInVehicle", []]
 };
 {
-	private _size = call WL2_fnc_iconSize;
+	private _position = getPosASL _x;
+	if ([_position] call _cullItem) then { continue; };
+
+	private _size = [_x] call WL2_fnc_iconSize;
 	_drawIcons pushBack [
-		call WL2_fnc_iconType,
+		[_x] call WL2_fnc_iconType,
 		[_x] call WL2_fnc_iconColor,
-		getPosASL _x,
+		_position,
 		_size,
 		_size,
-		call WL2_fnc_getDir,
+		[_x] call WL2_fnc_getDir,
 		if (_draw) then {format ["%1 [AI]", (name _x)]} else {""},
 		1,
 		0.043,
@@ -326,22 +355,26 @@ private _aiInVehicle = if (_drawAll) then {
 
 // AI
 {
-	private _size = call WL2_fnc_iconSize;
-	private _aiPos = getPosASL _x;
+	private _position = getPosASL _x;
+	if ([_position] call _cullItem) then { continue; };
+
+	private _size = [_x] call WL2_fnc_iconSize;
 	_drawIcons pushBack [
-		call WL2_fnc_iconType,
+		[_x] call WL2_fnc_iconType,
 		[_x] call WL2_fnc_iconColor,
-		_aiPos,
+		_position,
 		_size,
 		_size,
-		call WL2_fnc_getDir,
-		if (_draw) then {if (isPlayer _x) then {name _x} else {format ["%1 [AI]", (name _x)]}} else {""},
+		[_x] call WL2_fnc_getDir,
+		if (_draw) then {
+			format ["%1 [AI]", name _x]
+		} else {""},
 		1,
 		0.043,
 		"PuristaBold",
 		"right"
 	];
-	_drawIconsSelectable pushBack [_x, _aiPos];
+	_drawIconsSelectable pushBack [_x, _position];
 } forEach (_mapData getOrDefault ["playerAi", []]);
 
 // Draw squad lines
@@ -373,106 +406,47 @@ private _sideVehicles = if (_drawAll) then {
 };
 
 {
-	_size = call WL2_fnc_iconSize;
-	private _vehiclePos = getPosASL _x;
+	private _position = getPosASL _x;
+	if ([_position] call _cullItem) then { continue; };
+
+	private _size = [_x] call WL2_fnc_iconSize;
 	_drawIcons pushBack [
-		call WL2_fnc_iconType,
+		[_x] call WL2_fnc_iconType,
 		[_x] call WL2_fnc_iconColor,
-		_vehiclePos,
+		_position,
 		_size,
 		_size,
-		call WL2_fnc_getDir,
+		[_x] call WL2_fnc_getDir,
 		[_x, _draw] call WL2_fnc_iconText,
 		1,
 		0.043,
 		"PuristaBold",
 		"right"
 	];
-	_drawIconsSelectable pushBack [_x, _vehiclePos];
+	_drawIconsSelectable pushBack [_x, _position];
 } forEach _sideVehicles;
 
 private _drawSectorMarkerThreshold = _mapData getOrDefault ["sectorMarkerThreshold", 0.4];
 private _drawSectorMarkerText = (ctrlMapScale _map) < _drawSectorMarkerThreshold;
 
-private _drawSectorMarker = {
-	params ["_sectorMarkerPair", "_drawSide"];
-	private _sector = _sectorMarkerPair # 0;
-	private _marker = _sectorMarkerPair # 1;
-
-	private _sectorMarker = _marker # 1;
-
-	private _sectorIcon = switch (_sectorMarker) do {
-		case "ENEMY": {
-			private _sectorServices = _sector getVariable ["WL2_services", []];
-			if ("A" in _sectorServices) then {
-				"\a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa"
-			} else {
-				if ("H" in _sectorServices) then {
-					"\a3\ui_f\data\igui\cfg\simpletasks\types\Heli_ca.paa"
-				} else {
-					"\A3\ui_f\data\map\markers\handdrawn\flag_CA.paa"
-				};
-			};
-		};
-		case "INDEPENDENT": { "\A3\ui_f\data\map\markers\handdrawn\flag_CA.paa" };
-		case "ENEMY BASE": { "\A3\ui_f_orange\data\cfgmarkers\redcrystal_ca.paa" };
-		case "ATTACK";
-		case "ATTACK 2": { "\a3\ui_f\data\igui\cfg\simpletasks\types\attack_ca.paa" };
-		case "CAMPED": { "\A3\ui_f\data\map\markers\handdrawn\warning_CA.paa" };
-		default { "" };
-	};
-
-	private _sectorColorRGB = switch (_sectorMarker) do {
-		case "ENEMY";
-		case "ENEMY BASE": {
-			if (_drawSide == west) then {
-				[0.5, 0, 0, 1]
-			} else {
-				[0, 0.3, 0.6, 1]
-			}
-		};
-		case "INDEPENDENT": { [0, 0.5, 0, 1] };
-		case "ATTACK": { [1, 1, 1, 1] };
-		case "ATTACK 2": { [0.1, 0.1, 0.1, 1] };
-		case "CAMPED": { [1, 0, 0, 1] };
-		default { [1, 1, 1] };
-	};
-
-	private _sectorPosition = getPosASL _sector;
-	_sectorPosition set [1, (_sectorPosition # 1) + 50];
-
-    private _sectorMarkedByVar = format ["WL2_MapMarkedBy_%1", _drawSide];
-	private _sectorMarkedBy = _sector getVariable [_sectorMarkedByVar, ""];
-	private _sectorMarkedTimeVar = format ["WL2_MapMarkedTime_%1", _drawSide];
-	private _sectorMarkedTime = _sector getVariable [_sectorMarkedTimeVar, ""];
-
-	_drawIcons pushBack [
-		_sectorIcon,
-		_sectorColorRGB,
-		_sectorPosition,
-		32,
-		32,
-		0,
-		if (_drawSectorMarkerText) then {
-			format ["%1 (Marked by %2 %3)", _sectorMarker, _sectorMarkedBy, _sectorMarkedTime]
-		} else {""},
-		true,
-		0.04,
-		"PuristaBold",
-		"right"
-	];
-};
-
 private _sectorMarkers = _mapData getOrDefault ["teamSectorMarkers", []];
 {
-	[_x, BIS_WL_playerSide] call _drawSectorMarker;
+	private _position = getPosASL (_x # 0);
+	if ([_position] call _cullItem) then { continue; };
+
+	private _marker = [_x, BIS_WL_playerSide] call WL2_fnc_drawSectorMarker;
+	_drawIcons pushBack _marker;
 } forEach _sectorMarkers;
 
 if (_drawAll) then {
-	private _sectorMarkers = _mapData getOrDefault ["enemySectorMarkers", []];
+	private _enemySectorMarkers = _mapData getOrDefault ["enemySectorMarkers", []];
 	{
-		[_x, BIS_WL_enemySide] call _drawSectorMarker;
-	} forEach _sectorMarkers;
+		private _position = getPosASL (_x # 0);
+		if ([_position] call _cullItem) then { continue; };
+
+		private _marker = [_x, BIS_WL_enemySide] call WL2_fnc_drawSectorMarker;
+		_drawIcons pushBack _marker;
+	} forEach _enemySectorMarkers;
 };
 
 // Spectator draw

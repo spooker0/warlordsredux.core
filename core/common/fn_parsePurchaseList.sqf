@@ -386,6 +386,25 @@ private _strategyArr = [
 	]
 ];
 
+#if WL_PERF_TEST
+	_strategyArr pushBack [
+		"StressTestSector",
+		0,
+		[],
+		"Stress test: assets in current sector",
+		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
+		"Order up to 50 vehicles in current sector to test performance under stress."
+	];
+	_strategyArr pushBack [
+		"StressTestMap",
+		0,
+		[],
+		"Stress test: assets in every sector",
+		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
+		"Order up to 5 vehicles in every sector to test performance under stress."
+	];
+#endif
+
 #if WL_FACTION_THREE_ENABLED
 	_strategyArr pushBack [
 		"SwitchToGreen",

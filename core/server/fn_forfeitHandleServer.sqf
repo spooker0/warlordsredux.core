@@ -30,7 +30,9 @@ while { serverTime < ((missionNamespace getVariable [_varName, -1]) + 30) } do {
 
 if (_voteSucceeded) then {
 	missionNamespace setVariable ["BIS_WL_missionEnd", true, true];
-	missionNamespace setVariable ["WL2_gameWinner", _side, true];
+
+	private _oppositeTeam = if (_side == west) then { east } else { west };
+	missionNamespace setVariable ["WL2_gameWinner", _oppositeTeam, true];
 
 	0 spawn WL2_fnc_calculateEndResults;
 	0 remoteExec ["WL2_fnc_missionEndHandle", 0];

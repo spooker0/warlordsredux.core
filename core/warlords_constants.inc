@@ -16,6 +16,7 @@
 #define WL_ZEUS_ENABLED 0
 #define WL_EASTER_EGG 0
 #define WL_REPLAYS 0
+#define WL_PERF_TEST 0
 
 // Live: set all to 1
 #define WL_STOP_TEAM_SWITCH 1

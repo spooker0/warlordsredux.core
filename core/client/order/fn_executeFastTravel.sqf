@@ -10,12 +10,9 @@ params ["_fastTravelMode", "_marker"];
 // 6: Forward Base
 // 7: Vehicle Paradrop FOB
 
-titleCut ["", "BLACK OUT", 1];
 openMap [false, false];
 
 "Fast_travel" call WL2_fnc_announcer;
-
-sleep 1;
 
 private _destination = [];
 private _sectorPos = if (isNil "BIS_WL_targetSector") then {
@@ -81,6 +78,10 @@ switch (_fastTravelMode) do {
 	};
 };
 
+if (count _destination != 3 || _destination isEqualTo [0, 0, 0]) exitWith {
+	systemChat "Fast travel failed, no valid position found.";
+};
+
 private _tagAlong = (units player) select {
 	(_x distance2D player <= 100) &&
 	(isNull objectParent _x) &&
@@ -90,6 +91,10 @@ private _tagAlong = (units player) select {
 };
 
 private _directionToSector = _destination getDir _sectorPos;
+
+titleCut ["", "BLACK OUT", 1];
+
+sleep 1;
 
 switch (_fastTravelMode) do {
 	case 0;
@@ -183,8 +188,6 @@ switch (_fastTravelMode) do {
 		player setVehiclePosition [_destination, [], 0, "NONE"];
 	};
 };
-
-sleep 1;
 
 titleCut ["", "BLACK IN", 1];
 

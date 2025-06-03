@@ -1,16 +1,18 @@
-if ([_x] call WL2_fnc_isScannerMunition) exitWith {
-	"\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missileAlt_ca.paa";
+params ["_vehicle"];
+
+if (lifeState _vehicle == "INCAPACITATED") exitWith {
+	"a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa";
 };
 
-private _vt = typeOf (vehicle _x);
-_i = getText (configFile >> 'CfgVehicles' >> _vt >> 'icon');
-if ((getPlayerChannel _x) in [1,2]) then {
-	_i = "a3\ui_f\data\igui\rscingameui\rscdisplayvoicechat\microphone_ca.paa";
+private _cachedIconType = _vehicle getVariable ["WL2_iconType", ""];
+if (_cachedIconType != "") exitWith {
+	_cachedIconType;
 };
-if (((getPlayerChannel _x) == 5) && {((player distance2D _x) < 100)}) then {
-	_i = "a3\ui_f\data\igui\rscingameui\rscdisplayvoicechat\microphone_ca.paa";
+
+private _icon = if ([_vehicle] call WL2_fnc_isScannerMunition) then {
+	"\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missileAlt_ca.paa";
+} else {
+	getText (configFile >> 'CfgVehicles' >> typeOf (vehicle _vehicle) >> 'icon');
 };
-if (lifeState _x == "INCAPACITATED") then {
-	_i = "a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa";
-};
-_i;
+_vehicle setVariable ["WL2_iconType", _icon];
+_icon;
