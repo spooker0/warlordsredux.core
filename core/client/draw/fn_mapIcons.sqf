@@ -147,7 +147,7 @@
 		_mapData set ["teamSectorMarkers", _teamSectorMarkers];
 		_mapData set ["enemySectorMarkers", _allSectorMarkers];
 
-		uiSleep 0.5;
+		sleep 0.5;
 	};
 };
 

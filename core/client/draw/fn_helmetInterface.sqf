@@ -493,40 +493,46 @@ addMissionEventHandler ["Draw3D", {
                 };
             };
 
-            private _assetTypeName = [_target] call WL2_fnc_getAssetTypeName;
-
-            private _assetName = if (_targetSide == _side) then {
-                private _ownerName = [_target] call WL2_fnc_getAssetOwnerName;
-                format ["%1 %2", _assetTypeName, _ownerName];
-            } else {
-                _assetTypeName;
-            };
-
             if (_targetIsInfantry) then {
                 private _centerOfMass = _target selectionPosition "spine2";
                 _centerOfMass set [2, _centerOfMass # 2 + 1];
+
+                private _assetName = if (isPlayer _target) then {
+                    name _target;
+                } else {
+                    getText (configfile >> "CfgVehicles" >> typeof _target >> "textSingular");
+                };
 
                 _targetInfantryIcons pushBack [
                     "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\UnknownGround_ca.paa",
                     _targetColor,
                     _target modelToWorldVisual _centerOfMass,
-                    0.5,
-                    0.5,
+                    0.3,
+                    0.3,
                     45,
                     _assetName,
                     true,
-                    0.03,
+                    0.025,
                     "RobotoCondensedBold"
                 ];
             } else {
+                private _assetTypeName = [_target] call WL2_fnc_getAssetTypeName;
+
+                private _assetName = if (_targetSide == _side) then {
+                    private _ownerName = [_target] call WL2_fnc_getAssetOwnerName;
+                    format ["%1 %2", _assetTypeName, _ownerName];
+                } else {
+                    _assetTypeName;
+                };
+
                 private _assetActualType = _target getVariable ["WL2_orderedClass", typeof _target];
                 private _assetCategory = _categoryMap getOrDefault [_assetActualType, "Other"];
 
                 private _targetIcon = "";
-                private _targetIconSize = 1;
+                private _targetIconSize = 0.8;
                 if (_assetCategory == "AirDefense") then {
                     _targetIcon = "\A3\ui_f\data\map\markers\nato\b_antiair.paa";
-                    _targetIconSize = 0.8;
+                    _targetIconSize = 0.6;
                 } else {
                     _targetIcon = "\A3\ui_f\data\IGUI\Cfg\Cursors\lock_target_ca.paa";
                 };
@@ -543,12 +549,12 @@ addMissionEventHandler ["Draw3D", {
                     0,
                     _assetName,
                     true,
-                    0.032,
+                    0.025,
                     "RobotoCondensedBold",
                     "center",
                     true,
                     0,
-                    -0.05
+                    -0.04
                 ];
             };
         } forEach _targets;
