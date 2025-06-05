@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset", "_controlStation"];
 
 _controlStation setVariable ["DIS_remoteInUseBy", player, true];

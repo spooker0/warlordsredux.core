@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 private _selectedUnits = groupSelectedUnits player;
 private _ownedSelectedUnits = _selectedUnits select {
     _x != player && (_x getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player

@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_cameraPos", "_maxDistance"];
 
 private _projectiles = uiNamespace getVariable ["WL2_projectiles", []];

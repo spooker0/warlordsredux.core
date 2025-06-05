@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 private _hudRangeDistances = [0, 250, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000];
 private _hudRangeIndex = 7;
 

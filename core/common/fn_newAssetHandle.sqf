@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_asset", ["_owner", objNull]];
 
 [_asset] call WL2_fnc_lastHitHandler;
@@ -117,18 +116,15 @@ if (_asset isKindOf "Man") then {
 		_target setVariable ["WL_incomingLauncherLastKnown", _vehicle];
 	}];
 
-	private _hasScannerMap = missionNamespace getVariable ["WL2_hasScanner", createHashMap];
-	if (_hasScannerMap getOrDefault [_assetActualType, false]) then {
+	if (WL_ASSET(_assetActualType, "hasScanner", 0) > 0) then {
 		[_asset, false] remoteExec ["WL2_fnc_scannerAction", 0, true];
 	};
 
-	private _hasReconOpticsMap = missionNamespace getVariable ["WL2_hasReconOptics", createHashMap];
-	if (_hasReconOpticsMap getOrDefault [_assetActualType, false]) then {
+	if (WL_ASSET(_assetActualType, "hasReconOptics", 0) > 0) then {
 		[_asset, false] remoteExec ["WL2_fnc_reconOpticsAction", 0, true];
 	};
 
-	private _hasAWACSMap = missionNamespace getVariable ["WL2_hasAWACS", createHashMap];
-	if (_hasAWACSMap getOrDefault [_assetActualType, false]) then {
+	if (WL_ASSET(_assetActualType, "hasAWACS", 0) > 0) then {
 		[_asset, true] remoteExec ["WL2_fnc_scannerAction", 0, true];
 	};
 
@@ -340,16 +336,12 @@ if (_asset isKindOf "Man") then {
 		[_asset] remoteExec ["WL2_fnc_dazzlerAction", 0, true];
 	};
 
-	private _isLightweightMap = missionNamespace getVariable ["WL2_isLightweight", createHashMap];
-	private _isLightweight = _isLightweightMap getOrDefault [_assetActualType, false];
-	if (_isLightweight) then {
+	if (WL_ASSET(_assetActualType, "isLight", 0) > 0) then {
 		private _originalMass = getMass _asset;
 		[_asset, _originalMass * 0.65] remoteExec ["setMass", 0];
 	};
 
-	private _hasESAMMap = missionNamespace getVariable ["WL2_hasESAM", createHashMap];
-	private _isESAM = _hasESAMMap getOrDefault [_assetActualType, false];
-	if (_isESAM) then {
+	if (WL_ASSET(_assetActualType, "hasESAM", 0) > 0) then {
 		[_asset, _side] remoteExec ["DIS_fnc_setupExtendedSam", 0, true];
 	};
 
@@ -383,8 +375,7 @@ if (_asset isKindOf "Man") then {
 	};
 
 	if (typeOf _asset == "VirtualReammoBox_camonet_F") then {
-		private _containerMap = missionNamespace getVariable ["WL2_container", createHashMap];
-		private _containerItems = _containerMap getOrDefault [_assetActualType, []];
+		private _containerItems = WL_ASSET(_assetActualType, "container", []);
 		{
 			private _containerItemType = _x # 0;
 			private _containerItemCount = _x # 1;
@@ -422,7 +413,7 @@ if (_asset isKindOf "Man") then {
 		[_asset, 0] remoteExec ["setFuelCargo", 0];
 	};
 
-	private _rearmTime = (missionNamespace getVariable ["WL2_rearmTimers", createHashMap]) getOrDefault [_assetActualType, 600];
+	private _rearmTime = WL_ASSET(_assetActualType, "rearm", 600);
 	_asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
 
 	private _crewPosition = (fullCrew [_asset, "", true]) select {!("cargo" in _x)};
@@ -470,17 +461,15 @@ if (_asset isKindOf "Man") then {
 		_asset setTurretLimits [[0], -360, 360, 0, 30];
 	};
 
-	private _hasGPSMunitionMap = missionNamespace getVariable ["WL2_hasGPSMunition", createHashMap];
-	if (_hasGPSMunitionMap getOrDefault [_assetActualType, false]) then {
+	if (WL_ASSET(_assetActualType, "hasGPSMunition", 0) > 0) then {
 		[_asset] remoteExec ["DIS_fnc_setupGPSMunition", 0, true];
 	};
-	private _hasRemoteBombMap = missionNamespace getVariable ["WL2_hasRemoteBomb", createHashMap];
-	if (_hasRemoteBombMap getOrDefault [_assetActualType, false]) then {
+
+	if (WL_ASSET(_assetActualType, "hasRemoteBomb", 0) > 0) then {
 		[_asset] remoteExec ["DIS_fnc_setupRemoteMunition", 0, true];
 	};
 
-	private _demolishable = missionNamespace getVariable ["WL2_demolishable", createHashMap];
-	if (_demolishable getOrDefault [_assetActualType, false]) then {
+	if (WL_ASSET(_assetActualType, "demolishable", 0) > 0) then {
 		_asset setVariable ["WL2_canDemolish", true, true];
 	};
 

@@ -1,3 +1,4 @@
+#include "includes.inc"
 _uniform = uniform player;
 
 "RequestMenu_close" call WL2_fnc_setupUI;

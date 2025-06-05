@@ -1,5 +1,4 @@
-#include "squad_constants.inc"
-
+#include "includes.inc"
 params ["_action", "_params"];
 
 private _allPlayers = call BIS_fnc_listPlayers;

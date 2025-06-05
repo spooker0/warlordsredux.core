@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_vehicle"];
 
 if (lifeState _vehicle == "INCAPACITATED") exitWith {

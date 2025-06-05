@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_side", "_area"];
 
 ((allUnits + vehicles) inAreaArray _area) select {

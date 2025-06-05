@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset"];
 
 private _radarActionID = _asset addAction [

@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 private _allPlayers = call BIS_fnc_listPlayers;
 private _greenPlayers = _allPlayers select {
     side _x == independent;

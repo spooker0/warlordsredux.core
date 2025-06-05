@@ -1,4 +1,4 @@
-#include "..\..\warlords_constants.inc"
+#include "includes.inc"
 params ["_asset"];
 
 if (isDedicated) exitWith {};
@@ -17,9 +17,7 @@ _asset addAction [
         private _teamVehicles = missionNamespace getVariable [_teamVehiclesVar, []];
         private _controllableJets = _teamVehicles select {
             private _assetActualType = _x getVariable ["WL2_orderedClass", typeof _x];
-            private _hasRemoteBombMap = missionNamespace getVariable ["WL2_hasRemoteBomb", createHashMap];
-            private _hasRemoteBomb = _hasRemoteBombMap getOrDefault [_assetActualType, false];
-            _hasRemoteBomb
+            WL_ASSET(_assetActualType, "hasRemoteBomb", 0) > 0
         };
         if (count _controllableJets == 0) exitWith {
             systemChat "No remote munition standoff jets available.";

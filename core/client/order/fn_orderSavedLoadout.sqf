@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_event"];
 
 "RequestMenu_close" call WL2_fnc_setupUI;

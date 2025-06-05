@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params [["_overrideFirstBase", objNull]];
 
 private _canBeBase = {

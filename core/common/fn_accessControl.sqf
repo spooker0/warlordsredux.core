@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset", "_unit", "_role"];
 
 private _accessControl = _asset getVariable ["WL2_accessControl", -1];

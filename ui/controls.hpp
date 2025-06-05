@@ -1,6 +1,3 @@
-import RscStructuredText;
-import RscButtonMenu;
-
 class welcomeScreen
 {
 	idd = 9000;

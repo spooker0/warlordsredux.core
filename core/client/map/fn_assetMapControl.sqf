@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 addMissionEventHandler ["EachFrame", WL2_fnc_mapEachFrame];
 
 addMissionEventHandler ["Map", {

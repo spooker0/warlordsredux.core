@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_sector", "_owner"];
 
 if (isDedicated) exitWith {};

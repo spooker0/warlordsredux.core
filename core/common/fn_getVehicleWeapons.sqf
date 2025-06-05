@@ -1,10 +1,10 @@
+#include "includes.inc"
 params ["_vehicle", "_baseVehicle"];
 
 private _allTurretWeapons = [];
 
 private _overrideMap = createHashMap;
-private _turretOverrides = missionNamespace getVariable ["WL2_turretOverrides", createHashMap];
-private _turretOverridesForVehicle = _turretOverrides getOrDefault [_vehicle, []];
+private _turretOverridesForVehicle = WL_ASSET(_vehicle, "turretOverrides", []);
 {
 	private _turretOverride = _x;
 	private _turret = getArray (_turretOverride >> "turret");

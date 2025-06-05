@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset"];
 
 private _actionText = format ["<t color='#00ffcc'>GPS Munition Configuration (%1)</t>", actionKeysNames ["binocular", 1, "Combo"]];
@@ -15,8 +16,7 @@ private _actionID = _asset addAction [
 ];
 
 private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
-private _ammoOverridesHashMap = missionNamespace getVariable ["WL2_ammoOverrides", createHashMap];
-private _assetAmmoOverrides = _ammoOverridesHashMap getOrDefault [_assetActualType, createHashMap];
+private _assetAmmoOverrides = WL_ASSET(_assetActualType, "ammoOverrides", []);
 private _projectileConfigMap = APS_projectileConfig;
 
 while { alive _asset } do {
@@ -29,12 +29,15 @@ while { alive _asset } do {
 	};
 	private _currentMagazine = currentMagazine _asset;
 	private _currentAmmo = getText (configFile >> "CfgMagazines" >> _currentMagazine >> "ammo");
-	private _currentAmmoActual = _assetAmmoOverrides getOrDefault [_currentAmmo, [_currentAmmo]];
-	if !(_currentAmmoActual # 0 in _projectileConfigMap) then {
+	private _currentAmmoActual = _assetAmmoOverrides select {
+		_x # 0 == _currentAmmo
+	};
+	if (count _currentAmmoActual == 0) then {
 		continue;
 	};
+	_currentAmmoActual = _currentAmmoActual # 0;
 
-	private _projectileConfig = _projectileConfigMap getOrDefault [_currentAmmoActual # 0, createHashMap];
+	private _projectileConfig = _projectileConfigMap getOrDefault [_currentAmmoActual # 1 # 0, createHashMap];
 	if (_projectileConfig getOrDefault ["gps", false]) then {
 		private _inRangeCalculation = [_asset] call DIS_fnc_calculateInRange;
 		uiNamespace setVariable ["WL2_gpsTargetingLastUpdate", serverTime];

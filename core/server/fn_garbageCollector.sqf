@@ -1,15 +1,21 @@
-private _list = serverNamespace getVariable ["garbageCollector", createHashMap];
-private _staticsList = serverNamespace getVariable ["WL2_staticsGarbageCollector", createHashMap];
-while {!BIS_WL_missionEnd} do {
+#include "includes.inc"
+private _list = serverNamespace getVariable ["WL2_garbageCollector", createHashMap];
+private _assetData = WL_ASSET_DATA;
 
+while {!BIS_WL_missionEnd} do {
 	private _collectables = (allMissionObjects "") select {
-		private _isWreck = _x getEntityInfo 12;
-		private _isDeadSet = _x getEntityInfo 2;
-		private _isWeaponHolder = _x getEntityInfo 11;
-		private _isInBasicList = _list getOrDefault [typeOf _x, false];
+		!alive _x;
+	} select {
+		_x getEntityInfo 12; // wreck
+	} select {
+		_x getEntityInfo 2; // dead set
+	} select {
+		_x getEntityInfo 11; // weapon holder
+	} select {
+		_list getOrDefault [typeOf _x, false]; // basic list
+	} select {
 		private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
-		private _isInStaticsList = _staticsList getOrDefault [_assetActualType, false] && !(alive _x);
-		_isWreck || _isDeadSet || _isWeaponHolder || _isInBasicList || _isInStaticsList;
+		WL_ASSET_FIELD(_assetData, _assetActualType, "garbageCollect", false);
 	};
 
 	{

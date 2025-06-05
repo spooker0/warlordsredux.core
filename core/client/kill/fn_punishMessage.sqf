@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_offenderName", "_timeout", "_reason"];
 
 if (isDedicated) exitWith {};

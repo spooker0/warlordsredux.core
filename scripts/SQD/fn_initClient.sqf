@@ -1,3 +1,4 @@
+#include "includes.inc"
 if (side group player == independent) exitWith {};
 
 0 spawn {

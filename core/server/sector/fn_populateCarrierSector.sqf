@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_sector"];
 
 // setViewDistance 4500;
@@ -9,7 +8,16 @@ private _carrier = ((8 allObjects 0) select {
     _x isKindOf "Land_Carrier_01_hull_base_F" && _x inArea _sectorMarker;
 }) # 0;
 
-private _unitsPool = serverNamespace getVariable ["WL2_populateUnitPoolList", []];
+private _assetData = WL_ASSET_DATA;
+private _unitsPool = [];
+{
+    private _class = _x;
+    private _data = _y;
+    private _unitSpawn = _data getOrDefault ["unitSpawn", 0];
+    if (_unitSpawn > 0) then {
+        _unitsPool pushBack _class;
+    };
+} forEach _assetData;
 
 private _infantryGroups = [];
 private _infantryUnits = [];
@@ -39,6 +47,7 @@ private _spawned = 0;
             _spawned = _spawned + 1;
             doStop _infantry;
             _infantry setUnitPos "MIDDLE";
+            _infantry disableAI "PATH";
             _infantryUnits pushBack _infantry;
         };
 

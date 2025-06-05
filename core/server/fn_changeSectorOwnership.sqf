@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_sector", "_owner"];
 
 _sector setVariable ["BIS_WL_owner", _owner, true];

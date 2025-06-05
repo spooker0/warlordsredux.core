@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_side"];
 
 _varName = format ["BIS_WL_targetResetVotingSince_%1", _side];

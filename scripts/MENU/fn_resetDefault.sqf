@@ -1,3 +1,4 @@
+#include "includes.inc"
 closeDialog 0;
 
 private _result = ["RESET ALL", "Reset all settings to default?", "Yes", "Cancel"] call WL2_fnc_prompt;

@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_damager", "_instigator"];
 
 _ret = objNull;

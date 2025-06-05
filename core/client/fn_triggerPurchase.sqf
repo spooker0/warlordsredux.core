@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 params [
     "_className",
     "_requirements",
@@ -253,14 +252,16 @@ switch (_className) do {
     case "StressTestSector": {
         0 spawn {
             private _direction = [vectorDir player, vectorUp player];
-            private _costMap = missionNamespace getVariable ["WL2_costs", createHashMap];
-            private _costArray = keys _costMap;
+
+            private _assetData = WL_ASSET_DATA;
+            private _classesArray = keys _assetData;
+
             private _sector = BIS_WL_allSectors select {
                 player inArea (_x getVariable "objectAreaComplete")
             } select 0;
 
             for "_i" from 0 to 50 do {
-                private _orderedClass = selectRandom _costArray;
+                private _orderedClass = selectRandom _classesArray;
                 private _pos = selectRandom ([_sector, 0, true] call WL2_fnc_findSpawnPositions);
                 if (_orderedClass isKindOf "Man") then {
                     continue;
@@ -274,13 +275,13 @@ switch (_className) do {
     case "StressTestMap": {
         0 spawn {
             private _direction = [vectorDir player, vectorUp player];
-            private _costMap = missionNamespace getVariable ["WL2_costs", createHashMap];
-            private _costArray = keys _costMap;
+            private _assetData = WL_ASSET_DATA;
+            private _classesArray = keys _assetData;
 
             {
                 private _sector = _x;
                 for "_i" from 0 to 5 do {
-                    private _orderedClass = selectRandom _costArray;
+                    private _orderedClass = selectRandom _classesArray;
                     private _pos = selectRandom ([_sector, 0, true] call WL2_fnc_findSpawnPositions);
                     if (_orderedClass isKindOf "Man") then {
                         continue;

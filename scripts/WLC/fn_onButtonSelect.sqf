@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 params ["_control"];
 
 private _buttonMap = createHashMapFromArray [

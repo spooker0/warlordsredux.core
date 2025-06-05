@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 private _projectiles = [];
 uiNamespace setVariable ["WL2_projectiles", _projectiles];
 private _camera = objNull;

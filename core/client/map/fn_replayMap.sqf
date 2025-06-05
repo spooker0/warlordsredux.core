@@ -1,3 +1,4 @@
+#include "includes.inc"
 WL_IsReplaying = true;
 
 private _profileDrawIcons = profileNamespace getVariable ["WL2_drawIcons", ""];

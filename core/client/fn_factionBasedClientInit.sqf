@@ -1,3 +1,4 @@
+#include "includes.inc"
 params [["_unit", player]];
 
 private _magazineTypes = [

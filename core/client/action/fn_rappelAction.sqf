@@ -1,3 +1,4 @@
+#include "includes.inc"
 player addAction [
 	"<t color='#0000ff'>Rappel</t>",
 	{

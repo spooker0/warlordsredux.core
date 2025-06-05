@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 params ["_projectile", "_unit"];
 
 private _originalTarget = missileTarget _projectile;

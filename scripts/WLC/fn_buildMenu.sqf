@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 private _display = findDisplay WLC_DISPLAY;
 
 if (isNull _display) then {

@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_projectile", "_unit"];
 
 private _coordinates = +(_projectile getVariable ["DIS_targetCoordinates", getPosATL _unit]);
@@ -54,12 +55,12 @@ while { alive _projectile } do {
             _finalPosition = AGLtoASL _coordinates;
             _projectile setMissileTarget [_laserTarget, true];
         } else {
-            private _rewardsDB = missionNamespace getVariable ["WL2_killRewards", createHashMap];
-            private _sortedEnemies = [_enemiesNear, [_rewardsDB], {
-                private _rewardsDB = _input0;
+            private _sortedEnemies = [_enemiesNear, [WL_ASSET_DATA], {
+                private _assetData = _input0;
                 private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
-                _rewardsDB getOrDefault [_assetActualType, 0]
+                WL_ASSET_FIELD(_assetData, _assetActualType, "killReward", 0);
             }, "DESCEND"] call BIS_fnc_sortBy;
+
             private _closestEnemy = _sortedEnemies # 0;
             _finalPosition = getPosASL _closestEnemy;
             _projectile setMissileTarget [_closestEnemy, true];

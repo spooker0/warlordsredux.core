@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_projectile"];
 
 if !(_projectile isKindOf "MissileCore") exitWith {};

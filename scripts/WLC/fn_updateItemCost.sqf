@@ -1,5 +1,4 @@
-#include "constants.inc"
-params ["_cost", "_level"];
+#include "includes.inc"params ["_cost", "_level"];
 
 private _display = findDisplay WLC_DISPLAY;
 private _itemCostDisplay = _display displayCtrl WLC_COST_DISPLAY;

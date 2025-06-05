@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_accessControl"];
 
 private _lockStatus = [

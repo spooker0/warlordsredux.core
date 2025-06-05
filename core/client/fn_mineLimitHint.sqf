@@ -1,4 +1,4 @@
-#include "..\warlords_constants.inc"
+#include "includes.inc"
 params ["_endTime", "_mineDisplay", "_mineIndicator", "_mineIndicatorBackground", "_mineIndicatorText", "_mineData", "_strippedName", "_formattedName", "_mineDisplayName", "_limit", "_currentAmount", "_mineIndicatorText"];
 
 _mineDisplay = uiNamespace getVariable ["RscWLMineDisplay", objNull];

@@ -1,5 +1,4 @@
-#include "..\..\core\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_kills"];
 
 #if WL_EASTER_EGG

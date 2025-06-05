@@ -1,3 +1,4 @@
+#include "includes.inc"
 addMissionEventHandler ["HandleDisconnect", {
 	params ["_unit", "_id", "_uid", "_name"];
 	private _ownedVehicles = format ["BIS_WL_ownedVehicles_%1", _uid];

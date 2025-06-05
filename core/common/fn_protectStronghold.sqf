@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_stronghold", "_protect"];
 
 if (_stronghold isKindOf "House" || _stronghold isKindOf "Building") then {

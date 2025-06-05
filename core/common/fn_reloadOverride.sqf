@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_unit", "_weapon", "_turret", "_reloadTime"];
 
 sleep _reloadTime;

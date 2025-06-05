@@ -1,7 +1,8 @@
+#include "includes.inc"
 params ["_sender", "_pos", "_orderedClass", "_cost"];
 
 if !(isServer) exitWith {};
-private _class = missionNamespace getVariable ["WL2_spawnClass", createHashMap] getOrDefault [_orderedClass, _orderedClass];
+private _class = WL_ASSET(_orderedClass, "spawn", _orderedClass);
 
 private _owner = owner _sender;;
 

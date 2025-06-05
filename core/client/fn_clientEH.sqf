@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 "fundsDatabaseClients" addPublicVariableEventHandler {
 	false spawn WL2_fnc_refreshOSD;
 };

@@ -1,3 +1,4 @@
+#include "includes.inc"
 waituntil {!isnull (findDisplay 46)};
 
 _blockW = safeZoneW / 1000;

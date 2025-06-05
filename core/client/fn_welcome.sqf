@@ -1,3 +1,4 @@
+#include "includes.inc"
 "RequestMenu_close" call WL2_fnc_setupUI;
 
 createDialog ["welcomeScreen", true];

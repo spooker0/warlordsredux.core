@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 _display = uiNamespace getVariable ["BIS_WL_purchaseMenuDisplay", displayNull];
 
 _purchase_category = _display displayCtrl 100;
@@ -39,8 +38,7 @@ private _moneySign = [_side] call WL2_fnc_getMoneySign;
 private _scale = 1.5 call WL2_fnc_purchaseMenuGetUIScale;
 private _costDisplay = (_cost call BIS_fnc_numberText) regexReplace [" ", ","];
 
-private _spawnClassMap = missionNamespace getVariable ["WL2_spawnClass", createHashMap];
-private _spawnClass = _spawnClassMap getOrDefault [_className, _className];
+private _spawnClass = WL_ASSET(_className, "spawn", _className);
 private _dlcInfo = getAssetDLCInfo [_spawnClass];
 private _isDLC = _dlcInfo # 0;
 private _isAvailable = _dlcInfo # 3;

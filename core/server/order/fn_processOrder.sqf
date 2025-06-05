@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_asset", "_sender", "_orderedClass"];
 
 private _side = side group _sender;
@@ -20,8 +19,7 @@ if (count _currentSector == 0) then {
 	if (count _forwardBases > 0) then {
 		private _forwardBase = _forwardBases # 0;
 		private _forwardBaseSupplies = _forwardBase getVariable ["WL2_forwardBaseSupplies", 0];
-		private _costMap = missionNamespace getVariable ["WL2_costs", createHashMap];
-		private _cost = _costMap getOrDefault [_orderedClass, 0];
+		private _cost = WL_ASSET(_orderedClass, "cost", 0);
 		if (_cost > _forwardBaseSupplies) exitWith {
 			deleteVehicle _asset;
 			["Not enough supplies in forward base."] remoteExec ["systemChat", _sender];
@@ -32,8 +30,8 @@ if (count _currentSector == 0) then {
 };
 
 private _isAircraft = _asset isKindOf "Air";
-private _variant = missionNamespace getVariable ["WL2_variant", createHashMap] getOrDefault [_orderedClass, 0];
-if (!_isAircraft && _variant != 0) then {
+private _variant = WL_ASSET(_orderedClass, "variant", 0);
+if (!_isAircraft && _variant > 0) then {
 	private _sideFlag = switch (_side) do {
 		case west: {
 			"\A3\Ui_f\data\Map\Markers\Flags\nato_ca.paa"
@@ -46,8 +44,7 @@ if (!_isAircraft && _variant != 0) then {
 		};
 	};
 
-	private _flagMap = missionNamespace getVariable ["WL2_flagOffsets", createHashMap];
-	private _flagOffset = _flagMap getOrDefault [_orderedClass, []];
+	private _flagOffset = WL_ASSET(_orderedClass, "flagOffset", []);
 	if (count _flagOffset > 0) then {
 		private _flag = createVehicle ["FlagChecked_F", _asset, [], 0, "CAN_COLLIDE"];
 		_flag setFlagTexture _sideFlag;
@@ -61,14 +58,12 @@ if (!_isAircraft && _variant != 0) then {
 	};
 };
 
-private _textureHashmap = missionNamespace getVariable ["WL2_textures", createHashMap];
-private _assetTextures = _textureHashmap getOrDefault [_orderedClass, []];
+private _assetTextures = WL_ASSET(_orderedClass, "textures", []);
 {
 	_asset setObjectTextureGlobal [_forEachIndex, _x];
 } forEach _assetTextures;
 
-private _turretOverrides = missionNamespace getVariable ["WL2_turretOverrides", createHashMap];
-private _turretOverridesForVehicle = _turretOverrides getOrDefault [_orderedClass, []];
+private _turretOverridesForVehicle = WL_ASSET(_orderedClass, "turretOverrides", []);
 private _pylonInfo = getAllPylonsInfo _asset;
 
 {
@@ -170,8 +165,7 @@ if (count (_pylonInfo) > 0) then {
 	[_asset, _attachments, true] call WLM_fnc_applyPylon;
 };
 
-private _disallowListForPylon = missionNamespace getVariable ["WL2_disallowMagazinesForVehicle", createHashMap];
-private _disallowListForAsset = _disallowListForPylon getOrDefault [_orderedClass, []];
+private _disallowListForAsset = WL_ASSET(_orderedClass, "disallowMagazines", []);
 {
 	private _disallowedMagazine = _x;
 	{

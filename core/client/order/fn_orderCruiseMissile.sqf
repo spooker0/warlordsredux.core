@@ -1,3 +1,4 @@
+#include "includes.inc"
 private _lockState = uiNamespace getVariable ["WL2_cruiseMissileLockState", "NONE"];
 if (_lockState != "NONE") exitWith {
     systemChat "Cruise missile strike in progress. Please wait.";

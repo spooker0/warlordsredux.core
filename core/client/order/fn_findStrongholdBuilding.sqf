@@ -1,3 +1,4 @@
+#include "includes.inc"
 private _buildings = nearestObjects [player, ["House", "Building"], 50, true];
 _buildings = _buildings select {
     private _boundingBox = boundingBoxReal _x;

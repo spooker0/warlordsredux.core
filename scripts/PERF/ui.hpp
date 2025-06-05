@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 class PERF_Menu {
     idd = PERF_DISPLAY;
     movingEnable = true;

@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 private _endEffect = {
     "Restrict" cutText ["", "PLAIN"];
     player setVariable ["WL_zoneRestrictKillTime", -1];

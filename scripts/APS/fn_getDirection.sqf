@@ -1,3 +1,4 @@
+#include "includes.inc"
 private _v = _this;
 private _t = allTurrets [_v, false];
 private _d = 0;

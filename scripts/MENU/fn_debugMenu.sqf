@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 params ["_text"];
 
 if !(getPlayerUID player in getArray (missionConfigFile >> "adminIDs")) exitWith {};

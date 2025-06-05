@@ -1,3 +1,4 @@
+#include "includes.inc"
 WL2_announcerQueue = [];
 "Initialized" call WL2_fnc_announcer;
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];

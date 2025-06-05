@@ -1,3 +1,4 @@
+#include "includes.inc"
 if (!hasInterface) exitWith {};
 
 while { !BIS_WL_missionEnd } do {

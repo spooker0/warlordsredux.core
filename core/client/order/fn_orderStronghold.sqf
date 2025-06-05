@@ -1,3 +1,4 @@
+#include "includes.inc"
 "RequestMenu_close" call WL2_fnc_setupUI;
 
 private _findCurrentSector = (BIS_WL_sectorsArray # 0) select {

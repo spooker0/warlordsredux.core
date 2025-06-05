@@ -1,3 +1,4 @@
+#include "includes.inc"
 if (isNil "WL2_announcerQueue") exitWith {};
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];

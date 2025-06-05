@@ -1,5 +1,4 @@
-#include "squad_constants.inc"
-
+#include "includes.inc"
 params ["_control", "_selectionPath"];
 
 private _squadManager = missionNamespace getVariable ["SQUAD_MANAGER", []];

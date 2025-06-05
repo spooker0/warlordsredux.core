@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 private _captureDisplay = uiNamespace getVariable ["RscWLCaptureDisplay", objNull];
 if (isNull _captureDisplay) then {
 	"CaptureDisplay" cutRsc ["RscWLCaptureDisplay", "PLAIN", -1, true, true];

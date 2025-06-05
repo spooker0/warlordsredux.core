@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 params ["_score"];
 
 private _previousLevel = ["getLevel"] call WLC_fnc_getLevelInfo;

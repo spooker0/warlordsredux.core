@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 params ["_control", "_lbCurSel"];
 
 private _display = findDisplay WLC_DISPLAY;

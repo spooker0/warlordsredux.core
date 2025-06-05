@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_side"];
 
 private _varName = format ["BIS_WL_forfeitVotingSince_%1", _side];

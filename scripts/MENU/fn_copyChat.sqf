@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 params ["_control", "_limit"];
 
 private _display = ctrlParent _control;

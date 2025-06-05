@@ -1,3 +1,4 @@
+#include "includes.inc"
 if (isDedicated) exitWith {};
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];

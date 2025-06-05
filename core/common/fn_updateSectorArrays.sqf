@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_caller", ["_fullRecalc", false]];
 
 if (_caller == "server") then {

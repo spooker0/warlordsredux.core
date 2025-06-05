@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_fastTravelMode"];
 
 "Destination" call WL2_fnc_announcer;

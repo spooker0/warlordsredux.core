@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_sector", ["_replacing", false]];
 
 playSound "AddItemOK";

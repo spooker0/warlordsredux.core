@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_originalPosition", "_limitDistance", "_ignoreSector", "_asset"];
 
 if (vehicle player != player) exitWith {

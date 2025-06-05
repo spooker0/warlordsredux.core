@@ -1,8 +1,8 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_class"];
 
-private _spawnClass = missionNamespace getVariable ["WL2_spawnClass", createHashMap] getOrDefault [_class, _class];
+private _spawnClass = WL_ASSET(_class, "spawn", _class);
+
 if (getNumber (configFile >> "CfgVehicles" >> _spawnClass >> "isUav") == 1) then {
     private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
     private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];

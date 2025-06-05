@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 BIS_WL_highlightedSector = objNull;
 BIS_WL_hoverSamplePlayed = false;
 WL_SectorActionTarget = objNull;

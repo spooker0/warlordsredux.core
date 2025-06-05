@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 params ["_display"];
 private _chatHistoryList = _display displayCtrl MODR_CHAT_HISTORY;
 while { !isNull _display } do {

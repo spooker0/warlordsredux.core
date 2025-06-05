@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_unit", "_killer", "_instigator"];
 
 private _isSpawnedAsset = _unit getVariable ["WL_spawnedAsset", false];
@@ -49,8 +50,7 @@ if (isNull _responsiblePlayer) exitWith {};
 private _unitCost = if (_unit isKindOf "Man") then {
     if (_isUnitPlayer) then { 60 } else { 30 };
 } else {
-    private _costMap = missionNamespace getVariable ["WL2_costs", createHashMap];
-    _costMap getOrDefault [_assetActualType, 0];
+    WL_ASSET(_assetActualType, "cost", 0);
 };
 
 private _killerActualType = _killer getVariable ["WL2_orderedClass", typeOf _killer];
@@ -77,8 +77,7 @@ if (!isNull _responsiblePlayer && { isPlayer [_responsiblePlayer] }) then {
         private _killReward = if (_unit isKindOf "Man") then {
             if (_isUnitPlayer) then { 60 } else { 30 };
         } else {
-            private _killRewardMap = missionNamespace getVariable ["WL2_killRewards", createHashMap];
-            _killRewardMap getOrDefault [_assetActualType, 0];
+            WL_ASSET(_assetActualType, "killReward", 0);
         };
 
         private _spotReward = round (_killReward / 8.0);

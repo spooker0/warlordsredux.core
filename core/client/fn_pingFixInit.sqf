@@ -1,3 +1,4 @@
+#include "includes.inc"
 (findDisplay 46) displayAddEventHandler ["KeyDown", {
 	if (inputAction "TacticalPing" > 0) then {
 		["TaskMapPing"] call WLT_fnc_taskComplete;

@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_target", "_conditionName"];
 
 switch (_conditionName) do {

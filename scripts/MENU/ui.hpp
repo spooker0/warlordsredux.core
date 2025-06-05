@@ -1,8 +1,4 @@
-#include "constants.inc"
-
-import RscEdit;
-import RscCheckBox;
-
+#include "includes.inc"
 class MENU_Settings {
     idd = MENU_DISPLAY;
     movingEnable = true;

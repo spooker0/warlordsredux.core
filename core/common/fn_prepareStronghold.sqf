@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_stronghold", "_currentSector"];
 
 _stronghold setDamage 0;

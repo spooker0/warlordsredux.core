@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 _display = uiNamespace getVariable ["BIS_WL_purchaseMenuDisplay", displayNull];
 
 if (isNull _display) exitWith {};
@@ -36,7 +35,7 @@ for "_i" from 0 to ((lbSize _purchase_items) - 1) do {
 	_details set [7, _category];
 	_availability = _details call WL2_fnc_purchaseMenuAssetAvailability;
 
-	private _variant = missionNamespace getVariable ["WL2_variant", createHashMap] getOrDefault [_className, 0];
+	private _variant = WL_ASSET(_className, "variant", 0);
 	if !(_availability # 0) then {
 		private _color = if (_variant != 0) then {
 			[0.5, 0.42, 0.25, 1]

@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 private _dialog = (findDisplay 12) createDisplay "WL_MapButtonDisplay";
 
 getMousePosition params ["_mouseX", "_mouseY"];

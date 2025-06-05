@@ -1,3 +1,4 @@
+#include "includes.inc"
 private _vehicle = cameraOn;
 
 waitUntil {

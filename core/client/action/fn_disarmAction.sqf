@@ -1,3 +1,4 @@
+#include "includes.inc"
 [
     player,
     "<t color='#00ff00'>Stop Demolition</t>",

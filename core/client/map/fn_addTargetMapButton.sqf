@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_textLabel", "_action", "_actionClose", ["_actionCondition", ""], ["_costCondition", []]];
 // _costCondition = [amount, name, category]
 

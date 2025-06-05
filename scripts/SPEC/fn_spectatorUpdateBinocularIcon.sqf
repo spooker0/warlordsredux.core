@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_show"];
 
 private _projectileDisplay = uiNamespace getVariable ["RscWLSpectatorProjectileDisplay", displayNull];

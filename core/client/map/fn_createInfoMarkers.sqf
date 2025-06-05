@@ -1,3 +1,4 @@
+#include "includes.inc"
 private _menuKey = actionKeysNames ["gear", 1, "Combo"];
 private _pingKey = actionKeysNames ["TacticalPing", 1, "Combo"];
 private _pttKey = actionKeysNames ["pushToTalk", 1, "Combo"];

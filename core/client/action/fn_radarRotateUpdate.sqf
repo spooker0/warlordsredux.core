@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset", "_radarActionID"];
 
 private _radarRotation = _asset getVariable ["radarRotation", false];

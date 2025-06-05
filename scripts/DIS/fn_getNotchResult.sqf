@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 params ["_target", "_launcher", ["_projectile", objNull]];
 
 private _targetVelocity = velocity _target;

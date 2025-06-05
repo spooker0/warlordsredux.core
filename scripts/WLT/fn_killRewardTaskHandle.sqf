@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_customText", "_unitType"];
 
 if (isNil "WLT_stats") exitWith {};
@@ -6,8 +7,7 @@ if (_customText == "Revived Teammate") then {
 	WLT_stats set ["Revives", (WLT_stats getOrDefault ["Revives", 0]) + 1];
 };
 
-private _spawnTypeMap = missionNamespace getVariable ["WL2_spawnClass", createHashMap];
-private _spawnUnitType = _spawnTypeMap getOrDefault [_unitType, _unitType];
+private _spawnUnitType = WL_ASSET(_unitType, "spawn", _unitType);
 
 if (_spawnUnitType isKindOf "Man") then {
 	WLT_stats set ["Kills", (WLT_stats getOrDefault ["Kills", 0]) + 1];
@@ -16,11 +16,10 @@ if (_spawnUnitType isKindOf "Air") then {
 	WLT_stats set ["Air Vehicle Kills", (WLT_stats getOrDefault ["Air Vehicle Kills", 0]) + 1];
 };
 
-private _vehicleApsMap = missionNamespace getVariable ["WL2_aps", createHashMap];
-private _apsType = _vehicleApsMap getOrDefault [_unitType, -1];
-if (_apsType >= 1) then {
+private _apsType = WL_ASSET(_unitType, "aps", -1);
+if (_apsType >= 2) then {
 	WLT_stats set ["Armor Kills", (WLT_stats getOrDefault ["Armor Kills", 0]) + 1];
-	if (_apsType == 2) then {
+	if (_apsType == 3) then {
 		WLT_stats set ["Heavy Armor Kills", (WLT_stats getOrDefault ["Heavy Armor Kills", 0]) + 1];
 	};
 } else {

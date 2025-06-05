@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_sector"];
 
 private _sideArr = [west, east, independent];
@@ -84,7 +83,7 @@ private _eligibleEntitiesInArea = _allInArea select {
 	};
 };
 
-private _vehicleCapValueList = serverNamespace getVariable "WL2_cappingValues";
+private _assetData = WL_ASSET_DATA;
 private _disallowManList = ["B_UAV_AI", "O_UAV_AI", "I_UAV_AI"];
 private _strongholdMarker = _sector getVariable ["WL_strongholdMarker", ""];
 private _sideCapValues = createHashMap;
@@ -112,7 +111,7 @@ private _sideCapValues = createHashMap;
 		private _crewCount = count _aliveCrew;
 		if (_crewCount > 0) then {
 			private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
-			_vehicleCapValueList getOrDefault [_assetActualType, 0];
+			WL_ASSET_FIELD(_assetData, _assetActualType, "capValue", 0);
 		} else {
 			0;
 		};

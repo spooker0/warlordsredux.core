@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_friendlyFireIncidents"];
 
 private _uid = getPlayerUID player;

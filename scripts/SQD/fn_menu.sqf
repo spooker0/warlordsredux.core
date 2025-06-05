@@ -1,9 +1,10 @@
+#include "includes.inc"
 /*
     Author: Rook, MrThomasM
     Description: Opens the squad menu.
 */
 
-#include "squad_constants.inc"
+#include "includes.inc"
 params ["_firstStart"];
 
 if (_firstStart && isNull (findDisplay MENU)) then {

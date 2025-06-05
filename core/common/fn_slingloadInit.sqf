@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset", "_assetToLoad"];
 
 private _slingRopePoints = getArray (configFile >> "CfgVehicles" >> typeOf _assetToLoad >> "slingLoadCargoMemoryPoints");

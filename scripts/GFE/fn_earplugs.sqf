@@ -1,9 +1,9 @@
+#include "includes.inc"
 //________________	Author : GEORGE FLOROS [GR]	___________	29.03.19	___________
 /*
 ________________	GF Earplugs Script - Mod	________________
 https://forums.bohemia.net/forums/topic/215844-gf-earplugs-script-mod/
 */
-
 params ["_displayNumber"];
 
 disableSerialization;

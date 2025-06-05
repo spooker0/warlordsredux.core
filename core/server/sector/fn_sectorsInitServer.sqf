@@ -1,9 +1,8 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 private _baseData =
 #if WL_OVERRIDE_BASES
 	BIS_WL_allSectors select {
-		_x getVariable ["WL2_name", ""] in ["Airbase", "AAC Airfield"];
+		_x getVariable ["WL2_name", ""] in ["Airbase", "Kavala Castle"];
 	};
 #else
 	[] call WL2_fnc_calcHomeBases;
@@ -153,7 +152,7 @@ waitUntil {!isNil "WL2_base1" && {!isNil "WL2_base2"}};
 		_x getVariable ["WL2_name", ""] in ["Poliakko", "Alikampos", "Lakka"];
 	};
 	private _eastSectors = BIS_WL_allSectors select {
-		_x getVariable ["WL2_name", ""] in ["Stavros", "Neochori", "Katalaki", "USS Freedom"];
+		_x getVariable ["WL2_name", ""] in ["Stavros", "Neochori", "Katalaki"];
 	};
 	{
 		_x setVariable ["BIS_WL_revealedBy", [west], true];

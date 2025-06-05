@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_giveTent"];
 
 private _tentActionText = "<t color='#ff0000'>Place Fast Travel Tent</t>";

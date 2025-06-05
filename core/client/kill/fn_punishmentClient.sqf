@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_punishIncident"];
 
 private _uid = getPlayerUID player;

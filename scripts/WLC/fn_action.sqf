@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 params ["_flag"];
 
 private _index = _flag addAction [

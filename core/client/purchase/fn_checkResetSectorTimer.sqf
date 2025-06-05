@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 private _sectorSelectedTimestampVar = format ["BIS_WL_sectorSelectedTimestamp_%1", BIS_WL_playerSide];
 private _targetResetVotingVar = format ["BIS_WL_targetResetVotingSince_%1", BIS_WL_playerSide];
 

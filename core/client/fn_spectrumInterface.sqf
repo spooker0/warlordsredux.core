@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 if (isDedicated) exitWith {};
 
 uiNamespace setVariable ["WL_SpectrumIcons", []];

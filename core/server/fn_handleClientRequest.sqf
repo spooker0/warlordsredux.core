@@ -1,10 +1,11 @@
+#include "includes.inc"
 params [["_sender", objNull, [objNull]], ["_action", "", [""]], "_param1", "_param2", "_param3", "_param4", "_param5"];
 
 if (isNull _sender) exitWith {};
 if !(isServer) exitWith {};
 if (remoteExecutedOwner != (owner _sender)) exitWith {};
 
-#include "..\warlords_constants.inc"
+
 
 private _uid = getPlayerUID _sender;
 
@@ -22,8 +23,8 @@ if (_action == "orderAsset") exitWith {
 	private _position = _param2;
 	private _orderedClass = _param3;
 
-	private _costMap = missionNamespace getVariable ["WL2_costs", createHashMap];
-	private _cost = _costMap getOrDefault [_orderedClass, 50001];
+	private _cost = WL_ASSET(_orderedClass, "cost", 50001);
+
 	private _hasFunds = (_playerFunds >= _cost);
 	if (_hasFunds) then {
 		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
@@ -64,8 +65,8 @@ if (_action == "resetVehicle") exitWith {
 		_asset setVectorDirAndUp _direction;
 
 		private _orderedClass = _asset getVariable ["WL2_orderedClass", typeOf _asset];
-		private _demolishableHashMap = missionNamespace getVariable ["WL2_demolishable", createHashMap];
-		if (_demolishableHashMap getOrDefault [_orderedClass, false]) then {
+		private _isDemolishable = WL_ASSET(_orderedClass, "demolishable", 0) > 0;
+		if (_isDemolishable) then {
 			_asset setPosWorld _position;
 		} else {
 			_asset setVehiclePosition [_position, [], 0, "CAN_COLLIDE"];
@@ -219,7 +220,7 @@ if (_action == "targetReset") exitWith {
 };
 
 if (_action == "orderAI") exitWith {
-	_cost = ((missionNamespace getVariable "WL2_costs") getOrDefault [_param1, 150]);
+	private _cost = WL_ASSET(_param1, "cost", 150);
 	[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
 };
 
@@ -244,9 +245,6 @@ if (_action == "fundsTransfer") exitWith {
 		if !(_sender getVariable ["WL2_afk", false]) then {
 			private _recipientUid = getPlayerUID _recipient;
 			[_transferAmount, _recipientUid] call WL2_fnc_fundsDatabaseWrite;
-
-      		private _oldTransfer = serverNamespace getVariable [format ["BIS_WL_WLAC_%1", _recipientUid], 0];
-		  	serverNamespace setVariable [format ["BIS_WL_WLAC_%1", _recipientUid], _oldTransfer + _transferAmount];
 
 			private _sendUid = getPlayerUID _sender;
 			[-(_transferAmount + _transferCost), _sendUid] call WL2_fnc_fundsDatabaseWrite;

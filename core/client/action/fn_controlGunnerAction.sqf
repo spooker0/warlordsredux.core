@@ -1,4 +1,4 @@
-#include "..\..\warlords_constants.inc"
+#include "includes.inc"
 params ["_asset"];
 
 private _actionId = _asset addAction [

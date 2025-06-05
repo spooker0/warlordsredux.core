@@ -1,3 +1,4 @@
+#include "includes.inc"
 if (isNil "SQUAD_MANAGER") then {
     SQUAD_MANAGER = [];
     // Structure:

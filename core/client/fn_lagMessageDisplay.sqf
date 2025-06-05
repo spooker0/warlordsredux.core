@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_message"];
 
 private _display = uiNamespace getVariable ["RscLagMessageDisplay", objNull];

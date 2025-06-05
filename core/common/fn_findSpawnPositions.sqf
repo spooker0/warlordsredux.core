@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_area", ["_rimWidth", 0], ["_infantryOnly", true]];
 if !(_area isEqualType []) then {_area = [_area]};
 

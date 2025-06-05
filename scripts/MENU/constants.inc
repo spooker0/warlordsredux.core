@@ -1,5 +1,3 @@
-#include "..\..\core\warlords_constants.inc"
-
 #define MENU_DISPLAY 32000
 #define MENU_CLOSE_BUTTON 32001
 #define MENU_CONTROLS_GROUP 32002

@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_target"];
 
 private _displayName = [_target] call WL2_fnc_getAssetTypeName;

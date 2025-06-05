@@ -1,3 +1,4 @@
+#include "includes.inc"
 APS_projectileConfig = createHashMap;
 
 private _projectileConfig = missionConfigFile >> "WLProjectilesConfig";

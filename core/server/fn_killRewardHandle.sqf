@@ -1,11 +1,10 @@
-#include "..\warlords_constants.inc"
+#include "includes.inc"
 params ["_unit", "_responsibleLeader"];
 
 if (!isPlayer _responsibleLeader) exitWith {};
 
 private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
-private _killRewardMap = missionNamespace getVariable ["WL2_killRewards", createHashMap];
-private _killReward = _killRewardMap getOrDefault [_assetActualType, 0];
+private _killReward = WL_ASSET(_assetActualType, "killReward", 0);
 
 if (typeof _unit == "RuggedTerminal_01_communications_hub_F") then {
 	private _unitOwnerSide = _unit getVariable ["WL2_forwardBaseOwner", sideUnknown];

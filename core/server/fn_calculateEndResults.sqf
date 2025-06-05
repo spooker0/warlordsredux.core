@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 private _stats = missionNamespace getVariable ["WL_stats", createHashMap];
 private _roundStats = [_stats, "Round Stats"] call WL2_fnc_generateEndResultPage;
 missionNamespace setVariable ["WL_endScreen", _roundStats, true];

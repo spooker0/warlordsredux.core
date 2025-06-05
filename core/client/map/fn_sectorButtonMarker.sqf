@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_sector", "_side"];
 
 private _sectorMarker = _sector getVariable [format ["WL2_MapMarker_%1", _side], "unknown"];

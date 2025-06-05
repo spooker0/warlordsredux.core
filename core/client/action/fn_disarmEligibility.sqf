@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_start"];
 
 if (speed player > 5) exitWith {

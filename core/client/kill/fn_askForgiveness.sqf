@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_killer", "_victim"];
 
 private _assetType = [_victim] call WL2_fnc_getAssetTypeName;

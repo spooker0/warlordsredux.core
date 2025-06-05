@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset", "_actionID"];
 
 private _actionColor = if ([_asset] call APS_fnc_active) then {

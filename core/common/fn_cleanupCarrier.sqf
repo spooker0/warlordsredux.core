@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 private _carriers = allMissionObjects "Land_Carrier_01_base_F";
 
 private _changeAttackStatus = {

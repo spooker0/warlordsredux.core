@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_unit"];
 
 if ([_unit] call WL2_fnc_isScannerMunition) exitWith {

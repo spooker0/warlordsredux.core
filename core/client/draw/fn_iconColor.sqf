@@ -1,3 +1,4 @@
+#include "includes.inc"
 params [["_unit", objNull]];
 
 private _cachedColor = _unit getVariable ["WL2_iconColor", []];

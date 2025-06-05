@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_startPos", "_target", "_endPos", "_unit"];
 
 if (isNull _target) then {

@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset", "_side"];
 
 if (!isRemoteExecutedJIP && side group player != _side) then {

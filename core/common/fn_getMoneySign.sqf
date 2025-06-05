@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_team"];
 
 switch (_team) do {

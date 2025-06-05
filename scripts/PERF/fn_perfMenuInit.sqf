@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 private _display = findDisplay PERF_DISPLAY;
 if (isNull _display) then {
     _display = createDialog ["PERF_Menu", true];

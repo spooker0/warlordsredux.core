@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_side"];
 
 private _purchaseable = [];
@@ -75,7 +74,7 @@ private _purchaseable = [];
 		};
 	};
 
-	private _descriptionMap = missionNamespace getVariable ["WL2_descriptions", createHashMap];
+	private _assetData = WL_ASSET_DATA;
 
 	private _preset = missionConfigFile >> "CfgWLRequisitionPresets" >> "A3ReduxAll";
 	{
@@ -169,7 +168,7 @@ private _purchaseable = [];
 					_assetText = ((_assetText splitString "=") # 0) + ".";
 				};
 
-				private _description = _descriptionMap getOrDefault [_className, ""];
+				private _description = WL_ASSET_FIELD(_assetData, _className, "description", "");
 				if (_description != "") then {
 					_assetText = _description;
 				};
@@ -181,7 +180,7 @@ private _purchaseable = [];
 				_assetText;
 			};
 			default {
-				_descriptionMap getOrDefault [_className, ""];
+				WL_ASSET_FIELD(_assetData, _className, "description", "")
 			};
 		};
 

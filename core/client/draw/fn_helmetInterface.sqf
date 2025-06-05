@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 if (isDedicated) exitWith {};
 
 uiNamespace setVariable ["WL_HelmetInterfaceLaserIcons", []];
@@ -225,7 +224,7 @@ addMissionEventHandler ["Draw3D", {
 }];
 
 0 spawn {
-    private _categoryMap = missionNamespace getVariable ["WL2_categories", createHashMap];
+    private _assetData = WL_ASSET_DATA;
     private _missileTypeData = createHashMapFromArray [
         ["M_Zephyr", "ZEPHYR"],
         ["M_Titan_AA_long", "TITAN"],
@@ -315,7 +314,7 @@ addMissionEventHandler ["Draw3D", {
         // uiNamespace setVariable ["WL_HelmetInterfaceFlareIcons", _flareIcons];
 
         private _vehicleActualType = _vehicle getVariable ["WL2_orderedClass", typeOf _vehicle];
-        private _vehicleCategory = _categoryMap getOrDefault [_vehicleActualType, "Other"];
+        private _vehicleCategory = WL_ASSET_FIELD(_assetData, _vehicleActualType, "category", "Other");
         private _samIcons = [];
         if (_vehicleCategory == "AirDefense") then {
             private _samMissiles = (8 allObjects 2) select {
@@ -526,7 +525,7 @@ addMissionEventHandler ["Draw3D", {
                 };
 
                 private _assetActualType = _target getVariable ["WL2_orderedClass", typeof _target];
-                private _assetCategory = _categoryMap getOrDefault [_assetActualType, "Other"];
+                private _assetCategory = WL_ASSET_FIELD(_assetData, _assetActualType, "category", "Other");
 
                 private _targetIcon = "";
                 private _targetIconSize = 0.8;
@@ -609,13 +608,11 @@ addMissionEventHandler ["Draw3D", {
         // };
         private _vehicle = cameraOn;
 
-        private _allowedVehicles = missionNamespace getVariable ["WL2_hasHMD", createHashMap];
         private _vehicleActualType = _vehicle getVariable ["WL2_orderedClass", typeOf _vehicle];
-        private _inWhitelistedVehicle = _allowedVehicles getOrDefault [_vehicleActualType, false];
+        private _inWhitelistedVehicle = WL_ASSET(_vehicleActualType, "hasHMD", 0) > 0;
 
         private _sideVehiclesVars = format ["BIS_WL_%1OwnedVehicles", BIS_WL_playerSide];
         private _sideVehicles = missionNamespace getVariable [_sideVehiclesVars, []];
-        private _hasAWACSMap = missionNamespace getVariable ["WL2_hasAWACS", createHashMap];
 
         private _friendlyNetwork = _sideVehicles select {
             private _distance = _vehicle distance _x;

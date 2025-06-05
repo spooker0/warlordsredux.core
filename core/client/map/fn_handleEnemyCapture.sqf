@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_sector"];
 
 private _marker = (_sector getVariable "BIS_WL_markers") # 1;

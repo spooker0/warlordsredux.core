@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset"];
 
 private _isInCarrierSector = count (BIS_WL_allSectors select {

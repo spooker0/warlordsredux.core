@@ -1,3 +1,4 @@
+#include "includes.inc"
 private _sectorConfig = missionConfigFile >> "CfgWarlordSectors";
 private _sectors = "true" configClasses _sectorConfig;
 

@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 private _display = findDisplay MENU_DISPLAY;
 if (isNull _display) then {
     _display = createDialog ["MENU_Settings", true];

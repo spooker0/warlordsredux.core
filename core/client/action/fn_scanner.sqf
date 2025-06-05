@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_asset", "_actionId", "_awacs", "_iteration", ["_radiusOverride", -1]];
 
 private _scannerOn = _asset getVariable ["WL_scannerOn", false];

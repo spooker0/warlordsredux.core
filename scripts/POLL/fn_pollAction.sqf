@@ -1,3 +1,4 @@
+#include "includes.inc"
 private _activePoll = missionNamespace getVariable ["POLL_ActivePoll", []];
 if (count _activePoll == 0) exitWith {};
 if (_activePoll # 2 != -1) exitWith {};

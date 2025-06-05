@@ -1,3 +1,4 @@
+#include "includes.inc"
 ["Preload"] call BIS_fnc_arsenal;
 
 private _playerSide = str BIS_WL_playerSide;

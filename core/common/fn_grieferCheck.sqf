@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_class", "_position", "_direction", "_uid", "_objsToIgnore"];
 
 private _simulatedObject = [_class, _position, 0, true, false, true] call BIS_fnc_createSimpleObject;

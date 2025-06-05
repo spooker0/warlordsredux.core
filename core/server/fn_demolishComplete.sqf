@@ -1,10 +1,10 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_target", "_caller", "_explosive", "_explPos"];
 
 if !(isNull _caller) then {
     [_target, _caller] call WL2_fnc_killRewardHandle;
 };
+_target setVariable ["WL2_alreadyHandled", true];
 _target setVariable ["WL_lastHitter", _caller];
 
 private _explosion = createVehicle [_explosive, _explPos, [], 0, "FLY"];

@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 // Ongoing checks for sector target
 0 spawn {
     private _lastTargetFriendly = objNull;

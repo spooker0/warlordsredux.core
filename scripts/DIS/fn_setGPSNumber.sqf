@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 params ["_control", "_number"];
 
 private _num1 = floor (_number / 100);

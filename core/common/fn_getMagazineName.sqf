@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_magazine"];
 
 private _menuTextOverrides = call WLM_fnc_menuTextOverrides;

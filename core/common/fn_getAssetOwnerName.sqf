@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset"];
 
 private _ownerName = _asset getVariable ["WL2_assetOwnerName", ""];

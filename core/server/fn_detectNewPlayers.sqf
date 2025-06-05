@@ -1,3 +1,4 @@
+#include "includes.inc"
 private _previousAIMax = -1;
 missionNamespace setVariable ["WL2_readyList", []];
 while { !BIS_WL_missionEnd } do {

@@ -1,6 +1,4 @@
-#include "..\warlords_constants.inc"
-#include "\a3\ui_f\hpp\definedikcodes.inc"
-
+#include "includes.inc"
 params ["_key"];
 
 private _canBuy = uiNamespace getVariable ["WL2_canBuy", true];

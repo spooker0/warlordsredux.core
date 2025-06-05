@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset"];
 
 _asset addEventHandler ["Hit", {

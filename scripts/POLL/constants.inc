@@ -1,4 +1,4 @@
-#include "..\..\core\warlords_constants.inc"
+
 
 #define POLL_DURATION 45
 

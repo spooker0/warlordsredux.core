@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_sectorMarkerPair", "_drawSide"];
 private _sector = _sectorMarkerPair # 0;
 private _marker = _sectorMarkerPair # 1;

@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_sector"];
 
 private _area = _sector getVariable "WL2_objectArea";

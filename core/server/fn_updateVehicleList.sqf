@@ -1,3 +1,4 @@
+#include "includes.inc"
 while { !BIS_WL_missionEnd } do {
     private _westOwnedVehicles = [];
     private _eastOwnedVehicles = [];

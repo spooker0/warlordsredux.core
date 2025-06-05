@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 player addAction [
     "<t color='#ff0000'>NOT AFK</t>",
     {

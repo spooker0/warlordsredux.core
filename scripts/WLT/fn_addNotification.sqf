@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_notification"];
 
 if (WLT_notifications == 0) then {

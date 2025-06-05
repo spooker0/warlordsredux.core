@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_vehicle", "_angle", "_indicator", ["_gunner", objNull]];
 
 if (!isNull _gunner) then {

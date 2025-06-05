@@ -1,3 +1,4 @@
+#include "includes.inc"
 private _setLevel = {
 	params ["_levelDisplay"];
 	if (player getVariable ["WL_playerLevel", "Recruit"] == _levelDisplay) exitWith {};

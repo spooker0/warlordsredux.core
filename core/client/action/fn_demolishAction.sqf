@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 [
     player,
     "<t color='#ff0000'>Begin Demolition</t>",
@@ -11,7 +10,7 @@
     {
         params ["_target", "_caller", "_actionId", "_arguments", "_frame", "_maxFrame"];
         if (_frame % 4 == 0) then {
-            playSound3D ["\a3\sounds_f\arsenal\tools\minedetector_beep_01.wss", player, false, getPosASL player, 1, 1, 200];
+            playSound3D ["\a3\sounds_f\arsenal\tools\minedetector_beep_01.wss", player, false, getPosASL player, 1, 1, 0];
         };
     },
     {

@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset", "_caller", "_slingloading"];
 if (!alive _asset) exitWith {
     [false, [], [0, 0, 0]];
@@ -27,11 +28,13 @@ private _hasLoadedItem = !isNull _loadedItem || count _loadedVehicles > 0 || !is
 private _nearLoadableEntities = (_asset nearObjects 30) select {
     (isNull attachedTo _x) && (count ropesAttachedTo _x == 0);
 };
-private _loadableHashmap = missionNamespace getVariable ["WL2_loadable", createHashMap];
+
+private _assetData = WL_ASSET_DATA;
 private _nearLoadable = _nearLoadableEntities select {
     private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
     private _access = [_x, _caller, "full"] call WL2_fnc_accessControl;
-    (_assetActualType in _loadableHashmap) && (_access # 0);
+    private _loadable = WL_ASSET_FIELD(_assetData, _assetActualType, "loadable", []);
+    count _loadable > 0 && _access # 0;
 };
 private _hasNearLoadable = count _nearLoadable > 0;
 
@@ -46,7 +49,8 @@ private _sortedNearLoadable = if (_hasNearLoadable) then {
 private _offset = if (_hasNearLoadable) then {
     private _loadable = _sortedNearLoadable # 0;
     private _loadableType = _loadable getVariable ["WL2_orderedClass", typeOf _loadable];
-    _loadableHashmap getOrDefault [_loadableType, [0, 0, 1]];
+    private _defaultArray = [0, 0, 1];
+    WL_ASSET_FIELD(_assetData, _loadableType, "loadable", _defaultArray);
 } else {
     [0, 0, 1];
 };

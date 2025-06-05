@@ -1,3 +1,4 @@
+#include "includes.inc"
 if (player getVariable ["WL2_rappelling", false]) exitWith {
     objNull
 };

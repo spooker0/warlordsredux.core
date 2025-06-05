@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 private _vehicles = (nearestObjects [player, [], 20, true]) select {
     alive _x;
 } select {

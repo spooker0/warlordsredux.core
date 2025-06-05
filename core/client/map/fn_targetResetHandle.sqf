@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 if !(BIS_WL_playerSide in BIS_WL_competingSides) exitWith {};
 
 BIS_WL_playerSide spawn {

@@ -1,3 +1,4 @@
+#include "includes.inc"
 private _radarDisplay = uiNamespace getVariable ["RscCustomInfoSensors", displayNull];
 private _existingControl = _radarDisplay displayCtrl 107;
 private _existingPosition = ctrlPosition _existingControl;

@@ -1,8 +1,7 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_orderedClass", "_cost", "_requirements"];
 
-private _class = missionNamespace getVariable ["WL2_spawnClass", createHashMap] getOrDefault [_orderedClass, _orderedClass];
+private _class = WL_ASSET(_orderedClass, "spawn", _orderedClass);
 
 player setVariable ["BIS_WL_isOrdering", true, [2, clientOwner]];
 

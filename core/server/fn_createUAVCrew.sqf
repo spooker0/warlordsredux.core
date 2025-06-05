@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_pos", "_class", "_orderedClass", "_direction", "_exactPosition", "_sender"];
 
 private _vehCfg = configFile >> "CfgVehicles" >> _class;

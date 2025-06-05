@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_sector", "_isNext"];
 private _side = BIS_WL_playerSide;
 private _mapMarkerVar = format ["WL2_MapMarker_%1", _side];

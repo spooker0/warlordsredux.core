@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset"];
 
 private _actionID = _asset addAction [

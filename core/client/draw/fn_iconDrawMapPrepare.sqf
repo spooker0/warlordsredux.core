@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 // _drawMode: 0 = normal, 1 = spectator, 2 = stored
 params [["_map", controlNull], ["_drawMode", 0]];
 
@@ -211,7 +210,7 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 } forEach (_mapData getOrDefault ["ewNetworks", []]);
 
 // Draw scanner and scanned units
-private _hasAWACSMap = missionNamespace getVariable ["WL2_hasAWACS", createHashMap];
+private _assetData = WL_ASSET_DATA;
 private _scale = 6.4 * worldSize / 8192 * ctrlMapScale _map;
 
 private _scanners = if (_drawAll) then {
@@ -228,7 +227,7 @@ private _scanners = if (_drawAll) then {
     private _scanRadius = _x getVariable ["WL_scanRadius", 100];
 	if (_scanRadius == 0) then { continue; };
     private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
-	if (_hasAWACSMap getOrDefault [_assetActualType, false]) then {
+	if (WL_ASSET_FIELD(_assetData, _assetActualType, "hasAWACS", 0) > 0) then {
 		private _size = _scanRadius / _scale;
 		_drawIcons pushBack [
 			"\a3\ui_f\data\IGUI\RscCustomInfo\Sensors\Sectors\sector120_ca.paa",

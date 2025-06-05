@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_side"];
 
 if (BIS_WL_playerSide != _side) exitWith {};

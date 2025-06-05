@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_unit", "_responsibleLeader"];
 
 private _uid = _unit getVariable ["BIS_WL_ownerAsset", "123"];

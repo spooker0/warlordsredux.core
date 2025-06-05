@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 WL_LoadingState = 0;
 0 spawn {
 	private _startTime = serverTime;

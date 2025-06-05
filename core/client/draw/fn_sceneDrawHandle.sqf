@@ -1,3 +1,4 @@
+#include "includes.inc"
 addMissionEventHandler ["Draw3D", {
 	if !(isNull (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", BIS_WL_playerSide])) then {
 		drawIcon3D [

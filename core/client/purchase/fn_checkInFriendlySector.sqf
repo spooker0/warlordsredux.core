@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params [["_cost", 0], ["_requirements", []]];
 
 private _findCurrentSector = (BIS_WL_sectorsArray # 0) select {

@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_projectile", "_flightMode"];
 
 if (inputAction "defaultAction" > 0) then {
@@ -90,15 +91,13 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
     };
 
     private _fuelRemaining = switch (_flightMode) do {
-        case 0: {
+        case 0;
+        case 3: {
             100 * (_timeToLive - (serverTime - _startTime)) / _timeToLive;
         };
         case 1;
         case 2: {
             100 - _fuelUsed
-        };
-        case 3: {
-            (100 - _fuelUsed) min (100 * (_timeToLive - (serverTime - _startTime)) / _timeToLive);
         };
     };
 
@@ -193,9 +192,11 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
             _projectileSpeed = velocityModelSpace _projectile # 1;
         };
         case 3: {
-            private _projectileSpeedDragged = _projectileSpeed - (serverTime - _startTime) * 5;
+            private _projectileSpeedDragged = _projectileSpeed - (serverTime - _startTime) * 0.75;
             _projectile setVectorDirAndUp [_forward, _up];
-            _projectile setVelocityModelSpace [0, _projectileSpeedDragged max 0, 0];
+            if (_projectileSpeedDragged > 10) then {
+                _projectile setVelocityModelSpace [0, _projectileSpeedDragged max 10, 0];
+            };
         };
     };
 

@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset"];
 
 private _targetIcon = getText (configFile >> "CfgVehicles" >> typeOf _asset >> "picture");

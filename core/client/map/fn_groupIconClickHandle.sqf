@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 private _map = uiNamespace getVariable ["BIS_WL_mapControl", controlNull];
 if (isNull _map) exitWith {};
 

@@ -1,7 +1,4 @@
-#include "constants.inc"
-
-import RscShortcutButton;
-
+#include "includes.inc"
 class RscPollOption: RscShortcutButton {
     animTextureNormal = "#(argb,8,8,3)color(1,1,1,1)";
 	animTextureDisabled = "#(argb,8,8,3)color(1,1,1,1)";

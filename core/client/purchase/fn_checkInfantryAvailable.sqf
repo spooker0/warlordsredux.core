@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_class"];
 
 if (_class isKindOf "Man" && BIS_WL_matesAvailable <= 0) exitWith {

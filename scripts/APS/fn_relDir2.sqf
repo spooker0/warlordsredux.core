@@ -1,3 +1,4 @@
+#include "includes.inc"
 // Compare the directions of a projectile and a vehicle/turret facing and return relative direction based on turret facing
 private _id=_this select 0;
 private _v=_this select 1;

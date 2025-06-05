@@ -1,4 +1,4 @@
-#include "..\warlords_constants.inc"
+#include "includes.inc"
 params ["_targets", "_timeout"];
 private _side = side group player;
 {

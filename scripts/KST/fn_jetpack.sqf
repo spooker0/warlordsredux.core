@@ -1,3 +1,4 @@
+#include "includes.inc"
 BIS_WL_playerSide call WL2_fnc_parsePurchaseList;
 
 0 spawn {

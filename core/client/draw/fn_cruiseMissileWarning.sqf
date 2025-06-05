@@ -1,3 +1,4 @@
+#include "includes.inc"
 private _instructionDisplay = uiNamespace getVariable ["RscWLCruiseMissileDisplay", displayNull];
 if (isNull _instructionDisplay) then {
     "cruiseMissileWarning" cutRsc ["RscWLCruiseMissileDisplay", "PLAIN", -1, true, true];

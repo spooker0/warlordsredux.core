@@ -1,5 +1,4 @@
-#include "..\..\core\warlords_constants.inc"
-
+#include "includes.inc"
 private _alreadyAdded = _this getVariable ["APS_fireEventHandlerAdded", false];
 if (_alreadyAdded) exitWith {};
 _this setVariable ["APS_fireEventHandlerAdded", true];
@@ -11,11 +10,13 @@ _this addEventHandler ["Fired", {
 	if (!(local _gunner) && !(isManualFire _unit)) exitWith { true };	// Disable and restrict for cwis
 
 	private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
-	private _ammoOverridesHashMap = missionNamespace getVariable ["WL2_ammoOverrides", createHashMap];
-	private _assetAmmoOverrides = _ammoOverridesHashMap getOrDefault [_assetActualType, createHashMap];
-	private _projectileAmmoOverride = _assetAmmoOverrides getOrDefault [_ammo, [_ammo]];
-	if (_projectileAmmoOverride # 0 != _ammo) then {
-		_projectile setVariable ["APS_ammoOverride", _projectileAmmoOverride # 0];
+	private _projectileAmmoOverrides = WL_ASSET(_assetActualType, "ammoOverrides", []);
+	_projectileAmmoOverrides = _projectileAmmoOverrides select {
+		_x # 0 == _ammo
+	};
+	if (count _projectileAmmoOverrides > 0) then {
+		private _projectileAmmoOverride = _projectileAmmoOverrides # 0;
+		_projectile setVariable ["APS_ammoOverride", _projectileAmmoOverride # 1 # 0];
 	};
 
 	private _apsProjectileType = _projectile getVariable ["APS_ammoOverride", typeOf _projectile];

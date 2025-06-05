@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 private _findCurrentSector = (BIS_WL_sectorsArray # 0) select {
     player inArea (_x getVariable "objectAreaComplete")
 };

@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset"];
 
 private _dazzlerActivated = [_asset] call APS_fnc_active;

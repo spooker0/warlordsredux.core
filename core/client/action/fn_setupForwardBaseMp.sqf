@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_forwardBase", "_startTime", "_endTime", "_side"];
 
 _forwardBase setVariable ["WL2_canDemolish", true];

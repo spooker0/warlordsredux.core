@@ -1,8 +1,9 @@
+#include "includes.inc"
 params ["_orderedClass", "_cost", "_offset"];
 
 player setVariable ["BIS_WL_isOrdering", true, [2, clientOwner]];
 
-private _class = missionNamespace getVariable ["WL2_spawnClass", createHashMap] getOrDefault [_orderedClass, _orderedClass];
+private _class = WL_ASSET(_orderedClass, "spawn", _orderedClass);
 
 if (_class isKindOf "Man") then {
 	_asset = (group player) createUnit [_class, getPosATL player, [], 2, "NONE"];
@@ -43,8 +44,7 @@ if (_class isKindOf "Man") then {
 			playSound "assemble_target";
 			private _isExactPosition = false;
 
-			private _demolishableHashMap = missionNamespace getVariable ["WL2_demolishable", createHashMap];
-			private _isDemolishable = _demolishableHashMap getOrDefault [_orderedClass, false];
+			private _isDemolishable = WL_ASSET(_orderedClass, "demolishable", 0) > 0;
 			if (_isDemolishable) then {
 				_isExactPosition = true;
 			};

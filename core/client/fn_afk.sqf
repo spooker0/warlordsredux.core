@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 if (isDedicated) exitWith {};
 private _uid = getPlayerUID player;
 private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));

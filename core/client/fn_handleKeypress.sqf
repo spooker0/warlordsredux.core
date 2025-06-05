@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_displayorcontrol", "_key", "_shift", "_ctrl", "_alt"];
 
 private _zeusKey = actionKeys "curatorInterface";

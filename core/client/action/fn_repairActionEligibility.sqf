@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_target", "_caller"];
 
 private _isAlive = alive _target;

@@ -1,7 +1,4 @@
-#include "constants.inc"
-
-import RscListBox;
-
+#include "includes.inc"
 class DIS_GPS_MenuUI {
     idd = DIS_GPS_DISPLAY;
     movingEnable = true;

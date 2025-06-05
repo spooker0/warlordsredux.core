@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 ["server_init"] call BIS_fnc_startLoadingScreen;
 
 {
@@ -57,7 +56,6 @@ if !(isDedicated) then {
 0 spawn WL2_fnc_targetSelectionHandleServer;
 0 spawn WL2_fnc_incomePayoff;
 0 spawn WL2_fnc_garbageCollector;
-0 spawn WL2_fnc_wlac;
 call WL2_fnc_processRunways;
 
 0 spawn WL2_fnc_cleanupCarrier;

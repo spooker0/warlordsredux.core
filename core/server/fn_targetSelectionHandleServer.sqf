@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 {
 	missionNamespace setVariable [format ["BIS_WL_currentTarget_%1", _x], objNull, true];
 

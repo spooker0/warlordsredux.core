@@ -1,5 +1,3 @@
-#include "..\..\core\warlords_constants.inc"
-
 #define WLC_DISPLAY 12000
 
 #define WLC_DRAGGABLE 12001

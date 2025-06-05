@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset"];
 
 if (_asset getVariable ["WL_ewNetActive", false] && isEngineOn _asset) then {

@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 0 spawn {
     while { !BIS_WL_missionEnd } do {
         sleep 1;

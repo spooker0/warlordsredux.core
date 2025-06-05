@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_sender", "_targetUid", "_reason"];
 
 if (isNull _sender) exitWith {};

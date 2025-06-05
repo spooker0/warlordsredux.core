@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_warlord"];
 
 if (_warlord getVariable ["WL2_playerSetupStarted", false]) exitWith {};

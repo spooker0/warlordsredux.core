@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_carrier", "_carrierIndex"];
 
 private _ropeLocations = [

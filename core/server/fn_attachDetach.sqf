@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_attach", "_arguments"];
 
 if (_attach) then {

@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_projectile", "_isLocal"];
 
 private _interceptChance = 0;

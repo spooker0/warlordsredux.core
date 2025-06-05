@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_sector", "_requirements"];
 
 private _servicesInSector = _sector getVariable ["WL2_services", []];

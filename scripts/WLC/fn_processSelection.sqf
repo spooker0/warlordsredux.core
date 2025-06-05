@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 params ["_data", "_side", "_lastLoadout", "_unit", "_paidFor", "_collaborator"];
 
 private _playerFunds = (missionNamespace getVariable "fundsDatabaseClients") get (getPlayerUID player);

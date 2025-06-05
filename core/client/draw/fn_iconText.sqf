@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset", "_draw"];
 
 if (!_draw) exitWith {""};

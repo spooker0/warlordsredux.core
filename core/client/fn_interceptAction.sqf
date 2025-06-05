@@ -1,3 +1,4 @@
+#include "includes.inc"
 inGameUISetEventHandler ["Action", '
     params ["_target", "_caller", "_index", "_name", "_text", "_priority", "_showWindow", "_hideOnUse", "_shortcut", "_visibility", "_eventName"];
     switch (_name) do {

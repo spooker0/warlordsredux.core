@@ -391,6 +391,7 @@ class CfgFunctions {
 			class handleRespawnMarkers {};
 			class inAngleCheck {};
 			class income {};
+			class initAssetData {};
 			class initCommon {};
 			class initSectors {};
 			class lastHitHandler {};
@@ -403,7 +404,6 @@ class CfgFunctions {
 			class scriptCollector {};
 			class slingloadInit {};
 			class sortSectorArrays {};
-			class tablesSetUp {};
 			class uavConnectRefresh {};
 			class updateSectorArrays {};
 			class varsInit {};
@@ -447,7 +447,6 @@ class CfgFunctions {
 			class targetSelectionHandleServer {};
 			class uavJammed {};
 			class updateVehicleList {};
-			class wlac {};
 		};
 		class ServerSector {
 			file = "src\core\server\sector";
@@ -486,7 +485,7 @@ class CfgFunctions {
 	};
 	class WLM {
 		class WLM {
-			file = "src\scripts\WLM\functions";
+			file = "src\scripts\WLM";
 			class applyCustomization {};
 			class applyLoadoutAircraft {};
 			class applyLoadoutVehicle {};

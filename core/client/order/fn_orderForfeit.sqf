@@ -1,3 +1,4 @@
+#include "includes.inc"
 "RequestMenu_close" call WL2_fnc_setupUI;
 
 private _confirm_text = composeText [parseText "<img image='\a3\data_f\flags\flag_white_dmg_co.paa' size='8' align='center' />", lineBreak, parseText format [localize "STR_A3_WL_Confirm_Teamwide_Action_text", parseText format [localize "STR_A3_WL_feature_OrderForfeit", "Order forfeit"]]];

@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 if (isDedicated) exitWith {};
 WLT_stats = createHashMap;
 WLT_notifications = 0;

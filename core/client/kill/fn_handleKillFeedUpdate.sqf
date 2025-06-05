@@ -1,3 +1,4 @@
+#include "includes.inc"
 if (isDedicated) exitWith {};
 
 private _scoreControl = (findDisplay 46) ctrlCreate ["RscStructuredText", -1];

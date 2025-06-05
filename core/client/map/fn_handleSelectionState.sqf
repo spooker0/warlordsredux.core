@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 private _previousState = BIS_WL_currentSelection;
 private _previousVotePhase = WL_VotePhase;
 private _lastFullUpdate = -1;

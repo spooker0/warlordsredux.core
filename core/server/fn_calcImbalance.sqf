@@ -1,3 +1,4 @@
+#include "includes.inc"
 private _playersWest = allPlayers select { side group _x == west } select { !(_x getVariable ["WL2_afk", false]) };
 private _playersEast = allPlayers select { side group _x == east } select { !(_x getVariable ["WL2_afk", false]) };
 _playersWest = (count _playersWest) max 1;

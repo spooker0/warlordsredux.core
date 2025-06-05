@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_side"];
 
 if (_side == independent) exitWith {

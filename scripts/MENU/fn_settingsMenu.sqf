@@ -1,3 +1,4 @@
+#include "includes.inc"
 private _settingsText = "<t color='#FF0000'>Settings</t>";
 private _settingActionID = player addAction [
     _settingsText,

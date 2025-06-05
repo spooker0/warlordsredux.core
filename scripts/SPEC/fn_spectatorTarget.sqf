@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 while { WL_IsSpectator } do {
     private _maxDistance = uiNamespace getVariable ["WL_SpectatorHudMaxDistance", 10000];
     private _cameraPos = positionCameraToWorld [0, 0, 0];

@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 private _lastListType = "ENTITIES";
 while { WL_IsSpectator } do {
     private _oldEntitiesListMap = uiNamespace getVariable ["SPEC_entitiesList", createHashMap];

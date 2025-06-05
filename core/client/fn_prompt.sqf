@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_modalTitle", "_modalText", "_confirmText", "_cancelText", ["_confirmTooltip", ""], ["_cancelTooltip", ""]];
 
 private _confirmDialog = createDialog ["WL_Prompt_Dialog", true];

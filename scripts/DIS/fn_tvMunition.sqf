@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_projectile"];
 
 private _camera = "camera" camCreate (position _projectile);

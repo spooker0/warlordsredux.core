@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_inputStats", "_title"];
 
 private _results = [];
@@ -26,8 +27,7 @@ private _assetUses = [];
     private _buys = _assetStats getOrDefault ["buys", 0];
     private _deaths = _assetStats getOrDefault ["deaths", 0];
     private _killValue = _assetStats getOrDefault ["killValue", 0];
-    private _costMap = missionNamespace getVariable ["WL2_costs", createHashMap];
-    private _assetCost = _costMap getOrDefault [_asset, 0];
+    private _assetCost = WL_ASSET(_asset, "cost", 0);
 
     if (_buys > 0) then {
         _assetCost = _assetCost max 1;

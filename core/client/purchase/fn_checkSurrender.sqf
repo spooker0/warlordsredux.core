@@ -1,4 +1,4 @@
-#include "..\..\warlords_constants.inc"
+#include "includes.inc"
 private _gameStartTime = missionNamespace getVariable ["gameStart", 0];
 private _surrenderTime = _gameStartTime + 60 * 60 * 3;
 if (serverTime < _surrenderTime) exitWith {

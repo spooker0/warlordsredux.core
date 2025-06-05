@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_unit", "_responsiblePlayer", "_killer"];
 
 if (_unit != player || (alive player && lifeState player != "INCAPACITATED")) exitWith {};

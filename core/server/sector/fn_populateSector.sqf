@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_sector", "_owner"];
 
 private _vehicleUnits = [];
@@ -16,6 +15,17 @@ if (count (_sector getVariable ["BIS_WL_vehiclesToSpawn", []]) == 0) then {
 	};
 
 	private _randomSpots = [_sector] call WL2_fnc_findSpawnPositions;
+
+	private _vehiclesPool = [];
+	{
+		private _class = _x;
+		private _data = _y;
+		private _vehicleSpawn = _data getOrDefault ["vehicleSpawn", 0];
+		if (_vehicleSpawn > 0) then {
+			_vehiclesPool pushBack _class;
+		};
+	} forEach WL_ASSET_DATA;
+
 	for "_i" from 1 to _numVehicleSpawn do {
 		private _posRoad = selectRandom _randomSpots;
 		private _dirRoad = random 360;
@@ -25,7 +35,7 @@ if (count (_sector getVariable ["BIS_WL_vehiclesToSpawn", []]) == 0) then {
 			_dirRoad = _road getDir selectRandom (roadsConnectedTo _road);
 		};
 
-		_vehicleArray = [_posRoad, _dirRoad, selectRandom (serverNamespace getVariable "WL2_populateVehiclePoolList"), _owner] call BIS_fnc_spawnVehicle;
+		private _vehicleArray = [_posRoad, _dirRoad, selectRandom _vehiclesPool, _owner] call BIS_fnc_spawnVehicle;
 		_vehicleArray params ["_vehicle", "_crew", "_group"];
 
 		_vehicleUnits pushBack _vehicle;
@@ -111,7 +121,16 @@ if (!_connectedToBase && "H" in _services) then {
 	private _neighbors = (_sector getVariable "WL2_connectedSectors") select {(_x getVariable "BIS_WL_owner") == _owner};
 
 	if (count _neighbors > 0) then {
-		_vehicleArray = [position selectRandom _neighbors, 0, selectRandom (serverNamespace getVariable "WL2_populateAircraftPoolList"), _owner] call BIS_fnc_spawnVehicle;
+		private _aircraftPool = [];
+		{
+			private _class = _x;
+			private _data = _y;
+			private _aircraftSpawn = _data getOrDefault ["aircraftSpawn", 0];
+			if (_aircraftSpawn > 0) then {
+				_aircraftPool pushBack _class;
+			};
+		} forEach WL_ASSET_DATA;
+		private _vehicleArray = [position selectRandom _neighbors, 0, selectRandom _aircraftPool, _owner] call BIS_fnc_spawnVehicle;
 		_vehicleArray params ["_vehicle", "_crew", "_group"];
 
 		_vehicle call WL2_fnc_newAssetHandle;
@@ -144,7 +163,17 @@ private _spawnPosArr = [_sector, 0, true] call WL2_fnc_findSpawnPositions;
 if (count _spawnPosArr == 0) exitWith {};
 
 private _garrisonSize = (_sector getVariable "BIS_WL_value") * 2.3; // * x: the bigger x the more ai
-private _unitsPool = serverNamespace getVariable ["WL2_populateUnitPoolList", []];
+
+private _unitsPool = [];
+{
+    private _class = _x;
+    private _data = _y;
+    private _unitSpawn = _data getOrDefault ["unitSpawn", 0];
+    if (_unitSpawn > 0) then {
+        _unitsPool pushBack _class;
+    };
+} forEach WL_ASSET_DATA;
+
 private _infantryUnits = [];
 private _infantryGroups = [];
 _i = 0;

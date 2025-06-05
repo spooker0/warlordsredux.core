@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 params ["_projectile", "_unit"];
 
 private _target = _unit getVariable ["WL2_selectedAircraft", objNull];

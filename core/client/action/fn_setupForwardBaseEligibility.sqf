@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_target", "_caller", ["_addSupplies", false]];
 
 if (!alive _target) exitWith {

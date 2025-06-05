@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 0 spawn APS_fnc_defineVehicles;
 
 if !(isDedicated) then {
@@ -60,7 +59,7 @@ BIS_WL_allSectors = (entities "Logic") select { _x getVariable ["WL2_name", ""] 
 
 enableSaving [false, false];
 
-call WL2_fnc_tablesSetUp;
+call WL2_fnc_initAssetData;
 call WLC_fnc_init;
 
 private _lastUpdateVersion = profileNamespace getVariable ["WL2_lastUpdateVersion", ""];

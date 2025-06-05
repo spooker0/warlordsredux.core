@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 WL_IsSpectator = true;
 
 player setVariable ["ShowHeader", false];

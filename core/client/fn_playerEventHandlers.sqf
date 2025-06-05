@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 player addEventHandler ["HandleRating", {
 	params ["_unit", "_rating"];
 	0;

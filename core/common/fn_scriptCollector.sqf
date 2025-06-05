@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_messageTemplate"];
 
 private _fps = diag_fps;

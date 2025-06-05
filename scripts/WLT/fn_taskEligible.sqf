@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_taskId"];
 
 private _tasks = missionNamespace getVariable ["WLT_tasks", createHashMap];

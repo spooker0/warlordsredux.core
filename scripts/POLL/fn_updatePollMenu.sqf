@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 params ["_display", "_selectedOption"];
 
 private _option1Text = _display displayCtrl POLL_OPTION_1;

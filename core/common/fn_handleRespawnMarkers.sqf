@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_mode", ["_side", sideUnknown]];
 
 switch (_mode) do {

@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_projectile"];
 
 private _blasterSound = getMissionPath format ["src\sounds\blaster%1.ogg", ceil (random 4)];

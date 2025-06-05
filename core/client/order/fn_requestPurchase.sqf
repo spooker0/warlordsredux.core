@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_class", "_cost", "_category", "_requirements", "_offset"];
 
 "RequestMenu_close" call WL2_fnc_setupUI;

@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 BIS_WL_sectorLinks = [];
 WL_linkSectorMarkers = createHashmap;
 private _i = 0;

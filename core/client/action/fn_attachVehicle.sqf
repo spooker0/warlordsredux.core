@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset", "_childAsset", "_isAttaching"];
 
 if (_isAttaching) then {

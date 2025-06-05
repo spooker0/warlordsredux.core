@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset"];
 
 private _actionText = format ["<t color='#00ffcc'>Remote Munition Configuration (%1)</t>", actionKeysNames ["binocular", 1, "Combo"]];

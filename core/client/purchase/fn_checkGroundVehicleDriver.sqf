@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params [["_requireGround", true]];
 
 private _vehicle = vehicle player;

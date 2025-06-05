@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 if (WL_VotePhase == 2) then {
     BIS_WL_selection_availableSectors = BIS_WL_sectorsArray # 1;
     BIS_WL_selection_showLinks = true;

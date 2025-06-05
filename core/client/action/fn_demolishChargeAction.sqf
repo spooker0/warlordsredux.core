@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_position", "_dirAndUp", "_caller", "_target", "_dummy", "_isStrongholdDemolish"];
 
 private _charge = createVehicleLocal ["DemoCharge_F", _position, [], 0, "FLY"];
@@ -52,7 +51,7 @@ while { alive _charge && alive _target && alive _dummy } do {
     };
     _lightToggle = !_lightToggle;
 
-    playSound3D ["\a3\sounds_f\arsenal\tools\minedetector_beep_01.wss", _charge, false, getPosASL _charge, 2, 1, 200, 0, true];
+    playSound3D ["\a3\sounds_f\arsenal\tools\minedetector_beep_01.wss", _charge, false, getPosASL _charge, 2, 1, 0, 0, true];
 
     private _timeRemaining = (_startTime + WL_DEMOLISH_TIME) - serverTime;
     private _holdChargeExplosion = _dummy getVariable ["WL_holdChargeExplosion", false];
@@ -77,7 +76,7 @@ while { alive _charge && alive _target && alive _dummy } do {
         deleteVehicle _charge;
         deleteVehicle _lightPoint;
         sleep 2;
-        playSound3D ["a3\sounds_f\sfx\special_sfx\building_destroy_01.wss", objNull, false, _lightPos, 2, 1, 200, 0, true];
+        playSound3D ["a3\sounds_f\sfx\special_sfx\building_destroy_01.wss", objNull, false, _lightPos, 2, 1, 0, 0, true];
     } else {
         _sleepTime = (_timeRemaining / WL_DEMOLISH_TIME) max 0.1;
     };

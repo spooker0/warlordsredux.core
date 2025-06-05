@@ -1,3 +1,4 @@
+#include "includes.inc"
 private _refreshTimerVar = format ["WL2_manpowerRefreshTimers_%1", getPlayerUID player];
 
 private _manpowerRefreshTimers = missionNamespace getVariable [_refreshTimerVar, []];

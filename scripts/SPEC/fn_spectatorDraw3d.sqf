@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 private _laserTargets = uiNamespace getVariable ["WL2_spectatorDrawLasers", []];
 private _infantry = uiNamespace getVariable ["WL2_spectatorDrawInfantry", []];
 private _vehicles = uiNamespace getVariable ["WL2_spectatorDrawVehicles", []];

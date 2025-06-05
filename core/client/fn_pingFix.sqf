@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_position"];
 
 uiNamespace setVariable ["WL2_pingPosition", _position];

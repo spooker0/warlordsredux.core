@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_class", "_orderedClass", "_offset", "_range", "_ignoreSector"];
 
 private _asset = createVehicleLocal [_class, player modelToWorld [0, 0, 1000], [], 0, "NONE"];
@@ -54,8 +55,7 @@ private _drawRestrictionId = addMissionEventHandler ["Draw3D", {
 
 private _camo = _assetAppearanceDefaults getOrDefault ["camo", createHashmap];
 if (count _camo == 0) then {
-    private _textureHashmap = missionNamespace getVariable ["WL2_textures", createHashMap];
-    private _assetTextures = _textureHashmap getOrDefault [_orderedClass, []];
+    private _assetTextures = WL_ASSET(_orderedClass, "textures", []);
     {
         _asset setObjectTextureGlobal [_forEachIndex, _x];
     } forEach _assetTextures;
@@ -72,8 +72,7 @@ if (count _camo == 0) then {
     };
 } forEach _assetAppearanceDefaults;
 
-private _turretOverrides = missionNamespace getVariable ["WL2_turretOverrides", createHashMap];
-private _turretOverridesForVehicle = _turretOverrides getOrDefault [_orderedClass, []];
+private _turretOverridesForVehicle = WL_ASSET(_orderedClass, "turretOverrides", []);
 {
 	private _turretOverride = _x;
 	private _hideTurret = getNumber (_turretOverride >> "hideTurret");

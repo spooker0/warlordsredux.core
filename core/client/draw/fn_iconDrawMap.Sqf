@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_m"];
 
 uiNamespace setVariable ["BIS_WL_mapControl", _m];

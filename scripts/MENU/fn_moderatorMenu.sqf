@@ -1,9 +1,7 @@
+#include "includes.inc"
 /*
     Adapted from old report menu. Original Author: f1x1t
 */
-
-#include "constants.inc"
-
 params ["_elevatedPrivilege"];
 
 private _playerUid = getPlayerUID player;

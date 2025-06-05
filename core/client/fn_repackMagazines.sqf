@@ -1,3 +1,4 @@
+#include "includes.inc"
 comment "Magazine Repack";
 // Event Listener to Detect Inventory UI Open
 // This script has been taken and modified from MAZ_Enhacement_Pack_Core to fit in to the usecase of WL Redux thus none of the original names have been changed

@@ -1,6 +1,4 @@
-#include "constants.inc"
-#include "\a3\ui_f\hpp\definedikcodes.inc"
-
+#include "includes.inc"
 params ["_asset", "_target"];
 private _display = findDisplay DIS_GPS_DISPLAY;
 

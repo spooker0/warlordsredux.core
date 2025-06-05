@@ -1,4 +1,4 @@
-#include "..\..\core\warlords_constants.inc"
+
 
 #define SPEC_DISPLAY 60492
 

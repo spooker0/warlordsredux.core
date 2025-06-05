@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_dazzler", "_projectileAPSConsumption"];
 
 private _dazzlerFuel = fuel _dazzler;

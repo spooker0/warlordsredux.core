@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 private _hasCarrierSector = (BIS_WL_sectorsArray # 0) select {
     _x getVariable ["WL2_isAircraftCarrier", false]
 };

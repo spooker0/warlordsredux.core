@@ -1,3 +1,4 @@
+#include "includes.inc"
 private ["_class", "_ret"];
 
 _class = _this # 0;

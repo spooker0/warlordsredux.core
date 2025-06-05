@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_projectile"];
 
 while {alive _projectile} do {

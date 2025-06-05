@@ -1,5 +1,4 @@
-#include "..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_killer", "_event", ["_show", true]];
 
 if (_event == "init") then {

@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_munition"];
 private _allowedMunitionsMap = [
     "ShellCore",

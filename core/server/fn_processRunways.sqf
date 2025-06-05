@@ -1,3 +1,4 @@
+#include "includes.inc"
 private _sectorsWithRunways = BIS_WL_allSectors select {
 	private _services = _x getVariable ["WL2_services", []];
 	"A" in _services;

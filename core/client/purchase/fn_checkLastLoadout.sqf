@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 if (count BIS_WL_lastLoadout == 0) exitWith {
     [false, localize "STR_A3_WL_no_loadout_saved"];
 };

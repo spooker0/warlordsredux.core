@@ -1,14 +1,12 @@
+#include "includes.inc"
 params ["_asset"];
 
-private _vehicleApsMap = missionNamespace getVariable ["WL2_aps", createHashMap];
 private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
-private _index = _vehicleApsMap getOrDefault [_assetActualType, -1];
-private _ammo = switch (_index) do {
-	case 3: { 0 };
-	case 2: { 6 };
-	case 1: { 4 };
-	case 0: { 2 };
+private _apsType = WL_ASSET(_assetActualType, "aps", -1);
+switch (_apsType) do {
+	case 4: { 0 };
+	case 3: { 6 };
+	case 2: { 4 };
+	case 1: { 2 };
 	default { -1 };
 };
-
-_ammo;

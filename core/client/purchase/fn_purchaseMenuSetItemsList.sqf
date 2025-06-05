@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 _display = uiNamespace getVariable ["BIS_WL_purchaseMenuDisplay", displayNull];
 _purchase_category = _display displayCtrl 100;
 private _purchase_items_list = _display displayCtrl 101;

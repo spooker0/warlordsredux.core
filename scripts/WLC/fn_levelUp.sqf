@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_newLevel"];
 
 systemChat format ["You have reached level %1!", _newLevel];

@@ -1,3 +1,4 @@
+#include "includes.inc"
 private _uid = getPlayerUID player;
 private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
 private _isModerator = _uid in (getArray (missionConfigFile >> "moderatorIDs"));

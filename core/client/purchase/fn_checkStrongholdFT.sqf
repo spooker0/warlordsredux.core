@@ -1,3 +1,4 @@
+#include "includes.inc"
 private _eligibleSectors = (BIS_WL_sectorsArray # 2) select {
     !isNull (_x getVariable ["WL_stronghold", objNull])
 };

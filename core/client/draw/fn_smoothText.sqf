@@ -1,3 +1,4 @@
+#include "includes.inc"
 params [
 	["_text", "", [""]],
 	["_maxLines", 3, [0]],

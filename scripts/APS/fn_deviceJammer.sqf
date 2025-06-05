@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset", "_turret"];
 
 while { alive _asset } do {

@@ -1,5 +1,3 @@
-#include "..\..\core\warlords_constants.inc"
-
 #define PERF_DISPLAY 46000
 #define PERF_CLOSE_BUTTON 46001
 #define PERF_ERROR_TEXT 46002

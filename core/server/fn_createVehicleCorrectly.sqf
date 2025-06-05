@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_class", "_orderedClass", "_pos", "_direction", "_exactPosition"];
 _pos params ["_posX", "_posY", "_posZ"];
 

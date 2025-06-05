@@ -1,5 +1,4 @@
-#include "squad_constants.inc"
-
+#include "includes.inc"
 params ["_control", "_lbCurSel", "_lbSelection"];
 
 private _playerId = _control lbData _lbCurSel;

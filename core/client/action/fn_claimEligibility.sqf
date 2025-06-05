@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 params ["_target", "_caller"];
 
 private _callerSide = side group _caller;
@@ -11,8 +10,8 @@ private _isNotSameSide = _callerSide != (_target getVariable ["BIS_WL_ownerAsset
 private _isNotUAV = !unitIsUAV _target;
 
 private _assetActualType = _target getVariable ["WL2_orderedClass", typeOf _target];
-private _demolishable = missionNamespace getVariable ["WL2_demolishable", createHashMap];
-private _isStructureNotInEnemySector = if (_demolishable getOrDefault [_assetActualType, false]) then {
+private _isDemolishable = WL_ASSET(_assetActualType, "demolishable", 0) > 0;
+private _isStructureNotInEnemySector = if (_isDemolishable) then {
     private _currentSector = BIS_WL_allSectors select {
         _target inArea (_x getVariable "objectAreaComplete") &&
         _x getVariable ["BIS_WL_owner", sideUnknown] == _callerSide

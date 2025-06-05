@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 while { !BIS_WL_missionEnd } do {
 	if (isNull WL_CONTROL_MAP) then {
 		uiSleep 0.01;

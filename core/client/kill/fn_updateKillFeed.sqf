@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_killRewardMap"];
 
 private _scale = 0.75 call WL2_fnc_purchaseMenuGetUIScale;

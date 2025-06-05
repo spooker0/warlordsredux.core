@@ -1,5 +1,4 @@
-#include "squad_constants.inc"
-
+#include "includes.inc"
 // Global variables
 SQD_AUDIBLE_PLAYERS = createHashMap;
 SQD_SOUND_CHANGES = [];

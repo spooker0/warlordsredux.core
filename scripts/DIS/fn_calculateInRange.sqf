@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_asset"];
 
 private _lon = uiNamespace getVariable ["DIS_GPS_LON", 0];

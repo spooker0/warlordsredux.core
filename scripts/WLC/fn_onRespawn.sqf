@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 params [["_unit", player], ["_lastLoadout", BIS_WL_lastLoadout], ["_paidFor", false], ["_collaborator", false]];
 
 private _side = BIS_WL_playerSide;

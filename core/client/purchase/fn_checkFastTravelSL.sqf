@@ -1,5 +1,4 @@
-#include "..\..\warlords_constants.inc"
-
+#include "includes.inc"
 // Cooldown check
 private _ftNextUseVar = format ["BIS_WL_FTSLNextUse_%1", getPlayerUID player];
 private _ftNextUse = missionNamespace getVariable [_ftNextUseVar, 0];

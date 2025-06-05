@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_channel", "_owner", "_from", "_text", "_person", "_name", "_strID", "_forcedDisplay", "_isPlayerMessage", "_sentenceType", "_chatMessageType", "_params"];
 
 private _sentLocally = _owner == clientOwner;
@@ -20,6 +21,10 @@ if (_isModerator || _isAdmin) then {
         ];
         _chatHistory pushBack _chatMessage;
     };
+};
+
+if (_sentLocally && count allPlayers < 20 && count _params > 0 && {_params # 0 == "$STR_DS_VOTES_KICK"}) then {
+    [player, getPlayerUID player, "vote kick abuse", 3600] remoteExec ["WL2_fnc_punishPlayer", 2];
 };
 
 if (_sentLocally && _channel in [0, 1, 2, 3] && _text != "" && !_isPlayerMessage && _person == player && count _params == 0) then {

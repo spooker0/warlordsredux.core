@@ -1,3 +1,4 @@
+#include "includes.inc"
 params ["_taskId", ["_init", false]];
 
 private _taskCompletion = profileNamespace getVariable ["WLT_TaskCompletionStatuses", createHashMap];

@@ -1,5 +1,4 @@
-#include "constants.inc"
-
+#include "includes.inc"
 private _spectatingPlayer = objNull;
 private _spectatingPlayerScore = -1;
 
