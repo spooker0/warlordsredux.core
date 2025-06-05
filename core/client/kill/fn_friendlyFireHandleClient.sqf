@@ -18,7 +18,7 @@ private _penaltyEnd = _lastIncident + 30 * 60;
 if (_penaltyEnd < serverTime) exitWith {};
 
 private _timeRemaining = [(_penaltyEnd - serverTime) max 0, "MM:SS"] call BIS_fnc_secondsToString;
-private _penaltyText = format ["You are blocked from rejoining the game for %1.", _timeRemaining];
+private _penaltyText = format ["You are blocked from rejoining the game for %1. To see rules or report mod abuse, visit <a href='https://discord.gg/grmzsZE4ua'>the WSV Discord.</a>", _timeRemaining];
 
 [name player, _timeRemaining, "teamkilling"] remoteExec ["WL2_fnc_punishMessage", 0];
 
