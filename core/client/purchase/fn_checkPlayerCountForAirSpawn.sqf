@@ -1,22 +1,18 @@
-#include "..\..\warlords_constants.inc"
+#include "includes.inc"
+params ["_category", "_cost"];
 
-params ["_category", "_class"];
-
-if (_category != "Fixed Wing" && _category != "Rotary Wing" && _category != "Remote Control") exitWith {
+if (_cost < 5000) exitWith {
     [true, ""]
 };
 
-private _costMap = missionNamespace getVariable ["WL2_costs", createHashMap];
-private _assetCost = _costMap getOrDefault [_class, 0];
-
-if (_assetCost < 5000) exitWith {
+if !(_category in ["Fixed Wing", "Rotary Wing", "Remote Control"]) exitWith {
     [true, ""]
 };
 
-// private _players = (playersNumber west) + (playersNumber east);
-
-if ((playersNumber west) <= 7 && (playersNumber east) <= 7) then {
-    [false, "Player count is too small to deploy heavily armed aerial assets!"]
-} else {
-    [true, ""]
+#if WL_AIR_POP_LIMIT
+if ((playersNumber west) <= 7 && (playersNumber east) <= 7) exitWith {
+    [false, "Player count is too low to deploy heavily armed aerial assets."];
 };
+#endif
+
+[true, ""];

@@ -20,7 +20,8 @@
 
 // Live: set all to 1
 #define WL_STOP_TEAM_SWITCH 1
-#define WL_FOB_SQUAD_REQUIREMENT 0
+#define WL_FOB_SQUAD_REQUIREMENT 1
+#define WL_AIR_POP_LIMIT 1
 
 // Configuration
 #define WL_RESPAWN_MARKERS_CNT 20
