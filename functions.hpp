@@ -333,6 +333,7 @@ class CfgFunctions {
 		class ClientPurchase {
 			file = "src\core\client\purchase";
 			class checkAAPlacement {};
+			class checkPlayerCountForAirSpawn {};
 			class checkAlliedPlayers {};
 			class checkAssetLimit {};
 			class checkCarrierLimits {};
