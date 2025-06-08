@@ -6,17 +6,17 @@
 #define WL_FACTION_THREE_ENABLED 0
 #define WLC_DEBUG 0
 #define WLT_DEBUG_MODE 0
-#define WL_AIRPORT_BASES 1
+#define WL_AIRPORT_BASES 0
 #define WL_OVERRIDE_BASES 0
 #define WL_BASE_SELECTION_DEBUG 0
 #define WL_STRONGHOLD_DEBUG 0
 #define WL_NO_GROUND_AVOID 0
 #define WL_AA_TEST 0
 #define WL_QUICK_CAPTURE 0
-#define WL_ZEUS_ENABLED 1
+#define WL_ZEUS_ENABLED 0
 #define WL_EASTER_EGG 0
 #define WL_REPLAYS 0
-#define WL_PERF_TEST 1
+#define WL_PERF_TEST 0
 
 // Live: set all to 1
 #define WL_STOP_TEAM_SWITCH 1

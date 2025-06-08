@@ -246,7 +246,7 @@ _positionY = _positionY + 0.08;
     ["slider", "Map marker scale threshold", [0, 1, 0.05, 0.4, "sectorMarkerTextThreshold"]],
     ["slider", "Respawn: smoke grenades", [0, 2, 1, 1, "respawnSmokeGrenades"]],
     ["slider", "Respawn: frag grenades", [0, 3, 1, 2, "respawnFragGrenades"]],
-    ["slider", "Respawn: first air kits ", [0, 3, 1, 3, "respawnFirstAidKits"]],
+    ["slider", "Respawn: first aid kits ", [0, 3, 1, 3, "respawnFirstAidKits"]],
     ["category", "General settings"],
     ["checkbox", "Disable 3rd person view (2x reward)", ["3rdPersonDisabled", false, 360]],
     ["checkbox", "Autonomous mode off by default", ["enableAuto", false]],

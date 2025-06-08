@@ -10,7 +10,7 @@ private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
 private _isModerator = _uid in (getArray (missionConfigFile >> "moderatorIDs"));
 if !(_isAdmin || _isModerator || _uid == _targetUid) exitWith {};
 
-_time = _time min (30 * 60);
+// _time = _time min (30 * 60);
 
 private _punishVar = format ["WL2_punish_%1", _targetUid];
 private _punishIncident = [serverTime + _time, _reason];

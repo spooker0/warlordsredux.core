@@ -1,13 +1,8 @@
 #include "includes.inc"
 params [["_unit", objNull]];
 
-private _cachedColor = _unit getVariable ["WL2_iconColor", []];
-if (count _cachedColor == 4) exitWith {
-    _cachedColor
-};
-
 if (isNull _unit) exitWith {
-    private _color = switch (side group player) do {
+    switch (side group player) do {
         case west: {
             [0, 0.3, 0.6, 0.8]
         };
@@ -21,20 +16,14 @@ if (isNull _unit) exitWith {
             [0.4, 0, 0.5, 0.8]
         }
     };
-    _unit setVariable ["WL2_iconColor", _color];
-    _color;
 };
 
 if (_unit == player || player in crew _unit) exitWith {
-    private _color = [1, 1, 0, 0.8];
-    _unit setVariable ["WL2_iconColor", _color];
-    _color;
+    [1, 1, 0, 0.8];
 };
 
 if (_unit in (units player) && _unit != player) exitWith {
-    private _color = [0, 0.4, 0, 0.8];
-    _unit setVariable ["WL2_iconColor", _color];
-    _color;
+    [0, 0.4, 0, 0.8];
 };
 
 private _playerID = getPlayerID player;
@@ -56,16 +45,14 @@ private _areInSquad = if (isPlayer _unit) then {
     _anyInSquad
 };
 if (_areInSquad) exitWith {
-    private _color = [0, 1, 1, 0.8];
-    _unit setVariable ["WL2_iconColor", _color];
-    _color;
+    [0, 1, 1, 0.8];
 };
 
 private _unitSide = [_unit] call WL2_fnc_getAssetSide;
 if (_unitSide == sideUnknown) then {
     _unitSide = side group player;
 };
-private _color = switch (_unitSide) do {
+switch (_unitSide) do {
     case west: {
         [0, 0.3, 0.6, 0.8]
     };
@@ -79,5 +66,3 @@ private _color = switch (_unitSide) do {
         [0.4, 0, 0.5, 0.8]
     }
 };
-_unit setVariable ["WL2_iconColor", _color];
-_color;
