@@ -4,11 +4,11 @@ params ["_unit", "_responsibleLeader"];
 if (!isPlayer _responsibleLeader) exitWith {};
 
 private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
-private _killReward = WL_ASSET(_assetActualType, "killReward", 0);
+private _killReward = round (WL_ASSET(_assetActualType, "cost", 0) ^ 0.75);
 
 if (typeof _unit == "RuggedTerminal_01_communications_hub_F") then {
 	private _unitOwnerSide = _unit getVariable ["WL2_forwardBaseOwner", sideUnknown];
-	_killReward = 500;
+	_killReward = 3000;
 	if (_unitOwnerSide != side group _responsibleLeader) then {
 		_unit setVariable ["BIS_WL_ownerAsset", "0000"];
 	};

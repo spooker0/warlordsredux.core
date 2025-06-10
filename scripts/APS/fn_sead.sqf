@@ -14,7 +14,7 @@ if (isNull (missileTarget _projectile)) then {
                 _projectile setMissileTarget objNull;
             };
         } else {
-            _projectile setMissileTarget [_launcher, true];
+            [_projectile, _launcher] call APS_fnc_setSeadTarget;
         };
     };
 
@@ -30,7 +30,7 @@ if (isNull (missileTarget _projectile)) then {
     } forEach _sensorThreats;
     if (count _samTargets > 0) exitWith {
         private _sortedSamTargets = [_samTargets, [], { _unit distance _x }, "ASCEND"] call BIS_fnc_sortBy;
-        _projectile setMissileTarget [_sortedSamTargets # 0, true];
+        [_projectile, _sortedSamTargets # 0] call APS_fnc_setSeadTarget;
     };
 
     // radar on sensor
@@ -44,6 +44,6 @@ if (isNull (missileTarget _projectile)) then {
     } forEach _allAssetTargets;
     if (count _samTargets > 0) then {
         private _sortedSamTargets = [_samTargets, [], { _unit distance _x }, "ASCEND"] call BIS_fnc_sortBy;
-        _projectile setMissileTarget [_sortedSamTargets # 0, true];
+        [_projectile, _sortedSamTargets # 0] call APS_fnc_setSeadTarget;
     };
 };

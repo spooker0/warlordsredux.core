@@ -32,11 +32,16 @@ private _drawLines = [];
 private _mapData = missionNamespace getVariable ["WL2_mapData", createHashMap];
 private _side = _mapData getOrDefault ["side", sideUnknown];
 
+private _mapColorCache = uiNamespace getVariable ["WL2_mapColorCache", createHashMap];
+private _mapIconCache = uiNamespace getVariable ["WL2_mapIconCache", createHashMap];
+private _mapTextCache = uiNamespace getVariable ["WL2_mapTextCache", createHashMap];
+private _mapSizeCache = uiNamespace getVariable ["WL2_mapSizeCache", createHashMap];
+
 // Draw white hover selector
 if !(isNull BIS_WL_highlightedSector) then {
 	_drawIconsAnimated pushBack [
 		"A3\ui_f\data\map\groupicons\selector_selectedMission_ca.paa",
-		[1,1,1,0.5],
+		[1, 1, 1, 0.5],
 		getPosASL BIS_WL_highlightedSector,
 		60,
 		60,
@@ -60,7 +65,7 @@ if !(isNull BIS_WL_targetVote) then {
 if !(isNull WL_AssetActionTarget) then {
 	_drawIconsAnimated pushBack [
 		"A3\ui_f\data\map\groupicons\selector_selectedMission_ca.paa",
-		[] call WL2_fnc_iconColor,
+		[objNull, _mapColorCache] call WL2_fnc_iconColor,
 		getPosASL WL_AssetActionTarget,
 		40,
 		40,
@@ -72,7 +77,7 @@ if !(isNull WL_AssetActionTarget) then {
 if (!isNull WL_SectorActionTarget && isNull BIS_WL_highlightedSector && WL_SectorActionTargetActive) then {
 	_drawIconsAnimated pushBack [
 		"A3\ui_f\data\map\groupicons\selector_selectedMission_ca.paa",
-		[] call WL2_fnc_iconColor,
+		[objNull, _mapColorCache] call WL2_fnc_iconColor,
 		getPosASL WL_SectorActionTarget,
 		50,
 		50,
@@ -86,12 +91,15 @@ if (alive _respawnBag) then {
 	private _bagPos = getPosATL _respawnBag;
 	_drawIcons pushBack [
 		"\A3\ui_f\data\map\markers\military\triangle_CA.paa",
-		[player] call WL2_fnc_iconColor,
+		[player, _mapColorCache] call WL2_fnc_iconColor,
 		_bagPos,
-		50,
-		50,
+		35,
+		35,
 		0,
-		"Tent"
+		"Tent",
+		1,
+		0.04,
+		"PuristaBold"
 	];
 	_drawIconsSelectable pushBack [_respawnBag, _bagPos];
 };
@@ -175,15 +183,15 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 {
 	private _position = getPosASL _x;
 	if ([_position] call _cullItem) then { continue; };
-	private _size = [_x] call WL2_fnc_iconSize;
+	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
 	_drawIcons pushBack [
-		[_x] call WL2_fnc_iconType,
-		[_x] call WL2_fnc_iconColor,
+		[_x, _mapIconCache] call WL2_fnc_iconType,
+		[_x, _mapColorCache] call WL2_fnc_iconColor,
 		_position,
 		_size,
 		_size,
 		[_x] call WL2_fnc_getDir,
-		[_x] call WL2_fnc_iconTextSectorScan,
+		[_x, _draw, _mapTextCache] call WL2_fnc_iconText,
 		1,
 		0.043,
 		"PuristaBold",
@@ -204,7 +212,7 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		_range,
 		_range,
 		0,
-		[_x] call WL2_fnc_iconColor,
+		[_x, _mapColorCache] call WL2_fnc_iconColor,
 		""
 	];
 } forEach (_mapData getOrDefault ["ewNetworks", []]);
@@ -242,7 +250,7 @@ private _scanners = if (_drawAll) then {
 			_scanRadius,
 			_scanRadius,
 			0,
-			[_x] call WL2_fnc_iconColor,
+			[_x, _mapColorCache] call WL2_fnc_iconColor,
 			""
 		];
 	} else {
@@ -289,7 +297,7 @@ private _teammates = if (_drawAll) then {
 	private _position = getPosASL _x;
 	if ([_position] call _cullItem) then { continue; };
 
-	private _size = [_x] call WL2_fnc_iconSize;
+	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
 	if (_x == player) then {
 		_drawIcons pushBack [
 			'a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca.paa',
@@ -307,8 +315,8 @@ private _teammates = if (_drawAll) then {
 	};
 
 	_drawIcons pushBack [
-		[_x] call WL2_fnc_iconType,
-		[_x] call WL2_fnc_iconColor,
+		[_x, _mapIconCache] call WL2_fnc_iconType,
+		[_x, _mapColorCache] call WL2_fnc_iconColor,
 		_position,
 		_size,
 		_size,
@@ -336,10 +344,10 @@ private _aiInVehicle = if (_drawAll) then {
 	private _position = getPosASL _x;
 	if ([_position] call _cullItem) then { continue; };
 
-	private _size = [_x] call WL2_fnc_iconSize;
+	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
 	_drawIcons pushBack [
-		[_x] call WL2_fnc_iconType,
-		[_x] call WL2_fnc_iconColor,
+		[_x, _mapIconCache] call WL2_fnc_iconType,
+		[_x, _mapColorCache] call WL2_fnc_iconColor,
 		_position,
 		_size,
 		_size,
@@ -357,10 +365,10 @@ private _aiInVehicle = if (_drawAll) then {
 	private _position = getPosASL _x;
 	if ([_position] call _cullItem) then { continue; };
 
-	private _size = [_x] call WL2_fnc_iconSize;
+	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
 	_drawIcons pushBack [
-		[_x] call WL2_fnc_iconType,
-		[_x] call WL2_fnc_iconColor,
+		[_x, _mapIconCache] call WL2_fnc_iconType,
+		[_x, _mapColorCache] call WL2_fnc_iconColor,
 		_position,
 		_size,
 		_size,
@@ -408,15 +416,15 @@ private _sideVehicles = if (_drawAll) then {
 	private _position = getPosASL _x;
 	if ([_position] call _cullItem) then { continue; };
 
-	private _size = [_x] call WL2_fnc_iconSize;
+	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
 	_drawIcons pushBack [
-		[_x] call WL2_fnc_iconType,
-		[_x] call WL2_fnc_iconColor,
+		[_x, _mapIconCache] call WL2_fnc_iconType,
+		[_x, _mapColorCache] call WL2_fnc_iconColor,
 		_position,
 		_size,
 		_size,
 		[_x] call WL2_fnc_getDir,
-		[_x, _draw] call WL2_fnc_iconText,
+		[_x, _draw, _mapTextCache] call WL2_fnc_iconText,
 		1,
 		0.043,
 		"PuristaBold",
@@ -544,3 +552,8 @@ if (_drawMode == 2) then {
 	uiNamespace setVariable ["WL2_drawEllipses", _drawEllipses];
 	uiNamespace setVariable ["WL2_drawLines", _drawLines];
 };
+
+uiNamespace setVariable ["WL2_mapColorCache", _mapColorCache];
+uiNamespace setVariable ["WL2_mapIconCache", _mapIconCache];
+uiNamespace setVariable ["WL2_mapTextCache", _mapTextCache];
+uiNamespace setVariable ["WL2_mapSizeCache", _mapSizeCache];

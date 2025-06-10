@@ -24,7 +24,7 @@ if (_isModerator || _isAdmin) then {
 };
 
 if (_sentLocally && count allPlayers < 20 && count _params > 0 && {_params # 0 == "$STR_DS_VOTES_KICK"}) then {
-    [player, getPlayerUID player, "vote kick abuse", 3600] remoteExec ["WL2_fnc_punishPlayer", 2];
+    [player, getPlayerUID player, "vote kick not allowed", 120] remoteExec ["WL2_fnc_punishPlayer", 2];
 };
 
 if (_sentLocally && _channel in [0, 1, 2, 3] && _text != "" && !_isPlayerMessage && _person == player && count _params == 0) then {

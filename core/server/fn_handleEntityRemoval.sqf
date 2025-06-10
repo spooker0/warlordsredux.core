@@ -77,10 +77,10 @@ if (!isNull _responsiblePlayer && { isPlayer [_responsiblePlayer] }) then {
         private _killReward = if (_unit isKindOf "Man") then {
             if (_isUnitPlayer) then { 60 } else { 30 };
         } else {
-            WL_ASSET(_assetActualType, "killReward", 0);
+            round (WL_ASSET(_assetActualType, "cost", 0) ^ 0.75);
         };
 
-        private _spotReward = round (_killReward / 8.0);
+        private _spotReward = round (_killReward / 4.0);
         [_spotReward, getPlayerUID _lastSpotted] call WL2_fnc_fundsDatabaseWrite;
         [_unit, _spotReward, "Spot assist", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _lastSpotted];
     };

@@ -374,7 +374,7 @@ private _fortifyStrongholdExecute = {
     private _fortificationTime = _sector getVariable ["WL_fortificationTime", -1];
     if (_fortificationTime < serverTime) exitWith {};
     private _fortificationTimeRemaining = _fortificationTime - serverTime;
-    _sector setVariable ["WL_fortificationTime", serverTime + _fortificationTimeRemaining / 3, true];
+    _sector setVariable ["WL_fortificationTime", serverTime + _fortificationTimeRemaining / 5, true];
 
 #if WL_QUICK_CAPTURE
     _sector setVariable ["WL_fortificationTime", serverTime + 10, true];

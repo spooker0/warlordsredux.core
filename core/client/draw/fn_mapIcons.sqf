@@ -28,6 +28,11 @@
 			};
 		} forEach _maps;
 
+		uiNamespace setVariable ["WL2_mapColorCache", createHashMap];
+		uiNamespace setVariable ["WL2_mapIconCache", createHashMap];
+		uiNamespace setVariable ["WL2_mapTextCache", createHashMap];
+		uiNamespace setVariable ["WL2_mapSizeCache", createHashMap];
+
 		uiSleep 3;
 	};
 };
@@ -146,7 +151,7 @@
 		_mapData set ["teamSectorMarkers", _teamSectorMarkers];
 		_mapData set ["enemySectorMarkers", _allSectorMarkers];
 
-		sleep 0.5;
+		sleep 1;
 	};
 };
 
@@ -158,19 +163,20 @@
 			uiSleep 5;
 			continue;
 		};
+
+		private _refreshRate = _settingsMap getOrDefault ["mapRefresh", 4];
+		_refreshRate = _refreshRate max 1;
+		private _refreshSleepTime = 1 / _refreshRate;
+
 		private _isMapBeingDrawn = uiNamespace getVariable ["WL2_drawingMap", false];
 		if (!_isMapBeingDrawn) then {
-			sleep 0.01;
+			sleep _refreshSleepTime;
 			continue;
 		};
 
 		private _mainMap = (findDisplay 12) displayCtrl 51;
 		private _drawMode = if (WL_IsSpectator) then { 1 } else { 0 };
 		[WL_CONTROL_MAP, _drawMode] call WL2_fnc_iconDrawMapPrepare;
-
-		private _refreshRate = _settingsMap getOrDefault ["mapRefresh", 4];
-		_refreshRate = _refreshRate max 1;
-		private _refreshSleepTime = 1 / _refreshRate;
 
 		uiNamespace setVariable ["WL2_drawingMap", false];
 		sleep _refreshSleepTime;

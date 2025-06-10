@@ -25,7 +25,6 @@ params ["_asset"];
 
 		_asset setVariable ["BIS_WL_ownerAsset", getPlayerUID _caller, true];
 		_asset setVariable ["BIS_WL_ownerAssetSide", side group _caller, true];
-		_asset setVariable ["WL2_assetOwnerName", "", true];
 
 		private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID _caller];
 		private _vehicles = missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID _caller], []];

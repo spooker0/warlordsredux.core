@@ -45,7 +45,13 @@ while { alive _projectile && alive _target && serverTime < _startTime + 3 } do {
 private _projectilePos = getPosASL _projectile;
 _projectilePos set [2, _projectilePos # 2 + 10];
 private _newProjectile = createVehicle ["ammo_Missile_mim145", _projectilePos, [], 0, "NONE"];
-_newProjectile setVariable ["WL2_missileNameOverride", "DEATH", true];
+
+private _missileName = if ([_unit] call WL2_fnc_getAssetSide == west) then {
+    "RIM174";
+} else {
+    "HHQ9";
+};
+_newProjectile setVariable ["WL2_missileNameOverride", _missileName, true];
 [_newProjectile] remoteExec ["WL2_fnc_hideObjectOnAll", 2];
 [_newProjectile, [player, player]] remoteExec ["setShotParents", 2];
 

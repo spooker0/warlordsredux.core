@@ -401,7 +401,7 @@ addMissionEventHandler ["Draw3D", {
         private _maxDistance = switch (WL_HelmetInterface) do {
             case 0: { 0 };
             case 1: { 5000 };
-            case 2: { 5000 };
+            case 2: { 20000 };
             default { 5000 };
         };
         private _maxThreshold = uiNamespace getVariable ["WL_HelmetInterfaceMaxDistance", 5000];
@@ -664,8 +664,8 @@ addMissionEventHandler ["Draw3D", {
         private _rangeControl = _gogglesDisplay displayCtrl 8000;
         _rangeControl ctrlSetText str _range;
     };
-    private _helmetInterfaceDistances = [0, 250, 500, 1000, 2500, 5000];
-    private _helmetInterfaceIndex = count _helmetInterfaceDistances - 1;
+    private _helmetInterfaceDistances = [0, 250, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 20000];
+    private _helmetInterfaceIndex = 7;
 
     [_helmetInterfaceDistances # _helmetInterfaceIndex] call _setNewRange;
 

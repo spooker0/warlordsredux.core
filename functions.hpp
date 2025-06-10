@@ -20,6 +20,7 @@ class CfgFunctions {
 			class relDir2 {};
 			class report {};
 			class sead {};
+			class setSeadTarget {};
 			class setupProjectiles {};
 			class serverHandleAPS {};
 		};
@@ -242,7 +243,6 @@ class CfgFunctions {
 			class iconDrawMapPrepare {};
 			class iconSize {};
 			class iconText {};
-			class iconTextSectorScan {};
 			class iconType {};
 			class isScannerMunition {};
 			class mapIcons {};

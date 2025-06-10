@@ -1,18 +1,18 @@
 #include "includes.inc"
-params ["_asset"];
+params ["_asset", "_mapSizeCache"];
 
 if (lifeState _x == "INCAPACITATED") exitWith {
     35;
 };
 
-private _cachedSize = _asset getVariable ["WL2_iconSize", 0];
-if (_cachedSize != 0) exitWith {
-    _cachedSize;
+private _sizeFromCache = _mapSizeCache getOrDefault [hashValue _asset, -1];
+if (_sizeFromCache != -1) exitWith {
+    _sizeFromCache;
 };
 
 private _returnResult = {
     params ["_size"];
-    _asset setVariable ["WL2_iconSize", _size];
+    _mapSizeCache set [hashValue _asset, _size];
     _size;
 };
 

@@ -58,7 +58,7 @@ while { alive _projectile } do {
             private _sortedEnemies = [_enemiesNear, [WL_ASSET_DATA], {
                 private _assetData = _input0;
                 private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
-                WL_ASSET_FIELD(_assetData, _assetActualType, "killReward", 0);
+                WL_ASSET_FIELD(_assetData, _assetActualType, "cost", 0);
             }, "DESCEND"] call BIS_fnc_sortBy;
 
             private _closestEnemy = _sortedEnemies # 0;
