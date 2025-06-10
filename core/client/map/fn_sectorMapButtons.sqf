@@ -76,7 +76,7 @@ private _fastTravelConflictExecute = {
     true,
     "fastTravelConflict",
     [
-        getMissionConfigValue ["BIS_WL_fastTravelCostContested", 200],
+        WL_COST_FTCONTESTED,
         "FTConflict",
         "Fast Travel"
     ]
@@ -101,7 +101,7 @@ private _airAssaultExecute = {
     true,
     "airAssault",
     [
-        getMissionConfigValue ["WL_airAssaultCost", 100],
+        WL_COST_AIRASSAULT,
         "FTAirAssault",
         "Fast Travel"
     ]
@@ -119,7 +119,7 @@ private _vehicleParadropExecute = {
     true,
     "vehicleParadrop",
     [
-        getMissionConfigValue ["WL_vehicleParadropCost", 1000],
+        WL_COST_PARADROP,
         "FTParadropVehicle",
         "Fast Travel"
     ]
@@ -137,7 +137,7 @@ private _scanExecute = {
     true,
     "scan",
     [
-        getMissionConfigValue ["BIS_WL_scanCost", 750],
+        WL_COST_SCAN,
         "Scan",
         "Fast Travel"
     ]

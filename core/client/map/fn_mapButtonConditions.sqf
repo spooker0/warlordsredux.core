@@ -23,7 +23,7 @@ switch (_conditionName) do {
     };
     case "scan": {
         private _allScannableSectors = BIS_WL_sectorsArray # 3;
-        private _lastScanEligible = serverTime - (getMissionConfigValue ["BIS_WL_scanCooldown", 300]);
+        private _lastScanEligible = serverTime - WL_COOLDOWN_SCAN;
         private _availableSectors = _allScannableSectors select {
             _x getVariable [format ["BIS_WL_lastScanEnd_%1", BIS_WL_playerSide], -9999] < _lastScanEligible
         };

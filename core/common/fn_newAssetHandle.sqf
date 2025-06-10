@@ -14,7 +14,7 @@ if (isServer) then {
 };
 
 if (isPlayer _owner) then {
-	missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_AFK_TIMER];
+	missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_DURATION_AFKTIME];
 };
 
 if (_asset isKindOf "Man") then {
@@ -23,7 +23,7 @@ if (_asset isKindOf "Man") then {
 	if (isPlayer _owner) then {
 		private _refreshTimerVar = format ["WL2_manpowerRefreshTimers_%1", getPlayerUID player];
 		private _manpowerRefreshTimers = missionNamespace getVariable [_refreshTimerVar, []];
-		_manpowerRefreshTimers pushBack [serverTime + WL_MANPOWER_REFRESH_COOLDOWN, _asset];
+		_manpowerRefreshTimers pushBack [serverTime + WL_COOLDOWN_AIREFRESH, _asset];
 		missionNamespace setVariable [_refreshTimerVar, _manpowerRefreshTimers, true];
 
 		switch (typeof _asset) do {

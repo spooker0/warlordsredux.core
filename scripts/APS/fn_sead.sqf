@@ -2,6 +2,11 @@
 params ["_projectile", "_unit"];
 
 if (isNull (missileTarget _projectile)) then {
+    private _extendedSamLauncher = _unit getVariable ["WL_incomingExtendedSam", objNull];
+    if (alive _extendedSamLauncher) exitWith {
+        [_projectile, _extendedSamLauncher] call APS_fnc_setSeadTarget;
+    };
+
     // fire on launcher
     private _launcher = _unit getVariable ["WL_incomingLauncherLastKnown", objNull];
     if (alive _launcher) exitWith {

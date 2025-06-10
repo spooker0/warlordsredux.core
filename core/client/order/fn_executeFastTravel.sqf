@@ -35,7 +35,7 @@ switch (_fastTravelMode) do {
 			markerPos _marker;
 		};
 
-		[player, "fastTravelContested", getMissionConfigValue ["BIS_WL_fastTravelCostContested", 200]] remoteExec ["WL2_fnc_handleClientRequest", 2];
+		[player, "fastTravelContested", WL_COST_FTCONTESTED] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	};
 	case 2: {
 		private _randomPos = _marker call BIS_fnc_randomPosTrigger;
@@ -44,7 +44,7 @@ switch (_fastTravelMode) do {
 		_height = _height max 250;
 		_destination = [_randomPos # 0, _randomPos # 1, _height + _distance * 0.75];
 
-		[player, "fastTravelContested", getMissionConfigValue ["WL_airAssaultCost", 100]] remoteExec ["WL2_fnc_handleClientRequest", 2];
+		[player, "fastTravelContested", WL_COST_AIRASSAULT] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	};
 	case 3: {
 		private _safeSpot = selectRandom ([BIS_WL_targetSector, 0, true] call WL2_fnc_findSpawnPositions);
@@ -156,7 +156,7 @@ switch (_fastTravelMode) do {
 
 		private _paradropNextUseVar = format ["WL_paradropNextUse_%1", getPlayerUID player];
         missionNamespace setVariable [_paradropNextUseVar, serverTime + 600];
-		[player, "fastTravelContested", getMissionConfigValue ["WL_vehicleParadropCost", 1000]] remoteExec ["WL2_fnc_handleClientRequest", 2];
+		[player, "fastTravelContested", WL_COST_PARADROP] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	};
 	case 4: {
         if (count _destination > 0) then {

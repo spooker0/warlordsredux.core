@@ -25,7 +25,7 @@ _purchase_transfer_amount ctrlEnable true;
 _purchase_transfer_amount ctrlCommit 0;
 
 private _existingMoney = (missionNamespace getVariable "fundsDatabaseClients") get (getPlayerUID player);
-private _transferCost = getMissionConfigValue ["BIS_WL_fundsTransferCost", 2000];
+private _transferCost = WL_COST_FUNDTRANSFER;
 private _maxTransfer = _existingMoney - _transferCost;
 _purchase_transfer_amount ctrlSetText format ["%1", ceil _maxTransfer];
 

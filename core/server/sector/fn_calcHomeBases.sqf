@@ -30,7 +30,7 @@ private _basesToRemove = createHashMapFromArray [
 ];
 
 private _iterations = 0;
-private _maxIterations = getMissionConfigValue ["WL2_MinBaseDistance", 6];
+private _maxIterations = WL_BASE_MINDISTANCE;
 while { _iterations <= _maxIterations } do {
     private _nextBasesToRemove = createHashMap;
     {

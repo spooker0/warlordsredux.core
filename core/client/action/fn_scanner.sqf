@@ -46,7 +46,7 @@ if (_awacs && _assetHeight < 50) exitWith {
 };
 
 private _scanRadius = if (_awacs) then {
-    10000;
+    WL_AWACS_RANGE;
 } else {
     ((_assetHeight * 2) min 1000) max 350;
 };

@@ -2,20 +2,21 @@
 private _list = serverNamespace getVariable ["WL2_garbageCollector", createHashMap];
 private _assetData = WL_ASSET_DATA;
 
-while {!BIS_WL_missionEnd} do {
+private _shouldGarbageCollect = {
+	params ["_asset"];
+	if (!alive _asset) exitWith { true };
+	if (_asset getEntityInfo 12) exitWith { true };
+	if (_asset getEntityInfo 2) exitWith { true };
+	if (_asset getEntityInfo 11) exitWith { true };
+	if (_list getOrDefault [typeOf _asset, false]) exitWith { true };
+
+	private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+	WL_ASSET_FIELD(_assetData, _assetActualType, "garbageCollect", 0) > 0;
+};
+
+while { !BIS_WL_missionEnd } do {
 	private _collectables = (allMissionObjects "") select {
-		!alive _x;
-	} select {
-		_x getEntityInfo 12; // wreck
-	} select {
-		_x getEntityInfo 2; // dead set
-	} select {
-		_x getEntityInfo 11; // weapon holder
-	} select {
-		_list getOrDefault [typeOf _x, false]; // basic list
-	} select {
-		private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
-		WL_ASSET_FIELD(_assetData, _assetActualType, "garbageCollect", false);
+		[_x] call _shouldGarbageCollect;
 	};
 
 	{
@@ -41,5 +42,5 @@ while {!BIS_WL_missionEnd} do {
 		};
 	} forEach _simpleObjects;
 
-	sleep 60;
+	sleep WL_COOLDOWN_GC;
 };

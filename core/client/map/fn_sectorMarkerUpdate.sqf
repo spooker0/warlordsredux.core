@@ -26,7 +26,7 @@ if (_owner == BIS_WL_playerSide || BIS_WL_playerSide in _previousOwners || _sect
 
 if (BIS_WL_playerSide in (_sector getVariable ["BIS_WL_revealedBy", []]) || BIS_WL_playerSide == independent || _canSeeAll) then {
 	if (_sector in WL_BASES) then {
-		_mrkrMain setMarkerSizeLocal [WL_BASE_ICON_SIZE, WL_BASE_ICON_SIZE];
+		_mrkrMain setMarkerSizeLocal [1.5, 1.5];
 	};
 	if (_sector in _specialStateArray) then {
 		_mrkrMain setMarkerColorLocal "ColorGrey";

@@ -12,7 +12,7 @@ if (getNumber (configFile >> "CfgVehicles" >> _spawnClass >> "isUav") == 1) then
         _isUav && alive _x
     };
 
-    private _uavLimit = getMissionConfigValue ["BIS_WL_autonomous_limit", 2];
+    private _uavLimit = WL_MAX_AUTOASSETS;
     if (count _ownedUavs >= _uavLimit) then {
         [false, format [localize "STR_A3_WL_tip_max_autonomous", _uavLimit]];
     } else {

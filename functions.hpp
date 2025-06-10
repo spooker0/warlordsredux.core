@@ -260,6 +260,7 @@ class CfgFunctions {
 			class deathInfo {};
 			class friendlyFireHandleClient {};
 			class handleKillFeedUpdate {};
+			class killHistory {};
 			class killRewardClient {};
 			class punishmentClient {};
 			class punishMessage {};

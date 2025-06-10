@@ -2,6 +2,7 @@
 params ["_projectile", "_unit"];
 
 private _target = _unit getVariable ["WL2_selectedAircraft", objNull];
+_target setVariable ["WL_incomingExtendedSam", _unit, true];
 
 if (isNull _target) exitWith {
     systemChat "No target found! Launch using the Extended SAM interface.";

@@ -12,7 +12,7 @@ private _actionID = _asset addAction [
             [player, "repair", _nextRepairTime, 0, _asset] remoteExec ["WL2_fnc_handleClientRequest", 2];
             playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Repair.wss", _asset, false, getPosASL _asset, 2, 1, 75];
             [toUpper localize "STR_A3_WL_popup_asset_repaired"] spawn WL2_fnc_smoothText;
-            _asset setVariable ["WL2_nextRepair", serverTime + WL_MAINTENANCE_COOLDOWN_REPAIR, true];
+            _asset setVariable ["WL2_nextRepair", serverTime + WL_COOLDOWN_REPAIR, true];
 
             ["TaskRepairVehicle"] call WLT_fnc_taskComplete;
         } else {

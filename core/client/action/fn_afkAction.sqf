@@ -3,7 +3,7 @@ player addAction [
     "<t color='#ff0000'>NOT AFK</t>",
     {
         params ["_target", "_caller", "_actionId", "_argument"];
-        missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_AFK_TIMER];
+        missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_DURATION_AFKTIME];
         player setVariable ["WL2_afk", false, [clientOwner, 2]];
         hintSilent "";
 

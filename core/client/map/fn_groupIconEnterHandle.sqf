@@ -44,7 +44,7 @@ private _harbor = "W" in _services;
 private _side = BIS_WL_playerSide;
 
 private _lastScan = (_sector getVariable [format ["BIS_WL_lastScanEnd_%1", _side], -9999]);
-private _scanCD = (_lastScan + (getMissionConfigValue ["BIS_WL_scanCooldown", 300]) - serverTime) max 0;
+private _scanCD = (_lastScan + WL_COOLDOWN_SCAN - serverTime) max 0;
 
 private _getTeamColor = {
 	params ["_team"];

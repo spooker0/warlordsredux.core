@@ -42,7 +42,7 @@ if (_orderSelectionActive) exitWith {
 };
 
 if (_scanSelectionActive) exitWith {
-	if ((_sector getVariable [format ["BIS_WL_lastScanEnd_%1", BIS_WL_playerSide], -9999]) < (serverTime) - (getMissionConfigValue ["BIS_WL_scanCooldown", 300])) then {
+	if ((_sector getVariable [format ["BIS_WL_lastScanEnd_%1", BIS_WL_playerSide], -9999]) < serverTime - WL_COOLDOWN_SCAN) then {
 		BIS_WL_targetSector = _sector;
 		playSound "AddItemOK";
 	} else {
