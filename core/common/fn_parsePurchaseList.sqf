@@ -25,7 +25,7 @@ private _purchaseable = [];
 		case "Gear": {
 			_categoryData pushBack [
 				"Arsenal",
-				getMissionConfigValue ["BIS_WL_arsenalCost", 1000],
+				WL_COST_ARSENAL,
 				[],
 				localize "STR_A3_Arsenal",
 				"\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
@@ -49,7 +49,7 @@ private _purchaseable = [];
 			];
 			_categoryData pushBack [
 				"LastLoadout",
-				getMissionConfigValue ["BIS_WL_lastLoadoutCost", 100],
+				WL_COST_LASTLOADOUT,
 				[],
 				localize "STR_A3_WL_last_loadout",
 				"\A3\Data_F_Warlords\Data\preview_loadout.jpg",
@@ -57,7 +57,7 @@ private _purchaseable = [];
 			];
 			_categoryData pushBack [
 				"SavedLoadout",\
-				getMissionConfigValue ["BIS_WL_savedLoadoutCost", 500],
+				WL_COST_SAVEDLOADOUT,
 				[],
 				localize "STR_A3_WL_saved_loadout",
 				"\A3\Data_F_Warlords\Data\preview_loadout.jpg",
@@ -203,28 +203,28 @@ private _fastTravelArr = [
 		localize "STR_A3_WL_menu_fasttravel_info"
 	], [
 		"FTConflict",
-		getMissionConfigValue ["BIS_WL_fastTravelCostContested", 200],
+		WL_COST_FTCONTESTED,
 		[],
 		localize "STR_A3_WL_menu_fasttravel_conflict",
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
 		localize "STR_A3_WL_menu_fasttravel_info"
 	], [
 		"FTAirAssault",
-		getMissionConfigValue ["WL_airAssaultCost", 100],
+		WL_COST_AIRASSAULT,
 		[],
 		"Fast travel air assault",
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
 		"Attack the contested sector by dropping into it with a parachute."
 	], [
 		"FTParadropVehicle",
-		getMissionConfigValue ["WL_vehicleParadropCost", 1000],
+		WL_COST_PARADROP,
 		[],
 		"Fast travel vehicle paradrop",
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
 		"Move your vehicle to a friendly sector from a helipad/airfield sector by paradropping it.<br/>Requirements:<br/>1. In an owned sector.<br/>2. In a vehicle as the driver.<br/>3. No enemies nearby.<br/>4. Cooldown: 5 minutes."
 	], [
 		"FTSquadLeader",
-		getMissionConfigValue ["BIS_WL_fastTravelCostSquadLeader", 10],
+		WL_COST_FTSL,
 		[],
 		localize "STR_SQUADS_fastTravelToSquadLeader",
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
@@ -272,21 +272,21 @@ _purchaseable pushBack _fastTravelArr;
 private _strategyArr = [
 	[
 		"Scan",
-		getMissionConfigValue ["BIS_WL_scanCost", 750],
+		WL_COST_SCAN,
 		[],
 		localize "STR_A3_WL_param4_title",
 		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
 		localize "STR_A3_WL_menu_scan_info"
 	], [
 		"FundsTransfer",
-		getMissionConfigValue ["BIS_WL_fundsTransferCost", 2000],
+		WL_COST_FUNDTRANSFER,
 		[],
 		localize "STR_A3_WL_menu_moneytransfer",
 		"\A3\Data_F_Warlords\Data\preview_cp_transfer.jpg",
 		localize "STR_A3_WL_menu_fundstransfer_info"
 	], [
 		"TargetReset",
-		getMissionConfigValue ["BIS_WL_targetResetCost", 500],
+		WL_COST_TARGETRESET,
 		[],
 		localize "STR_A3_WL_menu_resetvoting",
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",

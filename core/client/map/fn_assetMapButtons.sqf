@@ -66,7 +66,7 @@ if (side group player == independent && _asset isKindOf "Man" && !isPlayer _asse
                 _manpowerRefreshTimers set [_assetIndex, [_manpowerRefreshTimers # _assetIndex # 0, player]];
             } else {
                 _asset setVariable ["BIS_WL_ownerAsset", getPlayerUID player, true];
-                _manpowerRefreshTimers pushBack [serverTime + WL_MANPOWER_REFRESH_COOLDOWN, _asset];
+                _manpowerRefreshTimers pushBack [serverTime + WL_COOLDOWN_AIREFRESH, _asset];
             };
             missionNamespace setVariable [_refreshTimerVar, _manpowerRefreshTimers, true];
             call WL2_fnc_teammatesAvailability;
@@ -231,7 +231,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         true,
         "vehicleParadropFOB",
         [
-            getMissionConfigValue ["WL_vehicleParadropCost", 1000],
+            WL_COST_PARADROP,
             "FTParadropVehicle",
             "Fast Travel"
         ]
@@ -281,7 +281,7 @@ private _fastTravelSLExecute = {
     params ["_asset"];
     ["ftSquadLeader"] spawn SQD_fnc_client;
     private _ftNextUseVar = format ["BIS_WL_FTSLNextUse_%1", getPlayerUID player];
-    missionNamespace setVariable [_ftNextUseVar, serverTime + WL_FAST_TRAVEL_SQUAD_TIMER];
+    missionNamespace setVariable [_ftNextUseVar, serverTime + WL_COOLDOWN_FTSL];
 };
 [
     "FAST TRAVEL SL",
@@ -289,7 +289,7 @@ private _fastTravelSLExecute = {
     true,
     "fastTravelSL",
     [
-        getMissionConfigValue ["BIS_WL_fastTravelCostSquadLeader", 10],
+        WL_COST_FTSL,
         "FTSquadLeader",
         "Fast Travel"
     ]

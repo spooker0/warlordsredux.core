@@ -9,7 +9,7 @@ private _i = 0;
 	_area = _sector getVariable "WL2_objectArea";
 
 	if (_sector in WL_BASES && ((_sector getVariable "BIS_WL_owner") == (side group player))) then {
-		_sector setVariable ["BIS_WL_value", (getMissionConfigValue ["BIS_WL_baseValue", 50])];
+		_sector setVariable ["BIS_WL_value", WL_BASE_VALUE];
 	} else {
 		_area params ["_a", "_b", "_angle", "_isRectangle"];
 		_size = _a * _b * (if (_isRectangle) then {4} else {pi});
@@ -66,11 +66,11 @@ private _i = 0;
 			_size = ((_pos1 distance2D _pos2) / 2) - 150;
 			_dir = _pos1 getDir _pos2;
 			private _linkMarker = createMarkerLocal [format ["BIS_WL_linkMrkr_%1", _i], _center];
-			_linkMarker setMarkerAlphaLocal WL_CONNECTING_LINE_ALPHA_MAX;
+			_linkMarker setMarkerAlphaLocal 0.5;
 			_linkMarker setMarkerColorLocal "ColorBlack";
 			_linkMarker setMarkerShapeLocal "RECTANGLE";
 			_linkMarker setMarkerDirLocal _dir;
-			_linkMarker setMarkerSizeLocal [WL_CONNECTING_LINE_AXIS, _size];
+			_linkMarker setMarkerSizeLocal [40, _size];
 			BIS_WL_sectorLinks pushBack _linkMarker;
 
 			private _existingSectorMarkers = WL_linkSectorMarkers getOrDefault [hashValue _sector, []];

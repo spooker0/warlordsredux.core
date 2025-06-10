@@ -106,7 +106,7 @@ waitUntil {!isNil "WL2_base1" && {!isNil "WL2_base2"}};
 	_size = _a * _b * (if (_isRectangle) then {4} else {pi});
 
 	if (_sector in [_firstBase, _secondBase]) then {
-		_sector setVariable ["BIS_WL_value", (getMissionConfigValue ["BIS_WL_baseValue", 50])];
+		_sector setVariable ["BIS_WL_value", WL_BASE_VALUE];
 	} else {
 		_sector setVariable ["BIS_WL_value", round (_size / 13000)];
 	};
@@ -149,7 +149,7 @@ waitUntil {!isNil "WL2_base1" && {!isNil "WL2_base2"}};
 0 spawn {
 	sleep 5;
 	private _westSectors = BIS_WL_allSectors select {
-		_x getVariable ["WL2_name", ""] in ["Poliakko", "Alikampos", "Lakka"];
+		_x getVariable ["WL2_name", ""] in ["Poliakko", "Alikampos", "Lakka", "USS Freedom"];
 	};
 	private _eastSectors = BIS_WL_allSectors select {
 		_x getVariable ["WL2_name", ""] in ["Stavros", "Neochori", "Katalaki"];

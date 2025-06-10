@@ -10,7 +10,7 @@ while { !BIS_WL_missionEnd } do {
 	private _afkTimer = missionNamespace getVariable ["WL2_afkTimer", -1];
     private _isAfk = serverTime > _afkTimer;
     if (speed player > 40) then {
-        missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_AFK_TIMER];
+        missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_DURATION_AFKTIME];
         _isAfk = false;
     };
 	if (_isAfk) then {

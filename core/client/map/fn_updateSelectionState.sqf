@@ -57,7 +57,7 @@ switch (BIS_WL_currentSelection) do {
     };
     case WL_ID_SELECTION_SCAN: {
         private _allScannableSectors = BIS_WL_sectorsArray # 3;
-        private _lastScanEligible = serverTime - (getMissionConfigValue ["BIS_WL_scanCooldown", 300]);
+        private _lastScanEligible = serverTime - WL_COOLDOWN_SCAN;
         private _availableSectors = _allScannableSectors select {
             _x getVariable [format ["BIS_WL_lastScanEnd_%1", BIS_WL_playerSide], -9999] < _lastScanEligible
         };
@@ -79,7 +79,7 @@ if (WL_IsSpectator || WL_IsReplaying) then {
 
 if (BIS_WL_selection_showLinks) then {
     {
-        _x setMarkerAlphaLocal WL_CONNECTING_LINE_ALPHA_MAX;
+        _x setMarkerAlphaLocal 0.5;
     } forEach BIS_WL_sectorLinks;
 } else {
     {
@@ -95,7 +95,7 @@ private _sectorLinks = WL_linkSectorMarkers getOrDefault [hashValue _targetedSec
 
 {
     private _alpha = if (BIS_WL_selection_dimSectors && !(_x in BIS_WL_selection_availableSectors)) then {
-        WL_CONNECTING_LINE_ALPHA_MIN;
+        0.2;
     } else {
         1;
     };

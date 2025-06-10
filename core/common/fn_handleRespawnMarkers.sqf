@@ -1,6 +1,7 @@
 #include "includes.inc"
 params ["_mode", ["_side", sideUnknown]];
 
+private _respawnMarkersCount = 20;
 switch (_mode) do {
 	case "setup": {
 		_spawnMarkers = {
@@ -9,13 +10,13 @@ switch (_mode) do {
 			_base = _this call WL2_fnc_getSideBase;
 			_baseSpots = [_base, 0, true] call WL2_fnc_findSpawnPositions;
 			_baseSpotsCnt = count _baseSpots;
-			if (_baseSpotsCnt > WL_RESPAWN_MARKERS_CNT) then {
-				_baseSpots resize WL_RESPAWN_MARKERS_CNT;
+			if (_baseSpotsCnt > _respawnMarkersCount) then {
+				_baseSpots resize _respawnMarkersCount;
 			};
 
 			_i = 1;
-			for "_i" from 1 to WL_RESPAWN_MARKERS_CNT do {
-				createMarkerLocal [_respawnMarkerFormat + str _i, if (_baseSpotsCnt == WL_RESPAWN_MARKERS_CNT) then {_baseSpots # _i} else {selectRandom _baseSpots}];
+			for "_i" from 1 to _respawnMarkersCount do {
+				createMarkerLocal [_respawnMarkerFormat + str _i, if (_baseSpotsCnt == _respawnMarkersCount) then {_baseSpots # _i} else {selectRandom _baseSpots}];
 			};
 		};
 		if (isServer) then {
@@ -32,7 +33,7 @@ switch (_mode) do {
 		_markerLocArr = [[_base, (_baseArea # 0) + WL_BASE_DANGER_SPAWN_RANGE, (_baseArea # 1) + WL_BASE_DANGER_SPAWN_RANGE, _baseArea # 2, _baseArea # 3], 50] call WL2_fnc_findSpawnPositions;
 
 		_i = 1;
-		for "_i" from 1 to WL_RESPAWN_MARKERS_CNT do {
+		for "_i" from 1 to _respawnMarkersCount do {
 			_mrkr = (_respawnMarkerFormat + str _i);
 			_mrkr setMarkerPosLocal (if (count _markerLocArr >= 5) then {selectRandom _markerLocArr} else {[_base, WL_BASE_DANGER_SPAWN_RANGE, random 360] call BIS_fnc_relPos});
 		};
@@ -44,7 +45,7 @@ switch (_mode) do {
 		_baseSpots = [_base, 0, true] call WL2_fnc_findSpawnPositions;
 
 		_i = 1;
-		for "_i" from 1 to WL_RESPAWN_MARKERS_CNT do {
+		for "_i" from 1 to _respawnMarkersCount do {
 			_mrkr = (_respawnMarkerFormat + str _i);
 			_mrkr setMarkerPosLocal (if (count _baseSpots >= 5) then {selectRandom _baseSpots} else {[_base, random 50, random 360] call BIS_fnc_relPos});
 		};

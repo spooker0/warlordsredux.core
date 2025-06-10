@@ -362,6 +362,7 @@ missionNamespace setVariable [format ["BIS_WL2_minesDB_%1", getPlayerUID player]
 player spawn APS_fnc_setupProjectiles;
 0 spawn WL2_fnc_handleSelectionState;
 0 spawn WL2_fnc_handleKillFeedUpdate;
+0 spawn WL2_fnc_killHistory;
 0 spawn {
 	sleep 5;
 	[] call MENU_fnc_updateViewDistance;
@@ -391,7 +392,7 @@ call WL2_fnc_createInfoMarkers;
 
 call POLL_fnc_pollAction;
 
-missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_AFK_TIMER];
+missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_DURATION_AFKTIME];
 0 spawn WL2_fnc_afk;
 call WL2_fnc_afkAction;
 

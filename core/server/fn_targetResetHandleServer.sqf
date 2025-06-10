@@ -4,7 +4,7 @@ params ["_side"];
 _varName = format ["BIS_WL_targetResetVotingSince_%1", _side];
 _terminate = false;
 
-while {!_terminate && {serverTime < ((missionNamespace getVariable [_varName, -1]) + WL_TARGET_RESET_VOTING_TIME)}} do {
+while {!_terminate && {serverTime < ((missionNamespace getVariable [_varName, -1]) + WL_COOLDOWN_SECTORRESET)}} do {
 	sleep WL_TIMEOUT_SHORT;
 
 	_warlords = (allPlayers select {(side group _x == _side) && {!(_x getVariable ["WL2_afk", false])}});
@@ -19,13 +19,13 @@ while {!_terminate && {serverTime < ((missionNamespace getVariable [_varName, -1
 		["server", true] call WL2_fnc_updateSectorArrays;
 		_side spawn {
 			params ["_side"];
-			sleep (30 min (getMissionConfigValue ["BIS_WL_sectorResetTimeout", 300]));
+			sleep (30 min WL_COOLDOWN_SECTORRESET);
 			missionNamespace setVariable [format ["BIS_WL_recentTargetReset_%1", _side], false, true];
 		};
 	} else {
 		if (_votedNo >= _limit) then {
 			_terminate = true;
-			missionNamespace setVariable [_varName, (serverTime - WL_TARGET_RESET_VOTING_TIME), true];
+			missionNamespace setVariable [_varName, (serverTime - WL_COOLDOWN_SECTORRESET), true];
 		};
 	};
 };

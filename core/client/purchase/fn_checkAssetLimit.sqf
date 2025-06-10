@@ -1,5 +1,5 @@
 #include "includes.inc"
-private _assetLimit = getMissionConfigValue ["BIS_WL_assetLimit", 10];
+private _assetLimit = WL_MAX_ASSETS;
 
 private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
 private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];

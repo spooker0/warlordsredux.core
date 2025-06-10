@@ -485,7 +485,6 @@ if (_displayClass == "OSD") then {
 				(_display displayCtrl _i) ctrlSetFade 1;
 				(_display displayCtrl _i) ctrlCommit 0;
 			};
-			[player, "fundsTransferCancel"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 			playSound "AddItemFailed";
 		}];
 		((uiNamespace getVariable ["BIS_WL_purchaseMenuLastSelection", [0, 0, 0]]) # 0) call WL2_fnc_purchaseMenuSetItemsList;

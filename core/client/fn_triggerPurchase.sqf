@@ -65,7 +65,7 @@ switch (_className) do {
     case "FTSquadLeader": {
         ["ftSquadLeader"] spawn SQD_fnc_client;
         private _ftNextUseVar = format ["BIS_WL_FTSLNextUse_%1", getPlayerUID player];
-        missionNamespace setVariable [_ftNextUseVar, serverTime + WL_FAST_TRAVEL_SQUAD_TIMER];
+        missionNamespace setVariable [_ftNextUseVar, serverTime + WL_COOLDOWN_FTSL];
         ["TaskFastTravelSquad"] call WLT_fnc_taskComplete;
     };
     case "BuyStronghold": {
@@ -86,7 +86,6 @@ switch (_className) do {
     };
     case "FundsTransfer": {
         call WL2_fnc_orderFundsTransfer;
-        [player, "fundsTransferBill"] remoteExec ["WL2_fnc_handleClientRequest", 2]
     };
     case "TargetReset": {"RequestMenu_close" call WL2_fnc_setupUI; [player, "targetReset"] remoteExec ["WL2_fnc_handleClientRequest", 2]};
     case "ForfeitVote": {0 spawn WL2_fnc_orderForfeit};

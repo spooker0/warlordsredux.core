@@ -2,8 +2,8 @@
 params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
 
 private _firedPosition = getPosATL _gunner;
-private _minDistSqr = getMissionConfigValue ["BIS_WL_minAPSDist", 400];
-private _maxDistSqr = getMissionConfigValue ["BIS_WL_maxAPSDist", 1600];
+private _minDistSqr = APS_MIN_DISTANCE_SQR;
+private _maxDistSqr = APS_MAX_DISTANCE_SQR;
 
 private _apsProjectileType = _projectile getVariable ["APS_ammoOverride", typeOf _projectile];
 private _apsProjectileConfig = APS_projectileConfig getOrDefault [_apsProjectileType, createHashMap];

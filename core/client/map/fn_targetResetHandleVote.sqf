@@ -32,7 +32,7 @@ if ((player getVariable ["BIS_WL_targetResetVote", -1]) == -1) then {
 		};
 	}];
 
-	waitUntil {sleep WL_TIMEOUT_SHORT; serverTime >= ((missionNamespace getVariable _varNameVoting) + WL_TARGET_RESET_VOTING_TIME) || {isNull WL_TARGET_FRIENDLY || {(player getVariable ["BIS_WL_targetResetVote", -1]) != -1}}};
+	waitUntil {sleep WL_TIMEOUT_SHORT; serverTime >= ((missionNamespace getVariable _varNameVoting) + WL_COOLDOWN_SECTORRESET) || {isNull WL_TARGET_FRIENDLY || {(player getVariable ["BIS_WL_targetResetVote", -1]) != -1}}};
 
 	[player, "targetResetVoting", false] call WL2_fnc_hintHandle;
 };

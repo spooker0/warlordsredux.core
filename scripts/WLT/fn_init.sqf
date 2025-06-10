@@ -104,7 +104,7 @@ missionNamespace setVariable ["WLT_tasks", _tasks];
     };
 };
 
-#if WLT_DEBUG_MODE
+#if WL_TASK_DEBUG_MODE
 // Debug code
 0 spawn {
     private _tasks = missionNamespace getVariable ["WLT_tasks", createHashMap];

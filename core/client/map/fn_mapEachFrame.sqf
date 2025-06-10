@@ -53,13 +53,15 @@ if (count _nearbyAssets > 0) then {
 
 if (isNull (findDisplay 160 displayCtrl 51)) then {
     _mapScale = ctrlMapScale WL_CONTROL_MAP;
-    _timer = (serverTime % WL_MAP_PULSE_FREQ);
-    _timer = if (_timer <= (WL_MAP_PULSE_FREQ / 2)) then {_timer} else {WL_MAP_PULSE_FREQ - _timer};
-    _markerSize = linearConversion [0, WL_MAP_PULSE_FREQ / 2, _timer, 1, WL_MAP_PULSE_ICON_SIZE];
+    private _pulseFrequency = 1;
+    private _pulseIconSize = 1.5;
+    _timer = (serverTime % _pulseFrequency);
+    _timer = if (_timer <= (_pulseFrequency / 2)) then {_timer} else {_pulseFrequency - _timer};
+    _markerSize = linearConversion [0, _pulseFrequency / 2, _timer, 1, _pulseIconSize];
     _markerSizeArr = [_markerSize, _markerSize];
 
     {
-        _x setMarkerSizeLocal [WL_CONNECTING_LINE_AXIS * _mapScale * BIS_WL_mapSizeIndex, (markerSize _x) # 1];
+        _x setMarkerSizeLocal [40 * _mapScale * BIS_WL_mapSizeIndex, (markerSize _x) # 1];
     } forEach BIS_WL_sectorLinks;
 
     {
@@ -67,7 +69,7 @@ if (isNull (findDisplay 160 displayCtrl 51)) then {
             ((_x getVariable "BIS_WL_markers") # 0) setMarkerSizeLocal [1, 1];
         } else {
             if (_x == BIS_WL_targetVote) then {
-                ((_x getVariable "BIS_WL_markers") # 0) setMarkerSizeLocal [WL_MAP_PULSE_ICON_SIZE, WL_MAP_PULSE_ICON_SIZE];
+                ((_x getVariable "BIS_WL_markers") # 0) setMarkerSizeLocal [_pulseIconSize, _pulseIconSize];
             } else {
                 ((_x getVariable "BIS_WL_markers") # 0) setMarkerSizeLocal _markerSizeArr;
             };

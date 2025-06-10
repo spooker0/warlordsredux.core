@@ -41,7 +41,7 @@ if (_event == "init") then {
 				toUpper localize "str_lib_info_yes",
 				localize "str_dik_n",
 				toUpper localize "str_lib_info_no",
-				0 max ceil (((missionNamespace getVariable [_varNameVoting, -1]) + WL_TARGET_RESET_VOTING_TIME) - serverTime),
+				0 max ceil (((missionNamespace getVariable [_varNameVoting, -1]) + WL_COOLDOWN_SECTORRESET) - serverTime),
 				if (_hintText == "") then {""} else {"<br/><br/>"}
 			];
 		};
