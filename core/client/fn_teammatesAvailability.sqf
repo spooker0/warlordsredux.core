@@ -9,5 +9,3 @@ _manpowerRefreshTimers = _manpowerRefreshTimers select {
 
 private _maxSubordinates = missionNamespace getVariable [format ["BIS_WL_maxSubordinates_%1", BIS_WL_playerSide], 1];
 BIS_WL_matesAvailable = (_maxSubordinates - (count _manpowerRefreshTimers)) max 0;
-
-false spawn WL2_fnc_refreshOSD;

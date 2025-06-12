@@ -167,7 +167,6 @@ class CfgFunctions {
 			class sideToFaction {};
 			class spectrumInterface {};
 			class teammatesAvailability {};
-			class timer {};
 			class triggerPurchase {};
 			class updateLevelDisplay {};
 			class welcome {};
@@ -244,12 +243,11 @@ class CfgFunctions {
 			class iconSize {};
 			class iconText {};
 			class iconType {};
+			class initHud {};
 			class isScannerMunition {};
 			class mapIcons {};
 			class refreshCurrentTargetData {};
-			class refreshOSD {};
 			class sceneDrawHandle {};
-			class setOSDEvent {};
 			class setupUI {};
 			class smoothText {};
 			class uavJammer {};
@@ -294,7 +292,6 @@ class CfgFunctions {
 			class replayMapClear {};
 			class sectorButtonMark {};
 			class sectorButtonMarker {};
-			class sectorCaptureStatus {};
 			class sectorMapButtons {};
 			class sectorMarkerUpdate {};
 			class sectorOwnershipHandleClient {};

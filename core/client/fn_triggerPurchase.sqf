@@ -172,7 +172,6 @@ switch (_className) do {
         {
             deleteVehicle _x;
         } forEach ((groupSelectedUnits player) select {_x != player && {_x getVariable ["BIS_WL_ownerAsset", "123"] == getPlayerUID player}});
-        false spawn WL2_fnc_refreshOSD;
     };
     case "WipeMap": {
         {

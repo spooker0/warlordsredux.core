@@ -30,10 +30,6 @@ BIS_WL_playerSide spawn {
 		if (missionNamespace getVariable [_varName, false]) then {
 			"Reset" call WL2_fnc_announcer;
 
-			if (player inArea (_target getVariable "objectAreaComplete")) then {
-				["seizing", []] spawn WL2_fnc_setOSDEvent;
-			};
-
 			private _enemySectorPreviousOwners = WL_TARGET_ENEMY getVariable ["BIS_WL_previousOwners", []];
 			if !(BIS_WL_playerSide in _enemySectorPreviousOwners) then {
 				"BIS_WL_targetEnemy" setMarkerAlphaLocal 0;

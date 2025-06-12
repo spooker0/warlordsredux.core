@@ -143,9 +143,9 @@ while { !_stop } do {
     private _projectileDirection = _projectile modelToWorld [0, 1000, 0];
     private _isDestroyed = _projectilePosition isEqualTo [0, 0, 0] || _projectileDirection isEqualTo [0, 0, 0];
     private _disconnected = unitIsUAV _unit && isNull (getConnectedUAV player);
-    private _playerDown = !alive player || lifeState player == "INCAPACITATED";
+    private _playerDead = !alive player;
 
-    _stop = isNull _projectile || !alive _projectile || _isDestroyed || _disconnected || _projectile getEntityInfo 14 || _playerDown;
+    _stop = isNull _projectile || !alive _projectile || _isDestroyed || _disconnected || _projectile getEntityInfo 14 || _playerDead;
 
     "rtt1" setPiPEffect [currentVisionMode player];
 

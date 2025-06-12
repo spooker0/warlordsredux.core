@@ -6,6 +6,7 @@ import RscControlsGroup;
 import RscEdit;
 import RscListBox;
 import RscPicture;
+import RscProgress;
 import RscShortcutButton;
 import RscStructuredText;
 import RscText;

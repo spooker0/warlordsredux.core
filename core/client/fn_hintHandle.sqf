@@ -8,7 +8,7 @@ if (_event == "init") then {
 		if (isNil _varName) then {
 			missionNamespace setVariable [_varName, false]
 		};
-	} forEach ["assembly", "placeCharge", "maintenance", "targetResetVoting", "forfeitVoting"];
+	} forEach ["assembly", "placeCharge", "targetResetVoting", "forfeitVoting"];
 
 	_hintText = "";
 	_lastHint = "";
@@ -69,20 +69,9 @@ if (_event == "init") then {
 		sleep WL_TIMEOUT_MEDIUM;
 	};
 } else {
-	_varName = format ["BIS_WL_showHint_%1", _event];
+	private _varName = format ["BIS_WL_showHint_%1", _event];
 
 	if (_show isEqualType true) then {
 		missionNamespace setVariable [_varName, _show];
-	} else {
-		[_varName, _show] spawn {
-			params ["_varName", "_show"];
-			while {!BIS_WL_missionEnd} do {
-				missionNamespace setVariable [_varName, call _show];
-				if (_varName == "BIS_WL_showHint_maintenance") then {
-					false spawn WL2_fnc_refreshOSD;
-				};
-				sleep WL_TIMEOUT_STANDARD;
-			};
-		};
 	};
 };

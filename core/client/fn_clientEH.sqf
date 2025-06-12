@@ -1,8 +1,4 @@
 #include "includes.inc"
-"fundsDatabaseClients" addPublicVariableEventHandler {
-	false spawn WL2_fnc_refreshOSD;
-};
-
 addMissionEventHandler ["GroupIconClick", WL2_fnc_groupIconClickHandle];
 addMissionEventHandler ["GroupIconOverEnter", WL2_fnc_groupIconEnterHandle];
 addMissionEventHandler ["GroupIconOverLeave", WL2_fnc_groupIconLeaveHandle];

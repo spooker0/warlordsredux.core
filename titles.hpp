@@ -138,6 +138,91 @@ class RscTitles {
 		};
 	};
 
+	class RscWarlordsHUD {
+		idd = -1;
+		movingEnable = 0;
+		duration = 1e+011;
+		name = "RscWarlordsHUD";
+		onLoad = "uiNamespace setVariable ['RscWarlordsHUD', _this select 0];";
+		class controls {
+			class RscWarlordsHUD_Timer: RscStructuredText {
+				idc = 2100;
+				x = safeZoneW + safeZoneX - 0.45;
+				y = safeZoneH + safeZoneY - 0.14;
+				w = 0.45;
+				h = 0.05;
+				text = "";
+				size = 0.045;
+			};
+
+			class RscWarlordsHUD_Money: RscStructuredText {
+				idc = 2101;
+				x = safeZoneW + safeZoneX - 0.45;
+				y = safeZoneH + safeZoneY - 0.2;
+				w = 0.2;
+				h = 0.05;
+				text = "";
+				size = 0.045;
+			};
+			class RscWarlordsHUD_AI: RscStructuredText {
+				idc = 2102;
+				x = safeZoneW + safeZoneX - 0.25;
+				y = safeZoneH + safeZoneY - 0.2;
+				w = 0.1;
+				h = 0.05;
+				text = "";
+				size = 0.045;
+			};
+			class RscWarlordsHUD_Squad: RscStructuredText {
+				idc = 2103;
+				x = safeZoneW + safeZoneX - 0.15;
+				y = safeZoneH + safeZoneY - 0.2;
+				w = 0.15;
+				h = 0.05;
+				text = "";
+				size = 0.045;
+			};
+
+			class RscWarlordsHUD_Rearm: RscStructuredText {
+				idc = 2104;
+				x = safeZoneW + safeZoneX - 0.45;
+				y = safeZoneH + safeZoneY - 0.25;
+				w = 0.2;
+				h = 0.05;
+				text = "";
+				size = 0.045;
+			};
+			class RscWarlordsHUD_Repair: RscStructuredText {
+				idc = 2105;
+				x = safeZoneW + safeZoneX - 0.25;
+				y = safeZoneH + safeZoneY - 0.25;
+				w = 0.2;
+				h = 0.05;
+				text = "";
+				size = 0.045;
+			};
+
+			class RscWarlordsHUD_CaptureProgress: RscProgress {
+				idc = 2106;
+				x = 0;
+				y = safeZoneY + 0.05;
+				w = 1;
+				h = 0.065;
+				colorFrame[] = {0, 0, 0, 1};
+				colorBar[] = {1, 1, 1, 1};
+			};
+			class RscWarlordsHUD_Capture: RscStructuredText {
+				idc = 2107;
+				x = 0;
+				y = safeZoneY + 0.05;
+				w = 1;
+				h = 0.07;
+				text = "";
+				size = 0.06;
+			};
+		};
+	};
+
 	class RscJammingIndicator {
 		idd = -1;
 		movingEnable = 0;

@@ -141,7 +141,7 @@ if !(isServer) then {
 };
 WL_LoadingState = 9;
 
-0 spawn WL2_fnc_sectorCaptureStatus;
+0 spawn WL2_fnc_initHud;
 0 spawn {
 	while {!BIS_WL_missionEnd} do {
 		sleep 5;
@@ -186,9 +186,6 @@ call WL2_fnc_targetResetHandle;
 [player, "init"] spawn WL2_fnc_hintHandle;
 WL_LoadingState = 11;
 
-["OSD"] spawn WL2_fnc_setupUI;
-0 spawn WL2_fnc_timer;
-
 0 spawn WL2_fnc_repackMagazines;
 
 0 spawn {
@@ -215,16 +212,6 @@ WL_LoadingState = 11;
 		call WL2_fnc_purchaseMenuRefresh;
 	};
 };
-
-[player, "maintenance", {
-	private _nearbyVehicles = (player nearEntities WL_MAINTENANCE_RADIUS) select {
-		private _config = configFile >> "CfgVehicles" >> typeOf _x;
-		private _isRepair = getNumber (_config >> "transportRepair") > 0;
-		private _isAmmo = getNumber (_config >> "transportAmmo") > 0;
-		(_isRepair || _isAmmo) && alive _x
-	};
-	count _nearbyVehicles > 0
-}] call WL2_fnc_hintHandle;
 
 0 spawn WL2_fnc_selectedTargetsHandle;
 0 spawn WL2_fnc_sectorVoteClient;
