@@ -147,8 +147,8 @@ class RscTitles {
 		class controls {
 			class RscWarlordsHUD_Timer: RscStructuredText {
 				idc = 2100;
-				x = safeZoneW + safeZoneX - 0.45;
-				y = safeZoneH + safeZoneY - 0.14;
+				x = safeZoneW + safeZoneX - 0.2;
+				y = safeZoneH + safeZoneY - 0.25;
 				w = 0.45;
 				h = 0.05;
 				text = "";
@@ -186,7 +186,7 @@ class RscTitles {
 			class RscWarlordsHUD_Rearm: RscStructuredText {
 				idc = 2104;
 				x = safeZoneW + safeZoneX - 0.45;
-				y = safeZoneH + safeZoneY - 0.25;
+				y = safeZoneH + safeZoneY - 0.15;
 				w = 0.2;
 				h = 0.05;
 				text = "";
@@ -195,7 +195,7 @@ class RscTitles {
 			class RscWarlordsHUD_Repair: RscStructuredText {
 				idc = 2105;
 				x = safeZoneW + safeZoneX - 0.25;
-				y = safeZoneH + safeZoneY - 0.25;
+				y = safeZoneH + safeZoneY - 0.15;
 				w = 0.2;
 				h = 0.05;
 				text = "";
