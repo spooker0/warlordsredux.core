@@ -244,6 +244,7 @@ _positionY = _positionY + 0.08;
     ["slider", "Parachute auto deploy height", [0, 500, 5, 100, "parachuteAutoDeployHeight"]],
     ["slider", "Announcer text size", [0.1, 1, 0.1, 0.5, "announcerTextSize"]],
     ["slider", "Map marker scale threshold", [0, 1, 0.05, 0.4, "sectorMarkerTextThreshold"]],
+    ["slider", "Map icon scale", [0.5, 2, 0.05, 1.0, "mapIconScale"]],
     ["slider", "Respawn: smoke grenades", [0, 2, 1, 1, "respawnSmokeGrenades"]],
     ["slider", "Respawn: frag grenades", [0, 3, 1, 2, "respawnFragGrenades"]],
     ["slider", "Respawn: first aid kits ", [0, 3, 1, 3, "respawnFirstAidKits"]],

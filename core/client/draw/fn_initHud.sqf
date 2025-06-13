@@ -26,8 +26,10 @@ private _getTeamColorHex = {
 
 private _getTeamColorRGB = {
 	params ["_team"];
-	[[0.0, 0.3, 0.6, 0.7], [0.5, 0.0, 0.0, 0.7], [0.0, 0.5, 0.0, 0.7]] # ([west, east, independent] find _team);
+	[[0.0, 0.3, 0.6, 1], [0.5, 0.0, 0.0, 1], [0.0, 0.5, 0.0, 1]] # ([west, east, independent] find _team);
 };
+
+private _lastMoney = 0;
 
 while { !BIS_WL_missionEnd } do {
 	sleep 1;
@@ -38,6 +40,12 @@ while { !BIS_WL_missionEnd } do {
 		"<t shadow='2' size ='1'><img color='#ffffff' image='a3\ui_f\data\igui\cfg\actions\settimer_ca.paa'></img>  %1</t>",
 		[36000 - (serverTime - _gameStart), "HH:MM:SS"] call BIS_fnc_secondsToString
 	];
+
+	private _currentMoney = (missionNamespace getVariable "fundsDatabaseClients") get (getPlayerUID player);
+	if (_currentMoney != _lastMoney) then {
+		_lastMoney = _currentMoney;
+		call WL2_fnc_purchaseMenuRefresh;
+	};
 
 	_moneyControl ctrlSetStructuredText parseText format [
 		"<t shadow='2' size ='1.1' align='middle'>%1%2</t>    <t shadow='2' size ='0.8' align='middle'>+%3</t>",

@@ -10,7 +10,7 @@ if (!isNull _gunner) then {
 if (vehicle player != _vehicle) exitWith {};
 
 private _assetApsType = _vehicle getVariable ["apsType", -1];
-if (_assetApsType == -1) exitWith {};
+if (_assetApsType <= -1) exitWith {};
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _apsVolume = _settingsMap getOrDefault ["apsVolume", 1];

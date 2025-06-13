@@ -31,11 +31,11 @@ switch (_op) do {
                 _level = _level + 1;
             };
         };
-        _ret = _level min 100;
+        _ret = _level min 500;
     };
     case "getNextLevelScore": {
         private _level = ["getLevel"] call WLC_fnc_getLevelInfo;
-        if (_level == 100) then {
+        if (_level == 500) then {
             _ret = 0;
         } else {
             private _score = 0;
