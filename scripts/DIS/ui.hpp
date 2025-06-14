@@ -435,7 +435,7 @@ class DIS_ESAM_MenuUI {
             y = -0.05;
             w = 0.9;
             h = 0.05;
-            text = "Extended SAM Configuration";
+            text = "SAM Configuration";
             style = ST_LEFT;
         };
         class DIS_ESAM_Background: IGUIBackMRTM {

@@ -7,13 +7,8 @@ ________________	GF Earplugs Script - Mod	________________
 https://forums.bohemia.net/forums/topic/215844-gf-earplugs-script-mod/
 */
 
-waitUntil {
-    !(isNull (findDisplay 46))
-};
-
-player createDiarySubject ["GF Earplugs Script", "GF Earplugs Script"];
-player createDiaryRecord ["GF Earplugs Script",
-    ["About and Credits", "
+player createDiaryRecord ["Warlords Redux",
+    ["GF Earplugs Script", "
     <br /><font size='30' color='#FF0000'>GF Earplugs Script
     <br />
     <br /><font size='25' color='#FCEF06'>Author : GEORGE FLOROS [GR]

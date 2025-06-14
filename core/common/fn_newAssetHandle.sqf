@@ -345,6 +345,10 @@ if (_asset isKindOf "Man") then {
 		[_asset, _side] remoteExec ["DIS_fnc_setupExtendedSam", 0, true];
 	};
 
+	if (WL_ASSET(_assetActualType, "hasASAM", 0) > 0) then {
+		[_asset] remoteExec ["DIS_fnc_setupAdvancedSam", 0, true];
+	};
+
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 	if (unitIsUAV _asset) then {
 		if (_settingsMap getOrDefault ["enableAuto", false] && !isDedicated) then {

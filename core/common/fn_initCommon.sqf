@@ -2,8 +2,9 @@
 0 spawn APS_fnc_defineVehicles;
 
 if !(isDedicated) then {
-	call GFE_fnc_credits;
-	waitUntil { !isNull player };
+	waitUntil {
+		!(isNull (findDisplay 46)) && !(isNull player);
+	};
 };
 
 if (isServer) then {

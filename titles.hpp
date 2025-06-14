@@ -147,9 +147,9 @@ class RscTitles {
 		class controls {
 			class RscWarlordsHUD_Timer: RscStructuredText {
 				idc = 2100;
-				x = safeZoneW + safeZoneX - 0.2;
-				y = safeZoneH + safeZoneY - 0.25;
-				w = 0.45;
+				x = safeZoneW + safeZoneX - 0.21;
+				y = safeZoneH + safeZoneY - 0.13;
+				w = 0.23;
 				h = 0.05;
 				text = "";
 				size = 0.045;
@@ -186,7 +186,7 @@ class RscTitles {
 			class RscWarlordsHUD_Rearm: RscStructuredText {
 				idc = 2104;
 				x = safeZoneW + safeZoneX - 0.45;
-				y = safeZoneH + safeZoneY - 0.15;
+				y = safeZoneH + safeZoneY - 0.27;
 				w = 0.2;
 				h = 0.05;
 				text = "";
@@ -195,7 +195,26 @@ class RscTitles {
 			class RscWarlordsHUD_Repair: RscStructuredText {
 				idc = 2105;
 				x = safeZoneW + safeZoneX - 0.25;
-				y = safeZoneH + safeZoneY - 0.15;
+				y = safeZoneH + safeZoneY - 0.27;
+				w = 0.2;
+				h = 0.05;
+				text = "";
+				size = 0.045;
+			};
+
+			class RscWarlordsHUD_APSType: RscStructuredText {
+				idc = 2106;
+				x = safeZoneW + safeZoneX - 0.45;
+				y = safeZoneH + safeZoneY - 0.34;
+				w = 0.2;
+				h = 0.05;
+				text = "";
+				size = 0.045;
+			};
+			class RscWarlordsHUD_APSAmmo: RscStructuredText {
+				idc = 2107;
+				x = safeZoneW + safeZoneX - 0.25;
+				y = safeZoneH + safeZoneY - 0.34;
 				w = 0.2;
 				h = 0.05;
 				text = "";
@@ -203,16 +222,16 @@ class RscTitles {
 			};
 
 			class RscWarlordsHUD_CaptureProgress: RscProgress {
-				idc = 2106;
-				x = 0;
+				idc = 2108;
+				x = 0.08;
 				y = safeZoneY + 0.05;
-				w = 1;
+				w = 0.84;
 				h = 0.065;
 				colorFrame[] = {0, 0, 0, 1};
 				colorBar[] = {1, 1, 1, 1};
 			};
 			class RscWarlordsHUD_Capture: RscStructuredText {
-				idc = 2107;
+				idc = 2109;
 				x = 0;
 				y = safeZoneY + 0.05;
 				w = 1;

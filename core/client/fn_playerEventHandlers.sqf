@@ -12,12 +12,6 @@ player addEventHandler ["GetInMan", {
 	if ((_vehicle getVariable ["BIS_WL_ownerAsset", "123"]) == (getPlayerUID player)) then {
 		_vehicle setVariable ["BIS_WL_lastActive", 0];
 	};
-	[_vehicle] spawn WL2_fnc_drawAssetName;
-}];
-
-player addEventHandler ["SeatSwitchedMan", {
-	params ["_unit1", "_unit2", "_vehicle"];
-	[_vehicle] spawn WL2_fnc_drawAssetName;
 }];
 
 player addEventHandler ["InventoryOpened",{
@@ -125,3 +119,15 @@ player addEventHandler ["Respawn", {
         };
     };
 }];
+
+0 spawn {
+	private _lastCamera = cameraOn;
+	while { !BIS_WL_missionEnd } do {
+		private _currentCamera = cameraOn;
+		if (_currentCamera != _lastCamera) then {
+			_lastCamera = _currentCamera;
+			[_currentCamera] spawn WL2_fnc_drawAssetName;
+		};
+		sleep 0.5;
+	};
+};

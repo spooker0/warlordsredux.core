@@ -7,6 +7,11 @@ if (isNull (missileTarget _projectile)) then {
         [_projectile, _extendedSamLauncher] call APS_fnc_setSeadTarget;
     };
 
+    private _advancedThreat = _unit getVariable ["WL2_advancedThreat", objNull];
+    if (alive _advancedThreat) exitWith {
+        [_projectile, _advancedThreat] call APS_fnc_setSeadTarget;
+    };
+
     // fire on launcher
     private _launcher = _unit getVariable ["WL_incomingLauncherLastKnown", objNull];
     if (alive _launcher) exitWith {

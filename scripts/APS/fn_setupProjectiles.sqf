@@ -65,6 +65,17 @@ _this addEventHandler ["Fired", {
 
 	_this spawn APS_fnc_firedProjectile;
 
+	private _projectileAsam = _projectileConfig getOrDefault ["asam", false];
+	if (_projectileAsam) then {
+		_projectile setVariable ["WL2_missileNameOverride", "HERCULES", true];
+
+		private _target = _unit getVariable ["WL2_selectedAircraft", objNull];
+		_projectile setMissileTarget [_target, true];
+
+		[_projectile, _unit] spawn DIS_fnc_frag;
+		[_projectile, _unit, 14000, 14000, 10000] spawn DIS_fnc_maneuver;
+	};
+
 	private _projectileSam = _projectileConfig getOrDefault ["sam", false];
 	if (_projectileSam) then {
 		[_projectile, _unit] spawn DIS_fnc_frag;

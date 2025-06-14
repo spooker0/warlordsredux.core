@@ -329,6 +329,7 @@ addMissionEventHandler ["Draw3D", {
             };
 
             {
+                private _missileType = _x getVariable ["WL2_missileNameOverride", _missileTypeData getOrDefault [typeof _x, "MISSILE"]];
                 _samIcons pushBack [
                     "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missileAlt_ca.paa",
                     [1, 0, 0, 1],
@@ -336,7 +337,7 @@ addMissionEventHandler ["Draw3D", {
                     0.8,
                     0.8,
                     0,
-                    _missileTypeData getOrDefault [typeof _x, "MISSILE"],
+                    _missileType,
                     true,
                     0.035,
                     "RobotoCondensedBold",
@@ -557,6 +558,25 @@ addMissionEventHandler ["Draw3D", {
                 ];
             };
         } forEach _targets;
+
+        private _advancedThreat = _vehicle getVariable ["WL2_advancedThreat", objNull];
+        if (alive _advancedThreat) then {
+            _targetVehicleIcons pushBack [
+                "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Threats\locking_ca.paa",
+                [1, 1, 0, 1],
+                _advancedThreat,
+                1.0,
+                1.0,
+                0,
+                "LOCKED",
+                true,
+                0.035,
+                "RobotoCondensedBold",
+                "center",
+                true
+            ];
+        };
+
         uiNamespace setVariable ["WL_HelmetInterfaceTargetInfantryIcons", _targetInfantryIcons];
         uiNamespace setVariable ["WL_HelmetInterfaceTargetVehicleIcons", _targetVehicleIcons];
 

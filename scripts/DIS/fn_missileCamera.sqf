@@ -166,10 +166,9 @@ camDestroy _camera;
 removeMissionEventHandler ["Draw3D", _targetDrawer];
 player setVariable ["WL_hmdOverride", -1];
 
-if (!isNull _originalRemote) then {
-    player remoteControl _originalRemote;
-    _originalCamera switchCamera _originalCamView;
-} else {
+sleep 2;
+
+if (!alive cameraOn) then {
     switchCamera player;
 };
 

@@ -37,6 +37,8 @@ class CfgFunctions {
 			class maneuver {};
 			class missileCamera {};
 			class remoteMunition {};
+			class setupAdvancedSam {};
+			class setupAdvancedSamMenu {};
 			class setupExtendedSam {};
 			class setupExtendedSamMenu {};
 			class setGPSNumber {};
