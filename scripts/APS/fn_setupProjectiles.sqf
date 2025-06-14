@@ -70,7 +70,9 @@ _this addEventHandler ["Fired", {
 		_projectile setVariable ["WL2_missileNameOverride", "HERCULES", true];
 
 		private _target = _unit getVariable ["WL2_selectedAircraft", objNull];
-		_projectile setMissileTarget [_target, true];
+		if !(isNull _target) then {
+			_projectile setMissileTarget [_target, true];
+		};
 
 		[_projectile, _unit] spawn DIS_fnc_frag;
 		[_projectile, _unit, 14000, 14000, 10000] spawn DIS_fnc_maneuver;
