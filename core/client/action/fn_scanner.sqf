@@ -10,7 +10,7 @@ private _actionColor = if (_scannerOn) then {
 };
 
 private _scannerTypeText = if (_awacs) then {
-    "AWACS";
+    "AESA RADAR";
 } else {
     "SCANNER";
 };

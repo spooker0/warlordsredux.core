@@ -75,7 +75,7 @@ _this addEventHandler ["Fired", {
 		};
 
 		[_projectile, _unit] spawn DIS_fnc_frag;
-		[_projectile, _unit, 14000, 14000, 10000] spawn DIS_fnc_maneuver;
+		[_projectile, _unit, 14000, 14000, 8000] spawn DIS_fnc_maneuver;
 	};
 
 	private _projectileSam = _projectileConfig getOrDefault ["sam", false];
