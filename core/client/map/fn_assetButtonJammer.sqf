@@ -1,8 +1,8 @@
 #include "includes.inc"
 params ["_asset"];
 
-private _jammerActivated = _asset getVariable ["WL_ewNetActive", false] && isEngineOn _asset;
-private _jammerActivating = _asset getVariable ["WL_ewNetActivating", false] && isEngineOn _asset;
+private _jammerActivated = _asset getVariable ["WL_ewNetActive", false];
+private _jammerActivating = _asset getVariable ["WL_ewNetActivating", false];
 private _jammerColor = if (_jammerActivated) then {
     "#4bff58"
 } else {

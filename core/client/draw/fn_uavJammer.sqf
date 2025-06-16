@@ -8,8 +8,7 @@ private _side = side _owner;
     params ["_asset", "_side"];
     while { alive _asset } do {
         private _activeVehicles = vehicles select {
-            alive _x &&
-            isEngineOn _x
+            alive _x
         };
         private _enemyJammers = _activeVehicles + ("Land_MobileRadar_01_radar_F" allObjects 0) select {
             [_x] call WL2_fnc_getAssetSide != _side &&

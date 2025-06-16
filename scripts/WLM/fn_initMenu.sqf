@@ -447,7 +447,7 @@ private _nonHornWeapons = [];
     private _currentTurretWeapons = _asset weaponsTurret _x;
     _nonHornWeapons append (_currentTurretWeapons select { !(_x in _hornWeapons) });
 } forEach _assetTurrets;
-if (count _nonHornWeapons == 0) exitWith {
+if (count _nonHornWeapons == 0 && _asset getVariable ["apsType", -1] != 3) exitWith {
     private _rearmButtonControl = _display displayCtrl WLM_REARM_BUTTON;
     _rearmButtonControl ctrlSetText "No weapons";
     _rearmButtonControl ctrlEnable false;

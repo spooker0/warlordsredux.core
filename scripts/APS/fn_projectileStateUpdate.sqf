@@ -10,6 +10,11 @@ if (_missileUpdateInitialized) exitWith {
 
 private _projectileNotify = [remoteExecutedOwner, clientOwner];
 while { alive _projectile } do {
+    if (_projectile getVariable ["WL2_missileStateOverride", ""] != "") then {
+        sleep 0.1;
+        continue;
+    };
+
     private _currentState = (missileState _projectile) # 1;
     private _notched = _projectile getVariable ["DIS_notched", false];
     if (_notched) then {

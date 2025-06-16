@@ -97,6 +97,9 @@ addMissionEventHandler ["Draw3D", {
 
         private _missileState = _missile getVariable ["APS_missileState", "LOCKED"];
         private _color = switch true do {
+            case (_missileState == "BOOST"): {
+                [0, 0, 1, 1]
+            };
             case (!_missileApproaching || _missileState == "BLIND"): {
                 [0, 0, 0, 1]
             };
@@ -389,7 +392,6 @@ addMissionEventHandler ["Draw3D", {
 
         private _scannerUnits = vehicles select {
             alive _x &&
-            isEngineOn _x &&
             _x getVariable ["WL_scannerOn", false]
         };
         {
@@ -398,6 +400,16 @@ addMissionEventHandler ["Draw3D", {
                 _targets pushBackUnique _x;
             } forEach _scannedObjects;
         } forEach _scannerUnits;
+
+        if (cameraOn isKindOf "Air") then {
+            private _staticAAWest = cameraOn nearEntities ["B_static_AA_F", 2500];
+            private _staticAAEast = cameraOn nearEntities ["O_static_AA_F", 2500];
+            {
+                if (alive _x) then {
+                    _targets pushBackUnique _x;
+                };
+            } forEach (_staticAAWest + _staticAAEast);
+        };
 
         private _maxDistance = switch (WL_HelmetInterface) do {
             case 0: { 0 };
@@ -636,7 +648,7 @@ addMissionEventHandler ["Draw3D", {
 
         private _friendlyNetwork = _sideVehicles select {
             private _distance = _vehicle distance _x;
-            private _activated = _x getVariable ["WL_ewNetActive", false] && isEngineOn _x;
+            private _activated = _x getVariable ["WL_ewNetActive", false];
             private _inJamRange = _distance < _x getVariable ["WL_ewNetRange", 0];
 
             private _scannerRange = _x getVariable ["WL_scanRadius", 0];

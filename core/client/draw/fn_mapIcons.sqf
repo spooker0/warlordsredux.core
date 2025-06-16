@@ -55,7 +55,7 @@
 		_mapData set ["scannedUnits", _targetsOnDatalink];
 
 		private _vehicles = vehicles select { alive _x };
-		private _activeVehicles = _vehicles select { isEngineOn _x };
+		private _activeVehicles = +_vehicles;
 		_activeVehicles append ("Land_MobileRadar_01_radar_F" allObjects 0);
 		private _ewNetworkUnits = _activeVehicles select {
 			_x getVariable ["WL_ewNetActive", false] ||

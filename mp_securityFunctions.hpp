@@ -4,7 +4,6 @@ class CfgRemoteExec {
 		mode = 1;
 		jip = 1;
 
-		class APS_fnc_dazzle {allowedTargets = 0;};
 		class APS_fnc_deviceJammer {allowedTargets = 0;};
 		class APS_fnc_lagProtectionServer {allowedTargets = 2;};
 		class APS_fnc_projectileStateUpdate {allowedTargets = 0;};
@@ -64,7 +63,6 @@ class CfgRemoteExec {
 		class WL2_fnc_sectorRevealHandle {allowedTargets = 0;};
 		class WL2_fnc_revive {allowedTargets = 0;};
 		class WL2_fnc_scannerAction {allowedTargets = 0;};
-		class WL2_fnc_setDazzlerState {allowedTargets = 2;};
 		class WL2_fnc_setupForwardBaseAction {allowedTargets = 0;};
 		class WL2_fnc_setupForwardBaseMp {allowedTargets = 0;};
 		class WL2_fnc_slingAddAction {allowedTargets = 1;};
@@ -75,6 +73,7 @@ class CfgRemoteExec {
 		class WL2_fnc_updateVehicleList {allowedTargets = 2;};
 		class WL2_fnc_vehicleLockAction {allowedTargets = 1;};
 		class WL2_fnc_vehicleLockUpdate {allowedTargets = 0;};
+		class WL2_fnc_warnIncomingMissile {allowedTargets = 0;};
 		class WLM_fnc_applyPylon {allowedTargets = 0;};
 		class WLM_fnc_applyVehicle {allowedTargets = 0;};
 		class WLM_fnc_changeHorn {allowedTargets = 0;};

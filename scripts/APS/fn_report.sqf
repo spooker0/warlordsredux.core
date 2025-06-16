@@ -22,21 +22,12 @@ private _type = switch (_vehicle getVariable "apsType") do {
 	default { "Dazzler" };
 };
 
-private _text = _type;
-if (_assetApsType == 3) then {
-	_text = _text + (if ([_vehicle] call APS_fnc_active) then {
-		" is active.";
-	} else {
-		" is inactive.";
-	});
-} else {
-	private _apsAmmo = _vehicle getVariable ["apsAmmo", 0];
-	_apsAmmo = _apsAmmo max 0;
-	_text = _text + format[" Charges: %1/%2", _apsAmmo, _vehicle call APS_fnc_getMaxAmmo];
+private _apsAmmo = _vehicle getVariable ["apsAmmo", 0];
+_apsAmmo = _apsAmmo max 0;
+private _text = format["%1 Charges: %2/%3", _type, _apsAmmo, _vehicle call APS_fnc_getMaxAmmo];
 
-	if (_apsAmmo == 0 && _indicator) then {
-		playSoundUI ["a3\sounds_f\vehicles\air\noises\heli_alarm_rotor_low.wss", _apsVolume, 0.5];
-	};
+if (_apsAmmo == 0 && _indicator) then {
+	playSoundUI ["a3\sounds_f\vehicles\air\noises\heli_alarm_rotor_low.wss", _apsVolume, 0.5];
 };
 
 private _apsDisplay = uiNamespace getVariable ["RscWLAPSDisplay", objNull];

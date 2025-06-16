@@ -1,8 +1,8 @@
 #include "includes.inc"
 params ["_asset", "_actionID"];
 
-private _isActive = _asset getVariable ["WL_ewNetActive", false] && isEngineOn _asset;
-private _isActivating = _asset getVariable ["WL_ewNetActivating", false] && isEngineOn _asset;
+private _isActive = _asset getVariable ["WL_ewNetActive", false];
+private _isActivating = _asset getVariable ["WL_ewNetActivating", false];
 private _actionColor = if (_isActive) then {
     "#4b51ff";
 } else {
@@ -17,12 +17,6 @@ private _actionText = if (_isActive) then {
     } else {
         "EW NETWORK: OFF";
     };
-};
-
-if (!_isActive && !_isActivating) then {
-    _asset setFuelConsumptionCoef 1;
-} else {
-    _asset setFuelConsumptionCoef 5;
 };
 
 if (isServer) then {

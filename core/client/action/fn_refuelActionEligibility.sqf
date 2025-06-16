@@ -10,6 +10,5 @@ private _nearbyRefuel = (_target nearEntities ["All", WL_MAINTENANCE_RADIUS]) se
     getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "transportFuel") > 0 &&
     ([_x, _caller, "cargo"] call WL2_fnc_accessControl) # 0
 };
-private _isBlocked = _target getVariable ["WL2_refuelBlocked", 0] > serverTime;
 
-_isAlive && _stopped && _hasAccess && _isInVehicle && count _nearbyRefuel > 0 && !_isBlocked;
+_isAlive && _stopped && _hasAccess && _isInVehicle && count _nearbyRefuel > 0;

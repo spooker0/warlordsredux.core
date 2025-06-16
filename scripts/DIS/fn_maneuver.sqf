@@ -1,5 +1,11 @@
 #include "includes.inc"
-params ["_projectile", "_unit", ["_groundAvoidDistance", 5000], ["_samMaxDistance", WL_SAM_MAX_DISTANCE], ["_distanceBeforeNotch", WL_SAM_NOTCH_ACTIVE_DIST]];
+params [
+    "_projectile",
+    "_unit",
+    ["_groundAvoidDistance", 5000],
+    ["_samMaxDistance", WL_SAM_MAX_DISTANCE],
+    ["_distanceBeforeNotch", WL_SAM_NOTCH_ACTIVE_DIST]
+];
 
 private _originalTarget = missileTarget _projectile;
 private _originalPosition = getPosASL _unit;
