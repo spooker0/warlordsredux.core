@@ -1,7 +1,7 @@
 #include "includes.inc"
 params [["_unit", player]];
 
-private _magazineTypes = [
+private _magazinesToRemove = [
 	"1Rnd_SmokeRed_Grenade_shell",
 	"1Rnd_SmokeGreen_Grenade_shell",
 	"1Rnd_SmokeBlue_Grenade_shell",
@@ -22,7 +22,15 @@ private _magazineTypes = [
 
 {
 	_unit removeMagazines _x;
-} forEach _magazineTypes;
+} forEach _magazinesToRemove;
+
+private _itemsToRemove = [
+	"FirstAidKit"
+];
+
+{
+	_unit removeItems _x;
+} forEach _itemsToRemove;
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _respawnUavTerminal = _settingsMap getOrDefault ["respawnUavTerminal", true];
@@ -50,10 +58,6 @@ switch (side group player) do {
 		_unit addWeaponGlobal "Laserdesignator_03";
 	};
 };
-
-{
-	_unit removeMagazines _x;
-} forEach _magazineTypes;
 
 _unit linkItem "Integrated_NVG_TI_0_F";
 

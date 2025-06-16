@@ -67,6 +67,7 @@ private _lastUpdateVersion = profileNamespace getVariable ["WL2_lastUpdateVersio
 if (_lastUpdateVersion != WL_VERSION) then {
 	profileNamespace setVariable ["WL2_lastUpdateVersion", WL_VERSION];
 	profileNamespace setVariable ["WL2_loadoutDefaults", createHashmap];
+	profileNamespace setVariable ["WLM_appearanceDefaults", createHashmap];
 };
 
 if (isServer) then {

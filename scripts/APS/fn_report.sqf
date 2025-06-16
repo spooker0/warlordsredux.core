@@ -7,15 +7,15 @@ if (!isNull _gunner) then {
 	} forEach (crew _vehicle);
 };
 
-if (vehicle player != _vehicle) exitWith {};
-
 private _assetApsType = _vehicle getVariable ["apsType", -1];
 if (_assetApsType <= -1) exitWith {};
+
+if (cameraOn != _vehicle && _assetApsType != 3) exitWith {};
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _apsVolume = _settingsMap getOrDefault ["apsVolume", 1];
 
-private _type = switch (_vehicle getVariable "apsType") do {
+private _type = switch (_assetApsType) do {
 	case 2: { "Heavy APS" };
 	case 1: { "Medium APS" };
 	case 0: { "Light APS" };

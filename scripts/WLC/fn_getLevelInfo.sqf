@@ -10,6 +10,21 @@ if (isNil "WLC_ScoreTable") then {
             _levelRequirements pushBack (_i * 1000);
         };
     };
+    for "_i" from 1 to 50 do {  // 60-100
+        _levelRequirements pushBack 5000;
+    };
+    for "_i" from 1 to 100 do { // 100-200
+        _levelRequirements pushBack 100000;
+    };
+    for "_i" from 1 to 100 do { // 200-300
+        _levelRequirements pushBack 1000000;
+    };
+    for "_i" from 1 to 100 do { // 300-400
+        _levelRequirements pushBack 10000000;
+    };
+    for "_i" from 1 to 100 do { // 400-500
+        _levelRequirements pushBack 100000000;
+    };
     WLC_ScoreTable = _levelRequirements;
 };
 
@@ -24,7 +39,7 @@ switch (_op) do {
             private _nextLevelReq = if (_level < count WLC_ScoreTable) then {
                 WLC_ScoreTable # _level;
             } else {
-                5000;
+                100000000;
             };
             _score = _score - _nextLevelReq;
             if (_score >= 0) then {
@@ -43,7 +58,7 @@ switch (_op) do {
                 private _nextLevelReq = if (_i < count WLC_ScoreTable) then {
                     WLC_ScoreTable # _i;
                 } else {
-                    5000;
+                    100000000;
                 };
                 _score = _score + _nextLevelReq;
             };

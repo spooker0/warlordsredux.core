@@ -12,17 +12,27 @@ if (isNull _target) exitWith {
 };
 
 sleep 0.5;
-_projectile setMissileTarget [_target, true];
 
 [_target, _unit, _projectile] remoteExec ["WL2_fnc_warnIncomingMissile", _target];
+
+private _posAbove = _unit modelToWorldWorld [0, 100, 2000];
+private _firstStageVectorDirAndUp = [getPosASL _projectile, _posAbove] call BIS_fnc_findLookAt;
+
+private _firstStageTime = serverTime;
+while { alive _projectile && alive _target && serverTime < _firstStageTime + 1 } do {
+    private _elapsedTime = serverTime - _firstStageTime;
+    private _actualVectorDir = vectorLinearConversion [0, 1, _elapsedTime, vectorDir _projectile, _firstStageVectorDirAndUp # 0, true];
+    private _actualVectorUp = vectorLinearConversion [0, 1, _elapsedTime, vectorUp _projectile, _firstStageVectorDirAndUp # 1, true];
+    _projectile setVectorDirAndUp [_actualVectorDir, _actualVectorUp];
+    sleep 0.01;
+};
+_projectile setVectorDirAndUp _firstStageVectorDirAndUp;
 
 private _altitude = getPosASL _projectile # 2;
 private _targetAltitude = getPosASL _target # 2;
 
-while { _altitude < _targetAltitude * 2.0 } do {
-    _projectile setVectorDirAndUp [[0, 0, 1], [0, 1, 0]];
-
-    private _boostSpeed = linearConversion [0, 2000, _altitude, 40, 1500, true];
+while { _altitude < (_targetAltitude * 2.0) min 5000 } do {
+    private _boostSpeed = linearConversion [0, 2000, _altitude, 40, 3000, true];
     _projectile setVelocityModelSpace [0, _boostSpeed, 0];
 
     _altitude = getPosASL _projectile # 2;
@@ -31,23 +41,16 @@ while { _altitude < _targetAltitude * 2.0 } do {
     sleep 0.1;
 };
 
-private _currentPosition = getPosASL _projectile;
-private _finalPosition = getPosASL _target;
-private _targetVectorDirAndUp = [_currentPosition, _finalPosition] call BIS_fnc_findLookAt;
-
-private _currentVectorDir = vectorDir _projectile;
-private _currentVectorUp = vectorUp _projectile;
+private _targetVectorDirAndUp = [getPosASL _projectile, getPosASL _target] call BIS_fnc_findLookAt;
 
 private _startTime = serverTime;
 while { alive _projectile && alive _target && serverTime < _startTime + 1 } do {
     private _elapsedTime = serverTime - _startTime;
-    private _actualVectorDir = vectorLinearConversion [0, 1, _elapsedTime, _currentVectorDir, _targetVectorDirAndUp # 0, true];
-    private _actualVectorUp = vectorLinearConversion [0, 1, _elapsedTime, _currentVectorUp, _targetVectorDirAndUp # 1, true];
+    private _actualVectorDir = vectorLinearConversion [0, 1, _elapsedTime, vectorDir _projectile, _targetVectorDirAndUp # 0, true];
+    private _actualVectorUp = vectorLinearConversion [0, 1, _elapsedTime, vectorUp _projectile, _targetVectorDirAndUp # 1, true];
     _projectile setVectorDirAndUp [_actualVectorDir, _actualVectorUp];
     sleep 0.01;
 };
-
-_projectile setVelocityModelSpace [0, 1200, 0];
 
 _projectile setVariable ["WL2_missileStateOverride", "", true];
 _projectile setMissileTarget [_target, true];
