@@ -39,6 +39,7 @@ private _purchaseable = [];
 				"\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
 				"Customization menu for respawn loadout."
 			];
+			#if WL_AR_GLASSES_TOGGLE
 			_categoryData pushBack [
 				"BuyGlasses",
 				1000,
@@ -47,6 +48,7 @@ private _purchaseable = [];
 				"\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
 				"Buy AR glasses, which show you enemies spotted by friendly datalink, while you are in range of an EW network. Use +/- keys to increase/decrease range."
 			];
+			#endif
 			_categoryData pushBack [
 				"LastLoadout",
 				WL_COST_LASTLOADOUT,
