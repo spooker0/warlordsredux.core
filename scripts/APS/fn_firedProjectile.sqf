@@ -22,7 +22,10 @@ private _safeMaxDistSqr = _maxDistSqr;
 private _unitSide = side group _unit;
 
 private _interception = {
-	params ["_target", "_dazzled"];
+	params ["_target", "_dazzled", "_projectileAPSConsumption"];
+	private _ammo = _target getVariable "apsAmmo";
+	_target setVariable ["apsAmmo", _ammo - _projectileAPSConsumption, true];
+
 	private _projectilePosition = getPosATL _projectile;
 	private _projectileDirection = _firedPosition getDir _target;
 	private _relativeDirection = if (isNull _target) then {
@@ -117,9 +120,8 @@ while {_continue && alive _projectile} do {
 
 			if (_dazzleable && _isGuided) exitWith {
 				_continue = false;
-				private _dazzlerFuel = fuel _x;
-				[_x, _projectileAPSConsumption] remoteExec ["APS_fnc_dazzle", _x];
-				[_x, true] call _interception;
+
+				[_x, true, _projectileAPSConsumption] call _interception;
 			};
 		} else {
 			if (_vehicleAPSType >= _projectileAPSType && {
@@ -134,10 +136,7 @@ while {_continue && alive _projectile} do {
 				}) exitWith {
 				_continue = false;
 
-				private _ammo = _x getVariable "apsAmmo";
-				_x setVariable ["apsAmmo", _ammo - _projectileAPSConsumption, true];
-
-				[_x, false] call _interception;
+				[_x, false, _projectileAPSConsumption] call _interception;
 			};
 		};
 	} forEach _sortedEligibleList;

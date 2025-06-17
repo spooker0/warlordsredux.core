@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_asset"];
 
-if (_asset getVariable ["WL_ewNetActive", false] && isEngineOn _asset) then {
+if (_asset getVariable ["WL_ewNetActive", false]) then {
     _asset setVariable ["WL_ewNetActive", false, true];
     _asset setVariable ["WL_ewNetActivating", false, true];
     playSoundUI ["a3\sounds_f_bootcamp\sfx\vr\simulation_fatal.wss"];
@@ -12,10 +12,6 @@ if (_asset getVariable ["WL_ewNetActive", false] && isEngineOn _asset) then {
     playSoundUI ["a3\sounds_f_bootcamp\sfx\vr\simulation_restart.wss"];
 
     _asset setVariable ["WL_ewNetActivating", true, true];
-
-    if (!isEngineOn _asset) then {
-        [_asset, true] remoteExec ["WL2_fnc_setDazzlerState", 2];
-    };
 
     [_asset] spawn {
         params ["_asset"];
@@ -30,7 +26,7 @@ if (_asset getVariable ["WL_ewNetActive", false] && isEngineOn _asset) then {
             _timePassed > 20;
         };
 
-        if (alive _asset && isEngineOn _asset) then {
+        if (alive _asset) then {
             _asset setVariable ["WL_ewNetActive", true, true];
             _asset setVariable ["WL_ewNetActivating", false, true];
         } else {

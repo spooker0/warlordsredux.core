@@ -5,7 +5,6 @@ class CfgFunctions {
 			class active {};
 			class ciws {};
 			class cram {};
-			class dazzle {};
 			class defineVehicles {};
 			class deviceJammer {};
 			class firedProjectile {};
@@ -28,6 +27,7 @@ class CfgFunctions {
 	class DIS {
 		class Default {
 			file = "src\scripts\DIS";
+			class advancedSam {};
 			class calculateInRange {};
 			class controlMunition {};
 			class extendedSam {};
@@ -37,6 +37,8 @@ class CfgFunctions {
 			class maneuver {};
 			class missileCamera {};
 			class remoteMunition {};
+			class setupAdvancedSam {};
+			class setupAdvancedSamMenu {};
 			class setupExtendedSam {};
 			class setupExtendedSamMenu {};
 			class setGPSNumber {};
@@ -406,6 +408,7 @@ class CfgFunctions {
 			class uavConnectRefresh {};
 			class updateSectorArrays {};
 			class varsInit {};
+			class warnIncomingMissile {};
 		};
 		class Server {
 			file = "src\core\server";
@@ -440,7 +443,6 @@ class CfgFunctions {
 			class rebalance {};
 			class selectTarget {};
 			class serverEHs {};
-			class setDazzlerState {};
 			class setupNewPlayer {};
 			class targetResetHandleServer {};
 			class targetSelectionHandleServer {};

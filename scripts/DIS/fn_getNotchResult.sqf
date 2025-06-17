@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_target", "_launcher", ["_projectile", objNull]];
+params ["_target", "_launcher", ["_projectile", objNull], ["_distanceBeforeNotch", WL_SAM_NOTCH_ACTIVE_DIST]];
 
 private _targetVelocity = velocity _target;
 private _projectileRelativeVelocity = if (isNull _projectile) then {
@@ -59,7 +59,7 @@ _actualMaxRange = _actualMaxRange max 500;
 private _trackSpeedPercent = (_perpendicularVelocity / _actualTrackSpeed) min 1;
 private _tolerancePercent = (_normalizedVelocity / _actualTolerance) min 1;
 private _maxRangePercent = (_distanceRemaining / _actualMaxRange) min 1;
-private _distanceTraveledPercent = (_distanceTraveled / WL_SAM_NOTCH_ACTIVE_DIST) min 1;
+private _distanceTraveledPercent = (_distanceTraveled / _distanceBeforeNotch) min 1;
 
 if (isNull _projectile) then {
     if (_maxRangePercent < 1) then {

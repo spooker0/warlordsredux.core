@@ -2,8 +2,9 @@
 0 spawn APS_fnc_defineVehicles;
 
 if !(isDedicated) then {
-	call GFE_fnc_credits;
-	waitUntil { !isNull player };
+	waitUntil {
+		!(isNull (findDisplay 46)) && !(isNull player);
+	};
 };
 
 if (isServer) then {
@@ -66,6 +67,7 @@ private _lastUpdateVersion = profileNamespace getVariable ["WL2_lastUpdateVersio
 if (_lastUpdateVersion != WL_VERSION) then {
 	profileNamespace setVariable ["WL2_lastUpdateVersion", WL_VERSION];
 	profileNamespace setVariable ["WL2_loadoutDefaults", createHashmap];
+	profileNamespace setVariable ["WLM_appearanceDefaults", createHashmap];
 };
 
 if (isServer) then {

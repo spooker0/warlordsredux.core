@@ -1,5 +1,7 @@
 #include "includes.inc"
 
+if (isDedicated) exitWith {};
+
 private _display = uiNamespace getVariable ["RscWarlordsHUD", displayNull];
 if (isNull _display) then {
 	"Warlords" cutRsc ["RscWarlordsHUD", "PLAIN"];
@@ -14,8 +16,11 @@ private _squadControl = _display displayCtrl 2103;
 private _rearmControl = _display displayCtrl 2104;
 private _repairControl = _display displayCtrl 2105;
 
-private _captureProgressBar = _display displayCtrl 2106;
-private _captureText = _display displayCtrl 2107;
+private _apsTypeControl = _display displayCtrl 2106;
+private _apsAmmoControl = _display displayCtrl 2107;
+
+private _captureProgressBar = _display displayCtrl 2108;
+private _captureText = _display displayCtrl 2109;
 
 private _gameStart = missionNamespace getVariable ["gameStart", 0];
 
@@ -26,8 +31,10 @@ private _getTeamColorHex = {
 
 private _getTeamColorRGB = {
 	params ["_team"];
-	[[0.0, 0.3, 0.6, 0.7], [0.5, 0.0, 0.0, 0.7], [0.0, 0.5, 0.0, 0.7]] # ([west, east, independent] find _team);
+	[[0.0, 0.3, 0.6, 1], [0.5, 0.0, 0.0, 1], [0.0, 0.5, 0.0, 1]] # ([west, east, independent] find _team);
 };
+
+private _lastMoney = 0;
 
 while { !BIS_WL_missionEnd } do {
 	sleep 1;
@@ -35,14 +42,20 @@ while { !BIS_WL_missionEnd } do {
 	private _side = BIS_WL_playerSide;
 
 	_timer ctrlSetStructuredText parseText format [
-		"<t shadow='2' size ='1'><img color='#ffffff' image='a3\ui_f\data\igui\cfg\actions\settimer_ca.paa'></img>  %1</t>",
+		"<t shadow='2'><img color='#ffffff' image='a3\ui_f\data\igui\cfg\actions\settimer_ca.paa'></img>  <t size ='1.1'>%1</t></t>",
 		[36000 - (serverTime - _gameStart), "HH:MM:SS"] call BIS_fnc_secondsToString
 	];
 
+	private _currentMoney = (missionNamespace getVariable ["fundsDatabaseClients", createHashMap]) getOrDefault [getPlayerUID player, 0];
+	if (_currentMoney != _lastMoney) then {
+		_lastMoney = _currentMoney;
+		call WL2_fnc_purchaseMenuRefresh;
+	};
+
 	_moneyControl ctrlSetStructuredText parseText format [
-		"<t shadow='2' size ='1.1' align='middle'>%1%2</t>    <t shadow='2' size ='0.8' align='middle'>+%3</t>",
+		"<t shadow='2' size ='1.1' align='middle'>%1%2</t>    <t shadow='2' size ='0.9' align='middle'>+%3</t>",
 		[_side] call WL2_fnc_getMoneySign,
-		(missionNamespace getVariable "fundsDatabaseClients") get (getPlayerUID player),
+		_currentMoney,
 		missionNamespace getVariable [format ["WL2_actualIncome_%1", _side], 0]
 	];
 
@@ -62,9 +75,9 @@ while { !BIS_WL_missionEnd } do {
 	} else {
 		private _cooldown = ((cameraOn getVariable ["BIS_WL_nextRearm", 0]) - serverTime) max 0;
 		if (_cooldown > 0) then {
-			format ["<t color='#ff0000' shadow='2'>REARM: %1</t>", [_cooldown, "MM:SS"] call BIS_fnc_secondsToString];
+			format ["<t color='#ff0000' shadow='2' size='1.1'>REARM: %1</t>", [_cooldown, "MM:SS"] call BIS_fnc_secondsToString];
 		} else {
-			format ["<t color='#00ff00' shadow='2'>REARM: READY</t>"];
+			format ["<t color='#00ff00' shadow='2' size='1.1'>REARM: READY</t>"];
 		};
 	};
 	_rearmControl ctrlSetStructuredText parseText _rearmText;
@@ -74,12 +87,46 @@ while { !BIS_WL_missionEnd } do {
 	} else {
 		private _cooldown = ((cameraOn getVariable ["WL2_nextRepair", 0]) - serverTime) max 0;
 		if (_cooldown > 0) then {
-			format ["<t color='#ff0000' shadow='2'>REPAIR: %1</t>", [_cooldown, "MM:SS"] call BIS_fnc_secondsToString];
+			format ["<t color='#ff0000' shadow='2' size='1.1'>REPAIR: %1</t>", [_cooldown, "MM:SS"] call BIS_fnc_secondsToString];
 		} else {
-			format ["<t color='#00ff00' shadow='2'>REPAIR: READY</t>"];
+			format ["<t color='#00ff00' shadow='2' size='1.1'>REPAIR: READY</t>"];
 		};
 	};
 	_repairControl ctrlSetStructuredText parseText _repairText;
+
+	private _apsType = cameraOn getVariable ["apsType", -1];
+	if (_apsType <= -1) then {
+		_apsTypeControl ctrlShow false;
+		_apsAmmoControl ctrlShow false;
+	} else {
+		private _apsActive = [cameraOn] call APS_fnc_active;
+		private _apsColor = if (_apsActive) then {
+			"#00ff00";
+		} else {
+			"#ff0000";
+		};
+		private _apsTypeName = switch (_apsType) do {
+			case 2: { "HEAVY" };
+			case 1: { "MEDIUM" };
+			case 0: { "LIGHT" };
+			default { "DAZZLER" };
+		};
+		_apsTypeControl ctrlSetStructuredText parseText format ["<t shadow='2' size='1.1' color='%1'>APS: %2</t>", _apsColor, _apsTypeName];
+		_apsTypeControl ctrlShow true;
+
+		if (_apsTypeName == "DAZZLER") then {
+			private _state = if (_apsActive) then {
+				"ACTIVE";
+			} else {
+				"INACTIVE";
+			};
+			_apsAmmoControl ctrlSetStructuredText parseText format ["<t shadow='2' size='1.1' color='%1'>%2</t>", _apsColor, _state];
+		} else {
+			private _apsAmmo = cameraOn getVariable ["apsAmmo", 0];
+			_apsAmmoControl ctrlSetStructuredText parseText format ["<t shadow='2' size='1.1' color='%1'>AMMO: %2</t>", _apsColor, _apsAmmo max 0];
+		};
+		_apsAmmoControl ctrlShow true;
+	};
 
 	private _visitedSectorId = BIS_WL_allSectors findIf { player inArea (_x getVariable "objectAreaComplete") };
 	if (_visitedSectorId == -1) then {

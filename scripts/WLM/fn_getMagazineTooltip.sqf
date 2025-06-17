@@ -196,10 +196,9 @@ if (count _ammoAPSConfig > 0) then {
 
     private _magDescAPSType = _ammoAPSConfig getOrDefault ["aps", -1];
     private _typeString = switch (_magDescAPSType) do {
-        case 1: {"All APS"};
-        case 2: {"Medium, Heavy APS"};
-        case 3: {"Heavy APS"};
-        case 4: {"Nothing"};
+        case 0: {"All APS"};
+        case 1: {"Medium, Heavy APS"};
+        case 2: {"Heavy APS"};
         default {"Nothing"};
     };
     _magDescAPS pushBack ["Intercepted By", _typeString];

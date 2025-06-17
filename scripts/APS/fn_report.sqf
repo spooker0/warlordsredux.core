@@ -7,36 +7,27 @@ if (!isNull _gunner) then {
 	} forEach (crew _vehicle);
 };
 
-if (vehicle player != _vehicle) exitWith {};
-
 private _assetApsType = _vehicle getVariable ["apsType", -1];
-if (_assetApsType == -1) exitWith {};
+if (_assetApsType <= -1) exitWith {};
+
+if (cameraOn != _vehicle && _assetApsType != 3) exitWith {};
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _apsVolume = _settingsMap getOrDefault ["apsVolume", 1];
 
-private _type = switch (_vehicle getVariable "apsType") do {
+private _type = switch (_assetApsType) do {
 	case 2: { "Heavy APS" };
 	case 1: { "Medium APS" };
 	case 0: { "Light APS" };
 	default { "Dazzler" };
 };
 
-private _text = _type;
-if (_assetApsType == 3) then {
-	_text = _text + (if ([_vehicle] call APS_fnc_active) then {
-		" is active.";
-	} else {
-		" is inactive.";
-	});
-} else {
-	private _apsAmmo = _vehicle getVariable ["apsAmmo", 0];
-	_apsAmmo = _apsAmmo max 0;
-	_text = _text + format[" Charges: %1/%2", _apsAmmo, _vehicle call APS_fnc_getMaxAmmo];
+private _apsAmmo = _vehicle getVariable ["apsAmmo", 0];
+_apsAmmo = _apsAmmo max 0;
+private _text = format["%1 Charges: %2/%3", _type, _apsAmmo, _vehicle call APS_fnc_getMaxAmmo];
 
-	if (_apsAmmo == 0 && _indicator) then {
-		playSoundUI ["a3\sounds_f\vehicles\air\noises\heli_alarm_rotor_low.wss", _apsVolume, 0.5];
-	};
+if (_apsAmmo == 0 && _indicator) then {
+	playSoundUI ["a3\sounds_f\vehicles\air\noises\heli_alarm_rotor_low.wss", _apsVolume, 0.5];
 };
 
 private _apsDisplay = uiNamespace getVariable ["RscWLAPSDisplay", objNull];

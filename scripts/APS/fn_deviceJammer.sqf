@@ -26,9 +26,8 @@ while { alive _asset } do {
 
     {
         private _deviceTarget = _x;
-        if (_deviceTarget getVariable ["BIS_WL_dazzlerActivated", false]) then {
-            _deviceTarget setVariable ["BIS_WL_dazzlerActivated", false, true];
-            [_deviceTarget, false] remoteExec ["WL2_fnc_setDazzlerState", 2];
+        if (_deviceTarget getVariable ["WL2_dazzlerActivated", false]) then {
+            _deviceTarget setVariable ["WL2_dazzlerActivated", false, true];
             [["a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", 1, 0.5, true]] remoteExec ["playSoundUI", _controllingUnit];
         };
     } forEach _devicesInRange;

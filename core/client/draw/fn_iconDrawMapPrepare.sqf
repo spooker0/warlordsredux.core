@@ -37,6 +37,9 @@ private _mapIconCache = uiNamespace getVariable ["WL2_mapIconCache", createHashM
 private _mapTextCache = uiNamespace getVariable ["WL2_mapTextCache", createHashMap];
 private _mapSizeCache = uiNamespace getVariable ["WL2_mapSizeCache", createHashMap];
 
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _mapIconScale = _settingsMap getOrDefault ["mapIconScale", 1];
+
 // Draw white hover selector
 if !(isNull BIS_WL_highlightedSector) then {
 	_drawIconsAnimated pushBack [
@@ -93,12 +96,12 @@ if (alive _respawnBag) then {
 		"\A3\ui_f\data\map\markers\military\triangle_CA.paa",
 		[player, _mapColorCache] call WL2_fnc_iconColor,
 		_bagPos,
-		35,
-		35,
+		35 * _mapIconScale,
+		35 * _mapIconScale,
 		0,
 		"Tent",
 		1,
-		0.04,
+		0.04 * _mapIconScale,
 		"PuristaBold"
 	];
 	_drawIconsSelectable pushBack [_respawnBag, _bagPos];
@@ -144,10 +147,12 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		"\A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_requestLeadership_ca.paa",
 		_baseColor,
 		_position,
-		40,
-		40,
+		40 * _mapIconScale,
+		40 * _mapIconScale,
 		0,
-		format ["Forward Base %1", _baseText]
+		format ["Forward Base %1", _baseText],
+		0,
+		0.04 * _mapIconScale
 	];
 	_drawIconsSelectable pushBack [_base, _position];
 
@@ -188,12 +193,12 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		[_x, _mapIconCache] call WL2_fnc_iconType,
 		[_x, _mapColorCache] call WL2_fnc_iconColor,
 		_position,
-		_size,
-		_size,
+		_size * _mapIconScale,
+		_size * _mapIconScale,
 		[_x] call WL2_fnc_getDir,
-		[_x, _draw, _mapTextCache] call WL2_fnc_iconText,
+		[_x, _draw, false, _mapTextCache] call WL2_fnc_iconText,
 		1,
-		0.043,
+		0.043 * _mapIconScale,
 		"PuristaBold",
 		"right"
 	];
@@ -276,12 +281,12 @@ private _deadPlayers = if (_drawAll) then {
 		"\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa",
 		[1, 0, 0, 0.8],
 		getPosASL _x,
-		20,
-		20,
+		20 * _mapIconScale,
+		20 * _mapIconScale,
 		0,
 		if (_draw) then {format ["%1 [K.I.A.]", (name _x)]} else {""},
 		1,
-		0.043,
+		0.043 * _mapIconScale,
 		"PuristaBold",
 		"right"
 	];
@@ -303,12 +308,12 @@ private _teammates = if (_drawAll) then {
 			'a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca.paa',
 			[1,0,0,1],
 			_position,
-			_size,
-			_size,
+			_size * _mapIconScale,
+			_size * _mapIconScale,
 			0,
 			"",
 			1,
-			0.043,
+			0.043 * _mapIconScale,
 			"PuristaBold",
 			"right"
 		];
@@ -318,8 +323,8 @@ private _teammates = if (_drawAll) then {
 		[_x, _mapIconCache] call WL2_fnc_iconType,
 		[_x, _mapColorCache] call WL2_fnc_iconColor,
 		_position,
-		_size,
-		_size,
+		_size * _mapIconScale,
+		_size * _mapIconScale,
 		[_x] call WL2_fnc_getDir,
 		if (_draw) then {
 			private _levelDisplay = _x getVariable ["WL_playerLevel", "Recruit"];
@@ -327,7 +332,7 @@ private _teammates = if (_drawAll) then {
 			_displayName
 		} else {""},
 		1,
-		0.043,
+		0.043 * _mapIconScale,
 		"PuristaBold",
 		"right"
 	];
@@ -349,12 +354,12 @@ private _aiInVehicle = if (_drawAll) then {
 		[_x, _mapIconCache] call WL2_fnc_iconType,
 		[_x, _mapColorCache] call WL2_fnc_iconColor,
 		_position,
-		_size,
-		_size,
+		_size * _mapIconScale,
+		_size * _mapIconScale,
 		[_x] call WL2_fnc_getDir,
 		if (_draw) then {format ["%1 [AI]", (name _x)]} else {""},
 		1,
-		0.043,
+		0.043 * _mapIconScale,
 		"PuristaBold",
 		"right"
 	];
@@ -370,14 +375,14 @@ private _aiInVehicle = if (_drawAll) then {
 		[_x, _mapIconCache] call WL2_fnc_iconType,
 		[_x, _mapColorCache] call WL2_fnc_iconColor,
 		_position,
-		_size,
-		_size,
+		_size * _mapIconScale,
+		_size * _mapIconScale,
 		[_x] call WL2_fnc_getDir,
 		if (_draw) then {
 			format ["%1 [AI]", name _x]
 		} else {""},
 		1,
-		0.043,
+		0.043 * _mapIconScale,
 		"PuristaBold",
 		"right"
 	];
@@ -421,12 +426,12 @@ private _sideVehicles = if (_drawAll) then {
 		[_x, _mapIconCache] call WL2_fnc_iconType,
 		[_x, _mapColorCache] call WL2_fnc_iconColor,
 		_position,
-		_size,
-		_size,
+		_size * _mapIconScale,
+		_size * _mapIconScale,
 		[_x] call WL2_fnc_getDir,
-		[_x, _draw, _mapTextCache] call WL2_fnc_iconText,
+		[_x, _draw, true, _mapTextCache] call WL2_fnc_iconText,
 		1,
-		0.043,
+		0.043 * _mapIconScale,
 		"PuristaBold",
 		"right"
 	];

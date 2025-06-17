@@ -103,17 +103,7 @@ if (_asset isKindOf "Man") then {
 	// HMD missile alert system
 	_asset addEventHandler ["IncomingMissile", {
 		params ["_target", "_ammo", "_vehicle", "_instigator", "_missile"];
-		if (isNull _missile) exitWith {};
-		_missile setVariable ["WL_launcher", _vehicle];
-		private _incomingMissiles = _target getVariable ["WL_incomingMissiles", []];
-		private _originalIncomingMissiles = +_incomingMissiles;
-		_incomingMissiles pushBackUnique _missile;
-		_incomingMissiles = _incomingMissiles select {
-			!(isNull _x) && alive _x;
-		};
-		if (_incomingMissiles isEqualTo _originalIncomingMissiles) exitWith {};
-		_target setVariable ["WL_incomingMissiles", _incomingMissiles];
-		_target setVariable ["WL_incomingLauncherLastKnown", _vehicle];
+		[_target, _vehicle, _missile] call WL2_fnc_warnIncomingMissile;
 	}];
 
 	if (WL_ASSET(_assetActualType, "hasScanner", 0) > 0) then {
@@ -180,7 +170,7 @@ if (_asset isKindOf "Man") then {
 		// Dazzlers
 		case "B_T_Truck_03_device_F";
 		case "O_Truck_03_device_F": {
-			_asset setVariable ["BIS_WL_dazzlerActivated", false, true];
+			_asset setVariable ["WL2_dazzlerActivated", false, true];
 			_asset setVariable ["WL_ewNetActive", false, true];
 			_asset setVariable ["WL_ewNetRange", WL_JAMMER_RANGE_OUTER, true];
 
@@ -343,6 +333,10 @@ if (_asset isKindOf "Man") then {
 
 	if (WL_ASSET(_assetActualType, "hasESAM", 0) > 0) then {
 		[_asset, _side] remoteExec ["DIS_fnc_setupExtendedSam", 0, true];
+	};
+
+	if (WL_ASSET(_assetActualType, "hasASAM", 0) > 0) then {
+		[_asset] remoteExec ["DIS_fnc_setupAdvancedSam", 0, true];
 	};
 
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];

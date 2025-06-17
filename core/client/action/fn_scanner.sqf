@@ -10,7 +10,7 @@ private _actionColor = if (_scannerOn) then {
 };
 
 private _scannerTypeText = if (_awacs) then {
-    "AWACS";
+    "AESA RADAR";
 } else {
     "SCANNER";
 };
@@ -24,9 +24,6 @@ private _actionText = if (_scannerOn) then {
 _asset setUserActionText [_actionId, format ["<t color = '%1'>%2 [%3]</t>", _actionColor, _actionText, actionKeysNames "ActiveSensorsToggle"]];
 
 if (!_scannerOn) exitWith {
-    _asset setVariable ["WL_scannedObjects", []];
-};
-if (!isEngineOn _asset) exitWith {
     _asset setVariable ["WL_scannedObjects", []];
 };
 
@@ -64,7 +61,6 @@ private _relevantVehicles = if (_awacs) then {
         private _vehiclePos = _x modelToWorldVisual [0, 0, 0];
         _x isKindOf "Air" &&
         _vehiclePos # 2 > 50 &&
-        _assetHeight > _vehiclePos # 2 &&
         [_assetPos, getDir _asset, 120, _vehiclePos] call WL2_fnc_inAngleCheck;
     };
     _munitions + _airVehicles

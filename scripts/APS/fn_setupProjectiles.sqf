@@ -65,6 +65,11 @@ _this addEventHandler ["Fired", {
 
 	_this spawn APS_fnc_firedProjectile;
 
+	private _projectileAsam = _projectileConfig getOrDefault ["asam", false];
+	if (_projectileAsam) then {
+		[_projectile, _unit] spawn DIS_fnc_advancedSam;
+	};
+
 	private _projectileSam = _projectileConfig getOrDefault ["sam", false];
 	if (_projectileSam) then {
 		[_projectile, _unit] spawn DIS_fnc_frag;

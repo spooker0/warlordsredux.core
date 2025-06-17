@@ -210,8 +210,7 @@ addMissionEventHandler ["Draw3D", {
 
             private _uavSide = [_lockedUav] call WL2_fnc_getAssetSide;
             private _activeVehicles = vehicles select {
-                alive _x &&
-                isEngineOn _x
+                alive _x
             };
             private _ewNetworkUnits = _activeVehicles + ("Land_MobileRadar_01_radar_F" allObjects 0) select {
                 _x getVariable ["WL_ewNetActive", false] &&

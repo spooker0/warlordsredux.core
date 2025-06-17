@@ -1,10 +1,16 @@
 #include "includes.inc"
-params ["_projectile", "_unit"];
+params [
+    "_projectile",
+    "_unit",
+    ["_groundAvoidDistance", 5000],
+    ["_samMaxDistance", WL_SAM_MAX_DISTANCE],
+    ["_distanceBeforeNotch", WL_SAM_NOTCH_ACTIVE_DIST]
+];
 
 private _originalTarget = missileTarget _projectile;
 private _originalPosition = getPosASL _unit;
-[_projectile, _originalTarget, _unit] spawn {
-    params ["_projectile", "_originalTarget", "_unit"];
+[_projectile, _originalTarget, _unit, _samMaxDistance, _distanceBeforeNotch] spawn {
+    params ["_projectile", "_originalTarget", "_unit", "_samMaxDistance", "_distanceBeforeNotch"];
     private _startTime = time;
     private _isLOAL = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "autoSeekTarget") == 1;
 
@@ -21,7 +27,7 @@ private _originalPosition = getPosASL _unit;
         };
 
         // Notching mechanic
-        private _notchResult = [_originalTarget, _unit, _projectile] call DIS_fnc_getNotchResult;
+        private _notchResult = [_originalTarget, _unit, _projectile, _distanceBeforeNotch] call DIS_fnc_getNotchResult;
         if (_notchResult == 4) then {
             _projectile setVariable ["DIS_notched", true];
         } else {
@@ -37,7 +43,7 @@ private _originalPosition = getPosASL _unit;
             triggerAmmo _projectile;
         };
 
-        if (_unit distance _projectilePosition > WL_SAM_MAX_DISTANCE) then {
+        if (_unit distance _projectilePosition > _samMaxDistance) then {
             triggerAmmo _projectile;
         };
     };
@@ -63,7 +69,7 @@ private _projectileActualType = _projectile getVariable ["APS_ammoOverride", _pr
 private _projectileConfig = APS_projectileConfig getOrDefault [_projectileActualType, createHashMap];
 private _projectileSpeedOverride = _projectileConfig getOrDefault ["speed", 1];
 _projectileSpeedOverride = _projectileSpeedOverride max 1;
-private _maxAcceleration = (getNumber (configfile >> "CfgAmmo" >> _projectileType >> "thrust")) * WL_SAM_ACCELERATION;
+private _maxAcceleration = (getNumber (configfile >> "CfgAmmo" >> _projectileType >> "thrust")) * WL_SAM_ACCELERATION * _projectileSpeedOverride;
 private _maxSpeed = getNumber (configfile >> "CfgAmmo" >> _projectileType >> "maxSpeed") * WL_SAM_MAX_SPEED_FACTOR * _projectileSpeedOverride;
 
 // Sound barrier
@@ -100,7 +106,7 @@ while { alive _projectile } do {
 
     private _angularVector = angularVelocityModelSpace _projectile;
     private _distanceTraveled = _projectile distance _originalPosition;
-    if (_disableGroundAvoid || _distanceTraveled > 5000) then {
+    if (_disableGroundAvoid || _distanceTraveled > _groundAvoidDistance) then {
         private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
         _projectile setAngularVelocityModelSpace _newAngularVector;
     } else {
