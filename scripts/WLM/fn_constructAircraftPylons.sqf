@@ -82,20 +82,10 @@ private _currentAssetPylonInfo = _asset getVariable ["WLM_pylonInfo", getAllPylo
             _actualAmmoType = _actualAmmoType # 0;
         };
 
-        private _magazineName = if (count _actualAmmoType == 0) then {
-            getText (_magazine >> "displayName");
+        private _displayName = if (count _actualAmmoType == 0) then {
+            [_x] call WL2_fnc_getMagazineName;
         } else {
             _actualAmmoType # 1 # 1;
-        };
-
-        private _magSize = getNumber (_magazine >> "count");
-
-        private _magSizeInName = [format["%1x", _magSize], _magazineName] call BIS_fnc_inString;
-
-        private _displayName = if (_magSizeInName || _magSize <= 1) then {
-            _magazineName;
-        } else {
-            format ["%1 %2x", _magazineName, _magSize];
         };
 
         private _selectBoxItem = _selectBox lbAdd _displayName;

@@ -23,10 +23,8 @@ if (_overrideMagazineName != "No Override") then {
 };
 
 private _magSize = getNumber (configFile >> "CfgMagazines" >> _magazine >> "count");
-_magazineName = if (_magSize > 0) then {
-    format ["%1 (%2)", _magazineName, _magSize];
-} else {
-    _magazineName;
+if (_magSize > 1) then {
+    _magazineName = format ["%1 (%2)", _magazineName, _magSize];
 };
 
 _magazineName;

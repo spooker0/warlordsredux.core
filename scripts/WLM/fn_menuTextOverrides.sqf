@@ -1,4 +1,10 @@
 #include "includes.inc"
+
+private _cache = uiNamespace getVariable ["WLM_menuTextOverrides", []];
+if (count _cache > 0) exitWith {
+    _cache
+};
+
 // Override magazine names
 // Format: Mag class, new mag name
 private _overrideMagazineNames = createHashMapFromArray [
@@ -48,7 +54,46 @@ private _overrideMagazineNames = createHashMapFromArray [
     ["1000Rnd_Gatling_30mm_Plane_CAS_01_F", "30mm Gatling"],
     ["500Rnd_Cannon_30mm_Plane_CAS_02_F", "30mm Gatling"],
     ["60Rnd_20mm_HE_shells", "20mm HE Shells"],
-    ["60Rnd_20mm_AP_shells", "20mm AP Shells"]
+    ["60Rnd_20mm_AP_shells", "20mm AP Shells"],
+    ["PylonRack_3Rnd_Missile_AGM_02_F", "Macer"],
+    ["PylonRack_3Rnd_LG_scalpel", "Scalpel"],
+    ["PylonRack_4Rnd_LG_scalpel", "Scalpel"],
+    ["PylonRack_7Rnd_Rocket_04_HE_F", "Shrieker HE"],
+    ["PylonRack_7Rnd_Rocket_04_AP_F", "Shrieker AP"],
+    ["PylonRack_12Rnd_PGM_missiles", "DAGR-M"],
+    ["PylonRack_20Rnd_Rocket_03_HE_F", "Tratnyr HE"],
+    ["PylonRack_20Rnd_Rocket_03_AP_F", "Tratnyr AP"],
+    ["PylonRack_19Rnd_Rocket_Skyfire", "Skyfire"],
+    ["PylonMissile_Missile_AMRAAM_C_x1", "AMRAAM C"],
+    ["PylonRack_Missile_AMRAAM_C_x1", "AMRAAM C"],
+    ["PylonRack_Missile_AMRAAM_C_x2", "AMRAAM C"],
+    ["PylonMissile_Missile_AMRAAM_D_x1", "AMRAAM D"],
+    ["PylonRack_Missile_AMRAAM_D_x1", "AMRAAM D"],
+    ["PylonMissile_Missile_AMRAAM_D_INT_x1", "AMRAAM D"],
+    ["PylonRack_Missile_AMRAAM_D_x1", "AMRAAM D"],
+    ["PylonRack_Missile_AMRAAM_D_x2", "AMRAAM D"],
+    ["PylonMissile_Missile_BIM9X_x1", "BIM 9X"],
+    ["PylonRack_Missile_BIM9X_x1", "BIM 9X"],
+    ["PylonRack_Missile_BIM9X_x2", "BIM 9X"],
+    ["PylonMissile_Missile_AGM_02_x1", "Macer II AGM"],
+    ["PylonMissile_Missile_AGM_02_x2", "Macer II AGM"],
+    ["PylonRack_Missile_AGM_02_x1", "Macer II AGM"],
+    ["PylonRack_Missile_AGM_02_x2", "Macer II AGM"],
+    ["PylonMissile_Bomb_GBU12_x1", "GBU 12 LGB"],
+    ["PylonRack_Bomb_GBU12_x2", "GBU 12 LGB"],
+    ["PylonMissile_Missile_AA_R73_x1", "R73 SR"],
+    ["PylonMissile_Missile_AA_R77_x1", "R77 MR"],
+    ["PylonMissile_Missile_AA_R77_INT_x1", "R77 MR"],
+    ["PylonMissile_Missile_AGM_KH25_x1", "KH25 AGM"],
+    ["PylonMissile_Missile_AGM_KH25_INT_x1", "KH25 AGM"],
+    ["PylonMissile_Bomb_KAB250_x1", "KAB 250 LGB"],
+    ["PylonMissile_Missile_HARM_x1", "AGM-88C HARM"],
+    ["PylonRack_Missile_HARM_x1", "AGM-88C HARM"],
+    ["PylonMissile_Missile_HARM_INT_x1", "AGM-88C HARM"],
+    ["PylonRack_Bomb_SDB_x4", "GBU SDB"],
+    ["PylonMissile_Missile_KH58_x1", "KH58 ARM"],
+    ["PylonMissile_Missile_KH58_INT_x1", "KH58 ARM"],
+    ["PylonRack_Bomb_SDB_x4", "GBU SDB"]
 ];
 
 // Override magazine descriptions
@@ -59,5 +104,6 @@ private _overrideMagazineDescriptions = createHashMapFromArray [
     ["1Rnd_GAA_missiles", "Short-range, infrared-guided, surface-to-air missile with high-explosive warhead."]
 ];
 
-// return
-[_overrideMagazineNames, _overrideMagazineDescriptions];
+private _return = [_overrideMagazineNames, _overrideMagazineDescriptions];
+uiNamespace setVariable ["WLM_menuTextOverrides", _return];
+_return;
