@@ -701,8 +701,13 @@ addMissionEventHandler ["Draw3D", {
 
     [_helmetInterfaceDistances # _helmetInterfaceIndex] call _setNewRange;
 
+    private _lastHasGoggles = false;
 	while { !BIS_WL_missionEnd && !WL_IsSpectator } do {
         private _hasGoggles = player getVariable ["WL_hasHelmetDisplay", false];
+        if (_hasGoggles != _lastHasGoggles) then {
+            _lastHasGoggles = _hasGoggles;
+            [_helmetInterfaceDistances # _helmetInterfaceIndex] call _setNewRange;
+        };
         if (_hasGoggles) then {
             sleep 0.01;
         } else {
