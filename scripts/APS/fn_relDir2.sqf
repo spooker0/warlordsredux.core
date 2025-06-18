@@ -1,9 +1,15 @@
 #include "includes.inc"
-// Compare the directions of a projectile and a vehicle/turret facing and return relative direction based on turret facing
-private _id=_this select 0;
-private _v=_this select 1;
-_id=_id-180;if(_id<0)then{_id=_id+360};
-private _wd=_v call APS_fnc_getDirection;
-_id=_id-_wd;
-if(_id<0)then{_id=_id+360};
-_id
+params ["_incomingDirection", "_vehicle"];
+
+_incomingDirection = _incomingDirection - 180;
+if(_incomingDirection < 0) then{
+    _incomingDirection = _incomingDirection + 360
+};
+
+private _weaponDirection = [_vehicle] call APS_fnc_getDirection;
+private _relativeDirection = _incomingDirection - _weaponDirection;
+
+if(_relativeDirection < 0) then {
+    _relativeDirection = _relativeDirection + 360
+};
+_relativeDirection;

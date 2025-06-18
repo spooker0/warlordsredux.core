@@ -34,7 +34,12 @@ private _nearLoadable = _nearLoadableEntities select {
     private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
     private _access = [_x, _caller, "full"] call WL2_fnc_accessControl;
     private _loadable = WL_ASSET_FIELD(_assetData, _assetActualType, "loadable", []);
-    count _loadable > 0 && _access # 0;
+    if (typeof _asset == "I_Heli_Transport_02_F") then {
+        private _cost = WL_ASSET_FIELD(_assetData, _assetActualType, "cost", -1);
+        _x != _asset && _access # 0 && _cost >= 0;
+    } else {
+        count _loadable > 0 && _access # 0;
+    };
 };
 private _hasNearLoadable = count _nearLoadable > 0;
 
