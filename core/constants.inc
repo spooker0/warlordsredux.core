@@ -92,6 +92,10 @@
 #define WL_DURATION_SECTORVOTE 30
 #define WL_DURATION_AFKTIME 300
 
+#define WL_DURATION_MISSION 36000 // number in secounds default is for 10h
+// This is only for the HUD make sure you also put the same value in the Countdown Module in your Eden Editor,
+// this is a very lazy way of doing this but for my use case it works so im gonna keep it this way and hope someone in the future can find a better fix for this
+
 #define WL_TARGET_FRIENDLY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_playerSide], objNull])
 #define WL_TARGET_ENEMY (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", BIS_WL_enemySide])
 #define WL_CONTROL_MAP (uiNamespace getVariable ["BIS_WL_mapControl", controlNull])

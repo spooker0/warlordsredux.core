@@ -24,6 +24,7 @@ private _captureText = _display displayCtrl 2109;
 
 private _gameStart = missionNamespace getVariable ["gameStart", 0];
 
+
 private _getTeamColorHex = {
 	params ["_team"];
 	['#004d99', '#7f0400', '#007f04'] # ([west, east, independent] find _team);
@@ -43,7 +44,7 @@ while { !BIS_WL_missionEnd } do {
 
 	_timer ctrlSetStructuredText parseText format [
 		"<t shadow='2'><img color='#ffffff' image='a3\ui_f\data\igui\cfg\actions\settimer_ca.paa'></img>  <t size ='1.1'>%1</t></t>",
-		[36000 - (serverTime - _gameStart), "HH:MM:SS"] call BIS_fnc_secondsToString
+		[(WL_DURATION_MISSION) - (serverTime - _gameStart), "HH:MM:SS"] call BIS_fnc_secondsToString
 	];
 
 	private _currentMoney = (missionNamespace getVariable ["fundsDatabaseClients", createHashMap]) getOrDefault [getPlayerUID player, 0];

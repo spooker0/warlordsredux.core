@@ -5,6 +5,8 @@ private _mapMarkerVar = format ["WL2_MapMarker_%1", _side];
 private _mapMarkedByVar = format ["WL2_MapMarkedBy_%1", _side];
 private _mapMarkedTimeVar = format ["WL2_MapMarkedTime_%1", _side];
 
+
+
 private _currentMarker = _sector getVariable [_mapMarkerVar, "unknown"];
 
 private _allMarkers = ["unknown", "enemy", "enemyhome", "green", "attack", "attack2", "camped"];
@@ -21,7 +23,7 @@ if (_markedByLast != _playerName) then {
     _sector setVariable [_mapMarkedByVar, _playerName, true];
 
     private _start = missionNamespace getVariable ["gameStart", 0];
-    private _gameTimer = [36000 - (serverTime - _start), "HH:MM"] call BIS_fnc_secondsToString;
+    private _gameTimer = [(WL_DURATION_MISSION) - (serverTime - _start), "HH:MM"] call BIS_fnc_secondsToString;
     _sector setVariable [_mapMarkedTimeVar, _gameTimer, true];
 };
 _sector setVariable [_mapMarkerVar, _nextMarker, true];
