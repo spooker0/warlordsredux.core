@@ -36,7 +36,18 @@ call SQD_fnc_initServer;
 
 call WL2_fnc_serverEHs;
 
-missionNamespace setVariable ["gameStart", serverTime, true];
+estimatedTimeLeft WL_DURATION_MISSION;
+
+0 spawn {
+	waitUntil {
+		sleep 1;
+		estimatedEndServerTime - serverTime < 1;
+	};
+	missionNamespace setVariable ["BIS_WL_missionEnd", true, true];
+	missionNamespace setVariable ["WL2_gameWinner", independent, true];
+	0 spawn WL2_fnc_calculateEndResults;
+	0 remoteExec ["WL2_fnc_missionEndHandle", 0];
+};
 
 if !(isDedicated) then {
 	waitUntil {

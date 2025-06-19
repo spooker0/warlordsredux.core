@@ -1,8 +1,8 @@
 #include "includes.inc"
-private _gameStartTime = missionNamespace getVariable ["gameStart", 0];
-private _surrenderTime = _gameStartTime + 60 * 60 * 3;
-if (serverTime < _surrenderTime) exitWith {
-	[false, format ["Surrender voting timer: %1", [_surrenderTime - serverTime, "MM:SS"] call BIS_fnc_secondsToString]];
+private _surrenderTime = 60 * 60 * 2;
+private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
+if (_timeSinceStart < _surrenderTime) exitWith {
+	[false, format ["Surrender voting timer: %1", [_surrenderTime - _timeSinceStart, "MM:SS"] call BIS_fnc_secondsToString]];
 };
 
 // private _countSide = playersNumber BIS_WL_playerSide;

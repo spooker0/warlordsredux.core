@@ -83,7 +83,8 @@ if (_lockedToTeam != sideUnknown) then {
         [_punishIncident] remoteExec ["WL2_fnc_punishmentClient", _owner];
     };
 } else {
-    private _exceedGracePeriod = (missionNamespace getVariable ["gameStart", 0]) + 300 < serverTime;
+    private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
+    private _exceedGracePeriod = _timeSinceStart > 60 * 5;
     private _isImbalanced = if (_exceedGracePeriod) then {
         private _friendlyCount = playersNumber _currentSide;
         private _enemySide = if (_currentSide == west) then {

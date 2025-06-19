@@ -20,8 +20,7 @@ private _playerName = [player, true] call BIS_fnc_getName;
 if (_markedByLast != _playerName) then {
     _sector setVariable [_mapMarkedByVar, _playerName, true];
 
-    private _start = missionNamespace getVariable ["gameStart", 0];
-    private _gameTimer = [36000 - (serverTime - _start), "HH:MM"] call BIS_fnc_secondsToString;
+    private _gameTimer = [estimatedEndServerTime - serverTime, "HH:MM"] call BIS_fnc_secondsToString;
     _sector setVariable [_mapMarkedTimeVar, _gameTimer, true];
 };
 _sector setVariable [_mapMarkerVar, _nextMarker, true];

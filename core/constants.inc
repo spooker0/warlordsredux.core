@@ -91,6 +91,7 @@
 
 #define WL_DURATION_SECTORVOTE 30
 #define WL_DURATION_AFKTIME 300
+#define WL_DURATION_MISSION 36000
 
 #define WL_TARGET_FRIENDLY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_playerSide], objNull])
 #define WL_TARGET_ENEMY (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", BIS_WL_enemySide])

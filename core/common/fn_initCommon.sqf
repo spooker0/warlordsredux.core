@@ -76,7 +76,6 @@ if (isServer) then {
 	waitUntil {{isNil _x} count [
 		"WL2_base1",
 		"WL2_base2",
-		"gameStart",
 		"BIS_WL_currentTarget_west",
 		"BIS_WL_currentTarget_east"
 	] == 0};
