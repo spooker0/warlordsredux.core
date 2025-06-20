@@ -9,9 +9,7 @@ private _shouldGarbageCollect = {
 	if (_asset getEntityInfo 2) exitWith { true };
 	if (_asset getEntityInfo 11) exitWith { true };
 	if (_list getOrDefault [typeOf _asset, false]) exitWith { true };
-
-	private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
-	WL_ASSET_FIELD(_assetData, _assetActualType, "garbageCollect", 0) > 0;
+	false;
 };
 
 while { !BIS_WL_missionEnd } do {
