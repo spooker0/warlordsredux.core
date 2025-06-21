@@ -1,4 +1,5 @@
-#include "includes.inc"
+#include "..\warlords_constants.inc"
+
 params ["_side"];
 
 private _purchaseable = [];
@@ -29,7 +30,8 @@ private _purchaseable = [];
 				[],
 				localize "STR_A3_Arsenal",
 				"\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
-				localize "STR_A3_WL_arsenal_open"
+				"The Virtual Arsenal allows players to customize their loadout to include whatever weapons, attachments and equipment they desire."
+				//localize "STR_A3_WL_arsenal_open"
 			];
 			_categoryData pushBack [
 				"Customization",
@@ -37,7 +39,7 @@ private _purchaseable = [];
 				[],
 				"Customization",
 				"\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
-				"Customization menu for respawn loadout."
+				"The Customization menu allows players to modify what gear, attachments and weapons they respawn with."
 			];
 			#if WL_AR_GLASSES_TOGGLE
 			_categoryData pushBack [
@@ -46,7 +48,7 @@ private _purchaseable = [];
 				[],
 				"Buy AR Glasses",
 				"\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
-				"Buy AR glasses, which show you enemies spotted by friendly datalink, while you are in range of an EW network. Use +/- keys to increase/decrease range."
+				"Buy AR glasses, which show you enemies spotted by friendly datalink via a HUD (Heads Up Display), while you are in range of an EW network. Use +/- keys to increase/decrease range of goggles."
 			];
 			#endif
 			_categoryData pushBack [
@@ -76,7 +78,7 @@ private _purchaseable = [];
 		};
 	};
 
-	private _assetData = WL_ASSET_DATA;
+	private _descriptionMap = missionNamespace getVariable ["WL2_descriptions", createHashMap];
 
 	private _preset = missionConfigFile >> "CfgWLRequisitionPresets" >> "A3ReduxAll";
 	{
@@ -148,6 +150,7 @@ private _purchaseable = [];
 			case "RemoteControl";
 			case "AirDefense";
 			case "SectorDefense";
+			case "Gear";
 			case "Naval": {
 				private _assetText = getText (_class >> "Library" >> "LibTextDesc");
 				if (_assetText == "") then {
@@ -170,8 +173,34 @@ private _purchaseable = [];
 					_assetText = ((_assetText splitString "=") # 0) + ".";
 				};
 
-				private _description = WL_ASSET_FIELD(_assetData, _className, "description", "");
+				private _keybindMap = [
+                    ["%LOCK_TARGET%", "lockTarget"],
+                    ["%NEXT_TARGET%", "vehLockTargets"],
+                    ["%LASE_RANGE%", "gunElevAuto"],
+                    ["%TOGGLE_RADAR%", "ActiveSensorsToggle"],
+					["%CYCLE_WEAPON%", "nextWeapon"],
+					["%OPEN_MAP%", "showMap"],
+					["%GUN_UP%", "gunElevUp"],
+					["%GUN_DOWN%", "gunElevDown"],
+					["%ZOOM_IN%", "zoomIn"],
+					["%ZOOM_OUT%", "zoomOut"],
+					["%PANELMODE_LEFT%", "NextModeLeftVehicleDisplay"],
+					["%PANELMODE_RIGHT%", "NextModeRightVehicleDisplay"],
+					["%PANEL_LEFT%", "ListLeftVehicleDisplay"],
+					["%PANEL_RIGHT%", "ListRightVehicleDisplay"]
+				];
+// Add more keybinds as needed ^, https://community.bistudio.com/wiki/Action_Keys
+				private _description = _descriptionMap getOrDefault [_className, ""];
 				if (_description != "") then {
+                    {
+                        private _placeholder = _x select 0;
+						private _actionName = _x select 1;
+						private _keys = actionKeysNames _actionName;
+						if (_keys isEqualTo "") then {
+                            _keys = """Error Keybind Not Found: Please bind key or select a control preset in Esc -> Configure -> Controls.""";
+						};
+						_description = _description regexReplace [_placeholder, _keys];
+                    } forEach _keybindMap;
 					_assetText = _description;
 				};
 
@@ -182,7 +211,7 @@ private _purchaseable = [];
 				_assetText;
 			};
 			default {
-				WL_ASSET_FIELD(_assetData, _className, "description", "")
+				_descriptionMap getOrDefault [_className, ""];
 			};
 		};
 
