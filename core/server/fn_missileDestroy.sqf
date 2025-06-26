@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_shooter", "_originatorUid"];
 
-if (isNil "_originatorUid" || _originatorUid == "123") exitWith {};
+if (isNil "_originatorUid") exitWith {};
 
 private _reward = 300;
 
