@@ -15,7 +15,7 @@ addMissionEventHandler ["HandleChatMessage", {
 	_display displayAddEventHandler ["KeyUp", {
 		_key = _this # 1;
 		if (_key in actionKeys "Gear") then {
-			BIS_WL_gearKeyPressed = false;
+			WL_gearKeyPressed = false;
 		};
 	}];
 
@@ -87,5 +87,16 @@ addMissionEventHandler ["EntityRespawned", {
 	private _wasMan = _oldEntity getEntityInfo 0;
 	if (_wasMan) then {
 		removeAllActions _oldEntity;
+	};
+}];
+
+addMissionEventHandler ["PlayerViewChanged", {
+	params ["_oldUnit", "_newUnit", "_vehicleIn", "_oldCameraOn", "_newCameraOn", "_uav"];
+	[_newCameraOn] spawn WL2_fnc_drawAssetName;
+
+	private _assetActualType = _newCameraOn getVariable ["WL2_orderedClass", typeof _newCameraOn];
+	private _ecmParameters = WL_ASSET(_assetActualType, "ecm", []);
+	if (count _ecmParameters >= 3) then {
+		[_newCameraOn] spawn WL2_fnc_ecmJammer;
 	};
 }];

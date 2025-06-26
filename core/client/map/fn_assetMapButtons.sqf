@@ -237,6 +237,23 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         ]
     ] call WL2_fnc_addTargetMapButton;
 
+    // Delete FOB Button
+    private _deleteFOBExecute = {
+        params ["_asset"];
+        deleteVehicle _asset;
+    };
+    [
+        "DELETE FOB",
+        _deleteFOBExecute,
+        true,
+        "deleteFOB",
+        [
+            0,
+            "DeleteFOB",
+            "Fast Travel"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
+
 #if WL_STRONGHOLD_DEBUG
     // Fast Travel FOB Test
     private _fastTravelFOBTestExecute = {

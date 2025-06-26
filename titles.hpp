@@ -224,20 +224,20 @@ class RscTitles {
 			class RscWarlordsHUD_CaptureProgress: RscProgress {
 				idc = 2108;
 				x = 0.08;
-				y = safeZoneY + 0.05;
+				y = safeZoneY + 0.04;
 				w = 0.84;
-				h = 0.065;
+				h = 0.048;
 				colorFrame[] = {0, 0, 0, 1};
 				colorBar[] = {1, 1, 1, 1};
 			};
 			class RscWarlordsHUD_Capture: RscStructuredText {
 				idc = 2109;
 				x = 0;
-				y = safeZoneY + 0.05;
+				y = safeZoneY + 0.04;
 				w = 1;
-				h = 0.07;
+				h = 0.05;
 				text = "";
-				size = 0.06;
+				size = 0.045;
 			};
 		};
 	};
@@ -982,6 +982,50 @@ class RscTitles {
 				style = ST_MULTI;
 				shadow = 0;
 				size = 0.08;
+			};
+		};
+	};
+
+	class RscWLECMJammerDisplay {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		name = "RscWLECMJammerDisplay";
+		onLoad = "uiNamespace setVariable ['RscWLECMJammerDisplay', _this select 0];";
+		class controls {
+			class RscWLECMJammerDisplay_ChargesIcon: RscPicture {
+				idc = 33001;
+				x = 0.47;
+				y = safeZoneY + 0.1;
+				w = 0.06;
+				h = 0.06;
+				colorText[] = {1, 1, 1, 1};
+				text = "\A3\ui_f\data\IGUI\RscIngameUI\RscUnitInfoAirRTDFull\ico_cpt_batt_ON_ca.paa";
+				style = ST_PICTURE + ST_KEEP_ASPECT_RATIO;
+				shadow = 0;
+			};
+			class RscWLECMJammerDisplay_ChargesText: RscStructuredText {
+				idc = 33002;
+				x = 0.38;
+				y = safeZoneY + 0.1;
+				w = 0.06;
+				h = 0.06;
+				text = "<t color='#33ff33' align='center'></t>";
+				style = ST_MULTI;
+				shadow = 0;
+				size = 0.06;
+			};
+			class RscWLECMJammerDisplay_ChargeTimer: RscStructuredText {
+				idc = 33003;
+				x = 0.55;
+				y = safeZoneY + 0.1;
+				w = 0.06;
+				h = 0.06;
+				text = "<t color='#ffffff' align='center'></t>";
+				style = ST_MULTI;
+				shadow = 0;
+				size = 0.06;
 			};
 		};
 	};

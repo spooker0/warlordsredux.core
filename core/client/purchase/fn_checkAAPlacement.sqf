@@ -6,7 +6,7 @@ if (_category != "Air Defense") exitWith {
 };
 
 private _assetCost = WL_ASSET(_class, "cost", 0);
-if (_assetCost <= 1000) exitWith {
+if (_assetCost <= 2000) exitWith {
     [true, ""]
 };
 

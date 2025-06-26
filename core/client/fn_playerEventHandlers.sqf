@@ -9,7 +9,7 @@ player addEventHandler ["GetInMan", {
 	if (_vehicle isKindOf "Air" && typeof _vehicle != "Steerable_Parachute_F") then {
 		0 spawn WL2_fnc_betty;
 	};
-	if ((_vehicle getVariable ["BIS_WL_ownerAsset", "123"]) == (getPlayerUID player)) then {
+	if ((_vehicle getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player) then {
 		_vehicle setVariable ["BIS_WL_lastActive", 0];
 	};
 }];
@@ -119,15 +119,3 @@ player addEventHandler ["Respawn", {
         };
     };
 }];
-
-0 spawn {
-	private _lastCamera = cameraOn;
-	while { !BIS_WL_missionEnd } do {
-		private _currentCamera = cameraOn;
-		if (_currentCamera != _lastCamera) then {
-			_lastCamera = _currentCamera;
-			[_currentCamera] spawn WL2_fnc_drawAssetName;
-		};
-		sleep 0.5;
-	};
-};

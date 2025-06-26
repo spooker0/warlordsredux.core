@@ -209,18 +209,14 @@ _playerList ctrlAddEventHandler ["LBSelChanged", {
     private _selectedPlayer = [_selectedUid] call BIS_fnc_getUnitByUID;
     private _playerName = [_selectedPlayer, true] call BIS_fnc_getName;
 
-    uiNamespace setVariable ["MODR_selectedPlayer", _selectedPlayer];
-    uiNamespace setVariable ["MODR_passedName", _playerName];
-    uiNamespace setVariable ["MODR_returnedBeId", ""];
+    private _guidMap = uiNamespace getVariable ["WL2_guidMap", createHashMap];
+    private _guid = _guidMap getOrDefault [_playerName, ""];
+    if (_guid != "") exitWith {
+        [_selectedPlayer] spawn MENU_fnc_moderatorLoaded;
+    };
 
     diag_log "serverCommand #beclient players";
     serverCommand "#beclient players";
-
-    // Mock reply for offline test
-    // 0 spawn {
-    //     sleep 3;
-    //     uiNamespace setVariable ["MODR_returnedBeId", "8ea8a9d51cc24705b60dcab0152b0905"];
-    // };
 
     [_selectedPlayer] spawn MENU_fnc_moderatorLoaded;
 }];

@@ -3,7 +3,7 @@ params ["_sector", "_owner"];
 
 if (isDedicated) exitWith {};
 
-if (_sector getVariable ["WL2_name", "Sector"] == "Wait") exitWith {};
+if (_sector getVariable ["WL2_name", "Sector"] in WL_SPECIAL_SECTORS) exitWith {};
 
 private _specialStateArray = if (isNil "BIS_WL_sectorsArray") then { [] } else {
 	(BIS_WL_sectorsArray # 6) + (BIS_WL_sectorsArray # 7);

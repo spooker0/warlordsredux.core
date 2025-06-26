@@ -35,16 +35,17 @@ waitUntil {
 
 private _vehicleType = typeof _vehicle;
 private _vehicleActualType = _vehicle getVariable ["WL2_orderedClass", _vehicleType];
-if (_vehicleActualType != _vehicleType) then {
-    private _assetTypeName = [_vehicle] call WL2_fnc_getAssetTypeName;
-    private _existingPosition = ctrlPosition (_unitInfo displayCtrl 1000);
+private _vehicleBaseType = getText (configFile >> "CfgVehicles" >> _vehicleType >> "displayName");
+private _vehicleActualType = [_vehicle] call WL2_fnc_getAssetTypeName;
 
+if (_vehicleBaseType != _vehicleActualType) then {
+    private _existingPosition = ctrlPosition (_unitInfo displayCtrl 1000);
     private _newControl = _unitInfo ctrlCreate ["RscText", -1];
     _newControl ctrlSetPosition _existingPosition;
     _newControl ctrlSetBackgroundColor [0.5, 0.5, 0.5, 1];
     _newControl ctrlSetTextColor (ctrlTextColor _existingControl);
     _newControl ctrlSetFontHeight (ctrlFontHeight _existingControl);
     _newControl ctrlSetShadow 0;
-    _newControl ctrlSetText _assetTypeName;
+    _newControl ctrlSetText _vehicleActualType;
     _newControl ctrlCommit 0;
 };

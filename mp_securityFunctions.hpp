@@ -35,8 +35,6 @@ class CfgRemoteExec {
 		class WL2_fnc_demolishComplete {allowedTargets = 0;};
 		class WL2_fnc_deployableAddAction {allowedTargets = 1;};
 		class WL2_fnc_deployCrateAction {allowedTargets = 1;};
-		class WL2_fnc_forfeitHandle {allowedTargets = 0;};
-		class WL2_fnc_forfeitHandleServer {allowedTargets = 2;};
 		class WL2_fnc_forgiveTeamkill {allowedTargets = 2;};
 		class WL2_fnc_handleClientRequest {allowedTargets = 2;};
 		class WL2_fnc_handleEntityRemoval {allowedTargets = 2;};
@@ -44,6 +42,7 @@ class CfgRemoteExec {
 		class WL2_fnc_jammerAction {allowedTargets = 0;};
 		class WL2_fnc_killRewardHandle {allowedTargets = 2;};
 		class WL2_fnc_lagMessageHandler {allowedTargets = 2;};
+		class WL2_fnc_missileDestroy {allowedTargets = 2;};
 		class WL2_fnc_punishPlayer {allowedTargets = 2;};
 		class WL2_fnc_pingFix {allowedTargets = 1;};
 		class WL2_fnc_prepareStronghold {allowedTargets = 0;};

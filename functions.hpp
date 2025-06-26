@@ -11,6 +11,7 @@ class CfgFunctions {
 			class getDirection {};
 			class getMaxAmmo {};
 			class hasCharges {};
+			class jamDestroy {};
 			class lagProtection {};
 			class lagProtectionServer {};
 			class projectileStateUpdate {};
@@ -47,6 +48,7 @@ class CfgFunctions {
 			class setupRemoteMenu {};
 			class setupRemoteMunition {};
 			class startMissileCamera {};
+			class terminalGuidance {};
 			class tvMunition {};
 		};
 	};
@@ -143,7 +145,6 @@ class CfgFunctions {
 			class betty {};
 			class clientEH {};
 			class factionBasedClientInit {};
-			class forfeitHandle {};
 			class handleBuyMenuKeypress {};
 			class handleChatMessages {};
 			class handleKeypress {};
@@ -237,6 +238,7 @@ class CfgFunctions {
 			class drawIncomingMissiles {};
 			class drawRadarName {};
 			class drawSectorMarker {};
+			class ecmJammer {};
 			class getDir {};
 			class helmetInterface {};
 			class iconColor {};
@@ -304,7 +306,6 @@ class CfgFunctions {
 			class sectorVoteDisplay {};
 			class selectedTargetsHandle {};
 			class targetResetHandle {};
-			class targetResetHandleVote {};
 			class targetSelected {};
 			class updateSelectionState {};
 		};
@@ -320,7 +321,6 @@ class CfgFunctions {
 			class orderArsenal {};
 			class orderCruiseMissile {};
 			class orderFastTravel {};
-			class orderForfeit {};
 			class orderFundsTransfer {};
 			class orderLastLoadout {};
 			class orderNaval {};
@@ -357,12 +357,10 @@ class CfgFunctions {
 			class checkParadropCooldown {};
 			class checkPlayerInVehicle {};
 			class checkRequirements {};
-			class checkResetSectorTimer {};
 			class checkResetVehicle {};
 			class checkSavedLoadout {};
 			class checkStrongholdFT {};
 			class checkSelectedUnits {};
-			class checkSurrender {};
 			class checkTargetEnemyBase {};
 			class checkTargetSelected {};
 			class checkTargetUnlinked {};
@@ -423,7 +421,6 @@ class CfgFunctions {
 			class createVehicleCorrectly {};
 			class demolishComplete {};
 			class detectNewPlayers {};
-			class forfeitHandleServer {};
 			class forgiveTeamkill {};
 			class friendlyFireHandleServer {};
 			class fundsDatabaseUpdate {};
@@ -438,13 +435,13 @@ class CfgFunctions {
 			class killRewardHandle {};
 			class lagMessageHandler {};
 			class laserTracker {};
+			class missileDestroy {};
 			class processRunways {};
 			class punishPlayer {};
 			class rebalance {};
 			class selectTarget {};
 			class serverEHs {};
 			class setupNewPlayer {};
-			class targetResetHandleServer {};
 			class targetSelectionHandleServer {};
 			class uavJammed {};
 			class updateVehicleList {};

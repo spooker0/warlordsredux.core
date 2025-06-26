@@ -11,6 +11,5 @@ _asset setDir (getDir _sender);
 [_asset, _sender, _orderedClass] call WL2_fnc_processOrder;
 
 if (_sender distance2D _asset < 100) then {
-    _sender setPosASL _position;
-    _sender moveInAny _asset;
+    _sender setVehiclePosition [ASLtoAGL getPosASL _asset, [], 5, "NONE"];
 };

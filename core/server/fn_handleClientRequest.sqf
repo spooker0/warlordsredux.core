@@ -42,6 +42,8 @@ private _actionCost = switch (_action) do {
 	case "savedLoadout" : { WL_COST_SAVEDLOADOUT };
 	case "orderArsenal" : { WL_COST_ARSENAL };
 	case "fastTravelContested" : { WL_COST_FTCONTESTED };
+	case "fastTravelAirAssault" : { WL_COST_AIRASSAULT };
+	case "fastTravelParadrop" : { WL_COST_PARADROP };
 	case "fastTravelSquadLeader" : { WL_COST_FTSL };
 	case "scan" : { WL_COST_SCAN };
 	case "targetReset" : { WL_COST_TARGETRESET };
@@ -173,12 +175,8 @@ if (_action == "ftSupportPoints") exitWith {
 };
 
 if (_action == "targetReset") exitWith {
-	missionNamespace setVariable [format ["BIS_WL_targetResetVotingSince_%1", _side], serverTime, true];
-	missionNamespace setVariable [format ["BIS_WL_targetResetOrderedBy_%1", _side], name _sender, true];
-	_sender setVariable ["BIS_WL_targetResetVote", 1, [2, remoteExecutedOwner]];
-
-	_side spawn WL2_fnc_targetResetHandleServer;
-	[_side] remoteExec ["WL2_fnc_targetResetHandleVote", [0, -2] select isDedicated];
+	missionNamespace setVariable [format ["WL_targetReset_%1", _side], true, true];
+	["server", true] call WL2_fnc_updateSectorArrays;
 
 	private _message = format ["%1 has initiated a vote to reset the target sector.", name _sender];
 	[_side, _message] call _broadcastActionToSide;

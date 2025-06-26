@@ -336,6 +336,13 @@ private _strategyArr = [
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"Call a volley of cruise missiles on your designation. Requires all targets (vehicles or infantry) to be on datalink."
 	], [
+		"SmokeScreen",
+		3000,
+		[],
+		"Call smoke screern",
+		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
+		"Call a volley of smoke screen on your designation."
+	], [
 		"PruneAssets",
 		0,
 		[],
@@ -377,13 +384,6 @@ private _strategyArr = [
 		localize "STR_A3_WL_infoScreen",
 		"src\img\wl_logo_ca.paa",
 		""
-	], [
-		"ForfeitVote",
-		0,
-		[],
-		localize "STR_A3_WL_feature_OrderForfeit",
-		"\a3\data_f\flags\flag_white_dmg_co.paa",
-		localize "STR_A3_WL_feature_OrderForfeit_info"
 	]
 ];
 

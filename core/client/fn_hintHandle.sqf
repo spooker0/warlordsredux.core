@@ -8,7 +8,7 @@ if (_event == "init") then {
 		if (isNil _varName) then {
 			missionNamespace setVariable [_varName, false]
 		};
-	} forEach ["assembly", "placeCharge", "targetResetVoting", "forfeitVoting"];
+	} forEach ["assembly", "placeCharge"];
 
 	_hintText = "";
 	_lastHint = "";
@@ -28,38 +28,6 @@ if (_event == "init") then {
 			private _placeChargeText = format ["<t align = 'left'>[ %1 ]</t><t align = 'right' color = '#4bff58'>%2</t>", localize "STR_dik_space", "Place Charge"];
 			private _cancelText = format ["<t align = 'left'>[ %1 ]</t><t align = 'right' color = '#ff4b4b'>%2</t>", localize "STR_dik_back", localize "STR_ca_cancel"];
 			_hintText = _hintText + format ["<t size = '1.2' shadow = '0'>%1<br/>%2</t>", _placeChargeText, _cancelText];
-		};
-
-		if (BIS_WL_showHint_targetResetVoting) then {
-			_varNameVoting = format ["BIS_WL_targetResetVotingSince_%1", BIS_WL_playerSide];
-			_warlords = allPlayers select {side group _x == BIS_WL_playerSide};
-			_hintText = _hintText + format [
-				"%8<t shadow = '0'><t align = 'center' size = '1.3'>%1</t><br/><t size = '1.2'><t align = 'left'>[ %2 + %3 ]</t><t align = 'right' color = '#4bff58'>%4</t><br/><t align = 'left'>[ %2 + %5 ]</t><t align = 'right' color = '#ff4b4b'>%6</t></t><t size = '1'><br/><br/><t align = 'center'>- %7 -</t></t></t>",
-				toUpper localize "STR_A3_WL_target_reset_info",
-				localize "str_dik_lcontrol",
-				localize "str_dik_y",
-				toUpper localize "str_lib_info_yes",
-				localize "str_dik_n",
-				toUpper localize "str_lib_info_no",
-				0 max ceil (((missionNamespace getVariable [_varNameVoting, -1]) + WL_COOLDOWN_SECTORRESET) - serverTime),
-				if (_hintText == "") then {""} else {"<br/><br/>"}
-			];
-		};
-
-		if (BIS_WL_showHint_forfeitVoting) then {
-			_varNameVoting = format ["BIS_WL_forfeitVotingSince_%1", BIS_WL_playerSide];
-			_warlords = allPlayers select {side group _x == BIS_WL_playerSide};
-			_hintText = _hintText + format [
-				"%8<t shadow = '0'><t align = 'center' size = '1.3'>%1</t><br/><t size = '1.2'><t align = 'left'>[ %2 + %3 ]</t><t align = 'right' color = '#4bff58'>%4</t><br/><t align = 'left'>[ %2 + %5 ]</t><t align = 'right' color = '#ff4b4b'>%6</t></t><t size = '1'><br/><br/><t align = 'center'>- %7 -</t></t></t>",
-				toUpper "Surrender vote activated",
-				localize "str_dik_lcontrol",
-				localize "str_dik_y",
-				toUpper localize "str_lib_info_yes",
-				localize "str_dik_n",
-				toUpper localize "str_lib_info_no",
-				0 max ceil (((missionNamespace getVariable [_varNameVoting, -1]) + 60) - serverTime),
-				if (_hintText == "") then {""} else {"<br/><br/>"}
-			];
 		};
 
 		if((_hintText != "" ) or ( _lastHint != "")) then {

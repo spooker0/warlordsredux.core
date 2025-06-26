@@ -1,4 +1,5 @@
-#include "includes.inc"params ["_projectile", "_unit", ["_fov", 0.75], ["_defaultOpticsMode", -1]];
+#include "includes.inc"
+params ["_projectile", "_unit", ["_fov", 0.75], ["_defaultOpticsMode", -1]];
 
 if (isDedicated) exitWith {};
 

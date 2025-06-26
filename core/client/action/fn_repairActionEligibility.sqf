@@ -1,13 +1,25 @@
 #include "includes.inc"
 params ["_target", "_caller"];
 
-private _isAlive = alive _target;
+if (cursorObject != _target) exitWith {
+    false
+};
+
+if (!alive _target) exitWith {
+    false
+};
+
 private _hasAccess = ([_target, _caller, "full"] call WL2_fnc_accessControl) # 0;
-private _isInVehicle = cursorObject == _target;
+if (!_hasAccess) exitWith {
+    false
+};
+
 private _nearbyRepair = (_target nearEntities ["All", WL_MAINTENANCE_RADIUS]) select {
-    alive _x &&
-    getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "transportRepair") > 0 &&
+    alive _x
+} select {
+    getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "transportRepair") > 0
+} select {
     ([_x, _caller, "cargo"] call WL2_fnc_accessControl) # 0
 };
 
-_isAlive && _hasAccess && _isInVehicle && count _nearbyRepair > 0;
+count _nearbyRepair > 0;

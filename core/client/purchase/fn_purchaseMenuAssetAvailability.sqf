@@ -147,14 +147,7 @@ if (_ret) then {
 		case "TargetReset": {
 			[
 				[WL2_fnc_checkIndependents],
-				[WL2_fnc_checkTargetSelected],
-				[WL2_fnc_checkResetSectorTimer]
-			]
-		};
-		case "ForfeitVote": {
-			[
-				[WL2_fnc_checkIndependents],
-				[WL2_fnc_checkSurrender]
+				[WL2_fnc_checkTargetSelected]
 			]
 		};
 		case "Arsenal": {
@@ -258,7 +251,7 @@ if (_ret) then {
 					[WL2_fnc_checkRequirements, [_sector, _requirements]],
 					[WL2_fnc_checkInfantryAvailable, [_class]],
 					[WL2_fnc_checkCarrierLimits, [_sector, _category]],
-					[WL2_fnc_checkAssetLimit],
+					[WL2_fnc_checkAssetLimit, [_class]],
 					[WL2_fnc_checkNearbyEnemies],
 					[WL2_fnc_checkPlayerInVehicle, [_requirements]],
 					[WL2_fnc_checkInFriendlySector, [_cost, _requirements]],

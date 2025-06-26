@@ -82,17 +82,32 @@ if (_text == "!updateZeus") exitWith {
     true;
 };
 
-private _passedName = uiNamespace getVariable ["MODR_passedName", ""];
+private _isBattleyeMessage = false;
 if (_channel == 16 || _channel == 17) then {
-    private _regexMatches = _text regexMatch "[\s]?.*[\d]+[\s]+([\w]{32,32})[\s]{1,1}(.*)$";
-    private _hasName = [_passedName, _text] call BIS_fnc_inString;
-    if (_regexMatches && _hasName) then {
-        private _reportLine = _text regexFind ["([\w]{32})[\s]{1}(.*)$",10];
-        if (count _reportLine > 0) then {
-            private _beId = _reportLine # 0 # 1 # 0;
-            uiNamespace setVariable ["MODR_returnedBeId", _beId];
-        };
+    private _regexMatches = _text regexFind ["[\s]?.*[\d]+[\s]+([\w]{32,32})[\s]{1,1}(.*)$"];
+    if (count _regexMatches > 0 && {count (_regexMatches # 0) >= 3}) exitWith {
+        private _beId = _regexMatches # 0 # 1 # 0;
+        private _beName = _regexMatches # 0 # 2 # 0;
+        private _guidMap = uiNamespace getVariable ["WL2_guidMap", createHashMap];
+        _guidMap set [_beName, _beId];
+        uiNamespace setVariable ["WL2_guidMap", _guidMap];
+        _isBattleyeMessage = true;
     };
+    if (_text == "BattlEye Client: Players on server:") exitWith {
+        _isBattleyeMessage = true;
+    };
+    if (_text == "  [#] [Ping] [GUID] [Name]") exitWith {
+        _isBattleyeMessage = true;
+    };
+    if (_text == "  ------------------------------") exitWith {
+        _isBattleyeMessage = true;
+    };
+    if (_text regexMatch ".*\([\d]+ players in total\)") exitWith {
+        _isBattleyeMessage = true;
+    };
+};
+if (_isBattleyeMessage) exitWith {
+    true;
 };
 
 private _showInSquadChat = ["showInSquadChat", [_person, _channel]] call SQD_fnc_client;
@@ -110,6 +125,10 @@ private _filteredText = _text;
 {
     _filteredText = _filteredText regexReplace [_x, "\*\*\*"];
 } forEach _disallowList;
+
+if (isNull _person) exitWith {
+    _filteredText;
+};
 
 if (_channel == 0) exitWith {
     private _playerLevel = _person getVariable ["WL_playerLevel", "Recruit"];

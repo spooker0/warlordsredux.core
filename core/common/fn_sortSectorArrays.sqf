@@ -54,8 +54,16 @@ while {count _knots > 0} do {
 	if ((_sector getVariable ["BIS_WL_owner", sideUnknown]) != _side && _linked findIf {_sector in (_x getVariable ["WL2_connectedSectors", []])} >= 0) then {
 		_available pushBack _sector;
 	};
-	if (_sector getVariable ["WL2_name", "Sector"] == "Wait") then {
+	private _sectorName = _sector getVariable ["WL2_name", "Sector"];
+	if (_sectorName == "Wait") then {
 		_available pushBack _sector;
+	};
+	if (_sectorName == "Surrender") then {
+		private _surrenderTime = 60 * 60 * 2;
+		private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
+		if (_timeSinceStart > _surrenderTime) then {
+			_available pushBack _sector;
+		};
 	};
 } forEach (_pool - _owned);
 

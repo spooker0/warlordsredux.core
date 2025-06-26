@@ -21,7 +21,7 @@ if (_key == DIK_BACKSPACE) exitWith {
     true;
 };
 
-if (_key in actionKeys "Gear" && !BIS_WL_gearKeyPressed) exitWith {
+if (_key in actionKeys "Gear" && !WL_gearKeyPressed) exitWith {
     if (!WL_GEAR_BUY_MENU && WL_TEMP_BUY_MENU) then {   // cancel buy code with menu
         WL_TEMP_BUY_MENU = false;
         uiNamespace setVariable ["WL_BuyMenuCode", ""];

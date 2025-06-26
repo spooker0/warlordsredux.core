@@ -19,9 +19,10 @@ _infoDisplay ctrlSetText _fullDisplayString;
 
 private _beIdReply = "";
 private _startTime = serverTime;
+private _guidMap = uiNamespace getVariable ["WL2_guidMap", createHashMap];
 waitUntil {
     sleep 0.1;
-    _beIdReply = uiNamespace getVariable ["MODR_returnedBeId", ""];
+    _beIdReply = _guidMap getOrDefault [_playerName, ""];
     _beIdReply != "" || serverTime - _startTime > 10;
 };
 if (_beIdReply == "") then {

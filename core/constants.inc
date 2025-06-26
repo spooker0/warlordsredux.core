@@ -73,17 +73,17 @@
 #define WL_COST_AIRASSAULT 100
 #define WL_COST_PARADROP 1000
 #define WL_COST_FUNDTRANSFER 2000
-#define WL_COST_TARGETRESET 1000
+#define WL_COST_TARGETRESET 200
 #define WL_COST_ARSENAL 1000
 #define WL_COST_LASTLOADOUT 100
 #define WL_COST_SAVEDLOADOUT 500
 
 #define WL_MAX_MONEY 50000
 #define WL_MAX_ASSETS 10
+#define WL_MAX_BUILDINGS 25
 #define WL_MAX_AUTOASSETS 2
 
 #define WL_COOLDOWN_SCAN 300
-#define WL_COOLDOWN_SECTORRESET 300
 #define WL_COOLDOWN_FTSL 60
 #define WL_COOLDOWN_AIREFRESH 300
 #define WL_COOLDOWN_REPAIR 600
@@ -96,6 +96,7 @@
 #define WL_TARGET_FRIENDLY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_playerSide], objNull])
 #define WL_TARGET_ENEMY (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", BIS_WL_enemySide])
 #define WL_CONTROL_MAP (uiNamespace getVariable ["BIS_WL_mapControl", controlNull])
+#define WL_SPECIAL_SECTORS (["Wait", "Surrender"])
 #define WL_PLAYER_REQUISITION_LIST (missionNamespace getVariable format ["WL2_purchasable_%1", BIS_WL_playerSide])
 #define WL_REQUISITION_CATEGORIES ["Infantry", "Light Vehicles", "Heavy Vehicles", "Rotary Wing", "Fixed Wing", "Remote Control", "Air Defense", "Sector Defense", "Naval", "Gear", "Fast Travel", "Strategy"]
 #define WL_BASES [WL2_base1, WL2_base2]

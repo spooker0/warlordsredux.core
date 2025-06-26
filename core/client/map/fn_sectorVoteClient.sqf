@@ -2,6 +2,7 @@
 // Ongoing checks for sector target
 0 spawn {
     private _lastTargetFriendly = objNull;
+    private _lastTargetReset = false;
     while { !BIS_WL_missionEnd } do {
         if (!(BIS_WL_playerSide in BIS_WL_competingSides) || WL_IsSpectator) exitWith {
             WL_VotePhase = 0;
@@ -14,14 +15,15 @@
             };
         };
 
-        if (isNull WL_TARGET_FRIENDLY) then {
+        private _targetReset = missionNamespace getVariable [format ["WL_targetReset_%1", BIS_WL_playerSide], false];
+        if (isNull WL_TARGET_FRIENDLY || _targetReset) then {
             call WL2_fnc_sectorVoteDisplay;
         };
 
-        if (_lastTargetFriendly != WL_TARGET_FRIENDLY) then {
+        if (_lastTargetFriendly != WL_TARGET_FRIENDLY || _targetReset != _lastTargetReset) then {
             ["client"] call WL2_fnc_updateSectorArrays;
 
-            if (!isNull WL_TARGET_FRIENDLY) then {
+            if (!isNull WL_TARGET_FRIENDLY && !_targetReset) then {
                 call WL2_fnc_refreshCurrentTargetData;
                 private _voteDisplay = uiNamespace getVariable ["RscWLVoteDisplay", objNull];
                 if (!isNull _voteDisplay) then {
@@ -37,6 +39,7 @@
         };
 
         _lastTargetFriendly = WL_TARGET_FRIENDLY;
+        _lastTargetReset = _targetReset;
         sleep 1;
     };
 };
@@ -47,7 +50,8 @@ while {!BIS_WL_missionEnd} do {
         WL_VotePhase = 0;
     };
 
-    private _isVoting = isNull WL_TARGET_FRIENDLY;
+    private _isTargetReset = missionNamespace getVariable [format ["WL_targetReset_%1", BIS_WL_playerSide], false];
+    private _isVoting = isNull WL_TARGET_FRIENDLY || _isTargetReset;
     private _isVoted = !isNull BIS_WL_targetVote;
     private _isRegularSquadMember = ["isRegularSquadMember", [getPlayerID player]] call SQD_fnc_client;
 
@@ -70,11 +74,22 @@ while {!BIS_WL_missionEnd} do {
             case 0: {
                 BIS_WL_targetVote = objNull;
                 missionNamespace setVariable [format ["BIS_WL_targetVote_%1", getPlayerID player], objNull, 2];
+                private _currentOwner = WL_TARGET_FRIENDLY getVariable ["BIS_WL_owner", independent];
+                [WL_TARGET_FRIENDLY, _currentOwner] call WL2_fnc_sectorMarkerUpdate;
             };
             // Started voting
             case 1: {
-                "Voting" call WL2_fnc_announcer;
-                [toUpper localize "STR_A3_WL_popup_voting"] spawn WL2_fnc_smoothText;
+                if (_isTargetReset) then {
+                    "Reset" call WL2_fnc_announcer;
+
+                    private _enemySectorPreviousOwners = WL_TARGET_ENEMY getVariable ["BIS_WL_previousOwners", []];
+                    if !(BIS_WL_playerSide in _enemySectorPreviousOwners) then {
+                        "BIS_WL_targetEnemy" setMarkerAlphaLocal 0;
+                    };
+                } else {
+                    "Voting" call WL2_fnc_announcer;
+                    [toUpper localize "STR_A3_WL_popup_voting"] spawn WL2_fnc_smoothText;
+                };
 
                 private _voteDisplay = uiNamespace getVariable ["RscWLVoteDisplay", objNull];
                 if (isNull _voteDisplay) then {

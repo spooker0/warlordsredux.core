@@ -18,6 +18,7 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
     private _projectileSam = getNumber (_x >> "sam") == 1;
     private _projectileSead = getNumber (_x >> "sead") == 1;
     private _projectileSpeedOverride = getNumber (_x >> "speed");
+    private _projectileTerminal = getNumber (_x >> "terminal") == 1;
     private _projectileTv = getNumber (_x >> "tv") == 1;
 
     {
@@ -36,6 +37,7 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
             ["sam", _projectileSam],
             ["sead", _projectileSead],
             ["speed", _projectileSpeedOverride],
+            ["terminal", _projectileTerminal],
             ["tv", _projectileTv]
         ];
 

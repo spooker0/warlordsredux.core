@@ -33,25 +33,20 @@
 			private _sortedVoteList = (toArray _votesByPlayers) # 1; // discard keys
 			_sortedVoteList = [_sortedVoteList, [], { _x # 1  }, "DESCEND"] call BIS_fnc_sortBy;
 
-			private _maxVotedSector = if (count _sortedVoteList > 0) then {
+			private _maxVotedSector = objNull;
+			if (count _sortedVoteList > 0) then {
 				_firstSector = _sortedVoteList # 0;
-				_firstSector = _firstSector # 0; // return sector object
+				_maxVotedSector = _firstSector # 0; // return sector object
 
-				if (_firstSector getVariable ["WL2_name", "Sector"] != "Wait") then {
-					_firstSector;
-				} else {
+				private _sectorName = _maxVotedSector getVariable ["WL2_name", "Sector"];
+				if (_sectorName == "Wait") then {
 					private _waitsInRow = missionNamespace getVariable [_waitVar, 0];
 
 					if (_waitsInRow >= 3 && count _sortedVoteList > 1) then {
 						private _secondSector = _sortedVoteList # 1;
-						_secondSector = _secondSector # 0;
-						_secondSector;
-					} else {
-						_firstSector;
+						_maxVotedSector = _secondSector # 0;
 					};
 				};
-			} else {
-				objNull;
 			};
 
 			[_maxVotedSector, _sortedVoteList];
@@ -111,23 +106,38 @@
 					_calculation = call _calculateMostVotedSector;
 					private _selectedSector = _calculation # 0;
 
-					if (_selectedSector getVariable ["WL2_name", "Sector"] != "Wait") then {
-						missionNamespace setVariable [_waitVar, 0];
-						[_side, _selectedSector] call WL2_fnc_selectTarget;
-					} else {
-						private _waitsInRow = missionNamespace getVariable [_waitVar, 0];
-						_waitsInRow = _waitsInRow + 1;
-						missionNamespace setVariable [_waitVar, _waitsInRow];
+					private _selectedSectorName = _selectedSector getVariable ["WL2_name", "Sector"];
+					switch (_selectedSectorName) do {
+						case "Wait": {
+							private _waitsInRow = missionNamespace getVariable [_waitVar, 0];
+							_waitsInRow = _waitsInRow + 1;
+							missionNamespace setVariable [_waitVar, _waitsInRow];
+						};
+						case "Surrender": {
+							missionNamespace setVariable ["BIS_WL_missionEnd", true, true];
+
+							private _oppositeTeam = if (_side == west) then { east } else { west };
+							missionNamespace setVariable ["WL2_gameWinner", _oppositeTeam, true];
+
+							0 spawn WL2_fnc_calculateEndResults;
+							0 remoteExec ["WL2_fnc_missionEndHandle", 0];
+						};
+						default {
+							missionNamespace setVariable [_waitVar, 0];
+							[_side, _selectedSector] call WL2_fnc_selectTarget;
+						};
 					};
 
 					call _wipeVotes;
 					missionNamespace setVariable [format ["BIS_WL_sectorVoteTallyDisplay_%1", _side], [], true];
+					missionNamespace setVariable [format ["WL_targetReset_%1", _side], false, true];
 
 					["server", true] call WL2_fnc_updateSectorArrays;
 
 					waitUntil {
 						sleep WL_TIMEOUT_STANDARD;
-						isNull (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", _side], objNull])
+						isNull (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", _side], objNull]) ||
+						missionNamespace getVariable [format ["WL_targetReset_%1", _side], false];
 					};
 				};
 			};

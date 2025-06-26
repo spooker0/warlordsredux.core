@@ -7,6 +7,9 @@ _this addEventHandler ["Fired", {
 	params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
 
 	if !(local _projectile) exitWith { true };
+
+	[_projectile] spawn APS_fnc_jamDestroy;
+
 	if (!(local _gunner) && !(isManualFire _unit)) exitWith { true };	// Disable and restrict for cwis
 
 	private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
@@ -79,5 +82,10 @@ _this addEventHandler ["Fired", {
 	private _projectileSead = _projectileConfig getOrDefault ["sead", false];
 	if (_projectileSead) then {
 		[_projectile, _unit] spawn APS_fnc_sead;
+	};
+
+	private _projectileTerminal = _projectileConfig getOrDefault ["terminal", false];
+	if (_projectileTerminal) then {
+		[_projectile] spawn DIS_fnc_terminalGuidance;
 	};
 }];

@@ -9,7 +9,7 @@ if (_start) then {
     private _cursorObject = cursorObject;
     private _target = _cursorObject getVariable ["WL_demolishable", objNull];
     if !(isNull _target) then {
-        true;
+        player distance _cursorObject < 30;
     } else {
         private _nearbyCharges = player nearObjects ["DemoCharge_F", 5];
         if (count _nearbyCharges > 0) then {

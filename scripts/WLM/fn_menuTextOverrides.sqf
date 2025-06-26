@@ -70,7 +70,6 @@ private _overrideMagazineNames = createHashMapFromArray [
     ["PylonMissile_Missile_AMRAAM_D_x1", "AMRAAM D"],
     ["PylonRack_Missile_AMRAAM_D_x1", "AMRAAM D"],
     ["PylonMissile_Missile_AMRAAM_D_INT_x1", "AMRAAM D"],
-    ["PylonRack_Missile_AMRAAM_D_x1", "AMRAAM D"],
     ["PylonRack_Missile_AMRAAM_D_x2", "AMRAAM D"],
     ["PylonMissile_Missile_BIM9X_x1", "BIM 9X"],
     ["PylonRack_Missile_BIM9X_x1", "BIM 9X"],

@@ -37,6 +37,10 @@ private _lastMoney = 0;
 while { !BIS_WL_missionEnd } do {
 	sleep 1;
 
+	if (WL_IsSpectator) exitWith {
+		"Warlords" cutText ["", "PLAIN"];
+	};
+
 	private _side = BIS_WL_playerSide;
 
 	_timer ctrlSetStructuredText parseText format [

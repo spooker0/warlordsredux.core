@@ -38,14 +38,23 @@ private _i = 0;
 	_sector setVariable ["BIS_WL_markers", [_mrkrMain, _mrkrArea]];
 
 	if !(BIS_WL_playerSide in _revealedBy) then {
-		if (_sector getVariable ["WL2_name", "Sector"] == "Wait") then {
-			_mrkrMain setMarkerTypeLocal "respawn_unknown";
-			_mrkrMain setMarkerColorLocal "ColorWhite";
-			_sector setVariable ["BIS_WL_revealedBy", [west, east, independent]];
-		} else {
-			_mrkrMain setMarkerTypeLocal "u_installation";
-			_mrkrMain setMarkerColorLocal "ColorUNKNOWN";
-			_mrkrArea setMarkerColorLocal "ColorOrange";
+		private _sectorName = _sector getVariable ["WL2_name", "Sector"];
+		switch (_sectorName) do {
+			case "Wait": {
+				_mrkrMain setMarkerTypeLocal "respawn_unknown";
+				_mrkrMain setMarkerColorLocal "ColorWhite";
+				_sector setVariable ["BIS_WL_revealedBy", [west, east, independent]];
+			};
+			case "Surrender": {
+				_mrkrMain setMarkerTypeLocal "KIA";
+				_mrkrMain setMarkerColorLocal "ColorWhite";
+				_sector setVariable ["BIS_WL_revealedBy", [west, east, independent]];
+			};
+			default {
+				_mrkrMain setMarkerTypeLocal "u_installation";
+				_mrkrMain setMarkerColorLocal "ColorUNKNOWN";
+				_mrkrArea setMarkerColorLocal "ColorOrange";
+			};
 		};
 	};
 

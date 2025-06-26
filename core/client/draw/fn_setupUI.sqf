@@ -5,6 +5,7 @@ waitUntil {!isNull (findDisplay 46)};
 
 private _side = BIS_WL_playerSide;
 if (_displayClass == "RequestMenu_open") then {
+	WL2_tutorialComplete = true;
 	if (WL_GEAR_BUY_MENU) exitWith {};
 	if (lifeState player == "INCAPACITATED") exitWith {};
 
@@ -53,7 +54,7 @@ if (_displayClass == "RequestMenu_open") then {
 	_myDisplay displayAddEventHandler ["KeyUp", {
 		_key = _this # 1;
 		if (_key in actionKeys "Gear") then {
-			BIS_WL_gearKeyPressed = false;
+			WL_gearKeyPressed = false;
 		};
 	}];
 

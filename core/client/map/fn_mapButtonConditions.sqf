@@ -95,4 +95,7 @@ switch (_conditionName) do {
     case "markSector": {
         true;
     };
+    case "deleteFOB": {
+        _target getVariable ["WL2_forwardBasePlacer", false];
+    };
 };

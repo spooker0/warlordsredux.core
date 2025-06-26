@@ -8,7 +8,7 @@ private _class = WL_ASSET(_orderedClass, "spawn", _orderedClass);
 if (_class isKindOf "Man") then {
 	_asset = (group player) createUnit [_class, getPosATL player, [], 2, "NONE"];
 	_asset setVehiclePosition [getPosATL player, [], 0, "CAN_COLLIDE"];
-	_asset setVariable ["BIS_WL_ownerAsset", getPlayerUID player, [2, clientOwner]];
+	_asset setVariable ["BIS_WL_ownerAsset", getPlayerUID player, true];
 	[player, "orderAI", _class] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	[_asset, player] spawn WL2_fnc_newAssetHandle;
 	player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
