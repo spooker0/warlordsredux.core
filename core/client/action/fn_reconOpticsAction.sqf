@@ -34,12 +34,6 @@ while { alive _asset } do {
         continue;
     };
 
-    if (cameraView != "GUNNER") then {
-        call _clearReconOptics;
-        sleep 0.1;
-        continue;
-    };
-
     call _addReconOptics;
     _reconOpticsLabel ctrlSetStructuredText parseText "<t color='#33ff33' align='center'>RECON OPTICS READY</t>";
 
@@ -71,41 +65,14 @@ while { alive _asset } do {
         private _targetIntersection = _targetIntersections # 0 # 0;
         private _area = [ASLtoAGL _targetIntersection, 125, 125, 0, false];
         private _unitsInArea = [BIS_WL_playerSide, _area] call WL2_fnc_detectUnits;
-        private _remoteTargets = (listRemoteTargets BIS_WL_playerSide) select { _x # 1 > -10 } apply { _x # 0 };
 
         [_unitsInArea, 20] remoteExec ["WL2_fnc_reportTargets", BIS_WL_playerSide];
 
-        _unitsInArea = _unitsInArea select {
-            !(_x in _remoteTargets)
-        };
-        if (count _unitsInArea > 0) then {
+        private _enemiesSpotted = [_unitsInArea] call WL2_fnc_reconReward;
+        if (_enemiesSpotted) then {
             playSoundUI ["a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", 1, 0.5, true];
             _instructionsDisplay ctrlShow false;
         };
-
-        private _newTargets = _unitsInArea select {
-            !(_x getVariable ["WL_scannedByPlayer", false])
-        };
-        private _targetPoints = 0;
-        {
-            private _targetScore = if (_x isKindOf "Man") then {
-                30;
-            } else {
-                100;
-            };
-            private _side = [_x] call WL2_fnc_getAssetSide;
-            if (_side == BIS_WL_enemySide) then {
-                _targetScore = _targetScore * 1.5;
-            };
-            _targetPoints = _targetPoints + _targetScore;
-        } forEach _newTargets;
-
-        if (_targetPoints > 0) then {
-            [player, "spot", _targetPoints] remoteExec ["WL2_fnc_handleClientRequest", 2];
-        };
-        {
-            _x setVariable ["WL_scannedByPlayer", true];
-        } forEach _newTargets;
 
         sleep 1;
     };

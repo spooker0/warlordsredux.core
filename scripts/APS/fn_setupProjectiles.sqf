@@ -8,7 +8,15 @@ _this addEventHandler ["Fired", {
 
 	if !(local _projectile) exitWith { true };
 
-	[_projectile] spawn APS_fnc_jamDestroy;
+	if (_projectile isKindOf "ShellCore") then {
+		private _shellId = currentMagazineDetail _unit;
+		_projectile setVariable ["WL2_shellId", _shellId, true];
+		if (_projectile getShotInfo 5) then {
+			private _shellMap = _unit getVariable ["WL2_shellMap", createHashMap];
+			_shellMap set [_shellId, _projectile];
+			_unit setVariable ["WL2_shellMap", _shellMap];
+		};
+	};
 
 	if (!(local _gunner) && !(isManualFire _unit)) exitWith { true };	// Disable and restrict for cwis
 

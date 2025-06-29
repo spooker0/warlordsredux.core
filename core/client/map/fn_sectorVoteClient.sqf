@@ -2,6 +2,7 @@
 // Ongoing checks for sector target
 0 spawn {
     private _lastTargetFriendly = objNull;
+    private _lastTargetEnemy = objNull;
     private _lastTargetReset = false;
     while { !BIS_WL_missionEnd } do {
         if (!(BIS_WL_playerSide in BIS_WL_competingSides) || WL_IsSpectator) exitWith {
@@ -38,14 +39,22 @@
             };
         };
 
+        if (_lastTargetEnemy != WL_TARGET_ENEMY) then {
+            private _enemySectorKnowers = _lastTargetEnemy getVariable ["BIS_WL_revealedBy", []];
+            if (BIS_WL_playerSide in _enemySectorKnowers) then {
+                systemChat "Enemy target sector reset.";
+            };
+        };
+
         _lastTargetFriendly = WL_TARGET_FRIENDLY;
+        _lastTargetEnemy = WL_TARGET_ENEMY;
         _lastTargetReset = _targetReset;
         sleep 1;
     };
 };
 
 // Checks for voting phase
-while {!BIS_WL_missionEnd} do {
+while { !BIS_WL_missionEnd } do {
     if (!(BIS_WL_playerSide in BIS_WL_competingSides) || WL_IsSpectator) exitWith {
         WL_VotePhase = 0;
     };

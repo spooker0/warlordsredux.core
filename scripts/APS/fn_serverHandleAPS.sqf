@@ -1,11 +1,13 @@
 #include "includes.inc"
-params ["_shooter", "_dazzled"];
+params ["_shooter", "_dazzled", "_ammoConsumption"];
 
 private _reward = if (_dazzled) then {
-    0
+    10
 } else {
     50
 };
+_reward = _reward * _ammoConsumption;
+
 private _rewardText = if (_dazzled) then {
     "Dazzler"
 } else {

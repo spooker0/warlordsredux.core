@@ -5,6 +5,7 @@ class CfgRemoteExec {
 		jip = 1;
 
 		class APS_fnc_deviceJammer {allowedTargets = 0;};
+		class APS_fnc_jamDestroy {allowedTargets = 0;};
 		class APS_fnc_lagProtectionServer {allowedTargets = 2;};
 		class APS_fnc_projectileStateUpdate {allowedTargets = 0;};
 		class APS_fnc_report {allowedTargets = 0;};
@@ -12,6 +13,7 @@ class CfgRemoteExec {
 		class APS_fnc_setupProjectiles {allowedTargets = 0;};
 		class DIS_fnc_setupAdvancedSam {allowedTargets = 0;};
 		class DIS_fnc_setupExtendedSam {allowedTargets = 0;};
+		class DIS_fnc_setupSeadAction {allowedTargets = 0;};
 		class DIS_fnc_setupGPSMunition {allowedTargets = 0;};
 		class DIS_fnc_setupRemoteMunition {allowedTargets = 0;};
 		class DIS_fnc_startMissileCamera {allowedTargets = 0;};
@@ -59,13 +61,15 @@ class CfgRemoteExec {
 		class WL2_fnc_repairAction {allowedTargets = 1;};
 		class WL2_fnc_reportTargets {allowedTargets = 0;};
 		class WL2_fnc_restockAction {allowedTargets = 0;};
-		class WL2_fnc_sectorRevealHandle {allowedTargets = 0;};
 		class WL2_fnc_revive {allowedTargets = 0;};
+		class WL2_fnc_sectorRevealHandle {allowedTargets = 0;};
 		class WL2_fnc_scannerAction {allowedTargets = 0;};
 		class WL2_fnc_setupForwardBaseAction {allowedTargets = 0;};
 		class WL2_fnc_setupForwardBaseMp {allowedTargets = 0;};
 		class WL2_fnc_slingAddAction {allowedTargets = 1;};
 		class WL2_fnc_slingloadInit {allowedTargets = 0;};
+		class WL2_fnc_smokeCurtainAction {allowedTargets = 0;};
+		class WL2_fnc_smokeCurtainParticles {allowedTargets = 0;};
 		class WL2_fnc_punishMessage {allowedTargets = 0;};
 		class WL2_fnc_uavConnectRefresh {allowedTargets = 0;};
 		class WL2_fnc_uavJammed {allowedTargets = 2;};

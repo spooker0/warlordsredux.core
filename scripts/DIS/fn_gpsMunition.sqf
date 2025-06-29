@@ -1,6 +1,8 @@
 #include "includes.inc"
 params ["_projectile", "_unit"];
 
+if (!isNull (missileTarget _projectile)) exitWith {};
+
 private _coordinates = +(_projectile getVariable ["DIS_targetCoordinates", getPosATL _unit]);
 private _laserTarget = createVehicleLocal ["LaserTargetC", _coordinates, [], 0, "CAN_COLLIDE"];
 _coordinates set [2, 400];
@@ -62,6 +64,13 @@ while { alive _projectile } do {
             }, "DESCEND"] call BIS_fnc_sortBy;
 
             private _closestEnemy = _sortedEnemies # 0;
+            private _closestEnemyName = if (_closestEnemy isKindOf "Man") then {
+                "Infantry";
+            } else {
+                [_closestEnemy] call WL2_fnc_getAssetTypeName;
+            };
+            systemChat format ["GPS bomb target: %1", _closestEnemyName];
+
             _finalPosition = getPosASL _closestEnemy;
             _projectile setMissileTarget [_closestEnemy, true];
         };

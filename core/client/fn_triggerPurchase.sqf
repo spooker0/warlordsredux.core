@@ -87,7 +87,11 @@ switch (_className) do {
     case "FundsTransfer": {
         call WL2_fnc_orderFundsTransfer;
     };
-    case "TargetReset": {"RequestMenu_close" call WL2_fnc_setupUI; [player, "targetReset"] remoteExec ["WL2_fnc_handleClientRequest", 2]};
+    case "TargetReset": {
+        "RequestMenu_close" call WL2_fnc_setupUI;
+        missionNamespace setVariable ["WL_targetResetTime", serverTime];
+        [player, "targetReset"] remoteExec ["WL2_fnc_handleClientRequest", 2]
+    };
     case "LockVehicles": {
         private _ownedVehicles = missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], []];
         {
@@ -133,87 +137,6 @@ switch (_className) do {
     case "CruiseMissiles": {
         "RequestMenu_close" call WL2_fnc_setupUI;
         0 spawn WL2_fnc_orderCruiseMissile;
-    };
-    case "SmokeScreen": {
-        "RequestMenu_close" call WL2_fnc_setupUI;
-        0 spawn {
-            player selectWeapon (binocular player);
-            waitUntil {
-                inputMouse 0 == 0;
-            };
-            private _designatingTargets = true;
-            private _strikeCancelled = false;
-            private _targetPos = [];
-            while { _designatingTargets } do {
-                private _position = screenToWorld [0.5, 0.5];
-
-                if (inputMouse 0 > 0) then {
-                    if (count _position > 0) then {
-                        _designatingTargets = false;
-                        _targetPos = _position;
-                        break;
-                    } else {
-                        systemChat "No targets found.";
-                        playSoundUI ["AddItemFailed"];
-                    };
-                };
-
-                if (inputAction "navigateMenu" == 1) then {
-                    _designatingTargets = false;
-                    _strikeCancelled = true;
-                    break;
-                };
-
-                sleep 0.2;
-            };
-
-            if (_strikeCancelled) exitWith {
-                systemChat "Smoke cancelled.";
-                playSoundUI ["AddItemFailed"];
-            };
-
-            private _relativePosition = cameraOn worldToModel _targetPos;
-            private _smokePositions = [];
-            for "_i" from 0 to 20 do {
-                private _smokePos = cameraOn modelToWorld (_relativePosition vectorAdd [(_i - 10) * 7, 0, 0]);
-                _smokePositions pushBack _smokePos;
-            };
-
-            private _smokeEntities = [];
-            private _smokeParticles = [];
-            {
-                private _smokePos = _x;
-
-                private _smoke = createVehicle ["#particlesource", _smokePos, [], 0, "NONE"];
-                _smoke setParticleParams [["\A3\data_f\ParticleEffects\Universal\Universal", 16, 7, 48, 1], "", "Billboard", 1, 10, [0, 0, 0], [0, 0, 0.5], 0, 1.277, 1, 0.025, [0.5, 8, 12, 15], [[1, 1, 1, 0.7],[1, 1, 1, 0.5], [1, 1, 1, 0.25], [1, 1, 1, 0]], [0.2], 1, 0.04, "", "", _smoke];;
-                _smoke setParticleRandom [2, [0.3, 0.3, 0.3], [1.5, 1.5, 1], 20, 0.2, [0, 0, 0, 0.1], 0, 0, 360];
-                _smoke setDropInterval 0.2;
-
-                private _smoke2 = createVehicle ["#particlesource", _smokePos, [], 0, "NONE"];
-                _smoke2 setParticleParams [["\A3\data_f\ParticleEffects\Universal\Universal", 16, 12, 7, 0], "", "Billboard", 1, 5, [0, 0, 0], [0, 0, 0.5], 0, 1.277, 1, 0.025, [0.5, 8, 12, 15], [[1, 1, 1, 1],[1, 1, 1, 1], [1, 1, 1, 0.5], [1, 1, 1, 0]], [0.2], 1, 0.04, "", "", _smoke2];
-                _smoke2 setParticleRandom [2, [0.3, 0.3, 0.3], [1.5, 1.5, 1], 20, 0.2, [0, 0, 0, 0.1], 0, 0, 360];
-                _smoke2 setDropInterval 0.15;
-
-                private _smokeShell = createVehicle ["SmokeShellVehicle", _smokePos, [], 0, "NONE"];
-                triggerAmmo _smokeShell;
-
-                _smokeParticles pushBack _smoke;
-                _smokeParticles pushBack _smoke2;
-                _smokeEntities pushBack _smokeShell;
-
-                sleep 0.2;
-            } forEach _smokePositions;
-
-            sleep 30;
-
-            {
-                _x setDropInterval 0;
-            } forEach _smokeParticles;
-
-            {
-                deleteVehicle _x;
-            } forEach _smokeEntities;
-        };
     };
     case "PruneAssets": {
         "RequestMenu_close" call WL2_fnc_setupUI;

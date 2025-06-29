@@ -85,7 +85,7 @@ private _currentAssetPylonInfo = _asset getVariable ["WLM_pylonInfo", getAllPylo
         private _displayName = if (count _actualAmmoType == 0) then {
             [_x] call WL2_fnc_getMagazineName;
         } else {
-            _actualAmmoType # 1 # 1;
+            [_x, _actualAmmoType # 1 # 1] call WL2_fnc_getMagazineName;
         };
 
         private _selectBoxItem = _selectBox lbAdd _displayName;

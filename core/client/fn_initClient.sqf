@@ -182,7 +182,6 @@ WL_LoadingState = 10;
 
 call WL2_fnc_refreshCurrentTargetData;
 call WL2_fnc_sceneDrawHandle;
-call WL2_fnc_targetResetHandle;
 [player, "init"] spawn WL2_fnc_hintHandle;
 WL_LoadingState = 11;
 
@@ -300,6 +299,7 @@ player setUserActionText [_squadActionId, _squadActionText, "<img size='2' image
 uiNamespace setVariable ["WL2_canBuy", true];
 uiNamespace setVariable ["WL2_chatHistory", []];
 
+[player, getUnitLoadout player, true] call WLC_fnc_onRespawn;
 [] spawn WL2_fnc_factionBasedClientInit;
 0 spawn WL2_fnc_captureList;
 0 spawn WL2_fnc_mineLimitHint;
@@ -369,6 +369,7 @@ removeGoggles player;
 
 0 spawn WL2_fnc_restrictedArea;
 
+call WL2_fnc_buyMenuAction;
 call WL2_fnc_demolishAction;
 call WL2_fnc_disarmAction;
 call WL2_fnc_rappelAction;
@@ -376,6 +377,7 @@ call WL2_fnc_rappelAction;
 0 spawn WL2_fnc_drawRadarName;
 0 spawn WL2_fnc_locationScanner;
 0 spawn WL2_fnc_drawIncomingMissiles;
+0 spawn WL2_fnc_rewardCapture;
 
 call POLL_fnc_pollAction;
 

@@ -33,38 +33,3 @@ private _infoMarkers = [
 	_marker setMarkerTypeLocal (_x # 1);
 	_marker setMarkerColorLocal (_x # 2);
 } forEach _infoMarkers;
-
-private _message = format [localize "WL2_InfoText_Basic", (actionKeysNames "gear") regexReplace ["""", ""]];
-_message = format ["<t size='3'>%1</t>", _message];
-private _header = "";
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-private _disableStartingTutoral = _settingsMap getOrDefault ["disableStartingTutoral", false];
-WL2_tutorialComplete = _disableStartingTutoral;
-private _display = displayNull;
-while { !WL2_tutorialComplete } do {
-	if (isNull _display) then {
-		[_message, _header] spawn BIS_fnc_guiMessage;
-
-		waitUntil {
-			_display = uiNamespace getVariable ["RscDisplayCommonMessage_display", displayNull];
-			!isNull _display
-		};
-		_display displayAddEventHandler ["KeyDown", {
-			params ["_display", "_key"];
-			[_display, _key, _thisEventHandler] spawn {
-				params ["_display", "_key", "_thisEventHandler"];
-				if (_key in actionKeys "Gear") then {
-					sleep 0.5;
-					if (inputAction "Gear" > 0) then {
-						_display displayRemoveEventHandler ["keyDown", _thisEventHandler];
-						_display closeDisplay 1;
-						WL_gearKeyPressed = true;
-						"RequestMenu_open" call WL2_fnc_setupUI;
-					};
-				};
-			};
-		}];
-	};
-
-	sleep 5;
-};

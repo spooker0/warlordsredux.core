@@ -224,6 +224,11 @@ if (_action == "updateZeus") exitWith {
 	};
 };
 
+if (_action == "sectorReward") exitWith {
+	private _reward = _param1;
+	[_reward] call _addFunds;
+};
+
 if (_action == "droneExplode") exitWith {
 	private _drone = vehicle _param1;
 	private _expl = createVehicle ["IEDUrbanBig_Remote_Ammo", getPos _drone, [], 0, "FLY"];

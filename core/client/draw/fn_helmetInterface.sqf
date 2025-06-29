@@ -580,7 +580,32 @@ addMissionEventHandler ["Draw3D", {
                 1.0,
                 1.0,
                 0,
-                "LOCKED",
+                "THREAT",
+                true,
+                0.035,
+                "RobotoCondensedBold",
+                "center",
+                true
+            ];
+        };
+
+        private _selectedTarget = _vehicle getVariable ["WL2_selectedTarget", objNull];
+        if (alive _selectedTarget) then {
+            private _isInAngle = [getPosATL _vehicle, getDir _vehicle, 120, getPosATL _selectedTarget] call WL2_fnc_inAngleCheck;
+            private _angleColor = if (_isInAngle) then {
+                [1, 0, 0, 1]
+            } else {
+                [0, 0, 0, 1]
+            };
+
+            _targetVehicleIcons pushBack [
+                "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Threats\locking_ca.paa",
+                _angleColor,
+                _selectedTarget,
+                1.0,
+                1.0,
+                0,
+                "LOCK",
                 true,
                 0.035,
                 "RobotoCondensedBold",

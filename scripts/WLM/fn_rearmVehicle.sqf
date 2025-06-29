@@ -36,3 +36,4 @@ private _weaponsByTurret = createHashMap;
 } forEach _weaponsByTurret;
 
 _asset spawn APS_fnc_rearmAPS;
+_asset setVariable ['WL2_smokeCurtains', 2];

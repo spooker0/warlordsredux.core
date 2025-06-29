@@ -336,13 +336,6 @@ private _strategyArr = [
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"Call a volley of cruise missiles on your designation. Requires all targets (vehicles or infantry) to be on datalink."
 	], [
-		"SmokeScreen",
-		3000,
-		[],
-		"Call smoke screern",
-		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"Call a volley of smoke screen on your designation."
-	], [
 		"PruneAssets",
 		0,
 		[],

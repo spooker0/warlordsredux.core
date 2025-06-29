@@ -20,7 +20,6 @@ class CfgFunctions {
 			class relDir2 {};
 			class report {};
 			class sead {};
-			class setSeadTarget {};
 			class setupProjectiles {};
 			class serverHandleAPS {};
 		};
@@ -34,19 +33,21 @@ class CfgFunctions {
 			class extendedSam {};
 			class frag {};
 			class getNotchResult {};
+			class getSeadTarget {};
 			class gpsMunition {};
 			class maneuver {};
 			class missileCamera {};
 			class remoteMunition {};
 			class setupAdvancedSam {};
-			class setupAdvancedSamMenu {};
 			class setupExtendedSam {};
-			class setupExtendedSamMenu {};
+			class setupSeadAction {};
+			class setupSeadActionEligibility {};
 			class setGPSNumber {};
 			class setupGPSMenu {};
 			class setupGPSMunition {};
 			class setupRemoteMenu {};
 			class setupRemoteMunition {};
+			class setupTargetMenu {};
 			class startMissileCamera {};
 			class terminalGuidance {};
 			class tvMunition {};
@@ -166,6 +167,7 @@ class CfgFunctions {
 			class resetVehicle {};
 			class restrictedArea {};
 			class revive {};
+			class rewardCapture {};
 			class setupCarrier {};
 			class sideToFaction {};
 			class spectrumInterface {};
@@ -179,6 +181,7 @@ class CfgFunctions {
 			class afkAction {};
 			class arsenalSetup {};
 			class attachVehicle {};
+			class buyMenuAction {};
 			class catapultAction {};
 			class catapultActionEligibility {};
 			class claimAction {};
@@ -210,6 +213,7 @@ class CfgFunctions {
 			class rappelActionEligibility {};
 			class rearmAction {};
 			class reconOpticsAction {};
+			class reconReward {};
 			class refuelAction {};
 			class refuelActionEligibility {};
 			class remoteControlAction {};
@@ -226,6 +230,8 @@ class CfgFunctions {
 			class setupForwardBaseEligibility {};
 			class setupForwardBaseMp {};
 			class slingAddAction {};
+			class smokeCurtainAction {};
+			class smokeCurtainParticles {};
 			class stabilizeBoatAction {};
 			class tireChangeEligibility {};
 			class vehicleLockAction {};
@@ -305,7 +311,6 @@ class CfgFunctions {
 			class sectorVoteClient {};
 			class sectorVoteDisplay {};
 			class selectedTargetsHandle {};
-			class targetResetHandle {};
 			class targetSelected {};
 			class updateSelectionState {};
 		};
@@ -362,6 +367,7 @@ class CfgFunctions {
 			class checkStrongholdFT {};
 			class checkSelectedUnits {};
 			class checkTargetEnemyBase {};
+			class checkTargetReset {};
 			class checkTargetSelected {};
 			class checkTargetUnlinked {};
 			class checkTent {};

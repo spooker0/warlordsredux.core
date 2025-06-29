@@ -147,7 +147,8 @@ if (_ret) then {
 		case "TargetReset": {
 			[
 				[WL2_fnc_checkIndependents],
-				[WL2_fnc_checkTargetSelected]
+				[WL2_fnc_checkTargetSelected],
+				[WL2_fnc_checkTargetReset]
 			]
 		};
 		case "Arsenal": {

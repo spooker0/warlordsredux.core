@@ -1,59 +1,79 @@
 #include "includes.inc"
 params ["_projectile", "_unit"];
 
-if (isNull (missileTarget _projectile)) then {
-    private _extendedSamLauncher = _unit getVariable ["WL_incomingExtendedSam", objNull];
-    if (alive _extendedSamLauncher) exitWith {
-        [_projectile, _extendedSamLauncher] call APS_fnc_setSeadTarget;
-    };
-
-    private _advancedThreat = _unit getVariable ["WL2_advancedThreat", objNull];
-    if (alive _advancedThreat) exitWith {
-        [_projectile, _advancedThreat] call APS_fnc_setSeadTarget;
-    };
-
-    // fire on launcher
-    private _launcher = _unit getVariable ["WL_incomingLauncherLastKnown", objNull];
-    if (alive _launcher) exitWith {
-        if (_launcher isKindOf "Man") then {
-            _projectile setMissileTarget [_launcher, true];
-
-            [_projectile] spawn {
-                params ["_projectile"];
-                sleep 2;
-                _projectile setMissileTarget objNull;
-            };
-        } else {
-            [_projectile, _launcher] call APS_fnc_setSeadTarget;
-        };
-    };
-
-    private _samTargets = [];
-    // locking SAMs
-    private _sensorThreats = getSensorThreats _unit;
-    {
-        _x params ["_threat", "_type", "_sensors"];
-        private _isInAngle = [getPosATL _projectile, getDir _projectile, 120, getPosATL _threat] call WL2_fnc_inAngleCheck;
-        if (_isInAngle && _type in ["locked", "marked"] && "radar" in _sensors) then {
-            _samTargets pushBack (vehicle _threat);
-        };
-    } forEach _sensorThreats;
-    if (count _samTargets > 0) exitWith {
-        private _sortedSamTargets = [_samTargets, [], { _unit distance _x }, "ASCEND"] call BIS_fnc_sortBy;
-        [_projectile, _sortedSamTargets # 0] call APS_fnc_setSeadTarget;
-    };
-
-    // radar on sensor
-    private _allAssetTargets = getSensorTargets _unit;
-    {
-        _x params ["_target", "_type", "_relationship", "_detectionSource"];
-        private _isInAngle = [getPosATL _projectile, getDir _projectile, 120, getPosATL _target] call WL2_fnc_inAngleCheck;
-        if (_isInAngle && _type == "ground" && _relationship != "friendly" && "passiveradar" in _detectionSource) then {
-            _samTargets pushBack (_x # 0);
-        };
-    } forEach _allAssetTargets;
-    if (count _samTargets > 0) then {
-        private _sortedSamTargets = [_samTargets, [], { _unit distance _x }, "ASCEND"] call BIS_fnc_sortBy;
-        [_projectile, _sortedSamTargets # 0] call APS_fnc_setSeadTarget;
+private _projectileOverride = _projectile getVariable ["APS_ammoOverride", typeof _projectile];
+if (!isNull (missileTarget _projectile)) exitWith {
+    if (_projectileOverride != typeof _projectile) then {
+        _projectile setVariable ["APS_ammoConsumptionOverride", 1];
     };
 };
+
+private _target = _unit getVariable ["WL2_selectedTarget", objNull];
+if (!alive _target) then {
+    private _seadTargets = [_unit] call DIS_fnc_getSeadTarget;
+    if (count _seadTargets > 0) then {
+        _target = _seadTargets # 0 # 0;
+    };
+};
+
+private _isInAngle = [getPosATL _projectile, getDir _projectile, 120, getPosATL _target] call WL2_fnc_inAngleCheck;
+
+if (!alive _target || !_isInAngle) exitWith {
+    if (_projectileOverride != typeof _projectile) then {
+        _projectile setVariable ["APS_ammoConsumptionOverride", 1];
+    };
+};
+
+if (_target isKindOf "Air") exitWith {
+    _projectile setMissileTarget [_target, true];
+};
+
+private _terminal = false;
+private _lastTargetPos = getPosASL _target;
+private _laser = objNull;
+
+private _projectileSpeed = getNumber (configfile >> "CfgAmmo" >> typeof _projectile >> "maxSpeed");
+_projectileSpeed = _projectileSpeed max 250;
+
+private _pitch = (_unit call BIS_fnc_getPitchBank) # 0;
+private _attackDistance = linearConversion [-15, 15, _pitch, 500, 1000, true];
+
+while { alive _projectile } do {
+    if (alive _target) then {
+        private _targetPos = getPosASL _target;
+        if (_projectile distance _laser > _attackDistance && !_terminal) then {
+            if (!alive _laser) then {
+                _laser = createVehicleLocal ["LaserTargetC", [0, 0, 0], [], 0, "NONE"];
+            };
+
+            _laser setPosASL (_targetPos vectorAdd [0, 0, 500]);
+            _projectile setVelocityModelSpace [0, _projectileSpeed, 0];
+            _projectile setMissileTarget [_laser, true];
+        } else {
+            private _targetVectorDirAndUp = [getPosASL _projectile, _targetPos] call BIS_fnc_findLookAt;
+            private _currentVectorDir = vectorDir _projectile;
+            private _currentVectorUp = vectorUp _projectile;
+
+            private _actualVectorDir = vectorLinearConversion [0, 1, 0.1, _currentVectorDir, _targetVectorDirAndUp # 0, true];
+            private _actualVectorUp = vectorLinearConversion [0, 1, 0.1, _currentVectorUp, _targetVectorDirAndUp # 1, true];
+            _projectile setVectorDirAndUp [_actualVectorDir, _actualVectorUp];
+
+            _projectile setVelocityModelSpace [0, 250, 0];
+
+            _terminal = true;
+            deleteVehicle _laser;
+
+            _projectile setMissileTarget [_target, true];
+        };
+        _lastTargetPos = _targetPos;
+    } else {
+        _laser setPosASL _lastTargetPos;
+        _projectile setMissileTarget [_laser, true];
+    };
+
+    sleep 0.001;
+};
+
+sleep 3;
+deleteVehicle _laser;
+deleteVehicle _projectile;

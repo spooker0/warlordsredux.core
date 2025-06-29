@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_data", "_side", "_lastLoadout", "_unit", "_paidFor", "_collaborator"];
 
-private _playerFunds = (missionNamespace getVariable "fundsDatabaseClients") get (getPlayerUID player);
+private _playerFunds = (missionNamespace getVariable ["fundsDatabaseClients", createHashMap]) getOrDefault [getPlayerUID player, 0];
 
 private _totalCost = 0;
 private _equipment = createHashMap;

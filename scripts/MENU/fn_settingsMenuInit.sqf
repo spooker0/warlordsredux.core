@@ -258,9 +258,9 @@ _positionY = _positionY + 0.08;
     ["checkbox", "Mute task notifications", ["muteTaskNotifications", false]],
     ["checkbox", "Disable incoming missile indicator", ["disableIncomingMissileDisplay", false]],
     ["checkbox", "Hide squad menu in scroll menu", ["hideSquadMenu", false]],
+    ["checkbox", "Hide buy menu in scroll menu", ["hideBuyMenu", false]],
     ["checkbox", "Delete quad bike/water scooter on exit", ["deleteSmallTransports", true]],
-    ["checkbox", "Respawn: spawn with UAV Terminal", ["respawnUavTerminal", true]],
-    ["checkbox", "Disable starting tutorial", ["disableStartingTutoral", false]]
+    ["checkbox", "Respawn: spawn with UAV Terminal", ["respawnUavTerminal", true]]
 ];
 
 {

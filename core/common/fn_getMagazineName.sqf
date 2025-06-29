@@ -1,5 +1,14 @@
 #include "includes.inc"
-params ["_magazine"];
+params ["_magazine", ["_override", ""]];
+
+if (_override != "") exitWith {
+    private _magSize = getNumber (configFile >> "CfgMagazines" >> _magazine >> "count");
+    if (_magSize > 1) then {
+        format ["%1 (%2)", _override, _magSize];
+    } else {
+        _override;
+    };
+};
 
 private _menuTextOverrides = call WLM_fnc_menuTextOverrides;
 

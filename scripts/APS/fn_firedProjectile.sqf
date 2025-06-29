@@ -22,9 +22,15 @@ private _safeMaxDistSqr = _maxDistSqr;
 private _unitSide = side group _unit;
 
 private _interception = {
-	params ["_target", "_dazzled", "_projectileAPSConsumption"];
+	params ["_target", "_dazzled"];
+
+	private _overrideAmmoConsumption = _projectile getVariable ["APS_ammoConsumptionOverride", -1];
+	if (_overrideAmmoConsumption != -1) then {
+		_projectileAPSConsumption = _overrideAmmoConsumption;
+	};
+
 	private _ammo = _target getVariable "apsAmmo";
-	_target setVariable ["apsAmmo", _ammo - _projectileAPSConsumption, true];
+	_target setVariable ["apsAmmo", (_ammo - _projectileAPSConsumption) max 0, true];
 
 	private _projectilePosition = getPosATL _projectile;
 	private _projectileDirection = _firedPosition getDir _target;
@@ -54,7 +60,8 @@ private _interception = {
 			hint localize "STR_A3_WL_aps_friendly_warning";
 		};
 	} else {
-		[_gunner, _dazzled] remoteExec ["APS_fnc_serverHandleAPS", 2];
+		private _actualAmmoUsed = _ammo min _projectileAPSConsumption;
+		[_gunner, _dazzled, _actualAmmoUsed] remoteExec ["APS_fnc_serverHandleAPS", 2];
 	};
 };
 
@@ -121,7 +128,7 @@ while {_continue && alive _projectile} do {
 			if (_dazzleable && _isGuided) exitWith {
 				_continue = false;
 
-				[_x, true, _projectileAPSConsumption] call _interception;
+				[_x, true] call _interception;
 			};
 		} else {
 			if (_vehicleAPSType >= _projectileAPSType && {
@@ -136,7 +143,7 @@ while {_continue && alive _projectile} do {
 				}) exitWith {
 				_continue = false;
 
-				[_x, false, _projectileAPSConsumption] call _interception;
+				[_x, false] call _interception;
 			};
 		};
 	} forEach _sortedEligibleList;

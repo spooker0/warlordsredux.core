@@ -416,12 +416,12 @@ class DIS_Remote_MenuUI {
     };
 };
 
-class DIS_ESAM_MenuUI {
-    idd = DIS_ESAM_DISPLAY;
+class DIS_TARGET_MenuUI {
+    idd = DIS_TARGET_DISPLAY;
     movingEnable = true;
     class controls {
-        class DIS_ESAM_Draggable: IGUIBackMRTM {
-            idc = DIS_ESAM_DRAGGABLE;
+        class DIS_TARGET_Draggable: IGUIBackMRTM {
+            idc = DIS_TARGET_DRAGGABLE;
             x = 0;
             y = -0.05;
             w = 1;
@@ -429,24 +429,24 @@ class DIS_ESAM_MenuUI {
             colorBackground[] = {0, 0, 0, 1};
             moving = 1;
         };
-        class DIS_ESAM_TitleBar: RscText {
+        class DIS_TARGET_TitleBar: RscText {
             idc = -1;
             x = 0.05;
             y = -0.05;
             w = 0.9;
             h = 0.05;
-            text = "SAM Configuration";
+            text = "Target Configuration";
             style = ST_LEFT;
         };
-        class DIS_ESAM_Background: IGUIBackMRTM {
-            idc = DIS_REMOTE_BACKGROUND;
+        class DIS_TARGET_Background: IGUIBackMRTM {
+            idc = -1;
             x = 0;
             y = 0;
             w = 1;
             h = 1;
             colorBackground[] = {0.2, 0.2, 0.2, 1};
         };
-        class DIS_ESAM_Frame: RscPicture {
+        class DIS_TARGET_Frame: RscPicture {
             idc = -1;
             x = 0;
             y = -0.05;
@@ -456,8 +456,8 @@ class DIS_ESAM_MenuUI {
             colorText[] = {1, 1, 1, 1};
             text = "a3\ui_f\data\igui\rsctitles\interlacing\interlacing_ca.paa";
         };
-        class DIS_ESAM_CloseButton: RscCheckboxMRTM {
-            idc = DIS_ESAM_CLOSE_BUTTON;
+        class DIS_TARGET_CloseButton: RscCheckboxMRTM {
+            idc = DIS_TARGET_CLOSE_BUTTON;
             sizeEx = "0.021 / (getResolution select 5)";
             x = 1 - 0.0375;
             y = -0.05;
@@ -476,7 +476,7 @@ class DIS_ESAM_MenuUI {
             textureDisabledChecked = "\A3\ui_f\data\map\groupicons\waypoint.paa";
             textureDisabledUnchecked = "\A3\ui_f\data\map\groupicons\waypoint.paa";
         };
-        class DIS_ESAM_Frame_T: RscPicture {
+        class DIS_TARGET_Frame_T: RscPicture {
             idc = -1;
             x = 0;
             y = -0.1;
@@ -486,7 +486,7 @@ class DIS_ESAM_MenuUI {
             text = "A3\ui_f\data\GUI\Rsc\RscMiniMapSmall\GPS_T_ca.paa";
             moving = 1;
         };
-        class DIS_ESAM_Frame_B: RscPicture {
+        class DIS_TARGET_Frame_B: RscPicture {
             idc = -1;
             x = 0;
             y = 0.97;
@@ -496,7 +496,7 @@ class DIS_ESAM_MenuUI {
             text = "A3\ui_f\data\GUI\Rsc\RscMiniMapSmall\GPS_B_ca.paa";
             moving = 1;
         };
-        class DIS_ESAM_Frame_L: RscPicture {
+        class DIS_TARGET_Frame_L: RscPicture {
             idc = -1;
             x = -0.05;
             y = -0.05;
@@ -506,7 +506,7 @@ class DIS_ESAM_MenuUI {
             text = "A3\ui_f\data\GUI\Rsc\RscMiniMapSmall\GPS_L_ca.paa";
             moving = 1;
         };
-        class DIS_ESAM_Frame_R: RscPicture {
+        class DIS_TARGET_Frame_R: RscPicture {
             idc = -1;
             x = 0.975;
             y = -0.05;
@@ -516,7 +516,7 @@ class DIS_ESAM_MenuUI {
             text = "A3\ui_f\data\GUI\Rsc\RscMiniMapSmall\GPS_R_ca.paa";
             moving = 1;
         };
-        class DIS_ESAM_Frame_TL: RscPicture {
+        class DIS_TARGET_Frame_TL: RscPicture {
             idc = -1;
             x = -0.05;
             y = -0.1;
@@ -526,7 +526,7 @@ class DIS_ESAM_MenuUI {
             text = "A3\ui_f\data\GUI\Rsc\RscMiniMapSmall\GPS_TL_ca.paa";
             moving = 1;
         };
-        class DIS_ESAM_Frame_TR: RscPicture {
+        class DIS_TARGET_Frame_TR: RscPicture {
             idc = -1;
             x = 0.975;
             y = -0.1;
@@ -536,7 +536,7 @@ class DIS_ESAM_MenuUI {
             text = "A3\ui_f\data\GUI\Rsc\RscMiniMapSmall\GPS_TR_ca.paa";
             moving = 1;
         };
-        class DIS_ESAM_Frame_BL: RscPicture {
+        class DIS_TARGET_Frame_BL: RscPicture {
             idc = -1;
             x = -0.05;
             y = 0.97;
@@ -546,7 +546,7 @@ class DIS_ESAM_MenuUI {
             text = "A3\ui_f\data\GUI\Rsc\RscMiniMapSmall\GPS_BL_ca.paa";
             moving = 1;
         };
-        class DIS_ESAM_Frame_BR: RscPicture {
+        class DIS_TARGET_Frame_BR: RscPicture {
             idc = -1;
             x = 0.975;
             y = 0.97;
@@ -557,8 +557,8 @@ class DIS_ESAM_MenuUI {
             moving = 1;
         };
 
-        class DIS_ESAM_AircraftList: RscListBox {
-            idc = DIS_ESAM_AIRCRAFT_LIST;
+        class DIS_TARGET_AircraftList: RscListBox {
+            idc = DIS_TARGET_AIRCRAFT_LIST;
 
             x = 0.05;
             y = 0.05;
@@ -591,8 +591,8 @@ class DIS_ESAM_MenuUI {
             style = LB_TEXTURES;
         };
 
-        class DIS_ESAM_LaunchButton: RscButton {
-            idc = DIS_ESAM_LAUNCH_BUTTON;
+        class DIS_TARGET_LaunchButton: RscButton {
+            idc = DIS_TARGET_LAUNCH_BUTTON;
             x = 0.05;
             y = 0.8;
             w = 0.9;

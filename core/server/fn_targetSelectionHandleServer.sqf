@@ -24,8 +24,15 @@
 					(BIS_WL_sectorsArrays # _sideIndex) # 1;
 				};
 				if (!(isNull _vote) && (_vote in _availableSectors)) then {
-					private _squadVotingPower = ["getSquadVotingPower", [getPlayerID _x]] call SQD_fnc_server;
-					private _voteCount = _squadVotingPower + (_votesByPlayers getOrDefault [_voteName, [objNull, 0]] select 1);
+					private _voteCount = 0;
+					if (_vote getVariable ["WL2_name", "Sector"] == "Surrender") then {
+						private _squadContribution = missionNamespace getVariable ["WL_PlayerSquadContribution", createHashMap];
+						private _playerVotes = _squadContribution getOrDefault [getPlayerUID player, 0];
+						_voteCount = round (_playerVotes * 0.2);
+					} else {
+						private _squadVotingPower = ["getSquadVotingPower", [getPlayerID _x]] call SQD_fnc_server;
+						_voteCount = _squadVotingPower + (_votesByPlayers getOrDefault [_voteName, [objNull, 0]] select 1);
+					};
 					_votesByPlayers set [_voteName, [_vote, _voteCount]];
 				};
 			} forEach (_players select { !(["isRegularSquadMember", [getPlayerID _x]] call SQD_fnc_server) });

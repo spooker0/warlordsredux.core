@@ -94,7 +94,7 @@ private _scannedObjects = _vehiclesInRadius select {
     _x getVariable ["BIS_WL_ownerAsset", "123"] != "123"
 });
 
-if (getConnectedUAV player == _asset || vehicle player == _asset) then {
+if (cameraOn == _asset) then {
     if (_awacs) then {
         if (_iteration % 8 == 0) then {
             playSoundUI ["radarTargetLost", 2, 1, true];
@@ -104,6 +104,7 @@ if (getConnectedUAV player == _asset || vehicle player == _asset) then {
             playSoundUI ["radarTargetLost", 2, 1, true];
         };
     };
+    [_scannedObjects] call WL2_fnc_reconReward;
 };
 
 _asset setVariable ["WL_scannedObjects", _scannedObjects];

@@ -13,10 +13,6 @@ if (_displayClass == "RequestMenu_open") then {
 
 	WL_GEAR_BUY_MENU = true;
 
-	if (random 10 > 7) then {
-		playSound selectRandom ["RadioAmbient6", "UAV_01", "UAV_03"];
-	};
-
 	hintSilent "";
 
 	_xDef = safezoneX;

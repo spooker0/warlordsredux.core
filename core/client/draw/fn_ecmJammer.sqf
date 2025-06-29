@@ -12,27 +12,21 @@ private _ecmParameters = WL_ASSET(_assetActualType, "ecm", []);
 if (count _ecmParameters < 3) exitWith {};
 
 private _ecmJammerType = _ecmParameters # 0;
-private _ecmPodsRequired = _ecmParameters # 1;
+private _ecmRequiresPod = _ecmParameters # 1;
 private _ecmRange = _ecmParameters # 2;
 private _ecmSpeed = _ecmParameters # 3;
 private _ecmCharges = _ecmParameters # 4;
 private _ecmRechargeTime = _ecmParameters # 5;
 
 private _jammerPods = { _x # 0 == "PylonFuelTank_UH80" } count (magazinesAllTurrets _asset);
-if (_jammerPods < _ecmPodsRequired) exitWith {
-    private _assetName = [_asset] call WL2_fnc_getAssetTypeName;
-    if (_jammerPods > 0) then {
-        systemChat format ["%1: Not enough ECM Jammer pods installed. Required: %2, Installed: %3", _assetName, _ecmPodsRequired, _jammerPods];
-    };
+
+if (_ecmRequiresPod == 1 && _jammerPods == 0) exitWith {};
+if (_ecmRequiresPod == 0) then {
+    _jammerPods = 1;
 };
 
-private _jammerRatio = if (_ecmPodsRequired > 0) then {
-    _jammerPods / _ecmPodsRequired
-} else {
-    1
-};
-_ecmCharges = round (_ecmCharges * _jammerRatio);
-_ecmRechargeTime = round (_ecmRechargeTime / _jammerRatio);
+_ecmCharges = round (_ecmCharges * _jammerPods);
+_ecmRechargeTime = round (_ecmRechargeTime / _jammerPods);
 
 // set default if not set
 private _charges = _asset getVariable ["WL2_ecmCharges", -100];
@@ -143,6 +137,13 @@ private _ecmDraw = addMissionEventHandler ["Draw3D", {
 
         private _jamMarkers = [];
         {
+            if (!alive _x) then {
+                continue;
+            };
+            if (_x getVariable ["WL2_jamDestroy", false]) then {
+                continue;
+            };
+
             private _munitionPos = _x modelToWorldVisual [0, 0, 0];
 
             private _screenPos = worldToScreen _munitionPos;
@@ -187,6 +188,12 @@ private _ecmDraw = addMissionEventHandler ["Draw3D", {
                 };
 
                 triggerAmmo _x;
+
+                private _shellId = _x getVariable ["WL2_shellId", ""];
+                if (_shellId != "") then {
+                    [_originator, _shellId] remoteExec ["APS_fnc_jamDestroy", _originator];
+                };
+
                 _x setVariable ["WL2_jamDestroy", true, true];
             };
         } forEach _ecmMunitions;
