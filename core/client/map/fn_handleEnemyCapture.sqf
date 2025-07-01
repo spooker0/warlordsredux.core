@@ -1,47 +1,49 @@
 #include "includes.inc"
-params ["_sector"];
 
-private _marker = (_sector getVariable "BIS_WL_markers") # 1;
+private _blinkingSectors = [];
+private _blinking = false;
 private _nextPossibleWarn = 0;
 private _playerSide = side group player;
-private _enemySide = [west, east];
-_enemySide deleteAt (_enemySide find _playerSide);
-_enemySide = _enemySide # 0;
 
-if !((_sector getVariable "BIS_WL_owner") == _playerSide) exitWith {};
+while { !BIS_WL_missionEnd } do {
+	_blinking = !_blinking;
+	sleep 1;
 
-while {(_sector getVariable "BIS_WL_owner") == _playerSide} do {
-	private _captureProgress = _sector getVariable ["BIS_WL_captureProgress", 0];
-	private _capturingTeam = _sector getVariable ["BIS_WL_capturingTeam", independent];
-
-	if (_capturingTeam == independent) then {
-		sleep 2;
-		continue;
-	};
-
-	if (_capturingTeam == _enemySide) then {
-		if (serverTime > _nextPossibleWarn) then {
-			_nextPossibleWarn = serverTime + 30;
-			"under_attack" call WL2_fnc_announcer;
-			[toUpper format [localize "STR_A3_WL_popup_losing_sector", _enemySide call WL2_fnc_sideToFaction, _sector getVariable "WL2_name"]] spawn WL2_fnc_smoothText;
-		};
-
-		while {_captureProgress > 0 && (_sector getVariable "BIS_WL_owner") == _playerSide} do {
-			_marker setMarkerBrushLocal "Solid";
-			_marker setMarkerColorLocal BIS_WL_colorMarkerEnemy;
-			sleep 0.5;
-
-			if ((_sector getVariable "BIS_WL_owner") == _playerSide) then {
-				_marker setMarkerBrushLocal "Border";
-				_marker setMarkerColorLocal BIS_WL_colorMarkerFriendly;
-				sleep 0.5;
+	if (_blinking) then {
+		{
+			private _sector = _x;
+			private _color = if (_sector getVariable ["BIS_WL_owner", independent] == _playerSide) then {
+				BIS_WL_colorMarkerFriendly
+			} else {
+				BIS_WL_colorMarkerEnemy
 			};
+			private _marker = (_sector getVariable ["BIS_WL_markers", []]) # 1;
+			_marker setMarkerBrushLocal "Border";
+			_marker setMarkerColorLocal _color;
+		} forEach _blinkingSectors;
 
-			_captureProgress = _sector getVariable ["BIS_WL_captureProgress", 0];
-		};
+		_blinkingSectors = [];
 	} else {
-		_marker setMarkerBrushLocal "Border";
-		_marker setMarkerColorLocal BIS_WL_colorMarkerFriendly;
+		private _ownedSectors = BIS_WL_sectorsArray select 0;
+
+		private _shouldWarn = false;
+		{
+			private _sector = _x;
+			private _captureProgress = _sector getVariable ["BIS_WL_captureProgress", 0];
+			private _owner = _sector getVariable ["BIS_WL_owner", independent];
+
+			if (_captureProgress > 0 && _owner == _playerSide) then {
+				_blinkingSectors pushBack _sector;
+				private _marker = (_sector getVariable ["BIS_WL_markers", []]) # 1;
+				_marker setMarkerBrushLocal "Solid";
+				_marker setMarkerColorLocal BIS_WL_colorMarkerEnemy;
+				_shouldWarn = true;
+			};
+		} forEach _ownedSectors;
+
+		if (_shouldWarn && serverTime > _nextPossibleWarn) then {
+			_nextPossibleWarn = serverTime + 60;
+			"under_attack" call WL2_fnc_announcer;
+		};
 	};
-	sleep 5;
 };

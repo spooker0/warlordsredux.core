@@ -129,9 +129,8 @@ class CfgFunctions {
 			class initClient {};
 			class initServer {};
 			class menu {};
-			class playerSelectionChanged {};
+			class sendData {};
 			class server {};
-			class treeSelectionChanged {};
 			class voice {};
 		};
 	};

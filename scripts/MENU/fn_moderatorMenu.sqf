@@ -23,6 +23,8 @@ _closeButton ctrlAddEventHandler ["ButtonClick", {
 
 private _playerList = _display displayCtrl MODR_PLAYER_LIST;
 private _allPlayers = call BIS_fnc_listPlayers;
+_allPlayers = [_allPlayers, [], { [_x] call BIS_fnc_getName }, "ASCEND"] call BIS_fnc_sortBy;
+
 private _playerAliases = profileNamespace getVariable ["WL2_playerAliases", createHashMap];
 {
     private _playerName = [_x] call BIS_fnc_getName;

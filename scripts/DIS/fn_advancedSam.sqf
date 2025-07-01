@@ -8,7 +8,7 @@ _projectile setVariable ["APS_missileState", "BOOST", true];
 private _target = _unit getVariable ["WL2_selectedTarget", objNull];
 if (isNull _target) exitWith {
     [_projectile, _unit] spawn DIS_fnc_frag;
-    [_projectile, _unit, 14000, 14000, 8000] spawn DIS_fnc_maneuver;
+    [_projectile, _unit, 14000, 9300, 8000] spawn DIS_fnc_maneuver;
 };
 
 sleep 0.5;

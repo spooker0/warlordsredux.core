@@ -17,7 +17,7 @@ private _actionId = _asset addAction [
 			10;
 		} else {
 			if (_awacs) then {
-				5;
+				2;
 			} else {
 				20;
 			};

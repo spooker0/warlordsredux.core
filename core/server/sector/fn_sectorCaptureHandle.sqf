@@ -76,7 +76,6 @@ while { !BIS_WL_missionEnd } do {
 		_sector setVariable ["BIS_WL_owner", _capturingTeam, true];
 		_sector setVariable ["BIS_WL_capturingTeam", independent, true];
 		_sector setVariable ["BIS_WL_captureProgress", 0, true];
-		_sector remoteExec ["WL2_fnc_handleEnemyCapture", [0, -2] select isDedicated];
 		[_sector, _capturingTeam] call WL2_fnc_changeSectorOwnership;
 	} else {
 		private _lastCaptureProgress = _sector getVariable ["BIS_WL_captureProgress", -1];

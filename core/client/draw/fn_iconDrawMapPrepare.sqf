@@ -243,7 +243,7 @@ private _scanners = if (_drawAll) then {
 	if (WL_ASSET_FIELD(_assetData, _assetActualType, "hasAWACS", 0) > 0) then {
 		private _size = _scanRadius / _scale;
 		_drawIcons pushBack [
-			"\a3\ui_f\data\IGUI\RscCustomInfo\Sensors\Sectors\sector120_ca.paa",
+			"\a3\ui_f\data\IGUI\RscCustomInfo\Sensors\Sectors\sector60_ca.paa",
 			[1, 1, 1, 0.3],
 			_position,
 			_size,

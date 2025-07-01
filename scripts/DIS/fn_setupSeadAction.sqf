@@ -16,3 +16,24 @@ _asset addAction [
 	50,
 	false
 ];
+
+[_asset] spawn {
+	params ["_asset"];
+	while { alive _asset } do {
+		sleep 1;
+		if (cameraOn != _asset) then {
+			continue;
+		};
+
+		private _selectedTarget = _asset getVariable ["WL2_selectedTarget", objNull];
+		if (alive _selectedTarget) then {
+			continue;
+		};
+		private _seadTargets = [_asset] call DIS_fnc_getSeadTarget;
+		if (count _seadTargets == 0) then {
+			continue;
+		};
+		private _topSeadTarget = _seadTargets # 0;
+		_asset setVariable ["WL2_selectedTarget", _topSeadTarget # 0];
+	};
+};

@@ -20,34 +20,21 @@ switch (_action) do {
         ["create", [_squadName, _leader, _side]] remoteExec ["SQD_fnc_server", 2];
     };
     case "leave": {
-        if (_mySquadNumber == -1) exitWith {
-            _return = 1;
-        };
-
-        ctrlShow [LEAVE_BUTTON, false];
-
         ["TaskLeaveSquad"] call WLT_fnc_taskComplete;
-
         ["remove", [getPlayerID player]] remoteExec ["SQD_fnc_server", 2];
     };
     case "invite": {
-        if (_mySquadNumber == -1) exitWith {
-            _return = 1;
-        };
+        private _invitee = _params select 0;
 
-        private _selection = lbCurSel PLAYER_LIST;
-        if (isNil "_selection") exitWith {
-            _return = 1;
-        };
-
-        private _player = lbData [PLAYER_LIST, _selection];
         private _inviter = getPlayerID player;
 
-        ["invite", [_player, _inviter]] remoteExec ["SQD_fnc_server", 2];
+        ["invite", [_invitee, _inviter]] remoteExec ["SQD_fnc_server", 2];
 
-        private _playerName = lbText [PLAYER_LIST, _selection];
-        systemChat format [localize "STR_SQUADS_sendInvitationSuccessText", _playerName];
-
+        private _inviteePlayer = _allPlayers select { getPlayerID _x == _invitee };
+        if (count _inviteePlayer == 0) exitWith {};
+        _inviteePlayer = _inviteePlayer # 0;
+        private _inviteeName = name _inviteePlayer;
+        systemChat format [localize "STR_SQUADS_sendInvitationSuccessText", _inviteeName];
         playSoundUI ["a3\ui_f\data\sound\cfgnotifications\tasksucceeded.wss"];
     };
     case "invited": {
@@ -111,16 +98,7 @@ switch (_action) do {
         };
     };
     case "promote": {
-        private _selection = tvCurSel TREE;
-        if (isNil "_selection") exitWith {
-            _return = 1;
-        };
-
-        private _player = tvData [TREE, _selection];
-
-        ctrlShow [PROMOTE_BUTTON, false];
-        ctrlShow [KICK_BUTTON, false];
-
+        private _player = _params select 0;
         ["promote", [_player]] remoteExec ["SQD_fnc_server", 2];
     };
     case "promoted": {
@@ -131,15 +109,7 @@ switch (_action) do {
         stopSound _sound;
     };
     case "kick": {
-        private _selection = tvCurSel TREE;
-        if (isNil "_selection") exitWith {
-            _return = 1;
-        };
-
-        private _player = tvData [TREE, _selection];
-
-        ctrlShow [KICK_BUTTON, false];
-
+        private _player = _params select 0;
         ["remove", [_player]] remoteExec ["SQD_fnc_server", 2];
     };
     case "isInMySquad": {
@@ -247,23 +217,8 @@ switch (_action) do {
 
         titleCut ["", "BLACK IN", 1];
     };
-    case "rename": {
-        if (isNull (findDisplay RENAME_WINDOW)) then {
-            createDialog "SquadsMenu_Rename";
-        };
-
-        private _squad = _squadManager select _mySquadNumber;
-        private _squadName = _squad select 0;
-        ctrlSetText [RENAME_EDIT, _squadName];
-
-        private _renamEditControl = displayCtrl RENAME_EDIT;
-        ctrlSetFocus _renamEditControl;
-        _renamEditControl ctrlSetTextSelection [0, count _squadName];
-
-        _return = true;
-    };
     case "renamed": {
-        private _newName = ctrlText RENAME_EDIT;
+        private _newName = _params select 0;
 
         private _disallowList = getArray (missionConfigFile >> "adminFilter");
         private _findInDisallowList = _disallowList findIf { [_x, _newName] call BIS_fnc_inString };
@@ -274,7 +229,6 @@ switch (_action) do {
         profileNamespace setVariable ["SQD_nameDefault", _newName];
 
         ["rename", [getPlayerID player, _newName]] remoteExec ["SQD_fnc_server", 2];
-        (findDisplay RENAME_WINDOW) closeDisplay 1;
     };
     case "isRegularSquadMember": {
         // Check if player is regular squad member

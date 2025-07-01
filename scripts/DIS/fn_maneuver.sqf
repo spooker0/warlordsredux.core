@@ -7,12 +7,27 @@ params [
     ["_distanceBeforeNotch", WL_SAM_NOTCH_ACTIVE_DIST]
 ];
 
+if (_unit isKindOf "Air") then {
+    _samMaxDistance = 30000;
+};
+
 private _originalTarget = missileTarget _projectile;
 private _originalPosition = getPosASL _unit;
 [_projectile, _originalTarget, _unit, _samMaxDistance, _distanceBeforeNotch] spawn {
     params ["_projectile", "_originalTarget", "_unit", "_samMaxDistance", "_distanceBeforeNotch"];
-    private _startTime = time;
+    private _startTime = serverTime;
     private _isLOAL = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "autoSeekTarget") == 1;
+
+    private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
+    private _allowLoal = WL_ASSET(_assetActualType, "allowLoal", 0) > 0;
+
+    if (_allowLoal) then {
+        waitUntil {
+            sleep 0.1;
+            !isNull (missileTarget _projectile) || !(alive _projectile) || (serverTime - _startTime > 10)
+        };
+        _originalTarget = missileTarget _projectile;
+    };
 
     while { alive _projectile } do {
         sleep 0.1;

@@ -22,3 +22,20 @@ if (side group player == independent) exitWith {};
         sleep 0.5;
     };
 };
+
+0 spawn {
+    private _squadManagerLastValue = [];
+    while { !BIS_WL_missionEnd } do {
+        sleep 0.1;
+        private _dialog = findDisplay 5000;
+        if (isNull _dialog) then{
+            continue;
+        };
+        private _squadManager = missionNamespace getVariable ["SQUAD_MANAGER", []];
+        if !(_squadManager isEqualTo _squadManagerLastValue) then {
+            private _texture = _dialog displayCtrl 5001;
+            [_texture] call SQD_fnc_sendData;
+            _squadManagerLastValue = +_squadManager;
+        };
+    };
+};

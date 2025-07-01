@@ -3,9 +3,8 @@ params ["_asset", "_targetFunction"];
 private _display = findDisplay DIS_TARGET_DISPLAY;
 
 uiNamespace setVariable ["DIS_targetingAsset", _asset];
-
 if (isNull _display) then {
-    _display = createDialog ["DIS_TARGET_MenuUI", true];
+    _display = (findDisplay 46) createDisplay "DIS_TARGET_MenuUI";
 };
 
 _display displayAddEventHandler ["KeyDown", {
@@ -13,7 +12,14 @@ _display displayAddEventHandler ["KeyDown", {
     [_display, _key, _thisEventHandler] spawn {
         params ["_display", "_key", "_thisEventHandler"];
         if (_key in actionKeys "throw") then {
-            closeDialog 0;
+            [_display] spawn {
+                params ["_display"];
+                waitUntil {
+                    sleep 0.001;
+                    inputAction "throw" == 0;
+                };
+                _display closeDisplay 0;
+            };
         };
     };
 }];
@@ -21,15 +27,17 @@ _display displayAddEventHandler ["KeyDown", {
 private _closeButton = _display displayCtrl DIS_TARGET_CLOSE_BUTTON;
 _closeButton ctrlAddEventHandler ["ButtonClick", {
     params ["_control", "_button"];
-    closeDialog 0;
+    private _display = ctrlParent _control;
+    _display closeDisplay 0;
 }];
 
 private _launchButton = _display displayCtrl DIS_TARGET_LAUNCH_BUTTON;
 _launchButton ctrlAddEventHandler ["ButtonClick", {
     params ["_control", "_button"];
     private _asset = uiNamespace getVariable ["DIS_targetingAsset", objNull];
+    private _display = ctrlParent _control;
     if (!alive _asset) exitWith {
-        closeDialog 0;
+        _display closeDisplay 0;
     };
 
     private _selectedTarget = _asset getVariable ["WL2_selectedTarget", objNull];
@@ -41,7 +49,8 @@ _launchButton ctrlAddEventHandler ["ButtonClick", {
     private _turret = cameraOn unitTurret focusOn;
     private _weaponState = weaponState [cameraOn, _turret];
     focusOn forceWeaponFire [_weaponState # 0, _weaponState # 2];
-    closeDialog 0;
+
+    _display closeDisplay 0;
 }];
 
 [_display, _asset, _targetFunction] spawn {
@@ -64,7 +73,7 @@ _launchButton ctrlAddEventHandler ["ButtonClick", {
             };
 
             _asset setVariable ["WL2_selectedTarget", objNull];
-            systemChat "Target: None";
+            systemChat "Target: Auto";
         } else {
             private _target = objectFromNetId _netId;
 
@@ -98,7 +107,7 @@ _launchButton ctrlAddEventHandler ["ButtonClick", {
             continue;
         };
 
-        private _noneId = _targetList lbAdd "None";
+        private _noneId = _targetList lbAdd "Auto";
         _targetList lbSetValue [_noneId, -1];
         _targetList lbSetData [_noneId, "none"];
         {
