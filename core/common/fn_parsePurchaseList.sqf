@@ -148,6 +148,7 @@ private _purchaseable = [];
 			case "RemoteControl";
 			case "AirDefense";
 			case "SectorDefense";
+			case "Structures";
 			case "Naval": {
 				private _assetText = getText (_class >> "Library" >> "LibTextDesc");
 				if (_assetText == "") then {

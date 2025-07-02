@@ -82,6 +82,7 @@ private _slotsScale = 0.7 call WL2_fnc_purchaseMenuGetUIScale;
 		localize "STR_A3_WL_RemoteControl_Info",
 		localize "STR_A3_WL_AirDefense_Info",
 		localize "STR_A3_WL_SectorDefense_Info",
+		localize "STR_A3_WL_Structures_Info",
 	 	localize "STR_A3_WL_asset_naval_info",
 	 	localize "STR_A3_WL_asset_gear_info",
 	 	""

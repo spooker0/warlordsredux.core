@@ -213,6 +213,7 @@ if (_displayClass == "RequestMenu_open") then {
 		localize "STR_A3_WL_RemoteControl",
 		localize "STR_A3_WL_AirDefense",
 		localize "STR_A3_WL_SectorDefense",
+		localize "STR_A3_WL_Structures",
 		localize "STR_A3_rscdisplaygarage_tab_naval",
 		localize "STR_A3_rscdisplaywelcome_exp_parb_list4_title",
 		"Fast Travel",

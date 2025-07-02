@@ -1,7 +1,10 @@
 #include "includes.inc"
 
-private _dialog = createDialog ["RscWLSquadMenu", true];
-private _texture = _dialog displayCtrl 5001;
+private _display = findDisplay 5000;
+if (isNull _display) then {
+    _display = (findDisplay 46) createDisplay "RscWLSquadMenu";
+};
+private _texture = _display displayCtrl 5001;
 // _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
 _texture ctrlAddEventHandler ["JSDialog", {
@@ -14,10 +17,8 @@ _texture ctrlAddEventHandler ["JSDialog", {
 
 _texture ctrlAddEventHandler ["PageLoaded", {
     params ["_texture"];
-
     [_texture] spawn {
         params ["_texture"];
-
         while { !isNull _texture } do {
             [_texture] call SQD_fnc_sendData;
             sleep 5;

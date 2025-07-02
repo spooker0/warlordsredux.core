@@ -99,7 +99,7 @@
 #define WL_CONTROL_MAP (uiNamespace getVariable ["BIS_WL_mapControl", controlNull])
 #define WL_SPECIAL_SECTORS (["Wait", "Surrender"])
 #define WL_PLAYER_REQUISITION_LIST (missionNamespace getVariable format ["WL2_purchasable_%1", BIS_WL_playerSide])
-#define WL_REQUISITION_CATEGORIES ["Infantry", "Light Vehicles", "Heavy Vehicles", "Rotary Wing", "Fixed Wing", "Remote Control", "Air Defense", "Sector Defense", "Naval", "Gear", "Fast Travel", "Strategy"]
+#define WL_REQUISITION_CATEGORIES ["Infantry", "Light Vehicles", "Heavy Vehicles", "Rotary Wing", "Fixed Wing", "Remote Control", "Air Defense", "Sector Defense", "Structures", "Naval", "Gear", "Fast Travel", "Strategy"]
 #define WL_BASES [WL2_base1, WL2_base2]
 #define WL_ASSET_DATA (missionNamespace getVariable ["WL2_assetData", createHashMap])
 #define WL_ASSET_FIELD(data,class,field,default) ((data getOrDefault [class, createHashMap]) getOrDefault [field, default])
