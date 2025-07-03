@@ -143,21 +143,24 @@ private _scanExecute = {
     ]
 ] call WL2_fnc_addTargetMapButton;
 
-// Mark Sector button
-private _markSectorExecuteLast = {
-    params ["_sector"];
-    [_sector, false] call WL2_fnc_sectorButtonMark;
+private _playerLevel = ["getLevel"] call WLC_fnc_getLevelInfo;
+if (_playerLevel >= 50) then {
+    // Mark Sector button
+    private _markSectorExecuteLast = {
+        params ["_sector"];
+        [_sector, false] call WL2_fnc_sectorButtonMark;
+    };
+    private _markSectorExecuteNext = {
+        params ["_sector"];
+        [_sector, true] call WL2_fnc_sectorButtonMark;
+    };
+    [
+        ([_sector, BIS_WL_playerSide] call WL2_fnc_sectorButtonMarker) # 0,
+        [_markSectorExecuteNext, _markSectorExecuteLast],
+        false,
+        "markSector"
+    ] call WL2_fnc_addTargetMapButton;
 };
-private _markSectorExecuteNext = {
-    params ["_sector"];
-    [_sector, true] call WL2_fnc_sectorButtonMark;
-};
-[
-    ([_sector, BIS_WL_playerSide] call WL2_fnc_sectorButtonMarker) # 0,
-    [_markSectorExecuteNext, _markSectorExecuteLast],
-    false,
-    "markSector"
-] call WL2_fnc_addTargetMapButton;
 
 [_display, _offsetX, _offsetY, _menuButtons] spawn {
     params ["_display", "_originalMouseX", "_originalMouseY", "_menuButtons"];

@@ -1,10 +1,7 @@
 #include "includes.inc"
-params ["_target", "_caller"];
+params ["_asset"];
 
-if (_target != cameraOn) exitWith {
-    false;
-};
-if (_caller != focusOn) exitWith {
+if (_asset != cameraOn) exitWith {
     false;
 };
 
@@ -18,7 +15,7 @@ _weaponState params ["_weapon", "_muzzle", "_firemode", "_magazine", "_ammoCount
 
 private _ammo = getText (configFile >> "CfgMagazines" >> _magazine >> "ammo");
 
-private _assetActualType = _target getVariable ["WL2_orderedClass", typeOf _target];
+private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
 private _projectileAmmoOverrides = WL_ASSET(_assetActualType, "ammoOverrides", []);
 _projectileAmmoOverrides = _projectileAmmoOverrides select {
     _x # 0 == _ammo

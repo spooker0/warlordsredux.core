@@ -1,39 +1,78 @@
 #include "includes.inc"
 params ["_asset"];
 
-_asset addAction [
-	format ["<t color='#00ffcc'>SEAD Configuration (%1)</t>", actionKeysNames ["throw", 1, "Combo"]],
-	{
-		params ["_target", "_caller"];
-		[_target, DIS_fnc_getSeadTarget] call DIS_fnc_setupTargetMenu;
-	},
-	[],
-	100,
-	true,
-	false,
-	"throw",
-	"[_target, _this] call DIS_fnc_setupSeadActionEligibility",
-	50,
-	false
-];
-
-[_asset] spawn {
-	params ["_asset"];
-	while { alive _asset } do {
-		sleep 1;
-		if (cameraOn != _asset) then {
-			continue;
-		};
-
-		private _selectedTarget = _asset getVariable ["WL2_selectedTarget", objNull];
-		if (alive _selectedTarget) then {
-			continue;
-		};
-		private _seadTargets = [_asset] call DIS_fnc_getSeadTarget;
-		if (count _seadTargets == 0) then {
-			continue;
-		};
-		private _topSeadTarget = _seadTargets # 0;
-		_asset setVariable ["WL2_selectedTarget", _topSeadTarget # 0];
+private _previousEligible = false;
+while { alive _asset } do {
+	sleep 0.5;
+	private _eligible = [_asset] call DIS_fnc_setupSeadActionEligibility;
+	if (_eligible == _previousEligible) then {
+		continue;
 	};
+
+	if (_eligible) then {
+		private _display = uiNamespace getVariable ["RscWLTargetingMenu", objNull];
+		if !(isNull _display) then {
+			_display closeDisplay 0;
+		};
+		"targeting" cutRsc ["RscWLTargetingMenu", "PLAIN", -1, true, true];
+		_display = uiNamespace getVariable "RscWLTargetingMenu";
+		private _texture = _display displayCtrl 5001;
+		// _texture ctrlWebBrowserAction ["OpenDevConsole"];
+
+		[_texture] spawn {
+			params ["_texture"];
+			while { !isNull _texture } do {
+				private _delta = 0;
+				if (inputAction "gunElevDown" > 0) then {
+					waitUntil {
+						sleep 0.001;
+						inputAction "gunElevDown" == 0
+					};
+					_delta = 1;
+				};
+
+				if (inputAction "gunElevUp" > 0) then {
+					waitUntil {
+						sleep 0.001;
+						inputAction "gunElevUp" == 0
+					};
+					_delta = -1;
+				};
+
+				if (_delta != 0) then {
+					private _seadTargetList = call DIS_fnc_getSeadList;
+					private _selectedTarget = cameraOn getVariable ["WL2_selectedTarget", objNull];
+					private _targetIndex = 0;
+					{
+						private _target = objectFromNetId (_x # 0);
+						if (_target == _selectedTarget) then {
+							_targetIndex = _forEachIndex;
+						};
+					} forEach _seadTargetList;
+					private _newIndex = (_targetIndex + _delta) % (count _seadTargetList);
+					private _newSelectedTargetId = _seadTargetList select _newIndex select 0;
+					cameraOn setVariable ["WL2_selectedTarget", objectFromNetId _newSelectedTargetId];
+
+					[_texture] call DIS_fnc_sendSeadData;
+					playSoundUI ["a3\ui_f\data\sound\rsccombo\soundexpand.wss", 2];
+				};
+				sleep 0.001;
+			};
+		};
+
+		_texture ctrlAddEventHandler ["PageLoaded", {
+			params ["_texture"];
+			[_texture] spawn {
+				params ["_texture"];
+				while { !isNull _texture } do {
+					[_texture] call DIS_fnc_sendSeadData;
+					sleep 1;
+				};
+			};
+		}];
+	} else {
+		"targeting" cutText ["", "PLAIN"];
+	};
+
+	_previousEligible = _eligible;
 };

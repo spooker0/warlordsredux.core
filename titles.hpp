@@ -1029,4 +1029,24 @@ class RscTitles {
 			};
 		};
 	};
+
+	class RscWLTargetingMenu {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		name = "RscWLTargetingMenu";
+		onLoad = "uiNamespace setVariable ['RscWLTargetingMenu', _this select 0];";
+		class controls {
+			class RscWLTargetingMenu_Texture: RscText {
+				type = 106;
+				idc = 5001;
+				x = safeZoneX;
+				y = safeZoneY;
+				w = safeZoneW;
+				h = safeZoneH;
+				url = "file://src/ui/sead.html";
+			};
+		};
+	};
 };

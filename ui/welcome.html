@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body,
+        html {
+            height: 100%;
+            text-align: center;
+        }
+
+        .squad-menu-wrapper {
+            display: inline-block;
+            width: 80%;
+            height: 60%;
+            max-width: 1000px;
+            border-radius: 10px;
+            border: 2px solid #444;
+            margin-top: 10%;
+            background-color: #2a2a2a;
+        }
+
+        .menu-title {
+            background-color: #222;
+            color: #fff;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 2px solid #444;
+        }
+
+        .squad-menu {
+            width: 100%;
+            height: calc(100% - 60px);
+            font-size: 0;
+        }
+
+        .panel {
+            display: inline-block;
+            vertical-align: top;
+            width: 50%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+            font-size: 16px;
+            background-color: #2a2a2a;
+            color: white;
+        }
+
+        .panel.left-panel {
+            border-right: 2px solid #444;
+        }
+
+        .panel.right-panel {
+            border-left: 2px solid #444;
+        }
+
+        h2 {
+            color: #66ccff;
+            text-align: left;
+            margin-bottom: 10px;
+        }
+
+        p {
+            text-align: left;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+
+        ul {
+            text-align: left;
+            margin-top: 15px;
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        strong {
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <div class="squad-menu-wrapper">
+        <div class="menu-title">Welcome</div>
+        <div class="squad-menu">
+            <div class="panel left-panel">
+                <h2>About Warlords Redux</h2>
+                <p>Welcome to Warlords Redux! This is a community upgrade project for the Original Warlords. The project's goal is to improve on BI vision of warlords with bugfixes and more balanced user experience while staying compatable with official servers for the best player count.</p>
+                <p>It introduces a lot of new features like fog of war, random base locations, custom pylons/ammo, aircraft rebalance, vehicle variants... etc.</p>
+            </div>
+            <div class="panel right-panel">
+                <h2>Credits</h2>
+                <p>Discord link: https://discord.gg/grmzsZE4ua (copy & paste)</p>
+                <p>External scripts and resources</p>
+                <ul>
+                    <li>GF Earplugs: George Floros's earplug script.</li>
+                    <li>A3 Aegis Mod: Texture for the Blufor Kuma (heavily compressed).</li>
+                </ul>
+                <p style="margin-top: 20px;">Developers</p>
+                <ul>
+                    <li>Special Thanks to: Dwarden (Bohemia Interactive)</li>
+                    <li>GamerDad</li>
+                    <li>Witch Doctor</li>
+                    <li>JWalker08</li>
+                    <li>Weasley Wells</li>
+                    <li>Rook</li>
+                    <li>MONGCHAW</li>
+                    <li>MrThomasM</li>
+                    <li>TenPenny</li>
+                    <li>Coffee Maker</li>
+                    <li>Korbelz</li>
+                    <li>Bo</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('wheel', function(e) {
+            const el = document.elementFromPoint(e.clientX, e.clientY);
+            if (el && el.closest('.panel')) {
+                el.closest('.panel').scrollTop += e.deltaY;
+                e.preventDefault();
+            }
+        }, { passive: false });
+    </script>
+</body>
+</html>

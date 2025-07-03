@@ -33,11 +33,13 @@ class CfgFunctions {
 			class extendedSam {};
 			class frag {};
 			class getNotchResult {};
+			class getSeadList {};
 			class getSeadTarget {};
 			class gpsMunition {};
 			class maneuver {};
 			class missileCamera {};
 			class remoteMunition {};
+			class sendSeadData {};
 			class setupAdvancedSam {};
 			class setupExtendedSam {};
 			class setupSeadAction {};

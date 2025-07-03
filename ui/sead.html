@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
+        }
+
+        body,
+        html {
+            height: 100%;
+        }
+
+        #game-data {
+            display: none;
+        }
+
+        .sead-wrapper {
+            display: inline-block;
+            width: 40%;
+            height: 50%;
+            border-radius: 10px;
+            margin-top: 50vh;
+            margin-left: 30vh;
+        }
+
+        p, li {
+            color: #ffffff;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="game-data">
+        <div id="targets"></div>
+    </div>
+
+    <div class="sead-wrapper">
+        <p>ANTI-RADIATION MISSILE [PAGE UP/DOWN]</p>
+        <ul class="target-list">
+            <li>[&gt;] TARGET: AUTO</li>
+            <li>[ ] Threat 2</li>
+            <li>[ ] Threat 3</li>
+            <li>[ ] Threat 4</li>
+        </ul>
+    </div>
+
+    <script>
+        function updateData() {
+            const targetsEl = document.getElementById('targets');
+            const targets = JSON.parse(targetsEl.textContent || '{}');
+
+            const targetListEl = document.querySelector('.target-list');
+            targetListEl.innerHTML = "";
+
+            targets.forEach((target, index) => {
+                const listItem = document.createElement('li');
+                let selectionState = " ";
+                if (target[2]) {
+                    selectionState = ">";
+                }
+                listItem.textContent = `[${selectionState}] ${target[1]}`;
+                listItem.dataset.targetId = target[0];
+
+                targetListEl.dataset.targetIndex = index;
+                targetListEl.appendChild(listItem);
+            });
+        }
+    </script>
+</body>
+</html>
