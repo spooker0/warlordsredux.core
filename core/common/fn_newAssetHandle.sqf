@@ -349,7 +349,7 @@ if (_asset isKindOf "Man") then {
 	// };
 
 	if (_asset isKindOf "Air") then {
-		[_asset] remoteExec ["DIS_fnc_setupSeadAction", 0, true];
+		[_asset] remoteExec ["DIS_fnc_setupSead", 0, true];
 	};
 
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];

@@ -1,8 +1,7 @@
-params ["_texture"];
+#include "includes.inc"
+params ["_texture", "_targetList"];
 
-private _seadTargetList = call DIS_fnc_getSeadList;
-
-private _targetsText = toJSON _seadTargetList;
+private _targetsText = toJSON _targetList;
 _targetsText = _texture ctrlWebBrowserAction ["ToBase64", _targetsText];
 
 private _script = format [

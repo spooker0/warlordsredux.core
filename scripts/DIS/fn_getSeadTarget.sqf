@@ -16,7 +16,7 @@ if (alive _extendedSamLauncher) then {
 
 private _launcher = _asset getVariable ["WL_incomingLauncherLastKnown", objNull];
 if (alive _launcher) then {
-    private _name = format ["THREAT: %1", [_launcher] call WL2_fnc_getAssetTypeName];
+    private _name = format ["LAUNCH: %1", [_launcher] call WL2_fnc_getAssetTypeName];
     _seadTargets pushBack [_launcher, _name];
 };
 

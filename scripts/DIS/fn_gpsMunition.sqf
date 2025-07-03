@@ -3,6 +3,11 @@ params ["_projectile", "_unit"];
 
 if (!isNull (missileTarget _projectile)) exitWith {};
 
+private _gpsBombs = _unit getVariable ["DIS_gpsBombs", []];
+_gpsBombs pushBack _projectile;
+_gpsBombs = _gpsBombs select { alive _x };
+_unit setVariable ["DIS_gpsBombs", _gpsBombs];
+
 private _coordinates = +(_projectile getVariable ["DIS_targetCoordinates", getPosATL _unit]);
 private _laserTarget = createVehicleLocal ["LaserTargetC", _coordinates, [], 0, "CAN_COLLIDE"];
 _coordinates set [2, 400];
@@ -30,12 +35,16 @@ while { alive _projectile } do {
         _projectile setMissileTarget [_laserTarget, true];
     } else {
         private _currentPosition = getPosASL _projectile;
+        private _missileTarget = missileTarget _projectile;
+        if (alive _missileTarget) then {
+            _finalPosition = getPosASL _missileTarget;
+        };
         private _targetVectorDirAndUp = [_currentPosition, _finalPosition] call BIS_fnc_findLookAt;
         private _currentVectorDir = vectorDir _projectile;
         private _currentVectorUp = vectorUp _projectile;
 
-        private _actualVectorDir = vectorLinearConversion [0, 1, 0.01, _currentVectorDir, _targetVectorDirAndUp # 0, true];
-        private _actualVectorUp = vectorLinearConversion [0, 1, 0.01, _currentVectorUp, _targetVectorDirAndUp # 1, true];
+        private _actualVectorDir = vectorLinearConversion [0, 1, 0.1, _currentVectorDir, _targetVectorDirAndUp # 0, true];
+        private _actualVectorUp = vectorLinearConversion [0, 1, 0.1, _currentVectorUp, _targetVectorDirAndUp # 1, true];
         _projectile setVectorDirAndUp [_actualVectorDir, _actualVectorUp];
 
         _projectile setVelocityModelSpace [0, _speed max 100, 0];
@@ -45,10 +54,11 @@ while { alive _projectile } do {
         _terminalManeuver = true;
 
         _coordinates set [2, 0];
-        private _enemiesNear = (_coordinates nearEntities 100) select {
+        private _enemiesNear = (_coordinates nearEntities 150) select {
             ([_x] call WL2_fnc_getAssetSide) != BIS_WL_playerSide &&
             alive _x &&
-            lifeState _x != "INCAPACITATED"
+            lifeState _x != "INCAPACITATED" &&
+            (_x getVariable ["WL_spawnedAsset", false] || isPlayer _x)
         };
 
         _finalPosition = [];
@@ -69,7 +79,7 @@ while { alive _projectile } do {
             } else {
                 [_closestEnemy] call WL2_fnc_getAssetTypeName;
             };
-            systemChat format ["GPS bomb target: %1", _closestEnemyName];
+            _projectile setVariable ["DIS_terminalTarget", _closestEnemyName];
 
             _finalPosition = getPosASL _closestEnemy;
             _projectile setMissileTarget [_closestEnemy, true];

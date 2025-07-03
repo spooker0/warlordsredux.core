@@ -41,7 +41,7 @@ private _demolishTotalTime = if (_isStrongholdDemolish) then {
     WL_DEMOLISH_TIME
 };
 
-while { alive _charge && alive _target && alive _dummy } do {
+while { alive _charge } do {
     private _sleepTime = 0.5;
 
     if (_lightToggle) then {

@@ -84,8 +84,8 @@ private _originalRemote = if (isRemoteControlling player) then {
     objNull
 };
 
-[_camera, _titleBar, _pictureControl, _defaultOpticsMode, _originalCamera, _originalCamView, _originalRemote] spawn {
-    params ["_camera", "_titleBar", "_pictureControl", "_defaultOpticsMode", "_originalCamera", "_originalCamView", "_originalRemote"];
+[_camera, _titleBar, _pictureControl, _defaultOpticsMode, _defaultTitlePosition, _defaultPicturePosition] spawn {
+    params ["_camera", "_titleBar", "_pictureControl", "_defaultOpticsMode", "_defaultTitlePosition", "_defaultPicturePosition"];
     private _opticsMode = _defaultOpticsMode;
     if (_opticsMode == 3) exitWith {
         _titleBar ctrlShow false;
@@ -108,24 +108,20 @@ private _originalRemote = if (isRemoteControlling player) then {
                 case 0: {
                     _titleBar ctrlShow true;
                     _pictureControl ctrlShow true;
+                    _titleBar ctrlSetPosition _defaultTitlePosition;
+                    _pictureControl ctrlSetPosition _defaultPicturePosition;
                 };
                 case 1: {
-                    _titleBar ctrlShow false;
-                    _pictureControl ctrlShow false;
-
-                    _camera switchCamera "INTERNAL";
-                    cameraEffectEnableHUD true;
-                    showHUD [true, true, true, true, true, true, true, true, true, true, true];
-                    player setVariable ["WL_hmdOverride", 2];
+                    _titleBar ctrlShow true;
+                    _pictureControl ctrlShow true;
+                    private _largeTitlePosition = [0, -0.05, 1, 0.05];
+                    private _largePicturePosition = [0, 0, 1, 1];
+                    _titleBar ctrlSetPosition _largeTitlePosition;
+                    _pictureControl ctrlSetPosition _largePicturePosition;
                 };
                 case 2: {
                     _titleBar ctrlShow false;
                     _pictureControl ctrlShow false;
-                    _originalCamera switchCamera _originalCamView;
-                    player setVariable ["WL_hmdOverride", -1];
-                    if (!isNull _originalRemote) then {
-                        player remoteControl _originalRemote;
-                    };
                 };
             };
             _titleBar ctrlCommit 0;
@@ -164,12 +160,7 @@ sleep 1.5;
 camDestroy _camera;
 "APS_Camera" cutFadeOut 0;
 removeMissionEventHandler ["Draw3D", _targetDrawer];
-player setVariable ["WL_hmdOverride", -1];
 
 sleep 2;
-
-if (!alive cameraOn) then {
-    switchCamera player;
-};
 
 setPiPViewDistance _originalPipViewDistance;

@@ -23,6 +23,13 @@ addMissionEventHandler ["HandleChatMessage", {
 		_this call WL2_fnc_handleKeypress;
 	}];
 
+	_display displayAddEventHandler ["KeyDown", {
+		params ["_display", "_key"];
+		[_key, "RscWLSamTargetingMenu", DIS_fnc_getSamTarget, "NO TARGET"] call DIS_fnc_handleKeypress;
+		[_key, "RscWLSeadTargetingMenu", DIS_fnc_getSeadTarget, "TARGET: AUTO"] call DIS_fnc_handleKeypress;
+		[_key] call DIS_fnc_handleGPSKeypress;
+	}];
+
 	// intentionally separate handler
 	_display displayAddEventHandler ["KeyDown", {
 		private _key = _this # 1;

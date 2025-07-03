@@ -109,6 +109,9 @@ if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
 	};
 };
 
+private _serverStats = profileNamespace getVariable ["WL_stats", createHashMap];
+missionNamespace setVariable ["WL_serverStats", _serverStats, true];
+
 ["server_init"] call BIS_fnc_endLoadingScreen;
 
 #if WL_EASTER_EGG

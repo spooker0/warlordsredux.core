@@ -1030,15 +1030,55 @@ class RscTitles {
 		};
 	};
 
-	class RscWLTargetingMenu {
+	class RscWLGPSTargetingMenu {
 		idd = -1;
 		duration = 1000000000;
 		fadein = 0;
 		fadeout = 0;
-		name = "RscWLTargetingMenu";
-		onLoad = "uiNamespace setVariable ['RscWLTargetingMenu', _this select 0];";
+		name = "RscWLGPSTargetingMenu";
+		onLoad = "uiNamespace setVariable ['RscWLGPSTargetingMenu', _this select 0];";
 		class controls {
-			class RscWLTargetingMenu_Texture: RscText {
+			class RscWLGPSTargetingMenu_Texture: RscText {
+				type = 106;
+				idc = 5001;
+				x = safeZoneX;
+				y = safeZoneY;
+				w = safeZoneW;
+				h = safeZoneH;
+				url = "file://src/ui/gps.html";
+			};
+		};
+	};
+
+	class RscWLSamTargetingMenu {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		name = "RscWLSamTargetingMenu";
+		onLoad = "uiNamespace setVariable ['RscWLSamTargetingMenu', _this select 0];";
+		class controls {
+			class RscWLSamTargetingMenu_Texture: RscText {
+				type = 106;
+				idc = 5001;
+				x = safeZoneX;
+				y = safeZoneY;
+				w = safeZoneW;
+				h = safeZoneH;
+				url = "file://src/ui/sam.html";
+			};
+		};
+	};
+
+	class RscWLSeadTargetingMenu {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		name = "RscWLSeadTargetingMenu";
+		onLoad = "uiNamespace setVariable ['RscWLSeadTargetingMenu', _this select 0];";
+		class controls {
+			class RscWLSeadTargetingMenu_Texture: RscText {
 				type = 106;
 				idc = 5001;
 				x = safeZoneX;

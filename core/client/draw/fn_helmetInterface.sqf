@@ -176,54 +176,6 @@ addMissionEventHandler ["Draw3D", {
             true
         ];
     };
-
-    private _gpsTargetingLastUpdate = uiNamespace getVariable ["WL2_gpsTargetingLastUpdate", 0];
-    private _gpsTargetingInfo = uiNamespace getVariable ["WL2_gpsTargetingInfo", []];
-    if (_gpsTargetingLastUpdate + 2.5 > serverTime && count _gpsTargetingInfo > 0) then {
-        private _inRange = _gpsTargetingInfo # 0;
-        private _range = _gpsTargetingInfo # 1;
-        private _distanceNeeded = _gpsTargetingInfo # 2;
-        private _targetPosATL = _gpsTargetingInfo # 3;
-
-        private _color = if (_inRange) then {
-            [0, 1, 0, 1]
-        } else {
-            [1, 0, 0, 1]
-        };
-
-        drawIcon3D [
-            "\A3\ui_f\data\IGUI\RscIngameUI\RscOptics\square.paa",
-            _color,
-            _targetPosATL,
-            0.3,
-            0.3,
-            0,
-            format ["TGT %1", (_distanceNeeded / 1000) toFixed 1],
-            0,
-            0.03,
-            "TahomaB",
-            "right",
-            false,
-            0.005,
-            -0.02
-        ];
-        drawIcon3D [
-            "",
-            _color,
-            _targetPosATL,
-            0.3,
-            0.3,
-            0,
-            format ["RNG %1", (_range / 1000) toFixed 1],
-            0,
-            0.03,
-            "TahomaB",
-            "right",
-            false,
-            0.005,
-            -0.005
-        ];
-    };
 }];
 
 0 spawn {
@@ -591,7 +543,12 @@ addMissionEventHandler ["Draw3D", {
 
         private _selectedTarget = _vehicle getVariable ["WL2_selectedTarget", objNull];
         if (alive _selectedTarget) then {
-            private _isInAngle = [getPosATL _vehicle, getDir _vehicle, 120, getPosATL _selectedTarget] call WL2_fnc_inAngleCheck;
+            private _isInAngle = if (unitIsUAV _vehicle) then {
+                true;
+            } else {
+                [getPosATL _vehicle, getDir _vehicle, 120, getPosATL _selectedTarget] call WL2_fnc_inAngleCheck;
+            };
+
             private _angleColor = if (_isInAngle) then {
                 [1, 0, 0, 1]
             } else {
