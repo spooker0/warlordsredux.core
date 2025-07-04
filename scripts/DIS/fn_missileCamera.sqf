@@ -76,14 +76,6 @@ private _targetDrawer = addMissionEventHandler ["Draw3D", {
     ];
 }];
 
-private _originalCamera = cameraOn;
-private _originalCamView = cameraView;
-private _originalRemote = if (isRemoteControlling player) then {
-    getConnectedUAVUnit player;
-} else {
-    objNull
-};
-
 [_camera, _titleBar, _pictureControl, _defaultOpticsMode, _defaultTitlePosition, _defaultPicturePosition] spawn {
     params ["_camera", "_titleBar", "_pictureControl", "_defaultOpticsMode", "_defaultTitlePosition", "_defaultPicturePosition"];
     private _opticsMode = _defaultOpticsMode;

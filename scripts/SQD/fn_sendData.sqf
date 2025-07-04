@@ -1,3 +1,5 @@
+#include "includes.inc"
+
 params ["_texture"];
 private _playersOnTeam = (call BIS_fnc_listPlayers) select {
     side group _x == BIS_WL_playerSide

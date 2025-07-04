@@ -337,13 +337,6 @@ private _strategyArr = [
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"Call a volley of cruise missiles on your designation. Requires all targets (vehicles or infantry) to be on datalink."
 	], [
-		"PruneAssets",
-		0,
-		[],
-		"Prune assets",
-		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"List all your assets in the game and decide whether to take action to delete some of them."
-	], [
 		"WipeMap",
 		0,
 		[],

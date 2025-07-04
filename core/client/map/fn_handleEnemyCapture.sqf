@@ -17,7 +17,13 @@ while { !BIS_WL_missionEnd } do {
 			} else {
 				BIS_WL_colorMarkerEnemy
 			};
-			private _marker = (_sector getVariable ["BIS_WL_markers", []]) # 1;
+
+			private _markers = _sector getVariable ["BIS_WL_markers", []];
+			if (count _markers < 2) then {
+				continue;	// fail less catastrophically
+			};
+
+			private _marker = _markers # 1;
 			_marker setMarkerBrushLocal "Border";
 			_marker setMarkerColorLocal _color;
 		} forEach _blinkingSectors;

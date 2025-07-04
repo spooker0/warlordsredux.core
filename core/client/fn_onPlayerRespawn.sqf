@@ -63,6 +63,7 @@ if (player getVariable ["WL_hasGoggles", false]) then {
 };
 
 call WL2_fnc_buyMenuAction;
+call WL2_fnc_vehicleManagerAction;
 call WL2_fnc_rappelAction;
 call WL2_fnc_demolishAction;
 call WL2_fnc_disarmAction;

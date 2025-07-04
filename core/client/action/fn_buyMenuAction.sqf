@@ -1,4 +1,5 @@
 #include "includes.inc"
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _hideBuyMenu = _settingsMap getOrDefault ["hideBuyMenu", false];
 if (_hideBuyMenu) exitWith {};
 

@@ -39,7 +39,7 @@ if (_cqbMode) exitWith {
     };
 };
 
-if !((UAVControl getConnectedUAV player # 1) isEqualTo "") exitWith {
+if (unitIsUAV focusOn) exitWith {
     private _targetViewDistance = _settingsMap getOrDefault ["droneViewDistance", 4000];
     if (_targetViewDistance != viewDistance) then {
         setViewDistance _targetViewDistance;

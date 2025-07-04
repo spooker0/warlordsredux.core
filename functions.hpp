@@ -204,6 +204,8 @@ class CfgFunctions {
 			class jammerAction {};
 			class jammerToggle {};
 			class jammerUpdate {};
+			class lockActionEligibility {};
+			class lockActionUpdate {};
 			class logisticsAddAction {};
 			class parachuteAction {};
 			class parachuteSetup {};
@@ -223,11 +225,13 @@ class CfgFunctions {
 			class removeStronghold {};
 			class repairAction {};
 			class repairActionEligibility {};
+			class repairActionUpdate {};
 			class respawnBagAction {};
 			class restockAction {};
 			class reviveAction {};
 			class scanner {};
 			class scannerAction {};
+			class sendVehicleData {};
 			class setupForwardBaseAction {};
 			class setupForwardBaseEligibility {};
 			class setupForwardBaseMp {};
@@ -238,6 +242,8 @@ class CfgFunctions {
 			class tireChangeEligibility {};
 			class vehicleLockAction {};
 			class vehicleLockUpdate {};
+			class vehicleManager {};
+			class vehicleManagerAction {};
 		};
 		class ClientDraw {
 			file = "src\core\client\draw";

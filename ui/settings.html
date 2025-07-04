@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body,
+        html {
+            height: 100%;
+            text-align: center;
+        }
+
+        .settings-menu-wrapper {
+            display: inline-block;
+            width: 80%;
+            height: 80%;
+            max-width: 1000px;
+            border-radius: 10px;
+            border: 2px solid #444;
+            margin-top: 5%;
+            background-color: #2a2a2a;
+        }
+
+        .menu-title {
+            background-color: #222;
+            color: #fff;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 2px solid #444;
+        }
+
+        .settings-content {
+            width: 100%;
+            height: calc(100% - 60px);
+            padding: 20px 30px;
+            overflow-y: auto;
+            text-align: left;
+            font-size: 16px;
+            scrollbar-color: #444444 #2a2a2a;
+            scrollbar-width: thin;
+            color: #fff;
+        }
+
+        .category {
+            color: #66ccff;
+            font-size: 20px;
+            margin: 25px 0 10px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 3px;
+        }
+
+        .control-row {
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            height: 36px;
+        }
+
+        .control-row label {
+            flex: 1 1 250px;
+            font-size: 18px;
+        }
+
+        .control-row input[type="range"] {
+            flex: 2 1 300px;
+            height: 10px;
+            -webkit-appearance: none;
+            background: #444;
+            border-radius: 5px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .control-row input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #66ccff;
+        }
+
+        .control-row input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #66ccff;
+            border: none;
+        }
+
+        .value-input {
+            width: 70px;
+            height: 32px;
+            padding: 4px 8px;
+            font-size: 16px;
+            text-align: right;
+            background-color: #1e1e1e;
+            color: #fff;
+            border: 1px solid #555;
+            border-radius: 6px;
+        }
+        .value-input:focus {
+            outline: none;
+            border-color: #66ccff;
+        }
+
+        .control-row input[type="checkbox"] {
+            transform: scale(1.2);
+            accent-color: #66ccff;
+            cursor: pointer;
+        }
+
+        button {
+            border: none;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-left: 10px;
+            background-color: #55aadd;
+            font-size: 16px;
+            margin: 4px;
+            min-width: 140px;
+        }
+
+        button:hover {
+            background-color: #4499cc;
+        }
+
+        #game-data {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="game-data"></div>
+    <div class="settings-menu-wrapper">
+        <div class="menu-title">Settings</div>
+        <div id="settingsContainer" class="settings-content"></div>
+    </div>
+
+    <script>
+        document.addEventListener('wheel', function (e) {
+            const el = document.elementFromPoint(e.clientX, e.clientY);
+            if (el && el.closest('.settings-content')) {
+                el.closest('.settings-content').scrollTop += e.deltaY;
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        function createMenu() {
+            const gameDataEl = document.getElementById('game-data');
+            const settingsData = JSON.parse(gameDataEl.textContent || '{}');
+
+            const container = document.getElementById("settingsContainer");
+
+            function createCategory(title) {
+                const h3 = document.createElement("div");
+                h3.className = "category";
+                h3.textContent = title;
+                return h3;
+            }
+
+            function createSlider(labelText, [min, max, step, value, id]) {
+                const row = document.createElement("div");
+                row.className = "control-row";
+
+                const label = document.createElement("label");
+                label.htmlFor = id;
+                label.textContent = labelText;
+
+                const slider = document.createElement("input");
+                slider.type = "range";
+                slider.id = id;
+                slider.min = min;
+                slider.max = max;
+                slider.step = step;
+                slider.value = value;
+
+                const valueInput = document.createElement("input");
+                valueInput.className = "value-input";
+                valueInput.type = "number";
+                valueInput.min = min;
+                valueInput.max = max;
+                valueInput.step = step;
+                valueInput.value = value;
+
+                // Update input when slider moves
+                slider.addEventListener("input", () => {
+                    valueInput.value = slider.value;
+                    A3API.SendAlert(`["slider", "${id}", ${slider.value}]`);
+                });
+
+                // Update slider when input changes
+                valueInput.addEventListener("change", () => {
+                    let newValue = parseFloat(valueInput.value);
+                    if (isNaN(newValue)) newValue = value;
+                    newValue = Math.max(min, Math.min(max, newValue));
+                    valueInput.value = newValue;
+                    slider.value = newValue;
+                    A3API.SendAlert(`["slider", "${id}", ${newValue}]`);
+                });
+
+                row.appendChild(label);
+                row.appendChild(slider);
+                row.appendChild(valueInput);
+                return row;
+            }
+
+            function createCheckbox(labelText, [id, defaultVal]) {
+                const row = document.createElement("div");
+                row.className = "control-row";
+
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.id = id;
+                checkbox.checked = !!defaultVal;
+
+                const label = document.createElement("label");
+                label.htmlFor = id;
+                label.textContent = labelText;
+
+                checkbox.addEventListener("change", () => {
+                    A3API.SendAlert(`["checkbox", "${id}", ${checkbox.checked}]`);
+                });
+
+                row.appendChild(checkbox);
+                row.appendChild(label);
+                return row;
+            }
+
+            function createButton(labelText) {
+                const button = document.createElement("button");
+                button.textContent = labelText;
+                button.addEventListener("click", () => {
+                    A3API.SendAlert(`["button", "${labelText}"]`);
+                });
+                return button;
+            }
+
+            settingsData.forEach((item) => {
+                const [type, label, params] = item;
+                let element;
+                switch (type) {
+                    case "category":
+                        element = createCategory(label);
+                        break;
+                    case "slider":
+                        element = createSlider(label, params);
+                        break;
+                    case "checkbox":
+                        element = createCheckbox(label, params);
+                        break;
+                    case "button":
+                        element = createButton(label);
+                        break;
+                    default:
+                        console.warn("Unknown control type:", type);
+                        return;
+                }
+                container.appendChild(element);
+            });
+        }
+    </script>
+</body>
+</html>

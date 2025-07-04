@@ -1,10 +1,6 @@
 #include "includes.inc"
 params ["_target", "_caller"];
 
-if (cursorObject != _target) exitWith {
-    false
-};
-
 if (!alive _target) exitWith {
     false
 };

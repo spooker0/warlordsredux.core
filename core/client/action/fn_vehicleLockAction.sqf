@@ -17,21 +17,11 @@ private _lockActionId = _asset addAction [
 	},
 	[],
 	-97,
-	true,
+	false,
 	false,
 	"",
-	"alive _target && getPlayerUID _this == (_target getVariable ['BIS_WL_ownerAsset', '123']) && (cursorObject == _target || vehicle _this == _target)",
+	"[_target, _this] call WL2_fnc_lockActionEligibility",
 	50,
 	true
 ];
-
-[_asset, _lockActionId] spawn {
-    params ["_asset", "_lockActionId"];
-    while { alive _asset } do {
-		[_asset, _lockActionId] call WL2_fnc_vehicleLockUpdate;
-		if (locked _asset != 0) then {
-			_asset lock false;
-		};
-        sleep 1;
-    };
-};
+_asset setVariable ["WL2_lockActionId", _lockActionId];

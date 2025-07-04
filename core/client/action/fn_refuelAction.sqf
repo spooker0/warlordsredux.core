@@ -18,7 +18,7 @@ private _actionID = _asset addAction [
 	true,
 	false,
 	"",
-	"[_target, _this] call WL2_fnc_refuelActionEligibility",
+	"cursorTarget == _target && [_target, _this] call WL2_fnc_refuelActionEligibility",
 	WL_MAINTENANCE_RADIUS,
 	false
 ];

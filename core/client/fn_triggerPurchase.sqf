@@ -138,39 +138,6 @@ switch (_className) do {
         "RequestMenu_close" call WL2_fnc_setupUI;
         0 spawn WL2_fnc_orderCruiseMissile;
     };
-    case "PruneAssets": {
-        "RequestMenu_close" call WL2_fnc_setupUI;
-
-        0 spawn {
-            private _ownedVehicleVariable = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
-            private _allAssets = (missionNamespace getVariable [_ownedVehicleVariable, []]) select { alive _x };
-
-            private _listText = "Your assets<br/>";
-            {
-                private _asset = _x;
-
-                private _displayName = [_asset] call WL2_fnc_getAssetTypeName;
-                private _assetSector = BIS_WL_allSectors select { _asset inArea (_x getVariable "objectAreaComplete") };
-                private _assetLocation = if (count _assetSector > 0) then {
-                    (_assetSector # 0) getVariable ["WL2_name", str (mapGridPosition _asset)];
-                } else {
-                    mapGridPosition _asset;
-                };
-                _listText = _listText + format ["%1 @ %2<br/>", _displayName, _assetLocation];
-            } forEach _allAssets;
-            _listText = _listText + "Would you like to go through and delete some of them?";
-
-            private _result = [_listText, "Asset List", "Yes", "Cancel"] call BIS_fnc_guiMessage;
-
-            if (_result) then {
-                {
-                    sleep 0.2;
-                    private _asset = _x;
-                    _asset call WL2_fnc_deleteAssetFromMap;
-                } forEach _allAssets;
-            };
-        };
-    };
     case "RemoveUnits": {
         {
             deleteVehicle _x;

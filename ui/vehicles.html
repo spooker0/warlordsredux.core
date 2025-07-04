@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body,
+        html {
+            height: 100%;
+            text-align: center;
+        }
+
+        #game-data {
+            display: none;
+        }
+
+        .vehicle-menu-wrapper {
+            display: inline-block;
+            width: 80%;
+            height: 60%;
+            max-width: 1000px;
+            border-radius: 10px;
+            border: 2px solid #444;
+            margin-top: 10%;
+            background-color: #2a2a2a;
+            /* Prevents background bleed */
+        }
+
+        .menu-title {
+            background-color: #222;
+            color: #fff;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 2px solid #444;
+        }
+
+        .vehicle-menu {
+            width: 100%;
+            height: calc(100% - 60px);
+            font-size: 0;
+        }
+
+        .panel {
+            display: inline-block;
+            vertical-align: top;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+            font-size: 16px;
+            /* Reset after font-size: 0 */
+            background-color: #2a2a2a;
+            color: white;
+            overflow-anchor: none;
+            scrollbar-color: #444444 #2a2a2a;
+            scrollbar-width: thin;
+        }
+
+        .vehicle {
+            background-color: #3a3a3a;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            text-align: left;
+            display: inline-block;
+            width: 100%;
+            line-height: 24px;
+            font-size: 14px;
+        }
+
+        .vehicle span {
+            vertical-align: middle;
+        }
+
+        button {
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            vertical-align: middle;
+            margin-left: 10px;
+            float: right;
+            cursor: pointer;
+        }
+
+        .remove-button,
+        .lock-button,
+        .kick-button {
+            background-color: #ff6666;
+        }
+
+        .remove-button:hover,
+        .lock-button:hover,
+        .kick-button:hover {
+            background-color: #aa5555;
+        }
+
+        .connect-button,
+        .rearm-button,
+        .repair-button,
+        .refuel-button {
+            background-color: #66cc66;
+        }
+
+        .connect-button:hover,
+        .rearm-button:hover,
+        .repair-button:hover,
+        .refuel-button:hover {
+            background-color: #55aa55;
+        }
+
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="game-data"></div>
+    <div class="vehicle-menu-wrapper">
+        <div class="menu-title">Vehicle Manager</div>
+        <div class="vehicle-menu">
+            <div class="panel"></div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('wheel', function (e) {
+            const el = document.elementFromPoint(e.clientX, e.clientY);
+            if (el && el.closest('.panel')) {
+                el.closest('.panel').scrollTop += e.deltaY;
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        function updateData() {
+            const gameDataEl = document.getElementById('game-data');
+            const gameData = JSON.parse(gameDataEl.textContent || '{}');
+
+            const panel = document.querySelector('.panel');
+            panel.innerHTML = '';
+
+            if (!gameData || !gameData.length) {
+                panel.innerHTML = '<div>No vehicles belonging to player found. Buy vehicles using the buy menu.</div>';
+                return;
+            }
+
+            gameData.forEach(vehicle => {
+                const vehicleDiv = document.createElement('div');
+                vehicleDiv.className = 'vehicle';
+                vehicleDiv.dataset.vehicleId = vehicle[0];
+                vehicleDiv.innerHTML = `<span class="vehicle-name">${vehicle[1]}</span>`;
+
+                const vehicleOptions = vehicle[2];
+                vehicleOptions.forEach(optionId => {
+                    let optionClass = "";
+                    let optionText = "";
+                    if (optionId === 'remove') {
+                        optionClass = 'remove-button';
+                        optionText = 'REMOVE';
+                    } else if (optionId === 'lock') {
+                        optionClass = 'lock-button';
+                        optionText = 'LOCK';
+                    } else if (optionId === 'kick') {
+                        optionClass = 'kick-button';
+                        optionText = 'KICK ALL';
+                    } else if (optionId === 'connect') {
+                        optionClass = 'connect-button';
+                        optionText = 'CONNECT';
+                    } else if (optionId === 'rearm') {
+                        optionClass = 'rearm-button';
+                        optionText = 'REARM';
+                    } else if (optionId === 'repair') {
+                        optionClass = 'repair-button';
+                        optionText = 'REPAIR';
+                    } else if (optionId === 'refuel') {
+                        optionClass = 'refuel-button';
+                        optionText = 'REFUEL';
+                    }
+
+                    const button = document.createElement('button');
+                    button.className = optionClass;
+                    button.textContent = optionText;
+
+                    button.addEventListener('click', () => {
+                        A3API.SendAlert(`["${vehicle[0]}", "${optionId}"]`);
+                    });
+
+                    vehicleDiv.appendChild(button);
+                });
+
+                panel.appendChild(vehicleDiv);
+            });
+        }
+    </script>
+</body>
+
+</html>

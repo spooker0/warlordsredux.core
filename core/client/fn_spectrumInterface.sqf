@@ -86,8 +86,7 @@ addMissionEventHandler ["Draw3D", {
         sleep 0.2;
 
         WL_SpectrumInterface = currentWeapon player == "hgun_esd_01_F" &&
-            vehicle player == player &&
-            isNull (getConnectedUAVUnit player) &&
+            cameraOn == player &&
             alive player && lifeState player != "INCAPACITATED";
 
         if (!WL_SpectrumInterface) then {

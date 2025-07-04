@@ -12,7 +12,7 @@ _index = _asset addAction [
 	},
 	[],
 	5,
-	true,
+	false,
 	false,
 	"",
 	"alive _target && ([_target, _this, ""full""] call WL2_fnc_accessControl) # 0 && vehicle _this == _this",
