@@ -4,6 +4,8 @@ params ["_key"];
 private _targetDisplay = uiNamespace getVariable ["RscWLGPSTargetingMenu", displayNull];
 if (isNull _targetDisplay) exitWith {};
 
+private _texture = _targetDisplay displayCtrl 5502;
+
 private _toggle = false;
 if (_key == DIK_HOME || _key == DIK_END) then {
     _toggle = true;
@@ -28,7 +30,6 @@ if (_toggle) exitWith {
         cameraOn setVariable ["DIS_gpsCord", _existingCord];
     };
 
-    private _texture = _targetDisplay displayCtrl 5001;
     [_texture] call DIS_fnc_sendGPSData;
     playSoundUI ["a3\ui_f\data\sound\rsccombo\soundexpand.wss", 2];
 };
@@ -73,7 +74,6 @@ if (count _newCord >= 6) then {
     cameraOn setVariable ["DIS_selectionIndex", 0];
 };
 
-private _texture = _targetDisplay displayCtrl 5001;
 [_texture] call DIS_fnc_sendGPSData;
 playSoundUI ["a3\ui_f\data\sound\rsccombo\soundexpand.wss", 2];
 

@@ -14,6 +14,7 @@ private _actionID = _asset addAction [
             playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Repair.wss", _asset, false, getPosASL _asset, 2, 1, 75];
             [toUpper localize "STR_A3_WL_popup_asset_repaired"] spawn WL2_fnc_smoothText;
             _asset setVariable ["WL2_nextRepair", serverTime + WL_COOLDOWN_REPAIR, true];
+            _asset setVariable ["WL2_demolitionHealth", 10, true];
 
             ["TaskRepairVehicle"] call WLT_fnc_taskComplete;
         } else {

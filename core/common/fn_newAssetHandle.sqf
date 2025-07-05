@@ -343,6 +343,10 @@ if (_asset isKindOf "Man") then {
 		[_asset] remoteExec ["DIS_fnc_setupAdvancedSam", 0, true];
 	};
 
+	if (WL_ASSET(_assetActualType, "hasLoal", 0) > 0) then {
+		[_asset] remoteExec ["DIS_fnc_setupLoal", 0, true];
+	};
+
 	// if (WL_ASSET(_assetActualType, "hasSmokeCurtain", 0) > 0) then {
 	// 	_asset setVariable ['WL2_smokeCurtains', 2, true];
 	// 	[_asset] remoteExec ["WL2_fnc_smokeCurtainAction", 0, true];

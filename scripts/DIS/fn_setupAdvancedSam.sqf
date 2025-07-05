@@ -15,7 +15,7 @@ while { alive _asset } do {
 			"samtarget" cutRsc ["RscWLSamTargetingMenu", "PLAIN", -1, true, true];
 			_display = uiNamespace getVariable "RscWLSamTargetingMenu";
 		};
-		private _texture = _display displayCtrl 5001;
+		private _texture = _display displayCtrl 5502;
 		// _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
 		_texture ctrlAddEventHandler ["PageLoaded", {

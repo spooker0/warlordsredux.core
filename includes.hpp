@@ -30,6 +30,5 @@ import ScrollBar;
 #include "scripts\MENU\ui.hpp"
 #include "scripts\PERF\ui.hpp"
 #include "scripts\POLL\ui.hpp"
-#include "scripts\SQD\ui.hpp"
 #include "scripts\WLC\ui.hpp"
 #include "scripts\WLM\ui.hpp"

@@ -83,3 +83,17 @@ class WL_MapButtonDisplay {
 class WLRscButtonMenu: RscButtonMenu {
 	soundClick[] = {"", 0, 1};
 };
+
+class RscWLBrowserMenu {
+	idd = 5500;
+	class controls {
+		class RscWLBrowserMenu_Texture: RscText {
+			type = 106;
+			idc = 5501;
+			x = safeZoneX;
+			y = safeZoneY;
+			w = safeZoneW;
+			h = safeZoneH;
+		};
+	};
+};

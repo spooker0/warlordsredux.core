@@ -42,10 +42,12 @@ class CfgFunctions {
 			class maneuver {};
 			class missileCamera {};
 			class remoteMunition {};
+			class seekTerminal {};
 			class sendGPSData {};
 			class sendTargetData {};
 			class setupAdvancedSam {};
 			class setupExtendedSam {};
+			class setupLoal {};
 			class setupSead {};
 			class setupGPSMunition {};
 			class setupRemoteMenu {};
@@ -194,13 +196,10 @@ class CfgFunctions {
 			class dazzlerToggle {};
 			class dazzlerUpdate {};
 			class demolishAction {};
-			class demolishChargeAction {};
 			class demolishEligibility {};
 			class deployableAddAction {};
 			class deployableEligibility {};
 			class deployCrateAction {};
-			class disarmAction {};
-			class disarmEligibility {};
 			class jammerAction {};
 			class jammerToggle {};
 			class jammerUpdate {};

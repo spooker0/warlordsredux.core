@@ -18,7 +18,15 @@ private _vehicleInfoText = toJSON (
         } else {
             mapGridPosition _vehicle;
         };
-        private _vehicleName = format ["%1 @ %2", _displayName, _assetLocation];
+        private _vehicleMaxAps = _vehicle call APS_fnc_getMaxAmmo;
+        private _apsAmmo = if (_vehicleMaxAps > 0) then {
+            private _actualApsAmmo = _vehicle getVariable ["apsAmmo", 0];
+            format ["(APS: %1/%2)", _actualApsAmmo, _vehicleMaxAps]
+        } else {
+            ""
+        };
+
+        private _vehicleName = format ["%1 @ %2 %3", _displayName, _assetLocation, _apsAmmo];
 
         private _availableActions = ["remove"];
 

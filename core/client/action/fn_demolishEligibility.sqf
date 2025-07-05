@@ -1,5 +1,5 @@
 #include "includes.inc"
-if (vehicle player != player) exitWith { false };
+if (cameraOn != player) exitWith { false };
 if (isNull cursorObject) exitWith { false };
 
 private _demolishTarget = cursorObject;
@@ -9,7 +9,7 @@ if (player distance2D _demolishTarget > 10) exitWith { false };
 private _strongholdSector = _demolishTarget getVariable ["WL_strongholdSector", objNull];
 if (isNull _strongholdSector) exitWith { true }; // Not a stronghold
 private _sectorOwner = _strongholdSector getVariable ["BIS_WL_owner", independent];
-if (_sectorOwner == BIS_WL_playerSide) exitWith { false };
+// if (_sectorOwner == BIS_WL_playerSide) exitWith { false };
 
 private _strongholdMarker = _strongholdSector getVariable ["WL_strongholdMarker", ""];
 private _nearbyEnemies = _strongholdMarker nearEntities [["Man"], false, true, false];

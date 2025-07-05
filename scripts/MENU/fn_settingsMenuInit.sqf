@@ -1,9 +1,9 @@
 #include "includes.inc"
-private _display = findDisplay 5000;
+private _display = findDisplay 5500;
 if (isNull _display) then {
-    _display = createDialog ["RscWLSettingsMenu", true];
+    _display = createDialog ["RscWLBrowserMenu", true];
 };
-private _texture = _display displayCtrl 5001;
+private _texture = _display displayCtrl 5501;
 _texture ctrlWebBrowserAction ["LoadFile", "src\ui\settings.html"];
 
 _texture ctrlAddEventHandler ["JSDialog", {

@@ -98,4 +98,10 @@ switch (_conditionName) do {
     case "deleteFOB": {
         _target getVariable ["WL2_forwardBasePlacer", false];
     };
+    case "repairFOB": {
+        alive _target &&
+        _target getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide &&
+        _target getVariable ["WL2_forwardBaseSupplies", -1] >= WL_FOB_REPAIR_COST &&
+        _target getVariable ["WL2_demolitionHealth", 10] < 10
+    };
 };

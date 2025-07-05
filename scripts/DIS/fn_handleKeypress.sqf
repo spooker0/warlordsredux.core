@@ -27,7 +27,7 @@ if (_delta != 0) then {
     private _newSelectedTargetId = _targetList select _newIndex select 0;
     cameraOn setVariable ["WL2_selectedTarget", objectFromNetId _newSelectedTargetId];
 
-    private _texture = _targetDisplay displayCtrl 5001;
+    private _texture = _targetDisplay displayCtrl 5502;
 
     _targetList = [_targetListFunction, _defaultOption] call DIS_fnc_getTargetList;
     [_texture, _targetList] call DIS_fnc_sendTargetData;

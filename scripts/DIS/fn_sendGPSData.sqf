@@ -7,20 +7,29 @@ private _gpsCord = cameraOn getVariable ["DIS_gpsCord", ""];
 private _inRangeCalculation = [cameraOn] call DIS_fnc_calculateInRange;
 
 private _gpsBombs = cameraOn getVariable ["DIS_gpsBombs", []];
-_gpsBombs = _gpsBombs select { alive _x };
-private _bombsText = toJSON (
-    _gpsBombs apply {
-        private _projectile = _x;
-        private _terminalTarget = _projectile getVariable ["DIS_terminalTarget", ""];
-        if (_terminalTarget == "") then {
-            private _target = _projectile getVariable ["DIS_targetCoordinates", [0, 0, 0]];
-            private _distance = _projectile distance _target;
-            format ["FLY [%1 KM]", (_distance / 1000) toFixed 1]
-        } else {
-            format ["TARGET %1", toUpper _terminalTarget]
-        };
-    }
-);
+private _bombsTextArray = [];
+{
+    private _projectile = _x;
+    if (!alive _projectile) then {
+        continue;
+    };
+
+    private _posAGL = _projectile modelToWorld [0, 0, 0];
+    if (_posAGL select 2 < 50) then {
+        continue;
+    };
+
+    private _terminalTarget = _projectile getVariable ["DIS_terminalTarget", ""];
+    if (_terminalTarget == "") then {
+        private _target = _projectile getVariable ["DIS_targetCoordinates", [0, 0, 0]];
+        private _distance = _projectile distance _target;
+        _bombsTextArray pushBack format ["FLY [%1 KM]", (_distance / 1000) toFixed 1];
+    } else {
+        _bombsTextArray pushBack format ["TARGET %1", toUpper _terminalTarget];
+    };
+} forEach _gpsBombs;
+private _bombsText = toJSON _bombsTextArray;
+
 _bombsText = _texture ctrlWebBrowserAction ["ToBase64", _bombsText];
 
 private _script = format [

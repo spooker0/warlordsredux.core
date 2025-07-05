@@ -33,7 +33,6 @@ class CfgRemoteExec {
 		class WL2_fnc_cruiseMissileWarning {allowedTargets = 0;};
 		class WL2_fnc_dazzlerAction {allowedTargets = 1;};
 		class WL2_fnc_demolishAction {allowedTargets = 0;};
-		class WL2_fnc_demolishChargeAction {allowedTargets = 0;};
 		class WL2_fnc_demolishComplete {allowedTargets = 0;};
 		class WL2_fnc_deployableAddAction {allowedTargets = 1;};
 		class WL2_fnc_deployCrateAction {allowedTargets = 1;};

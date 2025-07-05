@@ -1040,7 +1040,7 @@ class RscTitles {
 		class controls {
 			class RscWLGPSTargetingMenu_Texture: RscText {
 				type = 106;
-				idc = 5001;
+				idc = 5502;
 				x = safeZoneX;
 				y = safeZoneY;
 				w = safeZoneW;
@@ -1060,7 +1060,7 @@ class RscTitles {
 		class controls {
 			class RscWLSamTargetingMenu_Texture: RscText {
 				type = 106;
-				idc = 5001;
+				idc = 5502;
 				x = safeZoneX;
 				y = safeZoneY;
 				w = safeZoneW;
@@ -1080,7 +1080,7 @@ class RscTitles {
 		class controls {
 			class RscWLSeadTargetingMenu_Texture: RscText {
 				type = 106;
-				idc = 5001;
+				idc = 5502;
 				x = safeZoneX;
 				y = safeZoneY;
 				w = safeZoneW;

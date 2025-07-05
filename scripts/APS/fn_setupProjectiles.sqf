@@ -94,6 +94,6 @@ _this addEventHandler ["Fired", {
 
 	private _projectileTerminal = _projectileConfig getOrDefault ["terminal", false];
 	if (_projectileTerminal) then {
-		[_projectile] spawn DIS_fnc_terminalGuidance;
+		[_projectile, _unit] spawn DIS_fnc_terminalGuidance;
 	};
 }];

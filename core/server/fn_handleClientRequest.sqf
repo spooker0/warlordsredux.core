@@ -53,6 +53,7 @@ private _actionCost = switch (_action) do {
 	case "controlCollaborator" : { 2000 };
 	case "camouflage" : { 500 };
 	case "cruiseMissiles" : { 15000 };
+	case "repairFOB" : { 500 };
 	default { 0 };
 };
 

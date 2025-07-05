@@ -15,6 +15,7 @@ missionNamespace setVariable ["WL2_forwardBases", _currentForwardBases];
 _forwardBase setVariable ["WL2_forwardBaseTime", _endTime];
 _forwardBase setVariable ["WL_spawnedAsset", true];
 _forwardBase setVariable ["WL2_forwardBaseSupplies", -1];
+_forwardBase setVariable ["WL2_demolitionHealth", 10];
 
 waitUntil {
     sleep 1;

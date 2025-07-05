@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_projectile", "_unit", ["_fov", 0.75], ["_defaultOpticsMode", -1]];
+params ["_projectile", "_unit"];
 
 if (isDedicated) exitWith {};
 
@@ -22,6 +22,6 @@ if (!_disableCamera && !_isDisconnected && !_pipDisabled) then {
         "APS_Camera" cutFadeOut 0;
     };
 
-    private _missileCamera = [_projectile, _unit, _fov, _defaultOpticsMode] spawn DIS_fnc_missileCamera;
+    private _missileCamera = [_projectile, _unit] spawn DIS_fnc_missileCamera;
     uiNamespace setVariable ["APS_Camera_Process", _missileCamera];
 };

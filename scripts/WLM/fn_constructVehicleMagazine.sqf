@@ -161,7 +161,7 @@ private _assetAmmoOverrides = WL_ASSET(_assetActualType, "ammoOverrides", []);
                     private _magazineName = if (count _actualAmmoType == 0) then {
                         [_x] call WL2_fnc_getMagazineName;
                     } else {
-                        _actualAmmoType # 1 # 1;
+                        [_x, _actualAmmoType # 1 # 1] call WL2_fnc_getMagazineName;
                     };
 
                     private _selectBoxItem = _selectBox lbAdd _magazineName;

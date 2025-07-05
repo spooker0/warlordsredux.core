@@ -254,6 +254,26 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         ]
     ] call WL2_fnc_addTargetMapButton;
 
+    private _repairFOBExecute = {
+        params ["_asset"];
+        private _repairCost = WL_FOB_REPAIR_COST;
+        private _supplyFinal = (_asset getVariable ["WL2_forwardBaseSupplies", -1]) - _repairCost;
+        _asset setVariable ["WL2_forwardBaseSupplies", _supplyFinal, true];
+        _asset setVariable ["WL2_demolitionHealth", 10, true];
+        [player, "repairFOB"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+    };
+    [
+        "REPAIR BASE",
+        _repairFOBExecute,
+        true,
+        "repairFOB",
+        [
+            500,
+            "RepairFOB",
+            "Fast Travel"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
+
 #if WL_STRONGHOLD_DEBUG
     // Fast Travel FOB Test
     private _fastTravelFOBTestExecute = {

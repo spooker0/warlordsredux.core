@@ -375,7 +375,6 @@ removeGoggles player;
 
 call WL2_fnc_buyMenuAction;
 call WL2_fnc_demolishAction;
-call WL2_fnc_disarmAction;
 call WL2_fnc_rappelAction;
 0 spawn WL2_fnc_createInfoMarkers;
 0 spawn WL2_fnc_drawRadarName;

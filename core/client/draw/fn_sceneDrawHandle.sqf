@@ -75,7 +75,7 @@ addMissionEventHandler ["Draw3D", {
 			if (vehicle _x == _x) then {
 				(_x modelToWorldVisual (_x selectionPosition "head")) vectorAdd [0,0,0.6];
 			} else {
-				getPosATLVisual _x
+				_x modelToWorldVisual [0, 0, 0.6]
 			},
 			0,
 			0,

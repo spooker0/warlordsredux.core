@@ -12,22 +12,23 @@ if (_unit isKindOf "Air") then {
 };
 
 private _originalTarget = missileTarget _projectile;
+
+private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
+private _hasLoal = WL_ASSET(_assetActualType, "hasLoal", 0) > 0;
+
+if (_hasLoal) then {
+    private _selectedTarget = _unit getVariable ["WL2_selectedTarget", objNull];
+    if (!isNull _selectedTarget) then {
+        _projectile setMissileTarget [_selectedTarget, true];
+        _originalTarget = _selectedTarget;
+    };
+};
+
 private _originalPosition = getPosASL _unit;
 [_projectile, _originalTarget, _unit, _samMaxDistance, _distanceBeforeNotch] spawn {
     params ["_projectile", "_originalTarget", "_unit", "_samMaxDistance", "_distanceBeforeNotch"];
     private _startTime = serverTime;
     private _isLOAL = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "autoSeekTarget") == 1;
-
-    private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
-    private _allowLoal = WL_ASSET(_assetActualType, "allowLoal", 0) > 0;
-
-    if (_allowLoal) then {
-        waitUntil {
-            sleep 0.1;
-            !isNull (missileTarget _projectile) || !(alive _projectile) || (serverTime - _startTime > 10)
-        };
-        _originalTarget = missileTarget _projectile;
-    };
 
     while { alive _projectile } do {
         sleep 0.1;

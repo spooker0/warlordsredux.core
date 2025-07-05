@@ -1,11 +1,13 @@
 #include "includes.inc"
 params ["_asset"];
 
+_asset setVariable ["DIS_advancedSamRange", 30000];
+
 private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
 private _projectileAmmoOverrides = WL_ASSET(_assetActualType, "ammoOverrides", []);
 private _projectileConfig = APS_projectileConfig;
 
-private _gpsReady = {
+private _bvrReady = {
 	if (cameraOn != _asset) exitWith {
 		false;
 	};
@@ -28,22 +30,22 @@ private _gpsReady = {
 		_ammo = _overrideAmmo # 0;
 	};
 	private _ammoConfig = _projectileConfig getOrDefault [_ammo, createHashMap];
-	_ammoConfig getOrDefault ["gps", false];
+	_ammoConfig getOrDefault ["sam", false];
 };
 
 private _previousEligible = false;
 while { alive _asset } do {
 	sleep 0.5;
-	private _eligible = call _gpsReady;
+	private _eligible = call _bvrReady;
 	if (_eligible == _previousEligible) then {
 		continue;
 	};
 
 	if (_eligible) then {
-		private _display = uiNamespace getVariable ["RscWLGPSTargetingMenu", displayNull];
+		private _display = uiNamespace getVariable ["RscWLSamTargetingMenu", displayNull];
 		if (isNull _display) then {
-			"gpstarget" cutRsc ["RscWLGPSTargetingMenu", "PLAIN", -1, true, true];
-			_display = uiNamespace getVariable "RscWLGPSTargetingMenu";
+			"samtarget" cutRsc ["RscWLSamTargetingMenu", "PLAIN", -1, true, true];
+			_display = uiNamespace getVariable "RscWLSamTargetingMenu";
 		};
 		private _texture = _display displayCtrl 5502;
 		// _texture ctrlWebBrowserAction ["OpenDevConsole"];
@@ -53,15 +55,16 @@ while { alive _asset } do {
 			[_texture] spawn {
 				params ["_texture"];
 				while { !isNull _texture } do {
-					[_texture] call DIS_fnc_sendGPSData;
-					sleep 0.5;
+					private _targetList = [DIS_fnc_getSamTarget, "NO TARGET"] call DIS_fnc_getTargetList;
+					[_texture, _targetList] call DIS_fnc_sendTargetData;
+					sleep 1;
 				};
 			};
 		}];
 	} else {
-		"gpstarget" cutText ["", "PLAIN"];
+		"samtarget" cutText ["", "PLAIN"];
 	};
 
 	_previousEligible = _eligible;
 };
-"gpstarget" cutText ["", "PLAIN"];
+"samtarget" cutText ["", "PLAIN"];

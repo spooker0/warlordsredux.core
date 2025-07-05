@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_projectile", "_unit", "_fov", "_defaultOpticsMode"];
+params ["_projectile", "_unit"];
 
 private _originalPipViewDistance = getPiPViewDistance;
 setPiPViewDistance viewDistance;
@@ -36,16 +36,23 @@ private _lastKnownPosition = position _unit;
 private _lastKnownDirection = _projectile modelToWorld [0, 1000, 0];
 private _startTime = time;
 
-_camera camSetFov _fov;
-_camera camSetTarget _projectile;
-if (_defaultOpticsMode == 3) then {
-    _camera camSetRelPos [0, 1, 0];
+if (_projectile isKindOf "SubmunitionBase") then {
+    [_camera, _projectile] spawn {
+        params ["_camera", "_projectile"];
+        while { alive _camera && alive _projectile } do {
+            _camera setPosASL (_projectile modelToWorldWorld [0, 20, 0]);
+            _camera setVectorDirAndUp [vectorDir _projectile, vectorUp _projectile];
+            sleep 0.001;
+        };
+    };
 } else {
+    _camera camSetFov 0.75;
+    _camera camSetTarget _projectile;
     _camera camSetRelPos [0, -3, 0.4];
-};
-_camera camCommit 0;
+    _camera camCommit 0;
 
-_camera attachTo [_projectile];
+    _camera attachTo [_projectile];
+};
 
 uiNamespace setVariable ["APS_Camera_Projectile", _projectile];
 private _targetDrawer = addMissionEventHandler ["Draw3D", {
@@ -76,18 +83,9 @@ private _targetDrawer = addMissionEventHandler ["Draw3D", {
     ];
 }];
 
-[_camera, _titleBar, _pictureControl, _defaultOpticsMode, _defaultTitlePosition, _defaultPicturePosition] spawn {
-    params ["_camera", "_titleBar", "_pictureControl", "_defaultOpticsMode", "_defaultTitlePosition", "_defaultPicturePosition"];
-    private _opticsMode = _defaultOpticsMode;
-    if (_opticsMode == 3) exitWith {
-        _titleBar ctrlShow false;
-        _pictureControl ctrlShow false;
-        _titleBar ctrlCommit 0;
-        _pictureControl ctrlCommit 0;
-    };
-    if (_opticsMode == -1) then {
-        _opticsMode = missionNamespace getVariable ["DIS_missileCameraOpticsMode", 0];
-    };
+[_camera, _titleBar, _pictureControl, _defaultTitlePosition, _defaultPicturePosition] spawn {
+    params ["_camera", "_titleBar", "_pictureControl", "_defaultTitlePosition", "_defaultPicturePosition"];
+    private  _opticsMode = missionNamespace getVariable ["DIS_missileCameraOpticsMode", 0];
     private _changed = true;
     while { !isNull _camera } do {
         if (inputAction "opticsMode" > 0) then {
@@ -127,7 +125,7 @@ private _targetDrawer = addMissionEventHandler ["Draw3D", {
 while { !_stop } do {
     sleep 0.5;
 
-    private _projectilePosition = position _projectile;
+    private _projectilePosition = getPosASL _projectile;
     private _projectileDirection = _projectile modelToWorld [0, 1000, 0];
     private _isDestroyed = _projectilePosition isEqualTo [0, 0, 0] || _projectileDirection isEqualTo [0, 0, 0];
     private _disconnected = unitIsUAV _unit && isNull (getConnectedUAV player);
