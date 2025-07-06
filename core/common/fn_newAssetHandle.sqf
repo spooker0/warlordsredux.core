@@ -86,6 +86,7 @@ if (_asset isKindOf "Man") then {
 	[_asset] remoteExec ["WL2_fnc_repairAction", 0, true];
 	[_asset] remoteExec ["WL2_fnc_refuelAction", 0, true];
 	[_asset] remoteExec ["WL2_fnc_claimAction", 0, true];
+	[_asset] remoteExec ["WL2_fnc_ammoConfigDetection", 0, true];
 
 	_asset setVariable ["WL2_nextRepair", 0, true];
 	_asset setVariable ["BIS_WL_ownerAssetSide", _side, true];

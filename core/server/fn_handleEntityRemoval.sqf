@@ -28,14 +28,17 @@ if (isNull _responsiblePlayer || { _responsiblePlayer == _unit }) then {
     _responsiblePlayer = _lastHitter;
 };
 
+private _scoreboard = missionNamespace getVariable ["WL2_scoreboardData", createHashMap];
+private _victimEntry = _scoreboard getOrDefault [getPlayerUID _unit, createHashMap];
+private _killerEntry = _scoreboard getOrDefault [getPlayerUID _responsiblePlayer, createHashMap];
+
 if (_isUnitPlayer && _unit isKindOf "Man") then {
-    _unit addPlayerScores [0, 0, 0, 0, 1];
+    _victimEntry set ["deaths", (_victimEntry getOrDefault ["deaths", 0]) + 1];
     private _killMessage = if (isPlayer [_responsiblePlayer]) then {
         private _ffText = if (side group _unit == side group _responsiblePlayer) then {
-            _responsiblePlayer addPlayerScores [-1, 0, 0, 0, 0];
+            _killerEntry set ["kills", (_killerEntry getOrDefault ["kills", 0]) - 2];
             " (Friendly fire)"
         } else {
-            _responsiblePlayer addPlayerScores [1, 0, 0, 0, 0];
             ""
         };
         format["%1 was killed by %2.%3", name _unit, name _responsiblePlayer, _ffText];
@@ -59,7 +62,13 @@ private _killerKillValue = _killerStats getOrDefault ["killValue", 0];
 if (_unitCost > 0) then {
     _killerStats set ["killValue", _killerKillValue + _unitCost];
     _stats set [_killerActualType, _killerStats];
+
+    [_unit, _assetActualType, _killerEntry] call WL2_fnc_setScoreboardEntry;
 };
+
+_scoreboard set [getPlayerUID _unit, _victimEntry];
+_scoreboard set [getPlayerUID _responsiblePlayer, _killerEntry];
+missionNamespace setVariable ["WL2_scoreboardData", _scoreboard];
 
 if (!isNull _responsiblePlayer && { isPlayer [_responsiblePlayer] }) then {
     _unit setVariable ["WL_lastHitter", objNull];

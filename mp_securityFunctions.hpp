@@ -24,6 +24,7 @@ class CfgRemoteExec {
 		class MENU_fnc_reportPlayer {allowedTargets = 2;};
 		class POLL_fnc_selectOption {allowedTargets = 0;};
 		class SQD_fnc_server {allowedTargets = 2;};
+		class WL2_fnc_ammoConfigDetection {allowedTargets = 0;};
 		class WL2_fnc_attachDetach {allowedTargets = 0;};
 		class WL2_fnc_catapultAction {allowedTargets = 0;};
 		class WL2_fnc_claimAction {allowedTargets = 1;};
@@ -37,10 +38,12 @@ class CfgRemoteExec {
 		class WL2_fnc_deployableAddAction {allowedTargets = 1;};
 		class WL2_fnc_deployCrateAction {allowedTargets = 1;};
 		class WL2_fnc_forgiveTeamkill {allowedTargets = 2;};
+		class WL2_fnc_generateScoreboard {allowedTargets = 0;};
 		class WL2_fnc_handleClientRequest {allowedTargets = 2;};
 		class WL2_fnc_handleEntityRemoval {allowedTargets = 2;};
 		class WL2_fnc_hideObjectOnAll {allowedTargets = 0;};
 		class WL2_fnc_jammerAction {allowedTargets = 0;};
+		class WL2_fnc_killNotify {allowedTargets = 0;};
 		class WL2_fnc_killRewardHandle {allowedTargets = 2;};
 		class WL2_fnc_lagMessageHandler {allowedTargets = 2;};
 		class WL2_fnc_missileDestroy {allowedTargets = 2;};

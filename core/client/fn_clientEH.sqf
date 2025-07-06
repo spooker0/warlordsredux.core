@@ -30,6 +30,22 @@ addMissionEventHandler ["HandleChatMessage", {
 		[_key] call DIS_fnc_handleGPSKeypress;
 	}];
 
+	_display displayAddEventHandler ["KeyDown", {
+		params ["_display", "_key", "_shift", "_ctrl", "_alt"];
+		if (_shift) exitWith {};
+		if (_ctrl) exitWith {};
+		if (_alt) exitWith {};
+		if (_key in actionKeys "networkStats") then {
+			0 spawn WL2_fnc_scoreboard;
+		};
+		if (_key == DIK_ESCAPE) then {
+			if !(isNull (uiNamespace getVariable "RscWLScoreboardMenu")) then {
+				"scoreboard" cutText ["", "PLAIN"];
+				true;
+			};
+		};
+	}];
+
 	// intentionally separate handler
 	_display displayAddEventHandler ["KeyDown", {
 		private _key = _this # 1;

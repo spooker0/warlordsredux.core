@@ -17,11 +17,6 @@ private _responsiblePlayerName = if (!isNull _responsiblePlayer) then {
 };
 
 private _isKillerAI = !(isPlayer _responsiblePlayer || isPlayer _killer) && _responsiblePlayerName != "???";
-private _isAIText = if (_isKillerAI) then {
-    "<t size='1.2'>&#160;&#160;[AI]</t>";
-} else {
-    "";
-};
 private _side = side group _unit;
 private _killerSide = side group _responsiblePlayer;
 if (_killerSide == sideUnknown) then {
@@ -96,82 +91,16 @@ private _detectSensorText = if (count _findDetection > 0) then {
     };
 };
 
-private _responsibleText = format ["<t size='1.7' color='%1'>%2 %3 %4</t>", _killerColor, _killerTeam, _responsiblePlayerName, _isAIText];
-
-private _killerVehicle = vehicle _killer;
-private _killerWeapon = currentWeapon _killer;
-
-private _deathDisplay = uiNamespace getVariable ["RscWLDeathDisplay", objNull];
-if (isNull _deathDisplay) then {
-	"DeathDisplay" cutRsc ["RscWLDeathDisplay", "PLAIN", -1, true, false];
-	_deathDisplay = uiNamespace getVariable "RscWLDeathDisplay";
-};
-
-private _killedByTitle = _deathDisplay displayCtrl 7220;
-private _deathDisplayTitle = _deathDisplay displayCtrl 7210;
-private _sensorDisplayTitle = _deathDisplay displayCtrl 7221;
-
-private _deathDisplayBackground = _deathDisplay displayCtrl 7211;
-private _deathDisplayBackground2 = _deathDisplay displayCtrl 7212;
-private _deathDisplayBackground3 = _deathDisplay displayCtrl 7213;
-
-private _centerDisplayIcon = _deathDisplay displayCtrl 7214;
-private _centerDisplayText = _deathDisplay displayCtrl 7215;
-
-private _leftDisplayIcon = _deathDisplay displayCtrl 7216;
-private _leftDisplayText = _deathDisplay displayCtrl 7217;
-
-private _rightDisplayText = _deathDisplay displayCtrl 7218;
-private _rightDisplayText2 = _deathDisplay displayCtrl 7219;
-
-private _killedByText = format ["<t size='1.4'>%1</t>", localize "STR_A3_WL_killed_by"];
-_killedByTitle ctrlSetStructuredText parseText _killedByText;
-_killedByTitle ctrlShow true;
-
-_deathDisplayTitle ctrlSetStructuredText parseText _responsibleText;
-_deathDisplayTitle ctrlShow true;
-
-_sensorDisplayTitle ctrlSetStructuredText parseText _detectSensorText;
-_sensorDisplayTitle ctrlShow true;
-
-_deathDisplayBackground ctrlSetBackgroundColor [0, 0, 0, 0.9];
-_deathDisplayBackground2 ctrlSetBackgroundColor [0, 0, 0, 0.9];
-_deathDisplayBackground3 ctrlSetBackgroundColor [0, 0, 0, 0.9];
-
-private _centerDisplayIconText = if (vehicle _killer isKindOf "Man") then {
-    private _weaponIcon = getText (configfile >> "CfgWeapons" >> _killerWeapon >> "picture");
-    _weaponIcon;
+private _damageDone = if (alive _killer) then {
+    if (vehicle _killer isKindOf "Man") then {
+        damage _killer;
+    } else {
+        damage vehicle _killer;
+    };
 } else {
-    private _vehicleIcon = getText (configfile >> "CfgVehicles" >> typeOf _killerVehicle >> "picture"); // use spawned vehicle type
-    _vehicleIcon;
-};
-
-_centerDisplayIcon ctrlSetText _centerDisplayIconText;
-_centerDisplayIcon ctrlShow true;
-
-private _centerDisplayKillerText = if (vehicle _killer isKindOf "Man") then {
-    private _weaponText = getText (configfile >> "CfgWeapons" >> _killerWeapon >> "displayName");
-    _weaponText;
-} else {
-    private _vehicleText = [_killerVehicle] call WL2_fnc_getAssetTypeName;
-    _vehicleText;
-};
-
-_centerDisplayText ctrlSetText _centerDisplayKillerText;
-_centerDisplayText ctrlShow true;
-
-private _damageDone = if (vehicle _killer isKindOf "Man") then {
-    damage _killer;
-} else {
-    damage vehicle _killer;
+    1;
 };
 private _health = round ((1 - _damageDone) * 100);
-
-_leftDisplayText ctrlSetText format ["%1 %2%3", localize "STR_A3_WL_health", _health, "%"];
-_leftDisplayText ctrlShow true;
-
-_leftDisplayIcon ctrlSetTextColor [1, 1 - _damageDone, 1 - _damageDone, 1];
-_leftDisplayIcon ctrlShow true;
 
 private _distance = round (_killer distance _unit);
 private _distanceText = switch (true) do {
@@ -188,54 +117,101 @@ private _distanceText = switch (true) do {
         "DISTANT";
     };
 };
-private _distanceItemText = format ["<t size='1' color='#ffffff'>%1</t><br/><t size='1.5' color='#00ff00' shadow='0' font='RobotoCondensedBold'>%2</t>", localize "STR_A3_WL_distance", _distanceText];
 
-_rightDisplayText ctrlSetStructuredText parseText _distanceItemText;
-_rightDisplayText ctrlShow true;
+private _killerVehicle = vehicle _killer;
+private _killerWeapon = currentWeapon _killer;
 
-missionNamespace setVariable ["WL_killsInRow", 0];
-private _lastScore = missionNamespace getVariable ["WL_lastScore", 0];
-private _score = score player;
-private _scoreChange = _score - _lastScore;
-missionNamespace setVariable ["WL_lastScore", _score];
-
-private _scoreText = format ["<t size='1' color='#ffffff'>%1</t><br/><t size='1.8' color='#00ff00' shadow='0' font='RobotoCondensedBold'>%2</t>", localize "STR_A3_WL_score_in_life", _scoreChange];
-_rightDisplayText2 ctrlSetStructuredText parseText _scoreText;
-_rightDisplayText2 ctrlShow true;
-
-sleep 5;
-
-waitUntil {
-    sleep 0.2;
-    lifeState player != "INCAPACITATED";
+private _killerText = if (vehicle _killer isKindOf "Man") then {
+    private _weaponText = getText (configfile >> "CfgWeapons" >> _killerWeapon >> "displayName");
+    _weaponText;
+} else {
+    private _vehicleText = [_killerVehicle] call WL2_fnc_getAssetTypeName;
+    _vehicleText;
 };
 
-_killedByTitle ctrlSetText "";
-_killedByTitle ctrlShow false;
+private _killerIcon = if (vehicle _killer isKindOf "Man") then {
+    private _weaponIcon = getText (configfile >> "CfgWeapons" >> _killerWeapon >> "picture");
+    _weaponIcon;
+} else {
+    private _vehicleIcon = getText (configfile >> "CfgVehicles" >> typeOf _killerVehicle >> "picture"); // use spawned vehicle type
+    _vehicleIcon;
+};
 
-_deathDisplayTitle ctrlSetText "";
-_deathDisplayTitle ctrlShow false;
+private _killerTextArray = toArray _killerText;
+{
+    if (_x == 160) then {
+        _killerTextArray set [_forEachIndex, 32];
+    };
+} forEach _killerTextArray;
+_killerText = toString _killerTextArray;
 
-_sensorDisplayTitle ctrlSetText "";
-_sensorDisplayTitle ctrlShow false;
+private _responsiblePlayerText = format ["%1 %2", _killerTeam, _responsiblePlayerName];
 
-_deathDisplayBackground ctrlSetBackgroundColor [0, 0, 0, 0];
-_deathDisplayBackground2 ctrlSetBackgroundColor [0, 0, 0, 0];
-_deathDisplayBackground3 ctrlSetBackgroundColor [0, 0, 0, 0];
+private _responsiblePlayerUid = if (!isNull _responsiblePlayer) then {
+    getPlayerUID _responsiblePlayer
+} else {
+    ""
+};
 
-_centerDisplayIcon ctrlSetText "";
-_centerDisplayIcon ctrlShow false;
+private _ratioText = "0 - 0";
+if (_responsiblePlayerUid != "") then {
+    private _killedByMap = missionNamespace getVariable ["WL2_killedBy", createHashMap];
+    private _timesKilledBy = _killedByMap getOrDefault [_responsiblePlayerUid, 0];
+    _timesKilledBy = _timesKilledBy + 1;
+    _killedByMap set [_responsiblePlayerUid, _timesKilledBy];
+    missionNamespace setVariable ["WL2_killedBy", _killedByMap];
 
-_centerDisplayText ctrlSetText "";
-_centerDisplayText ctrlShow false;
+    private _timesKilledMap = missionNamespace getVariable ["WL2_killed", createHashMap];
+    private _timesKilled = _timesKilledMap getOrDefault [_responsiblePlayerUid, 0];
 
-_leftDisplayIcon ctrlShow false;
+    _ratioText = format ["%1 - %2", _timesKilled, _timesKilledBy];
+};
 
-_leftDisplayText ctrlSetText "";
-_leftDisplayText ctrlShow false;
+private _badgeText = if (isPlayer _responsiblePlayer) then {
+    _responsiblePlayer getVariable ["WL_playerLevel", "Recruit"];
+} else {
+    "AI";
+};
 
-_rightDisplayText ctrlSetText "";
-_rightDisplayText ctrlShow false;
+private _gameData = [
+    _health,
+    _killerText,
+    _killerIcon regexReplace ["^\\", ""],
+    _distanceText,
+    _ratioText,
+    _detectSensorText,
+    _responsiblePlayerText,
+    _killerColor,
+    _badgeText
+];
 
-_rightDisplayText2 ctrlSetText "";
-_rightDisplayText2 ctrlShow false;
+uiNamespace setVariable ["WL2_deathInfoData", _gameData];
+
+private _display = uiNamespace getVariable ["RscWLDeathInfoMenu", displayNull];
+if (isNull _display) then {
+    "deathInfo" cutRsc ["RscWLDeathInfoMenu", "PLAIN", -1, true, true];
+    _display = uiNamespace getVariable "RscWLDeathInfoMenu";
+};
+private _texture = _display displayCtrl 5502;
+
+_texture ctrlAddEventHandler ["PageLoaded", {
+    params ["_texture"];
+    private _gameData = uiNamespace getVariable ["WL2_deathInfoData", []];
+
+    private _deathInfoText = toJSON _gameData;
+    _deathInfoText = _texture ctrlWebBrowserAction ["ToBase64", _deathInfoText];
+
+    private _script = format [
+        "const gameDataEl = document.getElementById('game-data'); gameDataEl.innerHTML = atob(""%1""); updateData();",
+        _deathInfoText
+    ];
+    _texture ctrlWebBrowserAction ["ExecJS", _script];
+}];
+
+waitUntil {
+    sleep 0.5;
+    private _scoreboard = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
+    (alive player && lifeState player != "INCAPACITATED") || !isNull _scoreboard
+};
+
+"deathInfo" cutText ["", "PLAIN"];

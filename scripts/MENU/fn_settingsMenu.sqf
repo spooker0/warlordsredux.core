@@ -35,7 +35,7 @@ while { alive player } do {
     private _thirdPersonDisabled = _settingsMap getOrDefault ["3rdPersonDisabled", false];
     if (_thirdPersonDisabled) then {
         if (cameraView == "EXTERNAL") then {
-            _currentVehicle switchCamera "Internal";
+            cameraOn switchCamera "Internal";
         };
     };
     private _playerThirdPersonDisabled = player getVariable ["WL2_3rdPersonDisabled", false];
@@ -44,7 +44,7 @@ while { alive player } do {
     };
 
     if (cameraView == "GROUP") then {
-        _currentVehicle switchCamera "Internal";
+        cameraOn switchCamera "Internal";
     };
 
     sleep 0.1;

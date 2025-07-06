@@ -71,3 +71,6 @@ call WL2_fnc_demolishAction;
 
 call POLL_fnc_pollAction;
 call WL2_fnc_afkAction;
+
+inGameUISetEventHandler ["PrevAction", "[true] call WL2_fnc_scoreboardScroll"];
+inGameUISetEventHandler ["NextAction", "[false] call WL2_fnc_scoreboardScroll"];

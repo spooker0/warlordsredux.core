@@ -1030,6 +1030,26 @@ class RscTitles {
 		};
 	};
 
+	class RscWLDeathInfoMenu {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		name = "RscWLDeathInfoMenu";
+		onLoad = "uiNamespace setVariable ['RscWLDeathInfoMenu', _this select 0];";
+		class controls {
+			class RscWLDeathInfoMenu_Texture: RscText {
+				type = 106;
+				idc = 5502;
+				x = safeZoneX;
+				y = safeZoneY;
+				w = safeZoneW;
+				h = safeZoneH;
+				url = "file://src/ui/deathinfo.html";
+			};
+		};
+	};
+
 	class RscWLGPSTargetingMenu {
 		idd = -1;
 		duration = 1000000000;
@@ -1066,6 +1086,26 @@ class RscTitles {
 				w = safeZoneW;
 				h = safeZoneH;
 				url = "file://src/ui/sam.html";
+			};
+		};
+	};
+
+	class RscWLScoreboardMenu {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		name = "RscWLScoreboardMenu";
+		onLoad = "uiNamespace setVariable ['RscWLScoreboardMenu', _this select 0];";
+		class controls {
+			class RscWLScoreboardMenu_Texture: RscText {
+				type = 106;
+				idc = 5502;
+				x = safeZoneX;
+				y = safeZoneY;
+				w = safeZoneW;
+				h = safeZoneH;
+				url = "file://src/ui/scoreboard.html";
 			};
 		};
 	};

@@ -16,3 +16,8 @@ if (isPlayer _shooter) then {
     [_reward, _shooterUid] call WL2_fnc_fundsDatabaseWrite;
     [objNull, _reward, "Projectile destroyed", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _shooter];
 };
+
+if (isPlayer _originator) then {
+    [50, _originatorUid] call WL2_fnc_fundsDatabaseWrite;
+    [objNull, 50, "Projectile jammed", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _originator];
+};

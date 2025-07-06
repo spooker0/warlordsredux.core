@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body,
+        html {
+            height: 100%;
+            text-align: center;
+            color: #fff;
+        }
+
+        .scoreboard-wrapper {
+            display: inline-block;
+            width: 80%;
+            max-width: 1000px;
+            overflow-y: hidden;
+            border-radius: 10px;
+            border: 2px solid #444;
+            margin-top: 5%;
+            background-color: #2a2a2a;
+        }
+
+        .scoreboard-title {
+            background-color: #222;
+            color: #fff;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 2px solid #444;
+        }
+
+        .scoreboard-header,
+        .scoreboard-row {
+            display: grid;
+            grid-template-columns: 40px 15% repeat(7, 1fr) 150px;
+            padding: 10px 5px;
+            align-items: center;
+            text-align: right;
+        }
+
+        .scoreboard-header {
+            background-color: #333;
+            color: #66ccff;
+            font-weight: bold;
+            border-bottom: 2px solid #444;
+        }
+
+        #scoreboard-body {
+            overflow-y: auto;
+            max-height: 70vh;
+            scrollbar-color: #444444 #2a2a2a;
+            scrollbar-width: thin;
+        }
+
+        .scoreboard-row:nth-child(odd) {
+            background-color: #2f2f2f;
+        }
+
+        .scoreboard-row:nth-child(even) {
+            background-color: #3a3a3a;
+        }
+
+        .scoreboard-row:hover {
+            background-color: #444444;
+        }
+
+        .points-cell {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="game-data"></div>
+    <div class="scoreboard-wrapper">
+        <div class="scoreboard-title">Scoreboard</div>
+
+        <div class="scoreboard-header">
+            <div>#</div>
+            <div>Player</div>
+            <div>Kills</div>
+            <div>Deaths</div>
+            <div>Statics</div>
+            <div>Light</div>
+            <div>Heavy</div>
+            <div>Helo</div>
+            <div>Plane</div>
+            <div>Points</div>
+        </div>
+
+        <div id="scoreboard-body"></div>
+        <div id="blufor-footer" class="scoreboard-row"></div>
+        <div id="opfor-footer" class="scoreboard-row"></div>
+    </div>
+    <script>
+        function renderScoreboard(players) {
+            const body = document.getElementById('scoreboard-body');
+            body.innerHTML = '';
+            const blufor = {};
+            const opfor = {};
+
+            players.forEach((player, index) => {
+                const row = document.createElement('div');
+                row.className = 'scoreboard-row';
+
+                const kills = player.kills || 0;
+                const deaths = player.deaths || 0;
+                const staticKills = player.staticKills || 0;
+                const lightKills = player.lightKills || 0;
+                const heavyKills = player.heavyKills || 0;
+                const heloKills = player.heloKills || 0;
+                const planeKills = player.planeKills || 0;
+                const points = player.points || 0;
+
+                row.innerHTML = `
+                <div>${index + 1}</div>
+                <div class="player-name">${player.name}</div>
+                <div>${kills}</div>
+                <div>${deaths}</div>
+                <div>${staticKills}</div>
+                <div>${lightKills}</div>
+                <div>${heavyKills}</div>
+                <div>${heloKills}</div>
+                <div>${planeKills}</div>
+                <div>${points}</div>`;
+                body.appendChild(row);
+
+                const playerNameDiv = row.querySelector('.player-name');
+                if (player.side === 'BLUFOR') {
+                    playerNameDiv.style.color = '#004d99';
+                    blufor.kills = (blufor.kills || 0) + kills;
+                    blufor.deaths = (blufor.deaths || 0) + deaths;
+                    blufor.staticKills = (blufor.staticKills || 0) + staticKills;
+                    blufor.lightKills = (blufor.lightKills || 0) + lightKills;
+                    blufor.heavyKills = (blufor.heavyKills || 0) + heavyKills;
+                    blufor.heloKills = (blufor.heloKills || 0) + heloKills;
+                    blufor.planeKills = (blufor.planeKills || 0) + planeKills;
+                    blufor.points = (blufor.points || 0) + points;
+                } else if (player.side === 'OPFOR') {
+                    playerNameDiv.style.color = '#ff4b4b';
+                    opfor.kills = (opfor.kills || 0) + kills;
+                    opfor.deaths = (opfor.deaths || 0) + deaths;
+                    opfor.staticKills = (opfor.staticKills || 0) + staticKills;
+                    opfor.lightKills = (opfor.lightKills || 0) + lightKills;
+                    opfor.heavyKills = (opfor.heavyKills || 0) + heavyKills;
+                    opfor.heloKills = (opfor.heloKills || 0) + heloKills;
+                    opfor.planeKills = (opfor.planeKills || 0) + planeKills;
+                    opfor.points = (opfor.points || 0) + points;
+                } else {
+                    playerNameDiv.style.color = '#ffffff';
+                }
+            });
+
+            const bluforRow = document.getElementById('blufor-footer');
+            bluforRow.innerHTML = `
+            <div></div>
+            <div class="player-name">BLUFOR</div>
+            <div>${blufor.kills || 0}</div>
+            <div>${blufor.deaths || 0}</div>
+            <div>${blufor.staticKills || 0}</div>
+            <div>${blufor.lightKills || 0}</div>
+            <div>${blufor.heavyKills || 0}</div>
+            <div>${blufor.heloKills || 0}</div>
+            <div>${blufor.planeKills || 0}</div>
+            <div>${blufor.points || 0}</div>`;
+
+            const opforRow = document.getElementById('opfor-footer');
+            opforRow.innerHTML = `
+            <div></div>
+            <div class="player-name">OPFOR</div>
+            <div>${opfor.kills || 0}</div>
+            <div>${opfor.deaths || 0}</div>
+            <div>${opfor.staticKills || 0}</div>
+            <div>${opfor.lightKills || 0}</div>
+            <div>${opfor.heavyKills || 0}</div>
+            <div>${opfor.heloKills || 0}</div>
+            <div>${opfor.planeKills || 0}</div>
+            <div>${opfor.points || 0}</div>`;
+        }
+
+        function scrollScoreboard(scrollAmount) {
+            const scoreboardBody = document.getElementById('scoreboard-body');
+            scoreboardBody.scrollTop += scrollAmount;
+        }
+    </script>
+</body>
+
+</html>

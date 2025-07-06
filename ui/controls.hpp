@@ -84,6 +84,12 @@ class WLRscButtonMenu: RscButtonMenu {
 	soundClick[] = {"", 0, 1};
 };
 
+class RscTextRight: RscText {
+	colorBackground[] = {0.5, 0.5, 0.5, 1};
+	shadow = 0;
+	style = ST_RIGHT;
+};
+
 class RscWLBrowserMenu {
 	idd = 5500;
 	class controls {

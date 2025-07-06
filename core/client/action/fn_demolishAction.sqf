@@ -4,8 +4,8 @@ player setVariable ["WL2_demolishTarget", objNull];
 [
     player,
     "<t color='#ff0000'>Demolish</t>",
-    "\a3\ui_f\data\IGUI\Cfg\holdactions\holdAction_secure_ca.paa",
-    "\a3\ui_f\data\IGUI\Cfg\holdactions\holdAction_secure_ca.paa",
+    "\a3\ui_f\data\IGUI\Cfg\holdactions\holdAction_forceRespawn_ca.paa",
+    "\a3\ui_f\data\IGUI\Cfg\holdactions\holdAction_forceRespawn_ca.paa",
     "call WL2_fnc_demolishEligibility",
     "player distance2D (player getVariable ['WL2_demolishTarget', objNull]) <= 10",
     {

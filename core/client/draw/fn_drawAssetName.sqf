@@ -39,9 +39,9 @@ private _vehicleBaseType = getText (configFile >> "CfgVehicles" >> _vehicleType 
 private _vehicleActualType = [_vehicle] call WL2_fnc_getAssetTypeName;
 
 if (_vehicleBaseType != _vehicleActualType) then {
-    private _existingPosition = ctrlPosition (_unitInfo displayCtrl 1000);
-    private _newControl = _unitInfo ctrlCreate ["RscText", -1];
-    _newControl ctrlSetPosition _existingPosition;
+    private _controlGroup = ctrlParentControlsGroup _existingControl;
+    private _newControl = _unitInfo ctrlCreate ["RscText", -1, _controlGroup];
+    _newControl ctrlSetPosition (ctrlPosition _existingControl);
     _newControl ctrlSetBackgroundColor [0.5, 0.5, 0.5, 1];
     _newControl ctrlSetTextColor (ctrlTextColor _existingControl);
     _newControl ctrlSetFontHeight (ctrlFontHeight _existingControl);

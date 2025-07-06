@@ -304,10 +304,11 @@
         function saveName() {
             document.querySelector('.rename-modal').style.display = 'none';
             const newName = document.getElementById('squad-name-input').value;
-            if (!newName.trim()) {
+            const sanitizedName = newName.replace(/[^a-zA-Z0-9\s]/g, "").trim();
+            if (!sanitizedName) {
                 return;
             }
-            A3API.SendAlert(`["renamed", ["${newName}"]]`);
+            A3API.SendAlert(`["renamed", ["${sanitizedName}"]]`);
         }
 
         document.getElementById('rename-squad-button').addEventListener('click', () => {

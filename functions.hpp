@@ -144,6 +144,7 @@ class CfgFunctions {
 			file = "src\core\client";
 			class afk {};
 			class airburst {};
+			class ammoConfigDetection {};
 			class announcer {};
 			class announcerInit {};
 			class avTerminal {};
@@ -265,6 +266,8 @@ class CfgFunctions {
 			class mapIcons {};
 			class refreshCurrentTargetData {};
 			class sceneDrawHandle {};
+			class scoreboard {};
+			class scoreboardScroll {};
 			class setupUI {};
 			class smoothText {};
 			class uavJammer {};
@@ -276,6 +279,7 @@ class CfgFunctions {
 			class friendlyFireHandleClient {};
 			class handleKillFeedUpdate {};
 			class killHistory {};
+			class killNotify {};
 			class killRewardClient {};
 			class punishmentClient {};
 			class punishMessage {};
@@ -440,6 +444,7 @@ class CfgFunctions {
 			class fundsDatabaseWrite {};
 			class garbageCollector {};
 			class generateEndResultPage {};
+			class generateScoreboard {};
 			class handleClientRequest {};
 			class handleEntityRemoval {};
 			class hideObjectOnAll {};
@@ -454,6 +459,7 @@ class CfgFunctions {
 			class rebalance {};
 			class selectTarget {};
 			class serverEHs {};
+			class setScoreboardEntry {};
 			class setupNewPlayer {};
 			class targetSelectionHandleServer {};
 			class uavJammed {};
