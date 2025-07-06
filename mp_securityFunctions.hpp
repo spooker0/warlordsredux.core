@@ -38,7 +38,6 @@ class CfgRemoteExec {
 		class WL2_fnc_deployableAddAction {allowedTargets = 1;};
 		class WL2_fnc_deployCrateAction {allowedTargets = 1;};
 		class WL2_fnc_forgiveTeamkill {allowedTargets = 2;};
-		class WL2_fnc_generateScoreboard {allowedTargets = 0;};
 		class WL2_fnc_handleClientRequest {allowedTargets = 2;};
 		class WL2_fnc_handleEntityRemoval {allowedTargets = 2;};
 		class WL2_fnc_hideObjectOnAll {allowedTargets = 0;};
@@ -62,6 +61,7 @@ class CfgRemoteExec {
 		class WL2_fnc_removeAction {allowedTargets = 1;};
 		class WL2_fnc_repairAction {allowedTargets = 1;};
 		class WL2_fnc_reportTargets {allowedTargets = 0;};
+		class WL2_fnc_requestScoreboard {allowedTargets = 2;};
 		class WL2_fnc_restockAction {allowedTargets = 0;};
 		class WL2_fnc_revive {allowedTargets = 0;};
 		class WL2_fnc_sectorRevealHandle {allowedTargets = 0;};

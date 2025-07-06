@@ -457,6 +457,7 @@ class CfgFunctions {
 			class processRunways {};
 			class punishPlayer {};
 			class rebalance {};
+			class requestScoreboard {};
 			class selectTarget {};
 			class serverEHs {};
 			class setScoreboardEntry {};

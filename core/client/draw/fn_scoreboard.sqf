@@ -9,7 +9,7 @@ _display = uiNamespace getVariable "RscWLScoreboardMenu";
 private _texture = _display displayCtrl 5502;
 // _texture ctrlWebBrowserAction ["LoadFile", "src\ui\scoreboard.html"];
 
-[] remoteExec ["WL2_fnc_generateScoreboard", 2];
+[] remoteExec ["WL2_fnc_requestScoreboard", 2];
 
 _texture ctrlAddEventHandler ["PageLoaded", {
     params ["_texture"];

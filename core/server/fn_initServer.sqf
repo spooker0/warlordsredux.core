@@ -89,6 +89,7 @@ call WL2_fnc_processRunways;
 };
 
 0 spawn WL2_fnc_updateVehicleList;
+0 spawn WL2_fnc_generateScoreboard;
 
 #if WL_ZEUS_ENABLED == 0
 {
