@@ -101,7 +101,7 @@
         <div id="opfor-footer" class="scoreboard-row"></div>
     </div>
     <script>
-        function renderScoreboard(players) {
+        function renderScoreboard(players, firstRender) {
             const body = document.getElementById('scoreboard-body');
             body.innerHTML = '';
             const blufor = {};
@@ -156,6 +156,13 @@
                     opfor.points = (opfor.points || 0) + points;
                 } else {
                     playerNameDiv.style.color = '#ffffff';
+                }
+
+                if (player.isPlayer) {
+                    row.style.border = '2px solid #66ccff';
+                    if (firstRender) {
+                        body.scrollTop = row.offsetTop;
+                    }
                 }
             });
 

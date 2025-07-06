@@ -10,6 +10,7 @@ private _playerContribution = missionNamespace getVariable ["WL_PlayerSquadContr
     if (_playerUid == "") then {
         continue;
     };
+    _entry set ["uid", _playerUid];
 
     private _unit = [_playerUid] call BIS_fnc_getUnitByUid;
     private _unitName = [_unit] call BIS_fnc_getName;
@@ -26,4 +27,4 @@ private _playerContribution = missionNamespace getVariable ["WL_PlayerSquadContr
     _scoreboardResults pushBack _entry;
 } forEach _scoreboardData;
 
-missionNamespace setVariable ["WL2_scoreboardResults", _scoreboardResults, [2, clientOwner]];
+missionNamespace setVariable ["WL2_scoreboardResults", _scoreboardResults, [2, remoteExecutedOwner]];

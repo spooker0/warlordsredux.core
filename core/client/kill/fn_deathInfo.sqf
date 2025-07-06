@@ -210,8 +210,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
 
 waitUntil {
     sleep 0.5;
-    private _scoreboard = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
-    (alive player && lifeState player != "INCAPACITATED") || !isNull _scoreboard
+    alive player && lifeState player != "INCAPACITATED"
 };
 
 "deathInfo" cutText ["", "PLAIN"];

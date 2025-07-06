@@ -393,5 +393,6 @@ uiNamespace setVariable ["WL2_guidMap", createHashMap];
 uiNamespace setVariable ["WL2_scoreboardData", []];
 
 showScoretable 0;
+"deathInfo" cutFadeOut 0;
 inGameUISetEventHandler ["PrevAction", "[true] call WL2_fnc_scoreboardScroll"];
 inGameUISetEventHandler ["NextAction", "[false] call WL2_fnc_scoreboardScroll"];
