@@ -1,6 +1,9 @@
 #include "includes.inc"
 params ["_sector", "_owner"];
 
+private _sectorValue = _sector getVariable ["BIS_WL_value", 50];
+private _garrisonSize = _sectorValue * 2.3;
+
 private _vehicleUnits = [];
 if (count (_sector getVariable ["BIS_WL_vehiclesToSpawn", []]) == 0) then {
 	private _roads = ((_sector nearRoads 400) select {count roadsConnectedTo _x > 0}) inAreaArray (_sector getVariable "objectAreaComplete");
@@ -8,10 +11,9 @@ if (count (_sector getVariable ["BIS_WL_vehiclesToSpawn", []]) == 0) then {
 	private _hasRadar = false;
 	private _hardAIMode = WL_HARD_AI_MODE == 1;
 	private _numVehicleSpawn = if (_hardAIMode) then {
-		private _sectorValue = _sector getVariable ["BIS_WL_value", 50];
 		((_sectorValue / 5) max 1) min 4;
 	} else {
-		1;
+		2;
 	};
 
 	private _randomSpots = [_sector] call WL2_fnc_findSpawnPositions;
@@ -22,6 +24,16 @@ if (count (_sector getVariable ["BIS_WL_vehiclesToSpawn", []]) == 0) then {
 		private _data = _y;
 		private _vehicleSpawn = _data getOrDefault ["vehicleSpawn", 0];
 		if (_vehicleSpawn > 0) then {
+			private _cost = _data getOrDefault ["cost", 0];
+			if (_sectorValue <= 10 && _cost >= 3000) then {
+				continue;
+			};
+			if (_sectorValue <= 20 && _cost >= 8000) then {
+				continue;
+			};
+			if (_sectorValue > 20 && _cost <= 3000) then {
+				continue;
+			};
 			_vehiclesPool pushBack _class;
 		};
 	} forEach WL_ASSET_DATA;
@@ -161,8 +173,6 @@ if (!_connectedToBase && "H" in _services) then {
 
 private _spawnPosArr = [_sector, 0, true] call WL2_fnc_findSpawnPositions;
 if (count _spawnPosArr == 0) exitWith {};
-
-private _garrisonSize = (_sector getVariable "BIS_WL_value") * 2.3; // * x: the bigger x the more ai
 
 private _unitsPool = [];
 {

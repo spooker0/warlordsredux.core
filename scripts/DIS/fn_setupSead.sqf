@@ -32,6 +32,12 @@ while { alive _asset } do {
 		private _texture = _display displayCtrl 5502;
 		// _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
+		private _controlParams = ["SEAD CONTROLS", [
+			["Select previous", "gunElevUp"],
+			["Select next", "gunElevDown"]
+		]];
+		["SEAD", _controlParams, 10] call WL2_fnc_showHint;
+
 		_texture ctrlAddEventHandler ["PageLoaded", {
 			params ["_texture"];
 			[_texture] spawn {
@@ -45,8 +51,10 @@ while { alive _asset } do {
 		}];
 	} else {
 		"seadtarget" cutText ["", "PLAIN"];
+		["SEAD"] call WL2_fnc_showHint;
 	};
 
 	_previousEligible = _eligible;
 };
 "seadtarget" cutText ["", "PLAIN"];
+["SEAD"] call WL2_fnc_showHint;

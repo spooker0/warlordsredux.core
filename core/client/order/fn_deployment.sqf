@@ -86,7 +86,14 @@ private _turretOverridesForVehicle = WL_ASSET(_orderedClass, "turretOverrides", 
 	};
 } forEach _turretOverridesForVehicle;
 
-[player, "assembly"] call WL2_fnc_hintHandle;
+private _deployParams = ["DEPLOYMENT CONTROLS", [
+    [localize "STR_A3_assemble", "BuldSelect"],
+    ["Lock position", "lockTarget"],
+    ["Rotate left", "prevAction"],
+    ["Rotate right", "nextAction"],
+    [localize "STR_ca_cancel", "navigateMenu"]
+]];
+["Deploy", _deployParams] call WL2_fnc_showHint;
 
 private _originalPosition = getPosATL player;
 
@@ -199,6 +206,6 @@ detach _asset;
 deleteVehicle _asset;
 removeMissionEventHandler ["Draw3D", _drawRestrictionId];
 
-[player, "assembly", false] call WL2_fnc_hintHandle;
+["Deploy"] call WL2_fnc_showHint;
 
 [WL_DeploymentSuccess && _canStillOrderVehicle, _finalPosition, _offset, _finalDirection];

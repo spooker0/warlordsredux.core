@@ -6,6 +6,7 @@ if (isDedicated) exitWith {};
 private _clearReconOptics = {
     "reconOptics" cutText ["", "PLAIN"];
     _display = objNull;
+    ["Recon"] call WL2_fnc_showHint;
 };
 
 private _display = objNull;
@@ -19,16 +20,13 @@ private _addReconOptics = {
 
     _reconOpticsLabel = _display displayCtrl 26000;
 
-    _instructionsDisplay = _display displayCtrl 26001;
-    _instructionsDisplay ctrlSetStructuredText parseText format [
-        "<t size='1.2'><t align='left'>Scan</t><t align='right'>[%1]</t></t>",
-        (actionKeysNames ["lockTarget", 1, "Combo"]) regexReplace ["""", ""]
-    ];
-    _instructionsDisplay ctrlCommit 0;
+    ["Recon", ["RECON CONTROLS", [
+        ["Scan", "lockTarget"]
+    ]], 5] call WL2_fnc_showHint;
 };
 
 while { alive _asset } do {
-    if (vehicle player != _asset) then {
+    if (cameraOn != _asset) then {
         call _clearReconOptics;
         sleep 5;
         continue;

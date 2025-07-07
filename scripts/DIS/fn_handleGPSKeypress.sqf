@@ -7,7 +7,7 @@ if (isNull _targetDisplay) exitWith {};
 private _texture = _targetDisplay displayCtrl 5502;
 
 private _toggle = false;
-if (_key == DIK_HOME || _key == DIK_END) then {
+if (_key in actionKeys "gunElevUp" || _key in actionKeys "gunElevDown") then {
     _toggle = true;
 };
 

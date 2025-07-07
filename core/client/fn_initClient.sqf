@@ -182,7 +182,6 @@ WL_LoadingState = 10;
 
 call WL2_fnc_refreshCurrentTargetData;
 call WL2_fnc_sceneDrawHandle;
-[player, "init"] spawn WL2_fnc_hintHandle;
 WL_LoadingState = 11;
 
 0 spawn WL2_fnc_repackMagazines;

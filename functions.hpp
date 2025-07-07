@@ -52,7 +52,6 @@ class CfgFunctions {
 			class setupGPSMunition {};
 			class setupRemoteMenu {};
 			class setupRemoteMunition {};
-			class setupTargetMenu {};
 			class startMissileCamera {};
 			class terminalGuidance {};
 			class tvMunition {};
@@ -155,7 +154,6 @@ class CfgFunctions {
 			class handleChatMessages {};
 			class handleKeypress {};
 			class handlePlayerDamage {};
-			class hintHandle {};
 			class initClient {};
 			class interceptAction {};
 			class lagMessageDisplay {};
@@ -174,6 +172,7 @@ class CfgFunctions {
 			class revive {};
 			class rewardCapture {};
 			class setupCarrier {};
+			class showHint {};
 			class sideToFaction {};
 			class spectrumInterface {};
 			class teammatesAvailability {};

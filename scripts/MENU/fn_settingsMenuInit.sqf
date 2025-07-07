@@ -129,7 +129,16 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["checkbox", "Hide buy menu in scroll menu", ["hideBuyMenu", false]],
         ["checkbox", "Hide vehicle manager in scroll menu", ["hideVehicleManager", false]],
         ["checkbox", "Delete quad bike/water scooter on exit", ["deleteSmallTransports", true]],
-        ["checkbox", "Respawn: spawn with UAV Terminal", ["respawnUavTerminal", true]]
+        ["checkbox", "Respawn: spawn with UAV Terminal", ["respawnUavTerminal", true]],
+        ["category", "Control Hints"],
+        ["checkbox", "Show hint: Deployment", ["showHintDeploy", true]],
+        ["checkbox", "Show hint: Recon Optics", ["showHintRecon", true]],
+        ["checkbox", "Show hint: GPS Munitions", ["showHintGPS", true]],
+        ["checkbox", "Show hint: SEAD Munitions", ["showHintSEAD", true]],
+        ["checkbox", "Show hint: TV Munitions", ["showHintTV", true]],
+        ["checkbox", "Show hint: Remote Munitions", ["showHintRemote", true]],
+        ["checkbox", "Show hint: Advanced SAMs", ["showHintAdvancedSam", true]],
+        ["checkbox", "Show hint: LOAL", ["showHintLoal", true]]
     ];
 
     private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];

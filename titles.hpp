@@ -939,16 +939,6 @@ class RscTitles {
 				shadow = 0;
 				size = 0.05;
 			};
-			class RscWLReconOpticsDisplay_Instructions: RscStructuredText {
-				idc = 26001;
-				x = 0.25;
-				y = 1 - safeZoneY - 0.3;
-				w = 0.5;
-				h = 0.3;
-				text = "";
-				style = ST_MULTI;
-				shadow = 0;
-			};
 		};
 	};
 
@@ -1066,6 +1056,26 @@ class RscTitles {
 				w = safeZoneW;
 				h = safeZoneH;
 				url = "file://src/ui/gps.html";
+			};
+		};
+	};
+
+	class RscWLHintMenu {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		name = "RscWLHintMenu";
+		onLoad = "uiNamespace setVariable ['RscWLHintMenu', _this select 0];";
+		class controls {
+			class RscWLHintMenu_Texture: RscText {
+				type = 106;
+				idc = 5502;
+				x = safeZoneX;
+				y = safeZoneY;
+				w = safeZoneW;
+				h = safeZoneH;
+				url = "file://src/ui/hint.html";
 			};
 		};
 	};

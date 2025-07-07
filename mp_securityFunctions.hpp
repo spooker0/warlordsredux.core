@@ -13,6 +13,7 @@ class CfgRemoteExec {
 		class APS_fnc_setupProjectiles {allowedTargets = 0;};
 		class DIS_fnc_setupAdvancedSam {allowedTargets = 0;};
 		class DIS_fnc_setupExtendedSam {allowedTargets = 0;};
+		class DIS_fnc_setupLoal {allowedTargets = 0;};
 		class DIS_fnc_setupSead {allowedTargets = 0;};
 		class DIS_fnc_setupGPSMunition {allowedTargets = 0;};
 		class DIS_fnc_setupRemoteMunition {allowedTargets = 0;};

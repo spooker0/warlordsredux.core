@@ -18,9 +18,8 @@ _asset addEventHandler ["WeaponChanged", {
         _asset setVariable ["WL2_currentAmmoConfig", createHashMap];
     };
 
-    private _newWeaponState = weaponState [_asset, _turret];
-    _newWeaponState params ["_weapon", "_muzzle", "_firemode", "_magazine", "_ammoCount"];
-    private _ammo = getText (configFile >> "CfgMagazines" >> _magazine >> "ammo");
+    private _currentMagazine = cameraOn currentMagazineTurret _turret;
+    private _ammo = getText (configFile >> "CfgMagazines" >> _currentMagazine >> "ammo");
 
     private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
     private _projectileAmmoOverrides = WL_ASSET(_assetActualType, "ammoOverrides", []);

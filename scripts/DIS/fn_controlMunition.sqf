@@ -10,10 +10,6 @@ if (inputAction "defaultAction" > 0) then {
 
 "missileCamera" cutRsc ["RscTitleDisplayEmpty", "PLAIN"];
 private _display = uiNamespace getVariable ["RscTitleDisplayEmpty", displayNull];
-private _background = _display ctrlCreate ["RscPicture", -1];
-_background ctrlSetPosition [safeZoneX, safeZoneY, safeZoneW, safeZoneH];
-_background ctrlSetText "\a3\weapons_f\Reticle\data\optika_tv_CA.paa";
-_background ctrlCommit 0;
 
 private _reticle = _display ctrlCreate ["RscPicture", -1];
 _reticle ctrlSetText "\a3\weapons_f_beta\Reticle\Data\reticle_horizon2_CA.paa";
@@ -27,39 +23,13 @@ _fuelDisplay ctrlSetPosition [0, 0, 1, 0.2];
 _fuelDisplay ctrlSetTextColor [1, 1, 1, 1];
 _fuelDisplay ctrlCommit 0;
 
-private _instructionsDisplay = _display ctrlCreate ["RscStructuredText", -1];
-_instructionsDisplay ctrlSetPosition [0.25, 1 - safeZoneY - 0.3, 0.5, 0.3];
-_instructionsDisplay ctrlSetTextColor [1, 1, 1, 1];
-
-private _instructionStages = [
-    ["defaultAction", "Detonate"],
-    ["zoomIn", "Map Zoom In"],
-    ["zoomOut", "Map Zoom Out"]
-];
+private _controlParams = ["TV GUIDED MUNITION", [
+    ["Detonate", "defaultAction"]
+]];
 if (_flightMode in [1, 2]) then {
-    _instructionStages pushBack ["lockTarget", "Lock/Unlock Controls"];
+    _controlParams pushBack ["Lock/Unlock Controls", "lockTarget"];
 };
-
-_instructionStages = _instructionStages apply {
-    private _action = _x # 0;
-    private _text = _x # 1;
-    format ["<t align='left'>%1</t><t align='right'>[%2]</t>", _text, (actionKeysNames [_action, 1, "Combo"]) regexReplace ["""", ""]];
-};
-private _instructionText = _instructionStages joinString "<br/>";
-
-_instructionsDisplay ctrlSetStructuredText parseText format [
-    "<t size='1.2'>%1</t>",
-    _instructionText
-];
-_instructionsDisplay ctrlCommit 0;
-
-private _mapDisplay = _display ctrlCreate ["RscMapControl", -1];
-_mapDisplay ctrlCommit 0;
-_mapDisplay ctrlMapSetPosition [safeZoneX + 0.1, safeZoneY + 0.1, 0.3, 0.4];
-_mapDisplay ctrlMapAnimAdd [0, 0.2, getPosASL _projectile];
-ctrlMapAnimCommit _mapDisplay;
-_mapDisplay mapCenterOnCamera true;
-_mapDisplay ctrlAddEventHandler ["Draw", WL2_fnc_iconDrawMap];
+["TV", _controlParams] call WL2_fnc_showHint;
 
 private _yaw = getDir _projectile;
 
@@ -200,25 +170,6 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
         };
     };
 
-    private _zoomInMap = inputAction "zoomIn";
-    if (_zoomInMap > 0) then {
-        waitUntil {
-            inputAction "zoomIn" == 0
-        };
-        private _currentZoom = ctrlMapScale _mapDisplay;
-        _mapDisplay ctrlMapAnimAdd [0, _currentZoom / 2, getPosASL _projectile];
-        ctrlMapAnimCommit _mapDisplay;
-    };
-    private _zoomOutMap = inputAction "zoomOut";
-    if (_zoomOutMap > 0) then {
-        waitUntil {
-            inputAction "zoomOut" == 0
-        };
-        private _currentZoom = ctrlMapScale _mapDisplay;
-        _mapDisplay ctrlMapAnimAdd [0, _currentZoom * 2, getPosASL _projectile];
-        ctrlMapAnimCommit _mapDisplay;
-    };
-
     if (inputAction "defaultAction" > 0 && serverTime - _startTime > 2) then {
         triggerAmmo _projectile;
         break;
@@ -253,3 +204,4 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
 sleep 1;
 deleteVehicle _projectile;
 "missileCamera" cutText ["", "PLAIN"];
+["TV"] call WL2_fnc_showHint;
