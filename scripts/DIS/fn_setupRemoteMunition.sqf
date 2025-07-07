@@ -1,16 +1,60 @@
 #include "includes.inc"
 params ["_asset"];
 
-private _actionText = format ["<t color='#00ffcc'>Remote Munition Configuration (%1)</t>", actionKeysNames ["binocular", 1, "Combo"]];
-private _actionID = _asset addAction [
-	_actionText,
-	DIS_fnc_setupRemoteMenu,
-	[],
-	100,
-	true,
-	false,
-	"binocular",
-	"vehicle _this == _target",
-	50,
-	false
-];
+private _remoteMunitionReady = {
+	if (cameraOn != _asset) exitWith {
+		false;
+	};
+
+	private _turret = cameraOn unitTurret focusOn;
+	if (count _turret == 0) exitWith {
+		false;
+	};
+
+	private _ammoConfig = _asset getVariable ["WL2_currentAmmoConfig", createHashMap];
+	_ammoConfig getOrDefault ["remote", false];
+};
+
+private _previousEligible = false;
+while { alive _asset } do {
+	sleep 0.5;
+	private _eligible = call _remoteMunitionReady;
+	if (_eligible == _previousEligible) then {
+		continue;
+	};
+
+	if (_eligible) then {
+		private _display = uiNamespace getVariable ["RscWLRemoteMunitionMenu", displayNull];
+		if (isNull _display) then {
+			"remote" cutRsc ["RscWLRemoteMunitionMenu", "PLAIN", -1, true, true];
+			_display = uiNamespace getVariable "RscWLRemoteMunitionMenu";
+		};
+		private _texture = _display displayCtrl 5502;
+		// _texture ctrlWebBrowserAction ["OpenDevConsole"];
+
+		private _controlParams = ["REMOTE MUNITION", [
+			["Previous", "gunElevUp"],
+			["Next", "gunElevDown"]
+		]];
+		["Remote", _controlParams, 10] call WL2_fnc_showHint;
+
+		_texture ctrlAddEventHandler ["PageLoaded", {
+			params ["_texture"];
+			[_texture] spawn {
+				params ["_texture"];
+				while { !isNull _texture } do {
+					private _targetList = [] call DIS_fnc_getSquadList;
+					[_texture, _targetList] call DIS_fnc_sendTargetData;
+					sleep 0.5;
+				};
+			};
+		}];
+	} else {
+		"remote" cutText ["", "PLAIN"];
+		["Remote"] call WL2_fnc_showHint;
+	};
+
+	_previousEligible = _eligible;
+};
+"remote" cutText ["", "PLAIN"];
+["Remote"] call WL2_fnc_showHint;

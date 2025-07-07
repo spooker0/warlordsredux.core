@@ -19,8 +19,8 @@ while { alive _asset } do {
 		// _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
 		private _controlParams = ["ADVANCED SAM CONTROLS", [
-			["Select previous", "gunElevUp"],
-			["Select next", "gunElevDown"]
+			["Previous", "gunElevUp"],
+			["Next", "gunElevDown"]
 		]];
 		["AdvancedSam", _controlParams, 10] call WL2_fnc_showHint;
 

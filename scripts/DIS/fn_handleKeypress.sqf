@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_key", "_displayName", "_targetListFunction", "_defaultOption"];
+params ["_key", "_displayName", "_targetListFunction", "_targetListParams", "_targetVariable"];
 
 private _targetDisplay = uiNamespace getVariable [_displayName, displayNull];
 if (isNull _targetDisplay) exitWith {};
@@ -14,8 +14,8 @@ if (_key in actionKeys "gunElevDown") then {
 };
 
 if (_delta != 0) then {
-    private _targetList = [_targetListFunction, _defaultOption] call DIS_fnc_getTargetList;
-    private _selectedTarget = cameraOn getVariable ["WL2_selectedTarget", objNull];
+    private _targetList = _targetListParams call _targetListFunction;
+    private _selectedTarget = cameraOn getVariable [_targetVariable, objNull];
     private _targetIndex = 0;
     {
         private _target = objectFromNetId (_x # 0);
@@ -38,11 +38,11 @@ if (_delta != 0) then {
         };
     };
 
-    cameraOn setVariable ["WL2_selectedTarget", _newSelectedTarget];
+    cameraOn setVariable [_targetVariable, _newSelectedTarget];
 
     private _texture = _targetDisplay displayCtrl 5502;
 
-    _targetList = [_targetListFunction, _defaultOption] call DIS_fnc_getTargetList;
+    _targetList = _targetListParams call _targetListFunction;
     [_texture, _targetList] call DIS_fnc_sendTargetData;
     playSoundUI ["a3\ui_f\data\sound\rsccombo\soundexpand.wss", 2];
 };

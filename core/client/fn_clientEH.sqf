@@ -25,8 +25,9 @@ addMissionEventHandler ["HandleChatMessage", {
 
 	_display displayAddEventHandler ["KeyDown", {
 		params ["_display", "_key"];
-		[_key, "RscWLSamTargetingMenu", DIS_fnc_getSamTarget, "NO TARGET"] call DIS_fnc_handleKeypress;
-		[_key, "RscWLSeadTargetingMenu", DIS_fnc_getSeadTarget, "TARGET: AUTO"] call DIS_fnc_handleKeypress;
+		[_key, "RscWLSamTargetingMenu", DIS_fnc_getTargetList, [DIS_fnc_getSamTarget, "NO TARGET"], "WL2_selectedTarget"] call DIS_fnc_handleKeypress;
+		[_key, "RscWLSeadTargetingMenu", DIS_fnc_getTargetList, [DIS_fnc_getSeadTarget, "TARGET: AUTO"], "WL2_selectedTarget"] call DIS_fnc_handleKeypress;
+		[_key, "RscWLRemoteMunitionMenu", DIS_fnc_getSquadList, [], "WL2_selectedPlayerTarget"] call DIS_fnc_handleKeypress;
 		[_key] call DIS_fnc_handleGPSKeypress;
 	}];
 

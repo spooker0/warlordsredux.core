@@ -33,8 +33,8 @@ while { alive _asset } do {
 		// _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
 		private _controlParams = ["GPS CONTROLS", [
-			["Select previous", "gunElevUp"],
-			["Select next", "gunElevDown"],
+			["Previous", "gunElevUp"],
+			["Next", "gunElevDown"],
 			["Enter coordinates", "0-9"]
 		]];
 		["GPS", _controlParams, 10] call WL2_fnc_showHint;

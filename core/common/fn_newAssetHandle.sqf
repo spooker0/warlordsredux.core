@@ -90,7 +90,6 @@ if (_asset isKindOf "Man") then {
 
 	_asset setVariable ["WL2_nextRepair", 0, true];
 	_asset setVariable ["BIS_WL_ownerAssetSide", _side, true];
-	_asset setVariable ["WL2_massDefault", getMass _asset];
 
 	private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", _playerUID];
 	private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
@@ -269,12 +268,6 @@ if (_asset isKindOf "Man") then {
 			};
 		};
 
-		case "RuggedTerminal_01_communications_F": {
-			[_asset] remoteExec ["WL2_fnc_remoteControlAction", 0, true];
-			_asset animateSource ["Terminal_source", 100, true];
-			_asset setObjectTextureGlobal [0, "#(argb,8,8,3)color(0,0,1,1)"];
-		};
-
 		// Suicide drones
 		case "B_UAV_06_F";
 		case "O_UAV_06_F";
@@ -333,7 +326,11 @@ if (_asset isKindOf "Man") then {
 
 	if (WL_ASSET(_assetActualType, "isLight", 0) > 0) then {
 		private _originalMass = getMass _asset;
-		[_asset, _originalMass * 0.65] remoteExec ["setMass", 0];
+		private _lightMass = _originalMass * 0.65;
+		_asset setVariable ["WL2_massDefault", _lightMass, true];
+		[_asset, _lightMass] remoteExec ["setMass", 0];
+	} else {
+		_asset setVariable ["WL2_massDefault", getMass _asset, true];
 	};
 
 	if (WL_ASSET(_assetActualType, "hasESAM", 0) > 0) then {

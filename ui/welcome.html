@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <style>
         * {
@@ -17,12 +18,11 @@
 
         .welcome-menu-wrapper {
             display: inline-block;
-            width: 80%;
-            height: 60%;
-            max-width: 1000px;
+            height: 80vh;
+            width: 80vw;
             border-radius: 10px;
             border: 2px solid #444;
-            margin-top: 10%;
+            margin-top: 10vh;
             background-color: #2a2a2a;
         }
 
@@ -41,10 +41,9 @@
             font-size: 0;
         }
 
-        .panel {
+        .left-panel,
+        .right-panel {
             display: inline-block;
-            vertical-align: top;
-            width: 50%;
             height: 100%;
             overflow-y: auto;
             padding: 20px;
@@ -55,34 +54,76 @@
             scrollbar-width: thin;
         }
 
-        .panel.left-panel {
+        .left-panel {
+            width: 20%;
             border-right: 2px solid #444;
         }
 
-        .panel.right-panel {
+        .right-panel {
+            width: 80%;
             border-left: 2px solid #444;
+            display: none;
+        }
+
+        #welcome-text {
+            display: inline-block;
         }
 
         h2 {
             color: #66ccff;
             text-align: left;
             margin-bottom: 10px;
+            padding-left: 5px;
+        }
+
+        h3 {
+            color: #ffcc66;
+            text-align: left;
+            margin-top: 10px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 5px;
         }
 
         p {
             text-align: left;
-            margin-top: 10px;
+            padding-top: 10px;
             line-height: 1.6;
+            padding-left: 5px;
         }
 
-        ul {
+        .left-panel ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+        }
+
+        .left-panel li {
+            font-size: 16pt;
+        }
+
+        .category-item {
+            font-weight: bold;
+            color: #ffcc66;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        .left-panel li a {
+            color: #66ccff;
+            margin-left: 8px;
+            font-size: 10pt;
+        }
+
+        .right-panel ul {
             text-align: left;
             margin-top: 15px;
             padding-left: 20px;
             line-height: 1.8;
         }
 
-        li {
+        .right-panel li {
             margin-bottom: 8px;
         }
 
@@ -91,18 +132,25 @@
         }
     </style>
 </head>
+
 <body>
     <div class="welcome-menu-wrapper">
         <div class="menu-title">Welcome</div>
         <div class="welcome-menu">
             <div class="panel left-panel">
-                <h2>About Warlords Redux</h2>
-                <p>Welcome to Warlords Redux! This is a community upgrade project for the Original Warlords. The project's goal is to improve on BI vision of warlords with bugfixes and more balanced user experience while staying compatable with official servers for the best player count.</p>
-                <p>It introduces a lot of new features like fog of war, random base locations, custom pylons/ammo, aircraft rebalance, vehicle variants... etc.</p>
+                <ul></ul>
             </div>
-            <div class="panel right-panel">
-                <h2>Credits</h2>
+            <div class="panel right-panel category-redux" id="welcome-text">
+                <h2>About</h2>
                 <p>Discord link: https://discord.gg/grmzsZE4ua (copy & paste)</p>
+                <p>Welcome to Warlords Redux! This is a community upgrade project for the Original Warlords. The
+                    project's goal is to improve on BI vision of warlords with bugfixes and more balanced user
+                    experience while staying compatable with official servers for the best player count.</p>
+                <p>It introduces a lot of new features like fog of war, random base locations, custom pylons/ammo,
+                    aircraft rebalance, vehicle variants... etc.</p>
+            </div>
+            <div class="panel right-panel category-redux" id="credits">
+                <h2>Credits</h2>
                 <p>External scripts and resources</p>
                 <ul>
                     <li>GF Earplugs: George Floros's earplug script.</li>
@@ -124,16 +172,391 @@
                     <li>Bo</li>
                 </ul>
             </div>
+            <div class="panel right-panel category-general" id="assets">
+                <h2>Assets</h2>
+                <p>Assets can be bought via the Buy Menu with money. Assets are divided into several categories:</p>
+                <ul>
+                    <li><strong>Infantry</strong> - Infantry units with various roles, with preconfigured loadouts. A
+                        few infantry units have special abilities; for example, the repair specialist can repair
+                        vehicles and the diver can operate underwater. For a higher price, you may buy a Customized
+                        Unit, which is a special unit geared with your customized loadout, can repair vehicles, and has
+                        a higher accuracy.</li>
+                    <li><strong>Light Vehicles</strong> - Light vehicles that are fast and cheap, mostly useful for
+                        transports, specialized purposes, or early game.</li>
+                    <li><strong>Heavy Vehicles</strong> - Heavily armored vehicles from APCs to main battle tanks and
+                        artillery.</li>
+                    <li><strong>Rotary Wing</strong> - Helicopters, ranging from transport and recon to high end attack
+                        helicopters, most useful in the early to mid-game.</li>
+                    <li><strong>Fixed Wing</strong> - Fixed wing aircraft, ranging from light attack aircraft to air
+                        superiority jets.</li>
+                    <li><strong>Remote Control</strong> - Remote control drone assets, useful for reconnaissance and
+                        light attack roles.</li>
+                    <li><strong>Air Defense</strong> - Air defense assets, including static and mobile anti-air systems.
+                    </li>
+                    <li><strong>Sector Defense</strong> - Mostly static sector defense assets, including turrets, the
+                        static AT launcher, and mortars.</li>
+                    <li><strong>Structures</strong> - Static structures that can be placed in sectors, such as sandbags,
+                        bunkers, and towers.</li>
+                    <li><strong>Naval</strong> - Naval assets, including boats, useful for coastal operations.</li>
+                    <li><strong>Gear</strong> - Gear and equipment options that come in boxes and crates.</li>
+                    <li><strong>Fast Travel</strong> - Fast travel and forward base options that allow players to
+                        quickly move to the frontline.</li>
+                    <li><strong>Strategy</strong> - Strategy options that include sector scan, cruise missile strike,
+                        and other strategic actions.</li>
+                </ul>
+            </div>
+            <div class="panel right-panel category-general" id="money">
+                <h2>Money</h2>
+                <p>Players can earn money through various means:</p>
+                <ul>
+                    <li><strong>Destroying enemy assets</strong> - Destroying enemy assets yields the most significant
+                        monetary rewards, depending on the asset's value. This is by far the easiest way to fill your
+                        account.</li>
+                    <li><strong>Killing enemies</strong> - Player kills generate more money than AI kills.</li>
+                    <li><strong>Capturing sectors</strong> - Actively capturing sectors rewards money, depending on the
+                        value of your contribution to the sector capture. Heavy tanks that have higher capture values
+                        will generate higher monetary rewards.</li>
+                    <li><strong>Reconnaissance</strong> - Spotting enemies with tactical ping. Spotting enemies with
+                        recon optics is a quick way to get a lot of money.</li>
+                    <li><strong>Special support actions</strong> - Support actions like reviving teammates, depleting
+                        enemy APS, or placing spawn vehicles.</li>
+                    <li><strong>Passive income from controlled sectors</strong> - Players can earn a steady income from
+                        sectors they control. This is the slowest way to earn money.</li>
+                </ul>
+                <p>In general, the fastest way to earn money is to actively participate in the battle by destroying
+                    enemy assets and capturing objectives. In this game mode, it is highly recommended to do so with
+                    vehicles instead of on-foot. Instead of saving up a long time for big purchases, it is often much,
+                    much faster to buy and contribute to the team in lower-tier vehicles and use them as stepping stones
+                    to higher-tier assets.</p>
+            </div>
+            <div class="panel right-panel category-general" id="light-vehicles">
+                <h2>Light Vehicles</h2>
+                <p>These are information for light vehicles with functionality that goes beyond their vanilla
+                    functionality, special to this game mode. Consult the Field Manual for more information on default
+                    light vehicles.</p>
+                <h3>HEMTT/Tempest Transport</h3>
+                <p>In addition to transportation, this vehicle is an automatic spawn point for anyone on the team. To
+                    spawn on this vehicle, click on its icon on the map and select Fast Travel.</p>
+                <h3>HEMTT/Tempest Medical</h3>
+                <p>In addition to transportation and medical support, this vehicle is an automatic spawn point for
+                    anyone on the team. To spawn on this vehicle, click on its icon on the map and select Fast Travel.
+                </p>
+                <h3>HEMTT Flatbed</h3>
+                <p>This vehicle can be used to load and deploy static supplies and equipment. To load supplies, approach
+                    the flatbed and use the Load Deployable option.</p>
+                <p>In addition, this vehicle is an automatic spawn point for anyone on the team. To spawn on this
+                    vehicle, click on its icon on the map and select Fast Travel.</p>
+                <h3>HEMTT/Tempest Ammo</h3>
+                <p>This vehicle can be used to resupply vehicle ammunition. Use the scroll wheel menu on the vehicle you
+                    wish to resupply, select Modify/Rearm, and use the rearm button. There is a cooldown on rearming
+                    vehicles.</p>
+                <h3>HEMTT/Tempest Fuel</h3>
+                <p>This vehicle can be used to resupply vehicle fuel. Use the scroll wheel menu on the vehicle, and use
+                    the refuel action. This should refuel the vehicle to full capacity.</p>
+                <h3>HEMTT/Tempest Repair</h3>
+                <p>This vehicle can be used to repair vehicles. Use the scroll wheel menu on the vehicle you wish to
+                    repair, and use the repair action. This should repair the vehicle to full health. There is a
+                    cooldown on repairing vehicles.</p>
+                <h3>Tempest (Device)</h3>
+                <p>This vehicle is an electronic warfare vehicle with multiple functionalities.</p>
+                <p>1. EW Network: Activating the EW network generates a radius of electronic warfare coverage. Within
+                    this circle, which can be seen on the map by all players in the game, enemy drones are disrupted, in
+                    increasing severity as they get closer to the device until they are disabled. Players with AR
+                    goggles within the range can also see enemies that have been marked on data-link by radars, sensors,
+                    and recon vehicles. Additionally, friendly drones within the area are protected from enemy spectrum
+                    jammers, with the exception of the specialized short-range jammer attachment.</p>
+                <p>2. Dazzler: The dazzler is a device that neutralizes incoming enemy missiles. The dazzler has a
+                    limited number of charges before it needs to be rearmed.</p>
+                <h3>Prowler (Spike AT)</h3>
+                <p>This vehicle is equipped with Spike TV-guided anti-tank missiles that can be directly controlled by
+                    the player.</p>
+            </div>
+            <div class="panel right-panel category-general" id="heavy-vehicles">
+                <h2>Heavy Vehicles</h2>
+                <p>These are information for heavy vehicles with functionality that goes beyond their vanilla
+                    functionality, special to this game mode. Consult the Field Manual for more information on default
+                    heavy vehicles.</p>
+                <h3>AWC Nyx (AT)</h3>
+                <p>This vehicle is equipped with a powerful anti-tank guided missile system. Its machine gun has been
+                    removed.</p>
+                <h3>CRV-6e Bobcat</h3>
+                <p>This vehicle can be used to resupply vehicle ammunition. Use the scroll wheel menu on the vehicle you
+                    wish to resupply, select Modify/Rearm, and use the rearm button. There is a cooldown on rearming
+                    vehicles.</p>
+                <p>This vehicle can be used to resupply vehicle fuel. Use the scroll wheel menu on the vehicle, and use
+                    the refuel action. This should refuel the vehicle to full capacity.</p>
+                <p>This vehicle can be used to repair vehicles. Use the scroll wheel menu on the vehicle you wish to
+                    repair, and use the repair action. This should repair the vehicle to full health. There is a
+                    cooldown on repairing vehicles.</p>
+                <h3>AMV-7 Marshall Light</h3>
+                <p>This vehicle is a lighter version of the AMV-7 Marshall armed with a lighter minigun. It is cheaper
+                    and more mobile, making it ideal for anti-infantry roles, especially against independent sectors. It
+                    can also be slingloaded by helicopters.</p>
+                <h3>AMV-7 Marshall (Recon)</h3>
+                <p>This vehicle is a recon variant of the AMV-7 Marshall, with its turret removed and equipped with a
+                    powerful sensor suite that marks enemies within a certain radius onto data-link, making them visible
+                    on the map.</p>
+                <h3>BTR-K Kamysh (Recon)</h3>
+                <p>This vehicle is a recon variant of the BTR-K Kamysh, with its turret removed and equipped with a
+                    powerful sensor suite that marks enemies within a certain radius onto data-link, making them visible
+                    on the map.</p>
+                <p>It is equipped with a dazzler device. The dazzler is a device that neutralizes incoming enemy
+                    missiles. The dazzler has a limited number of charges before it needs to be rearmed.</p>
+                <h3>AMV-7 Marshall UP</h3>
+                <p>AMV-7 Marshall UP is a variant of the AMV-7 Marshall armed with a larger magazine 40mm cannon with
+                    improved tracking.</p>
+                <h3>BTR-KM Kamysh</h3>
+                <p>BTR-KM Kamysh is a variant of the BTR-K Kamysh armed with a 40mm cannon with improved tracking.</p>
+                <h3>IFV-6d Ocelot</h3>
+                <p>This vehicle is an anti-tank variant of the IFV-6a Cheetah. Its anti-air missiles are replaced with
+                    anti-tank missiles.</p>
+                <h3>BMP-39 Shir</h3>
+                <p>This vehicle is an anti-tank variant of the ZSU-39 Tigris. Its anti-air missiles are replaced with
+                    anti-tank missiles.</p>
+                <h3>T-100E Badger</h3>
+                <p>T-100E Badger is a downgraded export variant of the T-100 Varsuk with a 105mm cannon. It is the
+                    cheapest main battle tank option for OPFOR.</p>
+                <h3>M2A1 Slammer</h3>
+                <p>The default Slammer has been made lighter and more mobile.</p>
+                <h3>M2A1 Slammer UP</h3>
+                <p>In addition to its vanilla weapons, the M2A1 Slammer UP has its coaxial MG replaced with a .50 cal
+                    NVST that is highly effective against enemy infantry.</p>
+                <h3>M2A2 Slammer II</h3>
+                <p>M2A2 Slammer II is an advanced variant of the M2A1 Slammer armed with an advanced 125mm cannon and a
+                    recon scanner. The recon scanner can be used to mark enemy units on the map.</p>
+                <h3>M4 Scorcher UP</h3>
+                <p>This vehicle is an upgraded artillery variant that can launch self-seeking guided shells at enemy
+                    positions. Launch the projectiles at the enemy as with regular artillery, and its terminal guidance
+                    system will activate by itself above the coordinates.</p>
+                <h3>2S9M Sochor II</h3>
+                <p>This vehicle is an upgraded artillery variant that can launch self-seeking guided shells at enemy
+                    positions. Launch the projectiles at the enemy as with regular artillery, and its terminal guidance
+                    system will activate by itself above the coordinates.</p>
+            </div>
+            <div class="panel right-panel category-general" id="rotary-wing">
+                <h2>Rotary Wing</h2>
+                <p>These are information for rotary wing aircraft with functionality that goes beyond their vanilla
+                    functionality, special to this game mode. Consult the Field Manual for more information on default
+                    rotary wing aircraft.</p>
+                <h3>UH-80 Ghost Hawk</h3>
+                <p>In addition to its vanilla functionality, the UH-80 Ghost Hawk can be used to slingload vehicles and
+                    deploy static equipment. To do so, approach the vehicle or equipment you wish to deploy, use the
+                    Attach Deployable option.</p>
+                <p>It has an HMD (helmet-mounted display) that allows the pilot to see nearby data-linked enemies
+                    and incoming missiles.</p>
+                <h3>CH-49 Mohawk</h3>
+                <p>In addition to its vanilla functionality, the CH-49 Mohawk can be used to slingload vehicles and
+                    deploy static equipment. To do so, approach the vehicle or equipment you wish to deploy, use the
+                    Attach Deployable option.</p>
+                <p>The Mohawk is unique in its ability to slingload almost any vehicle in the OPFOR arsenal, including
+                    heavy vehicles.</p>
+                <p>It has an HMD (helmet-mounted display) that allows the pilot to see nearby data-linked enemies
+                    and incoming missiles.</p>
+                <h3>AH-9 Pawnee</h3>
+                <p>Instead of the vanilla minigun, the AH-9 Pawnee is armed with a 20mm autocannon, countermeasures, and
+                    can be loaded with Scalpels and Skyfire rockets.</p>
+                <p>It has an HMD (helmet-mounted display) that allows the pilot to see nearby data-linked enemies
+                    and incoming missiles.</p>
+                <h3>PO-30 Orca</h3>
+                <p>The PO-30 Orca can be equipped with ECM jammer pods, which can be used to destroy missiles in flight.
+                    To do so, aim and look at the incoming missiles for a short duration.</p>
+                <p>In addition to its vanilla functionality, the PO-30 Orca can be used to slingload vehicles and deploy
+                    static equipment. To do so, approach the vehicle or equipment you wish to deploy, use the Attach
+                    Deployable option.</p>
+                <p>It has an HMD (helmet-mounted display) that allows the pilot to see nearby data-linked enemies
+                    and incoming missiles.</p>
+                <h3>PO-32 Orca-M</h3>
+                <p>PO-32 Orca-M is an advanced variant of the PO-30 Orca with superior defensive systems and a wider
+                    variety of advanced weaponry, including KH-58 ARMs, AGM-122 Sidearms, and R73 air-to-air missiles.
+                </p>
+                <p>It can be equipped with ECM jammer pods, which can be used to destroy missiles in flight. To do so,
+                    aim and look at the incoming missiles for a short duration.</p>
+                <p>In addition to its vanilla functionality, the PO-32 Orca-M can be used to slingload vehicles and
+                    deploy static equipment. To do so, approach the vehicle or equipment you wish to deploy, use the
+                    Attach Deployable option.</p>
+                <p>It has an HMD (helmet-mounted display) that allows the pilot to see nearby data-linked enemies
+                    and incoming missiles.</p>
+                <h3>WY-55 Hellcat</h3>
+                <p>In addition to its vanilla options, the WY-55 Hellcat can be loaded with HARMs and Skyfire rockets.
+                </p>
+                <p>It has an HMD (helmet-mounted display) that allows the pilot to see nearby data-linked enemies
+                    and incoming missiles.</p>
+                <h3>UH-80 Ghost Hawk Block II</h3>
+                <p>This is an advanced variant of the UH-80 Ghost Hawk with exterior pylons for additional weaponry.</p>
+                <p>In addition to its vanilla functionality, the UH-80 Ghost Hawk Block II can be used to slingload
+                    vehicles and deploy static equipment. To do so, approach the vehicle or equipment you wish to
+                    deploy, use the Attach Deployable option.</p>
+                <p>It can be equipped with ECM jammer pods, which can be used to destroy missiles in flight. To do so,
+                    aim and look at the incoming missiles for a short duration.</p>
+                <p>It has an HMD (helmet-mounted display) that allows the pilot to see nearby data-linked enemies
+                    and incoming missiles.</p>
+                <h3>Mi-48 Kajman</h3>
+                <p>In addition to its vanilla options, the Mi-48 Kajman can be loaded with HARMs, DAGRs, and AGM-122
+                    Sidearms.</p>
+                <p>It can be equipped with ECM jammer pods, which can be used to destroy missiles in flight. To do so,
+                    aim and look at the incoming missiles for a short duration.</p>
+                <p>It has an HMD (helmet-mounted display) that allows the pilot to see nearby data-linked enemies
+                    and incoming missiles.</p>
+                <h3>AH-99 Blackfoot</h3>
+                <p>In addition to its vanilla options, the AH-99 Blackfoot can be loaded with HARMs and AGM-122
+                    Sidearms.</p>
+                <p>It has an HMD (helmet-mounted display) that allows the pilot to see nearby data-linked enemies
+                    and incoming missiles.</p>
+                <h3>AH-99 Blackfoot Block II</h3>
+                <p>In addition to its vanilla options, the AH-99 Blackfoot can be loaded with HARMs and AGM-122
+                    Sidearms.</p>
+                <p>It can be equipped with ECM jammer pods, which can be used to destroy missiles in flight. To do so,
+                    aim and look at the incoming missiles for a short duration.</p>
+                <p>It has an HMD (helmet-mounted display) that allows the pilot to see nearby data-linked enemies
+                    and incoming missiles.</p>
+            </div>
+            <div class="panel right-panel category-general" id="fixed-wing">
+                <h2>Fixed Wing</h2>
+                <p>These are information for fixed wing aircraft with functionality that goes beyond their vanilla
+                    functionality, special to this game mode. All armed fixed-wing aircraft are equipped with an HMD
+                    (helmet-mounted display) that allows the pilot to see nearby data-linked enemies and incoming
+                    missiles. Consult the Field Manual for more information on default fixed wing aircraft.</p>
+                <h3>Caesar BTT (Bomb)</h3>
+                <p>Caesar BTT (Bomb) is a variant of the Caesar BTT armed with a pair of GPS-guided GBU-15 bombs. Follow
+                    on-screen instructions to use.</p>
+                <h3>Y-32 Xi'an</h3>
+                <p>In addition to its vanilla options, the Y-32 Xi'an can be loaded with HARMs and DAGRs.</p>
+                <p>It can be equipped with ECM jammer pods, which can be used to destroy missiles in flight. To do so,
+                    aim and look at the incoming missiles for a short duration.</p>
+                <h3>A-143 Buzzard (CAS)</h3>
+                <p>In addition to its vanilla options, the A-143 Buzzard (CAS) can be loaded with TV-guided KAB-250KRs.
+                </p>
+                <h3>To-199 Neophron (CAS)</h3>
+                <p>In addition to its vanilla options, the To-199 Neophron (CAS) can be loaded with DAGRs.</p>
+                <h3>A-149 Gryphon</h3>
+                <p>In addition to its vanilla weapons, the A-149 Gryphon can be loaded with HARMs, AGM-122
+                    Sidearms, SDBs, and TV-guided GBU-15s.</p>
+                <h3>EF/A-181 Growler</h3>
+                <p>EF/A-181 Growler is a dedicated air superiority variant of the Black Wasp that has an AESA radar that
+                    scans for air targets and provides targeting for its lock-on-after-launch missiles.</p>
+                <p>In addition to its vanilla weapons, the EF/A-181 Growler can be loaded with HARMs and AGM-122
+                    Sidearms.</p>
+                <h3>To-201 Shikra</h3>
+                <p>In addition to its vanilla options, the To-201 Shikra can be loaded with more HARMs and two racks of
+                    SDBs.</p>
+                <h3>To-201 Shikra (Stealth/Recon)</h3>
+                <p>To-201 Shikra (Stealth/Recon) is a variant designed for stealth and standoff missions, featuring a
+                    recon sensor and lock-on-after-launch capabilities.</p>
+                <p>In addition to its vanilla options, the To-201 Shikra (Stealth/Recon) can be loaded with two racks of
+                    SDBs, AGM-122 Sidearms, and GPS-guided bombs.</p>
+                <h3>F/A-181 Black Wasp II</h3>
+                <p>In addition to its vanilla options, the F/A-181 Black Wasp II has an additional SDB rack on one of
+                    its center pylons.</p>
+                <h3>F/A-181 Black Wasp II (Stealth/Recon)</h3>
+                <p>F/A-181 Black Wasp II (Stealth/Recon) is a variant designed for stealth and standoff missions,
+                    featuring a recon sensor and lock-on-after-launch capabilities.</p>
+                <p>In addition to its vanilla options, the F/A-181 Black Wasp II (Stealth/Recon) can be loaded with
+                    AGM-122 Sidearms and GPS-guided bombs.</p>
+            </div>
         </div>
     </div>
     <script>
-        document.addEventListener('wheel', function(e) {
+        document.addEventListener('wheel', function (e) {
             const el = document.elementFromPoint(e.clientX, e.clientY);
             if (el && el.closest('.panel')) {
                 el.closest('.panel').scrollTop += e.deltaY;
                 e.preventDefault();
             }
         }, { passive: false });
+
+        document.addEventListener('click', function (e) {
+            const target = e.target;
+            if (target.tagName === 'A' && target.closest('.left-panel')) {
+                e.preventDefault();
+                const href = target.getAttribute('href');
+                const decodedHref = decodeURIComponent(href.replace(/[()\/]/g, '').replace(/\s+/g, '-').toLowerCase());
+
+                const subheading = document.querySelector(decodedHref);
+                console.log(subheading);
+                if (subheading && subheading.tagName !== 'DIV') {
+                    const parentPanel = subheading.closest('.right-panel');
+                    if (parentPanel) {
+                        document.querySelectorAll('.right-panel').forEach(p => p.style.display = 'none');
+                        parentPanel.style.display = 'inline-block';
+
+                        subheading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                        const paragraphs = [];
+                        let nextElement = subheading.nextElementSibling;
+                        while (nextElement && nextElement.tagName === 'P') {
+                            paragraphs.push(nextElement);
+                            nextElement = nextElement.nextElementSibling;
+                        }
+
+                        const elementsToHighlight = [subheading, ...paragraphs];
+                        elementsToHighlight.forEach(el => {
+                            el.style.backgroundColor = '#444';
+                        });
+
+                        setTimeout(() => {
+                            elementsToHighlight.forEach(el => {
+                                el.style.backgroundColor = '';
+                            });
+                        }, 1500);
+                    }
+                } else {
+                    const panel = document.querySelector('.right-panel' + href);
+                    if (panel) {
+                        document.querySelectorAll('.right-panel').forEach(p => p.style.display = 'none');
+                        panel.style.display = 'inline-block';
+                    }
+                }
+            }
+        });
+
+        function generateLeftNav() {
+            const leftPanel = document.querySelector('.left-panel ul');
+            const rightPanels = document.querySelectorAll('.right-panel');
+
+            const categories = new Set();
+
+            rightPanels.forEach(panel => {
+                const id = panel.id;
+                const title = panel.querySelector('h2')?.textContent;
+                const category = Array.from(panel.classList).find(cls => cls.startsWith('category-'));
+
+                if (category && !categories.has(category)) {
+                    const categoryName = category.replace('category-', '').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                    const categoryItem = document.createElement('li');
+                    categoryItem.classList.add('category-item');
+                    categoryItem.textContent = categoryName;
+                    leftPanel.appendChild(categoryItem);
+                    categories.add(category);
+                }
+
+                if (id && title) {
+                    const listItem = document.createElement('li');
+                    const link = document.createElement('a');
+                    link.href = `#${id}`;
+                    link.textContent = title;
+                    listItem.appendChild(link);
+                    leftPanel.appendChild(listItem);
+
+                    const subheadings = panel.querySelectorAll('h3');
+                    subheadings.forEach(subheading => {
+                        const subId = `${id}-${subheading.textContent.replace(/[()\/]/g, '').replace(/\s+/g, '-').toLowerCase()}`;
+                        subheading.id = subId;
+
+                        const subListItem = document.createElement('li');
+                        subListItem.style.marginLeft = '20px';
+                        const subLink = document.createElement('a');
+                        subLink.href = `#${subId}`;
+                        subLink.textContent = subheading.textContent;
+                        subListItem.appendChild(subLink);
+                        leftPanel.appendChild(subListItem);
+                    });
+                }
+            });
+        }
+
+        // Call the function to populate the left navigation panel
+        document.addEventListener('DOMContentLoaded', generateLeftNav);
     </script>
 </body>
+
 </html>

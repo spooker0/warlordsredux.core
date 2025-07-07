@@ -26,7 +26,6 @@ import ScrollBar;
 #include "sounds.hpp"
 #include "briefings.hpp"
 
-#include "scripts\DIS\ui.hpp"
 #include "scripts\MENU\ui.hpp"
 #include "scripts\PERF\ui.hpp"
 #include "scripts\POLL\ui.hpp"

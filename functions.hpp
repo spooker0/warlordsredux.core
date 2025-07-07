@@ -35,6 +35,7 @@ class CfgFunctions {
 			class getNotchResult {};
 			class getSamTarget {};
 			class getSeadTarget {};
+			class getSquadList {};
 			class getTargetList {};
 			class gpsMunition {};
 			class handleGPSKeypress {};
@@ -50,7 +51,6 @@ class CfgFunctions {
 			class setupLoal {};
 			class setupSead {};
 			class setupGPSMunition {};
-			class setupRemoteMenu {};
 			class setupRemoteMunition {};
 			class startMissileCamera {};
 			class terminalGuidance {};
@@ -219,7 +219,6 @@ class CfgFunctions {
 			class reconReward {};
 			class refuelAction {};
 			class refuelActionEligibility {};
-			class remoteControlAction {};
 			class removeAction {};
 			class removeStronghold {};
 			class repairAction {};

@@ -48,7 +48,10 @@ _this addEventHandler ["Fired", {
 	};
 	private _projectileRemote = _projectileConfig getOrDefault ["remote", false];
 	if (_projectileRemote) then {
-		_unit setVariable ["APS_remoteControlled", _projectile, true];
+		private _remoteController = _unit getVariable ["WL2_selectedPlayerTarget", objNull];
+		if (alive _remoteController) then {
+			[_projectile, _unit] remoteExec ["DIS_fnc_remoteMunition", _remoteController];
+		};
 	};
 
 	private _projectileGPS = _projectileConfig getOrDefault ["gps", false];

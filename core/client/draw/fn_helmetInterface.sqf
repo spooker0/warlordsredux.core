@@ -616,10 +616,6 @@ addMissionEventHandler ["Draw3D", {
             continue;
         };
 
-        // private _vehicle = vehicle (getConnectedUAVUnit player);
-        // if (isNull _vehicle) then {
-        //     _vehicle = vehicle player;
-        // };
         private _vehicle = cameraOn;
 
         private _vehicleActualType = _vehicle getVariable ["WL2_orderedClass", typeOf _vehicle];

@@ -11,6 +11,7 @@ class CfgRemoteExec {
 		class APS_fnc_report {allowedTargets = 0;};
 		class APS_fnc_serverHandleAPS {allowedTargets = 2;};
 		class APS_fnc_setupProjectiles {allowedTargets = 0;};
+		class DIS_fnc_remoteMunition {allowedTargets = 0;};
 		class DIS_fnc_setupAdvancedSam {allowedTargets = 0;};
 		class DIS_fnc_setupExtendedSam {allowedTargets = 0;};
 		class DIS_fnc_setupLoal {allowedTargets = 0;};
@@ -58,7 +59,6 @@ class CfgRemoteExec {
 		class WL2_fnc_reconOpticsAction {allowedTargets = 0;};
 		class WL2_fnc_refuelAction {allowedTargets = 0;};
 		class WL2_fnc_reloadOverride {allowedTargets = 0;};
-		class WL2_fnc_remoteControlAction {allowedTargets = 0;};
 		class WL2_fnc_removeAction {allowedTargets = 1;};
 		class WL2_fnc_repairAction {allowedTargets = 1;};
 		class WL2_fnc_reportTargets {allowedTargets = 0;};

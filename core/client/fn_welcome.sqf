@@ -7,3 +7,4 @@ if (isNull _display) then {
 };
 private _texture = _display displayCtrl 5501;
 _texture ctrlWebBrowserAction ["LoadFile", "src\ui\welcome.html"];
+// _texture ctrlWebBrowserAction ["OpenDevConsole"];

@@ -35,8 +35,8 @@ while { alive _asset } do {
 		// _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
 		private _controlParams = ["LOAL CONTROLS", [
-			["Select previous", "gunElevUp"],
-			["Select next", "gunElevDown"]
+			["Previous", "gunElevUp"],
+			["Next", "gunElevDown"]
 		]];
 		["Loal", _controlParams, 10] call WL2_fnc_showHint;
 

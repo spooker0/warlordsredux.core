@@ -128,6 +128,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["checkbox", "Hide squad menu in scroll menu", ["hideSquadMenu", false]],
         ["checkbox", "Hide buy menu in scroll menu", ["hideBuyMenu", false]],
         ["checkbox", "Hide vehicle manager in scroll menu", ["hideVehicleManager", false]],
+        ["checkbox", "Hide help menu in scroll menu", ["hideHelpMenu", false]],
         ["checkbox", "Delete quad bike/water scooter on exit", ["deleteSmallTransports", true]],
         ["checkbox", "Respawn: spawn with UAV Terminal", ["respawnUavTerminal", true]],
         ["category", "Control Hints"],
