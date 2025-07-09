@@ -26,7 +26,7 @@ switch (_className) do {
         player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 
         [_asset] call WL2_fnc_factionBasedClientInit;
-        [_asset, [], true] spawn WLC_fnc_onRespawn;
+        [_asset, true] spawn WLC_fnc_onRespawn;
 
         [_asset] spawn {
             params ["_asset"];
@@ -54,9 +54,6 @@ switch (_className) do {
         player addGoggles "G_Tactical_Clear";
         player setVariable ["WL_hasGoggles", true, true];
     };
-    case "LastLoadout": {"RequestMenu_close" call WL2_fnc_setupUI; [player, "lastLoadout"] remoteExec ["WL2_fnc_handleClientRequest", 2]};
-    case "SaveLoadout": {"save" call WL2_fnc_orderSavedLoadout};
-    case "SavedLoadout": {"RequestMenu_close" call WL2_fnc_setupUI; [player, "savedLoadout"] remoteExec ["WL2_fnc_handleClientRequest", 2]};
     case "Scan": { 0 spawn WL2_fnc_orderSectorScan };
     case "FTSeized": { 0 spawn WL2_fnc_orderFastTravel };
     case "FTConflict": { 1 spawn WL2_fnc_orderFastTravel };
@@ -173,7 +170,7 @@ switch (_className) do {
         _selectedCollaborator setVariable ["BIS_WL_ownerAssetSide", side group player, true];
 
         [_selectedCollaborator] call WL2_fnc_factionBasedClientInit;
-        [_selectedCollaborator, [], true, true] spawn WLC_fnc_onRespawn;
+        [_selectedCollaborator, true] spawn WLC_fnc_onRespawn;
 
         switchCamera _selectedCollaborator;
         player remoteControl _selectedCollaborator;

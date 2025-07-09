@@ -27,37 +27,17 @@ player addEventHandler ["InventoryOpened",{
 }];
 
 player addEventHandler ["Killed", {
-	BIS_WL_loadoutApplied = false;
 	"RequestMenu_close" call WL2_fnc_setupUI;
 
 	BIS_WL_lastLoadout = +getUnitLoadout player;
-	private _varName = format ["WL2_purchasable_%1", BIS_WL_playerSide];
-	private _gearArr = (missionNamespace getVariable _varName) # 5;
-	private _lastLoadoutArr = _gearArr # 1;
-	private _text = localize "STR_A3_WL_last_loadout_info";
-	_text = _text + "<br/><br/>";
-	{
-		if (_forEachIndex in [0,1,2,3,4]) then {
-			if (count _x > 0) then {
-				_text = _text + (getText (configFile >> "CfgWeapons" >> _x # 0 >> "displayName")) + "<br/>";
-			};
-		};
-		if (_forEachIndex == 5) then {
-			if (count _x > 0) then {
-				_text = _text + (getText (configFile >> "CfgVehicles" >> _x # 0 >> "displayName")) + "<br/>";
-			};
-		};
-	} forEach BIS_WL_lastLoadout;
-	_lastLoadoutArr set [5, _text];
-	_gearArr set [1, _lastLoadoutArr];
-	(missionNamespace getVariable _varName) set [5, _gearArr];
 
-	_connectedUAV = getConnectedUAV player;
+	private _connectedUAV = getConnectedUAV player;
 	if (_connectedUAV != objNull) exitWith {
 		player connectTerminalToUAV objNull;
 	};
 	player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
-	_canUse = player isUniformAllowed (uniform player);
+
+	private _canUse = player isUniformAllowed (uniform player);
 	if !(_canUse) then {
 		[format ["Player:%1, player's UID:%2: Uses a uniform from another faction: %3", player, getPlayerUID player, uniform player]] remoteExec ["diag_log", 2];
 	};

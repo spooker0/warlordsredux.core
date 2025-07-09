@@ -123,22 +123,6 @@ if (_ret) then {
 				[WL2_fnc_checkFastTravelSquad]
 			]
 		};
-		case "LastLoadout": {
-			[
-				[WL2_fnc_checkPlayerInVehicle],
-				[WL2_fnc_checkLastLoadout],
-				[WL2_fnc_checkInFriendlySector, [_cost, []]],
-				[WL2_fnc_checkNearbyEnemies]
-			]
-		};
-		case "SavedLoadout": {
-			[
-				[WL2_fnc_checkPlayerInVehicle],
-				[WL2_fnc_checkSavedLoadout],
-				[WL2_fnc_checkInFriendlySector, [_cost, []]],
-				[WL2_fnc_checkNearbyEnemies]
-			]
-		};
 		case "FundsTransfer": {
 			[
 				[WL2_fnc_checkAlliedPlayers]

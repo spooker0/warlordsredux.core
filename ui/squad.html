@@ -21,6 +21,7 @@
         }
 
         .squad-menu-wrapper {
+            position: relative;
             display: inline-block;
             width: 80%;
             height: 60%;
@@ -253,6 +254,25 @@
         .hide {
             display: none;
         }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.3);
+            width: 40px;
+            height: 40px;
+            font-size: 30px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+        }
+
+        .close-button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
     </style>
 </head>
 
@@ -282,6 +302,9 @@
                 </div>
             </div>
         </div>
+        <div class="close-button">
+            &times;
+        </div>
     </div>
     <script>
         document.addEventListener('wheel', function (e) {
@@ -299,6 +322,10 @@
 
         document.getElementById('cancel-rename-button').addEventListener('click', () => {
             document.querySelector('.rename-modal').style.display = 'none';
+        });
+
+        document.querySelector('.close-button').addEventListener('click', function () {
+            A3API.SendAlert('exit');
         });
 
         function saveName() {

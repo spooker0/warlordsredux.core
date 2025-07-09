@@ -336,9 +336,7 @@ class CfgFunctions {
 			class orderCruiseMissile {};
 			class orderFastTravel {};
 			class orderFundsTransfer {};
-			class orderLastLoadout {};
 			class orderNaval {};
-			class orderSavedLoadout {};
 			class orderStronghold {};
 			class orderSectorScan {};
 			class orderVehicle {};
@@ -365,14 +363,12 @@ class CfgFunctions {
 			class checkInFriendlySector {};
 			class checkInventoryOpen {};
 			class checkIsOrdering {};
-			class checkLastLoadout {};
 			class checkNearbyEnemies {};
 			class checkNoStronghold {};
 			class checkParadropCooldown {};
 			class checkPlayerInVehicle {};
 			class checkRequirements {};
 			class checkResetVehicle {};
-			class checkSavedLoadout {};
 			class checkStrongholdFT {};
 			class checkSelectedUnits {};
 			class checkTargetEnemyBase {};
@@ -485,18 +481,11 @@ class CfgFunctions {
 		class Default {
 			file = "src\scripts\WLC";
 			class action {};
-			class buildAmmo {};
-			class buildAttachments {};
 			class buildMenu {};
 			class getLevelInfo {};
-			class init {};
 			class levelUp {};
-			class onButtonSelect {};
 			class onRespawn {};
-			class onSelection {};
-			class processSelection {};
 			class setScore {};
-			class updateItemCost {};
 		};
 	};
 	class WLM {

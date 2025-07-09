@@ -17,7 +17,7 @@ if (isDedicated) exitWith {};
     {},
     {
         params ["_asset", "_caller", "_actionId"];
-        [_caller, getUnitLoadout _caller, false, false] call WLC_fnc_onRespawn;
+        [_caller, false] call WLC_fnc_onRespawn;
         [] call WL2_fnc_factionBasedClientInit;
     },
     {},

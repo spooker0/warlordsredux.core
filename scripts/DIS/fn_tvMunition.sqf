@@ -41,7 +41,14 @@ private _waypointDrawer = addMissionEventHandler ["Draw3D", {
 }];
 
 _projectile setVariable ["BIS_WL_ownerAssetSide", BIS_WL_playerSide];
-_projectile setVariable ["WL_tvMunition", true];
+
+private _apsProjectileType = _projectile getVariable ["APS_ammoOverride", typeOf _projectile];
+private _apsProjectileConfig = APS_projectileConfig getOrDefault [_apsProjectileType, createHashMap];
+private _dazzleable = _apsProjectileConfig getOrDefault ["dazzleable", false];
+if (_dazzleable) then {
+    _projectile setVariable ["WL2_dazzleable", true];
+};
+_projectile setVariable ["WL2_isTvMunition", true];
 [_projectile, player] spawn WL2_fnc_uavJammer;
 
 private _flightMode = if (_projectileIsShell) then {

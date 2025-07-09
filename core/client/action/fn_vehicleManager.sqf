@@ -9,6 +9,12 @@ _texture ctrlWebBrowserAction ["LoadFile", "src\ui\vehicles.html"];
 
 _texture ctrlAddEventHandler ["JSDialog", {
     params ["_texture", "_isConfirmDialog", "_message"];
+
+    playSoundUI ["a3\ui_f\data\sound\rsclistbox\soundselect.wss", 0.5];
+    if (_message == "exit") exitWith {
+        closeDialog 0;
+    };
+
     private _params = fromJSON _message;
     _params params ["_vehicleNetId", "_actionId"];
 
@@ -80,7 +86,6 @@ _texture ctrlAddEventHandler ["JSDialog", {
         };
     };
 
-    playSoundUI ["a3\ui_f\data\sound\rsclistbox\soundselect.wss", 0.5];
     [_texture] call WL2_fnc_sendVehicleData;
     true;
 }];

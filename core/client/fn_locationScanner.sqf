@@ -40,6 +40,8 @@ addMissionEventHandler ["Draw3D", {
 }];
 
 private _side = BIS_WL_playerSide;
+private _fobNextWarn = 0;
+private _strongholdNextWarn = 0;
 while { !BIS_WL_missionEnd } do {
     private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
     private _allScannedUnits = [];
@@ -60,6 +62,13 @@ while { !BIS_WL_missionEnd } do {
         private _strongholdArea = _strongholdSector getVariable ["WL_strongholdMarker", ""];
         private _scannedUnits = [_side, _strongholdArea] call WL2_fnc_detectUnits;
         _allScannedUnits append _scannedUnits;
+
+        if (count _scannedUnits > 0) then {
+            if (serverTime >= _strongholdNextWarn) then {
+                _strongholdNextWarn = serverTime + 30;
+                systemChat "Stronghold intrusion detected!";
+            };
+        };
     } forEach _strongholds;
 
     private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
@@ -71,6 +80,13 @@ while { !BIS_WL_missionEnd } do {
             private _forwardBaseArea = [_forwardBase, WL_FOB_RANGE, WL_FOB_RANGE, 0, false];
             private _scannedUnits = [_side, _forwardBaseArea] call WL2_fnc_detectUnits;
             _allScannedUnits append _scannedUnits;
+
+            if (count _scannedUnits > 0) then {
+                if (serverTime >= _fobNextWarn) then {
+                    _fobNextWarn = serverTime + 30;
+                    systemChat "Forward base intrusion detected!";
+                };
+            };
         } else {
             private _sectorsInRange = _forwardBase getVariable ["WL2_forwardBaseSectors", []];
             _sectorsInRange = _sectorsInRange select {

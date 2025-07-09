@@ -93,7 +93,7 @@ private _side = side _owner;
         private _jammerStrength = linearConversion [WL_JAMMER_RANGE_OUTER, WL_JAMMER_RANGE_INNER, _closestJammerDistance, 0, 1, true];
         _asset setVariable ["BIS_WL_jammerStrength", _jammerStrength];
 
-        private _isTvMunition = _asset getVariable ["WL_tvMunition", false];
+        private _isTvMunition = _asset getVariable ["WL2_isTvMunition", false];
         if (_jammerStrength >= 1 && !_isTvMunition) then {
             if (getPosATL _asset # 2 > 1) then {
                 // flyers take damage
@@ -140,7 +140,7 @@ private _side = side _owner;
     _indicator ctrlSetPosition [1, 0, _indicatorWidth + 0.05, 0.1];
     _indicator ctrlCommit 0;
 
-    private _isTvMunition = _asset getVariable ["WL_tvMunition", false];
+    private _isTvMunition = _asset getVariable ["WL2_isTvMunition", false];
 
     private _sensors = (listVehicleSensors _asset) apply { _x # 0 };
     private _sensorsDisabled = false;
@@ -155,8 +155,14 @@ private _side = side _owner;
 
         if (_isTvMunition) then {
             private _nearAir = _asset nearEntities ["Air", 300];
+            private _dazzleable = _asset getVariable ["WL2_dazzleable", false];
+            private _nearAirHeightLimit = if (_dazzleable) then {
+                20;
+            } else {
+                500;
+            };
             _nearAir = _nearAir select {
-                getPosATL _x # 2 > 20 &&
+                getPosATL _x # 2 > _nearAirHeightLimit &&
                 [_x] call WL2_fnc_getAssetSide != BIS_WL_playerSide
             };
             _nearAir = _nearAir select {

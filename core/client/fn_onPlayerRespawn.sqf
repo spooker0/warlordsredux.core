@@ -48,7 +48,6 @@ if (isRemoteControlling player) then {
 
 player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 [] call WLC_fnc_onRespawn;
-[] call WL2_fnc_factionBasedClientInit;
 
 0 spawn MENU_fnc_settingsMenu;
 

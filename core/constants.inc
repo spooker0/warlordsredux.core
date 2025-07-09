@@ -1,5 +1,5 @@
 // Live: update to latest version
-#define WL_VERSION "2.6.12"
+#define WL_VERSION "2.6.13"
 
 // Live: set all to 0
 #define WL_HARD_AI_MODE 0
@@ -75,8 +75,6 @@
 #define WL_COST_FUNDTRANSFER 2000
 #define WL_COST_TARGETRESET 50
 #define WL_COST_ARSENAL 1000
-#define WL_COST_LASTLOADOUT 100
-#define WL_COST_SAVEDLOADOUT 500
 
 #define WL_MAX_MONEY 50000
 #define WL_MAX_ASSETS 10

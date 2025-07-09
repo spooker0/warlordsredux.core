@@ -38,8 +38,6 @@ private _actionCost = switch (_action) do {
 	case "equip" : { _param1 max 0 };
 	case "buyStronghold" : { 500 };
 	case "fortifyStronghold" : { 2000 };
-	case "lastLoadout" : { WL_COST_LASTLOADOUT };
-	case "savedLoadout" : { WL_COST_SAVEDLOADOUT };
 	case "orderArsenal" : { WL_COST_ARSENAL };
 	case "fastTravelContested" : { WL_COST_FTCONTESTED };
 	case "fastTravelAirAssault" : { WL_COST_AIRASSAULT };
@@ -115,14 +113,6 @@ if (_action == "spot") exitWith {
 	private _reward = _param1;
 	[_reward] call _addFunds;
 	[objNull, _reward, "Recon", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
-};
-
-if (_action == "lastLoadout") exitWith {
-	0 remoteExec ["WL2_fnc_orderLastLoadout", remoteExecutedOwner];
-};
-
-if (_action == "savedLoadout") exitWith {
-	["apply"] remoteExec ["WL2_fnc_orderSavedLoadout", remoteExecutedOwner];
 };
 
 if (_action == "orderArsenal") exitWith {

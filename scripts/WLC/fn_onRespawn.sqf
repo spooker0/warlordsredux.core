@@ -1,21 +1,88 @@
 #include "includes.inc"
-params [["_unit", player], ["_lastLoadout", BIS_WL_lastLoadout], ["_paidFor", false], ["_collaborator", false]];
+params [["_unit", player], ["_paidFor", false]];
 
-private _side = BIS_WL_playerSide;
+private _countRockets = {
+    params ["_loadout"];
 
-private _data = createHashMap;
-{
-    private _type = _x;
-    private _customizationData = profileNamespace getVariable [format ["WLC_%1_%2", _type, _side], ""];
-    _data set [_type, _customizationData];
-} forEach ["Uniform", "Vest", "Helmet", "Primary", "Secondary", "Launcher"];
+    private _rocketCount = 0;
 
-{
-    private _type = _x;
-    private _attachmentData = profileNamespace getVariable [format ["WLC_%1_%2_Attach", _type, _side], ""];
-    private _ammoData = profileNamespace getVariable [format ["WLC_%1_%2_Ammo", _type, _side], ""];
-    _data set [_type + "Attachment", _attachmentData];
-    _data set [_type + "Ammo", _ammoData];
-} forEach ["Primary", "Secondary", "Launcher"];
+    if (count (_loadout # 1) > 0) then {
+        // in tube
+        if (count (_loadout # 1 # 4) > 0) then {
+            _rocketCount = _rocketCount + 1;
+        };
+    };
 
-[_data, _side, _lastLoadout, _unit, _paidFor, _collaborator] call WLC_fnc_processSelection;
+    if (count (_loadout # 2) > 0) then {
+        // in vest
+        private _vestMagazines = _loadout # 4 # 1;
+        {
+            private _magazine = _x;
+            private _magazineType = _magazine # 0;
+            private _magazineCount = _magazine # 1;
+
+            private _magazineMass = getNumber (configFile >> "CfgMagazines" >> _magazineType >> "mass");
+            if (_magazineMass < 40) then {
+                continue;
+            };
+
+            _rocketCount = _rocketCount + _magazineCount;
+        } forEach _vestMagazines;
+    };
+
+    // in backpack
+    if (count (_loadout # 5) > 0) then {
+        private _backpackMagazines = _loadout # 5 # 1;
+        {
+            private _magazine = _x;
+            private _magazineType = _magazine # 0;
+            private _magazineCount = _magazine # 1;
+
+            private _magazineMass = getNumber (configFile >> "CfgMagazines" >> _magazineType >> "mass");
+            if (_magazineMass < 40) then {
+                continue;
+            };
+
+            _rocketCount = _rocketCount + _magazineCount;
+        } forEach _backpackMagazines;
+    };
+
+    _rocketCount
+};
+
+private _customizationLoadout = profileNamespace getVariable [format ["WLC_savedLoadout_%1", BIS_WL_playerSide], []];
+if (count _customizationLoadout > 0) then {
+    private _lastLoadout = BIS_WL_lastLoadout;
+    private _rocketCountBefore = if (count _lastLoadout > 0) then {
+        [_lastLoadout] call _countRockets
+    } else {
+        0
+    };
+
+    private _rocketCountAfter = [_customizationLoadout] call _countRockets;
+    private _rocketDifference = (_rocketCountAfter - _rocketCountBefore) max 0;
+
+    if (!_paidFor) then {
+        private _totalCost = _rocketDifference * 50;
+        [player, "equip", _totalCost] remoteExec ["WL2_fnc_handleClientRequest", 2];
+
+        private _message = if (_totalCost > 0) then {
+            private _moneySign = [BIS_WL_playerSide] call WL2_fnc_getMoneySign;
+            format ["Equipment and customizations applied for %1%2.", _moneySign, _totalCost];
+        } else {
+            "Equipment and customizations applied for free.";
+        };
+        systemChat _message;
+    };
+
+	_unit setUnitLoadout _customizationLoadout;
+
+    _unit enableStamina false;
+    [_unit] spawn {
+        params ["_unit"];
+        sleep 3;
+        _unit enableStamina true;
+    };
+} else {
+    0 spawn WLC_fnc_buildMenu;
+};

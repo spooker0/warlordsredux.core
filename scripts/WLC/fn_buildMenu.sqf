@@ -1,125 +1,234 @@
 #include "includes.inc"
-private _display = findDisplay WLC_DISPLAY;
-
+private _display = findDisplay 5500;
 if (isNull _display) then {
-    _display = createDialog ["WLC_MenuUI", true];
+    _display = createDialog ["RscWLBrowserMenu", true];
 };
+private _texture = _display displayCtrl 5501;
+_texture ctrlWebBrowserAction ["LoadFile", "src\ui\loadout.html"];
+// _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
-disableSerialization;
+_texture ctrlAddEventHandler ["JSDialog", {
+    params ["_texture", "_isConfirmDialog", "_message"];
 
-private _side = BIS_WL_playerSide;
-
-private _closeButton = _display displayCtrl WLC_CLOSE_BUTTON;
-_closeButton ctrlAddEventHandler ["ButtonClick", {
-    closeDialog 0;
-}];
-
-private _controlMap = createHashMapFromArray [
-    [WLC_PRIMARY_SELECT, "Primary"],
-    [WLC_SECONDARY_SELECT, "Secondary"],
-    [WLC_LAUNCHER_SELECT, "Launcher"],
-    [WLC_UNIFORM_SELECT, "Uniform"],
-    [WLC_VEST_SELECT, "Vest"],
-    [WLC_HELMET_SELECT, "Helmet"]
-];
-
-private _level = ["getLevel"] call WLC_fnc_getLevelInfo;
-private _score = ["getScore"] call WLC_fnc_getLevelInfo;
-private _nextLevelScore = ["getNextLevelScore"] call WLC_fnc_getLevelInfo;
-
-private _levelDisplay = _display displayCtrl WLC_LEVEL_TEXT;
-_levelDisplay ctrlSetText format ["Level %1 (%2/%3)", _level, _score toFixed 0, _nextLevelScore toFixed 0];
-
-private _moneySign = [_side] call WL2_fnc_getMoneySign;
-
-private _sumCost = 0;
-{
-    private _select = _display displayCtrl _x;
-    private _type = _y;
-    private _customizationList = missionNamespace getVariable [format ["WLC_%1_%2", _type, _side], createHashMap];
-
-    lbClear _select;
-    private _default = _select lbAdd "Default";
-    _select lbSetData [_default, ""];
-    _select lbSetValue [_default, -1];
-
-    {
-        private _class = _x;
-        private _customization = _y;
-        private _name = _customization getOrDefault ["name", ""];
-        private _requiredLevel = _customization getOrDefault ["level", 0];
-
-        private _cost = _customization getOrDefault ["cost", 0];
-        private _displayName = if (_cost > 0) then {
-            format ["%1 [%2%3]", _name, _moneySign, _cost];
-            // continue;
-        } else {
-            _name;
-        };
-
-        private _index = _select lbAdd _displayName;
-        _select lbSetData [_index, _class];
-        _select lbSetValue [_index, _requiredLevel];
-
-        private _actualClass = _customization getOrDefault ["item", _class];
-        _select lbSetPicture [_index, getText (configFile >> "CfgWeapons" >> _actualClass >> "picture")];
-
-        if (_requiredLevel > _level) then {
-            _select lbSetColor [_index, [1, 0, 0, 1]];
-            _select lbSetText [_index, format ["(Lvl %1) %2", _requiredLevel, _displayName]];
-        };
-
-        private _tooltip = format ["%1\nUnlock: Level %2\nCost: %3%4", _name, _requiredLevel, _moneySign, _cost];
-        _select lbSetTooltip [_index, _tooltip];
-    } forEach _customizationList;
-    _select lbSortBy ["VALUE", false];
-
-    _select lbSetCurSel 0;
-    private _customizationData = profileNamespace getVariable [format ["WLC_%1_%2", _type, BIS_WL_playerSide], ""];
-    if (_customizationData != "") then {
-        for "_index" from 0 to lbSize _select - 1 do {
-            private _class = _select lbData _index;
-            if (_class == _customizationData) then {
-                private _customization = _customizationList getOrDefault [_class, createHashMap];
-                private _requiredLevel = _customization getOrDefault ["level", 0];
-                if (_requiredLevel <= _level) then {
-                    _select lbSetCurSel _index;
-                    private _cost = _customization getOrDefault ["cost", 0];
-                    _sumCost = _sumCost + _cost;
-                };
-                break;
-            };
-        };
+    if (_message select [0, 1] == "i") exitWith {
+        _message = _message select [1];
+        private _imageCache = missionNamespace getVariable ["WLC_imageCache", createHashMap];
+        private _imageData = fromJSON _message;
+        _imageCache merge _imageData;
+        missionNamespace setVariable ["WLC_imageCache", _imageCache];
     };
 
-    _select ctrlAddEventHandler ["LBSelChanged", format ["[_this # 0, _this # 1, '%1'] spawn WLC_fnc_onSelection", _type]];
+    playSoundUI ["a3\ui_f\data\sound\rsclistbox\soundselect.wss", 0.5];
+    if (_message == "exit") exitWith {
+        closeDialog 0;
+    };
 
-    _select ctrlShow false;
-} forEach _controlMap;
+    private _responseArray = fromJSON _message;
+    profileNamespace setVariable [format ["WLC_savedLoadout_%1", BIS_WL_playerSide], _responseArray];
+}];
 
-private _funds = (missionNamespace getVariable "fundsDatabaseClients") getOrDefault [getPlayerUID player, 0];
-private _affordColor = if (_funds >= _sumCost) then {
-    "#FFFFFF";
-} else {
-    "#FF0000";
+_texture ctrlAddEventHandler ["PageLoaded", {
+    params ["_texture"];
+
+    private _weaponData = getArray (missionConfigFile >> "CfgWLCustomization" >> "weapons");
+
+    if (BIS_WL_playerSide == west) then {
+        _weaponData append getArray (missionConfigFile >> "CfgWLCustomization" >> "West" >> "outfits");
+    } else {
+        _weaponData append getArray (missionConfigFile >> "CfgWLCustomization" >> "East" >> "outfits");
+    };
+
+    private _weaponOptionArray = [];
+    private _allMagazines = [];
+    {
+        private _weapon = _x # 0;
+        private _weaponType = _x # 1;
+        private _weaponLevel = _x # 2;
+
+        private _weaponName = getText (configFile >> "CfgWeapons" >> _weapon >> "displayName");
+        private _weaponIcon = (getText (configFile >> "CfgWeapons" >> _weapon >> "picture")) regexReplace ["^\\", ""];
+
+        if (_weaponType in ["vest", "uniform", "helmet"]) then {
+            private _maxLoad = getContainerMaxLoad _weapon;
+
+            _weaponOptionArray pushBack [
+                _weapon,
+                _weaponType,
+                _weaponName,
+                _weaponIcon,
+                _weaponLevel,
+                _maxLoad
+            ];
+            continue;
+        };
+
+        if (_weaponType == "backpack") then {
+            private _backpackName = getText (configFile >> "CfgVehicles" >> _weapon >> "displayName");
+            private _backpackIcon = (getText (configFile >> "CfgVehicles" >> _weapon >> "picture")) regexReplace ["^\\", ""];
+            _weaponOptionArray pushBack [
+                _weapon,
+                _weaponType,
+                _backpackName,
+                _backpackIcon,
+                _weaponLevel
+            ];
+            continue;
+        };
+
+        private _optics = compatibleItems [_weapon, "CowsSlot"];
+        private _opticsData = [];
+        {
+            private _optic = _x;
+            private _opticName = getText (configFile >> "CfgWeapons" >> _optic >> "displayName");
+            private _opticIcon = (getText (configFile >> "CfgWeapons" >> _optic >> "picture")) regexReplace ["^\\", ""];
+            _opticsData pushBack [_optic, _opticName, _opticIcon];
+        } forEach _optics;
+
+        private _muzzles = if (_weapon == "hgun_esd_01_F") then {
+            ["muzzle_antenna_01_f", "muzzle_antenna_02_f", "muzzle_antenna_03_f"]
+        } else {
+            compatibleItems [_weapon, "MuzzleSlot"];
+        };
+        private _muzzlesData = [];
+        {
+            private _muzzle = _x;
+            private _muzzleName = getText (configFile >> "CfgWeapons" >> _muzzle >> "displayName");
+            private _muzzleIcon = (getText (configFile >> "CfgWeapons" >> _muzzle >> "picture")) regexReplace ["^\\", ""];
+            _muzzlesData pushBack [_muzzle, _muzzleName, _muzzleIcon];
+        } forEach _muzzles;
+
+        private _bipods = compatibleItems [_weapon, "UnderBarrelSlot"];
+        private _bipodsData = [];
+        {
+            private _bipod = _x;
+            private _bipodName = getText (configFile >> "CfgWeapons" >> _bipod >> "displayName");
+            private _bipodIcon = (getText (configFile >> "CfgWeapons" >> _bipod >> "picture")) regexReplace ["^\\", ""];
+            _bipodsData pushBack [_bipod, _bipodName, _bipodIcon];
+        } forEach _bipods;
+
+        private _weaponMuzzles = getArray (configFile >> "CfgWeapons" >> _weapon >> "muzzles");
+        _weaponMuzzles = _weaponMuzzles apply {
+            if (_x == "this") then {
+                _weapon
+            } else {
+                _x
+            };
+        };
+
+        private _magazines1 = if (_weapon == "hgun_esd_01_F") then {
+            []
+        } else {
+            compatibleMagazines [_weapon, _weaponMuzzles # 0];
+        };
+        {
+            _allMagazines pushBackUnique _x;
+        } forEach _magazines1;
+
+        private _magazines2 = if (count _weaponMuzzles >= 2 && _weapon != "hgun_esd_01_F") then {
+            compatibleMagazines [_weapon, _weaponMuzzles # 1];
+        } else {
+            [];
+        };
+        {
+            _allMagazines pushBackUnique _x;
+        } forEach _magazines2;
+
+        _weaponOptionArray pushBack [
+            _weapon,
+            _weaponType,
+            _weaponName,
+            _weaponIcon,
+            _weaponLevel,
+            _opticsData,
+            _muzzlesData,
+            _bipodsData,
+            _magazines1,
+            _magazines2
+        ];
+    } forEach _weaponData;
+
+    private _magazineConfigData = getArray (missionConfigFile >> "CfgWLCustomization" >> "magazines");
+
+    private _magazineData = _allMagazines apply {
+        private _magazine = _x;
+        private _magazineName = getText (configFile >> "CfgMagazines" >> _magazine >> "displayName");
+        private _magazineIcon = (getText (configFile >> "CfgMagazines" >> _magazine >> "picture")) regexReplace ["^\\", ""];
+        private _mass = getNumber (configFile >> "CfgMagazines" >> _magazine >> "mass");
+        private _count = getNumber (configFile >> "CfgMagazines" >> _magazine >> "count");
+
+        private _magazineDataEntry = _magazineConfigData select {
+            (_x # 0) == _magazine
+        };
+        private _level = 0;
+        if (count _magazineDataEntry > 0) then {
+            _magazineDataEntry = _magazineDataEntry # 0;
+            _level = _magazineDataEntry # 1;
+        };
+        [_magazine, _magazineName, _magazineIcon, _mass, _count, _level];
+    };
+
+    private _magazineDataText = toJSON _magazineData;
+    private _magazineDataTextArray = toArray _magazineDataText;
+    {
+        if (_x == 160) then {
+            _magazineDataTextArray set [_forEachIndex, 32];
+        };
+    } forEach _magazineDataTextArray;
+    _magazineDataText = toString _magazineDataTextArray;
+    _magazineDataText = _texture ctrlWebBrowserAction ["ToBase64", _magazineDataText];
+
+    private _weaponDataText = toJSON _weaponOptionArray;
+    private _weaponDataTextArray = toArray _weaponDataText;
+    {
+        if (_x == 160) then {
+            _weaponDataTextArray set [_forEachIndex, 32];
+        };
+    } forEach _weaponDataTextArray;
+    _weaponDataText = toString _weaponDataTextArray;
+    _weaponDataText = _texture ctrlWebBrowserAction ["ToBase64", _weaponDataText];
+
+    private _loadout = profileNamespace getVariable [format ["WLC_savedLoadout_%1", BIS_WL_playerSide], []];
+    if (count _loadout == 0) then {
+        _loadout = getUnitLoadout player;
+    };
+
+    private _loadoutText = toJSON _loadout;
+    _loadoutText = _texture ctrlWebBrowserAction ["ToBase64", _loadoutText];
+
+    private _imageCache = missionNamespace getVariable ["WLC_imageCache", createHashMap];
+    {
+        private _imageUrl = _x;
+        private _imageData = _y;
+
+        _imageUrl = _texture ctrlWebBrowserAction ["ToBase64", _imageUrl];
+        _imageData = _texture ctrlWebBrowserAction ["ToBase64", _imageData];
+
+        private _addImageCacheScript = format [
+            "addToImageCache(atob(""%1""), atob(""%2""));",
+            _imageUrl,
+            _imageData
+        ];
+        _texture ctrlWebBrowserAction ["ExecJS", _addImageCacheScript];
+    } forEach _imageCache;
+
+    private _playerLevel = ["getLevel"] call WLC_fnc_getLevelInfo;
+
+    private _script = format [
+        "updateLoadout(atob(""%1""), atob(""%2""), atob(""%3""), %4);",
+        _loadoutText,
+        _weaponDataText,
+        _magazineDataText,
+        _playerLevel
+    ];
+    _texture ctrlWebBrowserAction ["ExecJS", _script];
+}];
+
+[_texture] spawn {
+    params ["_texture"];
+    while { !isNull _texture } do {
+        sleep 0.2;
+    };
+
+    ["LOADOUT SAVED FOR NEXT RESPAWN"] spawn WL2_fnc_smoothText;
+    systemChat "Loadout saved for next respawn.";
 };
-private _costDisplay = _display displayCtrl WLC_COST_TEXT;
-_costDisplay ctrlSetStructuredText parseText format ["<t align='right'>Total Cost: <t color='%1'>%2%3</t></t>", _affordColor, _moneySign, _sumCost];
-
-private _buttonMap = createHashMapFromArray [
-    [WLC_PRIMARY_SELECT_BUTTON, WLC_PRIMARY_SELECT],
-    [WLC_SECONDARY_SELECT_BUTTON, WLC_SECONDARY_SELECT],
-    [WLC_LAUNCHER_SELECT_BUTTON, WLC_LAUNCHER_SELECT],
-    [WLC_UNIFORM_SELECT_BUTTON, WLC_UNIFORM_SELECT],
-    [WLC_VEST_SELECT_BUTTON, WLC_VEST_SELECT],
-    [WLC_HELMET_SELECT_BUTTON, WLC_HELMET_SELECT]
-];
-
-{
-    private _button = _display displayCtrl _x;
-    private _select = _display displayCtrl _y;
-
-    _button ctrlAddEventHandler ["ButtonClick", "_this spawn WLC_fnc_onButtonSelect"];
-} forEach _buttonMap;
-
-[_display displayCtrl WLC_PRIMARY_SELECT_BUTTON] spawn WLC_fnc_onButtonSelect;

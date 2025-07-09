@@ -49,30 +49,6 @@ private _purchaseable = [];
 				"Buy AR glasses, which show you enemies spotted by friendly datalink, while you are in range of an EW network. Use +/- keys to increase/decrease range."
 			];
 			#endif
-			_categoryData pushBack [
-				"LastLoadout",
-				WL_COST_LASTLOADOUT,
-				[],
-				localize "STR_A3_WL_last_loadout",
-				"\A3\Data_F_Warlords\Data\preview_loadout.jpg",
-				localize "STR_A3_WL_last_loadout_info"
-			];
-			_categoryData pushBack [
-				"SavedLoadout",\
-				WL_COST_SAVEDLOADOUT,
-				[],
-				localize "STR_A3_WL_saved_loadout",
-				"\A3\Data_F_Warlords\Data\preview_loadout.jpg",
-				format [localize "STR_A3_WL_saved_loadout_info", "<br/>"]
-			];
-			_categoryData pushBack [
-				"SaveLoadout",
-				0,
-				[],
-				localize "STR_A3_WL_save_loadout",
-				"\A3\Data_F_Warlords\Data\preview_loadout.jpg",
-				localize "STR_A3_WL_save_loadout_info"
-			];
 		};
 	};
 

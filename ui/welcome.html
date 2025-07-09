@@ -24,6 +24,7 @@
             border: 2px solid #444;
             margin-top: 10vh;
             background-color: #2a2a2a;
+            position: relative;
         }
 
         .menu-title {
@@ -129,6 +130,25 @@
 
         strong {
             color: #ffd700;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.3);
+            width: 40px;
+            height: 40px;
+            font-size: 30px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+        }
+
+        .close-button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
         }
     </style>
 </head>
@@ -454,6 +474,9 @@
                     AGM-122 Sidearms and GPS-guided bombs.</p>
             </div>
         </div>
+        <div class="close-button">
+            &times;
+        </div>
     </div>
     <script>
         document.addEventListener('wheel', function (e) {
@@ -463,6 +486,10 @@
                 e.preventDefault();
             }
         }, { passive: false });
+
+        document.querySelector('.close-button').addEventListener('click', function () {
+            A3API.SendAlert('exit');
+        });
 
         document.addEventListener('click', function (e) {
             const target = e.target;

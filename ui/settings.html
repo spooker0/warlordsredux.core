@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <style>
         * {
@@ -24,6 +25,7 @@
             border: 2px solid #444;
             margin-top: 5%;
             background-color: #2a2a2a;
+            position: relative;
         }
 
         .menu-title {
@@ -89,6 +91,7 @@
             border: 1px solid #555;
             border-radius: 6px;
         }
+
         .value-input:focus {
             outline: none;
             border-color: #66ccff;
@@ -120,6 +123,25 @@
         #game-data {
             display: none;
         }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.3);
+            width: 40px;
+            height: 40px;
+            font-size: 30px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+        }
+
+        .close-button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
     </style>
 </head>
 
@@ -128,6 +150,9 @@
     <div class="settings-menu-wrapper">
         <div class="menu-title">Settings</div>
         <div id="settingsContainer" class="settings-content"></div>
+        <div class="close-button">
+            &times;
+        </div>
     </div>
 
     <script>
@@ -138,6 +163,10 @@
                 e.preventDefault();
             }
         }, { passive: false });
+
+        document.querySelector('.close-button').addEventListener('click', function () {
+            A3API.SendAlert('exit');
+        });
 
         function createMenu() {
             const gameDataEl = document.getElementById('game-data');
@@ -254,4 +283,5 @@
         }
     </script>
 </body>
+
 </html>

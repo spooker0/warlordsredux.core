@@ -69,6 +69,10 @@ private _smokeScriptReady = true;
 
 private _continue = alive _projectile;
 while {_continue && alive _projectile} do {
+	if (_projectile getVariable ["WL2_jamDestroy", false]) then {
+		deleteVehicle _projectile;
+	};
+
 	private _currentPos = getPosWorld _projectile;
 	private _displacement = _currentPos distance _previousPos;
 	if (_displacement > _maxAllowedDisplacement) then {

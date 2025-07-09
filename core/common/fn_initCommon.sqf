@@ -61,7 +61,6 @@ BIS_WL_allSectors = (entities "Logic") select { _x getVariable ["WL2_name", ""] 
 enableSaving [false, false];
 
 call WL2_fnc_initAssetData;
-call WLC_fnc_init;
 
 private _lastUpdateVersion = profileNamespace getVariable ["WL2_lastUpdateVersion", ""];
 if (_lastUpdateVersion != WL_VERSION) then {

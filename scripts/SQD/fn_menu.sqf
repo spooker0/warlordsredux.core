@@ -10,9 +10,12 @@ _texture ctrlWebBrowserAction ["LoadFile", "src\ui\squad.html"];
 
 _texture ctrlAddEventHandler ["JSDialog", {
     params ["_control", "_isConfirmDialog", "_message"];
+    playSoundUI ["a3\ui_f\data\sound\rsclistbox\soundselect.wss", 0.5];
+    if (_message == "exit") exitWith {
+        closeDialog 0;
+    };
     private _params = fromJSON _message;
     _params spawn SQD_fnc_client;
-    playSoundUI ["a3\ui_f\data\sound\rsclistbox\soundselect.wss", 0.5];
     true;
 }];
 
