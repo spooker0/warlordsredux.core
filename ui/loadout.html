@@ -45,7 +45,6 @@
             color: var(--text-color);
             display: inline-block;
             vertical-align: top;
-            overflow-y: auto;
             padding: 20px;
             font-size: 16px;
         }
@@ -63,6 +62,7 @@
 
         .panel.right-panel {
             width: calc(100vw - 600px - 100px);
+            overflow-y: auto;
         }
 
         .hide {
@@ -450,6 +450,72 @@
         .locked {
             color: var(--warn-color);
         }
+
+        .loadouts-title {
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .loadouts-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            height: 96px;
+            margin-top: 15px;
+        }
+
+        .loadout {
+            flex: 1;
+            max-width: 150px;
+            height: 100%;
+            font-size: 32pt;
+            background-color: var(--panel-color);
+            border: 2px solid var(--panel-color);
+            border-radius: 5px;
+            color: var(--text-color);
+            font-size: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .selected-loadout {
+            background-color: var(--border-color) !important;
+            border: 2px solid var(--lighter-color);
+        }
+
+        .loadout:hover {
+            background-color: var(--border-color);
+        }
+
+        .loadouts-options-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            gap: 15px;
+        }
+
+        .reset-all,
+        .copy-current {
+            flex: 1;
+            height: 50px;
+            background-color: var(--panel-color);
+            border: 2px solid var(--panel-color);
+            border-radius: 5px;
+            color: var(--text-color);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .reset-all:hover,
+        .copy-current:hover {
+            background-color: var(--border-color);
+        }
     </style>
 </head>
 
@@ -492,6 +558,25 @@
                         <img src="" class="ammo-icon fak-icon" />
                     </div>
                     <span class="ammo-name">Ammo</span>
+                </div>
+                <h1 class="loadouts-title">Loadouts</h1>
+                <div class="loadouts-row">
+                    <div class="loadout loadout-1 selected-loadout">1</div>
+                    <div class="loadout loadout-2">2</div>
+                    <div class="loadout loadout-3">3</div>
+                    <div class="loadout loadout-4">4</div>
+                    <div class="loadout loadout-5">5</div>
+                </div>
+                <div class="loadouts-row">
+                    <div class="loadout loadout-6">6</div>
+                    <div class="loadout loadout-7">7</div>
+                    <div class="loadout loadout-8">8</div>
+                    <div class="loadout loadout-9">9</div>
+                    <div class="loadout loadout-10">10</div>
+                </div>
+                <div class="loadouts-options-row">
+                    <div class="reset-all">RESET ALL</div>
+                    <div class="copy-current">COPY CURRENT</div>
                 </div>
             </div>
             <div class="panel right-panel panel-primary">
@@ -1040,6 +1125,24 @@
             });
         });
 
+        document.querySelectorAll('.loadout').forEach(loadout => {
+            loadout.addEventListener('click', function () {
+                document.querySelectorAll('.loadout').forEach(loadout => loadout.classList.remove('selected-loadout'));
+                this.classList.add('selected-loadout');
+
+                const loadoutIndex = parseInt(loadout.textContent.trim(), 10) - 1;
+                A3API.SendAlert('l' + loadoutIndex);
+            });
+        });
+
+        document.querySelector('.reset-all').addEventListener('click', function () {
+            A3API.SendAlert('r');
+        });
+
+        document.querySelector('.copy-current').addEventListener('click', function () {
+            A3API.SendAlert('c');
+        });
+
         function populateImage(element, imageUrl, resolution = 64) {
             if (document.imageCache[imageUrl] && resolution == 64) {
                 element.src = document.imageCache[imageUrl];
@@ -1306,6 +1409,7 @@
             const primaryWeaponData = weaponData.find(weapon => weapon[0] === primaryWeapon);
             if (primaryWeaponData) {
                 if (!primaryWeaponData[8].includes(document.playerLoadout[0][4][0])) {
+                    console.log("Ammo reset for " + primaryWeapon);
                     document.playerLoadout[0][4] = [];
                 }
                 if (!primaryWeaponData[9].includes(document.playerLoadout[0][5][0])) {
@@ -1406,6 +1510,37 @@
             A3API.SendAlert(playerLoadoutJSON);
         }
 
+        function handleAttachmentSelection() {
+            if (!document.playerLoadout) {
+                return;
+            }
+
+            const primaryPanel = document.querySelector('.panel-primary');
+            const secondaryPanel = document.querySelector('.panel-secondary');
+
+            const primaryOptic = primaryPanel.querySelector('.selected-optic');
+            const primaryOpticId = primaryOptic ? primaryOptic.dataset.opticId : "";
+            const primaryMuzzle = primaryPanel.querySelector('.selected-muzzle');
+            const primaryMuzzleId = primaryMuzzle ? primaryMuzzle.dataset.muzzleId : "";
+            const primaryBipod = primaryPanel.querySelector('.selected-bipod');
+            const primaryBipodId = primaryBipod ? primaryBipod.dataset.bipodId : "";
+
+            document.playerLoadout[0][3] = primaryOpticId;
+            document.playerLoadout[0][1] = primaryMuzzleId;
+            document.playerLoadout[0][2] = primaryBipodId;
+
+            const secondaryOptic = secondaryPanel.querySelector('.selected-optic');
+            const secondaryOpticId = secondaryOptic ? secondaryOptic.dataset.opticId : "";
+            const secondaryMuzzle = secondaryPanel.querySelector('.selected-muzzle');
+            const secondaryMuzzleId = secondaryMuzzle ? secondaryMuzzle.dataset.muzzleId : "";
+            const secondaryBipod = secondaryPanel.querySelector('.selected-bipod');
+            const secondaryBipodId = secondaryBipod ? secondaryBipod.dataset.bipodId : "";
+
+            document.playerLoadout[2][3] = secondaryOpticId;
+            document.playerLoadout[2][1] = secondaryMuzzleId;
+            document.playerLoadout[2][2] = secondaryBipodId;
+        }
+
         function createOpticRow(optic, parentPanel) {
             const opticRow = document.createElement('li');
             opticRow.className = 'optic-row';
@@ -1419,13 +1554,7 @@
                 document.querySelectorAll('.optic-row').forEach(row => row.classList.remove('selected-optic'));
                 this.classList.add('selected-optic');
 
-                if (parentPanel.classList.contains('panel-primary')) {
-                    document.playerLoadout[0][3] = optic[0];
-                } else if (parentPanel.classList.contains('panel-secondary')) {
-                    document.playerLoadout[2][3] = optic[0];
-                } else if (parentPanel.classList.contains('panel-launcher')) {
-                    document.playerLoadout[1][3] = optic[0];
-                }
+                handleAttachmentSelection();
 
                 selectionChanged();
             });
@@ -1512,9 +1641,9 @@
             }
 
             if (weapon && !panel.classList.contains('panel-launcher')) {
-                const optics = weapon[5];
-                const muzzles = weapon[6];
-                const bipods = weapon[7];
+                const optics = weapon[5] || [];
+                const muzzles = weapon[6] || [];
+                const bipods = weapon[7] || [];
 
                 const opticsListEl = panel.querySelector('.optic-list');
                 opticsListEl.innerHTML = '';
@@ -1560,18 +1689,22 @@
             }
 
             if (document.playerLoadout) {
+                let weaponId = "";
+                if (weapon && weapon.length > 0) {
+                    weaponId = weapon[0];
+                }
                 if (panel.classList.contains('panel-primary')) {
-                    document.playerLoadout[0][0] = weapon[0];
+                    document.playerLoadout[0][0] = weaponId || "";
                     document.playerLoadout[0][1] = "";
                     document.playerLoadout[0][3] = "";
                     document.playerLoadout[0][6] = "";
                 } else if (panel.classList.contains('panel-secondary')) {
-                    document.playerLoadout[2][0] = weapon[0];
+                    document.playerLoadout[2][0] = weaponId || "";
                     document.playerLoadout[2][1] = "";
                     document.playerLoadout[2][3] = "";
                     document.playerLoadout[2][6] = "";
                 } else if (panel.classList.contains('panel-launcher')) {
-                    document.playerLoadout[1][0] = weapon[0];
+                    document.playerLoadout[1][0] = weaponId || "";
                     document.playerLoadout[1][1] = "";
                     document.playerLoadout[1][3] = "";
                     document.playerLoadout[1][6] = "";
@@ -1642,6 +1775,8 @@
                 document.playerLoadout[6] = outfit[0];
             }
 
+            weaponChanged();
+            ammoChanged();
             selectionChanged();
         }
 
@@ -1894,7 +2029,17 @@
             themeRoot.style.setProperty('--text-color', theme.textColor);
         }
 
-        function updateLoadout(loadout, weaponData, magazineData, playerLevel, themeIndex) {
+        function selectLoadout(loadoutIndex) {
+            document.querySelectorAll('.loadout').forEach(loadout => {
+                loadout.classList.remove('selected-loadout');
+            });
+            const loadoutEl = document.querySelector(`.loadout-${loadoutIndex + 1}`);
+            loadoutEl.classList.add('selected-loadout');
+        }
+
+        function updateLoadout(loadout, loadoutIndex, weaponData, magazineData, playerLevel, themeIndex) {
+            document.playerLoadout = undefined;
+
             weaponData = JSON.parse(weaponData) || [];
             loadout = JSON.parse(loadout) || [];
             magazineData = JSON.parse(magazineData) || [];
@@ -1903,6 +2048,7 @@
             document.itemList = {};
             document.playerLevel = playerLevel;
 
+            selectLoadout(loadoutIndex);
             updateTheme(themeIndex);
 
             const primaryPanel = document.querySelector('.panel-primary');
@@ -1916,6 +2062,9 @@
             primaryPanel.querySelector('.weapon-list').innerHTML = '';
             secondaryPanel.querySelector('.weapon-list').innerHTML = '';
             launcherPanel.querySelector('.weapon-list').innerHTML = '';
+            vestPanel.querySelector('.outfit-list').innerHTML = '';
+            uniformPanel.querySelector('.outfit-list').innerHTML = '';
+            helmetPanel.querySelector('.outfit-list').innerHTML = '';
 
             createWeaponRow(["", "primary", "None", "", 0, 0, [], [], [], [], []], primaryPanel);
             createWeaponRow(["", "secondary", "None", "", 0, 0, [], [], [], [], []], secondaryPanel);
@@ -1978,9 +2127,22 @@
             selectedWeaponRow.forEach(row => {
                 row.scrollIntoView({ behavior: "smooth", block: "nearest" });
             });
+            const selectedOpticRow = document.querySelector('.selected-optic');
+            if (selectedOpticRow) {
+                selectedOpticRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }
+            const selectedMuzzleRow = document.querySelector('.selected-muzzle');
+            if (selectedMuzzleRow) {
+                selectedMuzzleRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }
+            const selectedBipodRow = document.querySelector('.selected-bipod');
+            if (selectedBipodRow) {
+                selectedBipodRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }
 
             document.playerLoadout = loadout;
             const itemList = ammoPanel.querySelector('.item-list');
+            itemList.innerHTML = '';
             createItemRow(["FirstAidKit", "First Aid Kit", "A3\\Weapons_F\\Items\\data\\UI\\gear_FirstAidKit_CA.paa", 8, false], itemList);
             createItemRow(["HandGrenade", "RGO Grenade", "A3\\Weapons_F\\Data\\UI\\gear_M67_CA.paa", 10, true], itemList);
             createItemRow(["MiniGrenade", "RGN Grenade", "A3\\Weapons_F\\Data\\UI\\gear_M67_CA.paa", 6, true], itemList);
@@ -1997,7 +2159,10 @@
             const firstAidKitImage = ammoIconContainer.querySelector('.fak-icon');
             populateImage(firstAidKitImage, "A3\\Weapons_f\\Items\\data\\UI\\gear_FirstAidKit_CA.paa", 256);
 
+            handleAttachmentSelection();
             weaponChanged();
+            ammoChanged();
+            selectionChanged();
             document.ammoAttentionNeeded = false;
         }
     </script>

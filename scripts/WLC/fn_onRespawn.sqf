@@ -54,13 +54,13 @@ private _sanityChecks = {
     params ["_unit"];
 
     if (loadBackpack _unit > 1) exitWith {
-        false;
+        format ["Backpack items exceed weight capacity: %1", loadBackpack _unit];
     };
     if (loadVest _unit > 1) exitWith {
-        false;
+        format ["Vest items exceed weight capacity: %1", loadVest _unit];
     };
     if (loadUniform _unit > 1) exitWith {
-        false;
+        format ["Uniform items exceed weight capacity: %1", loadUniform _unit];
     };
 
     private _primaryCompatibleMagazines = compatibleMagazines (primaryWeapon _unit);
@@ -95,14 +95,14 @@ private _sanityChecks = {
     } forEach _handgunMagazines;
 
     if (_invalidMagazines) exitWith {
-        false;
+        "Invalid magazines detected.";
     };
 
-    true;
+    "";
 };
 
-private _customizationLoadout = profileNamespace getVariable [format ["WLC_savedLoadout_%1", BIS_WL_playerSide], []];
-
+private _loadoutIndex = profileNamespace getVariable [format ["WLC_loadoutIndex_%1", BIS_WL_playerSide], 0];
+private _customizationLoadout = profileNamespace getVariable [format ["WLC_savedLoadout_%1_%2", BIS_WL_playerSide, _loadoutIndex], []];
 if (count _customizationLoadout > 0) then {
     private _lastLoadout = WL2_lastLoadout;
     private _rocketCountBefore = if (count _lastLoadout > 0) then {
@@ -114,28 +114,31 @@ if (count _customizationLoadout > 0) then {
     private _rocketCountAfter = [_customizationLoadout] call _countRockets;
     private _rocketDifference = (_rocketCountAfter - _rocketCountBefore) max 0;
 
-    if (!_paidFor) then {
-        private _totalCost = _rocketDifference * 50;
-        private _playerFunds = (missionNamespace getVariable ["fundsDatabaseClients", createHashMap]) getOrDefault [getPlayerUID player, 0];
+    private _totalCost = if (_paidFor) then {
+        0;
+    } else {
+        _rocketDifference * 50;
+    };
 
-        if (_totalCost <= _playerFunds) then {
-            _unit setUnitLoadout _customizationLoadout;
+    private _playerFunds = (missionNamespace getVariable ["fundsDatabaseClients", createHashMap]) getOrDefault [getPlayerUID player, 0];
+    if (_totalCost <= _playerFunds) then {
+        _unit setUnitLoadout _customizationLoadout;
 
-            // sanity checks
-            private _sanityCheckResult = [_unit] call _sanityChecks;
-            if (!_sanityCheckResult) then {
-                _unit setUnitLoadout _lastLoadout;
+        // sanity checks
+        private _sanityCheckResult = [_unit] call _sanityChecks;
+        if (_sanityCheckResult != "") then {
+            _unit setUnitLoadout _lastLoadout;
+            systemChat _sanityCheckResult;
+        } else {
+            [player, "equip", _totalCost] remoteExec ["WL2_fnc_handleClientRequest", 2];
+
+            private _message = if (_totalCost > 0) then {
+                private _moneySign = [BIS_WL_playerSide] call WL2_fnc_getMoneySign;
+                format ["Equipment and customizations applied for %1%2.", _moneySign, _totalCost];
             } else {
-                [player, "equip", _totalCost] remoteExec ["WL2_fnc_handleClientRequest", 2];
-
-                private _message = if (_totalCost > 0) then {
-                    private _moneySign = [BIS_WL_playerSide] call WL2_fnc_getMoneySign;
-                    format ["Equipment and customizations applied for %1%2.", _moneySign, _totalCost];
-                } else {
-                    "Equipment and customizations applied for free.";
-                };
-                systemChat _message;
+                "Equipment and customizations applied for free.";
             };
+            systemChat _message;
         };
     };
 } else {
