@@ -135,7 +135,8 @@
         .invite-button,
         .leave-button,
         .kick-button,
-        .promote-button {
+        .promote-button,
+        .ft-button {
             border: none;
             color: white;
             padding: 5px 10px;
@@ -147,12 +148,14 @@
         }
 
         .invite-button,
-        .promote-button {
+        .promote-button,
+        .ft-button {
             background-color: #66cc66;
         }
 
         .invite-button:hover,
-        .promote-button:hover {
+        .promote-button:hover,
+        .ft-button:hover {
             background-color: #55aa55;
         }
 
@@ -402,9 +405,26 @@
                             A3API.SendAlert(`["promote", ["${member[0]}"]]`);
                         });
                         memberEl.appendChild(promoteButton);
+
+                        const fastTravelButton = document.createElement('button');
+                        fastTravelButton.textContent = 'Fast Travel';
+                        fastTravelButton.classList.add('ft-button');
+                        fastTravelButton.addEventListener('click', function () {
+                            A3API.SendAlert(`["ftSquad", ["${member[0]}"]]`);
+                        });
+                        memberEl.appendChild(fastTravelButton);
                     }
                     if (squad[1] === member[0]) {
                         memberEl.classList.add('squad-leader');
+                        if (playerInfo[0] !== member[0]) {
+                            const fastTravelButton = document.createElement('button');
+                            fastTravelButton.textContent = 'Fast Travel';
+                            fastTravelButton.classList.add('ft-button');
+                            fastTravelButton.addEventListener('click', function () {
+                                A3API.SendAlert(`["ftSquadLeader", []]`);
+                            });
+                            memberEl.appendChild(fastTravelButton);
+                        }
                     } else {
                         memberEl.classList.remove('squad-leader');
                     }

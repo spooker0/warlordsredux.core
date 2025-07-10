@@ -484,6 +484,7 @@ class CfgFunctions {
 			class buildMenu {};
 			class getLevelInfo {};
 			class levelUp {};
+			class loadData {};
 			class onRespawn {};
 			class pageLoad {};
 			class setScore {};

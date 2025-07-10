@@ -164,19 +164,11 @@ switch (_action) do {
             _x getVariable ["BIS_WL_ownerAsset", "123"] == getPlayerUID player
         };
 
-        private _squadPlayer = vehicle _squadLeader;
-        if (_squadPlayer != _squadLeader && (_squadPlayer emptyPositions "Cargo" > 0)) then {
-            player moveInCargo _squadPlayer;
-            {
-                _x moveInCargo _squadPlayer;
-            } forEach _tagAlong;
-        } else {
-            private _destination = getPosATL _squadLeader;
-            {
-                _x setVehiclePosition [_destination, [], 5, "NONE"];
-            } forEach _tagAlong;
-            player setVehiclePosition [_destination, [], 5, "NONE"];
-        };
+        private _destination = getPosATL _squadLeader;
+        {
+            _x setVehiclePosition [_destination, [], 5, "NONE"];
+        } forEach _tagAlong;
+        player setVehiclePosition [_destination, [], 5, "NONE"];
 
         sleep 1;
 
@@ -199,19 +191,11 @@ switch (_action) do {
             _x getVariable ["BIS_WL_ownerAsset", "123"] == getPlayerUID player
         };
 
-        private _squadPlayer = vehicle _squadTargetPlayer;
-        if (_squadPlayer != _squadTargetPlayer && (_squadPlayer emptyPositions "Cargo" > 0)) then {
-            player moveInCargo _squadPlayer;
-            {
-                _x moveInCargo _squadPlayer;
-            } forEach _tagAlong;
-        } else {
-            private _destination = getPosATL _squadTargetPlayer;
-            {
-                _x setVehiclePosition [_destination, [], 5, "NONE"];
-            } forEach _tagAlong;
-            player setVehiclePosition [_destination, [], 5, "NONE"];
-        };
+        private _destination = getPosATL _squadTargetPlayer;
+        {
+            _x setVehiclePosition [_destination, [], 5, "NONE"];
+        } forEach _tagAlong;
+        player setVehiclePosition [_destination, [], 5, "NONE"];
 
         sleep 1;
 

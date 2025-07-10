@@ -5,20 +5,12 @@ if (isNull _display) then {
 };
 private _texture = _display displayCtrl 5501;
 _texture ctrlWebBrowserAction ["LoadFile", "src\ui\loadout.html"];
-// _texture ctrlWebBrowserAction ["OpenDevConsole"];
+_texture ctrlWebBrowserAction ["OpenDevConsole"];
 
 _texture ctrlAddEventHandler ["JSDialog", {
     params ["_texture", "_isConfirmDialog", "_message"];
 
     private _firstLetter = _message select [0, 1];
-
-    if (_firstLetter == "i") exitWith {
-        _message = _message select [1];
-        private _imageCache = missionNamespace getVariable ["WLC_imageCache", createHashMap];
-        private _imageData = fromJSON _message;
-        _imageCache merge _imageData;
-        missionNamespace setVariable ["WLC_imageCache", _imageCache];
-    };
 
     if (_firstLetter == "l") exitWith {
         private _newLoadoutIndex = _message select [1, 1];
@@ -52,6 +44,8 @@ _texture ctrlAddEventHandler ["JSDialog", {
     if (_message == "exit") exitWith {
         closeDialog 0;
     };
+
+    playSoundUI ["a3\ui_f\data\sound\rsclistbox\soundselect.wss", 0.5];
 
     private _loadoutIndex = profileNamespace getVariable [format ["WLC_loadoutIndex_%1", BIS_WL_playerSide], 0];
     private _responseArray = fromJSON _message;

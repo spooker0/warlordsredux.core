@@ -1,12 +1,12 @@
 #include "includes.inc"
 // Cooldown check
-private _ftNextUseVar = format ["BIS_WL_FTSLNextUse_%1", getPlayerUID player];
-private _ftNextUse = missionNamespace getVariable [_ftNextUseVar, 0];
-if (serverTime < _ftNextUse) exitWith {
-    private _cooldownText = localize "STR_SQUADS_cooldown";
-    private _timeoutDisplay = [_ftNextUse - serverTime, "MM:SS"] call BIS_fnc_secondsToString;
-    [false, format [_cooldownText, _timeoutDisplay]];
-};
+// private _ftNextUseVar = format ["BIS_WL_FTSLNextUse_%1", getPlayerUID player];
+// private _ftNextUse = missionNamespace getVariable [_ftNextUseVar, 0];
+// if (serverTime < _ftNextUse) exitWith {
+//     private _cooldownText = localize "STR_SQUADS_cooldown";
+//     private _timeoutDisplay = [_ftNextUse - serverTime, "MM:SS"] call BIS_fnc_secondsToString;
+//     [false, format [_cooldownText, _timeoutDisplay]];
+// };
 
 // Has valid squad leader
 private _squadLeaderID = ['getMySquadLeader'] call SQD_fnc_client;
@@ -26,7 +26,7 @@ if (count _squadLeader == 0) exitWith {
 };
 _squadLeader = _squadLeader # 0;
 
-if (!alive _squadLeader || lifeState _squadLeader == "INCAPACITATED" || speed _squadLeader > 15) exitWith {
+if (!alive _squadLeader || lifeState _squadLeader == "INCAPACITATED") exitWith {
     [false, localize "STR_SQUADS_fastTravelSquadLeaderUnavailable"];
 };
 
