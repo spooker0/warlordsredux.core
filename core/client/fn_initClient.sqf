@@ -298,6 +298,7 @@ player setUserActionText [_squadActionId, _squadActionText, "<img size='2' image
 uiNamespace setVariable ["WL2_canBuy", true];
 uiNamespace setVariable ["WL2_chatHistory", []];
 
+WL2_lastLoadout = getUnitLoadout player;
 [player, true] call WLC_fnc_onRespawn;
 [] spawn WL2_fnc_factionBasedClientInit;
 0 spawn WL2_fnc_captureList;

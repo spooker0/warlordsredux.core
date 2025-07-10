@@ -29,7 +29,7 @@ player addEventHandler ["InventoryOpened",{
 player addEventHandler ["Killed", {
 	"RequestMenu_close" call WL2_fnc_setupUI;
 
-	BIS_WL_lastLoadout = +getUnitLoadout player;
+	WL2_lastLoadout = getUnitLoadout player;
 
 	private _connectedUAV = getConnectedUAV player;
 	if (_connectedUAV != objNull) exitWith {

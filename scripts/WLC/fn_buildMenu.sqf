@@ -65,12 +65,15 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         if (_weaponType == "backpack") then {
             private _backpackName = getText (configFile >> "CfgVehicles" >> _weapon >> "displayName");
             private _backpackIcon = (getText (configFile >> "CfgVehicles" >> _weapon >> "picture")) regexReplace ["^\\", ""];
+
+            private _maxLoad = getContainerMaxLoad _weapon;
             _weaponOptionArray pushBack [
                 _weapon,
                 _weaponType,
                 _backpackName,
                 _backpackIcon,
-                _weaponLevel
+                _weaponLevel,
+                _maxLoad
             ];
             continue;
         };
@@ -155,16 +158,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         private _magazineIcon = (getText (configFile >> "CfgMagazines" >> _magazine >> "picture")) regexReplace ["^\\", ""];
         private _mass = getNumber (configFile >> "CfgMagazines" >> _magazine >> "mass");
         private _count = getNumber (configFile >> "CfgMagazines" >> _magazine >> "count");
-
-        private _magazineDataEntry = _magazineConfigData select {
-            (_x # 0) == _magazine
-        };
-        private _level = 0;
-        if (count _magazineDataEntry > 0) then {
-            _magazineDataEntry = _magazineDataEntry # 0;
-            _level = _magazineDataEntry # 1;
-        };
-        [_magazine, _magazineName, _magazineIcon, _mass, _count, _level];
+        [_magazine, _magazineName, _magazineIcon, _mass, _count];
     };
 
     private _magazineDataText = toJSON _magazineData;
@@ -213,12 +207,16 @@ _texture ctrlAddEventHandler ["PageLoaded", {
 
     private _playerLevel = ["getLevel"] call WLC_fnc_getLevelInfo;
 
+    private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+    private _themeIndex = _settingsMap getOrDefault ["loadoutTheme", 1];
+
     private _script = format [
-        "updateLoadout(atob(""%1""), atob(""%2""), atob(""%3""), %4);",
+        "updateLoadout(atob(""%1""), atob(""%2""), atob(""%3""), %4, %5);",
         _loadoutText,
         _weaponDataText,
         _magazineDataText,
-        _playerLevel
+        _playerLevel,
+        _themeIndex
     ];
     _texture ctrlWebBrowserAction ["ExecJS", _script];
 }];

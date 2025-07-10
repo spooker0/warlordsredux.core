@@ -111,7 +111,7 @@ if (_asset isKindOf "Man") then {
 	};
 
 	if (WL_ASSET(_assetActualType, "hasReconOptics", 0) > 0) then {
-		[_asset, false] remoteExec ["WL2_fnc_reconOpticsAction", 0, true];
+		[_asset, _playerUID] remoteExec ["WL2_fnc_reconOpticsAction", 0, true];
 	};
 
 	if (WL_ASSET(_assetActualType, "hasAWACS", 0) > 0) then {

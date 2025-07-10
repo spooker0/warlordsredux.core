@@ -26,7 +26,7 @@ switch (_locality) do {
 		BIS_WL_localized_km = localize "STR_A3_WL_unit_km";
 		BIS_WL_currentSelection = 0;
 		BIS_WL_matesAvailable = 0;
-		BIS_WL_lastLoadout = [];
+		WL2_lastLoadout = [];
 		BIS_WL_selectionMapManager = [];
 		BIS_WL_currentlyScannedSectors = [];
 		BIS_WL_currentTargetData = [

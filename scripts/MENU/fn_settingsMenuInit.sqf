@@ -117,6 +117,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["slider", "Announcer text size", [0.1, 1, 0.1, 0.5, "announcerTextSize"]],
         ["slider", "Map marker scale threshold", [0, 1, 0.05, 0.4, "sectorMarkerTextThreshold"]],
         ["slider", "Map icon scale", [0.5, 2, 0.05, 1.0, "mapIconScale"]],
+        ["slider", "Loadout theme", [1, 5, 1, 1, "loadoutTheme"]],
         ["category", "General settings"],
         ["checkbox", "Disable 3rd person view (2x reward)", ["3rdPersonDisabled", false]],
         ["checkbox", "Autonomous mode off by default", ["enableAuto", false]],

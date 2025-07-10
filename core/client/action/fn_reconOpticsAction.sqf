@@ -1,12 +1,17 @@
 #include "includes.inc"
-params ["_asset"];
+params ["_asset", "_playerUID"];
 
 if (isDedicated) exitWith {};
+
+if (_playerUID == getPlayerUID player) then {
+    ["Recon", ["RECON CONTROLS", [
+        ["Scan", "lockTarget"]
+    ]], 10] call WL2_fnc_showHint;
+};
 
 private _clearReconOptics = {
     "reconOptics" cutText ["", "PLAIN"];
     _display = objNull;
-    ["Recon"] call WL2_fnc_showHint;
 };
 
 private _display = objNull;
@@ -19,10 +24,6 @@ private _addReconOptics = {
     _display = uiNamespace getVariable ["RscWLReconOpticsDisplay", displayNull];
 
     _reconOpticsLabel = _display displayCtrl 26000;
-
-    ["Recon", ["RECON CONTROLS", [
-        ["Scan", "lockTarget"]
-    ]], 5] call WL2_fnc_showHint;
 };
 
 while { alive _asset } do {
