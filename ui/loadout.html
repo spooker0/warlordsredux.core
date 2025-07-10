@@ -28,7 +28,7 @@
 
         img {
             opacity: 0;
-            transition: opacity 1s ease;
+            transition: opacity 0.4s ease;
         }
 
         .menu-title {
@@ -104,7 +104,7 @@
 
         .slot.secondary,
         .slot.launcher {
-            height: 75px;
+            height: 100px;
         }
 
         .slot.ammo {
@@ -118,7 +118,7 @@
         .slot img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
             position: absolute;
             top: 0;
             left: 0;
@@ -136,7 +136,7 @@
             padding: 4px 12px;
             margin-top: 0;
             margin-bottom: 0;
-            font-size: 24pt;
+            font-size: 18pt;
             text-align: center;
             width: 100%;
             left: 50%;
@@ -144,6 +144,16 @@
             display: block;
             white-space: nowrap;
             overflow: hidden;
+        }
+
+        .slot span.primary-name {
+            font-size: 64pt;
+        }
+
+        .slot span.secondary-name,
+        .slot span.launcher-name,
+        .slot span.ammo-name {
+            font-size: 24pt;
         }
 
         .selected-slot {
@@ -442,6 +452,11 @@
             transform: none !important;
         }
 
+        .item-in-use {
+            background-color: var(--border-color);
+            border-color: var(--border-color);
+        }
+
         .ammo-flash {
             background-color: var(--warn-color);
             border-color: var(--warn-color);
@@ -557,7 +572,7 @@
                         <img src="" class="ammo-icon grenades-icon" />
                         <img src="" class="ammo-icon fak-icon" />
                     </div>
-                    <span class="ammo-name">Ammo</span>
+                    <span class="ammo-name">AMMO</span>
                 </div>
                 <h1 class="loadouts-title">Loadouts</h1>
                 <div class="loadouts-row">
@@ -1079,6 +1094,37 @@
             document.ammoFlash = !document.ammoFlash;
         }, 200);
 
+        function scrollPanelIntoView(panel) {
+            [
+                '.selected-weapon',
+                '.selected-optic',
+                '.selected-muzzle',
+                '.selected-bipod',
+                '.selected-outfit',
+                '.selected-backpack'
+            ].forEach((selector) => {
+                const selectedRow = panel.querySelector(selector);
+                if (selectedRow) {
+                    const scrollPanel = selectedRow.closest('.scroll-panel');
+                    if (scrollPanel) {
+                        const containerRect = scrollPanel.getBoundingClientRect();
+                        const elementRect = selectedRow.getBoundingClientRect();
+
+                        const scrollOffset =
+                            elementRect.top - containerRect.top + scrollPanel.scrollTop
+                            - (containerRect.height / 2)
+                            + (elementRect.height / 2);
+
+                        scrollPanel.scrollTo({
+                            top: scrollOffset,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+
+        }
+
         document.querySelectorAll('.slot').forEach(slot => {
             slot.addEventListener('click', function () {
                 document.querySelectorAll('.slot').forEach(slot => slot.classList.remove('selected-slot'));
@@ -1095,33 +1141,7 @@
                     document.ammoAttentionNeeded = false;
                 }
 
-                const selectedWeaponRow = activePanel.querySelector('.selected-weapon');
-                if (selectedWeaponRow) {
-                    selectedWeaponRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
-                }
-
-                const selectedOpticRow = activePanel.querySelector('.selected-optic');
-                if (selectedOpticRow) {
-                    selectedOpticRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
-                }
-                const selectedMuzzleRow = activePanel.querySelector('.selected-muzzle');
-                if (selectedMuzzleRow) {
-                    selectedMuzzleRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
-                }
-                const selectedBipodRow = activePanel.querySelector('.selected-bipod');
-                if (selectedBipodRow) {
-                    selectedBipodRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
-                }
-
-                const selectedOutfitRow = activePanel.querySelector('.selected-outfit');
-                if (selectedOutfitRow) {
-                    selectedOutfitRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
-                }
-
-                const selectedBackpackRow = activePanel.querySelector('.selected-backpack');
-                if (selectedBackpackRow) {
-                    selectedBackpackRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
-                }
+                scrollPanelIntoView(activePanel);
             });
         });
 
@@ -1173,9 +1193,11 @@
                 const quantity = parseInt(quantityDisplay.textContent, 10) || 0;
 
                 if (quantity == 0) {
+                    ammoRow.classList.remove('item-in-use');
                     return;
                 }
 
+                ammoRow.classList.add('item-in-use');
                 ammoSumList.push([ammoId, quantity, ammoMass]);
             });
 
@@ -1187,9 +1209,11 @@
                 const quantity = parseInt(quantityDisplay.textContent, 10) || 0;
 
                 if (quantity == 0) {
+                    itemRow.classList.remove('item-in-use');
                     return;
                 }
 
+                itemRow.classList.add('item-in-use');
                 ammoSumList.push([itemId, quantity, itemMass]);
             });
 
@@ -2123,22 +2147,7 @@
                 rows.forEach(row => list.appendChild(row));
             });
 
-            const selectedWeaponRow = document.querySelectorAll('.selected-weapon');
-            selectedWeaponRow.forEach(row => {
-                row.scrollIntoView({ behavior: "smooth", block: "nearest" });
-            });
-            const selectedOpticRow = document.querySelector('.selected-optic');
-            if (selectedOpticRow) {
-                selectedOpticRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
-            }
-            const selectedMuzzleRow = document.querySelector('.selected-muzzle');
-            if (selectedMuzzleRow) {
-                selectedMuzzleRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
-            }
-            const selectedBipodRow = document.querySelector('.selected-bipod');
-            if (selectedBipodRow) {
-                selectedBipodRow.scrollIntoView({ behavior: "smooth", block: "nearest" });
-            }
+            scrollPanelIntoView(primaryPanel);
 
             document.playerLoadout = loadout;
             const itemList = ammoPanel.querySelector('.item-list');
@@ -2147,6 +2156,12 @@
             createItemRow(["HandGrenade", "RGO Grenade", "A3\\Weapons_F\\Data\\UI\\gear_M67_CA.paa", 10, true], itemList);
             createItemRow(["MiniGrenade", "RGN Grenade", "A3\\Weapons_F\\Data\\UI\\gear_M67_CA.paa", 6, true], itemList);
             createItemRow(["SmokeShell", "Smoke Grenade (White)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_white_ca.paa", 4, true], itemList);
+            createItemRow(["SmokeShellRed", "Smoke Grenade (Red)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_red_ca.paa", 4, true], itemList);
+            createItemRow(["SmokeShellGreen", "Smoke Grenade (Green)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_green_ca.paa", 4, true], itemList);
+            createItemRow(["SmokeShellBlue", "Smoke Grenade (Blue)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_blue_ca.paa", 4, true], itemList);
+            createItemRow(["SmokeShellYellow", "Smoke Grenade (Yellow)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_yellow_ca.paa", 4, true], itemList);
+            createItemRow(["SmokeShellOrange", "Smoke Grenade (Orange)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_orange_ca.paa", 4, true], itemList);
+            createItemRow(["SmokeShellPurple", "Smoke Grenade (Purple)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_purple_ca.paa", 4, true], itemList);
 
             const ammoIconContainer = document.querySelector('.ammo-icon-container');
 
