@@ -39,21 +39,7 @@ player setVariable ["WL2_demolishTarget", objNull];
         params ["_target", "_caller", "_actionId", "_arguments"];
         private _targetObject = player getVariable ["WL2_demolishTarget", objNull];
         player setVariable ["WL2_demolishTarget", objNull];
-        private _existingHealth = _targetObject getVariable ["WL2_demolitionHealth", 10];
-        _existingHealth = _existingHealth - 1;
-        _targetObject setVariable ["WL2_demolitionHealth", _existingHealth, true];
-
-        if (_existingHealth <= 0) then {
-            private _strongholdSector = _targetObject getVariable ["WL_strongholdSector", objNull];
-            if !(isNull _strongholdSector) then {
-                private _strongholdSectorCheck = _strongholdSector getVariable ["WL_stronghold", objNull];
-                if (_targetObject == _strongholdSectorCheck) then {
-                    [_strongholdSector] call WL2_fnc_removeStronghold;
-                };
-            };
-
-            [_targetObject, player] remoteExec ["WL2_fnc_demolishComplete", 2];
-        };
+        [_targetObject, 1] call WL2_fnc_demolishStep;
     },
     {
         player setVariable ["WL2_demolishTarget", objNull];

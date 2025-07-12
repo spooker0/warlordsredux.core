@@ -84,6 +84,13 @@ _this addEventHandler ["Fired", {
 		[_projectile, _unit] spawn DIS_fnc_advancedSam;
 	};
 
+	private _projectileBunker = _projectileConfig getOrDefault ["bunker", false];
+	if (_projectileBunker) then {
+		_projectile addEventHandler ["Explode", {
+			_this spawn DIS_fnc_bunkerBuster;
+		}];
+	};
+
 	private _projectileSam = _projectileConfig getOrDefault ["sam", false];
 	if (_projectileSam) then {
 		[_projectile, _unit] spawn DIS_fnc_frag;

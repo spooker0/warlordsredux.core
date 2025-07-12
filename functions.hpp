@@ -28,6 +28,7 @@ class CfgFunctions {
 		class Default {
 			file = "src\scripts\DIS";
 			class advancedSam {};
+			class bunkerBuster {};
 			class calculateInRange {};
 			class controlMunition {};
 			class extendedSam {};
@@ -197,6 +198,7 @@ class CfgFunctions {
 			class dazzlerUpdate {};
 			class demolishAction {};
 			class demolishEligibility {};
+			class demolishStep {};
 			class deployableAddAction {};
 			class deployableEligibility {};
 			class deployCrateAction {};

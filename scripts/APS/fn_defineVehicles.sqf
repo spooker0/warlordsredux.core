@@ -8,6 +8,7 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
     private _projectileAmmos = getArray (_x >> "ammo");
     private _projectileAps = getNumber (_x >> "aps");
     private _projectileAsam = getNumber (_x >> "asam") == 1;
+    private _projectileBunker = getNumber (_x >> "bunker") == 1;
     private _projectileCamera = getNumber (_x >> "camera") == 1;
     private _projectileConsumption = getNumber (_x >> "consumption");
     private _projectileCRAM = getNumber (_x >> "cram") == 1;
@@ -27,6 +28,7 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
         private _projectileConfig = createHashMapFromArray [
             ["aps", _projectileAps],
             ["asam", _projectileAsam],
+            ["bunker", _projectileBunker],
             ["camera", _projectileCamera],
             ["consumption", _projectileConsumption],
             ["cram", _projectileCRAM],
