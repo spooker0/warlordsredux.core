@@ -142,6 +142,7 @@ class CfgFunctions {
 	class WL2 {
 		class Client {
 			file = "src\core\client";
+			class addMissileToMag {};
 			class afk {};
 			class airburst {};
 			class ammoConfigDetection {};
@@ -150,6 +151,7 @@ class CfgFunctions {
 			class avTerminal {};
 			class betty {};
 			class clientEH {};
+			class destroyerClient {};
 			class factionBasedClientInit {};
 			class handleBuyMenuKeypress {};
 			class handleChatMessages {};
@@ -433,6 +435,7 @@ class CfgFunctions {
 			class createUAVCrew {};
 			class createVehicleCorrectly {};
 			class demolishComplete {};
+			class destroyerServer {};
 			class detectNewPlayers {};
 			class forgiveTeamkill {};
 			class friendlyFireHandleServer {};

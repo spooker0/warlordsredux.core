@@ -7,10 +7,10 @@ if !(isServer) exitWith {};
 _asset = createVehicle [_class, [_posX, _posY, _posZ - 50], [], 0, "CAN_COLLIDE"];
 _asset setVectorDirAndUp _direction;
 
-private _isInCarrierSector = count (BIS_WL_allSectors select {
+private _isInWaterSector = count (BIS_WL_allSectors select {
 	_pos inArea (_x getVariable "objectAreaComplete") && _x getVariable ["WL2_isAircraftCarrier", false];
-}) > 0;
-if (_isInCarrierSector) then {
+}) > 0 || _pos inArea "ussliberty";
+if (_isInWaterSector) then {
 	_asset setVehiclePosition [[_posX, _posY, 50], [], 0, "CAN_COLLIDE"];
 } else {
 	_asset setVehiclePosition [[_posX, _posY, 0], [], 0, "CAN_COLLIDE"];

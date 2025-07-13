@@ -5,6 +5,10 @@ private _gpsSelectionIndex = cameraOn getVariable ["DIS_selectionIndex", 0];
 private _gpsCord = cameraOn getVariable ["DIS_gpsCord", ""];
 
 private _inRangeCalculation = [cameraOn] call DIS_fnc_calculateInRange;
+if (cameraOn getVariable ["WL2_ignoreRange", false]) then {
+	_inRangeCalculation set [0, true];
+    _inRangeCalculation set [1, 24000];
+};
 
 private _gpsBombs = cameraOn getVariable ["DIS_gpsBombs", []];
 private _bombsTextArray = [];

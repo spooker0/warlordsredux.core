@@ -85,7 +85,9 @@ private _eligibleEntitiesInArea = _allInArea select {
 
 private _assetData = WL_ASSET_DATA;
 private _disallowManList = ["B_UAV_AI", "O_UAV_AI", "I_UAV_AI"];
-private _strongholdMarker = _sector getVariable ["WL_strongholdMarker", ""];
+private _stronghold = _sector getVariable ["WL_stronghold", objNull];
+private _strongholdRadius = _stronghold getVariable ["WL_strongholdRadius", 0];
+
 private _sideCapValues = createHashMap;
 {
 	private _unit = _x;
@@ -100,7 +102,7 @@ private _sideCapValues = createHashMap;
 	};
 
 	private _points = if (_unit isKindOf "Man") then {
-		private _score = if (_unit inArea _strongholdMarker && vehicle _unit == _unit) then {
+		private _score = if (_unit distance2D _stronghold < _strongholdRadius && vehicle _unit == _unit) then {
 			5;
 		} else {
 			1;

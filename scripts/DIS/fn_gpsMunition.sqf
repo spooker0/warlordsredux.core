@@ -31,7 +31,7 @@ while { alive _projectile } do {
     private _distanceToTarget = _projectile distance _laserTarget;
     private _speed = _originalSpeed - (serverTime - _launchTime) * 0.1;
     if (!_terminalManeuver) then {
-        _projectile setVelocityModelSpace [0, _speed max 150, 0];
+        _projectile setVelocityModelSpace [0, _speed max 200, 0];
         _projectile setMissileTarget [_laserTarget, true];
     } else {
         private _currentPosition = getPosASL _projectile;

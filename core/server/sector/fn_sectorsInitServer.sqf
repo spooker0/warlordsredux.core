@@ -161,7 +161,7 @@ private _slowestCapture = 50;
 
 #if WL_OVERRIDE_BASES
 0 spawn {
-	sleep 5;
+	sleep 3;
 	private _westSectors = BIS_WL_allSectors select {
 		_x getVariable ["WL2_name", ""] in ["Poliakko", "Alikampos", "Lakka"];
 	};
@@ -170,16 +170,19 @@ private _slowestCapture = 50;
 	};
 	{
 		_x setVariable ["BIS_WL_revealedBy", [west], true];
-		[west, _x] call WL2_fnc_selectTarget;
 		[_x, west] call WL2_fnc_sectorRevealHandle;
 		[_x, west] call WL2_fnc_changeSectorOwnership;
 	} forEach _westSectors;
 	{
 		_x setVariable ["BIS_WL_revealedBy", [east], true];
-		[east, _x] call WL2_fnc_selectTarget;
 		[_x, east] call WL2_fnc_sectorRevealHandle;
 		[_x, east] call WL2_fnc_changeSectorOwnership;
 	} forEach _eastSectors;
+
+	private _sectorsInPlay = missionNamespace getVariable ["WL2_sectorsInPlay", []];
+	_sectorsInPlay append _westSectors;
+	_sectorsInPlay append _eastSectors;
+	missionNamespace setVariable ["WL2_sectorsInPlay", _sectorsInPlay];
 };
 #endif
 

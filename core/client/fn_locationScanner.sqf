@@ -44,32 +44,49 @@ private _fobNextWarn = 0;
 private _strongholdNextWarn = 0;
 while { !BIS_WL_missionEnd } do {
     private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
+    private _newStrongholds = [];
     private _allScannedUnits = [];
     {
         private _stronghold = _x;
-        private _strongholdInSector = BIS_WL_allSectors select {
-            _stronghold inArea (_x getVariable "objectAreaComplete")
-        };
-        if (count _strongholdInSector == 0) then {
+        private _strongholdSector = _stronghold getVariable ["WL_strongholdSector", objNull];
+
+        // check if stronghold has been deleted
+        private _sectorStronghold = _strongholdSector getVariable ["WL_stronghold", objNull];
+        if (_sectorStronghold == _stronghold) then {
+            _newStrongholds pushBack _stronghold;
+        } else {
+            _stronghold setVariable ["WL2_strongholdIntruders", false];
             continue;
         };
 
-        private _strongholdSector = _strongholdInSector # 0;
-        _stronghold setVariable ["WL_strongholdSector", _strongholdSector];
-
         private _sectorOwner = _strongholdSector getVariable ["BIS_WL_owner", independent];
-        if (_sectorOwner != _side) then { continue; };
-        private _strongholdArea = _strongholdSector getVariable ["WL_strongholdMarker", ""];
+        if (_sectorOwner != _side) then {
+            _stronghold setVariable ["WL2_strongholdIntruders", false];
+            continue;
+        };
+
+        private _strongholdRadius = _stronghold getVariable ["WL_strongholdRadius", 0];
+        private _strongholdArea = [
+            getPosASL _stronghold,
+            _strongholdRadius,
+            _strongholdRadius,
+            0,
+            false
+        ];
         private _scannedUnits = [_side, _strongholdArea] call WL2_fnc_detectUnits;
         _allScannedUnits append _scannedUnits;
 
         if (count _scannedUnits > 0) then {
+            _stronghold setVariable ["WL2_strongholdIntruders", true];
             if (serverTime >= _strongholdNextWarn) then {
                 _strongholdNextWarn = serverTime + 30;
                 systemChat "Stronghold intrusion detected!";
             };
+        } else {
+            _stronghold setVariable ["WL2_strongholdIntruders", false];
         };
     } forEach _strongholds;
+    missionNamespace setVariable ["WL_strongholds", _newStrongholds];
 
     private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 

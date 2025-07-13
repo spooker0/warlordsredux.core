@@ -32,9 +32,11 @@ while { !BIS_WL_missionEnd } do {
         };
 
         private _sectorOwner = _sector getVariable ["BIS_WL_owner", independent];
-        private _strongholdMarker = _sector getVariable ["WL_strongholdMarker", ""];
         if (_vehicle isKindOf "Man") then {
-            private _score = if (_vehicle inArea _strongholdMarker) then {
+            private _sectorStronghold = _sector getVariable ["WL_stronghold", objNull];
+            private _strongholdRadius = _sectorStronghold getVariable ["WL_strongholdRadius", 0];
+
+            private _score = if (_vehicle distance2D _sectorStronghold < _strongholdRadius) then {
                 5;
             } else {
                 1;

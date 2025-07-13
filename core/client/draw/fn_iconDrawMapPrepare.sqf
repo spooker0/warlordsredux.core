@@ -134,12 +134,13 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		private _timeString = [_timeRemaining, "MM:SS"] call BIS_fnc_secondsToString;
 		format ["(Constructing %1)", _timeString];
 	} else {
+		private _fobHealth = _base getVariable ["WL2_demolitionHealth", 10];
 		if (_baseOwner == _side) then {
 			private _supplies = _base getVariable ["WL2_forwardBaseSupplies", -1];
 			_supplies = (round _supplies) max 0;
-			format ["(%1 Supplies)", (_supplies call BIS_fnc_numberText) regexReplace [" ", ","]];
+			format ["(%1/10) [%2 Supplies]", _fobHealth, (_supplies call BIS_fnc_numberText) regexReplace [" ", ","]];
 		} else {
-			"";
+			format ["(%1/10)", _fobHealth];
 		};
 	};
 
@@ -152,7 +153,7 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		0,
 		format ["Forward Base %1", _baseText],
 		0,
-		0.04 * _mapIconScale
+		0.045 * _mapIconScale
 	];
 	_drawIconsSelectable pushBack [_base, _position];
 
@@ -183,6 +184,48 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		];
 	} forEach _sectorsInRange;
 } forEach _forwardBases;
+
+// Draw strongholds
+private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
+{
+	private _stronghold = _x;
+
+	private _strongholdPos = getPosATL _stronghold;
+	private _intruders = _stronghold getVariable ["WL2_strongholdIntruders", false];
+	private _strongholdColor = if (_intruders) then {
+		[1, 0, 0, 1]
+	} else {
+		[1, 1, 1, 1]
+	};
+
+	private _strongholdHealth = _stronghold getVariable ["WL2_demolitionHealth", 10];
+	_drawIcons pushBack [
+		"\A3\ui_f\data\map\mapcontrol\Ruin_CA.paa",
+		_strongholdColor,
+		_strongholdPos,
+		20 * _mapIconScale,
+		20 * _mapIconScale,
+		0,
+		if (_draw) then { format ["  STRONGHOLD (%1/10)", _strongholdHealth] } else {""},
+		1,
+		0.043,
+		"PuristaBold",
+		"right"
+	];
+
+	private _strongholdRadius = _stronghold getVariable ["WL_strongholdRadius", 0];
+
+	_drawEllipses pushBack [
+		_strongholdPos,
+		_strongholdRadius,
+		_strongholdRadius,
+		0,
+		[1, 1, 1, 1],
+		"#(rgb,8,8,3)color(1,1,1,0.2)"
+	];
+
+	_drawIconsSelectable pushBack [_stronghold, _strongholdPos];
+} forEach _strongholds;
 
 // Draw scanned units
 {

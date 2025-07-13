@@ -104,8 +104,8 @@ private _targetDrawer = addMissionEventHandler ["Draw3D", {
                 case 1: {
                     _titleBar ctrlShow true;
                     _pictureControl ctrlShow true;
-                    private _largeTitlePosition = [0, -0.05, 1, 0.05];
-                    private _largePicturePosition = [0, 0, 1, 1];
+                    private _largeTitlePosition = [safeZoneX + 0.2, safeZoneY + 0.15, safeZoneW - 0.4, 0.05];
+                    private _largePicturePosition = [safeZoneX + 0.2, safeZoneY + 0.2, safeZoneW - 0.4, safeZoneH - 0.3];
                     _titleBar ctrlSetPosition _largeTitlePosition;
                     _pictureControl ctrlSetPosition _largePicturePosition;
                 };

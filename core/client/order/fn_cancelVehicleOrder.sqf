@@ -66,17 +66,18 @@ if (count _forwardBases > 0) exitWith {
     [false, ""];
 };
 
-private _sectorStronghold = _sector getVariable ["WL_strongholdMarker", ""];
-if (_asset inArea _sectorStronghold) exitWith {
+private _sectorStronghold = _sector getVariable ["WL_stronghold", objNull];
+private _strongholdRadius = _sectorStronghold getVariable ["WL_strongholdRadius", 0];
+if (_asset distance2D _sectorStronghold < _strongholdRadius) exitWith {
     [false, ""];
 };
 
-private _isInCarrierSector = _sector getVariable ["WL2_isAircraftCarrier", false];
-if (_isInCarrierSector && ((getPosASL _asset) # 2) < 5) exitWith {
+private _isInWaterSector = _sector getVariable ["WL2_isAircraftCarrier", false] || _asset inArea "ussliberty";
+if (_isInWaterSector && ((getPosASL _asset) # 2) < 5) exitWith {
     [true, "Asset cannot be deployed so close to water."];
 };
 
-if (_isInCarrierSector) exitWith {
+if (_isInWaterSector) exitWith {
     [false, ""];
 };
 

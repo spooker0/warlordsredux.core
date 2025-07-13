@@ -9,18 +9,8 @@ private _ctrlAssetInfoBox = _ctrlMap getVariable "BIS_assetInfoBox";
 private _radius = (((ctrlMapScale _map) * 500) min 30) max 3;
 private _pos = _map ctrlMapScreenToWorld getMousePosition;
 
-private _selectableBuildings = [];
-{
-    private _stronghold = _x getVariable ["WL_stronghold", objNull];
-    private _strongholdPos = getPosATL _stronghold;
-    private _strongholdDistance = (_strongholdPos distance2D _pos) < _radius;
-    if (!isNull _stronghold) then {
-        _selectableBuildings pushBack [_stronghold, _strongholdPos];
-    };
-} forEach (BIS_WL_sectorsArray # 0);
-
 private _drawIconsSelectable = uiNamespace getVariable ["WL2_drawIconsSelectable", []];
-private _nearbyAssets = (_drawIconsSelectable + _selectableBuildings) select {
+private _nearbyAssets = _drawIconsSelectable select {
     private _asset = _x # 0;
     private _assetPos = _x # 1;
     (_assetPos distance2D _pos) < _radius

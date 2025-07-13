@@ -54,8 +54,9 @@ if (_class isKindOf "Man") then {
 			};
 			if (count _sectors > 0) then {
 				private _sector = _sectors # 0;
-				private _sectorStronghold = _sector getVariable ["WL_strongholdMarker", ""];
-				private _assetInStronghold = _pos inArea _sectorStronghold;
+				private _sectorStronghold = _sector getVariable ["WL_stronghold", objNull];
+				private _strongholdRadius = _sectorStronghold getVariable ["WL_strongholdRadius", 0];
+				private _assetInStronghold = _pos distance2D _sectorStronghold < _strongholdRadius;
 				if (_assetInStronghold) then {
 					_isExactPosition = true;
 				};
