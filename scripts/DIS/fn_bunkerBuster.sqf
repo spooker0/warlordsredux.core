@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_projectile", "_position", "_velocity"];
+params ["_projectile", "_position"];
 
 private _bombClass = typeof _projectile;
 private _penetrator = createVehicle [_bombClass, _position, [], 0, "NONE"];

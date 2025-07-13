@@ -11,7 +11,7 @@ private _filteredTargets = _datalinkTargets select {
     private _targetSide = [_target] call WL2_fnc_getAssetSide;
     private _targetAltitude = (ASLtoAGL (getPosASL _target)) # 2;
     private _targetDistance = _target distance _asset;
-    _targetTime >= -10 && _targetSide != BIS_WL_playerSide && alive _target && _targetDistance < _samRange && _targetAltitude >= 50
+    _targetTime >= -10 && _targetSide != BIS_WL_playerSide && alive _target && _target isKindOf "Air" && _targetDistance < _samRange && _targetAltitude >= 50
 };
 
 _filteredTargets apply {

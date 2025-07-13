@@ -9,6 +9,8 @@ while { !BIS_WL_missionEnd } do {
 	_blinking = !_blinking;
 	sleep 1;
 
+	private _ownedSectors = BIS_WL_sectorsArray select 0;
+
 	if (_blinking) then {
 		{
 			private _sector = _x;
@@ -26,12 +28,8 @@ while { !BIS_WL_missionEnd } do {
 			private _marker = _markers # 1;
 			_marker setMarkerBrushLocal "Border";
 			_marker setMarkerColorLocal _color;
-		} forEach _blinkingSectors;
-
-		_blinkingSectors = [];
+		} forEach _ownedSectors;
 	} else {
-		private _ownedSectors = BIS_WL_sectorsArray select 0;
-
 		private _shouldWarn = false;
 		{
 			private _sector = _x;

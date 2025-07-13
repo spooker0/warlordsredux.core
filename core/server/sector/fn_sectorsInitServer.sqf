@@ -91,6 +91,14 @@ waitUntil {!isNil "WL2_base1" && {!isNil "WL2_base2"}};
 	[_flag] remoteExec ["WLC_fnc_action", 0, true];
 } forEach [_firstBase, _secondBase];
 
+#if WL_QUICK_CAPTURE
+private _fastestCapture = 0.2;
+private _slowestCapture = 0.5;
+#else
+private _fastestCapture = 20;
+private _slowestCapture = 50;
+#endif
+
 {
 	_sector = _x;
 	_sectorPos = position _sector;
@@ -105,11 +113,12 @@ waitUntil {!isNil "WL2_base1" && {!isNil "WL2_base2"}};
 	_area params ["_a", "_b", "_angle", "_isRectangle"];
 	_size = _a * _b * (if (_isRectangle) then {4} else {pi});
 
-	if (_sector in [_firstBase, _secondBase]) then {
-		_sector setVariable ["BIS_WL_value", WL_BASE_VALUE];
+	private _sectorValue = if (_sector in [_firstBase, _secondBase]) then {
+		WL_BASE_VALUE;
 	} else {
-		_sector setVariable ["BIS_WL_value", round (_size / 13000)];
+		round (_size / 13000);
 	};
+	_sector setVariable ["BIS_WL_value", _sectorValue];
 
 	private _sectorVehicles = vehicles inAreaArray (_sector getVariable "objectAreaComplete");
 	private _sectorVehiclesArray = [];
@@ -143,7 +152,12 @@ waitUntil {!isNil "WL2_base1" && {!isNil "WL2_base2"}};
 	_agent = _agentGrp createUnit ["Logic", _sectorPos, [], 0, "CAN_COLLIDE"];
 	_agent enableSimulationGlobal false;
 	_sector setVariable ["BIS_WL_agentGrp", _agentGrp, true];
+
+	private _minCaptureTime = linearConversion [5, 30, _sectorValue, _fastestCapture, _slowestCapture, true];
+	_sector setVariable ["WL2_minCapture", _minCaptureTime];
 } forEach BIS_WL_allSectors;
+
+0 spawn WL2_fnc_sectorCaptureHandle;
 
 #if WL_OVERRIDE_BASES
 0 spawn {
@@ -156,15 +170,15 @@ waitUntil {!isNil "WL2_base1" && {!isNil "WL2_base2"}};
 	};
 	{
 		_x setVariable ["BIS_WL_revealedBy", [west], true];
+		[west, _x] call WL2_fnc_selectTarget;
 		[_x, west] call WL2_fnc_sectorRevealHandle;
 		[_x, west] call WL2_fnc_changeSectorOwnership;
-		_x spawn WL2_fnc_sectorCaptureHandle;
 	} forEach _westSectors;
 	{
 		_x setVariable ["BIS_WL_revealedBy", [east], true];
+		[east, _x] call WL2_fnc_selectTarget;
 		[_x, east] call WL2_fnc_sectorRevealHandle;
 		[_x, east] call WL2_fnc_changeSectorOwnership;
-		_x spawn WL2_fnc_sectorCaptureHandle;
 	} forEach _eastSectors;
 };
 #endif
