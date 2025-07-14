@@ -32,10 +32,13 @@ private _scoreboard = missionNamespace getVariable ["WL2_scoreboardData", create
 private _victimEntry = _scoreboard getOrDefault [getPlayerUID _unit, createHashMap];
 private _killerEntry = _scoreboard getOrDefault [getPlayerUID _responsiblePlayer, createHashMap];
 
+private _killerSide = side group _responsiblePlayer;
+private _unitSide = [_unit] call WL2_fnc_getAssetSide;
+
 if (_isUnitPlayer && _unit isKindOf "Man") then {
     _victimEntry set ["deaths", (_victimEntry getOrDefault ["deaths", 0]) + 1];
     private _killMessage = if (isPlayer [_responsiblePlayer]) then {
-        private _ffText = if (side group _unit == side group _responsiblePlayer) then {
+        private _ffText = if (_unitSide == _killerSide) then {
             _killerEntry set ["kills", (_killerEntry getOrDefault ["kills", 0]) - 2];
             " (Friendly fire)"
         } else {
@@ -59,7 +62,7 @@ private _unitCost = if (_unit isKindOf "Man") then {
 private _killerActualType = _killer getVariable ["WL2_orderedClass", typeOf _killer];
 private _killerStats = _stats getOrDefault [_killerActualType, createHashMap];
 private _killerKillValue = _killerStats getOrDefault ["killValue", 0];
-if (_unitCost > 0) then {
+if (_unitCost > 0 && _killerSide != _unitSide) then {
     _killerStats set ["killValue", _killerKillValue + _unitCost];
     _stats set [_killerActualType, _killerStats];
 

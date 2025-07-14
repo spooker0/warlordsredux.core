@@ -1,5 +1,26 @@
 #include "includes.inc"
-private _carriers = allMissionObjects "Land_Carrier_01_base_F";
+private _carrierCheck = allMissionObjects "Land_Carrier_01_base_F";
+
+private _carriers = [];
+{
+    private _carrier = _x;
+    private _nearSector = BIS_WL_allSectors select {
+        _x distance2D _carrier < 1000;
+    };
+    if (count _nearSector == 0) then {
+        private _area = [getPosASL _carrier, 1000, 1000, 0, false];
+        private _carrierProps = ((allMissionObjects "") inAreaArray _area) select {
+            damage _x == 0.5;
+        };
+        {
+            deleteVehicle _x;
+        } forEach _carrierProps;
+    } else {
+        _carriers pushBack _carrier;
+    };
+} forEach _carrierCheck;
+
+if (count _carriers == 0) exitWith {};
 
 private _changeAttackStatus = {
     params ["_carrier", "_markers"];

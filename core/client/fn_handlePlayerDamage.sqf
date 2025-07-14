@@ -36,12 +36,11 @@ if (_damage < 1) exitWith {
 // Downed
 moveOut _unit;
 switchCamera player;
-enableSentences false;
 
 [_unit] spawn {
     params ["_unit"];
     {
-        _x disableAI "ALL";
+        _x setUnconscious true;
     } forEach (units _unit);
 
     _unit setCaptive true;

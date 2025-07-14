@@ -151,7 +151,7 @@ class CfgFunctions {
 			class avTerminal {};
 			class betty {};
 			class clientEH {};
-			class destroyerClient {};
+			class createDestroyerClient {};
 			class factionBasedClientInit {};
 			class handleBuyMenuKeypress {};
 			class handleChatMessages {};
@@ -432,10 +432,10 @@ class CfgFunctions {
 			class changeSectorOwnership {};
 			class clearAllTimeouts {};
 			class clearPlayerReports {};
+			class createDestroyer {};
 			class createUAVCrew {};
 			class createVehicleCorrectly {};
 			class demolishComplete {};
-			class destroyerServer {};
 			class detectNewPlayers {};
 			class forgiveTeamkill {};
 			class friendlyFireHandleServer {};

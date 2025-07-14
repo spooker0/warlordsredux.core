@@ -46,7 +46,7 @@ player setVariable ["WL2_demolishTarget", objNull];
     },
     [],
     4,
-    80,
+    50,
     false,
     false
 ] call BIS_fnc_holdActionAdd;

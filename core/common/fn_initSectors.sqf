@@ -7,6 +7,7 @@ private _logicGroup = createGroup _logicCenter;
 
 private _createdSectors = createHashMap;
 private _initializedSectors = [];
+private _destroyerId = 0;
 {
     private _sector = _x;
     private _sectorClass = configName _sector;
@@ -27,7 +28,24 @@ private _initializedSectors = [];
     _area set [3, _area # 3 == 1];
     _logic setVariable ["WL2_objectArea", _area, true];
 
+    private _destroyer = getNumber (_sector >> "destroyer");
     private _carrier = getNumber (_sector >> "carrier");
+
+    if (_destroyer == 1 || (_carrier == 1 && random 1 > 0.6)) then {
+        private _actualArea = [_location, _area # 0, _area # 1, _area # 2, _area # 3];
+        private _objectsInCarrier = (allMissionObjects "") inAreaArray _actualArea;
+        {
+            deleteVehicle _x;
+        } forEach _objectsInCarrier;
+        deleteVehicle _logic;
+
+        _location set [2, 0];
+        [_location, 90 + (_area # 2), _name, _destroyerId] spawn WL2_fnc_createDestroyer;
+        _destroyerId = _destroyerId + 1;
+
+        continue;
+    };
+
     if (_carrier == 1) then {
         _logic setVariable ["WL2_isAircraftCarrier", true, true];
     };
@@ -47,6 +65,10 @@ private _connections = getArray (_sectorConfig >> "connections");
 
     private _fromSector = _createdSectors getOrDefault [_from, objNull];
     private _toSector = _createdSectors getOrDefault [_to, objNull];
+
+    if (isNull _fromSector || isNull _toSector) then {
+        continue;
+    };
 
     _fromSector synchronizeObjectsAdd [_toSector];
 

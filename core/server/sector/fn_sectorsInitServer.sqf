@@ -166,7 +166,7 @@ private _slowestCapture = 50;
 		_x getVariable ["WL2_name", ""] in ["Poliakko", "Alikampos", "Lakka"];
 	};
 	private _eastSectors = BIS_WL_allSectors select {
-		_x getVariable ["WL2_name", ""] in ["Stavros", "Neochori", "Katalaki", "USS Freedom"];
+		_x getVariable ["WL2_name", ""] in ["Stavros", "Neochori", "Katalaki"];
 	};
 	{
 		_x setVariable ["BIS_WL_revealedBy", [west], true];

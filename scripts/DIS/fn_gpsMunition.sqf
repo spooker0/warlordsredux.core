@@ -3,6 +3,12 @@ params ["_projectile", "_unit"];
 
 if (!isNull (missileTarget _projectile)) exitWith {};
 
+private _minimumSpeed = 150;
+private _ignoreRange = _unit getVariable ["WL2_ignoreRange", false];
+if (_ignoreRange) then {
+    _minimumSpeed = 300;
+};
+
 private _gpsBombs = _unit getVariable ["DIS_gpsBombs", []];
 _gpsBombs pushBack _projectile;
 _gpsBombs = _gpsBombs select { alive _x };
@@ -11,6 +17,9 @@ _unit setVariable ["DIS_gpsBombs", _gpsBombs];
 private _coordinates = +(_projectile getVariable ["DIS_targetCoordinates", getPosATL _unit]);
 private _laserTarget = createVehicleLocal ["LaserTargetC", _coordinates, [], 0, "CAN_COLLIDE"];
 _coordinates set [2, 400];
+if (_ignoreRange) then {
+    _coordinates set [2, 2000];
+};
 _laserTarget setPosATL _coordinates;
 _projectile setMissileTarget [_laserTarget, true];
 
@@ -31,7 +40,7 @@ while { alive _projectile } do {
     private _distanceToTarget = _projectile distance _laserTarget;
     private _speed = _originalSpeed - (serverTime - _launchTime) * 0.1;
     if (!_terminalManeuver) then {
-        _projectile setVelocityModelSpace [0, _speed max 200, 0];
+        _projectile setVelocityModelSpace [0, _speed max _minimumSpeed, 0];
         _projectile setMissileTarget [_laserTarget, true];
     } else {
         private _currentPosition = getPosASL _projectile;

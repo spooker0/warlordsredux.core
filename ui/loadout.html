@@ -1331,7 +1331,7 @@
                 } else if (panel.classList.contains('panel-secondary')) {
                     changeAttachments(document.playerLoadout[2], weapon, panel);
                 } else if (panel.classList.contains('panel-launcher')) {
-                    changeAttachments(document.playerLoadout[1], weapon);
+                    changeAttachments(document.playerLoadout[1], weapon, panel);
                 }
             }
 
@@ -1357,6 +1357,7 @@
             } else {
                 if (!muzzles.includes(loadout[1])) {
                     loadout[1] = "";
+                    console.log(loadout);
                 }
                 if (!optics.includes(loadout[3])) {
                     loadout[3] = "";

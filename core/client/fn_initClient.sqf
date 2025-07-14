@@ -381,7 +381,6 @@ call WL2_fnc_rappelAction;
 0 spawn WL2_fnc_locationScanner;
 0 spawn WL2_fnc_drawIncomingMissiles;
 0 spawn WL2_fnc_rewardCapture;
-0 spawn WL2_fnc_destroyerClient;
 
 call POLL_fnc_pollAction;
 

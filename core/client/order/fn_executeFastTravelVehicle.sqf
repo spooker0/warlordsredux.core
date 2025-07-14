@@ -10,7 +10,7 @@ if (!alive _targetVehicle) exitWith {
 
 private _assetPos = getPosASL _targetVehicle;
 private _altitude = _assetPos # 2;
-if (_altitude < 0 && surfaceIsWater _assetPos) exitWith {
+if (_altitude < -1 && surfaceIsWater _assetPos) exitWith {
     systemChat "Cannot fast travel to a submerged vehicle.";
     playSoundUI ["AddItemFailed"];
 };

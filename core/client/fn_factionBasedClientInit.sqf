@@ -20,8 +20,5 @@ switch (side group player) do {
 };
 
 _unit linkItem "Integrated_NVG_TI_0_F";
-
-_unit addPrimaryWeaponItem "muzzle_snds_H";
-_unit addPrimaryWeaponItem "muzzle_snds_M";
 _unit setUnitTrait ["loadCoef", 0.6];
 _unit setStamina 100;

@@ -1,18 +1,51 @@
 #include "includes.inc"
-if (isNil "destroyerController") exitWith {};
+params ["_destroyerBase", "_mrls", "_controller"];
 
-destroyerVLS setVariable ["WL2_ignoreRange", true];
+private _destroyerDir = getDir _destroyerBase;
 
-destroyerVLS addEventHandler ["Fired", {
+private _staticProps = [
+    ["Land_PortableDesk_01_olive_F", [-0.579102,-34.438,19.6331], 0],
+    ["Land_PortableDesk_01_olive_F", [1.87598, -34.4341, 19.6326], 0],
+    ["Land_PortableGenerator_01_sand_F", [-1.32324, -33.9192, 19.5646], 89.5469],
+    ["Land_PortableServer_01_cover_olive_F", [-1.54688, -34.4224, 20.1178], -192.838],
+    ["Land_DeskChair_01_sand_F", [-0.648438, -35.3083, 19.4113], -99.8427],
+    ["Land_MultiScreenComputer_01_closed_sand_F", [1.00293, -34.3979, 20.3257], 56.4011],
+    ["Land_laptop_03_closed_olive_F", [1.56152, -34.5183, 20.2523], -23.635],
+    ["Land_IPPhone_01_olive_F", [1.94238, -34.489, 20.1216], -1.554],
+    ["Land_BatteryPack_01_open_sand_F", [1.01367, -34.7173, 19.7958], 153.802],
+    ["Land_BatteryPack_01_closed_sand_F", [1.21875, -34.3982, 19.6868], -1.62357],
+    ["Land_PortableServer_01_sand_F", [1.15527, -34.5205, 19.3637], -3.05557],
+    ["Land_DeskChair_01_black_F", [2.62598, -34.708, 19.4234], 152.338],
+    ["Land_Router_01_sand_F", [2.79883, -34.4292, 20.1897], -177.399]
+];
+
+{
+    private _className = _x select 0;
+    private _propPosition = _x select 1;
+    private _direction = _x select 2;
+
+    private _staticProp = createSimpleObject [_className, _propPosition, true];
+    _staticProp setDir (_direction + _destroyerDir);
+
+    private _staticPropPos = _destroyerBase modelToWorldWorld _propPosition;
+    _staticProp setPosWorld _staticPropPos;
+
+    _staticProp allowDamage false;
+    _staticProp enableSimulation false;
+} forEach _staticProps;
+
+_mrls addEventHandler ["Fired", {
     _this spawn {
         params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
 
         if (player distance2D _unit < 1000) then {
             [_unit, _projectile] spawn {
                 params ["_unit", "_projectile"];
+                private _destroyerId = _unit getVariable ["WL2_destroyerId", 0];
+
                 private _camera = "camera" camCreate (getPosASL _unit);
-                _camera cameraEffect ["Terminate", "BACK", "destroyercam"];
-                _camera cameraEffect ["Internal", "BACK", "destroyercam"];
+                _camera cameraEffect ["Terminate", "BACK", format ["destroyercam%1", _destroyerId]];
+                _camera cameraEffect ["Internal", "BACK", format ["destroyercam%1", _destroyerId]];
                 _camera camSetTarget _projectile;
                 _camera camSetRelPos [0, -3, 0.4];
                 _camera camCommit 0;
@@ -27,7 +60,8 @@ destroyerVLS addEventHandler ["Fired", {
                     private _bombsRemaining = _unit getVariable ["DIS_gpsBombs", []];
                     _bombsRemaining = _bombsRemaining select { alive _x };
                     if (count _bombsRemaining == 0) then {
-                        _camera cameraEffect ["Terminate", "BACK", "destroyercam"];
+                        private _destroyerId = _unit getVariable ["WL2_destroyerId", 0];
+                        _camera cameraEffect ["Terminate", "BACK", format ["destroyercam%1", _destroyerId]];
                     };
 
                     camDestroy _camera;
@@ -35,7 +69,7 @@ destroyerVLS addEventHandler ["Fired", {
             };
         };
 
-        if (cameraOn != destroyerVLS) exitWith {};
+        if (cameraOn != _unit) exitWith {};
 
         private _inRangeCalculation = [_unit] call DIS_fnc_calculateInRange;
         private _targetCoordinates = _inRangeCalculation # 3;
@@ -43,24 +77,27 @@ destroyerVLS addEventHandler ["Fired", {
         [_projectile, _unit] spawn DIS_fnc_gpsMunition;
         [_projectile, player] call DIS_fnc_startMissileCamera;
 
-        private _currentAmmo = destroyerVLS magazineTurretAmmo ["magazine_Missiles_Cruise_01_x18", [0]];
+        private _currentAmmo = _unit magazineTurretAmmo ["magazine_Missiles_Cruise_01_x18", [0]];
         private _newControllerImage = format [
-            "#(rgb,512,512,3)text(1,1,""LucidaConsoleB"",0.15,""#000000"",""#ffffff"",""AMMO: %1"")",
+            "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""AMMO\n%1"")",
             _currentAmmo
         ];
-        destroyerController setObjectTextureGlobal [3, _newControllerImage];
+
+        private _controller = _unit getVariable ["WL2_destroyerController", objNull];
+        _controller setObjectTextureGlobal [3, _newControllerImage];
     };
 }];
 
-destroyerController addAction [
+_controller addAction [
     "<t color='#FF0000'>Control Missile Battery</t>",
     {
         _this spawn {
             params ["_target", "_caller", "_actionId"];
             _target setVariable ["WL2_controller", _caller, true];
 
-            destroyerVLS switchCamera "External";
-            player remoteControl (crew destroyerVLS select 0);
+            private _mrls = _target getVariable ["WL2_destroyerVLS", objNull];
+            _mrls switchCamera "External";
+            player remoteControl (crew _mrls select 0);
 
             private _display = uiNamespace getVariable ["RscWLGPSTargetingMenu", displayNull];
             if (isNull _display) then {
@@ -92,7 +129,7 @@ destroyerController addAction [
                 sleep 0.1;
                 !alive player ||
                 lifeState player == "INCAPACITATED" ||
-                cameraOn != destroyerVLS ||
+                cameraOn != _mrls ||
                 isNull _texture;
             };
 

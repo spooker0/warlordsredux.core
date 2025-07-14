@@ -168,26 +168,22 @@ if (_operateAccess && _hasRadar) then {
 
 if (typeof _asset == "Land_TentA_F") then {
     ["FAST TRAVEL TENT", {
+        if (!alive player || lifeState player == "INCAPACITATED") exitWith {
+            systemChat "Cannot fast travel.";
+            playSoundUI ["AddItemFailed"];
+        };
         [4, ""] spawn WL2_fnc_executeFastTravel;
     }, true] call WL2_fnc_addTargetMapButton;
 };
 
-private _spawnVehicleTypes = createHashMapFromArray [
-    ["B_Truck_01_medical_F", true],
-    ["B_Truck_01_transport_F", true],
-    ["B_Slingload_01_Medevac_F", true],
-    ["B_Truck_01_flatbed_F", true],
-
-    ["O_Truck_03_medical_F", true],
-    ["O_Truck_03_transport_F", true],
-    ["Land_Pod_Heli_Transport_04_medevac_F", true],
-    ["O_Truck_01_flatbed_F", true],
-    ["O_Heli_Transport_04_medevac_F", true]
-];
-
-if (_assetActualType in _spawnVehicleTypes) then {
+private _canFastTravel = WL_ASSET(_assetActualType, "hasFastTravel", 0) > 0;
+if (_canFastTravel) then {
     ["FAST TRAVEL", {
         params ["_asset"];
+        if (!alive player || lifeState player == "INCAPACITATED") exitWith {
+            systemChat "Cannot fast travel.";
+            playSoundUI ["AddItemFailed"];
+        };
         [_asset] spawn WL2_fnc_executeFastTravelVehicle;
     }, true] call WL2_fnc_addTargetMapButton;
 };
