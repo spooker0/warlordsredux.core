@@ -17,23 +17,35 @@ _unit setVariable ["DIS_gpsBombs", _gpsBombs];
 private _coordinates = +(_projectile getVariable ["DIS_targetCoordinates", getPosATL _unit]);
 private _laserTarget = createVehicleLocal ["LaserTargetC", _coordinates, [], 0, "CAN_COLLIDE"];
 _coordinates set [2, 400];
-if (_ignoreRange) then {
-    _coordinates set [2, 2000];
-};
 _laserTarget setPosATL _coordinates;
-_projectile setMissileTarget [_laserTarget, true];
-
-sleep 1;
 
 private _terminalManeuver = false;
 private _originalDistance = _projectile distance _laserTarget;
 private _launchTime = serverTime;
 private _originalSpeed = (velocityModelSpace _unit) # 1;
 
+if (_ignoreRange) then {
+    _coordinates set [2, 1000];
+};
+
 private _initialVectorUp = vectorUp _projectile;
 _initialVectorUp set [0, 0];
-_initialVectorUp set [1, 0];
+_initialVectorUp set [1, 1];
 _projectile setVectorDirAndUp [vectorDir _projectile, _initialVectorUp];
+
+if (_ignoreRange) then {
+    private _altitude = getPosASL _projectile select 2;
+    while { _altitude < 5000 } do {
+        _altitude = getPosASL _projectile select 2;
+        [_projectile, 90, 0] call BIS_fnc_setPitchBank;
+        _projectile setVelocityModelSpace [0, 500, 0];
+        sleep 0.1;
+    };
+};
+
+sleep 1;
+
+_projectile setMissileTarget [_laserTarget, true];
 
 private _finalPosition = [];
 while { alive _projectile } do {

@@ -1,8 +1,7 @@
 #include "includes.inc"
 params ["_position", "_destroyerDir", "_destroyerName", "_destroyerId"];
 
-private _destroyerBase = createVehicle ["Land_Destroyer_01_base_F", _position, [], 0, "CAN_COLLIDE"];
-_destroyerBase setPosWorld _position;
+private _destroyerBase = createSimpleObject ["Land_Destroyer_01_base_F", _position];
 _destroyerBase setDir _destroyerDir;
 private _destroyerPos = getPosWorld _destroyerBase;
 
@@ -27,7 +26,6 @@ private _hullNumber = "";
     _destroyerPartsArray pushBack [_dummy, _dummyPosition];
 
     _dummy allowDamage false;
-    _dummy enableSimulationGlobal false;
 
     if (_dummyClassName == "Land_Destroyer_01_hull_01_F") then {
         private _hullNum1 = round (random 9);
@@ -102,6 +100,8 @@ _destroyerMarker setMarkerShapeLocal "ICON";
 _destroyerMarker setMarkerTypeLocal "loc_boat";
 _destroyerMarker setMarkerTextLocal format ["%1 (DDG-%2)", _destroyerName, _hullNumber];
 _destroyerMarker setMarkerColor "ColorWhite";
+
+sleep 60;
 
 [_destroyerBase, _mrls, _controller] remoteExec ["WL2_fnc_createDestroyerClient", 0, true];
 

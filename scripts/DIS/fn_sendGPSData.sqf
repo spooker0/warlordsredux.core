@@ -7,7 +7,7 @@ private _gpsCord = cameraOn getVariable ["DIS_gpsCord", ""];
 private _inRangeCalculation = [cameraOn] call DIS_fnc_calculateInRange;
 if (cameraOn getVariable ["WL2_ignoreRange", false]) then {
 	_inRangeCalculation set [0, true];
-    _inRangeCalculation set [1, 36000];
+    _inRangeCalculation set [1, 30000];
 };
 
 private _gpsBombs = cameraOn getVariable ["DIS_gpsBombs", []];
