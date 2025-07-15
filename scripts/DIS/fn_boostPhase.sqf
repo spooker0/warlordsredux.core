@@ -25,6 +25,7 @@ private _altitude = getPosASL _projectile # 2;
 while { _altitude < _boostAltitude } do {
     private _boostSpeed = linearConversion [0, 2000, _altitude, 40, 3000, true];
     _projectile setVelocityModelSpace [0, _boostSpeed, 0];
+    _projectile setVectorDirAndUp _firstStageVectorDirAndUp;
 
     _altitude = getPosASL _projectile # 2;
     sleep 0.1;
