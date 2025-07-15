@@ -216,8 +216,7 @@ while { alive _asset && cameraOn == _asset } do {
         _ecmJammerType findIf { _munition isKindOf _x } >= 0 && {
             private _shotParent = getShotParents _munition # 0;
             private _shotParentUid = _shotParent getVariable ["BIS_WL_ownerAsset", "123"];
-            // _shotParentUid != _playerUid;
-            true;
+            _shotParentUid != _playerUid;
         };
     };
     uiNamespace setVariable ["WL2_ECMMunitions", _munitions];

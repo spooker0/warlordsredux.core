@@ -28,6 +28,7 @@ class CfgFunctions {
 		class Default {
 			file = "src\scripts\DIS";
 			class advancedSam {};
+			class boostPhase {};
 			class bunkerBuster {};
 			class calculateInRange {};
 			class controlMunition {};
