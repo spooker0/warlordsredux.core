@@ -3,8 +3,7 @@ params [
     "_projectile",
     "_unit",
     ["_samMaxDistance", WL_SAM_MAX_DISTANCE],
-    ["_distanceBeforeNotch", WL_SAM_NOTCH_ACTIVE_DIST],
-    ["_boostAltitude", 5000]
+    ["_distanceBeforeNotch", WL_SAM_NOTCH_ACTIVE_DIST]
 ];
 
 private _originalTarget = missileTarget _projectile;
@@ -12,7 +11,8 @@ private _originalTarget = missileTarget _projectile;
 if (_unit isKindOf "Air") then {
     _samMaxDistance = 30000;
 } else {
-    [_projectile, _originalTarget, _boostAltitude] call DIS_fnc_boostPhase;
+    private _targetAltitude = getPosASL _unit # 2;
+    [_projectile, _originalTarget, (_targetAltitude * 2) min 5000] call DIS_fnc_boostPhase;
 };
 
 private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];

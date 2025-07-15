@@ -8,7 +8,7 @@ sleep 0.5;
 _projectile setVariable ["WL2_missileStateOverride", "BOOST", true];
 _projectile setVariable ["APS_missileState", "BOOST", true];
 
-private _posAbove = _projectile modelToWorldWorld [0, 100, 2000];
+private _posAbove = _projectile modelToWorldWorld [0, 0, 2000];
 private _firstStageVectorDirAndUp = [getPosASL _projectile, _posAbove] call BIS_fnc_findLookAt;
 
 private _firstStageTime = serverTime;
@@ -42,5 +42,6 @@ while { alive _projectile && alive _target && serverTime < _startTime + 1 } do {
     sleep 0.01;
 };
 
+_projectile setVectorDirAndUp _targetVectorDirAndUp;
 _projectile setVariable ["WL2_missileStateOverride", "", true];
 _projectile setMissileTarget [_target, true];

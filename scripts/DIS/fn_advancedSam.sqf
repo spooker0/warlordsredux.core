@@ -15,4 +15,4 @@ _projectile setMissileTarget [_target, true];
 [_projectile, _unit] spawn DIS_fnc_frag;
 
 private _targetAltitude = getPosASL _target # 2;
-[_projectile, _unit, 14000, 8000, (_targetAltitude * 2) min 5000] spawn DIS_fnc_maneuver;
+[_projectile, _unit, 14000, 8000] spawn DIS_fnc_maneuver;
