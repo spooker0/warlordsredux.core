@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_originalProjectile", "_asset"];
+params ["_originalProjectile", "_asset", "_bunkerBuster"];
 
 private _assetName = [_asset] call WL2_fnc_getAssetTypeName;
 private _controlMunitionRequest = [
@@ -33,6 +33,12 @@ _projectile setVectorDirAndUp _projectileVectorDirAndUp;
 _projectile setVelocityModelSpace _projectileVelocity;
 [_projectile, [player, player]] remoteExec ["setShotParents", 2];
 [_projectile, driver _asset] remoteExec ["DIS_fnc_startMissileCamera", _asset];
+
+if (_bunkerBuster) then {
+    _projectile addEventHandler ["Explode", {
+        _this spawn DIS_fnc_bunkerBuster;
+    }];
+};
 
 _projectile setVariable ["APS_speedOverride", vectorMagnitude _projectileVelocity];
 player setVariable ["DIS_controllingProjectile", _projectile];

@@ -9,7 +9,11 @@ _asset setVectorDirAndUp _direction;
 
 private _isInWaterSector = count (BIS_WL_allSectors select {
 	_pos inArea (_x getVariable "objectAreaComplete") && _x getVariable ["WL2_isAircraftCarrier", false];
-}) > 0 || _pos inArea "ussliberty";
+}) > 0 || {
+	{
+		_pos inArea _x
+	} count ["marker_USS Liberty_outline", "marker_USS Freedom_outline", "marker_USS Independence_outline"] > 0
+};
 if (_isInWaterSector) then {
 	_asset setVehiclePosition [[_posX, _posY, 50], [], 0, "CAN_COLLIDE"];
 } else {

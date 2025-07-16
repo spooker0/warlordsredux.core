@@ -2,7 +2,7 @@
 params ["_mrls"];
 
 private _currentAmmo = _mrls magazineTurretAmmo ["magazine_Missiles_Cruise_01_x18", [0]];
-_currentAmmo = (_currentAmmo + 1) min 6;
+_currentAmmo = (_currentAmmo + 1) min 4;
 _mrls setMagazineTurretAmmo ["magazine_Missiles_Cruise_01_x18", _currentAmmo, [0]];
 
 private _newControllerImage = format [

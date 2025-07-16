@@ -366,6 +366,7 @@
                 document.querySelector('.squads').appendChild(squadEl);
 
                 const isSquadLeader = squad[1] === playerInfo[0];
+                const inCurrentSquad = squad[2].some(member => member[0] === playerInfo[0]);
 
                 let squadPoints = 0;
                 squad[2].forEach(member => {
@@ -414,9 +415,10 @@
                         });
                         memberEl.appendChild(fastTravelButton);
                     }
+
                     if (squad[1] === member[0]) {
                         memberEl.classList.add('squad-leader');
-                        if (playerInfo[0] !== member[0]) {
+                        if (playerInfo[0] !== member[0] && inCurrentSquad) {
                             const fastTravelButton = document.createElement('button');
                             fastTravelButton.textContent = 'Fast Travel';
                             fastTravelButton.classList.add('ft-button');

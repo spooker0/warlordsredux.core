@@ -2,18 +2,16 @@
 params [
     "_projectile",
     "_unit",
+    ["_groundAvoidDistance", 5000],
     ["_samMaxDistance", WL_SAM_MAX_DISTANCE],
     ["_distanceBeforeNotch", WL_SAM_NOTCH_ACTIVE_DIST]
 ];
 
-private _originalTarget = missileTarget _projectile;
-
 if (_unit isKindOf "Air") then {
     _samMaxDistance = 30000;
-} else {
-    private _targetAltitude = getPosASL _unit # 2;
-    [_projectile, _originalTarget, (_targetAltitude * 2) min 5000] call DIS_fnc_boostPhase;
 };
+
+private _originalTarget = missileTarget _projectile;
 
 private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
 private _hasLoal = WL_ASSET(_assetActualType, "hasLoal", 0) > 0;
@@ -96,6 +94,12 @@ if (speed _unit > 950) then {
     _maxAcceleration = _maxAcceleration * 3;
 };
 
+private _terrainTest = 4000;
+private _disableGroundAvoid = false;
+#if WL_NO_GROUND_AVOID
+_disableGroundAvoid = true;
+#endif
+
 private _lastLoopTime = serverTime;
 while { alive _projectile } do {
     private _currentVector = velocityModelSpace _projectile;
@@ -118,9 +122,37 @@ while { alive _projectile } do {
 
     private _angularVector = angularVelocityModelSpace _projectile;
     private _distanceTraveled = _projectile distance _originalPosition;
+    if (_disableGroundAvoid || _distanceTraveled > _groundAvoidDistance) then {
+        private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
+        _projectile setAngularVelocityModelSpace _newAngularVector;
+    } else {
+        private _start = getPosASL _projectile;
+        private _end = _projectile modelToWorldWorld [0, _terrainTest, -100];
+        private _intersectPosition = terrainIntersectAtASL [_start, _end];
+        private _target = missileTarget _projectile;
+        private _targetHeightATL = if !(isNull _target) then {
+            (getPosATL _target # 2) min (getPosASL _projectile # 2);
+        } else {
+            100;
+        };
+        private _projectileHeightATL = (getPosATL _projectile # 2) min (getPosASL _projectile # 2);
+        private _distanceToGround = _intersectPosition distance _start;
+        _projectileHeightATL = _projectileHeightATL min _distanceToGround;
+        private _belowTargetATL = _projectileHeightATL < _targetHeightATL;
+        private _groundAvoid = !(_intersectPosition isEqualTo [0, 0, 0]) && _belowTargetATL;
 
-    private _enemyVectorDirAndUp = [getPosASL _projectile, getPosASL _originalTarget] call BIS_fnc_findLookAt;
-    _projectile setVectorDirAndUp _enemyVectorDirAndUp;
+        if (_groundAvoid) then {
+            _projectile setAngularVelocityModelSpace [-30 * (_terrainTest -_distanceToGround) / _terrainTest, _angularVector # 1, _angularVector # 2];
+        } else {
+            private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
+            _projectile setAngularVelocityModelSpace _newAngularVector;
+        };
+
+        private _vectorUp = vectorUp _projectile;
+        _vectorUp set [0, 0];
+        _vectorUp set [1, 0];
+        _projectile setVectorDirAndUp [vectorDir _projectile, _vectorUp];
+    };
 
     _lastLoopTime = serverTime;
     sleep 0.001;

@@ -63,30 +63,35 @@ _screen allowDamage false;
 _screen enableSimulationGlobal false;
 _screen setObjectTextureGlobal [0, format ["#(argb,512,512,1)r2t(destroyercam%1,1.0)", _destroyerId]];
 
-private _mrlsParams = ["B_Ship_MRLS_01_F", [0.253906, -62.4602, 11.9104], -180];
-private _mrls = createVehicle [_mrlsParams select 0, [0, 0, 0], [], 0, "CAN_COLLIDE"];
-private _mrlsDir = _mrlsParams select 2;
-private _mrlsPos = _destroyerBase modelToWorldWorld (_mrlsParams select 1);
-_mrls setDir (_mrlsDir + _destroyerDir);
-_mrls setPosWorld _mrlsPos;
-_mrls allowDamage false;
-_mrls setVehicleReceiveRemoteTargets false;
-_mrls lock true;
-_destroyerBase setVariable ["WL2_destroyerVLS", _mrls, true];
+private _mrls = objNull;
 
-_controller setVariable ["WL2_destroyerVLS", _mrls, true];
-_mrls setVariable ["WL2_ignoreRange", true, true];
-_mrls setVariable ["WL2_destroyerController", _controller, true];
-_mrls setVariable ["WL2_destroyerId", _destroyerId, true];
+private _createMrls = {
+    private _mrlsParams = ["B_Ship_MRLS_01_F", [0.253906, -62.4602, 11.9104], -180];
+    _mrls = createVehicle [_mrlsParams select 0, [0, 0, 0], [], 0, "CAN_COLLIDE"];
+    private _mrlsDir = _mrlsParams select 2;
+    private _mrlsPos = _destroyerBase modelToWorldWorld (_mrlsParams select 1);
+    _mrls setDir (_mrlsDir + _destroyerDir);
+    _mrls setPosWorld _mrlsPos;
+    _mrls setVehicleReceiveRemoteTargets false;
+    _mrls lock true;
+    _destroyerBase setVariable ["WL2_destroyerVLS", _mrls, true];
 
-private _assetGroup = createGroup independent;
-private _unit = _assetGroup createUnit ["I_UAV_AI", [0, 0, 0], [], 0, "NONE"];
-_unit moveInAny _mrls;
-_unit disableAI "ALL";
-_assetGroup deleteGroupWhenEmpty true;
+    _controller setVariable ["WL2_destroyerVLS", _mrls, true];
+    _mrls setVariable ["WL2_ignoreRange", true, true];
+    _mrls setVariable ["WL2_destroyerController", _controller, true];
+    _mrls setVariable ["WL2_destroyerId", _destroyerId, true];
 
-_mrls removeMagazineTurret ["magazine_Missiles_Cruise_01_Cluster_x18", [0]];
-_mrls setMagazineTurretAmmo ["magazine_Missiles_Cruise_01_x18", 1, [0]];
+    private _assetGroup = createGroup independent;
+    private _unit = _assetGroup createUnit ["I_UAV_AI", [0, 0, 0], [], 0, "NONE"];
+    _unit moveInAny _mrls;
+    _unit disableAI "ALL";
+    _assetGroup deleteGroupWhenEmpty true;
+
+    _mrls removeMagazineTurret ["magazine_Missiles_Cruise_01_Cluster_x18", [0]];
+    _mrls setMagazineTurretAmmo ["magazine_Missiles_Cruise_01_x18", 1, [0]];
+};
+
+call _createMrls;
 
 private _outlineMarkerLocation = _destroyerBase modelToWorld [0, -10, 0];
 private _outlineMarker = createMarkerLocal [format ["marker_%1_outline", _destroyerName], _outlineMarkerLocation];
@@ -101,12 +106,19 @@ _destroyerMarker setMarkerTypeLocal "loc_boat";
 _destroyerMarker setMarkerTextLocal format ["%1 (DDG-%2)", _destroyerName, _hullNumber];
 _destroyerMarker setMarkerColor "ColorWhite";
 
-sleep 60;
+sleep 20;
 
-[_destroyerBase, _mrls, _controller] remoteExec ["WL2_fnc_createDestroyerClient", 0, true];
+[_destroyerBase, _mrls, _controller, true] remoteExec ["WL2_fnc_createDestroyerClient", 0, true];
 
-while { alive _mrls } do {
-    sleep 90;
+while { true } do {
+    sleep 120;
     private _turretOwner = _mrls turretOwner [0];
     [_mrls] remoteExec ["WL2_fnc_addMissileToMag", _turretOwner];
+
+    if (!alive _mrls) then {
+        deleteVehicle _mrls;
+        sleep 1800;
+        call _createMrls;
+        [objNull, _mrls, objNull, false] remoteExec ["WL2_fnc_createDestroyerClient", 0, true];
+    };
 };

@@ -1,5 +1,54 @@
 #include "includes.inc"
-params ["_destroyerBase", "_mrls", "_controller"];
+params ["_destroyerBase", "_mrls", "_controller", "_firstSpawn"];
+
+_mrls addEventHandler ["Fired", {
+    _this spawn {
+        params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
+
+        if (player distance2D _unit < 1000) then {
+            [_unit, _projectile] spawn {
+                params ["_unit", "_projectile"];
+                private _destroyerId = _unit getVariable ["WL2_destroyerId", 0];
+
+                private _camera = "camera" camCreate (getPosASL _unit);
+                _camera cameraEffect ["Terminate", "BACK", format ["destroyercam%1", _destroyerId]];
+                _camera cameraEffect ["Internal", "BACK", format ["destroyercam%1", _destroyerId]];
+                _camera camSetTarget _projectile;
+                _camera camSetRelPos [0, -3, 0.4];
+                _camera camCommit 0;
+                _camera attachTo [_projectile];
+
+                [_camera, _projectile, _unit] spawn {
+                    params ["_camera", "_projectile", "_unit"];
+                    while { alive _projectile } do {
+                        sleep 1;
+                    };
+
+                    camDestroy _camera;
+                };
+            };
+        };
+
+        if (cameraOn != _unit) exitWith {};
+
+        private _inRangeCalculation = [_unit] call DIS_fnc_calculateInRange;
+        private _targetCoordinates = _inRangeCalculation # 3;
+        _projectile setVariable ["DIS_targetCoordinates", _targetCoordinates];
+        [_projectile, _unit] spawn DIS_fnc_gpsMunition;
+        [_projectile, player] call DIS_fnc_startMissileCamera;
+
+        private _currentAmmo = _unit magazineTurretAmmo ["magazine_Missiles_Cruise_01_x18", [0]];
+        private _newControllerImage = format [
+            "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""AMMO\n%1"")",
+            _currentAmmo
+        ];
+
+        private _controller = _unit getVariable ["WL2_destroyerController", objNull];
+        _controller setObjectTextureGlobal [3, _newControllerImage];
+    };
+}];
+
+if (!_firstSpawn) exitWith {};
 
 private _destroyerDir = getDir _destroyerBase;
 
@@ -34,68 +83,18 @@ private _staticProps = [
     _staticProp enableSimulation false;
 } forEach _staticProps;
 
-_mrls addEventHandler ["Fired", {
-    _this spawn {
-        params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
-
-        if (player distance2D _unit < 1000) then {
-            [_unit, _projectile] spawn {
-                params ["_unit", "_projectile"];
-                private _destroyerId = _unit getVariable ["WL2_destroyerId", 0];
-
-                private _camera = "camera" camCreate (getPosASL _unit);
-                _camera cameraEffect ["Terminate", "BACK", format ["destroyercam%1", _destroyerId]];
-                _camera cameraEffect ["Internal", "BACK", format ["destroyercam%1", _destroyerId]];
-                _camera camSetTarget _projectile;
-                _camera camSetRelPos [0, -3, 0.4];
-                _camera camCommit 0;
-                _camera attachTo [_projectile];
-
-                [_camera, _projectile, _unit] spawn {
-                    params ["_camera", "_projectile", "_unit"];
-                    while { alive _projectile } do {
-                        sleep 1;
-                    };
-
-                    private _bombsRemaining = _unit getVariable ["DIS_gpsBombs", []];
-                    _bombsRemaining = _bombsRemaining select { alive _x };
-                    if (count _bombsRemaining == 0) then {
-                        private _destroyerId = _unit getVariable ["WL2_destroyerId", 0];
-                        _camera cameraEffect ["Terminate", "BACK", format ["destroyercam%1", _destroyerId]];
-                    };
-
-                    camDestroy _camera;
-                };
-            };
-        };
-
-        if (cameraOn != _unit) exitWith {};
-
-        private _inRangeCalculation = [_unit] call DIS_fnc_calculateInRange;
-        private _targetCoordinates = _inRangeCalculation # 3;
-        _projectile setVariable ["DIS_targetCoordinates", _targetCoordinates];
-        [_projectile, _unit] spawn DIS_fnc_gpsMunition;
-        [_projectile, player] call DIS_fnc_startMissileCamera;
-
-        private _currentAmmo = _unit magazineTurretAmmo ["magazine_Missiles_Cruise_01_x18", [0]];
-        private _newControllerImage = format [
-            "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""AMMO\n%1"")",
-            _currentAmmo
-        ];
-
-        private _controller = _unit getVariable ["WL2_destroyerController", objNull];
-        _controller setObjectTextureGlobal [3, _newControllerImage];
-    };
-}];
-
 _controller addAction [
     "<t color='#FF0000'>Control Missile Battery</t>",
     {
         _this spawn {
             params ["_target", "_caller", "_actionId"];
+            private _mrls = _target getVariable ["WL2_destroyerVLS", objNull];
+            if (isNull _mrls) exitWith {
+                systemChat "Missile Battery not found.";
+                playSoundUI ["AddItemFailed"];
+            };
             _target setVariable ["WL2_controller", _caller, true];
 
-            private _mrls = _target getVariable ["WL2_destroyerVLS", objNull];
             _mrls switchCamera "External";
             player remoteControl (crew _mrls select 0);
 
