@@ -7,9 +7,9 @@ _asset addAction [
         params ["_asset", "_caller"];
         private _rearmSource = cursorObject;
         private _rearmSourcePos = _rearmSource modelToWorld [0, 0, 0];
-        if (_rearmSourcePos # 2 < 300) exitWith {
+        if (_rearmSourcePos # 2 < 75) exitWith {
             playSoundUI ["AddItemFailed"];
-            systemChat "Rearm source is not flying above 300M!";
+            systemChat "Rearm source is not flying above 75M!";
         };
 
         _asset setVehicleAmmo 1;
@@ -27,7 +27,7 @@ _asset addAction [
     false,
     false,
     "",
-    "_target getVariable ['BIS_WL_nextRearm', 0] < serverTime && cursorObject distance _target < 300 && cursorObject getVariable ['WL2_hasInflightRearm', false]",
+    "_target == _this && _target getVariable ['BIS_WL_nextRearm', 0] < serverTime && cursorObject distance _target < 300 && cursorObject getVariable ['WL2_hasInflightRearm', false]",
     50,
     true
 ];

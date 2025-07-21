@@ -531,10 +531,23 @@
         .copy-current:hover {
             background-color: var(--border-color);
         }
+
+        .fps-display {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 1);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 1000;
+        }
     </style>
 </head>
 
 <body>
+    <div class="fps-display"></div>
     <div class="loadout-menu-wrapper">
         <div class="menu-title">Loadout</div>
         <div class="loadout-menu">
@@ -1814,6 +1827,13 @@
             document.readyToSend = true;
             selectionChanged();
             document.ammoAttentionNeeded = false;
+        }
+
+        function updateFpsDisplay(fps) {
+            const fpsDisplay = document.querySelector('.fps-display');
+            if (fpsDisplay) {
+                fpsDisplay.textContent = `FPS: ${fps}`;
+            }
         }
     </script>
 </body>
