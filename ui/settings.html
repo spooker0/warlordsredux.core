@@ -142,10 +142,23 @@
         .close-button:hover {
             background-color: rgba(0, 0, 0, 0.7);
         }
+
+        .fps-display {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 1);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 1000;
+        }
     </style>
 </head>
 
 <body>
+    <div class="fps-display"></div>
     <div id="game-data"></div>
     <div class="settings-menu-wrapper">
         <div class="menu-title">Settings</div>
@@ -281,6 +294,24 @@
                 container.appendChild(element);
             });
         }
+
+        const filterStrength = 20;
+        let frameTime = 0;
+        let lastLoop = performance.now();
+
+        const fpsLoop = () => {
+            const thisLoop = performance.now();
+            const thisFrameTime = thisLoop - lastLoop;
+            frameTime += (thisFrameTime - frameTime) / filterStrength;
+            lastLoop = thisLoop;
+            requestAnimationFrame(fpsLoop);
+        };
+
+        const fpsOut = document.querySelector('.fps-display');
+        setInterval(() => {
+            fpsOut.textContent = `MENU FPS: ${(1000 / frameTime).toFixed(2)}`;
+        }, 100);
+        fpsLoop();
     </script>
 </body>
 
