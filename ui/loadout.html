@@ -1829,12 +1829,19 @@
             document.ammoAttentionNeeded = false;
         }
 
-        function updateFpsDisplay(fps) {
-            const fpsDisplay = document.querySelector('.fps-display');
-            if (fpsDisplay) {
-                fpsDisplay.textContent = `FPS: ${fps}`;
-            }
-        }
+        setInterval(() => {
+            const getFPS = () =>
+                new Promise(resolve =>
+                    requestAnimationFrame(t1 =>
+                        requestAnimationFrame(t2 => resolve(1000 / (t2 - t1)))
+                    )
+                )
+
+            // Calling the function to get the FPS
+            getFPS().then(fps => {
+                document.querySelector('.fps-display').textContent = `MENU FPS: ${fps.toFixed(2)}`;
+            });
+        }, 200);
     </script>
 </body>
 
