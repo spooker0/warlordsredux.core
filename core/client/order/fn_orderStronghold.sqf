@@ -9,6 +9,13 @@ private _currentSector = _findCurrentSector # 0;
 private _oldStronghold = _currentSector getVariable ["WL_stronghold", objNull];
 private _hasOldStronghold = !isNull _oldStronghold;
 
+if (_hasOldStronghold && {
+    _oldStronghold getVariable ["WL2_strongholdIntruders", false];
+}) exitWith {
+    systemChat "You cannot create a new sector stronghold while there are intruders in the current one!";
+    playSoundUI ["AddItemFailed"];
+};
+
 private _buildings = call WL2_fnc_findStrongholdBuilding;
 if (count _buildings == 0) exitWith {
     playSoundUI ["AddItemFailed"];

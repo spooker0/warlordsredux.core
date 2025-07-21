@@ -37,7 +37,7 @@ private _spawned = 0;
 
     for "_i" from 0 to 8 do {
         private _infantry = _infantryGroup createUnit [selectRandom _unitsPool, _spawnPosition, [], 0, "NONE"];
-        _infantry setVehiclePosition [[_spawnPosition # 0, _spawnPosition # 1, 50], [], 5, "CAN_COLLIDE"];
+        _infantry setVehiclePosition [_spawnPosition, [], 5, "CAN_COLLIDE"];
 
         private _spawnHeight = getPosASL _infantry # 2;
         if (_spawnHeight < 10) then {

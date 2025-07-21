@@ -198,16 +198,10 @@ switch (_className) do {
         if (isNull _vehicle) exitWith {};
 
         {
-            if (!(isPlayer _x) && alive _x && _x distance2D player < 50) then {
+            if (!(isPlayer _x) && alive _x && _x distance2D player < 150) then {
                 _x moveInGunner _vehicle;
             };
         } forEach (units group player);
-    };
-    case "RespawnBag": {
-        [player, "orderRespawnBag"] remoteExec ["WL2_fnc_handleClientRequest", 2];
-        [true] call WL2_fnc_respawnBagAction;
-        "RequestMenu_close" call WL2_fnc_setupUI;
-        ["TaskBuyTent"] call WLT_fnc_taskComplete;
     };
     case "RespawnBagFT": {
         [4, ""] spawn WL2_fnc_executeFastTravel;

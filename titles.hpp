@@ -316,7 +316,6 @@ class RscTitles {
 				shadow = 1;
 				size = 0.032;
 				class Attributes {
-					font = "RobotoCondensed";
 					color = "#ffffff";
 					align = "center";
 				};

@@ -62,7 +62,8 @@ switch (_conditionName) do {
                 false
             } else {
                 private _owner = _strongholdBuilding getVariable ["WL_strongholdOwner", objNull];
-                isNull _owner || _owner == player;
+                private _hasIntruders = _strongholdBuilding getVariable ["WL2_strongholdIntruders", false];
+                (isNull _owner || _owner == player) && !_hasIntruders;
             };
         };
         count _findIsStronghold > 0;

@@ -5,7 +5,6 @@ class CfgRemoteExec {
 		jip = 1;
 
 		class APS_fnc_deviceJammer {allowedTargets = 0;};
-		class APS_fnc_jamDestroy {allowedTargets = 0;};
 		class APS_fnc_lagProtectionServer {allowedTargets = 2;};
 		class APS_fnc_projectileStateUpdate {allowedTargets = 0;};
 		class APS_fnc_report {allowedTargets = 0;};
@@ -27,7 +26,6 @@ class CfgRemoteExec {
 		class POLL_fnc_selectOption {allowedTargets = 0;};
 		class SQD_fnc_server {allowedTargets = 2;};
 		class WL2_fnc_addMissileToMag {allowedTargets = 0;};
-		class WL2_fnc_ammoConfigDetection {allowedTargets = 0;};
 		class WL2_fnc_attachDetach {allowedTargets = 0;};
 		class WL2_fnc_catapultAction {allowedTargets = 0;};
 		class WL2_fnc_claimAction {allowedTargets = 1;};
@@ -81,6 +79,7 @@ class CfgRemoteExec {
 		class WL2_fnc_vehicleLockAction {allowedTargets = 1;};
 		class WL2_fnc_vehicleLockUpdate {allowedTargets = 0;};
 		class WL2_fnc_warnIncomingMissile {allowedTargets = 0;};
+		class WL2_fnc_weaponChange {allowedTargets = 0;};
 		class WLM_fnc_applyPylon {allowedTargets = 0;};
 		class WLM_fnc_applyVehicle {allowedTargets = 0;};
 		class WLM_fnc_changeHorn {allowedTargets = 0;};

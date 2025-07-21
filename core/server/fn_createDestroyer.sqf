@@ -54,9 +54,9 @@ _controller setObjectTextureGlobal [3, "#(rgb,512,512,3)text(1,1,""PuristaBold""
 _destroyerBase setVariable ["WL2_destroyerController", _controller, true];
 
 private _screenParams = ["Land_FlatTV_01_F", [-0.875977, -34.217, 20.3959], 0];
-private _screen = createVehicle [_screenParams select 0, [0, 0, 0], [], 0, "CAN_COLLIDE"];
 private _screenDir = _screenParams select 2;
 private _screenPos = _destroyerBase modelToWorldWorld (_screenParams select 1);
+private _screen = createSimpleObject [_screenParams select 0, _screenPos, true];
 _screen setDir (_screenDir + _destroyerDir);
 _screen setPosWorld _screenPos;
 _screen allowDamage false;
@@ -80,6 +80,7 @@ private _createMrls = {
     _mrls setVariable ["WL2_ignoreRange", true, true];
     _mrls setVariable ["WL2_destroyerController", _controller, true];
     _mrls setVariable ["WL2_destroyerId", _destroyerId, true];
+    _mrls setVariable ["WL_spawnedAsset", true, true];
 
     private _assetGroup = createGroup independent;
     private _unit = _assetGroup createUnit ["I_UAV_AI", [0, 0, 0], [], 0, "NONE"];
@@ -106,18 +107,18 @@ _destroyerMarker setMarkerTypeLocal "loc_boat";
 _destroyerMarker setMarkerTextLocal format ["%1 (DDG-%2)", _destroyerName, _hullNumber];
 _destroyerMarker setMarkerColor "ColorWhite";
 
-sleep 20;
+sleep 60;
 
 [_destroyerBase, _mrls, _controller, true] remoteExec ["WL2_fnc_createDestroyerClient", 0, true];
 
 while { true } do {
-    sleep 120;
+    sleep WL_DESTROYER_RELOAD;
     private _turretOwner = _mrls turretOwner [0];
     [_mrls] remoteExec ["WL2_fnc_addMissileToMag", _turretOwner];
 
     if (!alive _mrls) then {
         deleteVehicle _mrls;
-        sleep 1800;
+        sleep WL_DESTROYER_RESPAWN;
         call _createMrls;
         [objNull, _mrls, objNull, false] remoteExec ["WL2_fnc_createDestroyerClient", 0, true];
     };

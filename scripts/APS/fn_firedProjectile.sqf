@@ -61,11 +61,11 @@ private _interception = {
 		};
 	} else {
 		private _actualAmmoUsed = _ammo min _projectileAPSConsumption;
-		[_gunner, _dazzled, _actualAmmoUsed] remoteExec ["APS_fnc_serverHandleAPS", 2];
+		[_gunner, _dazzled, _actualAmmoUsed, _target] remoteExec ["APS_fnc_serverHandleAPS", 2];
 	};
 };
 
-private _smokeScriptReady = true;
+// private _smokeScriptReady = true;
 
 private _continue = alive _projectile;
 while {_continue && alive _projectile} do {
@@ -98,24 +98,24 @@ while {_continue && alive _projectile} do {
 		};
 	};
 
-	if (_dazzleable && _smokeScriptReady) then {
-		private _missileTarget = missileTarget _projectile;
-		if !(isNull _missileTarget) then {
-			private _smokesNear = _missileTarget nearObjects ["SmokeShellVehicle", 50];
-			private _numberSmokes = count _smokesNear;
-			if (_numberSmokes > 0) then {
-				// 1 smoke grenade = 50% hit chance
-				// 2 smoke grenades = 25% hit chance
-				// 8 smoke grenades = 6.25% hit chance
-				// 16 smoke grenades = 3.125% hit chance
-				private _misdirect = random _numberSmokes >= 0.5;
-				if (_misdirect) then {
-					_projectile setMissileTarget objNull;
-				};
-				_smokeScriptReady = false;
-			};
-		};
-	};
+	// if (_dazzleable && _smokeScriptReady) then {
+	// 	private _missileTarget = missileTarget _projectile;
+	// 	if !(isNull _missileTarget) then {
+	// 		private _smokesNear = _missileTarget nearObjects ["SmokeShellVehicle", 50];
+	// 		private _numberSmokes = count _smokesNear;
+	// 		if (_numberSmokes > 0) then {
+	// 			// 1 smoke grenade = 50% hit chance
+	// 			// 2 smoke grenades = 25% hit chance
+	// 			// 8 smoke grenades = 6.25% hit chance
+	// 			// 16 smoke grenades = 3.125% hit chance
+	// 			private _misdirect = random _numberSmokes >= 0.5;
+	// 			if (_misdirect) then {
+	// 				_projectile setMissileTarget objNull;
+	// 			};
+	// 			_smokeScriptReady = false;
+	// 		};
+	// 	};
+	// };
 
 	_sortedEligibleList = [_eligibleNearbyVehicles, [_projectile], { _input0 distance _x }, "ASCEND"] call BIS_fnc_sortBy;
 	{

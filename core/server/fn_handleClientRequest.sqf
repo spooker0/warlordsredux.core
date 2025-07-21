@@ -47,7 +47,6 @@ private _actionCost = switch (_action) do {
 	case "targetReset" : { WL_COST_TARGETRESET };
 	case "orderAI" : { WL_ASSET(_param1, "cost", 150) };
 	case "buildABear" : { 300 };
-	case "orderRespawnBag" : { 50 };
 	case "controlCollaborator" : { 2000 };
 	case "camouflage" : { 500 };
 	case "cruiseMissiles" : { 15000 };

@@ -223,13 +223,6 @@ private _fastTravelArr = [
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
 		""
 	], [
-		"RespawnBag",
-		50,
-		[],
-		"Purchase fast travel tent",
-		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-		"Buy a deployable sleeping bag that respawns you at its location."
-	], [
 		"BuyFOB",
 		500,
 		[],

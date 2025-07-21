@@ -10,6 +10,15 @@ private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
 private _isModerator = _uid in (getArray (missionConfigFile >> "moderatorIDs"));
 if !(_isAdmin || _isModerator || _uid == _targetUid) exitWith {};
 
+// private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", _targetUid];
+// private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
+// private _assetValueSum = 0;
+// {
+//     private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+//     _assetValueSum = _assetValueSum + WL_ASSET(_assetActualType, "cost", 0);
+// } forEach _ownedVehicles;
+// if (_assetValueSum > 10000 && _isModerator) exitWith {};
+
 // _time = _time min (30 * 60);
 
 private _punishVar = format ["WL2_punish_%1", _targetUid];

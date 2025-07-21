@@ -15,7 +15,7 @@ if (count _hintParams < 2) exitWith {
     _layer cutText ["", "PLAIN"];
 };
 
-_layer cutRsc ["RscWLHintMenu", "PLAIN", -1, true, false];
+_layer cutRsc ["RscWLHintMenu", "PLAIN", -1, true, true];
 
 _display = uiNamespace getVariable "RscWLHintMenu";
 private _texture = _display displayCtrl 5502;

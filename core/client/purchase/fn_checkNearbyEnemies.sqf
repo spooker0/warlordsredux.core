@@ -1,4 +1,9 @@
 #include "includes.inc"
+
+if (isWeaponDeployed player) exitWith {
+    [false, "Bipod must not be deployed."];
+};
+
 private _enemiesNearPlayer = (allPlayers inAreaArray [player, 100, 100]) select {
     _x != player &&
     BIS_WL_playerSide != side group _x &&

@@ -11,7 +11,6 @@ class CfgFunctions {
 			class getDirection {};
 			class getMaxAmmo {};
 			class hasCharges {};
-			class jamDestroy {};
 			class lagProtection {};
 			class lagProtectionServer {};
 			class projectileStateUpdate {};
@@ -145,6 +144,7 @@ class CfgFunctions {
 			class addMissileToMag {};
 			class afk {};
 			class airburst {};
+			class ammoConfigChange {};
 			class ammoConfigDetection {};
 			class announcer {};
 			class announcerInit {};
@@ -181,6 +181,7 @@ class CfgFunctions {
 			class teammatesAvailability {};
 			class triggerPurchase {};
 			class updateLevelDisplay {};
+			class weaponChange {};
 			class welcome {};
 		};
 		class ClientAction {
@@ -212,6 +213,7 @@ class CfgFunctions {
 			class logisticsAddAction {};
 			class parachuteAction {};
 			class parachuteSetup {};
+			class placeRespawnBag {};
 			class radarOperateAction {};
 			class radarOperateUpdate {};
 			class radarRotateAction {};
@@ -228,7 +230,6 @@ class CfgFunctions {
 			class repairAction {};
 			class repairActionEligibility {};
 			class repairActionUpdate {};
-			class respawnBagAction {};
 			class restockAction {};
 			class reviveAction {};
 			class scanner {};

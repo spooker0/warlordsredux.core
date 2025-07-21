@@ -4,7 +4,7 @@ private _voteTallyDisplayVar = format ["BIS_WL_sectorVoteTallyDisplay_%1", BIS_W
 
 private _voteDisplay = uiNamespace getVariable ["RscWLVoteDisplay", objNull];
 if (isNull _voteDisplay) then {
-    "VoteDisplay" cutRsc ["RscWLVoteDisplay", "PLAIN", -1, true, false];
+    "VoteDisplay" cutRsc ["RscWLVoteDisplay", "PLAIN", -1, true, true];
     _voteDisplay = uiNamespace getVariable "RscWLVoteDisplay";
 };
 
@@ -19,16 +19,21 @@ private _eta = if (count _mostVoted > 0) then {
     -1;
 };
 private _etaDisplay = if (_eta >= 0) then {
-    format ["<t size='2' align='center'>%1s</t>", _eta];
+    format ["%1", _eta];
 } else {
-    "Waiting...";
+    "<t size='1.0' align='center'>WAITING...</t>";
 };
 
-private _displayText = format ["<t size='1.8' align='center'>%1</t><br/>%2<br/>", localize "STR_WL2_VOTE_IN_PROGRESS", _etaDisplay];
+private _displayText = format ["<t size='1.6' align='center'>%1</t><br/><t size='1.6'>%2</t><br/>", toUpper (localize "STR_WL2_VOTE_IN_PROGRESS"), _etaDisplay];
 
 {
     private _vote = _x # 0;
     private _voteCount = _x # 1;
+
+    if (_forEachIndex == 5) then {
+        _displayText = _displayText + format ["<t size='1.0' align='center'>+ %1 MORE</t>", count _sortedVoteList - 5];
+        break;
+    };
 
     private _sectorName = _vote getVariable ["WL2_name", "???"];
     private _isSectorRevealed = BIS_WL_playerSide in (_vote getVariable ["BIS_WL_revealedBy", []]);
@@ -50,14 +55,14 @@ private _displayText = format ["<t size='1.8' align='center'>%1</t><br/>%2<br/>"
         };
     };
     _displayText = _displayText + format [
-        "<t size='1.2' align='center' color='%1' shadow='2'>%2: %3 pts</t><br/>",
-        _color, _vote getVariable ["WL2_name", "Sector"], _voteCount
+        "<t size='1.0' align='center' color='%1'>%2: %3</t><br/>",
+        _color, toUpper (_vote getVariable ["WL2_name", "Sector"]), _voteCount
     ];
 } forEach _sortedVoteList;
 
 _indicator ctrlSetStructuredText (parseText _displayText);
 
-private _indicatorHeight = (0.15 + (count _sortedVoteList) * 0.04) min 0.33;
+private _indicatorHeight = (0.15 + (count _sortedVoteList) * 0.03) min 0.33;
 _indicatorBackground ctrlSetPositionH _indicatorHeight;
 _indicatorBackground ctrlSetBackgroundColor [0, 0, 0, 0.7];
 _indicatorBackground ctrlCommit 0;

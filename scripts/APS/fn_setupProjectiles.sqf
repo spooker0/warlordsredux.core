@@ -8,17 +8,11 @@ _this addEventHandler ["Fired", {
 
 	if !(local _projectile) exitWith { true };
 
-	if (_projectile isKindOf "ShellCore") then {
-		private _shellId = currentMagazineDetail _unit;
-		_projectile setVariable ["WL2_shellId", _shellId, true];
-		if (_projectile getShotInfo 5) then {
-			private _shellMap = _unit getVariable ["WL2_shellMap", createHashMap];
-			_shellMap set [_shellId, _projectile];
-			_unit setVariable ["WL2_shellMap", _shellMap];
-		};
-	};
-
 	if (!(local _gunner) && !(isManualFire _unit)) exitWith { true };	// Disable and restrict for cwis
+
+	if (_projectile isKindOf "Chemlight_base") exitWith {
+		[_projectile] spawn WL2_fnc_placeRespawnBag;
+	};
 
 	private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
 	private _projectileAmmoOverrides = WL_ASSET(_assetActualType, "ammoOverrides", []);

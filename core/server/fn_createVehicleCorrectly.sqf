@@ -15,7 +15,7 @@ private _isInWaterSector = count (BIS_WL_allSectors select {
 	} count ["marker_USS Liberty_outline", "marker_USS Freedom_outline", "marker_USS Independence_outline"] > 0
 };
 if (_isInWaterSector) then {
-	_asset setVehiclePosition [[_posX, _posY, 50], [], 0, "CAN_COLLIDE"];
+	_asset setVehiclePosition [_pos, [], 0, "CAN_COLLIDE"];
 } else {
 	_asset setVehiclePosition [[_posX, _posY, 0], [], 0, "CAN_COLLIDE"];
 };

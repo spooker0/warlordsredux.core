@@ -13,10 +13,9 @@ if (_unit isKindOf "Air") then {
 
 private _originalTarget = missileTarget _projectile;
 
-private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
-private _hasLoal = WL_ASSET(_assetActualType, "hasLoal", 0) > 0;
+private _ammoConfig = _unit getVariable ["WL2_currentAmmoConfig", createHashMap];
+if (_ammoConfig getOrDefault ["loal", false]) then {
 
-if (_hasLoal) then {
     private _selectedTarget = _unit getVariable ["WL2_selectedTarget", objNull];
     if (!isNull _selectedTarget) then {
         _projectile setMissileTarget [_selectedTarget, true];

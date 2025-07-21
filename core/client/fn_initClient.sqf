@@ -396,3 +396,5 @@ showScoretable 0;
 "deathInfo" cutFadeOut 0;
 inGameUISetEventHandler ["PrevAction", "[true] call WL2_fnc_scoreboardScroll"];
 inGameUISetEventHandler ["NextAction", "[false] call WL2_fnc_scoreboardScroll"];
+
+0 spawn WL2_fnc_ammoConfigChange;

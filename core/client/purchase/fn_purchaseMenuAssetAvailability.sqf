@@ -170,13 +170,6 @@ if (_ret) then {
 				[WL2_fnc_checkCollaborator]
 			]
 		};
-		case "RespawnBag": {
-			[
-				[WL2_fnc_checkPlayerInVehicle],
-				[WL2_fnc_checkNearbyEnemies],
-				[WL2_fnc_checkInFriendlySector, [_cost, []]]
-			]
-		};
 		case "RespawnBagFT": {
 			[
 				[WL2_fnc_checkPlayerInVehicle],

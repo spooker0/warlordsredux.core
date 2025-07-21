@@ -53,7 +53,7 @@ switch (_fastTravelMode) do {
 	case 4: {
 		private _respawnBag = player getVariable ["WL2_respawnBag", objNull];
         if (!isNull _respawnBag) then {
-            _destination = getPosATL _respawnBag;
+            _destination = _respawnBag modelToWorld [0, 0, 0];
         };
 	};
 	case 5: {
@@ -84,7 +84,6 @@ if (count _destination != 3 || _destination isEqualTo [0, 0, 0]) exitWith {
 };
 
 private _tagAlong = (units player) select {
-	(_x distance2D player <= 100) &&
 	(isNull objectParent _x) &&
 	(alive _x) &&
 	(_x != player) &&
@@ -160,18 +159,10 @@ switch (_fastTravelMode) do {
 	};
 	case 4: {
         if (count _destination > 0) then {
-            private _oldPlayerPos = getPosASL player;
-            player setVehiclePosition [_destination, [], 0, "NONE"];
-            private _newPos = getPosATL player;
-
-            if (abs ((_destination # 2) - (_newPos # 2)) > 5) then {
-                systemChat "Your tent was left in an invalid spot. Make sure to place it in an open spot outside next time.";
-                player setPosASL _oldPlayerPos;
-            } else {
-				{
-					_x setVehiclePosition [_destination, [], 3, "NONE"];
-				} forEach _tagAlong;
-			};
+            player setVehiclePosition [_destination, [], 0, "CAN_COLLIDE"];
+			{
+				_x setVehiclePosition [_destination, [], 3, "NONE"];
+			} forEach _tagAlong;
 
 			private _respawnBag = player getVariable ["WL2_respawnBag", objNull];
 			if (!isNull _respawnBag) then {

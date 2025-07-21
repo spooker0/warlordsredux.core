@@ -1,13 +1,13 @@
 #include "includes.inc"
 params ["_projectile", "_unit"];
 
-if (!isNull (missileTarget _projectile)) exitWith {};
-
 private _minimumSpeed = 150;
 private _ignoreRange = _unit getVariable ["WL2_ignoreRange", false];
 if (_ignoreRange) then {
     _minimumSpeed = 300;
 };
+
+if (!isNull (missileTarget _projectile)) exitWith {};
 
 private _gpsBombs = _unit getVariable ["DIS_gpsBombs", []];
 _gpsBombs pushBack _projectile;
@@ -75,7 +75,7 @@ while { alive _projectile } do {
         _terminalManeuver = true;
 
         _coordinates set [2, 0];
-        private _enemiesNear = (_coordinates nearEntities 150) select {
+        private _enemiesNear = (_coordinates nearEntities 250) select {
             ([_x] call WL2_fnc_getAssetSide) != BIS_WL_playerSide &&
             alive _x &&
             lifeState _x != "INCAPACITATED" &&

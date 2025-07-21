@@ -39,8 +39,12 @@ private _squadInfoText = toJSON (_squadInfo apply {
         private _playerLevel = _player getVariable ["WL_playerLevel", "Recruit"];
         private _playerName = format ["%1 [%2]", name _player, _playerLevel];
         private _playerContribution = _playerContributions getOrDefault [getPlayerUID _player, 0];
+        private _canFastTravel = ([_player, "fastTravelSquad"] call WL2_fnc_mapButtonConditions) && {
+            private _checkFastTravel = ["FTSeized", [], "", "", "", [], 0, "FastTravel"] call WL2_fnc_purchaseMenuAssetAvailability;
+            _checkFastTravel # 0
+        };
 
-        _squadMembers pushBack [_playerId, _playerName, _playerContribution];
+        _squadMembers pushBack [_playerId, _playerName, _playerContribution, _canFastTravel];
     } forEach _squadMemberIds;
     _newSquadInfo set [2, _squadMembers];
 

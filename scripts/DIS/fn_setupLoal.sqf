@@ -14,7 +14,7 @@ private _bvrReady = {
 	};
 
 	private _ammoConfig = _asset getVariable ["WL2_currentAmmoConfig", createHashMap];
-	_ammoConfig getOrDefault ["sam", false];
+	_ammoConfig getOrDefault ["loal", false];
 };
 
 private _previousEligible = false;

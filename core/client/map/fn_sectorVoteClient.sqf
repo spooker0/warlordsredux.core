@@ -102,7 +102,7 @@ while { !BIS_WL_missionEnd } do {
 
                 private _voteDisplay = uiNamespace getVariable ["RscWLVoteDisplay", objNull];
                 if (isNull _voteDisplay) then {
-                    "VoteDisplay" cutRsc ["RscWLVoteDisplay", "PLAIN", -1, true, false];
+                    "VoteDisplay" cutRsc ["RscWLVoteDisplay", "PLAIN", -1, true, true];
                     _voteDisplay = uiNamespace getVariable "RscWLVoteDisplay";
                 };
 

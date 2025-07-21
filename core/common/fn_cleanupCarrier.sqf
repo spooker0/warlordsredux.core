@@ -1,83 +1,17 @@
 #include "includes.inc"
-private _carrierCheck = allMissionObjects "Land_Carrier_01_base_F";
-
-private _carriers = [];
-{
-    private _carrier = _x;
-    private _nearSector = BIS_WL_allSectors select {
-        _x distance2D _carrier < 1000;
-    };
-    if (count _nearSector == 0) then {
-        private _area = [getPosASL _carrier, 1000, 1000, 0, false];
-        private _carrierProps = ((allMissionObjects "") inAreaArray _area) select {
-            damage _x == 0.5;
-        };
-        {
-            deleteVehicle _x;
-        } forEach _carrierProps;
-    } else {
-        _carriers pushBack _carrier;
-    };
-} forEach _carrierCheck;
-
+private _carriers = allMissionObjects "Land_Carrier_01_base_F";
 if (count _carriers == 0) exitWith {};
 
-private _changeAttackStatus = {
-    params ["_carrier", "_markers"];
-
-    private _sector = _carrier getVariable ["WL_carrierSector", objNull];
-
-    private _carrierProps = _carrier getVariable ["WL_carrierProps", []];
-    private _isUnderAttack = _carrier getVariable ["WL_carrierUnderAttack", false];
-    {
-        _x hideObject !_isUnderAttack;
-    } forEach _carrierProps;
-};
-
 {
     private _carrier = _x;
-    private _sector = (BIS_WL_allSectors select {
+    private _sector = BIS_WL_allSectors select {
         _x distance2D _carrier < 500;
-    }) # 0;
-    _carrier setVariable ["WL_carrierSector", _sector];
-
-    private _carrierProps = (allMissionObjects "") select {
-        _x inArea (_sector getVariable "objectAreaComplete") && { damage _x == 0.5 };
     };
-    _carrier setVariable ["WL_carrierProps", _carrierProps];
+    if (count _sector == 0) then {
+        continue;
+    };
+    _sector = _sector # 0;
+    _carrier setVariable ["WL_carrierSector", _sector];
 
     [_x, _forEachIndex] call WL2_fnc_setupCarrier;
 } forEach _carriers;
-
-// Ensure sync
-[_carriers, _changeAttackStatus] spawn {
-    params ["_carriers", "_changeAttackStatus"];
-
-    while { !BIS_WL_missionEnd } do {
-        {
-            private _carrier = _x;
-            [_carrier] call _changeAttackStatus;
-        } forEach _carriers;
-        sleep 30;
-    };
-};
-
-while { !BIS_WL_missionEnd } do {
-    {
-        if (isNil "BIS_WL_currentTarget_west" || isNil "BIS_WL_currentTarget_east") then {
-            sleep 5;
-            continue;
-        };
-        private _carrier = _x;
-
-        private _sector = _carrier getVariable ["WL_carrierSector", objNull];
-        private _wasUnderAttack = _carrier getVariable ["WL_carrierUnderAttack", false];
-        private _isUnderAttack = BIS_WL_currentTarget_west == _sector || BIS_WL_currentTarget_east == _sector;
-        if (_wasUnderAttack != _isUnderAttack) then {
-            _carrier setVariable ["WL_carrierUnderAttack", _isUnderAttack];
-            [_carrier] call _changeAttackStatus;
-        };
-    } forEach _carriers;
-
-    sleep 5;
-};

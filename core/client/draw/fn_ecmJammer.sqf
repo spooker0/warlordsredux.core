@@ -104,8 +104,8 @@ private _ecmDraw = addMissionEventHandler ["Draw3D", {
     } forEach _ecmLocks;
 }];
 
-[_asset, _jammerPods, _ecmRange, _ecmSpeed] spawn {
-    params ["_asset", "_jammerPods", "_ecmRange", "_ecmSpeed"];
+[_asset, _jammerPods, _ecmRange, _ecmSpeed, _ecmRequiresPod] spawn {
+    params ["_asset", "_jammerPods", "_ecmRange", "_ecmSpeed", "_ecmRequiresPod"];
 
     private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
     private _apsVolume = _settingsMap getOrDefault ["apsVolume", 1];
@@ -115,7 +115,7 @@ private _ecmDraw = addMissionEventHandler ["Draw3D", {
         private _ecmMunitions = uiNamespace getVariable ["WL2_ECMMunitions", []];
 
         private _sensitivity = 0.15;
-        if (_jammerPods == 0) then {
+        if (_ecmRequiresPod == 0) then {
             _sensitivity = 0.08;
             if (freelook) then {
                 continue;
@@ -188,12 +188,6 @@ private _ecmDraw = addMissionEventHandler ["Draw3D", {
                 };
 
                 triggerAmmo _x;
-
-                private _shellId = _x getVariable ["WL2_shellId", ""];
-                if (_shellId != "") then {
-                    [_originator, _shellId] remoteExec ["APS_fnc_jamDestroy", _originator];
-                };
-
                 _x setVariable ["WL2_jamDestroy", true, true];
             };
         } forEach _ecmMunitions;
