@@ -1829,19 +1829,23 @@
             document.ammoAttentionNeeded = false;
         }
 
-        setInterval(() => {
-            const getFPS = () =>
-                new Promise(resolve =>
-                    requestAnimationFrame(t1 =>
-                        requestAnimationFrame(t2 => resolve(1000 / (t2 - t1)))
-                    )
-                )
+        const filterStrength = 20;
+        let frameTime = 0;
+        let lastLoop = performance.now();
 
-            // Calling the function to get the FPS
-            getFPS().then(fps => {
-                document.querySelector('.fps-display').textContent = `MENU FPS: ${fps.toFixed(2)}`;
-            });
-        }, 200);
+        const fpsLoop = () => {
+            const thisLoop = performance.now();
+            const thisFrameTime = thisLoop - lastLoop;
+            frameTime += (thisFrameTime - frameTime) / filterStrength;
+            lastLoop = thisLoop;
+            requestAnimationFrame(fpsLoop);
+        };
+
+        const fpsOut = document.querySelector('.fps-display');
+        setInterval(() => {
+            fpsOut.textContent = `MENU FPS: ${(1000 / frameTime).toFixed(2)}`;
+        }, 100);
+        fpsLoop();
     </script>
 </body>
 
