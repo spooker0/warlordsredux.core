@@ -345,6 +345,10 @@ if (_asset isKindOf "Man") then {
 		[_asset] remoteExec ["DIS_fnc_setupLoal", 0, true];
 	};
 
+	if (WL_ASSET(_assetActualType, "hasAirRearm", 0) > 0) then {
+		_asset setVariable ['WL2_hasInflightRearm', true, true];
+	};
+
 	// if (WL_ASSET(_assetActualType, "hasSmokeCurtain", 0) > 0) then {
 	// 	_asset setVariable ['WL2_smokeCurtains', 2, true];
 	// 	[_asset] remoteExec ["WL2_fnc_smokeCurtainAction", 0, true];
@@ -352,6 +356,7 @@ if (_asset isKindOf "Man") then {
 
 	if (_asset isKindOf "Air") then {
 		[_asset] remoteExec ["DIS_fnc_setupSead", 0, true];
+		[_asset] remoteExec ["WL2_fnc_airRearmAction", 0, true];
 	};
 
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];

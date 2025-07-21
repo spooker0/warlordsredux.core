@@ -187,6 +187,7 @@ class CfgFunctions {
 		class ClientAction {
 			file = "src\core\client\action";
 			class afkAction {};
+			class airRearmAction {};
 			class arsenalSetup {};
 			class attachVehicle {};
 			class buyMenuAction {};
