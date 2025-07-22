@@ -255,7 +255,9 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         private _repairCost = WL_FOB_REPAIR_COST;
         private _supplyFinal = (_asset getVariable ["WL2_forwardBaseSupplies", -1]) - _repairCost;
         _asset setVariable ["WL2_forwardBaseSupplies", _supplyFinal, true];
-        _asset setVariable ["WL2_demolitionHealth", 10, true];
+
+        private _maxHealth = _asset getVariable ["WL2_demolitionMaxHealth", 5];
+        _asset setVariable ["WL2_demolitionHealth", _maxHealth, true];
         [player, "repairFOB"] remoteExec ["WL2_fnc_handleClientRequest", 2];
     };
     [

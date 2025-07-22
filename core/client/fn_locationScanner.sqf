@@ -1,12 +1,14 @@
 #include "includes.inc"
 0 spawn {
     while { !BIS_WL_missionEnd } do {
-        sleep 2;
+        sleep 1;
         private _nearbyDamagedItems = (player nearObjects 20) select {
-            alive _x && (_x getVariable ["WL2_demolitionHealth", 10] < 10)
+            private _maxHealth = _x getVariable ["WL2_demolitionMaxHealth", 5];
+            alive _x && (_x getVariable ["WL2_demolitionHealth", _maxHealth] < _maxHealth)
         };
         private _damagedIcons = [];
         {
+            private _maxHealth = _x getVariable ["WL2_demolitionMaxHealth", 5];
             _damagedIcons pushBack [
                 "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missileAlt_ca.paa",
                 [1, 0, 0, 1],
@@ -15,8 +17,9 @@
                 0.8,
                 0,
                 format [
-                    "%1/10",
-                    _x getVariable ["WL2_demolitionHealth", 10]
+                    "%1/%2",
+                    _x getVariable ["WL2_demolitionHealth", _maxHealth],
+                    _maxHealth
                 ],
                 true,
                 0.035,

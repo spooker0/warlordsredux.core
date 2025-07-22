@@ -134,11 +134,12 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		private _timeString = [_timeRemaining, "MM:SS"] call BIS_fnc_secondsToString;
 		format ["(Constructing %1)", _timeString];
 	} else {
-		private _fobHealth = _base getVariable ["WL2_demolitionHealth", 10];
+		private _maxHealth = _base getVariable ["WL2_demolitionMaxHealth", 5];
+		private _fobHealth = _base getVariable ["WL2_demolitionHealth", _maxHealth];
 		if (_baseOwner == _side) then {
 			private _supplies = _base getVariable ["WL2_forwardBaseSupplies", -1];
 			_supplies = (round _supplies) max 0;
-			format ["(%1/10) [%2 Supplies]", _fobHealth, (_supplies call BIS_fnc_numberText) regexReplace [" ", ","]];
+			format ["(%1/%2) [%3 Supplies]", _fobHealth, _maxHealth, (_supplies call BIS_fnc_numberText) regexReplace [" ", ","]];
 		} else {
 			format ["(%1/10)", _fobHealth];
 		};
@@ -198,7 +199,8 @@ private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
 		[1, 1, 1, 1]
 	};
 
-	private _strongholdHealth = _stronghold getVariable ["WL2_demolitionHealth", 10];
+	private _maxHealth = _stronghold getVariable ["WL2_demolitionMaxHealth", 5];
+	private _strongholdHealth = _stronghold getVariable ["WL2_demolitionHealth", _maxHealth];
 	_drawIcons pushBack [
 		"\A3\ui_f\data\map\mapcontrol\Ruin_CA.paa",
 		_strongholdColor,
@@ -206,7 +208,7 @@ private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
 		20 * _mapIconScale,
 		20 * _mapIconScale,
 		0,
-		if (_draw) then { format ["  STRONGHOLD (%1/10)", _strongholdHealth] } else {""},
+		if (_draw) then { format ["  STRONGHOLD (%1/%2)", _strongholdHealth, _maxHealth] } else {""},
 		1,
 		0.043,
 		"PuristaBold",

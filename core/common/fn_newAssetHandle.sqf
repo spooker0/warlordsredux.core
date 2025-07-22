@@ -483,7 +483,10 @@ if (_asset isKindOf "Man") then {
 		[_asset] remoteExec ["DIS_fnc_setupRemoteMunition", 0, true];
 	};
 
-	if (WL_ASSET(_assetActualType, "demolishable", 0) > 0) then {
+	private _demolishable = WL_ASSET(_assetActualType, "demolishable", 0);
+	if (_demolishable > 0) then {
+		_asset setVariable ["WL2_demolitionHealth", _demolishable, true];
+		_asset setVariable ["WL2_demolitionMaxHealth", _demolishable, true];
 		_asset setVariable ["WL2_canDemolish", true, true];
 	};
 

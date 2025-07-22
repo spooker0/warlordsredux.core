@@ -75,10 +75,23 @@
         .points-cell {
             font-weight: bold;
         }
+
+        .fps-display {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 1);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 1000;
+        }
     </style>
 </head>
 
 <body>
+    <div class="fps-display"></div>
     <div id="game-data"></div>
     <div class="scoreboard-wrapper">
         <div class="scoreboard-title">Scoreboard</div>
@@ -197,6 +210,25 @@
             const scoreboardBody = document.getElementById('scoreboard-body');
             scoreboardBody.scrollTop += scrollAmount;
         }
+
+        let frameTime = 0, frameCount = 0;
+        let lastLoop = performance.now();
+        const fpsLoop = () => {
+            const thisLoop = performance.now();
+            frameTime += (thisLoop - lastLoop - frameTime) / 20;
+            lastLoop = thisLoop;
+            frameCount++;
+            requestAnimationFrame(fpsLoop);
+        };
+        const fpsOut = document.querySelector('.fps-display');
+        setInterval(() => {
+            if (frameCount > 60) {
+                fpsOut.textContent = `MENU FPS: ${(1000 / frameTime).toFixed(2)}`;
+            } else {
+                fpsOut.textContent = `MENU FPS: -`;
+            }
+        }, 100);
+        fpsLoop();
     </script>
 </body>
 

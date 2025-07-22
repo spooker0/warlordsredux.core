@@ -17,6 +17,7 @@
 #define WL_REPLAYS 0
 #define WL_PERF_TEST 0
 #define WL_SURRENDER_ANYTIME 0
+#define WL_ECM_TEST 0
 
 // Live: set all to 1
 #define WL_STOP_TEAM_SWITCH 1

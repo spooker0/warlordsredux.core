@@ -9,11 +9,17 @@ private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];
 _ownedVehicles = _ownedVehicles select { alive _x };
 private _limitedVehicles = [];
 private _typeLimit = 0;
-if (_class isKindOf "Building") then {
-    _limitedVehicles = _ownedVehicles select { _x isKindOf "Building" };
+
+private _isBuildable = {
+    params ["_class"];
+    _class isKindOf "Building" || _class isKindOf "ReammoBox_F"
+};
+
+if ([_class] call _isBuildable) then {
+    _limitedVehicles = _ownedVehicles select { [_x] call _isBuildable };
     _typeLimit = WL_MAX_BUILDINGS;
 } else {
-    _limitedVehicles = _ownedVehicles select { !(_x isKindOf "Building") };
+    _limitedVehicles = _ownedVehicles select { !([_x] call _isBuildable) };
     _typeLimit = WL_MAX_ASSETS;
 };
 

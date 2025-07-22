@@ -295,21 +295,22 @@
             });
         }
 
-        const filterStrength = 20;
-        let frameTime = 0;
+        let frameTime = 0, frameCount = 0;
         let lastLoop = performance.now();
-
         const fpsLoop = () => {
             const thisLoop = performance.now();
-            const thisFrameTime = thisLoop - lastLoop;
-            frameTime += (thisFrameTime - frameTime) / filterStrength;
+            frameTime += (thisLoop - lastLoop - frameTime) / 20;
             lastLoop = thisLoop;
+            frameCount++;
             requestAnimationFrame(fpsLoop);
         };
-
         const fpsOut = document.querySelector('.fps-display');
         setInterval(() => {
-            fpsOut.textContent = `MENU FPS: ${(1000 / frameTime).toFixed(2)}`;
+            if (frameCount > 60) {
+                fpsOut.textContent = `MENU FPS: ${(1000 / frameTime).toFixed(2)}`;
+            } else {
+                fpsOut.textContent = `MENU FPS: -`;
+            }
         }, 100);
         fpsLoop();
     </script>

@@ -1,6 +1,7 @@
 #include "includes.inc"
 params ["_targetObject", "_steps"];
-private _existingHealth = _targetObject getVariable ["WL2_demolitionHealth", 10];
+private _maxHealth = _targetObject getVariable ["WL2_demolitionMaxHealth", 5];
+private _existingHealth = _targetObject getVariable ["WL2_demolitionHealth", _maxHealth];
 _existingHealth = _existingHealth - _steps;
 _targetObject setVariable ["WL2_demolitionHealth", _existingHealth, true];
 

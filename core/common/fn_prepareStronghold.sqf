@@ -14,6 +14,8 @@ private _windowHitPointNames = _allHitPointNames select { "glass" in toLower _x 
 } forEach _windowHitPointNames;
 forceHitPointsDamageSync _stronghold;
 
-_stronghold setVariable ["WL2_demolitionHealth", 10, true];
+private _maxHealth = 8;
+_stronghold setVariable ["WL2_demolitionMaxHealth", _maxHealth, true];
+_stronghold setVariable ["WL2_demolitionHealth", _maxHealth, true];
 
 [_stronghold, true] remoteExec ["WL2_fnc_protectStronghold", 0, true];

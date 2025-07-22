@@ -10,7 +10,7 @@ if (isNull _strongholdSector) exitWith {
     player distance2D _demolishTarget < 10;
 };
 private _sectorOwner = _strongholdSector getVariable ["BIS_WL_owner", independent];
-if (_sectorOwner == BIS_WL_playerSide) exitWith { false };
+// if (_sectorOwner == BIS_WL_playerSide) exitWith { false };
 
 private _strongholdRadius = _demolishTarget getVariable ["WL_strongholdRadius", 0];
 if (player distance2D _demolishTarget > _strongholdRadius) exitWith {

@@ -208,9 +208,13 @@ while { alive _asset && cameraOn == _asset } do {
     private _munitions = (8 allObjects 2) select { _x distance _asset < _ecmRange } select {
         private _munition = _x;
         _ecmJammerType findIf { _munition isKindOf _x } >= 0 && {
+#if WL_ECM_TEST
+            true;
+#else
             private _shotParent = getShotParents _munition # 0;
             private _shotParentUid = _shotParent getVariable ["BIS_WL_ownerAsset", "123"];
             _shotParentUid != _playerUid;
+#endif
         };
     };
     uiNamespace setVariable ["WL2_ECMMunitions", _munitions];
