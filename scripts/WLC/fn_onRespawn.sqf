@@ -98,6 +98,23 @@ private _sanityChecks = {
         "Invalid magazines detected.";
     };
 
+    private _playerSide = str BIS_WL_playerSide;
+
+    private _validUniforms = getArray (missionConfigFile >> "arsenalConfig" >> _playerSide >> "Uniforms");
+    if !(uniform _unit in _validUniforms) exitWith {
+        format ["Invalid uniform: %1", uniform _unit];
+    };
+
+    private _validVests = getArray (missionConfigFile >> "arsenalConfig" >> _playerSide >> "Vests");
+    if !(vest _unit in _validVests) exitWith {
+        format ["Invalid vest: %1", vest _unit];
+    };
+
+    private _validBackpacks = getArray (missionConfigFile >> "arsenalConfig" >> _playerSide >> "Backpacks");
+    if !(backpack _unit in _validBackpacks) exitWith {
+        format ["Invalid backpack: %1", backpack _unit];
+    };
+
     "";
 };
 

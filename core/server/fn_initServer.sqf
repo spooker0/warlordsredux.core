@@ -73,18 +73,25 @@ call WL2_fnc_processRunways;
 0 spawn WL2_fnc_laserTracker;
 
 0 spawn {
-	while {!BIS_WL_missionEnd} do {
-		_overcastPreset = random 1;
-		7200 setOvercast _overcastPreset;
-		waitUntil {
-			sleep 600;
-			0 setFog 0;
-			10e10 setFog 0;
-			0 setRain 0;
-			10e10 setRain 0;
-			simulWeatherSync;
-			abs (overcast - _overcastPreset) < 0.2
+	waitUntil { time > 0 };
+
+	private _dateTime = systemTime select [0, 5];
+	_dateTime set [3, round random 24];
+	_dateTime set [4, 0];
+	[_dateTime] remoteExec ["setDate"];
+
+	sleep 10;
+
+	while { !BIS_WL_missionEnd } do {
+		private _timeMultiplier = if (sunOrMoon < 0.99) then {
+			60;
+		} else {
+			1;
 		};
+		if (timeMultiplier != _timeMultiplier) then {
+			setTimeMultiplier _timeMultiplier;
+		};
+		sleep 60 * 2;
 	};
 };
 

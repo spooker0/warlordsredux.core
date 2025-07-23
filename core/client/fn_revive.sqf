@@ -14,3 +14,7 @@ private _group = group _unit;
 if (leader _group != _unit) then {
 	[_group, _unit] remoteExec ["selectLeader", groupOwner _group];
 };
+
+{
+	_x setUnconscious false;
+} forEach (units _unit);

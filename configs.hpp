@@ -3,6 +3,7 @@ adminFilter[] = {"!updatezeus","kanker","cancer","n3gro","negro","kill yourself"
 class arsenalConfig {
 	class west {
 		Uniforms[] = {
+			"",		// empty is valid
 			"U_B_CTRG_1",
 			"U_B_CTRG_2",
 			"U_B_CTRG_3",
@@ -38,6 +39,7 @@ class arsenalConfig {
 			"U_O_R_Gorka_01_black_F"
 		};
 		Vests[] = {
+			"",
 			"V_BandollierB_blk",
 			"V_BandollierB_cbr",
 			"V_BandollierB_khk",
@@ -87,6 +89,7 @@ class arsenalConfig {
 			"V_TacVestIR_blk"
 		};
 		Backpacks[] = {
+			"",
 			"B_AssaultPack_blk",
 			"B_AssaultPack_cbr",
 			"B_AssaultPack_eaf_F",
@@ -141,6 +144,7 @@ class arsenalConfig {
 			"B_ViperLightHarness_oli_F"
 		};
 		Helmets[] = {
+			"",
 			"H_Beret_02",
 			"H_Booniehat_grn",
 			"H_Booniehat_khk_hs",
@@ -200,6 +204,7 @@ class arsenalConfig {
 	};
 	class east {
 		Uniforms[] = {
+			"",
 			"U_B_GEN_Commander_F",
 			"U_C_Journalist",
 			"U_C_Paramedic_01_F",
@@ -226,6 +231,7 @@ class arsenalConfig {
 			"U_O_officer_noInsignia_hex_F"
 		};
 		Vests[] = {
+			"",
 			"V_BandollierB_blk",
 			"V_BandollierB_cbr",
 			"V_BandollierB_ghex_F",
@@ -274,6 +280,7 @@ class arsenalConfig {
 			"V_TacVest_oli"
 		};
 		Backpacks[] = {
+			"",
 			"B_AssaultPack_blk",
 			"B_AssaultPack_cbr",
 			"B_AssaultPack_khk",
@@ -323,6 +330,7 @@ class arsenalConfig {
 			"O_Static_Designator_02_weapon_F"
 		};
 		Helmets[] = {
+			"",
 			"H_Beret_CSAT_01_F",
 			"H_Beret_blk",
 			"H_Beret_ocamo",

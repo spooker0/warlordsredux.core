@@ -111,6 +111,7 @@ class CfgRemoteExec {
 		class selectLeader {allowedTargets = 0;};
 		class setAmmoCargo {allowedTargets = 0;};
 		class setAutonomous {allowedTargets = 0;};
+		class setDate {allowedTargets = 0;};
 		class setFuel {allowedTargets = 0;};
 		class setFuelCargo {allowedTargets = 0;};
 		class setFuelConsumptionCoef {allowedTargets = 0;};
