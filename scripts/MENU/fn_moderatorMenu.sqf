@@ -69,6 +69,8 @@ private _clearReports = _display displayCtrl MODR_CLEAR_REPORTS;
 private _clearTimeout = _display displayCtrl MODR_CLEAR_TIMEOUT;
 private _rebalance = _display displayCtrl MODR_REBALANCE;
 
+private _copyTimeouts = _display displayCtrl MODR_CHAT_HISTORY_COPY_TIMEOUTS;
+
 _infoDisplay ctrlShow false;
 _timeoutReasonLabel ctrlShow false;
 _timeoutReasonEdit ctrlShow false;
@@ -79,6 +81,7 @@ _chatHistoryList ctrlShow false;
 _chatHistoryCopy5 ctrlShow false;
 _chatHistoryCopy20 ctrlShow false;
 _chatHistoryCopyAll ctrlShow false;
+_copyTimeouts ctrlShow false;
 
 _reportTable ctrlShow false;
 _clearReports ctrlShow false;
@@ -130,6 +133,13 @@ if (_elevatedPrivilege) then {
         private _reasonText = ctrlText _reasonEdit;
 
         [player, _selectedUid, _reasonText, _timeoutValue] remoteExec ["WL2_fnc_punishPlayer", 2];
+
+        private _infoDisplay = _display displayCtrl MODR_INFO_DISPLAY;
+        private _infoDisplayText = ctrlText _infoDisplay;
+
+        private _existingInfoDisplay = profileNamespace getVariable ["WL2_infoDisplay", ""];
+        private _banText = format ["%1%5%2%5[DURATION] %3s%5[REASON] %4%5", _existingInfoDisplay, _infoDisplayText, _timeoutValue, _reasonText, endl];
+        profileNamespace setVariable ["WL2_infoDisplay", _banText];
     }];
 
     _chatHistoryList ctrlShow true;
@@ -138,19 +148,48 @@ if (_elevatedPrivilege) then {
     _chatHistoryCopy5 ctrlShow true;
     _chatHistoryCopy5 ctrlAddEventHandler ["ButtonClick", {
         params ["_control"];
-        [_control, 5] spawn MENU_fnc_copyChat;
+
+        private _chatHistory = uiNamespace getVariable ["WL2_chatHistory", []];
+        if (count _chatHistory > 5) then {
+            _chatHistory = [_chatHistory, -5] call BIS_fnc_subSelect;
+        };
+        private _chatHistoryText = _chatHistory apply {
+            format ["%1: %2", _x # 1, _x # 2]
+        };
+        [_control, _chatHistoryText joinString endl] spawn MENU_fnc_copyChat;
     }];
 
     _chatHistoryCopy20 ctrlShow true;
     _chatHistoryCopy20 ctrlAddEventHandler ["ButtonClick", {
         params ["_control"];
-        [_control, 20] spawn MENU_fnc_copyChat;
+
+        private _chatHistory = uiNamespace getVariable ["WL2_chatHistory", []];
+        if (count _chatHistory > 20) then {
+            _chatHistory = [_chatHistory, -20] call BIS_fnc_subSelect;
+        };
+        private _chatHistoryText = _chatHistory apply {
+            format ["%1: %2", _x # 1, _x # 2]
+        };
+        [_control, _chatHistoryText joinString endl] spawn MENU_fnc_copyChat;
     }];
 
     _chatHistoryCopyAll ctrlShow true;
     _chatHistoryCopyAll ctrlAddEventHandler ["ButtonClick", {
         params ["_control"];
-        [_control, -1] spawn MENU_fnc_copyChat;
+        private _chatHistory = uiNamespace getVariable ["WL2_chatHistory", []];
+        private _chatHistoryText = _chatHistory apply {
+            format ["%1: %2", _x # 1, _x # 2]
+        };
+        [_control, _chatHistoryText joinString endl] spawn MENU_fnc_copyChat;
+    }];
+
+    _copyTimeouts ctrlShow true;
+    _copyTimeouts ctrlAddEventHandler ["ButtonClick", {
+        params ["_control"];
+        private _display = ctrlParent _control;
+        private _infoDisplay = profileNamespace getVariable ["WL2_infoDisplay", ""];
+        [_control, _infoDisplay] spawn MENU_fnc_copyChat;
+        profileNamespace setVariable ["WL2_infoDisplay", ""];
     }];
 
     _clearReports ctrlAddEventHandler ["ButtonClick", {

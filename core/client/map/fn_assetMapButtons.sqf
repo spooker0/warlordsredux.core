@@ -256,8 +256,10 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         private _supplyFinal = (_asset getVariable ["WL2_forwardBaseSupplies", -1]) - _repairCost;
         _asset setVariable ["WL2_forwardBaseSupplies", _supplyFinal, true];
 
-        private _maxHealth = _asset getVariable ["WL2_demolitionMaxHealth", 5];
+        private _maxHealth = _asset getVariable ["WL2_demolitionMaxHealth", 12];
         _asset setVariable ["WL2_demolitionHealth", _maxHealth, true];
+        playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Repair.wss", _asset, false, getPosASL _asset, 2, 1, 75];
+
         [player, "repairFOB"] remoteExec ["WL2_fnc_handleClientRequest", 2];
     };
     [

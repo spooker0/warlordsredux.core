@@ -431,6 +431,16 @@ class MODR_Menu {
             sizeEx = 0.03;
         };
 
+        class MODR_CopyTimeouts: RscButton {
+            idc = MODR_CHAT_HISTORY_COPY_TIMEOUTS;
+            x = 0.45;
+            y = 0.96;
+            w = 0.16;
+            h = 0.035;
+            text = "MOD RECEIPTS";
+            sizeEx = 0.035;
+            colorBackground[] = {0, 0, 1, 0.6};
+        };
         class MODR_CopyChat5: RscButton {
             idc = MODR_CHAT_HISTORY_COPY_5;
             x = 0.63;

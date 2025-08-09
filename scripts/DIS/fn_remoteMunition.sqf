@@ -16,16 +16,42 @@ while { typeof cameraOn == "Camera" } do {
     sleep 0.1;
 };
 
+uiNamespace setVariable ["WL_waypointPosition", customWaypointPosition];
+
 private _camera = "camera" camCreate (position _asset);
 _camera switchCamera "INTERNAL";
 cameraEffectEnableHUD true;
 showHUD [true, true, true, true, true, true, true, true, true, true, true];
 player setVariable ["WL_hmdOverride", 2];
 
+private _waypointDrawer = addMissionEventHandler ["Draw3D", {
+    private _waypointPosition = uiNamespace getVariable ["WL_waypointPosition", []];
+    if (count _waypointPosition == 0) exitWith {};
+    private _distance = _waypointPosition distance cameraOn;
+    drawIcon3D [
+        "\A3\ui_f\data\IGUI\RscIngameUI\RscOptics\square.paa",
+        [1, 1, 1, 1],
+        _waypointPosition,
+        0.3,
+        0.3,
+        0,
+        format ["WAYPOINT %1KM", (_distance / 1000) toFixed 1],
+        0,
+        0.02,
+        "TahomaB",
+        "center",
+        true,
+        0,
+        0.01
+    ];
+}];
+
 private _projectileASL = getPosASL _originalProjectile;
 private _projectileVectorDirAndUp = [vectorDir _originalProjectile, vectorUp _originalProjectile];
 private _projectileVelocity = velocityModelSpace _originalProjectile;
 deleteVehicle _originalProjectile;
+
+_projectileVelocity = _projectileVelocity vectorMultiply 2;
 
 private _projectile = createVehicle ["Bomb_04_F", [0, 0, 0], [], 0, "FLY"];
 _projectile setPosASL _projectileASL;
@@ -49,5 +75,6 @@ _camera attachTo [_projectile, [0, -3, 0.4]];
 [_projectile, 3] call DIS_fnc_controlMunition;
 
 player setVariable ["WL_hmdOverride", -1];
+removeMissionEventHandler ["Draw3D", _waypointDrawer];
 switchCamera player;
 camDestroy _camera;

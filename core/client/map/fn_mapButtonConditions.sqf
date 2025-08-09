@@ -100,7 +100,7 @@ switch (_conditionName) do {
         _target getVariable ["WL2_forwardBasePlacer", false];
     };
     case "repairFOB": {
-        private _maxHealth = _target getVariable ["WL2_demolitionMaxHealth", 5];
+        private _maxHealth = _target getVariable ["WL2_demolitionMaxHealth", 12];
         alive _target &&
         _target getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide &&
         _target getVariable ["WL2_forwardBaseSupplies", -1] >= WL_FOB_REPAIR_COST &&

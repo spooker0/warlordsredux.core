@@ -43,10 +43,23 @@ _texture ctrlAddEventHandler ["JSDialog", {
     if (_firstLetter == "c") exitWith {
         private _loadoutIndex = profileNamespace getVariable [format ["WLC_loadoutIndex_%1", BIS_WL_playerSide], 0];
         private _loadoutVar = format ["WLC_savedLoadout_%1_%2", BIS_WL_playerSide, _loadoutIndex];
-        private _loadout = getUnitLoadout player;
-        profileNamespace setVariable [_loadoutVar, _loadout];
-        systemChat "Loadout copied.";
-        [_texture] call WLC_fnc_pageLoad;
+        private _profileString = profileNamespace getVariable [_loadoutVar, ""];
+
+        _profileString = format ["profileNamespace setVariable ['%1', %2];", _loadoutVar, _profileString];
+        uiNamespace setVariable ["display3DENCopy_data", ["Copy Text", _profileString]];
+
+        private _display = ctrlParent _texture;
+        [_display] spawn {
+            params ["_display"];
+            private _copyInterface = _display createDisplay "display3denCopy";
+            private _copyButton = _copyInterface displayCtrl 204;
+
+            waitUntil {
+                _copyButton = _copyInterface displayCtrl 204;
+                isNull _copyInterface || !(isNull _copyButton);
+            };
+            _copyButton ctrlShow false;
+        };
     };
 
     if (_message == "exit") exitWith {

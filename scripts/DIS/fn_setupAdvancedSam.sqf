@@ -22,7 +22,7 @@ while { alive _asset } do {
 			["Previous", "gunElevUp"],
 			["Next", "gunElevDown"]
 		]];
-		["AdvancedSam", _controlParams, 10] call WL2_fnc_showHint;
+		["AdvancedSam", _controlParams] call WL2_fnc_showHint;
 
 		_texture ctrlAddEventHandler ["PageLoaded", {
 			params ["_texture"];
