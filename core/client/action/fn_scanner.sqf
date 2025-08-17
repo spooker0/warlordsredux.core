@@ -41,6 +41,10 @@ if (_awacs && _assetHeight < 50) exitWith {
     _asset setVariable ["WL_scannedObjects", []];
     _asset setVariable ["WL_scanRadius", 0];
 };
+if (!_awacs && surfaceIsWater _assetPos) exitWith {
+    _asset setVariable ["WL_scannedObjects", []];
+    _asset setVariable ["WL_scanRadius", 0];
+};
 
 private _scanRadius = if (_awacs) then {
     WL_AWACS_RANGE;
