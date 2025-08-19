@@ -28,6 +28,11 @@ if (_result) then {
 		playSound "AddItemFailed";
 	};
 
+	if (alive _target && _target isKindOf "Air" && speed _target > 5 && !(unitIsUAV _target)) exitWith {
+		systemChat "Can't remove flying aircraft!";
+		playSound "AddItemFailed";
+	};
+
 	playSound "AddItemOK";
 	[format [toUpper localize "STR_A3_WL_popup_asset_deleted", toUpper _displayName], 2] spawn WL2_fnc_smoothText;
 	_vehicles = missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], []];
