@@ -343,6 +343,7 @@ private _teammates = if (_drawAll) then {
 } else {
 	_mapData getOrDefault ["teammates", []]
 };
+private _showPlayerUids = uiNamespace getVariable ["WL2_showPlayerUids", false];
 {
 	private _position = getPosASL _x;
 	if ([_position] call _cullItem) then { continue; };
@@ -374,6 +375,9 @@ private _teammates = if (_drawAll) then {
 		if (_draw) then {
 			private _levelDisplay = _x getVariable ["WL_playerLevel", "Recruit"];
 			private _displayName = format ["%1 [%2]", name _x, _levelDisplay];
+			if (_showPlayerUids) then {
+				_displayName = format ["%1 (%2)", _displayName, getPlayerUID _x];
+			};
 			_displayName
 		} else {""},
 		1,

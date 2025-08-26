@@ -143,6 +143,13 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["checkbox", "Show hint: LOAL", ["showHintLoal", true]]
     ];
 
+    if (_isAdmin || _isModerator) then {
+        _settingsMenu append [
+            ["category", "Moderator Options"],
+            ["checkbox", "Show player uids (requires respawn)", ["showPlayerUids", false]]
+        ];
+    };
+
     private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
     {
         _x params ["_category", "_text", "_params"];

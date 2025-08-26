@@ -53,6 +53,7 @@ addMissionEventHandler ["Draw3D", {
 			false;
 		};
 	};
+	private _showPlayerUids = uiNamespace getVariable ["WL2_showPlayerUids", false];
 	{
 		private _isInMySquad = ["isInMySquad", [getPlayerID _x]] call SQD_fnc_client;
 		private _color = if (lifeState _x == "INCAPACITATED") then {
@@ -67,6 +68,10 @@ addMissionEventHandler ["Draw3D", {
 		private _size = if (_isInMySquad) then { 0.04 } else { 0.03 };
 		private _levelDisplay = _x getVariable ["WL_playerLevel", "Recruit"];
 		private _displayName = format ["%1 [%2]", name _x, _levelDisplay];
+
+		if (_showPlayerUids) then {
+			_displayName = format ["%1 (%2)", _displayName, getPlayerUID _x];
+		};
 
 		drawIcon3D [
 			"A3\ui_f\data\igui\cfg\islandmap\iconplayer_ca.paa",

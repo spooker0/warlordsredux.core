@@ -40,6 +40,9 @@ if (!_hideSquadMenu) then {
 	player setUserActionText [_squadActionId, _squadActionText, "<img size='2' image='\a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa'/>"];
 };
 
+private _showPlayerUids = _settingsMap getOrDefault ["showPlayerUids", false];
+uiNamespace setVariable ["WL2_showPlayerUids", _showPlayerUids];
+
 uiNamespace setVariable ["WL2_canBuy", true];
 if (isRemoteControlling player) then {
 	player remoteControl objNull;
