@@ -50,6 +50,8 @@ if (count (_sector getVariable ["BIS_WL_vehiclesToSpawn", []]) == 0) then {
 		private _vehicleArray = [_posRoad, _dirRoad, selectRandom _vehiclesPool, _owner] call BIS_fnc_spawnVehicle;
 		_vehicleArray params ["_vehicle", "_crew", "_group"];
 
+		_vehicle setVehiclePosition [getPosATL _vehicle, [], 10, "NONE"];
+
 		_vehicleUnits pushBack _vehicle;
 
 		{

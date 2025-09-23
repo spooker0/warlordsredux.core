@@ -1099,6 +1099,26 @@ class RscTitles {
 		};
 	};
 
+	class RscWLKillfeedMenu {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		name = "RscWLKillfeedMenu";
+		onLoad = "uiNamespace setVariable ['RscWLKillfeedMenu', _this select 0];";
+		class controls {
+			class RscWLKillfeedMenu_Texture: RscText {
+				type = 106;
+				idc = 5502;
+				x = safeZoneX;
+				y = safeZoneY;
+				w = safeZoneW;
+				h = safeZoneH;
+				url = "file://src/ui/killfeed.html";
+			};
+		};
+	};
+
 	class RscWLSamTargetingMenu {
 		idd = -1;
 		duration = 1000000000;

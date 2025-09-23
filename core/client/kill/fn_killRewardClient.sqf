@@ -5,6 +5,8 @@ if (isDedicated) exitWith {};
 
 disableSerialization;
 
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+
 private _displayText = "";
 private _displayName = "";
 
@@ -18,11 +20,20 @@ if (_customText != "") then {
 		_unitType = _unitTypeName;
 	};
 
+	private _useNewKillfeed = _settingsMap getOrDefault ["useNewKillfeed", true];
 	if (_unitType isKindOf "Man") then {
-		_displayText = "Enemy killed";
+		_displayText = if (_useNewKillfeed) then {
+			"Kill"
+		} else {
+			"Enemy killed"
+		};
 	} else {
 		_displayName = [_unit, _unitType] call WL2_fnc_getAssetTypeName;
-		_displayText = "%1 destroyed";
+		_displayText = if (_useNewKillfeed) then {
+			"%1"
+		} else {
+			"%1 destroyed"
+		};
 	};
 	_displayText = format [_displayText, _displayName];
 };
@@ -34,10 +45,13 @@ private _killRewardMap = uiNamespace getVariable ["WL_killRewardMap", createHash
 private _killRewardEntry = _killRewardMap getOrDefault [_displayText, [0, 0, "", 0]];
 private _repetitions = _killRewardEntry # 0;
 private _points = _killRewardEntry # 1;
-_killRewardMap set [_displayText, [_repetitions + 1, _points + _reward, _customColor, serverTime]];
+
+_repetitions = _repetitions + 1;
+_points = _points + _reward;
+_killRewardMap set [_displayText, [_repetitions, _points, _customColor, serverTime]];
 
 uiNamespace setVariable ["WL_killRewardMap", _killRewardMap];
-[_killRewardMap] call WL2_fnc_updateKillFeed;
+[_displayText, _reward, _customColor] call WL2_fnc_updateKillFeed;
 
 if (_customColor == "#de0808") then {
 	missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_DURATION_AFKTIME];
@@ -49,9 +63,14 @@ if (_customColor == "#de0808") then {
 	_rewardHistory set [_displayText, _rewardEntry];
 	uiNamespace setVariable ["WL2_rewardHistory", _rewardHistory];
 
-	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 	private _hitmarkerVolume = _settingsMap getOrDefault ["hitmarkerVolume", 0.5];
-	playSoundUI ["hitmarker", _hitmarkerVolume * 2, 1];
+
+	private _useNewKillSound = _settingsMap getOrDefault ["useNewKillSound", true];
+	if (_useNewKillSound) then {
+		playSoundUI ["hitmarker", _hitmarkerVolume * 2, 1];
+	} else {
+		playSoundUI ["AddItemOk", _hitmarkerVolume * 2, 1];
+	};
 
 	if (missionNamespace getVariable ["WL_easterEggOverride", false]) then {
 		private _killsInRow = missionNamespace getVariable ["WL_killsInRow", 0];

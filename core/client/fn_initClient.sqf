@@ -398,3 +398,9 @@ inGameUISetEventHandler ["PrevAction", "[true] call WL2_fnc_scoreboardScroll"];
 inGameUISetEventHandler ["NextAction", "[false] call WL2_fnc_scoreboardScroll"];
 
 0 spawn WL2_fnc_ammoConfigChange;
+
+private _display = uiNamespace getVariable ["RscWLKillfeedMenu", displayNull];
+if (isNull _display) then {
+    "killfeed" cutRsc ["RscWLKillfeedMenu", "PLAIN", -1, true, true];
+    _display = uiNamespace getVariable "RscWLKillfeedMenu";
+};

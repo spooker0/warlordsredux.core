@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        :root {
+            --anchor-x: 50vw;
+            --gap: 12px;
+            --points-slot: 12ch;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            overflow: hidden;
+            /* background-color: black; */
+        }
+
+        .stage {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 10vh;
+            height: 40px;
+            pointer-events: none;
+            overflow: visible;
+        }
+
+        .kf-left {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: calc(var(--anchor-x) - var(--gap));
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .kf-badge {
+            border: 2px solid #00e1ff;
+            border-radius: 6px;
+            padding: 6px 10px;
+            background: rgba(0, 0, 0, 0.6);
+            display: inline-flex;
+            align-items: center;
+            transform-origin: right center;
+        }
+
+        .kf-points {
+            position: absolute;
+            left: calc(var(--anchor-x) + var(--gap));
+            bottom: 0;
+            width: var(--points-slot);
+            text-align: left;
+            font-size: 28px;
+            font-weight: 900;
+            color: #fff;
+            font-variant-numeric: tabular-nums;
+            transform-origin: left center;
+        }
+
+        .enter {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px) scale(0.98);
+            }
+
+            60% {
+                opacity: 1;
+                transform: translateX(0) scale(1.04);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        .exit {
+            animation: fadeOut 0.5s ease forwards;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+        }
+
+        .merge {
+            animation: bump 260ms cubic-bezier(.2, .9, .2, 1.2) both;
+        }
+
+        @keyframes bump {
+            0% {
+                transform: translateX(0) scale(1);
+                box-shadow: 0 0 0 0 rgba(0, 225, 255, 0);
+            }
+
+            25% {
+                transform: translateX(0) scale(1.08);
+                box-shadow: 0 0 16px 4px rgba(0, 225, 255, .35);
+            }
+
+            100% {
+                transform: translateX(0) scale(1);
+                box-shadow: 0 0 0 0 rgba(0, 225, 255, 0);
+            }
+        }
+
+        .points-merge {
+            animation: pointsBump 280ms cubic-bezier(.2, .9, .2, 1.2) both;
+        }
+
+        @keyframes pointsBump {
+            0% {
+                transform: translateX(0) scale(1);
+                text-shadow: 0 0 0 rgba(255, 255, 255, 0);
+            }
+
+            25% {
+                transform: translateX(0) scale(1.1);
+                text-shadow: 0 0 14px rgba(255, 255, 255, .75);
+            }
+
+            100% {
+                transform: translateX(0) scale(1);
+                text-shadow: 0 0 0 rgba(255, 255, 255, 0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stage">
+        <div class="kf-left" id="kf-left"></div>
+        <span class="kf-points" id="kf-points"></span>
+    </div>
+
+    <script>
+        const KILLFEED_TIMEOUT_MS = 10000;
+        const MIN_GAP_MS = 300;
+
+        const killfeedQueue = [];
+        let isProcessingQueue = false;
+        let lastAddTimestamp = 0;
+        let totalPoints = 0;
+
+        let displayedPoints = 0;
+
+        function formatPoints(n) {
+            try {
+                return new Intl.NumberFormat().format(n);
+            } catch {
+                return String(n);
+            }
+        }
+
+        function animatePoints(el, from, to) {
+            if (el._anim && el._anim.raf) cancelAnimationFrame(el._anim.raf);
+
+            if (from === to) {
+                displayedPoints = to;
+                el.textContent = to > 0 ? formatPoints(to) : "";
+                el._anim = null;
+                return;
+            }
+
+            const delta = Math.abs(to - from);
+            const duration = Math.min(500, 600 + Math.log10(delta + 1) * 650);
+
+            const start = performance.now();
+            const easeOutQuint = t => 1 - Math.pow(1 - t, 5);
+
+            el._anim = {
+                raf: requestAnimationFrame(function step(now) {
+                    const t = Math.min(1, (now - start) / duration);
+                    const eased = easeOutQuint(t);
+                    const value = Math.round(from + (to - from) * eased);
+
+                    if (value !== displayedPoints) {
+                        displayedPoints = value;
+                        el.textContent = value > 0 ? formatPoints(value) : "";
+                    }
+
+                    if (t < 1) {
+                        el._anim.raf = requestAnimationFrame(step);
+                    } else {
+                        el._anim = null;
+                    }
+                })
+            };
+        }
+
+        function addKillfeed(displayText, points, customColor) {
+            killfeedQueue.push([displayText, points, customColor]);
+            processQueue();
+        }
+
+        function processQueue() {
+            if (isProcessingQueue) return;
+            isProcessingQueue = true;
+
+            const step = () => {
+                if (killfeedQueue.length === 0) {
+                    isProcessingQueue = false;
+                    return;
+                }
+
+                const now = Date.now();
+                const waitTime = Math.max(0, MIN_GAP_MS - (now - lastAddTimestamp));
+
+                setTimeout(() => {
+                    const [displayText, points, customColor] = killfeedQueue.shift();
+                    addKillfeedImmediate(displayText, points, customColor);
+                    lastAddTimestamp = Date.now();
+                    step();
+                }, waitTime);
+            };
+
+            step();
+        }
+
+        function addKillfeedImmediate(displayText, points, customColor) {
+            const leftPanel = document.getElementById("kf-left");
+            const pointsBox = document.getElementById("kf-points");
+
+            const pulse = (el, cls) => {
+                if (!el) return;
+                el.classList.remove(cls);
+                void el.offsetWidth; // force reflow
+                el.classList.add(cls);
+            };
+
+            // Look for an existing badge with same label AND color
+            let badge = Array.from(leftPanel.querySelectorAll(".kf-badge"))
+                .find(b => b.dataset.label === displayText && b.dataset.customColor === (customColor || ""));
+
+            if (badge) {
+                const newCount = parseInt(badge.dataset.count || "1", 10) + 1;
+                badge.dataset.count = String(newCount);
+
+                const newPoints = parseInt(badge.dataset.points || "0", 10) + (points | 0);
+                badge.dataset.points = String(newPoints);
+
+                badge.innerHTML = displayText + (newCount > 1 ? ` &times; ${newCount}` : "");
+
+                const target = totalPoints + (points | 0);
+                animatePoints(pointsBox, displayedPoints, target);
+                totalPoints = target;
+
+                pulse(badge, "merge");
+                pulse(pointsBox, "points-merge");
+
+                clearTimeout(badge._timeout);
+                badge._timeout = setTimeout(() => removeBadge(badge), KILLFEED_TIMEOUT_MS);
+                return;
+            }
+
+            // Create a brand new badge
+            badge = document.createElement("span");
+            badge.className = "kf-badge enter";
+            badge.dataset.label = displayText;
+            badge.dataset.count = "1";
+            badge.dataset.points = String(points | 0);
+            badge.dataset.customColor = customColor || "";
+            badge.textContent = displayText;
+
+            if (customColor) {
+                badge.style.borderColor = customColor;
+                badge.style.color = customColor;
+            }
+
+            leftPanel.appendChild(badge);
+
+            // Update running total (animated)
+            const target = totalPoints + (points | 0);
+            animatePoints(pointsBox, displayedPoints, target);
+            totalPoints = target;
+            pulse(pointsBox, "points-merge");
+
+            // Auto-remove later
+            badge._timeout = setTimeout(() => removeBadge(badge), KILLFEED_TIMEOUT_MS);
+        }
+
+        function renderTotalPoints(pointsBox) {
+            // Keep for external calls; animates to current total
+            animatePoints(pointsBox, displayedPoints, totalPoints);
+        }
+
+        function removeBadge(badge) {
+            const leftPanel = document.getElementById("kf-left");
+            const pointsBox = document.getElementById("kf-points");
+
+            badge.classList.remove("enter", "merge");
+            badge.classList.add("exit");
+
+            badge.addEventListener("animationend", () => {
+                badge.remove();
+
+                // If no badges remain, reset points to zero (animated)
+                if (leftPanel.querySelectorAll(".kf-badge").length === 0) {
+                    totalPoints = 0;
+                    renderTotalPoints(pointsBox);
+                }
+            }, { once: true });
+        }
+
+        // --- Test ---
+        // setTimeout(() => addKillfeed("KILL", 100, "red"), 100);
+        // setTimeout(() => addKillfeed("KILL", 100, "red"), 120);
+        // setTimeout(() => addKillfeed("KILL", 100, "red"), 140);
+        // setTimeout(() => addKillfeed("VEHICLE DESTROYED", 1300, "red"), 160);
+        // setTimeout(() => addKillfeed("KILL", 100, "red"), 2200);
+        // setTimeout(() => addKillfeed("HEADSHOT", 250, "red"), 2200);
+        // setTimeout(() => addKillfeed("KILL", 100, "red"), 8000);
+    </script>
+</body>
+
+</html>

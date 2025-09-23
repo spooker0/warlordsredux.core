@@ -132,6 +132,8 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["checkbox", "Hide vehicle manager in scroll menu", ["hideVehicleManager", false]],
         ["checkbox", "Hide help menu in scroll menu", ["hideHelpMenu", false]],
         ["checkbox", "Delete quad bike/water scooter on exit", ["deleteSmallTransports", true]],
+        ["checkbox", "Use new kill sound", ["useNewKillSound", true]],
+        ["checkbox", "Use new killfeed", ["useNewKillfeed", true]],
         ["category", "Control Hints"],
         ["checkbox", "Show hint: Deployment", ["showHintDeploy", true]],
         ["checkbox", "Show hint: Recon Optics", ["showHintRecon", true]],

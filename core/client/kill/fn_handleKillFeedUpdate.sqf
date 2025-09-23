@@ -18,6 +18,14 @@ uiNamespace setVariable ["WL_scoreControl", _scoreControl];
 uiNamespace setVariable ["WL_killRewardMap", createHashMap];
 
 while { !BIS_WL_missionEnd } do {
+    private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+    private _useNewKillfeed = _settingsMap getOrDefault ["useNewKillfeed", true];
+
+    if (_useNewKillfeed) then {
+        sleep 10;
+        continue;
+    };
+
     private _killRewards = uiNamespace getVariable ["WL_killRewardMap", []];
     private _killFeedDirty = false;
     private _newKillRewardMap = createHashMap;
