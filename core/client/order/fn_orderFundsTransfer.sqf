@@ -111,8 +111,10 @@ _purchase_transfer_units lbSetCurSel 0;
 		lbClear _purchase_transfer_units;
 
 		{
-			_purchase_transfer_units lbAdd name _x;
-		} forEach (allPlayers select {isPlayer _x && {side group _x == BIS_WL_playerSide && {_x != player}}});
+			private _index = _purchase_transfer_units lbAdd (name _x);
+			private _playerFunds = (missionNamespace getVariable "fundsDatabaseClients") get (getPlayerUID _x);
+			_purchase_transfer_units lbSetTooltip [_index, format ["~%1%2", _moneySign, _playerFunds]];
+		} forEach (allPlayers select { isPlayer _x && side group _x == BIS_WL_playerSide && _x != player });
 
 		lbSort _purchase_transfer_units;
 		if (lbSize _purchase_transfer_units == 0) exitWith {
