@@ -23,14 +23,14 @@ if (_customText != "") then {
 	private _useNewKillfeed = _settingsMap getOrDefault ["useNewKillfeed", true];
 	if (_unitType isKindOf "Man") then {
 		_displayText = if (_useNewKillfeed) then {
-			"Kill"
+			"KILL"
 		} else {
 			"Enemy killed"
 		};
 	} else {
 		_displayName = [_unit, _unitType] call WL2_fnc_getAssetTypeName;
 		_displayText = if (_useNewKillfeed) then {
-			"%1"
+			"DESTROYED %1"
 		} else {
 			"%1 destroyed"
 		};
@@ -51,7 +51,27 @@ _points = _points + _reward;
 _killRewardMap set [_displayText, [_repetitions, _points, _customColor, serverTime]];
 
 uiNamespace setVariable ["WL_killRewardMap", _killRewardMap];
-[_displayText, _reward, _customColor] call WL2_fnc_updateKillFeed;
+
+private _displayIcon = switch (toUpper _displayText) do {
+	case "KILL": { "a3\\Ui_F_Curator\\Data\\CfgMarkers\\kia_ca.paa" };
+	case "ATTACKING SECTOR": { "a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\attack_ca.paa" };
+	case "DEFENDING SECTOR": { "a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\defend_ca.paa" };
+	case "ACTIVE PROTECTION SYSTEM";
+	case "DAZZLER";
+	case "PROJECTILE JAMMED";
+	case "PROJECTILE DESTROYED": { "A3\\ui_f\\data\\map\\markers\\military\\pickup_CA.paa" };
+	case "SECTOR CAPTURED": { "A3\\ui_f\\data\\map\\markers\\handdrawn\\flag_CA.paa" };
+	case "REVIVED TEAMMATE": { "a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\Heal_ca.paa" };
+	case "RECON";
+	case "SPOT ASSIST": { "a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\Radio_ca.paa" };
+	case "SPAWN REWARD": { "a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\car_ca.paa" };
+	case "SQUAD ASSIST": { "a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\meet_ca.paa" };
+	default {
+		private _unitIcon = getText (configFile >> "CfgVehicles" >> _unitType >> "picture");
+		(_unitIcon regexReplace ["\\", "\\\\"]) regexReplace ["^\\", ""];
+	};
+};
+[_displayText, _reward, _customColor, _displayIcon] call WL2_fnc_updateKillFeed;
 
 if (_customColor == "#de0808") then {
 	missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_DURATION_AFKTIME];

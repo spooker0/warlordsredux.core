@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_displayText", "_reward", "_customColor"];
+params ["_displayText", "_reward", "_customColor", "_iconUrl"];
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _useNewKillfeed = _settingsMap getOrDefault ["useNewKillfeed", true];
@@ -12,10 +12,11 @@ if (_useNewKillfeed) then {
 	};
 	private _texture = _display displayCtrl 5502;
 	private _script = format [
-		"addKillfeed(""%1"", %2, ""%3"");",
+		"addKillfeed(""%1"", %2, ""%3"", ""%4"");",
 		toUpper _displayText,
 		_reward,
-		_customColor
+		_customColor,
+		_iconUrl
 	];
 	_texture ctrlWebBrowserAction ["ExecJS", _script];
 

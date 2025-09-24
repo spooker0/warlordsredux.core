@@ -7,6 +7,8 @@
             --anchor-x: 50vw;
             --gap: 12px;
             --points-slot: 12ch;
+            --icons-max-width: 360px;
+            --icons-feather: 30px;
         }
 
         body {
@@ -15,7 +17,6 @@
             font-family: Arial, sans-serif;
             color: #fff;
             overflow: hidden;
-            /* background-color: black; */
         }
 
         .stage {
@@ -23,7 +24,7 @@
             left: 0;
             right: 0;
             bottom: 10vh;
-            height: 40px;
+            height: 70px;
             pointer-events: none;
             overflow: visible;
         }
@@ -34,13 +35,40 @@
             bottom: 0;
             width: calc(var(--anchor-x) - var(--gap));
             display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 8px;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
             white-space: nowrap;
             overflow: hidden;
             font-weight: bold;
             font-size: 16px;
+            z-index: 2;
+        }
+
+        .kf-icons-viewport {
+            position: relative;
+            max-width: var(--icons-max-width);
+            width: var(--icons-max-width);
+            overflow: hidden;
+            mask-image: linear-gradient(to right,
+                    rgba(0, 0, 0, 0) 0,
+                    rgba(0, 0, 0, 1) var(--icons-feather),
+                    rgba(0, 0, 0, 1) 100%);
+        }
+
+        .kf-icons-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: nowrap;
+        }
+
+        .kf-badges-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 8px;
         }
 
         .kf-badge {
@@ -51,19 +79,39 @@
             display: inline-flex;
             align-items: center;
             transform-origin: right center;
+            gap: 8px;
         }
 
         .kf-points {
             position: absolute;
             left: calc(var(--anchor-x) + var(--gap));
-            bottom: 0;
+            top: 0;
             width: var(--points-slot);
             text-align: left;
             font-size: 28px;
-            font-weight: 900;
             color: #fff;
             font-variant-numeric: tabular-nums;
             transform-origin: left center;
+            z-index: 1;
+        }
+
+        .kf-left.unclipped,
+        .kf-icons-row.unclipped,
+        .kf-badges-row.unclipped {
+            overflow: visible;
+        }
+
+        .kf-icon {
+            height: 32px;
+            width: auto;
+            flex: 0 0 auto;
+            display: block;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+        .kf-mult {
+            opacity: 0.9;
         }
 
         .enter {
@@ -144,19 +192,25 @@
 
 <body>
     <div class="stage">
-        <div class="kf-left" id="kf-left"></div>
+        <div class="kf-left" id="kf-left">
+            <div class="kf-icons-viewport">
+                <div class="kf-icons-row" id="kf-icons-row"></div>
+            </div>
+            <div class="kf-badges-row" id="kf-badges-row"></div>
+        </div>
         <span class="kf-points" id="kf-points"></span>
     </div>
 
     <script>
+        document.imageCache = {};
+
         const KILLFEED_TIMEOUT_MS = 10000;
-        const MIN_GAP_MS = 300;
+        const MIN_GAP_MS = 500;
 
         const killfeedQueue = [];
         let isProcessingQueue = false;
         let lastAddTimestamp = 0;
         let totalPoints = 0;
-
         let displayedPoints = 0;
 
         function formatPoints(n) {
@@ -167,44 +221,53 @@
             }
         }
 
-        function animatePoints(el, from, to) {
-            if (el._anim && el._anim.raf) cancelAnimationFrame(el._anim.raf);
+        const activeRafHandles = new WeakMap();
 
-            if (from === to) {
-                displayedPoints = to;
-                el.textContent = to > 0 ? formatPoints(to) : "";
-                el._anim = null;
+        function animatePoints(el, from, to) {
+            const startValue = Number(from) || 0;
+            const endValue = Number(to) || 0;
+
+            const previousHandle = activeRafHandles.get(el);
+            if (previousHandle !== undefined) cancelAnimationFrame(previousHandle);
+
+            if (startValue === endValue) {
+                displayedPoints = endValue;
+                el.textContent = endValue > 0 ? formatPoints(endValue) : "";
+                activeRafHandles.delete(el);
                 return;
             }
 
-            const delta = Math.abs(to - from);
-            const duration = Math.min(500, 600 + Math.log10(delta + 1) * 650);
+            const delta = Math.abs(endValue - startValue);
+            const durationMs = Math.min(500, 600 + Math.log10(delta + 1) * 650);
 
-            const start = performance.now();
+            const startTime = performance.now();
             const easeOutQuint = t => 1 - Math.pow(1 - t, 5);
 
-            el._anim = {
-                raf: requestAnimationFrame(function step(now) {
-                    const t = Math.min(1, (now - start) / duration);
-                    const eased = easeOutQuint(t);
-                    const value = Math.round(from + (to - from) * eased);
+            function animatePointStep(now) {
+                const elapsed = now - startTime;
+                const t = Math.min(1, elapsed / durationMs);
+                const eased = easeOutQuint(t);
+                const currentValue = Math.round(startValue + (endValue - startValue) * eased);
 
-                    if (value !== displayedPoints) {
-                        displayedPoints = value;
-                        el.textContent = value > 0 ? formatPoints(value) : "";
-                    }
+                if (currentValue !== displayedPoints) {
+                    displayedPoints = currentValue;
+                    el.textContent = currentValue > 0 ? formatPoints(currentValue) : "";
+                }
 
-                    if (t < 1) {
-                        el._anim.raf = requestAnimationFrame(step);
-                    } else {
-                        el._anim = null;
-                    }
-                })
-            };
+                if (t < 1) {
+                    const handle = requestAnimationFrame(animatePointStep);
+                    activeRafHandles.set(el, handle);
+                } else {
+                    activeRafHandles.delete(el);
+                }
+            }
+
+            const handle = requestAnimationFrame(animatePointStep);
+            activeRafHandles.set(el, handle);
         }
 
-        function addKillfeed(displayText, points, customColor) {
-            killfeedQueue.push([displayText, points, customColor]);
+        function addKillfeed(displayText, points, customColor, iconUrl) {
+            killfeedQueue.push([displayText, points, customColor, iconUrl]);
             processQueue();
         }
 
@@ -222,8 +285,8 @@
                 const waitTime = Math.max(0, MIN_GAP_MS - (now - lastAddTimestamp));
 
                 setTimeout(() => {
-                    const [displayText, points, customColor] = killfeedQueue.shift();
-                    addKillfeedImmediate(displayText, points, customColor);
+                    const [displayText, points, customColor, iconUrl] = killfeedQueue.shift();
+                    addKillfeedImmediate(displayText, points, customColor, iconUrl);
                     lastAddTimestamp = Date.now();
                     step();
                 }, waitTime);
@@ -232,31 +295,139 @@
             step();
         }
 
-        function addKillfeedImmediate(displayText, points, customColor) {
-            const leftPanel = document.getElementById("kf-left");
+        const activeAnimations = new WeakMap();
+        function flipReorder(containerElement, elementToMove) {
+            const ANIMATION_DURATION_MS = 200;
+            const ANIMATION_EASING = 'cubic-bezier(0.2, 0.9, 0.2, 1.0)';
+
+            const initialRects = new Map();
+            const childrenBefore = Array.from(containerElement.children);
+
+            for (const element of childrenBefore) {
+                initialRects.set(element, element.getBoundingClientRect());
+
+                const prev = activeAnimations.get(element);
+                if (prev) {
+                    try { prev.cancel(); } catch { /* ignore */ }
+                    activeAnimations.delete(element);
+                }
+            }
+
+            containerElement.appendChild(elementToMove);
+
+            const childrenAfter = Array.from(containerElement.children);
+            const finishedPromises = [];
+
+            containerElement.classList.add('unclipped');
+
+            for (const element of childrenAfter) {
+                const fromRect = initialRects.get(element);
+                if (!fromRect) continue;
+
+                const toRect = element.getBoundingClientRect();
+                const deltaX = fromRect.left - toRect.left;
+                const deltaY = fromRect.top - toRect.top;
+
+                if (deltaX === 0 && deltaY === 0) continue;
+
+                const animation = element.animate(
+                    [
+                        { transform: `translate(${deltaX}px, ${deltaY}px)` },
+                        { transform: 'translate(0, 0)' }
+                    ],
+                    { duration: ANIMATION_DURATION_MS, easing: ANIMATION_EASING, fill: 'both' }
+                );
+
+                activeAnimations.set(element, animation);
+
+                const settled = animation.finished
+                    .catch(() => { /* ignore cancels */ })
+                    .then(() => {
+                        try { animation.cancel(); } catch { /* ignore */ }
+                        element.style.transform = '';
+                        activeAnimations.delete(element);
+                    });
+
+                finishedPromises.push(settled);
+            }
+
+            Promise.allSettled(finishedPromises).then(() => {
+                containerElement.classList.remove('unclipped');
+            });
+        }
+
+        function injectImage(img, iconUrl) {
+            if (document.imageCache[iconUrl]) {
+                img.src = document.imageCache[iconUrl];
+                return;
+            }
+
+            A3API.RequestTexture(iconUrl, 64).then(imageContent => {
+                img.src = imageContent;
+                document.imageCache[iconUrl] = imageContent;
+            });
+        }
+
+        function addIconIndependent(iconUrl) {
+            if (!iconUrl) return;
+            const iconsRow = document.getElementById("kf-icons-row");
+
+            const iconEl = document.createElement("img");
+            iconEl.className = "kf-icon enter";
+            injectImage(iconEl, iconUrl);
+            iconsRow.appendChild(iconEl);
+
+            iconEl._timeout = setTimeout(() => {
+                iconEl.classList.remove("enter");
+                iconEl.classList.add("exit");
+                iconEl.addEventListener("animationend", () => iconEl.remove(), { once: true });
+            }, KILLFEED_TIMEOUT_MS);
+        }
+
+        function addKillfeedImmediate(displayText, points, customColor, iconUrl) {
+            A3API.SendAlert("A");
+
+            const badgesRow = document.getElementById("kf-badges-row");
             const pointsBox = document.getElementById("kf-points");
+            const pulse = (el, cls) => { if (!el) return; el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
 
-            const pulse = (el, cls) => {
-                if (!el) return;
-                el.classList.remove(cls);
-                void el.offsetWidth; // force reflow
-                el.classList.add(cls);
-            };
+            addIconIndependent(iconUrl);
 
-            // Look for an existing badge with same label AND color
-            let badge = Array.from(leftPanel.querySelectorAll(".kf-badge"))
-                .find(b => b.dataset.label === displayText && b.dataset.customColor === (customColor || ""));
+            let badge = Array.from(badgesRow.querySelectorAll(".kf-badge"))
+                .find(b =>
+                    b.dataset.label === displayText &&
+                    b.dataset.customColor === (customColor || "")
+                );
+
+            const incomingPoints = points | 0;
 
             if (badge) {
-                const newCount = parseInt(badge.dataset.count || "1", 10) + 1;
+                const labelEl = badge.querySelector(".kf-label");
+                let multEl = badge.querySelector(".kf-mult");
+
+                const newCount = (parseInt(badge.dataset.count || "1", 10) + 1);
                 badge.dataset.count = String(newCount);
 
-                const newPoints = parseInt(badge.dataset.points || "0", 10) + (points | 0);
+                const newPoints = (parseInt(badge.dataset.points || "0", 10) + incomingPoints);
                 badge.dataset.points = String(newPoints);
 
-                badge.innerHTML = displayText + (newCount > 1 ? ` &times; ${newCount}` : "");
+                if (labelEl) labelEl.textContent = displayText;
 
-                const target = totalPoints + (points | 0);
+                // 👇 Only show a multiplier when count > 1
+                if (newCount > 1) {
+                    if (!multEl) {
+                        multEl = document.createElement("span");
+                        multEl.className = "kf-mult";
+                        badge.appendChild(multEl);
+                    }
+                    multEl.innerHTML = `&times; ${newCount}`;
+                } else if (multEl) {
+                    multEl.remove();
+                }
+
+                flipReorder(badgesRow, badge);
+
+                const target = totalPoints + incomingPoints;
                 animatePoints(pointsBox, displayedPoints, target);
                 totalPoints = target;
 
@@ -268,63 +439,54 @@
                 return;
             }
 
-            // Create a brand new badge
-            badge = document.createElement("span");
-            badge.className = "kf-badge enter";
-            badge.dataset.label = displayText;
-            badge.dataset.count = "1";
-            badge.dataset.points = String(points | 0);
-            badge.dataset.customColor = customColor || "";
-            badge.textContent = displayText;
+            const newBadge = document.createElement("span");
+            newBadge.className = "kf-badge enter";
+            newBadge.dataset.label = displayText;
+            newBadge.dataset.count = "1";
+            newBadge.dataset.points = String(incomingPoints);
+            newBadge.dataset.customColor = customColor || "";
+
+            const labelSpan = document.createElement("span");
+            labelSpan.className = "kf-label";
+            labelSpan.textContent = displayText;
+            newBadge.appendChild(labelSpan);
 
             if (customColor) {
-                badge.style.borderColor = customColor;
-                badge.style.color = customColor;
+                newBadge.style.borderColor = customColor;
+                newBadge.style.color = customColor;
             }
 
-            leftPanel.appendChild(badge);
+            badgesRow.appendChild(newBadge);
 
-            // Update running total (animated)
-            const target = totalPoints + (points | 0);
+            const target = totalPoints + incomingPoints;
             animatePoints(pointsBox, displayedPoints, target);
             totalPoints = target;
             pulse(pointsBox, "points-merge");
 
-            // Auto-remove later
-            badge._timeout = setTimeout(() => removeBadge(badge), KILLFEED_TIMEOUT_MS);
+            newBadge._timeout = setTimeout(() => removeBadge(newBadge), KILLFEED_TIMEOUT_MS);
         }
 
         function renderTotalPoints(pointsBox) {
-            // Keep for external calls; animates to current total
             animatePoints(pointsBox, displayedPoints, totalPoints);
         }
 
         function removeBadge(badge) {
-            const leftPanel = document.getElementById("kf-left");
+            const badgesRow = document.getElementById("kf-badges-row");
             const pointsBox = document.getElementById("kf-points");
+
+            if (!badge || !badge.isConnected) return;
 
             badge.classList.remove("enter", "merge");
             badge.classList.add("exit");
-
             badge.addEventListener("animationend", () => {
                 badge.remove();
-
                 // If no badges remain, reset points to zero (animated)
-                if (leftPanel.querySelectorAll(".kf-badge").length === 0) {
+                if (badgesRow.querySelectorAll(".kf-badge").length === 0) {
                     totalPoints = 0;
                     renderTotalPoints(pointsBox);
                 }
             }, { once: true });
         }
-
-        // --- Test ---
-        // setTimeout(() => addKillfeed("KILL", 100, "red"), 100);
-        // setTimeout(() => addKillfeed("KILL", 100, "red"), 120);
-        // setTimeout(() => addKillfeed("KILL", 100, "red"), 140);
-        // setTimeout(() => addKillfeed("VEHICLE DESTROYED", 1300, "red"), 160);
-        // setTimeout(() => addKillfeed("KILL", 100, "red"), 2200);
-        // setTimeout(() => addKillfeed("HEADSHOT", 250, "red"), 2200);
-        // setTimeout(() => addKillfeed("KILL", 100, "red"), 8000);
     </script>
 </body>
 

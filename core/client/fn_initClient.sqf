@@ -404,3 +404,9 @@ if (isNull _display) then {
     "killfeed" cutRsc ["RscWLKillfeedMenu", "PLAIN", -1, true, true];
     _display = uiNamespace getVariable "RscWLKillfeedMenu";
 };
+private _texture = _display displayCtrl 5502;
+_texture ctrlAddEventHandler ["JSDialog", {
+    params ["_texture", "_isConfirmDialog", "_message"];
+    playSoundUI ["AddItemOk", 0.5];
+	true;
+}];

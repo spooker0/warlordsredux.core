@@ -73,7 +73,7 @@ call WL2_fnc_processRunways;
 0 spawn WL2_fnc_laserTracker;
 
 0 spawn {
-	if (random 1 > 0.3) exitWith {};
+	if (random 1 > 0.2) exitWith {};
 
 	waitUntil { time > 0 };
 

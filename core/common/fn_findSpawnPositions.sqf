@@ -29,9 +29,12 @@ switch (typeName _center) do {
 				_axisA = _area # 1;
 				_axisB = _area # 2;
 			} else {
-				_area = (_center getVariable "objectAreaComplete");
-				_axisA = _area # 1;
-				_axisB = _area # 2;
+				_area = (_center getVariable ["objectAreaComplete", []]);
+
+				if (count _area >= 3) then {
+					_axisA = _area # 1;
+					_axisB = _area # 2;
+				};
 
 				if (_center getVariable ["WL2_isAircraftCarrier", false]) then {
 					_carrierSector = _center;
@@ -96,18 +99,26 @@ private _areaCheck = if (_rimWidth == 0) then {
 
 private _ret = [];
 private _blacklistedMapObjects = ["BUILDING", "HOUSE", "CHURCH", "CHAPEL", "BUNKER", "FORTRESS", "FOUNTAIN", "VIEW-TOWER", "LIGHTHOUSE", "FUELSTATION", "HOSPITAL", "BUSSTOP", "TRANSMITTER", "STACK", "RUIN", "WATERTOWER", "ROCK", "ROCKS", "POWERSOLAR", "POWERWIND", "SHIPWRECK"];
-if !(_infantryOnly) then {_blacklistedMapObjects append ["TREE", "FOREST BORDER", "FOREST TRIANGLE", "FOREST SQUARE", "CROSS", "WALL", "FOREST", "POWER LINES"]};
+if (!_infantryOnly) then {
+	_blacklistedMapObjects append ["TREE", "FOREST BORDER", "FOREST TRIANGLE", "FOREST SQUARE", "CROSS", "WALL", "FOREST", "POWER LINES"];
+};
 
-for [{_axisYSpawnCheck = _areaStart # 1}, {_axisYSpawnCheck < (_areaEnd # 1)}, {_axisYSpawnCheck = _axisYSpawnCheck + _axisStep}] do {
-	for [{_axisXSpawnCheck = _areaStart # 0}, {_axisXSpawnCheck < (_areaEnd # 0)}, {_axisXSpawnCheck = _axisXSpawnCheck + _axisStep}] do {
-		_spawnCheckPos = [_axisXSpawnCheck, _axisYSpawnCheck, 0];
+private _startX = _areaStart # 0;
+private _startY = _areaStart # 1;
+private _endX = _areaEnd # 0;
+private _endY = _areaEnd # 1;
+private _allowDistance = 3;
+
+for "_yCoord" from _startY to _endY step _axisStep do {
+	for "_xCoord" from _startX to _endX step _axisStep do {
+		private _spawnCheckPos = [_xCoord, _yCoord, 0];
 		if (_spawnCheckPos call _areaCheck) then {
-			if !(isOnRoad _spawnCheckPos || surfaceIsWater _spawnCheckPos || !(_spawnCheckPos inArea BIS_WL_mapAreaArray)) then {
-				_finalPos = _spawnCheckPos isFlatEmpty [3, -1, 0.35, 6, 0, false, objNull];
-				if !(_finalPos isEqualTo []) then {
-					_finalPos = ASLToATL _finalPos;
-					_nearObjs = _finalPos nearObjects ["AllVehicles", 6];
-					_nearMapObjs = nearestTerrainObjects [_finalPos, _blacklistedMapObjects, 6, false, true];
+			if (!surfaceIsWater _spawnCheckPos) then {
+				private _spawnChecker = _spawnCheckPos isFlatEmpty [_allowDistance, -1, 0.35, _allowDistance, 0, false, objNull];
+				if (!(_spawnChecker isEqualTo []) || isOnRoad _spawnCheckPos) then {
+					private _finalPos = ASLToATL _spawnCheckPos;
+					private _nearObjs = _finalPos nearObjects ["AllVehicles", _allowDistance];
+					private _nearMapObjs = nearestTerrainObjects [_finalPos, _blacklistedMapObjects, _allowDistance, false, true];
 					if (count _nearObjs == 0 && {count _nearMapObjs == 0}) then {
 						_finalPos set [2, 0];
 						_ret pushBack _finalPos;
@@ -117,6 +128,7 @@ for [{_axisYSpawnCheck = _areaStart # 1}, {_axisYSpawnCheck < (_areaEnd # 1)}, {
 		};
 	};
 };
+
 _ret = _ret apply {[_x distance2D _center, [_x]]};
 _ret sort true;
 _ret = _ret apply {(_x # 1) # 0};

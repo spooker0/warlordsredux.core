@@ -40,7 +40,7 @@ while { !BIS_WL_missionEnd } do {
 
     if (_killFeedDirty) then {
         uiNamespace setVariable ["WL_killRewardMap", _newKillRewardMap];
-        [_newKillRewardMap] call WL2_fnc_updateKillFeed;
+        [] call WL2_fnc_updateKillFeed;
     };
 
     sleep 1;
