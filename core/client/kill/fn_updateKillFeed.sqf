@@ -11,12 +11,22 @@ if (_useNewKillfeed) then {
 		_display = uiNamespace getVariable "RscWLKillfeedMenu";
 	};
 	private _texture = _display displayCtrl 5502;
+
+	private _killfeedScale = _settingsMap getOrDefault ["killfeedScale", 1.0];
+	private _killfeedTimeout = (_settingsMap getOrDefault ["killfeedTimeout", 10]) * 1000;
+	private _killfeedMinGap = _settingsMap getOrDefault ["killfeedMinGap", 500];
+	private _ribbonMinShowTime = (_settingsMap getOrDefault ["ribbonMinShowTime", 5]) * 1000;
+
 	private _script = format [
-		"addKillfeed(""%1"", %2, ""%3"", ""%4"");",
+		"addKillfeed(""%1"", %2, ""%3"", ""%4""); setSettings(%5, %6, %7, %8);",
 		toUpper _displayText,
 		_reward,
 		_customColor,
-		_iconUrl
+		_iconUrl,
+		_killfeedScale,
+		_killfeedTimeout,
+		_killfeedMinGap,
+		_ribbonMinShowTime
 	];
 	_texture ctrlWebBrowserAction ["ExecJS", _script];
 

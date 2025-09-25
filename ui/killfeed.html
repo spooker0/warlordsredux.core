@@ -4,11 +4,12 @@
 <head>
     <style>
         :root {
+            --scale: 1;
             --anchor-x: 50vw;
-            --gap: 12px;
-            --points-slot: 12ch;
-            --icons-max-width: 360px;
-            --icons-feather: 30px;
+            --gap: calc(12px * var(--scale));
+            --points-slot: calc(12ch * var(--scale));
+            --icons-max-width: calc(360px * var(--scale));
+            --icons-feather: calc(30px * var(--scale));
         }
 
         body {
@@ -24,7 +25,7 @@
             left: 0;
             right: 0;
             bottom: 15vh;
-            height: 70px;
+            height: calc(70px * var(--scale));
             pointer-events: none;
             overflow: visible;
         }
@@ -37,11 +38,11 @@
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 4px;
+            gap: calc(4px * var(--scale));
             white-space: nowrap;
             overflow: hidden;
             font-weight: bold;
-            font-size: 16px;
+            font-size: calc(16px * var(--scale));
             z-index: 2;
         }
 
@@ -60,7 +61,7 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            gap: 8px;
+            gap: calc(8px * var(--scale));
             flex-wrap: nowrap;
         }
 
@@ -68,18 +69,19 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            gap: 8px;
+            gap: calc(8px * var(--scale));
         }
 
         .kf-badge {
-            border: 2px solid #00e1ff;
-            border-radius: 6px;
-            padding: 6px 10px;
+            border: calc(2px * var(--scale)) solid #00e1ff;
+            border-radius: calc(6px * var(--scale));
+            padding: calc(6px * var(--scale)) calc(10px * var(--scale));
             background: rgba(0, 0, 0, 0.6);
             display: inline-flex;
             align-items: center;
             transform-origin: right center;
-            gap: 8px;
+            gap: calc(8px * var(--scale));
+            font-size: calc(16px * var(--scale));
         }
 
         .kf-points {
@@ -88,7 +90,7 @@
             top: 0;
             width: var(--points-slot);
             text-align: left;
-            font-size: 28px;
+            font-size: calc(28px * var(--scale));
             color: #fff;
             font-variant-numeric: tabular-nums;
             transform-origin: left center;
@@ -102,7 +104,7 @@
         }
 
         .kf-icon {
-            height: 32px;
+            height: calc(32px * var(--scale));
             width: auto;
             flex: 0 0 auto;
             display: block;
@@ -115,13 +117,13 @@
         }
 
         .enter {
-            animation: fadeIn 0.3s ease forwards;
+            animation: fadeIn calc(0.3s * var(--scale)) ease forwards;
         }
 
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateX(-20px) scale(0.98);
+                transform: translateX(calc(-20px * var(--scale))) scale(0.98);
             }
 
             60% {
@@ -136,18 +138,18 @@
         }
 
         .exit {
-            animation: fadeOut 0.5s ease forwards;
+            animation: fadeOut calc(0.5s * var(--scale)) ease forwards;
         }
 
         @keyframes fadeOut {
             to {
                 opacity: 0;
-                transform: translateX(-30px);
+                transform: translateX(calc(-30px * var(--scale)));
             }
         }
 
         .merge {
-            animation: bump 260ms cubic-bezier(.2, .9, .2, 1.2) both;
+            animation: bump calc(260ms * var(--scale)) cubic-bezier(.2, .9, .2, 1.2) both;
         }
 
         @keyframes bump {
@@ -158,7 +160,7 @@
 
             25% {
                 transform: translateX(0) scale(1.08);
-                box-shadow: 0 0 16px 4px rgba(0, 225, 255, .35);
+                box-shadow: 0 0 calc(16px * var(--scale)) calc(4px * var(--scale)) rgba(0, 225, 255, .35);
             }
 
             100% {
@@ -168,7 +170,7 @@
         }
 
         .points-merge {
-            animation: pointsBump 280ms cubic-bezier(.2, .9, .2, 1.2) both;
+            animation: pointsBump calc(280ms * var(--scale)) cubic-bezier(.2, .9, .2, 1.2) both;
         }
 
         @keyframes pointsBump {
@@ -179,7 +181,7 @@
 
             25% {
                 transform: translateX(0) scale(1.1);
-                text-shadow: 0 0 14px rgba(255, 255, 255, .75);
+                text-shadow: 0 0 calc(14px * var(--scale)) rgba(255, 255, 255, .75);
             }
 
             100% {
@@ -192,7 +194,7 @@
             position: absolute;
             left: 0;
             right: 0;
-            bottom: -72px;
+            bottom: calc(-72px * var(--scale));
             display: flex;
             justify-content: center;
             align-items: flex-end;
@@ -204,34 +206,36 @@
             pointer-events: none;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            padding: 14px 24px;
+            gap: calc(10px * var(--scale));
+            padding: calc(14px * var(--scale)) calc(24px * var(--scale));
             background: rgba(0, 0, 0, 0.70);
-            border-radius: 2px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            border-radius: calc(2px * var(--scale));
+            box-shadow:
+                0 calc(4px * var(--scale)) calc(16px * var(--scale)) rgba(0, 0, 0, .35),
+                inset 0 0 0 calc(1px * var(--scale)) rgba(255, 255, 255, .05);
             font-weight: 700;
-            font-size: 28px;
+            font-size: calc(28px * var(--scale));
             letter-spacing: .25px;
             transform-origin: center bottom;
             opacity: 0;
         }
 
         .ribbon-level-1 {
-            border: 2px solid #779ECB;
+            border: calc(2px * var(--scale)) solid #779ECB;
         }
 
         .ribbon-level-2 {
-            border: 2px solid #cc7573;
+            border: calc(2px * var(--scale)) solid #cc7573;
         }
 
         .ribbon-level-3 {
-            border: 2px solid #FFD700;
+            border: calc(2px * var(--scale)) solid #FFD700;
         }
 
         .ribbon-icon {
-            width: 28px;
-            height: 28px;
-            flex: 0 0 28px;
+            width: calc(28px * var(--scale));
+            height: calc(28px * var(--scale));
+            flex: 0 0 calc(28px * var(--scale));
             mask-repeat: no-repeat;
             mask-position: center;
             mask-size: contain;
@@ -253,13 +257,13 @@
         }
 
         .ribbon-enter {
-            animation: ribbonIn 280ms cubic-bezier(.2, .9, .2, 1.1) forwards;
+            animation: ribbonIn calc(280ms * var(--scale)) cubic-bezier(.2, .9, .2, 1.1) forwards;
         }
 
         @keyframes ribbonIn {
             from {
                 opacity: 0;
-                transform: translateY(12px) scale(.98);
+                transform: translateY(calc(12px * var(--scale))) scale(.98);
             }
 
             70% {
@@ -274,13 +278,13 @@
         }
 
         .ribbon-exit {
-            animation: ribbonOut 300ms ease forwards;
+            animation: ribbonOut calc(300ms * var(--scale)) ease forwards;
         }
 
         @keyframes ribbonOut {
             to {
                 opacity: 0;
-                transform: translateY(10px) scale(.98);
+                transform: translateY(calc(10px * var(--scale))) scale(.98);
             }
         }
     </style>
@@ -301,9 +305,9 @@
     <script>
         document.imageCache = {};
 
-        const KILLFEED_TIMEOUT_MS = 10000;
-        const MIN_GAP_MS = 500;
-        const RIBBON_MIN_SHOW_MS = 5000;
+        let KILLFEED_TIMEOUT_MS = 10000;
+        let MIN_GAP_MS = 500;
+        let RIBBON_MIN_SHOW_MS = 5000;
 
         const killfeedQueue = [];
         let isProcessingQueue = false;
@@ -660,6 +664,14 @@
 
         function applyMask(el, dataUrl) {
             el.style.maskImage = `url("${dataUrl}")`;
+        }
+
+        function setSettings(scale, feedTimeout, minGap, ribbonMinShow) {
+            const s = Math.max(0.5, Math.min(3, Number(scale) || 1)); // clamp for sanity
+            document.documentElement.style.setProperty('--scale', s);
+            KILLFEED_TIMEOUT_MS = feedTimeout;
+            MIN_GAP_MS = minGap;
+            RIBBON_MIN_SHOW_MS = ribbonMinShow;
         }
 
         // addBadge("WELCOME", "A3\\ui_f\\data\\map\\markers\\military\\pickup_CA.paa", 1);

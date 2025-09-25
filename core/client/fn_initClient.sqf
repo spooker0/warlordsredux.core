@@ -406,10 +406,13 @@ if (isNull _display) then {
 private _texture = _display displayCtrl 5502;
 _texture ctrlAddEventHandler ["JSDialog", {
     params ["_texture", "_isConfirmDialog", "_message"];
+	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 	if (_message == "A") then {
-		playSoundUI ["AddItemOk", 0.5];
+		private _killfeedNotificationVolume = _settingsMap getOrDefault ["killfeedNotification", 1.0];
+		playSoundUI ["AddItemOk", _killfeedNotificationVolume];
 	} else {
-		playSoundUI ["a3\missions_f_exp\data\sounds\exp_m05_dramatic.wss", 5];
+		private _killfeedCelebrationVolume = _settingsMap getOrDefault ["killfeedCelebration", 1.0];
+		playSoundUI ["a3\missions_f_exp\data\sounds\exp_m05_dramatic.wss", _killfeedCelebrationVolume * 5];
 	};
 	true;
 }];
