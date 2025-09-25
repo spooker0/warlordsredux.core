@@ -25,7 +25,6 @@ private _fastTravelSeizedExecute = {
     params ["_sector"];
     BIS_WL_targetSector = _sector;
     [0, ""] spawn WL2_fnc_executeFastTravel;
-    ["TaskMapSectorControls"] call WLT_fnc_taskComplete;
 };
 [
     "FAST TRAVEL",

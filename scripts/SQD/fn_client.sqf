@@ -15,12 +15,9 @@ switch (_action) do {
 
         ctrlShow [CREATE_BUTTON, false];
 
-        ["TaskCreateSquad"] call WLT_fnc_taskComplete;
-
         ["create", [_squadName, _leader, _side]] remoteExec ["SQD_fnc_server", 2];
     };
     case "leave": {
-        ["TaskLeaveSquad"] call WLT_fnc_taskComplete;
         ["remove", [getPlayerID player]] remoteExec ["SQD_fnc_server", 2];
     };
     case "invite": {
@@ -76,8 +73,6 @@ switch (_action) do {
 
         if (_acceptInvite) then {
             ["add", [_inviter, getPlayerID player]] remoteExec ["SQD_fnc_server", 2];
-
-            ["TaskJoinSquad"] call WLT_fnc_taskComplete;
         };
     };
     case "newjoin": {

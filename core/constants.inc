@@ -4,7 +4,6 @@
 // Live: set all to 0
 #define WL_HARD_AI_MODE 0
 #define WL_FACTION_THREE_ENABLED 0
-#define WL_TASK_DEBUG_MODE 0
 #define WL_AIRPORT_BASES 0
 #define WL_OVERRIDE_BASES 0
 #define WL_BASE_SELECTION_DEBUG 0

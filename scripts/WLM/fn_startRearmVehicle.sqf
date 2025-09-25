@@ -55,8 +55,6 @@ if (_newAmmo < 0) exitWith {
     hint format [localize "STR_WLM_KG_AMMO_REQUIRED", _massTally];
 };
 
-["TaskRearmVehicle"] call WLT_fnc_taskComplete;
-
 _rearmSource setVariable ["WLM_ammoCargo", _newAmmo, true];
 
 [_asset] remoteExec ["WLM_fnc_rearmVehicle", _asset];

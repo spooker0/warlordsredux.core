@@ -39,8 +39,6 @@ if (_deploymentResult # 0) then {
     } else {
         playSound "assemble_target";
         [player, "resetVehicle", _vehicle, _position, _direction] remoteExec ["WL2_fnc_handleClientRequest", 2];
-
-        ["TaskResetVehicle"] call WLT_fnc_taskComplete;
     };
 } else {
     playSound "AddItemFailed";

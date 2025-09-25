@@ -20,9 +20,7 @@ private _deployActionId = _asset addAction [
         if (isNull _assetLoadedItem) then {
             private _nearLoadableEntities = _eligibilityQuery # 1;
             if (count _nearLoadableEntities > 0) then {
-                ['TaskLoadDeployable'] call WLT_fnc_taskComplete;
                 private _assetToLoad = _nearLoadableEntities select 0;
-
                 private _offset = _eligibilityQuery # 2;
 
                 [true, [_asset, _assetToLoad, _offset]] remoteExec ["WL2_fnc_attachDetach", _assetToLoad];

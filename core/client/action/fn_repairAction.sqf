@@ -17,8 +17,6 @@ private _actionID = _asset addAction [
 
             private _maxHealth = _asset getVariable ["WL2_demolitionMaxHealth", 5];
             _asset setVariable ["WL2_demolitionHealth", _maxHealth, true];
-
-            ["TaskRepairVehicle"] call WLT_fnc_taskComplete;
         } else {
             playSound "AddItemFailed";
         };

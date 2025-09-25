@@ -38,8 +38,6 @@ if (_customText != "") then {
 	_displayText = format [_displayText, _displayName];
 };
 
-[_customText, _unitType] call WLT_fnc_killRewardTaskHandle;
-
 // map: displayText => [repetition, points, customColor, timestamp]
 private _killRewardMap = uiNamespace getVariable ["WL_killRewardMap", createHashMap];
 private _killRewardEntry = _killRewardMap getOrDefault [_displayText, [0, 0, "", 0]];

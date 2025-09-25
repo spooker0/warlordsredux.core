@@ -40,12 +40,4 @@ _flag setUserActionText [_index, "<t color = '#4bff58'>Customize Player</t>", "<
 	_flag addAction ["<t color = '#ffff00'>(Debug) Set Normal Respawn</t>", {
 		setPlayerRespawnTime (getMissionConfigValue ["respawnDelay", 30]);
 	}, [], 5];
-
-	_flag addAction ["<t color = '#ffff00'>(Debug) Reset Tasks</t>", {
-		profileNamespace setVariable ["WLT_TaskCompletionStatuses", createHashMap];
-		{
-			player removeSimpleTask _x;
-		} forEach (simpleTasks player);
-		[] call WLT_fnc_init;
-	}, [], 5];
 #endif

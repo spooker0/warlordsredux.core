@@ -46,7 +46,6 @@ switch (_className) do {
     case "Customization": {
         "RequestMenu_close" call WL2_fnc_setupUI;
         0 spawn WLC_fnc_buildMenu;
-        ["TaskCustomization"] call WLT_fnc_taskComplete;
     };
     case "BuyGlasses": {
         "RequestMenu_close" call WL2_fnc_setupUI;
@@ -61,9 +60,6 @@ switch (_className) do {
     case "FTParadropVehicle": { 3 spawn WL2_fnc_orderFastTravel };
     case "FTSquadLeader": {
         ["ftSquadLeader"] spawn SQD_fnc_client;
-        // private _ftNextUseVar = format ["BIS_WL_FTSLNextUse_%1", getPlayerUID player];
-        // missionNamespace setVariable [_ftNextUseVar, serverTime + WL_COOLDOWN_FTSL];
-        ["TaskFastTravelSquad"] call WLT_fnc_taskComplete;
     };
     case "BuyStronghold": {
         0 spawn WL2_fnc_orderStronghold;

@@ -19,7 +19,6 @@ private _slingActionId = _asset addAction [
             private _nearLoadableEntities = _eligibilityQuery # 1;
 
             if (count _nearLoadableEntities > 0) then {
-                ['TaskSlingload'] call WLT_fnc_taskComplete;
                 private _assetToLoad = _nearLoadableEntities select 0;
 
                 [_asset, _assetToLoad, true] call WL2_fnc_attachVehicle;

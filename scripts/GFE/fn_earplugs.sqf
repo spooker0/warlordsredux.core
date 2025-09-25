@@ -17,7 +17,6 @@ private _display = findDisplay _displayNumber;
 _display displayAddEventHandler ["KeyDown", {
 	params ["_displayorcontrol", "_key", "_shift", "_ctrl", "_alt"];
 	if (_key == 0xD2) then {
-		["TaskEarplugs"] call WLT_fnc_taskComplete;
 		private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 		private _earplugVolume = _settingsMap getOrDefault ["earplugVolume", 0.1];
 

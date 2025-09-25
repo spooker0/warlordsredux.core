@@ -365,7 +365,6 @@ if (!isServer) then {
 0 spawn WL2_fnc_repairActionUpdate;
 0 spawn WL2_fnc_lockActionUpdate;
 call WL2_fnc_vehicleManagerAction;
-0 spawn WLT_fnc_init;
 
 0 spawn WL2_fnc_updateLevelDisplay;
 

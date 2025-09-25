@@ -10,8 +10,6 @@ private _actionID = _asset addAction [
         params ["_asset"];
         playSound3D ["a3\sounds_f\sfx\ui\vehicles\vehicle_refuel.wss", _asset, false, getPosASL _asset, 2, 1, 75];
         [_asset, 1] remoteExec ["setFuel", _asset];
-
-		['TaskRefuelVehicle'] call WLT_fnc_taskComplete;
     },
 	[],
 	5,

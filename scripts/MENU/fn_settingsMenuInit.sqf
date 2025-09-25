@@ -125,7 +125,6 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["checkbox", "Disable missile cameras", ["disableMissileCameras", false]],
         ["checkbox", "Show user-defined markers", ["showMarkers", true]],
         ["checkbox", "No voice speaker", ["noVoiceSpeaker", false]],
-        ["checkbox", "Mute task notifications", ["muteTaskNotifications", false]],
         ["checkbox", "Disable incoming missile indicator", ["disableIncomingMissileDisplay", false]],
         ["checkbox", "Delete quad bike/water scooter on exit", ["deleteSmallTransports", true]],
         ["checkbox", "Use new kill sound", ["useNewKillSound", true]],

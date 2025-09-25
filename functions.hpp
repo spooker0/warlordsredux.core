@@ -527,17 +527,4 @@ class CfgFunctions {
 			class wipePylonSaves {};
 		};
 	};
-
-	class WLT {
-		class Default {
-			file = "src\scripts\WLT";
-			class addNotification {};
-			class handleParentTask {};
-			class init {};
-			class killRewardTaskHandle {};
-			class taskComplete {};
-			class taskEligible {};
-			class taskStart {};
-		};
-	};
 };

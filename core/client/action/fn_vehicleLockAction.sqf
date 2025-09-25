@@ -10,10 +10,6 @@ private _lockActionId = _asset addAction [
 		_asset setVariable ["WL2_accessControl", _newAccess, true];
 		[_asset, _lockActionId] call WL2_fnc_vehicleLockUpdate;
 		playSound3D ["a3\sounds_f\sfx\objects\upload_terminal\terminal_lock_close.wss", _asset, false, getPosASL _asset, 1, 1, 0, 0];
-
-		if (_newAccess == 6) then {
-			["TaskLockPersonal"] call WLT_fnc_taskComplete;
-		};
 	},
 	[],
 	-97,

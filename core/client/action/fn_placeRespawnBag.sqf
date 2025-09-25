@@ -12,8 +12,6 @@ if (surfaceIsWater _projectilePosition && (_projectilePosition # 2) < -1) exitWi
     systemChat "Respawn tent cannot be placed under water.";
 };
 
-["TaskPlaceTent"] call WLT_fnc_taskComplete;
-
 private _previousRespawnBag = player getVariable ["WL2_respawnBag", objNull];
 if (!isNull _previousRespawnBag) then {
     player setVariable ["WL2_respawnBag", objNull, [2, clientOwner]];

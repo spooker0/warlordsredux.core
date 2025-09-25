@@ -1,7 +1,6 @@
 #include "includes.inc"
 (findDisplay 46) displayAddEventHandler ["KeyDown", {
 	if (inputAction "TacticalPing" > 0) then {
-		["TaskMapPing"] call WLT_fnc_taskComplete;
 		0 spawn {
 			private _existingPing = uiNamespace getVariable ["WL2_isPinging", -1];
 			if (serverTime < (_existingPing + 3)) exitWith {};
