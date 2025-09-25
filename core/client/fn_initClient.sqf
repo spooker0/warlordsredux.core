@@ -406,6 +406,12 @@ if (isNull _display) then {
 private _texture = _display displayCtrl 5502;
 _texture ctrlAddEventHandler ["JSDialog", {
     params ["_texture", "_isConfirmDialog", "_message"];
-    playSoundUI ["AddItemOk", 0.5];
+
+	if (_message == "A") then {
+		playSoundUI ["AddItemOk", 0.5];
+	} else {
+		playSoundUI ["a3\missions_f_exp\data\sounds\exp_m05_dramatic.wss", 5];
+	};
+
 	true;
 }];

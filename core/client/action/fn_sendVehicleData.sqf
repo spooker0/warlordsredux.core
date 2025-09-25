@@ -26,7 +26,11 @@ private _vehicleInfoText = toJSON (
             ""
         };
 
-        private _vehicleName = format ["%1 @ %2 %3", _displayName, _assetLocation, _apsAmmo];
+        private _accessControl = _vehicle getVariable ["WL2_accessControl", -1];
+        (_accessControl call WL2_fnc_getVehicleLockStatus) params ["_lockColor", "_lockLabel"];
+        private _lockState = format ["<t color='%1'>%2</t>", _lockColor, _lockLabel];
+
+        private _vehicleName = format ["%1 @ %2 %3 | %4", _displayName, _assetLocation, _apsAmmo, _lockState];
 
         private _availableActions = ["remove"];
 
@@ -38,9 +42,11 @@ private _vehicleInfoText = toJSON (
             _availableActions pushBack "kick";
         };
 
-        private _accessControl = _vehicle getVariable ["WL2_accessControl", -1];
-        if (_accessControl < 6) then {
+        if (_accessControl < 7) then {
             _availableActions pushBack "lock";
+        };
+        if (_accessControl > 0) then {
+            _availableActions pushBack "unlock";
         };
 
         private _driverAccess = [_vehicle, player, "driver"] call WL2_fnc_accessControl;

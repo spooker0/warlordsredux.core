@@ -353,11 +353,11 @@
             }
         }, { passive: false });
 
-        document.querySelector('.close-button').addEventListener('click', function () {
+        document.querySelector('.close-button').addEventListener('mousedown', function () {
             A3API.SendAlert('exit');
         });
 
-        document.addEventListener('click', function (e) {
+        document.addEventListener('mousedown', function (e) {
             const target = e.target;
             if (target.tagName === 'A' && target.closest('.left-panel')) {
                 e.preventDefault();

@@ -102,6 +102,7 @@
             background-color: #aa5555;
         }
 
+        .unlock-button,
         .connect-button,
         .rearm-button,
         .repair-button,
@@ -109,6 +110,7 @@
             background-color: #66cc66;
         }
 
+        .unlock-button:hover,
         .connect-button:hover,
         .rearm-button:hover,
         .repair-button:hover,
@@ -174,7 +176,7 @@
             }
         }, { passive: false });
 
-        document.querySelector('.close-button').addEventListener('click', function () {
+        document.querySelector('.close-button').addEventListener('mousedown', function () {
             A3API.SendAlert('exit');
         });
 
@@ -206,6 +208,9 @@
                     } else if (optionId === 'lock') {
                         optionClass = 'lock-button';
                         optionText = 'LOCK';
+                    } else if (optionId === 'unlock') {
+                        optionClass = 'unlock-button';
+                        optionText = 'UNLOCK';
                     } else if (optionId === 'kick') {
                         optionClass = 'kick-button';
                         optionText = 'KICK ALL';
@@ -227,7 +232,7 @@
                     button.className = optionClass;
                     button.textContent = optionText;
 
-                    button.addEventListener('click', () => {
+                    button.addEventListener('mousedown', () => {
                         A3API.SendAlert(`["${vehicle[0]}", "${optionId}"]`);
                     });
 

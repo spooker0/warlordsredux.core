@@ -22,5 +22,16 @@ while { !BIS_WL_missionEnd } do {
 
     player setDiaryRecordText [["Warlords Redux", _record], ["Statistics", _displayText]];
 
+    private _badgeText = "<font color='#CCCCCC' size='20'>Badges Earned</font><br/>";
+    private _badges = missionNamespace getVariable ["WL2_badges", createHashMap];
+    {
+        private _badgeName = _x;
+        private _badgeCount = _y;
+        _badgeName = format ["%1 (x%2)", _badgeName, _badgeCount];
+        _badgeText = format ["%1<br/>%2", _badgeText, _badgeName];
+    } forEach _badges;
+
+    player setDiaryRecordText [["Warlords Redux", _record], ["Badges", _badgeText]];
+
     sleep 15;
 };

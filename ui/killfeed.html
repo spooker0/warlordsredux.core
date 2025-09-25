@@ -23,7 +23,7 @@
             position: fixed;
             left: 0;
             right: 0;
-            bottom: 10vh;
+            bottom: 15vh;
             height: 70px;
             pointer-events: none;
             overflow: visible;
@@ -187,6 +187,102 @@
                 text-shadow: 0 0 0 rgba(255, 255, 255, 0);
             }
         }
+
+        .kf-ribbons {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -72px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        .kf-ribbon {
+            pointer-events: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 24px;
+            background: rgba(0, 0, 0, 0.70);
+            border-radius: 2px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            font-weight: 700;
+            font-size: 28px;
+            letter-spacing: .25px;
+            transform-origin: center bottom;
+            opacity: 0;
+        }
+
+        .ribbon-level-1 {
+            border: 2px solid #779ECB;
+        }
+
+        .ribbon-level-2 {
+            border: 2px solid #cc7573;
+        }
+
+        .ribbon-level-3 {
+            border: 2px solid #FFD700;
+        }
+
+        .ribbon-icon {
+            width: 28px;
+            height: 28px;
+            flex: 0 0 28px;
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-size: contain;
+        }
+
+        .ribbon-icon-level-1 {
+            filter: drop-shadow(0 0 0 rgba(119, 158, 203, .55));
+            background-color: #779ECB;
+        }
+
+        .ribbon-icon-level-2 {
+            filter: drop-shadow(0 0 0 rgba(204, 117, 115, .55));
+            background-color: #cc7573;
+        }
+
+        .ribbon-icon-level-3 {
+            filter: drop-shadow(0 0 0 rgba(255, 215, 0, .55));
+            background-color: #FFD700;
+        }
+
+        .ribbon-enter {
+            animation: ribbonIn 280ms cubic-bezier(.2, .9, .2, 1.1) forwards;
+        }
+
+        @keyframes ribbonIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(.98);
+            }
+
+            70% {
+                opacity: 1;
+                transform: translateY(0) scale(1.04);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .ribbon-exit {
+            animation: ribbonOut 300ms ease forwards;
+        }
+
+        @keyframes ribbonOut {
+            to {
+                opacity: 0;
+                transform: translateY(10px) scale(.98);
+            }
+        }
     </style>
 </head>
 
@@ -198,6 +294,7 @@
             </div>
             <div class="kf-badges-row" id="kf-badges-row"></div>
         </div>
+        <div class="kf-ribbons" id="kf-ribbons"></div>
         <span class="kf-points" id="kf-points"></span>
     </div>
 
@@ -206,6 +303,7 @@
 
         const KILLFEED_TIMEOUT_MS = 10000;
         const MIN_GAP_MS = 500;
+        const RIBBON_MIN_SHOW_MS = 5000;
 
         const killfeedQueue = [];
         let isProcessingQueue = false;
@@ -214,11 +312,8 @@
         let displayedPoints = 0;
 
         function formatPoints(n) {
-            try {
-                return new Intl.NumberFormat().format(n);
-            } catch {
-                return String(n);
-            }
+            try { return new Intl.NumberFormat().format(n); }
+            catch { return String(n); }
         }
 
         const activeRafHandles = new WeakMap();
@@ -276,10 +371,7 @@
             isProcessingQueue = true;
 
             const step = () => {
-                if (killfeedQueue.length === 0) {
-                    isProcessingQueue = false;
-                    return;
-                }
+                if (killfeedQueue.length === 0) { isProcessingQueue = false; return; }
 
                 const now = Date.now();
                 const waitTime = Math.max(0, MIN_GAP_MS - (now - lastAddTimestamp));
@@ -308,7 +400,7 @@
 
                 const prev = activeAnimations.get(element);
                 if (prev) {
-                    try { prev.cancel(); } catch { /* ignore */ }
+                    try { prev.cancel(); } catch { }
                     activeAnimations.delete(element);
                 }
             }
@@ -331,19 +423,16 @@
                 if (deltaX === 0 && deltaY === 0) continue;
 
                 const animation = element.animate(
-                    [
-                        { transform: `translate(${deltaX}px, ${deltaY}px)` },
-                        { transform: 'translate(0, 0)' }
-                    ],
+                    [{ transform: `translate(${deltaX}px, ${deltaY}px)` }, { transform: 'translate(0, 0)' }],
                     { duration: ANIMATION_DURATION_MS, easing: ANIMATION_EASING, fill: 'both' }
                 );
 
                 activeAnimations.set(element, animation);
 
                 const settled = animation.finished
-                    .catch(() => { /* ignore cancels */ })
+                    .catch(() => { })
                     .then(() => {
-                        try { animation.cancel(); } catch { /* ignore */ }
+                        try { animation.cancel(); } catch { }
                         element.style.transform = '';
                         activeAnimations.delete(element);
                     });
@@ -361,7 +450,6 @@
                 img.src = document.imageCache[iconUrl];
                 return;
             }
-
             A3API.RequestTexture(iconUrl, 64).then(imageContent => {
                 img.src = imageContent;
                 document.imageCache[iconUrl] = imageContent;
@@ -394,10 +482,7 @@
             addIconIndependent(iconUrl);
 
             let badge = Array.from(badgesRow.querySelectorAll(".kf-badge"))
-                .find(b =>
-                    b.dataset.label === displayText &&
-                    b.dataset.customColor === (customColor || "")
-                );
+                .find(b => b.dataset.label === displayText && b.dataset.customColor === (customColor || ""));
 
             const incomingPoints = points | 0;
 
@@ -413,7 +498,6 @@
 
                 if (labelEl) labelEl.textContent = displayText;
 
-                // 👇 Only show a multiplier when count > 1
                 if (newCount > 1) {
                     if (!multEl) {
                         multEl = document.createElement("span");
@@ -480,13 +564,109 @@
             badge.classList.add("exit");
             badge.addEventListener("animationend", () => {
                 badge.remove();
-                // If no badges remain, reset points to zero (animated)
                 if (badgesRow.querySelectorAll(".kf-badge").length === 0) {
                     totalPoints = 0;
                     renderTotalPoints(pointsBox);
                 }
             }, { once: true });
         }
+
+        const ribbonQueue = [];
+        let ribbonShowing = false;
+
+        function addBadge(badgeName, iconUrl, badgeLevel) {
+            ribbonQueue.push({ badgeName: String(badgeName || ""), iconUrl: iconUrl || "", badgeLevel: badgeLevel || "" });
+            processRibbonQueue();
+        }
+
+        function processRibbonQueue() {
+            if (ribbonShowing) return;
+            const next = ribbonQueue.shift();
+            if (!next) return;
+
+            ribbonShowing = true;
+            showRibbon(next).finally(() => {
+                ribbonShowing = false;
+                processRibbonQueue();
+            });
+        }
+
+        function showRibbon({ badgeName, iconUrl, badgeLevel }) {
+            return new Promise((resolve) => {
+                if (badgeLevel === 3) {
+                    A3API.SendAlert("B");
+                } else {
+                    A3API.SendAlert("A");
+                }
+
+                const mount = document.getElementById("kf-ribbons");
+
+                const ribbon = document.createElement("div");
+                ribbon.className = "kf-ribbon ribbon-enter";
+
+                if (badgeLevel === 1) {
+                    ribbon.classList.add("ribbon-level-1");
+                } else if (badgeLevel === 2) {
+                    ribbon.classList.add("ribbon-level-2");
+                } else {
+                    ribbon.classList.add("ribbon-level-3");
+                }
+
+                const icon = document.createElement("div");
+                icon.className = "ribbon-icon";
+
+                if (badgeLevel === 1) {
+                    icon.classList.add("ribbon-icon-level-1");
+                } else if (badgeLevel === 2) {
+                    icon.classList.add("ribbon-icon-level-2");
+                } else {
+                    icon.classList.add("ribbon-icon-level-3");
+                }
+
+                if (iconUrl) {
+                    const cached = document.imageCache[iconUrl];
+                    if (cached) {
+                        applyMask(icon, cached);
+                    } else {
+                        A3API.RequestTexture(iconUrl, 64).then(imageContent => {
+                            document.imageCache[iconUrl] = imageContent;
+                            applyMask(icon, imageContent);
+                        }).catch(() => { /* fail silently */ });
+                    }
+                }
+
+                const label = document.createElement("span");
+                label.textContent = badgeName || "";
+
+                ribbon.appendChild(icon);
+                ribbon.appendChild(label);
+                mount.replaceChildren(ribbon);
+
+                const minTimer = setTimeout(() => {
+                    ribbon.classList.remove("ribbon-enter");
+                    ribbon.classList.add("ribbon-exit");
+                    ribbon.addEventListener("animationend", () => {
+                        ribbon.remove();
+                        resolve();
+                    }, { once: true });
+                }, RIBBON_MIN_SHOW_MS);
+
+                ribbon.addEventListener("DOMNodeRemoved", () => {
+                    clearTimeout(minTimer);
+                    resolve();
+                }, { once: true });
+            });
+        }
+
+        function applyMask(el, dataUrl) {
+            el.style.maskImage = `url("${dataUrl}")`;
+        }
+
+        // addBadge("WELCOME", "A3\\ui_f\\data\\map\\markers\\military\\pickup_CA.paa", 1);
+        // addBadge("WELCOME 2", "A3\\ui_f\\data\\map\\markers\\military\\pickup_CA.paa", 2);
+        // addBadge("WELCOME 3", "A3\\ui_f\\data\\map\\markers\\military\\pickup_CA.paa", 3);
+        // addBadge("WELCOME 4", "A3\\ui_f\\data\\map\\markers\\military\\pickup_CA.paa", 1);
+        // addBadge("WELCOME 5", "A3\\ui_f\\data\\map\\markers\\military\\pickup_CA.paa", 2);
     </script>
 </body>
 

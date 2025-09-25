@@ -16,17 +16,22 @@ private _loadoutText = toJSON _loadout;
 _loadoutText = _texture ctrlWebBrowserAction ["ToBase64", _loadoutText];
 
 private _playerLevel = ["getLevel"] call WLC_fnc_getLevelInfo;
+private _playerScore = ["getScore"] call WLC_fnc_getLevelInfo;
+private _playerNextLevelScore = ["getNextLevelScore"] call WLC_fnc_getLevelInfo;
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _themeIndex = _settingsMap getOrDefault ["loadoutTheme", 1];
 
 private _script = format [
-    "updateLoadout(atob(""%1""), %2, atob(""%3""), atob(""%4""), %5, %6);",
+    "updateLoadout(atob(""%1""), %2, atob(""%3""), atob(""%4""), %5, %6, %7, %8);",
     _loadoutText,
     _loadoutIndex,
     _weaponDataText,
     _magazineDataText,
     _playerLevel,
+    _playerScore,
+    _playerNextLevelScore,
     _themeIndex
 ];
+
 _texture ctrlWebBrowserAction ["ExecJS", _script];

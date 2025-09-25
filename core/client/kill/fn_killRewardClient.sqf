@@ -71,6 +71,8 @@ private _displayIcon = switch (toUpper _displayText) do {
 };
 [_displayText, _reward, _customColor, _displayIcon] call WL2_fnc_updateKillFeed;
 
+[_displayText, _unitType] call RWD_fnc_handleReward;
+
 if (_customColor == "#de0808") then {
 	missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_DURATION_AFKTIME];
 

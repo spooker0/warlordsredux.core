@@ -110,6 +110,14 @@ class CfgFunctions {
 			class updatePollMenu {};
 		};
 	};
+	class RWD {
+		class Default {
+			file = "src\scripts\RWD";
+			class handleBadge {};
+			class handleReward {};
+			class newBadge {};
+		};
+	};
 	class SPEC {
 		class Default {
 			file = "src\scripts\SPEC";
@@ -206,6 +214,7 @@ class CfgFunctions {
 			class deployableAddAction {};
 			class deployableEligibility {};
 			class deployCrateAction {};
+			class getVehicleLockStatus {};
 			class jammerAction {};
 			class jammerToggle {};
 			class jammerUpdate {};

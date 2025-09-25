@@ -19,7 +19,16 @@ _texture ctrlAddEventHandler ["JSDialog", {
     _params params ["_vehicleNetId", "_actionId"];
 
     private _vehicle = objectFromNetId _vehicleNetId;
-    if (!alive _vehicle) exitWith {};
+    if (!alive _vehicle) exitWith {
+        closeDialog 0;
+        playSoundUI ["AddItemFailed"];
+        systemChat "Vehicle is no longer available.";
+    };
+    if (!alive player || lifeState player == "INCAPACITATED") exitWith {
+        closeDialog 0;
+        playSoundUI ["AddItemFailed"];
+        systemChat "You are incapacitated.";
+    };
 
     switch (_actionId) do {
         case "remove": {
@@ -35,8 +44,14 @@ _texture ctrlAddEventHandler ["JSDialog", {
             } forEach _unwantedPassengers;
         };
         case "lock": {
-            _vehicle setVariable ["WL2_accessControl", 6, true];
+            private _accessControl = _vehicle getVariable ["WL2_accessControl", 0];
+            _vehicle setVariable ["WL2_accessControl", (_accessControl + 1) min 7, true];
             playSound3D ["a3\sounds_f\sfx\objects\upload_terminal\terminal_lock_close.wss", _vehicle, false, getPosASL _vehicle, 1, 1, 0, 0];
+        };
+        case "unlock": {
+            private _accessControl = _vehicle getVariable ["WL2_accessControl", 0];
+            _vehicle setVariable ["WL2_accessControl", (_accessControl - 1) max 0, true];
+            playSound3D ["a3\sounds_f\sfx\objects\upload_terminal\terminal_lock_open.wss", _vehicle, false, getPosASL _vehicle, 1, 1, 0, 0];
         };
         case "connect": {
             private _access = [_vehicle, player, "driver"] call WL2_fnc_accessControl;
@@ -96,7 +111,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         params ["_texture"];
         while { !isNull _texture } do {
             [_texture] call WL2_fnc_sendVehicleData;
-            sleep 2;
+            sleep 1;
         };
     };
 }];

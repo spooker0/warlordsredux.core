@@ -17,6 +17,7 @@ private _index = _flag addAction [
 ];
 
 _flag setUserActionText [_index, "<t color = '#4bff58'>Customize Player</t>", "<img size='1.5' image='a3\ui_f\data\igui\cfg\simpletasks\types\backpack_ca.paa'/>"];
+[_flag] call WL2_fnc_restockAction;
 
 #if WLC_DEBUG
 	_flag addAction ["<t color = '#ffff00'>(Debug) Reset Score/Level to 0</t>", {

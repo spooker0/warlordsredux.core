@@ -329,16 +329,16 @@
             }
         }, { passive: false });
 
-        document.querySelector('.create-squad-button').addEventListener('click', function () {
+        document.querySelector('.create-squad-button').addEventListener('mousedown', function () {
             A3API.SendAlert('["create"]');
             document.querySelector('.create-squad-button-wrapper').classList.add('hide');
         });
 
-        document.getElementById('cancel-rename-button').addEventListener('click', () => {
+        document.getElementById('cancel-rename-button').addEventListener('mousedown', () => {
             document.querySelector('.rename-modal').style.display = 'none';
         });
 
-        document.querySelector('.close-button').addEventListener('click', function () {
+        document.querySelector('.close-button').addEventListener('mousedown', function () {
             A3API.SendAlert('exit');
         });
 
@@ -352,7 +352,7 @@
             A3API.SendAlert(`["renamed", ["${sanitizedName}"]]`);
         }
 
-        document.getElementById('rename-squad-button').addEventListener('click', () => {
+        document.getElementById('rename-squad-button').addEventListener('mousedown', () => {
             saveName();
         });
 
@@ -409,7 +409,7 @@
                         const leaveButton = document.createElement('button');
                         leaveButton.textContent = 'Leave';
                         leaveButton.classList.add('leave-button');
-                        leaveButton.addEventListener('click', function () {
+                        leaveButton.addEventListener('mousedown', function () {
                             A3API.SendAlert(`["leave"]`);
                         });
                         memberEl.appendChild(leaveButton);
@@ -417,7 +417,7 @@
                         const kickButton = document.createElement('button');
                         kickButton.textContent = 'Kick';
                         kickButton.classList.add('kick-button');
-                        kickButton.addEventListener('click', function () {
+                        kickButton.addEventListener('mousedown', function () {
                             A3API.SendAlert(`["kick", ["${member[0]}"]]`);
                         });
                         memberEl.appendChild(kickButton);
@@ -425,7 +425,7 @@
                         const promoteButton = document.createElement('button');
                         promoteButton.textContent = 'Promote';
                         promoteButton.classList.add('promote-button');
-                        promoteButton.addEventListener('click', function () {
+                        promoteButton.addEventListener('mousedown', function () {
                             A3API.SendAlert(`["promote", ["${member[0]}"]]`);
                         });
                         memberEl.appendChild(promoteButton);
@@ -434,7 +434,7 @@
                             const fastTravelButton = document.createElement('button');
                             fastTravelButton.textContent = 'Fast Travel';
                             fastTravelButton.classList.add('ft-button');
-                            fastTravelButton.addEventListener('click', function () {
+                            fastTravelButton.addEventListener('mousedown', function () {
                                 A3API.SendAlert(`["ftSquad", ["${member[0]}"]]`);
                             });
                             memberEl.appendChild(fastTravelButton);
@@ -447,7 +447,7 @@
                             const fastTravelButton = document.createElement('button');
                             fastTravelButton.textContent = 'Fast Travel';
                             fastTravelButton.classList.add('ft-button');
-                            fastTravelButton.addEventListener('click', function () {
+                            fastTravelButton.addEventListener('mousedown', function () {
                                 A3API.SendAlert(`["ftSquadLeader", []]`);
                             });
                             memberEl.appendChild(fastTravelButton);
@@ -462,7 +462,7 @@
                     const editButton = document.createElement('button');
                     editButton.textContent = 'Edit Squad Name';
                     editButton.classList.add('edit-button');
-                    editButton.addEventListener('click', function () {
+                    editButton.addEventListener('mousedown', function () {
                         const renameModalEl = document.querySelector('.rename-modal');
                         renameModalEl.style.display = 'flex';
                         setTimeout(() => {
@@ -506,7 +506,7 @@
                     const inviteButton = document.createElement('button');
                     inviteButton.textContent = 'Invite';
                     inviteButton.classList.add('invite-button');
-                    inviteButton.addEventListener('click', function () {
+                    inviteButton.addEventListener('mousedown', function () {
                         A3API.SendAlert(`["invite", ["${player[0]}"]]`);
                     });
                     playerEl.appendChild(inviteButton);

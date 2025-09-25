@@ -652,6 +652,8 @@
     </div>
     <script>
         document.playerLevel = 0;
+        document.playerScore = 0;
+        document.playerNextLevelScore = 0;
         document.imageCache = {};
 
         document.addEventListener('wheel', function (e) {
@@ -662,7 +664,7 @@
             }
         }, { passive: false });
 
-        document.querySelector('.close-button').addEventListener('click', function () {
+        document.querySelector('.close-button').addEventListener('mousedown', function () {
             A3API.SendAlert('exit');
         });
 
@@ -716,7 +718,7 @@
         }
 
         document.querySelectorAll('.slot').forEach(slot => {
-            slot.addEventListener('click', function () {
+            slot.addEventListener('mousedown', function () {
                 document.querySelectorAll('.slot').forEach(slot => slot.classList.remove('selected-slot'));
                 this.classList.add('selected-slot');
 
@@ -746,7 +748,7 @@
         });
 
         document.querySelectorAll('.loadout').forEach(loadout => {
-            loadout.addEventListener('click', function () {
+            loadout.addEventListener('mousedown', function () {
                 document.querySelectorAll('.loadout').forEach(loadout => loadout.classList.remove('selected-loadout'));
                 this.classList.add('selected-loadout');
 
@@ -755,11 +757,11 @@
             });
         });
 
-        document.querySelector('.reset-all').addEventListener('click', function () {
+        document.querySelector('.reset-all').addEventListener('mousedown', function () {
             A3API.SendAlert('r');
         });
 
-        document.querySelector('.copy-current').addEventListener('click', function () {
+        document.querySelector('.copy-current').addEventListener('mousedown', function () {
             A3API.SendAlert('c');
         });
 
@@ -1121,7 +1123,7 @@
                 const minusButton = document.createElement('button');
                 minusButton.textContent = '-';
                 minusButton.className = 'quantity-minus';
-                minusButton.addEventListener('click', () => {
+                minusButton.addEventListener('mousedown', () => {
                     const currentQuantity = parseInt(quantityDisplay.textContent, 10);
                     if (currentQuantity > 0) {
                         quantityDisplay.textContent = currentQuantity - 1;
@@ -1136,7 +1138,7 @@
                 const plusButton = document.createElement('button');
                 plusButton.textContent = '+';
                 plusButton.className = 'quantity-plus';
-                plusButton.addEventListener('click', () => {
+                plusButton.addEventListener('mousedown', () => {
                     const currentQuantity = parseInt(quantityDisplay.textContent, 10);
                     quantityDisplay.textContent = currentQuantity + 1;
                     ammoChanged();
@@ -1205,7 +1207,7 @@
             parentPanel.querySelector('.optic-list').appendChild(opticRow);
             populateImage(opticRow.querySelector('.optic-icon'), optic[2]);
 
-            opticRow.addEventListener('click', function () {
+            opticRow.addEventListener('mousedown', function () {
                 document.querySelectorAll('.optic-row').forEach(row => row.classList.remove('selected-optic'));
                 this.classList.add('selected-optic');
 
@@ -1224,7 +1226,7 @@
             parentPanel.querySelector('.muzzle-list').appendChild(muzzleRow);
             populateImage(muzzleRow.querySelector('.muzzle-icon'), muzzle[2]);
 
-            muzzleRow.addEventListener('click', function () {
+            muzzleRow.addEventListener('mousedown', function () {
                 document.querySelectorAll('.muzzle-row').forEach(row => row.classList.remove('selected-muzzle'));
                 this.classList.add('selected-muzzle');
 
@@ -1249,7 +1251,7 @@
             parentPanel.querySelector('.bipod-list').appendChild(bipodRow);
             populateImage(bipodRow.querySelector('.bipod-icon'), bipod[2]);
 
-            bipodRow.addEventListener('click', function () {
+            bipodRow.addEventListener('mousedown', function () {
                 document.querySelectorAll('.bipod-row').forEach(row => row.classList.remove('selected-bipod'));
                 this.classList.add('selected-bipod');
 
@@ -1363,9 +1365,9 @@
             let bipods = [];
             if (weapon && weapon.length > 0) {
                 weaponId = weapon[0];
-                optics = weapon[5].map(optic => optic[0]);
-                muzzles = weapon[6].map(muzzle => muzzle[0]);
-                bipods = weapon[7].map(bipod => bipod[0]);
+                optics = (weapon[5] || []).map(optic => optic[0]);
+                muzzles = (weapon[6] || []).map(muzzle => muzzle[0]);
+                bipods = (weapon[7] || []).map(bipod => bipod[0]);
             }
             loadout[0] = weaponId || "";
             if (weaponId === "") {
@@ -1414,7 +1416,7 @@
 
             panel.querySelector('.weapon-list').appendChild(weaponRow);
 
-            weaponRow.addEventListener('click', function () {
+            weaponRow.addEventListener('mousedown', function () {
                 if (this.classList.contains('locked')) {
                     return;
                 }
@@ -1476,7 +1478,7 @@
             panel.querySelector('.outfit-list').appendChild(outfitRow);
             populateImage(outfitRow.querySelector('.outfit-icon'), outfitIcon);
 
-            outfitRow.addEventListener('click', function () {
+            outfitRow.addEventListener('mousedown', function () {
                 if (this.classList.contains('locked')) {
                     return;
                 }
@@ -1535,7 +1537,7 @@
 
             panel.querySelector('.backpack-list').appendChild(backpackRow);
 
-            backpackRow.addEventListener('click', function () {
+            backpackRow.addEventListener('mousedown', function () {
                 if (this.classList.contains('locked')) {
                     return;
                 }
@@ -1568,7 +1570,7 @@
             const minusButton = document.createElement('button');
             minusButton.textContent = '-';
             minusButton.className = 'quantity-minus';
-            minusButton.addEventListener('click', () => {
+            minusButton.addEventListener('mousedown', () => {
                 const currentQuantity = parseInt(quantityDisplay.textContent, 10);
                 if (currentQuantity > 0) {
                     quantityDisplay.textContent = currentQuantity - 1;
@@ -1583,7 +1585,7 @@
             const plusButton = document.createElement('button');
             plusButton.textContent = '+';
             plusButton.className = 'quantity-plus';
-            plusButton.addEventListener('click', () => {
+            plusButton.addEventListener('mousedown', () => {
                 const currentQuantity = parseInt(quantityDisplay.textContent, 10);
                 quantityDisplay.textContent = currentQuantity + 1;
                 ammoChanged();
@@ -1707,7 +1709,11 @@
             loadoutEl.classList.add('selected-loadout');
         }
 
-        function updateLoadout(loadout, loadoutIndex, weaponData, magazineData, playerLevel, themeIndex) {
+        function formatNumber(num) {
+            return num.toLocaleString();
+        }
+
+        function updateLoadout(loadout, loadoutIndex, weaponData, magazineData, playerLevel, playerScore, playerNextLevelScore, themeIndex) {
             document.playerLoadout = undefined;
             document.readyToSend = false;
 
@@ -1718,6 +1724,11 @@
             document.magazineData = magazineData;
             document.itemList = {};
             document.playerLevel = playerLevel;
+            document.playerScore = playerScore;
+            document.playerNextLevelScore = playerNextLevelScore;
+
+            const menuTitle = document.querySelector('.menu-title');
+            menuTitle.textContent = `Loadout (Level ${playerLevel} - Score: ${formatNumber(playerScore)}/${formatNumber(playerNextLevelScore)})`;
 
             selectLoadout(loadoutIndex);
             updateTheme(themeIndex);

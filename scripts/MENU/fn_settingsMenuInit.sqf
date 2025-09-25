@@ -148,7 +148,8 @@ _texture ctrlAddEventHandler ["PageLoaded", {
     if (_isAdmin || _isModerator) then {
         _settingsMenu append [
             ["category", "Moderator Options"],
-            ["checkbox", "Show player uids (requires respawn)", ["showPlayerUids", false]]
+            ["checkbox", "Show player uids (requires respawn)", ["showPlayerUids", false]],
+            ["checkbox", "Show mod status (requires respawn)", ["showModStatus", true]]
         ];
     };
 
