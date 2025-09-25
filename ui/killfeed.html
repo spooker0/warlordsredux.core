@@ -5,6 +5,7 @@
     <style>
         :root {
             --scale: 1;
+            --ribbon-scale: 1;
             --anchor-x: 50vw;
             --gap: calc(12px * var(--scale));
             --points-slot: calc(12ch * var(--scale));
@@ -191,10 +192,10 @@
         }
 
         .kf-ribbons {
-            position: absolute;
+            position: fixed;
             left: 0;
             right: 0;
-            bottom: calc(-72px * var(--scale));
+            top: 5vh;
             display: flex;
             justify-content: center;
             align-items: flex-end;
@@ -206,15 +207,15 @@
             pointer-events: none;
             display: inline-flex;
             align-items: center;
-            gap: calc(10px * var(--scale));
-            padding: calc(14px * var(--scale)) calc(24px * var(--scale));
+            gap: calc(15px * var(--ribbon-scale));
+            padding: calc(21px * var(--ribbon-scale)) calc(36px * var(--ribbon-scale));
             background: rgba(0, 0, 0, 0.70);
-            border-radius: calc(2px * var(--scale));
+            border-radius: calc(3px * var(--ribbon-scale));
             box-shadow:
-                0 calc(4px * var(--scale)) calc(16px * var(--scale)) rgba(0, 0, 0, .35),
-                inset 0 0 0 calc(1px * var(--scale)) rgba(255, 255, 255, .05);
+                0 calc(4px * var(--ribbon-scale)) calc(24px * var(--ribbon-scale)) rgba(0, 0, 0, .35),
+                inset 0 0 0 calc(2px * var(--ribbon-scale)) rgba(255, 255, 255, .05);
             font-weight: 700;
-            font-size: calc(28px * var(--scale));
+            font-size: calc(42px * var(--ribbon-scale));
             letter-spacing: .25px;
             transform-origin: center bottom;
             opacity: 0;
@@ -666,19 +667,20 @@
             el.style.maskImage = `url("${dataUrl}")`;
         }
 
-        function setSettings(scale, feedTimeout, minGap, ribbonMinShow) {
-            const s = Math.max(0.5, Math.min(3, Number(scale) || 1)); // clamp for sanity
-            document.documentElement.style.setProperty('--scale', s);
+        function setSettings(scale, ribbonScale, feedTimeout, minGap, ribbonMinShow) {
+            document.documentElement.style.setProperty('--scale', scale);
+            document.documentElement.style.setProperty('--ribbon-scale', ribbonScale);
+
             KILLFEED_TIMEOUT_MS = feedTimeout;
             MIN_GAP_MS = minGap;
             RIBBON_MIN_SHOW_MS = ribbonMinShow;
         }
 
-        // addBadge("WELCOME", "A3\\ui_f\\data\\map\\markers\\military\\pickup_CA.paa", 1);
-        // addBadge("WELCOME 2", "A3\\ui_f\\data\\map\\markers\\military\\pickup_CA.paa", 2);
-        // addBadge("WELCOME 3", "A3\\ui_f\\data\\map\\markers\\military\\pickup_CA.paa", 3);
-        // addBadge("WELCOME 4", "A3\\ui_f\\data\\map\\markers\\military\\pickup_CA.paa", 1);
-        // addBadge("WELCOME 5", "A3\\ui_f\\data\\map\\markers\\military\\pickup_CA.paa", 2);
+        // addBadge("AIR DEFENSE SUPPRESSION", "A3\\ui_f\\data\\map\\markers\\military\\pickup_CA.paa", 1);
+        // addBadge("JUST ONE MORE ROCKET", "A3\\ui_f\\data\\map\\markers\\military\\pickup_CA.paa", 2);
+        // addBadge("ACE PILOT", "A3\\ui_f\\data\\map\\markers\\military\\pickup_CA.paa", 3);
+        // addBadge("HEAVY METAL", "A3\\ui_f\\data\\map\\markers\\military\\pickup_CA.paa", 3);
+        // addBadge("SIZE MATTERS NOT", "A3\\ui_f\\data\\map\\markers\\military\\pickup_CA.paa", 2);
     </script>
 </body>
 

@@ -121,6 +121,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["slider", "Map icon scale", [0.5, 2, 0.05, 1.0, "mapIconScale"]],
         ["slider", "Loadout theme", [1, 5, 1, 1, "loadoutTheme"]],
         ["slider", "Killfeed scale", [0.5, 1.2, 0.05, 1.0, "killfeedScale"]],
+        ["slider", "Killfeed badge scale", [0.2, 1.5, 0.05, 1.0, "killfeedBadgeScale"]],
         ["slider", "Killfeed timeout (s)", [3, 20, 0.5, 10, "killfeedTimeout"]],
         ["slider", "Killfeed min gap (ms)", [0, 1000, 50, 500, "killfeedMinGap"]],
         ["slider", "Killfeed badge show time (s)", [1, 10, 0.5, 5, "ribbonMinShowTime"]],
