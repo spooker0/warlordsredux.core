@@ -1,6 +1,6 @@
 #include "includes.inc"
 private _rewardStack = missionNamespace getVariable ["WL2_rewardStack", createHashMap];
-private _badges = missionNamespace getVariable ["WL2_badges", createHashMap];
+private _badges = profileNamespace getVariable ["WL2_badges", createHashMap];
 
 private _badgeConfigs = [
     ["SAM KILLS", "Grounded", RWD_BADGE_KILLREQ],
@@ -28,11 +28,11 @@ private _badgeConfigs = [
 	["REVIVED", "Combat Medic", RWD_BADGE_MEDICREQ],
 	["RECON", "Spotter", RWD_BADGE_RECONREQ],
 
-	["PLANE KILL PLANE", "Ace Pilot", RWD_BADGE_KILLREQ],
-	["HELO KILL PLANE", "Slow and Steady", RWD_BADGE_KILLREQ],
-	["LIGHT KILL HEAVY", "Anti-tank Warfare", RWD_BADGE_KILLREQ],
-	["HEAVY KILL HEAVY", "Heavy Metal", RWD_BADGE_KILLREQ],
-	["NAVAL KILL HEAVY", "Littoral Operator", RWD_BADGE_KILLREQ]
+	["PLANE KILL PLANE", "Ace Pilot", RWD_BADGE_SPECKILLREQ],
+	["HELO KILL PLANE", "Slow and Steady", RWD_BADGE_SPECKILLREQ],
+	["LIGHT KILL HEAVY", "Size Matters Not", RWD_BADGE_SPECKILLREQ],
+	["HEAVY KILL HEAVY", "Heavy Metal", RWD_BADGE_SPECKILLREQ],
+	["NAVAL KILL GROUND", "Littoral Operator", RWD_BADGE_SPECKILLREQ]
 ];
 
 {
@@ -50,4 +50,4 @@ private _badgeConfigs = [
     };
 } forEach _badgeConfigs;
 
-missionNamespace setVariable ["WL2_badges", _badges];
+profileNamespace setVariable ["WL2_badges", _badges];

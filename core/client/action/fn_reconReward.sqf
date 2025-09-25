@@ -8,7 +8,7 @@ private _newTargets = _reconnedObjects select {
 private _targetPoints = 0;
 {
     private _targetScore = if (_x isKindOf "Man") then {
-        30;
+        20;
     } else {
         100;
     };

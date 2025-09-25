@@ -25,7 +25,9 @@ _stats set [_assetActualType, _deathStats];
 private _responsiblePlayer = [_killer, _instigator] call WL2_fnc_handleInstigator;
 if (!isPlayer _responsiblePlayer || { getPlayerUID _responsiblePlayer == _unit getVariable ["BIS_WL_ownerAsset", "123"] }) then {
     private _lastHitter = _unit getVariable ["WL_lastHitter", objNull];
-    _responsiblePlayer = _lastHitter;
+    if (!isNull _lastHitter) then {
+        _responsiblePlayer = _lastHitter;
+    };
 };
 
 private _scoreboard = missionNamespace getVariable ["WL2_scoreboardData", createHashMap];

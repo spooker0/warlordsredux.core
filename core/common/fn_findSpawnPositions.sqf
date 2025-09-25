@@ -134,7 +134,11 @@ _ret sort true;
 _ret = _ret apply {(_x # 1) # 0};
 
 if (count _ret == 0) then {
-	_ret = [_center];
+	if (isNil "_center") then {
+		_ret = [getPosATL _center];
+	} else {
+		_ret = [_center];
+	};
 };
 
 _ret;

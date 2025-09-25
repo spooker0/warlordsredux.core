@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_rewardType", "_unitType"];
+params ["_rewardType", "_unitType", "_reward"];
 
 _rewardType = toUpper _rewardType;
 if (_rewardType select [0, 10] == "DESTROYED ") then {
@@ -67,9 +67,9 @@ if (_rewardType == "DESTROYED") then {
 		_rewardStack set ["HEAVY KILL HEAVY", _currentHeavyVHeavy + 1];
 	};
 
-	if (_killerType == "NAVAL" && _killedType == "HEAVY") then {
-		private _currentNavalVHeavy = _rewardStack getOrDefault ["NAVAL KILL HEAVY", 0];
-		_rewardStack set ["NAVAL KILL HEAVY", _currentNavalVHeavy + 1];
+	if (_killerType == "NAVAL" && _killedType in ["LIGHT", "HEAVY"]) then {
+		private _currentNavalVGround = _rewardStack getOrDefault ["NAVAL KILL GROUND", 0];
+		_rewardStack set ["NAVAL KILL GROUND", _currentNavalVGround + 1];
 	};
 };
 
@@ -93,9 +93,15 @@ if (_rewardType == "REVIVED TEAMMATE") then {
 	_rewardStack set ["REVIVED", _currentRevived + 1];
 };
 
-if (_rewardType in ["RECON", "SPOT ASSIST"]) then {
+if (_rewardType == "SPOT ASSIST") then {
 	private _currentRecon = _rewardStack getOrDefault ["RECON", 0];
 	_rewardStack set ["RECON", _currentRecon + 1];
+};
+
+if (_rewardType == "RECON") then {
+	private _rewardAmount = (floor (_reward / 100)) max 1;
+	private _currentRecon = _rewardStack getOrDefault ["RECON", 0];
+	_rewardStack set ["RECON", _currentRecon + _rewardAmount];
 };
 
 missionNamespace setVariable ["WL2_rewardStack", _rewardStack];

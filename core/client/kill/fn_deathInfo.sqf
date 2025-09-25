@@ -168,9 +168,17 @@ if (_responsiblePlayerUid != "") then {
 };
 
 private _badgeText = if (isPlayer _responsiblePlayer) then {
-    _responsiblePlayer getVariable ["WL_playerLevel", "Recruit"];
+    _responsiblePlayer getVariable ["WL2_currentBadge", "Player"];
 } else {
     "AI";
+};
+
+private _badgeConfigs = call RWD_fnc_getBadgeConfigs;
+private _badgeData = _badgeConfigs getOrDefault [_badgeText, []];
+private _badgeLevel = if (count _badgeData > 0) then {
+    _badgeData select 1;
+} else {
+    1;
 };
 
 private _gameData = [
@@ -182,7 +190,8 @@ private _gameData = [
     _detectSensorText,
     _responsiblePlayerText,
     _killerColor,
-    _badgeText
+    _badgeText,
+    _badgeLevel
 ];
 
 uiNamespace setVariable ["WL2_deathInfoData", _gameData];

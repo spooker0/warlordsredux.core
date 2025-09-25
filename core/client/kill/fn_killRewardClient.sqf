@@ -61,7 +61,7 @@ private _displayIcon = switch (toUpper _displayText) do {
 	case "SECTOR CAPTURED": { "A3\\ui_f\\data\\map\\markers\\handdrawn\\flag_CA.paa" };
 	case "REVIVED TEAMMATE": { "a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\Heal_ca.paa" };
 	case "RECON";
-	case "SPOT ASSIST": { "a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\Radio_ca.paa" };
+	case "SPOT ASSIST": { "a3\\ui_f\\data\\gui\\rsc\\rscdisplayarsenal\\binoculars_ca.paa" };
 	case "SPAWN REWARD": { "a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\car_ca.paa" };
 	case "SQUAD ASSIST": { "a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\meet_ca.paa" };
 	default {
@@ -71,7 +71,7 @@ private _displayIcon = switch (toUpper _displayText) do {
 };
 [_displayText, _reward, _customColor, _displayIcon] call WL2_fnc_updateKillFeed;
 
-[_displayText, _unitType] call RWD_fnc_handleReward;
+[_displayText, _unitType, _reward] call RWD_fnc_handleReward;
 
 if (_customColor == "#de0808") then {
 	missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_DURATION_AFKTIME];
