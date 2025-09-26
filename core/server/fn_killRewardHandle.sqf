@@ -29,7 +29,7 @@ private _noRewardList = ["B_UAV_AI", "O_UAV_AI", "I_UAV_AI"];
 if (_unit isKindOf "Man" && !(_unit in _noRewardList)) then {
 	if (isPlayer _unit) then {
 		_killReward = 60;
-		_customText = "Enemy player killed";
+		_customText = "Player kill";
 
 		[getPlayerUID _unit] remoteExec ["WL2_fnc_killNotify", _responsibleLeader];
 	} else {

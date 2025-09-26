@@ -233,6 +233,7 @@ class CfgFunctions {
 			class rappelAction {};
 			class rappelActionEligibility {};
 			class rearmAction {};
+			class rebaseActionEligibility {};
 			class reconOpticsAction {};
 			class reconReward {};
 			class refuelAction {};
@@ -407,6 +408,7 @@ class CfgFunctions {
 			class accessControl {};
 			class cleanupCarrier {};
 			class findSpawnPositions {};
+			class getAirSectorSpawn {};
 			class getAssetSide {};
 			class getAssetOwnerName {};
 			class getAssetTypeName {};

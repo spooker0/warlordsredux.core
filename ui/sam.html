@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <style>
         * {
@@ -28,16 +29,17 @@
             margin-left: 60vw;
         }
 
-        p, li {
+        p,
+        li {
             color: #ffffff;
             list-style: none;
             margin: 0;
             padding: 0;
             text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
-
     </style>
 </head>
+
 <body>
     <div id="game-data">
         <div id="targets"></div>
@@ -69,6 +71,13 @@
                 targetListEl.appendChild(listItem);
             });
         }
+
+        function setVisible(visible) {
+            document.body.style.display = visible ? 'block' : 'none';
+        }
+
+        setVisible(false);
     </script>
 </body>
+
 </html>

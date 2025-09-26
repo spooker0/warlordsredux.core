@@ -409,7 +409,8 @@ _texture ctrlAddEventHandler ["JSDialog", {
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 	if (_message == "A") then {
 		private _killfeedNotificationVolume = _settingsMap getOrDefault ["killfeedNotification", 1.0];
-		playSoundUI ["AddItemOk", _killfeedNotificationVolume];
+		private _pitch = 1.2 + (random 0.2);
+		playSoundUI ["AddItemOk", _killfeedNotificationVolume * 2, _pitch];
 	} else {
 		private _killfeedCelebrationVolume = _settingsMap getOrDefault ["killfeedCelebration", 1.0];
 		playSoundUI ["a3\missions_f_exp\data\sounds\exp_m05_dramatic.wss", _killfeedCelebrationVolume * 5];

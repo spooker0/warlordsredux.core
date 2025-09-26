@@ -15,46 +15,37 @@ private _gpsReady = {
 	_ammoConfig getOrDefault ["gps", false];
 };
 
-private _previousEligible = false;
+private _targetingMenus = uiNamespace getVariable ["DIS_gpsTargetingMenus", []];
+private _layerName = format ["gpstarget%1", count _targetingMenus];
+
+_layerName cutRsc ["RscWLGPSTargetingMenu", "PLAIN", -1, true, true];
+private _display = uiNamespace getVariable ["RscWLGPSTargetingMenu", displayNull];
+
+_targetingMenus pushBack _display;
+_targetingMenus = _targetingMenus select { !isNull _x };
+uiNamespace setVariable ["DIS_gpsTargetingMenus", _targetingMenus];
+
+private _texture = _display displayCtrl 5502;
+// _texture ctrlWebBrowserAction ["OpenDevConsole"];
+
+private _firstShow = true;
 while { alive _asset } do {
 	sleep 0.5;
 	private _eligible = call _gpsReady;
-	if (_eligible == _previousEligible) then {
-		continue;
-	};
-
 	if (_eligible) then {
-		private _display = uiNamespace getVariable ["RscWLGPSTargetingMenu", displayNull];
-		if (isNull _display) then {
-			"gpstarget" cutRsc ["RscWLGPSTargetingMenu", "PLAIN", -1, true, true];
-			_display = uiNamespace getVariable "RscWLGPSTargetingMenu";
+		if (_firstShow) then {
+			_firstShow = false;
+			private _controlParams = ["GPS CONTROLS", [
+				["Previous", "gunElevUp"],
+				["Next", "gunElevDown"],
+				["Enter coordinates", "0-9"]
+			]];
+			["GPS", _controlParams, 10] call WL2_fnc_showHint;
 		};
-		private _texture = _display displayCtrl 5502;
-		// _texture ctrlWebBrowserAction ["OpenDevConsole"];
-
-		private _controlParams = ["GPS CONTROLS", [
-			["Previous", "gunElevUp"],
-			["Next", "gunElevDown"],
-			["Enter coordinates", "0-9"]
-		]];
-		["GPS", _controlParams, 10] call WL2_fnc_showHint;
-
-		_texture ctrlAddEventHandler ["PageLoaded", {
-			params ["_texture"];
-			[_texture] spawn {
-				params ["_texture"];
-				while { !isNull _texture } do {
-					[_texture] call DIS_fnc_sendGPSData;
-					sleep 0.5;
-				};
-			};
-		}];
-	} else {
-		"gpstarget" cutText ["", "PLAIN"];
-		["GPS"] call WL2_fnc_showHint;
+		[_texture] call DIS_fnc_sendGPSData;
 	};
-
-	_previousEligible = _eligible;
+    _texture ctrlWebBrowserAction ["ExecJS", format ["setVisible(%1);", _eligible]];
+	_texture setVariable ["DIS_inFocus", _eligible];
 };
-"gpstarget" cutText ["", "PLAIN"];
-["GPS"] call WL2_fnc_showHint;
+
+_layerName cutText ["", "PLAIN"];

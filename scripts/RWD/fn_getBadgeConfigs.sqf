@@ -30,5 +30,7 @@ createHashMapFromArray [
 	["Slow and Steady", ["A3\\Air_F_Beta\\Heli_Attack_01\\Data\\UI\\Map_Heli_Attack_01_CA.paa", 3]],
 	["Size Matters Not", ["A3\\Soft_F_Exp\\LSV_02\\Data\\UI\\map_LSV_02_base_CA.paa", 3]],
 	["Heavy Metal", ["A3\\Armor_F_Gamma\\MBT_01\\Data\\ui\\map_slammer_mk4_ca.paa", 3]],
-	["Littoral Operator", ["A3\\boat_f\\Boat_Armed_01\\Data\\UI\\map_boat_armed_01_minigun.paa", 3]]
+	["Littoral Operator", ["A3\\boat_f\\Boat_Armed_01\\Data\\UI\\map_boat_armed_01_minigun.paa", 3]],
+
+	["One of Us", ["a3\\missions_f_oldman\\data\\img\\hints\\sleeping_ca.paa", 1]]
 ];

@@ -1,7 +1,7 @@
 #include "includes.inc"
-params ["_targetFunction", "_defaultOption"];
+params ["_targetFunction", "_defaultOption", "_targetVariable"];
 
-private _selectedTarget = cameraOn getVariable ["WL2_selectedTarget", objNull];
+private _selectedTarget = cameraOn getVariable [_targetVariable, objNull];
 
 private _targetInList = false;
 private _targets = [cameraOn] call _targetFunction;
@@ -23,6 +23,7 @@ private _targetList = [["none", _defaultOption, false]];
     _name = format ["%1 [%2KM]", toUpper _name, (_distance / 1000) toFixed 1];
     _targetList pushBack [netid _target, _name, _isSelected];
 } forEach _targets;
+
 if (!_targetInList) then {
     if (!alive _selectedTarget) then {
         private _autoOption = _targetList # 0;

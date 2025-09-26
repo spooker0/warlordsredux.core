@@ -1,5 +1,5 @@
 #include "includes.inc"
-private _selectedPlayerTarget = cameraOn getVariable ["WL2_selectedPlayerTarget", objNull];
+private _selectedPlayerTarget = cameraOn getVariable ["WL2_selectedTargetPlayer", objNull];
 
 private _playerInList = false;
 private _playerTargetList = [["none", "NO PLAYER SELECTED", false]];

@@ -98,42 +98,41 @@ _controller addAction [
             _mrls switchCamera "External";
             player remoteControl (crew _mrls select 0);
 
+            private _targetingMenus = uiNamespace getVariable ["DIS_gpsTargetingMenus", []];
+            private _layerName = format ["gpstarget%1", count _targetingMenus];
+
+            _layerName cutRsc ["RscWLGPSTargetingMenu", "PLAIN", -1, true, true];
             private _display = uiNamespace getVariable ["RscWLGPSTargetingMenu", displayNull];
-            if (isNull _display) then {
-                "gpstarget" cutRsc ["RscWLGPSTargetingMenu", "PLAIN", -1, true, true];
-                _display = uiNamespace getVariable "RscWLGPSTargetingMenu";
-            };
+
+            _targetingMenus pushBack _display;
+            _targetingMenus = _targetingMenus select { !isNull _x };
+            uiNamespace setVariable ["DIS_gpsTargetingMenus", _targetingMenus];
+
             private _texture = _display displayCtrl 5502;
             // _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
             private _controlParams = ["GPS CONTROLS", [
-                ["Previous", "gunElevUp"],
-                ["Next", "gunElevDown"],
-                ["Enter coordinates", "0-9"]
-            ]];
-            ["GPS", _controlParams, 10] call WL2_fnc_showHint;
+				["Previous", "gunElevUp"],
+				["Next", "gunElevDown"],
+				["Enter coordinates", "0-9"]
+			]];
+			["GPS", _controlParams, 10] call WL2_fnc_showHint;
 
-            _texture ctrlAddEventHandler ["PageLoaded", {
-                params ["_texture"];
-                [_texture] spawn {
-                    params ["_texture"];
-                    while { !isNull _texture } do {
-                        [_texture] call DIS_fnc_sendGPSData;
-                        sleep 0.5;
-                    };
-                };
-            }];
-
-            waitUntil {
+            private _areControlsReady = true;
+            while { 
+                cameraOn == _mrls &&
+                alive player &&
+                lifeState player != "INCAPACITATED" &&
+                !isNull _texture
+            } do {
                 sleep 0.1;
-                !alive player ||
-                lifeState player == "INCAPACITATED" ||
-                cameraOn != _mrls ||
-                isNull _texture;
+                [_texture] call DIS_fnc_sendGPSData;
+                _texture ctrlWebBrowserAction ["ExecJS", "setVisible(true);"];
+                _texture setVariable ["DIS_inFocus", true];
             };
 
             _target setVariable ["WL2_controller", objNull, true];
-            "gpstarget" cutText ["", "PLAIN"];
+            _layerName cutText ["", "PLAIN"];
         };
     },
     [],

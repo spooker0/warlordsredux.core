@@ -8,7 +8,7 @@ if (!isNull (missileTarget _projectile)) exitWith {
     };
 };
 
-private _target = _unit getVariable ["WL2_selectedTarget", objNull];
+private _target = _unit getVariable ["WL2_selectedTargetSEAD", objNull];
 if (!alive _target) then {
     private _seadTargets = [_unit] call DIS_fnc_getSeadTarget;
     if (count _seadTargets > 0) then {

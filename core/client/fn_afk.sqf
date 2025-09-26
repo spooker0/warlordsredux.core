@@ -5,6 +5,7 @@ private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
 private _isSpectator = _uid in (getArray (missionConfigFile >> "spectatorIDs"));
 if (_isAdmin || _isSpectator) exitWith {};
 
+private _alreadyHasOneOfUsBadge = false;
 while { !BIS_WL_missionEnd } do {
 	sleep 5;
 	private _afkTimer = missionNamespace getVariable ["WL2_afkTimer", -1];
@@ -20,5 +21,12 @@ while { !BIS_WL_missionEnd } do {
     private _wasAfk = player getVariable ["WL2_afk", false];
     if (_wasAfk != _isAfk) then {
         player setVariable ["WL2_afk", _isAfk, [clientOwner, 2]];
+    };
+
+    if (serverTime - _afkTimer > 900) then {
+        if (!_alreadyHasOneOfUsBadge) then {
+            _alreadyHasOneOfUsBadge = true;
+            ["One of Us"] call RWD_fnc_newBadge;
+        };
     };
 };

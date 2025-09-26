@@ -4,46 +4,11 @@ params ["_sender", "_pos", "_orderedClass", "_cost"];
 if !(isServer) exitWith {};
 private _class = WL_ASSET(_orderedClass, "spawn", _orderedClass);
 
-private _owner = owner _sender;;
-
-private _spawnPos = [];
-private _dir = 0;
+private _owner = owner _sender;
 
 private _sector = (_pos nearObjects ["Logic", 10]) select { _x in BIS_WL_allSectors } select 0;
-
-if (_sector getVariable ["WL2_isAircraftCarrier", false]) then {
-	private _carrierSettings = _sector getVariable ["WL2_aircraftCarrierAir", []];
-	{
-		private _potentialSpawnPos = _x # 0;
-		private _potentialSpawnDir = _x # 1;
-
-		private _potentialSpawnPosASL = ATLtoASL _potentialSpawnPos;
-		private _collisionObjects = (_potentialSpawnPosASL nearObjects ["AllVehicles", 20]) select {
-			!(_x isKindOf "Man")
-		};
-		if (count _collisionObjects == 0) then {
-			_spawnPos = _potentialSpawnPos;
-			_dir = _potentialSpawnDir;
-			break;
-		};
-	} forEach (_carrierSettings call BIS_fnc_arrayShuffle);
-} else {
-	private _taxiNodes = _sector getVariable "BIS_WL_runwaySpawnPosArr";
-	private _taxiNodesCnt = count _taxiNodes;
-	private _checks = 0;
-	while {count _spawnPos == 0 && _checks < 100} do {
-		_checks = _checks + 1;
-		private _i = (floor random _taxiNodesCnt) max 1;
-		private _pointB = _taxiNodes # _i;
-		private _pointA = _taxiNodes # (_i - 1);
-		_dir = _pointA getDir _pointB;
-		private _pos = [_pointA, random (_pointA distance2D _pointB), _dir] call BIS_fnc_relPos;
-		if (count (_pos nearObjects ["AllVehicles", 20]) == 0) then {
-			_spawnPos = _pos;
-		};
-		sleep 0.001;
-	};
-};
+private _spawnParams = [_sector] call WL2_fnc_getAirSectorSpawn;
+_spawnParams params ["_spawnPos", "_dir"];
 
 if (count _spawnPos == 0) exitWith {
 	diag_log format ["Ordering aircraft failed. Spawn position not found in sector %1.", _sector getVariable "WL2_name"];

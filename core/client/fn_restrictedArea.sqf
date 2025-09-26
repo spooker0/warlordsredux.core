@@ -29,7 +29,6 @@ while { !BIS_WL_missionEnd } do {
     } forEach _findCurrentSector;
 
     if (isNull _currentSector) then {
-        private _buffer = 5000;
         if (_pos # 0 > -WL_MAP_RESTRICTION_BUFFER &&
             _pos # 0 < worldSize + WL_MAP_RESTRICTION_BUFFER &&
             _pos # 1 > -WL_MAP_RESTRICTION_BUFFER &&

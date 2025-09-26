@@ -36,6 +36,10 @@ _texture ctrlAddEventHandler ["JSDialog", {
             case "VEHICLES": {
                 0 spawn WL2_fnc_vehicleManager;
             };
+            case "BADGES": {
+                openMap true;
+                player selectDiarySubject "Warlords Redux:Record1";
+            };
             case "REPORT": {
                 [false] spawn MENU_fnc_moderatorMenu;
             };
@@ -69,6 +73,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
     private _settingsMenu = [
         ["button", "SQUADS"],
         ["button", "VEHICLES"],
+        ["button", "BADGES"],
         ["button", "REPORT"],
         ["button", "POLL"],
         ["button", "PERFORMANCE"],

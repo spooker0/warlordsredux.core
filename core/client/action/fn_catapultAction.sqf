@@ -57,3 +57,73 @@ private _catapultActionID = _asset addAction [
 ];
 
 _asset setUserActionText [_catapultActionID, "<t color = '#ff4b4b'>Catapult Launch</t>", "<img size='2' color='#ff4b4b' image='\a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa'/>"];
+
+private _rebaseAction = _asset addAction [
+	"Return to Base",
+	{
+        _this params ["_asset", "_caller", "_actionId"];
+
+        private _airfieldSectors = (BIS_WL_sectorsArray # 2) select {
+            private _services = _x getVariable ["WL2_services", []];
+            "A" in _services;
+        };
+
+        if (count _airfieldSectors == 0) exitWith {
+            systemChat "No friendly airfields available!";
+            playSoundUI ["AddItemFail"];
+        };
+
+        private _airfieldsByDistance = [_airfieldSectors, [_asset], { _input0 distance _x }, "ASCEND"] call BIS_fnc_sortBy;
+        private _closestAirfield = _airfieldsByDistance # 0;
+        private _sectorName = _closestAirfield getVariable ["WL2_name", "sector"];
+        private _message = format ["Are you sure you want to rebase to %1?<br/>Make sure your landing gear is functional and deployed!", _sectorName];
+        private _result = [_message, "Rebase to Nearest Airfield", "Rebase", "Cancel"] call BIS_fnc_guiMessage;
+
+        if (!_result) exitWith {
+            playSoundUI ["AddItemFailed"];
+        };
+
+        private _spawnParams = [_closestAirfield] call WL2_fnc_getAirSectorSpawn;
+        _spawnParams params ["_spawnPos", "_dir"];
+        if (count _spawnPos == 0) exitWith {
+            diag_log format ["Rebase failed. Spawn position not found in sector %1.", _closestAirfield getVariable "WL2_name"];
+            "No suitable spawn position found. Clear the runways." remoteExec ["systemChat", owner _caller];
+            playSoundUI ["AddItemFail"];
+        };
+
+        [_asset, _spawnPos, _dir] spawn {
+            params ["_asset", "_spawnPos", "_dir"];
+            titleCut ["", "BLACK OUT", 1];
+            
+            sleep 1;
+            
+            _asset setAirplaneThrottle 0;
+            _asset engineOn false;
+            _asset setVectorDirAndUp [[0, 1, 0], [0, 0, 1]];
+            _asset setVelocity [0, 0, 0];
+
+            sleep 5;
+
+            _asset setVehiclePosition [_spawnPos, [], 0, "CAN_COLLIDE"];
+            _asset setVectorDirAndUp [[0, 1, 0], [0, 0, 1]];
+            _asset setDir _dir;
+            _asset setVelocity [0, 0, 0];
+
+            titleCut ["", "BLACK IN", 1];
+        };
+	},
+	[],
+	10,
+	false,
+	true,
+	"",
+	"[_target] call WL2_fnc_rebaseActionEligibility",
+    30,
+	false
+];
+
+_asset setUserActionText [
+    _rebaseAction,
+    "<t color='#4bafff'>Return to Base</t>",
+    "<img size='2' color='#4bafff' image='\a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa'/>"
+];

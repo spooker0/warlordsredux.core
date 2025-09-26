@@ -540,36 +540,38 @@ addMissionEventHandler ["Draw3D", {
                 true
             ];
         };
+        
+        {
+            private _selectedTarget = _vehicle getVariable [format ["WL2_selectedTarget%1", _x], objNull];
+            if (alive _selectedTarget) then {
+                private _isInAngle = if (unitIsUAV _vehicle) then {
+                    true;
+                } else {
+                    [getPosATL _vehicle, getDir _vehicle, 120, getPosATL _selectedTarget] call WL2_fnc_inAngleCheck;
+                };
 
-        private _selectedTarget = _vehicle getVariable ["WL2_selectedTarget", objNull];
-        if (alive _selectedTarget) then {
-            private _isInAngle = if (unitIsUAV _vehicle) then {
-                true;
-            } else {
-                [getPosATL _vehicle, getDir _vehicle, 120, getPosATL _selectedTarget] call WL2_fnc_inAngleCheck;
+                private _angleColor = if (_isInAngle) then {
+                    [1, 0, 0, 1]
+                } else {
+                    [0, 0, 0, 1]
+                };
+
+                _targetVehicleIcons pushBack [
+                    "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Threats\locking_ca.paa",
+                    _angleColor,
+                    _selectedTarget,
+                    1.0,
+                    1.0,
+                    0,
+                    format ["LOCK %1", _x],
+                    true,
+                    0.035,
+                    "RobotoCondensedBold",
+                    "center",
+                    true
+                ];
             };
-
-            private _angleColor = if (_isInAngle) then {
-                [1, 0, 0, 1]
-            } else {
-                [0, 0, 0, 1]
-            };
-
-            _targetVehicleIcons pushBack [
-                "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Threats\locking_ca.paa",
-                _angleColor,
-                _selectedTarget,
-                1.0,
-                1.0,
-                0,
-                "LOCK",
-                true,
-                0.035,
-                "RobotoCondensedBold",
-                "center",
-                true
-            ];
-        };
+        } forEach ["AA", "SEAD"];
 
         uiNamespace setVariable ["WL_HelmetInterfaceTargetInfantryIcons", _targetInfantryIcons];
         uiNamespace setVariable ["WL_HelmetInterfaceTargetVehicleIcons", _targetVehicleIcons];

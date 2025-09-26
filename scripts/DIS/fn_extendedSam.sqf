@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_projectile", "_unit"];
 
-private _target = _unit getVariable ["WL2_selectedTarget", objNull];
+private _target = _unit getVariable ["WL2_selectedTargetAA", objNull];
 _target setVariable ["WL_incomingExtendedSam", _unit, true];
 
 if (isNull _target) exitWith {

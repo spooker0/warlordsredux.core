@@ -51,7 +51,8 @@ _killRewardMap set [_displayText, [_repetitions, _points, _customColor, serverTi
 uiNamespace setVariable ["WL_killRewardMap", _killRewardMap];
 
 private _displayIcon = switch (toUpper _displayText) do {
-	case "KILL": { "a3\\Ui_F_Curator\\Data\\CfgMarkers\\kia_ca.paa" };
+	case "KILL";
+	case "PLAYER KILL": { "a3\\Ui_F_Curator\\Data\\CfgMarkers\\kia_ca.paa" };
 	case "ATTACKING SECTOR": { "a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\attack_ca.paa" };
 	case "DEFENDING SECTOR": { "a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\defend_ca.paa" };
 	case "ACTIVE PROTECTION SYSTEM";

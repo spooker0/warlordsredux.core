@@ -5,7 +5,7 @@ _projectile setVariable ["WL2_missileNameOverride", "HERCULES", true];
 _projectile setVariable ["WL2_missileStateOverride", "BOOST", true];
 _projectile setVariable ["APS_missileState", "BOOST", true];
 
-private _target = _unit getVariable ["WL2_selectedTarget", objNull];
+private _target = _unit getVariable ["WL2_selectedTargetAA", objNull];
 if (isNull _target) exitWith {
     [_projectile, _unit] spawn DIS_fnc_frag;
     [_projectile, _unit, 14000, 9300, 8000] spawn DIS_fnc_maneuver;

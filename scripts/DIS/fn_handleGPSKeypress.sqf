@@ -1,9 +1,16 @@
 #include "includes.inc"
 params ["_key"];
 
-private _targetDisplay = uiNamespace getVariable ["RscWLGPSTargetingMenu", displayNull];
-if (isNull _targetDisplay) exitWith {};
+private _allMenuDisplays = uiNamespace getVariable ["DIS_gpsTargetingMenus", []];
+private _topMenu = _allMenuDisplays select { 
+    private _display = _x;
+    private _texture = _display displayCtrl 5502;
+    private _inFocus = _texture getVariable ["DIS_inFocus", false];
+    _inFocus
+};
+if (count _topMenu == 0) exitWith {};
 
+private _targetDisplay = _topMenu select 0;
 private _texture = _targetDisplay displayCtrl 5502;
 
 private _toggle = false;

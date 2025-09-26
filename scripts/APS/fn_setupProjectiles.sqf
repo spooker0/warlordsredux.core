@@ -43,7 +43,7 @@ _this addEventHandler ["Fired", {
 	private _projectileRemote = _projectileConfig getOrDefault ["remote", false];
 	private _projectileBunker = _projectileConfig getOrDefault ["bunker", false];
 	if (_projectileRemote) then {
-		private _remoteController = _unit getVariable ["WL2_selectedPlayerTarget", objNull];
+		private _remoteController = _unit getVariable ["WL2_selectedTargetPlayer", objNull];
 		if (alive _remoteController) then {
 			[_projectile, _unit, _projectileBunker] remoteExec ["DIS_fnc_remoteMunition", _remoteController];
 		};

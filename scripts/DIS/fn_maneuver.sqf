@@ -15,11 +15,23 @@ private _originalTarget = missileTarget _projectile;
 
 private _ammoConfig = _unit getVariable ["WL2_currentAmmoConfig", createHashMap];
 if (_ammoConfig getOrDefault ["loal", false]) then {
-
-    private _selectedTarget = _unit getVariable ["WL2_selectedTarget", objNull];
+    private _selectedTarget = _unit getVariable ["WL2_selectedTargetAA", objNull];
     if (!isNull _selectedTarget) then {
         _projectile setMissileTarget [_selectedTarget, true];
         _originalTarget = _selectedTarget;
+
+        private _projectilePos = getPosASL _projectile;
+        private _targetPos = getPosASL _selectedTarget;
+
+        private _targetVectorDirAndUp = [_projectilePos, _targetPos] call BIS_fnc_findLookAt;
+        _projectile setVectorDirAndUp _targetVectorDirAndUp;
+        
+        sleep 1;
+        
+        _projectile setMissileTarget [_selectedTarget, true];
+        if (speed _unit > 950 && _projectilePos # 2 > _targetPos # 2) then {
+            _distanceBeforeNotch = 48000;
+        };
     };
 };
 

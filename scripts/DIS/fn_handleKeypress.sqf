@@ -1,8 +1,17 @@
 #include "includes.inc"
-params ["_key", "_displayName", "_targetListFunction", "_targetListParams", "_targetVariable"];
+params ["_key", "_relevantMenus", "_targetListFunction", "_targetListParams", "_targetVariable"];
 
-private _targetDisplay = uiNamespace getVariable [_displayName, displayNull];
-if (isNull _targetDisplay) exitWith {};
+private _allMenuDisplays = uiNamespace getVariable [_relevantMenus, []];
+private _topMenu = _allMenuDisplays select { 
+    private _display = _x;
+    private _texture = _display displayCtrl 5502;
+    private _inFocus = _texture getVariable ["DIS_inFocus", false];
+    _inFocus
+};
+if (count _topMenu == 0) exitWith {};
+
+private _targetDisplay = _topMenu select 0;
+private _texture = _targetDisplay displayCtrl 5502;
 
 private _delta = 0;
 if (_key in actionKeys "gunElevUp") then {
@@ -39,8 +48,6 @@ if (_delta != 0) then {
     };
 
     cameraOn setVariable [_targetVariable, _newSelectedTarget];
-
-    private _texture = _targetDisplay displayCtrl 5502;
 
     _targetList = _targetListParams call _targetListFunction;
     [_texture, _targetList] call DIS_fnc_sendTargetData;

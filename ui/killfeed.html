@@ -199,38 +199,91 @@
             display: flex;
             justify-content: center;
             align-items: flex-end;
+            gap: calc(10px * var(--ribbon-scale));
             pointer-events: none;
-            z-index: 3;
+            z-index: 30;
         }
 
         .kf-ribbon {
             pointer-events: none;
+            position: relative;
             display: inline-flex;
             align-items: center;
             gap: calc(15px * var(--ribbon-scale));
-            padding: calc(21px * var(--ribbon-scale)) calc(36px * var(--ribbon-scale));
-            background: rgba(0, 0, 0, 0.70);
-            border-radius: calc(3px * var(--ribbon-scale));
-            box-shadow:
-                0 calc(4px * var(--ribbon-scale)) calc(24px * var(--ribbon-scale)) rgba(0, 0, 0, .35),
-                inset 0 0 0 calc(2px * var(--ribbon-scale)) rgba(255, 255, 255, .05);
-            font-weight: 700;
-            font-size: calc(42px * var(--ribbon-scale));
+            padding: calc(18px * var(--ribbon-scale)) calc(28px * var(--ribbon-scale));
+            border-radius: calc(10px * var(--ribbon-scale));
+            font-weight: 800;
+            font-size: calc(38px * var(--ribbon-scale));
             letter-spacing: .25px;
             transform-origin: center bottom;
-            opacity: 0;
+            opacity: 1;
+            overflow: hidden;
+        }
+
+        .kf-ribbon::before {
+            content: "";
+            position: absolute;
+            left: 6%;
+            right: 6%;
+            top: calc(4px * var(--ribbon-scale));
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .65), transparent);
+            opacity: .7;
+            pointer-events: none;
+        }
+
+        .kf-ribbon::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(75deg,
+                    transparent 45%,
+                    rgba(255, 255, 255, .20) 50%,
+                    transparent 55%);
+            transform: translateX(-120%);
+            animation: ribbonSheen 2s ease-out 0.35s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes ribbonSheen {
+            0% {
+                transform: translateX(-120%);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(120%);
+                opacity: 0;
+            }
         }
 
         .ribbon-level-1 {
-            border: calc(2px * var(--scale)) solid #779ECB;
+            background-color: rgba(119, 158, 203, .65);
+            border: calc(2px * var(--scale)) solid rgba(119, 158, 203, .9);
+            box-shadow:
+                0 0 calc(24px * var(--ribbon-scale)) rgba(119, 158, 203, .35),
+                inset 0 0 0 calc(1px * var(--ribbon-scale)) rgba(119, 158, 203, .25);
         }
 
         .ribbon-level-2 {
-            border: calc(2px * var(--scale)) solid #cc7573;
+            background-color: rgba(204, 117, 115, .65);
+            border: calc(2px * var(--scale)) solid rgba(204, 117, 115, .95);
+            box-shadow:
+                0 0 calc(24px * var(--ribbon-scale)) rgba(204, 117, 115, .38),
+                inset 0 0 0 calc(1px * var(--ribbon-scale)) rgba(204, 117, 115, .25);
         }
 
         .ribbon-level-3 {
-            border: calc(2px * var(--scale)) solid #FFD700;
+            background-color: rgba(255, 215, 0, .65);
+            border: calc(2px * var(--scale)) solid rgba(255, 215, 0, .95);
+            box-shadow:
+                0 0 calc(24px * var(--ribbon-scale)) rgba(255, 215, 0, .40),
+                inset 0 0 0 calc(1px * var(--ribbon-scale)) rgba(255, 215, 0, .30);
         }
 
         .ribbon-icon {
@@ -240,6 +293,7 @@
             mask-repeat: no-repeat;
             mask-position: center;
             mask-size: contain;
+            filter: drop-shadow(0 0 calc(6px * var(--ribbon-scale)) rgba(255, 255, 255, .25));
         }
 
         .ribbon-icon-level-1 {
@@ -258,35 +312,34 @@
         }
 
         .ribbon-enter {
-            animation: ribbonIn calc(280ms * var(--scale)) cubic-bezier(.2, .9, .2, 1.1) forwards;
+            animation: ribbonIn 320ms cubic-bezier(.22, .95, .18, 1.05) forwards;
         }
 
         @keyframes ribbonIn {
             from {
                 opacity: 0;
-                transform: translateY(calc(12px * var(--scale))) scale(.98);
-            }
-
-            70% {
-                opacity: 1;
-                transform: translateY(0) scale(1.04);
+                transform: translateX(-1000px);
             }
 
             to {
                 opacity: 1;
-                transform: translateY(0) scale(1);
+                transform: translateX(0);
             }
         }
 
         .ribbon-exit {
-            animation: ribbonOut calc(300ms * var(--scale)) ease forwards;
+            animation: ribbonOut calc(260ms * var(--scale)) cubic-bezier(.2, .7, .3, 1) forwards;
         }
 
         @keyframes ribbonOut {
             to {
                 opacity: 0;
-                transform: translateY(calc(10px * var(--scale))) scale(.98);
+                transform: translateX(1000px);
             }
+        }
+
+        .kf-ribbon[data-index] {
+            animation-delay: calc(40ms * var(--scale) * var(--data-index, 0));
         }
     </style>
 </head>

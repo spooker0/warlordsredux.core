@@ -1,6 +1,6 @@
 #include "includes.inc"
 
-private _timeout = missionNamespace getVariable ["WL2_cruiseMissileTimeout", 0];
+private _timeout = profileNamespace getVariable ["WL2_cruiseMissileTimeout", 0];
 if (serverTime < _timeout) exitWith {
     private _timeLeft = [_timeout - serverTime, "MM:SS"] call BIS_fnc_secondsToString;
     [false, format ["Cruise missiles on cooldown: %1", _timeLeft]];
