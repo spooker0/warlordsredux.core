@@ -1,6 +1,11 @@
 #include "includes.inc"
 params ["_asset"];
 
+while { alive _asset && !local _asset } do {
+	sleep 1;
+};
+if (!alive _asset) exitWith {};
+
 private _seadReady = {
 	if (cameraOn != _asset) exitWith {
 		false;
@@ -16,7 +21,7 @@ private _seadReady = {
 };
 
 private _targetingMenus = uiNamespace getVariable ["DIS_seadTargetingMenus", []];
-private _layerName = format ["seadtarget%1", count _targetingMenus];
+private _layerName = format ["seadtarget%1%2", systemTime # 6, count _targetingMenus];
 
 _layerName cutRsc ["RscWLSeadTargetingMenu", "PLAIN", -1, true, true];
 private _display = uiNamespace getVariable ["RscWLSeadTargetingMenu", displayNull];

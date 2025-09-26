@@ -1,8 +1,13 @@
 #include "includes.inc"
 params ["_asset"];
 
+while { alive _asset && !local _asset } do {
+	sleep 1;
+};
+if (!alive _asset) exitWith {};
+
 private _targetingMenus = uiNamespace getVariable ["DIS_samTargetingMenus", []];
-private _layerName = format ["samtarget%1", count _targetingMenus];
+private _layerName = format ["samtarget%1%2", systemTime # 6, count _targetingMenus];
 
 _layerName cutRsc ["RscWLSamTargetingMenu", "PLAIN", -1, true, true];
 private _display = uiNamespace getVariable ["RscWLSamTargetingMenu", displayNull];

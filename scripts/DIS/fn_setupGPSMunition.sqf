@@ -1,6 +1,11 @@
 #include "includes.inc"
 params ["_asset"];
 
+while { alive _asset && !local _asset } do {
+	sleep 1;
+};
+if (!alive _asset) exitWith {};
+
 private _gpsReady = {
 	if (cameraOn != _asset) exitWith {
 		false;
@@ -16,7 +21,7 @@ private _gpsReady = {
 };
 
 private _targetingMenus = uiNamespace getVariable ["DIS_gpsTargetingMenus", []];
-private _layerName = format ["gpstarget%1", count _targetingMenus];
+private _layerName = format ["gpstarget%1%2", systemTime # 6, count _targetingMenus];
 
 _layerName cutRsc ["RscWLGPSTargetingMenu", "PLAIN", -1, true, true];
 private _display = uiNamespace getVariable ["RscWLGPSTargetingMenu", displayNull];

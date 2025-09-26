@@ -99,7 +99,7 @@ _controller addAction [
             player remoteControl (crew _mrls select 0);
 
             private _targetingMenus = uiNamespace getVariable ["DIS_gpsTargetingMenus", []];
-            private _layerName = format ["gpstarget%1", count _targetingMenus];
+            private _layerName = format ["gpstarget%1%2", systemTime # 6, count _targetingMenus];
 
             _layerName cutRsc ["RscWLGPSTargetingMenu", "PLAIN", -1, true, true];
             private _display = uiNamespace getVariable ["RscWLGPSTargetingMenu", displayNull];
