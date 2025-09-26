@@ -295,23 +295,26 @@ private _scanners = if (_drawAll) then {
 			_size,
 			getDirVisual _x
 		];
-		_drawEllipses pushBack [
-			_position,
-			_scanRadius,
-			_scanRadius,
-			0,
-			[_x, _mapColorCache] call WL2_fnc_iconColor,
-			""
-		];
 	} else {
-		_drawEllipses pushBack [
-			_position,
-			_scanRadius,
-			_scanRadius,
-			0,
-			[0, 1, 1, 1],
-			"#(rgb,1,1,1)color(0,1,1,0.15)"
-		];
+		if (WL_ASSET_FIELD(_assetData, _assetActualType, "hasThreatDetect", 0) > 0) then {
+			_drawEllipses pushBack [
+				_position,
+				_scanRadius,
+				_scanRadius,
+				0,
+				[_x, _mapColorCache] call WL2_fnc_iconColor,
+				""
+			];
+		} else {
+			_drawEllipses pushBack [
+				_position,
+				_scanRadius,
+				_scanRadius,
+				0,
+				[0, 1, 1, 1],
+				"#(rgb,1,1,1)color(0,1,1,0.15)"
+			];
+		};
 	};
 } forEach _scanners;
 

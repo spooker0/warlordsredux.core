@@ -7,6 +7,17 @@ params [
     ["_distanceBeforeNotch", WL_SAM_NOTCH_ACTIVE_DIST]
 ];
 
+private _detectors = vehicles select { alive _x } 
+    select { count crew _x > 0 } 
+    select { [_x] call WL2_fnc_getAssetSide != [_unit] call WL2_fnc_getAssetSide }
+    select { _x getVariable ["DIS_missileDetector", false] }
+    select { _x distance2D _projectile < 20000 };
+
+if (count _detectors > 0) then {
+    private _detectorSide = [_detectors # 0] call WL2_fnc_getAssetSide;
+    [[_unit], 60] remoteExec ["WL2_fnc_reportTargets", _detectorSide];
+};
+
 if (_unit isKindOf "Air") then {
     _samMaxDistance = 30000;
 };

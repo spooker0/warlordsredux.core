@@ -312,6 +312,12 @@ if (_asset isKindOf "Man") then {
 		[_asset] remoteExec ["DIS_fnc_setupLoal", 0, true];
 	};
 
+	if (WL_ASSET(_assetActualType, "hasThreatDetect", 0) > 0) then {
+		_asset setVariable ["DIS_missileDetector", true, true];
+		_asset setVariable ["WL_scanRadius", WL_AWACS_RANGE, true];
+		_asset setVariable ["WL_scannerOn", true, true];
+	};
+
 	// if (WL_ASSET(_assetActualType, "hasAirRearm", 0) > 0) then {
 	// 	_asset setVariable ['WL2_hasInflightRearm', true, true];
 	// };
