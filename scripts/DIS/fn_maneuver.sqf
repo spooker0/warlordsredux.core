@@ -11,6 +11,7 @@ private _detectors = vehicles select { alive _x }
     select { count crew _x > 0 } 
     select { [_x] call WL2_fnc_getAssetSide != [_unit] call WL2_fnc_getAssetSide }
     select { _x getVariable ["DIS_missileDetector", false] }
+    select { ((getPosATL _x) # 2) > 50 }
     select { _x distance2D _projectile < 20000 };
 
 if (count _detectors > 0) then {
