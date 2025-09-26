@@ -21,7 +21,7 @@ if (_sector getVariable ["WL2_isAircraftCarrier", false]) then {
 		};
 	} forEach (_carrierSettings call BIS_fnc_arrayShuffle);
 } else {
-	private _taxiNodes = _sector getVariable "BIS_WL_runwaySpawnPosArr";
+	private _taxiNodes = _sector getVariable ["BIS_WL_runwaySpawnPosArr", []];
 	private _taxiNodesCnt = count _taxiNodes;
 	private _checks = 0;
 	while {count _spawnPos == 0 && _checks < 100} do {

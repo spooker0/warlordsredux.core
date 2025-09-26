@@ -23,7 +23,7 @@ if (count _sectorsWithRunways > 0) then {
 			};
 
 			private _sectorsWithRunwaysSorted = [_sectorsWithRunways, [], {_x distance2D _runwayPos}, "ASCEND"] call BIS_fnc_sortBy;
-			(_sectorsWithRunwaysSorted # 0) setVariable ["BIS_WL_runwaySpawnPosArr", _spawnPosArr];
+			(_sectorsWithRunwaysSorted # 0) setVariable ["BIS_WL_runwaySpawnPosArr", _spawnPosArr, true];
 		};
 	} forEach ([configFile >> "CfgWorlds" >> worldName] + ("true" configClasses (configFile >> "CfgWorlds" >> worldName >> "SecondaryAirports")));
 };
