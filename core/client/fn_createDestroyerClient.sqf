@@ -98,41 +98,18 @@ _controller addAction [
             _mrls switchCamera "External";
             player remoteControl (crew _mrls select 0);
 
-            private _targetingMenus = uiNamespace getVariable ["DIS_gpsTargetingMenus", []];
-            private _layerName = format ["gpstarget%1%2", systemTime # 6, count _targetingMenus];
-
-            _layerName cutRsc ["RscWLGPSTargetingMenu", "PLAIN", -1, true, true];
-            private _display = uiNamespace getVariable ["RscWLGPSTargetingMenu", displayNull];
-
-            _targetingMenus pushBack _display;
-            _targetingMenus = _targetingMenus select { !isNull _x };
-            uiNamespace setVariable ["DIS_gpsTargetingMenus", _targetingMenus];
-
-            private _texture = _display displayCtrl 5502;
-            // _texture ctrlWebBrowserAction ["OpenDevConsole"];
-
-            private _controlParams = ["GPS CONTROLS", [
-				["Previous", "gunElevUp"],
-				["Next", "gunElevDown"],
-				["Enter coordinates", "0-9"]
-			]];
-			["GPS", _controlParams, 10] call WL2_fnc_showHint;
-
+            uiNamespace setVariable ["WL2_usingVLS", true];
             private _areControlsReady = true;
             while { 
                 cameraOn == _mrls &&
                 alive player &&
-                lifeState player != "INCAPACITATED" &&
-                !isNull _texture
+                lifeState player != "INCAPACITATED"
             } do {
                 sleep 0.1;
-                [_texture] call DIS_fnc_sendGPSData;
-                _texture ctrlWebBrowserAction ["ExecJS", "setVisible(true);"];
-                _texture setVariable ["DIS_inFocus", true];
             };
 
+            uiNamespace setVariable ["WL2_usingVLS", false];
             _target setVariable ["WL2_controller", objNull, true];
-            _layerName cutText ["", "PLAIN"];
         };
     },
     [],

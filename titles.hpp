@@ -1039,46 +1039,6 @@ class RscTitles {
 		};
 	};
 
-	class RscWLGPSTargetingMenu {
-		idd = -1;
-		duration = 1000000000;
-		fadein = 0;
-		fadeout = 0;
-		name = "RscWLGPSTargetingMenu";
-		onLoad = "uiNamespace setVariable ['RscWLGPSTargetingMenu', _this select 0];";
-		class controls {
-			class RscWLGPSTargetingMenu_Texture: RscText {
-				type = 106;
-				idc = 5502;
-				x = safeZoneX;
-				y = safeZoneY;
-				w = safeZoneW;
-				h = safeZoneH;
-				url = "file://src/ui/gps.html";
-			};
-		};
-	};
-
-	class RscWLRemoteMunitionMenu {
-		idd = -1;
-		duration = 1000000000;
-		fadein = 0;
-		fadeout = 0;
-		name = "RscWLRemoteMunitionMenu";
-		onLoad = "uiNamespace setVariable ['RscWLRemoteMunitionMenu', _this select 0];";
-		class controls {
-			class RscWLRemoteMunitionMenu_Texture: RscText {
-				type = 106;
-				idc = 5502;
-				x = safeZoneX;
-				y = safeZoneY;
-				w = safeZoneW;
-				h = safeZoneH;
-				url = "file://src/ui/remoteMunition.html";
-			};
-		};
-	};
-
 	class RscWLHintMenu {
 		idd = -1;
 		duration = 1000000000;
@@ -1119,26 +1079,6 @@ class RscTitles {
 		};
 	};
 
-	class RscWLSamTargetingMenu {
-		idd = -1;
-		duration = 1000000000;
-		fadein = 0;
-		fadeout = 0;
-		name = "RscWLSamTargetingMenu";
-		onLoad = "uiNamespace setVariable ['RscWLSamTargetingMenu', _this select 0];";
-		class controls {
-			class RscWLSamTargetingMenu_Texture: RscText {
-				type = 106;
-				idc = 5502;
-				x = safeZoneX;
-				y = safeZoneY;
-				w = safeZoneW;
-				h = safeZoneH;
-				url = "file://src/ui/sam.html";
-			};
-		};
-	};
-
 	class RscWLScoreboardMenu {
 		idd = -1;
 		duration = 1000000000;
@@ -1159,22 +1099,22 @@ class RscTitles {
 		};
 	};
 
-	class RscWLSeadTargetingMenu {
+	class RscWLTargetingMenu {
 		idd = -1;
 		duration = 1000000000;
 		fadein = 0;
 		fadeout = 0;
-		name = "RscWLSeadTargetingMenu";
-		onLoad = "uiNamespace setVariable ['RscWLSeadTargetingMenu', _this select 0];";
+		name = "RscWLTargetingMenu";
+		onLoad = "uiNamespace setVariable ['RscWLTargetingMenu', _this select 0];";
 		class controls {
-			class RscWLSeadTargetingMenu_Texture: RscText {
+			class RscWLTargetingMenu_Texture: RscText {
 				type = 106;
 				idc = 5502;
 				x = safeZoneX;
 				y = safeZoneY;
 				w = safeZoneW;
 				h = safeZoneH;
-				url = "file://src/ui/sead.html";
+				url = "file://src/ui/target.html";
 			};
 		};
 	};

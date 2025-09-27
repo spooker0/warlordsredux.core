@@ -10,25 +10,38 @@ params [
 private _detectors = vehicles select { alive _x } 
     select { count crew _x > 0 } 
     select { [_x] call WL2_fnc_getAssetSide != [_unit] call WL2_fnc_getAssetSide }
-    select { _x getVariable ["DIS_missileDetector", false] }
     select { ((getPosATL _x) # 2) > 50 }
-    select { _x distance2D _projectile < 20000 };
+    select {
+        private _detectionRadius = _x getVariable ["DIS_missileDetector", 0];
+        _detectionRadius > 0 && (_x distance2D _projectile) < _detectionRadius
+    };
 
 if (count _detectors > 0) then {
     private _detectorSide = [_detectors # 0] call WL2_fnc_getAssetSide;
-    [[_unit], 60] remoteExec ["WL2_fnc_reportTargets", _detectorSide];
+    [[_unit], 5] remoteExec ["WL2_fnc_reportTargets", _detectorSide];
 };
+
+private _munitionList = _unit getVariable ["DIS_munitionList", []];
+_munitionList pushBack _projectile;
+_munitionList = _munitionList select { alive _x };
+_unit setVariable ["DIS_munitionList", _munitionList];
 
 if (_unit isKindOf "Air") then {
     _samMaxDistance = 30000;
 };
+
+private _ammo = typeof _projectile;
+private _ammoSensors = "true" configClasses (configfile >> "CfgAmmo" >> _ammo >> "Components" >> "SensorsManagerComponent" >> "Components");
+_ammoSensors = _ammoSensors apply { configName _x };
+private _missileType = if ("IRSensorComponent" in _ammoSensors) then { 2 } else { 3 };
+_projectile setVariable ["WL2_missileType", format ["FOX-%1", _missileType]];
 
 private _originalTarget = missileTarget _projectile;
 
 private _ammoConfig = _unit getVariable ["WL2_currentAmmoConfig", createHashMap];
 if (_ammoConfig getOrDefault ["loal", false]) then {
     private _selectedTarget = _unit getVariable ["WL2_selectedTargetAA", objNull];
-    if (!isNull _selectedTarget) then {
+    if (!isNull _selectedTarget && isNull _originalTarget) then {
         _projectile setMissileTarget [_selectedTarget, true];
         _originalTarget = _selectedTarget;
 
@@ -46,6 +59,7 @@ if (_ammoConfig getOrDefault ["loal", false]) then {
         };
     };
 };
+_projectile setVariable ["DIS_ultimateTarget", _originalTarget];
 
 private _originalPosition = getPosASL _unit;
 [_projectile, _originalTarget, _unit, _samMaxDistance, _distanceBeforeNotch] spawn {

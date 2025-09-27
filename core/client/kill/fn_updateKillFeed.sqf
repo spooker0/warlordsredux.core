@@ -15,6 +15,12 @@ if (_useNewKillfeed) then {
 	if (_displayText == "RECON") then {
 		_times = (floor (_reward / 100)) max 1;
 	};
+	if (_displayText == "ACTIVE PROTECTION SYSTEM") then {
+		_times = (floor (_reward / 50)) max 1;
+	};
+	if (_displayText == "DAZZLER") then {
+		_times = (floor (_reward / 10)) max 1;
+	};
 	private _texture = _display displayCtrl 5502;
 
 	for "_i" from 1 to _times do {

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
+        }
+
+        body,
+        html {
+            height: 100%;
+        }
+
+        .target-wrapper {
+            display: inline-block;
+            width: 40%;
+            height: 70%;
+            border-radius: 10px;
+            margin-top: 30vh;
+            margin-left: 60vw;
+        }
+
+        h1,
+        h2,
+        p,
+        li {
+            color: #ffffff;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+
+        h1 {
+            font-size: 34px;
+        }
+
+        h2 {
+            font-size: 24px;
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .gps-controls {
+            margin-top: 16px;
+        }
+
+        .munition-display {
+            margin-top: 64px;
+        }
+
+        .munition-display li {
+            color: #2ba11b;
+        }
+
+        .mode {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="target-wrapper">
+        <div class="mode mode-aa">
+            <p>AIR TARGETING</p>
+            <ul class="target-list"></ul>
+        </div>
+
+        <div class="mode mode-gps">
+            <p>GPS-GUIDED MUNITION</p>
+            <h1 class="grid-coord-display">GRID 000 000</h1>
+            <h2 class="target-range-display">TGT: 00.0</h2>
+            <h2 class="asset-range-display">RNG: 00.0</h2>
+            <ul class="gps-controls"></ul>
+        </div>
+
+        <div class="mode mode-remote">
+            <p>REMOTE MUNITION CONTROLLER</p>
+            <ul class="target-list"></ul>
+        </div>
+
+        <div class="mode mode-sead">
+            <p>ANTI-RADIATION MISSILE</p>
+            <ul class="target-list"></ul>
+        </div>
+
+        <ul class="munition-display mode-aa mode-gps mode-remote mode-sead"></ul>
+    </div>
+
+    <script>
+        function setTargetList(targetListEl, targets) {
+            targets = JSON.parse(targets || '[]');
+            targetListEl.innerHTML = "";
+            targets.forEach((target, index) => {
+                const listItem = document.createElement('li');
+                let selectionState = " ";
+                if (target[2]) {
+                    selectionState = ">";
+                }
+                listItem.textContent = `[${selectionState}] ${target[1]}`;
+                listItem.dataset.targetId = target[0];
+
+                targetListEl.dataset.targetIndex = index;
+                targetListEl.appendChild(listItem);
+            });
+        }
+
+        function setAATargetData(targets) {
+            const targetListEl = document.querySelector('.mode-aa .target-list');
+            setTargetList(targetListEl, targets);
+        }
+
+        function setRemoteTargetData(targets) {
+            const targetListEl = document.querySelector('.mode-remote .target-list');
+            setTargetList(targetListEl, targets);
+        }
+
+        function setSEADTargetData(targets) {
+            const targetListEl = document.querySelector('.mode-sead .target-list');
+            setTargetList(targetListEl, targets);
+        }
+
+        function setMunitionList(munitions) {
+            munitions = JSON.parse(munitions || '[]');
+
+            const munitionsEl = document.querySelector('.munition-display');
+            munitionsEl.innerHTML = "";
+            munitions.forEach((munition, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = munition;
+                munitionsEl.appendChild(listItem);
+            });
+        }
+
+        function setGPSData(selectionIndex, gridCoord, targetRange, assetRange, inRange) {
+            const controlsEl = document.querySelector('.mode-gps .gps-controls');
+            if (selectionIndex === 1) {
+                controlsEl.innerHTML = `<li>[ ] READY</li><li>[&gt;] ENTER NEW COORDS</li>`;
+            } else {
+                controlsEl.innerHTML = `<li>[&gt;] READY</li><li>[ ] ENTER NEW COORDS</li>`;
+            }
+
+            const gridCoordEl = document.querySelector('.mode-gps .grid-coord-display');
+            if (gridCoord === "") {
+                gridCoordEl.textContent = "GRID 000 000";
+            } else {
+                let lastThree = gridCoord.slice(-3);
+                while (lastThree.length < 3) {
+                    lastThree = "0" + lastThree;
+                }
+                let firstThree = gridCoord.slice(-6, -3);
+                while (firstThree.length < 3) {
+                    firstThree = "0" + firstThree;
+                }
+                gridCoordEl.textContent = `GRID ${firstThree} ${lastThree}`;
+            }
+
+            const targetRangeDisplayEl = document.querySelector('.mode-gps .target-range-display');
+            targetRangeDisplayEl.textContent = `TGT: ${targetRange}`;
+
+            const assetRangeDisplayEl = document.querySelector('.mode-gps .asset-range-display');
+            assetRangeDisplayEl.textContent = `RNG: ${assetRange}`;
+
+            if (inRange) {
+                targetRangeDisplayEl.style.color = "green";
+                assetRangeDisplayEl.style.color = "green";
+            } else {
+                targetRangeDisplayEl.style.color = "red";
+                assetRangeDisplayEl.style.color = "red";
+            }
+        }
+
+        function setMode(mode) {
+            document.querySelectorAll('.mode').forEach(el => el.style.display = 'none');
+            const modeEl = document.querySelectorAll(`.mode-${mode}`);
+            if (modeEl) {
+                modeEl.forEach(el => el.style.display = 'block');
+            }
+        }
+    </script>
+</body>
+
+</html>

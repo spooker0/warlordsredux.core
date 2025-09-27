@@ -62,4 +62,3 @@ sleep 120;
 _asset removeAction _waitActionId;
 
 _asset setVariable ["DIS_advancedSamRange", 48000];
-[_asset] call DIS_fnc_setupAdvancedSam;

@@ -25,10 +25,24 @@ addMissionEventHandler ["HandleChatMessage", {
 
 	_display displayAddEventHandler ["KeyDown", {
 		params ["_display", "_key"];
-		[_key, "DIS_samTargetingMenus", DIS_fnc_getTargetList, [DIS_fnc_getSamTarget, "NO TARGET", "WL2_selectedTargetAA"], "WL2_selectedTargetAA"] call DIS_fnc_handleKeypress;
-		[_key, "DIS_seadTargetingMenus", DIS_fnc_getTargetList, [DIS_fnc_getSeadTarget, "TARGET: AUTO", "WL2_selectedTargetSEAD"], "WL2_selectedTargetSEAD"] call DIS_fnc_handleKeypress;
-		[_key, "DIS_remoteTargetingMenus", DIS_fnc_getSquadList, [], "WL2_selectedTargetPlayer"] call DIS_fnc_handleKeypress;
-		[_key] call DIS_fnc_handleGPSKeypress;
+		private _currentMode = uiNamespace getVariable ["DIS_currentTargetingMode", "none"];
+		switch (_currentMode) do {
+			case "asam";
+			case "esam";
+			case "loal": {
+				[_key, DIS_fnc_getTargetList, [DIS_fnc_getSamTarget, "NO TARGET", "WL2_selectedTargetAA"], "WL2_selectedTargetAA"] call DIS_fnc_handleKeypress;
+			};
+			case "gps": {
+				[_key] call DIS_fnc_handleGPSKeypress;
+			};
+			case "remote": {
+				[_key, DIS_fnc_getSquadList, [], "WL2_selectedTargetPlayer"] call DIS_fnc_handleKeypress;
+			};
+			case "sead": {
+				[_key, DIS_fnc_getTargetList, [DIS_fnc_getSeadTarget, "TARGET: AUTO", "WL2_selectedTargetSEAD"], "WL2_selectedTargetSEAD"] call DIS_fnc_handleKeypress;
+			};
+			default {};
+		};
 	}];
 
 	_display displayAddEventHandler ["KeyDown", {

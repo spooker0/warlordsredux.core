@@ -1,6 +1,12 @@
 #include "includes.inc"
 params ["_projectile", "_unit"];
 
+private _munitionList = _unit getVariable ["DIS_munitionList", []];
+_munitionList pushBack _projectile;
+_munitionList = _munitionList select { alive _x };
+_unit setVariable ["DIS_munitionList", _munitionList];
+_projectile setVariable ["WL2_missileType", "ARM"];
+
 private _projectileOverride = _projectile getVariable ["APS_ammoOverride", typeof _projectile];
 if (!isNull (missileTarget _projectile)) exitWith {
     if (_projectileOverride != typeof _projectile) then {
@@ -23,6 +29,8 @@ if (!alive _target || !_isInAngle) exitWith {
         _projectile setVariable ["APS_ammoConsumptionOverride", 1];
     };
 };
+
+_projectile setVariable ["DIS_ultimateTarget", _target];
 
 if (_target isKindOf "Air") exitWith {
     _projectile setMissileTarget [_target, true];

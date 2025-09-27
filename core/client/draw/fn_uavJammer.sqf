@@ -59,7 +59,11 @@ private _side = side _owner;
         private _spectrumJammed = _asset getVariable ["BIS_WL_spectrumJammed", false];
         if (_spectrumJammed) then {
             _asset setVariable ["BIS_WL_spectrumJammed", false, true];
-            playSoundUI ["a3\sounds_f\vehicles\air\CAS_01\noise.wss", 1, 1, false, 3.6];
+
+            private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+            private _droneJammingVolume = _settingsMap getOrDefault ["droneJammingVolume", 1];
+
+            playSoundUI ["a3\sounds_f\vehicles\air\CAS_01\noise.wss", _droneJammingVolume, 1, false, 3.6];
             systemChat (localize "STR_A3_UAV_jammed");
 
             // Effect

@@ -44,14 +44,8 @@ class CfgFunctions {
 			class missileCamera {};
 			class remoteMunition {};
 			class seekTerminal {};
-			class sendGPSData {};
-			class sendTargetData {};
-			class setupAdvancedSam {};
 			class setupExtendedSam {};
-			class setupLoal {};
-			class setupSead {};
-			class setupGPSMunition {};
-			class setupRemoteMunition {};
+			class setupTargetingMenu {};
 			class startMissileCamera {};
 			class terminalGuidance {};
 			class tvMunition {};
@@ -461,6 +455,7 @@ class CfgFunctions {
 			class generateScoreboard {};
 			class handleClientRequest {};
 			class handleEntityRemoval {};
+			class handleGpsDirect {};
 			class hideObjectOnAll {};
 			class incomePayoff {};
 			class initServer {};

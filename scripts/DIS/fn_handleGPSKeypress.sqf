@@ -1,17 +1,9 @@
 #include "includes.inc"
 params ["_key"];
 
-private _allMenuDisplays = uiNamespace getVariable ["DIS_gpsTargetingMenus", []];
-private _topMenu = _allMenuDisplays select { 
-    private _display = _x;
-    private _texture = _display displayCtrl 5502;
-    private _inFocus = _texture getVariable ["DIS_inFocus", false];
-    _inFocus
-};
-if (count _topMenu == 0) exitWith {};
-
-private _targetDisplay = _topMenu select 0;
-private _texture = _targetDisplay displayCtrl 5502;
+private _display = uiNamespace getVariable ["RscWLTargetingMenu", displayNull];
+if (isNull _display) exitWith {};
+private _texture = _display displayCtrl 5502;
 
 private _toggle = false;
 if (_key in actionKeys "gunElevUp" || _key in actionKeys "gunElevDown") then {
@@ -37,7 +29,6 @@ if (_toggle) exitWith {
         cameraOn setVariable ["DIS_gpsCord", _existingCord];
     };
 
-    [_texture] call DIS_fnc_sendGPSData;
     playSoundUI ["a3\ui_f\data\sound\rsccombo\soundexpand.wss", 2];
 };
 
@@ -81,7 +72,6 @@ if (count _newCord >= 6) then {
     cameraOn setVariable ["DIS_selectionIndex", 0];
 };
 
-[_texture] call DIS_fnc_sendGPSData;
 playSoundUI ["a3\ui_f\data\sound\rsccombo\soundexpand.wss", 2];
 
 true;

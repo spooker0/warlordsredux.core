@@ -83,9 +83,21 @@ if (_rewardType == "DEFENDING SECTOR") then {
 	_rewardStack set ["DEFENDING SECTOR", _currentDefending + 1];
 };
 
-if (_rewardType in ["ACTIVE PROTECTION SYSTEM", "DAZZLER", "PROJECTILE JAMMED"]) then {
-	private _currentProjectileKilled = _rewardStack getOrDefault ["PROJECTILE KILLED", 0];
-	_rewardStack set ["PROJECTILE KILLED", _currentProjectileKilled + 1];
+if (_rewardType == "ACTIVE PROTECTION SYSTEM") then {
+	private _rewardAmount = (floor (_reward / 50)) max 1;
+	private _currentAPS = _rewardStack getOrDefault ["ACTIVE PROTECTION SYSTEM", 0];
+	_rewardStack set ["ACTIVE PROTECTION SYSTEM", _currentAPS + 1];
+};
+
+if (_rewardType == "DAZZLER") then {
+	private _rewardAmount = (floor (_reward / 10)) max 1;
+	private _currentDazzler = _rewardStack getOrDefault ["DAZZLER", 0];
+	_rewardStack set ["DAZZLER", _currentDazzler + 1];
+};
+
+if (_rewardType == "PROJECTILE JAMMED") then {
+	private _currentProjectileJammed = _rewardStack getOrDefault ["PROJECTILE JAMMED", 0];
+	_rewardStack set ["PROJECTILE JAMMED", _currentProjectileJammed + 1];
 };
 
 if (_rewardType == "REVIVED TEAMMATE") then {

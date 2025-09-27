@@ -267,7 +267,7 @@ private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
 	];
 } forEach (_mapData getOrDefault ["ewNetworks", []]);
 
-// Draw scanner and scanned units
+// Draw scanner
 private _assetData = WL_ASSET_DATA;
 private _scale = 6.4 * worldSize / 8192 * ctrlMapScale _map;
 
@@ -296,25 +296,14 @@ private _scanners = if (_drawAll) then {
 			getDirVisual _x
 		];
 	} else {
-		if (WL_ASSET_FIELD(_assetData, _assetActualType, "hasThreatDetect", 0) > 0) then {
-			_drawEllipses pushBack [
-				_position,
-				_scanRadius,
-				_scanRadius,
-				0,
-				[_x, _mapColorCache] call WL2_fnc_iconColor,
-				""
-			];
-		} else {
-			_drawEllipses pushBack [
-				_position,
-				_scanRadius,
-				_scanRadius,
-				0,
-				[0, 1, 1, 1],
-				"#(rgb,1,1,1)color(0,1,1,0.15)"
-			];
-		};
+		_drawEllipses pushBack [
+			_position,
+			_scanRadius,
+			_scanRadius,
+			0,
+			[0, 1, 1, 1],
+			"#(rgb,1,1,1)color(0,1,1,0.15)"
+		];
 	};
 } forEach _scanners;
 
@@ -472,6 +461,18 @@ private _sideVehicles = if (_drawAll) then {
 {
 	private _position = getPosASL _x;
 	if ([_position] call _cullItem) then { continue; };
+
+	private _threatDetector = _x getVariable ["DIS_missileDetector", 0];
+	if (_threatDetector > 0) then {
+		_drawEllipses pushBack [
+			_position,
+			_threatDetector,
+			_threatDetector,
+			0,
+			[_x, _mapColorCache] call WL2_fnc_iconColor,
+			""
+		];
+	};
 
 	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
 	_drawIcons pushBack [

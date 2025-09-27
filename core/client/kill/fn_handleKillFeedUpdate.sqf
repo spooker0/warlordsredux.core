@@ -31,7 +31,7 @@ while { !BIS_WL_missionEnd } do {
         private _killfeedScale = _settingsMap getOrDefault ["killfeedScale", 1.0];
         private _killfeedBadgeScale = _settingsMap getOrDefault ["killfeedBadgeScale", 1.0];
         private _killfeedTimeout = (_settingsMap getOrDefault ["killfeedTimeout", 10]) * 1000;
-        private _killfeedMinGap = _settingsMap getOrDefault ["killfeedMinGap", 500];
+        private _killfeedMinGap = _settingsMap getOrDefault ["killfeedMinGap", 250];
         private _ribbonMinShowTime = (_settingsMap getOrDefault ["ribbonMinShowTime", 5]) * 1000;
 
         private _texture = _display displayCtrl 5502;

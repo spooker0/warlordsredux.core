@@ -11,12 +11,7 @@ class CfgRemoteExec {
 		class APS_fnc_serverHandleAPS {allowedTargets = 2;};
 		class APS_fnc_setupProjectiles {allowedTargets = 0;};
 		class DIS_fnc_remoteMunition {allowedTargets = 0;};
-		class DIS_fnc_setupAdvancedSam {allowedTargets = 0;};
 		class DIS_fnc_setupExtendedSam {allowedTargets = 0;};
-		class DIS_fnc_setupLoal {allowedTargets = 0;};
-		class DIS_fnc_setupSead {allowedTargets = 0;};
-		class DIS_fnc_setupGPSMunition {allowedTargets = 0;};
-		class DIS_fnc_setupRemoteMunition {allowedTargets = 0;};
 		class DIS_fnc_startMissileCamera {allowedTargets = 0;};
 		class KST_fnc_explode {allowedTargets = 0;};
 		class KST_fnc_rocket {allowedTargets = 0;};
@@ -42,6 +37,7 @@ class CfgRemoteExec {
 		class WL2_fnc_forgiveTeamkill {allowedTargets = 2;};
 		class WL2_fnc_handleClientRequest {allowedTargets = 2;};
 		class WL2_fnc_handleEntityRemoval {allowedTargets = 2;};
+		class WL2_fnc_handleGpsDirect {allowedTargets = 2;};
 		class WL2_fnc_hideObjectOnAll {allowedTargets = 0;};
 		class WL2_fnc_jammerAction {allowedTargets = 0;};
 		class WL2_fnc_killNotify {allowedTargets = 0;};

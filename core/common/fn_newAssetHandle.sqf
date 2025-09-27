@@ -304,17 +304,13 @@ if (_asset isKindOf "Man") then {
 		[_asset, _side] remoteExec ["DIS_fnc_setupExtendedSam", 0, true];
 	};
 
-	if (WL_ASSET(_assetActualType, "hasASAM", 0) > 0) then {
-		[_asset] remoteExec ["DIS_fnc_setupAdvancedSam", 0, true];
-	};
-
 	if (WL_ASSET(_assetActualType, "hasLoal", 0) > 0) then {
-		[_asset] remoteExec ["DIS_fnc_setupLoal", 0, true];
+		_asset setVariable ["DIS_advancedSamRange", 30000, true];
 	};
 
-	if (WL_ASSET(_assetActualType, "hasThreatDetect", 0) > 0) then {
-		_asset setVariable ["DIS_missileDetector", true, true];
-		_asset setVariable ["WL_scanRadius", WL_AWACS_RANGE, true];
+	private _threatDetection = WL_ASSET(_assetActualType, "threatDetection", 0);
+	if (_threatDetection > 0) then {
+		_asset setVariable ["DIS_missileDetector", _threatDetection, true];
 		_asset setVariable ["WL_scannerOn", true, true];
 	};
 
@@ -327,10 +323,9 @@ if (_asset isKindOf "Man") then {
 	// 	[_asset] remoteExec ["WL2_fnc_smokeCurtainAction", 0, true];
 	// };
 
-	if (_asset isKindOf "Air") then {
-		[_asset] remoteExec ["DIS_fnc_setupSead", 0, true];
+	// if (_asset isKindOf "Air") then {
 		// [_asset] remoteExec ["WL2_fnc_airRearmAction", 0, true];
-	};
+	// };
 
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 	if (unitIsUAV _asset) then {
@@ -418,7 +413,7 @@ if (_asset isKindOf "Man") then {
 				private _radarValue = if (_asset getVariable "radarOperation") then {
 					1;
 				} else {
-					2;
+					0;
 				};
 
 				if (local _asset) then {
@@ -446,14 +441,6 @@ if (_asset isKindOf "Man") then {
 
 	if (_assetActualType == "B_LSV_01_AT_TV_F") then {
 		_asset setTurretLimits [[0], -360, 360, 0, 30];
-	};
-
-	if (WL_ASSET(_assetActualType, "hasGPSMunition", 0) > 0) then {
-		[_asset] remoteExec ["DIS_fnc_setupGPSMunition", 0, true];
-	};
-
-	if (WL_ASSET(_assetActualType, "hasRemoteBomb", 0) > 0) then {
-		[_asset] remoteExec ["DIS_fnc_setupRemoteMunition", 0, true];
 	};
 
 	private _demolishable = WL_ASSET(_assetActualType, "demolishable", 0);

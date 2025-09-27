@@ -397,6 +397,7 @@ inGameUISetEventHandler ["PrevAction", "[true] call WL2_fnc_scoreboardScroll"];
 inGameUISetEventHandler ["NextAction", "[false] call WL2_fnc_scoreboardScroll"];
 
 0 spawn WL2_fnc_ammoConfigChange;
+0 spawn DIS_fnc_setupTargetingMenu;
 
 private _display = uiNamespace getVariable ["RscWLKillfeedMenu", displayNull];
 if (isNull _display) then {
@@ -409,8 +410,8 @@ _texture ctrlAddEventHandler ["JSDialog", {
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 	if (_message == "A") then {
 		private _killfeedNotificationVolume = _settingsMap getOrDefault ["killfeedNotification", 1.0];
-		private _pitch = 1.2 + (random 0.2);
-		playSoundUI ["AddItemOk", _killfeedNotificationVolume * 2, _pitch];
+		private _pitch = 1 + (random 0.2);
+		playSoundUI ["AddItemOk", _killfeedNotificationVolume * 5, _pitch];
 	} else {
 		private _killfeedCelebrationVolume = _settingsMap getOrDefault ["killfeedCelebration", 1.0];
 		playSoundUI ["a3\missions_f_exp\data\sounds\exp_m05_dramatic.wss", _killfeedCelebrationVolume * 5];
