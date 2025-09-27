@@ -98,7 +98,7 @@ private _makeMunitionTextArray = {
 		} else {
 			private _projectileTargetName = [_projectileTarget] call WL2_fnc_getAssetTypeName;
 			private _projectileDistance = _projectile distance _projectileTarget;
-			format ["%1 -> %2 [%3KM]", _missileType, _projectileTargetName, (_projectileDistance / 1000) toFixed 1]
+			format ["%1 -> %2 [%3KM]", _missileType, toUpper _projectileTargetName, (_projectileDistance / 1000) toFixed 1]
 		};
 		_munitionTextArray pushBack _munitionText;
 	} forEach _munitionList;
@@ -211,6 +211,13 @@ while { !BIS_WL_missionEnd } do {
 		};
 	};
 	_texture ctrlWebBrowserAction ["ExecJS", _script];
+
+	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+	private _left = _settingsMap getOrDefault ["targetingMenuLeft", 60];
+	private _top = _settingsMap getOrDefault ["targetingMenuTop", 30];
+	private _setPositionScript = format ["setPosition(%1, %2);", _left, _top];
+	_texture ctrlWebBrowserAction ["ExecJS", _setPositionScript];
+
 	uiNamespace setVariable ["DIS_currentTargetingMode", _currentMode];
 	_lastMode = _currentMode;
 };

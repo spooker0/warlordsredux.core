@@ -360,6 +360,14 @@ private _strategyArr = [
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"Order up to 5 vehicles in every sector to test performance under stress."
 	];
+	_strategyArr pushBack [
+		"TestKillfeed",
+		0,
+		[],
+		"Test: Killfeed",
+		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
+		"Add some random killfeed items."
+	];
 #endif
 
 #if WL_FACTION_THREE_ENABLED

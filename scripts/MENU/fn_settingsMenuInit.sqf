@@ -131,6 +131,8 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["slider", "Killfeed timeout (s)", [3, 20, 0.5, 10, "killfeedTimeout"]],
         ["slider", "Killfeed min gap (ms)", [0, 1000, 50, 250, "killfeedMinGap"]],
         ["slider", "Killfeed badge show time (s)", [1, 10, 0.5, 5, "ribbonMinShowTime"]],
+        ["slider", "Targeting menu position (left %)", [0, 100, 1, 60, "targetingMenuLeft"]],
+        ["slider", "Targeting menu position (top %)", [0, 100, 1, 30, "targetingMenuTop"]],
         ["category", "General settings"],
         ["checkbox", "Disable 3rd person view (2x reward)", ["3rdPersonDisabled", false]],
         ["checkbox", "Autonomous mode off by default", ["enableAuto", false]],

@@ -67,7 +67,11 @@ private _displayIcon = switch (toUpper _displayText) do {
 	case "SQUAD ASSIST": { "a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\meet_ca.paa" };
 	default {
 		private _unitIcon = getText (configFile >> "CfgVehicles" >> _unitType >> "picture");
-		(_unitIcon regexReplace ["\\", "\\\\"]) regexReplace ["^\\", ""];
+		if (_unitIcon in ["pictureThing", "pictureStaticObject"]) then {
+			"a3\\ui_f\\data\\map\\vehicleicons\\iconcratesupp_ca.paa";
+		} else {
+			(_unitIcon regexReplace ["\\", "\\\\"]) regexReplace ["^\\", ""];
+		};
 	};
 };
 [_displayText, _reward, _customColor, _displayIcon] call WL2_fnc_updateKillFeed;

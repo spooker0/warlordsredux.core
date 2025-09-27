@@ -248,6 +248,39 @@ switch (_className) do {
             } forEach BIS_WL_allSectors;
         };
     };
+    case "TestKillfeed": {
+        0 spawn {
+            private _testSupports = [
+                ["ATTACKING SECTOR", "#228b22"],
+                ["DEFENDING SECTOR", "#228b22"],
+                ["ACTIVE PROTECTION SYSTEM", "#de0808"],
+                ["DAZZLER", "#de0808"],
+                ["PROJECTILE JAMMED", "#de0808"],
+                ["PROJECTILE DESTROYED", "#de0808"],
+                ["SECTOR CAPTURED", "#228b22"],
+                ["REVIVED TEAMMATE", "#228b22"],
+                ["RECON", "#228b22"],
+                ["SPOT ASSIST", "#228b22"],
+                ["SPAWN REWARD", "#228b22"],
+                ["SQUAD ASSIST", "#228b22"]
+            ];
+            for "_i" from 1 to 20 do {
+                private _testSupport = selectRandom _testSupports;
+                private _reward = floor (random 100);
+                [objNull, _reward, _testSupport # 0, _testSupport # 1] call WL2_fnc_killRewardClient;
+                sleep (random 1);
+            };
+
+            {
+                private _asset = _x;
+                private _assetData = _y;
+                _asset = _assetData getOrDefault ["spawn", _asset];
+                private _reward = floor (random 400);
+                [objNull, _reward, "", "#de0808", _asset] call WL2_fnc_killRewardClient;
+                sleep (random 0.5);
+            } forEach WL_ASSET_DATA;
+        };
+    };
     case "SwitchToGreen": {
         private _greenUnits = allUnits select {
             (_x getVariable ["WL2_isPlayableGreen", false]) && !isPlayer _x;

@@ -16,6 +16,14 @@ if (count _turret == 0) exitWith {
     _asset setVariable ["WL2_currentAmmoConfig", createHashMap];
 };
 
+if (isManualFire cameraOn) then {
+    if (_turret isEqualTo [-1]) then {
+        _turret = [0];
+    } else {
+        _turret = [-1];
+    };
+};
+
 private _currentMagazine = cameraOn currentMagazineTurret _turret;
 private _ammo = getText (configFile >> "CfgMagazines" >> _currentMagazine >> "ammo");
 
