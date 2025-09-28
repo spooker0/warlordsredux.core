@@ -97,6 +97,16 @@ call WL2_fnc_processRunways;
 	};
 };
 
+0 spawn {
+	sleep 10;
+	while { !BIS_WL_missionEnd } do {
+		if (random 1 < 0.05) then {
+			[] remoteExec ["WL2_fnc_earthquake", 0];
+		};
+		sleep 60 * 10;
+	};
+};
+
 0 spawn WL2_fnc_updateVehicleList;
 0 spawn WL2_fnc_generateScoreboard;
 

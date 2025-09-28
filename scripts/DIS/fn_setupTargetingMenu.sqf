@@ -9,6 +9,7 @@ private _texture = _display displayCtrl 5502;
 // _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
 uiNamespace setVariable ["DIS_currentTargetingMode", "none"];
+uiNamespace setVariable ["WL2_usingVLS", false];
 
 private _assetData = WL_ASSET_DATA;
 

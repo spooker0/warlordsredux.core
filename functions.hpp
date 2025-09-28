@@ -156,6 +156,7 @@ class CfgFunctions {
 			class betty {};
 			class clientEH {};
 			class createDestroyerClient {};
+			class earthquake {};
 			class factionBasedClientInit {};
 			class handleBuyMenuKeypress {};
 			class handleChatMessages {};
@@ -280,6 +281,8 @@ class CfgFunctions {
 			class scoreboardScroll {};
 			class setupUI {};
 			class smoothText {};
+			class toggleTurretVisualizer {};
+			class turretLimits {};
 			class uavJammer {};
 		};
 		class ClientKill {

@@ -114,7 +114,7 @@ private _ecmDraw = addMissionEventHandler ["Draw3D", {
         sleep 0.1;
         private _ecmMunitions = uiNamespace getVariable ["WL2_ECMMunitions", []];
 
-        private _sensitivity = 0.15;
+        private _sensitivity = 0.2;
         if (_ecmRequiresPod == 0) then {
             _sensitivity = 0.08;
             if (freelook) then {

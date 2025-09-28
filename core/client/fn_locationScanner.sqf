@@ -11,10 +11,10 @@
             private _maxHealth = _x getVariable ["WL2_demolitionMaxHealth", 5];
             _damagedIcons pushBack [
                 "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missileAlt_ca.paa",
-                [1, 0, 0, 1],
+                [1, 1, 0, 1],
                 _x,
-                0.8,
-                0.8,
+                1.4,
+                1.4,
                 0,
                 format [
                     "%1/%2",
@@ -22,7 +22,7 @@
                     _maxHealth
                 ],
                 true,
-                0.035,
+                0.07,
                 "RobotoCondensedBold",
                 "center",
                 true
