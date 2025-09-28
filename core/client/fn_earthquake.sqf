@@ -2,7 +2,7 @@
 
 if ((getPosATL cameraOn) # 2 > 10) exitWith {};
 
-0 spawn {()
+0 spawn {
     private _startTime = serverTime;
 
     while { (serverTime - _startTime) < 25 } do {
