@@ -1,10 +1,7 @@
 #include "includes.inc"
-params ["_turret"];
+params ["_turret", ["_isFirst", false]];
 
-private _turretLimits = cameraOn getTurretLimits _turret;
-_turretLimits params ["_minTurn", "_maxTurn", "_minElev", "_maxElev"];
-
-private _radius = 100000000;
+private _radius = 100000000000;
 
 private _convertSafezoneToScreen = {
     params ["_input"];
@@ -20,7 +17,33 @@ private _pointFromAngles = {
     private _x = -_radius * (sin _turn) * (cos _elev);
     private _y =  _radius * (cos _turn) * (cos _elev);
     private _z =  _radius * (sin _elev);
-    cameraOn modelToWorld [_x, _y, _z]
+    cameraOn modelToWorld [_x, _y, _z];
+};
+
+if (_isFirst && typeof cameraOn == "B_T_VTOL_01_armed_F") exitWith {
+    private _referencePoint = uiNamespace getVariable ["WL2_turretRefPoint", [0, 0, 0]];
+    if (_referencePoint isEqualTo [0, 0, 0]) exitWith {
+        []
+    }; 
+
+    private _directionToRef = vectorNormalized (cameraOn worldToModel _referencePoint);
+
+    private _refTurn = (-(_directionToRef # 0)) atan2 (_directionToRef # 1);
+    private _refElev = (_directionToRef # 2) atan2 (sqrt((_directionToRef # 0) * (_directionToRef # 0) + (_directionToRef # 1) * (_directionToRef # 1)));
+    
+    private _desiredGunAzimuth = 90;
+    private _desiredGunElevation = -7.5;
+
+    private _noseTurn = _refTurn - _desiredGunAzimuth;
+    private _noseElev = _refElev - _desiredGunElevation;
+
+    private _desiredPoint = [_noseTurn, 0] call _pointFromAngles;
+    private _desiredScreenPoint = [_desiredPoint] call _convertSafezoneToScreen;
+
+    private _currentScreenPoint = [cameraOn modelToWorld [0, _radius, 0]] call _convertSafezoneToScreen;
+    private _referenceScreenPoint = [_referencePoint] call _convertSafezoneToScreen;
+
+    [_referenceScreenPoint, _desiredScreenPoint, _currentScreenPoint, _noseElev];
 };
 
 private _edgeSweepTurn = {
@@ -44,6 +67,9 @@ private _edgeSweepElev = {
     };
     _out
 };
+
+private _turretLimits = cameraOn getTurretLimits _turret;
+_turretLimits params ["_minTurn", "_maxTurn", "_minElev", "_maxElev"];
 
 private _topLeftPoint     = [_maxTurn, _maxElev] call _pointFromAngles;
 private _topRightPoint    = [_minTurn, _maxElev] call _pointFromAngles;

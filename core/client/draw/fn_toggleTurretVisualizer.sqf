@@ -10,6 +10,8 @@ if (isNull _display) then {
 private _texture = _display displayCtrl 5502;
 // _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
+uiNamespace setVariable ["WL2_turretRefPoint", [0, 0, 0]];
+
 private _draw3dHandler = addMissionEventHandler ["Draw3D", {
     private _display = uiNamespace getVariable ["RscWLTurretMenu", displayNull];
     private _texture = _display displayCtrl 5502;
@@ -22,6 +24,26 @@ private _draw3dHandler = addMissionEventHandler ["Draw3D", {
         !isNull (cameraOn turretUnit _x)
     };
 
+    private _refPointScript = "setReferencePoint(-1, -1);setDesiredPoint(-1);";
+    if (typeof cameraOn == "B_T_VTOL_01_armed_F") then {
+        private _referencePointData = [[-1], true] call WL2_fnc_turretLimits;
+        if (count _referencePointData == 4) then {
+            private _referencePoint = _referencePointData # 0;
+            private _desiredPoint = _referencePointData # 1;
+            private _screenPoint = _referencePointData # 2;
+            private _noseElev = _referencePointData # 3;
+            _refPointScript = format [
+                "setReferencePoint(%1, %2);setDesiredPoint(%3, %4, %5, %6);", 
+                _referencePoint # 0, 
+                _referencePoint # 1,
+                _desiredPoint # 0,
+                _screenPoint # 0,
+                _screenPoint # 1,
+                _noseElev
+            ];
+        };
+    };
+    
     private _screenPoints = [];
     private _weaponScreenPoints = [];
     {
@@ -33,12 +55,40 @@ private _draw3dHandler = addMissionEventHandler ["Draw3D", {
     } forEach _occupiedTurrets;
 
     private _script = format [
-        "setReferencePoints(%1);setBoxLines(%2);",
+        "setCrosshairs(%1);setBoxLines(%2);%3",
         toJSON _weaponScreenPoints,
-        toJSON _screenPoints
+        toJSON _screenPoints,
+        _refPointScript
     ];
     _texture ctrlWebBrowserAction ["ExecJS", _script];
 }];
+
+if (typeof cameraOn == "B_T_VTOL_01_armed_F") then {
+    ["Blackfish", ["BLACKFISH CONTROLS", [
+        ["Set Reference Point", "headlights"]
+    ]], 10] call WL2_fnc_showHint;
+
+    0 spawn {
+        private _display = uiNamespace getVariable ["RscWLTurretMenu", displayNull];
+
+        while { alive player && alive cameraOn && !isNull _display } do {
+            if (inputAction "headlights" > 0) then {
+                waitUntil {
+                    inputAction "headlights" == 0
+                };
+
+                private _referencePoint = uiNamespace getVariable ["WL2_turretRefPoint", [0, 0, 0]];
+                if (_referencePoint isEqualTo [0, 0, 0]) then {
+                    private _hitPoint = screenToWorld [0.5, 0.5];
+                    uiNamespace setVariable ["WL2_turretRefPoint", _hitPoint];
+                } else {
+                    uiNamespace setVariable ["WL2_turretRefPoint", [0, 0, 0]];
+                };
+            };
+            sleep 0.001;
+        };
+    };
+};
 
 waitUntil {
     sleep 0.1;

@@ -93,7 +93,7 @@ call WL2_fnc_processRunways;
 		if (timeMultiplier != _timeMultiplier) then {
 			setTimeMultiplier _timeMultiplier;
 		};
-		sleep 60 * 2;
+		sleep (60 * 2);
 	};
 };
 
@@ -103,7 +103,7 @@ call WL2_fnc_processRunways;
 		if (random 1 < 0.05) then {
 			[] remoteExec ["WL2_fnc_earthquake", 0];
 		};
-		sleep 60 * 10;
+		sleep (60 * 10);
 	};
 };
 

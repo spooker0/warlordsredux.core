@@ -467,7 +467,7 @@ if (_asset isKindOf "Man") then {
 			false,
 			true,
 			"",
-			"alive _target && (driver _target == _this)"
+			"alive _target && cameraOn == _target"
 		];
 	};
 

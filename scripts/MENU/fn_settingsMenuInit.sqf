@@ -157,7 +157,8 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["checkbox", "Show hint: TV Munitions", ["showHintTV", true]],
         ["checkbox", "Show hint: Remote Munitions", ["showHintRemote", true]],
         ["checkbox", "Show hint: Advanced SAMs", ["showHintAdvancedSam", true]],
-        ["checkbox", "Show hint: LOAL", ["showHintLoal", true]]
+        ["checkbox", "Show hint: LOAL", ["showHintLoal", true]],
+        ["checkbox", "Show hint: Blackfish", ["showHintBlackfish", true]]
     ];
 
     if (_isAdmin || _isModerator) then {

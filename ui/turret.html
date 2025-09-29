@@ -19,7 +19,9 @@
 
         .ref-label-1,
         .ref-label-2,
-        .ref-label-3 {
+        .ref-label-3,
+        .ref-label-point,
+        .ref-label-nose {
             margin: 0;
             padding: 0;
             color: lime;
@@ -44,10 +46,22 @@
             <line class="ref-h" style="stroke:lime;stroke-width:2;vector-effect:non-scaling-stroke" />
             <line class="ref-v" style="stroke:lime;stroke-width:2;vector-effect:non-scaling-stroke" />
         </g>
+
+        <g id="ref-point">
+            <line class="ref-h" style="stroke:lime;stroke-width:2;vector-effect:non-scaling-stroke" />
+            <line class="ref-v" style="stroke:lime;stroke-width:2;vector-effect:non-scaling-stroke" />
+        </g>
+        <g id="ref-point-nose">
+            <line class="ref-h" style="stroke:lime;stroke-width:2;vector-effect:non-scaling-stroke" />
+            <line class="ref-v" style="stroke:red;stroke-width:2;vector-effect:non-scaling-stroke" />
+            <line class="ref-v2" style="stroke:lime;stroke-width:2;vector-effect:non-scaling-stroke" />
+        </g>
     </svg>
     <p class="ref-label-1"></p>
     <p class="ref-label-2"></p>
     <p class="ref-label-3"></p>
+    <p class="ref-label-point"></p>
+    <p class="ref-label-nose"></p>
 
     <script>
         const ns = "http://www.w3.org/2000/svg";
@@ -94,7 +108,7 @@
             setLines(segments);
         }
 
-        function setReferencePoint(x, y, crossEl, name, textEl) {
+        function setCrosshair(x, y, crossEl, name, textEl, angleDeg = 0) {
             const halfSizePx = 15;
             const dx = halfSizePx / window.innerWidth;
             const dy = halfSizePx / window.innerHeight;
@@ -122,7 +136,70 @@
             }
         }
 
-        function setReferencePoints(points) {
+        function setAzimuthBar(offsetX, x, y, crossEl, name, textEl, angleDeg = 0) {
+            const a = angleDeg * Math.PI / 180;
+
+            const aspect = window.innerHeight / window.innerWidth;
+            let slope = Math.tan(a) * aspect;
+
+            // avoid infinities
+            const MAX_SLOPE = 1e6;
+            if (!Number.isFinite(slope)) slope = Math.sign(slope || 1) * MAX_SLOPE;
+            slope = Math.max(Math.min(slope, MAX_SLOPE), -MAX_SLOPE);
+
+            const y1 = y - 0.1, y2 = y + 0.1;
+            const x1 = x + (y1 - 0.5) * slope;
+            const x2 = x + (y2 - 0.5) * slope;
+            const centerX = x + (y - 0.5) * slope;
+
+            const hLine = crossEl.querySelector(".ref-h");
+            hLine.setAttribute("x1", offsetX);
+            hLine.setAttribute("y1", y);
+            hLine.setAttribute("x2", centerX);
+            hLine.setAttribute("y2", y);
+
+            const vLine = crossEl.querySelector(".ref-v");
+            vLine.setAttribute("x1", x1);
+            vLine.setAttribute("y1", y1);
+            vLine.setAttribute("x2", x2);
+            vLine.setAttribute("y2", y2);
+
+            const vLine2 = crossEl.querySelector(".ref-v2");
+            vLine2.setAttribute("x1", centerX);
+            vLine2.setAttribute("y1", y1);
+            vLine2.setAttribute("x2", centerX);
+            vLine2.setAttribute("y2", y2);
+
+            if (name) {
+                textEl.textContent = name.toUpperCase();
+                textEl.style.display = "block";
+                textEl.style.position = "fixed";
+                textEl.style.left = `${(x * window.innerWidth) + 10}px`;
+                textEl.style.top = `${y * window.innerHeight}px`;
+            } else {
+                textEl.style.display = "none";
+            }
+        }
+
+        function setReferencePoint(x, y) {
+            const crossEl = document.getElementById("ref-point");
+            const textEl = document.querySelector(".ref-label-point");
+            setCrosshair(x, y, crossEl, "REF", textEl);
+        }
+
+        function setDesiredPoint(x1, x2, y2, angle) {
+            const textEl = document.querySelector(".ref-label-nose");
+            const noseEl = document.getElementById("ref-point-nose");
+            if (x1 === -1) {
+                noseEl.style.display = "none";
+                textEl.style.display = "none";
+                return;
+            }
+            noseEl.style.display = "block";
+            setAzimuthBar(x1, x2, y2, noseEl, "PYLON TURN", textEl, angle);
+        }
+
+        function setCrosshairs(points) {
             const crosses = [
                 document.getElementById("ref-cross-1"),
                 document.getElementById("ref-cross-2"),
@@ -134,7 +211,7 @@
                 if (i < points.length) {
                     crossEl.style.display = "block";
                     const [x, y, name] = points[i];
-                    setReferencePoint(x, y, crossEl, name, textEl);
+                    setCrosshair(x, y, crossEl, name, textEl);
                 } else {
                     crossEl.style.display = "none";
                     textEl.style.display = "none";
