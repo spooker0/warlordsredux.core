@@ -52,9 +52,9 @@
             <line class="ref-v" style="stroke:lime;stroke-width:2;vector-effect:non-scaling-stroke" />
         </g>
         <g id="ref-point-nose">
-            <line class="ref-h" style="stroke:lime;stroke-width:2;vector-effect:non-scaling-stroke" />
-            <line class="ref-v" style="stroke:red;stroke-width:2;vector-effect:non-scaling-stroke" />
-            <line class="ref-v2" style="stroke:lime;stroke-width:2;vector-effect:non-scaling-stroke" />
+            <line class="ref-h" style="stroke-width:2;vector-effect:non-scaling-stroke" />
+            <line class="ref-v" style="stroke-width:2;vector-effect:non-scaling-stroke" />
+            <line class="ref-v2" style="stroke-width:2;vector-effect:non-scaling-stroke" />
         </g>
     </svg>
     <p class="ref-label-1"></p>
@@ -136,7 +136,7 @@
             }
         }
 
-        function setAzimuthBar(offsetX, x, y, crossEl, name, textEl, angleDeg = 0) {
+        function setAzimuthBar(offsetX, x, y, crossEl, name, textEl, angleDeg, isTurnGood, isElevGood) {
             const a = angleDeg * Math.PI / 180;
 
             const aspect = window.innerHeight / window.innerWidth;
@@ -158,6 +158,12 @@
             hLine.setAttribute("x2", centerX);
             hLine.setAttribute("y2", y);
 
+            if (isTurnGood) {
+                hLine.setAttribute("stroke", "lime");
+            } else {
+                hLine.setAttribute("stroke", "red");
+            }
+
             const vLine = crossEl.querySelector(".ref-v");
             vLine.setAttribute("x1", x1);
             vLine.setAttribute("y1", y1);
@@ -169,6 +175,14 @@
             vLine2.setAttribute("y1", y1);
             vLine2.setAttribute("x2", centerX);
             vLine2.setAttribute("y2", y2);
+
+            if (isElevGood) {
+                vLine.setAttribute("stroke", "lime");
+                vLine2.setAttribute("stroke", "lime");
+            } else {
+                vLine.setAttribute("stroke", "red");
+                vLine2.setAttribute("stroke", "red");
+            }
 
             if (name) {
                 textEl.textContent = name.toUpperCase();
@@ -187,7 +201,7 @@
             setCrosshair(x, y, crossEl, "REF", textEl);
         }
 
-        function setDesiredPoint(x1, x2, y2, angle) {
+        function setDesiredPoint(x1, x2, y2, angle, isTurnGood, isElevGood) {
             const textEl = document.querySelector(".ref-label-nose");
             const noseEl = document.getElementById("ref-point-nose");
             if (x1 === -1) {
@@ -196,7 +210,7 @@
                 return;
             }
             noseEl.style.display = "block";
-            setAzimuthBar(x1, x2, y2, noseEl, "PYLON TURN", textEl, angle);
+            setAzimuthBar(x1, x2, y2, noseEl, "PYLON TURN", textEl, angle, isTurnGood, isElevGood);
         }
 
         function setCrosshairs(points) {

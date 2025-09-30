@@ -43,7 +43,10 @@ if (_isFirst && typeof cameraOn == "B_T_VTOL_01_armed_F") exitWith {
     private _currentScreenPoint = [cameraOn modelToWorld [0, _radius, 0]] call _convertSafezoneToScreen;
     private _referenceScreenPoint = [_referencePoint] call _convertSafezoneToScreen;
 
-    [_referenceScreenPoint, _desiredScreenPoint, _currentScreenPoint, _noseElev];
+    private _isTurnGood = _refTurn < 102 && _refTurn > 74;
+    private _isElevGood = _refElev < 13 && _refElev > -28;
+
+    [_referenceScreenPoint, _desiredScreenPoint, _currentScreenPoint, _noseElev, _isTurnGood, _isElevGood];
 };
 
 private _edgeSweepTurn = {

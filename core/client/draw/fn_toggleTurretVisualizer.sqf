@@ -27,19 +27,23 @@ private _draw3dHandler = addMissionEventHandler ["Draw3D", {
     private _refPointScript = "setReferencePoint(-1, -1);setDesiredPoint(-1);";
     if (typeof cameraOn == "B_T_VTOL_01_armed_F") then {
         private _referencePointData = [[-1], true] call WL2_fnc_turretLimits;
-        if (count _referencePointData == 4) then {
+        if (count _referencePointData == 6) then {
             private _referencePoint = _referencePointData # 0;
             private _desiredPoint = _referencePointData # 1;
             private _screenPoint = _referencePointData # 2;
             private _noseElev = _referencePointData # 3;
+            private _isTurnGood = _referencePointData # 4;
+            private _isElevGood = _referencePointData # 5;
             _refPointScript = format [
-                "setReferencePoint(%1, %2);setDesiredPoint(%3, %4, %5, %6);", 
+                "setReferencePoint(%1, %2);setDesiredPoint(%3, %4, %5, %6, %7, %8);", 
                 _referencePoint # 0, 
                 _referencePoint # 1,
                 _desiredPoint # 0,
                 _screenPoint # 0,
                 _screenPoint # 1,
-                _noseElev
+                _noseElev,
+                _isTurnGood,
+                _isElevGood
             ];
         };
     };
