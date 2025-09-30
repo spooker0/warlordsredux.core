@@ -108,6 +108,7 @@ class CfgFunctions {
 		class Default {
 			file = "src\scripts\RWD";
 			class applyBadge {};
+			class badgeMenu {};
 			class getBadgeConfigs {};
 			class handleBadge {};
 			class handleReward {};
@@ -251,6 +252,7 @@ class CfgFunctions {
 			class smokeCurtainParticles {};
 			class stabilizeBoatAction {};
 			class tireChangeEligibility {};
+			class turretVisualizerAction {};
 			class vehicleLockAction {};
 			class vehicleLockUpdate {};
 			class vehicleManager {};

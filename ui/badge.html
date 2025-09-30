@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body,
+        html {
+            height: 100%;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .badge-menu-wrapper {
+            display: inline-block;
+            width: 60vw;
+            height: 80vh;
+            border-radius: 10px;
+            border: 2px solid #444;
+            background-color: #2a2a2a;
+            position: absolute;
+            left: 20vw;
+            top: 10vh;
+        }
+
+        .menu-title {
+            background-color: #222;
+            color: #fff;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 2px solid #444;
+        }
+
+        .badge-content {
+            width: 100%;
+            height: calc(100% - 60px);
+            padding: 20px 30px;
+            overflow-y: auto;
+            text-align: left;
+            font-size: 16px;
+            scrollbar-color: #444444 #2a2a2a;
+            scrollbar-width: thin;
+            color: #fff;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.3);
+            width: 40px;
+            height: 40px;
+            font-size: 30px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+        }
+
+        .close-button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .fps-display {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 1);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 1000;
+        }
+
+        .selected-wrap {
+            margin-bottom: 18px;
+        }
+
+        .selected-badge {
+            display: grid;
+            grid-template-columns: 96px 1fr;
+            gap: 16px;
+            align-items: center;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.06));
+            border: 1px solid #3a3a3a;
+            border-radius: 14px;
+            padding: 14px 16px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .sb-left {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sb-right {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sb-name {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+        }
+
+        .sb-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0.9;
+        }
+
+        .sb-meta .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            outline: 2px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        .sb-meta .count {
+            color: #cfcfcf;
+            font-size: 14px;
+        }
+
+        .badge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 14px;
+        }
+
+        .badge-card {
+            position: relative;
+            border: 1px solid #363636;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 14px;
+            padding: 14px 12px;
+            display: grid;
+            grid-template-rows: auto auto;
+            justify-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
+            color: #fff;
+        }
+
+        .badge-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+            border-color: #4a4a4a;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .badge-card:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(255, 255, 255, 0.25);
+        }
+
+        .badge-card.is-selected {
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 0 2px var(--badge-color, #fff), 0 0 24px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.08));
+        }
+
+        .badge-card .label {
+            font-weight: 700;
+            font-size: 14px;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .count-pill {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 2px 8px;
+            font-size: 12px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .icon-mask {
+            width: 64px;
+            height: 64px;
+            background-color: var(--badge-color, #fff);
+            mask-image: var(--icon);
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-size: contain;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+            border-radius: 10px;
+        }
+
+        .icon-mask.lg {
+            width: 88px;
+            height: 88px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="fps-display"></div>
+    <div class="badge-menu-wrapper">
+        <div class="menu-title">Badges</div>
+        <div class="badge-content"></div>
+        <div class="close-button">
+            &times;
+        </div>
+    </div>
+    <script>
+        document.addEventListener('wheel', function (e) {
+            const el = document.elementFromPoint(e.clientX, e.clientY);
+            if (el && el.closest('.panel')) {
+                el.closest('.panel').scrollTop += e.deltaY;
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        document.querySelector('.close-button').addEventListener('mousedown', function () {
+            A3API.SendAlert('exit');
+        });
+
+        function dragElement(wrapper, header) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            header.addEventListener('mousedown', dragMouseDown);
+            function dragMouseDown(e) {
+                e.preventDefault(); pos3 = e.clientX; pos4 = e.clientY;
+                document.addEventListener('mouseup', closeDragElement);
+                document.addEventListener('mousemove', elementDrag);
+            }
+            function elementDrag(e) {
+                e.preventDefault();
+                pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY;
+                pos3 = e.clientX; pos4 = e.clientY;
+                wrapper.style.top = (wrapper.offsetTop - pos2) + "px";
+                wrapper.style.left = (wrapper.offsetLeft - pos1) + "px";
+            }
+            function closeDragElement() {
+                document.removeEventListener('mouseup', closeDragElement);
+                document.removeEventListener('mousemove', elementDrag);
+            }
+        }
+        dragElement(document.querySelector('.badge-menu-wrapper'), document.querySelector('.menu-title'));
+
+        document.imageCache = new Map();
+        function setImage(imageUrl, element) {
+            try {
+                if (imageUrl) {
+                    if (document.imageCache.has(imageUrl)) {
+                        const img = document.imageCache.get(imageUrl);
+                        element.style.setProperty('--icon', `url('${img}')`);
+                        return;
+                    }
+
+                    A3API.RequestTexture(imageUrl, 64).then(img => {
+                        document.imageCache.set(imageUrl, img);
+                        element.style.setProperty('--icon', `url('${img}')`);
+                    });
+                }
+            } catch { }
+        }
+
+        function setBadges(badgesInput = [], selectedBadgeName = "") {
+            const root = document.querySelector(".badge-content");
+            if (!root) return;
+
+            const el = (tag, className, attrs = {}) => {
+                const node = document.createElement(tag);
+                if (className) node.className = className;
+                for (const [k, v] of Object.entries(attrs)) {
+                    if (k === "text") node.textContent = v;
+                    else node.setAttribute(k, v);
+                }
+                return node;
+            };
+            const setStyleVars = (node, vars = {}) => {
+                for (const [k, v] of Object.entries(vars)) node.style.setProperty(k, v);
+            };
+
+            root.replaceChildren();
+            const selectedRegion = el("div", "selected-wrap", {
+                "aria-live": "polite",
+                "aria-atomic": "true",
+            });
+            const grid = el("div", "badge-grid", { role: "list" });
+            root.append(selectedRegion, grid);
+
+            let selectedIndex = badgesInput.findIndex((b) => b[2] === selectedBadgeName);
+            if (selectedIndex < 0) selectedIndex = 0;
+            if (!badgesInput.length) selectedIndex = -1; // no badges case
+
+            // Render helpers
+            const renderEmptySelected = () => {
+                const wrapper = el("div", "selected-badge");
+                const left = el("div", "sb-left");
+                const icon = el("div", "icon-mask lg");
+                setStyleVars(icon, { "--badge-color": "#666", "--icon": "url('')" });
+                left.append(icon);
+
+                const right = el("div", "sb-right");
+                right.append(
+                    el("div", "sb-name", { text: "No badges yet" }),
+                    el("div", "sb-meta").appendChild(
+                        (() => {
+                            const span = el("span", "count", { text: "Add some to get started" });
+                            return span;
+                        })()
+                    ).parentNode
+                );
+
+                wrapper.append(left, right);
+                selectedRegion.replaceChildren(wrapper);
+            };
+
+            const renderSelected = (index) => {
+                if (!badgesInput.length || index < 0) {
+                    renderEmptySelected();
+                    return;
+                }
+
+                const [color, iconUrl, name, count] = badgesInput[index];
+
+                const wrapper = el("div", "selected-badge");
+                setStyleVars(wrapper, { "--badge-color": color });
+
+                const left = el("div", "sb-left");
+                const icon = el("div", "icon-mask lg");
+                setStyleVars(icon, { "--badge-color": color });
+
+                left.append(icon);
+
+                try {
+                    if (iconUrl) {
+                        setImage(iconUrl, icon);
+                    }
+                } catch { }
+
+                const right = el("div", "sb-right");
+                const title = el("div", "sb-name", { text: name });
+
+                const meta = el("div", "sb-meta");
+                const dot = el("span", "dot");
+                setStyleVars(dot, { color, background: color });
+                const owned = el("span", "count", { text: `${count} earned` });
+                meta.append(dot, owned);
+
+                right.append(title, meta);
+                wrapper.append(left, right);
+                selectedRegion.replaceChildren(wrapper);
+
+                // Toggle selected state in grid
+                Array.from(grid.children).forEach((child, i) => {
+                    child.classList.toggle("is-selected", i === index);
+                    child.setAttribute("aria-selected", i === index ? "true" : "false");
+                });
+            };
+
+            const makeCard = ([color, iconUrl, name, count], index) => {
+                const button = el("button", "badge-card", {
+                    type: "button",
+                    role: "listitem",
+                    "aria-label": `${name}, ${count} earned`,
+                });
+                setStyleVars(button, { "--badge-color": color });
+
+                const icon = el("div", "icon-mask");
+                setStyleVars(icon, { "--badge-color": color, "--icon": `url('${iconUrl || ""}')` });
+
+                const label = el("div", "label", { text: name });
+                const countPill = el("div", "count-pill", { text: String(count) });
+
+                button.append(icon, label, countPill);
+
+                const activate = () => {
+                    renderSelected(index);
+                    A3API.SendAlert(name);
+                };
+                button.addEventListener("click", activate);
+                button.addEventListener("keydown", (e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        activate();
+                    }
+                });
+
+                try {
+                    if (iconUrl) {
+                        setImage(iconUrl, icon);
+                    }
+                } catch { }
+
+                return button;
+            };
+
+            // Populate grid efficiently
+            grid.replaceChildren();
+            const frag = document.createDocumentFragment();
+            badgesInput.forEach((badge, i) => frag.appendChild(makeCard(badge, i)));
+            grid.appendChild(frag);
+
+            renderSelected(selectedIndex);
+        };
+
+        let frameTime = 0, frameCount = 0;
+        let lastLoop = performance.now();
+        const fpsLoop = () => {
+            const thisLoop = performance.now();
+            frameTime += (thisLoop - lastLoop - frameTime) / 20;
+            lastLoop = thisLoop;
+            frameCount++;
+            requestAnimationFrame(fpsLoop);
+        };
+        const fpsOut = document.querySelector('.fps-display');
+        setInterval(() => {
+            if (frameCount > 60) {
+                fpsOut.textContent = `MENU FPS: ${(1000 / frameTime).toFixed(2)}`;
+            } else {
+                fpsOut.textContent = `MENU FPS: -`;
+            }
+        }, 100);
+        fpsLoop();
+    </script>
+</body>
+
+</html>

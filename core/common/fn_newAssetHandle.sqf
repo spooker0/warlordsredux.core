@@ -443,6 +443,10 @@ if (_asset isKindOf "Man") then {
 		_asset setTurretLimits [[0], -360, 360, 0, 30];
 	};
 
+	if (_assetActualType == "B_T_VTOL_01_armed_up_F") then {
+		_asset setTurretLimits [[0], 0, 0, 0, 0];
+	};
+
 	private _demolishable = WL_ASSET(_assetActualType, "demolishable", 0);
 	if (_demolishable > 0) then {
 		_asset setVariable ["WL2_demolitionHealth", _demolishable, true];
@@ -451,24 +455,7 @@ if (_asset isKindOf "Man") then {
 	};
 
 	if (WL_ASSET(_assetActualType, "hasTurretVisualizer", 0) > 0) then {
-		_asset addAction [
-			"<t color='#00FF00'>Toggle Turret View</t>",
-			{
-				params ["_target", "_caller", "_id", "_args"];
-				private _display = uiNamespace getVariable ["RscWLTurretMenu", displayNull];
-				if (isNull _display) then {
-					0 spawn WL2_fnc_toggleTurretVisualizer;
-				} else {
-					"turretLimits" cutText ["", "PLAIN"];
-				};
-			},
-			nil,
-			100,
-			false,
-			true,
-			"",
-			"alive _target && cameraOn == _target"
-		];
+		[_asset] remoteExec ["WL2_fnc_turretVisualizerAction", 0, true];
 	};
 
 	private _parachuteCount = count ((backpackCargo _asset) select {_x == "B_Parachute"});

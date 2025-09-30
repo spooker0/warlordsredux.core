@@ -168,3 +168,5 @@ _unit enableStamina false;
     sleep 3;
     _unit enableStamina true;
 };
+
+[] call WL2_fnc_factionBasedClientInit;

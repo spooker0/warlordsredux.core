@@ -3,12 +3,16 @@
 
 <head>
     <style>
+        :root {
+            --base-font-size: 18px;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Courier New', monospace;
-            font-size: 20px;
+            font-size: var(--base-font-size);
         }
 
         body,
@@ -20,7 +24,6 @@
 
         .target-wrapper {
             display: inline-block;
-            border-radius: 10px;
             margin-top: 30vh;
             margin-left: 60vw;
         }
@@ -29,7 +32,7 @@
         h2,
         p,
         li {
-            color: #ffffff;
+            color: #bfff00;
             list-style: none;
             margin: 0;
             padding: 0;
@@ -37,21 +40,21 @@
         }
 
         h1 {
-            font-size: 34px;
+            font-size: calc(var(--base-font-size) * 1.7);
         }
 
         h2 {
-            font-size: 24px;
+            font-size: calc(var(--base-font-size) * 1.2);
             display: inline-block;
-            margin-right: 20px;
+            margin-right: var(--base-font-size);
         }
 
         .gps-controls {
-            margin-top: 16px;
+            margin-top: calc(var(--base-font-size) * 0.8);
         }
 
         .munition-display {
-            margin-top: 64px;
+            margin-top: calc(var(--base-font-size) * 3.2);
         }
 
         .munition-display li {
@@ -183,10 +186,12 @@
             }
         }
 
-        function setPosition(left, top) {
+        function setSettings(left, top, fontSize) {
             const wrapper = document.querySelector('.target-wrapper');
             wrapper.style.marginLeft = `${left}vw`;
             wrapper.style.marginTop = `${top}vh`;
+
+            document.documentElement.style.setProperty('--base-font-size', `${fontSize}px`);
         }
     </script>
 </body>

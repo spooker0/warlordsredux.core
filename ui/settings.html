@@ -14,18 +14,19 @@
         html {
             height: 100%;
             text-align: center;
+            overflow: hidden;
         }
 
         .settings-menu-wrapper {
             display: inline-block;
-            width: 80vw;
+            width: 60vw;
             height: 80vh;
-            /* max-width: 1000px; */
             border-radius: 10px;
             border: 2px solid #444;
-            margin-top: 5%;
             background-color: #2a2a2a;
-            position: relative;
+            position: absolute;
+            left: 20vw;
+            top: 10vh;
         }
 
         .menu-title {
@@ -47,6 +48,32 @@
             scrollbar-color: #444444 #2a2a2a;
             scrollbar-width: thin;
             color: #fff;
+        }
+
+        .search-wrap {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: linear-gradient(#2a2a2a, #2a2a2a);
+            padding: 8px 0 14px;
+            margin-top: 10px;
+            margin-bottom: 14px;
+            border-bottom: 1px solid #3e3e3e;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 20px 12px;
+            border-radius: 6px;
+            border: 1px solid #555;
+            background: #1e1e1e;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #66ccff;
         }
 
         .category {
@@ -120,8 +147,11 @@
             background-color: #4499cc;
         }
 
-        #game-data {
-            display: none;
+        button img {
+            height: 48px;
+            vertical-align: middle;
+            margin-top: 8px;
+            margin-bottom: 8px;
         }
 
         .close-button {
@@ -159,7 +189,6 @@
 
 <body>
     <div class="fps-display"></div>
-    <div id="game-data"></div>
     <div class="settings-menu-wrapper">
         <div class="menu-title">Settings</div>
         <div id="settingsContainer" class="settings-content"></div>
@@ -181,10 +210,30 @@
             A3API.SendAlert('exit');
         });
 
-        function createMenu() {
-            const gameDataEl = document.getElementById('game-data');
-            const settingsData = JSON.parse(gameDataEl.textContent || '{}');
+        function dragElement(wrapper, header) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            header.addEventListener('mousedown', dragMouseDown);
+            function dragMouseDown(e) {
+                e.preventDefault(); pos3 = e.clientX; pos4 = e.clientY;
+                document.addEventListener('mouseup', closeDragElement);
+                document.addEventListener('mousemove', elementDrag);
+            }
+            function elementDrag(e) {
+                e.preventDefault();
+                pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY;
+                pos3 = e.clientX; pos4 = e.clientY;
+                wrapper.style.top = (wrapper.offsetTop - pos2) + "px";
+                wrapper.style.left = (wrapper.offsetLeft - pos1) + "px";
+            }
+            function closeDragElement() {
+                document.removeEventListener('mouseup', closeDragElement);
+                document.removeEventListener('mousemove', elementDrag);
+            }
+        }
+        dragElement(document.querySelector('.settings-menu-wrapper'), document.querySelector('.menu-title'));
 
+        function createMenu(settingsData) {
+            settingsData = JSON.parse(settingsData || '[]');
             const container = document.getElementById("settingsContainer");
 
             function createCategory(title) {
@@ -262,9 +311,19 @@
                 return row;
             }
 
-            function createButton(labelText) {
+            function createButton(labelText, image) {
                 const button = document.createElement("button");
-                button.textContent = labelText;
+
+                if (image) {
+                    const eWeaponImage = document.createElement('img');
+                    A3API.RequestTexture(image, 64).then(imageContent => eWeaponImage.src = imageContent);
+                    button.appendChild(eWeaponImage);
+                }
+
+                const buttonText = document.createElement('div');
+                buttonText.textContent = labelText;
+                button.appendChild(buttonText);
+                
                 button.addEventListener("click", () => {
                     A3API.SendAlert(`["button", "${labelText}"]`);
                 });
@@ -285,7 +344,7 @@
                         element = createCheckbox(label, params);
                         break;
                     case "button":
-                        element = createButton(label);
+                        element = createButton(label, params);
                         break;
                     default:
                         console.warn("Unknown control type:", type);
@@ -293,6 +352,52 @@
                 }
                 container.appendChild(element);
             });
+
+            addSearchBar(container);
+        }
+
+        function addSearchBar(container) {
+            const searchWrap = document.createElement('div');
+            searchWrap.className = 'search-wrap';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'search-input';
+            input.placeholder = 'Search settings...';
+            searchWrap.appendChild(input);
+
+            const children = Array.from(container.children);
+            const buttons = children.filter(el => el.tagName === 'BUTTON');
+            if (buttons.length) {
+                buttons[buttons.length - 1].insertAdjacentElement('afterend', searchWrap);
+            } else {
+                container.insertBefore(searchWrap, container.firstChild);
+            }
+
+            const entries = () => Array.from(container.children).filter(el =>
+                el.classList?.contains('control-row')
+            );
+
+            const entryText = (el) => {
+                if (el.classList.contains('control-row')) {
+                    const label = el.querySelector('label');
+                    return (label ? label.textContent : el.textContent).trim();
+                }
+                if (el.tagName === 'BUTTON') return el.textContent.trim();
+                return '';
+            };
+
+            function applyFilter(q) {
+                const query = q.trim().toLowerCase();
+
+                entries().forEach(el => {
+                    const text = entryText(el).toLowerCase();
+                    const match = !query || text.startsWith(query) || text.indexOf(query) >= 0;
+                    el.style.display = match ? '' : 'none';
+                });
+            }
+
+            input.addEventListener('input', e => applyFilter(e.target.value));
         }
 
         let frameTime = 0, frameCount = 0;

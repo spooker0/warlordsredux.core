@@ -16,7 +16,7 @@ waitUntil {
 private _display = findDisplay _displayNumber;
 _display displayAddEventHandler ["KeyDown", {
 	params ["_displayorcontrol", "_key", "_shift", "_ctrl", "_alt"];
-	if (_key == 0xD2) then {
+	if (_key in actionKeys "BuldSwitchCamera") then {
 		private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 		private _earplugVolume = _settingsMap getOrDefault ["earplugVolume", 0.1];
 
@@ -31,7 +31,7 @@ _display displayAddEventHandler ["KeyDown", {
 		};
 	};
 
-	if (_key == 0xD3) then {
+	if (_key in actionKeys "curatorDelete") then {
 		private _oldValue = player getVariable ["WL_ViewRangeReduced", false];
 		if (_oldValue) then {
 			"ViewRange" cutText ["", "PLAIN"];

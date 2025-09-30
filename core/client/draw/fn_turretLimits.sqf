@@ -76,7 +76,7 @@ private _topRightPoint    = [_minTurn, _maxElev] call _pointFromAngles;
 private _bottomRightPoint = [_minTurn, _minElev] call _pointFromAngles;
 private _bottomLeftPoint  = [_maxTurn, _minElev] call _pointFromAngles;
 
-private _samplesTurnEdge  = 40;  // top/bottom (TURN sweep)
+private _samplesTurnEdge  = 20;  // top/bottom (TURN sweep)
 private _samplesElevEdge  = 2;   // left/right (ELEV sweep)
 
 private _points = [];
@@ -88,7 +88,8 @@ _points append ([_minElev, _maxElev, _maxTurn, _samplesElevEdge] call _edgeSweep
 private _weaponDirection = cameraOn weaponDirection (cameraOn currentWeaponTurret _turret);
 
 private _vehicleAnimationsTable = createHashMapFromArray [
-    ["B_T_VTOL_01_armed_F", [[], ["gatling_rot", "gatling_turret_rot"], ["cannon_rot", "cannon_turret_rot"]]]
+    ["B_T_VTOL_01_armed_F", [[], ["gatling_rot", "gatling_turret_rot"], ["cannon_rot", "cannon_turret_rot"]]],
+    ["B_Heli_Transport_03_F", [[], ["gunner_1_aimdown1", "gunner_1_rot1"], ["gunner_2_aimdown1", "gunner_2_rot2"]]]
 ];
 
 if !(_turret isEqualTo [0]) then {

@@ -63,6 +63,21 @@ private _draw3dHandler = addMissionEventHandler ["Draw3D", {
     _texture ctrlWebBrowserAction ["ExecJS", _script];
 }];
 
+0 spawn {
+    private _display = uiNamespace getVariable ["RscWLTurretMenu", displayNull];
+    private _texture = _display displayCtrl 5502;
+
+    while { alive player && alive cameraOn && !isNull _display } do {
+        if (visibleMap) then {
+            _texture ctrlWebBrowserAction [
+                "ExecJS",
+                "setCrosshairs([]);setBoxLines([]);setReferencePoint(-1, -1);setDesiredPoint(-1);"
+            ];
+        };
+        sleep 0.001;
+    };
+};
+
 if (typeof cameraOn == "B_T_VTOL_01_armed_F") then {
     ["Blackfish", ["BLACKFISH CONTROLS", [
         ["Set Reference Point", "headlights"]

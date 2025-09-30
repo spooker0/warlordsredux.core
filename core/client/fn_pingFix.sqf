@@ -2,7 +2,12 @@
 params ["_position"];
 
 uiNamespace setVariable ["WL2_pingPosition", _position];
-playSound ["TacticalPing4", false];
+
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _dronePingVolume = _settingsMap getOrDefault ["dronePingVolume", 1];
+if (_dronePingVolume > 0) then {
+    playSoundUI ["TacticalPing4", _dronePingVolume];
+};
 
 private _r = profileNamespace getVariable ['IGUI_TACTPING_RGB_R', 1.0];
 private _g = profileNamespace getVariable ['IGUI_TACTPING_RGB_G', 0.8];

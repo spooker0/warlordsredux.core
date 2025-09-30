@@ -4,13 +4,13 @@ if (isNull _display) then {
     _display = createDialog ["RscWLBrowserMenu", true];
 };
 
-_display displayAddEventHandler ["KeyDown", {
-    params ["_display", "_key", "_shift", "_ctrl", "_alt"];
-    if (_key == DIK_B) then {
-        private _texture = _display displayCtrl 5501;
-        _texture ctrlWebBrowserAction ["OpenDevConsole"];
-    };
-}];
+// _display displayAddEventHandler ["KeyDown", {
+//     params ["_display", "_key", "_shift", "_ctrl", "_alt"];
+//     if (_key == DIK_B) then {
+//         private _texture = _display displayCtrl 5501;
+//         _texture ctrlWebBrowserAction ["OpenDevConsole"];
+//     };
+// }];
 
 private _texture = _display displayCtrl 5501;
 _texture ctrlWebBrowserAction ["LoadFile", "src\ui\loadout.html"];

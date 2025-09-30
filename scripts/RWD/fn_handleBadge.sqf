@@ -32,7 +32,10 @@ private _badgeConfigs = [
 	["HELO KILL PLANE", "Slow and Steady", RWD_BADGE_SPECKILLREQ],
 	["LIGHT KILL HEAVY", "Size Matters Not", RWD_BADGE_SPECKILLREQ],
 	["HEAVY KILL HEAVY", "Heavy Metal", RWD_BADGE_SPECKILLREQ],
-	["NAVAL KILL GROUND", "Littoral Operator", RWD_BADGE_SPECKILLREQ]
+	["NAVAL KILL GROUND", "Littoral Operator", RWD_BADGE_SPECKILLREQ],
+
+	["SAM KILL PLANE", "No Fly Zone", RWD_BADGE_SPECKILLREQMORE],
+	["STATIC KILL HEAVY", "Stationary", RWD_BADGE_SPECKILLREQMORE]
 ];
 
 {
@@ -46,7 +49,7 @@ private _badgeConfigs = [
 		[_badgeName] call RWD_fnc_newBadge;
         
 		private _currentBadges = _badges getOrDefault [_badgeName, 0];
-		_badges set [_badgeName, _currentBadges + 1];
+		_badges set [_badgeName, (_currentBadges + 1) min 50];
     };
 } forEach _badgeConfigs;
 

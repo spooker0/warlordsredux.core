@@ -17,22 +17,16 @@ if ((getPosATL cameraOn) # 2 > 10) exitWith {};
 addCamShake [10, 20, 30];
 playsound "Earthquake_03";
 
-sleep 8;
+sleep 1;
 
-"DynamicBlur" ppEffectEnable true;
-"DynamicBlur" ppEffectAdjust [3];
-"DynamicBlur" ppEffectCommit 1;
+playSoundUI ["a3\dubbing_f_tank\ta_tanks_m01\045_eve_earthquake\ta_tanks_m01_045_eve_earthquake_arplayer_0.ogg", 3, 1, true, 0.3];
+
+sleep 7;
 
 addCamShake [20, 20, 30];
 playsound "Earthquake_04";
 
 sleep 8;
 
-"DynamicBlur" ppEffectAdjust [0];
-"DynamicBlur" ppEffectCommit 10;
-
 addCamShake [10, 20, 30];
 playsound "Earthquake_03";
-
-sleep 10;
-"DynamicBlur" ppEffectEnable false;

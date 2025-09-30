@@ -285,7 +285,8 @@ private _scanners = if (_drawAll) then {
     private _scanRadius = _x getVariable ["WL_scanRadius", 100];
 	if (_scanRadius == 0) then { continue; };
     private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
-	if (WL_ASSET_FIELD(_assetData, _assetActualType, "hasAWACS", 0) > 0) then {
+	private _isAWACS = WL_ASSET_FIELD(_assetData, _assetActualType, "hasAWACS", 0) > 0;
+	if (_isAWACS) then {
 		private _size = _scanRadius / _scale;
 		_drawIcons pushBack [
 			"\a3\ui_f\data\IGUI\RscCustomInfo\Sensors\Sectors\sector60_ca.paa",
@@ -296,14 +297,17 @@ private _scanners = if (_drawAll) then {
 			getDirVisual _x
 		];
 	} else {
-		_drawEllipses pushBack [
-			_position,
-			_scanRadius,
-			_scanRadius,
-			0,
-			[0, 1, 1, 1],
-			"#(rgb,1,1,1)color(0,1,1,0.15)"
-		];
+		private _isNotThreatDetector = WL_ASSET_FIELD(_assetData, _assetActualType, "threatDetection", 0) == 0;
+		if (_isNotThreatDetector) then {
+				_drawEllipses pushBack [
+				_position,
+				_scanRadius,
+				_scanRadius,
+				0,
+				[0, 1, 1, 1],
+				"#(rgb,1,1,1)color(0,1,1,0.15)"
+			];
+		};
 	};
 } forEach _scanners;
 

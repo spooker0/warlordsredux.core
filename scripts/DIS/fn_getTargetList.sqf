@@ -5,6 +5,10 @@ private _selectedTarget = cameraOn getVariable [_targetVariable, objNull];
 
 private _targetInList = false;
 private _targets = [cameraOn] call _targetFunction;
+
+// Can sort, but might lead to ordering issues
+// _targets = [_targets, [], { cameraOn distance2D (_x # 0) }, "ASCEND"] call BIS_fnc_sortBy;
+
 private _targetList = [["none", _defaultOption, false]];
 {
     private _target = _x # 0;

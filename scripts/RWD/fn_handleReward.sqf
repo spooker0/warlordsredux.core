@@ -71,6 +71,16 @@ if (_rewardType == "DESTROYED") then {
 		private _currentNavalVGround = _rewardStack getOrDefault ["NAVAL KILL GROUND", 0];
 		_rewardStack set ["NAVAL KILL GROUND", _currentNavalVGround + 1];
 	};
+
+	if (_killerType == "SAM" && _killedType == "PLANE") then {
+		private _currentSAMVPlane = _rewardStack getOrDefault ["SAM KILL PLANE", 0];
+		_rewardStack set ["SAM KILL PLANE", _currentSAMVPlane + 1];
+	};
+
+	if (_killerType == "STATIC" && _killedType == "HEAVY") then {
+		private _currentStaticVHeavy = _rewardStack getOrDefault ["STATIC KILL HEAVY", 0];
+		_rewardStack set ["STATIC KILL HEAVY", _currentStaticVHeavy + 1];
+	};
 };
 
 if (_rewardType == "ATTACKING SECTOR") then {
