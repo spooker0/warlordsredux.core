@@ -37,6 +37,7 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
             ["esam", _projectileESam],
             ["gps", _projectileGPS],
             ["loal", _projectileLoal],
+            ["name", _ammo],
             ["remote", _projectileRemote],
             ["sam", _projectileSam],
             ["sead", _projectileSead],

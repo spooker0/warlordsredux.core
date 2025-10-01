@@ -15,41 +15,43 @@ private _assetData = WL_ASSET_DATA;
 
 private _getCurrentMode = {
 	if (!alive cameraOn) exitWith {
-		"none"
+		["none", "none"]
 	};
 
 	private _turret = cameraOn unitTurret focusOn;
 	if (count _turret == 0) exitWith {
-		"none"
+		["none", "none"]
 	};
 
 	private _ammoConfig = cameraOn getVariable ["WL2_currentAmmoConfig", createHashMap];
+	private _weaponName = cameraOn getVariable ["WL2_currentWeaponName", ""];
+	_weaponName = toUpper _weaponName;
 	if (_ammoConfig getOrDefault ["gps", false]) exitWith {
-		"gps"
+		["gps", _weaponName]
 	};
 	if (_ammoConfig getOrDefault ["loal", false]) exitWith {
-		"loal"
+		["loal", _weaponName]
 	};
 	if (_ammoConfig getOrDefault ["remote", false]) exitWith {
-		"remote"
+		["remote", _weaponName]
 	};
 	if (_ammoConfig getOrDefault ["sead", false]) exitWith {
-		"sead"
+		["sead", _weaponName]
 	};
 
 	private _assetActualType = cameraOn getVariable ["WL2_orderedClass", typeof cameraOn];
 	if (WL_ASSET_FIELD(_assetData, _assetActualType, "hasASAM", 0) > 0) exitWith {
-		"asam"
+		["asam", "Hercules AA"]
 	};
 	if (WL_ASSET_FIELD(_assetData, _assetActualType, "hasESAM", 0) > 0) exitWith {
-		"esam"
+		["esam", "RIM-174 AA"]
 	};
 
 	if (uiNamespace getVariable ["WL2_usingVLS", false]) exitWith {
-		"gps"
+		["gps", ""]
 	};
 
-	"none";
+	["none", "none"];
 };
 
 private _targetingControls = [
@@ -134,8 +136,10 @@ private _makeGPSBombTextArray = {
 
 private _lastMode = "none";
 while { !BIS_WL_missionEnd } do {
-	sleep 0.1;
-	private _currentMode = call _getCurrentMode;
+	sleep 0.05;
+	private _currentModeData = call _getCurrentMode;
+	private _currentMode = _currentModeData # 0;
+	private _currentModeTitle = _currentModeData # 1;
 	private _script = "";
 
 	private _hintEntry = _hintMap getOrDefault [_currentMode, []];
@@ -170,7 +174,7 @@ while { !BIS_WL_missionEnd } do {
 			private _targetList = [DIS_fnc_getSamTarget, "NO TARGET", "WL2_selectedTargetAA"] call DIS_fnc_getTargetList;
 			private _targetsText = toJSON _targetList;
 			_targetsText = _texture ctrlWebBrowserAction ["ToBase64", _targetsText];
-			_script = format ["setMode(""aa"");setAATargetData(atob(""%1""));", _targetsText];
+			_script = format ["setMode(""aa"", ""%1"");setAATargetData(atob(""%2""));", _currentModeTitle, _targetsText];
 		};
 		case "gps": {
 			private _gpsSelectionIndex = cameraOn getVariable ["DIS_selectionIndex", 0];
@@ -183,7 +187,8 @@ while { !BIS_WL_missionEnd } do {
 			};
 
 			_script = format [
-				"setMode(""gps"");setGPSData(%1, ""%2"", ""%3"", ""%4"", %5);",
+				"setMode(""gps"", ""%1"");setGPSData(%2, ""%3"", ""%4"", ""%5"", %6);",
+				_currentModeTitle,
 				_gpsSelectionIndex,
 				_gpsCord,
 				(_inRangeCalculation # 2 / 1000) toFixed 1,
@@ -195,19 +200,19 @@ while { !BIS_WL_missionEnd } do {
 			private _targetList = [] call DIS_fnc_getSquadList;
 			private _targetsText = toJSON _targetList;
 			_targetsText = _texture ctrlWebBrowserAction ["ToBase64", _targetsText];
-			_script = format ["setMode(""remote"");setRemoteTargetData(atob(""%1""));", _targetsText];
+			_script = format ["setMode(""remote"", ""%1"");setRemoteTargetData(atob(""%2""));", _currentModeTitle, _targetsText];
 		};
 		case "sead": {
 			private _targetList = [DIS_fnc_getSeadTarget, "TARGET: AUTO", "WL2_selectedTargetSEAD"] call DIS_fnc_getTargetList;
 			private _targetsText = toJSON _targetList;
 			_targetsText = _texture ctrlWebBrowserAction ["ToBase64", _targetsText];
-			_script = format ["setMode(""sead"");setSEADTargetData(atob(""%1""));", _targetsText];
+			_script = format ["setMode(""sead"", ""%1"");setSEADTargetData(atob(""%2""));", _currentModeTitle, _targetsText];
 		};
 		default {
 			if (_lastMode == "none") then {
 				continue;
 			} else {
-				_script = "setMode(""none"");";
+				_script = format ["setMode(""none"", ""%1"");", _currentModeTitle];
 			};
 		};
 	};

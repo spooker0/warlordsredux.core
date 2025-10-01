@@ -31,6 +31,9 @@ private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset
 private _projectileAmmoOverrides = WL_ASSET(_assetActualType, "ammoOverrides", []);
 private _projectileConfig = APS_projectileConfig;
 
+private _currentWeapon = cameraOn currentWeaponTurret _turret;
+private _weaponName = getText (configFile >> "CfgWeapons" >> _currentWeapon >> "displayName");
+
 private _selectedAmmoOverrides = _projectileAmmoOverrides select {
     _x # 0 == _ammo
 };
@@ -38,6 +41,7 @@ if (count _selectedAmmoOverrides > 0) then {
     private _projectileAmmoOverride = _selectedAmmoOverrides # 0;
     private _overrideAmmo = _projectileAmmoOverride # 1;
     _ammo = _overrideAmmo # 0;
+    _weaponName = _overrideAmmo # 1;
 
     private _weaponInfo = _unitInfo displayCtrl 118;
 
@@ -48,9 +52,10 @@ if (count _selectedAmmoOverrides > 0) then {
     _newControl ctrlSetTextColor (ctrlTextColor _weaponInfo);
     _newControl ctrlSetFontHeight (ctrlFontHeight _weaponInfo);
     _newControl ctrlSetShadow 0;
-    _newControl ctrlSetText (_overrideAmmo # 1);
+    _newControl ctrlSetText _weaponName;
     _newControl ctrlCommit 0;
 };
 
 private _ammoConfig = _projectileConfig getOrDefault [_ammo, createHashMap];
 _asset setVariable ["WL2_currentAmmoConfig", _ammoConfig];
+_asset setVariable ["WL2_currentWeaponName", _weaponName];

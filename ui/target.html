@@ -11,7 +11,8 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Courier New', monospace;
+            font-family: 'Consolas', monospace;
+            font-weight: bold;
             font-size: var(--base-font-size);
         }
 
@@ -32,7 +33,7 @@
         h2,
         p,
         li {
-            color: #bfff00;
+            color: #14cb00;
             list-style: none;
             margin: 0;
             padding: 0;
@@ -58,7 +59,7 @@
         }
 
         .munition-display li {
-            color: #2ba11b;
+            color: #14cb00;
         }
 
         .mode {
@@ -70,12 +71,12 @@
 <body>
     <div class="target-wrapper">
         <div class="mode mode-aa">
-            <p>AIR TARGETING</p>
+            <p class="mode-title">AIR TARGETING</p>
             <ul class="target-list"></ul>
         </div>
 
         <div class="mode mode-gps">
-            <p>GPS-GUIDED MUNITION</p>
+            <p class="mode-title">GPS-GUIDED MUNITION</p>
             <h1 class="grid-coord-display">GRID 000 000</h1>
             <h2 class="target-range-display">TGT: 00.0</h2>
             <h2 class="asset-range-display">RNG: 00.0</h2>
@@ -83,12 +84,12 @@
         </div>
 
         <div class="mode mode-remote">
-            <p>REMOTE MUNITION CONTROLLER</p>
+            <p class="mode-title">REMOTE MUNITION CONTROLLER</p>
             <ul class="target-list"></ul>
         </div>
 
         <div class="mode mode-sead">
-            <p>ANTI-RADIATION MISSILE</p>
+            <p class="mode-title">ANTI-RADIATION MISSILE</p>
             <ul class="target-list"></ul>
         </div>
 
@@ -178,11 +179,15 @@
             }
         }
 
-        function setMode(mode) {
+        function setMode(mode, title) {
             document.querySelectorAll('.mode').forEach(el => el.style.display = 'none');
             const modeEl = document.querySelectorAll(`.mode-${mode}`);
             if (modeEl) {
                 modeEl.forEach(el => el.style.display = 'block');
+
+                if (title && title !== "") {
+                    document.querySelectorAll('.mode-title').forEach(el => el.textContent = title);
+                }
             }
         }
 
