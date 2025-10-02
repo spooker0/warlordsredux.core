@@ -177,6 +177,7 @@ if (_action == "scan") exitWith {
 		if (!isNull _uav) then {
 			deleteVehicle _uav;
 		};
+		_sector setVariable ["WL2_lastScanned", serverTime, true];
 	};
 };
 

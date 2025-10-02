@@ -90,8 +90,10 @@
 		};
 		private _vehiclesOnSide = _vehicles select { count crew _x > 0 } select { side _x == _side };
 		_sideVehicles insert [-1, _vehiclesOnSide, true];	// append but only if unique
-		_sideVehicles append (allPlayers select { side group _x == _side } select { isNull objectParent _x });
-		_sideVehicles append ((units player) select { _x != player } select { isNull objectParent _x });
+		private _playersOnSide = allPlayers select { side group _x == _side } select { isNull objectParent _x };
+		_sideVehicles insert [-1, _playersOnSide, true];
+		private _playerAi = allPlayers select { side group _x == _side } select { !isNull objectParent _x };
+		_sideVehicles insert [-1, _playerAi, true];
 
 		_mapData set ["sideVehicles", _sideVehicles];
 
