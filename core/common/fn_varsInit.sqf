@@ -27,7 +27,6 @@ switch (_locality) do {
 		BIS_WL_matesAvailable = 0;
 		WL2_lastLoadout = [];
 		BIS_WL_selectionMapManager = [];
-		BIS_WL_currentlyScannedSectors = [];
 		BIS_WL_currentTargetData = [
 			"\A3\ui_f\data\map\markers\nato\b_hq.paa",
 			[0, 0, 0, 0],

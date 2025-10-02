@@ -11,6 +11,9 @@ private _mapW = _controlPosition # 2;
 private _mapH = _controlPosition # 3;
 private _bottomLeftCorner = _map ctrlMapScreenToWorld [_mapX, _mapY + _mapH];
 private _topRightCorner = _map ctrlMapScreenToWorld [_mapX + _mapW, _mapY];
+private _mapCenter = _map ctrlMapScreenToWorld [_mapX + _mapW / 2, _mapY + _mapH / 2];
+private _mapWidth = _topRightCorner # 0 - _bottomLeftCorner # 0;
+private _mapHeight = _topRightCorner # 1 - _bottomLeftCorner # 1;
 
 private _cullItem = {
 	params ["_itemPosition"];
@@ -112,7 +115,6 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 {
 	private _base = _x;
 	private _position = getPosATL _base;
-	if ([_position] call _cullItem) then { continue; };
 
 	private _baseOwner = _base getVariable ["WL2_forwardBaseOwner", sideUnknown];
 	private _showOnMap = _base getVariable ["WL2_forwardBaseShowOnMap", false];
@@ -230,9 +232,9 @@ private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
 } forEach _strongholds;
 
 // Draw scanned units
+private _scannedUnits = _mapData getOrDefault ["scannedUnits", []];
 {
 	private _position = getPosASL _x;
-	if ([_position] call _cullItem) then { continue; };
 	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
 	_drawIcons pushBack [
 		[_x, _mapIconCache] call WL2_fnc_iconType,
@@ -247,14 +249,13 @@ private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
 		"PuristaBold",
 		"right"
 	];
-} forEach (_mapData getOrDefault ["scannedUnits", []]);
+} forEach (_scannedUnits inAreaArray [_mapCenter, _mapWidth, _mapHeight, 0, true]);
 
 // Draw EW networks
 {
 	if (isNull _x) then { continue; };
 
 	private _position = getPosASL _x;
-	if ([_position] call _cullItem) then { continue; };
 
 	private _range = _x getVariable ["WL_ewNetRange", 0];
 	_drawEllipses pushBack [
@@ -280,7 +281,6 @@ private _scanners = if (_drawAll) then {
 	if (isNull _x) then { continue; };
 
 	private _position = getPosASL _x;
-	if ([_position] call _cullItem) then { continue; };
 
     private _scanRadius = _x getVariable ["WL_scanRadius", 100];
 	if (_scanRadius == 0) then { continue; };
@@ -310,129 +310,6 @@ private _scanners = if (_drawAll) then {
 		};
 	};
 } forEach _scanners;
-
-// Dead players
-private _deadPlayers = if (_drawAll) then {
-	_mapData getOrDefault ["deadPlayersAll", []]
-} else {
-	_mapData getOrDefault ["deadPlayers", []]
-};
-{
-	_drawIcons pushBack [
-		"\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa",
-		[1, 0, 0, 0.8],
-		getPosASL _x,
-		20 * _mapIconScale,
-		20 * _mapIconScale,
-		0,
-		if (_draw) then {format ["%1 [K.I.A.]", (name _x)]} else {""},
-		1,
-		0.043 * _mapIconScale,
-		"PuristaBold",
-		"right"
-	];
-} forEach _deadPlayers;
-
-// Teammates
-private _teammates = if (_drawAll) then {
-	_mapData getOrDefault ["livePlayersAll", []]
-} else {
-	_mapData getOrDefault ["teammates", []]
-};
-private _showPlayerUids = uiNamespace getVariable ["WL2_showPlayerUids", false];
-{
-	private _position = getPosASL _x;
-	if ([_position] call _cullItem) then { continue; };
-
-	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
-	if (_x == player) then {
-		_drawIcons pushBack [
-			'a3\ui_f\data\igui\cfg\islandmap\iconplayer_ca.paa',
-			[1,0,0,1],
-			_position,
-			_size * _mapIconScale,
-			_size * _mapIconScale,
-			0,
-			"",
-			1,
-			0.043 * _mapIconScale,
-			"PuristaBold",
-			"right"
-		];
-	};
-
-	_drawIcons pushBack [
-		[_x, _mapIconCache] call WL2_fnc_iconType,
-		[_x, _mapColorCache] call WL2_fnc_iconColor,
-		_position,
-		_size * _mapIconScale,
-		_size * _mapIconScale,
-		[_x] call WL2_fnc_getDir,
-		if (_draw) then {
-			private _levelDisplay = _x getVariable ["WL_playerLevel", "Recruit"];
-			private _displayName = format ["%1 [%2]", name _x, _levelDisplay];
-			if (_showPlayerUids) then {
-				_displayName = format ["%1 (%2)", _displayName, getPlayerUID _x];
-			};
-			_displayName
-		} else {""},
-		1,
-		0.043 * _mapIconScale,
-		"PuristaBold",
-		"right"
-	];
-	_drawIconsSelectable pushBack [_x, _position];
-} forEach _teammates;
-
-// AI in vehicle
-private _aiInVehicle = if (_drawAll) then {
-	_mapData getOrDefault ["aiInVehicleAll", []]
-} else {
-	_mapData getOrDefault ["aiInVehicle", []]
-};
-{
-	private _position = getPosASL _x;
-	if ([_position] call _cullItem) then { continue; };
-
-	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
-	_drawIcons pushBack [
-		[_x, _mapIconCache] call WL2_fnc_iconType,
-		[_x, _mapColorCache] call WL2_fnc_iconColor,
-		_position,
-		_size * _mapIconScale,
-		_size * _mapIconScale,
-		[_x] call WL2_fnc_getDir,
-		if (_draw) then {format ["%1 [AI]", (name _x)]} else {""},
-		1,
-		0.043 * _mapIconScale,
-		"PuristaBold",
-		"right"
-	];
-} forEach _aiInVehicle;
-
-// AI
-{
-	private _position = getPosASL _x;
-	if ([_position] call _cullItem) then { continue; };
-
-	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
-	_drawIcons pushBack [
-		[_x, _mapIconCache] call WL2_fnc_iconType,
-		[_x, _mapColorCache] call WL2_fnc_iconColor,
-		_position,
-		_size * _mapIconScale,
-		_size * _mapIconScale,
-		[_x] call WL2_fnc_getDir,
-		if (_draw) then {
-			format ["%1 [AI]", name _x]
-		} else {""},
-		1,
-		0.043 * _mapIconScale,
-		"PuristaBold",
-		"right"
-	];
-	_drawIconsSelectable pushBack [_x, _position];
-} forEach (_mapData getOrDefault ["playerAi", []]);
 
 // Draw squad lines
 private _allSquadmates = _mapData getOrDefault ["allSquadmates", []];
@@ -464,7 +341,6 @@ private _sideVehicles = if (_drawAll) then {
 
 {
 	private _position = getPosASL _x;
-	if ([_position] call _cullItem) then { continue; };
 
 	private _threatDetector = _x getVariable ["DIS_missileDetector", 0];
 	if (_threatDetector > 0) then {
@@ -493,16 +369,13 @@ private _sideVehicles = if (_drawAll) then {
 		"right"
 	];
 	_drawIconsSelectable pushBack [_x, _position];
-} forEach _sideVehicles;
+} forEach (_sideVehicles inAreaArray [_mapCenter, _mapWidth, _mapHeight, 0, true]);
 
 private _drawSectorMarkerThreshold = _mapData getOrDefault ["sectorMarkerThreshold", 0.4];
 private _drawSectorMarkerText = (ctrlMapScale _map) < _drawSectorMarkerThreshold;
 
 private _sectorMarkers = _mapData getOrDefault ["teamSectorMarkers", []];
 {
-	private _position = getPosASL (_x # 0);
-	if ([_position] call _cullItem) then { continue; };
-
 	private _marker = [_x, BIS_WL_playerSide] call WL2_fnc_drawSectorMarker;
 	_drawIcons pushBack _marker;
 } forEach _sectorMarkers;
@@ -510,9 +383,6 @@ private _sectorMarkers = _mapData getOrDefault ["teamSectorMarkers", []];
 if (_drawAll) then {
 	private _enemySectorMarkers = _mapData getOrDefault ["enemySectorMarkers", []];
 	{
-		private _position = getPosASL (_x # 0);
-		if ([_position] call _cullItem) then { continue; };
-
 		private _marker = [_x, BIS_WL_enemySide] call WL2_fnc_drawSectorMarker;
 		_drawIcons pushBack _marker;
 	} forEach _enemySectorMarkers;

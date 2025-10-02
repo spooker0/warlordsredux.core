@@ -57,21 +57,17 @@ private _purchaseable = [];
 	private _preset = missionConfigFile >> "CfgWLRequisitionPresets" >> "A3ReduxAll";
 	{
 		private _className = configName _x;
-		private _actualClassName = getText (_x >> "spawn");
+		private _actualClassName = WL_ASSET_FIELD(_assetData, _className, "spawn", "");
 
 		if (_actualClassName == "") then {
 			_actualClassName = _className;
 		};
 
 		private _class = configFile >> "CfgVehicles" >> _actualClassName;
-		private _cost = getNumber (_x >> "cost");
-		private _requirements = getArray (_x >> "requirements");
-		private _offset = getArray (_x >> "offset");
-
-		private _displayName = getText (_x >> "name");
-		if (_displayName == "") then {
-			_displayName = getText (_class >> "displayName");
-		};
+		private _cost = WL_ASSET_FIELD(_assetData, _className, "cost", 0);
+		private _requirements = WL_ASSET_FIELD(_assetData, _className, "requirements", []);
+		private _offset = WL_ASSET_FIELD(_assetData, _className, "offset", []);
+		private _displayName = [objNull, _className] call WL2_fnc_getAssetTypeName;
 
 		private _picture = getText (_class >> "editorPreview");
 

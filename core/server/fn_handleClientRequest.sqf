@@ -126,8 +126,58 @@ if (_action == "scan") exitWith {
 	private _message = format ["%1 has initiated sector scan on %2.", name _sender, _sectorName];
 	[_side, _message] call _broadcastActionToSide;
 
-	private _scanEnd = serverTime + 30;
-	[_sector, _scanEnd] remoteExec ["WL2_fnc_sectorScanHandle", _side];
+	private _spawnPos = getPosATL _sector;
+	_spawnPos set [2, 1000];
+
+	private _uavGroup = createGroup _side;
+	_uavGroup deleteGroupWhenEmpty true;
+
+	private _uavType = if (_side == west) then {
+		"B_UAV_02_F"
+	} else {
+		"O_UAV_02_F"
+	};
+
+	private _uav = createVehicle [_uavType, _spawnPos, [], 0, "FLY"];
+	_uav setVehicleAmmo 0;
+	_uav setVariable ["BIS_WL_ownerAsset", getPlayerUID _sender, true];
+	_uav setVariable ["BIS_WL_ownerAssetSide", _side, true];
+	_uav setVariable ["WL_spawnedAsset", true, true];
+
+	_uav setPosATL _spawnPos;
+
+	private _crewType = if (_side == west) then {
+		"B_UAV_AI"
+	} else {
+		"O_UAV_AI"
+	};
+
+	private _pilot = _uavGroup createUnit [_crewType, _spawnPos, [], 0, "NONE"];
+	_pilot moveInAny _uav;
+
+	_uav lock 2;
+	_uav setFuelConsumptionCoef 20;
+	_uav setVariable ["WL2_accessControl", 7, true];
+
+	private _waypoint = _uavGroup addWaypoint [_sector, 0];
+	_waypoint setWaypointLoiterType "CIRCLE";
+
+	[_sector, _uav] remoteExec ["WL2_fnc_sectorScanHandle", _side];
+	[_sector, _uav] spawn {
+		params ["_sector", "_uav"];
+
+		while {
+			alive _uav &&
+			fuel _uav > 0 &&
+			_uav distance2D _sector < 1000 &&
+			(_uav modelToWorld [0, 0, 0]) # 2 > 500
+		} do {
+			sleep 1;
+		};
+		if (!isNull _uav) then {
+			deleteVehicle _uav;
+		};
+	};
 };
 
 if (_action == "ftSupportPoints") exitWith {

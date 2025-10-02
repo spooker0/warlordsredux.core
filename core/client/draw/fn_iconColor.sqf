@@ -26,13 +26,13 @@ if (isNull _unit) exitWith {
 };
 
 if (_unit == player || player in crew _unit) exitWith {
-    private _color = [1, 1, 0, 0.8];
+    private _color = [1, 1, 0, 1];
     _mapColorCache set [hashValue _unit, _color];
     _color;
 };
 
 if (_unit in (units player) && _unit != player) exitWith {
-    private _color = [0, 0.4, 0, 0.8];
+    private _color = [0.7, 0.7, 0, 0.8];
     _mapColorCache set [hashValue _unit, _color];
     _color;
 };

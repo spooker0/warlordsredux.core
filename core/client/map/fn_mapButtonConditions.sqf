@@ -25,7 +25,9 @@ switch (_conditionName) do {
         private _allScannableSectors = BIS_WL_sectorsArray # 3;
         private _lastScanEligible = serverTime - WL_COOLDOWN_SCAN;
         private _availableSectors = _allScannableSectors select {
-            _x getVariable [format ["BIS_WL_lastScanEnd_%1", BIS_WL_playerSide], -9999] < _lastScanEligible
+            private _currentScannedSectors = missionNamespace getVariable ["WL2_scanningSectors", []];
+            _x getVariable ["WL2_lastScanned", -9999] < _lastScanEligible &&
+            !(_x in _currentScannedSectors)
         };
         _target in _availableSectors;
     };

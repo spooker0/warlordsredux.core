@@ -43,8 +43,10 @@ private _harbor = "W" in _services;
 
 private _side = BIS_WL_playerSide;
 
-private _lastScan = (_sector getVariable [format ["BIS_WL_lastScanEnd_%1", _side], -9999]);
+private _lastScan = (_sector getVariable ["WL2_lastScanned", -9999]);
 private _scanCD = (_lastScan + WL_COOLDOWN_SCAN - serverTime) max 0;
+private _currentScannedSectors = missionNamespace getVariable ["WL2_scanningSectors", []];
+private _isScanning = _sector in _currentScannedSectors;
 
 private _getTeamColor = {
 	params ["_team"];
@@ -148,10 +150,14 @@ private _sectorInfoText = [
 		""
 	},
 
-	if (_scanCD > 0) then {
-		_scanCooldownText joinString ""
+	if (_isScanning) then {
+		"<t color='#4bff4b'>Scan Active</t>" + _linebreak
 	} else {
-		""
+		if (_scanCD > 0) then {
+			_scanCooldownText joinString ""
+		} else {
+			""
+		}
 	},
 
 	if (_percentage > 0 || count _myTeamInfo > 0) then {

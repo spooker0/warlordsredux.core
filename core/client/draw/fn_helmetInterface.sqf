@@ -484,7 +484,7 @@ addMissionEventHandler ["Draw3D", {
 
                 private _assetName = if (_targetSide == _side) then {
                     private _ownerName = [_target] call WL2_fnc_getAssetOwnerName;
-                    format ["%1 %2", _assetTypeName, _ownerName];
+                    format ["%1 (%2)", _assetTypeName, _ownerName];
                 } else {
                     _assetTypeName;
                 };

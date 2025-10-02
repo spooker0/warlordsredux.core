@@ -1,12 +1,14 @@
 #include "includes.inc"
-params ["_sector", "_scanEnd"];
+params ["_sector", "_uav"];
 
 if (isDedicated) exitWith {};
 
 private _side = BIS_WL_playerSide;
-_sector setVariable [format ["BIS_WL_lastScanEnd_%1", _side], _scanEnd];
 
-BIS_WL_currentlyScannedSectors pushBack _sector;
+private _currentScannedSectors = missionNamespace getVariable ["WL2_scanningSectors", []];
+_currentScannedSectors pushBack _sector;
+missionNamespace setVariable ["WL2_scanningSectors", _currentScannedSectors];
+
 "Scan" call WL2_fnc_announcer;
 playSound "Beep_Target";
 [toUpper format [localize "STR_A3_WL_popup_scan_active", _sector getVariable "WL2_name"]] spawn WL2_fnc_smoothText;
@@ -19,17 +21,20 @@ waitUntil {
     private _allDetected = [_side, _sectorArea] call WL2_fnc_detectUnits;
 
     {
-        _side reportRemoteTarget [_x, 5];
+        _side reportRemoteTarget [_x, 1];
     } forEach _allDetected;
 
     _sector setVariable ["WL2_detectedUnits", _allDetected];
+    _sector setVariable ["WL2_lastScanned", serverTime];
+    _uav setVariable ["WL2_accessControl", 7];
 
-    (_sector getVariable [format ["BIS_WL_lastScanEnd_%1", BIS_WL_playerSide], -9999]) <= serverTime
+    player disableUAVConnectability [_uav, true];
+    !alive _uav
 };
 
-BIS_WL_currentlyScannedSectors = BIS_WL_currentlyScannedSectors select {
-    _x != _sector
-};
+private _currentScannedSectors = missionNamespace getVariable ["WL2_scanningSectors", []];
+_currentScannedSectors = _currentScannedSectors select {_x != _sector};
+missionNamespace setVariable ["WL2_scanningSectors", _currentScannedSectors];
 
 "Scan_terminated" call WL2_fnc_announcer;
 [toUpper format [localize "STR_A3_WL_popup_scan_ended", _sector getVariable "WL2_name"]] spawn WL2_fnc_smoothText;

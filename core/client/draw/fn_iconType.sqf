@@ -1,6 +1,10 @@
 #include "includes.inc"
 params ["_vehicle", "_mapIconCache"];
 
+if (!alive _vehicle) exitWith {
+	"\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa";
+};
+
 if (lifeState _vehicle == "INCAPACITATED") exitWith {
 	"a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa";
 };

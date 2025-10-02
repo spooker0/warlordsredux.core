@@ -73,34 +73,6 @@
 		};
 		_mapData set ["scannersTeam", _scannerUnitTeam];
 
-		private _allPlayers = allPlayers;
-
-		private _teamPlayers = _allPlayers select { side group _x == _side };
-		private _deadPlayers = _teamPlayers select { !alive _x };
-		_mapData set ["deadPlayers", _deadPlayers];
-
-		private _deadPlayersAll = _allPlayers select { !alive _x };
-		_mapData set ["deadPlayersAll", _deadPlayersAll];
-
-		private _teammates = _teamPlayers select { isNull objectParent _x } select { alive _x } select { !isObjectHidden _x };
-		_mapData set ["teammates", _teammates];
-
-		private _livePlayersAll = _allPlayers select { isNull objectParent _x } select { alive _x } select { !isObjectHidden _x };
-		_mapData set ["livePlayersAll", _livePlayersAll];
-
-		private _aiInVehicle = allUnits select { alive _x }
-			select { isNull objectParent _x }
-			select { typeOf _x != "Logic" }
-			select { !isPlayer _x };
-
-		_mapData set ["aiInVehicleAll", _aiInVehicle];
-
-		_aiInVehicleTeam = _aiInVehicle select { side group (crew _x select 0) == _side };
-		_mapData set ["aiInVehicle", _aiInVehicleTeam];
-
-		private _playerAi = (units player) select { _x != player } select { alive _x } select { isNull objectParent _x };
-		_mapData set ["playerAi", _playerAi];
-
 		private _allSquadmates = ["getAllInSquad"] call SQD_fnc_client;
 		_allSquadmates = _allSquadmates apply { vehicle _x };
 		_mapData set ["allSquadmates", _allSquadmates];
@@ -117,7 +89,10 @@
 			[]
 		};
 		private _vehiclesOnSide = _vehicles select { count crew _x > 0 } select { side _x == _side };
-		_sideVehicles insert [-1, _vehiclesOnSide, true];
+		_sideVehicles insert [-1, _vehiclesOnSide, true];	// append but only if unique
+		_sideVehicles append (allPlayers select { side group _x == _side } select { isNull objectParent _x });
+		_sideVehicles append ((units player) select { _x != player } select { isNull objectParent _x });
+
 		_mapData set ["sideVehicles", _sideVehicles];
 
 		private _sideVehiclesAll = _vehicles select { simulationEnabled _x } select { !(_x isKindOf "LaserTarget") } select {
