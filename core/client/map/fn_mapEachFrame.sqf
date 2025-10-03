@@ -6,12 +6,11 @@ if (isNull _map) exitWith {};
 private _ctrlMap = ctrlParent _map;
 private _ctrlAssetInfoBox = _ctrlMap getVariable "BIS_assetInfoBox";
 
-private _radius = (((ctrlMapScale _map) * 500) min 30) max 3;
+private _radius = ((ctrlMapScale _map) * 500) max 3;
 private _pos = _map ctrlMapScreenToWorld getMousePosition;
 
 private _drawIconsSelectable = uiNamespace getVariable ["WL2_drawIconsSelectable", []];
 private _nearbyAssets = _drawIconsSelectable select {
-    private _asset = _x # 0;
     private _assetPos = _x # 1;
     (_assetPos distance2D _pos) < _radius
 };

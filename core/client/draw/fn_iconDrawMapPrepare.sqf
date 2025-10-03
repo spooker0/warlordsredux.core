@@ -14,14 +14,8 @@ private _topRightCorner = _map ctrlMapScreenToWorld [_mapX + _mapW, _mapY];
 private _mapCenter = _map ctrlMapScreenToWorld [_mapX + _mapW / 2, _mapY + _mapH / 2];
 private _mapWidth = _topRightCorner # 0 - _bottomLeftCorner # 0;
 private _mapHeight = _topRightCorner # 1 - _bottomLeftCorner # 1;
-
-private _cullItem = {
-	params ["_itemPosition"];
-	_itemPosition # 0 < _bottomLeftCorner # 0 ||
-	_itemPosition # 0 > _topRightCorner # 0 ||
-	_itemPosition # 1 < _bottomLeftCorner # 1 ||
-	_itemPosition # 1 > _topRightCorner # 1
-};
+private _mapBoundW = _mapWidth * 0.5;
+private _mapBoundH = _mapHeight * 0.5;
 
 private _drawAll = _drawMode == 1 || _drawMode == 2;
 private _draw = (ctrlMapScale _map) < 0.3 || _drawMode == 2;
@@ -249,7 +243,7 @@ private _scannedUnits = _mapData getOrDefault ["scannedUnits", []];
 		"PuristaBold",
 		"right"
 	];
-} forEach (_scannedUnits inAreaArray [_mapCenter, _mapWidth, _mapHeight, 0, true]);
+} forEach (_scannedUnits inAreaArray [_mapCenter, _mapBoundW, _mapBoundH, 0, true]);
 
 // Draw EW networks
 {
@@ -369,7 +363,7 @@ private _sideVehicles = if (_drawAll) then {
 		"right"
 	];
 	_drawIconsSelectable pushBack [_x, _position];
-} forEach (_sideVehicles inAreaArray [_mapCenter, _mapWidth, _mapHeight, 0, true]);
+} forEach (_sideVehicles inAreaArray [_mapCenter, _mapBoundW, _mapBoundH, 0, true]);
 
 private _drawSectorMarkerThreshold = _mapData getOrDefault ["sectorMarkerThreshold", 0.4];
 private _drawSectorMarkerText = (ctrlMapScale _map) < _drawSectorMarkerThreshold;
