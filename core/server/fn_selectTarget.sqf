@@ -11,9 +11,7 @@ private _prevSector = missionNamespace getVariable format ["BIS_WL_currentTarget
 missionNamespace setVariable [format ["BIS_WL_currentTarget_%1", _side], _sector, true];
 
 private _isHomeBase = _sector in (profileNamespace getVariable "BIS_WL_lastBases");
-if (_isHomeBase) then {
-	["base_vulnerable", _sector getVariable "BIS_WL_originalOwner"] call WL2_fnc_handleRespawnMarkers;
-} else {
+if (!_isHomeBase) then {
 	private _owner = _sector getVariable ["BIS_WL_owner", sideUnknown];
 	private _enemySector = missionNamespace getVariable format ["BIS_WL_currentTarget_%1", ([west, east] select {_x != _side}) # 0];
 	if (_owner == resistance && _sector != _enemySector && _prevSector != _sector) then {
@@ -23,9 +21,5 @@ if (_isHomeBase) then {
 		} else {
 			[_sector, _owner] spawn WL2_fnc_populateSector;
 		};
-	};
-
-	if (_prevSector in (profileNamespace getVariable "BIS_WL_lastBases")) then {
-		["base_safe", _prevSector getVariable "BIS_WL_originalOwner"] call WL2_fnc_handleRespawnMarkers;
 	};
 };

@@ -97,7 +97,7 @@
 #define WL_DURATION_MISSION 36000
 
 #define WL_TARGET_FRIENDLY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_playerSide], objNull])
-#define WL_TARGET_ENEMY (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", BIS_WL_enemySide])
+#define WL_TARGET_ENEMY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_enemySide], objNull])
 #define WL_CONTROL_MAP (uiNamespace getVariable ["BIS_WL_mapControl", controlNull])
 #define WL_SPECIAL_SECTORS (["Wait", "Surrender"])
 #define WL_PLAYER_REQUISITION_LIST (missionNamespace getVariable format ["WL2_purchasable_%1", BIS_WL_playerSide])

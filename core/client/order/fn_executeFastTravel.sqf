@@ -19,22 +19,15 @@ private _destination = [];
 private _sectorPos = if (isNil "BIS_WL_targetSector") then {
 	[0, 0, 0];
 } else {
-	[toUpper format [localize "STR_A3_WL_popup_travelling", BIS_WL_targetSector getVariable "WL2_name"], nil, 3] spawn WL2_fnc_smoothText;
 	(BIS_WL_targetSector getVariable "objectAreaComplete") # 0;
 };
 
 switch (_fastTravelMode) do {
 	case 0: {
-		_destination = selectRandom ([BIS_WL_targetSector, 0, true] call WL2_fnc_findSpawnPositions);
+		_destination = selectRandom ([BIS_WL_targetSector] call WL2_fnc_findSpawnsInSector);
 	};
 	case 1: {
-		private _spawnPositions = [_marker, 0, true] call WL2_fnc_findSpawnPositions;
-		_destination = if (count _spawnPositions > 0) then {
-			selectRandom _spawnPositions;
-		} else {
-			markerPos _marker;
-		};
-
+		_destination = selectRandom ([_marker] call WL2_fnc_findSpawnsInMarker);
 		[player, "fastTravelContested"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	};
 	case 2: {
@@ -47,7 +40,7 @@ switch (_fastTravelMode) do {
 		[player, "fastTravelAirAssault"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	};
 	case 3: {
-		private _safeSpot = selectRandom ([BIS_WL_targetSector, 0, true] call WL2_fnc_findSpawnPositions);
+		private _safeSpot = selectRandom ([BIS_WL_targetSector] call WL2_fnc_findSpawnsInSector);
 		_destination = [_safeSpot # 0, _safeSpot # 1, 50];
 	};
 	case 4: {
@@ -67,13 +60,7 @@ switch (_fastTravelMode) do {
 	};
 	case 6;
 	case 7: {
-		private _spawnPositions = [_marker, 0, true] call WL2_fnc_findSpawnPositions;
-		if (count _spawnPositions > 0) then {
-			_destination = selectRandom _spawnPositions;
-		};
-		if !(_destination inArea _marker) then {
-			_destination = markerPos _marker;
-		};
+		_destination = selectRandom ([_marker] call WL2_fnc_findSpawnsInMarker);
 		_destination = [_destination # 0, _destination # 1, 50];
 		deleteMarker _marker;
 	};
@@ -99,6 +86,7 @@ sleep 1;
 switch (_fastTravelMode) do {
 	case 0;
 	case 1: {
+		[toUpper format [localize "STR_A3_WL_popup_travelling", BIS_WL_targetSector getVariable "WL2_name"], nil, 3] spawn WL2_fnc_smoothText;
 		{
 			_x setVehiclePosition [_destination, [], 3, "NONE"];
 		} forEach _tagAlong;

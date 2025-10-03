@@ -121,9 +121,6 @@ if (isNil "_settingsMap") then {
     profileNamespace setVariable ["WL2_settings", createHashMap];
 };
 
-if !(isServer) then {
-	"setup" call WL2_fnc_handleRespawnMarkers;
-};
 WL_LoadingState = 6;
 
 call WL2_fnc_sectorsInitClient;
@@ -224,13 +221,8 @@ WL_LoadingState = 12;
 0 spawn WL2_fnc_announcerInit;
 [toUpper localize "STR_A3_WL_popup_init"] spawn WL2_fnc_smoothText;
 
-0 spawn {
-	_markers = BIS_WL_playerSide call WL2_fnc_getRespawnMarkers;
-	_respawnPos = markerPos selectRandom _markers;
-	while { player distance2D _respawnPos > 300 } do {
-		player setVehiclePosition [_respawnPos, [], 0, "NONE"];
-		sleep 1;
-	};
+if !(isDedicated) then {
+	[true] call WL2_fnc_spawnAtBase;
 };
 
 0 spawn {

@@ -357,6 +357,14 @@ private _strategyArr = [
 		"Order up to 5 vehicles in every sector to test performance under stress."
 	];
 	_strategyArr pushBack [
+		"StressTestSpawns",
+		0,
+		[],
+		"Stress test: show sector spawns",
+		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
+		"Show all possible sector spawns."
+	];
+	_strategyArr pushBack [
 		"TestKillfeed",
 		0,
 		[],

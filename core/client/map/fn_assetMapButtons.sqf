@@ -235,6 +235,10 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     // Delete FOB Button
     private _deleteFOBExecute = {
         params ["_asset"];
+        private _result = ["Delete FOB", "Are you sure you would like to delete your FOB?", "Yes", "Cancel"] call WL2_fnc_prompt;
+        if (!_result) exitWith {
+            playSoundUI ["AddItemFailed"];
+        };
         deleteVehicle _asset;
     };
     [

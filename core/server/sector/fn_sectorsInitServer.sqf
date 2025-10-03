@@ -202,7 +202,7 @@ private _slowestCapture = 50;
 	];
 	{
 		private _sector = _x;
-		private _randomSpots = [_sector] call WL2_fnc_findSpawnPositions;
+		private _randomSpots = [_sector] call WL2_fnc_findSpawnsInSector;
 		{
 			private _pos = selectRandom _randomSpots;
 			private _direction = [[0, 0, 1], [0, 1, 0]];

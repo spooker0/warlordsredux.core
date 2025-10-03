@@ -217,7 +217,7 @@ switch (_className) do {
 
             for "_i" from 0 to 50 do {
                 private _orderedClass = selectRandom _classesArray;
-                private _pos = selectRandom ([_sector, 0, true] call WL2_fnc_findSpawnPositions);
+                private _pos = selectRandom ([_sector] call WL2_fnc_findSpawnsInSector);
                 if (_orderedClass isKindOf "Man") then {
                     continue;
                 };
@@ -237,7 +237,7 @@ switch (_className) do {
                 private _sector = _x;
                 for "_i" from 0 to 5 do {
                     private _orderedClass = selectRandom _classesArray;
-                    private _pos = selectRandom ([_sector, 0, true] call WL2_fnc_findSpawnPositions);
+                    private _pos = selectRandom ([_sector] call WL2_fnc_findSpawnsInSector);
                     if (_orderedClass isKindOf "Man") then {
                         continue;
                     };
@@ -246,6 +246,33 @@ switch (_className) do {
                     sleep 0.1;
                 };
             } forEach BIS_WL_allSectors;
+        };
+    };
+    case "StressTestSpawns": {
+        0 spawn {
+            private _spawns = [];
+            {
+                private _sectorName = _x getVariable ["WL2_name", "Unknown"];
+                systemChat format ["Finding spawns in sector: %1", _sectorName];
+                private _spawnsForSector = [_x] call WL2_fnc_findSpawnsInSector;
+                _spawns append _spawnsForSector;
+            } forEach BIS_WL_allSectors;
+
+            systemChat format ["Found %1 spawns on map. Painting sector spawns. This can take a while...", count _spawns];
+            
+            private _markers = [];
+            {
+                private _marker = createMarkerLocal [format ["WL2_testSpawnMarker_%1", _forEachIndex], _x];
+                _marker setMarkerShapeLocal "ICON";
+                _marker setMarkerTypeLocal "mil_dot";
+                _marker setMarkerColorLocal "ColorRed";
+                _marker setMarkerShadowLocal false;
+                _markers pushBack _marker;
+            } forEach _spawns;
+
+            systemChat format ["%1 markers painted.", count _markers];
+
+            openMap true;
         };
     };
     case "TestKillfeed": {

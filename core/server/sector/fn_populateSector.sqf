@@ -16,7 +16,7 @@ if (count (_sector getVariable ["BIS_WL_vehiclesToSpawn", []]) == 0) then {
 		2;
 	};
 
-	private _randomSpots = [_sector] call WL2_fnc_findSpawnPositions;
+	private _randomSpots = [_sector] call WL2_fnc_findSpawnsInSector;
 
 	private _vehiclesPool = [];
 	{
@@ -83,7 +83,7 @@ if (count (_sector getVariable ["BIS_WL_vehiclesToSpawn", []]) == 0) then {
 	};
 
 	if (_hasRadar && _hardAIMode) then {
-		private _samLocation = selectRandom ([_sector, 0, true] call WL2_fnc_findSpawnPositions);
+		private _samLocation = selectRandom ([_sector] call WL2_fnc_findSpawnsInSector);
 		private _createSamResult = [_samLocation, 0, "I_E_SAM_System_03_F", resistance] call BIS_fnc_spawnVehicle;
 		private _sam = _createSamResult select 0;
 		for "_i" from 1 to 10 do {
@@ -173,7 +173,7 @@ if (!_connectedToBase && "H" in _services) then {
 };
 [_vehicleUnits, _sector] spawn WL2_fnc_assetRelevanceCheck;
 
-private _spawnPosArr = [_sector, 0, true] call WL2_fnc_findSpawnPositions;
+private _spawnPosArr = [_sector] call WL2_fnc_findSpawnsInSector;
 if (count _spawnPosArr == 0) exitWith {};
 
 private _unitsPool = [];

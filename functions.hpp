@@ -183,6 +183,7 @@ class CfgFunctions {
 			class setupCarrier {};
 			class showHint {};
 			class sideToFaction {};
+			class spawnAtBase {};
 			class spectrumInterface {};
 			class teammatesAvailability {};
 			class triggerPurchase {};
@@ -314,7 +315,6 @@ class CfgFunctions {
 			class createInfoMarkers {};
 			class deleteAssetFromMap {};
 			class detectUnits {};
-			class getRespawnMarkers {};
 			class getSideBase {};
 			class groupIconClickHandle {};
 			class groupIconEnterHandle {};
@@ -406,7 +406,9 @@ class CfgFunctions {
 			file = "src\core\common";
 			class accessControl {};
 			class cleanupCarrier {};
-			class findSpawnPositions {};
+			class findSpawnsInArea {};
+			class findSpawnsInMarker {};
+			class findSpawnsInSector {};
 			class getAirSectorSpawn {};
 			class getAssetSide {};
 			class getAssetOwnerName {};
@@ -416,7 +418,6 @@ class CfgFunctions {
 			class getVehicleWeapons {};
 			class grieferCheck {};
 			class handleInstigator {};
-			class handleRespawnMarkers {};
 			class inAngleCheck {};
 			class income {};
 			class initAssetData {};

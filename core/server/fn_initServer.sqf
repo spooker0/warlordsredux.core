@@ -56,7 +56,6 @@ if !(isDedicated) then {
 };
 
 call WL2_fnc_sectorsInitServer;
-"setup" call WL2_fnc_handleRespawnMarkers;
 if !(isDedicated) then {
 	{
 		_x call WL2_fnc_parsePurchaseList;
@@ -73,7 +72,7 @@ call WL2_fnc_processRunways;
 0 spawn WL2_fnc_laserTracker;
 
 0 spawn {
-	if (random 1 > 0.2) exitWith {};
+	if (random 1 > 0.1) exitWith {};
 
 	waitUntil { time > 0 };
 
@@ -86,7 +85,7 @@ call WL2_fnc_processRunways;
 
 	while { !BIS_WL_missionEnd } do {
 		private _timeMultiplier = if (sunOrMoon < 0.99) then {
-			60;
+			30;
 		} else {
 			1;
 		};
