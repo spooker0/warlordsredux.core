@@ -54,8 +54,16 @@ if (_ammoConfig getOrDefault ["loal", false]) then {
         sleep 1;
         
         _projectile setMissileTarget [_selectedTarget, true];
-        if (speed _unit > 950 && _projectilePos # 2 > _targetPos # 2) then {
-            _distanceBeforeNotch = 48000;
+
+        private _unitSpeed = speed _unit;
+        private _projAlt = _projectilePos # 2;
+        private _targetAlt = _targetPos # 2;
+        if (_unitSpeed > 950) then {
+            if (_projAlt > _targetAlt) then {
+                _distanceBeforeNotch = 48000;
+            } else {
+                _distanceBeforeNotch = 5000 + _projAlt * 2;
+            };
         };
     };
 };
