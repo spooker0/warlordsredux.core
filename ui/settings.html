@@ -3,235 +3,21 @@
 
 <head>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        body,
         html {
-            height: 100%;
-            text-align: center;
-            overflow: hidden;
-        }
-
-        .settings-menu-wrapper {
-            display: inline-block;
-            width: 60vw;
-            height: 80vh;
-            border-radius: 10px;
-            border: 2px solid #444;
-            background-color: #2a2a2a;
-            position: absolute;
-            left: 20vw;
-            top: 10vh;
-        }
-
-        .menu-title {
-            background-color: #222;
-            color: #fff;
-            padding: 15px;
-            font-size: 24px;
-            font-weight: bold;
-            border-bottom: 2px solid #444;
-        }
-
-        .settings-content {
-            width: 100%;
-            height: calc(100% - 60px);
-            padding: 20px 30px;
-            overflow-y: auto;
-            text-align: left;
-            font-size: 16px;
-            scrollbar-color: #444444 #2a2a2a;
-            scrollbar-width: thin;
-            color: #fff;
-        }
-
-        .search-wrap {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background: linear-gradient(#2a2a2a, #2a2a2a);
-            padding: 8px 0 14px;
-            margin-top: 10px;
-            margin-bottom: 14px;
-            border-bottom: 1px solid #3e3e3e;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 20px 12px;
-            border-radius: 6px;
-            border: 1px solid #555;
-            background: #1e1e1e;
-            color: #fff;
-            font-size: 14px;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #66ccff;
-        }
-
-        .category {
-            color: #66ccff;
-            font-size: 20px;
-            margin: 25px 0 10px;
-            border-bottom: 1px solid #444;
-            padding-bottom: 3px;
-        }
-
-        .control-row {
-            margin: 16px 0px;
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            background-color: #3a3a3a;
-            padding: 8px 16px;
-            border-radius: 6px;
-        }
-
-        .control-row label {
-            flex: 1 1 250px;
-            font-size: 15px;
-        }
-
-        .control-row input[type="range"] {
-            flex: 2 1 300px;
-            background: #444;
-            border-radius: 5px;
-            outline: none;
-            cursor: pointer;
-        }
-
-        .value-input {
-            width: 70px;
-            padding: 4px 8px;
-            font-size: 14px;
-            text-align: right;
-            background-color: #1e1e1e;
-            color: #fff;
-            border: 1px solid #555;
-            border-radius: 6px;
-        }
-
-        .value-input:focus {
-            outline: none;
-            border-color: #66ccff;
-        }
-
-        .control-row input[type="checkbox"] {
-            transform: scale(1.2);
-            accent-color: #66ccff;
-            cursor: pointer;
-        }
-
-        button {
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 4px;
-            vertical-align: middle;
-            margin-left: 10px;
-            background-color: #55aadd;
-            font-size: 16px;
-            margin: 4px;
-            min-width: 140px;
-            font-weight: bold;
-        }
-
-        button:hover {
-            background-color: #4499cc;
-        }
-
-        button img {
-            height: 48px;
-            vertical-align: middle;
-            margin-top: 8px;
-            margin-bottom: 8px;
-        }
-
-        .close-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: rgba(0, 0, 0, 0.3);
-            width: 40px;
-            height: 40px;
-            font-size: 30px;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 3px;
-        }
-
-        .close-button:hover {
-            background-color: rgba(0, 0, 0, 0.7);
-        }
-
-        .fps-display {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            background-color: rgba(0, 0, 0, 1);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            z-index: 1000;
+            visibility: hidden;
         }
     </style>
+    <link rel="stylesheet" href="src\ui\style\settings.css">
+    <link rel="stylesheet" href="src\ui\style\menu.css">
 </head>
 
 <body>
-    <div class="fps-display"></div>
-    <div class="settings-menu-wrapper">
+    <div class="menu-wrapper settings-menu-wrapper">
         <div class="menu-title">Settings</div>
         <div id="settingsContainer" class="settings-content"></div>
-        <div class="close-button">
-            &times;
-        </div>
     </div>
-
+    <script src="src\ui\script\menu.js"></script>
     <script>
-        document.addEventListener('wheel', function (e) {
-            const el = document.elementFromPoint(e.clientX, e.clientY);
-            if (el && el.closest('.settings-content')) {
-                el.closest('.settings-content').scrollTop += e.deltaY;
-                e.preventDefault();
-            }
-        }, { passive: false });
-
-        document.querySelector('.close-button').addEventListener('mousedown', function () {
-            A3API.SendAlert('exit');
-        });
-
-        function dragElement(wrapper, header) {
-            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-            header.addEventListener('mousedown', dragMouseDown);
-            function dragMouseDown(e) {
-                e.preventDefault(); pos3 = e.clientX; pos4 = e.clientY;
-                document.addEventListener('mouseup', closeDragElement);
-                document.addEventListener('mousemove', elementDrag);
-            }
-            function elementDrag(e) {
-                e.preventDefault();
-                pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY;
-                pos3 = e.clientX; pos4 = e.clientY;
-                wrapper.style.top = (wrapper.offsetTop - pos2) + "px";
-                wrapper.style.left = (wrapper.offsetLeft - pos1) + "px";
-            }
-            function closeDragElement() {
-                document.removeEventListener('mouseup', closeDragElement);
-                document.removeEventListener('mousemove', elementDrag);
-            }
-        }
-        dragElement(document.querySelector('.settings-menu-wrapper'), document.querySelector('.menu-title'));
-
         function createMenu(settingsData) {
             settingsData = JSON.parse(settingsData || '[]');
             const container = document.getElementById("settingsContainer");
@@ -323,7 +109,7 @@
                 const buttonText = document.createElement('div');
                 buttonText.textContent = labelText;
                 button.appendChild(buttonText);
-                
+
                 button.addEventListener("click", () => {
                     A3API.SendAlert(`["button", "${labelText}"]`);
                 });
@@ -399,25 +185,29 @@
 
             input.addEventListener('input', e => applyFilter(e.target.value));
         }
-
-        let frameTime = 0, frameCount = 0;
-        let lastLoop = performance.now();
-        const fpsLoop = () => {
-            const thisLoop = performance.now();
-            frameTime += (thisLoop - lastLoop - frameTime) / 20;
-            lastLoop = thisLoop;
-            frameCount++;
-            requestAnimationFrame(fpsLoop);
-        };
-        const fpsOut = document.querySelector('.fps-display');
-        setInterval(() => {
-            if (frameCount > 60) {
-                fpsOut.textContent = `MENU FPS: ${(1000 / frameTime).toFixed(2)}`;
-            } else {
-                fpsOut.textContent = `MENU FPS: -`;
+    </script>
+    <script>
+        var allStyles = document.getElementsByTagName("link");
+        [...allStyles].forEach((link) => {
+            if (link.href) {
+                const styleNode = document.createElement("style");
+                A3API.RequestFile(link.href).then(content => {
+                    styleNode.innerHTML = content;
+                    link.replaceWith(styleNode);
+                });
             }
-        }, 100);
-        fpsLoop();
+        });
+
+        const allScripts = document.getElementsByTagName("script");
+        [...allScripts].forEach((script) => {
+            if (script.src) {
+                A3API.RequestFile(script.src).then(content => {
+                    const scriptNode = document.createElement("script");
+                    scriptNode.innerHTML = content;
+                    script.replaceWith(scriptNode);
+                });
+            }
+        });
     </script>
 </body>
 

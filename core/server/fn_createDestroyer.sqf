@@ -77,7 +77,7 @@ private _createMrls = {
     _destroyerBase setVariable ["WL2_destroyerVLS", _mrls, true];
 
     _controller setVariable ["WL2_destroyerVLS", _mrls, true];
-    _mrls setVariable ["WL2_ignoreRange", true, true];
+    _mrls setVariable ["WL2_overrideRange", 30000, true];
     _mrls setVariable ["WL2_destroyerController", _controller, true];
     _mrls setVariable ["WL2_destroyerId", _destroyerId, true];
     _mrls setVariable ["WL_spawnedAsset", true, true];

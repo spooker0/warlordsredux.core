@@ -263,7 +263,6 @@ class CfgFunctions {
 			file = "src\core\client\draw";
 			class cruiseMissileWarning {};
 			class drawAssetName {};
-			class drawIncomingMissiles {};
 			class drawRadarName {};
 			class drawSectorMarker {};
 			class ecmJammer {};
@@ -281,7 +280,6 @@ class CfgFunctions {
 			class refreshCurrentTargetData {};
 			class sceneDrawHandle {};
 			class scoreboard {};
-			class scoreboardScroll {};
 			class setupUI {};
 			class smoothText {};
 			class toggleTurretVisualizer {};
@@ -299,6 +297,7 @@ class CfgFunctions {
 			class killRewardClient {};
 			class punishmentClient {};
 			class punishMessage {};
+			class refreshKillfeed {};
 			class updateKillFeed {};
 		};
 		class ClientMap {

@@ -29,4 +29,8 @@ player setVariable ["WL2_respawnBag", _freshTent, [2, clientOwner]];
 _freshTent enableWeaponDisassembly false;
 playSoundUI ["a3\ui_f\data\sound\cfgnotifications\communicationmenuitemadded.wss"];
 
+_freshTent setVariable ["WL2_demolitionHealth", 1, true];
+_freshTent setVariable ["WL2_demolitionMaxHealth", 1, true];
+_freshTent setVariable ["WL2_canDemolish", true, true];
+
 deleteVehicle _projectile;

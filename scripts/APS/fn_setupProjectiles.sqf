@@ -60,6 +60,16 @@ _this addEventHandler ["Fired", {
 		} else {
 			systemChat "GPS target out of range.";
 		};
+
+		private _overrideRange = _unit getVariable ["WL2_overrideRange", 0];
+		if (_overrideRange > 0) then {
+			if (_inRange) then {
+				playSound3D ["a3\sounds_f\weapons\rockets\new_rocket_3.wss", _projectile, false, getPosASL _projectile, 5, 0.8 + random 0.4];
+			} else {
+				deleteVehicle _projectile;
+				playSoundUI ["AddItemFailed"];
+			};
+		};
 	};
 
 	private _projectileESam = _projectileConfig getOrDefault ["esam", false];

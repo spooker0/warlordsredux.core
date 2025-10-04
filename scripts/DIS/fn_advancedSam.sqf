@@ -56,4 +56,4 @@ _projectile setVariable ["WL2_missileStateOverride", "", true];
 _projectile setMissileTarget [_target, true];
 
 [_projectile, _unit] spawn DIS_fnc_frag;
-[_projectile, _unit, 14000, 14000, 8000] spawn DIS_fnc_maneuver;
+[_projectile, _unit, 14000, 14000, 6500] spawn DIS_fnc_maneuver;

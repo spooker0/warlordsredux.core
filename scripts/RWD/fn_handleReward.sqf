@@ -47,6 +47,11 @@ if (_rewardType == "DESTROYED") then {
 	private _currentTypeDestroyed = _rewardStack getOrDefault [_killedType + " DESTROYED", 0];
 	_rewardStack set [_killedType + " DESTROYED", _currentTypeDestroyed + 1];
 
+	if (_killerType == "INFANTRY" && _killedType == "HEAVY") then {
+		private _currentInfantryVHeavy = _rewardStack getOrDefault ["INFANTRY KILL HEAVY", 0];
+		_rewardStack set ["INFANTRY KILL HEAVY", _currentInfantryVHeavy + 1];
+	};
+
 	if (_killerType == "PLANE" && _killedType == "PLANE") then {
 		private _currentPlaneVPlane = _rewardStack getOrDefault ["PLANE KILL PLANE", 0];
 		_rewardStack set ["PLANE KILL PLANE", _currentPlaneVPlane + 1];

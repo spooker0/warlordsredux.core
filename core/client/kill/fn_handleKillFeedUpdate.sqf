@@ -22,29 +22,6 @@ while { !BIS_WL_missionEnd } do {
     private _useNewKillfeed = _settingsMap getOrDefault ["useNewKillfeed", true];
 
     if (_useNewKillfeed) then {
-        private _display = uiNamespace getVariable ["RscWLKillfeedMenu", displayNull];
-        if (isNull _display) then {
-            "killfeed" cutRsc ["RscWLKillfeedMenu", "PLAIN", -1, true, true];
-            _display = uiNamespace getVariable "RscWLKillfeedMenu";
-        };
-
-        private _killfeedScale = _settingsMap getOrDefault ["killfeedScale", 1.0];
-        private _killfeedBadgeScale = _settingsMap getOrDefault ["killfeedBadgeScale", 1.0];
-        private _killfeedTimeout = (_settingsMap getOrDefault ["killfeedTimeout", 10]) * 1000;
-        private _killfeedMinGap = _settingsMap getOrDefault ["killfeedMinGap", 250];
-        private _ribbonMinShowTime = (_settingsMap getOrDefault ["ribbonMinShowTime", 5]) * 1000;
-
-        private _texture = _display displayCtrl 5502;
-        private _script = format [
-            "setSettings(%1, %2, %3, %4, %5);",
-            _killfeedScale,
-            _killfeedBadgeScale,
-            _killfeedTimeout,
-            _killfeedMinGap,
-            _ribbonMinShowTime
-        ];
-        _texture ctrlWebBrowserAction ["ExecJS", _script];
-
         sleep 10;
         continue;
     };

@@ -6,6 +6,7 @@ if (isNull _display) then {
 };
 private _texture = _display displayCtrl 5501;
 _texture ctrlWebBrowserAction ["LoadFile", "src\ui\vehicles.html"];
+// _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
 _texture ctrlAddEventHandler ["JSDialog", {
     params ["_texture", "_isConfirmDialog", "_message"];
@@ -107,11 +108,12 @@ _texture ctrlAddEventHandler ["JSDialog", {
 
 _texture ctrlAddEventHandler ["PageLoaded", {
     params ["_texture"];
+    [_texture] call WL2_fnc_domLoader;
     [_texture] spawn {
         params ["_texture"];
         while { !isNull _texture } do {
             [_texture] call WL2_fnc_sendVehicleData;
-            sleep 1;
+            sleep 0.5;
         };
     };
 }];

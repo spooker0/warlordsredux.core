@@ -3,299 +3,16 @@
 
 <head>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        body,
         html {
-            height: 100%;
-            text-align: center;
-        }
-
-        #game-data {
-            display: none;
-        }
-
-        .squad-menu-wrapper {
-            position: relative;
-            display: inline-block;
-            width: 80vw;
-            height: 80vh;
-            max-width: 1200px;
-            border-radius: 10px;
-            border: 2px solid #444;
-            margin-top: 10vh;
-            background-color: #2a2a2a;
-        }
-
-        .menu-title {
-            background-color: #222;
-            color: #fff;
-            padding: 15px;
-            font-size: 24px;
-            font-weight: bold;
-            border-bottom: 2px solid #444;
-        }
-
-        .squad-menu {
-            width: 100%;
-            height: calc(100% - 60px);
-            font-size: 0;
-        }
-
-        .panel {
-            display: inline-block;
-            vertical-align: top;
-            height: 100%;
-            overflow-y: auto;
-            padding: 20px;
-            font-size: 16px;
-            background-color: #2a2a2a;
-            color: white;
-            overflow-anchor: none;
-            scrollbar-color: #444444 #2a2a2a;
-            scrollbar-width: thin;
-        }
-
-        .panel.left-panel {
-            border-right: 2px solid #444;
-            width: 60%;
-        }
-
-        .panel.right-panel {
-            border-left: 2px solid #444;
-            width: 40%;
-        }
-
-        .template {
-            display: none;
-        }
-
-        .create-squad-button-wrapper {
-            margin-bottom: 20px;
-        }
-
-        .create-squad-button {
-            width: 100%;
-            background-color: #66ccff;
-            color: #000;
-            padding: 15px;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 16px;
-            text-align: left;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .create-squad-button:hover {
-            background-color: #55aadd;
-        }
-
-        .squad {
-            margin-bottom: 20px;
-        }
-
-        .squad h3 {
-            text-align: left;
-            margin-bottom: 10px;
-            color: #66ccff;
-        }
-
-        .member,
-        .unsquadded-player {
-            background-color: #3a3a3a;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            text-align: left;
-            display: inline-block;
-            width: 100%;
-            line-height: 24px;
-            font-size: 14px;
-        }
-
-        .member span,
-        .unsquadded-player span {
-            vertical-align: middle;
-        }
-
-        .squad-leader {
-            font-weight: bold;
-            color: #ffd700;
-        }
-
-        .invite-button,
-        .leave-button,
-        .kick-button,
-        .promote-button,
-        .ft-button {
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            vertical-align: middle;
-            margin-left: 10px;
-            float: right;
-            cursor: pointer;
-        }
-
-        .invite-button,
-        .promote-button,
-        .ft-button {
-            background-color: #66cc66;
-        }
-
-        .invite-button:hover,
-        .promote-button:hover,
-        .ft-button:hover {
-            background-color: #55aa55;
-        }
-
-        .leave-button,
-        .kick-button {
-            background-color: #ff6666;
-        }
-
-        .leave-button:hover,
-        .kick-button:hover {
-            background-color: #aa5555;
-        }
-
-        .edit-button {
-            background: none;
-            border: none;
-            color: #66ccff;
-            float: right;
-            padding: 0;
-            font-size: 14px;
-        }
-
-        .edit-button:hover {
-            color: #55aadd;
-        }
-
-        .unsquadded-player::after {
-            content: "";
-            display: block;
-            clear: both;
-        }
-
-        .rename-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 999;
-        }
-
-        .rename-modal-content {
-            background-color: #2a2a2a;
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            max-width: 400px;
-            width: 80%;
-            border: 2px solid #444;
-        }
-
-        .rename-modal-content h4 {
-            font-size: 20px;
-            color: #ffffff;
-            margin-bottom: 20px;
-        }
-
-        .rename-modal-content input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #444;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            background-color: #1e1e1e;
-            color: white;
-        }
-
-        .rename-modal-content button {
-            padding: 10px 20px;
-            margin: 0 10px;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        #rename-squad-button {
-            background-color: #66cc66;
-            color: #000;
-        }
-
-        #rename-squad-button:hover {
-            background-color: #55aa55;
-        }
-
-        #cancel-rename-button {
-            background-color: #ff6666;
-            color: #000;
-        }
-
-        #cancel-rename-button:hover {
-            background-color: #aa5555;
-        }
-
-        .hide {
-            display: none;
-        }
-
-        .close-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: rgba(0, 0, 0, 0.3);
-            width: 40px;
-            height: 40px;
-            font-size: 30px;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 3px;
-        }
-
-        .close-button:hover {
-            background-color: rgba(0, 0, 0, 0.7);
-        }
-
-        .fps-display {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            background-color: rgba(0, 0, 0, 1);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            z-index: 1000;
+            visibility: hidden;
         }
     </style>
+    <link rel="stylesheet" href="src\ui\style\squad.css">
+    <link rel="stylesheet" href="src\ui\style\menu.css">
 </head>
 
 <body>
-    <div class="fps-display"></div>
-    <div id="game-data">
-        <div id="player-info"></div>
-        <div id="squad-info"></div>
-    </div>
-    <div class="squad-menu-wrapper">
+    <div class="menu-wrapper">
         <div class="menu-title">Squad</div>
         <div class="squad-menu">
             <div class="panel left-panel">
@@ -316,19 +33,9 @@
                 </div>
             </div>
         </div>
-        <div class="close-button">
-            &times;
-        </div>
     </div>
+    <script src="src\ui\script\menu.js"></script>
     <script>
-        document.addEventListener('wheel', function (e) {
-            const el = document.elementFromPoint(e.clientX, e.clientY);
-            if (el && el.closest('.panel')) {
-                el.closest('.panel').scrollTop += e.deltaY;
-                e.preventDefault();
-            }
-        }, { passive: false });
-
         document.querySelector('.create-squad-button').addEventListener('mousedown', function () {
             A3API.SendAlert('["create"]');
             document.querySelector('.create-squad-button-wrapper').classList.add('hide');
@@ -336,10 +43,6 @@
 
         document.getElementById('cancel-rename-button').addEventListener('mousedown', () => {
             document.querySelector('.rename-modal').style.display = 'none';
-        });
-
-        document.querySelector('.close-button').addEventListener('mousedown', function () {
-            A3API.SendAlert('exit');
         });
 
         function saveName() {
@@ -366,12 +69,9 @@
             return points + " pts";
         }
 
-        function updateData() {
-            const playerInfoEl = document.getElementById('player-info');
-            const playerInfo = JSON.parse(playerInfoEl.textContent || '{}');
-
-            const squadInfoEl = document.getElementById('squad-info');
-            const squadData = JSON.parse(squadInfoEl.textContent || '{}');
+        function updateData(playerInfo, squadData) {
+            playerInfo = JSON.parse(playerInfo || '{}');
+            squadData = JSON.parse(squadData || '{}');
 
             const squadTemplate = document.querySelector('.squad.template');
             document.querySelector('.squads').innerHTML = '';
@@ -513,25 +213,31 @@
                 }
             });
         }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            var allStyles = document.getElementsByTagName("link");
+            [...allStyles].forEach((link) => {
+                if (link.href) {
+                    const styleNode = document.createElement("style");
+                    A3API.RequestFile(link.href).then(content => {
+                        styleNode.innerHTML = content;
+                        link.replaceWith(styleNode);
+                    });
+                }
+            });
 
-        let frameTime = 0, frameCount = 0;
-        let lastLoop = performance.now();
-        const fpsLoop = () => {
-            const thisLoop = performance.now();
-            frameTime += (thisLoop - lastLoop - frameTime) / 20;
-            lastLoop = thisLoop;
-            frameCount++;
-            requestAnimationFrame(fpsLoop);
-        };
-        const fpsOut = document.querySelector('.fps-display');
-        setInterval(() => {
-            if (frameCount > 60) {
-                fpsOut.textContent = `MENU FPS: ${(1000 / frameTime).toFixed(2)}`;
-            } else {
-                fpsOut.textContent = `MENU FPS: -`;
-            }
-        }, 100);
-        fpsLoop();
+            const allScripts = document.getElementsByTagName("script");
+            [...allScripts].forEach((script) => {
+                if (script.src) {
+                    A3API.RequestFile(script.src).then(content => {
+                        const scriptNode = document.createElement("script");
+                        scriptNode.innerHTML = content;
+                        script.replaceWith(scriptNode);
+                    });
+                }
+            });
+        });
     </script>
 </body>
 

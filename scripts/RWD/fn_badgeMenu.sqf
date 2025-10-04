@@ -49,7 +49,8 @@ _texture ctrlAddEventHandler ["PageLoaded", {
             case 3: {"#FFD700"};
             default {"#FFFFFF"};
         };
-        _badgeDisplayData pushBack [_badgeColor, _badgeIcon, _badgeName, _badgeCount];
+        private _badgeDescription = _badgeData select 2;
+        _badgeDisplayData pushBack [_badgeColor, _badgeIcon, _badgeName, _badgeCount, _badgeDescription];
     } forEach _badgeArray;
 
     private _currentBadge = player getVariable ["WL2_currentBadge", "Player"];

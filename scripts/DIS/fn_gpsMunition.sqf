@@ -7,8 +7,8 @@ _projectile addEventHandler ["HitPart", {
 }];
 
 private _minimumSpeed = 150;
-private _ignoreRange = _unit getVariable ["WL2_ignoreRange", false];
-if (_ignoreRange) then {
+private _overrideRange = _unit getVariable ["WL2_overrideRange", 0];
+if (_overrideRange > 0) then {
     _minimumSpeed = 300;
 };
 
@@ -29,7 +29,7 @@ private _originalDistance = _projectile distance _laserTarget;
 private _launchTime = serverTime;
 private _originalSpeed = (velocityModelSpace _unit) # 1;
 
-if (_ignoreRange) then {
+if (_overrideRange > 0) then {
     _coordinates set [2, 1000];
 };
 
@@ -38,9 +38,9 @@ _initialVectorUp set [0, 0];
 _initialVectorUp set [1, 1];
 _projectile setVectorDirAndUp [vectorDir _projectile, _initialVectorUp];
 
-if (_ignoreRange) then {
+if (_overrideRange > 0) then {
     private _altitude = getPosASL _projectile select 2;
-    while { _altitude < 5000 } do {
+    while { _altitude < (_overrideRange / 6) } do {
         _altitude = getPosASL _projectile select 2;
         [_projectile, 90, 0] call BIS_fnc_setPitchBank;
         _projectile setVelocityModelSpace [0, 500, 0];

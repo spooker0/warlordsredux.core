@@ -54,7 +54,7 @@ private _squadInfoText = toJSON (_squadInfo apply {
 _squadInfoText = _texture ctrlWebBrowserAction ["ToBase64", _squadInfoText];
 
 private _script = format [
-    "const playerInfo = document.getElementById('player-info'); playerInfo.innerHTML = atob(""%1""); const squadInfo = document.getElementById('squad-info'); squadInfo.innerHTML = atob(""%2""); updateData();",
+    "updateData(atob(""%1""), atob(""%2""));",
     _playerInfoText,
     _squadInfoText
 ];

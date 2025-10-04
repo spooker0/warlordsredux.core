@@ -23,6 +23,10 @@ private _timeToGround = sqrt (_altitude / 5);
 private _range = _timeToGround * (_relativeVelocity + 200);
 
 private _distanceNeeded = _targetPos distance2D _launcherPos;
+private _overrideRange = _asset getVariable ["WL2_overrideRange", 0];
+if (_overrideRange > 0) then {
+	_range = _overrideRange;
+};
 private _inRange = _range > _distanceNeeded && _distanceNeeded > 500;
 
 [_inRange, _range, _distanceNeeded, _posATL]

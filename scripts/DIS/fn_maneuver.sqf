@@ -64,6 +64,8 @@ if (_ammoConfig getOrDefault ["loal", false]) then {
             } else {
                 _distanceBeforeNotch = 5000 + _projAlt * 2;
             };
+        } else {
+            _distanceBeforeNotch = 3500;
         };
     };
 };

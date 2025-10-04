@@ -275,7 +275,7 @@ switch (_className) do {
             openMap true;
         };
     };
-    case "TestKillfeed": {
+    case "StressTestKillfeed": {
         0 spawn {
             private _testSupports = [
                 ["ATTACKING SECTOR", "#228b22"],

@@ -358,6 +358,7 @@ if (!isServer) then {
 0 spawn WL2_fnc_lockActionUpdate;
 call WL2_fnc_vehicleManagerAction;
 
+player setVariable ["WL2_currentBadge", profileNamespace getVariable ["WL2_currentBadge", "Player"], true];
 0 spawn WL2_fnc_updateLevelDisplay;
 
 removeGoggles player;
@@ -370,7 +371,6 @@ call WL2_fnc_rappelAction;
 0 spawn WL2_fnc_createInfoMarkers;
 0 spawn WL2_fnc_drawRadarName;
 0 spawn WL2_fnc_locationScanner;
-0 spawn WL2_fnc_drawIncomingMissiles;
 0 spawn WL2_fnc_rewardCapture;
 
 call POLL_fnc_pollAction;
@@ -385,29 +385,8 @@ uiNamespace setVariable ["WL2_scoreboardData", []];
 
 showScoretable 0;
 "deathInfo" cutFadeOut 0;
-inGameUISetEventHandler ["PrevAction", "[true] call WL2_fnc_scoreboardScroll"];
-inGameUISetEventHandler ["NextAction", "[false] call WL2_fnc_scoreboardScroll"];
+"APS_Camera" cutFadeOut 0;
 
 0 spawn WL2_fnc_ammoConfigChange;
 0 spawn DIS_fnc_setupTargetingMenu;
-
-private _display = uiNamespace getVariable ["RscWLKillfeedMenu", displayNull];
-if (isNull _display) then {
-    "killfeed" cutRsc ["RscWLKillfeedMenu", "PLAIN", -1, true, true];
-    _display = uiNamespace getVariable "RscWLKillfeedMenu";
-};
-private _texture = _display displayCtrl 5502;
-_texture ctrlAddEventHandler ["JSDialog", {
-    params ["_texture", "_isConfirmDialog", "_message"];
-	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-	if (_message == "A") then {
-		private _killfeedNotificationVolume = _settingsMap getOrDefault ["killfeedNotification", 1.0];
-		private _pitch = 1 + (random 0.2);
-		playSoundUI ["AddItemOk", _killfeedNotificationVolume * 5, _pitch];
-	} else {
-		private _killfeedCelebrationVolume = _settingsMap getOrDefault ["killfeedCelebration", 1.0];
-		playSoundUI ["a3\missions_f_exp\data\sounds\exp_m05_dramatic.wss", _killfeedCelebrationVolume * 5];
-	};
-	true;
-}];
-player setVariable ["WL2_currentBadge", profileNamespace getVariable ["WL2_currentBadge", "Player"], true];
+0 spawn WL2_fnc_refreshKillfeed;

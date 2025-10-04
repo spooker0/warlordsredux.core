@@ -155,16 +155,10 @@
             font-size: 24pt;
             font-weight: bold;
         }
-
-        #game-data {
-            display: none;
-        }
     </style>
 </head>
 
 <body>
-    <div id="game-data"></div>
-
     <div class="row">
         <div class="panel left-panel">
             <div class="content-wrapper">
@@ -214,10 +208,9 @@
             text.textContent = `HEALTH ${bounded}%`;
         }
 
-        function updateData() {
-            const gameDataEl = document.getElementById('game-data');
-            const gameData = JSON.parse(gameDataEl.textContent || '[]');
-
+        function updateData(gameData) {
+            gameData = JSON.parse(gameData || '[]');
+            
             const health = gameData[0] || 100;
             setHealth(health);
 

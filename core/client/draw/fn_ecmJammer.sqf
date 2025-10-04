@@ -104,8 +104,8 @@ private _ecmDraw = addMissionEventHandler ["Draw3D", {
     } forEach _ecmLocks;
 }];
 
-[_asset, _jammerPods, _ecmRange, _ecmSpeed, _ecmRequiresPod] spawn {
-    params ["_asset", "_jammerPods", "_ecmRange", "_ecmSpeed", "_ecmRequiresPod"];
+[_asset, _jammerPods, _ecmRange, _ecmSpeed] spawn {
+    params ["_asset", "_jammerPods", "_ecmRange", "_ecmSpeed"];
 
     private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
     private _apsVolume = _settingsMap getOrDefault ["apsVolume", 1];
@@ -115,19 +115,6 @@ private _ecmDraw = addMissionEventHandler ["Draw3D", {
         private _ecmMunitions = uiNamespace getVariable ["WL2_ECMMunitions", []];
 
         private _sensitivity = 0.2;
-        if (_ecmRequiresPod == 0) then {
-            _sensitivity = 0.08;
-            if (freelook) then {
-                continue;
-            };
-            if (inputAction "defaultAction" == 0) then {
-                continue;
-            };
-            if (!someAmmo _asset) then {
-                continue;
-            };
-        };
-
         private _charges = _asset getVariable ["WL2_ecmCharges", 0];
         if (_charges <= 0) then {
             continue;

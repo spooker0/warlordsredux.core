@@ -83,7 +83,7 @@ private _vehicleInfoText = toJSON (
 _vehicleInfoText = _texture ctrlWebBrowserAction ["ToBase64", _vehicleInfoText];
 
 private _script = format [
-    "const gameDataEl = document.getElementById('game-data'); gameDataEl.innerHTML = atob(""%1""); updateData();",
+    "updateData(atob(""%1""));",
     _vehicleInfoText
 ];
 _texture ctrlWebBrowserAction ["ExecJS", _script];

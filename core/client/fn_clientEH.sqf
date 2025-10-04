@@ -53,12 +53,6 @@ addMissionEventHandler ["HandleChatMessage", {
 		if (_key in actionKeys "networkStats") then {
 			0 spawn WL2_fnc_scoreboard;
 		};
-		if (_key == DIK_ESCAPE) then {
-			if !(isNull (uiNamespace getVariable "RscWLScoreboardMenu")) then {
-				"scoreboard" cutText ["", "PLAIN"];
-				true;
-			};
-		};
 	}];
 
 	// intentionally separate handler

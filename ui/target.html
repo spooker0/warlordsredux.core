@@ -24,9 +24,17 @@
         }
 
         .target-wrapper {
+            position: fixed;
             display: inline-block;
             margin-top: 30vh;
             margin-left: 60vw;
+        }
+
+        .missile-wrapper {
+            position: fixed;
+            display: inline-block;
+            margin-top: 20vh;
+            margin-left: 5vw;
         }
 
         h1,
@@ -65,6 +73,25 @@
         .mode {
             display: none;
         }
+
+        .missile-wrapper .missile-table {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: inline-block;
+        }
+
+        .missile-wrapper .missile-row {
+            display: grid;
+            grid-template-columns: 10ch 14ch 12ch 8ch;
+            column-gap: 3ch;
+            align-items: baseline;
+            white-space: nowrap;
+        }
+
+        .missile-wrapper .missile-row+.missile-row {
+            margin: 0;
+        }
     </style>
 </head>
 
@@ -94,6 +121,9 @@
         </div>
 
         <ul class="munition-display mode-aa mode-gps mode-remote mode-sead"></ul>
+    </div>
+    <div class="missile-wrapper">
+        <ul class="missile-table"></ul>
     </div>
 
     <script>
@@ -191,10 +221,60 @@
             }
         }
 
-        function setSettings(left, top, fontSize) {
+        function setIncomingMissiles(missiles) {
+            missiles = JSON.parse(missiles || '[]');
+            missiles.sort((a, b) => {
+                const approachA = a[2] ? 0 : 100000;
+                const approachB = b[2] ? 0 : 100000;
+                return (approachA + a[1]) - (approachB + b[1]);
+            });
+
+            const missileTableEl = document.querySelector('.missile-table');
+            missileTableEl.innerHTML = "";
+
+            missiles.forEach((missile) => {
+                const [missileState, missileDistance, missileApproaching, missileType] = missile;
+
+                const rowEl = document.createElement('li');
+                rowEl.classList.add('missile-row');
+
+                const typeEl = document.createElement('span');
+                typeEl.classList.add('col', 'type');
+                typeEl.textContent = missileType;
+                rowEl.appendChild(typeEl);
+
+                const statusEl = document.createElement('span');
+                statusEl.classList.add('col', 'status');
+                statusEl.textContent = missileState;
+                rowEl.appendChild(statusEl);
+
+                const angleEl = document.createElement('span');
+                angleEl.classList.add('col', 'angle');
+                angleEl.textContent = `${(missileDistance / 1000.0).toFixed(1)} KM`;
+                rowEl.appendChild(angleEl);
+
+                let rowColor = "#ff0000";
+                if (!missileApproaching) {
+                    rowColor = "#000000";
+                } else if (missileDistance > 5000) {
+                    rowColor = "#ffffff";
+                } else if (missileDistance > 2500) {
+                    rowColor = "#ffff00";
+                }
+
+                rowEl.style.color = rowColor;
+                missileTableEl.appendChild(rowEl);
+            });
+        }
+
+        function setSettings(targetLeft, targetTop, incomingLeft, incomingTop, fontSize) {
             const wrapper = document.querySelector('.target-wrapper');
-            wrapper.style.marginLeft = `${left}vw`;
-            wrapper.style.marginTop = `${top}vh`;
+            wrapper.style.marginLeft = `${targetLeft}vw`;
+            wrapper.style.marginTop = `${targetTop}vh`;
+
+            const incomingWrapper = document.querySelector('.missile-wrapper');
+            incomingWrapper.style.marginLeft = `${incomingLeft}vw`;
+            incomingWrapper.style.marginTop = `${incomingTop}vh`;
 
             document.documentElement.style.setProperty('--base-font-size', `${fontSize}px`);
         }

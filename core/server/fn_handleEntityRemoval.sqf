@@ -39,9 +39,8 @@ private _unitSide = [_unit] call WL2_fnc_getAssetSide;
 
 if (_isUnitPlayer && _unit isKindOf "Man") then {
     _victimEntry set ["deaths", (_victimEntry getOrDefault ["deaths", 0]) + 1];
-    private _killMessage = if (isPlayer [_responsiblePlayer]) then {
+    private _killMessage = if (isPlayer [_responsiblePlayer] && _responsiblePlayer != _unit) then {
         private _ffText = if (_unitSide == _killerSide) then {
-            _killerEntry set ["kills", (_killerEntry getOrDefault ["kills", 0]) - 2];
             " (Friendly fire)"
         } else {
             ""
@@ -64,11 +63,11 @@ private _unitCost = if (_unit isKindOf "Man") then {
 private _killerActualType = _killer getVariable ["WL2_orderedClass", typeOf _killer];
 private _killerStats = _stats getOrDefault [_killerActualType, createHashMap];
 private _killerKillValue = _killerStats getOrDefault ["killValue", 0];
-if (_unitCost > 0 && _killerSide != _unitSide) then {
+if (_unitCost > 0 && _responsiblePlayer != _unit) then {
     _killerStats set ["killValue", _killerKillValue + _unitCost];
     _stats set [_killerActualType, _killerStats];
 
-    [_unit, _assetActualType, _killerEntry] call WL2_fnc_setScoreboardEntry;
+    [_unit, _assetActualType, _killerEntry, _killerSide == _unitSide] call WL2_fnc_setScoreboardEntry;
 };
 
 _scoreboard set [getPlayerUID _unit, _victimEntry];

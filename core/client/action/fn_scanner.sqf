@@ -103,14 +103,14 @@ if (cameraOn == _asset) then {
         if (_iteration % 8 == 0) then {
             playSoundUI ["radarTargetLost", 2, 1, true];
         };
+        _scannedObjects = _scannedObjects select { _x isKindOf "Air" };
     } else {
         if (_iteration % 2 == 0) then {
             playSoundUI ["radarTargetLost", 2, 1, true];
         };
     };
 
-    private _scannedAirObjects = _scannedObjects select { _x isKindOf "Air" };
-    [_scannedAirObjects] call WL2_fnc_reconReward;
+    [_scannedObjects] call WL2_fnc_reconReward;
 };
 
 _asset setVariable ["WL_scannedObjects", _scannedObjects];

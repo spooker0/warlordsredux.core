@@ -211,6 +211,7 @@ if (_asset isKindOf "Man") then {
 		// Radars
 		case "B_Radar_System_01_F";
 		case "O_Radar_System_02_F";
+		case "O_Radar_System_02_ecm_F";
 		case "I_E_Radar_System_01_F": {
 			_asset setVariable ["radarRotation", false, true];
 			[_asset] remoteExec ["WL2_fnc_radarRotateAction", 0, true];
@@ -445,6 +446,18 @@ if (_asset isKindOf "Man") then {
 
 	if (_assetActualType == "B_T_VTOL_01_armed_up_F") then {
 		_asset setTurretLimits [[0], 0, 0, 0, 0];
+	};
+
+	if (_assetActualType == "B_MBT_01_mlrs_sdb_F") then {
+		_asset setVariable ["WL2_overrideRange", 8000, true];
+		[_asset] spawn {
+			params ["_asset"];
+			while { alive _asset } do {
+				private _targetAbove = _asset modelToWorld [0, 500, 800];
+				_asset lockCameraTo [_targetAbove, [0], false];
+				sleep 2;
+			};
+		};
 	};
 
 	private _demolishable = WL_ASSET(_assetActualType, "demolishable", 0);

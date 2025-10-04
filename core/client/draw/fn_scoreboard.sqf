@@ -1,13 +1,20 @@
 #include "includes.inc"
-private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
-if (!isNull _display) exitWith {
-    "scoreboard" cutText ["", "PLAIN"];
-};
-"scoreboard" cutRsc ["RscWLScoreboardMenu", "PLAIN", -1, true, true];
-_display = uiNamespace getVariable "RscWLScoreboardMenu";
 
-private _texture = _display displayCtrl 5502;
-// _texture ctrlWebBrowserAction ["LoadFile", "src\ui\scoreboard.html"];
+private _display = findDisplay 5500;
+if (isNull _display) then {
+    _display = createDialog ["RscWLBrowserMenu", true];
+};
+
+_display displayAddEventHandler ["KeyDown", {
+    params ["_display", "_key", "_shift", "_ctrl", "_alt"];
+    if (_key in actionKeys "networkStats") then {
+        closeDialog 0;
+    };
+}];
+
+private _texture = _display displayCtrl 5501;
+_texture ctrlWebBrowserAction ["LoadFile", "src\ui\scoreboard.html"];
+// _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
 [] remoteExec ["WL2_fnc_requestScoreboard", 2];
 
@@ -30,13 +37,23 @@ _texture ctrlAddEventHandler ["PageLoaded", {
             _scoreboardDataText = _texture ctrlWebBrowserAction ["ToBase64", _scoreboardDataText];
 
             private _script = format [
-                "renderScoreboard(JSON.parse(atob(""%1"")), %2);",
+                "renderScoreboard(atob(""%1""), %2);",
                 _scoreboardDataText,
                 str _firstRender
             ];
             _texture ctrlWebBrowserAction ["ExecJS", _script];
             _firstRender = false;
-            sleep 1;
+            sleep 0.5;
         };
     };
+}];
+
+_texture ctrlAddEventHandler ["JSDialog", {
+    params ["_texture", "_isConfirmDialog", "_message"];
+
+    playSoundUI ["a3\ui_f\data\sound\rsclistbox\soundselect.wss", 0.5];
+    if (_message == "exit") exitWith {
+        closeDialog 0;
+    };
+    true;
 }];

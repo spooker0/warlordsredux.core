@@ -5,7 +5,7 @@ private _badges = profileNamespace getVariable ["WL2_badges", createHashMap];
 private _badgeConfigs = [
     ["SAM KILLS", "Grounded", RWD_BADGE_KILLREQ],
     ["PLANE KILLS", "Air Warfare", RWD_BADGE_KILLREQ],
-    ["HEAVY KILLS", "Tank Superiority", RWD_BADGE_KILLREQ],
+    ["HEAVY KILLS", "Armor Superiority", RWD_BADGE_KILLREQ],
     ["INFANTRY KILLS", "Combat Proficiency", RWD_BADGE_KILLREQ],
     ["LIGHT KILLS", "Vehicle Tactical", RWD_BADGE_KILLREQ],
 	["NAVAL KILLS", "Naval Combat", RWD_BADGE_KILLREQ],
@@ -13,7 +13,7 @@ private _badgeConfigs = [
     ["HELO KILLS", "Chopper Proficiency", RWD_BADGE_KILLREQ],
     ["STATIC KILLS", "Turret Excellence", RWD_BADGE_KILLREQ],
 
-	["SAM DESTROYED", "Air Defense Suppression", RWD_BADGE_DESTROYREQ],
+	["SAM DESTROYED", "Safe Skies", RWD_BADGE_DESTROYREQ],
 	["PLANE DESTROYED", "Air Superiority", RWD_BADGE_DESTROYREQ],
 	["HEAVY DESTROYED", "Tank Destroyer", RWD_BADGE_DESTROYREQ],
 	["LIGHT DESTROYED", "Vehicle Hunter", RWD_BADGE_DESTROYREQ],
@@ -33,6 +33,7 @@ private _badgeConfigs = [
 	["LIGHT KILL HEAVY", "Size Matters Not", RWD_BADGE_SPECKILLREQ],
 	["HEAVY KILL HEAVY", "Heavy Metal", RWD_BADGE_SPECKILLREQ],
 	["NAVAL KILL GROUND", "Littoral Operator", RWD_BADGE_SPECKILLREQ],
+	["INFANTRY KILL HEAVY", "Junkyard", RWD_BADGE_SPECKILLREQ],
 
 	["SAM KILL PLANE", "No Fly Zone", RWD_BADGE_SPECKILLREQMORE],
 	["STATIC KILL HEAVY", "Stationary", RWD_BADGE_SPECKILLREQMORE]

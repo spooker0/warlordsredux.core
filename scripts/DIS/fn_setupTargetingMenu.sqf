@@ -48,7 +48,7 @@ private _getCurrentMode = {
 	};
 
 	if (uiNamespace getVariable ["WL2_usingVLS", false]) exitWith {
-		["gps", ""]
+		["gps", "LIBERTY-CLASS DESTROYER"]
 	};
 
 	["none", "none"];
@@ -82,6 +82,18 @@ private _hintMap = createHashMapFromArray [
 		"sead",
 		["SEAD", ["SEAD CONTROLS", _targetingControls], false]
 	]
+];
+
+private _missileTypeData = createHashMapFromArray [
+    ["M_Zephyr", "ZEPHYR"],
+    ["M_Titan_AA", "TITAN"],
+    ["M_Titan_AA_static", "TITAN"],
+    ["M_Titan_AA_long", "TITAN UP"],
+    ["ammo_Missile_mim145", "DEFENDER"],
+    ["ammo_Missile_s750", "RHEA"],
+    ["ammo_Missile_rim116", "SPARTAN"],
+    ["ammo_Missile_rim162", "CENTURION"],
+    ["M_70mm_SAAMI", "SAAMI"]
 ];
 
 private _makeMunitionTextArray = {
@@ -134,12 +146,14 @@ private _makeGPSBombTextArray = {
 	_bombsTextArray;
 };
 
-private _lastMode = "none";
 while { !BIS_WL_missionEnd } do {
 	sleep 0.05;
 	private _currentModeData = call _getCurrentMode;
 	private _currentMode = _currentModeData # 0;
 	private _currentModeTitle = _currentModeData # 1;
+
+	uiNamespace setVariable ["DIS_currentTargetingMode", _currentMode];
+
 	private _script = "";
 
 	private _hintEntry = _hintMap getOrDefault [_currentMode, []];
@@ -179,12 +193,7 @@ while { !BIS_WL_missionEnd } do {
 		case "gps": {
 			private _gpsSelectionIndex = cameraOn getVariable ["DIS_selectionIndex", 0];
 			private _gpsCord = cameraOn getVariable ["DIS_gpsCord", ""];
-
 			private _inRangeCalculation = [cameraOn] call DIS_fnc_calculateInRange;
-			if (cameraOn getVariable ["WL2_ignoreRange", false]) then {
-				_inRangeCalculation set [0, true];
-				_inRangeCalculation set [1, 30000];
-			};
 
 			_script = format [
 				"setMode(""gps"", ""%1"");setGPSData(%2, ""%3"", ""%4"", ""%5"", %6);",
@@ -209,22 +218,38 @@ while { !BIS_WL_missionEnd } do {
 			_script = format ["setMode(""sead"", ""%1"");setSEADTargetData(atob(""%2""));", _currentModeTitle, _targetsText];
 		};
 		default {
-			if (_lastMode == "none") then {
-				continue;
-			} else {
-				_script = format ["setMode(""none"", ""%1"");", _currentModeTitle];
-			};
+			_script = format ["setMode(""none"", ""%1"");", _currentModeTitle];
 		};
 	};
 	_texture ctrlWebBrowserAction ["ExecJS", _script];
 
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-	private _left = _settingsMap getOrDefault ["targetingMenuLeft", 65];
-	private _top = _settingsMap getOrDefault ["targetingMenuTop", 30];
+	private _targetLeft = _settingsMap getOrDefault ["targetingMenuLeft", 65];
+	private _targetTop = _settingsMap getOrDefault ["targetingMenuTop", 30];
 	private _fontSize = _settingsMap getOrDefault ["targetingMenuFontSize", 18];
-	private _setPositionScript = format ["setSettings(%1, %2, %3);", _left, _top, _fontSize];
+	private _incomingLeft = _settingsMap getOrDefault ["incomingIndicatorLeft", 5];
+	private _incomingTop = _settingsMap getOrDefault ["incomingIndicatorTop", 20];
+	private _setPositionScript = format ["setSettings(%1, %2, %3, %4, %5);", _targetLeft, _targetTop, _incomingLeft, _incomingTop, _fontSize];
 	_texture ctrlWebBrowserAction ["ExecJS", _setPositionScript];
 
-	uiNamespace setVariable ["DIS_currentTargetingMode", _currentMode];
-	_lastMode = _currentMode;
+	private _disableIncomingMissileDisplay = _settingsMap getOrDefault ["disableIncomingMissileDisplay", false];
+    if (WL_HelmetInterface != 0 && !_disableIncomingMissileDisplay) then {
+		private _incomingMissiles = cameraOn getVariable ["WL_incomingMissiles", []];
+		_incomingMissiles = _incomingMissiles select { alive _x };
+
+		private _targetVector = velocity cameraOn;
+		private _missilesData = _incomingMissiles apply {
+			private _missile = _x;
+			private _missileState = _missile getVariable ["APS_missileState", "LOCKED"];
+			private _distance = _missile distance cameraOn;
+			private _relDir = _missile getRelDir cameraOn;
+			private _missileApproaching = (_relDir < 90 || _relDir > 270) && !(_missileState == "BLIND");
+			private _missileType = _missile getVariable ["WL2_missileNameOverride", _missileTypeData getOrDefault [typeof _missile, "MISSILE"]];
+
+			[_missileState, _distance, _missileApproaching, _missileType];
+		};
+		
+		private _encodedMissilesText = _texture ctrlWebBrowserAction ["ToBase64", toJSON _missilesData];
+		_texture ctrlWebBrowserAction ["ExecJS", format ["setIncomingMissiles(atob(""%1""));", _encodedMissilesText]];
+    };
 };

@@ -210,10 +210,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
     private _deathInfoText = toJSON _gameData;
     _deathInfoText = _texture ctrlWebBrowserAction ["ToBase64", _deathInfoText];
 
-    private _script = format [
-        "const gameDataEl = document.getElementById('game-data'); gameDataEl.innerHTML = atob(""%1""); updateData();",
-        _deathInfoText
-    ];
+    private _script = format ["updateData(atob(""%1""));", _deathInfoText];
     _texture ctrlWebBrowserAction ["ExecJS", _script];
 }];
 

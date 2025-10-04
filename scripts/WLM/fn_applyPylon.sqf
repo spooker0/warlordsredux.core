@@ -59,6 +59,7 @@ private _assetTurrets = (allTurrets _asset) + [[-1]];
 
 if (_rearm) then {
     _asset setVehicleAmmo 1;
+    _asset setVariable ["WL2_ecmCharges", -100];
 };
 
 {
