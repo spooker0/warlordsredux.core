@@ -3,12 +3,134 @@
 
 <head>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body,
         html {
-            visibility: hidden;
+            height: 100%;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .menu-wrapper {
+            display: inline-block;
+            width: 80vw;
+            height: 80vh;
+            border-radius: 10px;
+            border: 2px solid #444;
+            background-color: #2a2a2a;
+            position: absolute;
+            left: 10vw;
+            top: 10vh;
+        }
+
+        .menu-title {
+            background-color: #222;
+            color: #fff;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 2px solid #444;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.3);
+            width: 40px;
+            height: 40px;
+            font-size: 30px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+        }
+
+        .close-button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .fps-display {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 1);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 1000;
+        }
+
+        .scoreboard-panel {
+            padding: 1em;
+            color: white;
+        }
+
+        .scoreboard-row {
+            display: grid;
+            grid-template-columns: 40px 15% repeat(7, 1fr) 150px;
+            padding: 10px 5px;
+            align-items: center;
+            text-align: right;
+        }
+
+        .scoreboard-header {
+            display: grid;
+            grid-template-columns: 40px 15% repeat(7, 1fr) 150px;
+            padding: 10px 15px;
+            align-items: center;
+            text-align: right;
+        }
+
+        .player-name {
+            text-align: left;
+            padding-left: 30px;
+        }
+
+        .scoreboard-header {
+            background-color: #333;
+            color: #66ccff;
+            font-weight: bold;
+            border-bottom: 2px solid #444;
+        }
+
+        #scoreboard-body {
+            scrollbar-color: #444444 #2a2a2a;
+            scrollbar-width: thin;
+            height: 60vh;
+            overflow-y: scroll;
+            border-radius: 5px;
+        }
+
+        .scoreboard-row:nth-child(odd) {
+            background-color: #2f2f2f;
+        }
+
+        .scoreboard-row:nth-child(even) {
+            background-color: #3a3a3a;
+        }
+
+        .scoreboard-row:hover {
+            background-color: #444444;
+        }
+
+        .points-cell {
+            font-weight: bold;
+        }
+
+        img {
+            height: 32px;
+            transform: translateX(25%);
         }
     </style>
-    <link rel="stylesheet" href="src\ui\style\scoreboard.css">
-    <link rel="stylesheet" href="src\ui\style\menu.css">
 </head>
 
 <body>
@@ -32,7 +154,6 @@
             <div id="opfor-footer" class="scoreboard-row"></div>
         </div>
     </div>
-    <script src="src\ui\script\menu.js"></script>
     <script>
         const imageSize = 64;
         A3API.RequestTexture("a3\\modules_f_bootcamp\\data\\portraitbootcampstage.paa", imageSize).then(imageContent => {
@@ -178,29 +299,75 @@
             if (bluforRow) renderFooter(bluforRow, 'BLUFOR', blufor);
             if (opforRow) renderFooter(opforRow, 'OPFOR', opfor);
         }
-    </script>
-    <script>
-        var allStyles = document.getElementsByTagName("link");
-        [...allStyles].forEach((link) => {
-            if (link.href) {
-                const styleNode = document.createElement("style");
-                A3API.RequestFile(link.href).then(content => {
-                    styleNode.innerHTML = content;
-                    link.replaceWith(styleNode);
-                });
+
+        document.addEventListener('wheel', function (e) {
+            const el = document.elementFromPoint(e.clientX, e.clientY);
+            if (el && el.closest('.panel')) {
+                el.closest('.panel').scrollTop += e.deltaY;
+                e.preventDefault();
             }
+        }, { passive: false });
+
+        const wrapper = document.querySelector('.menu-wrapper');
+        const header = document.querySelector('.menu-title');
+
+        const closeButton = document.createElement('div');
+        closeButton.className = 'close-button';
+        closeButton.innerHTML = '&times;';
+        wrapper.appendChild(closeButton);
+        closeButton.addEventListener('mousedown', function () {
+            A3API.SendAlert('exit');
         });
 
-        const allScripts = document.getElementsByTagName("script");
-        [...allScripts].forEach((script) => {
-            if (script.src) {
-                A3API.RequestFile(script.src).then(content => {
-                    const scriptNode = document.createElement("script");
-                    scriptNode.innerHTML = content;
-                    script.replaceWith(scriptNode);
-                });
+        const pos = { x1: 0, y1: 0, x2: 0, y2: 0 };
+
+        const onMouseMove = (e) => {
+            e.preventDefault();
+            const { clientX, clientY } = e;
+            pos.x1 = pos.x2 - clientX;
+            pos.y1 = pos.y2 - clientY;
+            pos.x2 = clientX;
+            pos.y2 = clientY;
+            wrapper.style.top = `${wrapper.offsetTop - pos.y1}px`;
+            wrapper.style.left = `${wrapper.offsetLeft - pos.x1}px`;
+        };
+
+        const onMouseUp = () => {
+            document.removeEventListener('mouseup', onMouseUp);
+            document.removeEventListener('mousemove', onMouseMove);
+        };
+
+        const onMouseDown = (e) => {
+            e.preventDefault();
+            pos.x2 = e.clientX;
+            pos.y2 = e.clientY;
+            document.addEventListener('mouseup', onMouseUp);
+            document.addEventListener('mousemove', onMouseMove);
+        };
+
+        header.addEventListener('mousedown', onMouseDown);
+
+        const fpsDisplay = document.createElement('div');
+        fpsDisplay.className = 'fps-display';
+        document.body.appendChild(fpsDisplay);
+
+        let frameTime = 0, frameCount = 0;
+        let lastLoop = performance.now();
+        const fpsLoop = () => {
+            const thisLoop = performance.now();
+            frameTime += (thisLoop - lastLoop - frameTime) / 20;
+            lastLoop = thisLoop;
+            frameCount++;
+            requestAnimationFrame(fpsLoop);
+        };
+        setInterval(() => {
+            if (frameCount > 60) {
+                fpsDisplay.textContent = `MENU FPS: ${(1000 / frameTime).toFixed(2)}`;
+            } else {
+                fpsDisplay.textContent = `MENU FPS: -`;
             }
-        });
+        }, 100);
+        fpsLoop();
     </script>
 </body>
 

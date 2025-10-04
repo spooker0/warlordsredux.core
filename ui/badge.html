@@ -3,12 +3,217 @@
 
 <head>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body,
         html {
-            visibility: hidden;
+            height: 100%;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .menu-wrapper {
+            display: inline-block;
+            width: 80vw;
+            height: 80vh;
+            border-radius: 10px;
+            border: 2px solid #444;
+            background-color: #2a2a2a;
+            position: absolute;
+            left: 10vw;
+            top: 10vh;
+        }
+
+        .menu-title {
+            background-color: #222;
+            color: #fff;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 2px solid #444;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.3);
+            width: 40px;
+            height: 40px;
+            font-size: 30px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+        }
+
+        .close-button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .fps-display {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 1);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 1000;
+        }
+
+        .menu-wrapper.badge-menu-wrapper {
+            max-width: 60vw;
+            left: 20vw;
+        }
+
+        .badge-content {
+            width: 100%;
+            height: calc(100% - 60px);
+            padding: 20px 30px;
+            overflow-y: auto;
+            text-align: left;
+            font-size: 16px;
+            scrollbar-color: #444444 #2a2a2a;
+            scrollbar-width: thin;
+            color: #fff;
+        }
+
+        .selected-wrap {
+            margin-bottom: 18px;
+        }
+
+        .selected-badge {
+            display: grid;
+            grid-template-columns: 96px 1fr;
+            gap: 16px;
+            align-items: center;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.06));
+            border: 1px solid #3a3a3a;
+            border-radius: 14px;
+            padding: 14px 16px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .sb-left {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sb-right {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sb-name {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+        }
+
+        .sb-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0.9;
+        }
+
+        .sb-meta .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            outline: 2px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        .sb-meta .count {
+            color: #cfcfcf;
+            font-size: 14px;
+        }
+
+        .badge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 14px;
+        }
+
+        .badge-card {
+            position: relative;
+            border: 1px solid #363636;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 14px;
+            padding: 14px 12px;
+            display: grid;
+            grid-template-rows: auto auto;
+            justify-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
+            color: #fff;
+        }
+
+        .badge-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.35);
+            border-color: #4a4a4a;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .badge-card:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(255, 255, 255, 0.25);
+        }
+
+        .badge-card.is-selected {
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 0 2px var(--badge-color, #fff), 0 0 24px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.08));
+        }
+
+        .badge-card .label {
+            font-weight: 700;
+            font-size: 14px;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .count-pill {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 2px 8px;
+            font-size: 12px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .icon-mask {
+            width: 64px;
+            height: 64px;
+            background-color: var(--badge-color, #fff);
+            mask-image: var(--icon);
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-size: contain;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+            border-radius: 10px;
+        }
+
+        .icon-mask.lg {
+            width: 88px;
+            height: 88px;
         }
     </style>
-    <link rel="stylesheet" href="src\ui\style\badge.css">
-    <link rel="stylesheet" href="src\ui\style\menu.css">
 </head>
 
 <body>
@@ -16,7 +221,6 @@
         <div class="menu-title">Badges</div>
         <div class="badge-content"></div>
     </div>
-    <script src="src\ui\script\menu.js"></script>
     <script>
         document.imageCache = new Map();
         function setImage(imageUrl, element) {
@@ -178,32 +382,76 @@
             grid.appendChild(frag);
 
             renderSelected(selectedIndex);
-        };
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            var allStyles = document.getElementsByTagName("link");
-            [...allStyles].forEach((link) => {
-                if (link.href) {
-                    const styleNode = document.createElement("style");
-                    A3API.RequestFile(link.href).then(content => {
-                        styleNode.innerHTML = content;
-                        link.replaceWith(styleNode);
-                    });
-                }
-            });
+        }
 
-            const allScripts = document.getElementsByTagName("script");
-            [...allScripts].forEach((script) => {
-                if (script.src) {
-                    A3API.RequestFile(script.src).then(content => {
-                        const scriptNode = document.createElement("script");
-                        scriptNode.innerHTML = content;
-                        script.replaceWith(scriptNode);
-                    });
-                }
-            });
+        document.addEventListener('wheel', function (e) {
+            const el = document.elementFromPoint(e.clientX, e.clientY);
+            if (el && el.closest('.panel')) {
+                el.closest('.panel').scrollTop += e.deltaY;
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        const wrapper = document.querySelector('.menu-wrapper');
+        const header = document.querySelector('.menu-title');
+
+        const closeButton = document.createElement('div');
+        closeButton.className = 'close-button';
+        closeButton.innerHTML = '&times;';
+        wrapper.appendChild(closeButton);
+        closeButton.addEventListener('mousedown', function () {
+            A3API.SendAlert('exit');
         });
+
+        const pos = { x1: 0, y1: 0, x2: 0, y2: 0 };
+
+        const onMouseMove = (e) => {
+            e.preventDefault();
+            const { clientX, clientY } = e;
+            pos.x1 = pos.x2 - clientX;
+            pos.y1 = pos.y2 - clientY;
+            pos.x2 = clientX;
+            pos.y2 = clientY;
+            wrapper.style.top = `${wrapper.offsetTop - pos.y1}px`;
+            wrapper.style.left = `${wrapper.offsetLeft - pos.x1}px`;
+        };
+
+        const onMouseUp = () => {
+            document.removeEventListener('mouseup', onMouseUp);
+            document.removeEventListener('mousemove', onMouseMove);
+        };
+
+        const onMouseDown = (e) => {
+            e.preventDefault();
+            pos.x2 = e.clientX;
+            pos.y2 = e.clientY;
+            document.addEventListener('mouseup', onMouseUp);
+            document.addEventListener('mousemove', onMouseMove);
+        };
+
+        header.addEventListener('mousedown', onMouseDown);
+
+        const fpsDisplay = document.createElement('div');
+        fpsDisplay.className = 'fps-display';
+        document.body.appendChild(fpsDisplay);
+
+        let frameTime = 0, frameCount = 0;
+        let lastLoop = performance.now();
+        const fpsLoop = () => {
+            const thisLoop = performance.now();
+            frameTime += (thisLoop - lastLoop - frameTime) / 20;
+            lastLoop = thisLoop;
+            frameCount++;
+            requestAnimationFrame(fpsLoop);
+        };
+        setInterval(() => {
+            if (frameCount > 60) {
+                fpsDisplay.textContent = `MENU FPS: ${(1000 / frameTime).toFixed(2)}`;
+            } else {
+                fpsDisplay.textContent = `MENU FPS: -`;
+            }
+        }, 100);
+        fpsLoop();
     </script>
 </body>
 
