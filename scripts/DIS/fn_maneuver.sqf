@@ -48,12 +48,13 @@ if (_ammoConfig getOrDefault ["loal", false]) then {
         private _projectilePos = getPosASL _projectile;
         private _targetPos = getPosASL _selectedTarget;
 
-        private _targetVectorDirAndUp = [_projectilePos, _targetPos] call BIS_fnc_findLookAt;
-        _projectile setVectorDirAndUp _targetVectorDirAndUp;
         _projectile setVelocityModelSpace [0, 100, 0];
         
         sleep 1;
         
+        private _targetVectorDirAndUp = [_projectilePos, _targetPos] call BIS_fnc_findLookAt;
+        _projectile setVectorDirAndUp _targetVectorDirAndUp;
+
         _projectile setMissileTarget [_selectedTarget, true];
 
         private _unitSpeed = speed _unit;
@@ -67,7 +68,7 @@ if (_ammoConfig getOrDefault ["loal", false]) then {
                 _distanceBeforeNotch = _distanceBeforeNotch max 3500;
             };
         } else {
-            _distanceBeforeNotch = 3500;
+            _distanceBeforeNotch = 4000;
         };
     };
 };
@@ -98,6 +99,8 @@ private _originalPosition = getPosASL _unit;
         } else {
             // If not already notched and not notching
             if (_projectile getVariable ["DIS_notched", false]) then {
+                private _targetVectorDirAndUp = [_projectilePosition, _targetPosition] call BIS_fnc_findLookAt;
+                _projectile setVectorDirAndUp _targetVectorDirAndUp;
                 _projectile setMissileTarget [_originalTarget, true];
             };
         };

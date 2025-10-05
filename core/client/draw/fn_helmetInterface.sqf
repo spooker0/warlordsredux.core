@@ -542,7 +542,7 @@ addMissionEventHandler ["Draw3D", {
                     [getPosATL _vehicle, getDir _vehicle, 120, getPosATL _selectedTarget] call WL2_fnc_inAngleCheck;
                 };
 
-                private _angleColor = if (_isInAngle) then {
+                private _angleColor = if (_isInAngle || _x == "AA") then {
                     [1, 0, 0, 1]
                 } else {
                     [0, 0, 0, 1]

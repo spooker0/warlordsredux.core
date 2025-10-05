@@ -950,7 +950,7 @@ class RscTitles {
 				idc = 33003;
 				x = 0.55;
 				y = safeZoneY + 0.1;
-				w = 0.06;
+				w = 0.09;
 				h = 0.06;
 				text = "<t color='#ffffff' align='center'></t>";
 				style = ST_MULTI;

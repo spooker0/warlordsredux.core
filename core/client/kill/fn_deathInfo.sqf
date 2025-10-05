@@ -181,6 +181,12 @@ private _badgeLevel = if (count _badgeData > 0) then {
     1;
 };
 
+private _badgeIcon = if (count _badgeData > 0) then {
+    _badgeData select 0;
+} else {
+    "";
+};
+
 private _gameData = [
     _health,
     _killerText,
@@ -191,7 +197,8 @@ private _gameData = [
     _responsiblePlayerText,
     _killerColor,
     _badgeText,
-    _badgeLevel
+    _badgeLevel,
+    _badgeIcon
 ];
 
 uiNamespace setVariable ["WL2_deathInfoData", _gameData];

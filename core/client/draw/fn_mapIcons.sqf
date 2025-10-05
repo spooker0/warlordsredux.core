@@ -90,11 +90,11 @@
 		};
 		private _vehiclesOnSide = _vehicles select { count crew _x > 0 } select { side _x == _side };
 		_sideVehicles insert [-1, _vehiclesOnSide, true];	// append but only if unique
-		private _playersOnSide = allPlayers select { side group _x == _side } select { isNull objectParent _x };
+		private _playersOnSide = allPlayers select { side group _x == _side };
 		_sideVehicles insert [-1, _playersOnSide, true];
-		private _playerAi = (units player) select { isNull objectParent _x };
+		private _playerAi = units player;
 		_sideVehicles insert [-1, _playerAi, true];
-		_mapData set ["sideVehicles", _sideVehicles];
+		_mapData set ["sideVehicles", _sideVehicles select { isNull objectParent _x }];
 
 		private _sideVehiclesAll = _vehicles select { simulationEnabled _x } select { !(_x isKindOf "LaserTarget") } select {
 			private _targetSide = [_x] call WL2_fnc_getAssetSide;

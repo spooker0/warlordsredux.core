@@ -241,5 +241,7 @@ while { !BIS_WL_missionEnd } do {
 		
 		private _encodedMissilesText = _texture ctrlWebBrowserAction ["ToBase64", toJSON _missilesData];
 		_texture ctrlWebBrowserAction ["ExecJS", format ["setIncomingMissiles(atob(""%1""));", _encodedMissilesText]];
-    };
+    } else {
+		_texture ctrlWebBrowserAction ["ExecJS", "setIncomingMissiles([]);"];
+	};
 };

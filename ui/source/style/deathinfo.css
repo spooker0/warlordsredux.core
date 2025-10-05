@@ -114,9 +114,35 @@ img {
     font-weight: bold;
 }
 
-.killer-icon {
-    margin-top: 30px;
+.center-panel .content-wrapper {
+    position: static;
+    top: auto;
+    left: auto;
+    right: auto;
+    transform: none;
+}
+
+.center-panel .killer-icon {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 200px;
+    aspect-ratio: 1;
+    background-color: #fff;
+    mask-image: var(--icon);
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .35));
+    margin-top: 0;
+}
+
+.center-panel .killer-text {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .badge {
@@ -129,6 +155,10 @@ img {
     margin-top: 120px;
     text-align: center;
     border: 2px solid #ff2222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
 }
 
 .badge-level-1 {
@@ -149,4 +179,21 @@ img {
 .badge-text {
     font-size: 24pt;
     font-weight: bold;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 30px;
+}
+
+.badge-icon-mask {
+    display: inline-block;
+    vertical-align: middle;
+    width: 64px;
+    height: 64px;
+    background-color: var(--badge-color, #fff);
+    mask-image: var(--icon);
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+    border-radius: 10px;
 }

@@ -19,7 +19,9 @@ function updateData(gameData) {
     const killerIcon = gameData[2] || "";
     const killerIconElement = document.querySelector('.killer-icon');
     if (killerIcon) {
-        A3API.RequestTexture(killerIcon, 512).then(imageContent => killerIconElement.src = imageContent);
+        A3API.RequestTexture(killerIcon, 256).then(imageContent => {
+            killerIconElement.style.setProperty('--icon', `url(${imageContent})`);
+        });
     }
 
     const distance = gameData[3] || "CQB";
@@ -52,11 +54,27 @@ function updateData(gameData) {
     }
 
     const badgeLevel = gameData[9] || 1;
+    let badgeColor = "#ffffff";
     if (badgeLevel === 1) {
         badgeEl.className = "badge badge-level-1";
+        badgeColor = "#779ECB";
     } else if (badgeLevel === 2) {
         badgeEl.className = "badge badge-level-2";
+        badgeColor = "#cc7573";
     } else if (badgeLevel === 3) {
         badgeEl.className = "badge badge-level-3";
+        badgeColor = "#FFD700";
+    }
+
+    const badgeIcon = gameData[10] || "";
+    const badgeIconMask = document.querySelector('.badge-icon-mask');
+    if (badgeIcon) {
+        A3API.RequestTexture(badgeIcon.replace(/\\\\/g, "\\"), 64).then(imageContent => {
+            badgeIconMask.style.setProperty('--icon', `url(${imageContent})`);
+            badgeIconMask.style.setProperty('--badge-color', badgeColor);
+        });
+    } else {
+        badgeIconMask.style.setProperty('--icon', `none`);
+        badgeIconMask.style.display = "none";
     }
 }
