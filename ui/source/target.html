@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="style/target.css" inline>
+</head>
+
+<body>
+    <div class="target-wrapper">
+        <div class="mode mode-aa">
+            <p class="mode-title">AIR TARGETING</p>
+            <ul class="target-list"></ul>
+        </div>
+
+        <div class="mode mode-gps">
+            <p class="mode-title">GPS-GUIDED MUNITION</p>
+            <h1 class="grid-coord-display">GRID 000 000</h1>
+            <h2 class="target-range-display">TGT: 00.0</h2>
+            <h2 class="asset-range-display">RNG: 00.0</h2>
+            <ul class="gps-controls"></ul>
+        </div>
+
+        <div class="mode mode-remote">
+            <p class="mode-title">REMOTE MUNITION CONTROLLER</p>
+            <ul class="target-list"></ul>
+        </div>
+
+        <div class="mode mode-sead">
+            <p class="mode-title">ANTI-RADIATION MISSILE</p>
+            <ul class="target-list"></ul>
+        </div>
+
+        <ul class="munition-display mode-aa mode-gps mode-remote mode-sead"></ul>
+    </div>
+    <div class="missile-wrapper">
+        <ul class="missile-table"></ul>
+    </div>
+    <script src="script/target.js" inline></script>
+</body>
+
+</html>

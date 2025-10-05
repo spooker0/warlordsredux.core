@@ -13,7 +13,7 @@ _display displayAddEventHandler ["KeyDown", {
 }];
 
 private _texture = _display displayCtrl 5501;
-_texture ctrlWebBrowserAction ["LoadFile", "src\ui\scoreboard.html"];
+_texture ctrlWebBrowserAction ["LoadFile", "src\ui\gen\scoreboard.html"];
 // _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
 [] remoteExec ["WL2_fnc_requestScoreboard", 2];

@@ -975,7 +975,7 @@ class RscTitles {
 				y = safeZoneY;
 				w = safeZoneW;
 				h = safeZoneH;
-				url = "file://src/ui/deathinfo.html";
+				url = "file://src/ui/gen/deathinfo.html";
 			};
 		};
 	};
@@ -995,7 +995,7 @@ class RscTitles {
 				y = safeZoneY;
 				w = safeZoneW;
 				h = safeZoneH;
-				url = "file://src/ui/hint.html";
+				url = "file://src/ui/gen/hint.html";
 			};
 		};
 	};
@@ -1015,7 +1015,7 @@ class RscTitles {
 				y = safeZoneY;
 				w = safeZoneW;
 				h = safeZoneH;
-				url = "file://src/ui/killfeed.html";
+				url = "file://src/ui/gen/killfeed.html";
 			};
 		};
 	};
@@ -1035,7 +1035,7 @@ class RscTitles {
 				y = safeZoneY;
 				w = safeZoneW;
 				h = safeZoneH;
-				url = "file://src/ui/target.html";
+				url = "file://src/ui/gen/target.html";
 			};
 		};
 	};
@@ -1055,7 +1055,7 @@ class RscTitles {
 				y = safeZoneY;
 				w = safeZoneW;
 				h = safeZoneH;
-				url = "file://src/ui/turret.html";
+				url = "file://src/ui/gen/turret.html";
 			};
 		};
 	};

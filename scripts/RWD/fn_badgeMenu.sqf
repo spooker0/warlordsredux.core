@@ -6,7 +6,7 @@ if (isNull _display) then {
     _display = createDialog ["RscWLBrowserMenu", true];
 };
 private _texture = _display displayCtrl 5501;
-_texture ctrlWebBrowserAction ["LoadFile", "src\ui\badge.html"];
+_texture ctrlWebBrowserAction ["LoadFile", "src\ui\gen\badge.html"];
 // _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
 _texture ctrlAddEventHandler ["JSDialog", {

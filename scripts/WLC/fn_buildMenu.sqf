@@ -13,7 +13,7 @@ if (isNull _display) then {
 // }];
 
 private _texture = _display displayCtrl 5501;
-_texture ctrlWebBrowserAction ["LoadFile", "src\ui\loadout.html"];
+_texture ctrlWebBrowserAction ["LoadFile", "src\ui\gen\loadout.html"];
 
 _texture ctrlAddEventHandler ["JSDialog", {
     params ["_texture", "_isConfirmDialog", "_message"];

@@ -1,0 +1,89 @@
+:root {
+    --base-font-size: 18px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Consolas', monospace;
+    font-weight: bold;
+    font-size: var(--base-font-size);
+}
+
+body,
+html {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.target-wrapper {
+    position: fixed;
+    display: inline-block;
+    margin-top: 30vh;
+    margin-left: 60vw;
+}
+
+.missile-wrapper {
+    position: fixed;
+    display: inline-block;
+    margin-top: 20vh;
+    margin-left: 5vw;
+}
+
+h1,
+h2,
+p,
+li {
+    color: #14cb00;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+h1 {
+    font-size: calc(var(--base-font-size) * 1.7);
+}
+
+h2 {
+    font-size: calc(var(--base-font-size) * 1.2);
+    display: inline-block;
+    margin-right: var(--base-font-size);
+}
+
+.gps-controls {
+    margin-top: calc(var(--base-font-size) * 0.8);
+}
+
+.munition-display {
+    margin-top: calc(var(--base-font-size) * 3.2);
+}
+
+.munition-display li {
+    color: #14cb00;
+}
+
+.mode {
+    display: none;
+}
+
+.missile-wrapper .missile-table {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+}
+
+.missile-wrapper .missile-row {
+    display: grid;
+    grid-template-columns: 10ch 14ch 12ch 8ch;
+    column-gap: 3ch;
+    align-items: baseline;
+    white-space: nowrap;
+}
+
+.missile-wrapper .missile-row+.missile-row {
+    margin: 0;
+}

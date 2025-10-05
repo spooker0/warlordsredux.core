@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="style/menu.css" inline>
+    <link rel="stylesheet" href="style/welcome.css" inline>
+</head>
+
+<body>
+    <div class="menu-wrapper">
+        <div class="menu-title">Welcome</div>
+        <div class="welcome-menu">
+            <div class="panel left-panel">
+                <ul></ul>
+            </div>
+            <div class="panel right-panel category-redux" id="welcome-text">
+                <h2>About</h2>
+                <p>Discord link: https://discord.gg/grmzsZE4ua (copy & paste)</p>
+                <p>Welcome to Warlords Redux! This is a community upgrade project for the Original Warlords. The
+                    project's goal is to improve on BI vision of warlords with bugfixes and more balanced user
+                    experience while staying compatable with official servers for the best player count.</p>
+                <p>It introduces a lot of new features like fog of war, random base locations, custom pylons/ammo,
+                    aircraft rebalance, vehicle variants... etc.</p>
+            </div>
+            <div class="panel right-panel category-redux" id="credits">
+                <h2>Credits</h2>
+                <p>External scripts and resources</p>
+                <ul>
+                    <li>GF Earplugs: George Floros's earplug script.</li>
+                    <li>A3 Aegis Mod: Texture for the Blufor Kuma (heavily compressed).</li>
+                </ul>
+                <p style="margin-top: 20px;">Developers</p>
+                <ul>
+                    <li>Special Thanks to: Dwarden (Bohemia Interactive)</li>
+                    <li>GamerDad</li>
+                    <li>Witch Doctor</li>
+                    <li>JWalker08</li>
+                    <li>Weasley Wells</li>
+                    <li>Rook</li>
+                    <li>MONGCHAW</li>
+                    <li>MrThomasM</li>
+                    <li>TenPenny</li>
+                    <li>Coffee Maker</li>
+                    <li>Korbelz</li>
+                    <li>Bo</li>
+                </ul>
+            </div>
+            <div class="panel right-panel category-gameplay" id="assets">
+                <h2>Assets</h2>
+                <p>Assets can be bought via the Buy Menu with money. Assets are divided into several categories:</p>
+                <ul>
+                    <li><strong>Infantry</strong> - Infantry units with various roles, with preconfigured loadouts. A
+                        few infantry units have special abilities; for example, the repair specialist can repair
+                        vehicles and the diver can operate underwater. For a higher price, you may buy a Customized
+                        Unit, which is a special unit geared with your customized loadout, can repair vehicles, and has
+                        a higher accuracy.</li>
+                    <li><strong>Light Vehicles</strong> - Light vehicles that are fast and cheap, mostly useful for
+                        transports, specialized purposes, or early game.</li>
+                    <li><strong>Heavy Vehicles</strong> - Heavily armored vehicles from APCs to main battle tanks and
+                        artillery.</li>
+                    <li><strong>Rotary Wing</strong> - Helicopters, ranging from transport and recon to high end attack
+                        helicopters, most useful in the early to mid-game.</li>
+                    <li><strong>Fixed Wing</strong> - Fixed wing aircraft, ranging from light attack aircraft to air
+                        superiority jets.</li>
+                    <li><strong>Remote Control</strong> - Remote control drone assets, useful for reconnaissance and
+                        light attack roles.</li>
+                    <li><strong>Air Defense</strong> - Air defense assets, including static and mobile anti-air systems.
+                    </li>
+                    <li><strong>Sector Defense</strong> - Mostly static sector defense assets, including turrets, the
+                        static AT launcher, and mortars.</li>
+                    <li><strong>Structures</strong> - Static structures that can be placed in sectors, such as sandbags,
+                        bunkers, and towers.</li>
+                    <li><strong>Naval</strong> - Naval assets, including boats, useful for coastal operations.</li>
+                    <li><strong>Gear</strong> - Gear and equipment options that come in boxes and crates.</li>
+                    <li><strong>Fast Travel</strong> - Fast travel and forward base options that allow players to
+                        quickly move to the frontline.</li>
+                    <li><strong>Strategy</strong> - Strategy options that include sector scan, cruise missile strike,
+                        and other strategic actions.</li>
+                </ul>
+            </div>
+            <div class="panel right-panel category-gameplay" id="money">
+                <h2>Money</h2>
+                <p>Players can earn money through various means:</p>
+                <ul>
+                    <li><strong>Destroying enemy assets</strong> - Destroying enemy assets yields the most significant
+                        monetary rewards, depending on the asset's value. This is by far the easiest way to fill your
+                        account.</li>
+                    <li><strong>Killing enemies</strong> - Player kills generate more money than AI kills.</li>
+                    <li><strong>Capturing sectors</strong> - Actively capturing sectors rewards money, depending on the
+                        value of your contribution to the sector capture. Heavy tanks that have higher capture values
+                        will generate higher monetary rewards.</li>
+                    <li><strong>Reconnaissance</strong> - Spotting enemies with tactical ping. Spotting enemies with
+                        recon optics is a quick way to get a lot of money.</li>
+                    <li><strong>Special support actions</strong> - Support actions like reviving teammates, depleting
+                        enemy APS, or placing spawn vehicles.</li>
+                    <li><strong>Passive income from controlled sectors</strong> - Players can earn a steady income from
+                        sectors they control. This is the slowest way to earn money.</li>
+                </ul>
+                <p>In general, the fastest way to earn money is to actively participate in the battle by destroying
+                    enemy assets and capturing objectives. In this game mode, it is highly recommended to do so with
+                    vehicles instead of on-foot. Instead of saving up a long time for big purchases, it is often much,
+                    much faster to buy and contribute to the team in lower-tier vehicles and use them as stepping stones
+                    to higher-tier assets.</p>
+            </div>
+            <div class="panel right-panel category-gameplay" id="loadouts">
+                <h2>Loadouts</h2>
+            </div>
+            <div class="panel right-panel category-gameplay" id="aps">
+                <h2>Active Protection System</h2>
+                <p>Active protection systems (APS) are defensive systems that are installed on armored vehicles to
+                    protect them from incoming projectiles. They work by intercepting and destroying incoming threats
+                    before they can hit the vehicle.</p>
+                <h3>APS types</h3>
+                <p>APS are available on most heavy vehicles and some light vehicles. There are four types of APS:</p>
+                <ul>
+                    <li><strong>Light APS</strong> - Can intercept lighter hand-held rocket launchers. It is available
+                        on a few light vehicles. Comes with 2 ammo.</li>
+                    <li><strong>Medium APS</strong> - Can intercept rockets and missiles. It is available on most APCs.
+                        Comes with 4 ammo.</li>
+                    <li><strong>Heavy APS</strong> - Can intercept rockets and missiles. It is available on main battle
+                        tanks. Comes with 6 ammo.</li>
+                    <li><strong>Dazzler</strong> - Can intercept guided munitions. It is available on select electronic
+                        warfare vehicles. Comes with 25 ammo.</li>
+                </ul>
+                <h3>Ammo Consumption</h3>
+                <p>APS is consumed when it successfully intercepts a projectile. Once the APS ammo is depleted, the
+                    vehicle must be reloaded for the APS ammo to be replenished.</p>
+                <p>Some heavier munitions, especially air-to-ground munitions, may consume more than one APS ammo per
+                    interception.</p>
+                <p>With the vehicle menu, it is possible to see the current APS ammo count and reload the APS if needed.
+                </p>
+                <h3>Engagement Behavior</h3>
+                <p>APS will automatically engage incoming threats within a large radius and angle of attack. You should
+                    beware of triggering and depleting your team's APS before launching missiles and rockets near
+                    friendly vehicles.</p>
+                <p>When APS is triggered, the occupants of the vehicle are informed of the direction of the incoming
+                    vehicle, and any AI inside the vehicle will become instantly aware of the location of the threat.
+                </p>
+                <p>Light, medium, and heavy APS all have a deadzone. Projectiles fired within ~30M of the vehicle will
+                    not be intercepted. This makes armored vehicles vulnerable to close-range attacks.</p>
+                <h3>Dazzlers</h3>
+                <p>Dazzlers can be toggled on/off. By default, it is off. Unlike other APS, dazzlers do not have a
+                    deadzone and can destroy incoming missiles even at very close range.</p>
+                <p>Dazzlers are generally ineffective against unguided munitions, such as unguided hand-held rocket
+                    launchers (like the RPG-7 and MAAWS), and aircraft bombs.</p>
+                <h3>Countermeasure Smoke</h3>
+                <p>Vehicles with APS may also employ countermeasure smoke to greater effect. Locked on missiles have a
+                    high chance of missing vehicles that are near a large amount of smoke.</p>
+                <h3>Anti-ramming Measures</h3>
+                <p>Vehicles with APS are partially protected from ramming vehicles. Armored vehicles are protected
+                    against the fuel explosions of other vehicles that are below its APS level. Additionally, infantry
+                    inside vehicles with at least medium APS are protected from direct ramming damage.</p>
+            </div>
+            <div class="panel right-panel category-gameplay" id="rearming">
+                <h2>Rearming</h2>
+                <p>Vehicles can be rearmed using rearming crates and vehicles:</p>
+                <ul>
+                    <li><strong>Vehicle Ammo</strong> - Cheapest option for rearming a single vehicle. Can be found in
+                        the Gear menu.</li>
+                    <li><strong>Huron/Taru Ammo Containers</strong> - Can be slingloaded. Also found in the Gear menu.
+                    </li>
+                    <li><strong>HEMMT/Tempest Ammo Trucks</strong> - Can be driven around. Found in the Light Vehicles
+                        menu.</li>
+                    <li><strong>CRV-6e Bobcat</strong> - A Blufor-unique logistics vehicle that can rearm, repair, and
+                        refuel other vehicles.</li>
+                </ul>
+                <p>Rearming is done by driving the vehicle close to the rearming crate or vehicle and using the scroll
+                    wheel menu to find the Modify/Rearm. In this menu, you may modify the weapons loadout of the
+                    vehicle. If you have not consumed ammo (which includes APS and smoke), you can change the vehicle
+                    configuration without a cooldown timer.</p>
+                <p>This menu allows you to customize the vehicle's appearance (including camo and slat cages) and smoke
+                    seat. You may move the smoke launcher between the driver, gunner, and commander seats for easier
+                    access.</p>
+                <p>You can also remotely rearm vehicles using the Vehicles menu.</p>
+                <h3>Cooldown</h3>
+                <p>There is a cooldown for rearming vehicles. The cooldown depends on the vehicle. Here are the general
+                    guidelines for rearm timers:</p>
+                <ul>
+                    <li>120 seconds: Light vehicles, dazzlers, boats</li>
+                    <li>180 seconds: Medium vehicles, light AA/AT</li>
+                    <li>240 seconds: Medium vehicles with specialized weapons, most AA, scout helicopters</li>
+                    <li>300 seconds: Heavy vehicles, advanced AA, attack helicopters, light fixed wing</li>
+                    <li>420 seconds: Heavy fixed wing</li>
+                    <li>900 seconds: Mortars</li>
+                    <li>1800 seconds: Heavy artillery</li>
+                </ul>
+                <p>You can see the rearm cooldown for the current vehicle you are using in the button right of your HUD.
+                </p>
+            </div>
+            <div class="panel right-panel category-gameplay" id="air-and-defense">
+                <h2>Air & Air Defense</h2>
+                <h3>Missile Evasion</h3>
+                <h3>Air-to-Air</h3>
+                <h3>Suppression of Enemy Air Defenses</h3>
+                <h3>Advanced SAMs</h3>
+                <h3>LOAL</h3>
+                <h3>Standoff: Remote Bombs</h3>
+                <h3>Standoff: GPS-Guided Bombs</h3>
+                <h3>Bunker Buster</h3>
+            </div>
+            <div class="panel right-panel category-gameplay" id="relocating-assets">
+
+            </div>
+            <div class="panel right-panel category-gameplay" id="fob">
+
+            </div>
+            <div class="panel right-panel category-gameplay" id="strategies">
+
+            </div>
+        </div>
+    </div>
+    <script src="script/welcome.js" inline></script>
+    <script src="script/menu.js" inline></script>
+</body>
+
+</html>

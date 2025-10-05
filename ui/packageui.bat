@@ -1,0 +1,1 @@
+node --loader ./loader.mjs build.mjs

@@ -1,0 +1,37 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Courier New', monospace;
+    font-size: 14pt;
+}
+
+body,
+html {
+    height: 100%;
+}
+
+.hint-wrapper {
+    display: inline-block;
+    white-space: nowrap;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 30vh;
+    margin-left: 20px;
+    background-color: rgba(34, 34, 34, 0.8);
+}
+
+p {
+    color: #ffffff;
+    font-size: 18pt;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+li {
+    color: #ffffff;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}

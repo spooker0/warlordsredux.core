@@ -1,0 +1,61 @@
+.scoreboard-panel {
+    padding: 1em;
+    color: white;
+}
+
+.scoreboard-row {
+    display: grid;
+    grid-template-columns: 40px 15% repeat(7, 1fr) 150px;
+    padding: 10px 5px;
+    align-items: center;
+    text-align: right;
+}
+
+.scoreboard-header {
+    display: grid;
+    grid-template-columns: 40px 15% repeat(7, 1fr) 150px;
+    padding: 10px 15px;
+    align-items: center;
+    text-align: right;
+}
+
+.player-name {
+    text-align: left;
+    padding-left: 30px;
+}
+
+.scoreboard-header {
+    background-color: #333;
+    color: #66ccff;
+    font-weight: bold;
+    border-bottom: 2px solid #444;
+}
+
+#scoreboard-body {
+    scrollbar-color: #444444 #2a2a2a;
+    scrollbar-width: thin;
+    height: 60vh;
+    overflow-y: scroll;
+    border-radius: 5px;
+}
+
+.scoreboard-row:nth-child(odd) {
+    background-color: #2f2f2f;
+}
+
+.scoreboard-row:nth-child(even) {
+    background-color: #3a3a3a;
+}
+
+.scoreboard-row:hover {
+    background-color: #444444;
+}
+
+.points-cell {
+    font-weight: bold;
+}
+
+img {
+    height: 32px;
+    transform: translateX(25%);
+}

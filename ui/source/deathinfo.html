@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="style/deathinfo.css" inline>
+</head>
+
+<body>
+    <div class="row">
+        <div class="panel left-panel">
+            <div class="content-wrapper">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAGHaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8P3hwYWNrZXQgYmVnaW49J++7vycgaWQ9J1c1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCc/Pg0KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyI+PHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj48cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0idXVpZDpmYWY1YmRkNS1iYTNkLTExZGEtYWQzMS1kMzNkNzUxODJmMWIiIHhtbG5zOnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIj48dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPjwvcmRmOkRlc2NyaXB0aW9uPjwvcmRmOlJERj48L3g6eG1wbWV0YT4NCjw/eHBhY2tldCBlbmQ9J3cnPz4slJgLAAAAWklEQVRYR+3WIQ4AIAhAUfAKVqP3P5HR6hm0OooSlPJ/JLg3A0MkOLWDU6PUaWd7uTfXm8kOfgcAAAAA4QCVi/X6qtybhv8AAAAAXOeTXOwMTjJvAAAAABDeAugyDDr4geD2AAAAAElFTkSuQmCC"
+                    alt="" />
+                <div class="fill-mask">
+                    <div class="fill-inner" id="fillInner"></div>
+                </div>
+                <div class="health-text" id="healthText">HEALTH 100%</div>
+            </div>
+        </div>
+        <div class="panel center-panel">
+            <div class="content-wrapper">
+                <div class="killer-text"></div>
+                <img class="killer-icon" />
+            </div>
+        </div>
+        <div class="panel right-panel">
+            <div class="content-wrapper">
+                <div class="distance-label">DISTANCE</div>
+                <div class="distance-text">???</div>
+                <div class="ratio-label">RATIO</div>
+                <div class="ratio-text">0-0</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="death-display">
+        <div class="display-title">YOU ARE DEAD</div>
+        <div class="sensor-display-title">Detected by AI</div>
+        <div class="killed-by-title">
+            Killed By:
+            <span class="killed-by-name">Enemy</span>
+        </div>
+        <div class="badge">
+            <div class="badge-text"></div>
+        </div>
+    </div>
+    <script src="script/deathinfo.js" inline></script>
+</body>
+
+</html>

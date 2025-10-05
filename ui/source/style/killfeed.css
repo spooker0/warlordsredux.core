@@ -1,0 +1,352 @@
+:root {
+    --scale: 1;
+    --ribbon-scale: 1;
+    --anchor-x: 50vw;
+    --anchor-y: 15vh;
+    --gap: calc(12px * var(--scale));
+    --points-slot: calc(12ch * var(--scale));
+    --icons-max-width: calc(20vw * var(--scale));
+    --badges-max-width: calc(40vw * var(--scale));
+    --icons-feather: calc(30px * var(--scale));
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: #fff;
+    overflow: hidden;
+}
+
+.stage {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: var(--anchor-y);
+    height: calc(70px * var(--scale));
+    pointer-events: none;
+    overflow: visible;
+}
+
+.kf-left {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: calc(var(--anchor-x) - var(--gap));
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: calc(4px * var(--scale));
+    white-space: nowrap;
+    overflow: hidden;
+    font-weight: bold;
+    font-size: calc(16px * var(--scale));
+    z-index: 2;
+}
+
+.kf-icons-viewport {
+    position: relative;
+    max-width: var(--icons-max-width);
+    width: var(--icons-max-width);
+    overflow: hidden;
+    mask-image: linear-gradient(to right,
+            rgba(0, 0, 0, 0) 0,
+            rgba(0, 0, 0, 1) var(--icons-feather),
+            rgba(0, 0, 0, 1) 100%);
+}
+
+.kf-badges-viewport {
+    position: relative;
+    max-width: var(--badges-max-width);
+    width: var(--badges-max-width);
+    overflow: hidden;
+    mask-image: linear-gradient(to right,
+            rgba(0, 0, 0, 0) 0,
+            rgba(0, 0, 0, 1) var(--icons-feather),
+            rgba(0, 0, 0, 1) 100%);
+}
+
+.kf-icons-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: calc(8px * var(--scale));
+    flex-wrap: nowrap;
+}
+
+.kf-badges-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: calc(8px * var(--scale));
+}
+
+.kf-badge {
+    border: calc(2px * var(--scale)) solid #00e1ff;
+    border-radius: calc(6px * var(--scale));
+    padding: calc(6px * var(--scale)) calc(10px * var(--scale));
+    background: rgba(0, 0, 0, 0.6);
+    display: inline-flex;
+    align-items: center;
+    transform-origin: right center;
+    gap: calc(8px * var(--scale));
+    font-size: calc(16px * var(--scale));
+}
+
+.kf-points {
+    position: absolute;
+    left: calc(var(--anchor-x) + var(--gap));
+    top: 0;
+    width: var(--points-slot);
+    text-align: left;
+    font-size: calc(28px * var(--scale));
+    font-weight: 900;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+    transform-origin: left center;
+    z-index: 1;
+}
+
+.kf-left.unclipped,
+.kf-icons-row.unclipped,
+.kf-badges-row.unclipped {
+    overflow: visible;
+}
+
+.kf-icon {
+    height: calc(32px * var(--scale));
+    width: auto;
+    flex: 0 0 auto;
+    display: block;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+.kf-mult {
+    opacity: 0.9;
+}
+
+.enter {
+    animation: fadeIn calc(0.3s * var(--scale)) ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(calc(-20px * var(--scale))) scale(0.98);
+    }
+
+    60% {
+        opacity: 1;
+        transform: translateX(0) scale(1.04);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+.exit {
+    animation: fadeOut calc(0.5s * var(--scale)) ease forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateX(calc(-30px * var(--scale)));
+    }
+}
+
+.merge {
+    animation: bump calc(260ms * var(--scale)) cubic-bezier(.2, .9, .2, 1.2) both;
+}
+
+@keyframes bump {
+    0% {
+        transform: translateX(0) scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 225, 255, 0);
+    }
+
+    25% {
+        transform: translateX(0) scale(1.08);
+        box-shadow: 0 0 calc(16px * var(--scale)) calc(4px * var(--scale)) rgba(0, 225, 255, .35);
+    }
+
+    100% {
+        transform: translateX(0) scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 225, 255, 0);
+    }
+}
+
+.points-merge {
+    animation: pointsBump calc(280ms * var(--scale)) cubic-bezier(.2, .9, .2, 1.2) both;
+}
+
+@keyframes pointsBump {
+    0% {
+        transform: translateX(0) scale(1);
+        text-shadow: 0 0 0 rgba(255, 255, 255, 0);
+    }
+
+    25% {
+        transform: translateX(0) scale(1.1);
+        text-shadow: 0 0 calc(14px * var(--scale)) rgba(255, 255, 255, .75);
+    }
+
+    100% {
+        transform: translateX(0) scale(1);
+        text-shadow: 0 0 0 rgba(255, 255, 255, 0);
+    }
+}
+
+.kf-ribbons {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: calc(10px * var(--ribbon-scale));
+    pointer-events: none;
+    z-index: 30;
+}
+
+.kf-ribbon {
+    pointer-events: none;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: calc(15px * var(--ribbon-scale));
+    padding: calc(18px * var(--ribbon-scale)) calc(28px * var(--ribbon-scale));
+    border-radius: calc(10px * var(--ribbon-scale));
+    font-weight: 800;
+    font-size: calc(38px * var(--ribbon-scale));
+    letter-spacing: .25px;
+    transform-origin: center bottom;
+    opacity: 1;
+    overflow: hidden;
+}
+
+.kf-ribbon::before {
+    content: "";
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    top: calc(4px * var(--ribbon-scale));
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .65), transparent);
+    opacity: .7;
+    pointer-events: none;
+}
+
+.kf-ribbon::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(75deg,
+            transparent 45%,
+            rgba(255, 255, 255, .20) 50%,
+            transparent 55%);
+    transform: translateX(-120%);
+    animation: ribbonSheen 2s ease-out 0.35s infinite;
+    pointer-events: none;
+}
+
+@keyframes ribbonSheen {
+    0% {
+        transform: translateX(-120%);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(120%);
+        opacity: 0;
+    }
+}
+
+.ribbon-level-1 {
+    background-color: rgba(119, 158, 203, .65);
+    border: calc(2px * var(--scale)) solid rgba(119, 158, 203, .9);
+    box-shadow:
+        0 0 calc(24px * var(--ribbon-scale)) rgba(119, 158, 203, .35),
+        inset 0 0 0 calc(1px * var(--ribbon-scale)) rgba(119, 158, 203, .25);
+}
+
+.ribbon-level-2 {
+    background-color: rgba(204, 117, 115, .65);
+    border: calc(2px * var(--scale)) solid rgba(204, 117, 115, .95);
+    box-shadow:
+        0 0 calc(24px * var(--ribbon-scale)) rgba(204, 117, 115, .38),
+        inset 0 0 0 calc(1px * var(--ribbon-scale)) rgba(204, 117, 115, .25);
+}
+
+.ribbon-level-3 {
+    background-color: rgba(255, 215, 0, .65);
+    border: calc(2px * var(--scale)) solid rgba(255, 215, 0, .95);
+    box-shadow:
+        0 0 calc(24px * var(--ribbon-scale)) rgba(255, 215, 0, .40),
+        inset 0 0 0 calc(1px * var(--ribbon-scale)) rgba(255, 215, 0, .30);
+}
+
+.ribbon-icon {
+    width: calc(64px * var(--scale));
+    height: calc(64px * var(--scale));
+    flex: 0 0 calc(64px * var(--scale));
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    filter: drop-shadow(0 0 calc(6px * var(--ribbon-scale)) rgba(255, 255, 255, .25));
+}
+
+.ribbon-icon-level-1 {
+    filter: drop-shadow(0 0 0 rgba(119, 158, 203, .55));
+    background-color: #779ECB;
+}
+
+.ribbon-icon-level-2 {
+    filter: drop-shadow(0 0 0 rgba(204, 117, 115, .55));
+    background-color: #cc7573;
+}
+
+.ribbon-icon-level-3 {
+    filter: drop-shadow(0 0 0 rgba(255, 215, 0, .55));
+    background-color: #FFD700;
+}
+
+.ribbon-enter {
+    animation: ribbonIn 320ms cubic-bezier(.22, .95, .18, 1.05) forwards;
+}
+
+@keyframes ribbonIn {
+    from {
+        opacity: 0;
+        transform: translateX(-1000px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.ribbon-exit {
+    animation: ribbonOut calc(260ms * var(--scale)) cubic-bezier(.2, .7, .3, 1) forwards;
+}
+
+@keyframes ribbonOut {
+    to {
+        opacity: 0;
+        transform: translateX(1000px);
+    }
+}
+
+.kf-ribbon[data-index] {
+    animation-delay: calc(40ms * var(--scale) * var(--data-index, 0));
+}
