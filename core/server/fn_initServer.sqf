@@ -116,15 +116,6 @@ call WL2_fnc_processRunways;
 #endif
 
 if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
-	{
-		_x addEventHandler ["CuratorObjectPlaced", {
-			params ["_curator", "_entity"];
-			[_entity] call WL2_fnc_newAssetHandle;
-			{
-				[_x] call WL2_fnc_newAssetHandle;
-			} forEach (crew _entity);
-		}];
-	} forEach allCurators;
 	0 spawn {
 		while {!BIS_WL_missionEnd} do {
 			private _allEntities = entities [[], ["Logic"], true];

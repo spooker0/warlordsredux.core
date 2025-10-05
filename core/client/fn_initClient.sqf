@@ -279,6 +279,17 @@ if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
 			[player, "10K"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 		}
 	];
+
+	{
+		private _curator = _x;
+		_curator addEventHandler ["CuratorObjectPlaced", {
+			params ["_curator", "_entity"];
+			[_entity] call WL2_fnc_newAssetHandle;
+			{
+				[_x] call WL2_fnc_newAssetHandle;
+			} forEach (crew _entity);
+		}];
+	} forEach allCurators;
 };
 
 private _squadActionText = format ["<t color='#00FFFF'>%1</t>", localize "STR_SQUADS_squads"];
