@@ -353,6 +353,12 @@
             const squaddedPlayers = [];
             let isInASquad = false;
             squadData.forEach(squad => {
+                const squadMembers = squad[2];
+
+                if (!squadMembers || squadMembers.length === 0) {
+                    return;
+                }
+
                 const squadEl = document.createElement('div');
                 squadEl.classList.add('squad');
 
@@ -361,10 +367,10 @@
                 document.querySelector('.squads').appendChild(squadEl);
 
                 const isSquadLeader = squad[1] === playerInfo[0];
-                const inCurrentSquad = squad[2].some(member => member[0] === playerInfo[0]);
+                const inCurrentSquad = squadMembers.some(member => member[0] === playerInfo[0]);
 
                 let squadPoints = 0;
-                squad[2].forEach(member => {
+                squadMembers.forEach(member => {
                     const memberEl = document.createElement('div');
                     memberEl.classList.add('member');
                     memberEl.dataset.playerId = member[0];

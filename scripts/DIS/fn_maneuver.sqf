@@ -50,6 +50,7 @@ if (_ammoConfig getOrDefault ["loal", false]) then {
 
         private _targetVectorDirAndUp = [_projectilePos, _targetPos] call BIS_fnc_findLookAt;
         _projectile setVectorDirAndUp _targetVectorDirAndUp;
+        _projectile setVelocityModelSpace [0, 100, 0];
         
         sleep 1;
         
@@ -62,7 +63,8 @@ if (_ammoConfig getOrDefault ["loal", false]) then {
             if (_projAlt > _targetAlt) then {
                 _distanceBeforeNotch = 48000;
             } else {
-                _distanceBeforeNotch = 5000 + _projAlt * 2;
+                _distanceBeforeNotch = 5000 + (_projAlt - _targetAlt) * 2;
+                _distanceBeforeNotch = _distanceBeforeNotch max 3500;
             };
         } else {
             _distanceBeforeNotch = 3500;

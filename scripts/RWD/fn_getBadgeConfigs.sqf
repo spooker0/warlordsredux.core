@@ -20,6 +20,8 @@ createHashMapFromArray [
 	["Chopper Down", ["A3\\Air_F_Beta\\Heli_Attack_01\\Data\\UI\\Map_Heli_Attack_01_CA.paa", 2, "Destroy 4 enemy helicopters."]],
 	["Turret Sweeper", ["A3\\Static_F_Gamma\\Data\\UI\\map_StaticTurret_AT_CA.paa", 2, "Destroy 4 enemy static turrets."]],
 
+	["Bulldozer", ["a3\\characters_f_orange\\headgear\\data\\ui\\icon_h_construction_headset_orange_f_ca.paa", 3, "Destroy 4 strongholds."]],
+
 	["Frontline Hero", ["a3\\ui_f\\data\\gui\\cfg\\communicationmenu\\attack_ca.paa", 1, "Attack a sector 10 times."]],
 	["Defender", ["a3\\ui_f\\data\\gui\\cfg\\communicationmenu\\defend_ca.paa", 1, "Defend a sector 10 times."]],
 	["Just One More Rocket", ["A3\\ui_f\\data\\map\\markers\\military\\pickup_CA.paa", 1, "Get 30 projectiles neutralized by APS."]],

@@ -3,7 +3,11 @@ params ["_rewardType", "_unitType", "_reward"];
 
 _rewardType = toUpper _rewardType;
 if (_rewardType select [0, 10] == "DESTROYED ") then {
-	_rewardType = "DESTROYED";
+	if (_rewardType == "DESTROYED STRONGHOLD") then {
+		_rewardType = "DESTROYED STRONGHOLD";
+	} else {
+		_rewardType = "DESTROYED";
+	};
 };
 
 private _rewardStack = missionNamespace getVariable ["WL2_rewardStack", createHashMap];
@@ -86,6 +90,11 @@ if (_rewardType == "DESTROYED") then {
 		private _currentStaticVHeavy = _rewardStack getOrDefault ["STATIC KILL HEAVY", 0];
 		_rewardStack set ["STATIC KILL HEAVY", _currentStaticVHeavy + 1];
 	};
+};
+
+if (_rewardType == "DESTROYED STRONGHOLD") then {
+	private _currentStrongholds = _rewardStack getOrDefault ["STRONGHOLDS DESTROYED", 0];
+	_rewardStack set ["STRONGHOLDS DESTROYED", _currentStrongholds + 1];
 };
 
 if (_rewardType == "ATTACKING SECTOR") then {

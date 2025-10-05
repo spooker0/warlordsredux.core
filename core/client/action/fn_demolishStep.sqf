@@ -11,6 +11,7 @@ if (_existingHealth <= 0) then {
         private _strongholdSectorCheck = _strongholdSector getVariable ["WL_stronghold", objNull];
         if (_targetObject == _strongholdSectorCheck) then {
             [_strongholdSector] call WL2_fnc_removeStronghold;
+            [player] remoteExec ["WL2_fnc_destroyStronghold", 2];
         };
     };
 

@@ -84,17 +84,7 @@ private _hintMap = createHashMapFromArray [
 	]
 ];
 
-private _missileTypeData = createHashMapFromArray [
-    ["M_Zephyr", "ZEPHYR"],
-    ["M_Titan_AA", "TITAN"],
-    ["M_Titan_AA_static", "TITAN"],
-    ["M_Titan_AA_long", "TITAN UP"],
-    ["ammo_Missile_mim145", "DEFENDER"],
-    ["ammo_Missile_s750", "RHEA"],
-    ["ammo_Missile_rim116", "SPARTAN"],
-    ["ammo_Missile_rim162", "CENTURION"],
-    ["M_70mm_SAAMI", "SAAMI"]
-];
+private _missileTypeData = call DIS_fnc_getMissileType;
 
 private _makeMunitionTextArray = {
 	params ["_munitionList"];

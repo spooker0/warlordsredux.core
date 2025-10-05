@@ -305,8 +305,8 @@ if (_asset isKindOf "Man") then {
 		[_asset, _side] remoteExec ["DIS_fnc_setupExtendedSam", 0, true];
 	};
 
-	if (WL_ASSET(_assetActualType, "hasLoal", 0) > 0) then {
-		_asset setVariable ["DIS_advancedSamRange", 30000, true];
+	if (WL_ASSET(_assetActualType, "hasASAM", 0) > 0) then {
+		_asset setVariable ["DIS_advancedSamRange", 14000, true];
 	};
 
 	private _threatDetection = WL_ASSET(_assetActualType, "threatDetection", 0);

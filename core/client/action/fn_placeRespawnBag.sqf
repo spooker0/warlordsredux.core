@@ -32,5 +32,8 @@ playSoundUI ["a3\ui_f\data\sound\cfgnotifications\communicationmenuitemadded.wss
 _freshTent setVariable ["WL2_demolitionHealth", 1, true];
 _freshTent setVariable ["WL2_demolitionMaxHealth", 1, true];
 _freshTent setVariable ["WL2_canDemolish", true, true];
+_freshTent setVariable ["WL_spawnedAsset", true, true];
+_freshTent setVariable ["BIS_WL_ownerAsset", getPlayerUID player, true];
+_freshTent setVariable ["BIS_WL_ownerAssetSide", side group player, true];
 
 deleteVehicle _projectile;

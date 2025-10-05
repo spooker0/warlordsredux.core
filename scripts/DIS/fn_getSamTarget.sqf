@@ -3,7 +3,7 @@ params ["_asset"];
 
 private _datalinkTargets = listRemoteTargets BIS_WL_playerSide;
 
-private _samRange = _asset getVariable ["DIS_advancedSamRange", 14000];
+private _samRange = _asset getVariable ["DIS_advancedSamRange", 30000];
 
 private _filteredTargets = _datalinkTargets select {
     private _target = _x # 0;

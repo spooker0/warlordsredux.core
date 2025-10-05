@@ -32,6 +32,7 @@ class CfgFunctions {
 			class controlMunition {};
 			class extendedSam {};
 			class frag {};
+			class getMissileType {};
 			class getNotchResult {};
 			class getSamTarget {};
 			class getSeadTarget {};
@@ -450,6 +451,7 @@ class CfgFunctions {
 			class createUAVCrew {};
 			class createVehicleCorrectly {};
 			class demolishComplete {};
+			class destroyStronghold {};
 			class detectNewPlayers {};
 			class forgiveTeamkill {};
 			class friendlyFireHandleServer {};

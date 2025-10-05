@@ -180,15 +180,7 @@ addMissionEventHandler ["Draw3D", {
 
 0 spawn {
     private _assetData = WL_ASSET_DATA;
-    private _missileTypeData = createHashMapFromArray [
-        ["M_Zephyr", "ZEPHYR"],
-        ["M_Titan_AA_long", "TITAN"],
-        ["ammo_Missile_mim145", "DEFENDER"],
-        ["ammo_Missile_s750", "RHEA"],
-        ["ammo_Missile_rim116", "SPARTAN"],
-        ["ammo_Missile_rim162", "CENTURION"],
-        ["M_70mm_SAAMI", "SAAMI"]
-    ];
+    private _missileTypeData = call DIS_fnc_getMissileType;
     private _apsProjectileConfig = APS_projectileConfig;
     private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 
