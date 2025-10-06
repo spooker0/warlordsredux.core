@@ -31,11 +31,32 @@ if (alive _launcher) then {
 
 {
     _x params ["_target", "_type", "_relationship", "_detectionSource"];
-    if (_relationship != "friendly" && "passiveradar" in _detectionSource) then {
-        private _radar = _x # 0;
-        private _name = format ["EMITTER: %1", [_radar] call WL2_fnc_getAssetTypeName];
-        _seadTargets pushBack [_radar, _name];
+    if (_relationship == "friendly") then {
+        continue;
+    };
+    if ("passiveradar" in _detectionSource) then {
+        private _name = format ["EMITTER: %1", [_target] call WL2_fnc_getAssetTypeName];
+        _seadTargets pushBack [_target, _name];
     };
 } forEach (getSensorTargets _asset);
+
+private _side = [_asset] call WL2_fnc_getAssetSide;
+{
+    _x params ["_target", "_lastDetected"];
+    if (_lastDetected < 0) then {
+        continue;
+    };
+    if (!alive _target) then {
+        continue;
+    };
+    private _targetSide = [_target] call WL2_fnc_getAssetSide;
+    if (_targetSide == _side) then {
+        continue;
+    };
+    if (_target getVariable ["WL2_dazzlerActivated", false]) then {
+        private _name = format ["EMITTER: %1", [_target] call WL2_fnc_getAssetTypeName];
+        _seadTargets pushBack [_target, _name];
+    };
+} forEach (listRemoteTargets _side);
 
 _seadTargets;

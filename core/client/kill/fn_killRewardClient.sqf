@@ -109,3 +109,13 @@ if (_customColor == "#de0808") then {
 // WLC
 private _newScore = (["getScore"] call WLC_fnc_getLevelInfo) + _reward;
 [_newScore] call WLC_fnc_setScore;
+
+// Total rewards tracker
+private _totalRewards = missionNamespace getVariable ["WL2_totalRewards", 0];
+_totalRewards = _totalRewards + _reward;
+private _alreadyHasBadge = missionNamespace getVariable ["WL2_hasJohnWarlordsBadge", false];
+if (_totalRewards > 100000 && !_alreadyHasBadge) then {
+	["John Warlords"] call RWD_fnc_addBadge;
+	missionNamespace setVariable ["WL2_hasJohnWarlordsBadge", true];
+};
+missionNamespace setVariable ["WL2_totalRewards", _totalRewards];

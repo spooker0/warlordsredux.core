@@ -108,6 +108,7 @@ class CfgFunctions {
 	class RWD {
 		class Default {
 			file = "src\scripts\RWD";
+			class addBadge {};
 			class applyBadge {};
 			class badgeMenu {};
 			class getBadgeConfigs {};

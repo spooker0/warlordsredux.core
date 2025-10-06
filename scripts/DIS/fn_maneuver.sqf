@@ -68,7 +68,7 @@ if (_ammoConfig getOrDefault ["loal", false]) then {
                 _distanceBeforeNotch = _distanceBeforeNotch max 3500;
             };
         } else {
-            _distanceBeforeNotch = 4000;
+            _distanceBeforeNotch = 3500;
         };
     };
 };
@@ -98,7 +98,8 @@ private _originalPosition = getPosASL _unit;
             _projectile setVariable ["DIS_notched", true];
         } else {
             // If not already notched and not notching
-            if (_projectile getVariable ["DIS_notched", false]) then {
+            private _isNotched = _projectile getVariable ["DIS_notched", false];
+            if (!_isNotched && !isNull _originalTarget) then {
                 private _targetVectorDirAndUp = [_projectilePosition, _targetPosition] call BIS_fnc_findLookAt;
                 _projectile setVectorDirAndUp _targetVectorDirAndUp;
                 _projectile setMissileTarget [_originalTarget, true];

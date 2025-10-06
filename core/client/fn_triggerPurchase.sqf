@@ -193,11 +193,28 @@ switch (_className) do {
         "RequestMenu_close" call WL2_fnc_setupUI;
         if (isNull _vehicle) exitWith {};
 
-        {
-            if (!(isPlayer _x) && alive _x && _x distance2D player < 150) then {
-                _x moveInGunner _vehicle;
+        private _aiToMove = (units group player) select { !isPlayer _x } select { alive _x } select { _x distance2D player < 150 } select { vehicle _x == _x };
+        if (count _aiToMove == 0) exitWith {
+            playSoundUI ["AddItemFailed"];
+            systemChat "No eligible AI to move!";
+        };
+
+        [_vehicle, _aiToMove] spawn {
+            params ["_vehicle", "_aiToMove"];
+            systemChat format ["Moving %1 AI into vehicle when ready.", count _aiToMove];
+
+            private _startWaitTime = serverTime;
+            waitUntil {
+                sleep 0.1;
+                !alive _vehicle || _vehicle turretLocal [0] || (serverTime - _startWaitTime > 30)
             };
-        } forEach (units group player);
+
+            {
+                _x moveInGunner _vehicle;
+            } forEach _aiToMove;
+
+            playSoundUI ["AddItemOK"];
+        };
     };
     case "RespawnBagFT": {
         [4, ""] spawn WL2_fnc_executeFastTravel;

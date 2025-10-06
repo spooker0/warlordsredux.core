@@ -105,6 +105,7 @@ class CfgRemoteExec {
 		class lock {allowedTargets = 0;};
 		class lockCameraTo {allowedTargets = 0;};
 		class lookAt {allowedTargets = 0;};
+		class moveInDriver {allowedTargets = 0;};
 		class playSoundUI {allowedTargets = 0;};
 		class removeWeaponGlobal {allowedTargets = 0;};
 		class selectLeader {allowedTargets = 0;};

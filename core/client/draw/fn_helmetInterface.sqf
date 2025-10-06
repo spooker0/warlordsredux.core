@@ -481,6 +481,11 @@ addMissionEventHandler ["Draw3D", {
                     _assetTypeName;
                 };
 
+                private _altitude = getPosATL _target # 2;
+                if (_altitude > 1000) then {
+                    _assetName = format ["%1 - ALT %2", _assetName, (_altitude / 1000) toFixed 1];
+                };
+
                 private _assetActualType = _target getVariable ["WL2_orderedClass", typeof _target];
                 private _assetCategory = WL_ASSET_FIELD(_assetData, _assetActualType, "category", "Other");
 

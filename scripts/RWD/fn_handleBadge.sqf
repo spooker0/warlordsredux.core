@@ -1,7 +1,5 @@
 #include "includes.inc"
 private _rewardStack = missionNamespace getVariable ["WL2_rewardStack", createHashMap];
-private _badges = profileNamespace getVariable ["WL2_badges", createHashMap];
-
 private _badgeConfigs = [
     ["SAM KILLS", "Grounded", RWD_BADGE_KILLREQ],
     ["PLANE KILLS", "Air Warfare", RWD_BADGE_KILLREQ],
@@ -49,11 +47,6 @@ private _badgeConfigs = [
 
     if (_current >= _badgeReq) then {
         _rewardStack set [_badgeKey, _current - _badgeReq];
-		[_badgeName] call RWD_fnc_newBadge;
-        
-		private _currentBadges = _badges getOrDefault [_badgeName, 0];
-		_badges set [_badgeName, (_currentBadges + 1) min 50];
+		[_badgeName] call RWD_fnc_addBadge;
     };
 } forEach _badgeConfigs;
-
-profileNamespace setVariable ["WL2_badges", _badges];

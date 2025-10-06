@@ -26,7 +26,7 @@ while { !BIS_WL_missionEnd } do {
     if (serverTime - _afkTimer > 900) then {
         if (!_alreadyHasOneOfUsBadge) then {
             _alreadyHasOneOfUsBadge = true;
-            ["One of Us"] call RWD_fnc_newBadge;
+            ["One of Us"] call RWD_fnc_addBadge;
         };
     };
 };
