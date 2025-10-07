@@ -77,7 +77,7 @@ private _rebaseAction = _asset addAction [
             private _airfieldsByDistance = [_airfieldSectors, [_asset], { _input0 distance _x }, "ASCEND"] call BIS_fnc_sortBy;
             private _closestAirfield = _airfieldsByDistance # 0;
             private _sectorName = _closestAirfield getVariable ["WL2_name", "sector"];
-            private _message = format ["Are you sure you want to rebase to %1?<br/>Make sure your landing gear is functional and deployed!", _sectorName];
+            private _message = format ["Are you sure you want to rebase to %1?<br/>Make sure your landing gear is functional!", _sectorName];
             private _result = [_message, "Rebase to Nearest Airfield", "Rebase", "Cancel"] call BIS_fnc_guiMessage;
 
             if (!_result) exitWith {
@@ -87,22 +87,25 @@ private _rebaseAction = _asset addAction [
             private _spawnParams = [_closestAirfield] call WL2_fnc_getAirSectorSpawn;
             _spawnParams params ["_spawnPos", "_dir"];
             if (count _spawnPos == 0) exitWith {
-                diag_log format ["Rebase failed. Spawn position not found in sector %1.", _closestAirfield getVariable "WL2_name"];
-                "No suitable spawn position found. Clear the runways." remoteExec ["systemChat", owner _caller];
+                systemChat "No valid spawn position found at airfield!";
                 playSoundUI ["AddItemFail"];
             };
 
-            params ["_asset", "_spawnPos", "_dir"];
+            player action ["LandGear", _asset];
+
             titleCut ["", "BLACK OUT", 1];
             
             sleep 1;
             
-            _asset setAirplaneThrottle 0;
-            _asset engineOn false;
-            _asset setVectorDirAndUp [[0, 1, 0], [0, 0, 1]];
-            _asset setVelocity [0, 0, 0];
-
-            sleep 5;
+            private _startWaitTime = serverTime;
+            systemChat "Returning to base...";
+            while { (serverTime - _startWaitTime) < 5 } do {
+                _asset setAirplaneThrottle 0;
+                _asset engineOn false;
+                _asset setVectorDirAndUp [[0, 1, 0], [0, 0, 1]];
+                _asset setVelocity [0, 0, 0];
+                sleep 0.1;
+            };
 
             _asset setVehiclePosition [_spawnPos, [], 0, "CAN_COLLIDE"];
             _asset setVectorDirAndUp [[0, 1, 0], [0, 0, 1]];
