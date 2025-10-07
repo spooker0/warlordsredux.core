@@ -20,6 +20,10 @@ while { alive _projectile } do {
     if (_notched) then {
         _currentState = "BLIND";
         _projectile setMissileTarget objNull;
+    } else {
+        if (_currentState == "LOST") then {
+            _currentState = "SEARCH";
+        };
     };
     private _missileVarState = _projectile getVariable ["APS_missileState", "LOCKED"];
     if (_currentState != _missileVarState) then {
