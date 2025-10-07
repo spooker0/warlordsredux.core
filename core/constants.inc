@@ -1,5 +1,5 @@
 // Live: update to latest version
-#define WL_VERSION "2.6.13"
+#define WL_VERSION "2.7.0"
 
 // Live: set all to 0
 #define WL_HARD_AI_MODE 0

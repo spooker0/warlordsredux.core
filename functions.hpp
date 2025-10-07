@@ -448,6 +448,7 @@ class CfgFunctions {
 			class changeSectorOwnership {};
 			class clearAllTimeouts {};
 			class clearPlayerReports {};
+			class clearServerStats {};
 			class createDestroyer {};
 			class createUAVCrew {};
 			class createVehicleCorrectly {};
