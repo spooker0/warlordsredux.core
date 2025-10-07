@@ -92,15 +92,18 @@ private _currentAssetPylonInfo = _asset getVariable ["WLM_pylonInfo", getAllPylo
 
         _selectBox lbSetTooltip [_selectBoxItem, [_x] call WLM_fnc_getMagazineTooltip];
         _selectBox lbSetData [_selectBoxItem, _x];
-
-        if (_currentPylonInfo # 3 == (configName _magazine)) then {
-            _selectBox lbSetCurSel _selectBoxItem;
-        };
     } forEach _allowedMagazines;
 
     _selectBox ctrlSetPosition [_xPos, _yPos, _textWidth + 0.04, 0.035];
-
     _selectBox ctrlCommit 0;
+
+    _selectBox lbSortBy ["TEXT"];
+    for "_index" from 0 to (lbSize _selectBox - 1) do {
+        private _itemData = _selectBox lbData _index;
+        if (_itemData == (_currentPylonInfo # 3)) then {
+            _selectBox lbSetCurSel _index;
+        };
+    };
 
     private _selectUserBox = _display ctrlCreate ["WLM_PylonSelectUser", WLM_PYLON_USER_START + _forEachIndex];
     _selectUserBox ctrlSetPosition [_xPos - 0.035, _yPos];

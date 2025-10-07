@@ -138,6 +138,8 @@ private _makeGPSBombTextArray = {
 
 while { !BIS_WL_missionEnd } do {
 	sleep 0.05;
+	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+
 	private _currentModeData = call _getCurrentMode;
 	private _currentMode = _currentModeData # 0;
 	private _currentModeTitle = _currentModeData # 1;
@@ -166,9 +168,9 @@ while { !BIS_WL_missionEnd } do {
 		private _encodedMunitionsText = _texture ctrlWebBrowserAction ["ToBase64", _munitionsText];
 
 		private _munitionScript = format ["setMunitionList(atob(""%1""));", _encodedMunitionsText];
-		_texture ctrlWebBrowserAction ["ExecJS", _munitionScript];
+		_script = _script + _munitionScript;
 	} else {
-		_texture ctrlWebBrowserAction ["ExecJS", "setMunitionList('[]');"];
+		_script = _script + "setMunitionList('[]');";
 	};
 
 	switch(_currentMode) do {
@@ -178,14 +180,14 @@ while { !BIS_WL_missionEnd } do {
 			private _targetList = [DIS_fnc_getSamTarget, "NO TARGET", "WL2_selectedTargetAA"] call DIS_fnc_getTargetList;
 			private _targetsText = toJSON _targetList;
 			_targetsText = _texture ctrlWebBrowserAction ["ToBase64", _targetsText];
-			_script = format ["setMode(""aa"", ""%1"");setAATargetData(atob(""%2""));", _currentModeTitle, _targetsText];
+			_script = _script + format ["setMode(""aa"", ""%1"");setAATargetData(atob(""%2""));", _currentModeTitle, _targetsText];
 		};
 		case "gps": {
 			private _gpsSelectionIndex = cameraOn getVariable ["DIS_selectionIndex", 0];
 			private _gpsCord = cameraOn getVariable ["DIS_gpsCord", ""];
 			private _inRangeCalculation = [cameraOn] call DIS_fnc_calculateInRange;
 
-			_script = format [
+			_script = _script + format [
 				"setMode(""gps"", ""%1"");setGPSData(%2, ""%3"", ""%4"", ""%5"", %6);",
 				_currentModeTitle,
 				_gpsSelectionIndex,
@@ -199,28 +201,18 @@ while { !BIS_WL_missionEnd } do {
 			private _targetList = [] call DIS_fnc_getSquadList;
 			private _targetsText = toJSON _targetList;
 			_targetsText = _texture ctrlWebBrowserAction ["ToBase64", _targetsText];
-			_script = format ["setMode(""remote"", ""%1"");setRemoteTargetData(atob(""%2""));", _currentModeTitle, _targetsText];
+			_script = _script + format ["setMode(""remote"", ""%1"");setRemoteTargetData(atob(""%2""));", _currentModeTitle, _targetsText];
 		};
 		case "sead": {
 			private _targetList = [DIS_fnc_getSeadTarget, "TARGET: AUTO", "WL2_selectedTargetSEAD"] call DIS_fnc_getTargetList;
 			private _targetsText = toJSON _targetList;
 			_targetsText = _texture ctrlWebBrowserAction ["ToBase64", _targetsText];
-			_script = format ["setMode(""sead"", ""%1"");setSEADTargetData(atob(""%2""));", _currentModeTitle, _targetsText];
+			_script = _script + format ["setMode(""sead"", ""%1"");setSEADTargetData(atob(""%2""));", _currentModeTitle, _targetsText];
 		};
 		default {
-			_script = format ["setMode(""none"", ""%1"");", _currentModeTitle];
+			_script = _script + format ["setMode(""none"", ""%1"");", _currentModeTitle];
 		};
 	};
-	_texture ctrlWebBrowserAction ["ExecJS", _script];
-
-	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-	private _targetLeft = _settingsMap getOrDefault ["targetingMenuLeft", 65];
-	private _targetTop = _settingsMap getOrDefault ["targetingMenuTop", 30];
-	private _fontSize = _settingsMap getOrDefault ["targetingMenuFontSize", 18];
-	private _incomingLeft = _settingsMap getOrDefault ["incomingIndicatorLeft", 5];
-	private _incomingTop = _settingsMap getOrDefault ["incomingIndicatorTop", 20];
-	private _setPositionScript = format ["setSettings(%1, %2, %3, %4, %5);", _targetLeft, _targetTop, _incomingLeft, _incomingTop, _fontSize];
-	_texture ctrlWebBrowserAction ["ExecJS", _setPositionScript];
 
 	private _disableIncomingMissileDisplay = _settingsMap getOrDefault ["disableIncomingMissileDisplay", false];
     if (WL_HelmetInterface != 0 && !_disableIncomingMissileDisplay) then {
@@ -240,8 +232,34 @@ while { !BIS_WL_missionEnd } do {
 		};
 		
 		private _encodedMissilesText = _texture ctrlWebBrowserAction ["ToBase64", toJSON _missilesData];
-		_texture ctrlWebBrowserAction ["ExecJS", format ["setIncomingMissiles(atob(""%1""));", _encodedMissilesText]];
+		_script = _script + format ["setIncomingMissiles(atob(""%1""));", _encodedMissilesText];
     } else {
-		_texture ctrlWebBrowserAction ["ExecJS", "setIncomingMissiles([]);"];
+		_script = _script + "setIncomingMissiles('[]');";
 	};
+
+	private _reconOptics = cameraOn getVariable ["WL2_hasReconOptics", false];
+	if (_reconOptics) then {
+		private _isReady = cameraOn getVariable ["WL2_reconOpticsReady", false];
+		_script = _script + format ["setReconOptics(true, %1);", _isReady];
+	} else {
+		_script = _script + "setReconOptics(false, false);";
+	};
+
+	private _ecmCharges = cameraOn getVariable ["WL2_ecmCharges", -100];
+	if (_ecmCharges != -100) then {
+		private _nextChargeTime = cameraOn getVariable ["WL2_ecmNextChargeTime", 0];
+		_script = _script + format ["setEcmCharges(true, %1, %2);", _ecmCharges, _nextChargeTime];
+	} else {
+		_script = _script + "setEcmCharges(false, 0, 0);";
+	};
+
+	private _targetLeft = _settingsMap getOrDefault ["targetingMenuLeft", 65];
+	private _targetTop = _settingsMap getOrDefault ["targetingMenuTop", 30];
+	private _fontSize = _settingsMap getOrDefault ["targetingMenuFontSize", 18];
+	private _incomingLeft = _settingsMap getOrDefault ["incomingIndicatorLeft", 5];
+	private _incomingTop = _settingsMap getOrDefault ["incomingIndicatorTop", 20];
+	private _setPositionScript = format ["setSettings(%1, %2, %3, %4, %5);", _targetLeft, _targetTop, _incomingLeft, _incomingTop, _fontSize];
+	_script = _script + _setPositionScript;
+
+	_texture ctrlWebBrowserAction ["ExecJS", _script];
 };

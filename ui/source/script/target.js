@@ -138,6 +138,29 @@ function setIncomingMissiles(missiles) {
     });
 }
 
+function setReconOptics(state, ready) {
+    const reconEl = document.querySelector('.recon-indicator');
+    if (state) {
+        reconEl.textContent = ready ? "RECON OPTICS READY" : "RECON OPTICS WAIT";
+        reconEl.style.color = ready ? "lime" : "black";
+    } else {
+        reconEl.textContent = "";
+    }
+}
+
+function setEcmCharges(active, count, nextChargeTime) {
+    const ecmIndicatorEl = document.querySelector('.ecm-indicator');
+    const rechargeEl = document.querySelector('.recharge-indicator');
+    if (active) {
+        ecmIndicatorEl.textContent = `ECM CHARGES: ${count}`;
+        rechargeEl.textContent = `RECHARGE: ${nextChargeTime}`;
+        ecmIndicatorEl.style.color = count > 0 ? "lime" : "black";
+    } else {
+        ecmIndicatorEl.textContent = "";
+        rechargeEl.textContent = "";
+    }
+}
+
 function setSettings(targetLeft, targetTop, incomingLeft, incomingTop, fontSize) {
     const wrapper = document.querySelector('.target-wrapper');
     wrapper.style.marginLeft = `${targetLeft}vw`;

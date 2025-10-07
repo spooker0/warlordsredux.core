@@ -32,6 +32,21 @@ html {
     margin-left: 5vw;
 }
 
+.recon-wrapper {
+    position: fixed;
+    display: inline-block;
+    margin-top: 15vh;
+    width: 100vw;
+}
+
+.ecm-wrapper {
+    position: fixed;
+    display: inline-block;
+    margin-top: 7vh;
+    width: 100vw;
+    text-align: center;
+}
+
 h1,
 h2,
 p,
@@ -86,4 +101,18 @@ h2 {
 
 .missile-wrapper .missile-row+.missile-row {
     margin: 0;
+}
+
+.recon-indicator {
+    text-align: center;
+    font-size: calc(var(--base-font-size) * 1.5);
+}
+
+.ecm-indicator,
+.recharge-indicator {
+    font-size: calc(var(--base-font-size) * 1.2);
+}
+
+.recharge-indicator {
+    color: white;
 }

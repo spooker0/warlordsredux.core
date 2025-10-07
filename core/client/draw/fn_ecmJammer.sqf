@@ -37,13 +37,6 @@ if (_charges == -100) then {
 uiNamespace setVariable ["WL2_ECMMunitions", []];
 uiNamespace setVariable ["WL2_ECMMunitionLocks", []];
 
-"ecmJammer" cutRsc ["RscWLECMJammerDisplay", "PLAIN"];
-private _display = uiNamespace getVariable ["RscWLECMJammerDisplay", displayNull];
-
-private _chargesIcon = _display displayCtrl 33001;
-private _chargesText = _display displayCtrl 33002;
-private _chargesTimer = _display displayCtrl 33003;
-
 private _ecmDraw = addMissionEventHandler ["Draw3D", {
     private _ecmMunitions = uiNamespace getVariable ["WL2_ECMMunitions", []];
 
@@ -107,9 +100,6 @@ private _ecmDraw = addMissionEventHandler ["Draw3D", {
 [_asset, _jammerPods, _ecmRange, _ecmSpeed] spawn {
     params ["_asset", "_jammerPods", "_ecmRange", "_ecmSpeed"];
 
-    private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-    private _apsVolume = _settingsMap getOrDefault ["apsVolume", 1];
-
     while { alive _asset && cameraOn == _asset } do {
         sleep 0.1;
         private _ecmMunitions = uiNamespace getVariable ["WL2_ECMMunitions", []];
@@ -163,9 +153,6 @@ private _ecmDraw = addMissionEventHandler ["Draw3D", {
             _jamMarkers pushBack _x;
 
             if (_jamPercent >= 100) then {
-                if (_chargesRemaining == 1 && _jammerPods > 0) then {
-                    playSoundUI ["a3\sounds_f\vehicles\air\noises\heli_alarm_rotor_low.wss", _apsVolume * 0.2, 0.5];
-                };
                 _asset setVariable ["WL2_ecmCharges", _chargesRemaining - 1];
 
                 private _originator = getShotParents _x # 0;
@@ -189,6 +176,9 @@ private _ecmDraw = addMissionEventHandler ["Draw3D", {
 
 private _playerUid = getPlayerUID player;
 private _nextChargeTime = serverTime + _ecmRechargeTime;
+private _lastCharges = _charges;
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _apsVolume = _settingsMap getOrDefault ["apsVolume", 1];
 while { alive _asset && cameraOn == _asset } do {
     sleep 0.25;
 
@@ -206,28 +196,21 @@ while { alive _asset && cameraOn == _asset } do {
     };
     uiNamespace setVariable ["WL2_ECMMunitions", _munitions];
 
-    private _currentChanges = _asset getVariable ["WL2_ecmCharges", _ecmCharges];
-    if (serverTime > _nextChargeTime || _currentChanges >= _ecmCharges) then {
+    private _currentCharges = _asset getVariable ["WL2_ecmCharges", _ecmCharges];
+    if (serverTime > _nextChargeTime || _currentCharges >= _ecmCharges) then {
         _nextChargeTime = serverTime + _ecmRechargeTime;
-        if (_currentChanges < _ecmCharges) then {
-            _asset setVariable ["WL2_ecmCharges", _currentChanges + 1];
+        if (_currentCharges < _ecmCharges) then {
+            _asset setVariable ["WL2_ecmCharges", _currentCharges + 1];
             playSoundUI ["AddItemOk", 1, 5.0];
         };
     };
 
-    private _charges = _asset getVariable ["WL2_ecmCharges", _ecmCharges];
+    cameraOn setVariable ["WL2_ecmNextChargeTime", ceil (_nextChargeTime - serverTime)];
 
-    private _chargesColor = "#33ff33";
-    if (_charges <= 0) then {
-        _chargesIcon ctrlSetTextColor [1, 0, 0, 1];
-        _chargesColor = "#ff3333";
-    } else {
-        _chargesIcon ctrlSetTextColor [1, 1, 1, 1];
+    if (_lastCharges > 0 && _currentCharges == 0) then {
+        playSoundUI ["a3\sounds_f\vehicles\air\noises\heli_alarm_rotor_low.wss", _apsVolume * 0.2, 0.5];
     };
-
-    _chargesText ctrlSetStructuredText parseText format ["<t color='%1' align='center'>%2</t>", _chargesColor, _charges];
-    _chargesTimer ctrlSetStructuredText parseText format ["<t color='#ffffff' align='center'>%1</t>", ceil (_nextChargeTime - serverTime)];
+    _lastCharges = _currentCharges;
 };
 
-"ecmJammer" cutText ["", "PLAIN"];
 removeMissionEventHandler ["Draw3D", _ecmDraw];

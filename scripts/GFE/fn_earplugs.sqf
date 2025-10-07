@@ -21,7 +21,7 @@ _display displayAddEventHandler ["KeyDown", {
 		private _earplugVolume = _settingsMap getOrDefault ["earplugVolume", 0.1];
 
 		if (soundVolume == 1) then {
-			"GF_Earplugs" cutRsc ["Rsc_GF_Earplugs", "PLAIN"];
+			"GF_Earplugs" cutRsc ["RscGFEarplugs", "PLAIN"];
 			titleText ["<t color='#339933' size='2'font='PuristaBold'>EARPLUGS IN</t>", "PLAIN DOWN", -1, true, true];
 			0 fadeSound _earplugVolume;
 		} else {

@@ -9,39 +9,20 @@ if (_playerUID == getPlayerUID player) then {
     ]], 10] call WL2_fnc_showHint;
 };
 
-private _clearReconOptics = {
-    "reconOptics" cutText ["", "PLAIN"];
-    _display = objNull;
-};
-
-private _display = objNull;
-private _instructionsDisplay = controlNull;
-private _reconOpticsLabel = controlNull;
-
-private _addReconOptics = {
-    if !(isNull _display) exitWith {};
-    "reconOptics" cutRsc ["RscWLReconOpticsDisplay", "PLAIN"];
-    _display = uiNamespace getVariable ["RscWLReconOpticsDisplay", displayNull];
-
-    _reconOpticsLabel = _display displayCtrl 26000;
-};
-
 while { alive _asset } do {
     if (cameraOn != _asset) then {
-        call _clearReconOptics;
         sleep 5;
         continue;
     };
 
-    call _addReconOptics;
-    _reconOpticsLabel ctrlSetStructuredText parseText "<t color='#33ff33' align='center'>RECON OPTICS READY</t>";
+    _asset setVariable ["WL2_reconOpticsReady", true];
 
 	if (inputAction "lockTarget" > 0) then {
         waitUntil {
             inputAction "lockTarget" == 0
         };
 
-        _reconOpticsLabel ctrlSetStructuredText parseText "<t color='#ff3333' align='center'>RECON OPTICS WAIT</t>";
+        _asset setVariable ["WL2_reconOpticsReady", false];
         playSoundUI ["a3\sounds_f\arsenal\weapons\launchers\titan\dry_titan.wss", 1, 1, true];
 
         private _targetIntersections = lineIntersectsSurfaces [
@@ -70,13 +51,10 @@ while { alive _asset } do {
         private _enemiesSpotted = [_unitsInArea] call WL2_fnc_reconReward;
         if (_enemiesSpotted) then {
             playSoundUI ["a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", 1, 0.5, true];
-            _instructionsDisplay ctrlShow false;
         };
 
-        sleep 1;
+        sleep 2;
     };
 
     sleep 0.001;
 };
-
-call _clearReconOptics;

@@ -96,14 +96,17 @@ private _originalPosition = getPosASL _unit;
         private _notchResult = [_originalTarget, _unit, _projectile, _distanceBeforeNotch] call DIS_fnc_getNotchResult;
         if (_notchResult == 4) then {
             _projectile setVariable ["DIS_notched", true];
+        };
+        
+        private _isNotched = _projectile getVariable ["DIS_notched", false];
+        if (_isNotched) then {  // If not already notched and not notching
+            _projectile setMissileTarget [objNull, true];
         } else {
-            // If not already notched and not notching
-            private _isNotched = _projectile getVariable ["DIS_notched", false];
-            if (!_isNotched && !isNull _originalTarget) then {
+            if (!isNull _originalTarget) then {
                 private _targetVectorDirAndUp = [_projectilePosition, _targetPosition] call BIS_fnc_findLookAt;
                 _projectile setVectorDirAndUp _targetVectorDirAndUp;
                 _projectile setMissileTarget [_originalTarget, true];
-            };
+            };  
         };
 
         private _currentMissileTarget = missileTarget _projectile;
