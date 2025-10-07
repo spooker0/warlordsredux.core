@@ -127,6 +127,8 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["slider", "Map marker scale threshold", [0, 1, 0.05, 0.4, "sectorMarkerTextThreshold"]],
         ["slider", "Map icon scale", [0.5, 2, 0.05, 1.0, "mapIconScale"]],
         ["slider", "Loadout theme", [1, 5, 1, 1, "loadoutTheme"]],
+        ["slider", "Missile camera position (left %)", [0, 100, 1, 0, "missileCameraLeft"]],
+        ["slider", "Missile camera position (top %)", [0, 100, 1, 100, "missileCameraTop"]],
         ["slider", "Killfeed scale", [0.5, 1.2, 0.05, 1.0, "killfeedScale"]],
         ["slider", "Killfeed badge scale", [0.2, 1.5, 0.05, 1.0, "killfeedBadgeScale"]],
         ["slider", "Killfeed timeout (s)", [3, 20, 0.5, 10, "killfeedTimeout"]],

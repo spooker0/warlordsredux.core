@@ -806,4 +806,35 @@ class RscTitles {
 			};
 		};
 	};
+
+	class RscWLMissileCameraDisplay {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		name = "RscWLMissileCameraDisplay";
+		onLoad = "uiNamespace setVariable ['RscWLMissileCameraDisplay', _this select 0];";
+		class controls {
+			class RscWLMissileCameraDisplay_TitleBar: RscText {
+				idc = 5110;
+				x = safezoneX + 0.2;
+				y = safezoneY + 0.1;
+				w = safeZoneW / 4;
+				h = 0.05;
+				colorBackground[] = {0, 0, 0, 0.9};
+				colorText[] = {1, 1, 1, 1};
+				text = "MISSILE CAMERA";
+			};
+			class RscWLMissileCameraDisplay_Picture: RscPicture {
+				idc = 5111;
+				x = safezoneX + 0.2;
+				y = safezoneY + 0.15;
+				w = safeZoneW / 4;
+				h = safeZoneW / 4;
+				colorBackground[] = {0, 0, 0, 0.9};
+				colorText[] = {1, 1, 1, 1};
+				text = "#(argb,512,512,1)r2t(rtt1,1.0)";
+			};
+		};
+	};
 };

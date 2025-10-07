@@ -396,7 +396,7 @@ uiNamespace setVariable ["WL2_scoreboardData", []];
 
 showScoretable 0;
 "deathInfo" cutFadeOut 0;
-"APS_Camera" cutFadeOut 0;
+"missileCamera" cutFadeOut 0;
 
 0 spawn WL2_fnc_ammoConfigChange;
 0 spawn DIS_fnc_setupTargetingMenu;

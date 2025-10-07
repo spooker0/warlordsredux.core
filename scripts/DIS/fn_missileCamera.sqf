@@ -4,24 +4,12 @@ params ["_projectile", "_unit"];
 private _originalPipViewDistance = getPiPViewDistance;
 setPiPViewDistance viewDistance;
 
-"APS_Camera" cutRsc ["RscTitleDisplayEmpty", "PLAIN", -1, true, true];
-
-private _display = uiNamespace getVariable "RscTitleDisplayEmpty";
-
-private _defaultTitlePosition = [safezoneX + 0.2, safezoneY + 0.1, safeZoneW / 4, 0.05];
-private _defaultPicturePosition = [safezoneX + 0.2, safeZoneY + 0.15, safeZoneW / 4, safeZoneW / 4];
-
-private _titleBar = _display ctrlCreate ["RscText", -1];
-_titleBar ctrlSetPosition _defaultTitlePosition;
-_titleBar ctrlSetBackgroundColor [0, 0, 0, 0.9];
-_titleBar ctrlSetTextColor [1, 1, 1, 1];
-_titleBar ctrlSetText "Missile Camera";
-_titleBar ctrlCommit 0;
-
-private _pictureControl = _display ctrlCreate ["RscPicture", -1];
-_pictureControl ctrlSetPosition _defaultPicturePosition;
-_pictureControl ctrlSetText "#(argb,512,512,1)r2t(rtt1,1.0)";
-_pictureControl ctrlCommit 0;
+private _display = uiNamespace getVariable ["RscWLMissileCameraDisplay", objNull];
+if (!isNull _display) then {
+    "missileCamera" cutFadeOut 0;
+};
+"missileCamera" cutRsc ["RscWLMissileCameraDisplay", "PLAIN", -1, true, true];
+_display = uiNamespace getVariable "RscWLMissileCameraDisplay";
 
 private _camera = "camera" camCreate (position _projectile);
 _camera cameraEffect ["Terminate", "BACK TOP", "rtt1"];
@@ -83,9 +71,33 @@ private _targetDrawer = addMissionEventHandler ["Draw3D", {
     ];
 }];
 
-[_camera, _titleBar, _pictureControl, _defaultTitlePosition, _defaultPicturePosition] spawn {
-    params ["_camera", "_titleBar", "_pictureControl", "_defaultTitlePosition", "_defaultPicturePosition"];
+[_camera, _display] spawn {
+    params ["_camera", "_display"];
+    private _titleBar = _display displayCtrl 5110;
+    private _pictureControl = _display displayCtrl 5111;
+
     private  _opticsMode = missionNamespace getVariable ["DIS_missileCameraOpticsMode", 0];
+
+    private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+    private _missileCameraLeft = _settingsMap getOrDefault ["missileCameraLeft", 0];
+    private _missileCameraTop = _settingsMap getOrDefault ["missileCameraTop", 100];
+
+    private _totalWidth = safeZoneW - safeZoneW / 4;
+    private _totalHeight = safeZoneH - safeZoneW / 4 - 0.05;
+    private _windowLeft = (_missileCameraLeft / 100) * _totalWidth + safeZoneX;
+    private _windowTop = (_missileCameraTop / 100) * _totalHeight + safeZoneY;
+
+    private _defaultTitlePosition = [_windowLeft, _windowTop, safeZoneW / 4, 0.05];
+    private _defaultPicturePosition = [_windowLeft, _windowTop + 0.05, safeZoneW / 4, safeZoneW / 4];
+
+    _titleBar ctrlSetPosition _defaultTitlePosition;
+    _pictureControl ctrlSetPosition _defaultPicturePosition;
+    _titleBar ctrlCommit 0;
+    _pictureControl ctrlCommit 0;
+
+    private _largeTitlePosition = [safeZoneX + 0.2, safeZoneY + 0.15, safeZoneW - 0.4, 0.05];
+    private _largePicturePosition = [safeZoneX + 0.2, safeZoneY + 0.2, safeZoneW - 0.4, safeZoneH - 0.3];
+
     private _changed = true;
     while { !isNull _camera } do {
         if (inputAction "opticsMode" > 0) then {
@@ -104,8 +116,6 @@ private _targetDrawer = addMissionEventHandler ["Draw3D", {
                 case 1: {
                     _titleBar ctrlShow true;
                     _pictureControl ctrlShow true;
-                    private _largeTitlePosition = [safeZoneX + 0.2, safeZoneY + 0.15, safeZoneW - 0.4, 0.05];
-                    private _largePicturePosition = [safeZoneX + 0.2, safeZoneY + 0.2, safeZoneW - 0.4, safeZoneH - 0.3];
                     _titleBar ctrlSetPosition _largeTitlePosition;
                     _pictureControl ctrlSetPosition _largePicturePosition;
                 };
@@ -148,7 +158,7 @@ _camera camCommit 0;
 sleep 1.5;
 
 camDestroy _camera;
-"APS_Camera" cutFadeOut 0;
+"missileCamera" cutFadeOut 0;
 removeMissionEventHandler ["Draw3D", _targetDrawer];
 
 sleep 2;

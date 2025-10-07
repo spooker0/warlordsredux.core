@@ -19,7 +19,7 @@ if (!_disableCamera && !_isDisconnected && !_pipDisabled) then {
     if (!isNull _existingCam) then {
         _existingCam cameraEffect ["Terminate", "BACK TOP"];
         camDestroy _existingCam;
-        "APS_Camera" cutFadeOut 0;
+        "missileCamera" cutFadeOut 0;
     };
 
     private _missileCamera = [_projectile, _unit] spawn DIS_fnc_missileCamera;
