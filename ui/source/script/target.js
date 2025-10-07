@@ -172,3 +172,6 @@ function setSettings(targetLeft, targetTop, incomingLeft, incomingTop, fontSize)
 
     document.documentElement.style.setProperty('--base-font-size', `${fontSize}px`);
 }
+
+setReconOptics(false, false);
+setEcmCharges(false, 0, 0);
