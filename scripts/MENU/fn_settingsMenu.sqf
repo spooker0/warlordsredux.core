@@ -8,7 +8,9 @@ private _settingActionID = player addAction [
     false,
     false,
     "",
-    ""
+    "",
+    0,
+    true
 ];
 player setUserActionText [_settingActionID, _settingsText, "<img size='3' image='\a3\3den\Data\Displays\Display3DEN\PanelRight\submode_logic_module_ca'/>"];
 

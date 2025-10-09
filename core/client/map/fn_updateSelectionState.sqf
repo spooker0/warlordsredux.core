@@ -33,7 +33,8 @@ switch (BIS_WL_currentSelection) do {
     case WL_ID_SELECTION_FAST_TRAVEL_VEHICLE: {
         BIS_WL_selection_availableSectors = (BIS_WL_sectorsArray # 2) select {
             private _isCarrierSector = _x getVariable ["WL2_isAircraftCarrier", false];
-            !_isCarrierSector;
+            private _sectorNotUnderAttack = _x != WL_TARGET_ENEMY; 
+            !_isCarrierSector && _sectorNotUnderAttack;
         };
         BIS_WL_selection_showLinks = false;
         BIS_WL_selection_dimSectors = true;

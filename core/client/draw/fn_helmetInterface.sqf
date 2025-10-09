@@ -4,7 +4,6 @@ if (isDedicated) exitWith {};
 uiNamespace setVariable ["WL_HelmetInterfaceLaserIcons", []];
 // uiNamespace setVariable ["WL_HelmetInterfaceFlareIcons", []];
 uiNamespace setVariable ["WL_HelmetInterfaceSAMIcons", []];
-uiNamespace setVariable ["WL_HelmetInterfaceMunitionIcons", []];
 uiNamespace setVariable ["WL_HelmetInterfaceTargetVehicleIcons", []];
 uiNamespace setVariable ["WL_HelmetInterfaceTargetInfantryIcons", []];
 uiNamespace setVariable ["WL_HelmetInterfaceMaxDistance", 5000];
@@ -31,11 +30,6 @@ addMissionEventHandler ["Draw3D", {
         _icon set [2, _location];
         drawIcon3D _icon;
     } forEach _samIcons;
-
-    private _munitionIcons = uiNamespace getVariable ["WL_HelmetInterfaceMunitionIcons", []];
-    {
-        drawIcon3D _x;
-    } forEach _munitionIcons;
 
     private _targetVehicleIcons = uiNamespace getVariable ["WL_HelmetInterfaceTargetVehicleIcons", []];
     {
@@ -364,46 +358,6 @@ addMissionEventHandler ["Draw3D", {
         private _maxThreshold = uiNamespace getVariable ["WL_HelmetInterfaceMaxDistance", 5000];
         _maxDistance = _maxDistance min _maxThreshold;
 
-        private _munitions = _targets select {
-            _vehicle distance _x < _maxDistance &&
-            [_x] call WL2_fnc_isScannerMunition;
-        };
-        private _munitionIcons = [];
-        {
-            private _munition = _x;
-            private _munitionPos = _munition modelToWorldVisual [0, 0, 0];
-
-            private _originator = getShotParents _munition # 0;
-            private _originatorType = if (_originator isKindOf "Man") then {
-                "INFANTRY";
-            } else {
-                toUpper ([_originator] call WL2_fnc_getAssetTypeName);
-            };
-
-            private _color = switch ([_originator] call WL2_fnc_getAssetSide) do {
-                case west: { [0, 0.3, 0.6, 0.9] };
-                case east: { [0.5, 0, 0, 0.9] };
-                case independent: { [0, 0.6, 0, 0.9] };
-                default { [1, 1, 1, 1] };
-            };
-
-            _munitionIcons pushBack [
-                "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missileAlt_ca.paa",
-                _color,
-                _munitionPos,
-                0.8,
-                0.8,
-                0,
-                format ["FROM: %1", _originatorType],
-                true,
-                0.035,
-                "RobotoCondensedBold",
-                "center",
-                true
-            ];
-        } forEach _munitions;
-        uiNamespace setVariable ["WL_HelmetInterfaceMunitionIcons", _munitionIcons];
-
         _targets = _targets select {
             alive _x &&
             lifeState _x != "INCAPACITATED" &&
@@ -441,11 +395,7 @@ addMissionEventHandler ["Draw3D", {
                     [0, 0.5, 0, 1]
                 };
                 default {
-                    if ([_x] call WL2_fnc_isScannerMunition) then {
-                        [1, 1, 1, 1]
-                    } else {
-                        [1, 1, 1, 0]
-                    };
+                    [1, 1, 1, 0]
                 };
             };
 

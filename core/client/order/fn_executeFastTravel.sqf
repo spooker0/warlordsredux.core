@@ -123,6 +123,7 @@ switch (_fastTravelMode) do {
 			};
 		};
 
+		_destination set [2, 150];
 		private _parachute = createVehicle [_parachuteClass, _destination, [], 0, "NONE"];
 		_parachute setDir _directionToSector;
 		_vehicle attachTo [_parachute, [0, 0, 0]];
@@ -142,7 +143,7 @@ switch (_fastTravelMode) do {
 		};
 
 		private _paradropNextUseVar = format ["WL_paradropNextUse_%1", getPlayerUID player];
-        missionNamespace setVariable [_paradropNextUseVar, serverTime + 600];
+        _vehicle setVariable [_paradropNextUseVar, serverTime + 600];
 		[player, "fastTravelParadrop"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	};
 	case 4: {

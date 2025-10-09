@@ -15,7 +15,8 @@ switch (_conditionName) do {
     case "vehicleParadrop": {
         private _sectorAvailable = _target in (BIS_WL_sectorsArray # 2);
         private _isCarrierSector = _target getVariable ["WL2_isAircraftCarrier", false];
-        _sectorAvailable && !_isCarrierSector;
+        private _sectorNotUnderAttack = _target != WL_TARGET_ENEMY;
+        _sectorAvailable && !_isCarrierSector && _sectorNotUnderAttack;
     };
     case "vehicleParadropFOB": {
         // alive _target && _target getVariable ["WL2_forwardBaseTime", serverTime] < serverTime;

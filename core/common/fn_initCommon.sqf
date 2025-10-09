@@ -20,7 +20,11 @@ if (isServer) then {
 			continue;
 		};
 		_expectedSectors = _expectedSectors apply { _x getVariable ["WL2_name", ""] };
-		private _foundSectors = (entities "Logic") select { _x getVariable ["WL2_name", ""] != "" } apply { _x getVariable ["WL2_name", ""] };
+		private _foundSectors = (entities "Logic") select {
+			private _name = _x getVariable ["WL2_name", ""];
+			private _objArea = _x getVariable ["WL2_objectArea", []];
+			_name != "" && (count _objArea >= 4);
+		} apply { _x getVariable ["WL2_name", ""] };
 		private _foundAllSectors = true;
 		{
 			if !(_x in _foundSectors) then {

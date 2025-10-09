@@ -14,7 +14,7 @@ player addAction [
 	false,
 	false,
 	"",
-	"alive player && lifeState player != 'INCAPACITATED' && _target == cameraOn",
-	50,
+	"_target == cameraOn",
+	0,
 	true
 ];

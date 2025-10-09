@@ -36,7 +36,7 @@ private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashM
 private _hideSquadMenu = _settingsMap getOrDefault ["hideSquadMenu", false];
 if (!_hideSquadMenu) then {
 	private _squadActionText = format ["<t color='#00FFFF'>%1</t>", localize "STR_SQUADS_squads"];
-	private _squadActionId = player addAction[_squadActionText, { [true] call SQD_fnc_menu }, [], -100, false, false, "", ""];
+	private _squadActionId = player addAction[_squadActionText, { [true] call SQD_fnc_menu }, [], -100, false, false, "", "", 0, true];
 	player setUserActionText [_squadActionId, _squadActionText, "<img size='2' image='\a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa'/>"];
 };
 

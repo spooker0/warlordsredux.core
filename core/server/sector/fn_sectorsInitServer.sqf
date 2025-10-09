@@ -100,19 +100,22 @@ private _slowestCapture = 50;
 #endif
 
 {
-	_sector = _x;
-	_sectorPos = position _sector;
+	private _sector = _x;
+	if (isNull _sector) then {
+		continue;
+	};
+
+	private _sectorPos = position _sector;
 	if ((_sector getVariable ["BIS_WL_owner", sideUnknown]) == sideUnknown) then {
 		_sector setVariable ["BIS_WL_owner", resistance, true];
 		_sector setVariable ["BIS_WL_previousOwners", [], true];
 		[_sector] remoteExec ['WL2_fnc_sectorRevealHandle', [0, -2] select isDedicated];
 	};
 
-	_area = _sector getVariable "WL2_objectArea";
+	private _area = _sector getVariable "WL2_objectArea";
 	_area set [4, 38];
 	_area params ["_a", "_b", "_angle", "_isRectangle"];
-	_size = _a * _b * (if (_isRectangle) then {4} else {pi});
-
+	private _size = _a * _b * (if (_isRectangle) then {4} else {pi});
 	private _sectorValue = if (_sector in [_firstBase, _secondBase]) then {
 		WL_BASE_VALUE;
 	} else {

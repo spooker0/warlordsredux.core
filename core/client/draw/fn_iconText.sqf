@@ -30,19 +30,6 @@ if (_asset isKindOf "Man") exitWith {
 	_textForCache;
 };
 
-if ([_asset] call WL2_fnc_isScannerMunition) exitWith {
-	private _originator = getShotParents _asset # 0;
-
-	private _originatorType = if (_originator isKindOf "Man") then {
-		"INFANTRY";
-	} else {
-		toUpper ([_originator] call WL2_fnc_getAssetTypeName);
-	};
-	private _munitionText = format ["FROM: %1", _originatorType];
-	_mapTextCache set [hashValue _asset, [_munitionText, ""]];
-	_munitionText;
-};
-
 private _vehicleDisplayName = [_asset] call WL2_fnc_getAssetTypeName;
 
 _mapTextCache set [hashValue _asset, [_vehicleDisplayName, _assetOwnerName]];
