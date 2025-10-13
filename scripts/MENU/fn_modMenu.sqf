@@ -13,21 +13,6 @@ private _texture = _display displayCtrl 5501;
 _texture ctrlWebBrowserAction ["LoadFile", "src\ui\gen\mod.html"];
 // _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
-private _guidMap = uiNamespace getVariable ["WL2_guidMap", createHashMap];
-private _allPlayersHaveGuid = true;
-{
-    private _playerName = [_x, true] call BIS_fnc_getName;
-    private _guid = _guidMap getOrDefault [_playerName, ""];
-    if (_guid == "") then {
-        _allPlayersHaveGuid = false;
-    };
-} forEach allPlayers;
-if (!_allPlayersHaveGuid) then {
-    diag_log "serverCommand #beclient players";
-    systemChat "Requesting player GUIDs from BE...";
-    serverCommand "#beclient players";
-};
-
 _texture ctrlAddEventHandler ["JSDialog", {
     params ["_texture", "_isConfirmDialog", "_message"];
     playSoundUI ["a3\ui_f\data\sound\rsclistbox\soundselect.wss", 0.5];
@@ -128,6 +113,21 @@ _texture ctrlAddEventHandler ["JSDialog", {
 }];
 
 _texture ctrlAddEventHandler ["PageLoaded", {
+    private _guidMap = uiNamespace getVariable ["WL2_guidMap", createHashMap];
+    private _allPlayersHaveGuid = true;
+    {
+        private _playerName = [_x, true] call BIS_fnc_getName;
+        private _guid = _guidMap getOrDefault [_playerName, ""];
+        if (_guid == "") then {
+            _allPlayersHaveGuid = false;
+        };
+    } forEach allPlayers;
+    if (!_allPlayersHaveGuid) then {
+        diag_log "serverCommand #beclient players";
+        systemChat "Requesting player GUIDs from BE...";
+        serverCommand "#beclient players";
+    };
+    
     _this spawn {
         params ["_texture"];        
         private _playerAliases = profileNamespace getVariable ["WL2_playerAliases", createHashMap];
