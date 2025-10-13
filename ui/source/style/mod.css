@@ -1,0 +1,412 @@
+.menu-wrapper {
+    background: #2b2f33;
+    color: #e6e6e6;
+    --bg-1: #2b2f33;
+    --bg-2: #34383d;
+    --bg-3: #3a3f45;
+    --bg-4: #40464d;
+    --line-1: #1f2327;
+    --line-2: #262b30;
+    --muted: #b7bec6;
+    --accent-blue: #6aa7ff;
+    --accent-red: #ff6a6a;
+    --accent-amber: #ffc04d;
+    --accent-green: #61d095;
+}
+
+.mod-content {
+    font-family: Arial, sans-serif;
+    position: absolute;
+    top: 62px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    gap: 1rem;
+    overflow: hidden;
+    min-height: 0;
+    scrollbar-width: thin;
+    scrollbar-color: #444444 #2a2a2a;
+}
+
+.players-panel {
+    flex: 1 1 20rem;
+}
+
+.player-details-panel {
+    flex: 1.2 1 26rem;
+    visibility: hidden;
+}
+
+.chat-panel {
+    flex: 1.2 1 26rem;
+}
+
+.panel-title,
+.panel-subtitle,
+.block-title {
+    font-weight: 800;
+    padding: 0.6rem 0.9rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.panel-subtitle,
+.block-title {
+    font-size: 0.92rem;
+    color: var(--muted);
+}
+
+.block {
+    padding: 0.4rem;
+}
+
+.players-panel {
+    display: grid;
+    grid-auto-rows: auto;
+    grid-template-rows: auto 1fr;
+    gap: 0;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.player-item,
+.timeout-item,
+.report-item {
+    border: 1px solid var(--line-2);
+    padding: 0.6rem 0.8rem;
+    margin: 0.2rem 0;
+    background: var(--bg-3);
+}
+
+.player-item:hover,
+.timeout-item:hover,
+.report-item:hover,
+.chat-msg:hover {
+    background: var(--bg-4);
+}
+
+.player-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.8rem;
+}
+
+.player-name,
+.chat-player {
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.player-aliases,
+.player-reports,
+.report-from,
+.report-reason,
+.timeout-name,
+.chat-text {
+    color: var(--muted);
+}
+
+.report-item {
+    text-align: left;
+}
+
+.report-from {
+    margin-right: 1em;
+}
+
+#player-list {
+    min-height: 0;
+    overflow: auto;
+    padding-right: 0.2rem;
+}
+
+.player-details-panel {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    min-height: 0;
+}
+
+#selected-player-header {
+    padding: 0.8rem 0.9rem;
+    border-bottom: 1px solid var(--line-2);
+    font-size: 1.2em;
+}
+
+.selected,
+.selected:hover,
+.selected * {
+    color: var(--line-1) !important;
+    background-color: whitesmoke !important;
+}
+
+.label {
+    font-weight: 700;
+    color: #ffffff;
+}
+
+#player-info,
+#chat-export,
+input,
+select,
+textarea {
+    font: inherit;
+    background: var(--bg-3);
+    color: #e6e6e6;
+    padding: 0.5rem 0.65rem;
+    border: none;
+}
+
+#chat-export {
+    width: 100%;
+    height: 10rem;
+    resize: none;
+}
+
+#player-info {
+    width: 100%;
+    min-height: 6rem;
+    resize: none;
+}
+
+#timeout-records {
+    max-height: 5rem;
+    overflow: auto;
+}
+
+.timeout-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 0 0.9rem 0.9rem;
+}
+
+#timeout-minutes {
+    max-width: 8rem;
+}
+
+#timeout-reason {
+    width: 100%;
+}
+
+.chat-panel {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    overflow: hidden;
+    min-height: 0;
+}
+
+#chat-current-filter {
+    color: var(--muted);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-align: left;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid var(--line-2);
+}
+
+#chat-current-filter:hover {
+    cursor: pointer;
+    background: var(--bg-4);
+}
+
+#chat-channels {
+    display: flex;
+    gap: 0.6rem;
+}
+
+.chat-channel,
+.chat-player {
+    cursor: pointer;
+    border: 1px solid var(--line-2);
+    padding: 0.25rem 0.5rem;
+    background: var(--bg-3);
+    color: #e6e6e6;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.chat-channel:hover,
+.chat-player:hover {
+    background: var(--bg-4);
+}
+
+#chat-log {
+    min-height: 0;
+    overflow: auto;
+    border-top: 1px solid var(--line-2);
+    border-bottom: 1px solid var(--line-2);
+}
+
+#chat-messages {
+    overflow: auto;
+    height: 100%;
+}
+
+.chat-msg {
+    border: 1px solid var(--line-2);
+    padding: 0.4rem 0.5rem;
+    margin: 0.2rem 0;
+    background: var(--bg-3);
+    text-align: left;
+
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+}
+
+#player-info {
+    font-family: 'Consolas', monospace;
+    color: var(--accent-green);
+}
+
+.timeout-uid,
+.timeout-end,
+.timeout-clear {
+    font-family: 'Consolas', monospace;
+    font-weight: 700;
+    color: var(--accent-green);
+}
+
+.timeout-clear {
+    padding: 0.2rem 0.4rem;
+}
+
+.chat-time {
+    font-family: 'Consolas', monospace;
+    font-weight: 700;
+    color: var(--accent-amber);
+}
+
+.chat-text {
+    text-align: left;
+}
+
+.chat-channel,
+.report-from {
+    color: var(--accent-blue);
+}
+
+button {
+    font: inherit;
+    cursor: pointer;
+    border: 1px solid var(--line-2);
+    background: #3f454b;
+    color: #e6e6e6;
+    padding: 0.5rem 0.75rem;
+}
+
+button:hover {
+    background: var(--bg-4);
+}
+
+button:active {
+    opacity: 0.8;
+}
+
+#btn-timeout {
+    background: #462c2c;
+    border-color: #5b3434;
+    width: 100%;
+}
+
+#btn-timeout:hover {
+    background: #553535;
+}
+
+#btn-timeout {
+    color: #ffb3b3;
+}
+
+#btn-clear-reports,
+#btn-mod-receipts {
+    background: #4a3f2a;
+    border-color: #5a4a33;
+    color: #ffdca3;
+    width: 100%;
+}
+
+#btn-clear-reports:hover,
+#btn-mod-receipts:hover {
+    background: #554833;
+}
+
+#btn-rebalance,
+#btn-vehicles,
+#btn-goto,
+#btn-see-transfers {
+    background: #2d3a4b;
+    border-color: #364354;
+    color: #b7d7ff;
+    width: 100%;
+}
+
+#btn-rebalance:hover,
+#btn-vehicles:hover,
+#btn-goto:hover,
+#btn-see-transfers:hover {
+    background: #344155;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.4rem;
+}
+
+.player-reports,
+.player-aliases,
+.report-reason,
+.timeout-name {
+    color: var(--muted);
+}
+
+.player-reports {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2em;
+    height: 2em;
+    font-size: 10pt;
+    border-radius: 50%;
+    background-color: var(--accent-red) !important;
+    color: whitesmoke !important;
+}
+
+.player-reports:empty {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.player-aliases {
+    text-align: left;
+    font-size: 8pt;
+}
+
+#selected-player-name {
+    color: #ffffff;
+}
+
+.timeout-item {
+    padding: 2px 16px;
+    margin: 0.2em 0;
+}
+
+.timeout-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 8pt;
+}
+
+.timeout-clear:hover {
+    background-color: var(--accent-red);
+}

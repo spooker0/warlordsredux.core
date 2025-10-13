@@ -336,6 +336,12 @@ if (_displayClass == "RequestMenu_open") then {
 			if (count _targetArr > 0) then {
 				playSound "AddItemOK";
 				_target = _targetArr # 0;
+				
+				private _transfers = profileNamespace getVariable ["WL2_playerTransfers", createHashMap];
+				private _existingAmount = _transfers getOrDefault [_targetName, 0];
+				_transfers set [_targetName, _existingAmount + _amount];
+				profileNamespace setVariable ["WL2_playerTransfers", _transfers];
+
 				[player, "fundsTransfer", _amount, _target] remoteExec ["WL2_fnc_handleClientRequest", 2];
 				_i = 100;
 				for "_i" from 100 to 114 do {

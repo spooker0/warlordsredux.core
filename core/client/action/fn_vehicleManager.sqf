@@ -108,12 +108,12 @@ _texture ctrlAddEventHandler ["JSDialog", {
 
 _texture ctrlAddEventHandler ["PageLoaded", {
     params ["_texture"];
-    [_texture] call WL2_fnc_domLoader;
     [_texture] spawn {
         params ["_texture"];
         while { !isNull _texture } do {
             [_texture] call WL2_fnc_sendVehicleData;
             sleep 0.5;
         };
+        uiNamespace setVariable ["WL2_modOverrideUid", ""];
     };
 }];

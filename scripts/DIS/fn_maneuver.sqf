@@ -60,7 +60,7 @@ if (_ammoConfig getOrDefault ["loal", false]) then {
         private _unitSpeed = speed _unit;
         private _projAlt = _projectilePos # 2;
         private _targetAlt = _targetPos # 2;
-        if (_unitSpeed > 950) then {
+        if (_unitSpeed > WL_SAM_FAST_THRESHOLD) then {
             if (_projAlt > _targetAlt) then {
                 _distanceBeforeNotch = 48000;
             } else {
@@ -79,6 +79,8 @@ private _originalPosition = getPosASL _unit;
     params ["_projectile", "_originalTarget", "_unit", "_samMaxDistance", "_distanceBeforeNotch"];
     private _startTime = serverTime;
     private _isLOAL = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "autoSeekTarget") == 1;
+    private _lockSpeed = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "missileLockMaxSpeed");
+    _lockSpeed = _lockSpeed * 3.6 / 1.5;
 
     while { alive _projectile } do {
         sleep 0.1;
@@ -98,11 +100,15 @@ private _originalPosition = getPosASL _unit;
             _projectile setVariable ["DIS_notched", true];
         };
         
-        private _canDodge = _projectile distance _unit > _distanceBeforeNotch && _projectile getVariable ["DIS_notched", false];
-        if (!_canDodge && !isNull _originalTarget) then {  // If not already notched and not notching
-            private _targetVectorDirAndUp = [_projectilePosition, _targetPosition] call BIS_fnc_findLookAt;
-            _projectile setVectorDirAndUp _targetVectorDirAndUp;
-            _projectile setMissileTarget [_originalTarget, true];
+        if (!isNull _originalTarget) then {
+            private _canDodge = _projectile getVariable ["DIS_notched", false] || speed _originalTarget > (WL_SAM_FAST_THRESHOLD min _lockSpeed);
+            if (!_canDodge) then {  // If not already notched and not notching
+                private _targetVectorDirAndUp = [_projectilePosition, _targetPosition] call BIS_fnc_findLookAt;
+                _projectile setVectorDirAndUp _targetVectorDirAndUp;
+                _projectile setMissileTarget [_originalTarget, true];
+            } else {
+                _projectile setMissileTarget [objNull, true];
+            };
         };
 
         private _currentMissileTarget = missileTarget _projectile;
@@ -141,7 +147,7 @@ private _maxAcceleration = (getNumber (configfile >> "CfgAmmo" >> _projectileTyp
 private _maxSpeed = getNumber (configfile >> "CfgAmmo" >> _projectileType >> "maxSpeed") * WL_SAM_MAX_SPEED_FACTOR * _projectileSpeedOverride;
 
 // Sound barrier
-if (speed _unit > 950) then {
+if (speed _unit > WL_SAM_FAST_THRESHOLD) then {
     _maxSpeed = _maxSpeed * 3;
     _maxAcceleration = _maxAcceleration * 3;
 };

@@ -21,7 +21,8 @@ if (count _textFromCache == 1) exitWith { _textFromCache # 0 };
 private _assetOwnerName = [_asset] call WL2_fnc_getAssetOwnerName;
 if (_asset isKindOf "Man") exitWith {
 	private _textForCache = if (isPlayer [_asset] && _showName) then {
-		_assetOwnerName;
+		private _nameTag = _asset getVariable ["WL_playerLevel", ""];
+		format ["%1 [%2]", _assetOwnerName, _nameTag];
 	} else {
 		getText (configfile >> "CfgVehicles" >> typeof _asset >> "textSingular");
 	};

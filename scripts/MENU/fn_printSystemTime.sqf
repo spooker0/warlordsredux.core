@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_systemTime"];
+params ["_systemTime", ["_showDay", true]];
 
 private _systemTimeUtc = _systemTime apply {
     if (_x < 10) then {
@@ -9,5 +9,9 @@ private _systemTimeUtc = _systemTime apply {
     };
 };
 _systemTimeUtc params ["_year", "_month", "_day", "_hour", "_minute", "_second"];
+
+if (!_showDay) exitWith {
+    format ["%1:%2:%3", _hour, _minute, _second];
+};
 
 format["%1/%2/%3 %4:%5:%6", _year, _month, _day, _hour, _minute, _second];

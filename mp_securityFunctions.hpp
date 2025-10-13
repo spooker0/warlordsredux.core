@@ -28,6 +28,7 @@ class CfgRemoteExec {
 		class WL2_fnc_clearAllTimeouts {allowedTargets = 2;};
 		class WL2_fnc_clearPlayerReports {allowedTargets = 2;};
 		class WL2_fnc_clearServerStats {allowedTargets = 2;};
+		class WL2_fnc_clearTimeout {allowedTargets = 2;};
 		class WL2_fnc_controlGunnerAction {allowedTargets = 0;};
 		class WL2_fnc_cruiseMissileWarning {allowedTargets = 0;};
 		class WL2_fnc_dazzlerAction {allowedTargets = 1;};

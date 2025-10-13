@@ -102,7 +102,6 @@ _purchase_transfer_units lbSetCurSel 0;
 			];
 			_purchase_transfer_ok ctrlSetStructuredText parseText _transferText;
 
-
 			_purchase_transfer_ok ctrlSetBackgroundColor [(_color # 0) * 0.5, (_color # 1) * 0.5, (_color # 2) * 0.5, _color # 3];
 			_purchase_transfer_ok ctrlSetTextColor [0.5, 0.5, 0.5, 1];
 			if (_value > 0) then {_purchase_transfer_ok ctrlSetTooltip localize "STR_A3_WL_low_funds"} else {_purchase_transfer_ok ctrlSetTooltip ""};

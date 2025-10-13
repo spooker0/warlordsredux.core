@@ -25,5 +25,9 @@ private _punishVar = format ["WL2_punish_%1", _targetUid];
 private _punishIncident = [serverTime + _time, _reason];
 serverNamespace setVariable [_punishVar, _punishIncident];
 
+private _punishmentCollection = missionNamespace getVariable ["WL2_punishmentCollection", []];
+_punishmentCollection pushBack [_targetUid, serverTime + _time];
+missionNamespace setVariable ["WL2_punishmentCollection", _punishmentCollection, true];
+
 private _punishedPlayer = _targetUid call BIS_fnc_getUnitByUID;
 [_punishIncident] remoteExec ["WL2_fnc_punishmentClient", _punishedPlayer];

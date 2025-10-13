@@ -87,7 +87,7 @@ if (_asset isKindOf "Man") then {
 	private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", _playerUID];
 	private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
 	_ownedVehicles pushBack _asset;
-	missionNamespace setVariable [_ownedVehicleVar, _ownedVehicles, [2, clientOwner]];
+	missionNamespace setVariable [_ownedVehicleVar, _ownedVehicles, true];
 
 	[_asset, true] remoteExec ["setVehicleReceiveRemoteTargets", _asset, true];
 	[_asset, true] remoteExec ["setVehicleReportRemoteTargets", _asset, true];

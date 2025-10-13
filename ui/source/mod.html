@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="style/menu.css" inline>
+    <link rel="stylesheet" href="style/mod.css" inline>
+</head>
+
+<body>
+    <div class="menu-wrapper">
+        <div class="menu-title">Moderate</div>
+
+        <div class="mod-content">
+            <div class="players-panel">
+                <div class="panel-title">Players</div>
+                <ul id="player-list" class="list players panel"></ul>
+                <div class="panel-subtitle">Timed Out</div>
+                <ul id="timeout-records" class="list timeouts panel"></ul>
+            </div>
+
+            <div class="player-details-panel panel">
+                <div id="selected-player-header">
+                    <div id="selected-player-name" class="label">Selected Player Name</div>
+                </div>
+                <div class="block">
+                    <textarea id="player-info"></textarea>
+                </div>
+                <div class="block timeout-form">
+                    <div class="block-title">Timeout</div>
+                    <div class="row">
+                        <label class="label" for="timeout-minutes">Minutes</label>
+                        <input id="timeout-minutes" name="minutes" type="number" min="1" max="120" step="1" value="15">
+                    </div>
+                    <div class="row">
+                        <label class="label" for="timeout-reason-select">Reason</label>
+                        <input id="timeout-reason" name="reason-custom" type="text"
+                            placeholder="unsportsmanlike conduct">
+                    </div>
+                    <div class="row">
+                        <button id="btn-timeout" type="button">Timeout player</button>
+                    </div>
+                </div>
+
+                <div class="block">
+                    <div class="block-title">Actions</div>
+                    <div class="row">
+                        <button id="btn-rebalance" type="button">Rebalance player</button>
+                    </div>
+                    <div class="row">
+                        <button id="btn-vehicles" type="button">Access player vehicles</button>
+                    </div>
+                    <div class="row">
+                        <button id="btn-goto" type="button">Fast travel to player</button>
+                    </div>
+                    <div class="row">
+                        <button id="btn-see-transfers" type="button">See player transfers</button>
+                    </div>
+                </div>
+                <div class="block">
+                    <div class="block-title">Reports</div>
+                    <ul id="player-reports" class="list reports"></ul>
+                    <div class="row">
+                        <button id="btn-clear-reports" type="button">Clear Reports</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-panel">
+                <div class="panel-title">Chat</div>
+                <div id="chat-current-filter">Showing all messages</div>
+                <div id="chat-log">
+                    <ul id="chat-messages" class="list panel"></ul>
+                </div>
+                <textarea id="chat-export" placeholder="Double click chat line to copy here"></textarea>
+                <button id="btn-mod-receipts" type="button">MOD RECEIPTS</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script/mod.js" inline></script>
+    <script src="script/menu.js" inline></script>
+</body>
+
+</html>

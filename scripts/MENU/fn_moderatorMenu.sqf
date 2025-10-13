@@ -91,7 +91,7 @@ _clearTimeout ctrlShow false;
 
 if (_elevatedPrivilege) then {
     if (!_isAdmin) then {
-        _timeoutTime sliderSetRange [1, 30];
+        _timeoutTime sliderSetRange [1, 120];
     };
 
     for "_i" from 0 to (lbSize _playerList - 1) do {

@@ -3,6 +3,30 @@ private _uid = getPlayerUID player;
 private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
 private _isModerator = _uid in (getArray (missionConfigFile >> "moderatorIDs"));
 
+private _checkDirty = {
+    params ["_varName"];
+    private _storedVar = profileNamespace getVariable [_varName, createHashMap];
+    private _currentVar = player getVariable [_varName, createHashMap];
+
+    private _currentCount = count _currentVar;
+    private _dirty = if (count _storedVar != _currentCount) then {
+        true
+    } else {
+        private _isDirty = false;
+        {
+            private _key = _x;
+            if (_storedVar getOrDefault [_key, ""] != _currentVar getOrDefault [_key, ""]) then {
+                _isDirty = true;
+                break;
+            };
+        } forEach _currentVar;
+        _isDirty;
+    };
+    if (_dirty) then {
+        player setVariable [_varName, _storedVar, true];
+    };
+};
+
 while { !BIS_WL_missionEnd } do {
     if (_isAdmin || _isModerator) then {
         private _allPlayers = call BIS_fnc_listPlayers;
@@ -16,26 +40,8 @@ while { !BIS_WL_missionEnd } do {
         profileNamespace setVariable ["WL2_playerAliases", _playerAliases];
     };
 
-    private _playerReports = profileNamespace getVariable ["WL2_playerReports", createHashMap];
-    private _playerReportsCurrent = player getVariable ["WL2_playerReports", createHashMap];
-
-    private _playerReportCount = count _playerReportsCurrent;
-    private _playerReportDirty = if (count _playerReports != count _playerReportsCurrent) then {
-        true
-    } else {
-        private _dirty = false;
-        {
-            private _key = _x;
-            if (_playerReports getOrDefault [_key, ""] != _playerReportsCurrent getOrDefault [_key, ""]) then {
-                _dirty = true;
-                break;
-            };
-        } forEach _playerReportsCurrent;
-        _dirty;
-    };
-    if (_playerReportDirty) then {
-        player setVariable ["WL2_playerReports", _playerReports, true];
-    };
+    ["WL2_playerReports"] call _checkDirty;
+    ["WL2_playerTransfers"] call _checkDirty;
 
     sleep 10;
 };

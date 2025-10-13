@@ -59,7 +59,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
                 0 spawn SPEC_fnc_spectator;
             };
             case "MODERATE": {
-                [true] spawn MENU_fnc_moderatorMenu;
+                0 spawn MENU_fnc_modMenu;
             };
             default {};
         };

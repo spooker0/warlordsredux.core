@@ -29,7 +29,7 @@ params ["_asset"];
 		private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID _caller];
 		private _vehicles = missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID _caller], []];
 		_vehicles pushBack _asset;
-		missionNamespace setVariable [_ownedVehicleVar, _vehicles, [2, owner _caller]];
+		missionNamespace setVariable [_ownedVehicleVar, _vehicles, true];
 	},
 	{},
 	[],

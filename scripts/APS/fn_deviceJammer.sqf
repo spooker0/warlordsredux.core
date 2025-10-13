@@ -5,7 +5,7 @@ while { alive _asset } do {
     sleep 0.2;
 
     private _controllingUnit = _asset turretUnit _turret;
-    if !(isPlayer _controllingUnit) then {
+    if (isNull _controllingUnit) then {
         sleep 1;
         continue;
     };

@@ -1,1 +1,1 @@
-node --loader ./loader.mjs build.mjs
+node --loader ./loader.mjs watch.mjs

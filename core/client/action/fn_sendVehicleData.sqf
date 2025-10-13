@@ -3,6 +3,11 @@ params ["_texture"];
 
 private _playerUid = getPlayerUID player;
 
+private _modOverrideUid = uiNamespace getVariable ["WL2_modOverrideUid", ""];
+if (_modOverrideUid != "") then {
+    _playerUid = _modOverrideUid;
+};
+
 private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", _playerUid];
 private _playerVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
 _playerVehicles = _playerVehicles select { alive _x };

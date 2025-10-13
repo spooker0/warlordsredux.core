@@ -78,6 +78,7 @@ class CfgFunctions {
 			class execCode {};
 			class moderatorLoaded {};
 			class moderatorMenu {};
+			class modMenu {};
 			class playerDataRefresh {};
 			class playerReported {};
 			class printSystemTime {};
@@ -449,6 +450,7 @@ class CfgFunctions {
 			class clearAllTimeouts {};
 			class clearPlayerReports {};
 			class clearServerStats {};
+			class clearTimeout {};
 			class createDestroyer {};
 			class createUAVCrew {};
 			class createVehicleCorrectly {};

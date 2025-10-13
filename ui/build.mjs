@@ -3,16 +3,13 @@ import path from 'node:path';
 import { glob } from 'glob';
 import { inlineSource } from 'inline-source';
 import { minify as minifyHtml } from 'html-minifier-terser';
+import { fileURLToPath } from 'node:url';
 
-const INPUT_DIR = path.resolve(process.cwd(), 'source');
-const OUTPUT_DIR = path.resolve(process.cwd(), 'gen');
+export const INPUT_DIR = path.resolve(process.cwd(), 'source');
+export const OUTPUT_DIR = path.resolve(process.cwd(), 'gen');
 
 async function ensureDir(dir) {
-    try {
-        await stat(dir);
-    } catch {
-        await mkdir(dir, { recursive: true });
-    }
+    try { await stat(dir); } catch { await mkdir(dir, { recursive: true }); }
 }
 
 async function processOne(htmlPath) {
@@ -34,32 +31,33 @@ async function processOne(htmlPath) {
         sortAttributes: true,
         sortClassName: true
     });
-
     await ensureDir(OUTPUT_DIR);
     const outPath = path.join(OUTPUT_DIR, path.basename(htmlPath));
     await writeFile(outPath, minimized, 'utf8');
     return outPath;
 }
 
-async function main() {
+export async function runBuild() {
     const files = await glob('*.html', {
         cwd: INPUT_DIR,
         nodir: true,
         absolute: true,
         windowsPathsNoEscape: true
     });
-
     if (files.length === 0) {
         console.error(`No HTML files found in: ${INPUT_DIR}`);
-        process.exit(1);
+        return { written: [], count: 0 };
     }
-
     const written = await Promise.all(files.map(processOne));
     console.log('Wrote:');
     written.forEach(p => console.log(' -', path.relative(process.cwd(), p)));
+    return { written, count: written.length };
 }
 
-main().catch(err => {
-    console.error(err);
-    process.exit(1);
-});
+const isDirect = fileURLToPath(import.meta.url) === path.resolve(process.argv[1] || '');
+if (isDirect) {
+    runBuild().catch(err => {
+        console.error(err);
+        process.exit(1);
+    });
+}
