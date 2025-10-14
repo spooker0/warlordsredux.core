@@ -41,7 +41,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
                 0 spawn RWD_fnc_badgeMenu;
             };
             case "REPORT": {
-                [false] spawn MENU_fnc_moderatorMenu;
+                0 spawn MENU_fnc_reportMenu;
             };
             case "POLL": {
                 0 spawn POLL_fnc_pollMenu;

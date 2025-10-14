@@ -101,12 +101,7 @@ if !(BIS_WL_playerSide in BIS_WL_sidesArray) exitWith {
 
 enableRadio true;
 enableSentences true;
-{
-	_x enableChannel [true, true]
-} forEach [1, 3, 4, 5];
-{
-	_x enableChannel [true, false]
-} forEach [0, 2];
+[true] call WL2_fnc_mutePlayer;
 setCurrentChannel 1;
 enableEnvironment [false, true];
 
@@ -279,6 +274,11 @@ if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
 			[player, "10K"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 		}
 	];
+	
+	0 spawn {
+		sleep 30;
+		["Play Tester"] call RWD_fnc_addBadge;
+	};
 
 	{
 		private _curator = _x;

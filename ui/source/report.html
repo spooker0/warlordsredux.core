@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="style/menu.css" inline>
+    <link rel="stylesheet" href="style/report.css" inline>
+</head>
+
+<body>
+    <div class="menu-wrapper">
+        <div class="menu-title">Report</div>
+
+        <div class="report-content">
+            <div class="players-panel">
+                <div class="panel-title">Players</div>
+                <ul id="player-list" class="list players panel"></ul>
+            </div>
+
+            <div class="player-details-panel panel">
+                <div id="selected-player-header">
+                    <div id="selected-player-name" class="label">Selected Player Name</div>
+                </div>
+                <div class="block">
+                    <textarea id="player-info" disabled></textarea>
+                    <button id="btn-copy" type="button">Copy to clipboard</button>
+                </div>
+                <div class="block report-form">
+                    <div class="report-title">Report</div>
+                    <div class="row">
+                        <label class="label" for="report-reason">Reason</label>
+                        <input id="report-reason" name="reason-custom" type="text"
+                            placeholder="unsportsmanlike conduct">
+                    </div>
+                    <div class="row">
+                        <button id="btn-report" type="button">Report player</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script/md5.js" inline></script>
+    <script src="script/report.js" inline></script>
+    <script src="script/menu.js" inline></script>
+</body>
+
+</html>

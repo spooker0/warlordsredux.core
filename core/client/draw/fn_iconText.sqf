@@ -22,7 +22,12 @@ private _assetOwnerName = [_asset] call WL2_fnc_getAssetOwnerName;
 if (_asset isKindOf "Man") exitWith {
 	private _textForCache = if (isPlayer [_asset] && _showName) then {
 		private _nameTag = _asset getVariable ["WL_playerLevel", ""];
-		format ["%1 [%2]", _assetOwnerName, _nameTag];
+		private _showPlayerUids = uiNamespace getVariable ["WL2_showPlayerUids", false];
+		if (_showPlayerUids) then {
+			format ["%1 [%2] (%3)", _assetOwnerName, _nameTag, getPlayerUID _asset];
+		} else {
+			format ["%1 [%2]", _assetOwnerName, _nameTag];
+		};
 	} else {
 		getText (configfile >> "CfgVehicles" >> typeof _asset >> "textSingular");
 	};

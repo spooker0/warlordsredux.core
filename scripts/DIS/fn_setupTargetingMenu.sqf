@@ -177,7 +177,7 @@ while { !BIS_WL_missionEnd } do {
 		case "asam";
 		case "esam";
 		case "loal": {
-			private _targetList = [DIS_fnc_getSamTarget, "NO TARGET", "WL2_selectedTargetAA"] call DIS_fnc_getTargetList;
+			private _targetList = [DIS_fnc_getSamTarget, "MANUAL LOCK", "WL2_selectedTargetAA"] call DIS_fnc_getTargetList;
 			private _targetsText = toJSON _targetList;
 			_targetsText = _texture ctrlWebBrowserAction ["ToBase64", _targetsText];
 			_script = _script + format ["setMode(""aa"", ""%1"");setAATargetData(atob(""%2""));", _currentModeTitle, _targetsText];

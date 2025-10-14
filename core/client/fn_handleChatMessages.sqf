@@ -17,7 +17,7 @@ if (_isModerator || _isAdmin) then {
             _channel,
             _name,
             _text,
-            systemTimeUTC
+            systemTime
         ];
         _chatHistory pushBack _chatMessage;
     };
@@ -27,35 +27,35 @@ if (_isModerator || _isAdmin) then {
 //     [player, getPlayerUID player, "vote kick not allowed", 120] remoteExec ["WL2_fnc_punishPlayer", 2];
 // };
 
-if (_sentLocally && _channel in [0, 1, 2, 3] && _text != "" && !_isPlayerMessage && _person == player && count _params == 0) then {
-    private _spamHistory = uiNamespace getVariable ["WL2_spamHistory", []];
-    private _spammedMessages = _spamHistory select {
-        _x # 0 == _text &&
-        serverTime - (_x # 1) < 120
-    };
+// if (_sentLocally && _channel in [0, 1, 2, 3] && _text != "" && !_isPlayerMessage && _person == player && count _params == 0) then {
+//     private _spamHistory = uiNamespace getVariable ["WL2_spamHistory", []];
+//     private _spammedMessages = _spamHistory select {
+//         _x # 0 == _text &&
+//         serverTime - (_x # 1) < 120
+//     };
 
-    if (count _spammedMessages >= 3) then {
-        {
-            private _vonStatus = (channelEnabled _x) # 1;
-            _x enableChannel [false, _vonStatus];
-        } forEach [0, 1, 3];
+//     if (count _spammedMessages >= 3) then {
+//         {
+//             private _vonStatus = (channelEnabled _x) # 1;
+//             _x enableChannel [false, _vonStatus];
+//         } forEach [0, 1, 3];
 
-        systemChat "Spam protection triggered. Chat disabled for 30s.";
-        0 spawn {
-            sleep 30;
-            {
-                private _vonStatus = (channelEnabled _x) # 1;
-                _x enableChannel [true, _vonStatus];
-            } forEach [0, 1, 3];
-        };
-    };
+//         systemChat "Spam protection triggered. Chat disabled for 30s.";
+//         0 spawn {
+//             sleep 30;
+//             {
+//                 private _vonStatus = (channelEnabled _x) # 1;
+//                 _x enableChannel [true, _vonStatus];
+//             } forEach [0, 1, 3];
+//         };
+//     };
 
-    _spamHistory pushBack [_text, serverTime];
-    _spamHistory = _spamHistory select {
-        serverTime - (_x # 1) < 120
-    };
-    uiNamespace setVariable ["WL2_spamHistory", _spamHistory];
-};
+//     _spamHistory pushBack [_text, serverTime];
+//     _spamHistory = _spamHistory select {
+//         serverTime - (_x # 1) < 120
+//     };
+//     uiNamespace setVariable ["WL2_spamHistory", _spamHistory];
+// };
 
 if (_text == "!lag") exitWith {
     if (_sentLocally) then {

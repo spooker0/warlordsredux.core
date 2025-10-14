@@ -14,7 +14,7 @@
             <div class="players-panel">
                 <div class="panel-title">Players</div>
                 <ul id="player-list" class="list players panel"></ul>
-                <div class="panel-subtitle">Timed Out</div>
+                <div class="panel-subtitle">Gulag</div>
                 <ul id="timeout-records" class="list timeouts panel"></ul>
             </div>
 
@@ -23,16 +23,18 @@
                     <div id="selected-player-name" class="label">Selected Player Name</div>
                 </div>
                 <div class="block">
-                    <textarea id="player-info"></textarea>
+                    <textarea id="player-info" disabled></textarea>
+                    <button id="btn-copy" type="button">Copy to clipboard</button>
                 </div>
                 <div class="block timeout-form">
                     <div class="block-title">Timeout</div>
                     <div class="row">
                         <label class="label" for="timeout-minutes">Minutes</label>
                         <input id="timeout-minutes" name="minutes" type="number" min="1" max="120" step="1" value="15">
+                        <input id="timeout-minutes-slider" name="minutes" type="range" min="1" max="120" step="1" value="15">
                     </div>
                     <div class="row">
-                        <label class="label" for="timeout-reason-select">Reason</label>
+                        <label class="label" for="timeout-reason">Reason</label>
                         <input id="timeout-reason" name="reason-custom" type="text"
                             placeholder="unsportsmanlike conduct">
                     </div>
@@ -55,12 +57,15 @@
                     <div class="row">
                         <button id="btn-see-transfers" type="button">See player transfers</button>
                     </div>
+                    <div class="row">
+                        <button id="btn-mute" type="button">Toggle player mute</button>
+                    </div>
                 </div>
                 <div class="block">
                     <div class="block-title">Reports</div>
                     <ul id="player-reports" class="list reports"></ul>
                     <div class="row">
-                        <button id="btn-clear-reports" type="button">Clear Reports</button>
+                        <button id="btn-clear-reports" type="button">Clear reports</button>
                     </div>
                 </div>
             </div>
@@ -71,12 +76,17 @@
                 <div id="chat-log">
                     <ul id="chat-messages" class="list panel"></ul>
                 </div>
-                <textarea id="chat-export" placeholder="Double click chat line to copy here"></textarea>
-                <button id="btn-mod-receipts" type="button">MOD RECEIPTS</button>
+                <div class="btn-row">
+                    <button id="btn-select-all" type="button">Select all</button>
+                    <button id="btn-select-none" type="button">Select none</button>
+                    <button id="btn-copy-chat" type="button">Copy chat (0)</button>
+                    <button id="btn-mod-receipts" type="button">Copy mod receipts (0)</button>
+                </div>
             </div>
         </div>
     </div>
 
+    <script src="script/md5.js" inline></script>
     <script src="script/mod.js" inline></script>
     <script src="script/menu.js" inline></script>
 </body>

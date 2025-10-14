@@ -16,9 +16,7 @@ private _punishVar = format ["WL2_punish_%1", _targetUid];
 private _punishment = serverNamespace getVariable [_punishVar, []];
 if (count _punishment > 0) then {
     serverNamespace setVariable [_punishVar, []];
-    private _punishmentCollection = missionNamespace getVariable ["WL2_punishmentCollection", []];
-    _punishmentCollection = _punishmentCollection select {
-        !(_x select 0 == _targetUid)
-    };
+    private _punishmentCollection = missionNamespace getVariable ["WL2_punishmentCollection", createHashMap];
+    _punishmentCollection deleteAt _targetUid;
     missionNamespace setVariable ["WL2_punishmentCollection", _punishmentCollection, true];
 };

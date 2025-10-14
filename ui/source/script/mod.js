@@ -182,12 +182,15 @@ function updatePlayerInfo(playerInfo) {
     document.selectedPlayer = playerUid;
     const playerName = playerInfo[1] || '';
     document.selectedPlayerName = playerName;
+    const systemTime = playerInfo[2] || '';
 
     const nameEl = document.getElementById('selected-player-name');
     nameEl.textContent = playerName;
 
     const infoEl = document.getElementById('player-info');
-    infoEl.value = playerInfo[2] || '';
+    const beid = uidToBeGuid(playerUid);
+    const displayString = `[NAME] ${playerName}\n[BEID] ${beid}\n[GUID] ${playerUid}\n[TIME] ${systemTime}`;
+    infoEl.value = displayString;
 
     const reportList = document.getElementById('player-reports');
     reportList.innerHTML = '';
@@ -199,7 +202,7 @@ function updatePlayerInfo(playerInfo) {
     }
 
     changeButtons();
-    document.querySelector('.player-details-panel').style.visibility = 'visible';
+    document.querySelector('.player-details-panel').style.display = 'flex';
 }
 
 function makeChatUid(timestamp, channel, player, text) {
@@ -241,14 +244,28 @@ function createChatMsgItem(msg) {
     textEl.className = 'chat-text';
     textEl.textContent = text;
 
-    li.append(timeEl, channelEl, playerEl, textEl);
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'chat-select';
 
-    li.addEventListener('dblclick', () => {
-        const exportEl = document.getElementById('chat-export');
-        if (exportEl) {
-            const existingText = exportEl.value || '';
-            exportEl.value += (existingText ? '\n' : '') + `${player}: ${text}`;
+    checkbox.addEventListener('click', (e) => {
+        const copyChatBtn = document.getElementById('btn-copy-chat');
+        const selectedCount = document.querySelectorAll('.chat-select:checked').length;
+        if (selectedCount > 0) {
+            copyChatBtn.style.fontWeight = 'bold';
+        } else {
+            copyChatBtn.style.fontWeight = 'normal';
         }
+
+        copyChatBtn.textContent = `Copy chat (${selectedCount})`;
+    });
+
+    li.append(timeEl, channelEl, playerEl, textEl, checkbox);
+    li.addEventListener('click', (e) => {
+        if (e.target !== checkbox) {
+            checkbox.checked = !checkbox.checked;
+        }
+        checkbox.dispatchEvent(new Event('click'));
     });
     return li;
 }
@@ -328,6 +345,19 @@ function filterChatByPlayer(player) {
     currentFilterEl.textContent = `Clear filter: Player ${player}`;
 }
 
+function updateModReceipts(modReceipts) {
+    document.modReceipts = modReceipts;
+    const receiptCount = (modReceipts.match(/\[NAME\]/g) || []).length;
+    const modReceiptsBtn = document.getElementById('btn-mod-receipts');
+    modReceiptsBtn.textContent = `Copy mod receipts (${receiptCount})`;
+
+    if (receiptCount > 0) {
+        modReceiptsBtn.style.fontWeight = 'bold';
+    } else {
+        modReceiptsBtn.style.fontWeight = 'normal';
+    }
+}
+
 const currentFilterEl = document.getElementById('chat-current-filter');
 currentFilterEl.addEventListener('click', () => {
     currentFilterEl.textContent = 'Showing all messages';
@@ -341,6 +371,12 @@ clearReportBtn.addEventListener('click', () => {
 });
 
 const timeoutButton = document.getElementById('btn-timeout');
+const timeoutSliderEl = document.getElementById('timeout-minutes-slider');
+timeoutSliderEl.addEventListener('input', () => {
+    timeoutDurationEl.value = timeoutSliderEl.value;
+    timeoutDurationEl.dispatchEvent(new Event('change'));
+});
+
 const timeoutDurationEl = document.getElementById('timeout-minutes');
 timeoutDurationEl.addEventListener('change', () => {
     let duration = timeoutDurationEl.value || 15;
@@ -349,12 +385,16 @@ timeoutDurationEl.addEventListener('change', () => {
         duration = 120;
     }
     timeoutButton.textContent = `Timeout ${document.selectedPlayerName} for ${duration} minutes`;
+    timeoutSliderEl.value = duration;
 });
+
 timeoutButton.addEventListener('click', () => {
     const player = document.selectedPlayer;
     const duration = timeoutDurationEl.value || 15;
     const reason = document.getElementById('timeout-reason').value || 'unsportsmanlike conduct';
-    A3API.SendAlert(`["timeout", "${player}", ${duration}, "${reason}"]`);
+    const infoEl = document.getElementById('player-info');
+    const timeoutString = `${infoEl.value}\n[TIMEOUT] ${duration} minutes\n[REASON] ${reason}\n\n`;
+    A3API.SendAlert(`["timeout", "${player}", ${duration}, "${btoa(reason)}", "${btoa(timeoutString)}"]`);
 });
 
 const balanceButton = document.getElementById('btn-rebalance');
@@ -377,6 +417,11 @@ seeTransfersButton.addEventListener('click', () => {
     A3API.SendAlert(`["seeTransfers", "${document.selectedPlayer}"]`);
 });
 
+const muteButton = document.getElementById('btn-mute');
+muteButton.addEventListener('click', () => {
+    A3API.SendAlert(`["mutePlayer", "${document.selectedPlayer}"]`);
+});
+
 function changeButtons() {
     const player = document.selectedPlayer;
     const playerName = document.selectedPlayerName;
@@ -385,7 +430,83 @@ function changeButtons() {
 }
 changeButtons();
 
+const selectAllBtn = document.getElementById('btn-select-all');
+selectAllBtn.addEventListener('click', () => {
+    const chatEl = document.getElementById('chat-messages');
+    if (!chatEl) return;
+    chatEl.querySelectorAll('.chat-select').forEach(cb => {
+        if (cb.offsetParent !== null) {
+            cb.checked = true;
+            cb.dispatchEvent(new Event('click'));
+        }
+    });
+});
+
+const deselectAllBtn = document.getElementById('btn-select-none');
+deselectAllBtn.addEventListener('click', () => {
+    const chatEl = document.getElementById('chat-messages');
+    if (!chatEl) return;
+    chatEl.querySelectorAll('.chat-select').forEach(cb => {
+        cb.checked = false;
+        cb.dispatchEvent(new Event('click'));
+    });
+});
+
+const copyChatBtn = document.getElementById('btn-copy-chat');
+copyChatBtn.addEventListener('click', () => {
+    const chatEl = document.getElementById('chat-messages');
+    if (!chatEl) return;
+    let messages = "";
+    const chatMessagesEl = chatEl.querySelectorAll('.chat-msg');
+    chatMessagesEl.forEach(li => {
+        const cb = li.querySelector('.chat-select');
+        if (cb && cb.checked) {
+            const player = li.querySelector('.chat-player')?.textContent || '';
+            const text = li.querySelector('.chat-text')?.textContent || '';
+            messages += (messages ? '\n' : '') + (player ? `${player}: ${text}` : text);
+        }
+    });
+    document.copyData = messages;
+    document.execCommand('copy');
+
+    chatMessagesEl.forEach(li => {
+        const cb = li.querySelector('.chat-select');
+        if (cb && cb.checked) cb.checked = false;
+    });
+    copyChatBtn.style.fontWeight = 'normal';
+    copyChatBtn.textContent = 'Copy chat (0)';
+});
+
 const modReceiptsBtn = document.getElementById('btn-mod-receipts');
 modReceiptsBtn.addEventListener('click', () => {
+    document.copyData = document.modReceipts || '';
+    document.execCommand('copy');
     A3API.SendAlert('["modReceipts"]');
 });
+
+document.addEventListener('copy', (e) => {
+    if (!document.copyData) return;
+    e.clipboardData.setData('text/plain', document.copyData);
+    document.copyData = '';
+    e.preventDefault();
+});
+
+const copyInfoBtn = document.getElementById('btn-copy');
+copyInfoBtn.addEventListener('click', () => {
+    const infoEl = document.getElementById('player-info');
+    document.copyData = infoEl.value;
+    document.execCommand('copy');
+});
+
+function uidToBeGuid(uid) {
+    if (!uid) return "";
+    let id = BigInt(uid);
+    let payload = "BE"; // 'B' 'E'
+
+    for (let i = 0; i < 8; i++) {
+        const byte = Number(id & 0xFFn);
+        id >>= 8n;
+        payload += String.fromCharCode(byte);
+    }
+    return CryptoJS.MD5(CryptoJS.enc.Latin1.parse(payload)).toString();
+}

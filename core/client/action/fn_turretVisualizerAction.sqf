@@ -17,5 +17,5 @@ _asset addAction [
     false,
     true,
     "",
-    "alive _target && cameraOn == _target"
+    "alive _target && cameraOn == _target && count (crew _target) > 1"
 ];

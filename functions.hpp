@@ -76,15 +76,15 @@ class CfgFunctions {
 			class copyChat {};
 			class debugMenu {};
 			class execCode {};
-			class moderatorLoaded {};
-			class moderatorMenu {};
 			class modMenu {};
 			class playerDataRefresh {};
 			class playerReported {};
 			class printSystemTime {};
-			class refreshChat {};
+			class reportMenu {};
 			class reportPlayer {};
 			class resetDefault {};
+			class sendModData {};
+			class sendReportData {};
 			class setReturnValue {};
 			class settingsMenu {};
 			class settingsMenuInit {};
@@ -171,6 +171,7 @@ class CfgFunctions {
 			class lagMessageDisplay {};
 			class locationScanner {};
 			class mineLimitHint {};
+			class mutePlayer {};
 			class onPause {};
 			class onPlayerRespawn {};
 			class pingFix {};
@@ -447,7 +448,6 @@ class CfgFunctions {
 			class calcImbalance {};
 			class calculateEndResults {};
 			class changeSectorOwnership {};
-			class clearAllTimeouts {};
 			class clearPlayerReports {};
 			class clearServerStats {};
 			class clearTimeout {};

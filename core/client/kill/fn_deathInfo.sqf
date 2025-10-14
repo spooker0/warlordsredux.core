@@ -22,20 +22,7 @@ private _killerSide = side group _responsiblePlayer;
 if (_killerSide == sideUnknown) then {
     _killerSide = side group _killer;
 };
-private _killerTeam = switch (_killerSide) do {
-    case (west): {
-        "[NATO]";
-    };
-    case (east): {
-        "[CSAT]";
-    };
-    case (independent): {
-        "[AAF]";
-    };
-    default {
-        "";
-    };
-};
+
 private _killerColor = switch (_killerSide) do {
     case (west): {
         "#00008b";
@@ -145,8 +132,6 @@ private _killerTextArray = toArray _killerText;
 } forEach _killerTextArray;
 _killerText = toString _killerTextArray;
 
-private _responsiblePlayerText = format ["%1 %2", _killerTeam, _responsiblePlayerName];
-
 private _responsiblePlayerUid = if (!isNull _responsiblePlayer) then {
     getPlayerUID _responsiblePlayer
 } else {
@@ -194,7 +179,7 @@ private _gameData = [
     _distanceText,
     _ratioText,
     _detectSensorText,
-    _responsiblePlayerText,
+    _responsiblePlayerName,
     _killerColor,
     _badgeText,
     _badgeLevel,

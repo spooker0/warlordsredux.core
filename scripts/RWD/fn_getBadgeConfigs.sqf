@@ -38,6 +38,7 @@ createHashMapFromArray [
 	["No Fly Zone", ["a3\\ui_f\\data\\igui\\cfg\\actions\\radaron_ca.paa", 3, "Destroy 15 enemy fixed-wing aircraft with air defenses."]],
 	["Stationary", ["a3\\static_f_gamma\\data\\ui\\map_staticturret_gmg_ca.paa", 3, "Destroy 15 enemy tanks with static turrets."]],
 
+	["Play Tester", ["a3\\modules_f_curator\\data\\portraitanimalsgoats_ca.paa", 3, "Help test the game."]],
 	["One of Us", ["a3\\missions_f_oldman\\data\\img\\hints\\sleeping_ca.paa", 1, "Go AFK for more than 15 minutes."]],
 	["John Warlords", ["a3\\missions_f_oldman\\data\\img\\hints\\restricted_ca.paa", 3, "Earn more than 100,000 points in a single match."]]
 ];

@@ -6,8 +6,6 @@ private _garrisonSize = _sectorValue * 2.3;
 
 private _vehicleUnits = [];
 if (count (_sector getVariable ["BIS_WL_vehiclesToSpawn", []]) == 0) then {
-	private _roads = ((_sector nearRoads 400) select {count roadsConnectedTo _x > 0}) inAreaArray (_sector getVariable "objectAreaComplete");
-
 	private _hasRadar = false;
 	private _hardAIMode = WL_HARD_AI_MODE == 1;
 	private _numVehicleSpawn = if (_hardAIMode) then {
@@ -39,15 +37,15 @@ if (count (_sector getVariable ["BIS_WL_vehiclesToSpawn", []]) == 0) then {
 	} forEach WL_ASSET_DATA;
 
 	for "_i" from 1 to _numVehicleSpawn do {
-		private _posRoad = selectRandom _randomSpots;
-		private _dirRoad = random 360;
-		if (count _roads > 0) then {
-			private _road = selectRandom _roads;
-			_posRoad = position _road;
-			_dirRoad = _road getDir selectRandom (roadsConnectedTo _road);
+		if (count _randomSpots == 0) then {
+			_randomSpots = [_sector] call WL2_fnc_findSpawnsInSector;
+		};
+		private _spawnPos = selectRandom _randomSpots;
+		_randomSpots = _randomSpots select {
+			_x distance2D _spawnPos > 30
 		};
 
-		private _vehicleArray = [_posRoad, _dirRoad, selectRandom _vehiclesPool, _owner] call BIS_fnc_spawnVehicle;
+		private _vehicleArray = [_spawnPos, random 360, selectRandom _vehiclesPool, _owner] call BIS_fnc_spawnVehicle;
 		_vehicleArray params ["_vehicle", "_crew", "_group"];
 
 		_vehicle setVehiclePosition [getPosATL _vehicle, [], 10, "NONE"];
@@ -65,10 +63,10 @@ if (count (_sector getVariable ["BIS_WL_vehiclesToSpawn", []]) == 0) then {
 		_group setBehaviour "COMBAT";
 		_group deleteGroupWhenEmpty true;
 
-		_wp = _group addWaypoint [_posRoad, 100];
+		_wp = _group addWaypoint [_spawnPos, 100];
 		_wp setWaypointType "SAD";
 
-		_wp = _group addWaypoint [_posRoad, 100];
+		_wp = _group addWaypoint [_spawnPos, 100];
 		_wp setWaypointType "CYCLE";
 
 		_vehicle allowCrewInImmobile [true, true];
@@ -129,21 +127,28 @@ if (count (_sector getVariable ["BIS_WL_vehiclesToSpawn", []]) == 0) then {
 	_sector setVariable ["BIS_WL_vehiclesToSpawn", nil];
 };
 
-_connectedToBase = count ((profileNamespace getVariable "BIS_WL_lastBases") arrayIntersect (_sector getVariable "WL2_connectedSectors")) > 0;
 private _services = _sector getVariable ["WL2_services", []];
-if (!_connectedToBase && "H" in _services) then {
-	private _neighbors = (_sector getVariable "WL2_connectedSectors") select {(_x getVariable "BIS_WL_owner") == _owner};
+if ("H" in _services) then {
+	private _aircraftPool = [];
+	{
+		private _class = _x;
+		private _data = _y;
+		private _aircraftSpawn = _data getOrDefault ["aircraftSpawn", 0];
+		if (_aircraftSpawn > 0) then {
+			_aircraftPool pushBack _class;
+		};
+	} forEach WL_ASSET_DATA;
 
-	if (count _neighbors > 0) then {
-		private _aircraftPool = [];
-		{
-			private _class = _x;
-			private _data = _y;
-			private _aircraftSpawn = _data getOrDefault ["aircraftSpawn", 0];
-			if (_aircraftSpawn > 0) then {
-				_aircraftPool pushBack _class;
-			};
-		} forEach WL_ASSET_DATA;
+	private _neighbors = _sector getVariable ["WL2_connectedSectors", []];
+	_neighbors = _neighbors select {
+		_x getVariable ["BIS_WL_owner", independent] == independent
+	};
+	if (count _neighbors == 0) then {
+		_neighbors = [_sector];
+	};
+
+	private _numAirSpawn = (round (random 3)) max 1;
+	for "_i" from 1 to _numAirSpawn do {
 		private _vehicleArray = [position selectRandom _neighbors, 0, selectRandom _aircraftPool, _owner] call BIS_fnc_spawnVehicle;
 		_vehicleArray params ["_vehicle", "_crew", "_group"];
 

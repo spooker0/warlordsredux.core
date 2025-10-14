@@ -24,11 +24,7 @@ if (_isSpectator && _showModStatus) exitWith {
 	["Spectator"] call _setLevel;
 };
 
-private _currentBadge = player getVariable ["WL2_currentBadge", "Player"];
-if (_currentBadge != "Player") exitWith {
-	[_currentBadge] call _setLevel;
-};
-
+private _currentBadge = player getVariable ["WL2_currentBadge", ""];
 private _level = ["getLevel"] call WLC_fnc_getLevelInfo;
-private _playerLevel = format ["Level %1", _level];
+private _playerLevel = format ["Level %1 | %2", _level, _currentBadge];
 [_playerLevel] call _setLevel;
