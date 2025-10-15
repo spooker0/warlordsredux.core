@@ -11,10 +11,9 @@ if (isServer) then {
 	call WL2_fnc_initSectors;
 } else {
 	["client_init"] call BIS_fnc_startLoadingScreen;
-
 	private _sectorsReady = false;
 	while { !_sectorsReady } do {
-		sleep 0.01;
+		uiSleep 0.1;
 		private _expectedSectors = missionNamespace getVariable "WL2_sectorsInitializationComplete";
 		if (isNil "_expectedSectors") then {
 			continue;
@@ -76,23 +75,48 @@ if (_lastUpdateVersion != WL_VERSION) then {
 if (isServer) then {
 	call WL2_fnc_initServer;
 } else {
-	waitUntil {{isNil _x} count [
-		"WL2_base1",
-		"WL2_base2",
-		"BIS_WL_currentTarget_west",
-		"BIS_WL_currentTarget_east"
-	] == 0};
+	private _initComplete = false;
 
-	waitUntil {{isNil {_x getVariable "BIS_WL_originalOwner"}} count [WL2_base1, WL2_base2] == 0};
+	while {_initComplete} do {
+		_initComplete = true;
+		{
+			if (isNil _x) then {
+				_initComplete = false;
+				diag_log format ["Missing %1", _x];
+			};
+		} forEach [
+			"WL2_base1",
+			"WL2_base2",
+			"BIS_WL_currentTarget_west",
+			"BIS_WL_currentTarget_east"
+		];
 
-	{
-		_sector = _x;
-		waitUntil {{isNil {_sector getVariable _x}} count [
-			"BIS_WL_owner",
-			"BIS_WL_previousOwners",
-			"BIS_WL_agentGrp"
-		] == 0};
-	} forEach BIS_WL_allSectors;
+		{
+			if (isNil {_x getVariable "BIS_WL_originalOwner"}) then {
+				_initComplete = false;
+				diag_log format ["Missing BIS_WL_originalOwner on %1", _x];
+			};
+		} forEach [WL2_base1, WL2_base2];
+
+		{
+			private _sector = _x;
+			private _sectorName = _sector getVariable ["WL2_name", "Sector"];
+			if (isNil {_sector getVariable "BIS_WL_owner"}) then {
+				_initComplete = false;
+				diag_log format ["Missing BIS_WL_owner on sector %1", _sectorName];
+			};
+			if (isNil {_sector getVariable "BIS_WL_previousOwners"}) then {
+				_initComplete = false;
+				diag_log format ["Missing BIS_WL_previousOwners on sector %1", _sectorName];
+			};
+			if (isNil {_sector getVariable "BIS_WL_agentGrp"}) then {
+				_initComplete = false;
+				diag_log format ["Missing BIS_WL_agentGrp on sector %1", _sectorName];
+			};
+		} forEach BIS_WL_allSectors;
+
+		uiSleep 0.1;
+	};
 };
 
 if (!isDedicated && hasInterface) then {

@@ -3,15 +3,10 @@ WL_LoadingState = 0;
 0 spawn {
 	private _startTime = serverTime;
 
-	private _loadingScreen = uiNamespace getVariable ["RscWLLoadingScreen", displayNull];
-	private _indicator = _loadingScreen displayCtrl 101;
-
 	private _stepText = "";
 	private _totalLoadSteps = 12;
 	waitUntil {
 		uiSleep 0.1;
-		_stepText = format ["Client Loading Step %1/%2", WL_LoadingState, _totalLoadSteps];
-		_indicator ctrlSetText _stepText;
 		serverTime - _startTime > 60 || WL_LoadingState >= _totalLoadSteps
 	};
 
@@ -25,8 +20,6 @@ WL_LoadingState = 0;
 		endMission "BlockScreen";
 		forceEnd;
 	};
-
-	_indicator ctrlSetText "";
 };
 
 waitUntil {
