@@ -118,6 +118,7 @@ function updatePlayerInfo(playerInfo) {
 
 const reportButton = document.getElementById('btn-report');
 const reasonEl = document.getElementById('report-reason');
+reasonEl.addEventListener('input', changeButtons);
 reportButton.addEventListener('click', () => {
     const player = document.selectedPlayer;
     const reason = reasonEl.value || 'unsportsmanlike conduct';

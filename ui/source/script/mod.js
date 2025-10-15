@@ -412,14 +412,19 @@ gotoButton.addEventListener('click', () => {
     A3API.SendAlert(`["gotoPlayer", "${document.selectedPlayer}"]`);
 });
 
+const muteButton = document.getElementById('btn-mute');
+muteButton.addEventListener('click', () => {
+    A3API.SendAlert(`["mutePlayer", "${document.selectedPlayer}"]`);
+});
+
 const seeTransfersButton = document.getElementById('btn-see-transfers');
 seeTransfersButton.addEventListener('click', () => {
     A3API.SendAlert(`["seeTransfers", "${document.selectedPlayer}"]`);
 });
 
-const muteButton = document.getElementById('btn-mute');
-muteButton.addEventListener('click', () => {
-    A3API.SendAlert(`["mutePlayer", "${document.selectedPlayer}"]`);
+const seeAFKLogButton = document.getElementById('btn-see-afk-log');
+seeAFKLogButton.addEventListener('click', () => {
+    A3API.SendAlert(`["seeAFKLog", "${document.selectedPlayer}"]`);
 });
 
 function changeButtons() {

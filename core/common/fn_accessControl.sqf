@@ -6,6 +6,11 @@ if (_accessControl == -1) exitWith {
     [true, "Access: Not Set"];
 };
 
+private _modOverride = uiNamespace getVariable ["WL2_modOverrideUid", ""];
+if (_modOverride != "") exitWith {
+    [true, "Access: Mod Override"];
+};
+
 private _ownerUID = _asset getVariable ["BIS_WL_ownerUavAsset", _asset getVariable ["BIS_WL_ownerAsset", "123"]];
 private _owner = _ownerUID call BIS_fnc_getUnitByUid;
 private _ownerID = getPlayerID _owner;

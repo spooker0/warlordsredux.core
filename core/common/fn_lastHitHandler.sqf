@@ -31,6 +31,10 @@ if (isPlayer _asset) exitWith {};
 
 _asset addEventHandler ["HandleDamage", {
 	params ["_unit", "_selection", "_damage", "_source", "_projectile", "_hitIndex", "_instigator", "_hitPoint", "_directHit", "_context"];
+	if (_unit isKindOf "Man" && side group _unit != independent) then {
+		_damage = _this call WL2_fnc_handleAIDamage;
+	};
+
 	if (_projectile == "FuelExplosion") then {
 		private _unitApsType = _unit call APS_fnc_getMaxAmmo;
 		private _sourceApsType = _source call APS_fnc_getMaxAmmo;

@@ -219,6 +219,13 @@ private _fastTravelArr = [
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
 		""
 	], [
+		"FTHome",
+		0,
+		[],
+		"Fast travel to home sector",
+		"\A3\Data_F_Warlords\Data\preview_ft_owned.jpg",
+		""
+	], [
 		"BuyFOB",
 		500,
 		[],

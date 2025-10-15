@@ -114,6 +114,11 @@ _texture ctrlAddEventHandler ["PageLoaded", {
             [_texture] call WL2_fnc_sendVehicleData;
             sleep 0.5;
         };
-        uiNamespace setVariable ["WL2_modOverrideUid", ""];
+
+        private _override = uiNamespace getVariable ["WL2_modOverrideUid", ""];
+        if (_override != "") then {
+            systemChat "Mod vehicle access expired.";
+            uiNamespace setVariable ["WL2_modOverrideUid", ""];
+        };
     };
 }];

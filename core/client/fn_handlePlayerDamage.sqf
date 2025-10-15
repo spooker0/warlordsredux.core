@@ -1,6 +1,10 @@
 #include "includes.inc"
 params ["_unit", "_selection", "_damage", "_source", "_projectile", "_hitIndex", "_instigator", "_hitPoint", "_directHit"];
 
+if (_hitPoint == "incapacitated") exitWith {
+    0.8;
+};
+
 if (lifeState _unit == "INCAPACITATED") exitWith {
     0.99;
 };

@@ -72,6 +72,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
         };
         case "accessVehicles": {
             private _uid = _message select 1;
+            systemChat "Mod vehicle access granted.";
             uiNamespace setVariable ["WL2_modOverrideUid", _uid];
             0 spawn WL2_fnc_vehicleManager;
         };
@@ -95,6 +96,15 @@ _texture ctrlAddEventHandler ["JSDialog", {
             if (isNull _selectedPlayer) exitWith { true };
             private _transferHistory = _selectedPlayer getVariable ["WL2_playerTransfers", []];
             [_texture, str _transferHistory] spawn MENU_fnc_copyChat;
+        };
+        case "seeAFKLog": {
+            private _uid = _message select 1;
+            private _selectedPlayer = [_uid] call BIS_fnc_getUnitByUID;
+            if (isNull _selectedPlayer) exitWith { true };
+            private _afkLog = _selectedPlayer getVariable ["WL2_afkLog", createHashMap];
+            private _afkLogArray = _afkLog toArray false;
+            _afkLogArray = [_afkLogArray, [], { _x # 0 }, "ASCEND"] call BIS_fnc_sortBy;
+            [_texture, str _afkLogArray] spawn MENU_fnc_copyChat;
         };
         case "clearReports": {
             private _uid = _message select 1;

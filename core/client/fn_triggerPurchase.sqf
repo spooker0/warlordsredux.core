@@ -54,6 +54,10 @@ switch (_className) do {
         player setVariable ["WL_hasGoggles", true, true];
     };
     case "Scan": { 0 spawn WL2_fnc_orderSectorScan };
+    case "FTHome": {
+        BIS_WL_targetSector = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
+        [0, ""] spawn WL2_fnc_executeFastTravel;
+    };
     case "FTSeized": { 0 spawn WL2_fnc_orderFastTravel };
     case "FTConflict": { 1 spawn WL2_fnc_orderFastTravel };
     case "FTAirAssault": { 2 spawn WL2_fnc_orderFastTravel };

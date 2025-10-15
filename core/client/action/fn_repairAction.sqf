@@ -53,33 +53,57 @@ private _repairTitle = if (count _validTracks > 0) then {
 private _repairWheels = _asset addAction [
 	format ["<t color = '#4bff58'>%1</t>", _repairTitle],
 	{
-        params ["_asset", "_caller", "_actionId", "_arguments"];
-        private _validHitPoints = _arguments select 0;
+        _this spawn {
+            params ["_asset", "_caller", "_actionId", "_arguments"];
+            private _animation = "Acts_carFixingWheel";
+            player switchMove _animation;
 
-        player switchMove "Acts_carFixingWheel";
-        [_asset, _validHitPoints] spawn {
-            params ["_asset", "_validHitPoints"];
-            private _wheelsRemoved = false;
+            private _validHitPoints = _arguments select 0;
+            [[0, -3, 1]] call WL2_fnc_actionLockCamera;
+            
+            private _startCheckingUnhold = false;
+            private _timeToRemove = serverTime + 5;
+            private _timeToRepair = serverTime + 10;
+            private _timeToStop = serverTime + 12;
+            while { _timeToStop > serverTime } do {
+                if (!alive player) then {
+                    break;
+                };
+                if (lifeState player == "INCAPACITATED") then {
+                    break;
+                };
 
-            while { alive player && animationState player == "Acts_carFixingWheel" && vehicle player == player } do {
-                private _progress = getUnitMovesInfo player # 0;
+                private _inputAction = inputAction "Action" + inputAction "ActionContext";
+                if (_startCheckingUnhold && _inputAction > 0) then {
+                    break;
+                };
+                if (_inputAction == 0) then {
+                    _startCheckingUnhold = true;
+                };
 
-                if (_progress > 0.3 && !_wheelsRemoved) then {
+                if (_timeToRemove <= serverTime) then {
                     {
                         if (_asset getHitPointDamage _x != 0) then {
                             _asset setHitPointDamage [_x, 1];
                         };
                     } forEach _validHitPoints;
-                    _wheelsRemoved = true;
                 };
 
-                if (_progress > 0.9 && animationState player == "Acts_carFixingWheel") then {
+                if (_timeToRepair <= serverTime) then {
                     {
                         _asset setHitPointDamage [_x, 0];
                     } forEach _validHitPoints;
+                };
+
+                if (_timeToStop <= serverTime) then {
                     break;
                 };
+
+                sleep 0.001;
             };
+
+            cameraOn cameraEffect ["Terminate", "BACK"];
+            player switchMove "";
         };
 	},
 	[_validHitPoints],

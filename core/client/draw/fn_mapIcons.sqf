@@ -40,8 +40,18 @@
 // Refresh unit loop
 0 spawn {
 	private _mapData = createHashMap;
+	private _assetData = WL_ASSET_DATA;
 	missionNamespace setVariable ["WL2_mapData", _mapData];
 	while { !BIS_WL_missionEnd } do {
+		private _afkTimer = missionNamespace getVariable ["WL2_afkTimer", -1];
+		private _isAfk = serverTime > _afkTimer;
+		if (_isAfk) then {
+			_mapData = createHashMap;
+			missionNamespace setVariable ["WL2_mapData", _mapData];
+			sleep 5;
+			continue;
+		};
+
 		private _side = BIS_WL_playerSide;
 		_mapData set ["side", _side];
 
@@ -69,7 +79,9 @@
 		_mapData set ["scannersAll", _scannerUnits];
 
 		private _scannerUnitTeam = _scannerUnits select {
-			([_x] call WL2_fnc_getAssetSide) == _side
+			private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+			([_x] call WL2_fnc_getAssetSide) == _side ||
+			WL_ASSET_FIELD(_assetData, _assetActualType, "hasScanner", 0) == 1
 		};
 		_mapData set ["scannersTeam", _scannerUnitTeam];
 

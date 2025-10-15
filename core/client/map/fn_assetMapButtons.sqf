@@ -400,7 +400,27 @@ private _removeStrongholdExecute = {
     [
         500,
         "RemoveStronghold",
-        "Remove Stronghold"
+        "Fast Travel"
+    ]
+] call WL2_fnc_addTargetMapButton;
+
+private _repairStrongholdExecute = {
+    params ["_asset"];
+    private _maxHealth = _asset getVariable ["WL2_demolitionMaxHealth", 8];
+    _asset setVariable ["WL2_demolitionHealth", _maxHealth, true];
+    playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Repair.wss", _asset, false, getPosASL _asset, 2, 1, 75];
+
+    [player, "repairStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+};
+[
+    "REPAIR STRONGHOLD",
+    _repairStrongholdExecute,
+    true,
+    "repairStronghold",
+    [
+        250,
+        "RepairStronghold",
+        "Fast Travel"
     ]
 ] call WL2_fnc_addTargetMapButton;
 

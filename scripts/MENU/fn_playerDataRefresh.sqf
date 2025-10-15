@@ -42,6 +42,7 @@ while { !BIS_WL_missionEnd } do {
 
     ["WL2_playerReports"] call _checkDirty;
     ["WL2_playerTransfers"] call _checkDirty;
+    ["WL2_afkLog"] call _checkDirty;
 
     sleep 10;
 };

@@ -248,18 +248,6 @@ if !(isDedicated) then {
 	};
 };
 
-0 spawn {
-	while { !BIS_WL_missionEnd } do {
-		sleep 1;
-		if (alive player && lifeState player == "INCAPACITATED") then {
-			if (animationState player != "acts_staticdeath_01") then {
-				player setVelocityModelSpace [0, 0, 0];
-				[player, ["Acts_StaticDeath_01", 1]] remoteExec ["switchMove", 0];
-			};
-		};
-	};
-};
-
 if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
 	player addAction [
 		"+$10K",
@@ -293,6 +281,7 @@ player setUserActionText [_squadActionId, _squadActionText, "<img size='2' image
 
 uiNamespace setVariable ["WL2_canBuy", true];
 uiNamespace setVariable ["WL2_chatHistory", []];
+uiNamespace setVariable ["WL2_modOverrideUid", ""];
 
 WL2_lastLoadout = getUnitLoadout player;
 [player, true] call WLC_fnc_onRespawn;

@@ -293,7 +293,7 @@ private _scanners = if (_drawAll) then {
 	} else {
 		private _isNotThreatDetector = WL_ASSET_FIELD(_assetData, _assetActualType, "threatDetection", 0) == 0;
 		if (_isNotThreatDetector) then {
-				_drawEllipses pushBack [
+			_drawEllipses pushBack [
 				_position,
 				_scanRadius,
 				_scanRadius,

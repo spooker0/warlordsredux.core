@@ -3,7 +3,36 @@
 uiNamespace setVariable ["WL2_damagedDrawIcons", []];
 0 spawn {
     while { !BIS_WL_missionEnd } do {
-        sleep 1;
+        sleep 0.5;
+
+        private _nearbyUnconscious = (player nearObjects ["Man", 8]) select {
+            lifeState _x == "INCAPACITATED" && side group _x == BIS_WL_playerSide
+        };
+        _nearbyUnconscious = _nearbyUnconscious select {
+            [getPosASL player, getDir player, 90, getPosASL _x] call WL2_fnc_inAngleCheck
+        };
+        if (count _nearbyUnconscious > 1) then {
+            _nearbyUnconscious = [_nearbyUnconscious, [], { 
+                if (_x == cursorTarget) then {
+                    -1
+                } else {
+                    player distance _x
+                };
+            }, "ASCEND"] call BIS_fnc_sortBy;
+        };
+        private _reviveTarget = if (count _nearbyUnconscious > 0) then { _nearbyUnconscious # 0 } else { objNull };
+        if (!isNull _reviveTarget) then {
+            private _reviveActionId = player getVariable ["WL2_reviveActionId", -1];
+            private _displayText = name _reviveTarget;
+            private _reviveText = format ["<t color='#00ff00'>Revive %1</t>", _displayText];
+            private _reviveImage = format [
+                "<img size='3' color='#00ff00' image='a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa'/> <t size='1.5' color='#00ff00'>Revive %1</t>",
+                _displayText
+            ];
+            player setUserActionText [_reviveActionId, _reviveText, _reviveImage];
+        };
+        player setVariable ["WL2_reviveTarget", _reviveTarget];
+
         private _nearbyDemolishableItems = (player nearObjects 35) select {
             _x getVariable ["WL2_canDemolish", false];
         };
@@ -16,7 +45,7 @@ uiNamespace setVariable ["WL2_damagedDrawIcons", []];
         // do distance checks after, visible within 35 anyway
         _nearbyDemolishableItems = _nearbyDemolishableItems select {
             private _isNotStronghold = isNull (_x getVariable ["WL_strongholdSector", objNull]);
-            private _distanceLimit = if (_isNotStronghold) then { 10 } else { 25 };
+            private _distanceLimit = if (_isNotStronghold) then { 10 } else { 35 };
             private _inAngle = if (_isNotStronghold) then {
                 [getPosASL player, getDir player, 90, getPosASL _x] call WL2_fnc_inAngleCheck;
             } else {
@@ -34,7 +63,11 @@ uiNamespace setVariable ["WL2_damagedDrawIcons", []];
                 [_currentTarget] call WL2_fnc_getAssetTypeName
             };
             private _demolishText = format ["<t color='#ff0000'>Demolish %1</t>", _displayText];
-            player setUserActionText [_demolishActionId, _demolishText];
+            private _demolishImage = format [
+                "<img size='3' color='#ff0000' image='a3\ui_f_oldman\data\igui\cfg\holdactions\destroy_ca.paa'/> <t size='1.5' color='#ff0000'>Demolish %1</t>", 
+                _displayText
+            ];
+            player setUserActionText [_demolishActionId, _demolishText, _demolishImage];
         };
         player setVariable ["WL2_demolishableTarget", _currentTarget];
 
@@ -140,6 +173,11 @@ while { !BIS_WL_missionEnd } do {
         ];
         private _scannedUnits = [_side, _strongholdArea] call WL2_fnc_detectUnits;
         _allScannedUnits append _scannedUnits;
+
+        // don't consider unconscious units as intruders
+        _scannedUnits = _scannedUnits select {
+            lifeState _x != "INCAPACITATED"
+        };
 
         if (count _scannedUnits > 0) then {
             _stronghold setVariable ["WL2_strongholdIntruders", true];

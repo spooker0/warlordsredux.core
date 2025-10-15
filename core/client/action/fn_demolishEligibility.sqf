@@ -19,7 +19,7 @@ private _demolishTarget = _demolishableItems # 0;
 private _strongholdSector = _demolishTarget getVariable ["WL_strongholdSector", objNull];
 if (isNull _strongholdSector) exitWith { _demolishTarget };
 private _sectorOwner = _strongholdSector getVariable ["BIS_WL_owner", independent];
-// if (_sectorOwner == BIS_WL_playerSide) exitWith { false };
+if (_sectorOwner == BIS_WL_playerSide) exitWith { objNull };
 
 private _strongholdRadius = _demolishTarget getVariable ["WL_strongholdRadius", 0];
 private _strongholdArea = [
@@ -29,6 +29,8 @@ private _strongholdArea = [
     0,
     false
 ];
+if !(player inArea _strongholdArea) exitWith { objNull };
+
 private _nearbyEnemies = _strongholdArea nearEntities [["Man"], false, true, false];
 _nearbyEnemies = _nearbyEnemies select {
     lifeState _x != "INCAPACITATED" &&

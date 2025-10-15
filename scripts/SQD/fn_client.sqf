@@ -137,6 +137,9 @@ switch (_action) do {
     };
     case "ftSquadLeader": {
         // call this async
+        if (!alive player || lifeState player == "INCAPACITATED") exitWith {
+            _return = 1;
+        };
         private _sl = ['getMySquadLeader'] call SQD_fnc_client;
         private _squadLeader = _allPlayers select {getPlayerID _x == _sl};
         if (count _squadLeader == 0) exitWith {
@@ -174,6 +177,10 @@ switch (_action) do {
         titleCut ["", "BLACK IN", 1];
     };
     case "ftSquad": {
+        if (!alive player || lifeState player == "INCAPACITATED") exitWith {
+            _return = 1;
+        };
+
         private _squadTarget = _params select 0;
         private _squadTargetPlayer = _allPlayers select {getPlayerID _x == _squadTarget} select 0;
 

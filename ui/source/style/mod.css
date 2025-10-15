@@ -392,8 +392,9 @@ button:active {
 #btn-rebalance,
 #btn-vehicles,
 #btn-goto,
+#btn-mute,
 #btn-see-transfers,
-#btn-mute {
+#btn-see-afk-log {
     background: var(--btn-action-bg);
     border-color: var(--btn-action-border);
     color: var(--btn-action-text);
@@ -403,8 +404,9 @@ button:active {
 #btn-rebalance:hover,
 #btn-vehicles:hover,
 #btn-goto:hover,
+#btn-mute:hover,
 #btn-see-transfers:hover,
-#btn-mute:hover {
+#btn-see-afk-log:hover {
     background: var(--btn-action-bg-hover);
 }
 

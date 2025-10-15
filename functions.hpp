@@ -162,6 +162,7 @@ class CfgFunctions {
 			class createDestroyerClient {};
 			class earthquake {};
 			class factionBasedClientInit {};
+			class handleAIDamage {};
 			class handleBuyMenuKeypress {};
 			class handleChatMessages {};
 			class handleKeypress {};
@@ -197,6 +198,7 @@ class CfgFunctions {
 		};
 		class ClientAction {
 			file = "src\core\client\action";
+			class actionLockCamera {};
 			class afkAction {};
 			class airRearmAction {};
 			class arsenalSetup {};

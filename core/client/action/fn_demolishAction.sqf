@@ -27,37 +27,14 @@ private _demolishActionId = player addAction [
                 _targetDiff set [2, _height * 0.5 + 2];
                 _targetDiff
             } else {
-                [0, 2, 1.5]
+                [0, 10, 5]
             };
 
-            private _visionMode = currentVisionMode [player];
-
-            private _camPosition = player modelToWorld _cameraPlayerModelSpace;
-
-            private _camera = "camera" camCreate _camPosition;
-            private _targetVectorDirAndUp = [getPosASL _camera, eyePos player] call BIS_fnc_findLookAt;
-            _camera setVectorDirAndUp _targetVectorDirAndUp;
-            _camera camCommit 0;
-
-            _camera cameraEffect ["Internal", "BACK"];
-
-            switch (_visionMode # 0) do {
-                case 0: {
-                    camUseNVG false;
-                    false setCamUseTI 0;
-                };
-                case 1: {
-                    camUseNVG true;
-                };
-                case 2: {
-                    true setCamUseTI (_visionMode # 1);
-                };
-            };
+            [_cameraPlayerModelSpace] call WL2_fnc_actionLockCamera;
             
-            showCinemaBorder false;
-            cameraEffectEnableHUD true;
-
-            private _soundSource = createSoundSource ["WLDemolitionSound", player modelToWorld [0, 0, 0], [], 0];
+            private _playerPosition = player modelToWorld [0, 0, 0];
+            private _soundSource = createSoundSource ["WLDemolitionSound", _playerPosition, [], 0];
+            player switchMove "Acts_carFixingWheel";
 
             private _demolishSuccess = false;
             private _startCheckingUnhold = false;
@@ -70,11 +47,7 @@ private _demolishActionId = player addAction [
                 if (lifeState player == "INCAPACITATED") then {
                     break;
                 };
-                private _currentTarget = player getVariable ["WL2_demolishableTarget", objNull];
-                if (!alive _currentTarget) then {
-                    break;
-                };
-                if (_currentTarget != _demolishableTarget) then {
+                if (!alive _demolishableTarget) then {
                     break;
                 };
 
@@ -103,6 +76,7 @@ private _demolishActionId = player addAction [
             };
 
             deleteVehicle _soundSource;
+            player switchMove "";
 
             cameraOn cameraEffect ["Terminate", "BACK"];
 

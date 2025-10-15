@@ -7,6 +7,9 @@ if (leader _newGroup != _newUnit) then {
 };
 
 {
+	if (damage _x >= 0.99) then {
+		deleteVehicle _x;
+	};
 	_x setUnconscious false;
 } forEach (units _newGroup);
 

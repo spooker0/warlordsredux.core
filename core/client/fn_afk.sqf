@@ -1,9 +1,12 @@
 #include "includes.inc"
 if (isDedicated) exitWith {};
+
+#if WL_AFK_ADMIN_TEST == 0
 private _uid = getPlayerUID player;
 private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
 private _isSpectator = _uid in (getArray (missionConfigFile >> "spectatorIDs"));
 if (_isAdmin || _isSpectator) exitWith {};
+#endif
 
 private _alreadyHasOneOfUsBadge = false;
 while { !BIS_WL_missionEnd } do {

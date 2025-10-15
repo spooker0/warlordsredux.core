@@ -38,6 +38,24 @@ private _fastTravelSeizedExecute = {
     ]
 ] call WL2_fnc_addTargetMapButton;
 
+// Fast Travel Home Button
+private _fastTravelHomeExecute = {
+    params ["_sector"];
+    BIS_WL_targetSector = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
+    [0, ""] spawn WL2_fnc_executeFastTravel;
+};
+[
+    "FAST TRAVEL HOME",
+    _fastTravelHomeExecute,
+    true,
+    "fastTravelHome",
+    [
+        0,
+        "FTHome",
+        "Fast Travel"
+    ]
+] call WL2_fnc_addTargetMapButton;
+
 // Fast Travel Stronghold
 private _fastTravelStrongholdExecute = {
     params ["_sector"];

@@ -6,7 +6,10 @@ switch (_conditionName) do {
         private _eligibleSectors = (BIS_WL_sectorsArray # 2) select {
             (_x getVariable ["BIS_WL_owner", independent]) == (side (group player))
         };
-        _target in _eligibleSectors;
+        _target in _eligibleSectors && ([BIS_WL_playerSide] call WL2_fnc_getSideBase) != _target;
+    };
+    case "fastTravelHome": {
+        ([BIS_WL_playerSide] call WL2_fnc_getSideBase) == _target;
     };
     case "fastTravelConflict";
     case "airAssault": {
@@ -108,5 +111,12 @@ switch (_conditionName) do {
         _target getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide &&
         _target getVariable ["WL2_forwardBaseSupplies", -1] >= WL_FOB_REPAIR_COST &&
         _target getVariable ["WL2_demolitionHealth", _maxHealth] < _maxHealth
+    };
+    case "repairStronghold": {
+        private _maxHealth = _target getVariable ["WL2_demolitionMaxHealth", 8];
+        private _hasIntruders = _target getVariable ["WL2_strongholdIntruders", false];
+        alive _target && 
+        _target getVariable ["WL2_demolitionHealth", _maxHealth] < _maxHealth &&
+        !_hasIntruders;
     };
 };
