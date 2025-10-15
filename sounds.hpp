@@ -131,3 +131,25 @@ class CfgSounds {
         titles[] = {};
     };
 };
+
+class CfgSFX {
+	class WLDemolition {
+		sounds[] = { "sound0", "sound1", "sound2", "sound3", "sound4", "sound5", "sound6", "sound7" };
+        sound0[] = { "@a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_01.wss", 5, 1.0, 1000, 0.125, 0, 0.2, 0.4 };
+        sound1[] = { "@a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_02.wss", 5, 1.0, 1000, 0.125, 0, 0.2, 0.4 };
+        sound2[] = { "@a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_03.wss", 5, 1.0, 1000, 0.125, 0, 0.2, 0.4 };
+        sound3[] = { "@a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_04.wss", 5, 1.0, 1000, 0.125, 0, 0.2, 0.4 };
+        sound4[] = { "@a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_01.wss", 5, 1.0, 1000, 0.125, 0, 0.2, 0.4 };
+        sound5[] = { "@a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_02.wss", 5, 1.0, 1000, 0.125, 0, 0.2, 0.4 };
+        sound6[] = { "@a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_03.wss", 5, 1.0, 1000, 0.125, 0, 0.2, 0.4 };
+        sound7[] = { "@a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_04.wss", 5, 1.0, 1000, 0.125, 0, 0.2, 0.4 };
+
+		empty[] = { "", 0, 0, 0, 0, 0, 0, 0 };
+	};
+};
+
+class CfgVehicles {
+	class WLDemolitionSound {
+		sound = "WLDemolition";
+	};
+};

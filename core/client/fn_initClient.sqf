@@ -276,7 +276,7 @@ if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
 	];
 	
 	0 spawn {
-		sleep 30;
+		sleep 300;
 		["Play Tester"] call RWD_fnc_addBadge;
 	};
 
