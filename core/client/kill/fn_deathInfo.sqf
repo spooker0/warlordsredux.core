@@ -204,11 +204,25 @@ _texture ctrlAddEventHandler ["PageLoaded", {
 
     private _script = format ["updateData(atob(""%1""));", _deathInfoText];
     _texture ctrlWebBrowserAction ["ExecJS", _script];
+
+    _this spawn {
+        params ["_texture"];
+        while { !isNull _texture } do {
+            private _downedLiveTime = player getVariable ["WL2_downedLiveTime", 25];
+            private _downedTime = player getVariable ["WL_unconsciousTime", 0];
+            private _respawnTimer = _downedLiveTime - _downedTime;
+
+            private _script = format ["updateRespawnTimer(""%1"");", _respawnTimer toFixed 1];
+            _texture ctrlWebBrowserAction ["ExecJS", _script];
+
+            sleep 0.1;
+        };
+    };
 }];
 
 waitUntil {
-    sleep 0.5;
-    alive player && lifeState player != "INCAPACITATED"
+    sleep 0.1;
+    !alive player
 };
 
 "deathInfo" cutText ["", "PLAIN"];

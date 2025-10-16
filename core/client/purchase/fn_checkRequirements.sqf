@@ -1,18 +1,26 @@
 #include "includes.inc"
 params ["_sector", "_requirements"];
 
+private _potentialBases = missionNamespace getVariable ["WL2_forwardBases", []];
+private _forwardBases = _potentialBases select {
+    player distance2D _x < WL_FOB_RANGE &&
+    _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
+};
+
 private _servicesInSector = _sector getVariable ["WL2_services", []];
 if ("H" in _requirements && !("H" in _servicesInSector)) exitWith {
-    private _potentialBases = missionNamespace getVariable ["WL2_forwardBases", []];
-    private _forwardBases = _potentialBases select {
-        player distance2D _x < WL_FOB_RANGE &&
-        _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
-    };
-
     if (count _forwardBases > 0) then {
         [true, ""];
     } else {
         [false, "Must be in a sector with a helipad."];
+    };
+};
+
+if ("F" in _requirements) exitWith {
+    if (count _forwardBases > 0) then {
+        [true, ""];
+    } else {
+        [false, "Must be in a forward base."];
     };
 };
 

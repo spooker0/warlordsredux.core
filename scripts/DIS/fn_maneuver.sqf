@@ -42,22 +42,21 @@ private _ammoConfig = _unit getVariable ["WL2_currentAmmoConfig", createHashMap]
 if (_ammoConfig getOrDefault ["loal", false]) then {
     private _selectedTarget = _unit getVariable ["WL2_selectedTargetAA", objNull];
     if (!isNull _selectedTarget && isNull _originalTarget) then {
+        private _unitSpeed = speed _unit;
+        _projectile setVelocityModelSpace [0, _unitSpeed * 3.6 + 100, 0];
         _projectile setMissileTarget [_selectedTarget, true];
         _originalTarget = _selectedTarget;
+        
+        sleep 1;
 
         private _projectilePos = getPosASL _projectile;
         private _targetPos = getPosASL _selectedTarget;
-
-        _projectile setVelocityModelSpace [0, 100, 0];
-        
-        sleep 1;
         
         private _targetVectorDirAndUp = [_projectilePos, _targetPos] call BIS_fnc_findLookAt;
         _projectile setVectorDirAndUp _targetVectorDirAndUp;
 
         _projectile setMissileTarget [_selectedTarget, true];
 
-        private _unitSpeed = speed _unit;
         private _projAlt = _projectilePos # 2;
         private _targetAlt = _targetPos # 2;
         if (_unitSpeed > WL_SAM_FAST_THRESHOLD) then {
@@ -174,7 +173,7 @@ while { alive _projectile } do {
     private _notched = _projectile getVariable ["DIS_notched", false];
     if (_notched) then {
         _projectile setAngularVelocityModelSpace [0, 0, 0];
-        sleep 0.001;
+        sleep 0.01;
         continue;
     };
 
@@ -213,5 +212,5 @@ while { alive _projectile } do {
     };
 
     _lastLoopTime = serverTime;
-    sleep 0.001;
+    sleep 0.01;
 };

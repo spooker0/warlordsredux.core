@@ -19,7 +19,10 @@ private _demolishTarget = _demolishableItems # 0;
 private _strongholdSector = _demolishTarget getVariable ["WL_strongholdSector", objNull];
 if (isNull _strongholdSector) exitWith { _demolishTarget };
 private _sectorOwner = _strongholdSector getVariable ["BIS_WL_owner", independent];
+
+#if WL_STRONGHOLD_DEBUG == 0
 if (_sectorOwner == BIS_WL_playerSide) exitWith { objNull };
+#endif
 
 private _strongholdRadius = _demolishTarget getVariable ["WL_strongholdRadius", 0];
 private _strongholdArea = [

@@ -11,6 +11,7 @@ if (leader _newGroup != _newUnit) then {
 		deleteVehicle _x;
 	};
 	_x setUnconscious false;
+	_x setCaptive false;
 } forEach (units _newGroup);
 
 #if WL_FACTION_THREE_ENABLED

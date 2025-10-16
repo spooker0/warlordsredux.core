@@ -22,6 +22,8 @@ private _sectorPos = if (isNil "BIS_WL_targetSector") then {
 	(BIS_WL_targetSector getVariable "objectAreaComplete") # 0;
 };
 
+private _strongholdHasSpot = false;
+
 switch (_fastTravelMode) do {
 	case 0: {
 		_destination = selectRandom ([BIS_WL_targetSector] call WL2_fnc_findSpawnsInSector);
@@ -53,6 +55,7 @@ switch (_fastTravelMode) do {
 		private _stronghold = BIS_WL_targetSector getVariable ["WL_stronghold", objNull];
 		private _posArr = _stronghold buildingPos -1;
 		_destination = if (count _posArr > 0) then {
+			_strongholdHasSpot = true;
 			selectRandom _posArr;
 		} else {
 			getPosATL _stronghold;
@@ -160,7 +163,21 @@ switch (_fastTravelMode) do {
             player setVariable ["WL2_respawnBag", objNull, [2, clientOwner]];
         };
 	};
-	case 5;
+	case 5: {
+		if (_strongholdHasSpot) then {
+			{
+				_x setPosATL _destination;
+			} forEach _tagAlong;
+
+			player setPosATL _destination;
+		} else {
+			{
+				_x setVehiclePosition [_destination, [], 3, "NONE"];
+			} forEach _tagAlong;
+
+			player setVehiclePosition [_destination, [], 0, "NONE"];
+		};
+	};
 	case 6: {
 		{
 			_x setVehiclePosition [_destination, [], 3, "NONE"];

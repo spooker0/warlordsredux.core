@@ -87,29 +87,25 @@ private _reviveActionId = player addAction [
 ];
 player setVariable ["WL2_reviveActionId", _reviveActionId];
 
-[
-    player,
-    "<t color='#ff0000'>Respawn</t>",
-    "\a3\ui_f\data\igui\cfg\revive\overlayIcons\d100_ca.paa",
-    "\a3\ui_f\data\igui\cfg\revive\overlayIcons\d100_ca.paa",
-    "lifeState player == 'INCAPACITATED'",
-    "lifeState player == 'INCAPACITATED'",
-    {},
-    {},
-    {
-        private _waitedTime = player getVariable ["WL_unconsciousTime", 0];
-        private _originalRespawnTime = getMissionConfigValue ["respawnDelay", 30];
-        private _newRespawnTime = (_originalRespawnTime - _waitedTime) max 5;
-        setPlayerRespawnTime _newRespawnTime;
-        forceRespawn player;
-    },
-    {},
-    [],
-    1,
-    100,
-    false,
-    true
-] call BIS_fnc_holdActionAdd;
+
+player addAction [
+	"<t color='#00ff00'>Hold on longer</t>",
+	{
+        params ["_target", "_caller", "_actionId", "_arguments"];
+        player setVariable ["WL2_downedLiveTime", 90];
+        player removeAction _actionId;
+	},
+	nil,
+	1.5,
+	true,
+	true,
+	"",
+	"lifeState player == 'INCAPACITATED'",
+	5,
+	true,
+	"",
+	""
+];
 
 player addAction [
 	"Customization",

@@ -1,12 +1,13 @@
 #include "includes.inc"
 params ["_asset", "_turret"];
 
+private _assetSide = [_asset] call WL2_fnc_getAssetSide;
+
 while { alive _asset } do {
     sleep 0.2;
 
-    private _controllingUnit = _asset turretUnit _turret;
-    if (isNull _controllingUnit) then {
-        sleep 1;
+    if (!local _asset) then {
+        sleep 3;
         continue;
     };
 
@@ -16,19 +17,20 @@ while { alive _asset } do {
         continue;
     };
 
-    private _devicesInRange = (_laserTarget nearEntities 50) select {
-        _x getVariable ["apsType", -1] == 3;
+    private _vehiclesInRange = (_laserTarget nearEntities 50) select {
+        _x getVariable ["apsType", -1] > -1 &&
+        [_x] call WL2_fnc_getAssetSide != _assetSide
     };
 
-    if (count _devicesInRange == 0) then {
+    if (count _vehiclesInRange == 0) then {
         continue;
     };
 
     {
         private _deviceTarget = _x;
-        if (_deviceTarget getVariable ["WL2_dazzlerActivated", false]) then {
-            _deviceTarget setVariable ["WL2_dazzlerActivated", false, true];
-            [["a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", 1, 0.5, true]] remoteExec ["playSoundUI", _controllingUnit];
+        if (_deviceTarget getVariable ["WL2_apsActivated", false]) then {
+            _deviceTarget setVariable ["WL2_apsActivated", false, true];
+            [["a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", 1, 0.5, true]] remoteExec ["playSoundUI", [_asset, _deviceTarget]];
         };
-    } forEach _devicesInRange;
+    } forEach _vehiclesInRange;
 };

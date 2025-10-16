@@ -37,7 +37,7 @@ private _strongholdsInRange = _strongholds select {
 };
 if (count _strongholdsInRange > 0) then {
     private _stronghold = _strongholdsInRange # 0;
-    [_stronghold, 4] call WL2_fnc_demolishStep;
+    [_stronghold, 5] call WL2_fnc_demolishStep;
 };
 
 private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
@@ -46,5 +46,5 @@ private _forwardBasesInRange = _forwardBases select {
 };
 if (count _forwardBasesInRange > 0) then {
     private _forwardBase = _forwardBasesInRange # 0;
-    [_forwardBase, 4] call WL2_fnc_demolishStep;
+    [_forwardBase, 5] call WL2_fnc_demolishStep;
 };

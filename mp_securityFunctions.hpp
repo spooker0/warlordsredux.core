@@ -5,6 +5,7 @@ class CfgRemoteExec {
 		jip = 1;
 
 		class APS_fnc_deviceJammer {allowedTargets = 0;};
+		class APS_fnc_friendlyWarning {allowedTargets = 0;};
 		class APS_fnc_lagProtectionServer {allowedTargets = 2;};
 		class APS_fnc_projectileStateUpdate {allowedTargets = 0;};
 		class APS_fnc_report {allowedTargets = 0;};
@@ -30,7 +31,6 @@ class CfgRemoteExec {
 		class WL2_fnc_clearTimeout {allowedTargets = 2;};
 		class WL2_fnc_controlGunnerAction {allowedTargets = 0;};
 		class WL2_fnc_cruiseMissileWarning {allowedTargets = 0;};
-		class WL2_fnc_dazzlerAction {allowedTargets = 1;};
 		class WL2_fnc_demolishAction {allowedTargets = 0;};
 		class WL2_fnc_demolishComplete {allowedTargets = 0;};
 		class WL2_fnc_deployableAddAction {allowedTargets = 1;};

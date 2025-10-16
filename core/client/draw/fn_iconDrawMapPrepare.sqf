@@ -162,6 +162,14 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		_baseColor,
 		""
 	];
+	_drawEllipses pushBack [
+		_position,
+		WL_FOB_MIN_DISTANCE,
+		WL_FOB_MIN_DISTANCE,
+		0,
+		_baseColor,
+		""
+	];
 
 	private _sectorsInRange = _x getVariable ["WL2_forwardBaseSectors", []];
 	{

@@ -12,6 +12,8 @@ private _projectileAPSConsumption = _apsProjectileConfig getOrDefault ["consumpt
 private _dazzleable = _apsProjectileConfig getOrDefault ["dazzleable", false];
 private _isGuided = _projectileAPSType < 3;		// if stoppable by APS, always dazzleable by dazzler
 
+if (!_dazzleable && _projectileAPSType == 3) exitWith {};
+
 private _radius = if (_dazzleable) then {125} else {sqrt _maxDistSqr};
 
 private _maxSpeed = getNumber (configFile >> "CfgAmmo" >> typeof _projectile >> "maxSpeed");
@@ -53,6 +55,7 @@ private _interception = {
 
 	private _ownerSide = _x getVariable ["BIS_WL_ownerAssetSide", sideUnknown];
 	if (side group _unit == _ownerSide) then {
+		[name player] remoteExec ["APS_fnc_friendlyWarning", _target];
 		0 spawn {
 			sleep 0.5;
 

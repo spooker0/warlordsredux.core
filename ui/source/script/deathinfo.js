@@ -78,3 +78,8 @@ function updateData(gameData) {
         badgeIconMask.style.display = "none";
     }
 }
+
+function updateRespawnTimer(time) {
+    const respawnTimer = document.querySelector('.respawn-timer');
+    respawnTimer.textContent = `Respawning in ${time}...`;
+}

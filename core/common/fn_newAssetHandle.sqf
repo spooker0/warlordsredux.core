@@ -112,6 +112,10 @@ if (_asset isKindOf "Man") then {
 		[_asset, true] remoteExec ["WL2_fnc_scannerAction", 0, true];
 	};
 
+	if (WL_ASSET(_assetActualType, "hasGunnerAction", 0) > 0) then {
+		[_asset] remoteExec ["WL2_fnc_controlGunnerAction", 0, true];
+	};
+
 	private _loadoutDefaults = profileNamespace getVariable ["WLM_loadoutDefaults", createHashmap];
 	if (_assetActualType in _loadoutDefaults) then {
     	private _lastLoadout = _loadoutDefaults getOrDefault [_assetActualType, []];
@@ -138,7 +142,6 @@ if (_asset isKindOf "Man") then {
 		// Dazzlers
 		case "B_T_Truck_03_device_F";
 		case "O_Truck_03_device_F": {
-			_asset setVariable ["WL2_dazzlerActivated", false, true];
 			_asset setVariable ["WL_ewNetActive", false, true];
 			_asset setVariable ["WL_ewNetRange", WL_JAMMER_RANGE_OUTER, true];
 
@@ -201,12 +204,6 @@ if (_asset isKindOf "Man") then {
 
 		// case "B_AAA_System_01_F": {
 		// 	[_asset] spawn APS_fnc_ciws;
-		// };
-
-		// case "I_Heli_light_03_dynamicLoadout_F";
-		// case "B_Heli_Attack_01_dynamicLoadout_F";
-		// case "O_Heli_Attack_02_dynamicLoadout_F": {
-		// 	[_asset] remoteExec ["WL2_fnc_controlGunnerAction", 0, true];
 		// };
 
 		// Radars
@@ -289,8 +286,8 @@ if (_asset isKindOf "Man") then {
 		};
 	};
 
-	if (_asset getVariable ["apsType", -1] == 3) then {
-		[_asset] remoteExec ["WL2_fnc_dazzlerAction", 0, true];
+	if (_asset getVariable ["apsType", -1] > -1) then {
+		_asset setVariable ["WL2_apsActivated", true, true];
 	};
 
 	if (WL_ASSET(_assetActualType, "isLight", 0) > 0) then {

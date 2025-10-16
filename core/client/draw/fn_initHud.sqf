@@ -101,8 +101,15 @@ while { !BIS_WL_missionEnd } do {
 		_apsTypeControl ctrlShow false;
 		_apsAmmoControl ctrlShow false;
 	} else {
-		private _apsActive = [cameraOn] call APS_fnc_active;
-		private _apsColor = if (_apsActive) then {
+		private _apsActive = cameraOn getVariable ["WL2_apsActivated", false];
+		private _apsActiveColor = if (_apsActive) then {
+			"#00ff00";
+		} else {
+			"#ff0000";
+		};
+		private _apsAmmo = cameraOn getVariable ["apsAmmo", 0];
+		private _apsHasAmmo = _apsAmmo > 0;
+		private _apsAmmoColor = if (_apsHasAmmo) then {
 			"#00ff00";
 		} else {
 			"#ff0000";
@@ -113,20 +120,10 @@ while { !BIS_WL_missionEnd } do {
 			case 0: { "LIGHT" };
 			default { "DAZZLER" };
 		};
-		_apsTypeControl ctrlSetStructuredText parseText format ["<t shadow='2' size='1.1' color='%1'>APS: %2</t>", _apsColor, _apsTypeName];
+		_apsTypeControl ctrlSetStructuredText parseText format ["<t shadow='2' size='1.1' color='%1'>APS: %2</t>", _apsActiveColor, _apsTypeName];
 		_apsTypeControl ctrlShow true;
 
-		if (_apsTypeName == "DAZZLER") then {
-			private _state = if (_apsActive) then {
-				"ACTIVE";
-			} else {
-				"INACTIVE";
-			};
-			_apsAmmoControl ctrlSetStructuredText parseText format ["<t shadow='2' size='1.1' color='%1'>%2</t>", _apsColor, _state];
-		} else {
-			private _apsAmmo = cameraOn getVariable ["apsAmmo", 0];
-			_apsAmmoControl ctrlSetStructuredText parseText format ["<t shadow='2' size='1.1' color='%1'>AMMO: %2</t>", _apsColor, _apsAmmo max 0];
-		};
+		_apsAmmoControl ctrlSetStructuredText parseText format ["<t shadow='2' size='1.1' color='%1'>AMMO: %2</t>", _apsAmmoColor, _apsAmmo max 0];
 		_apsAmmoControl ctrlShow true;
 	};
 

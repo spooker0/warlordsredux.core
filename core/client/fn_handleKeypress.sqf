@@ -8,8 +8,8 @@ if (_adminKeyPressed && !_isAdmin) exitWith {
     true;
 };
 
-if (inputAction "cycleThrownItems" > 0.01 && !(isNull objectParent player)) exitWith {
-    [vehicle player, 0, false] spawn APS_fnc_report;
+if (inputAction "cycleThrownItems" > 0.01 && cameraOn != player) exitWith {
+    [cameraOn] call APS_fnc_toggle;
     true;
 };
 

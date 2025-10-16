@@ -256,8 +256,9 @@ addMissionEventHandler ["Draw3D", {
 
         private _vehicleActualType = _vehicle getVariable ["WL2_orderedClass", typeOf _vehicle];
         private _vehicleCategory = WL_ASSET_FIELD(_assetData, _vehicleActualType, "category", "Other");
+        private _hasThreatDetector = WL_ASSET_FIELD(_assetData, _vehicleActualType, "threatDetection", 0);
         private _samIcons = [];
-        if (_vehicleCategory == "AirDefense") then {
+        if (_vehicleCategory == "AirDefense" || _hasThreatDetector > 0) then {
             private _samMissiles = (8 allObjects 2) select {
                 if !(_x isKindOf "MissileCore") then {
                     false;

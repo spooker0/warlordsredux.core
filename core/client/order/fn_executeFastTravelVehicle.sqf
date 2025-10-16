@@ -37,8 +37,15 @@ private _unitsToMove = (units player) select {
         if (isNull _targetVehicle) then {
             _targetVehicle = player;
         };
-        private _destination = getPosATL _targetVehicle;
-        _unit setVehiclePosition [_destination, [], 3, "NONE"];
+        
+        private _buildingPositions = _targetVehicle buildingPos -1;
+        if (count _buildingPositions > 0) then {
+            private _destination = selectRandom _buildingPositions;
+            _unit setPosATL _destination;
+        } else {
+            private _destination = getPosATL _targetVehicle;
+            _unit setVehiclePosition [_destination, [], 3, "NONE"];
+        };
     };
 } forEach _unitsToMove;
 

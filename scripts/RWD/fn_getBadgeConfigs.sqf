@@ -37,6 +37,7 @@ createHashMapFromArray [
 
 	["No Fly Zone", ["a3\\ui_f\\data\\igui\\cfg\\actions\\radaron_ca.paa", 3, "Destroy 15 enemy fixed-wing aircraft with air defenses."]],
 	["Stationary", ["a3\\static_f_gamma\\data\\ui\\map_staticturret_gmg_ca.paa", 3, "Destroy 15 enemy tanks with static turrets."]],
+	["Demolition Specialist", ["a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\destroy_ca.paa", 3, "Get 15 demolitions on enemy assets."]],
 
 	["Play Tester", ["a3\\modules_f_curator\\data\\portraitanimalsgoats_ca.paa", 3, "Help test the game."]],
 	["One of Us", ["a3\\missions_f_oldman\\data\\img\\hints\\sleeping_ca.paa", 1, "Go AFK for more than 15 minutes."]],

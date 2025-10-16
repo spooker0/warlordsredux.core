@@ -140,6 +140,11 @@ if (_rewardType == "RECON") then {
 	_rewardStack set ["RECON", _currentRecon + _rewardAmount];
 };
 
+if (_rewardType == "DEMOLITION") then {
+	private _currentDemolitions = _rewardStack getOrDefault ["DEMOLITIONS", 0];
+	_rewardStack set ["DEMOLITIONS", _currentDemolitions + 1];
+};
+
 missionNamespace setVariable ["WL2_rewardStack", _rewardStack];
 
 call RWD_fnc_handleBadge;

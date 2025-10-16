@@ -113,9 +113,11 @@ switch (_conditionName) do {
         _target getVariable ["WL2_demolitionHealth", _maxHealth] < _maxHealth
     };
     case "repairStronghold": {
+        private _strongholdSector = _target getVariable ["WL_strongholdSector", objNull];
         private _maxHealth = _target getVariable ["WL2_demolitionMaxHealth", 8];
         private _hasIntruders = _target getVariable ["WL2_strongholdIntruders", false];
-        alive _target && 
+        alive _target &&
+        !(isNull _strongholdSector) &&
         _target getVariable ["WL2_demolitionHealth", _maxHealth] < _maxHealth &&
         !_hasIntruders;
     };

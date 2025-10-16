@@ -149,7 +149,7 @@ copyInfoBtn.addEventListener('click', () => {
 function uidToBeGuid(uid) {
     if (!uid) return "";
     let id = BigInt(uid);
-    let payload = "BE"; // 'B' 'E'
+    let payload = "BE";
 
     for (let i = 0; i < 8; i++) {
         const byte = Number(id & 0xFFn);

@@ -1,8 +1,8 @@
 #include "includes.inc"
 params ["_unit", "_selection", "_damage", "_source", "_projectile", "_hitIndex", "_instigator", "_hitPoint", "_directHit"];
 
-if (_hitPoint == "incapacitated") exitWith {
-    0.8;
+if (_hitPoint == "incapacitated") then {
+    _damage = 0.8 min _damage;
 };
 
 if (lifeState _unit == "INCAPACITATED") exitWith {
@@ -44,6 +44,7 @@ switchCamera player;
 [_unit] spawn {
     params ["_unit"];
     {
+        _x setCaptive true;
         _x setUnconscious true;
     } forEach (units _unit);
 
@@ -53,25 +54,28 @@ switchCamera player;
     [_unit, false] remoteExec ["setPhysicsCollisionFlag", 0];
 
     private _unconsciousTime = _unit getVariable ["WL_unconsciousTime", 0];
+    player setVariable ["WL2_downedLiveTime", 25];
     if (_unconsciousTime > 0) exitWith {};
 
     private _startTime = serverTime;
     private _downTime = 0;
-    while { alive _unit && lifeState _unit == "INCAPACITATED" && _downTime < 90 } do {
+    while { alive _unit && lifeState _unit == "INCAPACITATED" } do {
         _downTime = serverTime - _startTime;
+        if (_downTime >= 25) then {
+            setPlayerRespawnTime 5;
+        };
+
+        private _downTimeAllowed = player getVariable ["WL2_downedLiveTime", 25];
+        if (_downTime >= _downTimeAllowed) then {
+            forceRespawn _unit;
+            break;
+        };
+
         _unit setPosASL (getPosASL _unit);
         switchCamera player;
 
-        hintSilent format ["Downed for %1", round _downTime];
         _unit setVariable ["WL_unconsciousTime", _downTime];
-        sleep 1;
-    };
-
-    hintSilent "";
-    _downTime = serverTime - _startTime;
-    if (_downTime >= 90) then {
-        setPlayerRespawnTime 5;
-        forceRespawn _unit;
+        sleep 0.1;
     };
 };
 

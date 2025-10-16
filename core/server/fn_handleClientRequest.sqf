@@ -115,6 +115,12 @@ if (_action == "spot") exitWith {
 	[objNull, _reward, "Recon", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
+if (_action == "demolished") exitWith {
+	private _reward = 20;
+	[_reward] call _addFunds;
+	[objNull, _reward, "Demolition", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+};
+
 if (_action == "orderArsenal") exitWith {
 	0 remoteExec ["WL2_fnc_orderArsenal", remoteExecutedOwner];
 };

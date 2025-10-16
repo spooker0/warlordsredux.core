@@ -8,9 +8,9 @@ class CfgFunctions {
 			class defineVehicles {};
 			class deviceJammer {};
 			class firedProjectile {};
+			class friendlyWarning {};
 			class getDirection {};
 			class getMaxAmmo {};
-			class hasCharges {};
 			class lagProtection {};
 			class lagProtectionServer {};
 			class projectileStateUpdate {};
@@ -21,6 +21,7 @@ class CfgFunctions {
 			class sead {};
 			class setupProjectiles {};
 			class serverHandleAPS {};
+			class toggle {};
 		};
 	};
 	class DIS {
@@ -121,6 +122,7 @@ class CfgFunctions {
 	class SPEC {
 		class Default {
 			file = "src\scripts\SPEC";
+			class customSpectator {};
 			class spectator {};
 			class spectatorDraw3d {};
 			class spectatorFeedback {};
@@ -210,9 +212,6 @@ class CfgFunctions {
 			class claimEligibility {};
 			class controlGunnerAction {};
 			class controlGunnerEligibility {};
-			class dazzlerAction {};
-			class dazzlerToggle {};
-			class dazzlerUpdate {};
 			class demolishAction {};
 			class demolishEligibility {};
 			class demolishStep {};
@@ -310,7 +309,6 @@ class CfgFunctions {
 			file = "src\core\client\map";
 			class addTargetMapButton {};
 			class assetButtonAccessControl {};
-			class assetButtonDazzler {};
 			class assetButtonJammer {};
 			class assetButtonRadarOperate {};
 			class assetButtonRadarRotate {};

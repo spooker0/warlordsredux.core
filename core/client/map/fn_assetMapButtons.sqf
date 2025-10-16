@@ -118,14 +118,6 @@ if (_hasCrew && _isNotFlying && !(_asset isKindOf "Man") && _ownsVehicle) then {
 };
 
 private _operateAccess = ([_asset, player, "driver"] call WL2_fnc_accessControl) # 0;
-if (_operateAccess && typeof _asset in ["O_T_Truck_03_device_ghex_F", "O_Truck_03_device_F"]) then {
-    private _dazzlerText = [_asset] call WL2_fnc_assetButtonDazzler;
-
-    [_dazzlerText, {
-        params ["_asset"];
-        [_asset] call WL2_fnc_dazzlerToggle;
-    }, true] call WL2_fnc_addTargetMapButton;
-};
 
 if (_operateAccess && typeof _asset in ["O_T_Truck_03_device_ghex_F", "O_Truck_03_device_F", "Land_MobileRadar_01_radar_F"]) then {
     private _jammerText = [_asset] call WL2_fnc_assetButtonJammer;

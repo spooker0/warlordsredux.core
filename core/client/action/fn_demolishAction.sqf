@@ -34,11 +34,20 @@ private _demolishActionId = player addAction [
             
             private _playerPosition = player modelToWorld [0, 0, 0];
             private _soundSource = createSoundSource ["WLDemolitionSound", _playerPosition, [], 0];
-            player switchMove "Acts_carFixingWheel";
+            player switchMove "Acts_TerminalOpen";
 
             private _demolishSuccess = false;
             private _startCheckingUnhold = false;
-            private _endTime = serverTime + WL_DEMOLITION_STEP_TIME;
+            private _demolitionStepTime = if (_isStronghold) then {
+                WL_DEMOLITION_STRONGHOLD_STEP_TIME
+            } else {
+                if (typeof _demolishableTarget == "RuggedTerminal_01_communications_hub_F") then {
+                    WL_DEMOLITION_FOB_STEP_TIME
+                } else {
+                    WL_DEMOLITION_STEP_TIME
+                }
+            };
+            private _endTime = serverTime + _demolitionStepTime;
             while { true } do {
                 // interrupts
                 if (!alive player) then {
@@ -66,12 +75,11 @@ private _demolishActionId = player addAction [
                 sleep 0.01;
             };
 
-            private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-            private _hitmarkerVolume = _settingsMap getOrDefault ["hitmarkerVolume", 0.5];
             if (_demolishSuccess) then {
                 [_demolishableTarget, 1] call WL2_fnc_demolishStep;
-                playSoundUI ["hitmarker", _hitmarkerVolume * 2];
             } else {
+                private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+                private _hitmarkerVolume = _settingsMap getOrDefault ["hitmarkerVolume", 0.5];
                 playSoundUI ["AddItemFailed", _hitmarkerVolume * 2];
             };
 

@@ -117,7 +117,7 @@ private _setupActionId = [
 	{},
 	[],
 	5,
-	6,
+	60,
 	false
 ] call BIS_fnc_holdActionAdd;
 
@@ -202,6 +202,6 @@ private _setupActionId = [
 	{},
 	[],
 	2,
-	6,
+	60,
 	false
 ] call BIS_fnc_holdActionAdd;
