@@ -33,6 +33,10 @@
 		uiNamespace setVariable ["WL2_mapTextCache", createHashMap];
 		uiNamespace setVariable ["WL2_mapSizeCache", createHashMap];
 
+		// player icon cache
+		uiNamespace setVariable ["WL2_playerIconTextCache", createHashMap];
+		uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
+
 		uiSleep 3;
 	};
 };
@@ -43,8 +47,7 @@
 	private _assetData = WL_ASSET_DATA;
 	missionNamespace setVariable ["WL2_mapData", _mapData];
 	while { !BIS_WL_missionEnd } do {
-		private _afkTimer = missionNamespace getVariable ["WL2_afkTimer", -1];
-		private _isAfk = serverTime > _afkTimer;
+		private _isAfk = player getVariable ["WL2_afk", false];
 		if (_isAfk) then {
 			_mapData = createHashMap;
 			missionNamespace setVariable ["WL2_mapData", _mapData];

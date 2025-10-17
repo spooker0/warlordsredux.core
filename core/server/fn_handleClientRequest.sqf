@@ -116,7 +116,8 @@ if (_action == "spot") exitWith {
 };
 
 if (_action == "demolished") exitWith {
-	private _reward = 20;
+	private _steps = _param1;
+	private _reward = 20 * _steps;
 	[_reward] call _addFunds;
 	[objNull, _reward, "Demolition", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };

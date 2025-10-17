@@ -51,11 +51,10 @@ switchCamera player;
     _unit setCaptive true;
     _unit setUnconscious true;
 
-    [_unit, false] remoteExec ["setPhysicsCollisionFlag", 0];
-
     private _unconsciousTime = _unit getVariable ["WL_unconsciousTime", 0];
-    player setVariable ["WL2_downedLiveTime", 25];
     if (_unconsciousTime > 0) exitWith {};
+    _unit setVariable ["WL2_downedLiveTime", 25];
+    _unit setVariable ["WL2_expirationTime", serverTime + 25, true];
 
     private _startTime = serverTime;
     private _downTime = 0;
@@ -65,7 +64,7 @@ switchCamera player;
             setPlayerRespawnTime 5;
         };
 
-        private _downTimeAllowed = player getVariable ["WL2_downedLiveTime", 25];
+        private _downTimeAllowed = _unit getVariable ["WL2_downedLiveTime", 25];
         if (_downTime >= _downTimeAllowed) then {
             forceRespawn _unit;
             break;
@@ -78,6 +77,5 @@ switchCamera player;
         sleep 0.1;
     };
 };
-
 [_unit, _source, _instigator] remoteExec ["WL2_fnc_handleEntityRemoval", 2];
 0.99;

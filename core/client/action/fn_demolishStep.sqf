@@ -8,7 +8,7 @@ _targetObject setVariable ["WL_lastHitter", player, 2];
 
 private _assetSide = [_targetObject] call WL2_fnc_getAssetSide;
 if (_assetSide != BIS_WL_playerSide) then {
-    [player, "demolished"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+    [player, "demolished", _steps] remoteExec ["WL2_fnc_handleClientRequest", 2];
 };
 
 if (_existingHealth <= 0) then {

@@ -51,8 +51,4 @@ if (BIS_WL_playerSide in (_sector getVariable ["BIS_WL_revealedBy", []]) || BIS_
 	_mrkrArea setMarkerColorLocal "ColorOrange";
 };
 
-if (_sector == WL_TARGET_FRIENDLY) then {
-	call WL2_fnc_refreshCurrentTargetData;
-};
-
 ["client", true] call WL2_fnc_updateSectorArrays;

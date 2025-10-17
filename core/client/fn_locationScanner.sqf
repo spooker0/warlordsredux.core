@@ -1,6 +1,11 @@
 #include "includes.inc"
 
 uiNamespace setVariable ["WL2_damagedDrawIcons", []];
+uiNamespace setVariable ["WL2_drawPlayerIcons", []];
+uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
+uiNamespace setVariable ["WL2_playerIconTextCache", createHashMap];
+uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
+
 0 spawn {
     while { !BIS_WL_missionEnd } do {
         sleep 0.5;
@@ -77,7 +82,7 @@ uiNamespace setVariable ["WL2_damagedDrawIcons", []];
             _demolishIcons pushBack [
                 "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missileAlt_ca.paa",
                 [1, 1, 0, 1],
-                _x,
+                [_x, 0.5],
                 1.4,
                 1.4,
                 0,
@@ -97,7 +102,7 @@ uiNamespace setVariable ["WL2_damagedDrawIcons", []];
         private _nearSaboteurs = allPlayers select {
             side group _x != BIS_WL_playerSide
         } select {
-            _x distance2D player < 50
+            _x distance2D player < 100
         };
         {
             private _sabotageTarget = _x getVariable ["WL2_sabotageTarget", [0, ""]];
@@ -105,7 +110,7 @@ uiNamespace setVariable ["WL2_damagedDrawIcons", []];
             _demolishIcons pushBack [
                 "a3\ui_f_oldman\data\igui\cfg\holdactions\destroy_ca.paa",
                 [1, 0, 0, 1],
-                _x,
+                [_x, 0.5],
                 1,
                 1,
                 0,
@@ -121,20 +126,175 @@ uiNamespace setVariable ["WL2_damagedDrawIcons", []];
         } forEach _nearSaboteurs;
 
         uiNamespace setVariable ["WL2_damagedDrawIcons", _demolishIcons];
+
+        private _playerIconTextCache = uiNamespace getVariable ["WL2_playerIconTextCache", createHashMap];
+        private _playerIconColorCache = uiNamespace getVariable ["WL2_playerIconColorCache", createHashMap];
+        private _viewDistance = (getObjectViewDistance # 0) min 1000;
+        private _detectableUnits = allUnits;
+        _detectableUnits pushBackUnique cursorTarget;
+        _detectableUnits pushBackUnique cursorObject;
+        private _playerIcons = [];
+        {
+            if (_x == player) then { continue; };
+            if ((typeof _x) in ["B_UAV_AI", "O_UAV_AI", "I_UAV_AI"]) then { continue; };
+            private _assetSide = [_x] call WL2_fnc_getAssetSide;
+
+            if (BIS_WL_playerSide != _assetSide) then {
+                private _isNotStronghold = isNull (_x getVariable ["WL_strongholdSector", objNull]);
+                if (_isNotStronghold) then { continue; };
+            };
+
+            private _isntCursorTarget = _x != cursorTarget && _x != cursorObject;
+            if (_x distance cameraOn > _viewDistance && _isntCursorTarget) then { continue; };
+
+            private _isInMySquad = ["isInMySquad", [getPlayerID _x]] call SQD_fnc_client;
+            if (!_isInMySquad && _x distance cameraOn > 100 && _isntCursorTarget) then { continue; };
+
+            if (!(_x isKindOf "Man") && !alive _x) then { continue; };
+
+            private _color = [_x, _playerIconColorCache] call WL2_fnc_iconColor;
+            
+            private _displayName = [_x, true, true, _playerIconTextCache] call WL2_fnc_iconText;
+            private _size = if (_isInMySquad) then { 0.04 } else { 0.03 };
+
+            private _boundingSize = ((boundingBoxReal _x) # 2) / 2;
+
+            if (lifeState _x == "INCAPACITATED") then {
+                _playerIcons pushBack [
+                    "a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa",
+                    _color,
+                    [_x, _boundingSize],
+                    1.2,
+                    1.2,
+                    0,
+                    _displayName,
+                    2,
+                    _size,
+                    "RobotoCondensedBold",
+                    "center",
+                    true,
+                    0,
+                    -0.05
+                ];
+            } else {
+                _playerIcons pushBack [
+                    "",
+                    _color,
+                    [_x, _boundingSize],
+                    0,
+                    0,
+                    0,
+                    _displayName,
+                    2,
+                    _size,
+                    "RobotoCondensedBold",
+                    "center"
+                ];
+            };
+        } forEach _detectableUnits;
+        uiNamespace setVariable ["WL2_playerIconColorCache", _playerIconColorCache];
+        uiNamespace setVariable ["WL2_playerIconTextCache", _playerIconTextCache];
+        uiNamespace setVariable ["WL2_drawPlayerIcons", _playerIcons];
+
+        private _sectorIcons = [];
+        {
+            private _target = _x;
+            if (isNull _target) then { continue; };
+
+            private _revealedBy = _target getVariable ["BIS_WL_revealedBy", []];
+            private _isRevealed = BIS_WL_playerSide in _revealedBy;
+            if (!_isRevealed && _x != WL_TARGET_FRIENDLY) then { continue; };
+
+            private _owner = _target getVariable ["BIS_WL_owner", independent];
+            private _color = if (_isRevealed) then {
+                BIS_WL_colorsArray # (BIS_WL_sidesArray find _owner);
+            } else {
+                BIS_WL_colorsArray # 3;
+            };
+            _color set [3, 0.5];
+
+            private _mapMarker = (_target getVariable ["BIS_WL_markers", []]) # 0;
+            private _mapMarkerType = markerType _mapMarker;
+            private _mapMarkerPath = getText (configFile >> "CfgMarkers" >> _mapMarkerType >> "icon");
+
+            private _sectorName = _target getVariable ["WL2_name", "Sector"];
+            private _markerPosition = _target modelToWorldVisual [0, 0, 5];
+
+            _sectorIcons pushBack [
+                _mapMarkerPath,
+                _color,
+                _markerPosition,
+                1,
+                1,
+                0,
+                _sectorName,
+                2,
+                0.03,
+                "RobotoCondensedBold",
+                "center"
+            ];
+
+            private _distance = cameraOn distance _target;
+            private _distanceText = if (_distance >= 1000) then {
+                format ["(%1 %2)", (_distance / 1000) toFixed 1, toUpper BIS_WL_localized_km]
+            } else {
+                ""
+            };
+            private _displayText = if (_owner == BIS_WL_playerSide) then {
+                format ["DEFEND %1", _distanceText]
+            } else {
+                format ["ATTACK %1", _distanceText]
+            };
+            private _sectorTextColor = if (_owner == BIS_WL_playerSide) then {
+                [0, 1, 0, 1]
+            } else {
+                [1, 0, 0, 1]
+            };
+
+            _sectorIcons pushBack [
+                "",
+                _sectorTextColor,
+                _markerPosition,
+                0,
+                0,
+                0,
+                _displayText,
+                2,
+                0.031,
+                "RobotoCondensedBold",
+                "center",
+                true,
+                0,
+                -0.035
+            ];
+        } forEach [WL_TARGET_FRIENDLY, WL_TARGET_ENEMY];
+        uiNamespace setVariable ["WL2_drawSectorHudIcons", _sectorIcons];
     };
 };
 
 addMissionEventHandler ["Draw3D", {
     private _drawIcons = uiNamespace getVariable ["WL2_damagedDrawIcons", []];
+    private _playerIcons = uiNamespace getVariable ["WL2_drawPlayerIcons", []];
     {
         private _icon = +_x;
-        private _target = _icon select 2;
-        if (!alive _target) then { continue; };
-        private _offset = if (_target isKindOf "Man") then { [0, 0, 2] } else { [0, 0, 0] };
+        private _targetInfo = _icon select 2;
+        private _target = _targetInfo # 0;
+        private _boundingSize = _targetInfo # 1;
+        private _offset = if (_target isKindOf "Man") then {
+            (_target selectionPosition "head") vectorAdd [0, 0, 0.5]
+        } else {
+            private _centerOfMass = getCenterOfMass _target;
+            _centerOfMass vectorAdd [0, 0, _boundingSize]
+        };
         private _position = _target modelToWorldVisual _offset;
         _icon set [2, _position];
         drawIcon3D _icon;
-    } forEach _drawIcons;
+    } forEach (_drawIcons + _playerIcons);
+
+    private _sectorIcons = uiNamespace getVariable ["WL2_drawSectorHudIcons", createHashMap];
+    {
+        drawIcon3D _x;
+    } forEach _sectorIcons;
 }];
 
 private _side = BIS_WL_playerSide;

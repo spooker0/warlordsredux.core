@@ -25,7 +25,6 @@
             ["client"] call WL2_fnc_updateSectorArrays;
 
             if (!isNull WL_TARGET_FRIENDLY && !_targetReset) then {
-                call WL2_fnc_refreshCurrentTargetData;
                 private _voteDisplay = uiNamespace getVariable ["RscWLVoteDisplay", objNull];
                 if (!isNull _voteDisplay) then {
                     private _indicator = _voteDisplay displayCtrl 7002;

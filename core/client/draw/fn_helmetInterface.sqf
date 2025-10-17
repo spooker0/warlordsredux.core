@@ -560,6 +560,12 @@ addMissionEventHandler ["Draw3D", {
     while { !BIS_WL_missionEnd && !WL_IsSpectator } do {
         sleep 1;
 
+		private _isAfk = player getVariable ["WL2_afk", false];
+        if (_isAfk) then {
+            WL_HelmetInterface = 0;
+            continue;
+        };
+
         private _override = player getVariable ["WL_hmdOverride", -1];
         if (_override > 0) then {
             WL_HelmetInterface = _override;

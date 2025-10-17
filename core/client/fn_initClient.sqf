@@ -165,8 +165,6 @@ WL_LoadingState = 10;
 	_x setMarkerAlphaLocal 0
 } forEach BIS_WL_sectorLinks;
 
-call WL2_fnc_refreshCurrentTargetData;
-call WL2_fnc_sceneDrawHandle;
 WL_LoadingState = 11;
 
 0 spawn WL2_fnc_repackMagazines;

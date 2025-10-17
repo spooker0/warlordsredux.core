@@ -1,11 +1,6 @@
 #include "includes.inc"
 params ["_projectile", "_unit"];
 
-_projectile addEventHandler ["HitPart", {
-	params ["_projectile", "_hitEntity", "_projectileOwner", "_pos", "_velocity", "_normal", "_components", "_radius" ,"_surfaceType", "_instigator"];
-    [_hitEntity, _instigator] remoteExec ["WL2_fnc_handleGpsDirect", 2];
-}];
-
 private _minimumSpeed = 150;
 private _overrideRange = _unit getVariable ["WL2_overrideRange", 0];
 if (_overrideRange > 0) then {

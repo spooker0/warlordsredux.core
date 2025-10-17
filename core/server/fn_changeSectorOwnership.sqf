@@ -43,15 +43,6 @@ _side deleteAt (_side find _owner);
 private _enemySide = _side # 0;
 if (isNull (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", _enemySide]) && !_isNeutralSector) then {
 	missionNamespace setVariable [format ["BIS_WL_resetTargetSelection_server_%1", _enemySide], true];
-	BIS_WL_resetTargetSelection_client = true;
-	{
-		(owner _x) publicVariableClient "BIS_WL_resetTargetSelection_client";
-	} forEach (allPlayers select {side group _x == _enemySide});
-	if !(isDedicated) then {
-		if (BIS_WL_playerSide != _enemySide) then {
-			BIS_WL_resetTargetSelection_client = false;
-		};
-	};
 };
 
 waitUntil {

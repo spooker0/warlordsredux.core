@@ -18,6 +18,12 @@ if (count _textFromCache == 2) exitWith {
 };
 if (count _textFromCache == 1) exitWith { _textFromCache # 0 };
 
+if (!isNull (_x getVariable ["WL_strongholdSector", objNull])) exitWith {
+	private _textForCache = "Stronghold";
+	_mapTextCache set [hashValue _asset, [_textForCache]];
+	_textForCache;
+};
+
 private _assetOwnerName = [_asset] call WL2_fnc_getAssetOwnerName;
 if (_asset isKindOf "Man") exitWith {
 	private _textForCache = if (isPlayer [_asset] && _showName) then {

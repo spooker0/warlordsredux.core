@@ -282,8 +282,6 @@ class CfgFunctions {
 			class initHud {};
 			class isScannerMunition {};
 			class mapIcons {};
-			class refreshCurrentTargetData {};
-			class sceneDrawHandle {};
 			class scoreboard {};
 			class setupUI {};
 			class smoothText {};
@@ -466,7 +464,6 @@ class CfgFunctions {
 			class generateScoreboard {};
 			class handleClientRequest {};
 			class handleEntityRemoval {};
-			class handleGpsDirect {};
 			class hideObjectOnAll {};
 			class incomePayoff {};
 			class initServer {};

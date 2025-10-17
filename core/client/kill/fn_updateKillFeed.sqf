@@ -21,6 +21,9 @@ if (_useNewKillfeed) then {
 	if (_displayText == "DAZZLER") then {
 		_times = (floor (_reward / 10)) max 1;
 	};
+	if (_displayText == "DEMOLITION") then {
+		_times = (floor (_reward / 20)) max 1;
+	};
 	private _texture = _display displayCtrl 5502;
 
 	for "_i" from 1 to _times do {

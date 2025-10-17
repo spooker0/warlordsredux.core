@@ -15,6 +15,20 @@ if (_damage < 1) exitWith {
 
 _unit setCaptive true;
 _unit setUnconscious true;
+[_unit] spawn {
+    params ["_unit"];
+    private _downedTime = serverTime;
+    private _unconsciousTime = _unit getVariable ["WL_unconsciousTime", 0];
+    if (_unconsciousTime > 0) exitWith {};
+    _unit setVariable ["WL2_expirationTime", serverTime + 90, true];
+
+    while { alive _unit && lifeState _unit == "INCAPACITATED" } do {
+        sleep 0.1;
+        if (serverTime - _downedTime > 90) then {
+            deleteVehicle _unit;
+            break;
+        };
+    };
+};
 [_unit, _source, _instigator] remoteExec ["WL2_fnc_handleEntityRemoval", 2];
-[_unit, false] remoteExec ["setPhysicsCollisionFlag", 0];
 0.99;

@@ -141,8 +141,9 @@ if (_rewardType == "RECON") then {
 };
 
 if (_rewardType == "DEMOLITION") then {
+	private _rewardAmount = (floor (_reward / 20)) max 1;
 	private _currentDemolitions = _rewardStack getOrDefault ["DEMOLITIONS", 0];
-	_rewardStack set ["DEMOLITIONS", _currentDemolitions + 1];
+	_rewardStack set ["DEMOLITIONS", _currentDemolitions + _rewardAmount];
 };
 
 missionNamespace setVariable ["WL2_rewardStack", _rewardStack];

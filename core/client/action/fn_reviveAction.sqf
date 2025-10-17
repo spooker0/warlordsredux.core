@@ -93,6 +93,9 @@ player addAction [
 	{
         params ["_target", "_caller", "_actionId", "_arguments"];
         player setVariable ["WL2_downedLiveTime", 90];
+        private _currentExpirationTime = player getVariable ["WL2_expirationTime", 0];
+        _currentExpirationTime = _currentExpirationTime + 65;
+        player setVariable ["WL2_expirationTime", _currentExpirationTime, true];
         player removeAction _actionId;
 	},
 	nil,

@@ -145,8 +145,7 @@ switch (_fastTravelMode) do {
 			_vehicle setVehiclePosition [getPosATL _vehicle, [], 0, "NONE"];
 		};
 
-		private _paradropNextUseVar = format ["WL_paradropNextUse_%1", getPlayerUID player];
-        _vehicle setVariable [_paradropNextUseVar, serverTime + 600];
+        _vehicle setVariable ["WL2_paradropNextUse", serverTime + WL_COOLDOWN_PARADROP, true];
 		[player, "fastTravelParadrop"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	};
 	case 4: {
