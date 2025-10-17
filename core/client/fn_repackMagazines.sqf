@@ -200,6 +200,6 @@ MAZ_fnc_repackLoadingBar = {
 MAZ_fnc_repackAnimation = {
 	while { !MAZ_magRepackDone && vehicle player == player } do {
 		player playMoveNow "AinvPknlMstpSnonWnonDnon_medic_1";
-		sleep 5;
+		uiSleep 5;
 	};
 };

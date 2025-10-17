@@ -6,5 +6,5 @@ while {alive _projectile} do {
     if (count _targets > 0) exitWith {
         triggerAmmo _projectile;
     };
-    sleep 0.05;
+    uiSleep 0.05;
 };

@@ -1,7 +1,7 @@
 #include "includes.inc"
 
 while { !BIS_WL_missionEnd } do {
-    sleep 10;
+    uiSleep 10;
 
     private _scoreboardData = missionNamespace getVariable ["WL2_scoreboardData", createHashMap];
     private _scoreboardResults = [];

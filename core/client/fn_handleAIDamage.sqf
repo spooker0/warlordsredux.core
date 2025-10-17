@@ -23,7 +23,7 @@ _unit setUnconscious true;
     _unit setVariable ["WL2_expirationTime", serverTime + 90, true];
 
     while { alive _unit && lifeState _unit == "INCAPACITATED" } do {
-        sleep 0.1;
+        uiSleep 0.1;
         if (serverTime - _downedTime > 90) then {
             deleteVehicle _unit;
             break;

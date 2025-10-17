@@ -19,7 +19,7 @@ private _catapultActionID = _asset addAction [
 
         [_asset] spawn {
             params ["_asset"];
-            sleep 5;
+            uiSleep 5;
 
             private _assetConfig = configFile >> "CfgVehicles" >> typeOf _asset;
             private _stallSpeed = getNumber(_assetConfig >> "stallSpeed");
@@ -42,7 +42,7 @@ private _catapultActionID = _asset addAction [
                 _timeDelta = serverTime - _timeStart;
                 _velocity = _velocityIncrease * _timeDelta;
                 _asset setVelocity [sin _direction * _velocity, cos _direction * _velocity, velocity _asset select 2];
-                sleep _accelerationStep;
+                uiSleep _accelerationStep;
             };
         };
 	},
@@ -95,7 +95,7 @@ private _rebaseAction = _asset addAction [
 
             titleCut ["", "BLACK OUT", 1];
             
-            sleep 1;
+            uiSleep 1;
             
             private _startWaitTime = serverTime;
             systemChat "Returning to base...";
@@ -104,7 +104,7 @@ private _rebaseAction = _asset addAction [
                 _asset engineOn false;
                 _asset setVectorDirAndUp [[0, 1, 0], [0, 0, 1]];
                 _asset setVelocity [0, 0, 0];
-                sleep 0.1;
+                uiSleep 0.1;
             };
 
             _asset setVehiclePosition [_spawnPos, [], 0, "CAN_COLLIDE"];

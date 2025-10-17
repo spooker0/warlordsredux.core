@@ -2,7 +2,7 @@
 params ["_asset"];
 
 waitUntil {
-    sleep 0.1;
+    uiSleep 0.1;
     cameraOn == _asset;
 };
 
@@ -101,7 +101,7 @@ private _ecmDraw = addMissionEventHandler ["Draw3D", {
     params ["_asset", "_jammerPods", "_ecmRange", "_ecmSpeed"];
 
     while { alive _asset && cameraOn == _asset } do {
-        sleep 0.1;
+        uiSleep 0.1;
         private _ecmMunitions = uiNamespace getVariable ["WL2_ECMMunitions", []];
 
         private _sensitivity = 0.2;
@@ -180,7 +180,7 @@ private _lastCharges = _charges;
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _apsVolume = _settingsMap getOrDefault ["apsVolume", 1];
 while { alive _asset && cameraOn == _asset } do {
-    sleep 0.25;
+    uiSleep 0.25;
 
     private _munitions = (8 allObjects 2) select { _x distance _asset < _ecmRange } select {
         private _munition = _x;

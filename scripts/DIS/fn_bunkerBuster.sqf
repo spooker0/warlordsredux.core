@@ -26,7 +26,7 @@ if (_inDestroyerArea) then {
 
 [_penetrator, [player, player]] remoteExec ["setShotParents", 2];
 
-sleep 5;
+uiSleep 5;
 
 _penetrator enableSimulation true;
 triggerAmmo _penetrator;

@@ -43,7 +43,7 @@ private _reviveActionId = player addAction [
                     _reviveSuccess = true;
                     break;
                 };
-                sleep 0.01;
+                uiSleep 0.01;
             };
 
             private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];

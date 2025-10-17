@@ -3,7 +3,7 @@ if (!hasInterface) exitWith {};
 
 while { !BIS_WL_missionEnd } do {
     waitUntil {
-        sleep 0.1;
+        uiSleep 0.1;
         !isNull findDisplay 160
     };
 
@@ -52,6 +52,6 @@ while { !BIS_WL_missionEnd } do {
             lbSort _selectBox;
         };
 
-        sleep 1;
+        uiSleep 1;
     };
 };

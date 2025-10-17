@@ -19,14 +19,14 @@ if (side group player == independent) exitWith {};
             [true] call SQD_fnc_menu;
         };
 
-        sleep 0.5;
+        uiSleep 0.5;
     };
 };
 
 0 spawn {
     private _squadManagerLastValue = [];
     while { !BIS_WL_missionEnd } do {
-        sleep 0.1;
+        uiSleep 0.1;
         private _dialog = findDisplay 5500;
         if (isNull _dialog) then{
             continue;

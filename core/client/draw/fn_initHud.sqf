@@ -35,7 +35,7 @@ private _getTeamColorRGB = {
 private _lastMoney = 0;
 
 while { !BIS_WL_missionEnd } do {
-	sleep 1;
+	uiSleep 0.5;
 
 	if (WL_IsSpectator) exitWith {
 		"Warlords" cutText ["", "PLAIN"];

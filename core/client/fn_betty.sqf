@@ -2,7 +2,7 @@
 private _vehicle = cameraOn;
 
 waitUntil {
-	sleep 0.1;
+	uiSleep 0.1;
 	_vehicle = cameraOn;
 	!(alive player) || _vehicle isKindOf "Air"
 };
@@ -79,5 +79,5 @@ while { _vehicle isKindOf "Air" && alive player && alive _vehicle && vehicle pla
 		_vehicle setVariable ["WL2_storedTargets", _newSensorTargets];
 	};
 
-	sleep 1;
+	uiSleep 1;
 };

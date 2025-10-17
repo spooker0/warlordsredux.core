@@ -43,10 +43,10 @@ if (_fastTravelMode in [1, 2]) then {
 	_markerText = _fastTravelConflict # 1;
 };
 
-sleep WL_TIMEOUT_SHORT;
+uiSleep WL_TIMEOUT_SHORT;
 
 waitUntil {
-	sleep WL_TIMEOUT_MIN;
+	uiSleep WL_TIMEOUT_MIN;
 	!isNull BIS_WL_targetSector || !visibleMap || !alive player || lifeState player == "INCAPACITATED"
 };
 
@@ -64,7 +64,7 @@ if (isNull BIS_WL_targetSector) exitWith {
 	deleteMarkerLocal _marker;
 	deleteMarkerLocal _markerText;
 
-	sleep 1;
+	uiSleep 1;
 	WL_MapBusy = WL_MapBusy - ["orderFastTravel"];
 };
 
@@ -82,5 +82,5 @@ if (BIS_WL_currentSelection in [
 	BIS_WL_currentSelection = _selectionBefore;
 };
 
-sleep 1;
+uiSleep 1;
 WL_MapBusy = WL_MapBusy - ["orderFastTravel"];

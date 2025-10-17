@@ -20,7 +20,7 @@ openMap false;
 
 "Fast_travel" call WL2_fnc_announcer;
 
-sleep 1;
+uiSleep 1;
 
 private _unitsToMove = (units player) select {
 	_x distance2D player <= 100 &&
@@ -51,5 +51,5 @@ private _unitsToMove = (units player) select {
 
 [player, "ftSupportPoints", _targetVehicle, count _unitsToMove] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
-sleep 1;
+uiSleep 1;
 titleCut ["", "BLACK IN", 1];

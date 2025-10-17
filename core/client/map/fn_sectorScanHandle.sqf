@@ -16,7 +16,7 @@ playSound "Beep_Target";
 private _sectorArea = _sector getVariable "objectAreaComplete";
 
 waitUntil {
-    sleep 1;
+    uiSleep 1;
 
     private _allDetected = [_side, _sectorArea] call WL2_fnc_detectUnits;
 

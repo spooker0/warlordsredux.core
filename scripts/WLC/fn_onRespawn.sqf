@@ -165,7 +165,7 @@ if (count _customizationLoadout > 0) then {
 _unit enableStamina false;
 [_unit] spawn {
     params ["_unit"];
-    sleep 3;
+    uiSleep 3;
     _unit enableStamina true;
 };
 

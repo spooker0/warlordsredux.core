@@ -8,9 +8,9 @@ private _range = getNumber (configfile >> "CfgAmmo" >> _projectileClass >> "indi
 private _proxRange = _range * 2.5;
 
 private _objectsNearby = [];
-sleep 0.5;
+uiSleep 0.5;
 while { alive _projectile } do {
-	sleep 0.1;
+	uiSleep 0.1;
 
 	_objectsNearby = _projectile nearEntities ["Air", _proxRange];
 	_objectsNearby = _objectsNearby select {

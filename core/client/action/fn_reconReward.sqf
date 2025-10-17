@@ -2,7 +2,7 @@
 params ["_reconnedObjects"];
 
 private _newTargets = _reconnedObjects select {
-    private _lastReconTime = _x getVariable ["WL_scannedByPlayer", 0];
+    private _lastReconTime = _x getVariable ["WL_scannedByPlayer", -300];
     alive _x && lifeState _x != "INCAPACITATED" && _lastReconTime < serverTime - 300
 };
 private _targetPoints = 0;

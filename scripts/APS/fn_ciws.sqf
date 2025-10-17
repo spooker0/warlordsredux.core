@@ -74,7 +74,7 @@ params ["_asset"];
             };
             _asset setVariable ["WL2_targetRealPosition", [], true];
         };
-        sleep 0.01;
+        uiSleep 0.01;
     };
 };
 
@@ -95,7 +95,7 @@ params ["_asset"];
 
             _gunner forceWeaponFire [currentWeapon _asset, "close"];
         };
-        sleep 0.01;
+        uiSleep 0.01;
     };
 };
 

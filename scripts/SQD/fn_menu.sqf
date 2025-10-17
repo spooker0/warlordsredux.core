@@ -25,7 +25,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         params ["_texture"];
         while { !isNull _texture } do {
             [_texture] call SQD_fnc_sendData;
-            sleep 5;
+            uiSleep 5;
         };
     };
 }];

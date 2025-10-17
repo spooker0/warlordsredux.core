@@ -2,7 +2,7 @@
 params ["_projectile"];
 
 waitUntil {
-    sleep 0.5;
+    uiSleep 0.5;
     !alive _projectile || (abs speed _projectile) < 0.1;
 };
 

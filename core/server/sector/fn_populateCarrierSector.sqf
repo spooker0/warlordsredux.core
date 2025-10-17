@@ -51,7 +51,7 @@ private _spawned = 0;
             _infantryUnits pushBack _infantry;
         };
 
-        sleep 0.001;
+        uiSleep 0.001;
     };
 
     _infantryGroup setBehaviour "COMBAT";

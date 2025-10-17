@@ -6,7 +6,7 @@ private _interceptChance = 0;
 _projectile setVariable ["WL2_isShell", true];
 
 while { alive _projectile } do {
-    sleep 0.1;
+    uiSleep 0.1;
     private _projectilePosATL = getPosATL _projectile;
     if (_projectilePosATL # 2 < 50) then {
         continue;

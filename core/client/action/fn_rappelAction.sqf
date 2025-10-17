@@ -9,7 +9,7 @@ player addAction [
 			player setVariable ["WL2_rappelling", true];
 			playSoundUI ["a3\sounds_f\air\sfx\sl_4hooksunlock.wss"];
 
-			sleep 1;
+			uiSleep 1;
 
 			player switchMove "LadderRifleStatic";
 			player allowDamage false;
@@ -42,7 +42,7 @@ player addAction [
 			private _startTime = serverTime;
 
 			while { alive player && _interval < _rappelTime } do {
-				sleep 0.0001;
+				uiSleep 0.0001;
 				player setVelocityTransformation [
 					_startPos,
 					_endPos,
@@ -70,7 +70,7 @@ player addAction [
 			private _finalPosition = _rope modelToWorld _finalRelativePosition;
 			player setVehiclePosition [_finalPosition, [], 0, "CAN_COLLIDE"];
 
-            sleep 1;
+            uiSleep 1;
 			player allowDamage true;
 			player setVariable ["WL2_rappelling", false];
 		};

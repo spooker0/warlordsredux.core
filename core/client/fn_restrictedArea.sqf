@@ -2,7 +2,7 @@
 private _endEffect = {
     "Restrict" cutText ["", "PLAIN"];
     player setVariable ["WL_zoneRestrictKillTime", -1];
-    sleep 2;
+    uiSleep 2;
 };
 
 private _side = BIS_WL_playerSide;
@@ -78,5 +78,5 @@ while { !BIS_WL_missionEnd } do {
         call _endEffect;
     };
 
-    sleep 0.3;
+    uiSleep 0.3;
 };

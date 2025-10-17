@@ -112,7 +112,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         params ["_texture"];
         while { !isNull _texture } do {
             [_texture] call WL2_fnc_sendVehicleData;
-            sleep 0.5;
+            uiSleep 0.5;
         };
 
         private _override = uiNamespace getVariable ["WL2_modOverrideUid", ""];

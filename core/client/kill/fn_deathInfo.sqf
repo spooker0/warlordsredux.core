@@ -215,13 +215,13 @@ _texture ctrlAddEventHandler ["PageLoaded", {
             private _script = format ["updateRespawnTimer(""%1"");", _respawnTimer toFixed 1];
             _texture ctrlWebBrowserAction ["ExecJS", _script];
 
-            sleep 0.1;
+            uiSleep 0.1;
         };
     };
 }];
 
 waitUntil {
-    sleep 0.1;
+    uiSleep 0.1;
     !alive player
 };
 

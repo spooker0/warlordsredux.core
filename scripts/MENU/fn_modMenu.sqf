@@ -123,7 +123,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
 
     [_texture] spawn {
         _this call MENU_fnc_sendModData;
-        sleep 1;
+        uiSleep 1;
         _this call MENU_fnc_sendModData;
     };
 
@@ -135,7 +135,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         params ["_texture"];
         while { !isNull _texture } do {
             [_texture] call MENU_fnc_sendModData;
-            sleep 5;
+            uiSleep 5;
         };
     };
 }];

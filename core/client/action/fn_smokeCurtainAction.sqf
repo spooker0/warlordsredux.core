@@ -16,7 +16,7 @@ private _actionId = _asset addAction [
                 private _smokeGrenade = createVehicle ["SmokeShell", _asset modelToWorld [0, -7, 1], [], 0, "FLY"];
                 [_smokeGrenade] remoteExec ["WL2_fnc_smokeCurtainParticles", 0, true];
                 _smokeGrenades pushBack _smokeGrenade;
-                sleep 1;
+                uiSleep 1;
                 _grenadesLeft = _grenadesLeft - 1;
             };
 

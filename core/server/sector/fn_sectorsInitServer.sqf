@@ -164,7 +164,7 @@ private _slowestCapture = 50;
 
 #if WL_OVERRIDE_BASES
 0 spawn {
-	sleep 3;
+	uiSleep 3;
 	private _westSectors = BIS_WL_allSectors select {
 		_x getVariable ["WL2_name", ""] in ["Poliakko", "Alikampos", "Lakka"];
 	};
@@ -214,7 +214,7 @@ private _slowestCapture = 50;
 
 			private _asset = [_realClass, _orderedClass, _pos, _direction, false] call WL2_fnc_createVehicleCorrectly;
 			waitUntil {
-				sleep 0.1;
+				uiSleep 0.1;
 				!(isNull _asset)
 			};
 			private _assetCrewGroup = createVehicleCrew _asset;
@@ -244,7 +244,7 @@ private _slowestCapture = 50;
 						_asset doFire (_targetQueue # 0);
 
 					};
-					sleep 5;
+					uiSleep 5;
 				};
 			};
 		} forEach (_airDefenseToSpawn # _forEachIndex);

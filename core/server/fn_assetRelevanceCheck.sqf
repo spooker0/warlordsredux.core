@@ -20,7 +20,7 @@ while { count _assets > 0 } do {
 		} forEach _assets;
 	};
 
-	sleep 30;
+	uiSleep 30;
 
 	_assets = _assets select {
 		alive _x && _x getVariable ["BIS_WL_ownerAsset", "123"] == "123"

@@ -64,7 +64,7 @@ _indicatorText ctrlSetText _text;
 uiNamespace setVariable ["WL_APS_showScreenExpire", time + 7];
 
 waitUntil {
-	sleep 0.5;
+	uiSleep 0.5;
 	time > uiNamespace getVariable ["WL_APS_showScreenExpire", 0]
 };
 

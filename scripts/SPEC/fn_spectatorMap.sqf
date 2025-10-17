@@ -32,7 +32,7 @@ while { isNull _mapGroup } do {
     _spectatorDisplay = findDisplay SPEC_DISPLAY;
     _spectatorDisplayMap = _spectatorDisplay displayCtrl SPEC_MAP_CONTROL;
     _mapGroup = ctrlParentControlsGroup _spectatorDisplayMap;
-    sleep 0.1;
+    uiSleep 0.1;
 };
 
 _mapGroup ctrlShow false;
@@ -195,5 +195,5 @@ while { WL_IsSpectator } do {
         _instructionsDisplay ctrlShow false;
     };
 
-    sleep 0.001;
+    uiSleep 0.001;
 };

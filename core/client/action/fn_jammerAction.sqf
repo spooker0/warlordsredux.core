@@ -22,6 +22,6 @@ private _actionID = _asset addAction [
 	params ["_asset", "_actionID"];
 	while { alive _asset } do {
 		[_asset, _actionID] call WL2_fnc_jammerUpdate;
-		sleep 1;
+		uiSleep 1;
 	};
 };

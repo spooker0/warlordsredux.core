@@ -45,9 +45,9 @@ private _actionId = _asset addAction [
 	while { alive _asset } do {
         [_asset, _actionId, _awacs, _iteration] call WL2_fnc_scanner;
 		if (_awacs) then {
-			sleep 0.5;
+			uiSleep 0.5;
 		} else {
-			sleep 2;
+			uiSleep 2;
 		};
 		_iteration = _iteration + 1;
 	};

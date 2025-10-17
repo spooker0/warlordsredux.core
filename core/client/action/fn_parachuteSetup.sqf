@@ -11,7 +11,7 @@ private _parachuteActionId = _unit addAction [
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _parachuteAutoDeployHeight = _settingsMap getOrDefault ["parachuteAutoDeployHeight", 100];
 waitUntil {
-    sleep 0.01;
+    uiSleep 0.01;
     (getPosATL _unit # 2) < _parachuteAutoDeployHeight ||
     (getPosASL _unit # 2) < _parachuteAutoDeployHeight ||
     isTouchingGround (vehicle _unit) ||

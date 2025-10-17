@@ -15,14 +15,14 @@ addMissionEventHandler ["Draw3D", {
 0 spawn {
     while { !BIS_WL_missionEnd } do {
         if !(WL_SpectrumInterface) then {
-            sleep 1;
+            uiSleep 1;
             continue;
         };
 
         private _uavsInRange = player getVariable ["WL_SpectrumUavs", []];
         if (count _uavsInRange == 0) then {
             missionNamespace setVariable ["#EM_Values", []];
-            sleep 1;
+            uiSleep 1;
             continue;
         };
 
@@ -32,7 +32,7 @@ addMissionEventHandler ["Draw3D", {
         private _closestUav = _sortedUavs # 0;
         private _distance = _closestUav getVariable ["WL_spectrumViewConeDistance", 1];
         if (_distance > 1) then {
-            sleep 1;
+            uiSleep 1;
             continue;
         };
 
@@ -42,7 +42,7 @@ addMissionEventHandler ["Draw3D", {
 
         playSoundUI ["a3\ui_f\data\sound\readout\readouthideclick1.wss", 2, 1, true];
         private _frequency = linearConversion [0, 0.5, _distance, WL_JAMMER_SPECTRUM_DIFFICULTY, 1, true];
-        sleep _frequency;
+        uiSleep _frequency;
     };
 };
 
@@ -83,7 +83,7 @@ addMissionEventHandler ["Draw3D", {
     private _indicator = _display displayCtrl 17001;
 
     while { !BIS_WL_missionEnd } do {
-        sleep 0.2;
+        uiSleep 0.2;
 
         WL_SpectrumInterface = currentWeapon player == "hgun_esd_01_F" &&
             cameraOn == player &&

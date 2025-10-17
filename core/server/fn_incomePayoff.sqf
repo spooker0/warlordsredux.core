@@ -1,6 +1,6 @@
 #include "includes.inc"
 while { !BIS_WL_missionEnd } do {
-	sleep 60;
+	uiSleep 60;
 
 	private _notBlocked = allPlayers select {
 		!(_x getVariable ["WL2_afk", false])

@@ -34,7 +34,7 @@ _lightPoint attachTo [_projectile, [0, 0, 0]];
 
 private _startTime = serverTime;
 waitUntil {
-    sleep 0.1;
+    uiSleep 0.1;
     _lightPoint distance _projectile > 500 || serverTime - _startTime > 3 || speed _projectile < 0.1;
 };
 deleteVehicle _lightPoint;

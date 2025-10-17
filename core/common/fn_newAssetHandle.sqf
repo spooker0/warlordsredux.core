@@ -229,7 +229,7 @@ if (_asset isKindOf "Man") then {
 						};
 						_radarIter = (_radarIter + 1) % 4;
 					};
-					sleep 2.4;
+					uiSleep 2.4;
 				};
 			};
 		};
@@ -238,7 +238,7 @@ if (_asset isKindOf "Man") then {
 		case "B_UAV_06_F";
 		case "O_UAV_06_F";
 		case "I_UAV_06_F": {
-			waitUntil {sleep 0.1; !(isNull group _asset)};
+			waitUntil {uiSleep 0.1; !(isNull group _asset)};
 			_asset spawn {
 				params ["_asset"];
 				[
@@ -282,7 +282,7 @@ if (_asset isKindOf "Man") then {
 		};
 
 		case "C_IDAP_UAV_06_antimine_F": {
-			waitUntil {sleep 0.1; !(isNull group _asset)};
+			waitUntil {uiSleep 0.1; !(isNull group _asset)};
 		};
 	};
 
@@ -421,7 +421,7 @@ if (_asset isKindOf "Man") then {
 					[_asset, _radarValue] remoteExec ["setVehicleRadar", _asset];
 				};
 
-				sleep 10;
+				uiSleep 10;
 			};
 		};
 	};
@@ -453,7 +453,7 @@ if (_asset isKindOf "Man") then {
 			while { alive _asset } do {
 				private _targetAbove = _asset modelToWorld [0, 500, 800];
 				_asset lockCameraTo [_targetAbove, [0], false];
-				sleep 2;
+				uiSleep 2;
 			};
 		};
 	};
@@ -483,7 +483,7 @@ if (_asset isKindOf "Man") then {
 				private _distance = _vehicle distance _unit;
 
 				waitUntil {
-					sleep 1;
+					uiSleep 1;
 					_height = (getPos _unit) # 2;
 					_distance = _vehicle distance _unit;
 					_height < 5 || _distance > 10 || !alive _unit || !alive _vehicle;

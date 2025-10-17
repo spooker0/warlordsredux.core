@@ -42,9 +42,9 @@ private _getRunningScripts = {
     };
 };
 private _runningScripts1 = call _getRunningScripts;
-sleep 1;
+uiSleep 1;
 private _runningScripts2 = call _getRunningScripts;
-sleep 1;
+uiSleep 1;
 private _runningScripts3 = call _getRunningScripts;
 _runningScripts2 = _runningScripts2 select {
     !(_x in _runningScripts1)

@@ -36,7 +36,7 @@ diag_log "======================================================================
     diag_log _x;
 } forEach _message;
 
-sleep 10;
+uiSleep 10;
 
 {
     _x ctrlSetText "";

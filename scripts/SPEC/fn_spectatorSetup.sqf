@@ -88,5 +88,5 @@ while { WL_IsSpectator } do {
     "BIS_WL_targetFriendly" setMarkerPosLocal getPosASL WL_TARGET_FRIENDLY;
     "BIS_WL_targetFriendly" setMarkerAlphaLocal 1;
 
-    sleep 5;
+    uiSleep 5;
 };

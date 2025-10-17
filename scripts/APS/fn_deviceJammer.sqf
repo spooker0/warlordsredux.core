@@ -4,16 +4,16 @@ params ["_asset", "_turret"];
 private _assetSide = [_asset] call WL2_fnc_getAssetSide;
 
 while { alive _asset } do {
-    sleep 0.2;
+    uiSleep 0.2;
 
     if (!local _asset) then {
-        sleep 3;
+        uiSleep 3;
         continue;
     };
 
     private _laserTarget = _asset laserTarget _turret;
     if (isNull _laserTarget) then {
-        sleep 1;
+        uiSleep 1;
         continue;
     };
 

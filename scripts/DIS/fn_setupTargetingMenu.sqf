@@ -137,7 +137,7 @@ private _makeGPSBombTextArray = {
 };
 
 while { !BIS_WL_missionEnd } do {
-	sleep 0.05;
+	uiSleep 0.05;
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 
 	private _currentModeData = call _getCurrentMode;

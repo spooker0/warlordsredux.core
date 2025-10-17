@@ -17,10 +17,10 @@ private _selectionBefore = BIS_WL_currentSelection;
 BIS_WL_currentSelection = WL_ID_SELECTION_ORDERING_AIRCRAFT;
 WL_orderingClass = _orderedClass;
 WL_MapBusy pushBack "orderAircraft";
-sleep 0.25;
+uiSleep 0.25;
 
 waitUntil {
-	sleep 0.05;
+	uiSleep 0.05;
 	!isNull BIS_WL_targetSector || !visibleMap
 };
 
@@ -33,7 +33,7 @@ if (isNull BIS_WL_targetSector) exitWith {
 	[toUpper localize "STR_A3_WL_deploy_canceled"] spawn WL2_fnc_smoothText;
 	player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 
-	sleep 1;
+	uiSleep 1;
 	WL_MapBusy = WL_MapBusy - ["orderAircraft"];
 };
 
@@ -44,5 +44,5 @@ player setPosATL (getPosATL player);
 
 openMap [false, false];
 
-sleep 1;
+uiSleep 1;
 WL_MapBusy = WL_MapBusy - ["orderAircraft"];

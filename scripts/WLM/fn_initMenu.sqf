@@ -433,7 +433,7 @@ _customizationSelectControl ctrlAddEventHandler ["LBSelChanged", {
             };
         };
 
-        sleep 1;
+        uiSleep 1;
     };
 };
 
@@ -478,7 +478,7 @@ _asset spawn {
             _rearmButtonControl ctrlEnable false;
         };
 
-        sleep 1;
+        uiSleep 1;
     };
 };
 
@@ -510,6 +510,6 @@ _asset spawn {
             _applyButtonControl ctrlSetText (localize "STR_WLM_APPLY");
         };
 
-		sleep 1;
+		uiSleep 1;
 	};
 };

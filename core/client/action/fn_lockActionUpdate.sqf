@@ -2,7 +2,7 @@
 if (isDedicated) exitWith {};
 
 while { !BIS_WL_missionEnd } do {
-    sleep 1;
+    uiSleep 1;
 
     if (!isActionMenuVisible) then {
         continue;

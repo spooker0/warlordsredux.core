@@ -79,9 +79,9 @@ while { alive _projectile } do {
         _projectile setMissileTarget [_laser, true];
     };
 
-    sleep 0.001;
+    uiSleep 0.001;
 };
 
-sleep 3;
+uiSleep 3;
 deleteVehicle _laser;
 deleteVehicle _projectile;

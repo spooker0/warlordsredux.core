@@ -73,7 +73,7 @@ private _slingActionId = _asset addAction [
         };
 
         _asset setUserActionText [_slingActionId, _actionText, format ["<img size='3' image='%1'/>", _actionIcon]];
-        sleep 1;
+        uiSleep 1;
     };
 };
 

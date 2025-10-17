@@ -80,7 +80,7 @@ private _turretOverridesForVehicle = WL_ASSET(_orderedClass, "turretOverrides", 
 		[_asset] spawn {
             params ["_asset"];
             _asset animateSource ["HideTurret", 1, true];
-            sleep 0.5;
+            uiSleep 0.5;
             _asset animateSource ["HideTurret", 1, true];
         };
 	};
@@ -102,7 +102,7 @@ WL_DeploymentEnd = false;
     params ["_asset", "_offset", "_originalPosition", "_range", "_ignoreSector"];
 
     waitUntil {
-        sleep 0.001;
+        uiSleep 0.001;
         inputAction "BuldSelect" == 0 && inputAction "navigateMenu" == 0;
     };
 
@@ -134,7 +134,7 @@ WL_DeploymentEnd = false;
 
         if (inputAction "lockTarget" > 0) then {
             waitUntil {
-                sleep 0.001;
+                uiSleep 0.001;
                 inputAction "lockTarget" == 0;
             };
             detach _asset;
@@ -177,14 +177,14 @@ WL_DeploymentEnd = false;
             };
         };
 
-        sleep 0.001;
+        uiSleep 0.001;
     };
 
     WL_DeploymentEnd = true;
 };
 
 waitUntil {
-    sleep 0.1;
+    uiSleep 0.1;
     WL_DeploymentEnd;
 };
 

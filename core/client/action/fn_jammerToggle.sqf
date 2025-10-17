@@ -20,7 +20,7 @@ if (_asset getVariable ["WL_ewNetActive", false]) then {
         private _startTime = serverTime;
 
         waitUntil {
-            sleep 1;
+            uiSleep 1;
             private _timePassed = serverTime - _startTime;
             private _spinSpeed = _timePassed / 20;
             _timePassed > 20;

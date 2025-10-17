@@ -161,7 +161,7 @@ if (side group player == independent) exitWith {};
 
         SQD_SOUND_CHANGES = [];
 
-        sleep 0.1;
+        uiSleep 0.1;
     };
 };
 
@@ -176,5 +176,5 @@ while { !BIS_WL_missionEnd } do {
         2 enableChannel [false, false];
     };
 
-    sleep 1;
+    uiSleep 1;
 };

@@ -5,7 +5,7 @@ private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashM
 
 while { !BIS_WL_missionEnd } do {
     if (count WL2_announcerQueue == 0) then {
-        sleep 2;
+        uiSleep 2;
         continue;
     };
 
@@ -19,5 +19,5 @@ while { !BIS_WL_missionEnd } do {
     playSoundUI [_message, _announcerVolume];
     WL2_announcerQueue deleteAt 0;
 
-    sleep (_length + 0.5);
+    uiSleep (_length + 0.5);
 };

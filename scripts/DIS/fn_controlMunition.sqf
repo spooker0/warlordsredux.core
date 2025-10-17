@@ -3,7 +3,7 @@ params ["_projectile", "_flightMode"];
 
 if (inputAction "defaultAction" > 0) then {
     waitUntil {
-        sleep 0.001;
+        uiSleep 0.001;
         inputAction "defaultAction" == 0
     };
 };
@@ -198,10 +198,10 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
         round _altitude
     ];
 
-    sleep 0.001;
+    uiSleep 0.001;
 };
 
-sleep 1;
+uiSleep 1;
 deleteVehicle _projectile;
 "missileCamera" cutText ["", "PLAIN"];
 ["TV"] call WL2_fnc_showHint;

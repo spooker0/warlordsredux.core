@@ -11,7 +11,7 @@ if (_missileUpdateInitialized) exitWith {
 private _projectileNotify = [remoteExecutedOwner, clientOwner];
 while { alive _projectile } do {
     if (_projectile getVariable ["WL2_missileStateOverride", ""] != "") then {
-        sleep 0.1;
+        uiSleep 0.1;
         continue;
     };
 
@@ -30,5 +30,5 @@ while { alive _projectile } do {
         _projectile setVariable ["APS_missileState", _currentState, _projectileNotify];
     };
 
-    sleep 0.001;
+    uiSleep 0.001;
 };

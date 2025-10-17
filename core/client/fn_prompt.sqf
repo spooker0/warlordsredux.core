@@ -32,7 +32,7 @@ _confirmButtonControl ctrlAddEventHandler ["ButtonClick", {
 }];
 
 waitUntil {
-    sleep 0.1;
+    uiSleep 0.1;
     isNull _confirmDialog;
 };
 

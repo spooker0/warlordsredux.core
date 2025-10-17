@@ -40,5 +40,5 @@ while { !BIS_WL_missionEnd } do {
 		};
 	} forEach _simpleObjects;
 
-	sleep WL_COOLDOWN_GC;
+	uiSleep WL_COOLDOWN_GC;
 };

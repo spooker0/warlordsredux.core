@@ -46,7 +46,7 @@ while {count _knots > 0} do {
 			};
 		} forEach (_x getVariable ["WL2_connectedSectors", []]);
 	} forEach _knotsCurrent;
-	sleep 0.0001;
+	uiSleep 0.0001;
 };
 
 {

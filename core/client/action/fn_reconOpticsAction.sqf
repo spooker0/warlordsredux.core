@@ -11,7 +11,7 @@ if (_playerUID == getPlayerUID player) then {
 
 while { alive _asset } do {
     if (cameraOn != _asset) then {
-        sleep 5;
+        uiSleep 5;
         continue;
     };
 
@@ -38,7 +38,7 @@ while { alive _asset } do {
         ];
 
         if (count _targetIntersections == 0) then {
-            sleep 1;
+            uiSleep 1;
             continue;
         };
 
@@ -53,8 +53,8 @@ while { alive _asset } do {
             playSoundUI ["a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", 1, 0.5, true];
         };
 
-        sleep 2;
+        uiSleep 2;
     };
 
-    sleep 0.001;
+    uiSleep 0.001;
 };

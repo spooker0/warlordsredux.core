@@ -9,7 +9,7 @@ params ["_displayNumber"];
 disableSerialization;
 
 waitUntil {
-	sleep 1;
+	uiSleep 1;
 	!(isNull (findDisplay _displayNumber))
 };
 

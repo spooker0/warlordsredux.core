@@ -1,6 +1,6 @@
 #include "includes.inc"
 while { !BIS_WL_missionEnd } do {
-    sleep 5;
+    uiSleep 5;
     private _laserTargets = entities "LaserTarget";
 
     private _playerOwnerIds = createHashMap;

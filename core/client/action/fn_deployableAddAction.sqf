@@ -98,6 +98,6 @@ private _deployActionId = _asset addAction [
         };
 
         _asset setUserActionText [_deployActionId, _actionText, format ["<img size='3' image='%1'/>", _actionIcon]];
-        sleep 1;
+        uiSleep 1;
     };
 };

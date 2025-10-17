@@ -20,7 +20,7 @@ if (!isRemoteExecutedJIP && side group player != _side) then {
 		while { alive _asset && alive player && serverTime < _endTime } do {
 			if !(cameraOn isKindOf "Air") then {
 				_warningTextDisplay ctrlSetText "";
-				sleep 2;
+				uiSleep 2;
 				continue;
 			};
 
@@ -37,7 +37,7 @@ if (!isRemoteExecutedJIP && side group player != _side) then {
 				_warningText,
 				round _timeRemaining
 			];
-			sleep 0.01;
+			uiSleep 0.01;
 		};
 
 		"SamWarning" cutText ["", "PLAIN"];
@@ -58,7 +58,7 @@ private _waitActionId = _asset addAction [
 	false
 ];
 
-sleep 120;
+uiSleep 120;
 _asset removeAction _waitActionId;
 
 _asset setVariable ["DIS_advancedSamRange", 48000];

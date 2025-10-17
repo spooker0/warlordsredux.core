@@ -21,7 +21,7 @@ _mrls addEventHandler ["Fired", {
                 [_camera, _projectile, _unit] spawn {
                     params ["_camera", "_projectile", "_unit"];
                     while { alive _projectile } do {
-                        sleep 1;
+                        uiSleep 1;
                     };
 
                     camDestroy _camera;
@@ -105,7 +105,7 @@ _controller addAction [
                 alive player &&
                 lifeState player != "INCAPACITATED"
             } do {
-                sleep 0.1;
+                uiSleep 0.1;
             };
 
             uiNamespace setVariable ["WL2_usingVLS", false];

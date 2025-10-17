@@ -180,7 +180,7 @@ if (_action == "scan") exitWith {
 			_uav distance2D _sector < 1000 &&
 			(_uav modelToWorld [0, 0, 0]) # 2 > 500
 		} do {
-			sleep 1;
+			uiSleep 1;
 		};
 		if (!isNull _uav) then {
 			deleteVehicle _uav;

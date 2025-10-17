@@ -41,5 +41,5 @@ while { alive _projectile } do {
     _projectile setVectorDirAndUp _targetVectorDirAndUp;
     _projectile setVelocityModelSpace [0, _terminalSpeed, 0];
 
-    sleep 0.001;
+    uiSleep 0.001;
 };

@@ -71,5 +71,5 @@ if (_class isKindOf "Man") then {
 	};
 };
 
-sleep 0.1;
+uiSleep 0.1;
 showCommandingMenu "";

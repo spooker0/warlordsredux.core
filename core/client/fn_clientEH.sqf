@@ -10,7 +10,7 @@ addMissionEventHandler ["HandleChatMessage", {
 }];
 
 0 spawn {
-	waituntil {sleep 0.1; !isnull (findDisplay 46)};
+	waituntil {uiSleep 0.1; !isnull (findDisplay 46)};
 	private _display = findDisplay 46;
 	_display displayAddEventHandler ["KeyUp", {
 		_key = _this # 1;
@@ -67,7 +67,7 @@ addMissionEventHandler ["HandleChatMessage", {
 			WL_GEAR_BUY_MENU = false;
 			WL_CONTROL_MAP ctrlEnable true;
 		};
-		sleep 1;
+		uiSleep 1;
 	};
 };
 

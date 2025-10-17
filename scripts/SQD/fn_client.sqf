@@ -100,7 +100,7 @@ switch (_action) do {
         systemChat "You have been promoted to squad leader.";
 
         private _sound = playSoundUI ["a3\music_f_tank\maintheme_f_tank.ogg", 1, 1, false, 1.7];
-        sleep 2.8;
+        uiSleep 2.8;
         stopSound _sound;
     };
     case "kick": {
@@ -152,7 +152,7 @@ switch (_action) do {
         titleCut ["", "BLACK OUT", 1];
         openMap [false, false];
 
-        sleep 1;
+        uiSleep 1;
 
         private _tagAlong = (units player) select {
             (_x distance2D player <= 100) &&
@@ -172,7 +172,7 @@ switch (_action) do {
             };
         } forEach _tagAlong;
 
-        sleep 1;
+        uiSleep 1;
 
         titleCut ["", "BLACK IN", 1];
     };
@@ -187,7 +187,7 @@ switch (_action) do {
         titleCut ["", "BLACK OUT", 1];
         openMap [false, false];
 
-        sleep 1;
+        uiSleep 1;
 
         private _tagAlong = (units player) select {
             (_x distance2D player <= 100) &&
@@ -207,7 +207,7 @@ switch (_action) do {
             };
         } forEach _tagAlong;
 
-        sleep 1;
+        uiSleep 1;
 
         titleCut ["", "BLACK IN", 1];
     };

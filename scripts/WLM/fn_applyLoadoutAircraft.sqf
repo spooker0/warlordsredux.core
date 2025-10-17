@@ -70,7 +70,7 @@ _asset setVariable ["WLM_assetAttachments", _attachments, true];
         private _successSound = selectRandom ['FD_Target_PopDown_Large_F','FD_Target_PopDown_Small_F','FD_Target_PopUp_Small_F'];
         private _soundPath = getArray (configfile >> "CfgSounds" >> _successSound >> "sound");
         playSound3D [_soundPath # 0, _asset, false, getPosASL _asset, random [1.8, 2.0, 2.2], random [1.8, 2.0, 2.2], 50];
-        sleep 0.1;
+        uiSleep 0.1;
     } forEach _attachments;
 };
 

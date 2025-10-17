@@ -14,7 +14,7 @@ _smoke2 setParticleParams [["\A3\data_f\ParticleEffects\Universal\Universal", 16
 _smoke2 setParticleRandom [2, [0.3, 0.3, 0.3], [1.5, 1.5, 1], 20, 0.2, [0, 0, 0, 0.1], 0, 0, 360];
 _smoke2 setDropInterval 0.3;
 
-sleep 45;
+uiSleep 45;
 
 _smoke setDropInterval 0;
 _smoke2 setDropInterval 0;

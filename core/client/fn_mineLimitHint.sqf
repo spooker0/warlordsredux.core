@@ -32,5 +32,5 @@ while {!BIS_WL_missionEnd} do {
         _mineIndicator ctrlSetText "";
         _mineIndicatorBackground ctrlSetBackgroundColor [0, 0, 0, 0];
     };
-    sleep WL_TIMEOUT_STANDARD;
+    uiSleep WL_TIMEOUT_STANDARD;
 };

@@ -37,6 +37,6 @@ private _ping = addMissionEventHandler ["draw3D", {
     ];
 }];
 
-sleep 9;
+uiSleep 9;
 
 removeMissionEventHandler ["draw3D", _ping];

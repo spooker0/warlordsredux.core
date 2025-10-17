@@ -32,7 +32,7 @@ switch (_className) do {
             params ["_asset"];
             private _assetReady = false;
             waitUntil {
-                sleep 1;
+                uiSleep 1;
                 _assetReady = _asset getVariable ["WL_spawnedAsset", false];
                 _assetReady || !alive _asset;
             };
@@ -184,10 +184,10 @@ switch (_className) do {
                 alive _collaborator && lifeState _collaborator != "INCAPACITATED" &&
                 alive player && lifeState player != "INCAPACITATED"
             } do {
-                sleep 1;
+                uiSleep 1;
             };
 
-            sleep 5;
+            uiSleep 5;
             player remoteControl objNull;
             uiNamespace setVariable ["WL2_canBuy", true];
         };
@@ -209,7 +209,7 @@ switch (_className) do {
 
             private _startWaitTime = serverTime;
             waitUntil {
-                sleep 0.1;
+                uiSleep 0.1;
                 !alive _vehicle || _vehicle turretLocal [0] || (serverTime - _startWaitTime > 30)
             };
 
@@ -244,7 +244,7 @@ switch (_className) do {
                 };
                 [player, "orderAsset", "vehicle", _pos, _orderedClass, _direction, false] remoteExec ["WL2_fnc_handleClientRequest", 2];
                 [player, "10K"] remoteExec ["WL2_fnc_handleClientRequest", 2];
-                sleep 0.1;
+                uiSleep 0.1;
             };
         };
     };
@@ -264,7 +264,7 @@ switch (_className) do {
                     };
                     [player, "orderAsset", "vehicle", _pos, _orderedClass, _direction, false] remoteExec ["WL2_fnc_handleClientRequest", 2];
                     [player, "10K"] remoteExec ["WL2_fnc_handleClientRequest", 2];
-                    sleep 0.1;
+                    uiSleep 0.1;
                 };
             } forEach BIS_WL_allSectors;
         };
@@ -316,7 +316,7 @@ switch (_className) do {
                 private _testSupport = selectRandom _testSupports;
                 private _reward = floor (random 100);
                 [objNull, _reward, _testSupport # 0, _testSupport # 1] call WL2_fnc_killRewardClient;
-                sleep (random 1);
+                uiSleep (random 1);
             };
 
             {
@@ -325,7 +325,7 @@ switch (_className) do {
                 _asset = _assetData getOrDefault ["spawn", _asset];
                 private _reward = floor (random 400);
                 [objNull, _reward, "", "#de0808", _asset] call WL2_fnc_killRewardClient;
-                sleep (random 0.5);
+                uiSleep (random 0.5);
             } forEach WL_ASSET_DATA;
         };
     };
@@ -372,7 +372,7 @@ switch (_className) do {
             params ["_unit", "_oldUnit"];
 
             waitUntil {
-                sleep 0.1;
+                uiSleep 0.1;
                 local _unit;
             };
 

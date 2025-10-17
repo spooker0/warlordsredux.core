@@ -34,7 +34,7 @@ if (_sector getVariable ["WL2_isAircraftCarrier", false]) then {
 		if (count (_pos nearObjects ["AllVehicles", 20]) == 0) then {
 			_spawnPos = _pos;
 		};
-		sleep 0.001;
+		uiSleep 0.001;
 	};
 };
 

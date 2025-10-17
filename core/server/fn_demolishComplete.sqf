@@ -7,7 +7,7 @@ if !(isNull _caller) then {
 _target setVariable ["WL2_alreadyHandled", true];
 _target setVariable ["WL_lastHitter", _caller];
 
-sleep 0.5;
+uiSleep 0.5;
 
 for "_i" from 1 to 10 do {
     if (random 1 > 0.5) then {
@@ -22,10 +22,10 @@ for "_i" from 1 to 10 do {
     };
 
     playSound3D [format ["a3\sounds_f_orange\arsenal\explosives\debris_%1.wss", _randomFile], _target];
-    sleep 0.2;
+    uiSleep 0.2;
 };
 
 _target setDamage [1, true, _caller, _caller];
 
-sleep 2;
+uiSleep 2;
 deleteVehicle _target;

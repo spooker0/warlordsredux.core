@@ -20,7 +20,7 @@ _forwardBase setVariable ["WL2_demolitionMaxHealth", 12];
 _forwardBase setVariable ["WL2_demolitionHealth", 12];
 
 waitUntil {
-    sleep 1;
+    uiSleep 1;
     if (isServer) then {
         private _timeRemaining = _endTime - serverTime;
         private _totalTime = _endTime - _startTime;

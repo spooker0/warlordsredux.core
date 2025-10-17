@@ -39,11 +39,11 @@ if (_overrideRange > 0) then {
         _altitude = getPosASL _projectile select 2;
         [_projectile, 90, 0] call BIS_fnc_setPitchBank;
         _projectile setVelocityModelSpace [0, 500, 0];
-        sleep 0.1;
+        uiSleep 0.1;
     };
 };
 
-sleep 1;
+uiSleep 1;
 
 _projectile setMissileTarget [_laserTarget, true];
 
@@ -112,7 +112,7 @@ while { alive _projectile } do {
         _laserTarget setPosATL _coordinates;
     };
 
-    sleep 0.001;
+    uiSleep 0.001;
 };
 
 deleteVehicle _laserTarget;

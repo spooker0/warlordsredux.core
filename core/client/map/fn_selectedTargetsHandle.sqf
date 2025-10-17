@@ -13,5 +13,5 @@ while {!BIS_WL_missionEnd} do {
 		if !(isNull WL_TARGET_ENEMY) then {[WL_TARGET_ENEMY, BIS_WL_enemySide, true] call WL2_fnc_targetSelected};
 		_prevSector2 = WL_TARGET_ENEMY;
 	};
-	if (isNull WL_TARGET_FRIENDLY) then {sleep 0.25} else {sleep 1};
+	if (isNull WL_TARGET_FRIENDLY) then {uiSleep 0.25} else {uiSleep 1};
 };

@@ -7,7 +7,7 @@ if (isNil "WL2_ffBuffer") then {
 	0 spawn {
 		private _busy = false;
 		while {!BIS_WL_missionEnd && {(count WL2_ffBuffer) > 0}} do {
-			waitUntil {sleep 1; (count WL2_ffBuffer > 0) && {!_busy}};
+			waitUntil {uiSleep 1; (count WL2_ffBuffer > 0) && {!_busy}};
 			_busy = true;
 
 			private _params = WL2_ffBuffer # 0;

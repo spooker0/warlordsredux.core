@@ -5,7 +5,7 @@ params ["_vehicle"];
     params ["_script"];
     private _startTime = serverTime;
     waitUntil {
-        sleep 1;
+        uiSleep 1;
         serverTime - _startTime > 10 || scriptDone _script;
     };
     if (!scriptDone _script) then {
@@ -15,7 +15,7 @@ params ["_vehicle"];
 
 private _unitInfo = uiNamespace getVariable ["RscUnitInfo", displayNull];
 waitUntil {
-    sleep 0.1;
+    uiSleep 0.1;
     _unitInfo = uiNamespace getVariable ["RscUnitInfo", displayNull];
     !isNull _unitInfo;
 };
@@ -23,13 +23,13 @@ waitUntil {
 private _existingControl = _unitInfo displayCtrl 120;
 
 waitUntil {
-    sleep 0.1;
+    uiSleep 0.1;
     _existingControl = _unitInfo displayCtrl 120;
     !isNull _existingControl;
 };
 
 waitUntil {
-    sleep 0.1;
+    uiSleep 0.1;
     ctrlText _existingControl != "" && ctrlShown _existingControl;
 };
 

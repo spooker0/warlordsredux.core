@@ -11,7 +11,7 @@ WL_LoadingState = 0;
 	};
 
 	if (WL_LoadingState < _totalLoadSteps) exitWith {
-		["client_init"] call BIS_fnc_endLoadingScreen;
+		["main"] call BIS_fnc_endLoadingScreen;
 		"BlockScreen" setDebriefingText [
 			"Load Failed",
 			format ["It seems that client loading has failed to complete in time. It was stuck on %1. Please rejoin from the lobby. Thanks for understanding.", _stepText],
@@ -49,7 +49,7 @@ if (!_isAdmin) then {
 	WL_LoadingState = 2;
 
 	if (missionNamespace getVariable _switch) exitWith {
-		["client_init"] call BIS_fnc_endLoadingScreen;
+		["main"] call BIS_fnc_endLoadingScreen;
 		"BlockScreen" setDebriefingText ["Switch Teams", localize "STR_A3_WL_switch_teams_info", localize "STR_A3_WL_switch_teams"];
 		endMission "BlockScreen";
 		forceEnd;
@@ -64,7 +64,7 @@ if (!_isAdmin) then {
 	WL_LoadingState = 3;
 
 	if (missionNamespace getVariable _imbalanced) exitWith {
-		["client_init"] call BIS_fnc_endLoadingScreen;
+		["main"] call BIS_fnc_endLoadingScreen;
 		"BlockScreen" setDebriefingText ["Switch Teams", "It seems that the teams are not balanced, please head back to the lobby and join the other team, Thank you.", "Teams are imbalanced."];
 		endMission "BlockScreen";
 		forceEnd;
@@ -75,7 +75,7 @@ if (!_isAdmin) then {
 	if ((_list findIf {
 		[_x, _text] call BIS_fnc_inString
 	}) != -1) exitWith {
-		["client_init"] call BIS_fnc_endLoadingScreen;
+		["main"] call BIS_fnc_endLoadingScreen;
 		"BlockScreen" setDebriefingText ["Admin", localize "STR_A3_nameFilter_info", localize "STR_A3_nameFilter"];
 		endMission "BlockScreen";
 		forceEnd;
@@ -86,7 +86,7 @@ if (!_isAdmin) then {
 WL_LoadingState = 4;
 
 if !(BIS_WL_playerSide in BIS_WL_sidesArray) exitWith {
-	["client_init"] call BIS_fnc_endLoadingScreen;
+	["main"] call BIS_fnc_endLoadingScreen;
 	"BlockScreen" setDebriefingText ["Error", "Your unit is not a Warlords competitor", "Warlords Mission Error."];
 	endMission "BlockScreen";
 	forceEnd;
@@ -129,7 +129,7 @@ WL_LoadingState = 9;
 0 spawn WL2_fnc_initHud;
 0 spawn {
 	while {!BIS_WL_missionEnd} do {
-		sleep 5;
+		uiSleep 5;
 		call WL2_fnc_teammatesAvailability;
 	};
 };
@@ -178,7 +178,7 @@ WL_LoadingState = 11;
 	});
 	while { !BIS_WL_missionEnd } do {
 		waitUntil {
-			sleep 1;
+			uiSleep 1;
 			count ((groupSelectedUnits player) select {
 				_x != player && {
 					(_x getVariable ["BIS_WL_ownerAsset", "123"]) == _uid
@@ -202,8 +202,6 @@ WL_LoadingState = 11;
 [46] spawn GFE_fnc_earplugs;
 WL_LoadingState = 12;
 
-["client_init"] call BIS_fnc_endLoadingScreen;
-
 0 spawn WL2_fnc_announcerInit;
 [toUpper localize "STR_A3_WL_popup_init"] spawn WL2_fnc_smoothText;
 
@@ -215,7 +213,7 @@ if !(isDedicated) then {
 	WL_ORIGINAL_SPEAKER = speaker player;
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 	while { !BIS_WL_missionEnd } do {
-		sleep 5;
+		uiSleep 5;
 		private _noVoice = _settingsMap getOrDefault ["noVoiceSpeaker", false];
 		if (_noVoice) then {
 			player setSpeaker "NoVoice";
@@ -242,7 +240,7 @@ if !(isDedicated) then {
 		if !(_vehicles isEqualTo _newVehicles) then {
 			missionNamespace setVariable [_ownedVehicleVar, _newVehicles, [2, clientOwner]];
 		};
-		sleep 10;
+		uiSleep 10;
 	};
 };
 
@@ -255,7 +253,7 @@ if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
 	];
 	
 	0 spawn {
-		sleep 300;
+		uiSleep 300;
 		["Play Tester"] call RWD_fnc_addBadge;
 	};
 
@@ -325,7 +323,7 @@ missionNamespace setVariable [format ["BIS_WL2_minesDB_%1", getPlayerUID player]
 		{
 			_x call WL2_fnc_uavConnectRefresh;
 		} forEach allUnitsUAV;
-		sleep 5;
+		uiSleep 5;
 	};
 };
 
@@ -335,7 +333,7 @@ player spawn APS_fnc_setupProjectiles;
 0 spawn WL2_fnc_handleKillFeedUpdate;
 0 spawn WL2_fnc_killHistory;
 0 spawn {
-	sleep 5;
+	uiSleep 5;
 	[] call MENU_fnc_updateViewDistance;
 };
 0 spawn WL2_fnc_interceptAction;

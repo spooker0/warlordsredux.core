@@ -185,7 +185,7 @@ if (_playerLevel >= 50) then {
     private _menuHeight = (count _menuButtons) * 0.05;
     private _startTime = serverTime;
     waitUntil {
-        sleep 0.1;
+        uiSleep 0.1;
         !visibleMap || inputMouse 0 == 0 || serverTime - _startTime > 1;
     };
     while { visibleMap && _keepDialog} do {

@@ -10,7 +10,7 @@ WL_IsSpectator = true;
 setPlayerRespawnTime 10000000;
 forceRespawn player;
 0 spawn {
-    sleep 3;
+    uiSleep 3;
     (uiNamespace getVariable ["RscRespawnCounter", displayNull]) closeDisplay 1;
 };
 

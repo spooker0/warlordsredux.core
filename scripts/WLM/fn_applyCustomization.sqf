@@ -19,7 +19,7 @@ private _assetAppearanceDefaults = _appearanceDefaults getOrDefault [_assetActua
 
 private _finalizeCustomization = {
     params ["_asset"];
-    sleep 0.5;
+    uiSleep 0.5;
     0 spawn WLM_fnc_constructVehicleMagazine;
 };
 

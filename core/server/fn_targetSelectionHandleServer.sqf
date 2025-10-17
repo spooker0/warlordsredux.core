@@ -77,7 +77,7 @@
 			missionNamespace setVariable [format ["BIS_WL_sectorVoteTallyDisplay_%1", _side], _calculation # 1, true];
 
 			waitUntil {
-				sleep WL_TIMEOUT_SHORT;
+				uiSleep WL_TIMEOUT_SHORT;
 				private _allPlayers = call BIS_fnc_listPlayers;
 				_warlords = _allPlayers select {side group _x == _side};
 				_players = _warlords select {isPlayer _x};
@@ -106,7 +106,7 @@
 						_nextUpdate = serverTime + WL_TIMEOUT_STANDARD;
 					};
 
-					sleep WL_TIMEOUT_SHORT;
+					uiSleep WL_TIMEOUT_SHORT;
 				};
 
 				if !(missionNamespace getVariable [_votingResetVar, false]) then {
@@ -142,7 +142,7 @@
 					["server", true] call WL2_fnc_updateSectorArrays;
 
 					waitUntil {
-						sleep WL_TIMEOUT_STANDARD;
+						uiSleep WL_TIMEOUT_STANDARD;
 						isNull (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", _side], objNull]) ||
 						missionNamespace getVariable [format ["WL_targetReset_%1", _side], false];
 					};

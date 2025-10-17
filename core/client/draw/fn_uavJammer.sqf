@@ -38,7 +38,7 @@ private _side = side _owner;
 
         [_jammersInRange, 10] remoteExec ["WL2_fnc_reportTargets", BIS_WL_enemySide];
 
-        sleep 5;
+        uiSleep 5;
     };
 };
 
@@ -47,7 +47,7 @@ private _side = side _owner;
     params ["_asset"];
     private _hardlineDistanceSqr = WL_JAMMER_HARDLINE_RANGE * WL_JAMMER_HARDLINE_RANGE;
     while { alive _asset } do {
-        sleep 1;
+        uiSleep 1;
 
         private _controller = (UAVControl _asset) # 0;
         private _controllerDistanceToAsset = _controller distanceSqr _asset;
@@ -151,7 +151,7 @@ private _side = side _owner;
     while { alive _asset } do {
         if (isNil "_filmGrain") then {
             _filmGrain = call _initFilmGrain;
-            sleep 10;
+            uiSleep 10;
             continue;
         };
 
@@ -250,7 +250,7 @@ private _side = side _owner;
             _asset setVehicleReportRemoteTargets true;
         };
 
-        sleep 0.1;
+        uiSleep 0.1;
     };
 
     _indicator ctrlSetText "";

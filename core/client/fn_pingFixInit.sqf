@@ -31,7 +31,7 @@
 				};
 			};
 
-			sleep 9;
+			uiSleep 9;
 			uiNamespace setVariable ["WL2_isPinging", -1];
 		};
 	};

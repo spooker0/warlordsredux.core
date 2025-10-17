@@ -43,7 +43,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
             ];
             _texture ctrlWebBrowserAction ["ExecJS", _script];
             _firstRender = false;
-            sleep 0.5;
+            uiSleep 0.5;
         };
     };
 }];

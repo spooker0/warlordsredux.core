@@ -6,7 +6,7 @@ if (isNull _target) then {
     _target setPosASL _endPos;
     [_target] spawn {
         params ["_target"];
-        sleep 20;
+        uiSleep 20;
         deleteVehicle _target;
     };
 };

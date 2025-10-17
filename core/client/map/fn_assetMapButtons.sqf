@@ -281,7 +281,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
             _marker setMarkerAlphaLocal 0;
 
             [6, "WL2_fastTravelFOBMarker"] spawn WL2_fnc_executeFastTravel;
-            sleep 3;
+            uiSleep 3;
         };
     };
     [
@@ -454,7 +454,7 @@ private _fortifyStrongholdExecute = {
 
     for "_i" from 1 to 10 do {
         playSound3D [selectRandom _impactSounds, player, false, getPosASL player, 2, 1, 200, 0];
-        sleep 0.3;
+        uiSleep 0.3;
     };
 
     [player, "fortifyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
@@ -482,7 +482,7 @@ private _fastTravelStrongholdTestExecute = {
     systemChat "Testing Sector Stronghold spawns. Force respawn to end test.";
     while { alive player } do {
         [5, ""] spawn WL2_fnc_executeFastTravel;
-        sleep 3;
+        uiSleep 3;
     };
 };
 [
@@ -504,7 +504,7 @@ private _fastTravelStrongholdTestExecute = {
     private _menuHeight = (count _menuButtons) * 0.05;
     private _startTime = serverTime;
     waitUntil {
-        sleep 0.1;
+        uiSleep 0.1;
         !visibleMap || inputMouse 0 == 0 || serverTime - _startTime > 1;
     };
     while { visibleMap && _keepDialog} do {

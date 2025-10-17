@@ -72,7 +72,7 @@ private _demolishActionId = player addAction [
                     _demolishSuccess = true;
                     break;
                 };
-                sleep 0.01;
+                uiSleep 0.01;
             };
 
             if (_demolishSuccess) then {

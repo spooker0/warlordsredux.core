@@ -140,7 +140,7 @@ private _setupActionId = [
 			_asset setVariable ["WL2_setupActionRestriction", _setupMessage];
 		};
 
-        sleep 1;
+        uiSleep 1;
     };
 
 	removeMissionEventHandler ["Draw3D", _drawRestrictionId];

@@ -158,5 +158,5 @@ while { WL_IsSpectator } do {
     uiNamespace setVariable ["WL2_spectatorDrawVehicles", _vehicles];
     uiNamespace setVariable ["WL2_spectatorDrawSectors", _sectors];
 
-    sleep 0.5;
+    uiSleep 0.5;
 };

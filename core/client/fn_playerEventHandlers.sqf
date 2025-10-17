@@ -52,7 +52,7 @@ player addEventHandler ["GetOutMan", {
 	params ["_unit", "_role", "_vehicle", "_turret", "_isEject"];
 	[_unit] spawn {
 		params ["_unit"];
-		sleep 5;
+		uiSleep 5;
 		_unit allowDamage true;
 	};
 	if (((_vehicle getVariable "BIS_WL_ownerAsset") == (getPlayerUID player)) && (pricehash getOrDefault [typeOf _vehicle, 300] <= 200)) then {

@@ -10,10 +10,10 @@ _newControl ctrlSetFontHeight (ctrlFontHeight _existingControl);
 _newControl ctrlSetShadow 0;
 _newControl ctrlCommit 0;
 
-sleep 3;
+uiSleep 3;
 
 while { alive player } do {
-    sleep 0.05;
+    uiSleep 0.05;
     private _target = cursorTarget;
     if (isNull _target) then {
         _newControl ctrlShow false;

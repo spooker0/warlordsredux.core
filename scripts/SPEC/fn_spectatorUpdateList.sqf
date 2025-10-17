@@ -80,5 +80,5 @@ while { WL_IsSpectator } do {
 
     _lastListType = _listType;
     uiNamespace setVariable ["SPEC_entitiesList", _newEntitiesListMap];
-    sleep 0.5;
+    uiSleep 0.5;
 };

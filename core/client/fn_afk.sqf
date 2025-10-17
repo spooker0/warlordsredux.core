@@ -10,7 +10,7 @@ if (_isAdmin || _isSpectator) exitWith {};
 
 private _alreadyHasOneOfUsBadge = false;
 while { !BIS_WL_missionEnd } do {
-	sleep 5;
+	uiSleep 5;
 	private _afkTimer = missionNamespace getVariable ["WL2_afkTimer", -1];
     private _isAfk = serverTime > _afkTimer;
     if (speed player > 40) then {

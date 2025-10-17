@@ -21,7 +21,7 @@ while { _altitude < _targetAltitude * 1.5 } do {
     _altitude = getPosASL _projectile # 2;
     _targetAltitude = getPosASL _target # 2;
 
-    sleep 0.1;
+    uiSleep 0.1;
 };
 
 private _currentPosition = getPosASL _projectile;
@@ -40,7 +40,7 @@ while { alive _projectile && alive _target && serverTime < _startTime + 3 } do {
     _projectile setVectorDirAndUp [_actualVectorDir, _actualVectorUp];
     _projectile setVelocityModelSpace [0, 1500, 0];
 
-    sleep 0.01;
+    uiSleep 0.01;
 };
 
 private _projectilePos = getPosASL _projectile;
@@ -83,10 +83,10 @@ while { alive _newProjectile && alive _target } do {
         break;
     };
 
-    sleep 0.01;
+    uiSleep 0.01;
 };
 
-sleep 3;
+uiSleep 3;
 
 deleteVehicle _newProjectile;
 deleteVehicle _projectile;

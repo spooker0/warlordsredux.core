@@ -74,7 +74,7 @@ switchCamera player;
         switchCamera player;
 
         _unit setVariable ["WL_unconsciousTime", _downTime];
-        sleep 0.1;
+        uiSleep 0.1;
     };
 };
 [_unit, _source, _instigator] remoteExec ["WL2_fnc_handleEntityRemoval", 2];

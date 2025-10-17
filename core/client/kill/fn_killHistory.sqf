@@ -21,5 +21,5 @@ while { !BIS_WL_missionEnd } do {
     } forEach _rewardHistory;
 
     player setDiaryRecordText [["Warlords Redux", _statsRecord], ["Statistics", _displayText]];
-    sleep 15;
+    uiSleep 15;
 };

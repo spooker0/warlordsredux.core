@@ -26,7 +26,7 @@ BIS_WL_playerSide call WL2_fnc_parsePurchaseList;
         private _duration = _x # 1;
 
         playSoundUI [_pingSound, 2, _note];
-        sleep _duration;
+        uiSleep _duration;
     } forEach _notes;
 };
 
@@ -59,7 +59,7 @@ player addAction [
         waitUntil { !isTouchingGround _unit };
 
         while { !isTouchingGround _unit } do {
-            sleep 0.01;
+            uiSleep 0.01;
             _existingSpeed = velocityModelSpace _unit;
 
             if (_existingSpeed # 2 > 0) then {

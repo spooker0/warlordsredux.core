@@ -91,5 +91,5 @@ for "_i" from 1 to 10 do {
     };
 
     playSound3D [format ["a3\sounds_f_orange\arsenal\explosives\debris_%1.wss", _randomFile], _stronghold];
-    sleep 0.2;
+    uiSleep 0.2;
 };

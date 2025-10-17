@@ -3,10 +3,13 @@ BIS_WL_sectorLinks = [];
 WL_linkSectorMarkers = createHashmap;
 private _i = 0;
 
+BIS_WL_allSectors = BIS_WL_allSectors select { !isNull _x };
+
 {
-	_sector = _x;
-	_sectorPos = position _sector;
-	_area = _sector getVariable "WL2_objectArea";
+	private _sector = _x;
+
+	private _sectorPos = position _sector;
+	private _area = _sector getVariable "WL2_objectArea";
 
 	if (_sector in WL_BASES && ((_sector getVariable "BIS_WL_owner") == (side group player))) then {
 		_sector setVariable ["BIS_WL_value", WL_BASE_VALUE];
@@ -16,7 +19,7 @@ private _i = 0;
 		_sector setVariable ["BIS_WL_value", round (_size / 13000)];
 	};
 
-	_mrkrArea = createMarkerLocal [format ["BIS_WL_sectorMarker_%1_area", _forEachIndex], _sectorPos];
+	private _mrkrArea = createMarkerLocal [format ["BIS_WL_sectorMarker_%1_area", _forEachIndex], _sectorPos];
 	_mrkrArea setMarkerShapeLocal (if (_area # 3) then {"RECTANGLE"} else {"ELLIPSE"});
 	_mrkrArea setMarkerDirLocal (_area # 2);
 	_mrkrArea setMarkerBrushLocal "Solid";
@@ -25,15 +28,14 @@ private _i = 0;
 } forEach BIS_WL_allSectors;
 
 {
-	_sector = _x;
+	private _sector = _x;
 
-	_owner = _sector getVariable "BIS_WL_owner";
-	_revealedBy = _sector getVariable ["BIS_WL_revealedBy", []];
-	_sectorPos = position _sector;
+	private _owner = _sector getVariable "BIS_WL_owner";
+	private _revealedBy = _sector getVariable ["BIS_WL_revealedBy", []];
+	private _sectorPos = position _sector;
 
-	_mrkrArea = format ["BIS_WL_sectorMarker_%1_area", _forEachIndex];
-
-	_mrkrMain = createMarkerLocal [format ["BIS_WL_sectorMarker_%1_main", _forEachIndex], _sectorPos];
+	private _mrkrArea = format ["BIS_WL_sectorMarker_%1_area", _forEachIndex];
+	private _mrkrMain = createMarkerLocal [format ["BIS_WL_sectorMarker_%1_main", _forEachIndex], _sectorPos];
 
 	_sector setVariable ["BIS_WL_markers", [_mrkrMain, _mrkrArea]];
 
@@ -97,7 +99,7 @@ private _i = 0;
 		};
 	} forEach _neighbors;
 
-	_agentGrp = _sector getVariable "BIS_WL_agentGrp";
+	private _agentGrp = _sector getVariable "BIS_WL_agentGrp";
 	_agentGrp setVariable ["BIS_WL_sector", _sector];
 	_agentGrp addGroupIcon ["selector_selectable", [0, 0]];
 	_agentGrp setGroupIconParams [[0,0,0,0], "", 1, false];

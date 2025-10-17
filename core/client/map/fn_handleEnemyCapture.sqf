@@ -7,7 +7,7 @@ private _playerSide = side group player;
 
 while { !BIS_WL_missionEnd } do {
 	_blinking = !_blinking;
-	sleep 1;
+	uiSleep 1;
 
 	private _ownedSectors = BIS_WL_sectorsArray select 0;
 

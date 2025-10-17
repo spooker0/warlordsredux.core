@@ -31,6 +31,6 @@ private _asset = if (_isUav) then {
 // 	} forEach _textures;
 // };
 
-waitUntil {sleep 0.1; !(isNull _asset)};
+waitUntil {uiSleep 0.1; !(isNull _asset)};
 
 [_asset, _sender, _orderedClass] call WL2_fnc_processOrder;

@@ -10,7 +10,7 @@ private _indicatorBackground = _captureDisplay displayCtrl 7004;
 _indicatorBackground ctrlSetBackgroundColor [0, 0, 0, 0.7];
 
 while { !BIS_WL_missionEnd } do {
-	sleep WL_TIMEOUT_STANDARD;
+	uiSleep WL_TIMEOUT_STANDARD;
 
 	private _side = BIS_WL_playerSide;
 	private _sectorsBeingCaptured = BIS_WL_allSectors select {

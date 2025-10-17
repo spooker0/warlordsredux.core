@@ -237,7 +237,7 @@ while {_i < _garrisonSize} do {
 
 	_newWP = _newGrp addWaypoint [_pos, 0];
 	_newWP setWaypointType "HOLD";
-	sleep 0.001;
+	uiSleep 0.001;
 };
 
 // {

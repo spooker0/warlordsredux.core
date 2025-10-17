@@ -4,7 +4,7 @@ private _disallowManList = ["B_UAV_AI", "O_UAV_AI", "I_UAV_AI"];
 private _assetData = WL_ASSET_DATA;
 
 while { !BIS_WL_missionEnd } do {
-    sleep 20;
+    uiSleep 20;
 
     private _vehicles = missionNamespace getVariable [_ownedVehicleVar, []];
 

@@ -78,7 +78,7 @@ _texture ctrlAddEventHandler ["PageLoaded", WLC_fnc_pageLoad];
 [_texture] spawn {
     params ["_texture"];
     while { !isNull _texture } do {
-        sleep 0.2;
+        uiSleep 0.2;
     };
 
     ["LOADOUT SAVED FOR NEXT RESPAWN"] spawn WL2_fnc_smoothText;

@@ -13,7 +13,7 @@ private _controllingProjectile = player getVariable ["DIS_controllingProjectile"
 triggerAmmo _controllingProjectile;
 
 while { typeof cameraOn == "Camera" } do {
-    sleep 0.1;
+    uiSleep 0.1;
 };
 
 uiNamespace setVariable ["WL_waypointPosition", customWaypointPosition];

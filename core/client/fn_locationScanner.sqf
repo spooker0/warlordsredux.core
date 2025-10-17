@@ -8,7 +8,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
 
 0 spawn {
     while { !BIS_WL_missionEnd } do {
-        sleep 0.5;
+        uiSleep 0.5;
 
         private _nearbyUnconscious = (player nearObjects ["Man", 8]) select {
             lifeState _x == "INCAPACITATED" && side group _x == BIS_WL_playerSide
@@ -381,5 +381,5 @@ while { !BIS_WL_missionEnd } do {
     } forEach _allScannedUnits;
 
     missionNamespace setVariable ["WL2_detectedUnits", _allScannedUnits];
-    sleep 2;
+    uiSleep 2;
 };

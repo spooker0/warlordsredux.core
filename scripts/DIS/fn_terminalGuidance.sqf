@@ -9,12 +9,12 @@ _projectile addEventHandler ["SubmunitionCreated", {
 }];
 
 waitUntil {
-    sleep 0.1;
+    uiSleep 0.1;
     private _altitude = getPosATL _projectile # 2;
     _altitude > 500 || !alive _projectile;
 };
 waitUntil {
-    sleep 0.1;
+    uiSleep 0.1;
     private _altitude = getPosATL _projectile # 2;
     _altitude < 500 || !alive _projectile;
 };

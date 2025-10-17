@@ -3,7 +3,7 @@ private _previousState = BIS_WL_currentSelection;
 private _previousVotePhase = WL_VotePhase;
 private _lastFullUpdate = -1;
 while { !BIS_WL_missionEnd } do {
-    sleep 0.1;
+    uiSleep 0.1;
     if (_previousState == BIS_WL_currentSelection && _previousVotePhase == WL_VotePhase && _lastFullUpdate + 2 > serverTime) then {
         continue;
     };

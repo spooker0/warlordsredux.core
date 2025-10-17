@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_unit", "_weapon", "_turret", "_reloadTime"];
 
-sleep _reloadTime;
+uiSleep _reloadTime;
 private _saveWeaponState = weaponState [_unit, _turret];
 
 _unit removeWeaponTurret [_weapon, _turret];

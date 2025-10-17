@@ -47,7 +47,7 @@ if (_ammoConfig getOrDefault ["loal", false]) then {
         _projectile setMissileTarget [_selectedTarget, true];
         _originalTarget = _selectedTarget;
         
-        sleep 1;
+        uiSleep 1;
 
         private _projectilePos = getPosASL _projectile;
         private _targetPos = getPosASL _selectedTarget;
@@ -82,7 +82,7 @@ private _originalPosition = getPosASL _unit;
     _lockSpeed = _lockSpeed * 3.6 / 1.5;
 
     while { alive _projectile } do {
-        sleep 0.1;
+        uiSleep 0.1;
 
         private _projectilePosition = getPosASL _projectile;
         private _targetPosition = getPosASL _originalTarget;
@@ -125,9 +125,9 @@ private _originalPosition = getPosASL _unit;
 // Friendly fire check.
 [_projectile, _unit] spawn {
     params ["_projectile", "_unit"];
-    sleep 1;
+    uiSleep 1;
     while { alive _projectile } do {
-        sleep 0.2;
+        uiSleep 0.2;
         private _missileTarget = missileTarget _projectile;
         private _missileTargetSide = [_missileTarget] call WL2_fnc_getAssetSide;
         private _projectileSide = side (group _unit);
@@ -173,7 +173,7 @@ while { alive _projectile } do {
     private _notched = _projectile getVariable ["DIS_notched", false];
     if (_notched) then {
         _projectile setAngularVelocityModelSpace [0, 0, 0];
-        sleep 0.01;
+        uiSleep 0.01;
         continue;
     };
 
@@ -212,5 +212,5 @@ while { alive _projectile } do {
     };
 
     _lastLoopTime = serverTime;
-    sleep 0.01;
+    uiSleep 0.01;
 };

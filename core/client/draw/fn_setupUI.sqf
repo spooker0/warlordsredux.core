@@ -43,7 +43,7 @@ if (_displayClass == "RequestMenu_open") then {
 
 	_myDisplay spawn {
 		disableSerialization;
-		waitUntil {sleep WL_TIMEOUT_SHORT; lifeState player == "INCAPACITATED" || {isNull _this}};
+		waitUntil {uiSleep WL_TIMEOUT_SHORT; lifeState player == "INCAPACITATED" || {isNull _this}};
 		"RequestMenu_close" call WL2_fnc_setupUI;
 	};
 

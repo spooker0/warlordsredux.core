@@ -107,18 +107,18 @@ _destroyerMarker setMarkerTypeLocal "loc_boat";
 _destroyerMarker setMarkerTextLocal format ["%1 (DDG-%2)", _destroyerName, _hullNumber];
 _destroyerMarker setMarkerColor "ColorWhite";
 
-sleep 60;
+uiSleep 60;
 
 [_destroyerBase, _mrls, _controller, true] remoteExec ["WL2_fnc_createDestroyerClient", 0, true];
 
 while { true } do {
-    sleep WL_DESTROYER_RELOAD;
+    uiSleep WL_DESTROYER_RELOAD;
     private _turretOwner = _mrls turretOwner [0];
     [_mrls] remoteExec ["WL2_fnc_addMissileToMag", _turretOwner];
 
     if (!alive _mrls) then {
         deleteVehicle _mrls;
-        sleep WL_DESTROYER_RESPAWN;
+        uiSleep WL_DESTROYER_RESPAWN;
         call _createMrls;
         [objNull, _mrls, objNull, false] remoteExec ["WL2_fnc_createDestroyerClient", 0, true];
     };

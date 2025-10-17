@@ -50,5 +50,5 @@ while { WL_IsSpectator } do {
         call MENU_fnc_settingsMenuInit;
     };
 
-    sleep 0.001;
+    uiSleep 0.001;
 };

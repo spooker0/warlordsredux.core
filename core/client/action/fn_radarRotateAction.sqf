@@ -22,6 +22,6 @@ private _radarActionID = _asset addAction [
     params ["_asset", "_radarActionID"];
     while { alive _asset } do {
 		[_asset, _radarActionID] call WL2_fnc_radarRotateUpdate;
-        sleep 1;
+        uiSleep 1;
     };
 };

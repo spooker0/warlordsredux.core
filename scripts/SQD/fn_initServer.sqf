@@ -38,6 +38,6 @@ addMissionEventHandler ["HandleDisconnect", {
     while { !BIS_WL_missionEnd } do {
         // clean up squads when everyone goes to the lobby
         call SQD_CleanUp;
-        sleep 30;
+        uiSleep 30;
     };
 };

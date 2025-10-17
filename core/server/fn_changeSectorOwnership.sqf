@@ -46,7 +46,7 @@ if (isNull (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", _ene
 };
 
 waitUntil {
-	sleep 0.01;
+	uiSleep 0.01;
 	(_sector getVariable ["BIS_WL_owner", civilian]) == _owner
 };
 

@@ -180,9 +180,9 @@ addMissionEventHandler ["Draw3D", {
 
     while { !BIS_WL_missionEnd } do {
         if (WL_HelmetInterface == 2) then {
-            sleep 0.1;
+            uiSleep 0.1;
         } else {
-            sleep 1;
+            uiSleep 1;
         };
 
         if (WL_HelmetInterface == 0) then {
@@ -191,7 +191,7 @@ addMissionEventHandler ["Draw3D", {
 
         private _vehicle = cameraOn;
         if (!alive _vehicle) then {
-            sleep 1;
+            uiSleep 1;
             continue;
         };
 
@@ -558,7 +558,7 @@ addMissionEventHandler ["Draw3D", {
 
 0 spawn {
     while { !BIS_WL_missionEnd && !WL_IsSpectator } do {
-        sleep 1;
+        uiSleep 1;
 
 		private _isAfk = player getVariable ["WL2_afk", false];
         if (_isAfk) then {
@@ -643,13 +643,13 @@ addMissionEventHandler ["Draw3D", {
             [_helmetInterfaceDistances # _helmetInterfaceIndex] call _setNewRange;
         };
         if (_hasGoggles) then {
-            sleep 0.01;
+            uiSleep 0.01;
         } else {
-            sleep 1;
+            uiSleep 1;
         };
 
         if (inputAction "timeDec" > 0) then {
-            waitUntil { sleep 0.01; inputAction "timeDec" == 0 };
+            waitUntil { uiSleep 0.01; inputAction "timeDec" == 0 };
             _helmetInterfaceIndex = (_helmetInterfaceIndex - 1) max 0;
             private _newMaxDistance = _helmetInterfaceDistances # _helmetInterfaceIndex;
             uiNamespace setVariable ["WL_HelmetInterfaceMaxDistance", _newMaxDistance];
@@ -657,7 +657,7 @@ addMissionEventHandler ["Draw3D", {
             playSoundUI ["a3\sounds_f_mark\arsenal\sfx\bipods\bipod_generic_deploy.wss"];
         };
         if (inputAction "timeInc" > 0) then {
-            waitUntil { sleep 0.01; inputAction "timeInc" == 0 };
+            waitUntil { uiSleep 0.01; inputAction "timeInc" == 0 };
             _helmetInterfaceIndex = (_helmetInterfaceIndex + 1) min (count _helmetInterfaceDistances - 1);
             private _newMaxDistance = _helmetInterfaceDistances # _helmetInterfaceIndex;
             uiNamespace setVariable ["WL_HelmetInterfaceMaxDistance", _newMaxDistance];

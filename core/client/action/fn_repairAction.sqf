@@ -99,7 +99,7 @@ private _repairWheels = _asset addAction [
                     break;
                 };
 
-                sleep 0.001;
+                uiSleep 0.001;
             };
 
             cameraOn cameraEffect ["Terminate", "BACK"];

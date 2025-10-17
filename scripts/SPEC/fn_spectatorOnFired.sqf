@@ -37,7 +37,7 @@ if ([_projectile] call WL2_fnc_isScannerMunition) then {
                 if (uiNamespace getVariable ["SPEC_spectateProjectile", true]) then {
                     break;
                 };
-                sleep 0.1;
+                uiSleep 0.1;
             };
 
             detach _camera;

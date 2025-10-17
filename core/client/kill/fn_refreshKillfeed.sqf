@@ -39,7 +39,7 @@ while { !BIS_WL_missionEnd } do {
     private _useNewKillfeed = _settingsMap getOrDefault ["useNewKillfeed", true];
 
     if (!_useNewKillfeed) then {
-        sleep 10;
+        uiSleep 10;
         continue;
     };
 
@@ -64,5 +64,5 @@ while { !BIS_WL_missionEnd } do {
     ];
     _texture ctrlWebBrowserAction ["ExecJS", _script];
 
-    sleep 1;
+    uiSleep 1;
 };

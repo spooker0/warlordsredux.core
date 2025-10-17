@@ -40,6 +40,6 @@ createHashMapFromArray [
 	["Demolition Specialist", ["a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\destroy_ca.paa", 3, "Get 15 demolitions on enemy assets."]],
 
 	["Play Tester", ["a3\\modules_f_curator\\data\\portraitanimalsgoats_ca.paa", 3, "Help test the game."]],
-	["One of Us", ["a3\\missions_f_oldman\\data\\img\\hints\\sleeping_ca.paa", 1, "Go AFK for more than 15 minutes."]],
+	["One of Us", ["a3\\missions_f_oldman\\data\\img\\hints\\uiSleeping_ca.paa", 1, "Go AFK for more than 15 minutes."]],
 	["John Warlords", ["a3\\missions_f_oldman\\data\\img\\hints\\restricted_ca.paa", 3, "Earn more than 100,000 points in a single match."]]
 ];

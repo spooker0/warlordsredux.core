@@ -57,7 +57,7 @@ private _interception = {
 	if (side group _unit == _ownerSide) then {
 		[name player] remoteExec ["APS_fnc_friendlyWarning", _target];
 		0 spawn {
-			sleep 0.5;
+			uiSleep 0.5;
 
 			playSoundUI ["alarm", 2];
 			hint localize "STR_A3_WL_aps_friendly_warning";
@@ -155,5 +155,5 @@ while {_continue && alive _projectile} do {
 		};
 	} forEach _sortedEligibleList;
 
-	sleep 0.001;
+	uiSleep 0.001;
 };

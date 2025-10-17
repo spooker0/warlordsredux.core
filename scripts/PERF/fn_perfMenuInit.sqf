@@ -36,7 +36,7 @@ uiNamespace setVariable ["PERF_longestFrame", 0];
         _longestFrame = _longestFrame max (1000 / diag_fps);
         uiNamespace setVariable ["PERF_longestFrame", _longestFrame];
         _lowfpsDisplay ctrlSetText format ["Longest Frame: %1ms", _longestFrame toFixed 3];
-        sleep 0.001;
+        uiSleep 0.001;
     };
 };
 

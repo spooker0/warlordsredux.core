@@ -19,7 +19,7 @@ private _actionId = _asset addAction [
 ];
 
 while { alive _asset } do {
-    sleep 0.001;
+    uiSleep 0.001;
     if (cameraOn != _asset) then {
         continue;
     };

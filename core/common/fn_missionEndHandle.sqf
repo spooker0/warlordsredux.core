@@ -8,7 +8,7 @@ if !(isDedicated) then {
 
 	private _startWait = serverTime;
 	waitUntil {
-		sleep 0.1;
+		uiSleep 0.1;
 		_gameWinner = missionNamespace getVariable ["WL2_gameWinner", sideUnknown];
 		serverTime - _startWait > 5 || _gameWinner != sideUnknown;
 	};
@@ -30,6 +30,6 @@ if !(isDedicated) then {
 	private _debriefing = format ["BIS_WL%1%2", _status, _playerSide];
 	[_debriefing, _victory] call BIS_fnc_endMission;
 } else {
-	sleep 15;
+	uiSleep 15;
 	endMission "End1";
 };

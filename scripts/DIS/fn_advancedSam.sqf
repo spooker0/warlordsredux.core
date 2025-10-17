@@ -11,7 +11,7 @@ if (isNull _target) exitWith {
     [_projectile, _unit, 14000, 9300, 8000] spawn DIS_fnc_maneuver;
 };
 
-sleep 0.5;
+uiSleep 0.5;
 
 [_target, _unit, _projectile] remoteExec ["WL2_fnc_warnIncomingMissile", _target];
 
@@ -24,7 +24,7 @@ while { alive _projectile && alive _target && serverTime < _firstStageTime + 1 }
     private _actualVectorDir = vectorLinearConversion [0, 1, _elapsedTime, vectorDir _projectile, _firstStageVectorDirAndUp # 0, true];
     private _actualVectorUp = vectorLinearConversion [0, 1, _elapsedTime, vectorUp _projectile, _firstStageVectorDirAndUp # 1, true];
     _projectile setVectorDirAndUp [_actualVectorDir, _actualVectorUp];
-    sleep 0.01;
+    uiSleep 0.01;
 };
 _projectile setVectorDirAndUp _firstStageVectorDirAndUp;
 
@@ -38,7 +38,7 @@ while { _altitude < (_targetAltitude * 2.0) min 5000 } do {
     _altitude = getPosASL _projectile # 2;
     _targetAltitude = getPosASL _target # 2;
 
-    sleep 0.1;
+    uiSleep 0.1;
 };
 
 private _targetVectorDirAndUp = [getPosASL _projectile, getPosASL _target] call BIS_fnc_findLookAt;
@@ -49,7 +49,7 @@ while { alive _projectile && alive _target && serverTime < _startTime + 1 } do {
     private _actualVectorDir = vectorLinearConversion [0, 1, _elapsedTime, vectorDir _projectile, _targetVectorDirAndUp # 0, true];
     private _actualVectorUp = vectorLinearConversion [0, 1, _elapsedTime, vectorUp _projectile, _targetVectorDirAndUp # 1, true];
     _projectile setVectorDirAndUp [_actualVectorDir, _actualVectorUp];
-    sleep 0.01;
+    uiSleep 0.01;
 };
 
 _projectile setVariable ["WL2_missileStateOverride", "", true];

@@ -94,6 +94,6 @@ while { !BIS_WL_missionEnd } do {
 		};
 	} forEach _sectorsInPlay;
 
-	sleep 1;
+	uiSleep 1;
 	// systemChat format ["Sector %1 | Owner: %2, Capturing Team: %3, Progress: %4", _sector getVariable ["WL2_name", "Unknown"], _sector getVariable ["BIS_WL_owner", "Unknown"], _sector getVariable ["BIS_WL_capturingTeam", "Unknown"], _sector getVariable ["BIS_WL_captureProgress", 0]];
 };

@@ -30,7 +30,7 @@ if (_projectile isKindOf "SubmunitionBase") then {
         while { alive _camera && alive _projectile } do {
             _camera setPosASL (_projectile modelToWorldWorld [0, 20, 0]);
             _camera setVectorDirAndUp [vectorDir _projectile, vectorUp _projectile];
-            sleep 0.001;
+            uiSleep 0.001;
         };
     };
 } else {
@@ -133,7 +133,7 @@ private _targetDrawer = addMissionEventHandler ["Draw3D", {
 };
 
 while { !_stop } do {
-    sleep 0.5;
+    uiSleep 0.5;
 
     private _projectilePosition = getPosASL _projectile;
     private _projectileDirection = _projectile modelToWorld [0, 1000, 0];
@@ -155,12 +155,12 @@ _camera camSetPos _lastKnownPosition;
 _camera camSetTarget _lastKnownDirection;
 _camera camCommit 0;
 
-sleep 1.5;
+uiSleep 1.5;
 
 camDestroy _camera;
 "missileCamera" cutFadeOut 0;
 removeMissionEventHandler ["Draw3D", _targetDrawer];
 
-sleep 2;
+uiSleep 2;
 
 setPiPViewDistance _originalPipViewDistance;

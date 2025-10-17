@@ -132,7 +132,7 @@ while {!_done} do {
 	_box ctrlSetStructuredText parseText format _textStructuredFormat;
 };
 
-sleep _onScreenDuration;
+uiSleep _onScreenDuration;
 
 _box ctrlSetFade 1;
 _box ctrlCommit 1;

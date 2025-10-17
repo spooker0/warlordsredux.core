@@ -42,7 +42,7 @@ if (_isModerator || _isAdmin) then {
 
 //         systemChat "Spam protection triggered. Chat disabled for 30s.";
 //         0 spawn {
-//             sleep 30;
+//             uiSleep 30;
 //             {
 //                 private _vonStatus = (channelEnabled _x) # 1;
 //                 _x enableChannel [true, _vonStatus];

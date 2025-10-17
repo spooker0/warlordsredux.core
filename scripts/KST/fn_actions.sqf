@@ -25,7 +25,7 @@ if (_kills == 3) then {
 			private _fuel = 60;
 			private _startTime = serverTime;
 			waitUntil {
-				sleep 0.2;
+				uiSleep 0.2;
 				[_uav, -1, false, 1, 2000] call WL2_fnc_scanner;
 				hintSilent format ["UAV - Fuel: %1%%", round (100 * (_fuel - (serverTime - _startTime)) / _fuel)];
 				!alive player || serverTime - _startTime > _fuel
@@ -93,7 +93,7 @@ if (_kills == 5) then {
 				private _sound = -1;
 				while { alive _missile } do {
 					_sound = playSoundUI ["A3\Sounds_F\weapons\Rockets\rocket_fly_2.wss", 3, 1, true];
-					sleep ((soundParams _sound) # 2);
+					uiSleep ((soundParams _sound) # 2);
 				};
 				stopSound _sound;
 			};
@@ -156,7 +156,7 @@ if (_kills == 5) then {
 						false setCamUseTI 2;
 					};
 
-					sleep 0.001;
+					uiSleep 0.001;
 				};
 			};
 
@@ -171,7 +171,7 @@ if (_kills == 5) then {
 			private _startTime = serverTime;
 			private _fuel = 60;
 			waitUntil {
-				sleep 0.2;
+				uiSleep 0.2;
 				[_uav, -1, false, 1, 8000] call WL2_fnc_scanner;
 				_fuelDisplay ctrlSetStructuredText parseText format ["<t align='center' size='2'>Fuel: %1%%</t>", round (100 * (_fuel - (serverTime - _startTime)) / _fuel)];
 				!alive _missile || serverTime - _startTime > _fuel
@@ -180,7 +180,7 @@ if (_kills == 5) then {
 				triggerAmmo _missile;
 			};
 
-			sleep 3;
+			uiSleep 3;
 			switchCamera player;
 			player remoteControl objNull;
 
@@ -283,7 +283,7 @@ if (_kills == 7) then {
 			private _gunnerUnit = gunner _chopper;
 			_gunnerUnit setVariable ["BIS_WL_ownerAsset", getPlayerUID player];
 			playSoundUI ["a3\dubbing_f_heli\mp_groundsupport\50_cas\mp_groundsupport_50_cas_bhq_0.ogg", 3, 1, true];
-			sleep 3;
+			uiSleep 3;
 			switchCamera _gunnerUnit;
 			player remoteControl _gunnerUnit;
 			deleteVehicle (driver _chopper);
@@ -301,7 +301,7 @@ if (_kills == 7) then {
 					private _newPos = _chopper modelToWorldWorld [_lateralInput, _forwardInput, 0];
 					_newPos set [2, 600];
 					_chopper setPosASL _newPos;
-					sleep 0.001;
+					uiSleep 0.001;
 				};
 			};
 
@@ -335,11 +335,11 @@ if (_kills == 7) then {
 							playSoundUI ["a3\sounds_f\weapons\rockets\new_rocket_3.wss", 2, 1, true];
 						};
 					};
-					sleep 0.001;
+					uiSleep 0.001;
 				};
 			};
 
-			sleep 3;
+			uiSleep 3;
 			_gunnerUnit switchCamera "GUNNER";
 
 			private _startTime = serverTime;
@@ -347,7 +347,7 @@ if (_kills == 7) then {
 
 			_chopper setVariable ["WL_scannerOn", true];
 			waitUntil {
-				sleep 0.2;
+				uiSleep 0.2;
 				player setVariable ["WL_hmdOverride", 2];
 				_gunnerUnit selectWeapon ["autocannon_40mm_VTOL_01", "HE", "player"];
 				[_chopper, -1, false, 1, 4000] call WL2_fnc_scanner;

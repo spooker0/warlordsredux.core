@@ -145,6 +145,6 @@ private _vote = _activePoll # 2;
         private _activePoll = missionNamespace getVariable ["POLL_ActivePoll", []];
         private _selection = _activePoll # 2;
         [_display, _selection] call POLL_fnc_updatePollMenu;
-        sleep 0.1;
+        uiSleep 0.1;
     };
 };

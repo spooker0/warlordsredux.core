@@ -173,7 +173,7 @@ while { _designatingTargets } do {
         break;
     };
 
-    sleep 0.2;
+    uiSleep 0.2;
 };
 
 
@@ -239,10 +239,10 @@ private _missiles = [];
                 _missile setMissileTarget [_laser, true];
             };
 
-            sleep 1;
+            uiSleep 1;
         };
 
-        sleep 3;
+        uiSleep 3;
         deleteVehicle _laser;
         deleteVehicle _missile;
     };
@@ -254,7 +254,7 @@ private _missiles = [];
         "vlslaunch03"
     ];
     playSoundUI [selectRandom _soundFiles, 1, 1, true];
-    sleep 2;
+    uiSleep 2;
 } forEach _targets;
 
 systemChat format ["Launch complete.", count _missiles];

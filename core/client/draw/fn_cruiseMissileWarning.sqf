@@ -12,6 +12,6 @@ _instructionText ctrlShow false;
 
 playSound "air_raid";
 
-sleep 10;
+uiSleep 10;
 
 "cruiseMissileWarning" cutText ["", "PLAIN"];

@@ -84,7 +84,7 @@ private _directionToSector = _destination getDir _sectorPos;
 
 titleCut ["", "BLACK OUT", 1];
 
-sleep 1;
+uiSleep 1;
 
 switch (_fastTravelMode) do {
 	case 0;
@@ -133,7 +133,7 @@ switch (_fastTravelMode) do {
 		[_vehicle, _parachute] spawn {
 			params ["_vehicle", "_parachute"];
 			waitUntil {
-				sleep 0.2;
+				uiSleep 0.2;
 				_parachute setVelocity [0, 0, (velocity _parachute) # 2];
 				_parachute setVectorUp [0, 0, 1];
 				(getPosATL _vehicle # 2) < 5
@@ -141,7 +141,7 @@ switch (_fastTravelMode) do {
 			detach _vehicle;
 			deleteVehicle _parachute;
 
-			sleep 0.5;
+			uiSleep 0.5;
 			_vehicle setVehiclePosition [getPosATL _vehicle, [], 0, "NONE"];
 		};
 

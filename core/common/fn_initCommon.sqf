@@ -1,16 +1,19 @@
 #include "includes.inc"
-0 spawn APS_fnc_defineVehicles;
-
 if !(isDedicated) then {
 	waitUntil {
 		!(isNull (findDisplay 46)) && !(isNull player);
 	};
 };
 
+if (hasInterface) then {
+	["main"] call BIS_fnc_startLoadingScreen;
+};
+
+0 spawn APS_fnc_defineVehicles;
+
 if (isServer) then {
 	call WL2_fnc_initSectors;
 } else {
-	["client_init"] call BIS_fnc_startLoadingScreen;
 	private _sectorsReady = false;
 	while { !_sectorsReady } do {
 		uiSleep 0.1;
@@ -22,7 +25,8 @@ if (isServer) then {
 		private _foundSectors = (entities "Logic") select {
 			private _name = _x getVariable ["WL2_name", ""];
 			private _objArea = _x getVariable ["WL2_objectArea", []];
-			_name != "" && (count _objArea >= 4);
+			private _agentGrp = _x getVariable ["BIS_WL_agentGrp", grpNull];
+			_name != "" && (count _objArea >= 4) && !isNull _agentGrp
 		} apply { _x getVariable ["WL2_name", ""] };
 		private _foundAllSectors = true;
 		{
@@ -121,4 +125,8 @@ if (isServer) then {
 
 if (!isDedicated && hasInterface) then {
 	call WL2_fnc_initClient;
+};
+
+if (hasInterface) then {
+	["main"] call BIS_fnc_endLoadingScreen;
 };

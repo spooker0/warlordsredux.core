@@ -59,7 +59,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         params ["_texture"];
         while { !isNull _texture } do {
             [_texture] call MENU_fnc_sendReportData;
-            sleep 5;
+            uiSleep 5;
         };
     };
 }];

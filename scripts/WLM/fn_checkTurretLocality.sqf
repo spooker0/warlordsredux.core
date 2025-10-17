@@ -29,5 +29,5 @@ while { alive _asset } do {
         _asset setVariable ["WLM_assetCanRearm", _turretLocalityMatch, true];
     };
 
-    sleep 0.5;
+    uiSleep 0.5;
 };

@@ -51,7 +51,7 @@
 		if (_isAfk) then {
 			_mapData = createHashMap;
 			missionNamespace setVariable ["WL2_mapData", _mapData];
-			sleep 5;
+			uiSleep 5;
 			continue;
 		};
 
@@ -142,7 +142,7 @@
 		_mapData set ["teamSectorMarkers", _teamSectorMarkers];
 		_mapData set ["enemySectorMarkers", _allSectorMarkers];
 
-		sleep 1;
+		uiSleep 1;
 	};
 };
 
@@ -161,7 +161,7 @@
 
 		private _isMapBeingDrawn = uiNamespace getVariable ["WL2_drawingMap", false];
 		if (!_isMapBeingDrawn) then {
-			sleep _refreshSleepTime;
+			uiSleep _refreshSleepTime;
 			continue;
 		};
 
@@ -170,7 +170,7 @@
 		[WL_CONTROL_MAP, _drawMode] call WL2_fnc_iconDrawMapPrepare;
 
 		uiNamespace setVariable ["WL2_drawingMap", false];
-		sleep _refreshSleepTime;
+		uiSleep _refreshSleepTime;
 	};
 };
 
@@ -184,7 +184,7 @@
 	while { !BIS_WL_missionEnd } do {
 		private _mainMap = (findDisplay 12) displayCtrl 51;
 		[_mainMap, 2] call WL2_fnc_iconDrawMapPrepare;
-		sleep 30;
+		uiSleep 30;
 	};
 };
 #endif

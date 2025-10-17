@@ -78,7 +78,7 @@ private _draw3dHandler = addMissionEventHandler ["Draw3D", {
                 "setCrosshairs([]);setBoxLines([]);setReferencePoint(-1, -1);setDesiredPoint(-1);"
             ];
         };
-        sleep 0.001;
+        uiSleep 0.001;
     };
 };
 
@@ -104,13 +104,13 @@ if (typeof cameraOn == "B_T_VTOL_01_armed_F") then {
                     uiNamespace setVariable ["WL2_turretRefPoint", [0, 0, 0]];
                 };
             };
-            sleep 0.001;
+            uiSleep 0.001;
         };
     };
 };
 
 waitUntil {
-    sleep 0.1;
+    uiSleep 0.1;
     !alive player || 
     !alive cameraOn ||
     isNull _display

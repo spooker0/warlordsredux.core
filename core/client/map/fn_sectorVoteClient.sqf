@@ -48,7 +48,7 @@
         _lastTargetFriendly = WL_TARGET_FRIENDLY;
         _lastTargetEnemy = WL_TARGET_ENEMY;
         _lastTargetReset = _targetReset;
-        sleep 1;
+        uiSleep 1;
     };
 };
 
@@ -114,5 +114,5 @@ while { !BIS_WL_missionEnd } do {
         };
     };
 
-    sleep WL_TIMEOUT_SHORT;
+    uiSleep WL_TIMEOUT_SHORT;
 };

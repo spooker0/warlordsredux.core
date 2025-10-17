@@ -27,7 +27,7 @@ if (count _slingRopePoints == 0) then {
 _assetToLoad setTowParent _asset;
 
 waitUntil {
-    sleep 1;
+    uiSleep 1;
     local _assetToLoad || !alive _assetToLoad || !alive _asset;
 };
 

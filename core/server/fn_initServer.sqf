@@ -1,6 +1,4 @@
 #include "includes.inc"
-["server_init"] call BIS_fnc_startLoadingScreen;
-
 {
 	createCenter _x;
 } forEach [west, east, resistance, civilian];
@@ -40,7 +38,7 @@ estimatedTimeLeft WL_DURATION_MISSION;
 
 0 spawn {
 	waitUntil {
-		sleep 1;
+		uiSleep 1;
 		estimatedEndServerTime - serverTime < 1;
 	};
 	missionNamespace setVariable ["BIS_WL_missionEnd", true, true];
@@ -81,7 +79,7 @@ call WL2_fnc_processRunways;
 	_dateTime set [4, 0];
 	[_dateTime] remoteExec ["setDate"];
 
-	sleep 10;
+	uiSleep 10;
 
 	while { !BIS_WL_missionEnd } do {
 		private _timeMultiplier = if (sunOrMoon < 0.99) then {
@@ -92,17 +90,17 @@ call WL2_fnc_processRunways;
 		if (timeMultiplier != _timeMultiplier) then {
 			setTimeMultiplier _timeMultiplier;
 		};
-		sleep (60 * 2);
+		uiSleep (60 * 2);
 	};
 };
 
 0 spawn {
-	sleep 10;
+	uiSleep 10;
 	while { !BIS_WL_missionEnd } do {
 		if (random 1 < 0.02) then {
 			[] remoteExec ["WL2_fnc_earthquake", 0];
 		};
-		sleep (60 * 20);
+		uiSleep (60 * 20);
 	};
 };
 
@@ -123,15 +121,13 @@ if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
 			{
 				_x addCuratorEditableObjects [_allNonLocalEntities, true];
 			} forEach allCurators;
-			sleep 30;
+			uiSleep 30;
 		};
 	};
 };
 
 private _serverStats = profileNamespace getVariable ["WL_stats", createHashMap];
 missionNamespace setVariable ["WL_serverStats", _serverStats, true];
-
-["server_init"] call BIS_fnc_endLoadingScreen;
 
 #if WL_EASTER_EGG
 private _systemTime = systemTimeUTC;
