@@ -29,6 +29,11 @@ _texture ctrlAddEventHandler ["JSDialog", {
             private _playerName = [_selectedPlayer, true] call BIS_fnc_getName;
             private _systemTimeDisplay = [systemTimeUTC] call MENU_fnc_printSystemTime;
 
+            private _hiddenIdentity = player getVariable ["WL2_hideIdentity", ""];
+            if (_hiddenIdentity != "") then {
+                _uid = _hiddenIdentity;
+            };
+
             private _playerData = [_uid, _playerName, _systemTimeDisplay];
             private _playerDataJson = toJSON _playerData;
             _playerDataJson = _texture ctrlWebBrowserAction ["ToBase64", _playerDataJson];
@@ -40,12 +45,11 @@ _texture ctrlAddEventHandler ["JSDialog", {
         };
         case "report": {
             private _uid = _message select 1;
-            private _reason = _message select 2;
+            private _playerName = _message select 2;
+            private _reason = _message select 3;
             _reason = _texture ctrlWebBrowserAction ["FromBase64", _reason];
 
             [player, _uid, _reason] remoteExec ["MENU_fnc_reportPlayer", 2];
-            private _selectedPlayer = [_uid] call BIS_fnc_getUnitByUID;
-            private _playerName = [_selectedPlayer, true] call BIS_fnc_getName;
             systemChat format["Reported %1 for %2", _playerName, _reason];
 
             closeDialog 0;

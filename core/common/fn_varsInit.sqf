@@ -41,6 +41,7 @@ switch (_locality) do {
 		WL_SpectrumInterface = false;
 		WL_IsSpectator = false;
 		WL_IsReplaying = false;
+		WL_MoneySign = [BIS_WL_playerSide] call WL2_fnc_getMoneySign;
 		BIS_WL_highlightedSector = objNull;
 	};
 };

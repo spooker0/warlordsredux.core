@@ -173,7 +173,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         _settingsMenu append [
             ["category", "Moderator Options"],
             ["checkbox", "Show player uids (requires respawn)", ["showPlayerUids", false]],
-            ["checkbox", "Show mod status (requires respawn)", ["showModStatus", true]]
+            ["checkbox", "Hide my identity (requires respawn)", ["hideMyIdentity", true]]
         ];
     };
 

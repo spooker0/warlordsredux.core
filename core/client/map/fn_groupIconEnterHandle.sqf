@@ -128,7 +128,7 @@ private _enemyCaptureText = if (_revealed) then {
 private _sectorName = _sector getVariable ["WL2_name", "Sector"];
 private _sectorIncome = if !(_sectorName in WL_SPECIAL_SECTORS) then {
 	[
-		[_side] call WL2_fnc_getMoneySign,
+		WL_MoneySign,
 		_sector getVariable "BIS_WL_value",
 		"/",
 		localize "STR_A3_rscmpprogress_min",

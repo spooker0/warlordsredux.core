@@ -3,6 +3,8 @@ params ["_assets", "_parentSector"];
 
 if (count _assets == 0) exitWith {};
 
+uiSleep 10;
+
 while { count _assets > 0 } do {
 	private _targetedSectors = [
 		missionNamespace getVariable "BIS_WL_currentTarget_west",
@@ -19,6 +21,15 @@ while { count _assets > 0 } do {
 			};
 		} forEach _assets;
 	};
+
+	{
+		if (_x isKindOf "Man" && vehicle _x == _x) then {
+			if (isTouchingGround _x) then {
+				continue;
+			};
+			deleteVehicle _x;
+		};
+	} forEach _assets;
 
 	uiSleep 30;
 

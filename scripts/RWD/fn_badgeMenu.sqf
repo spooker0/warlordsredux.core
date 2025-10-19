@@ -28,6 +28,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
 
     private _badgeArray = [];
     {
+        if (_y == 0) then { continue; };
         _badgeArray pushBack [_x, _y];
     } forEach _badges;
 

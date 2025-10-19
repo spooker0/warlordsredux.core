@@ -88,7 +88,12 @@ private _demolishActionId = player addAction [
 
             cameraOn cameraEffect ["Terminate", "BACK"];
 
-            player setVariable ["WL2_sabotageTarget", [serverTime + WL_DEMOLITION_STEP_TIME, "Saboteur"], true];
+            private _demolitionTargetSide = [_demolishableTarget] call WL2_fnc_getAssetSide;
+            if (_demolitionTargetSide == BIS_WL_playerSide) then {
+                player setVariable ["WL2_sabotageTarget", [serverTime, ""], true];
+            } else {
+                player setVariable ["WL2_sabotageTarget", [serverTime + WL_DEMOLITION_STEP_TIME, "Saboteur"], true];
+            };
         };
     },
     [],

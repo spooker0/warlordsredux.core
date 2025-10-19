@@ -253,8 +253,9 @@ if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
 	];
 	
 	0 spawn {
-		uiSleep 300;
-		["Play Tester"] call RWD_fnc_addBadge;
+		uiSleep 10;
+
+		["Play Tester", true] call RWD_fnc_addBadge;
 	};
 
 	{
@@ -347,6 +348,7 @@ if (!isServer) then {
 0 spawn WL2_fnc_lockActionUpdate;
 call WL2_fnc_vehicleManagerAction;
 
+["Player", true] call RWD_fnc_addBadge;	
 player setVariable ["WL2_currentBadge", profileNamespace getVariable ["WL2_currentBadge", "Player"], true];
 0 spawn WL2_fnc_updateLevelDisplay;
 

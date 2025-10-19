@@ -19,22 +19,10 @@ private _destroyerId = 0;
     };
 
     private _sectorClass = configName _sector;
-
-    private _location = getArray (_sector >> "location");
-    private _logic = _logicGroup createUnit ["Logic", _location, [], 0, "NONE"];
-
     private _name = getText (_sector >> "name");
-    _logic setVariable ["WL2_name", _name, true];
-
-    private _disableHome = getNumber (_sector >> "disableHome");
-    _logic setVariable ["WL2_canBeBase", _disableHome != 1];
-
-    private _services = getArray (_sector >> "services");
-    _logic setVariable ["WL2_services", _services, true];
-
+    private _location = getArray (_sector >> "location");
     private _area = getArray (_sector >> "area");
     _area set [3, _area # 3 == 1];
-    _logic setVariable ["WL2_objectArea", _area, true];
 
     private _destroyer = getNumber (_sector >> "destroyer");
     private _carrier = getNumber (_sector >> "carrier");
@@ -45,7 +33,6 @@ private _destroyerId = 0;
         {
             deleteVehicle _x;
         } forEach _objectsInCarrier;
-        deleteVehicle _logic;
 
         _location set [2, 0];
         [_location, 90 + (_area # 2), _name, _destroyerId] spawn WL2_fnc_createDestroyer;
@@ -53,6 +40,21 @@ private _destroyerId = 0;
 
         continue;
     };
+
+    private _logic = _logicGroup createUnit ["Logic", _location, [], 0, "NONE"];
+
+    _logic setVariable ["WL2_name", _name, true];
+
+    private _disableHome = getNumber (_sector >> "disableHome");
+    _logic setVariable ["WL2_canBeBase", _disableHome != 1];
+
+    private _services = getArray (_sector >> "services");
+    _logic setVariable ["WL2_services", _services, true];
+
+    _logic setVariable ["WL2_objectArea", _area, true];
+
+    private _vehicles = getArray (_sector >> "vehicles");
+    _logic setVariable ["WL2_vehiclesToSpawn", _vehicles];
 
     if (_carrier == 1) then {
         _logic setVariable ["WL2_isAircraftCarrier", true, true];

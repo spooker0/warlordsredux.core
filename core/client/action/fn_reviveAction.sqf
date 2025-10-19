@@ -87,28 +87,31 @@ private _reviveActionId = player addAction [
 ];
 player setVariable ["WL2_reviveActionId", _reviveActionId];
 
-
-player addAction [
-	"<t color='#00ff00'>Hold on longer</t>",
-	{
+[
+    player,
+    "<t color='#00ff00'>Hold on longer</t>",
+    "\A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_revive_ca.paa",
+    "\A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_revive_ca.paa",
+    "lifeState player == 'INCAPACITATED'",
+    "lifeState player == 'INCAPACITATED'",
+    {},
+    {},
+    {
         params ["_target", "_caller", "_actionId", "_arguments"];
         player setVariable ["WL2_downedLiveTime", 90];
         private _currentExpirationTime = player getVariable ["WL2_expirationTime", 0];
         _currentExpirationTime = _currentExpirationTime + 65;
         player setVariable ["WL2_expirationTime", _currentExpirationTime, true];
         player removeAction _actionId;
-	},
-	nil,
-	1.5,
-	true,
-	true,
-	"",
-	"lifeState player == 'INCAPACITATED'",
-	5,
-	true,
-	"",
-	""
-];
+    },
+    {},
+    [],
+    3,
+    1,
+    true,
+    true,
+    false
+] call BIS_fnc_holdActionAdd;
 
 player addAction [
 	"Customization",

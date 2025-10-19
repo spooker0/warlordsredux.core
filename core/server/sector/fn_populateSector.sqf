@@ -5,7 +5,9 @@ private _sectorValue = _sector getVariable ["BIS_WL_value", 50];
 private _garrisonSize = _sectorValue * 2.3;
 
 private _vehicleUnits = [];
-if (count (_sector getVariable ["BIS_WL_vehiclesToSpawn", []]) == 0) then {
+
+private _presetVehicles = _sector getVariable ["WL2_vehiclesToSpawn", []];
+if (count _presetVehicles == 0) then {
 	private _hasRadar = false;
 	private _hardAIMode = WL_HARD_AI_MODE == 1;
 	private _numVehicleSpawn = if (_hardAIMode) then {
@@ -97,9 +99,9 @@ if (count (_sector getVariable ["BIS_WL_vehiclesToSpawn", []]) == 0) then {
 	};
 } else {
 	{
-		_vehicleInfo = _x;
-		_vehicleInfo params ["_type", "_pos", "_dir", "_lock", "_waypoints"];
-		_vehicleArray = [_pos, _dir, _type, _owner] call BIS_fnc_spawnVehicle;
+		private _vehicleInfo = _x;
+		_vehicleInfo params ["_type", "_pos", "_dir"];
+		private _vehicleArray = [_pos, _dir, _type, _owner] call BIS_fnc_spawnVehicle;
 		_vehicleArray params ["_vehicle", "_crew", "_group"];
 
 		_vehicleUnits pushBack _vehicle;
@@ -111,20 +113,19 @@ if (count (_sector getVariable ["BIS_WL_vehiclesToSpawn", []]) == 0) then {
 
 		[_vehicle, driver _vehicle, typeof _vehicle] call WL2_fnc_processOrder;
 
-		_posVic = position _vehicle;
+		private _posVic = position _vehicle;
 		[_group, 0] setWaypointPosition [_posVic, 100];
 		_group setBehaviour "COMBAT";
 		_group deleteGroupWhenEmpty true;
 
-		_wp = _group addWaypoint [_posVic, 100];
+		private _wp = _group addWaypoint [_posVic, 100];
 		_wp setWaypointType "SAD";
 
-		_wp1 = _group addWaypoint [_posVic, 100];
+		private _wp1 = _group addWaypoint [_posVic, 100];
 		_wp1 setWaypointType "CYCLE";
 
 		_vehicle allowCrewInImmobile [true, true];
-	} forEach (_sector getVariable "BIS_WL_vehiclesToSpawn");
-	_sector setVariable ["BIS_WL_vehiclesToSpawn", nil];
+	} forEach _presetVehicles;
 };
 
 private _services = _sector getVariable ["WL2_services", []];
@@ -219,7 +220,7 @@ while {_i < _garrisonSize} do {
 
 	private _i2 = 0;
 	for "_i2" from 0 to _grpSize do {
-		private _newUnit = _newGrp createUnit [selectRandom _unitsPool, _pos, [], 100, "NONE"];
+		private _newUnit = _newGrp createUnit [selectRandom _unitsPool, _pos, [], 20, "NONE"];
 		private _posAboveGround = getPosATL _newUnit;
 		_posAboveGround set [2, 100];
 		_newUnit setVehiclePosition [_posAboveGround, [], 0, "CAN_COLLIDE"];

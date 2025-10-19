@@ -46,7 +46,7 @@ if (_useNewKillfeed) then {
 	private _killRewardMap = uiNamespace getVariable ["WL_killRewardMap", createHashMap];
 
 	private _scale = 0.75 call WL2_fnc_purchaseMenuGetUIScale;
-	private _moneySign = [BIS_WL_playerSide] call WL2_fnc_getMoneySign;
+	private _moneySign = WL_MoneySign;
 
 	private _killFeed = "";
 	{

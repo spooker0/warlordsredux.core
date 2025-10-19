@@ -100,8 +100,6 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
         } forEach _nearbyDamagedItems;
 
         private _nearSaboteurs = allPlayers select {
-            side group _x != BIS_WL_playerSide
-        } select {
             _x distance2D player < 100
         };
         {

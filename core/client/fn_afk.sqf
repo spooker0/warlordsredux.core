@@ -8,7 +8,6 @@ private _isSpectator = _uid in (getArray (missionConfigFile >> "spectatorIDs"));
 if (_isAdmin || _isSpectator) exitWith {};
 #endif
 
-private _alreadyHasOneOfUsBadge = false;
 while { !BIS_WL_missionEnd } do {
 	uiSleep 5;
 	private _afkTimer = missionNamespace getVariable ["WL2_afkTimer", -1];
@@ -27,9 +26,6 @@ while { !BIS_WL_missionEnd } do {
     };
 
     if (serverTime - _afkTimer > 900) then {
-        if (!_alreadyHasOneOfUsBadge) then {
-            _alreadyHasOneOfUsBadge = true;
-            ["One of Us"] call RWD_fnc_addBadge;
-        };
+        ["One of Us", true] call RWD_fnc_addBadge;
     };
 };

@@ -44,12 +44,6 @@ BIS_WL_allSectors = (entities "Logic") select { _x getVariable ["WL2_name", ""] 
 
 {
 	private _sector = _x;
-
-	if (count (_x getVariable ["WL2_objectArea", []]) == 0) then {
-		private _nearDetectors = _x nearObjects ["EmptyDetector", 100];
-		_x setVariable ["WL2_objectArea", triggerArea (_nearDetectors # 0)];
-	};
-
 	private _sectorArea = _sector getVariable "WL2_objectArea";
 	private _connections = _sector getVariable ["WL2_connectedSectors", []];
 	{
@@ -60,8 +54,6 @@ BIS_WL_allSectors = (entities "Logic") select { _x getVariable ["WL2_name", ""] 
 	_sector setVariable ["WL2_connectedSectors", _connections];
 	_sector setVariable ["objectAreaComplete", [position _sector] + _sectorArea];
 } forEach BIS_WL_allSectors;
-
-{_x enableSimulation false} forEach allMissionObjects "EmptyDetector";
 
 "common" call WL2_fnc_varsInit;
 

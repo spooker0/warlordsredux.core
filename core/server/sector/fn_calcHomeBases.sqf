@@ -10,9 +10,6 @@ private _canBeBase = {
 #endif
 };
 
-// Eliminate last bases
-// _potBases = _potBases - (profileNamespace getVariable ["BIS_WL_lastBases", []]);
-
 private _firstBase = if (isNull _overrideFirstBase) then {
     selectRandom (BIS_WL_allSectors select {
         [_x] call _canBeBase;
@@ -66,7 +63,14 @@ private _finalPot = BIS_WL_allSectors select {
 
 // diag_log format ["Iterations: %1, Final bases: %2", _iterations, _potBases apply { _x getVariable ["WL2_name", ""] }];
 
-private _secondBase = selectRandom _finalPot;
+private _secondBase = if (count _finalPot == 0) then {
+    // Fallback
+    selectRandom (BIS_WL_allSectors select {
+        [_x] call _canBeBase && _x != _firstBase;
+    })
+} else {
+    selectRandom _finalPot
+};
 
 if (random 1 > 0.5) then {
     [_firstBase, _secondBase, _finalPot]

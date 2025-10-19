@@ -52,6 +52,7 @@ private _actionCost = switch (_action) do {
 	case "cruiseMissiles" : { 15000 };
 	case "repairFOB" : { 500 };
 	case "repairStronghold" : { 250 };
+	case "jetRTB" : { WL_COST_JETRTB };
 	default { 0 };
 };
 
@@ -241,7 +242,7 @@ if (_action == "fundsTransfer") exitWith {
 
 	[_transferAmount, getPlayerUID _recipient] call _addFunds;
 
-	private _sentMoney = format ["%1%2", [_side] call WL2_fnc_getMoneySign, _transferAmount];
+	private _sentMoney = format ["%1%2", WL_MoneySign, _transferAmount];
 	private _message = format [localize "STR_A3_WL_donate_cp", name _sender, name _recipient, _sentMoney];
 
 	[_side, _message] call _broadcastActionToSide;

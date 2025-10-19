@@ -30,8 +30,7 @@ private _offsetY = WL2_TargetButtonSetup # 3;
 private _costText = if (count _costCondition > 0) then {
     private _cost = _costCondition # 0;
     if (_cost > 0) then {
-        private _moneySign = [BIS_WL_playerSide] call WL2_fnc_getMoneySign;
-        format [" (%1%2)", _moneySign, _costCondition # 0];
+        format [" (%1%2)", WL_MoneySign, _costCondition # 0];
     } else {
         " (FREE)";
     };

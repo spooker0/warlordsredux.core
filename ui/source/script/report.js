@@ -121,8 +121,9 @@ const reasonEl = document.getElementById('report-reason');
 reasonEl.addEventListener('input', changeButtons);
 reportButton.addEventListener('click', () => {
     const player = document.selectedPlayer;
+    const playerName = document.selectedPlayerName;
     const reason = reasonEl.value || 'unsportsmanlike conduct';
-    A3API.SendAlert(`["report", "${player}", "${btoa(reason)}"]`);
+    A3API.SendAlert(`["report", "${player}", "${playerName}", "${btoa(reason)}"]`);
 });
 
 function changeButtons() {

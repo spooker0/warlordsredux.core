@@ -2,7 +2,7 @@
 private _baseData =
 #if WL_OVERRIDE_BASES
 	BIS_WL_allSectors select {
-		_x getVariable ["WL2_name", ""] in ["Airbase", "AAC Airfield"];
+		_x getVariable ["WL2_name", ""] in ["Pyrgos", "AAC Airfield"];
 	};
 #else
 	[] call WL2_fnc_calcHomeBases;
@@ -65,7 +65,6 @@ systemChat format ["Second base: %1", _secondBase getVariable ["WL2_name", ""]];
 
 missionNamespace setVariable ["WL2_base1", _firstBase, true];
 missionNamespace setVariable ["WL2_base2", _secondBase, true];
-profileNamespace setVariable ["BIS_WL_lastBases", [_firstBase, _secondBase]];
 waitUntil {!isNil "WL2_base1" && {!isNil "WL2_base2"}};
 
 {
@@ -122,34 +121,6 @@ private _slowestCapture = 50;
 		round (_size / 13000);
 	};
 	_sector setVariable ["BIS_WL_value", _sectorValue];
-
-	private _sectorVehicles = vehicles inAreaArray (_sector getVariable "objectAreaComplete");
-	private _sectorVehiclesArray = [];
-	{
-		private _vehicle = _x;
-		if (_vehicle getVariable ["WL_excludeSectorSpawn", false]) then {
-			continue;
-		};
-		if !(_vehicle isKindOf "AllVehicles") then {
-			continue;
-		};
-		private _group = group effectiveCommander _vehicle;
-		private _array = [typeOf _vehicle, position _vehicle, direction _vehicle, locked _vehicle];
-		private _waypoints = +(waypoints _group);
-		reverse _waypoints;
-		_waypoints resize ((count _waypoints) - .5);
-		reverse _waypoints;
-		_waypoints = _waypoints apply {[waypointPosition _x, waypointType _x, waypointSpeed _x, waypointBehaviour _x, waypointTimeout _x]};
-		_array pushBack _waypoints;
-		_sectorVehiclesArray pushBack _array;
-		{_vehicle deleteVehicleCrew _x} forEach crew _vehicle;
-		if (count units _group == 0) then {deleteGroup _group};
-		deleteVehicle _vehicle;
-	} forEach _sectorVehicles;
-
-	if (count _sectorVehiclesArray > 0) then {
-		_sector setVariable ["BIS_WL_vehiclesToSpawn", _sectorVehiclesArray];
-	};
 
 	_agentGrp = createGroup CIVILIAN;
 	_agent = _agentGrp createUnit ["Logic", _sectorPos, [], 0, "CAN_COLLIDE"];

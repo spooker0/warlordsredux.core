@@ -150,8 +150,7 @@ if (count _customizationLoadout > 0) then {
             [player, "equip", _totalCost] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
             private _message = if (_totalCost > 0) then {
-                private _moneySign = [BIS_WL_playerSide] call WL2_fnc_getMoneySign;
-                format ["Equipment and customizations applied for %1%2.", _moneySign, _totalCost];
+                format ["Equipment and customizations applied for %1%2.", WL_MoneySign, _totalCost];
             } else {
                 "Equipment and customizations applied for free.";
             };

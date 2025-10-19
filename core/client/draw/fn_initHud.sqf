@@ -56,7 +56,7 @@ while { !BIS_WL_missionEnd } do {
 
 	_moneyControl ctrlSetStructuredText parseText format [
 		"<t shadow='2' size ='1.1' align='middle'>%1%2</t>    <t shadow='2' size ='0.9' align='middle'>+%3</t>",
-		[_side] call WL2_fnc_getMoneySign,
+		WL_MoneySign,
 		_currentMoney,
 		missionNamespace getVariable [format ["WL2_actualIncome_%1", _side], 0]
 	];
@@ -148,9 +148,14 @@ while { !BIS_WL_missionEnd } do {
 	if (count _captureDetails > 0) then {
 		_captureDetails = [_captureDetails, [], { _x # 1 }, "DESCEND"] call BIS_fnc_sortBy;
 
-		_capturingTeam = _captureDetails select {
+		private _capturingTeamRaw = _captureDetails select {
 			_x # 0 != _sectorOwner
-		} select 0 select 0;
+		} select 0;
+		_capturingTeam = if (_capturingTeamRaw select 1 == 0) then {
+			independent
+		} else {
+			_capturingTeamRaw select 0
+		};
 
 		_sectorOwnerCap = _captureDetails select {
 			_x # 0 == _sectorOwner

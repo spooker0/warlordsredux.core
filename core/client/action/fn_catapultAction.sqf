@@ -59,7 +59,7 @@ private _catapultActionID = _asset addAction [
 _asset setUserActionText [_catapultActionID, "<t color = '#ff4b4b'>Catapult Launch</t>", "<img size='2' color='#ff4b4b' image='\a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa'/>"];
 
 private _rebaseAction = _asset addAction [
-	"Return to Base",
+	format ["Return to Base (%1%2)", WL_MoneySign, WL_COST_JETRTB],
 	{
         _this params ["_asset", "_caller", "_actionId"];
         [_asset] spawn {
@@ -77,8 +77,8 @@ private _rebaseAction = _asset addAction [
             private _airfieldsByDistance = [_airfieldSectors, [_asset], { _input0 distance _x }, "ASCEND"] call BIS_fnc_sortBy;
             private _closestAirfield = _airfieldsByDistance # 0;
             private _sectorName = _closestAirfield getVariable ["WL2_name", "sector"];
-            private _message = format ["Are you sure you want to rebase to %1?<br/>Make sure your landing gear is functional!", _sectorName];
-            private _result = [_message, "Rebase to Nearest Airfield", "Rebase", "Cancel"] call BIS_fnc_guiMessage;
+            private _message = format ["Are you sure you want to return to %1 for %2%3?<br/>Make sure your landing gear is functional!", _sectorName, WL_MoneySign, WL_COST_JETRTB];
+            private _result = [_message, "Return to Nearest Airfield", "Rebase", "Cancel"] call BIS_fnc_guiMessage;
 
             if (!_result) exitWith {
                 playSoundUI ["AddItemFailed"];
@@ -112,6 +112,8 @@ private _rebaseAction = _asset addAction [
             _asset setDir _dir;
             _asset setVelocity [0, 0, 0];
 
+            [player, "jetRTB"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+
             titleCut ["", "BLACK IN", 1];
         };
 	},
@@ -127,6 +129,6 @@ private _rebaseAction = _asset addAction [
 
 _asset setUserActionText [
     _rebaseAction,
-    "<t color='#4bafff'>Return to Base</t>",
+    format ["<t color='#4bafff'>Return to Base (%1%2)</t>", WL_MoneySign, WL_COST_JETRTB],
     "<img size='2' color='#4bafff' image='\a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa'/>"
 ];

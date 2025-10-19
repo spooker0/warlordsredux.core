@@ -5,6 +5,16 @@ if (!alive _asset) exitWith {
 	false;
 };
 
+private _lastDamageTime = _asset getEntityInfo 5;
+if (_lastDamageTime > 0 && _lastDamageTime < WL_COOLDOWN_JETRTB_DMG) exitWith {
+    false;
+};
+
+private _playerFunds = (missionNamespace getVariable ["fundsDatabaseClients", createHashMap]) getOrDefault [getPlayerUID player, 0];
+if (_playerFunds < WL_COST_JETRTB) exitWith {
+	false;
+};
+
 private _pos = getPosASL _asset;
 
 if (_pos # 0 > -WL_MAP_RESTRICTION_BUFFER &&
