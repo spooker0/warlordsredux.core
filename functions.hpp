@@ -219,6 +219,9 @@ class CfgFunctions {
 			class deployableEligibility {};
 			class deployCrateAction {};
 			class getVehicleLockStatus {};
+			class hmdSendData {};
+			class hmdSettings {};
+			class hmdSettingsAction {};
 			class jammerAction {};
 			class jammerToggle {};
 			class jammerUpdate {};

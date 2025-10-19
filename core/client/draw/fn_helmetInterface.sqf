@@ -6,7 +6,6 @@ uiNamespace setVariable ["WL_HelmetInterfaceLaserIcons", []];
 uiNamespace setVariable ["WL_HelmetInterfaceSAMIcons", []];
 uiNamespace setVariable ["WL_HelmetInterfaceTargetVehicleIcons", []];
 uiNamespace setVariable ["WL_HelmetInterfaceTargetInfantryIcons", []];
-uiNamespace setVariable ["WL_HelmetInterfaceMaxDistance", 5000];
 
 uiNamespace setVariable ["WL2_gpsTargetingLastUpdate", 0];
 
@@ -195,12 +194,21 @@ addMissionEventHandler ["Draw3D", {
             continue;
         };
 
+        private _hmdSettingProfiles = profileNamespace getVariable ["WL2_HMDSettingProfiles", []];
+        private _currentProfileIndex = uiNamespace getVariable ["WL2_HMDSettingProfileIndex", 0];
+        private _settingProfileData = if (_currentProfileIndex < count _hmdSettingProfiles) then {
+            _hmdSettingProfiles # _currentProfileIndex;
+        } else {
+            createHashMap;
+        };
+
         private _side = BIS_WL_playerSide;
         private _laserTargets = entities "LaserTarget";
         private _laserIcons = [];
+        private _laserViewDistance = _settingProfileData getOrDefault ["LASER", 5000];
         {
             private _target = _x;
-            if (_target distance _vehicle > 7000) then {
+            if (_target distance _vehicle > _laserViewDistance) then {
                 continue;
             };
 
@@ -258,6 +266,7 @@ addMissionEventHandler ["Draw3D", {
         private _vehicleCategory = WL_ASSET_FIELD(_assetData, _vehicleActualType, "category", "Other");
         private _hasThreatDetector = WL_ASSET_FIELD(_assetData, _vehicleActualType, "threatDetection", 0);
         private _samIcons = [];
+        private _missileViewDistance = _settingProfileData getOrDefault ["MISSILE", 5000];
         if (_vehicleCategory == "AirDefense" || _hasThreatDetector > 0) then {
             private _samMissiles = (8 allObjects 2) select {
                 if !(_x isKindOf "MissileCore") then {
@@ -266,7 +275,7 @@ addMissionEventHandler ["Draw3D", {
                     private _projectile = _x;
                     private _projectileConfig = _apsProjectileConfig getOrDefault [typeOf _projectile, createHashMap];
                     private _projectileSAM = _projectileConfig getOrDefault ["sam", false];
-                    _projectileSAM && _projectile distance _vehicle < 8000;
+                    _projectileSAM && _projectile distance _vehicle < _missileViewDistance;
                 };
             };
 
@@ -350,20 +359,10 @@ addMissionEventHandler ["Draw3D", {
             } forEach (_staticAAWest + _staticAAEast);
         };
 
-        private _maxDistance = switch (WL_HelmetInterface) do {
-            case 0: { 0 };
-            case 1: { 5000 };
-            case 2: { 20000 };
-            default { 5000 };
-        };
-        private _maxThreshold = uiNamespace getVariable ["WL_HelmetInterfaceMaxDistance", 5000];
-        _maxDistance = _maxDistance min _maxThreshold;
-
         _targets = _targets select {
             alive _x &&
             lifeState _x != "INCAPACITATED" &&
             (_x getVariable ["WL_spawnedAsset", false] || isPlayer _x) &&
-            _x distance _vehicle < _maxDistance &&
             _x != _vehicle;
         };
 
@@ -374,10 +373,15 @@ addMissionEventHandler ["Draw3D", {
         private _approachingMissiles = _incomingMissiles select {
             alive _x && _x getVariable ["WL_missileApproaching", false]
         };
+
+        private _infantryViewDistance = _settingProfileData getOrDefault ["INFANTRY", 500];
+        private _vehicleViewDistance = _settingProfileData getOrDefault ["VEHICLE", 5000];
+        private _aircraftViewDistance = _settingProfileData getOrDefault ["AIRCRAFT", 10000];
+        private _airDefenseViewDistance = _settingProfileData getOrDefault ["AIR DEFENSE", 5000];
+
         private _hasApproachingMissiles = count _approachingMissiles > 0;
         {
             private _target = _x;
-            private _targetIsInfantry = _target isKindOf "Man";
 
             private _lastKnownLauncher = _vehicle getVariable ["WL_incomingLauncherLastKnown", objNull];
             if (WL_HelmetInterface == 2 && _hasApproachingMissiles && _lastKnownLauncher == _target) then {
@@ -400,7 +404,14 @@ addMissionEventHandler ["Draw3D", {
                 };
             };
 
-            if (_targetIsInfantry) then {
+            if (_target isKindOf "Man") then {
+                if (_vehicleCategory == "AirDefense") then {
+                    continue;
+                };
+                if (_target distance _vehicle > _infantryViewDistance) then {
+                    continue;
+                };
+
                 private _centerOfMass = _target selectionPosition "spine2";
                 _centerOfMass set [2, _centerOfMass # 2 + 1];
 
@@ -445,8 +456,20 @@ addMissionEventHandler ["Draw3D", {
                 if (_assetCategory == "AirDefense") then {
                     _targetIcon = "\A3\ui_f\data\map\markers\nato\b_antiair.paa";
                     _targetIconSize = 0.6;
+                    if (_target distance _vehicle > _airDefenseViewDistance) then {
+                        continue;
+                    };
                 } else {
                     _targetIcon = "\A3\ui_f\data\IGUI\Cfg\Cursors\lock_target_ca.paa";
+                    if (_target isKindOf "Air") then {
+                        if (_target distance _vehicle > _aircraftViewDistance) then {
+                            continue;
+                        };
+                    } else {
+                        if (_target distance _vehicle > _vehicleViewDistance) then {
+                            continue;
+                        };
+                    };
                 };
 
                 private _vehicleColor = +_targetColor;
@@ -488,7 +511,7 @@ addMissionEventHandler ["Draw3D", {
                 true
             ];
         };
-        
+
         {
             private _selectedTarget = _vehicle getVariable [format ["WL2_selectedTarget%1", _x], objNull];
             if (alive _selectedTarget) then {
@@ -577,92 +600,10 @@ addMissionEventHandler ["Draw3D", {
         private _vehicleActualType = _vehicle getVariable ["WL2_orderedClass", typeOf _vehicle];
         private _inWhitelistedVehicle = WL_ASSET(_vehicleActualType, "hasHMD", 0) > 0;
 
-        private _sideVehiclesVars = format ["BIS_WL_%1OwnedVehicles", BIS_WL_playerSide];
-        private _sideVehicles = missionNamespace getVariable [_sideVehiclesVars, []];
-
-        private _friendlyNetwork = _sideVehicles select {
-            private _distance = _vehicle distance _x;
-            private _activated = _x getVariable ["WL_ewNetActive", false];
-            private _inJamRange = _distance < _x getVariable ["WL_ewNetRange", 0];
-
-            private _scannerRange = _x getVariable ["WL_scanRadius", 0];
-            private _isScanner = _scannerRange > 100;
-            private _inScanRange = _distance < _scannerRange;
-            (_inJamRange && _activated) || (_isScanner && _inScanRange);
-        };
-        private _inNetworkRange = count _friendlyNetwork > 0;
-        private _hasGlasses = goggles player == "G_Tactical_Clear";
-
-        if (_hasGlasses || _inWhitelistedVehicle) then {
-            private _gogglesDisplay = uiNamespace getVariable ["RscWLGogglesDisplay", displayNull];
-            if (isNull _gogglesDisplay) then {
-                "WLGoggles" cutRsc ["RscWLGogglesDisplay", "PLAIN"];
-            };
-            player setVariable ["WL_hasHelmetDisplay", true];
-        } else {
-            "WLGoggles" cutText ["", "PLAIN"];
-            player setVariable ["WL_hasHelmetDisplay", false];
-        };
-
-        if (_inNetworkRange) then {
-            "WLNetwork" cutRsc ["RscWLEWNetworkDisplay", "PLAIN"];
-        } else {
-            "WLNetwork" cutText ["", "PLAIN"];
-        };
-
         if (_inWhitelistedVehicle) then {
             WL_HelmetInterface = 2;
         } else {
-            if (_hasGlasses && _inNetworkRange) then {
-                WL_HelmetInterface = 1;
-            } else {
-                WL_HelmetInterface = 0;
-            };
-        };
-    };
-};
-
-0 spawn {
-    private _setNewRange = {
-        params ["_range"];
-        private _gogglesDisplay = uiNamespace getVariable ["RscWLGogglesDisplay", displayNull];
-        if (isNull _gogglesDisplay) exitWith {};
-        private _rangeControl = _gogglesDisplay displayCtrl 8000;
-        _rangeControl ctrlSetText str _range;
-    };
-    private _helmetInterfaceDistances = [0, 250, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 20000];
-    private _helmetInterfaceIndex = 7;
-
-    [_helmetInterfaceDistances # _helmetInterfaceIndex] call _setNewRange;
-
-    private _lastHasGoggles = false;
-	while { !BIS_WL_missionEnd && !WL_IsSpectator } do {
-        private _hasGoggles = player getVariable ["WL_hasHelmetDisplay", false];
-        if (_hasGoggles != _lastHasGoggles) then {
-            _lastHasGoggles = _hasGoggles;
-            [_helmetInterfaceDistances # _helmetInterfaceIndex] call _setNewRange;
-        };
-        if (_hasGoggles) then {
-            uiSleep 0.01;
-        } else {
-            uiSleep 1;
-        };
-
-        if (inputAction "timeDec" > 0) then {
-            waitUntil { uiSleep 0.01; inputAction "timeDec" == 0 };
-            _helmetInterfaceIndex = (_helmetInterfaceIndex - 1) max 0;
-            private _newMaxDistance = _helmetInterfaceDistances # _helmetInterfaceIndex;
-            uiNamespace setVariable ["WL_HelmetInterfaceMaxDistance", _newMaxDistance];
-            [_newMaxDistance] call _setNewRange;
-            playSoundUI ["a3\sounds_f_mark\arsenal\sfx\bipods\bipod_generic_deploy.wss"];
-        };
-        if (inputAction "timeInc" > 0) then {
-            waitUntil { uiSleep 0.01; inputAction "timeInc" == 0 };
-            _helmetInterfaceIndex = (_helmetInterfaceIndex + 1) min (count _helmetInterfaceDistances - 1);
-            private _newMaxDistance = _helmetInterfaceDistances # _helmetInterfaceIndex;
-            uiNamespace setVariable ["WL_HelmetInterfaceMaxDistance", _newMaxDistance];
-            [_newMaxDistance] call _setNewRange;
-            playSoundUI ["a3\sounds_f_mark\arsenal\sfx\bipods\bipod_generic_deploy.wss"];
+            WL_HelmetInterface = 0;
         };
     };
 };

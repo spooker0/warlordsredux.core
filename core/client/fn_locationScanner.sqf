@@ -17,7 +17,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
             [getPosASL player, getDir player, 90, getPosASL _x] call WL2_fnc_inAngleCheck
         };
         if (count _nearbyUnconscious > 1) then {
-            _nearbyUnconscious = [_nearbyUnconscious, [], { 
+            _nearbyUnconscious = [_nearbyUnconscious, [], {
                 if (_x == cursorTarget) then {
                     -1
                 } else {
@@ -41,7 +41,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
         private _nearbyDemolishableItems = (player nearObjects 35) select {
             _x getVariable ["WL2_canDemolish", false];
         };
-        
+
         private _nearbyDamagedItems = _nearbyDemolishableItems select {
             private _maxHealth = _x getVariable ["WL2_demolitionMaxHealth", 5];
             alive _x && (_x getVariable ["WL2_demolitionHealth", _maxHealth] < _maxHealth)
@@ -69,7 +69,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
             };
             private _demolishText = format ["<t color='#ff0000'>Demolish %1</t>", _displayText];
             private _demolishImage = format [
-                "<img size='3' color='#ff0000' image='a3\ui_f_oldman\data\igui\cfg\holdactions\destroy_ca.paa'/> <t size='1.5' color='#ff0000'>Demolish %1</t>", 
+                "<img size='3' color='#ff0000' image='a3\ui_f_oldman\data\igui\cfg\holdactions\destroy_ca.paa'/> <t size='1.5' color='#ff0000'>Demolish %1</t>",
                 _displayText
             ];
             player setUserActionText [_demolishActionId, _demolishText, _demolishImage];
@@ -151,7 +151,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
             if (!(_x isKindOf "Man") && !alive _x) then { continue; };
 
             private _color = [_x, _playerIconColorCache] call WL2_fnc_iconColor;
-            
+
             private _displayName = [_x, true, true, _playerIconTextCache] call WL2_fnc_iconText;
             private _size = if (_isInMySquad) then { 0.04 } else { 0.03 };
 

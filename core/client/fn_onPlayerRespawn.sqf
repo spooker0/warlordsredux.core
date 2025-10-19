@@ -71,6 +71,7 @@ call WL2_fnc_buyMenuAction;
 call WL2_fnc_vehicleManagerAction;
 call WL2_fnc_rappelAction;
 call WL2_fnc_demolishAction;
+call WL2_fnc_hmdSettingsAction;
 
 0 spawn WL2_fnc_drawRadarName;
 

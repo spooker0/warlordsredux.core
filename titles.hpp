@@ -494,75 +494,6 @@ class RscTitles {
 		};
 	};
 
-	class RscWLGogglesDisplay {
-		idd = -1;
-		duration = 1000000000;
-		fadein = 0;
-		fadeout = 0;
-		name = "RscWLGogglesDisplay";
-		onLoad = "uiNamespace setVariable ['RscWLGogglesDisplay', _this select 0];";
-		class controls {
-			class RscWLGogglesDisplay_Icon {
-				idc = -1;
-				type = 0;
-				style = ST_PICTURE;
-				tileH = 1;
-				tileW = 1;
-				x = 0.90 * safezoneW + safezoneX;
-				y = 0.17  * safezoneH + safezoneY;
-				w = 0.06;
-				h = 0.08;
-				font = "EtelkaNarrowMediumPro";
-				sizeEx = 1;
-				colorBackground[] = {0, 0, 0, 0};
-				colorText[] = {0.3, 1, 1, 1};
-				text = "\A3\ui_f\data\GUI\Rsc\RscDisplayArsenal\goggles_ca.paa";
-				lineSpacing = 0;
-			};
-			class RscWLGogglesDisplay_RangeDisplay: RscText {
-				idc = 8000;
-				type = CT_STATIC;
-				style = ST_CENTER;
-				x = 0.90 * safezoneW + safezoneX;
-				y = 0.19  * safezoneH + safezoneY;
-				w = 0.06;
-				h = 0.08;
-				font = "RobotoCondensed";
-				shadow = 0;
-				colorBackground[] = {0, 0, 0, 0};
-				colorText[] = {0.3, 1, 1, 1};
-				text = "5000";
-				lineSpacing = 0;
-			};
-		};
-	};
-
-	class RscWLEWNetworkDisplay {
-		idd = -1;
-		duration = 1000000000;
-		fadein = 0;
-		fadeout = 0;
-		class controls {
-			class RscWLEWNetworkDisplay_Icon {
-				idc = -1;
-				type = 0;
-				style = ST_PICTURE;
-				tileH = 1;
-				tileW = 1;
-				x = 0.87 * safezoneW + safezoneX;
-				y = 0.17  * safezoneH + safezoneY;
-				w = 0.06;
-				h = 0.08;
-				font = "EtelkaNarrowMediumPro";
-				sizeEx = 1;
-				colorBackground[] = {0, 0, 0, 0};
-				colorText[] = {0.3, 1, 1, 1};
-				text = "\A3\ui_f\data\GUI\Rsc\RscDisplayArsenal\radio_ca.paa";
-				lineSpacing = 0;
-			};
-		};
-	};
-
 	class RscWLSpectatorProjectileDisplay {
 		idd = -1;
 		duration = 1000000000;
@@ -743,6 +674,26 @@ class RscTitles {
 				w = safeZoneW;
 				h = safeZoneH;
 				url = "file://src/ui/gen/hint.html";
+			};
+		};
+	};
+
+	class RscWLHmdSettingMenu {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		name = "RscWLHmdSettingMenu";
+		onLoad = "uiNamespace setVariable ['RscWLHmdSettingMenu', _this select 0];";
+		class controls {
+			class RscWLHmdSettingMenu_Texture: RscText {
+				type = 106;
+				idc = 5502;
+				x = safeZoneX;
+				y = safeZoneY;
+				w = safeZoneW;
+				h = safeZoneH;
+				url = "file://src/ui/gen/hmd.html";
 			};
 		};
 	};

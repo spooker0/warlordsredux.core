@@ -116,6 +116,10 @@ if (_asset isKindOf "Man") then {
 		[_asset] remoteExec ["WL2_fnc_controlGunnerAction", 0, true];
 	};
 
+	if (WL_ASSET(_assetActualType, "hasHMD", 0) > 0) then {
+		_asset setVariable ["WL2_hasHMD", true, true];
+	};
+
 	private _loadoutDefaults = profileNamespace getVariable ["WLM_loadoutDefaults", createHashmap];
 	if (_assetActualType in _loadoutDefaults) then {
     	private _lastLoadout = _loadoutDefaults getOrDefault [_assetActualType, []];
