@@ -123,6 +123,13 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		default { [1, 1, 1, 0] };
 	};
 
+	private _intruders = _base getVariable ["WL2_forwardBaseIntruders", false];
+	private _fillTexture = if (_intruders) then {
+		"#(rgb,8,8,3)color(1,0,0,1)"
+	} else {
+		""
+	};
+
 	private _baseTime = _base getVariable ["WL2_forwardBaseTime", -1];
 
 	private _baseText = if (serverTime < _baseTime) then {
@@ -160,7 +167,7 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		WL_FOB_RANGE,
 		0,
 		_baseColor,
-		""
+		_fillTexture
 	];
 	_drawEllipses pushBack [
 		_position,

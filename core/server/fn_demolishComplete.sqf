@@ -3,6 +3,7 @@ params ["_target", "_caller"];
 
 if !(isNull _caller) then {
     [_target, _caller] call WL2_fnc_killRewardHandle;
+    [_target, _caller] call WL2_fnc_friendlyFireHandleServer;
 };
 _target setVariable ["WL2_alreadyHandled", true];
 _target setVariable ["WL_lastHitter", _caller];

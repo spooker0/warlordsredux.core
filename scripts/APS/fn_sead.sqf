@@ -9,9 +9,7 @@ _projectile setVariable ["WL2_missileType", "ARM"];
 
 private _projectileOverride = _projectile getVariable ["APS_ammoOverride", typeof _projectile];
 if (!isNull (missileTarget _projectile)) exitWith {
-    if (_projectileOverride != typeof _projectile) then {
-        _projectile setVariable ["APS_ammoConsumptionOverride", 1];
-    };
+    _projectile setVariable ["APS_ammoConsumptionOverride", 1];
 };
 
 private _target = _unit getVariable ["WL2_selectedTargetSEAD", objNull];

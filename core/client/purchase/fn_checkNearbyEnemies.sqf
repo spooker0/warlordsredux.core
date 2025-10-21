@@ -5,6 +5,8 @@ if (isWeaponDeployed player) exitWith {
 };
 
 private _enemiesNearPlayer = (allUnits inAreaArray [player, 150, 150]) select {
+    _x isKindOf "Man"
+} select {
     BIS_WL_playerSide != side group _x
 } select {
     _x != player

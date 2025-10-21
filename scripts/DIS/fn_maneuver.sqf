@@ -7,8 +7,8 @@ params [
     ["_distanceBeforeNotch", WL_SAM_NOTCH_ACTIVE_DIST]
 ];
 
-private _detectors = vehicles select { alive _x } 
-    select { count crew _x > 0 } 
+private _detectors = vehicles select { alive _x }
+    select { count crew _x > 0 }
     select { [_x] call WL2_fnc_getAssetSide != [_unit] call WL2_fnc_getAssetSide }
     select { ((getPosATL _x) # 2) > 50 }
     select {
@@ -46,12 +46,12 @@ if (_ammoConfig getOrDefault ["loal", false]) then {
         _projectile setVelocityModelSpace [0, _unitSpeed * 3.6 + 100, 0];
         _projectile setMissileTarget [_selectedTarget, true];
         _originalTarget = _selectedTarget;
-        
+
         uiSleep 1;
 
         private _projectilePos = getPosASL _projectile;
         private _targetPos = getPosASL _selectedTarget;
-        
+
         private _targetVectorDirAndUp = [_projectilePos, _targetPos] call BIS_fnc_findLookAt;
         _projectile setVectorDirAndUp _targetVectorDirAndUp;
 
@@ -98,9 +98,9 @@ private _originalPosition = getPosASL _unit;
         if (_notchResult == 4) then {
             _projectile setVariable ["DIS_notched", true];
         };
-        
+
         if (!isNull _originalTarget) then {
-            private _canDodge = _projectile getVariable ["DIS_notched", false] || speed _originalTarget > (WL_SAM_FAST_THRESHOLD min _lockSpeed);
+            private _canDodge = _projectile getVariable ["DIS_notched", false];
             if (!_canDodge) then {  // If not already notched and not notching
                 private _targetVectorDirAndUp = [_projectilePosition, _targetPosition] call BIS_fnc_findLookAt;
                 _projectile setVectorDirAndUp _targetVectorDirAndUp;

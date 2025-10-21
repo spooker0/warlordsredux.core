@@ -8,6 +8,7 @@ switch (_locality) do {
 		BIS_WL_missionEnd = false;
 		BIS_WL_mapSize = getNumber (configFile >> "cfgWorlds" >> worldName >> "mapSize");
 		if (BIS_WL_mapSize == 0) then {BIS_WL_mapSize = getNumber (configFile >> "cfgWorlds" >> worldName >> "Grid" >> "OffsetY")};
+		WL_MoneySign = [BIS_WL_playerSide] call WL2_fnc_getMoneySign;
 	};
 	case "client": {
 		BIS_WL_playerSide = side group player;
@@ -41,7 +42,6 @@ switch (_locality) do {
 		WL_SpectrumInterface = false;
 		WL_IsSpectator = false;
 		WL_IsReplaying = false;
-		WL_MoneySign = [BIS_WL_playerSide] call WL2_fnc_getMoneySign;
 		BIS_WL_highlightedSector = objNull;
 	};
 };

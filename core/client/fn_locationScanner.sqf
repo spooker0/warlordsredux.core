@@ -365,10 +365,13 @@ while { !BIS_WL_missionEnd } do {
             _allScannedUnits append _scannedUnits;
 
             if (count _scannedUnits > 0) then {
+                _forwardBase setVariable ["WL2_forwardBaseIntruders", true];
                 if (serverTime >= _fobNextWarn) then {
                     _fobNextWarn = serverTime + 30;
                     systemChat "Forward base intrusion detected!";
                 };
+            } else {
+                _forwardBase setVariable ["WL2_forwardBaseIntruders", false];
             };
         } else {
             private _sectorsInRange = _forwardBase getVariable ["WL2_forwardBaseSectors", []];
