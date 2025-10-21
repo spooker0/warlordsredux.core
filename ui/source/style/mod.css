@@ -74,8 +74,7 @@
 }
 
 .player-details-panel {
-    flex: 1 1 auto;
-    max-width: 25rem;
+    flex: 1 1 35rem;
     display: none;
     flex-direction: column;
     overflow: auto;

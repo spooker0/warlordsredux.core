@@ -242,51 +242,10 @@ if (_asset isKindOf "Man") then {
 		case "B_UAV_06_F";
 		case "O_UAV_06_F";
 		case "I_UAV_06_F": {
-			waitUntil {uiSleep 0.1; !(isNull group _asset)};
-			_asset spawn {
-				params ["_asset"];
-				[
-					driver _asset,
-					format["<t color='#E5E500' shadow='2'>&#160;%1</t>", "*Arm Drone*"],
-					"\a3\ui_f_oldman\data\IGUI\Cfg\holdactions\attack_ca.paa",
-					"\a3\ui_f_oldman\data\IGUI\Cfg\holdactions\attack_ca.paa",
-					"!(isNull (getConnectedUAVUnit player))",
-					"!(isNull (getConnectedUAVUnit player))",
-					{
-						playSound3D ["a3\sounds_f\sfx\objects\upload_terminal\terminal_antena_close.wss", (getConnectedUAVUnit player), false, getPosASL (getConnectedUAVUnit player), 1, 1, 0];
-					},
-					{},
-					{
-						(getConnectedUAVUnit player) addEventHandler ["Killed", {
-							params ["_unit", "_killer", "_instigator", "_useEffects"];
-							[player, "droneExplode", _unit] remoteExec ["WL2_fnc_handleClientRequest", 2];
-						}];
-						[
-							getConnectedUAVUnit player,
-							format["<t color='#f80e1a' shadow='2'>&#160;%1</t>", "*Detonate*"],
-							"\a3\ui_f_oldman\data\IGUI\Cfg\holdactions\destroy_ca.paa",
-							"\a3\ui_f_oldman\data\IGUI\Cfg\holdactions\destroy_ca.paa",
-							"!(isNull (getConnectedUAVUnit player))",
-							"!(isNull (getConnectedUAVUnit player))",
-							{},
-							{},
-							{
-								[player, "droneExplode", _target] remoteExec ["WL2_fnc_handleClientRequest", 2];
-							},
-							{},
-							[],
-							1
-						] call BIS_fnc_holdActionAdd;
-					},
-					{},
-					[],
-					2
-				] call BIS_fnc_holdActionAdd;
-			};
-		};
-
-		case "C_IDAP_UAV_06_antimine_F": {
-			waitUntil {uiSleep 0.1; !(isNull group _asset)};
+			_asset addEventHandler ["Killed", {
+				params ["_unit", "_killer", "_instigator", "_useEffects"];
+				[player, "droneExplode", _unit] remoteExec ["WL2_fnc_handleClientRequest", 2];
+			}];
 		};
 	};
 

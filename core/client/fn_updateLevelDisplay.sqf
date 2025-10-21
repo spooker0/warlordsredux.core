@@ -5,17 +5,6 @@ private _setLevel = {
 	player setVariable ["WL_playerLevel", _levelDisplay, true];
 };
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-private _hideMyIdentity = _settingsMap getOrDefault ["hideMyIdentity", true];
-
-if (_hideMyIdentity) then {
-	private _identityId = random [76561197960265728, 76561193665298432, 76561202255233023] toFixed 0;
-	private _hiddenIdentity = player getVariable ["WL2_hideIdentity", ""];
-	if (_hiddenIdentity == "") then {
-		player setVariable ["WL2_hideIdentity", _identityId, true];
-	};
-};
-
 private _uid = getPlayerUID player;
 private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
 if (_isAdmin) then {
@@ -36,6 +25,16 @@ if (_isSpectator) then {
 	["Spectator", true] call RWD_fnc_addBadge;
 } else {
 	["Spectator", false, true] call RWD_fnc_addBadge;
+};
+
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _hideMyIdentity = _settingsMap getOrDefault ["hideMyIdentity", true];
+if ((_isAdmin || _isModerator) && _hideMyIdentity) then {
+	private _identityId = format ["76561%1", (random 1 toFixed 12) select [2]];
+	private _hiddenIdentity = player getVariable ["WL2_hideIdentity", ""];
+	if (_hiddenIdentity == "") then {
+		player setVariable ["WL2_hideIdentity", _identityId, true];
+	};
 };
 
 private _currentBadge = player getVariable ["WL2_currentBadge", ""];

@@ -1,6 +1,10 @@
 #include "includes.inc"
 params ["_projectile", "_unit"];
 
+private _detectionLocation = getPosASL _unit;
+_detectionLocation = _detectionLocation vectorAdd [(random 5000) - 2500, (random 5000) - 2500, 0];
+_unit setVariable ["DIS_advancedSamDetectionLocation", _detectionLocation, true];
+
 _projectile setVariable ["WL2_missileNameOverride", "HERCULES", true];
 _projectile setVariable ["WL2_missileStateOverride", "BOOST", true];
 _projectile setVariable ["APS_missileState", "BOOST", true];

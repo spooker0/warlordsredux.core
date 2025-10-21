@@ -260,7 +260,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
                 0.031,
                 "RobotoCondensedBold",
                 "center",
-                true,
+                false,
                 0,
                 -0.035
             ];

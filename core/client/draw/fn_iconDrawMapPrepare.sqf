@@ -125,7 +125,7 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 
 	private _intruders = _base getVariable ["WL2_forwardBaseIntruders", false];
 	private _fillTexture = if (_intruders) then {
-		"#(rgb,8,8,3)color(1,0,0,1)"
+		"#(rgb,1,1,1)color(1,1,1,0.3)"
 	} else {
 		""
 	};
@@ -144,7 +144,7 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 			_supplies = (round _supplies) max 0;
 			format ["(%1/%2) [%3 Supplies]", _fobHealth, _maxHealth, (_supplies call BIS_fnc_numberText) regexReplace [" ", ","]];
 		} else {
-			format ["(%1/10)", _fobHealth];
+			format ["(%1/%2)", _fobHealth, _maxHealth];
 		};
 	};
 

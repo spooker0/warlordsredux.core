@@ -11,7 +11,7 @@ player addAction [
 
 			uiSleep 1;
 
-			player switchMove "LadderRifleStatic";
+			player switchMove ["LadderRifleStatic"];
 			player allowDamage false;
 			private _sound = playSoundUI ["a3\sounds_f\vehicles\air\noises\wind_open_int.wss", 0.5, 2, true];
 
@@ -58,7 +58,7 @@ player addAction [
 			};
 
 			stopSound _sound;
-			player switchMove "NoActions";
+			player switchMove ["NoActions"];
 
 			private _finalRelativePosition = if (_up) then {
 				(_boundingBox # 1) vectorAdd [0, 2, 0];

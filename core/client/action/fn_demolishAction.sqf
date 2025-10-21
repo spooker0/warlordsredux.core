@@ -18,7 +18,7 @@ private _demolishActionId = player addAction [
             };
             _displayText = format ["Demolishing %1", _displayText];
             player setVariable ["WL2_sabotageTarget", [serverTime + 20, _displayText], true];
-            
+
             private _isStronghold = !isNull (_demolishableTarget getVariable ["WL_strongholdSector", objNull]);
 
             private _cameraPlayerModelSpace = if (!_isStronghold) then {
@@ -31,10 +31,10 @@ private _demolishActionId = player addAction [
             };
 
             [_cameraPlayerModelSpace] call WL2_fnc_actionLockCamera;
-            
+
             private _playerPosition = player modelToWorld [0, 0, 0];
             private _soundSource = createSoundSource ["WLDemolitionSound", _playerPosition, [], 0];
-            player switchMove "Acts_TerminalOpen";
+            player switchMove ["Acts_TerminalOpen"];
 
             private _demolishSuccess = false;
             private _startCheckingUnhold = false;
@@ -84,7 +84,7 @@ private _demolishActionId = player addAction [
             };
 
             deleteVehicle _soundSource;
-            player switchMove "";
+            player switchMove [""];
 
             cameraOn cameraEffect ["Terminate", "BACK"];
 

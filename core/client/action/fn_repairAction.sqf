@@ -56,11 +56,11 @@ private _repairWheels = _asset addAction [
         _this spawn {
             params ["_asset", "_caller", "_actionId", "_arguments"];
             private _animation = "Acts_carFixingWheel";
-            player switchMove _animation;
+            player switchMove [_animation];
 
             private _validHitPoints = _arguments select 0;
             [[0, -3, 1]] call WL2_fnc_actionLockCamera;
-            
+
             private _startCheckingUnhold = false;
             private _timeToRemove = serverTime + 5;
             private _timeToRepair = serverTime + 10;
@@ -103,7 +103,7 @@ private _repairWheels = _asset addAction [
             };
 
             cameraOn cameraEffect ["Terminate", "BACK"];
-            player switchMove "";
+            player switchMove [""];
         };
 	},
 	[_validHitPoints],

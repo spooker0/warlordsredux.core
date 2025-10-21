@@ -10,8 +10,8 @@ private _reviveActionId = player addAction [
             if (isNull _reviveTarget) exitWith {};
 
             [[0, 8, 2]] call WL2_fnc_actionLockCamera;
-            
-            player switchMove "AinvPknlMstpSlayWrflDnon_medic";
+
+            player switchMove ["AinvPknlMstpSlayWrflDnon_medic"];
 
             private _reviveSuccess = false;
             private _startCheckingUnhold = false;
@@ -70,7 +70,7 @@ private _reviveActionId = player addAction [
             };
 
             player setVariable ["WL2_reviveTarget", objNull];
-            player switchMove "";
+            player switchMove [""];
             cameraOn cameraEffect ["Terminate", "BACK"];
         };
     },

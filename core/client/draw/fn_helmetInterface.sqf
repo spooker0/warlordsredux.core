@@ -378,6 +378,9 @@ addMissionEventHandler ["Draw3D", {
         private _infantryNameViewDistance = _settingProfileData getOrDefault ["INFANTRY NAME", 250];
         private _vehicleViewDistance = _settingProfileData getOrDefault ["VEHICLE", 5000];
         private _aircraftViewDistance = _settingProfileData getOrDefault ["AIRCRAFT", 10000];
+        if (_aircraftViewDistance == 20000) then {
+            _aircraftViewDistance = 100000;
+        };
         private _airDefenseViewDistance = _settingProfileData getOrDefault ["AIR DEFENSE", 5000];
 
         private _hasApproachingMissiles = count _approachingMissiles > 0;
