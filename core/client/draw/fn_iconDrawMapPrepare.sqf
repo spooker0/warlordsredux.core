@@ -392,9 +392,8 @@ if (_drawAll) then {
 
 // Spectator draw
 if (_drawAll) then {
-	private _camera = missionNamespace getVariable ["BIS_EGSpectatorCamera_camera", objNull];
-
-	if !(isNull _camera) then {
+	private _camera = cameraOn;
+	if (!isNull _camera && WL_IsSpectator) then {
 		private _center = _camera screenToWorld [0.5, 0.5];
 		private _distance = if (_center isEqualTo [0, 0, 0]) then {
 			viewDistance;

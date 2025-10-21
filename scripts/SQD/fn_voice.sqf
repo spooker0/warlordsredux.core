@@ -92,7 +92,7 @@ if (side group player == independent) exitWith {};
     private _voiceDisplayText = _voiceDisplay displayCtrl 7201;
 
     // Fast loop
-    while { !BIS_WL_missionEnd } do {
+    while { !BIS_WL_missionEnd && WL_IsSpectator } do {
         private _currentChannel = currentChannel;
         if (_currentChannel != _previousChannel) then {
             missionNamespace setVariable [_playerChannelVar, _currentChannel, true];
@@ -163,6 +163,9 @@ if (side group player == independent) exitWith {};
 
         uiSleep 0.1;
     };
+
+    _voiceDisplayBackground ctrlShow false;
+    _voiceDisplayText ctrlSetText "";
 };
 
 // Slow loop

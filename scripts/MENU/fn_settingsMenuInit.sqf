@@ -83,6 +83,8 @@ _texture ctrlAddEventHandler ["PageLoaded", {
     private _playerUid = getPlayerUID player;
     private _isAdmin = _playerUid in getArray (missionConfigFile >> "adminIDs");
     private _isSpectator = _playerUid in getArray (missionConfigFile >> "spectatorIDs");
+    private _isTempSpectator = _playerUid == missionNamespace getVariable ["WL2_tempSpectatorUID", ""];
+     _isSpectator = _isSpectator || _isTempSpectator;
     private _isModerator = _playerUid in getArray (missionConfigFile >> "moderatorIDs");
     if (_isAdmin) then {
         _settingsMenu pushBack ["button", "DEBUG", "a3\ui_f\data\igui\cfg\simpletasks\types\box_ca.paa"];

@@ -6,10 +6,11 @@ private _profileData = _currentProfile # _currentProfileIndex;
 
 private _dataArray = [
     ["INFANTRY", 0, 20000, 500, true],
+    ["INFANTRY NAME", 0, 20000, 500, true],
     ["VEHICLE", 0, 20000, 5000, true],
     ["AIRCRAFT", 0, 20000, 10000, true],
     ["AIR DEFENSE", 0, 20000, 5000, true],
-    ["MISSILE", 0, 20000, 5000, true], 
+    ["MISSILE", 0, 20000, 5000, true],
     ["LASER", 0, 20000, 5000, true]
 ];
 

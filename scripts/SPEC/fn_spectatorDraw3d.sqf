@@ -38,12 +38,12 @@ private _sectors = uiNamespace getVariable ["WL2_spectatorDrawSectors", []];
         "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\UnknownGround_ca.paa",
         _targetColor,
         _target modelToWorldVisual _centerOfMass,
-        0.5,
-        0.5,
+        0.3,
+        0.3,
         45,
         _assetName,
         true,
-        0.032,
+        0.02,
         "RobotoCondensedBold"
     ];
 } forEach _infantry;
@@ -106,11 +106,14 @@ private _cameraPos = positionCameraToWorld [0, 0, 0];
     private _sector = _x # 0;
     private _sectorIcon = _x # 1;
     private _sectorColor = _x # 2;
-    private _sectorPos = _x # 3;
-    private _sectorName = _x # 4;
+    private _sectorName = _x # 3;
 
+    private _sectorPos = _sector modelToWorldVisual [0, 0, 10];
     private _distance = _cameraPos distance _sectorPos;
-    private _sectorIconSize = linearConversion [200, 5000, _distance, 1.2, 0.3, true];
+    if (_distance > 4000) then {
+        continue;
+    };
+    private _sectorIconSize = linearConversion [200, 5000, _distance, 0.8, 0.2, true];
 
     drawIcon3D [
         _sectorIcon,

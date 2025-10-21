@@ -4,8 +4,9 @@ if (isDedicated) exitWith {};
 #if WL_AFK_ADMIN_TEST == 0
 private _uid = getPlayerUID player;
 private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
+private _isModerator = _uid in (getArray (missionConfigFile >> "moderatorIDs"));
 private _isSpectator = _uid in (getArray (missionConfigFile >> "spectatorIDs"));
-if (_isAdmin || _isSpectator) exitWith {};
+if (_isAdmin || _isModerator || _isSpectator) exitWith {};
 #endif
 
 while { !BIS_WL_missionEnd } do {

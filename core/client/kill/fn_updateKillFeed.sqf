@@ -1,6 +1,8 @@
 #include "includes.inc"
 params ["_displayText", "_reward", "_customColor", "_iconUrl"];
 
+if (WL_IsSpectator && _displayText != "Spectate Target Earned Score") exitWith {};
+
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _useNewKillfeed = _settingsMap getOrDefault ["useNewKillfeed", true];
 

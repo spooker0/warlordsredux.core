@@ -172,7 +172,11 @@ if (_canFastTravel) then {
     ["FAST TRAVEL", {
         params ["_asset"];
         if (!alive player || lifeState player == "INCAPACITATED") exitWith {
-            systemChat "Cannot fast travel.";
+            systemChat "Cannot fast travel while dead.";
+            playSoundUI ["AddItemFailed"];
+        };
+        if (isWeaponDeployed player) exitWith {
+            systemChat "Cannot fast travel while weapon is deployed.";
             playSoundUI ["AddItemFailed"];
         };
         [_asset] spawn WL2_fnc_executeFastTravelVehicle;

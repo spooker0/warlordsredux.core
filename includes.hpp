@@ -5,6 +5,7 @@ import RscCombo;
 import RscControlsGroup;
 import RscEdit;
 import RscListBox;
+import RscMapControl;
 import RscPicture;
 import RscProgress;
 import RscShortcutButton;

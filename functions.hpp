@@ -122,18 +122,16 @@ class CfgFunctions {
 	class SPEC {
 		class Default {
 			file = "src\scripts\SPEC";
-			class customSpectator {};
 			class spectator {};
-			class spectatorDraw3d {};
-			class spectatorFeedback {};
-			class spectatorGetIcon {};
+			class spectator3P {};
+			class spectatorFree {};
 			class spectatorMap {};
-			class spectatorOnFired {};
-			class spectatorSetup {};
+			class spectatorMenu {};
+			class spectatorRewardProxy {};
+			class spectatorSelectTarget {};
+			class spectatorDraw3d {};
+			class spectatorGetIcon {};
 			class spectatorTarget {};
-			class spectatorUpdateBinocularIcon {};
-			class spectatorUpdateList {};
-			class spectatorUpdateProjectiles {};
 		};
 	};
 	class SQD {

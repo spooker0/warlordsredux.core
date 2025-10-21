@@ -111,7 +111,7 @@
 		_sideVehicles insert [-1, _playerAi, true];
 		_mapData set ["sideVehicles", _sideVehicles select { isNull objectParent _x }];
 
-		private _sideVehiclesAll = _vehicles select { simulationEnabled _x } select { !(_x isKindOf "LaserTarget") } select {
+		private _sideVehiclesAll = (_vehicles + allUnits) select { simulationEnabled _x } select { !(_x isKindOf "LaserTarget") } select {
 			private _targetSide = [_x] call WL2_fnc_getAssetSide;
 			_targetSide in [west, east, independent]
 		};

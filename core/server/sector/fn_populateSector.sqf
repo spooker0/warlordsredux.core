@@ -215,12 +215,12 @@ while {_i < _garrisonSize} do {
 	*/
 	private _newGrp = createGroup _owner;
 	_infantryGroups pushBack _newGrp;
-	private _grpSize = floor (10 + random 3);
+	private _grpSize = floor (7 + random 3);
 	private _cnt = (count allPlayers) max 1;
 
 	private _i2 = 0;
 	for "_i2" from 0 to _grpSize do {
-		private _newUnit = _newGrp createUnit [selectRandom _unitsPool, _pos, [], 20, "NONE"];
+		private _newUnit = _newGrp createUnit [selectRandom _unitsPool, _pos, [], 100, "NONE"];
 		private _posAboveGround = getPosATL _newUnit;
 		_posAboveGround set [2, 100];
 		_newUnit setVehiclePosition [_posAboveGround, [], 0, "CAN_COLLIDE"];

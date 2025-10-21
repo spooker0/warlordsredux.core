@@ -375,6 +375,7 @@ addMissionEventHandler ["Draw3D", {
         };
 
         private _infantryViewDistance = _settingProfileData getOrDefault ["INFANTRY", 500];
+        private _infantryNameViewDistance = _settingProfileData getOrDefault ["INFANTRY NAME", 250];
         private _vehicleViewDistance = _settingProfileData getOrDefault ["VEHICLE", 5000];
         private _aircraftViewDistance = _settingProfileData getOrDefault ["AIRCRAFT", 10000];
         private _airDefenseViewDistance = _settingProfileData getOrDefault ["AIR DEFENSE", 5000];
@@ -415,10 +416,14 @@ addMissionEventHandler ["Draw3D", {
                 private _centerOfMass = _target selectionPosition "spine2";
                 _centerOfMass set [2, _centerOfMass # 2 + 1];
 
-                private _assetName = if (isPlayer _target) then {
-                    name _target;
+                private _assetName = if (_target distance _vehicle < _infantryNameViewDistance) then {
+                    if (isPlayer _target) then {
+                        name _target;
+                    } else {
+                        getText (configfile >> "CfgVehicles" >> typeof _target >> "textSingular");
+                    };
                 } else {
-                    getText (configfile >> "CfgVehicles" >> typeof _target >> "textSingular");
+                    "";
                 };
 
                 _targetInfantryIcons pushBack [

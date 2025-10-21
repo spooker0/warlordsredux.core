@@ -29,7 +29,7 @@ private _spawned = 0;
 
     private _spawnPosition = _x;
 
-    for "_i" from 0 to 8 do {
+    for "_i" from 0 to 6 do {
         private _infantry = _infantryGroup createUnit [selectRandom _unitsPool, _spawnPosition, [], 0, "NONE"];
         _infantry setVehiclePosition [_spawnPosition, [], 10, "NONE"];
 

@@ -38,7 +38,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
         };
         player setVariable ["WL2_reviveTarget", _reviveTarget];
 
-        private _nearbyDemolishableItems = (player nearObjects 35) select {
+        private _nearbyDemolishableItems = (cameraOn nearObjects 35) select {
             _x getVariable ["WL2_canDemolish", false];
         };
 
@@ -216,12 +216,11 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
             private _mapMarkerPath = getText (configFile >> "CfgMarkers" >> _mapMarkerType >> "icon");
 
             private _sectorName = _target getVariable ["WL2_name", "Sector"];
-            private _markerPosition = _target modelToWorldVisual [0, 0, 5];
 
             _sectorIcons pushBack [
                 _mapMarkerPath,
                 _color,
-                _markerPosition,
+                _target,
                 1,
                 1,
                 0,
@@ -252,7 +251,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
             _sectorIcons pushBack [
                 "",
                 _sectorTextColor,
-                _markerPosition,
+                _target,
                 0,
                 0,
                 0,
@@ -289,9 +288,15 @@ addMissionEventHandler ["Draw3D", {
         drawIcon3D _icon;
     } forEach (_drawIcons + _playerIcons);
 
+    if (WL_IsSpectator) exitWith {};
+
     private _sectorIcons = uiNamespace getVariable ["WL2_drawSectorHudIcons", createHashMap];
     {
-        drawIcon3D _x;
+        private _icon = +_x;
+        private _target = _icon select 2;
+        private _sectorPos = _target modelToWorldVisual [0, 0, 5];
+        _icon set [2, _sectorPos];
+        drawIcon3D _icon;
     } forEach _sectorIcons;
 }];
 

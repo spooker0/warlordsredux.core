@@ -14,6 +14,7 @@ private _existingProfiles = profileNamespace getVariable ["WL2_HMDSettingProfile
 if (count _existingProfiles != 5) then {
     private _profile1 = createHashMapFromArray [
         ["INFANTRY", 500],
+        ["INFANTRY NAME", 250],
         ["VEHICLE", 5000],
         ["AIRCRAFT", 10000],
         ["AIR DEFENSE", 5000],
@@ -22,6 +23,7 @@ if (count _existingProfiles != 5) then {
     ];
     private _profile2 = createHashMapFromArray [
         ["INFANTRY", 0],
+        ["INFANTRY NAME", 0],
         ["VEHICLE", 4000],
         ["AIRCRAFT", 20000],
         ["AIR DEFENSE", 8000],
@@ -30,6 +32,7 @@ if (count _existingProfiles != 5) then {
     ];
     private _profile3 = createHashMapFromArray [
         ["INFANTRY", 4000],
+        ["INFANTRY NAME", 4000],
         ["VEHICLE", 4000],
         ["AIRCRAFT", 4000],
         ["AIR DEFENSE", 4000],
@@ -38,6 +41,7 @@ if (count _existingProfiles != 5) then {
     ];
     private _profile4 = createHashMapFromArray [
         ["INFANTRY", 20000],
+        ["INFANTRY NAME", 20000],
         ["VEHICLE", 20000],
         ["AIRCRAFT", 20000],
         ["AIR DEFENSE", 20000],
@@ -46,6 +50,7 @@ if (count _existingProfiles != 5) then {
     ];
     private _profile5 = createHashMapFromArray [
         ["INFANTRY", 0],
+        ["INFANTRY NAME", 0],
         ["VEHICLE", 0],
         ["AIRCRAFT", 0],
         ["AIR DEFENSE", 0],
@@ -122,7 +127,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
 }];
 
 while { !isNull _display } do {
-    if !(cameraOn getVariable ['WL2_hasHMD', false]) then {
+    if !(cameraOn getVariable ['WL2_hasHMD', false] || typeof cameraOn == "Camera") then {
         "hmd" cutText ["", "PLAIN"];
     };
     uiSleep 0.1;

@@ -90,6 +90,19 @@ class RscTextRight: RscText {
 	style = ST_RIGHT;
 };
 
+class RscSpectatorDisplay {
+	idd = -1;
+	class controls {
+		class RscSpectatorDisplay_Map: RscMapControl {
+			idc = 5503;
+			x = safeZoneX;
+			y = safeZoneY;
+			w = safeZoneW;
+			h = safeZoneH;
+		};
+	};
+};
+
 class RscWLBrowserMenu {
 	idd = 5500;
 	class controls {

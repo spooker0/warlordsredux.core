@@ -4,7 +4,7 @@ if (isWeaponDeployed player) exitWith {
     [false, "Bipod must not be deployed."];
 };
 
-private _enemiesNearPlayer = (allPlayers inAreaArray [player, 175, 175]) select {
+private _enemiesNearPlayer = (allUnits inAreaArray [player, 150, 150]) select {
     BIS_WL_playerSide != side group _x
 } select {
     _x != player
@@ -12,6 +12,9 @@ private _enemiesNearPlayer = (allPlayers inAreaArray [player, 175, 175]) select 
     alive _x && lifeState _x != "INCAPACITATED"
 } select {
     isTouchingGround _x
+} select {
+    private _position = getPosASL _x;
+    !(surfaceIsWater _position) || (_position # 2 > 20 && _position # 2 < 30)
 };
 
 private _homeBase = BIS_WL_playerSide call WL2_fnc_getSideBase;
