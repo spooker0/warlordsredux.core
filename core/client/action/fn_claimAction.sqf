@@ -7,7 +7,7 @@ _asset addAction [
         _this spawn {
             params ["_asset", "_caller", "_actionId", "_arguments"];
             private _animation = "Acts_TerminalOpen";
-            player switchMove [_animation];
+            [player, [_animation]] remoteExec ["switchMove", 0];
 
             [[0, -3, 1]] call WL2_fnc_actionLockCamera;
 
@@ -62,7 +62,7 @@ _asset addAction [
             };
 
             cameraOn cameraEffect ["Terminate", "BACK"];
-            player switchMove [""];
+            [player, [""]] remoteExec ["switchMove", 0];
 			deleteVehicle _soundSource;
         };
 	},

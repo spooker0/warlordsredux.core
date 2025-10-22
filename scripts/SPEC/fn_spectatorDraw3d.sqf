@@ -108,7 +108,7 @@ private _cameraPos = positionCameraToWorld [0, 0, 0];
     private _sectorColor = _x # 2;
     private _sectorName = _x # 3;
 
-    private _sectorPos = _sector modelToWorldVisual [0, 0, 10];
+    private _sectorPos = _sector modelToWorldVisual [0, 0, 50];
     private _distance = _cameraPos distance _sectorPos;
     if (_distance > 4000) then {
         continue;

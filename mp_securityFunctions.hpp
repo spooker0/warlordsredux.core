@@ -129,6 +129,7 @@ class CfgRemoteExec {
 		class setVehicleReportOwnPosition {allowedTargets = 0;};
 		class setVehicleReportRemoteTargets {allowedTargets = 0;};
 		class setVelocityModelSpace {allowedTargets = 2;};
+		class switchMove {allowedTargets = 0;};
 		class systemChat {allowedTargets = 0;};
 	};
 };

@@ -40,5 +40,16 @@ uiNamespace setVariable ["SPEC_CameraTarget", _target];
 uiNamespace setVariable ["SPEC_CameraTargetName", _typeName];
 _texture ctrlWebBrowserAction ["ExecJS", format ["updateTargetName('%1');", _typeName]];
 
-private _currentTargetUid = _target getVariable ["BIS_WL_ownerAsset", "123"];
-player setVariable ["SPEC_CameraTargetUid", _currentTargetUid, true];
+private _isProjectile = {
+    params ["_projectile"];
+    if (_projectile isKindOf "MissileCore") exitWith { true; };
+    if (_projectile isKindOf "RocketCore") exitWith { true; };
+    if (_projectile isKindOf "BombCore") exitWith { true; };
+    if (_projectile isKindOf "ShellCore") exitWith { true; };
+    if (_projectile isKindOf "SubmunitionCore") exitWith { true; };
+    false;
+};
+if !([_target] call _isProjectile) then {
+    private _currentTargetUid = _target getVariable ["BIS_WL_ownerAsset", "123"];
+    player setVariable ["SPEC_CameraTargetUid", _currentTargetUid, true];
+};

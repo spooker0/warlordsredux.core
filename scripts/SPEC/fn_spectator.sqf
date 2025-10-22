@@ -195,6 +195,51 @@ _mainDisplay displayAddEventHandler ["KeyUp", {
         };
     };
 
+    if (_key in actionKeys "MoveUp") exitWith {
+        private _currentTarget = uiNamespace getVariable ["SPEC_CameraTarget", objNull];
+        if (isNull _currentTarget) exitWith {};
+
+        private _isValidProjectile = {
+            params ["_projectile"];
+            if (!alive _projectile) exitWith { false; };
+            if (_projectile isKindOf "MissileCore") exitWith { true; };
+            if (_projectile isKindOf "RocketCore") exitWith { true; };
+            if (_projectile isKindOf "BombCore") exitWith { true; };
+            if (_projectile isKindOf "ShellCore") exitWith { true; };
+            if (_projectile isKindOf "SubmunitionCore") exitWith { true; };
+            false;
+        };
+
+        private _targetIsProjectile = [_currentTarget] call _isValidProjectile;
+        private _currentTargetUid = if (_targetIsProjectile) then {
+            private _shotParents = getShotParents _currentTarget;
+            private _instigator = _shotParents call WL2_fnc_handleInstigator;
+            getPlayerUID _instigator;
+        } else {
+            _currentTarget getVariable ["BIS_WL_ownerAsset", "123"];
+        };
+
+        private _munitions = (8 allObjects 2) select {
+            [_x] call _isValidProjectile
+        } select {
+            private _shotParents = getShotParents _x;
+            if (count _shotParents == 0) exitWith { false };
+            private _instigator = _shotParents call WL2_fnc_handleInstigator;
+            getPlayerUID _instigator == _currentTargetUid;
+        };
+		_munitions = [_munitions, [], { (getShotInfo _x) # 0 }, "DESCEND"] call BIS_fnc_sortBy;
+        if (count _munitions == 0) exitWith {};
+
+        private _munitionIndex = if (_targetIsProjectile) then {
+            _munitions find _currentTarget;
+        } else {
+            -1;
+        };
+        _munitionIndex = (_munitionIndex + 1) mod count _munitions;
+        private _newTarget = _munitions select _munitionIndex;
+        [_newTarget] call SPEC_fnc_spectatorSelectTarget;
+    };
+
     if (_key in actionKeys "showMap") exitWith {
         call SPEC_fnc_spectatorMap;
     };
@@ -315,7 +360,8 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
                     ["Zoom in", "prevAction"],
                     ["Zoom out", "nextAction"],
                     ["Cycle target camera view", "personView"],
-                    ["Unselect target", "lockTarget"]
+                    ["Unselect target", "lockTarget"],
+                    ["Select projectile", "MoveUp"]
                 ];
             };
             private _commonControls = [

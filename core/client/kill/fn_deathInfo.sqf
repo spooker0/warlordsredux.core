@@ -25,56 +25,16 @@ if (_killerSide == sideUnknown) then {
 
 private _killerColor = switch (_killerSide) do {
     case (west): {
-        "#00008b";
+        "#1087ff";
     };
     case (east): {
-        "#8b0000";
+        "#fe0000";
     };
     case (independent): {
-        "#008b00";
+        "#00fe00";
     };
     default {
-        "#ffffff";
-    };
-};
-
-private _detectedBySensors = switch (_killerSide) do {
-    case (west): {
-        listRemoteTargets west;
-    };
-    case (east): {
-        listRemoteTargets east;
-    };
-    case (independent): {
-        listRemoteTargets independent;
-    };
-    default {
-        [];
-    };
-};
-private _findDetection = _detectedBySensors select { _x # 0 == vehicle _unit || _x # 0 == _unit };
-private _detectSensorText = if (count _findDetection > 0) then {
-    localize "STR_A3_WL_detected_by_sensors";
-} else {
-    private _detectedByAI = switch (_killerSide) do {
-        case (west): {
-            west knowsAbout _unit;
-        };
-        case (east): {
-            east knowsAbout _unit;
-        };
-        case (independent): {
-            0;  // independents are always AI anyway
-        };
-        default {
-            0;
-        };
-    };
-
-    if (_detectedByAI >= 1.5 && _killerSide != _side && !_isKillerAI) then {
-        localize "STR_A3_WL_detected_by_AI";
-    } else {
-        "";
+        "#FFFFFF";
     };
 };
 
@@ -88,22 +48,6 @@ private _damageDone = if (alive _killer) then {
     1;
 };
 private _health = round ((1 - _damageDone) * 100);
-
-private _distance = round (_killer distance _unit);
-private _distanceText = switch (true) do {
-    case (_distance < 100): {
-        "CQB";
-    };
-    case (_distance < 1000): {
-        "NEAR";
-    };
-    case (_distance < 10000): {
-        "FAR";
-    };
-    default {
-        "DISTANT";
-    };
-};
 
 private _killerVehicle = vehicle _killer;
 private _killerWeapon = currentWeapon _killer;
@@ -138,7 +82,8 @@ private _responsiblePlayerUid = if (!isNull _responsiblePlayer) then {
     ""
 };
 
-private _ratioText = "0 - 0";
+private _ratioYou = 0;
+private _ratioThem = 0;
 if (_responsiblePlayerUid != "") then {
     private _killedByMap = missionNamespace getVariable ["WL2_killedBy", createHashMap];
     private _timesKilledBy = _killedByMap getOrDefault [_responsiblePlayerUid, 0];
@@ -149,7 +94,8 @@ if (_responsiblePlayerUid != "") then {
     private _timesKilledMap = missionNamespace getVariable ["WL2_killed", createHashMap];
     private _timesKilled = _timesKilledMap getOrDefault [_responsiblePlayerUid, 0];
 
-    _ratioText = format ["%1 - %2", _timesKilled, _timesKilledBy];
+    _ratioYou = _timesKilled;
+    _ratioThem = _timesKilledBy;
 };
 
 private _badgeText = if (isPlayer _responsiblePlayer) then {
@@ -176,9 +122,8 @@ private _gameData = [
     _health,
     _killerText,
     _killerIcon regexReplace ["^\\", ""],
-    _distanceText,
-    _ratioText,
-    _detectSensorText,
+    _ratioYou,
+    _ratioThem,
     _responsiblePlayerName,
     _killerColor,
     _badgeText,
@@ -212,7 +157,12 @@ _texture ctrlAddEventHandler ["PageLoaded", {
             private _downedTime = player getVariable ["WL_unconsciousTime", 0];
             private _respawnTimer = _downedLiveTime - _downedTime;
 
-            private _script = format ["updateRespawnTimer(""%1"");", _respawnTimer toFixed 1];
+            private _respawnDisplay = if (!alive player) then {
+                ""
+            } else {
+                _respawnTimer toFixed 1
+            };
+            private _script = format ["updateRespawnTimer(""%1"");", _respawnDisplay];
             _texture ctrlWebBrowserAction ["ExecJS", _script];
 
             uiSleep 0.1;
@@ -222,7 +172,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
 
 waitUntil {
     uiSleep 0.1;
-    !alive player
+    (alive player && lifeState player != "INCAPACITATED") || WL_IsSpectator;
 };
 
 "deathInfo" cutText ["", "PLAIN"];

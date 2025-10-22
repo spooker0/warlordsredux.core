@@ -17,7 +17,9 @@ if (leader _group != _unit) then {
 	[_group, _unit] remoteExec ["selectLeader", groupOwner _group];
 };
 
+#if __GAME_BUILD__ <= 153351
 {
 	_x setUnconscious false;
 	_x setCaptive false;
 } forEach (units _unit);
+#endif

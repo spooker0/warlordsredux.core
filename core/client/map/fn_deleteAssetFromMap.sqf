@@ -18,7 +18,7 @@ if (_result) then {
 		playSound "AddItemFailed";
 	};
 
-	if (!alive player) exitWith {
+	if (!alive player || lifeState player == "INCAPACITATED") exitWith {
 		systemChat "You are dead!";
 		playSound "AddItemFailed";
 	};

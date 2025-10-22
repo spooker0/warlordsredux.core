@@ -1,11 +1,22 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 .spectate-content {
     width: 100%;
     height: calc(100% - 60px);
     padding: 16px;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
 }
 
 .spectate-search {
     margin-bottom: 12px;
+    flex: 0 0 auto;
 }
 
 .spectate-search input {
@@ -30,11 +41,12 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    height: 100%;
+
+    flex: 1 1 auto;
+    min-height: 0;
     overflow: auto;
-    /* one scroll for everything */
+
     padding-right: 6px;
-    /* space for thin scrollbar */
     scrollbar-color: #444444 #2a2a2a;
     scrollbar-width: thin;
 }

@@ -230,7 +230,7 @@ while { !BIS_WL_missionEnd } do {
 
 			[_missileState, _distance, _missileApproaching, _missileType];
 		};
-		
+
 		private _encodedMissilesText = _texture ctrlWebBrowserAction ["ToBase64", toJSON _missilesData];
 		_script = _script + format ["setIncomingMissiles(atob(""%1""));", _encodedMissilesText];
     } else {

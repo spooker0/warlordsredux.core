@@ -158,7 +158,6 @@ while { WL_IsSpectator } do {
     {
         private _sector = _x;
         private _sectorArea = _sector getVariable "objectAreaComplete";
-        private _sectorPos = _x modelToWorldVisual [0, 0, 200];
         private _sectorName = _sector getVariable ["WL2_name", "Sector"];
         private _captureProgress = _sector getVariable ["BIS_WL_captureProgress", 0];
         if (_captureProgress > 0) then {

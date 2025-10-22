@@ -118,7 +118,7 @@
 		_mapData set ["sideVehiclesAll", _sideVehiclesAll];
 
 		private _advancedSams = _vehicles select {
-
+			[_x] call WL2_fnc_getAssetSide != _side
 		} select {
 			count (_x getVariable ["DIS_advancedSamDetectionLocation", []]) > 0
 		};

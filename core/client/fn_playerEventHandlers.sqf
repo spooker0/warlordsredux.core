@@ -99,3 +99,14 @@ player addEventHandler ["Respawn", {
         };
     };
 }];
+
+#if __GAME_BUILD__ > 153351
+(group player) addEventHandler ["LeaderChanged", {
+	params ["_group", "_newLeader"];
+	if (_newLeader != player) then {
+		{
+			_x disableAI "COMMAND";
+		} forEach (units _group);
+	};
+}];
+#endif

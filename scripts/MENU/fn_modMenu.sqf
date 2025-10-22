@@ -30,7 +30,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
             private _selectedPlayer = _allPlayers select { getPlayerUID _x == _uid };
             if (count _selectedPlayer == 0) exitWith { true };
             _selectedPlayer = _selectedPlayer select 0;
-                        
+
             private _playerName = [_selectedPlayer, true] call BIS_fnc_getName;
             private _systemTimeDisplay = [systemTimeUTC] call MENU_fnc_printSystemTime;
 
@@ -46,7 +46,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
             private _playerDataJson = toJSON _playerData;
             _playerDataJson = _texture ctrlWebBrowserAction ["ToBase64", _playerDataJson];
             private _script = format [
-                "updatePlayerInfo(atob(""%1""));",  
+                "updatePlayerInfo(atob(""%1""));",
                 _playerDataJson
             ];
             _texture ctrlWebBrowserAction ["ExecJS", _script];
@@ -105,6 +105,10 @@ _texture ctrlAddEventHandler ["JSDialog", {
             private _afkLogArray = _afkLog toArray false;
             _afkLogArray = [_afkLogArray, [], { _x # 0 }, "ASCEND"] call BIS_fnc_sortBy;
             [_texture, str _afkLogArray] spawn MENU_fnc_copyChat;
+        };
+        case "deputize": {
+            private _uid = _message select 1;
+            missionNamespace setVariable ["WL2_tempSpectatorUID", _uid];
         };
         case "clearReports": {
             private _uid = _message select 1;

@@ -43,10 +43,12 @@ switchCamera player;
 
 [_unit] spawn {
     params ["_unit"];
+#if __GAME_BUILD__ <= 153351
     {
         _x setCaptive true;
         _x setUnconscious true;
     } forEach (units _unit);
+#endif
 
     _unit setCaptive true;
     _unit setUnconscious true;

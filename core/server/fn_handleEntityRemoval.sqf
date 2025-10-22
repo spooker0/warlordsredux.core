@@ -30,6 +30,10 @@ if (!isPlayer _responsiblePlayer || { getPlayerUID _responsiblePlayer == _unit g
     };
 };
 
+if (_isUnitPlayer) then {	// use alt syntax to exclude vehicle kills
+    [_unit, _responsiblePlayer, _killer] remoteExec ["WL2_fnc_deathInfo", _unit];
+};
+
 private _scoreboard = missionNamespace getVariable ["WL2_scoreboardData", createHashMap];
 private _victimEntry = _scoreboard getOrDefault [getPlayerUID _unit, createHashMap];
 private _killerEntry = _scoreboard getOrDefault [getPlayerUID _responsiblePlayer, createHashMap];
@@ -97,10 +101,6 @@ if (!isNull _responsiblePlayer && { isPlayer [_responsiblePlayer] }) then {
         [_spotReward, getPlayerUID _lastSpotted] call WL2_fnc_fundsDatabaseWrite;
         [_unit, _spotReward, "Spot assist", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _lastSpotted];
     };
-};
-
-if (_isUnitPlayer) then {	// use alt syntax to exclude vehicle kills
-    [_unit, _responsiblePlayer, _killer] remoteExec ["WL2_fnc_deathInfo", _unit];
 };
 
 _unit spawn {

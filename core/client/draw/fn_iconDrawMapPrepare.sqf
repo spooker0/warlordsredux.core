@@ -380,6 +380,27 @@ private _sideVehicles = if (_drawAll) then {
 	_drawIconsSelectable pushBack [_x, _position];
 } forEach (_sideVehicles inAreaArray [_mapCenter, _mapBoundW, _mapBoundH, 0, true]);
 
+private _advancedSams = _mapData getOrDefault ["advancedSams", []];
+{
+	private _position = getPosASL _x;
+
+	private _detectionLocation = _x getVariable ["DIS_advancedSamDetectionLocation", []];
+	if (count _detectionLocation != 3) then { continue; };
+	_drawIcons pushBack [
+		"\A3\ui_f\data\map\markers\handdrawn\warning_CA.paa",
+		[1, 0, 0, 1],
+		_detectionLocation,
+		40 * _mapIconScale,
+		40 * _mapIconScale,
+		0,
+		"ENEMY HEAVY SAM",
+		1,
+		0.08 * _mapIconScale,
+		"PuristaBold",
+		"right"
+	];
+} forEach _advancedSams;
+
 private _drawSectorMarkerThreshold = _mapData getOrDefault ["sectorMarkerThreshold", 0.4];
 private _drawSectorMarkerText = (ctrlMapScale _map) < _drawSectorMarkerThreshold;
 

@@ -1,9 +1,27 @@
 #include "includes.inc"
 params ["_projectile", "_unit"];
 
-private _detectionLocation = getPosASL _unit;
-_detectionLocation = _detectionLocation vectorAdd [(random 5000) - 2500, (random 5000) - 2500, 0];
-_unit setVariable ["DIS_advancedSamDetectionLocation", _detectionLocation, true];
+private _launches = _unit getVariable ["DIS_advancedSamLaunches", 0];
+_launches = _launches + 1;
+if (_launches >= 5) then {
+    private _lastDetectionLocation = _unit getVariable ["DIS_advancedSamDetectionLocation", []];
+    private _detectionLocation = getPosASL _unit;
+    private _radius = if (count _lastDetectionLocation > 0) then {
+        _lastDetectionLocation distance2D _detectionLocation;
+    } else {
+        3000
+    };
+    if (_radius > 5000) then {
+        _launches = 1;
+        _unit setVariable ["DIS_advancedSamDetectionLocation", [], true];
+    } else {
+        _detectionLocation = _detectionLocation getPos [_radius * (0.7 + random 0.3), random 360];
+        _unit setVariable ["DIS_advancedSamDetectionLocation", _detectionLocation, true];
+    };
+} else {
+    _unit setVariable ["DIS_advancedSamDetectionLocation", [], true];
+};
+_unit setVariable ["DIS_advancedSamLaunches", _launches, true];
 
 _projectile setVariable ["WL2_missileNameOverride", "HERCULES", true];
 _projectile setVariable ["WL2_missileStateOverride", "BOOST", true];

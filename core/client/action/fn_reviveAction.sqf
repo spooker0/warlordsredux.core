@@ -11,8 +11,7 @@ private _reviveActionId = player addAction [
 
             [[0, 8, 2]] call WL2_fnc_actionLockCamera;
 
-            player switchMove ["AinvPknlMstpSlayWrflDnon_medic"];
-
+            [player, ["AinvPknlMstpSlayWrflDnon_medic"]] remoteExec ["switchMove", 0];
             private _reviveSuccess = false;
             private _startCheckingUnhold = false;
             private _endTime = serverTime + 5;
@@ -70,7 +69,7 @@ private _reviveActionId = player addAction [
             };
 
             player setVariable ["WL2_reviveTarget", objNull];
-            player switchMove [""];
+            [player, [""]] remoteExec ["switchMove", 0];
             cameraOn cameraEffect ["Terminate", "BACK"];
         };
     },

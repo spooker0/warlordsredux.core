@@ -35,6 +35,8 @@ if ((_isAdmin || _isModerator) && _hideMyIdentity) then {
 	if (_hiddenIdentity == "") then {
 		player setVariable ["WL2_hideIdentity", _identityId, true];
 	};
+} else {
+	player setVariable ["WL2_hideIdentity", "", true];
 };
 
 private _currentBadge = player getVariable ["WL2_currentBadge", ""];

@@ -393,7 +393,8 @@ button:active {
 #btn-goto,
 #btn-mute,
 #btn-see-transfers,
-#btn-see-afk-log {
+#btn-see-afk-log,
+#btn-deputize {
     background: var(--btn-action-bg);
     border-color: var(--btn-action-border);
     color: var(--btn-action-text);
@@ -405,8 +406,13 @@ button:active {
 #btn-goto:hover,
 #btn-mute:hover,
 #btn-see-transfers:hover,
-#btn-see-afk-log:hover {
+#btn-see-afk-log:hover,
+#btn-deputize:hover {
     background: var(--btn-action-bg-hover);
+}
+
+#btn-deputize {
+    display: none;
 }
 
 .row {

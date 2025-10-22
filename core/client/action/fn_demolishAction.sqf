@@ -34,7 +34,7 @@ private _demolishActionId = player addAction [
 
             private _playerPosition = player modelToWorld [0, 0, 0];
             private _soundSource = createSoundSource ["WLDemolitionSound", _playerPosition, [], 0];
-            player switchMove ["Acts_TerminalOpen"];
+            [player, ["Acts_TerminalOpen"]] remoteExec ["switchMove", 0];
 
             private _demolishSuccess = false;
             private _startCheckingUnhold = false;
@@ -84,7 +84,7 @@ private _demolishActionId = player addAction [
             };
 
             deleteVehicle _soundSource;
-            player switchMove [""];
+            [player, [""]] remoteExec ["switchMove", 0];
 
             cameraOn cameraEffect ["Terminate", "BACK"];
 

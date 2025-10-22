@@ -1,59 +1,40 @@
-function setHealth(percent) {
-    const fill = document.getElementById('fillInner');
-    const text = document.getElementById('healthText');
-    const bounded = Math.max(0, Math.min(percent, 100));
-    fill.style.height = bounded + '%';
-    text.textContent = `HEALTH ${bounded}%`;
-}
-
 function updateData(gameData) {
     gameData = JSON.parse(gameData || '[]');
 
-    const health = gameData[0] || 100;
-    setHealth(health);
+    const [health, killer, killerIcon, ratioYou, ratioThem, killedBy, killerColor, badgeText, badgeLevel, badgeIcon] = gameData;
 
-    const killer = gameData[1] || "Unknown";
-    const killerText = document.querySelector('.killer-text');
-    killerText.textContent = killer;
+    document.querySelector(".health-text").textContent = `HEALTH ${health}%`;
 
-    const killerIcon = gameData[2] || "";
-    const killerIconElement = document.querySelector('.killer-icon');
-    if (killerIcon) {
-        A3API.RequestTexture(killerIcon, 256).then(imageContent => {
-            killerIconElement.style.setProperty('--icon', `url(${imageContent})`);
-        });
-    }
+    document.querySelector(".ratio-you").textContent = `YOU ${ratioYou}`;
+    document.querySelector(".ratio-them").textContent = `${ratioThem} THEM`;
 
-    const distance = gameData[3] || "CQB";
-    const distanceText = document.querySelector('.distance-text');
-    distanceText.textContent = distance;
-
-    const ratio = gameData[4] || "0 - 0";
-    const ratioText = document.querySelector('.ratio-text');
-    ratioText.textContent = ratio;
-
-    const sensorDetected = gameData[5] || "";
-    const sensorDisplayTitle = document.querySelector('.sensor-display-title');
-    sensorDisplayTitle.textContent = sensorDetected;
-
-    const killedBy = gameData[6] || "Enemy";
     const killedByName = document.querySelector('.killed-by-name');
-    killedByName.textContent = killedBy;
+    killedByName.textContent = `${killedBy}`;
 
-    const killerColor = gameData[7] || "#ff2222";
     killedByName.style.color = killerColor;
 
-    const badgeText = gameData[8] || "No Badge";
-    const badge = document.querySelector('.badge-text');
-    const badgeEl = document.querySelector('.badge');
-    if (badgeText === "No Badge") {
-        badgeEl.style.display = "none";
+    const killerText = document.querySelector('.killer-text');
+    killerText.textContent = killer;
+    killerText.style.color = killerColor;
+
+    const ratioThemEl = document.querySelector('.ratio-them');
+    ratioThemEl.style.color = killerColor;
+
+    const killerIconElement = document.querySelector('.killer-icon-mask');
+    if (killerIcon) {
+        killerIconElement.style.display = "";
+        A3API.RequestTexture(killerIcon, 512).then(imageContent => {
+            killerIconElement.style.setProperty('--icon', `url(${imageContent})`);
+            killerIconElement.style.setProperty('--icon-color', killerColor);
+        });
     } else {
-        badgeEl.style.display = "block";
-        badge.textContent = badgeText;
+        killerIconElement.style.display = "none";
     }
 
-    const badgeLevel = gameData[9] || 1;
+    const badge = document.querySelector('.badge-text');
+    const badgeEl = document.querySelector('.badge');
+    badge.textContent = badgeText;
+
     let badgeColor = "#ffffff";
     if (badgeLevel === 1) {
         badgeEl.className = "badge badge-level-1";
@@ -66,20 +47,25 @@ function updateData(gameData) {
         badgeColor = "#FFD700";
     }
 
-    const badgeIcon = gameData[10] || "";
     const badgeIconMask = document.querySelector('.badge-icon-mask');
     if (badgeIcon) {
-        A3API.RequestTexture(badgeIcon.replace(/\\\\/g, "\\"), 64).then(imageContent => {
+        A3API.RequestTexture(badgeIcon.replace(/\\\\/g, "\\"), 256).then(imageContent => {
             badgeIconMask.style.setProperty('--icon', `url(${imageContent})`);
             badgeIconMask.style.setProperty('--badge-color', badgeColor);
         });
     } else {
-        badgeIconMask.style.setProperty('--icon', `none`);
-        badgeIconMask.style.display = "none";
+        A3API.RequestTexture("a3\\missions_f_epa\\data\\img\\orbat\\i_aaf_ca.paa", 256).then(imageContent => {
+            badgeIconMask.style.setProperty('--icon', `url(${imageContent})`);
+            badgeIconMask.style.setProperty('--badge-color', badgeColor);
+        });
     }
 }
 
 function updateRespawnTimer(time) {
     const respawnTimer = document.querySelector('.respawn-timer');
-    respawnTimer.textContent = `Respawning in ${time}...`;
+    if (time) {
+        respawnTimer.textContent = `BLEED OUT IN ${time}...`;
+    } else {
+        respawnTimer.textContent = "WAITING TO RESPAWN...";
+    }
 }

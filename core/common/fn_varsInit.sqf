@@ -3,6 +3,7 @@ params ["_locality"];
 
 switch (_locality) do {
 	case "common": {
+		BIS_WL_playerSide = side group player;
 		BIS_WL_sidesArray = [west, east, resistance];
 		BIS_WL_competingSides = [west, east];
 		BIS_WL_missionEnd = false;
@@ -11,7 +12,6 @@ switch (_locality) do {
 		WL_MoneySign = [BIS_WL_playerSide] call WL2_fnc_getMoneySign;
 	};
 	case "client": {
-		BIS_WL_playerSide = side group player;
 		BIS_WL_enemySide = (BIS_WL_competingSides - [BIS_WL_playerSide]) # 0;
 		BIS_WL_mapSizeIndex = BIS_WL_mapSize / 8192;
 		BIS_WL_colorMarkerFriendly = ["colorBLUFOR", "colorOPFOR", "colorIndependent"] # (BIS_WL_sidesArray find BIS_WL_playerSide);

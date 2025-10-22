@@ -427,11 +427,22 @@ seeAFKLogButton.addEventListener('click', () => {
     A3API.SendAlert(`["seeAFKLog", "${document.selectedPlayer}"]`);
 });
 
+const deputizeButton = document.getElementById('btn-deputize');
+deputizeButton.addEventListener('click', () => {
+    A3API.SendAlert(`["deputize", "${document.selectedPlayer}"]`);
+});
+
 function changeButtons() {
     const player = document.selectedPlayer;
     const playerName = document.selectedPlayerName;
     timeoutButton.textContent = `Timeout ${playerName} for ${timeoutDurationEl.value || 15} minutes`;
     balanceButton.textContent = `Rebalance ${playerName}`;
+
+    if (document.isAdmin) {
+        deputizeButton.style.display = 'block';
+    } else {
+        deputizeButton.style.display = 'none';
+    }
 }
 changeButtons();
 
