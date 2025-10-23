@@ -1,7 +1,41 @@
+function sideToColorHex(side) {
+    switch (side) {
+        case 'WEST': {
+            return "#1087ff";
+        }
+        case 'EAST': {
+            return "#fe0000";
+        }
+        case 'GUER': {
+            return "#00fe00";
+        }
+        default: {
+            return "#FFFFFF";
+        }
+    }
+}
+
+function sideToColorRGB(side, opacity = 1) {
+    switch (side) {
+        case 'WEST': {
+            return `rgba(16, 135, 255, ${opacity})`;
+        }
+        case 'EAST': {
+            return `rgba(254, 0, 0, ${opacity})`;
+        }
+        case 'GUER': {
+            return `rgba(0, 254, 0, ${opacity})`;
+        }
+        default: {
+            return `rgba(255, 255, 255, ${opacity})`;
+        }
+    }
+}
+
 function updateData(gameData) {
     gameData = JSON.parse(gameData || '[]');
 
-    const [health, killer, killerIcon, ratioYou, ratioThem, killedBy, killerColor, badgeText, badgeLevel, badgeIcon] = gameData;
+    const [health, killer, killerIcon, ratioYou, ratioThem, killedBy, killerSide, badgeText, badgeLevel, badgeIcon] = gameData;
 
     document.querySelector(".health-text").textContent = `HEALTH ${health}%`;
 
@@ -11,21 +45,20 @@ function updateData(gameData) {
     const killedByName = document.querySelector('.killed-by-name');
     killedByName.textContent = `${killedBy}`;
 
-    killedByName.style.color = killerColor;
+    const killerHex = sideToColorHex(killerSide);
+
+    const deathStrip = document.querySelector('.death-strip');
+    deathStrip.style.backgroundColor = sideToColorRGB(killerSide, 0.8);
 
     const killerText = document.querySelector('.killer-text');
     killerText.textContent = killer;
-    killerText.style.color = killerColor;
-
-    const ratioThemEl = document.querySelector('.ratio-them');
-    ratioThemEl.style.color = killerColor;
 
     const killerIconElement = document.querySelector('.killer-icon-mask');
     if (killerIcon) {
         killerIconElement.style.display = "";
         A3API.RequestTexture(killerIcon, 512).then(imageContent => {
             killerIconElement.style.setProperty('--icon', `url(${imageContent})`);
-            killerIconElement.style.setProperty('--icon-color', killerColor);
+            // killerIconElement.style.setProperty('--icon-color', killerHex);
         });
     } else {
         killerIconElement.style.display = "none";
@@ -64,7 +97,7 @@ function updateData(gameData) {
 function updateRespawnTimer(time) {
     const respawnTimer = document.querySelector('.respawn-timer');
     if (time) {
-        respawnTimer.textContent = `BLEED OUT IN ${time}...`;
+        respawnTimer.textContent = `BLEED OUT IN ${String(time).padStart(4, '0')}...`;
     } else {
         respawnTimer.textContent = "WAITING TO RESPAWN...";
     }

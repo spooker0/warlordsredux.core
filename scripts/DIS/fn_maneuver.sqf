@@ -78,8 +78,6 @@ private _originalPosition = getPosASL _unit;
     params ["_projectile", "_originalTarget", "_unit", "_samMaxDistance", "_distanceBeforeNotch"];
     private _startTime = serverTime;
     private _isLOAL = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "autoSeekTarget") == 1;
-    private _lockSpeed = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "missileLockMaxSpeed");
-    _lockSpeed = _lockSpeed * 3.6 / 1.5;
 
     while { alive _projectile } do {
         uiSleep 0.1;

@@ -463,6 +463,8 @@ if (_asset isKindOf "Man") then {
 		_asset animateSource ["hide_rail", 0];
 	};
 
+	_asset allowCrewInImmobile [true, true];
+
 	if (isPlayer _owner) then {
 		private _appearanceDefaults = profileNamespace getVariable ["WLM_appearanceDefaults", createHashmap];
 		private _assetAppearanceDefaults = _appearanceDefaults getOrDefault [_assetActualType, createHashmap];

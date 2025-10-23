@@ -28,6 +28,11 @@ while { !BIS_WL_missionEnd } do {
         };
     } forEach _findCurrentSector;
 
+    if (!alive player || lifeState player == "INCAPACITATED") exitWith {
+        call _endEffect;
+        continue;
+    };
+
     if (isNull _currentSector) then {
         if (_pos # 0 > -WL_MAP_RESTRICTION_BUFFER &&
             _pos # 0 < worldSize + WL_MAP_RESTRICTION_BUFFER &&

@@ -6,15 +6,15 @@ if (leader _newGroup != _newUnit) then {
 	[_newGroup, _newUnit] remoteExec ["selectLeader", groupOwner _newGroup];
 };
 
+#if __GAME_BUILD__ <= 153351
 {
 	if (damage _x >= 0.99) then {
 		deleteVehicle _x;
 	};
-#if __GAME_BUILD__ <= 153351
 	_x setUnconscious false;
 	_x setCaptive false;
-#endif
 } forEach (units _newGroup);
+#endif
 
 #if WL_FACTION_THREE_ENABLED
 if (side group player == independent) then {

@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_target"];
+params ["_target", ["_texture", controlNull]];
 
 private _displayName = [_target] call WL2_fnc_getAssetTypeName;
 private _assetSector = BIS_WL_allSectors select { _target inArea (_x getVariable "objectAreaComplete") };
@@ -47,6 +47,10 @@ if (_result) then {
 	deleteVehicle _target;
 	((ctrlParent WL_CONTROL_MAP) getVariable "BIS_sectorInfoBox") ctrlShow false;
 	((ctrlParent WL_CONTROL_MAP) getVariable "BIS_sectorInfoBox") ctrlEnable true;
+
+	if (!isNull _texture) then {
+		[_texture] call WL2_fnc_sendVehicleData;
+	};
 } else {
 	playSound "AddItemFailed";
 };

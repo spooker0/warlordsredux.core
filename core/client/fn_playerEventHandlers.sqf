@@ -107,6 +107,10 @@ player addEventHandler ["Respawn", {
 		{
 			_x disableAI "COMMAND";
 		} forEach (units _group);
+	} else {
+		{
+			_x enableAI "COMMAND";
+		} forEach (units _group);
 	};
 }];
 #endif

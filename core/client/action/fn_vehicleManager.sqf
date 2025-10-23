@@ -33,7 +33,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
 
     switch (_actionId) do {
         case "remove": {
-            [_vehicle] spawn WL2_fnc_deleteAssetFromMap;
+            [_vehicle, _texture] spawn WL2_fnc_deleteAssetFromMap;
         };
         case "kick": {
             private _unwantedPassengers = (crew _vehicle) select {

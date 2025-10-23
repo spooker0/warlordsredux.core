@@ -23,21 +23,6 @@ if (_killerSide == sideUnknown) then {
     _killerSide = side group _killer;
 };
 
-private _killerColor = switch (_killerSide) do {
-    case (west): {
-        "#1087ff";
-    };
-    case (east): {
-        "#fe0000";
-    };
-    case (independent): {
-        "#00fe00";
-    };
-    default {
-        "#FFFFFF";
-    };
-};
-
 private _damageDone = if (alive _killer) then {
     if (vehicle _killer isKindOf "Man") then {
         damage _killer;
@@ -125,7 +110,7 @@ private _gameData = [
     _ratioYou,
     _ratioThem,
     _responsiblePlayerName,
-    _killerColor,
+    str _killerSide,
     _badgeText,
     _badgeLevel,
     _badgeIcon

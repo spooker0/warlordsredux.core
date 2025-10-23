@@ -352,6 +352,7 @@ class CfgFunctions {
 			class findStrongholdBuilding {};
 			class orderAircraft {};
 			class orderArsenal {};
+			class orderCombatAir {};
 			class orderCruiseMissile {};
 			class orderFastTravel {};
 			class orderFundsTransfer {};

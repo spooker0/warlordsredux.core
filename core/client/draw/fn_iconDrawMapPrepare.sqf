@@ -245,6 +245,7 @@ private _scannedUnits = _mapData getOrDefault ["scannedUnits", []];
 {
 	private _position = getPosASL _x;
 	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
+	private _textSize = if (_x isKindOf "Man") then { 0.025 } else { 0.043 };
 	_drawIcons pushBack [
 		[_x, _mapIconCache] call WL2_fnc_iconType,
 		[_x, _mapColorCache] call WL2_fnc_iconColor,
@@ -254,7 +255,7 @@ private _scannedUnits = _mapData getOrDefault ["scannedUnits", []];
 		[_x] call WL2_fnc_getDir,
 		[_x, _draw, false, _mapTextCache] call WL2_fnc_iconText,
 		1,
-		0.043 * _mapIconScale,
+		_textSize * _mapIconScale,
 		"PuristaBold",
 		"right"
 	];
