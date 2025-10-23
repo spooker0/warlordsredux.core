@@ -374,6 +374,7 @@ call WL2_fnc_afkAction;
 uiNamespace setVariable ["WL2_cruiseMissileLockState", "NONE"];
 uiNamespace setVariable ["WL2_guidMap", createHashMap];
 uiNamespace setVariable ["WL2_scoreboardData", []];
+uiNamespace setVariable ["WL2_damagedProjectiles", createHashMap];
 
 showScoretable 0;
 "deathInfo" cutFadeOut 0;

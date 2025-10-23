@@ -51,7 +51,7 @@ private _interception = {
 	_explosionPosition set [2, _explosionHeight];
 	createVehicle ["SmallSecondary", _explosionPosition, [], 0, "FLY"];
 
-	[_target, _relativeDirection, true, _gunner] remoteExec ["APS_fnc_report", _target];
+	[_target, _relativeDirection, true, _apsProjectileType, _gunner] remoteExec ["APS_fnc_report", _target];
 
 	private _ownerSide = _x getVariable ["BIS_WL_ownerAssetSide", sideUnknown];
 	if (side group _unit == _ownerSide) then {

@@ -1,12 +1,18 @@
 #include "includes.inc"
-params ["_unit", "_selection", "_damage", "_source", "_projectile", "_hitIndex", "_instigator", "_hitPoint", "_directHit"];
+params ["_unit", "_selection", "_damage", "_source", "_projectile", "_hitIndex", "_instigator", "_hitPoint", "_directHit", "_context"];
+
+if (_projectile != "" && _context == 2) then {
+    private _existingProjectiles = uiNamespace getVariable ["WL2_damagedProjectiles", createHashMap];
+    _existingProjectiles set [diag_tickTime, _projectile];
+    uiNamespace setVariable ["WL2_damagedProjectiles", _existingProjectiles];
+};
 
 if (_hitPoint == "incapacitated") then {
     _damage = 0.8 min _damage;
 };
 
 if (lifeState _unit == "INCAPACITATED") exitWith {
-    0.99;
+    _damage min 0.99;
 };
 
 private _homeBase = [WL2_base1, WL2_base2] select {

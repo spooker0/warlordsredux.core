@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_vehicle", "_angle", "_indicator", ["_gunner", objNull]];
+params ["_vehicle", "_angle", "_indicator", "_projectile", ["_gunner", objNull]];
 
 if (!isNull _gunner) then {
 	{
@@ -11,6 +11,10 @@ private _assetApsType = _vehicle getVariable ["apsType", -1];
 if (_assetApsType <= -1) exitWith {};
 
 if (cameraOn != _vehicle && _assetApsType != 3) exitWith {};
+
+private _existingProjectiles = uiNamespace getVariable ["WL2_damagedProjectiles", createHashMap];
+_existingProjectiles set [diag_tickTime, _projectile];
+uiNamespace setVariable ["WL2_damagedProjectiles", _existingProjectiles];
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _apsVolume = _settingsMap getOrDefault ["apsVolume", 1];

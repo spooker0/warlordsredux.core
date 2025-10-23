@@ -105,7 +105,7 @@ player setVariable ["WL2_reviveActionId", _reviveActionId];
     },
     {},
     [],
-    1,
+    0.5,
     1,
     true,
     true,

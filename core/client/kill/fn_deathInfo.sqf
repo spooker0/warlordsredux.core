@@ -103,6 +103,21 @@ private _badgeIcon = if (count _badgeData > 0) then {
     "";
 };
 
+private _hitPoints = (getAllHitPointsDamage player) select 2;
+private _hitProjectiles = uiNamespace getVariable ["WL2_damagedProjectiles", createHashMap];
+private _projectileHitArray = [];
+{
+    _projectileHitArray pushBack [_x, _y];
+} forEach _hitProjectiles;
+_projectileHitArray = [_projectileHitArray, [], { _x # 0 }, "DESCEND"] call BIS_fnc_sortBy;
+_projectileHitArray = (_projectileHitArray select {
+    private _timeAgo = diag_tickTime - (_x # 0);
+    _timeAgo < 300
+} select [0, 20]) apply {
+    private _timeAgo = diag_tickTime - (_x # 0);
+    [format ["-%1", round (_timeAgo * 1000)], _x # 1]
+};
+
 private _gameData = [
     _health,
     _killerText,
@@ -113,7 +128,9 @@ private _gameData = [
     str _killerSide,
     _badgeText,
     _badgeLevel,
-    _badgeIcon
+    _badgeIcon,
+    _hitPoints,
+    _projectileHitArray
 ];
 
 uiNamespace setVariable ["WL2_deathInfoData", _gameData];
@@ -152,6 +169,8 @@ _texture ctrlAddEventHandler ["PageLoaded", {
 
             uiSleep 0.1;
         };
+
+        uiNamespace setVariable ["WL2_damagedProjectiles", createHashMap];
     };
 }];
 

@@ -1,5 +1,6 @@
 :root {
     --accent: #ff3b3b;
+    --hud-text: #14cb00;
     --bar-bg-solid: rgba(8, 10, 14, 0.5);
     --bar-bg-mid: rgba(8, 10, 14, 0.4);
     --bar-bg-transparent: rgba(8, 10, 14, 0);
@@ -236,4 +237,69 @@ body {
     font-size: calc(var(--text-size) * 1.25);
     color: var(--text);
     text-shadow: 0 6px 28px rgba(0, 0, 0, 0.45);
+}
+
+.hit-projectiles {
+    position: fixed;
+    left: 1vw;
+    top: 30vh;
+
+    width: 30vw;
+    height: 50vh;
+
+    font-size: calc(var(--text-size) * 0.6);
+    color: var(--hud-text);
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    text-align: left;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+
+    align-items: center;
+}
+
+.hit-projectiles-list {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 30px;
+    align-items: start;
+}
+
+.hit-header {
+    grid-column: 1 / -1;
+    margin-bottom: 1.1em;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.6em;
+}
+
+.hit-times,
+.hit-by {
+    display: block;
+    white-space: pre-line;
+}
+
+.hit-times {
+    text-align: right;
+}
+
+.hit-by {
+    text-align: left;
+}
+
+.hitviz-wrap {
+    width: 300px;
+    height: 480px;
+    position: fixed;
+    left: 75vw;
+    top: 30vh;
+}
+
+#hitviz {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    image-rendering: pixelated;
 }

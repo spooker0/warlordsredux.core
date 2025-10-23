@@ -29,6 +29,7 @@ if (!isPlayer _responsiblePlayer || { getPlayerUID _responsiblePlayer == _unit g
         _responsiblePlayer = _lastHitter;
     };
 };
+_unit setVariable ["WL_lastHitter", objNull];
 
 if (_isUnitPlayer) then {	// use alt syntax to exclude vehicle kills
     [_unit, _responsiblePlayer, _killer] remoteExec ["WL2_fnc_deathInfo", _unit];
@@ -79,8 +80,6 @@ _scoreboard set [getPlayerUID _responsiblePlayer, _killerEntry];
 missionNamespace setVariable ["WL2_scoreboardData", _scoreboard];
 
 if (!isNull _responsiblePlayer && { isPlayer [_responsiblePlayer] }) then {
-    _unit setVariable ["WL_lastHitter", objNull];
-
     // must be sync calls, type info may disappear in next frame
     [_unit, _responsiblePlayer] call WL2_fnc_killRewardHandle;
     [_unit, _responsiblePlayer] call WL2_fnc_friendlyFireHandleServer;

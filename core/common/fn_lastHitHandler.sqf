@@ -31,6 +31,12 @@ if (isPlayer _asset) exitWith {};
 
 _asset addEventHandler ["HandleDamage", {
 	params ["_unit", "_selection", "_damage", "_source", "_projectile", "_hitIndex", "_instigator", "_hitPoint", "_directHit", "_context"];
+	if (cameraOn == _unit && _projectile != "" && _context == 2) then {
+		private _existingProjectiles = uiNamespace getVariable ["WL2_damagedProjectiles", createHashMap];
+		_existingProjectiles set [diag_tickTime, _projectile];
+		uiNamespace setVariable ["WL2_damagedProjectiles", _existingProjectiles];
+	};
+
 	if (_selection == "" && _projectile == "ammo_Bomb_SDB") then {
 		_damage = 1;
 	};
