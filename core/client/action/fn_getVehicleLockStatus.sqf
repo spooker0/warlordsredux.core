@@ -21,6 +21,7 @@ private _lockLabel = switch (_accessControl) do {
     case 5: { "Access: Squad (Passenger Only)"; };
     case 6: { "Access: Personal"; };
     case 7: { "Access: Locked"; };
+    default { "Access: None"; };
 };
 
 [_color, _lockLabel];

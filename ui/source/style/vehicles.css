@@ -59,7 +59,6 @@ button {
 }
 
 .unlock-button,
-.connect-button,
 .rearm-button,
 .repair-button,
 .refuel-button {
@@ -67,11 +66,17 @@ button {
 }
 
 .unlock-button:hover,
-.connect-button:hover,
 .rearm-button:hover,
 .repair-button:hover,
 .refuel-button:hover {
     background-color: #55aa55;
+}
+
+.connect-button {
+    background-color: #6699ff;
+}
+.connect-button:hover {
+    background-color: #5577dd;
 }
 
 .hide {

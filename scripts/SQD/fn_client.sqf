@@ -165,11 +165,13 @@ switch (_action) do {
 
         {
             if (vehicle _squadLeader != _squadLeader) then {
-                _x moveInAny (vehicle _squadLeader);
-            } else {
-                private _destination = getPosATL _squadLeader;
-                _x setVehiclePosition [_destination, [], 5, "NONE"];
+                private _moveSuccess = _x moveInAny (vehicle _squadLeader);
+                if (_moveSuccess) then {
+                    continue;
+                };
             };
+            private _destination = getPosATL _squadLeader;
+            _x setVehiclePosition [_destination, [], 5, "NONE"];
         } forEach _tagAlong;
 
         uiSleep 1;
@@ -200,11 +202,13 @@ switch (_action) do {
 
         {
             if (vehicle _squadTargetPlayer != _squadTargetPlayer) then {
-                _x moveInAny (vehicle _squadTargetPlayer);
-            } else {
-                private _destination = getPosATL _squadTargetPlayer;
-                _x setVehiclePosition [_destination, [], 5, "NONE"];
+                private _moveSuccess = _x moveInAny (vehicle _squadTargetPlayer);
+                if (_moveSuccess) then {
+                    continue;
+                };
             };
+            private _destination = getPosATL _squadTargetPlayer;
+            _x setVehiclePosition [_destination, [], 5, "NONE"];
         } forEach _tagAlong;
 
         uiSleep 1;

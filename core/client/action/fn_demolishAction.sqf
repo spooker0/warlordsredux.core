@@ -60,7 +60,7 @@ private _demolishActionId = player addAction [
                     break;
                 };
 
-                private _inputAction = inputAction "Action" + inputAction "ActionContext";
+                private _inputAction = inputAction "Action" + inputAction "ActionContext" + inputAction "navigateMenu";
                 if (_startCheckingUnhold && _inputAction > 0) then {
                     break;
                 };

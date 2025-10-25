@@ -52,15 +52,18 @@ while { !BIS_WL_missionEnd } do {
     private _killfeedLeft = _settingsMap getOrDefault ["killfeedLeft", 50];
     private _killfeedBottom = 100 - (_settingsMap getOrDefault ["killfeedTop", 95]);
 
+    private _showHitIndicator = _settingsMap getOrDefault ["showHitIndicator", false];
+
     private _script = format [
-        "setSettings(%1, %2, %3, %4, %5, %6, %7);",
+        "setSettings(%1, %2, %3, %4, %5, %6, %7, %8);",
         _killfeedScale,
         _killfeedBadgeScale,
         _killfeedTimeout,
         _killfeedMinGap,
         _ribbonMinShowTime,
         _killfeedLeft,
-        _killfeedBottom
+        _killfeedBottom,
+        _showHitIndicator
     ];
     _texture ctrlWebBrowserAction ["ExecJS", _script];
 

@@ -1,7 +1,7 @@
 :root {
     --accent: #ff3b3b;
     --hud-text: #14cb00;
-    --bar-bg-solid: rgba(8, 10, 14, 0.5);
+    --bar-bg-solid: rgba(8, 10, 14, 0.4);
     --bar-bg-mid: rgba(8, 10, 14, 0.4);
     --bar-bg-transparent: rgba(8, 10, 14, 0);
     --text: #ffffff;
@@ -43,7 +43,7 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 0;
-    background: var(--bar-bg-solid);
+    /* background: var(--bar-bg-solid); */
 }
 
 .death-strip::before,
@@ -127,6 +127,7 @@ body {
 .center-panel {
     position: relative;
     height: 20vh;
+    background-color: var(--bar-bg-solid);
 }
 
 .badge {
@@ -242,7 +243,7 @@ body {
 .hit-projectiles {
     position: fixed;
     left: 1vw;
-    top: 30vh;
+    top: 25vh;
 
     width: 30vw;
     height: 50vh;
@@ -294,7 +295,7 @@ body {
     height: 480px;
     position: fixed;
     left: 75vw;
-    top: 30vh;
+    top: 28vh;
 }
 
 #hitviz {
@@ -302,4 +303,62 @@ body {
     height: 100%;
     background: transparent;
     image-rendering: pixelated;
+}
+
+.actions-bar {
+    position: fixed;
+    left: 50%;
+    bottom: 20vh;
+    width: 70vw;
+    transform: translateX(-50%);
+    z-index: 20;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.actions-track {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    justify-content: center;
+}
+
+.action {
+    position: relative;
+    flex: 1 1 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 2em;
+    font-size: calc(var(--text-size) * 0.8);
+    color: var(--hud-text);
+    border: 4px solid transparent;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.action.is-selected {
+    border-color: var(--hud-text);
+}
+
+.action::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: calc(var(--hold-progress, 0) * 100%);
+    background: var(--hud-text);
+    transition: width 0s linear;
+}
+
+.action::after {
+    content: attr(data-label);
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    clip-path: inset(0 calc((1 - var(--hold-progress, 0)) * 100%) 0 0);
+    text-shadow: none;
 }

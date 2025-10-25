@@ -16,7 +16,7 @@ if (side group player == independent) exitWith {};
 
     while { !BIS_WL_missionEnd } do {
         if (getPlayerChannel player > 5 && !(["isInSquad", [_playerID]] call SQD_fnc_client)) then {
-            [true] call SQD_fnc_menu;
+            0 spawn SQD_fnc_menu;
         };
 
         uiSleep 0.5;

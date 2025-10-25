@@ -46,15 +46,15 @@ if (_key in actionKeys "Gear") then {
             cameraOn action ["Gear", cameraOn];
         };
 
-        private _cursorTarget = cursorTarget;
-        if (_cursorTarget distance player > 8) exitWith {
+        private _cursorObject = cursorObject;
+        if (_cursorObject distance player > 8) exitWith {
             player action ["Gear", objNull];
         };
-        if (_cursorTarget isKindOf "House") exitWith {
+        if (_cursorObject isKindOf "House") exitWith {
             player action ["Gear", objNull];
         };
-        if (alive _cursorTarget || _cursorTarget isKindOf "Man") exitWith {
-            player action ["Gear", _cursorTarget];
+        if (alive _cursorObject || _cursorObject isKindOf "Man") exitWith {
+            player action ["Gear", _cursorObject];
         };
         player action ["Gear", objNull];
     };

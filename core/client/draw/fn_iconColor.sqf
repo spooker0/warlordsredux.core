@@ -3,8 +3,8 @@ params ["_unit", "_mapColorCache"];
 
 if (lifeState _unit == "INCAPACITATED") exitWith {
     private _expirationTime = _unit getVariable ["WL2_expirationTime", 0];
-    private _timeLife = (_expirationTime - serverTime) / 25;
-    [_timeLife, _timeLife, _timeLife, 1];
+    private _timeLife = ((_expirationTime - serverTime) / 30) min 1;
+    [1, _timeLife, _timeLife, 1];
 };
 
 private _colorFromCache = _mapColorCache getOrDefault [hashValue _unit, []];

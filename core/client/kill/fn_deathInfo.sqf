@@ -23,7 +23,7 @@ if (_killerSide == sideUnknown) then {
     _killerSide = side group _killer;
 };
 
-private _damageDone = if (alive _killer) then {
+private _damageDone = if (alive _killer && lifeState _killer != "INCAPACITATED") then {
     if (vehicle _killer isKindOf "Man") then {
         damage _killer;
     } else {
@@ -134,6 +134,7 @@ private _gameData = [
 ];
 
 uiNamespace setVariable ["WL2_deathInfoData", _gameData];
+uiNamespace setVariable ["WL2_deadActionId", 0];
 
 private _display = uiNamespace getVariable ["RscWLDeathInfoMenu", displayNull];
 if (isNull _display) then {
@@ -155,9 +156,8 @@ _texture ctrlAddEventHandler ["PageLoaded", {
     _this spawn {
         params ["_texture"];
         while { !isNull _texture } do {
-            private _downedLiveTime = player getVariable ["WL2_downedLiveTime", 25];
-            private _downedTime = player getVariable ["WL_unconsciousTime", 0];
-            private _respawnTimer = _downedLiveTime - _downedTime;
+            private _expirationTime = player getVariable ["WL2_expirationTime", 0];
+            private _respawnTimer = (_expirationTime - serverTime) max 0;
 
             private _respawnDisplay = if (!alive player) then {
                 ""
@@ -172,6 +172,22 @@ _texture ctrlAddEventHandler ["PageLoaded", {
 
         uiNamespace setVariable ["WL2_damagedProjectiles", createHashMap];
     };
+}];
+
+_texture ctrlAddEventHandler ["JSDialog", {
+    params ["_texture", "_isConfirmDialog", "_message"];
+    if (_message == "HOLD ON") then {
+        private _currentExpirationTime = player getVariable ["WL2_expirationTime", 0];
+        _currentExpirationTime = (_currentExpirationTime + 5) min (serverTime + 30);
+        player setVariable ["WL2_expirationTime", _currentExpirationTime, true];
+
+        private _crawlSounds = [];
+        for "_i" from 1 to 5 do {
+            _crawlSounds pushBack format ["a3\sounds_f\characters\crawl\concrete_crawl_%1.wss", _i];
+        };
+        playSoundUI [selectRandom _crawlSounds];
+    };
+    true;
 }];
 
 waitUntil {

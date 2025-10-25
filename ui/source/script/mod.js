@@ -68,10 +68,15 @@ function createTimedOutListItem(timeout, listEl) {
         A3API.SendAlert(`["clearTimeout", "${timeout.uid}"]`);
     });
 
+    const reason = document.createElement('div');
+    reason.className = 'timeout-reason';
+    reason.textContent = `Reason: ${timeout.reason}`;
+
     row.appendChild(uidEl);
     row.appendChild(endEl);
     row.appendChild(clearBtn);
     li.appendChild(row);
+    li.appendChild(reason);
 
     return li;
 }
@@ -86,6 +91,10 @@ function updateTimedOutListItem(li, timeout) {
     const endEl = li.querySelector('.timeout-end');
     if (endEl && endEl.textContent !== timeout.end)
         endEl.textContent = timeout.end;
+
+    const reasonEl = li.querySelector('.timeout-reason');
+    if (reasonEl && reasonEl.textContent !== `Reason: ${timeout.reason}`)
+        reasonEl.textContent = `Reason: ${timeout.reason}`;
 }
 
 function updateTimeouts(timeoutData) {
@@ -94,7 +103,7 @@ function updateTimeouts(timeoutData) {
     const listEl = document.getElementById('timeout-records');
     if (!listEl) return;
 
-    const items = timeoutData.map(([uid, end]) => ({ uid, end }));
+    const items = timeoutData.map(([uid, end, reason]) => ({ uid, end, reason }));
 
     patchList(listEl, items, {
         key: i => i.uid, // one per player

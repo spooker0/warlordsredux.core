@@ -5,7 +5,7 @@ if (isDedicated) exitWith {};
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _disableCamera = _settingsMap getOrDefault ["disableMissileCameras", false];
-private _isDisconnected = unitIsUAV _unit && isNull (getConnectedUAV player);
+private _isDisconnected = cameraOn != _unit;
 private _pipDisabled = (getVideoOptions getOrDefault ["pipQualityName", "None"]) == "Disabled";
 
 if (!_disableCamera && !_isDisconnected && !_pipDisabled) then {

@@ -53,6 +53,7 @@ uiNamespace setVariable ["WL_killRewardMap", _killRewardMap];
 private _displayIcon = switch (toUpper _displayText) do {
 	case "KILL";
 	case "PLAYER KILL": { "a3\\Ui_F_Curator\\Data\\CfgMarkers\\kia_ca.paa" };
+	case "VEHICLE DISABLED": { "a3\\ui_f\\data\\igui\\cfg\\vehicletoggles\\wheelbreakiconon_ca.paa" };
 	case "DEMOLITION": { "a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\destroy_ca.paa" };
 	case "ATTACKING SECTOR";
 	case "DESTROYED STRONGHOLD": { "a3\\ui_f\\data\\igui\\cfg\\simpletasks\\types\\attack_ca.paa" };

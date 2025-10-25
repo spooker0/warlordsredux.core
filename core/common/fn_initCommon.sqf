@@ -55,6 +55,14 @@ BIS_WL_allSectors = (entities "Logic") select { _x getVariable ["WL2_name", ""] 
 	_sector setVariable ["objectAreaComplete", [position _sector] + _sectorArea];
 } forEach BIS_WL_allSectors;
 
+private _catapultTriggers = allMissionObjects "EmptyDetector" select {
+	private _carrierParts = _x getVariable ["bis_carrierParts", []];
+	count _carrierParts > 0
+};
+{
+	deleteVehicle _x;
+} forEach _catapultTriggers;
+
 "common" call WL2_fnc_varsInit;
 
 enableSaving [false, false];

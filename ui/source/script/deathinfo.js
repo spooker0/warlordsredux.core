@@ -273,4 +273,76 @@ function updateHitpoints(hitArray) {
     drawRect(ctx, legR_X, legsY, LEG_W, legsH, v.hitlegs);
 }
 
-// updateHitpoints([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
+const track = document.getElementById('actionsTrack');
+const actions = Array.from(track.querySelectorAll('.action'));
+const HOLD_TIME_MS = 1000;
+
+let selectedIndex = 0;
+let holdRaf = null;
+let holdStartTs = 0;
+let holdProgress = 0;
+let isHolding = false;
+
+function applySelection() {
+    actions.forEach((el, i) => {
+        el.classList.toggle('is-selected', i === selectedIndex);
+        if (i !== selectedIndex) el.style.removeProperty('--hold-progress');
+    });
+}
+
+function stepHold(ts) {
+    if (!holdStartTs) holdStartTs = ts;
+    const dt = ts - holdStartTs;
+    holdProgress = Math.min(1, dt / HOLD_TIME_MS);
+
+    const el = actions[selectedIndex];
+    if (el) el.style.setProperty('--hold-progress', holdProgress.toFixed(4));
+
+    if (isHolding && holdProgress < 1) {
+        holdRaf = requestAnimationFrame(stepHold);
+    } else {
+        holdRaf = null;
+        isHolding = false;
+        A3API.SendAlert(`${el.textContent}`);
+    }
+}
+
+function startHold() {
+    if (isHolding) return;
+    isHolding = true;
+    holdStartTs = 0;
+    holdProgress = 0;
+
+    const el = actions[selectedIndex];
+    if (el) el.style.setProperty('--hold-progress', '0');
+
+    holdRaf = requestAnimationFrame(stepHold);
+}
+
+function cancelHold() {
+    if (!isHolding && holdRaf == null) return;
+    isHolding = false;
+
+    if (holdRaf != null) {
+        cancelAnimationFrame(holdRaf);
+        holdRaf = null;
+    }
+    holdStartTs = 0;
+    holdProgress = 0;
+
+    const el = actions[selectedIndex];
+    if (el) el.style.removeProperty('--hold-progress');
+}
+
+function updateSelectedItem(actionId) {
+    const clamped = Math.max(0, Math.min(actions.length - 1, (actionId | 0)));
+    if (clamped === selectedIndex) return;
+    cancelHold();
+    selectedIndex = clamped;
+    applySelection();
+}
+
+applySelection();
+actions.forEach(el => {
+    el.dataset.label = el.textContent.trim();
+});

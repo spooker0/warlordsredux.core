@@ -101,7 +101,7 @@ params ["_asset"];
 
 addMissionEventHandler ["Draw3D", {
     private _asset = objectFromNetId (_thisArgs # 0);
-    if (getConnectedUAV player != _asset) exitWith {};
+    if (cameraOn != _asset) exitWith {};
 
     private _target = _asset getVariable ["WL2_target", objNull];
     if (isNull _target) exitWith {};

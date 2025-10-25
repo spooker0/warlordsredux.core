@@ -6,7 +6,7 @@ if (_hitPoint == "incapacitated") then {
 };
 
 if (lifeState _unit == "INCAPACITATED") exitWith {
-    0.99;
+    _damage min 0.99;
 };
 
 if (_damage < 1) exitWith {
@@ -23,7 +23,7 @@ _unit setUnconscious true;
     _unit setVariable ["WL2_expirationTime", serverTime + 90, true];
 
     while { alive _unit && lifeState _unit == "INCAPACITATED" } do {
-        uiSleep 0.1;
+        uiSleep 1;
         if (serverTime - _downedTime > 90) then {
             deleteVehicle _unit;
             break;

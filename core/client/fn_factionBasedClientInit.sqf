@@ -3,17 +3,14 @@ params [["_unit", player]];
 
 switch (side group player) do {
 	case west: {
-		_unit linkItem "B_UavTerminal";
 		_unit addMagazineGlobal "Laserbatteries";
 		_unit addWeaponGlobal "Laserdesignator";
 	};
 	case east: {
-		_unit linkItem "O_UavTerminal";
 		_unit addMagazineGlobal "Laserbatteries";
 		_unit addWeaponGlobal "Laserdesignator_02";
 	};
 	case independent: {
-		_unit linkItem "I_UavTerminal";
 		_unit addMagazineGlobal "Laserbatteries";
 		_unit addWeaponGlobal "Laserdesignator_03";
 	};

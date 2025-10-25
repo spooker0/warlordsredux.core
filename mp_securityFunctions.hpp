@@ -26,9 +26,8 @@ class CfgRemoteExec {
 		class WL2_fnc_attachDetach {allowedTargets = 0;};
 		class WL2_fnc_catapultAction {allowedTargets = 0;};
 		class WL2_fnc_claimAction {allowedTargets = 1;};
-		class WL2_fnc_clearPlayerReports {allowedTargets = 2;};
+		class WL2_fnc_clearPlayerReports {allowedTargets = 0;};
 		class WL2_fnc_clearServerStats {allowedTargets = 2;};
-		class WL2_fnc_clearTimeout {allowedTargets = 2;};
 		class WL2_fnc_controlGunnerAction {allowedTargets = 0;};
 		class WL2_fnc_cruiseMissileWarning {allowedTargets = 0;};
 		class WL2_fnc_demolishAction {allowedTargets = 0;};
@@ -77,6 +76,7 @@ class CfgRemoteExec {
 		class WL2_fnc_uavConnectRefresh {allowedTargets = 0;};
 		class WL2_fnc_uavJammed {allowedTargets = 2;};
 		class WL2_fnc_updateVehicleList {allowedTargets = 2;};
+		class WL2_fnc_vehicleImmobilized {allowedTargets = 0;};
 		class WL2_fnc_vehicleLockAction {allowedTargets = 1;};
 		class WL2_fnc_vehicleLockUpdate {allowedTargets = 0;};
 		class WL2_fnc_warnIncomingMissile {allowedTargets = 0;};

@@ -9,6 +9,10 @@ if (lifeState _vehicle == "INCAPACITATED") exitWith {
 	"a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa";
 };
 
+if (_vehicle getVariable ["WL_ewNetActive", false]) exitWith {
+	"\a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa";
+};
+
 private _iconFromCache = _mapIconCache getOrDefault [typeof _vehicle, ""];
 if (_iconFromCache != "") exitWith {
 	_iconFromCache;

@@ -4,7 +4,7 @@ params ["_asset"];
 if (isDedicated) exitWith {};
 
 private _catapultActionID = _asset addAction [
-	"Catapult Launch",
+	localize "STR_A3_action_useCatapult",
 	{
         _this params ["_asset", "_caller", "_actionId"];
 
@@ -56,7 +56,11 @@ private _catapultActionID = _asset addAction [
 	false
 ];
 
-_asset setUserActionText [_catapultActionID, "<t color = '#ff4b4b'>Catapult Launch</t>", "<img size='2' color='#ff4b4b' image='\a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa'/>"];
+_asset setUserActionText [
+    _catapultActionID,
+    format ["<t color='#ff4b4b'>%1</t>", localize "STR_A3_action_useCatapult"],
+    "<img size='2' color='#ff4b4b' image='\a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa'/>"
+];
 
 private _rebaseAction = _asset addAction [
 	format ["Return to Base (%1%2)", WL_MoneySign, WL_COST_JETRTB],
@@ -94,9 +98,9 @@ private _rebaseAction = _asset addAction [
             player action ["LandGear", _asset];
 
             titleCut ["", "BLACK OUT", 1];
-            
+
             uiSleep 1;
-            
+
             private _startWaitTime = serverTime;
             systemChat "Returning to base...";
             while { (serverTime - _startWaitTime) < 5 } do {

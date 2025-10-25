@@ -32,9 +32,19 @@ if (!_forgive) then {
 	private _displayMsgForgiver = format ["You have been compensated for teamkill. [+%1]", round (_compensation * 0.5)];
 	[_displayMsgForgiver] remoteExec ["systemChat", _forgiver];
 
-	private _friendlyFireVar = format ["WL2_friendlyFire_%1", _teamkillerUid];
-	private _friendlyFireIncidents = serverNamespace getVariable [_friendlyFireVar, []];
+	private _friendlyFireMap = serverNamespace getVariable ["WL2_friendlyFireMap", createHashMap];
+	private _friendlyFireIncidents = _friendlyFireMap getOrDefault [_teamkillerUid, []];
 	_friendlyFireIncidents pushBack serverTime;
-	serverNamespace setVariable [_friendlyFireVar, _friendlyFireIncidents];
-	[_friendlyFireIncidents] remoteExec ["WL2_fnc_friendlyFireHandleClient", _teamkillerOwner];
+
+	// keep only last 20 minutes
+	_friendlyFireIncidents = _friendlyFireIncidents select { _x >= (serverTime - WL_DURATION_FFTIMEOUT) };
+
+	private _totalIncidents = count _friendlyFireIncidents;
+	if (_totalIncidents >= 3) then {
+		[_teamkiller, _teamkillerUid, "teamkilling", WL_DURATION_FFTIMEOUT] call WL2_fnc_punishPlayer;
+		_friendlyFireIncidents = [];
+	};
+
+	_friendlyFireMap set [_teamkillerUid, _friendlyFireIncidents];
+	serverNamespace setVariable ["WL2_friendlyFireMap", _friendlyFireMap];
 };

@@ -271,8 +271,8 @@ if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
 
 private _squadActionText = format ["<t color='#00FFFF'>%1</t>", localize "STR_SQUADS_squads"];
 private _squadActionId = player addAction[_squadActionText, {
-	[true] call SQD_fnc_menu
-}, [], -100, false, false, "", "", 0, true];
+	0 spawn SQD_fnc_menu
+}, [], -100, false, false, "", "", 0];
 player setUserActionText [_squadActionId, _squadActionText, "<img size='2' image='\a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa'/>"];
 
 uiNamespace setVariable ["WL2_canBuy", true];
@@ -337,7 +337,7 @@ player spawn APS_fnc_setupProjectiles;
 	[] call MENU_fnc_updateViewDistance;
 };
 0 spawn WL2_fnc_interceptAction;
-0 spawn WL2_fnc_avTerminal;
+call WL2_fnc_controlUAVAction;
 if (!isServer) then {
 	0 spawn WL2_fnc_cleanupCarrier;
 };

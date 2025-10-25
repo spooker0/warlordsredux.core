@@ -156,7 +156,6 @@ class CfgFunctions {
 			class ammoConfigDetection {};
 			class announcer {};
 			class announcerInit {};
-			class avTerminal {};
 			class betty {};
 			class clientEH {};
 			class createDestroyerClient {};
@@ -210,6 +209,8 @@ class CfgFunctions {
 			class claimEligibility {};
 			class controlGunnerAction {};
 			class controlGunnerEligibility {};
+			class controlUAVAction {};
+			class controlUAVEligibility {};
 			class demolishAction {};
 			class demolishEligibility {};
 			class demolishStep {};
@@ -217,6 +218,7 @@ class CfgFunctions {
 			class deployableEligibility {};
 			class deployCrateAction {};
 			class getVehicleLockStatus {};
+			class grapple {};
 			class hmdSendData {};
 			class hmdSettings {};
 			class hmdSettingsAction {};
@@ -293,8 +295,8 @@ class CfgFunctions {
 		class ClientKill {
 			file = "src\core\client\kill";
 			class askForgiveness {};
+			class deadActions {};
 			class deathInfo {};
-			class friendlyFireHandleClient {};
 			class handleKillFeedUpdate {};
 			class killHistory {};
 			class killNotify {};
@@ -303,6 +305,7 @@ class CfgFunctions {
 			class punishMessage {};
 			class refreshKillfeed {};
 			class updateKillFeed {};
+			class vehicleImmobilized {};
 		};
 		class ClientMap {
 			file = "src\core\client\map";
@@ -450,7 +453,6 @@ class CfgFunctions {
 			class changeSectorOwnership {};
 			class clearPlayerReports {};
 			class clearServerStats {};
-			class clearTimeout {};
 			class createDestroyer {};
 			class createUAVCrew {};
 			class createVehicleCorrectly {};

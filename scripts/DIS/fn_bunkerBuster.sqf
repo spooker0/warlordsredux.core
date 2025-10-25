@@ -31,20 +31,9 @@ uiSleep 5;
 _penetrator enableSimulation true;
 triggerAmmo _penetrator;
 
-private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
-private _strongholdsInRange = _strongholds select {
-    _x distance2D _position < 30;
+private _nearDestroyables = (_position nearObjects 30) select {
+    _x getVariable ["WL2_canDemolish", false];
 };
-if (count _strongholdsInRange > 0) then {
-    private _stronghold = _strongholdsInRange # 0;
-    [_stronghold, 5] call WL2_fnc_demolishStep;
-};
-
-private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
-private _forwardBasesInRange = _forwardBases select {
-    _x distance2D _position < 10;
-};
-if (count _forwardBasesInRange > 0) then {
-    private _forwardBase = _forwardBasesInRange # 0;
-    [_forwardBase, 5] call WL2_fnc_demolishStep;
-};
+{
+    [_x, 5] call WL2_fnc_demolishStep;
+} forEach _nearDestroyables;

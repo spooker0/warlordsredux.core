@@ -18,6 +18,26 @@ body {
     overflow: hidden;
 }
 
+.hit-indicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0s;
+}
+
+.hit-indicator.visible {
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+.hit-indicator-image {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+}
+
 .stage {
     position: fixed;
     left: 0;

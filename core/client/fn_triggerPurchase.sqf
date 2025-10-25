@@ -43,7 +43,7 @@ switch (_className) do {
         };
     };
     case "Arsenal": {if (isNull (findDisplay 602)) then {"RequestMenu_close" call WL2_fnc_setupUI; [player, "orderArsenal"] remoteExec ["WL2_fnc_handleClientRequest", 2]} else {playSound "AddItemFailed"}};
-    case "Customization": {
+    case "Loadouts": {
         "RequestMenu_close" call WL2_fnc_setupUI;
         0 spawn WLC_fnc_buildMenu;
     };
@@ -74,10 +74,10 @@ switch (_className) do {
     case "BuyFOB": {
         switch (BIS_WL_playerSide) do {
             case west: {
-                ["Land_Cargo10_blue_F", 500, "Fast Travel", [], [0, 3, 0]] call WL2_fnc_requestPurchase;
+                ["Land_Cargo20_blue_F", 500, "Fast Travel", [], [0, 3, 0]] call WL2_fnc_requestPurchase;
             };
             case east: {
-                ["Land_Cargo10_red_F", 500, "Fast Travel", [], [0, 3, 0]] call WL2_fnc_requestPurchase;
+                ["Land_Cargo20_red_F", 500, "Fast Travel", [], [0, 3, 0]] call WL2_fnc_requestPurchase;
             };
         };
     };
@@ -280,7 +280,7 @@ switch (_className) do {
             } forEach BIS_WL_allSectors;
 
             systemChat format ["Found %1 spawns on map. Painting sector spawns. This can take a while...", count _spawns];
-            
+
             private _markers = [];
             {
                 private _marker = createMarkerLocal [format ["WL2_testSpawnMarker_%1", _forEachIndex], _x];

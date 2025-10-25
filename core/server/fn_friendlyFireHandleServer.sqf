@@ -8,10 +8,8 @@ private _owner = owner _victim;
 if (_owner <= 2) exitWith {};
 
 if (_unit isKindOf "Man") then {
-	if ((group _unit) != (group _responsibleLeader)) then {
-		if (side (group _unit) == side (group _responsibleLeader)) then {
-			[_responsibleLeader, _unit] remoteExec ["WL2_fnc_askForgiveness", _owner];
-		};
+	if (side group _unit == side group _responsibleLeader) then {
+		[_responsibleLeader, _unit] remoteExec ["WL2_fnc_askForgiveness", _owner];
 	};
 } else {
 	private _typeSide = switch (getNumber (configFile >> "CfgVehicles" >> typeOf _unit >> "side")) do {

@@ -17,6 +17,8 @@ private _actionID = _asset addAction [
 
             private _maxHealth = _asset getVariable ["WL2_demolitionMaxHealth", 5];
             _asset setVariable ["WL2_demolitionHealth", _maxHealth, true];
+
+            _asset setVariable ["WL2_immobilized", false, true];
         } else {
             playSound "AddItemFailed";
         };
@@ -73,7 +75,7 @@ private _repairWheels = _asset addAction [
                     break;
                 };
 
-                private _inputAction = inputAction "Action" + inputAction "ActionContext";
+                private _inputAction = inputAction "Action" + inputAction "ActionContext" + inputAction "navigateMenu";
                 if (_startCheckingUnhold && _inputAction > 0) then {
                     break;
                 };
@@ -93,6 +95,7 @@ private _repairWheels = _asset addAction [
                     {
                         _asset setHitPointDamage [_x, 0];
                     } forEach _validHitPoints;
+                    _asset setVariable ["WL2_immobilized", false, true];
                 };
 
                 if (_timeToStop <= serverTime) then {

@@ -10,6 +10,11 @@ if (_variableSide != sideUnknown) exitWith {
     _variableSide;
 };
 
+private _strongholdSector = _unit getVariable ["WL_strongholdSector", objNull];
+if !(isNull _strongholdSector) exitWith {
+    _strongholdSector getVariable ["BIS_WL_owner", independent];
+};
+
 private _groupSide = side group _unit;
 if (_groupSide != sideUnknown || _groupSide != civilian) exitWith {
     _groupSide;

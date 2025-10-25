@@ -18,7 +18,7 @@ if (count _textFromCache == 2) exitWith {
 };
 if (count _textFromCache == 1) exitWith { _textFromCache # 0 };
 
-if (!isNull (_x getVariable ["WL_strongholdSector", objNull])) exitWith {
+if (!isNull (_asset getVariable ["WL_strongholdSector", objNull])) exitWith {
 	private _textForCache = "Stronghold";
 	_mapTextCache set [hashValue _asset, [_textForCache]];
 	_textForCache;
@@ -43,6 +43,10 @@ if (_asset isKindOf "Man") exitWith {
 };
 
 private _vehicleDisplayName = [_asset] call WL2_fnc_getAssetTypeName;
+
+if (_asset getVariable ["WL_ewNetActive", false]) then {
+	_vehicleDisplayName = "Active EW";
+};
 
 _mapTextCache set [hashValue _asset, [_vehicleDisplayName, _assetOwnerName]];
 if (_showName) then {

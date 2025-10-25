@@ -48,17 +48,19 @@ private _chatHistoryData = _chatHistory apply {
 private _chatHistoryJson = toJSON _chatHistoryData;
 _chatHistoryJson = _texture ctrlWebBrowserAction ["ToBase64", _chatHistoryJson];
 
-private _punishmentCollection = missionNamespace getVariable ["WL2_punishmentCollection", createHashMap];
+private _punishmentMap = missionNamespace getVariable ["WL2_punishmentMap", createHashMap];
 private _punishData = [];
 {
     private _uid = _x;
-    private _endTime = _y;
+    private _incidentData = _y;
 
+    private _endTime = _incidentData # 0;
     if (_endTime < serverTime) then {
         continue;
     };
-    _punishData pushBack [_uid, round (_endTime - serverTime)];
-} forEach _punishmentCollection;
+    private _reason = _incidentData # 1;
+    _punishData pushBack [_uid, round (_endTime - serverTime), _reason];
+} forEach _punishmentMap;
 
 private _timeoutJson = toJSON _punishData;
 _timeoutJson = _texture ctrlWebBrowserAction ["ToBase64", _timeoutJson];

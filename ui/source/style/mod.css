@@ -279,10 +279,18 @@ textarea {
 }
 
 .timeout-uid,
-.timeout-end {
+.timeout-end,
+.timeout-reason {
     font-family: Consolas, monospace;
     font-weight: 700;
     color: var(--accent-green);
+}
+
+.timeout-reason {
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .timeout-clear {
@@ -451,11 +459,11 @@ button:active {
 .timeout-item {
     padding: 2px 16px;
     margin: 0.2em 0;
+    font-size: 8pt;
 }
 
 .timeout-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 8pt;
 }

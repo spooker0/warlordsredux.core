@@ -54,10 +54,24 @@ _texture ctrlAddEventHandler ["JSDialog", {
             _vehicle setVariable ["WL2_accessControl", (_accessControl - 1) max 0, true];
             playSound3D ["a3\sounds_f\sfx\objects\upload_terminal\terminal_lock_open.wss", _vehicle, false, getPosASL _vehicle, 1, 1, 0, 0];
         };
-        case "connect": {
+        case "connect-driver": {
             private _access = [_vehicle, player, "driver"] call WL2_fnc_accessControl;
             if (_access # 0) then {
-                player connectTerminalToUAV _vehicle;
+                switchCamera _vehicle;
+                player remoteControl (driver _vehicle);
+                uiNamespace setVariable ["WL2_remoteControlTarget", _vehicle];
+                uiNamespace setVariable ["WL2_remoteControlSeat", "Driver"];
+                closeDialog 0;
+            };
+        };
+        case "connect-gunner": {
+            private _access = [_vehicle, player, "driver"] call WL2_fnc_accessControl;
+            if (_access # 0) then {
+                switchCamera _vehicle;
+                player remoteControl (gunner _vehicle);
+                uiNamespace setVariable ["WL2_remoteControlTarget", _vehicle];
+                uiNamespace setVariable ["WL2_remoteControlSeat", "Gunner"];
+                closeDialog 0;
             };
         };
         case "rearm": {

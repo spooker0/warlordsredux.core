@@ -7,6 +7,12 @@ if (_attach) then {
     private _offset = _arguments # 2;
 
     _load attachTo [_asset, _offset];
+    private _loadActualType = _load getVariable ["WL2_orderedClass", typeOf _load];
+    private _flipLoadable = WL_ASSET(_loadActualType, "flipLoadable", 0);
+    if (_flipLoadable > 0) then {
+        _load setDir _flipLoadable;
+        _load setPosWorld getPosWorld _load;
+    };
 
     _asset setVariable ["WL2_loadingAsset", false, true];
 

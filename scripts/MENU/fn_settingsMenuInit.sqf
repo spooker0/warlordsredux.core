@@ -32,7 +32,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
         closeDialog 0;
         switch (_id) do {
             case "SQUADS": {
-                [true] spawn SQD_fnc_menu;
+                0 spawn SQD_fnc_menu;
             };
             case "VEHICLES": {
                 0 spawn WL2_fnc_vehicleManager;
@@ -154,6 +154,8 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["checkbox", "Delete quad bike/water scooter on exit", ["deleteSmallTransports", true]],
         ["checkbox", "Use new kill sound", ["useNewKillSound", true]],
         ["checkbox", "Use new killfeed", ["useNewKillfeed", true]],
+        ["checkbox", "Show hitmarker (experimental)", ["showHitIndicator", false]],
+        ["checkbox", "Enable allied demolition (punishable)", ["enableAlliedDemolition", false]],
         ["category", "Hide scroll menus (requires respawn)"],
         ["checkbox", "Hide: Squad menu", ["hideSquadMenu", false]],
         ["checkbox", "Hide: Buy menu", ["hideBuyMenu", false]],

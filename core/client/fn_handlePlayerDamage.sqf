@@ -61,19 +61,16 @@ switchCamera player;
 
     private _unconsciousTime = _unit getVariable ["WL_unconsciousTime", 0];
     if (_unconsciousTime > 0) exitWith {};
-    _unit setVariable ["WL2_downedLiveTime", 25];
-    _unit setVariable ["WL2_expirationTime", serverTime + 25, true];
+    _unit setVariable ["WL2_expirationTime", serverTime + 30, true];
 
     private _startTime = serverTime;
     private _downTime = 0;
     while { alive _unit && lifeState _unit == "INCAPACITATED" } do {
         _downTime = serverTime - _startTime;
-        if (_downTime >= 25) then {
-            setPlayerRespawnTime 5;
-        };
+        setPlayerRespawnTime ((30 - _downTime) max 1);
 
-        private _downTimeAllowed = _unit getVariable ["WL2_downedLiveTime", 25];
-        if (_downTime >= _downTimeAllowed) then {
+        private _expirationTime = _unit getVariable ["WL2_expirationTime", serverTime + 30];
+        if (serverTime > _expirationTime) then {
             forceRespawn _unit;
             break;
         };

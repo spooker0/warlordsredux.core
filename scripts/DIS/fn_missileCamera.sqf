@@ -138,7 +138,7 @@ while { !_stop } do {
     private _projectilePosition = getPosASL _projectile;
     private _projectileDirection = _projectile modelToWorld [0, 1000, 0];
     private _isDestroyed = _projectilePosition isEqualTo [0, 0, 0] || _projectileDirection isEqualTo [0, 0, 0];
-    private _disconnected = unitIsUAV _unit && isNull (getConnectedUAV player);
+    private _disconnected = cameraOn != _unit;
     private _playerDead = !alive player;
 
     _stop = isNull _projectile || !alive _projectile || _isDestroyed || _disconnected || _projectile getEntityInfo 14 || _playerDead;
@@ -158,6 +158,20 @@ _camera camCommit 0;
 uiSleep 1.5;
 
 camDestroy _camera;
+
+private _controlUnit = if (isRemoteControlling player) then {
+    vehicle (remoteControlled player)
+} else {
+    player
+};
+if (cameraOn != _controlUnit) then {
+    switchCamera _controlUnit;
+} else {
+    if (isNull cameraOn) then {
+        switchCamera player;
+    };
+};
+
 "missileCamera" cutFadeOut 0;
 removeMissionEventHandler ["Draw3D", _targetDrawer];
 

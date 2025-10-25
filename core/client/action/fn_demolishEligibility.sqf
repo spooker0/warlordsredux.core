@@ -6,7 +6,7 @@ if (cameraOn != player) exitWith { objNull };
 
 if (count _demolishableItems == 0) exitWith { objNull };
 if (count _demolishableItems > 1) then {
-    _demolishableItems = [_demolishableItems, [], { 
+    _demolishableItems = [_demolishableItems, [], {
         if (_x == cursorTarget) then {
             -1
         } else {
@@ -17,7 +17,20 @@ if (count _demolishableItems > 1) then {
 private _demolishTarget = _demolishableItems # 0;
 
 private _strongholdSector = _demolishTarget getVariable ["WL_strongholdSector", objNull];
-if (isNull _strongholdSector) exitWith { _demolishTarget };
+if (isNull _strongholdSector) exitWith {
+    private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+    private _enableAlliedDemolition = _settingsMap getOrDefault ["enableAlliedDemolition", false];
+    if (_enableAlliedDemolition) then {
+        _demolishTarget
+    } else {
+        private _assetSide = [_demolishTarget] call WL2_fnc_getAssetSide;
+        if (_assetSide == BIS_WL_playerSide) then {
+            objNull
+        } else {
+            _demolishTarget
+        };
+    };
+};
 private _sectorOwner = _strongholdSector getVariable ["BIS_WL_owner", independent];
 
 #if WL_STRONGHOLD_DEBUG == 0

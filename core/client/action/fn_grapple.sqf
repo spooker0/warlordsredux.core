@@ -1,0 +1,117 @@
+#include "includes.inc"
+player addAction [
+	"<t color='#0000ff'>Grapple</t>",
+	{
+		0 spawn {
+			player setVariable ["WL2_rappelling", true];
+			playSoundUI ["a3\sounds_f\air\sfx\sl_4hooksunlock.wss"];
+
+			private _startPos = getPosASL player;
+            private _intersections = lineIntersectsSurfaces [
+                AGLToASL positionCameraToWorld [0, 0, 0],
+                AGLToASL positionCameraToWorld [0, 0, 100],
+                player,
+                objNull,
+                true,
+                1,
+                "FIRE",
+                "",
+                true
+            ];
+			private _hitPos = if (count _intersections == 0) then {
+				_startPos;
+			} else {
+				_intersections select 0 select 0;
+			};
+
+            private _endPos = if (count _intersections == 0) then {
+                _startPos;
+            } else {
+                private _newEndPos = +_hitPos;
+                _newEndPos set [2, (_newEndPos # 2) - 1.5 - 1.5];
+                _newEndPos;
+            };
+			private _endIsFlat = if (count _intersections == 0) then {
+				true
+			} else {
+				private _normal = _intersections select 0 select 1;
+				abs (_normal # 2) > 0.7
+			};
+
+			private _distanceToEnd = _endPos distance _startPos;
+
+			private _dummyStart = createVehicle ["I_TargetSoldier", eyePos player, [], 0, "CAN_COLLIDE"];
+			_dummyStart setPosASL (eyePos player);
+			_dummyStart enableRopeAttach true;
+			_dummyStart disableCollisionWith player;
+			[_dummyStart] remoteExec ["WL2_fnc_hideObjectOnAll", 2];
+
+			private _dummyEnd = createVehicle ["I_TargetSoldier", _hitPos, [], 0, "CAN_COLLIDE"];
+			_dummyEnd setPosASL _hitPos;
+			_dummyEnd enableRopeAttach true;
+			_dummyEnd disableCollisionWith player;
+			[_dummyEnd] remoteExec ["WL2_fnc_hideObjectOnAll", 2];
+
+			private _cable = ropeCreate [_dummyStart, [0, 0, 0], _dummyEnd, [0, 0, 0], _distanceToEnd, ["", [0, 0, -1]], ["", [0, 0, -1]], "Rope", 1];
+			uiSleep 1;
+
+			[player, ["LadderRifleStatic"]] remoteExec ["switchMove", 0];
+			player allowDamage false;
+
+			private _sound = createSoundSourceLocal ["WLRopeTravelSound", player modelToWorld [0, 0, 0], [], 0];
+
+			private _rappelTime = _distanceToEnd / 60;
+
+			private _interval = 0;
+			private _startTime = serverTime;
+
+			while { alive player && _interval < _rappelTime } do {
+				uiSleep 0.0001;
+				player setVelocityTransformation [
+					_startPos,
+					_endPos,
+					[0, 0, 0],
+					[0, 0, 0],
+					[0, 0, 1],
+					[0, 0, 1],
+					[0, 0, 1],
+					[0, 0, 1],
+					_interval / _rappelTime,
+                    [0, 0, -1.5]
+				];
+				_sound setPosATL (getPosATL player);
+				_interval = serverTime - _startTime;
+			};
+
+            player setVelocity [0, 0, 0];
+			deleteVehicle _sound;
+
+			if (!_endIsFlat) then {
+				uiSleep 0.2;
+				private _newFinalPosition = player modelToWorldWorld [0, 2, 1];
+				player setPosASL _newFinalPosition;
+			};
+
+			private _maxTimeInAir = serverTime + 5;
+			waitUntil {
+				uiSleep 0.1;
+				isTouchingGround player || serverTime > _maxTimeInAir
+			};
+
+			[player, [""]] remoteExec ["switchMove", 0];
+			player allowDamage true;
+			player setVariable ["WL2_rappelling", false];
+
+			uiSleep 0.5;
+			ropeDestroy _cable;
+			deleteVehicle _dummyStart;
+			deleteVehicle _dummyEnd;
+		};
+	},
+	[],
+	100,
+	false,
+	true,
+	"",
+	""
+];

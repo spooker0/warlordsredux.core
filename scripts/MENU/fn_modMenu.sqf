@@ -121,7 +121,10 @@ _texture ctrlAddEventHandler ["JSDialog", {
         };
         case "clearTimeout": {
             private _uid = _message select 1;
-            [player, _uid] remoteExec ["WL2_fnc_clearTimeout", 2];
+
+            private _punishmentMap = missionNamespace getVariable ["WL2_punishmentMap", createHashMap];
+            _punishmentMap deleteAt _uid;
+            missionNamespace setVariable ["WL2_punishmentMap", _punishmentMap, true];
         };
     };
 

@@ -12,6 +12,15 @@ _asset addEventHandler ["Hit", {
 	if (!alive _unit || !isDamageAllowed _unit) exitWith {};
 	if (isNull _responsiblePlayer) exitWith {};
 
+	// only check if vehicle is driven
+	if (!canMove _unit && alive driver _unit) then {
+		private _wasImmobilized = _unit getVariable ["WL2_immobilized", false];
+		if (!_wasImmobilized) then {
+			[] remoteExec ["WL2_fnc_vehicleImmobilized", _responsiblePlayer];
+			_unit setVariable ["WL2_immobilized", true, true];
+		};
+	};
+
 	_unit setVariable ["WL_lastHitter", _responsiblePlayer, 2];
 
 	private _children = _unit getVariable ["WL2_children", []];
@@ -21,6 +30,7 @@ _asset addEventHandler ["Hit", {
 
 	private _crew = crew _unit;
 	if (count _crew == 0) exitWith {};
+
 	if (count _crew == 1 && _crew # 0 == _unit) exitWith {};
 	{
 		_x setVariable ["WL_lastHitter", _responsiblePlayer, 2];

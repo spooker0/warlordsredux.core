@@ -10,6 +10,29 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
     while { !BIS_WL_missionEnd } do {
         uiSleep 0.5;
 
+        private _cursorObject = cursorObject;
+        private _access = [_cursorObject, player, "driver"] call WL2_fnc_accessControl;
+        if (unitIsUAV _cursorObject && _access # 0) then {
+            private _remoteActionId = player getVariable ["WL2_controlUAVActionId", -1];
+            private _assetTypeName = [_cursorObject] call WL2_fnc_getAssetTypeName;
+            private _controlSeat = if (alive driver _cursorObject) then {
+                "Driver"
+            } else {
+                "Gunner"
+            };
+            private _remoteText = format ["Control %1 (%2)</t>", _assetTypeName, _controlSeat];
+            player setUserActionText [_remoteActionId, _remoteText];
+        } else {
+            private _remoteControlTarget = uiNamespace getVariable ["WL2_remoteControlTarget", objNull];
+            if (alive _remoteControlTarget) then {
+                private _remoteActionId = player getVariable ["WL2_controlUAVActionId", -1];
+                private _assetTypeName = [vehicle _remoteControlTarget] call WL2_fnc_getAssetTypeName;
+                private _controlSeat = uiNamespace getVariable ["WL2_remoteControlSeat", "Driver"];
+                private _remoteText = format ["Control %1 (%2)</t>", _assetTypeName, _controlSeat];
+                player setUserActionText [_remoteActionId, _remoteText];
+            };
+        };
+
         private _nearbyUnconscious = (player nearObjects ["Man", 8]) select {
             lifeState _x == "INCAPACITATED" && side group _x == BIS_WL_playerSide
         };
@@ -130,7 +153,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
         private _viewDistance = (getObjectViewDistance # 0) min 1000;
         private _detectableUnits = allUnits;
         _detectableUnits pushBackUnique cursorTarget;
-        _detectableUnits pushBackUnique cursorObject;
+        _detectableUnits pushBackUnique _cursorObject;
         private _playerIcons = [];
         {
             if (_x == player) then { continue; };
@@ -142,7 +165,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
                 if (_isNotStronghold) then { continue; };
             };
 
-            private _isntCursorTarget = _x != cursorTarget && _x != cursorObject;
+            private _isntCursorTarget = _x != cursorTarget && _x != _cursorObject;
             if (_x distance cameraOn > _viewDistance && _isntCursorTarget) then { continue; };
 
             private _isInMySquad = ["isInMySquad", [getPlayerID _x]] call SQD_fnc_client;
@@ -385,7 +408,6 @@ while { !BIS_WL_missionEnd } do {
     {
         _side reportRemoteTarget [_x, 5];
     } forEach _allScannedUnits;
-
     missionNamespace setVariable ["WL2_detectedUnits", _allScannedUnits];
     uiSleep 2;
 };

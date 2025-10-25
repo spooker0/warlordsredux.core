@@ -31,9 +31,12 @@ function updateData(gameData) {
             } else if (optionId === 'kick') {
                 optionClass = 'kick-button';
                 optionText = 'KICK ALL';
-            } else if (optionId === 'connect') {
+            } else if (optionId === 'connect-driver') {
                 optionClass = 'connect-button';
-                optionText = 'CONNECT';
+                optionText = 'CONTROL DRIVER';
+            } else if (optionId === 'connect-gunner') {
+                optionClass = 'connect-button';
+                optionText = 'CONTROL GUNNER';
             } else if (optionId === 'rearm') {
                 optionClass = 'rearm-button';
                 optionText = 'REARM';

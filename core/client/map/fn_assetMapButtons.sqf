@@ -302,14 +302,33 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
 #endif
 };
 
-if (_operateAccess && unitIsUAV _asset && getConnectedUAV player != _asset) then {
-    ["CONNECT TO UAV", {
-        params ["_asset"];
-        _access = [_asset, player, "driver"] call WL2_fnc_accessControl;
-        if (_access # 0) then {
-            player connectTerminalToUAV _asset;
-        };
-    }, true] call WL2_fnc_addTargetMapButton;
+if (_operateAccess && unitIsUAV _asset) then {
+    if (alive driver _asset) then {
+        ["CONTROL DRIVER", {
+            params ["_asset"];
+            private _access = [_asset, player, "driver"] call WL2_fnc_accessControl;
+            if (_access # 0) then {
+                openMap false;
+                switchCamera _asset;
+                player remoteControl (driver _asset);
+                uiNamespace setVariable ["WL2_remoteControlTarget", _asset];
+                uiNamespace setVariable ["WL2_remoteControlSeat", "Driver"];
+            };
+        }, true] call WL2_fnc_addTargetMapButton;
+    };
+    if (alive gunner _asset) then {
+        ["CONTROL GUNNER", {
+            params ["_asset"];
+            private _access = [_asset, player, "driver"] call WL2_fnc_accessControl;
+            if (_access # 0) then {
+                openMap false;
+                switchCamera _asset;
+                player remoteControl (gunner _asset);
+                uiNamespace setVariable ["WL2_remoteControlTarget", _asset];
+                uiNamespace setVariable ["WL2_remoteControlSeat", "Gunner"];
+            };
+        }, true] call WL2_fnc_addTargetMapButton;
+    };
 };
 
 // Fast Travel SL Button

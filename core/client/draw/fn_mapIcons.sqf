@@ -58,15 +58,6 @@
 		private _side = BIS_WL_playerSide;
 		_mapData set ["side", _side];
 
-		private _targetsOnDatalink = (listRemoteTargets _side) select {
-            private _target = _x # 0;
-            private _targetSide = [_target] call WL2_fnc_getAssetSide;
-
-            private _targetTime = _x # 1;
-            _targetTime >= -10 && _targetSide != _side && alive _target && !(_target isKindOf "LaserTarget")
-        } apply { _x # 0 };
-		_mapData set ["scannedUnits", _targetsOnDatalink];
-
 		private _vehicles = vehicles select { alive _x };
 		private _activeVehicles = +_vehicles;
 		_activeVehicles append ("Land_MobileRadar_01_radar_F" allObjects 0);
@@ -109,13 +100,31 @@
 		_sideVehicles insert [-1, _playersOnSide, true];
 		private _playerAi = units player;
 		_sideVehicles insert [-1, _playerAi, true];
-		_mapData set ["sideVehicles", _sideVehicles select { isNull objectParent _x }];
+		_sideVehicles = _sideVehicles select {
+			isNull objectParent _x
+		};
+		_mapData set ["sideVehicles", _sideVehicles];
 
 		private _sideVehiclesAll = (_vehicles + allUnits) select { simulationEnabled _x } select { !(_x isKindOf "LaserTarget") } select {
 			private _targetSide = [_x] call WL2_fnc_getAssetSide;
 			_targetSide in [west, east, independent]
 		};
 		_mapData set ["sideVehiclesAll", _sideVehiclesAll];
+
+		private _alwaysShowEwUnits = _ewNetworkUnits apply {
+			[_x, 10]
+		};
+		private _targetsOnDatalink = (_alwaysShowEwUnits + listRemoteTargets _side) select {
+			alive (_x # 0)
+		} select {
+			(_x # 1) >= -10
+		} select {
+			private _targetSide = [_x # 0] call WL2_fnc_getAssetSide;
+			_targetSide != _side
+		} select {
+            !(_x # 0 isKindOf "LaserTarget")
+        } apply { _x # 0 };
+		_mapData set ["scannedUnits", _targetsOnDatalink];
 
 		private _advancedSams = _vehicles select {
 			[_x] call WL2_fnc_getAssetSide != _side

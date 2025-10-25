@@ -10,6 +10,15 @@ if (_modOverrideUid != "") then {
 
 private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", _playerUid];
 private _playerVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
+
+private _uavsWithAccess = allUnitsUAV select {
+    private _assetSide = [_x] call WL2_fnc_getAssetSide;
+    _assetSide == BIS_WL_playerSide;
+} select {
+    private _uavAccess = [_x, player, "driver"] call WL2_fnc_accessControl;
+    _uavAccess # 0;
+};
+_playerVehicles insert [-1, _uavsWithAccess, true];
 _playerVehicles = _playerVehicles select { alive _x };
 
 private _vehicleInfoText = toJSON (
@@ -33,9 +42,12 @@ private _vehicleInfoText = toJSON (
 
         private _accessControl = _vehicle getVariable ["WL2_accessControl", -1];
         (_accessControl call WL2_fnc_getVehicleLockStatus) params ["_lockColor", "_lockLabel"];
-        private _lockState = format ["<t color='%1'>%2</t>", _lockColor, _lockLabel];
 
-        private _vehicleName = format ["%1 @ %2 %3 | %4", _displayName, _assetLocation, _apsAmmo, _lockState];
+        private _vehicleName = format ["%1 @ %2 %3 | %4", _displayName, _assetLocation, _apsAmmo, _lockLabel];
+        private _vehicleOwner = _vehicle getVariable ["BIS_WL_ownerAsset", "123"];
+        if (_vehicleOwner != _playerUid) then {
+            _vehicleName = format ["(SHARED) %1", _vehicleName];
+        };
 
         private _availableActions = ["remove"];
 
@@ -55,8 +67,13 @@ private _vehicleInfoText = toJSON (
         };
 
         private _driverAccess = [_vehicle, player, "driver"] call WL2_fnc_accessControl;
-        if (unitIsUAV _vehicle && getConnectedUAV player != _vehicle && _driverAccess # 0) then {
-            _availableActions pushBack "connect";
+        if (unitIsUAV _vehicle && _driverAccess # 0) then {
+            if (alive (gunner _vehicle)) then {
+                _availableActions pushBack "connect-gunner";
+            };
+            if (alive (driver _vehicle)) then {
+                _availableActions pushBack "connect-driver";
+            };
         };
 
         private _fullAccess = [_vehicle, player, "full"] call WL2_fnc_accessControl;

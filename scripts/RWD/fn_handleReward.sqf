@@ -146,6 +146,11 @@ if (_rewardType == "DEMOLITION") then {
 	_rewardStack set ["DEMOLITIONS", _currentDemolitions + _rewardAmount];
 };
 
+if (_rewardType == "VEHICLE DISABLED") then {
+	private _currentImmobilizations = _rewardStack getOrDefault ["IMMOBILIZATIONS", 0];
+	_rewardStack set ["IMMOBILIZATIONS", _currentImmobilizations + 1];
+};
+
 missionNamespace setVariable ["WL2_rewardStack", _rewardStack];
 
 call RWD_fnc_handleBadge;

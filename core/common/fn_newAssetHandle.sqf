@@ -188,8 +188,8 @@ if (_asset isKindOf "Man") then {
 			[_asset] remoteExec ["WL2_fnc_slingAddAction", 0, true];
 		};
 
-		case "Land_Cargo10_blue_F";
-		case "Land_Cargo10_red_F": {
+		case "Land_Cargo20_blue_F";
+		case "Land_Cargo20_red_F": {
 			[_asset] remoteExec ["WL2_fnc_setupForwardBaseAction", 0, true];
 		};
 
@@ -310,7 +310,11 @@ if (_asset isKindOf "Man") then {
 	if (_asset isKindOf "ReammoBox_F") then {
 		_asset setVariable ["WL2_accessControl", 2, true];
 	} else {
-		_asset setVariable ["WL2_accessControl", 4, true];
+		if (unitIsUAV _asset) then {
+			_asset setVariable ["WL2_accessControl", 6, true];
+		} else {
+			_asset setVariable ["WL2_accessControl", 4, true];
+		};
 	};
 	[_asset] remoteExec ["WL2_fnc_vehicleLockAction", 0, true];
 

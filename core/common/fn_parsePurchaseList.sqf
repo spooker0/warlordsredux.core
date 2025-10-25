@@ -32,12 +32,12 @@ private _purchaseable = [];
 				localize "STR_A3_WL_arsenal_open"
 			];
 			_categoryData pushBack [
-				"Customization",
+				"Loadouts",
 				0,
 				[],
-				"Customization",
+				"Loadouts",
 				"\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
-				"Customization menu for respawn loadout."
+				"Loadouts menu for respawn loadout."
 			];
 			#if WL_AR_GLASSES_TOGGLE
 			_categoryData pushBack [

@@ -60,8 +60,6 @@ if (isNil "_playerList") exitWith {
 
 private _teamBlockVar = format ["WL2_teamBlocked_%1", _uid];
 private _balanceBlockVar = format ["WL2_balanceBlocked_%1", _uid];
-private _friendlyFireVar = format ["WL2_friendlyFire_%1", _uid];
-private _punishVar = format ["WL2_punish_%1", _uid];
 
 private _lockedToTeam = _playerList getOrDefault [_uid, sideUnknown];
 private _currentSide = side group _warlord;
@@ -77,9 +75,8 @@ if (_lockedToTeam != sideUnknown) then {
 	missionNamespace setVariable [_balanceBlockVar, false, _owner];
 
     if (_correctSide) then {
-        private _friendlyFireIncidents = serverNamespace getVariable [_friendlyFireVar, []];
-        [_friendlyFireIncidents] remoteExec ["WL2_fnc_friendlyFireHandleClient", _owner];
-        private _punishIncident = serverNamespace getVariable [_punishVar, []];
+        private _punishmentMap = missionNamespace getVariable ["WL2_punishmentMap", createHashMap];
+        private _punishIncident = _punishmentMap getOrDefault [_uid, []];
         [_punishIncident] remoteExec ["WL2_fnc_punishmentClient", _owner];
     };
 } else {

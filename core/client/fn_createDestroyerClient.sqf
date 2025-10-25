@@ -35,7 +35,7 @@ _mrls addEventHandler ["Fired", {
         private _targetCoordinates = _inRangeCalculation # 3;
         _projectile setVariable ["DIS_targetCoordinates", _targetCoordinates];
         [_projectile, _unit] spawn DIS_fnc_gpsMunition;
-        [_projectile, player] call DIS_fnc_startMissileCamera;
+        [_projectile, _unit] call DIS_fnc_startMissileCamera;
 
         private _currentAmmo = _unit magazineTurretAmmo ["magazine_Missiles_Cruise_01_x18", [0]];
         private _newControllerImage = format [
@@ -100,7 +100,7 @@ _controller addAction [
 
             uiNamespace setVariable ["WL2_usingVLS", true];
             private _areControlsReady = true;
-            while { 
+            while {
                 cameraOn == _mrls &&
                 alive player &&
                 lifeState player != "INCAPACITATED"

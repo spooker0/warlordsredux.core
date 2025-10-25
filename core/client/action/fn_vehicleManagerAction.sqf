@@ -15,6 +15,5 @@ player addAction [
 	false,
 	"",
 	"_target == cameraOn",
-	0,
-	true
+	0
 ];

@@ -152,6 +152,12 @@ class CfgSFX {
         sound0[] = { "@a3\sounds_f\sfx\alarmcar.wss", 3, 1.0, 200, 1, 0, 0, 0 };
 		empty[] = { "", 0, 0, 0, 0, 0, 0, 0 };
 	};
+
+    class WLRopeTravel {
+        sounds[] = { "sound0" };
+        sound0[] = { "@a3\sounds_f\vehicles\air\noises\wind_open_int.wss", 1, 1.0, 100, 1, 0, 0, 0 };
+		empty[] = { "", 0, 0, 0, 0, 0, 0, 0 };
+    };
 };
 
 class CfgVehicles {
@@ -162,4 +168,8 @@ class CfgVehicles {
     class WLAlarmSound {
 		sound = "WLAlarm";
 	};
+
+    class WLRopeTravelSound {
+        sound = "WLRopeTravel";
+    };
 };

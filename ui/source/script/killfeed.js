@@ -3,6 +3,7 @@ document.imageCache = {};
 let KILLFEED_TIMEOUT_MS = 10000;
 let MIN_GAP_MS = 500;
 let RIBBON_MIN_SHOW_MS = 5000;
+let SHOW_HIT_INDICATOR = true;
 
 const killfeedQueue = [];
 let isProcessingQueue = false;
@@ -61,6 +62,7 @@ function animatePoints(el, from, to) {
 }
 
 function addKillfeed(displayText, points, customColor, iconUrl) {
+    if (SHOW_HIT_INDICATOR) hitIndicator();
     killfeedQueue.push([displayText, points, customColor, iconUrl]);
     processQueue();
 }
@@ -361,7 +363,7 @@ function applyMask(el, dataUrl) {
     el.style.maskImage = `url("${dataUrl}")`;
 }
 
-function setSettings(scale, ribbonScale, feedTimeout, minGap, ribbonMinShow, anchorX, anchorY) {
+function setSettings(scale, ribbonScale, feedTimeout, minGap, ribbonMinShow, anchorX, anchorY, showIndicator) {
     document.documentElement.style.setProperty('--scale', scale);
     document.documentElement.style.setProperty('--ribbon-scale', ribbonScale);
 
@@ -371,4 +373,18 @@ function setSettings(scale, ribbonScale, feedTimeout, minGap, ribbonMinShow, anc
     KILLFEED_TIMEOUT_MS = feedTimeout;
     MIN_GAP_MS = minGap;
     RIBBON_MIN_SHOW_MS = ribbonMinShow;
+    SHOW_HIT_INDICATOR = showIndicator;
+}
+
+const indicator = document.querySelector('.hit-indicator');
+const indicatorImage = indicator.querySelector('.hit-indicator-image');
+A3API.RequestTexture("a3\\ui_f\\data\\igui\\cfg\\cursors\\iconcursorsupport_ca.paa", 64).then(imageContent => {
+    indicatorImage.src = imageContent;
+});
+function hitIndicator() {
+    indicator.classList.add('visible');
+    clearTimeout(indicator.hideTimeout);
+    indicator.hideTimeout = setTimeout(() => {
+        indicator.classList.remove('visible');
+    }, 200);
 }

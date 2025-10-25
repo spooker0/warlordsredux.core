@@ -17,7 +17,7 @@ private _ownerID = getPlayerID _owner;
 private _callerID = getPlayerID (leader _unit);
 private _isOwner = _ownerUID == getPlayerUID (leader _unit);
 
-private _isEnemy = (side group _unit) != _asset call WL2_fnc_getAssetSide;
+private _isEnemy = (side group _unit) != [_asset] call WL2_fnc_getAssetSide;
 if (_isEnemy && !(_asset isKindOf "Man")) exitWith {
     [false, "Access: Enemy (Claim to Capture)"];
 };

@@ -105,7 +105,7 @@ if (_action == "resetVehicle") exitWith {
 };
 
 if (_action == "revived") exitWith {
-	private _reward = 50;
+	private _reward = _param1;
 	[_reward] call _addFunds;
 	[objNull, _reward, "Revived Teammate", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
@@ -125,6 +125,12 @@ if (_action == "demolished") exitWith {
 
 if (_action == "orderArsenal") exitWith {
 	0 remoteExec ["WL2_fnc_orderArsenal", remoteExecutedOwner];
+};
+
+if (_action == "immobilized") exitWith {
+	private _reward = 50;
+	[_reward] call _addFunds;
+	[objNull, _reward, "Vehicle Disabled", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
 private _side = side group _sender;

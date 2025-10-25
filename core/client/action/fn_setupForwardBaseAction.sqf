@@ -67,32 +67,48 @@ private _setupActionId = [
 		params ["_target", "_caller"];
 		[_target] spawn {
 			params ["_target"];
-			_target setVariable ["WL2_deploying", true];
 
 			private _terminalClass = "RuggedTerminal_01_communications_hub_F";
-			private _deploymentResult = [
-				_terminalClass,
-				_terminalClass,
-				[0, 5, 0],
-				20,
-				true
-			] call WL2_fnc_deployment;
+			private _position = _target modelToWorld [0, 5, 0];
+			private _direction = [[0, 0, 1], [1, 0, 0]];
 
-			if !(_deploymentResult # 0) exitWith {
-				playSound "AddItemFailed";
-				_target setVariable ["WL2_deploying", false];
+			private _deploymentAction = {
+				_target setVariable ["WL2_deploying", true];
+
+				private _deploymentResult = [
+					_terminalClass,
+					_terminalClass,
+					[0, 5, 0],
+					20,
+					true
+				] call WL2_fnc_deployment;
+
+				if !(_deploymentResult # 0) exitWith {
+					playSound "AddItemFailed";
+					_target setVariable ["WL2_deploying", false];
+				};
+
+				_position =  _deploymentResult # 1;
+				private _offset = _deploymentResult # 2;
+				_direction = _deploymentResult # 3;
+				private _nearbyEntities = [_terminalClass, _position, _direction, "dontcheckuid", [_target]] call WL2_fnc_grieferCheck;
+
+				if (count _nearbyEntities > 0) exitWith {
+					private _nearbyObjectName = [_nearbyEntities # 0] call WL2_fnc_getAssetTypeName;
+					systemChat format ["Deploying too close to %1!", _nearbyObjectName];
+					playSound "AddItemFailed";
+					_target setVariable ["WL2_deploying", false];
+					false;
+				};
+				true;
 			};
 
-			private _position =  _deploymentResult # 1;
-			private _offset = _deploymentResult # 2;
-			private _direction = _deploymentResult # 3;
-			private _nearbyEntities = [_terminalClass, _position, _direction, "dontcheckuid", [_target]] call WL2_fnc_grieferCheck;
-
-			if (count _nearbyEntities > 0) exitWith {
-				private _nearbyObjectName = [_nearbyEntities # 0] call WL2_fnc_getAssetTypeName;
-				systemChat format ["Deploying too close to %1!", _nearbyObjectName];
-				playSound "AddItemFailed";
-				_target setVariable ["WL2_deploying", false];
+			while { alive player && lifeState player != "INCAPACITATED" } do {
+				private _deployResult = [_target] call _deploymentAction;
+				if (_deployResult) then {
+					break;
+				};
+				uiSleep 1;
 			};
 
 			systemChat format ["Forward base under construction. %1 seconds remaining.", WL_FOB_SETUP_TIME];

@@ -90,6 +90,8 @@ private _createMrls = {
 
     _mrls removeMagazineTurret ["magazine_Missiles_Cruise_01_Cluster_x18", [0]];
     _mrls setMagazineTurretAmmo ["magazine_Missiles_Cruise_01_x18", 1, [0]];
+
+    _mrls setVariable ["WL2_accessControl", 7, true];
 };
 
 call _createMrls;

@@ -10,6 +10,7 @@ private _badgeConfigs = [
 	["UAV KILLS", "Drone Operator", RWD_BADGE_KILLREQ],
     ["HELO KILLS", "Chopper Proficiency", RWD_BADGE_KILLREQ],
     ["STATIC KILLS", "Turret Excellence", RWD_BADGE_KILLREQ],
+	["IMMOBILIZATIONS", "Immobilizer", RWD_BADGE_KILLREQ],
 
 	["SAM DESTROYED", "Safe Skies", RWD_BADGE_DESTROYREQ],
 	["PLANE DESTROYED", "Air Superiority", RWD_BADGE_DESTROYREQ],
