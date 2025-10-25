@@ -102,7 +102,7 @@ private _originalPosition = getPosASL _unit;
                 _projectile setVectorDirAndUp _targetVectorDirAndUp;
                 _projectile setMissileTarget [_originalTarget, true];
             } else {
-                _projectile setMissileTarget [objNull, true];
+                triggerAmmo _projectile;
             };
         };
 

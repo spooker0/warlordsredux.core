@@ -74,6 +74,16 @@ _texture ctrlAddEventHandler ["JSDialog", {
                 closeDialog 0;
             };
         };
+        case "set-auto": {
+            private _access = [_vehicle, player, "driver"] call WL2_fnc_accessControl;
+            if (_access # 0) then {
+                if (isAutonomous _vehicle) then {
+                    [_vehicle, false] remoteExec ["setAutonomous", 0];
+                } else {
+                    [_vehicle, true] remoteExec ["setAutonomous", 0];
+                };
+            };
+        };
         case "rearm": {
             private _assetActualType = _vehicle getVariable ["WL2_orderedClass", typeOf _vehicle];
             private _rearmTime = WL_ASSET(_assetActualType, "rearm", 600);

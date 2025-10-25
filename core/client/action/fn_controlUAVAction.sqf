@@ -22,6 +22,7 @@ private _actionId = player addAction [
                 if (alive _driver) then {
                     player remoteControl _driver;
                 } else {
+                    uiNamespace setVariable ["WL2_remoteControlSeat", "Gunner"];
                     player remoteControl _remoteControlTarget;
                 };
             } else {

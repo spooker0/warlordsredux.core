@@ -37,6 +37,9 @@ function updateData(gameData) {
             } else if (optionId === 'connect-gunner') {
                 optionClass = 'connect-button';
                 optionText = 'CONTROL GUNNER';
+            } else if (optionId === 'set-auto') {
+                optionClass = 'connect-button';
+                optionText = 'TOGGLE AUTO';
             } else if (optionId === 'rearm') {
                 optionClass = 'rearm-button';
                 optionText = 'REARM';

@@ -74,6 +74,7 @@ private _vehicleInfoText = toJSON (
             if (alive (driver _vehicle)) then {
                 _availableActions pushBack "connect-driver";
             };
+            _availableActions pushBack "set-auto";
         };
 
         private _fullAccess = [_vehicle, player, "full"] call WL2_fnc_accessControl;

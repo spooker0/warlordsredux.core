@@ -15,20 +15,14 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
         if (unitIsUAV _cursorObject && _access # 0) then {
             private _remoteActionId = player getVariable ["WL2_controlUAVActionId", -1];
             private _assetTypeName = [_cursorObject] call WL2_fnc_getAssetTypeName;
-            private _controlSeat = if (alive driver _cursorObject) then {
-                "Driver"
-            } else {
-                "Gunner"
-            };
-            private _remoteText = format ["Control %1 (%2)</t>", _assetTypeName, _controlSeat];
+            private _remoteText = format ["Control %1</t>", _assetTypeName];
             player setUserActionText [_remoteActionId, _remoteText];
         } else {
             private _remoteControlTarget = uiNamespace getVariable ["WL2_remoteControlTarget", objNull];
             if (alive _remoteControlTarget) then {
                 private _remoteActionId = player getVariable ["WL2_controlUAVActionId", -1];
                 private _assetTypeName = [vehicle _remoteControlTarget] call WL2_fnc_getAssetTypeName;
-                private _controlSeat = uiNamespace getVariable ["WL2_remoteControlSeat", "Driver"];
-                private _remoteText = format ["Control %1 (%2)</t>", _assetTypeName, _controlSeat];
+                private _remoteText = format ["Control %1</t>", _assetTypeName];
                 player setUserActionText [_remoteActionId, _remoteText];
             };
         };

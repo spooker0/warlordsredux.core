@@ -305,6 +305,12 @@ if (_asset isKindOf "Man") then {
 		_assetGrp setVariable ["WL2_assetOwner", _owner, true];
 		_assetGrp setVariable ["WL2_assetTypeName", _assetTypeName, true];
 		[_asset] call WL2_fnc_uavConnectRefresh;
+
+		if (_side == west) then {
+			_asset addItemCargoGlobal ["B_UAVTerminal", 1];
+		} else {
+			_asset addItemCargoGlobal ["O_UAVTerminal", 1];
+		};
 	};
 
 	if (_asset isKindOf "ReammoBox_F") then {

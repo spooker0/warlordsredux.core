@@ -29,7 +29,9 @@ private _targetList = [["none", _defaultOption, false]];
 } forEach _targets;
 
 if (!_targetInList) then {
-    if (!alive _selectedTarget) then {
+    private _samRange = _asset getVariable ["DIS_advancedSamRange", 48000];
+    private _distance = cameraOn distance _selectedTarget;
+    if (!alive _selectedTarget || _distance > _samRange) then {
         private _autoOption = _targetList # 0;
         _autoOption set [2, true];
     } else {
