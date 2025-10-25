@@ -386,5 +386,5 @@ function hitIndicator() {
     clearTimeout(indicator.hideTimeout);
     indicator.hideTimeout = setTimeout(() => {
         indicator.classList.remove('visible');
-    }, 200);
+    }, 500);
 }

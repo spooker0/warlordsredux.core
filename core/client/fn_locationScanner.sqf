@@ -157,6 +157,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
         private _playerIcons = [];
         {
             if (_x == player) then { continue; };
+            if !(isNull objectParent _x) then { continue; };
             if ((typeof _x) in ["B_UAV_AI", "O_UAV_AI", "I_UAV_AI"]) then { continue; };
             private _assetSide = [_x] call WL2_fnc_getAssetSide;
 

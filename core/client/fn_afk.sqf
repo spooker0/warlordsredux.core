@@ -13,7 +13,7 @@ while { !BIS_WL_missionEnd } do {
 	uiSleep 5;
 	private _afkTimer = missionNamespace getVariable ["WL2_afkTimer", -1];
     private _isAfk = serverTime > _afkTimer;
-    if (speed player > 40) then {
+    if (speed cameraOn > 40) then {
         missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_DURATION_AFKTIME];
         _isAfk = false;
     };

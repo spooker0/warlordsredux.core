@@ -41,7 +41,14 @@ if (!_forgive) then {
 
 	private _totalIncidents = count _friendlyFireIncidents;
 	if (_totalIncidents >= 3) then {
-		[_teamkiller, _teamkillerUid, "teamkilling", WL_DURATION_FFTIMEOUT] call WL2_fnc_punishPlayer;
+		private _punishIncident = [serverTime + WL_DURATION_FFTIMEOUT, "teamkilling"];
+		private _punishmentMap = missionNamespace getVariable ["WL2_punishmentMap", createHashMap];
+		_punishmentMap set [_teamkillerUid, _punishIncident];
+		missionNamespace setVariable ["WL2_punishmentMap", _punishmentMap, true];
+
+		private _punishedPlayer = _teamkillerUid call BIS_fnc_getUnitByUID;
+		[_punishIncident] remoteExec ["WL2_fnc_punishmentClient", _punishedPlayer];
+
 		_friendlyFireIncidents = [];
 	};
 
