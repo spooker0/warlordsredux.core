@@ -47,7 +47,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
     _hintText = _texture ctrlWebBrowserAction ["ToBase64", _hintText];
 
     private _script = format [
-        "updateHint(atob(""%1""), atob(""%2""));",
+        "updateHint(atobr(""%1""), atobr(""%2""));",
         _hintTitle,
         _hintText
     ];

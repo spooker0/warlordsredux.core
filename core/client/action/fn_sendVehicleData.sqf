@@ -106,7 +106,7 @@ private _vehicleInfoText = toJSON (
 _vehicleInfoText = _texture ctrlWebBrowserAction ["ToBase64", _vehicleInfoText];
 
 private _script = format [
-    "updateData(atob(""%1""));",
+    "updateData(atobr(""%1""));",
     _vehicleInfoText
 ];
 _texture ctrlWebBrowserAction ["ExecJS", _script];

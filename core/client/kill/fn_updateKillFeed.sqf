@@ -28,16 +28,18 @@ if (_useNewKillfeed) then {
 	};
 	private _texture = _display displayCtrl 5502;
 
+	private _script = "";
 	for "_i" from 1 to _times do {
-		private _script = format [
-			"addKillfeed(""%1"", %2, ""%3"", ""%4"");",
+		_script = format [
+			"%1addKillfeed(""%2"", %3, ""%4"", ""%5"");",
+			_script,
 			toUpper _displayText,
 			floor (_reward / _times),
 			_customColor,
 			_iconUrl
 		];
-		_texture ctrlWebBrowserAction ["ExecJS", _script];
 	};
+	_texture ctrlWebBrowserAction ["ExecJS", _script];
 
 	private _scoreControl = uiNamespace getVariable ["WL_scoreControl", controlNull];
 	if (!isNull _scoreControl) then {

@@ -45,14 +45,8 @@ addMissionEventHandler ["HandleChatMessage", {
 		};
 	}];
 
-	_display displayAddEventHandler ["KeyDown", {
-		params ["_display", "_key", "_shift", "_ctrl", "_alt"];
-		if (_shift) exitWith {};
-		if (_ctrl) exitWith {};
-		if (_alt) exitWith {};
-		if (_key in actionKeys "networkStats") then {
-			0 spawn WL2_fnc_scoreboard;
-		};
+	addUserActionEventHandler ["networkStats", "Activate", {
+		0 spawn WL2_fnc_scoreboard;
 	}];
 
 	_display displayAddEventHandler ["KeyDown", {

@@ -1,5 +1,7 @@
 #include "includes.inc"
-params ["_position"];
+params ["_position", "_senderIsRemoteControlling"];
+
+if (!_senderIsRemoteControlling && focusOn == player) exitWith {};
 
 uiNamespace setVariable ["WL2_pingPosition", _position];
 

@@ -74,7 +74,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
             private _playerDataJson = toJSON _playerData;
             _playerDataJson = _texture ctrlWebBrowserAction ["ToBase64", _playerDataJson];
 
-            private _script = format ["updatePlayerList(atob(""%1""));", _playerDataJson];
+            private _script = format ["updatePlayerList(atobr(""%1""));", _playerDataJson];
             _texture ctrlWebBrowserAction ["ExecJS", _script];
 
             uiSleep 0.5;

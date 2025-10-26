@@ -15,7 +15,7 @@ private _playerDataJson = toJSON _playerData;
 _playerDataJson = _texture ctrlWebBrowserAction ["ToBase64", _playerDataJson];
 
 private _script = format [
-    "updatePlayers(atob(""%1""));",
+    "updatePlayers(atobr(""%1""));",
     _playerDataJson
 ];
 _texture ctrlWebBrowserAction ["ExecJS", _script];

@@ -28,6 +28,7 @@ private _waypointDrawer = addMissionEventHandler ["Draw3D", {
     private _waypointPosition = uiNamespace getVariable ["WL_waypointPosition", []];
     if (count _waypointPosition == 0) exitWith {};
     private _distance = _waypointPosition distance cameraOn;
+    _waypointPosition set [2, 0];
     drawIcon3D [
         "\A3\ui_f\data\IGUI\RscIngameUI\RscOptics\square.paa",
         [1, 1, 1, 1],

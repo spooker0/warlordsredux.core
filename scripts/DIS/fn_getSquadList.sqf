@@ -7,9 +7,9 @@ private _allSquadmates = ["getAllInSquad"] call SQD_fnc_client;
 
 {
     private _squadmate = _x;
-    if (_squadmate == player) then {
-        continue;
-    };
+    // if (_squadmate == player) then {
+    //     continue;
+    // };
 
     if (_playerTargetList findIf { _x # 0 == netid _squadmate } > -1) then {
         continue;

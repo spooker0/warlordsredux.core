@@ -202,7 +202,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
     _settingsMenuText = _texture ctrlWebBrowserAction ["ToBase64", _settingsMenuText];
 
     private _script = format [
-        "createMenu(atob(""%1""));",
+        "createMenu(atobr(""%1""));",
         _settingsMenuText
     ];
     _texture ctrlWebBrowserAction ["ExecJS", _script];

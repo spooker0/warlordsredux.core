@@ -62,7 +62,7 @@ function animatePoints(el, from, to) {
 }
 
 function addKillfeed(displayText, points, customColor, iconUrl) {
-    if (SHOW_HIT_INDICATOR) hitIndicator();
+    if (SHOW_HIT_INDICATOR && customColor === "#de0808") hitIndicator();
     killfeedQueue.push([displayText, points, customColor, iconUrl]);
     processQueue();
 }

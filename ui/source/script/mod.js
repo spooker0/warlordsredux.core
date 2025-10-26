@@ -211,7 +211,8 @@ function updatePlayerInfo(playerInfo) {
     }
 
     changeButtons();
-    document.querySelector('.player-details-panel').style.display = 'flex';
+    document.querySelector('.player-details-panel').classList.add('visible');
+    document.querySelector('.chat-panel').classList.add('shrink');
 }
 
 function makeChatUid(timestamp, channel, player, text) {

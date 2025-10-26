@@ -37,7 +37,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
             _scoreboardDataText = _texture ctrlWebBrowserAction ["ToBase64", _scoreboardDataText];
 
             private _script = format [
-                "renderScoreboard(atob(""%1""), %2);",
+                "renderScoreboard(atobr(""%1""), %2);",
                 _scoreboardDataText,
                 str _firstRender
             ];

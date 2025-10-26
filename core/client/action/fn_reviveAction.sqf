@@ -64,6 +64,8 @@ private _reviveActionId = player addAction [
                         } else {
                             [player, "revived", 0] remoteExec ["WL2_fnc_handleClientRequest", 2];
                         };
+                    } else {
+                        [player, "revived", 0] remoteExec ["WL2_fnc_handleClientRequest", 2];
                     };
                 };
             } else {
@@ -80,7 +82,7 @@ private _reviveActionId = player addAction [
     false,
     false,
     "",
-    "alive (player getVariable ['WL2_reviveTarget', objNull])",
+    "alive (player getVariable ['WL2_reviveTarget', objNull]) && cameraOn == player",
     0,
     false,
     "",

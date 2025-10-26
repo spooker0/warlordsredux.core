@@ -35,5 +35,5 @@ private _nearDestroyables = (_position nearObjects 30) select {
     _x getVariable ["WL2_canDemolish", false];
 };
 {
-    [_x, 5] call WL2_fnc_demolishStep;
+    [_x, 7] call WL2_fnc_demolishStep;
 } forEach _nearDestroyables;

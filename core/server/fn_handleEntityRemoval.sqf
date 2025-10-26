@@ -23,13 +23,12 @@ _deathStats set ["deaths", _deathValue + 1];
 _stats set [_assetActualType, _deathStats];
 
 private _responsiblePlayer = [_killer, _instigator] call WL2_fnc_handleInstigator;
-if (!isPlayer _responsiblePlayer || { getPlayerUID _responsiblePlayer == _unit getVariable ["BIS_WL_ownerAsset", "123"] }) then {
+if (!isPlayer _responsiblePlayer || ([_unit] call WL2_fnc_getAssetSide) == (side group _responsiblePlayer)) then {
     private _lastHitter = _unit getVariable ["WL_lastHitter", objNull];
     if (!isNull _lastHitter) then {
         _responsiblePlayer = _lastHitter;
     };
 };
-_unit setVariable ["WL_lastHitter", objNull];
 
 if (_isUnitPlayer) then {	// use alt syntax to exclude vehicle kills
     [_unit, _responsiblePlayer, _killer] remoteExec ["WL2_fnc_deathInfo", _unit];

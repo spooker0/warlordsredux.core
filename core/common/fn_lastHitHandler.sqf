@@ -11,6 +11,7 @@ _asset addEventHandler ["Hit", {
 	if (_ownerSide == _responsibleSide) exitWith {};
 	if (!alive _unit || !isDamageAllowed _unit) exitWith {};
 	if (isNull _responsiblePlayer) exitWith {};
+	if !(isPlayer [_responsiblePlayer]) exitWith {};
 
 	// only check if vehicle is driven
 	if (!canMove _unit && alive driver _unit) then {

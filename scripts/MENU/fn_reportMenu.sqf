@@ -38,7 +38,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
             private _playerDataJson = toJSON _playerData;
             _playerDataJson = _texture ctrlWebBrowserAction ["ToBase64", _playerDataJson];
             private _script = format [
-                "updatePlayerInfo(atob(""%1""));",
+                "updatePlayerInfo(atobr(""%1""));",
                 _playerDataJson
             ];
             _texture ctrlWebBrowserAction ["ExecJS", _script];

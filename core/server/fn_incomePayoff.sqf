@@ -26,10 +26,5 @@ while { !BIS_WL_missionEnd } do {
     {
 		private _supplies = _x getVariable ["WL2_forwardBaseSupplies", 0];
 		_x setVariable ["WL2_forwardBaseSupplies", _supplies + 1000, true];
-
-		private _health = _x getVariable ["WL2_demolitionHealth", 0];
-		private _maxHealth = _x getVariable ["WL2_demolitionMaxHealth", 12];
-		_health = (_health + 1) min _maxHealth;
-		_x setVariable ["WL2_demolitionHealth", _health, true];
     } forEach _forwardBases;
 };

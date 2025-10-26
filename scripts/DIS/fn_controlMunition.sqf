@@ -8,7 +8,7 @@ if (inputAction "defaultAction" > 0) then {
     };
 };
 
-"missileCamera" cutRsc ["RscTitleDisplayEmpty", "PLAIN"];
+"munitionControl" cutRsc ["RscTitleDisplayEmpty", "PLAIN"];
 private _display = uiNamespace getVariable ["RscTitleDisplayEmpty", displayNull];
 
 private _reticle = _display ctrlCreate ["RscPicture", -1];
@@ -24,6 +24,7 @@ _fuelDisplay ctrlSetTextColor [1, 1, 1, 1];
 _fuelDisplay ctrlCommit 0;
 
 private _controlParams = ["TV GUIDED MUNITION", [
+    ["Boost", "turbo"],
     ["Detonate", "defaultAction"]
 ]];
 if (_flightMode in [1, 2]) then {
@@ -148,11 +149,18 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
         };
     };
 
+    private _isSpeedModify = inputAction "turbo" > 0;
+    private _speedModifier = if (_isSpeedModify) then {
+        1
+    } else {
+        0.3
+    };
+
     switch (_flightMode) do {
         case 0;
         case 2: {
             _projectile setVectorDirAndUp [_forward, _up];
-            _projectile setVelocityModelSpace [0, _projectileSpeed, 0];
+            _projectile setVelocityModelSpace [0, _projectileSpeed * _speedModifier, 0];
         };
         case 1:{
             _dir = vectorDir _projectile;
@@ -162,11 +170,9 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
             _projectileSpeed = velocityModelSpace _projectile # 1;
         };
         case 3: {
-            private _projectileSpeedDragged = _projectileSpeed - (serverTime - _startTime) * 0.75;
+            private _projectileSpeedDragged = (_projectileSpeed * _speedModifier) - (serverTime - _startTime) * 0.75;
             _projectile setVectorDirAndUp [_forward, _up];
-            if (_projectileSpeedDragged > 10) then {
-                _projectile setVelocityModelSpace [0, _projectileSpeedDragged max 10, 0];
-            };
+            _projectile setVelocityModelSpace [0, _projectileSpeedDragged max 10, 0];
         };
     };
 
@@ -203,5 +209,5 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
 
 uiSleep 1;
 deleteVehicle _projectile;
-"missileCamera" cutText ["", "PLAIN"];
+"munitionControl" cutText ["", "PLAIN"];
 ["TV"] call WL2_fnc_showHint;

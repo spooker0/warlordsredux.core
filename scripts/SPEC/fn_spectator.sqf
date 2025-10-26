@@ -74,7 +74,6 @@ addMissionEventHandler ["EachFrame", {
 }];
 
 private _mainDisplay = findDisplay 46;
-[46] spawn GFE_fnc_earplugs;
 _mainDisplay displayAddEventHandler ["KeyDown", {
     params ["_displayOrControl", "_key", "_shift", "_ctrl", "_alt"];
 

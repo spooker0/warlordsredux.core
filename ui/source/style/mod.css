@@ -81,12 +81,20 @@
     min-height: 0;
 }
 
+.player-details-panel.visible {
+    display: flex;
+}
+
 .chat-panel {
     flex: 1 1 auto;
     display: grid;
     grid-template-rows: auto auto 1fr auto;
     overflow: hidden;
     min-height: 0;
+}
+
+.chat-panel.shrink {
+    max-width: 50%;
 }
 
 .panel-title,

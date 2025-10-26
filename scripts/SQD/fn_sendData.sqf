@@ -54,7 +54,7 @@ private _squadInfoText = toJSON (_squadInfo apply {
 _squadInfoText = _texture ctrlWebBrowserAction ["ToBase64", _squadInfoText];
 
 private _script = format [
-    "updateData(atob(""%1""), atob(""%2""));",
+    "updateData(atobr(""%1""), atobr(""%2""));",
     _playerInfoText,
     _squadInfoText
 ];

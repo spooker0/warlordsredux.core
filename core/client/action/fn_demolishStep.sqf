@@ -2,6 +2,7 @@
 params ["_targetObject", "_steps"];
 private _maxHealth = _targetObject getVariable ["WL2_demolitionMaxHealth", 5];
 private _existingHealth = _targetObject getVariable ["WL2_demolitionHealth", _maxHealth];
+_steps = _steps min _existingHealth;
 _existingHealth = _existingHealth - _steps;
 _targetObject setVariable ["WL2_demolitionHealth", _existingHealth, true];
 _targetObject setVariable ["WL_lastHitter", player, 2];

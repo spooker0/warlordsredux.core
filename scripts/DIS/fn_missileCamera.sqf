@@ -162,9 +162,9 @@ camDestroy _camera;
 private _controlUnit = if (isRemoteControlling player) then {
     vehicle (remoteControlled player)
 } else {
-    player
+    vehicle player
 };
-if (cameraOn != _controlUnit) then {
+if (cameraOn != _controlUnit && isNull (player getVariable ["DIS_controllingProjectile", objNull])) then {
     switchCamera _controlUnit;
 } else {
     if (isNull cameraOn) then {

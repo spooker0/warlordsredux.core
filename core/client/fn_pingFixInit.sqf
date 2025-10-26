@@ -15,8 +15,8 @@
 			private _posAGL = ASLToAGL _pos;
 
 			private _targets = allPlayers select { side _x == side player && _x != player };
-			if (count _targets > 0  && { isRemoteControlling player }) then {
-				[_posAGL] remoteExec ["WL2_fnc_pingFix", _targets, true];
+			if (count _targets > 0) then {
+				[_posAGL, isRemoteControlling player] remoteExec ["WL2_fnc_pingFix", _targets];
 			};
 
 			// find enemies near ping

@@ -23,7 +23,7 @@ private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashM
 private _themeIndex = _settingsMap getOrDefault ["loadoutTheme", 1];
 
 private _script = format [
-    "updateLoadout(atob(""%1""), %2, atob(""%3""), atob(""%4""), %5, %6, %7, %8);",
+    "updateLoadout(atobr(""%1""), %2, atobr(""%3""), atobr(""%4""), %5, %6, %7, %8);",
     _loadoutText,
     _loadoutIndex,
     _weaponDataText,

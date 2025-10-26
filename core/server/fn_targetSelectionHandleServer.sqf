@@ -27,7 +27,7 @@
 					private _voteCount = 0;
 					if (_vote getVariable ["WL2_name", "Sector"] == "Surrender") then {
 						private _squadContribution = missionNamespace getVariable ["WL_PlayerSquadContribution", createHashMap];
-						private _playerVotes = _squadContribution getOrDefault [getPlayerUID player, 0];
+						private _playerVotes = _squadContribution getOrDefault [getPlayerUID _player, 0];
 						_voteCount = round (_playerVotes * 0.2);
 					} else {
 						private _squadVotingPower = ["getSquadVotingPower", [getPlayerID _x]] call SQD_fnc_server;

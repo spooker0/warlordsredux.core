@@ -76,7 +76,7 @@ private _setAdmin = if (_isAdmin) then {
 
 
 private _script = format [
-    "updatePlayers(atob(""%1""));updateChat(atob(""%2""));updateTimeouts(atob(""%3""));updateModReceipts(atob(""%4""));%5",
+    "updatePlayers(atobr(""%1""));updateChat(atobr(""%2""));updateTimeouts(atobr(""%3""));updateModReceipts(atobr(""%4""));%5",
     _playerDataJson,
     _chatHistoryJson,
     _timeoutJson,

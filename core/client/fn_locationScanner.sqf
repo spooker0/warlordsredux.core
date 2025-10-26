@@ -171,8 +171,6 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
             private _color = [_x, _playerIconColorCache] call WL2_fnc_iconColor;
 
             private _displayName = [_x, true, true, _playerIconTextCache] call WL2_fnc_iconText;
-            private _size = if (_isInMySquad) then { 0.04 } else { 0.03 };
-
             private _boundingSize = ((boundingBoxReal _x) # 2) / 2;
 
             if (lifeState _x == "INCAPACITATED") then {
@@ -185,7 +183,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
                     0,
                     _displayName,
                     2,
-                    _size,
+                    0.03,
                     "RobotoCondensedBold",
                     "center",
                     true,
@@ -202,7 +200,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
                     0,
                     _displayName,
                     2,
-                    _size,
+                    0.03,
                     "RobotoCondensedBold",
                     "center"
                 ];
@@ -358,6 +356,8 @@ while { !BIS_WL_missionEnd } do {
         // don't consider unconscious units as intruders
         _scannedUnits = _scannedUnits select {
             lifeState _x != "INCAPACITATED"
+        } select {
+            _x isKindOf "Man"
         };
 
         if (count _scannedUnits > 0) then {

@@ -167,7 +167,7 @@ while { !BIS_WL_missionEnd } do {
 		private _munitionsText = toJSON _munitionsTextArray;
 		private _encodedMunitionsText = _texture ctrlWebBrowserAction ["ToBase64", _munitionsText];
 
-		private _munitionScript = format ["setMunitionList(atob(""%1""));", _encodedMunitionsText];
+		private _munitionScript = format ["setMunitionList(atobr(""%1""));", _encodedMunitionsText];
 		_script = _script + _munitionScript;
 	} else {
 		_script = _script + "setMunitionList('[]');";
@@ -180,7 +180,7 @@ while { !BIS_WL_missionEnd } do {
 			private _targetList = [DIS_fnc_getSamTarget, "MANUAL LOCK", "WL2_selectedTargetAA"] call DIS_fnc_getTargetList;
 			private _targetsText = toJSON _targetList;
 			_targetsText = _texture ctrlWebBrowserAction ["ToBase64", _targetsText];
-			_script = _script + format ["setMode(""aa"", ""%1"");setAATargetData(atob(""%2""));", _currentModeTitle, _targetsText];
+			_script = _script + format ["setMode(""aa"", ""%1"");setAATargetData(atobr(""%2""));", _currentModeTitle, _targetsText];
 		};
 		case "gps": {
 			private _gpsSelectionIndex = cameraOn getVariable ["DIS_selectionIndex", 0];
@@ -201,13 +201,13 @@ while { !BIS_WL_missionEnd } do {
 			private _targetList = [] call DIS_fnc_getSquadList;
 			private _targetsText = toJSON _targetList;
 			_targetsText = _texture ctrlWebBrowserAction ["ToBase64", _targetsText];
-			_script = _script + format ["setMode(""remote"", ""%1"");setRemoteTargetData(atob(""%2""));", _currentModeTitle, _targetsText];
+			_script = _script + format ["setMode(""remote"", ""%1"");setRemoteTargetData(atobr(""%2""));", _currentModeTitle, _targetsText];
 		};
 		case "sead": {
 			private _targetList = [DIS_fnc_getSeadTarget, "TARGET: AUTO", "WL2_selectedTargetSEAD"] call DIS_fnc_getTargetList;
 			private _targetsText = toJSON _targetList;
 			_targetsText = _texture ctrlWebBrowserAction ["ToBase64", _targetsText];
-			_script = _script + format ["setMode(""sead"", ""%1"");setSEADTargetData(atob(""%2""));", _currentModeTitle, _targetsText];
+			_script = _script + format ["setMode(""sead"", ""%1"");setSEADTargetData(atobr(""%2""));", _currentModeTitle, _targetsText];
 		};
 		default {
 			_script = _script + format ["setMode(""none"", ""%1"");", _currentModeTitle];
@@ -232,7 +232,7 @@ while { !BIS_WL_missionEnd } do {
 		};
 
 		private _encodedMissilesText = _texture ctrlWebBrowserAction ["ToBase64", toJSON _missilesData];
-		_script = _script + format ["setIncomingMissiles(atob(""%1""));", _encodedMissilesText];
+		_script = _script + format ["setIncomingMissiles(atobr(""%1""));", _encodedMissilesText];
     } else {
 		_script = _script + "setIncomingMissiles('[]');";
 	};
