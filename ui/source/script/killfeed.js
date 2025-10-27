@@ -75,7 +75,7 @@ function processQueue() {
         if (killfeedQueue.length === 0) { isProcessingQueue = false; return; }
 
         const now = Date.now();
-        const waitTime = 10;//Math.max(0, MIN_GAP_MS - (now - lastAddTimestamp));
+        const waitTime = Math.max(0, MIN_GAP_MS - (now - lastAddTimestamp));
 
         setTimeout(() => {
             const [displayText, points, customColor, iconUrl] = killfeedQueue.shift();
