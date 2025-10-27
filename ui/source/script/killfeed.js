@@ -59,12 +59,13 @@ function animatePoints(el, from, to) {
     activeRafHandles.set(el, handle);
 }
 
-function addKillfeed(killfeedItems) {
-    for (const [displayText, points, customColor, iconUrl] of killfeedItems) {
-        if (SHOW_HIT_INDICATOR && customColor === "#de0808") hitIndicator();
+function addKillfeed(killfeedItems, times = 1) {
+    const [displayText, points, customColor, iconUrl] = killfeedItems;
+    if (SHOW_HIT_INDICATOR && customColor === "#de0808") hitIndicator();
+    for (let i = 0; i < times; i++) {
         killfeedQueue.push([displayText, points, customColor, iconUrl]);
-        processQueue();
     }
+    processQueue();
 }
 
 function processQueue() {
@@ -381,6 +382,7 @@ const indicatorImage = indicator.querySelector('.hit-indicator-image');
 A3API.RequestTexture("a3\\ui_f\\data\\igui\\cfg\\cursors\\iconcursorsupport_ca.paa", 64).then(imageContent => {
     indicatorImage.src = imageContent;
 });
+
 function hitIndicator() {
     indicator.classList.add('visible');
     clearTimeout(indicator.hideTimeout);

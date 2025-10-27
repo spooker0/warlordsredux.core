@@ -28,17 +28,14 @@ if (_useNewKillfeed) then {
 	};
 	private _texture = _display displayCtrl 5502;
 
-	private _killFeedItems = [];
-	for "_i" from 1 to _times do {
-		_killFeedItems pushBack [
-			toUpper _displayText,
-			floor (_reward / _times),
-			_customColor,
-			_iconUrl
-		];
-	};
+	private _killFeedItems = [
+		toUpper _displayText,
+		floor (_reward / _times),
+		_customColor,
+		_iconUrl
+	];
 	private _killfeedText = toJSON _killFeedItems;
-	private _script = format ["addKillfeed(%1)", _killfeedText];
+	private _script = format ["addKillfeed(%1, %2)", _killfeedText, _times];
 	_texture ctrlWebBrowserAction ["ExecJS", _script];
 
 	private _scoreControl = uiNamespace getVariable ["WL_scoreControl", controlNull];
