@@ -12,8 +12,7 @@ let totalPoints = 0;
 let displayedPoints = 0;
 
 function formatPoints(n) {
-    try { return new Intl.NumberFormat().format(n); }
-    catch { return String(n); }
+    return new Number(n).toLocaleString();
 }
 
 const activeRafHandles = new WeakMap();
@@ -32,8 +31,7 @@ function animatePoints(el, from, to) {
         return;
     }
 
-    const delta = Math.abs(endValue - startValue);
-    const durationMs = Math.min(500, 600 + Math.log10(delta + 1) * 650);
+    const durationMs = 500;
 
     const startTime = performance.now();
     const easeOutQuint = t => 1 - Math.pow(1 - t, 5);
@@ -61,10 +59,12 @@ function animatePoints(el, from, to) {
     activeRafHandles.set(el, handle);
 }
 
-function addKillfeed(displayText, points, customColor, iconUrl) {
-    if (SHOW_HIT_INDICATOR && customColor === "#de0808") hitIndicator();
-    killfeedQueue.push([displayText, points, customColor, iconUrl]);
-    processQueue();
+function addKillfeed(killfeedItems) {
+    for (const [displayText, points, customColor, iconUrl] of killfeedItems) {
+        if (SHOW_HIT_INDICATOR && customColor === "#de0808") hitIndicator();
+        killfeedQueue.push([displayText, points, customColor, iconUrl]);
+        processQueue();
+    }
 }
 
 function processQueue() {
@@ -75,7 +75,7 @@ function processQueue() {
         if (killfeedQueue.length === 0) { isProcessingQueue = false; return; }
 
         const now = Date.now();
-        const waitTime = Math.max(0, MIN_GAP_MS - (now - lastAddTimestamp));
+        const waitTime = 10;//Math.max(0, MIN_GAP_MS - (now - lastAddTimestamp));
 
         setTimeout(() => {
             const [displayText, points, customColor, iconUrl] = killfeedQueue.shift();
@@ -151,7 +151,7 @@ function injectImage(img, iconUrl) {
         img.src = document.imageCache[iconUrl];
         return;
     }
-    A3API.RequestTexture(iconUrl, 64).then(imageContent => {
+    A3API.RequestTexture(iconUrl, 32).then(imageContent => {
         img.src = imageContent;
         document.imageCache[iconUrl] = imageContent;
     });

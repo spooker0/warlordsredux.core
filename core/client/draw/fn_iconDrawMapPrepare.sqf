@@ -91,7 +91,7 @@ if (alive _respawnBag) then {
 	private _bagPos = getPosATL _respawnBag;
 	_drawIcons pushBack [
 		"\A3\ui_f\data\map\markers\military\triangle_CA.paa",
-		[player, _mapColorCache] call WL2_fnc_iconColor,
+		[1, 1, 0, 1],
 		_bagPos,
 		35 * _mapIconScale,
 		35 * _mapIconScale,

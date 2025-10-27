@@ -368,6 +368,23 @@ private _fastTravelSquadmateExecute = {
     ]
 ] call WL2_fnc_addTargetMapButton;
 
+// Fast Travel AI Button
+private _fastTravelAIExecute = {
+    params ["_asset"];
+    [_asset] spawn WL2_fnc_executeFastTravelVehicle;
+};
+[
+    "FAST TRAVEL AI",
+    _fastTravelAIExecute,
+    true,
+    "fastTravelAI",
+    [
+        0,
+        "FTAI",
+        "Fast Travel"
+    ]
+] call WL2_fnc_addTargetMapButton;
+
 // Fast Travel Stronghold Button
 private _fastTravelStrongholdExecute = {
     params ["_asset"];

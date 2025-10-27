@@ -52,7 +52,7 @@ private _offset = [
     _radius * _sinP
 ];
 
-private _tPos = getPosASL _currentTarget;
+private _tPos = getPosASLVisual _currentTarget;
 private _camPos = _tPos vectorAdd _offset;
 
 private _forward = vectorNormalized (_tPos vectorDiff _camPos);

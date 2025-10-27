@@ -208,6 +208,7 @@ class arsenalConfig {
 			"U_B_GEN_Commander_F",
 			"U_C_Journalist",
 			"U_C_Paramedic_01_F",
+			"U_O_CombatUniform_ocamo",
 			"U_O_CombatUniform_oucamo",
 			"U_O_FullGhillie_ard",
 			"U_O_FullGhillie_lsh",

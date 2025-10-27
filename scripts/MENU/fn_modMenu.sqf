@@ -38,8 +38,16 @@ _texture ctrlAddEventHandler ["JSDialog", {
             private _playerReportArray = [];
             {
                 private _reporter = _x;
-                private _reason = _y;
-                _playerReportArray pushBack [_reporter, _reason];
+                private _reportData = _y;
+
+                _reportData = if (_reportData isEqualType []) then {
+                    private _reportTime = _reportData select 1;
+                    [_reportData select 0, [systemTimeUTC] call MENU_fnc_printSystemTime];
+                } else {
+                    [_reportData, "?"];
+                };
+
+                _playerReportArray pushBack [_reporter, _reportData];
             } forEach _playerReports;
 
             private _playerData = [_uid, _playerName, _systemTimeDisplay, _playerReportArray];

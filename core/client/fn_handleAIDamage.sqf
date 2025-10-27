@@ -13,6 +13,7 @@ if (_damage < 1) exitWith {
     _damage;
 };
 
+moveOut _unit;
 _unit setCaptive true;
 _unit setUnconscious true;
 [_unit] spawn {

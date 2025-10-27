@@ -8,8 +8,9 @@ if (isNull _display) then {
     "killfeed" cutRsc ["RscWLKillfeedMenu", "PLAIN", -1, true, true];
     _display = uiNamespace getVariable ["RscWLKillfeedMenu", displayNull];
 };
-
 private _texture = _display displayCtrl 5502;
+// _texture ctrlWebBrowserAction ["OpenDevConsole"];
+
 _texture ctrlAddEventHandler ["JSDialog", {
     params ["_texture", "_isConfirmDialog", "_message"];
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];

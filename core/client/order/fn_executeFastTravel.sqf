@@ -77,6 +77,7 @@ private _tagAlong = (units player) select {
 	(isNull objectParent _x) &&
 	(alive _x) &&
 	(_x != player) &&
+	_x distance player < 200 &&
 	_x getVariable ["BIS_WL_ownerAsset", "123"] == getPlayerUID player
 };
 

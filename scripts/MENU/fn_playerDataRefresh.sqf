@@ -15,7 +15,9 @@ private _checkDirty = {
         private _isDirty = false;
         {
             private _key = _x;
-            if (_storedVar getOrDefault [_key, ""] != _currentVar getOrDefault [_key, ""]) then {
+            private _storedValue = _storedVar getOrDefault [_key, ""];
+            private _currentValue = _currentVar getOrDefault [_key, ""];
+            if (_storedValue isNotEqualTo _currentValue) then {
                 _isDirty = true;
                 break;
             };

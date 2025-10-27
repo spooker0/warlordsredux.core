@@ -29,8 +29,6 @@ if (!_scannerOn) exitWith {
 
 private _assetSide = [_asset] call WL2_fnc_getAssetSide;
 
-if (_assetSide != side group player) exitWith {};
-
 private _assetPos = _asset modelToWorldVisual [0, 0, 0];
 private _assetHeight = (_assetPos # 2) min (getPosASL _asset # 2);
 if (!_awacs && _assetHeight > 2000) exitWith {
@@ -55,6 +53,8 @@ if (_radiusOverride > 0) then {
     _scanRadius = _radiusOverride;
 };
 _asset setVariable ["WL_scanRadius", _scanRadius];
+
+if (_assetSide != side group player) exitWith {};
 
 private _relevantVehicles = if (_awacs) then {
     vehicles select {

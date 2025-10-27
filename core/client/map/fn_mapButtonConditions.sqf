@@ -49,6 +49,9 @@ switch (_conditionName) do {
         private _areInSquad = ["areInSquad", [getPlayerID _squadMember, getPlayerID player]] call SQD_fnc_client;
         _target != player && isPlayer _target && _areInSquad && alive _target && lifeState _target != "INCAPACITATED";
     };
+    case "fastTravelAI": {
+        alive _target && lifeState _target != "INCAPACITATED" && _target != player && _target in (units player);
+    };
     case "fastTravelStronghold": {
         private _findIsStronghold = (BIS_WL_sectorsArray # 2) select {
             (_x getVariable ["WL_stronghold", objNull]) == _target

@@ -47,6 +47,7 @@ _mapControl ctrlAddEventHandler ["MouseButtonUp", {
     // Reset to free cam in scripts
     uiNamespace setVariable ["SPEC_CameraTarget", objNull];
 
+    if !(cameraOn isKindOf "Camera") exitWith {};
     private _posStart = _map ctrlMapScreenToWorld _start;
     _posStart set [2, (getPosATL cameraOn) # 2];
 

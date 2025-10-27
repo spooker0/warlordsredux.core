@@ -76,7 +76,6 @@ switchCamera player;
         };
 
         _unit setPosASL (getPosASL _unit);
-        switchCamera player;
 
         _unit setVariable ["WL_unconsciousTime", _downTime];
         uiSleep 0.1;

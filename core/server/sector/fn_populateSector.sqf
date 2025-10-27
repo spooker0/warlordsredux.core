@@ -140,17 +140,14 @@ if ("H" in _services) then {
 		};
 	} forEach WL_ASSET_DATA;
 
-	private _neighbors = _sector getVariable ["WL2_connectedSectors", []];
-	_neighbors = _neighbors select {
-		_x getVariable ["BIS_WL_owner", independent] == independent
-	};
-	if (count _neighbors == 0) then {
-		_neighbors = [_sector];
-	};
-
 	private _numAirSpawn = (round (random 3)) max 1;
 	for "_i" from 1 to _numAirSpawn do {
-		private _vehicleArray = [position selectRandom _neighbors, 0, selectRandom _aircraftPool, _owner] call BIS_fnc_spawnVehicle;
+		private _randomAngle = random 360;
+		private _randomDistance = 2000 + random 500;
+		private _randomPos = _sector getPos [_randomDistance, _randomAngle];
+		_randomPos set [2, 800];
+
+		private _vehicleArray = [_randomPos, 0, selectRandom _aircraftPool, _owner] call BIS_fnc_spawnVehicle;
 		_vehicleArray params ["_vehicle", "_crew", "_group"];
 
 		_vehicle call WL2_fnc_newAssetHandle;

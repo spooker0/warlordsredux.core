@@ -91,10 +91,11 @@
     grid-template-rows: auto auto 1fr auto;
     overflow: hidden;
     min-height: 0;
+    max-width: 80%;
 }
 
 .chat-panel.shrink {
-    max-width: 50%;
+    max-width: 40%;
 }
 
 .panel-title,

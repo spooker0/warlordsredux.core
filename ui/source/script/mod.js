@@ -203,10 +203,12 @@ function updatePlayerInfo(playerInfo) {
 
     const reportList = document.getElementById('player-reports');
     reportList.innerHTML = '';
-    for (const [from, reason] of playerInfo[3]) {
+    for (const [from, reportData] of playerInfo[3]) {
+        const reason = reportData[0];
+        const reportTime = reportData[1];
         const li = document.createElement('li');
         li.className = 'report-item';
-        li.innerHTML = `<span class="report-from">By: ${from}</span> <span class="report-reason">${reason}</span>`;
+        li.innerHTML = `<span class="report-from">By: ${from} (${reportTime})</span> <span class="report-reason">${reason}</span>`;
         reportList.appendChild(li);
     }
 
@@ -311,7 +313,7 @@ function updateChat(chatData) {
     const chatEl = document.getElementById('chat-messages');
     if (!chatEl) return;
 
-    const messages = chatData.map(m => {
+    const messages = chatData.reverse().map(m => {
         const timestamp = m[0];
         const channel = m[1];
         const player = m[2];

@@ -325,7 +325,7 @@ switch (_className) do {
                 _asset = _assetData getOrDefault ["spawn", _asset];
                 private _reward = floor (random 400);
                 [objNull, _reward, "", "#de0808", _asset] call WL2_fnc_killRewardClient;
-                uiSleep (random 0.5);
+                uiSleep 0.001;
             } forEach WL_ASSET_DATA;
         };
     };
