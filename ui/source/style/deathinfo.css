@@ -6,7 +6,7 @@
     --bar-bg-transparent: rgba(8, 10, 14, 0);
     --text: #ffffff;
     --divider: rgba(255, 255, 255, 0.4);
-    --text-size: 35px;
+    --text-size: 25px;
     --badge-size: 128px;
     --badge-gap: 30px;
 }
@@ -242,7 +242,7 @@ body {
 
 .hit-projectiles {
     position: fixed;
-    left: 1vw;
+    left: 0vw;
     top: 28vh;
 
     width: 30vw;
@@ -261,7 +261,7 @@ body {
     align-items: center;
 }
 
-.hit-projectiles-list {
+.death-projectiles-list {
     display: grid;
     grid-template-columns: auto 1fr;
     column-gap: 30px;
@@ -294,7 +294,7 @@ body {
     width: 240px;
     height: 384px;
     position: fixed;
-    left: 75vw;
+    left: 85vw;
     top: 32vh;
 }
 
@@ -308,8 +308,8 @@ body {
 .actions-bar {
     position: fixed;
     left: 50%;
-    bottom: 20vh;
-    width: 70vw;
+    bottom: 5vh;
+    width: 50vw;
     transform: translateX(-50%);
     z-index: 20;
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
