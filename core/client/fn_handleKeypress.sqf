@@ -8,11 +8,6 @@ if (_adminKeyPressed && !_isAdmin) exitWith {
     true;
 };
 
-if (inputAction "cycleThrownItems" > 0.01 && cameraOn != player) exitWith {
-    [cameraOn] call APS_fnc_toggle;
-    true;
-};
-
 private _canBuy = uiNamespace getVariable ["WL2_canBuy", true];
 if (!_canBuy) exitWith {
     false;

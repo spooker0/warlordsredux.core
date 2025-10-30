@@ -34,8 +34,8 @@ if (_useNewKillfeed) then {
 		_customColor,
 		_iconUrl
 	];
-	private _killfeedText = toJSON _killFeedItems;
-	private _script = format ["addKillfeed(%1, %2)", _killfeedText, _times];
+	private _killfeedText = _texture ctrlWebBrowserAction ["ToBase64", toJSON _killFeedItems];
+	private _script = format ["addKillfeed(atobr(""%1""), %2)", _killfeedText, _times];
 	_texture ctrlWebBrowserAction ["ExecJS", _script];
 
 	private _scoreControl = uiNamespace getVariable ["WL_scoreControl", controlNull];

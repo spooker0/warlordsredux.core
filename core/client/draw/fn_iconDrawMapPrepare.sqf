@@ -85,6 +85,40 @@ if (!isNull WL_SectorActionTarget && isNull BIS_WL_highlightedSector && WL_Secto
 	];
 };
 
+// Draw waypoints
+private _currentGroup = group cameraOn;
+private _currentPosition = getPosASL cameraOn;
+{
+	private _waypointPosition = waypointPosition _x;
+	private _currentWaypointIndex = currentWaypoint _currentGroup;
+
+	if (_forEachIndex < _currentWaypointIndex) then {
+		continue;
+	};
+
+	_drawIcons pushBack [
+		"a3\ui_f\data\map\mapcontrol\waypointeditor_ca.paa",
+		[1, 1, 0, 1],
+		_waypointPosition,
+		20 * _mapIconScale,
+		20 * _mapIconScale,
+		0,
+		str (_forEachIndex - _currentWaypointIndex + 1),
+		0,
+		0.05 * _mapIconScale,
+		"PuristaBold"
+	];
+
+	_drawLines pushBack [
+		_currentPosition,
+		_waypointPosition,
+		[0.9, 0.9, 0.9, 1],
+		8
+	];
+
+	_currentPosition = _waypointPosition;
+} forEach (waypoints _currentGroup);
+
 // Draw player tent
 private _respawnBag = player getVariable ["WL2_respawnBag", objNull];
 if (alive _respawnBag) then {

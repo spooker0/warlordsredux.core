@@ -80,7 +80,6 @@ class CfgRemoteExec {
 		class WL2_fnc_vehicleLockAction {allowedTargets = 1;};
 		class WL2_fnc_vehicleLockUpdate {allowedTargets = 0;};
 		class WL2_fnc_warnIncomingMissile {allowedTargets = 0;};
-		class WL2_fnc_weaponChange {allowedTargets = 0;};
 		class WLM_fnc_applyPylon {allowedTargets = 0;};
 		class WLM_fnc_applyVehicle {allowedTargets = 0;};
 		class WLM_fnc_changeHorn {allowedTargets = 0;};
@@ -128,6 +127,7 @@ class CfgRemoteExec {
 		class setVehicleReceiveRemoteTargets {allowedTargets = 0;};
 		class setVehicleReportOwnPosition {allowedTargets = 0;};
 		class setVehicleReportRemoteTargets {allowedTargets = 0;};
+		class setVehicleTIPars {allowedTargets = 0;};
 		class setVelocityModelSpace {allowedTargets = 2;};
 		class switchMove {allowedTargets = 0;};
 		class systemChat {allowedTargets = 0;};

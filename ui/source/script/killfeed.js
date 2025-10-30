@@ -4,6 +4,7 @@ let KILLFEED_TIMEOUT_MS = 10000;
 let MIN_GAP_MS = 500;
 let RIBBON_MIN_SHOW_MS = 5000;
 let SHOW_HIT_INDICATOR = true;
+let MINIMALISTIC = false;
 
 const killfeedQueue = [];
 let isProcessingQueue = false;
@@ -20,6 +21,12 @@ const activeRafHandles = new WeakMap();
 function animatePoints(el, from, to) {
     const startValue = Number(from) || 0;
     const endValue = Number(to) || 0;
+
+    if (MINIMALISTIC) {
+        displayedPoints = endValue;
+        el.textContent = endValue > 0 ? formatPoints(endValue) : "";
+        return;
+    }
 
     const previousHandle = activeRafHandles.get(el);
     if (previousHandle !== undefined) cancelAnimationFrame(previousHandle);
@@ -60,7 +67,7 @@ function animatePoints(el, from, to) {
 }
 
 function addKillfeed(killfeedItems, times = 1) {
-    const [displayText, points, customColor, iconUrl] = killfeedItems;
+    const [displayText, points, customColor, iconUrl] = JSON.parse(killfeedItems) || [];
     if (SHOW_HIT_INDICATOR && customColor === "#de0808") hitIndicator();
     for (let i = 0; i < times; i++) {
         killfeedQueue.push([displayText, points, customColor, iconUrl]);
@@ -123,6 +130,11 @@ function flipReorder(containerElement, elementToMove) {
         const deltaY = fromRect.top - toRect.top;
 
         if (deltaX === 0 && deltaY === 0) continue;
+
+        if (MINIMALISTIC) {
+            containerElement.classList.remove('unclipped');
+            continue;
+        }
 
         const animation = element.animate(
             [{ transform: `translate(${deltaX}px, ${deltaY}px)` }, { transform: 'translate(0, 0)' }],
@@ -264,13 +276,22 @@ function removeBadge(badge) {
 
     badge.classList.remove("enter", "merge");
     badge.classList.add("exit");
-    badge.addEventListener("animationend", () => {
+
+    if (MINIMALISTIC) {
         badge.remove();
         if (badgesRow.querySelectorAll(".kf-badge").length === 0) {
             totalPoints = 0;
             renderTotalPoints(pointsBox);
         }
-    }, { once: true });
+    } else {
+        badge.addEventListener("animationend", () => {
+            badge.remove();
+            if (badgesRow.querySelectorAll(".kf-badge").length === 0) {
+                totalPoints = 0;
+                renderTotalPoints(pointsBox);
+            }
+        }, { once: true });
+    };
 }
 
 const ribbonQueue = [];
@@ -364,7 +385,7 @@ function applyMask(el, dataUrl) {
     el.style.maskImage = `url("${dataUrl}")`;
 }
 
-function setSettings(scale, ribbonScale, feedTimeout, minGap, ribbonMinShow, anchorX, anchorY, showIndicator) {
+function setSettings(scale, ribbonScale, feedTimeout, minGap, ribbonMinShow, anchorX, anchorY, showIndicator, minimalistic) {
     document.documentElement.style.setProperty('--scale', scale);
     document.documentElement.style.setProperty('--ribbon-scale', ribbonScale);
 
@@ -375,6 +396,13 @@ function setSettings(scale, ribbonScale, feedTimeout, minGap, ribbonMinShow, anc
     MIN_GAP_MS = minGap;
     RIBBON_MIN_SHOW_MS = ribbonMinShow;
     SHOW_HIT_INDICATOR = showIndicator;
+    MINIMALISTIC = minimalistic;
+
+    if (MINIMALISTIC) {
+        document.body.classList.add('minimalistic');
+    } else {
+        document.body.classList.remove('minimalistic');
+    }
 }
 
 const indicator = document.querySelector('.hit-indicator');

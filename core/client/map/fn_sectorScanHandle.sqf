@@ -5,6 +5,8 @@ if (isDedicated) exitWith {};
 
 private _side = BIS_WL_playerSide;
 
+_uav setVehicleTIPars [1, 1, 1];
+
 private _currentScannedSectors = missionNamespace getVariable ["WL2_scanningSectors", []];
 _currentScannedSectors pushBack _sector;
 missionNamespace setVariable ["WL2_scanningSectors", _currentScannedSectors];

@@ -336,7 +336,7 @@ if (_displayClass == "RequestMenu_open") then {
 			if (count _targetArr > 0) then {
 				playSound "AddItemOK";
 				_target = _targetArr # 0;
-				
+
 				private _transfers = profileNamespace getVariable ["WL2_playerTransfers", createHashMap];
 				private _existingAmount = _transfers getOrDefault [_targetName, 0];
 				_transfers set [_targetName, _existingAmount + _amount];

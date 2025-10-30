@@ -1,5 +1,6 @@
 #include "includes.inc"
 private _dialog = (findDisplay 12) createDisplay "WL_MapButtonDisplay";
+uiNamespace setVariable ["WL2_mapButtonDisplay", _dialog];
 
 getMousePosition params ["_mouseX", "_mouseY"];
 
@@ -547,7 +548,7 @@ private _fastTravelStrongholdTestExecute = {
         uiSleep 0.1;
         !visibleMap || inputMouse 0 == 0 || serverTime - _startTime > 1;
     };
-    while { visibleMap && _keepDialog} do {
+    while { visibleMap && _keepDialog } do {
         getMousePosition params ["_mouseX", "_mouseY"];
 
         private _deltaX = _mouseX - _originalMouseX;
@@ -556,6 +557,10 @@ private _fastTravelStrongholdTestExecute = {
         if (_deltaX < 0 || _deltaX > 0.5 || _deltaY < -0.05 || _deltaY > _menuHeight) then {
             _keepDialog = inputMouse 0 == 0 && inputMouse 1 == 0;
         };
+    };
+
+    waitUntil {
+        inputMouse 0 == 0 && inputMouse 1 == 0
     };
 
     _dialog closeDisplay 1;

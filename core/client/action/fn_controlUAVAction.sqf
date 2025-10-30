@@ -26,7 +26,13 @@ private _actionId = player addAction [
                     player remoteControl _remoteControlTarget;
                 };
             } else {
-                player remoteControl (gunner _remoteControlTarget);
+                private _gunner = gunner _remoteControlTarget;
+                if (alive _gunner) then {
+                    player remoteControl _gunner;
+                } else {
+                    uiNamespace setVariable ["WL2_remoteControlSeat", "Driver"];
+                    player remoteControl _remoteControlTarget;
+                };
             };
         };
 	},

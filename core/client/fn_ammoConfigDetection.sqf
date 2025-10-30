@@ -1,11 +1,7 @@
 #include "includes.inc"
 params ["_asset"];
 
-private _unitInfo = uiNamespace getVariable ["RscUnitInfo", displayNull];
-private _existingControl = _unitInfo displayCtrl 6101;
-if (!isNull _existingControl) then {
-    ctrlDelete _existingControl;
-};
+uiNamespace setVariable ["WL2_ammoOverrideName", ""];
 
 if (cameraOn != _asset) exitWith {
     _asset setVariable ["WL2_currentAmmoConfig", createHashMap];
@@ -42,18 +38,7 @@ if (count _selectedAmmoOverrides > 0) then {
     private _overrideAmmo = _projectileAmmoOverride # 1;
     _ammo = _overrideAmmo # 0;
     _weaponName = _overrideAmmo # 1;
-
-    private _weaponInfo = _unitInfo displayCtrl 118;
-
-    private _controlGroup = ctrlParentControlsGroup _weaponInfo;
-    private _newControl = _unitInfo ctrlCreate ["RscTextRight", 6101, _controlGroup];
-    _newControl ctrlSetPosition (ctrlPosition _weaponInfo);
-    _newControl ctrlSetBackgroundColor [0.5, 0.5, 0.5, 1];
-    _newControl ctrlSetTextColor (ctrlTextColor _weaponInfo);
-    _newControl ctrlSetFontHeight (ctrlFontHeight _weaponInfo);
-    _newControl ctrlSetShadow 0;
-    _newControl ctrlSetText _weaponName;
-    _newControl ctrlCommit 0;
+    uiNamespace setVariable ["WL2_ammoOverrideName", _weaponName];
 };
 
 private _ammoConfig = _projectileConfig getOrDefault [_ammo, createHashMap];

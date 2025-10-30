@@ -148,6 +148,7 @@ function setDesiredPoint(x1, x2, y2, angle, isTurnGood, isElevGood) {
 }
 
 function setCrosshairs(points) {
+    points = JSON.parse(points) || [];
     const crosses = [
         document.getElementById("ref-cross-1"),
         document.getElementById("ref-cross-2"),

@@ -136,6 +136,55 @@ private _makeGPSBombTextArray = {
 	_bombsTextArray;
 };
 
+[_texture] spawn {
+	params ["_texture"];
+	private _lastPositionScript = "";
+	while { !isNull _texture } do {
+		uiSleep 0.5;
+		private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+
+		private _allDisplays = uiNamespace getVariable ["IGUI_displays", []];
+		private _unitInfo = _allDisplays select { ctrlIDD _x == 300 } select { !isNull (_x displayCtrl 118) };
+		private _unitInfoPositionConverted = if (count _unitInfo > 0) then {
+			private _weaponInfo = (_unitInfo # 0) displayCtrl 118;
+			private _weaponInfoPosition = ctrlPosition _weaponInfo;
+
+			private _weaponInfoParent = ctrlParentControlsGroup _weaponInfo;
+			private _weaponInfoParentPosition = ctrlPosition _weaponInfoParent;
+
+			private _unitInfoPosition = [
+				_weaponInfoPosition # 0 + _weaponInfoParentPosition # 0,
+				_weaponInfoPosition # 1 + _weaponInfoParentPosition # 1,
+				_weaponInfoPosition # 2,
+				_weaponInfoPosition # 3
+			];
+
+			[
+				(_unitInfoPosition # 0 - safeZoneX) / safeZoneW * 100,
+				(_unitInfoPosition # 1 - safeZoneY) / safeZoneH * 100,
+				(_unitInfoPosition # 2) / safeZoneW * 100,
+				(_unitInfoPosition # 3) / safeZoneH * 100
+			];
+		} else {
+			[0, 0, 0, 0];
+		};
+
+		private _targetLeft = _settingsMap getOrDefault ["targetingMenuLeft", 65];
+		private _targetTop = _settingsMap getOrDefault ["targetingMenuTop", 30];
+		private _fontSize = _settingsMap getOrDefault ["targetingMenuFontSize", 18];
+		private _incomingLeft = _settingsMap getOrDefault ["incomingIndicatorLeft", 5];
+		private _incomingTop = _settingsMap getOrDefault ["incomingIndicatorTop", 20];
+		private _setPositionScript = format ["setSettings(%1, %2, %3, %4, %5, %6);", _targetLeft, _targetTop, _incomingLeft, _incomingTop, _fontSize, _unitInfoPositionConverted];
+
+		if (_setPositionScript == _lastPositionScript) then {
+			continue;
+		};
+
+		_texture ctrlWebBrowserAction ["ExecJS", _setPositionScript];
+		_lastPositionScript = _setPositionScript;
+	};
+};
+
 while { !BIS_WL_missionEnd } do {
 	uiSleep 0.05;
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
@@ -253,13 +302,8 @@ while { !BIS_WL_missionEnd } do {
 		_script = _script + "setEcmCharges(false, 0, 0);";
 	};
 
-	private _targetLeft = _settingsMap getOrDefault ["targetingMenuLeft", 65];
-	private _targetTop = _settingsMap getOrDefault ["targetingMenuTop", 30];
-	private _fontSize = _settingsMap getOrDefault ["targetingMenuFontSize", 18];
-	private _incomingLeft = _settingsMap getOrDefault ["incomingIndicatorLeft", 5];
-	private _incomingTop = _settingsMap getOrDefault ["incomingIndicatorTop", 20];
-	private _setPositionScript = format ["setSettings(%1, %2, %3, %4, %5);", _targetLeft, _targetTop, _incomingLeft, _incomingTop, _fontSize];
-	_script = _script + _setPositionScript;
+	private _weaponNameOverride = uiNamespace getVariable ["WL2_ammoOverrideName", ""];
+	_script = _script + format ["setWeaponName(""%1"");", _weaponNameOverride];
 
 	_texture ctrlWebBrowserAction ["ExecJS", _script];
 };

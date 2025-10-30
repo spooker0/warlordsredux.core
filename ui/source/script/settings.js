@@ -163,5 +163,15 @@ function addSearchBar(container) {
         });
     }
 
+    document.addEventListener('click', function (e) {
+        if (e.target === input) {
+            input.placeholder = '';
+            input.style.border = '1px solid #e5f31f';
+        } else {
+            input.placeholder = 'Search settings...';
+            input.style.border = '1px solid #555';
+        }
+    });
+
     input.addEventListener('input', e => applyFilter(e.target.value));
 }

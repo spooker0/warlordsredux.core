@@ -28,7 +28,7 @@ function formatPoints(points) {
     if (points >= 1000) {
         return (points / 1000).toFixed(1) + "K pts";
     }
-    return points + " pts";
+    return `Points: ${points}`;
 }
 
 function updateData(playerInfo, squadData) {
@@ -125,7 +125,18 @@ function updateData(playerInfo, squadData) {
             }
         });
 
-        squadNameEl.textContent = `${squad[0]} (${formatPoints(squadPoints)})`;
+        squadNameEl.textContent = `${squad[0]} `;
+
+        const squadMembersEl = document.createElement('span');
+        squadMembersEl.classList.add('squad-members');
+        squadMembersEl.textContent = `Members: ${squadMembers.length}`;
+        squadNameEl.appendChild(squadMembersEl);
+
+        const squadPointsEl = document.createElement('span');
+        squadPointsEl.classList.add('squad-points');
+        squadPointsEl.textContent = `${formatPoints(squadPoints)}`;
+        squadNameEl.appendChild(squadPointsEl);
+
         if (isSquadLeader) {
             const editButton = document.createElement('button');
             editButton.textContent = 'Edit Squad Name';

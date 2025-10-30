@@ -355,7 +355,7 @@ while { !BIS_WL_missionEnd } do {
 
         // don't consider unconscious units as intruders
         _scannedUnits = _scannedUnits select {
-            lifeState _x != "INCAPACITATED"
+            alive _x && lifeState _x != "INCAPACITATED"
         } select {
             _x isKindOf "Man"
         };
@@ -381,6 +381,9 @@ while { !BIS_WL_missionEnd } do {
             private _forwardBaseArea = [_forwardBase, WL_FOB_RANGE, WL_FOB_RANGE, 0, false];
             private _scannedUnits = [_side, _forwardBaseArea] call WL2_fnc_detectUnits;
             _allScannedUnits append _scannedUnits;
+            _scannedUnits = _scannedUnits select {
+                alive _x && lifeState _x != "INCAPACITATED"
+            };
 
             if (count _scannedUnits > 0) then {
                 _forwardBase setVariable ["WL2_forwardBaseIntruders", true];

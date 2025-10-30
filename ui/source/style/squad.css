@@ -64,6 +64,18 @@
     color: #66ccff;
 }
 
+.squad-members {
+    font-size: 18px;
+    color: #cccccc;
+    margin-left: 2em;
+}
+
+.squad-points {
+    font-size: 18px;
+    color: #cccccc;
+    margin-left: 2em;
+}
+
 .member,
 .unsquadded-player {
     background-color: #3a3a3a;

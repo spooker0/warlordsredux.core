@@ -18,6 +18,32 @@ body {
     overflow: hidden;
 }
 
+.minimalistic * {
+    animation: none !important;
+}
+
+.minimalistic .stage {
+    height: calc(22px * var(--scale));
+}
+
+.minimalistic .kf-badge {
+    border: none;
+    background: none;
+    padding: 0;
+    margin-left: 1em;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.minimalistic .kf-points {
+    font-size: calc(16px * var(--scale));
+    padding: 0;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.minimalistic .kf-icons-viewport {
+    visibility: hidden;
+}
+
 .hit-indicator {
     position: fixed;
     top: 50%;
@@ -293,7 +319,7 @@ body {
 
 .ribbon-level-1 {
     background-color: rgba(119, 158, 203, .65);
-    border: calc(2px * var(--scale)) solid rgba(119, 158, 203, .9);
+    border: calc(2px * var(--ribbon-scale)) solid rgba(119, 158, 203, .9);
     box-shadow:
         0 0 calc(24px * var(--ribbon-scale)) rgba(119, 158, 203, .35),
         inset 0 0 0 calc(1px * var(--ribbon-scale)) rgba(119, 158, 203, .25);
@@ -301,7 +327,7 @@ body {
 
 .ribbon-level-2 {
     background-color: rgba(204, 117, 115, .65);
-    border: calc(2px * var(--scale)) solid rgba(204, 117, 115, .95);
+    border: calc(2px * var(--ribbon-scale)) solid rgba(204, 117, 115, .95);
     box-shadow:
         0 0 calc(24px * var(--ribbon-scale)) rgba(204, 117, 115, .38),
         inset 0 0 0 calc(1px * var(--ribbon-scale)) rgba(204, 117, 115, .25);
@@ -309,16 +335,16 @@ body {
 
 .ribbon-level-3 {
     background-color: rgba(255, 215, 0, .65);
-    border: calc(2px * var(--scale)) solid rgba(255, 215, 0, .95);
+    border: calc(2px * var(--ribbon-scale)) solid rgba(255, 215, 0, .95);
     box-shadow:
         0 0 calc(24px * var(--ribbon-scale)) rgba(255, 215, 0, .40),
         inset 0 0 0 calc(1px * var(--ribbon-scale)) rgba(255, 215, 0, .30);
 }
 
 .ribbon-icon {
-    width: calc(64px * var(--scale));
-    height: calc(64px * var(--scale));
-    flex: 0 0 calc(64px * var(--scale));
+    width: calc(64px * var(--ribbon-scale));
+    height: calc(64px * var(--ribbon-scale));
+    flex: 0 0 calc(64px * var(--ribbon-scale));
     mask-repeat: no-repeat;
     mask-position: center;
     mask-size: contain;

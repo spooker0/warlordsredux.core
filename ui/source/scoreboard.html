@@ -2,16 +2,14 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="style/menu.css" inline>
     <link rel="stylesheet" href="style/scoreboard.css" inline>
 </head>
 
 <body>
     <div class="menu-wrapper">
-        <div class="menu-title">Scoreboard</div>
-        <div class="scoreboard-panel">
+        <div class="scoreboard-columns scoreboard-headers">
             <div class="scoreboard-header">
-                <div></div>
+                <div> <img class="nato-flag" /></div>
                 <div class="player-name"><img class="player-icon" /></div>
                 <div><img class="kill-icon" /></div>
                 <div><img class="static-icon" /></div>
@@ -22,13 +20,43 @@
                 <div><img class="death-icon" /></div>
                 <div><img class="point-icon" /></div>
             </div>
-            <div id="scoreboard-body" class="panel"></div>
-            <div id="blufor-footer" class="scoreboard-row"></div>
-            <div id="opfor-footer" class="scoreboard-row"></div>
+
+            <div class="scoreboard-header">
+                <div> <img class="csat-flag" /></div>
+                <div class="player-name"><img class="player-icon" /></div>
+                <div><img class="kill-icon" /></div>
+                <div><img class="static-icon" /></div>
+                <div><img class="light-icon" /></div>
+                <div><img class="heavy-icon" /></div>
+                <div><img class="helo-icon" /></div>
+                <div><img class="plane-icon" /></div>
+                <div><img class="death-icon" /></div>
+                <div><img class="point-icon" /></div>
+            </div>
+        </div>
+
+        <div id="scoreboard-scroll" class="scoreboard-columns scoreboard-scroll">
+            <div class="scoreboard-panel blufor-panel">
+                <div id="scoreboard-body-blufor"></div>
+            </div>
+
+            <div class="scoreboard-panel opfor-panel">
+                <div id="scoreboard-body-opfor"></div>
+            </div>
+        </div>
+
+        <div class="scoreboard-columns scoreboard-footers">
+            <div class="scoreboard-footer">
+                <div class="scoreboard-row blufor-row"></div>
+            </div>
+
+            <div class="scoreboard-footer">
+                <div class="scoreboard-row opfor-row"></div>
+            </div>
         </div>
     </div>
+
     <script src="script/scoreboard.js" inline></script>
-    <script src="script/menu.js" inline></script>
     <script src="script/utility.js" inline></script>
 </body>
 

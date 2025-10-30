@@ -174,7 +174,6 @@ private _ecmDraw = addMissionEventHandler ["Draw3D", {
     };
 };
 
-private _playerUid = getPlayerUID player;
 private _nextChargeTime = serverTime + _ecmRechargeTime;
 private _lastCharges = _charges;
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
@@ -189,8 +188,7 @@ while { alive _asset && cameraOn == _asset } do {
             true;
 #else
             private _shotParent = getShotParents _munition # 0;
-            private _shotParentUid = _shotParent getVariable ["BIS_WL_ownerAsset", "123"];
-            _shotParentUid != _playerUid;
+            BIS_WL_playerSide != [_shotParent] call WL2_fnc_getAssetSide
 #endif
         };
     };

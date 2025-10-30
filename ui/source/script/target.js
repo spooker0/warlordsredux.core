@@ -161,7 +161,18 @@ function setEcmCharges(active, count, nextChargeTime) {
     }
 }
 
-function setSettings(targetLeft, targetTop, incomingLeft, incomingTop, fontSize) {
+function setWeaponName(name) {
+    const weaponWrapperEl = document.querySelector('.weapon-wrapper');
+    const weaponNameEl = document.querySelector('.weapon-name');
+    if (name === "") {
+        weaponWrapperEl.style.display = "none";
+    } else {
+        weaponWrapperEl.style.display = "block";
+        weaponNameEl.textContent = name;
+    }
+}
+
+function setSettings(targetLeft, targetTop, incomingLeft, incomingTop, fontSize, weaponPosition) {
     const wrapper = document.querySelector('.target-wrapper');
     wrapper.style.marginLeft = `${targetLeft}vw`;
     wrapper.style.marginTop = `${targetTop}vh`;
@@ -171,6 +182,17 @@ function setSettings(targetLeft, targetTop, incomingLeft, incomingTop, fontSize)
     incomingWrapper.style.marginTop = `${incomingTop}vh`;
 
     document.documentElement.style.setProperty('--base-font-size', `${fontSize}px`);
+
+    if (weaponPosition[2] !== 0 || weaponPosition[3] !== 0) {
+        const weaponWrapperEl = document.querySelector('.weapon-wrapper');
+        weaponWrapperEl.style.left = `${weaponPosition[0]}vw`;
+        weaponWrapperEl.style.top = `${weaponPosition[1]}vh`;
+        weaponWrapperEl.style.width = `${weaponPosition[2]}vw`;
+        weaponWrapperEl.style.height = `${weaponPosition[3]}vh`;
+
+        const weaponNameEl = document.querySelector('.weapon-name');
+        weaponNameEl.style.lineHeight = `${weaponPosition[3]}vh`;
+    }
 }
 
 setReconOptics(false, false);

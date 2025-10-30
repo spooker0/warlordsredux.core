@@ -28,12 +28,15 @@ if (count _objectsNearby == 0) exitWith {
 	triggerAmmo _projectile;
 };
 
-{
-	_x setVariable ["WL_lastHitter", _unit, 2];
+private _responsiblePlayer = [_unit, _unit] call WL2_fnc_handleInstigator;
+if (!isNull _responsiblePlayer) then {
 	{
-		_x setVariable ["WL_lastHitter", _unit, 2];
-	} forEach (crew _x);
-} forEach _objectsNearby;
+		_x setVariable ["WL_lastHitter", _responsiblePlayer, 2];
+		{
+			_x setVariable ["WL_lastHitter", _responsiblePlayer, 2];
+		} forEach (crew _x);
+	} forEach _objectsNearby;
+};
 
 private _targetDetected = _objectsNearby # 0;
 private _targetPosition = getPosASL _targetDetected;

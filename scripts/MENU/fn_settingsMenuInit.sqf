@@ -154,6 +154,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["checkbox", "Delete quad bike/water scooter on exit", ["deleteSmallTransports", true]],
         ["checkbox", "Use new kill sound", ["useNewKillSound", true]],
         ["checkbox", "Use new killfeed", ["useNewKillfeed", true]],
+        ["checkbox", "Use minimalistic killfeed", ["killfeedMinimalistic", false]],
         ["checkbox", "Show hitmarker (experimental)", ["showHitIndicator", false]],
         ["checkbox", "Enable allied demolition (punishable)", ["enableAlliedDemolition", false]],
         ["category", "Hide scroll menus (requires respawn)"],

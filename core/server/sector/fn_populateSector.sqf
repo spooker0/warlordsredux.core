@@ -172,6 +172,7 @@ if ("H" in _services) then {
 		_wp3 setWaypointType "CYCLE";
 
 		_vehicle allowCrewInImmobile [true, true];
+		[_vehicle, [1, 1, 1]] remoteExec ["setVehicleTIPars", 0];
 	};
 };
 [_vehicleUnits, _sector] spawn WL2_fnc_assetRelevanceCheck;

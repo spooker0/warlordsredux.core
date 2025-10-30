@@ -166,10 +166,9 @@ private _controlUnit = if (isRemoteControlling player) then {
 };
 if (cameraOn != _controlUnit && isNull (player getVariable ["DIS_controllingProjectile", objNull])) then {
     switchCamera _controlUnit;
-} else {
-    if (isNull cameraOn) then {
-        switchCamera player;
-    };
+};
+if (isNull cameraOn) then {
+    switchCamera player;
 };
 
 "missileCamera" cutFadeOut 0;

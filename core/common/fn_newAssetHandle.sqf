@@ -79,7 +79,6 @@ if (_asset isKindOf "Man") then {
 	[_asset] remoteExec ["WL2_fnc_repairAction", 0, true];
 	[_asset] remoteExec ["WL2_fnc_refuelAction", 0, true];
 	[_asset] remoteExec ["WL2_fnc_claimAction", 0, true];
-	[_asset] remoteExec ["WL2_fnc_weaponChange", 0, true];
 
 	_asset setVariable ["WL2_nextRepair", 0, true];
 	_asset setVariable ["BIS_WL_ownerAssetSide", _side, true];
@@ -310,6 +309,13 @@ if (_asset isKindOf "Man") then {
 			_asset addItemCargoGlobal ["B_UAVTerminal", 1];
 		} else {
 			_asset addItemCargoGlobal ["O_UAVTerminal", 1];
+		};
+
+		_asset setBehaviourStrong "COMBAT";
+
+		private _remoteControlTarget = uiNamespace getVariable ["WL2_remoteControlTarget", objNull];
+		if (!alive _remoteControlTarget) then {
+			uiNamespace setVariable ["WL2_remoteControlTarget", _asset];
 		};
 	};
 

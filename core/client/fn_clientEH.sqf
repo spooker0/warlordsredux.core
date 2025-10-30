@@ -45,8 +45,38 @@ addMissionEventHandler ["HandleChatMessage", {
 		};
 	}];
 
-	addUserActionEventHandler ["networkStats", "Activate", {
-		0 spawn WL2_fnc_scoreboard;
+	_display displayAddEventHandler ["KeyDown", {
+		params ["_display", "_key", "_shift", "_ctrl", "_alt"];
+		if (_key != 1) exitWith {};	// escape to kill scoreboard
+		private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
+		if !(isNull _display) then {
+			_display closeDisplay 1;
+			true;
+		};
+	}];
+
+	_display displayAddEventHandler ["KeyUp", {
+		params ["_display", "_key", "_shift", "_ctrl", "_alt"];
+		private _isPressed = false;
+		{
+			_isPressed = _isPressed || [_x, _key, _shift, _ctrl, _alt] call WL2_fnc_isKeyPressed;
+		} forEach actionKeys ["networkStats"];
+
+		if (_isPressed) then {
+			0 spawn WL2_fnc_scoreboard;
+		};
+	}];
+
+	_display displayAddEventHandler ["KeyUp", {
+		params ["_display", "_key", "_shift", "_ctrl", "_alt"];
+		private _isPressed = false;
+		{
+			_isPressed = _isPressed || [_x, _key, _shift, _ctrl, _alt] call WL2_fnc_isKeyPressed;
+		} forEach actionKeys ["cycleThrownItems"];
+
+		if (_isPressed) then {
+			[cameraOn] call APS_fnc_toggle;
+		};
 	}];
 
 	_display displayAddEventHandler ["KeyDown", {
@@ -70,6 +100,9 @@ addMissionEventHandler ["HandleChatMessage", {
 	_display displayAddEventHandler ["MouseZChanged", {
 		params ["_displayOrControl", "_scroll"];
 		if (alive player && lifeState player != "INCAPACITATED") exitWith {};
+		private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
+		if (!isNull _display) exitWith {};
+
 		if (_scroll < 0) then {
 			["Next"] call WL2_fnc_deadActions;
 			true;
@@ -149,6 +182,10 @@ addMissionEventHandler ["EntityRespawned", {
 
 addMissionEventHandler ["PlayerViewChanged", {
 	params ["_oldUnit", "_newUnit", "_vehicleIn", "_oldCameraOn", "_newCameraOn", "_uav"];
+	if (isNull _newCameraOn) exitWith {
+		switchCamera player;
+	};
+
 	[_newCameraOn] spawn WL2_fnc_drawAssetName;
 
 	private _assetActualType = _newCameraOn getVariable ["WL2_orderedClass", typeof _newCameraOn];

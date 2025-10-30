@@ -116,7 +116,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
         };
         case "deputize": {
             private _uid = _message select 1;
-            missionNamespace setVariable ["WL2_tempSpectatorUID", _uid];
+            missionNamespace setVariable ["WL2_tempSpectatorUID", _uid, true];
         };
         case "clearReports": {
             private _uid = _message select 1;

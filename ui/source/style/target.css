@@ -47,6 +47,21 @@ html {
     text-align: center;
 }
 
+.weapon-wrapper {
+    position: fixed;
+    text-align: right;
+    background-color: gray;
+    color: white;
+}
+
+.weapon-name {
+    margin-right: 0.5em;
+    vertical-align: middle;
+    font-family: "Arial", sans-serif;
+    font-size: 11pt;
+    font-weight: normal;
+}
+
 h1,
 h2,
 p,

@@ -1,18 +1,14 @@
 #include "includes.inc"
 
-private _display = findDisplay 5500;
-if (isNull _display) then {
-    _display = createDialog ["RscWLBrowserMenu", true];
+private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
+if (!isNull _display) exitWith {
+    _display closeDisplay 1;
 };
 
-_display displayAddEventHandler ["KeyDown", {
-    params ["_display", "_key", "_shift", "_ctrl", "_alt"];
-    if (_key in actionKeys "networkStats") then {
-        closeDialog 0;
-    };
-}];
+"scoreboard" cutRsc ["RscWLScoreboardMenu", "PLAIN", -1, true, true];
+_display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
 
-private _texture = _display displayCtrl 5501;
+private _texture = _display displayCtrl 5502;
 _texture ctrlWebBrowserAction ["LoadFile", "src\ui\gen\scoreboard.html"];
 // _texture ctrlWebBrowserAction ["OpenDevConsole"];
 

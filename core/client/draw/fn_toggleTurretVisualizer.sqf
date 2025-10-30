@@ -35,8 +35,8 @@ private _draw3dHandler = addMissionEventHandler ["Draw3D", {
             private _isTurnGood = _referencePointData # 4;
             private _isElevGood = _referencePointData # 5;
             _refPointScript = format [
-                "setReferencePoint(%1, %2);setDesiredPoint(%3, %4, %5, %6, %7, %8);", 
-                _referencePoint # 0, 
+                "setReferencePoint(%1, %2);setDesiredPoint(%3, %4, %5, %6, %7, %8);",
+                _referencePoint # 0,
                 _referencePoint # 1,
                 _desiredPoint # 0,
                 _screenPoint # 0,
@@ -47,7 +47,7 @@ private _draw3dHandler = addMissionEventHandler ["Draw3D", {
             ];
         };
     };
-    
+
     private _screenPoints = [];
     private _weaponScreenPoints = [];
     {
@@ -58,9 +58,11 @@ private _draw3dHandler = addMissionEventHandler ["Draw3D", {
         _weaponScreenPoints pushBack _weaponScreenPoint;
     } forEach _occupiedTurrets;
 
+    private _weaponScreenPointsText = _texture ctrlWebBrowserAction ["ToBase64", toJSON _weaponScreenPoints];
+
     private _script = format [
-        "setCrosshairs(%1);setBoxLines(%2);%3",
-        toJSON _weaponScreenPoints,
+        "setCrosshairs(atobr(""%1""));setBoxLines(%2);%3",
+        _weaponScreenPointsText,
         toJSON _screenPoints,
         _refPointScript
     ];
@@ -111,7 +113,7 @@ if (typeof cameraOn == "B_T_VTOL_01_armed_F") then {
 
 waitUntil {
     uiSleep 0.1;
-    !alive player || 
+    !alive player ||
     !alive cameraOn ||
     isNull _display
 };

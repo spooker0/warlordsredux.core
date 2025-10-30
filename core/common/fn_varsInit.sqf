@@ -32,6 +32,7 @@ switch (_locality) do {
 		WL_gearKeyPressed = false;
 		WL_AssetActionTarget = objNull;
 		WL_SectorActionTarget = objNull;
+		WL_UAVActionTarget = objNull;
 		WL_SectorActionTargetActive = false;
 		WL_MapBusy = [];
 		WL_GEAR_BUY_MENU = false;

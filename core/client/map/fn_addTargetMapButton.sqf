@@ -104,7 +104,13 @@ _button ctrlAddEventHandler ["MouseButtonDown", {
     if (_targetButtonSetupActionClose) then {
         uiNamespace setVariable ["WL2_assetTargetSelected", objNull];
         private _dialog = ctrlParent _control;
-        _dialog closeDisplay 1;
+        [_dialog] spawn {
+            params ["_dialog"];
+            waitUntil {
+                inputMouse 0 == 0 && inputMouse 1 == 0
+            };
+            _dialog closeDisplay 1;
+        };
     };
 }];
 

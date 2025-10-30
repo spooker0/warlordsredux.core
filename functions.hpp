@@ -192,7 +192,6 @@ class CfgFunctions {
 			class teammatesAvailability {};
 			class triggerPurchase {};
 			class updateLevelDisplay {};
-			class weaponChange {};
 			class welcome {};
 		};
 		class ClientAction {
@@ -343,6 +342,7 @@ class CfgFunctions {
 			class sectorVoteDisplay {};
 			class selectedTargetsHandle {};
 			class targetSelected {};
+			class uavMapButtons {};
 			class updateSelectionState {};
 		};
 		class ClientOrder {
@@ -429,6 +429,7 @@ class CfgFunctions {
 			class initAssetData {};
 			class initCommon {};
 			class initSectors {};
+			class isKeyPressed {};
 			class lastHitHandler {};
 			class missionEndHandle {};
 			class newAssetHandle {};

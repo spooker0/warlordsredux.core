@@ -691,6 +691,26 @@ class RscTitles {
 		};
 	};
 
+	class RscWLScoreboardMenu {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		name = "RscWLScoreboardMenu";
+		onLoad = "uiNamespace setVariable ['RscWLScoreboardMenu', _this select 0];";
+		class controls {
+			class RscWLScoreboardMenu_Texture: RscText {
+				type = 106;
+				idc = 5502;
+				x = safeZoneX;
+				y = safeZoneY;
+				w = safeZoneW;
+				h = safeZoneH;
+				url = "file://src/ui/gen/scoreboard.html";
+			};
+		};
+	};
+
 	class RscWLSpectatorMenu {
 		idd = -1;
 		duration = 1000000000;

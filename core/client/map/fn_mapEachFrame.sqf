@@ -66,13 +66,16 @@ if (isNull (findDisplay 160 displayCtrl 51)) then {
     } forEach BIS_WL_allSectors;
 };
 
+private _mapButtonDisplay = uiNamespace getVariable ["WL2_mapButtonDisplay", displayNull];
+if (!isNull _mapButtonDisplay) exitWith {};
+
 private _mapMouseActionComplete = uiNamespace getVariable ["WL2_mapMouseActionComplete", true];
-private _mouseClicked = inputMouse 0 > 0 || inputMouse 1 > 0;
+private _mouseClicked = inputMouse 0 > 0;
 if (_mouseClicked && _mapMouseActionComplete && inputAction "BuldTurbo" == 0) then {
     uiNamespace setVariable ["WL2_mapMouseActionComplete", false];
     0 spawn {
         waitUntil {
-            inputMouse 0 == 0 && inputMouse 1 == 0
+            inputMouse 0 == 0
         };
 
         if (count WL_MapBusy > 0) exitWith {
@@ -81,19 +84,29 @@ if (_mouseClicked && _mapMouseActionComplete && inputAction "BuldTurbo" == 0) th
 
         uiNamespace setVariable ["WL2_assetTargetSelectedTime", serverTime];
 
+        private _showUavMenu = true;
+
         if !(isNull WL_AssetActionTarget) then {
+            _showUavMenu = false;
             uiNamespace setVariable ["WL2_assetTargetSelected", WL_AssetActionTarget];
             call WL2_fnc_assetMapButtons;
             playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss", 0.15, 1];
         };
 
         if !(isNull WL_SectorActionTarget) then {
+            _showUavMenu = false;
             private _isVotingThisSector = WL_SectorActionTarget in BIS_WL_selection_availableSectors;
             if (!_isVotingThisSector) then {
                 uiNamespace setVariable ["WL2_assetTargetSelected", WL_SectorActionTarget];
                 call WL2_fnc_sectorMapButtons;
                 playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss", 0.15, 1];
             };
+        };
+
+        if (_showUavMenu && unitIsUAV cameraOn && alive driver cameraOn) then {
+            uiNamespace setVariable ["WL2_assetTargetSelected", cameraOn];
+            call WL2_fnc_uavMapButtons;
+            playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss", 0.15, 1];
         };
 
         WL_AssetActionTarget = objNull;

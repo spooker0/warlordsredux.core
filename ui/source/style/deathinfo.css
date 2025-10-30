@@ -1,13 +1,14 @@
 :root {
     --accent: #ff3b3b;
     --hud-text: #14cb00;
+    --background-color: rgba(255, 59, 59, 0.3);
     --bar-bg-solid: rgba(8, 10, 14, 0.4);
     --bar-bg-mid: rgba(8, 10, 14, 0.4);
     --bar-bg-transparent: rgba(8, 10, 14, 0);
     --text: #ffffff;
     --divider: rgba(255, 255, 255, 0.4);
     --text-size: 25px;
-    --badge-size: 128px;
+    --badge-size: 84px;
     --badge-gap: 30px;
 }
 
@@ -24,6 +25,8 @@ body {
     font-family: 'Consolas', monospace;
     color: var(--text);
 
+    background-color: var(--background-color);
+
     text-transform: uppercase;
     font-size: var(--text-size);
     line-height: 1;
@@ -39,7 +42,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 20vh;
+    height: 15vh;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 0;
@@ -81,7 +84,7 @@ body {
     align-items: start;
     justify-items: stretch;
     padding: 0 0.5em;
-    height: 20vh;
+    height: 15vh;
 }
 
 .killed-by-title,
@@ -126,7 +129,7 @@ body {
 
 .center-panel {
     position: relative;
-    height: 20vh;
+    height: 15vh;
     background-color: var(--bar-bg-solid);
 }
 
@@ -184,6 +187,7 @@ body {
     justify-items: center;
     align-items: start;
     align-content: start;
+    height: 15vh;
 
     text-align: center;
     margin: 0;
@@ -242,10 +246,10 @@ body {
 
 .hit-projectiles {
     position: fixed;
-    left: 0vw;
+    left: 2vw;
     top: 28vh;
 
-    width: 30vw;
+    width: 20vw;
     height: 50vh;
 
     font-size: calc(var(--text-size) * 0.5);
@@ -258,7 +262,7 @@ body {
     gap: 8px;
     padding: 8px;
 
-    align-items: center;
+    align-items: left;
 }
 
 .death-projectiles-list {
