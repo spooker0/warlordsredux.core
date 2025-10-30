@@ -406,7 +406,8 @@ timeoutButton.addEventListener('click', () => {
     const reason = document.getElementById('timeout-reason').value || 'unsportsmanlike conduct';
     const infoEl = document.getElementById('player-info');
     const timeoutString = `${infoEl.value}\n[TIMEOUT] ${duration} minutes\n[REASON] ${reason}\n\n`;
-    A3API.SendAlert(`["timeout", "${player}", ${duration}, "${btoa(reason)}", "${btoa(timeoutString)}"]`);
+    console.log(`["timeout", "${player}", ${duration}, "${btoar(reason)}", "${btoar(timeoutString)}"]`);
+    A3API.SendAlert(`["timeout", "${player}", ${duration}, "${btoar(reason)}", "${btoar(timeoutString)}"]`);
 });
 
 const balanceButton = document.getElementById('btn-rebalance');

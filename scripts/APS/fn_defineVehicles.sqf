@@ -15,6 +15,7 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
     private _projectileDazzleable = getNumber (_x >> "dazzleable") == 1;
     private _projectileESam = getNumber (_x >> "esam") == 1;
     private _projectileGPS = getNumber (_x >> "gps") == 1;
+    private _projectileImmunity = getNumber (_x >> "immunity");
     private _projectileLoal = getNumber (_x >> "loal") == 1;
     private _projectileRemote = getNumber (_x >> "remote") == 1;
     private _projectileSam = getNumber (_x >> "sam") == 1;
@@ -36,6 +37,7 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
             ["dazzleable", _projectileDazzleable],
             ["esam", _projectileESam],
             ["gps", _projectileGPS],
+            ["immunity", _projectileImmunity],
             ["loal", _projectileLoal],
             ["name", _ammo],
             ["remote", _projectileRemote],

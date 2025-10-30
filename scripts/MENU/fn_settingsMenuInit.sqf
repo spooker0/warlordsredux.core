@@ -144,7 +144,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["slider", "Incoming indicator position (left %)", [0, 100, 1, 5, "incomingIndicatorLeft"]],
         ["slider", "Incoming indicator position (top %)", [0, 100, 1, 20, "incomingIndicatorTop"]],
         ["category", "General settings"],
-        ["checkbox", "Disable 3rd person view (2x reward)", ["3rdPersonDisabled", false]],
+        ["checkbox", "Disable 3rd person view (1.5x reward)", ["3rdPersonDisabled", false]],
         ["checkbox", "Autonomous mode off by default", ["enableAuto", false]],
         ["checkbox", "Spawn vehicles with empty inventory", ["spawnEmpty", false]],
         ["checkbox", "Disable missile cameras", ["disableMissileCameras", false]],

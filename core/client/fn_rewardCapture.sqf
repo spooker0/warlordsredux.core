@@ -60,8 +60,8 @@ while { !BIS_WL_missionEnd } do {
         };
     } forEach (_vehicles + [player]);
 
-    _attackingValue = _attackingValue * 10;
-    _defendingValue = _defendingValue * 10;
+    _attackingValue = _attackingValue * 50;
+    _defendingValue = _defendingValue * 50;
 
     if (_attackingValue > 0) then {
         [objNull, _attackingValue, "Attacking sector", "#228b22"] call WL2_fnc_killRewardClient;

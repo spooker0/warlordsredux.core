@@ -123,7 +123,7 @@ reportButton.addEventListener('click', () => {
     const player = document.selectedPlayer;
     const playerName = document.selectedPlayerName;
     const reason = reasonEl.value || 'unsportsmanlike conduct';
-    A3API.SendAlert(`["report", "${player}", "${playerName}", "${btoa(reason)}"]`);
+    A3API.SendAlert(`["report", "${player}", "${playerName}", "${btoar(reason)}"]`);
 });
 
 function changeButtons() {

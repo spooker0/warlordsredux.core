@@ -65,7 +65,7 @@ if (_ammoConfig getOrDefault ["loal", false]) then {
             _distanceBeforeNotch = 5000 + (_projAlt - _targetAlt) * 2;
             _distanceBeforeNotch = (_distanceBeforeNotch max 3500) min 16000;
         } else {
-            _distanceBeforeNotch = 3500;
+            _distanceBeforeNotch = _ammoConfig getOrDefault ["immunity", 3500];
         };
     };
 };

@@ -50,7 +50,7 @@ private _sideCaptureModifier = createHashMap;
 private _relevantEntities = entities [["LandVehicle", "Man"], ["Logic"], true, true];
 private _sectorAO = _sector getVariable "objectAreaComplete";
 private _allInArea = (_relevantEntities inAreaArray _sectorAO) select {
-	lifeState _x != "INCAPACITATED";
+	alive _x && lifeState _x != "INCAPACITATED";
 };
 
 // Perf benchmarking result: entities w/ inAreaArray is faster than nearEntities

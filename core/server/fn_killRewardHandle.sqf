@@ -4,7 +4,7 @@ params ["_unit", "_responsibleLeader"];
 if (!isPlayer _responsibleLeader) exitWith {};
 
 private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
-private _killReward = round (0.7 * WL_ASSET(_assetActualType, "cost", 0) ^ 0.8);
+private _killReward = round (0.6 * WL_ASSET(_assetActualType, "cost", 0) ^ 0.8);
 
 if (typeof _unit == "RuggedTerminal_01_communications_hub_F") then {
 	private _unitOwnerSide = _unit getVariable ["WL2_forwardBaseOwner", sideUnknown];
@@ -42,18 +42,18 @@ if (_unit isKindOf "Man" && !(_unit in _noRewardList)) then {
 private _targets = [missionNamespace getVariable "BIS_WL_currentTarget_west", missionNamespace getVariable "BIS_WL_currentTarget_east"] select {!(isNull _x)};
 
 if (_responsibleLeader getVariable ["WL2_3rdPersonDisabled", false]) then {
-	_killReward = _killReward * 2;
+	_killReward = _killReward * 1.5;
 };
 if ((_targets findIf {_unit inArea (_x getVariable "objectAreaComplete")}) != -1) then {
 	_killReward = _killReward * 1.2;
 };
 if (_unitSide != independent && _unitSide != sideUnknown) then {
-	_killReward = _killReward * 3.0;
+	_killReward = _killReward * 2.0;
 };
 
 private _playerId = getPlayerID _responsibleLeader;
 private _squadmatesIDs = ["getSquadmates", [_playerId]] call SQD_fnc_server;
-private _squadReward = round (_killReward * 0.5 / (sqrt (count _squadmatesIDs) max 1));
+private _squadReward = round (_killReward * 0.3 / (sqrt (count _squadmatesIDs) max 1));
 {
 	private _userInfo = getUserInfo _x;
 	if (count _userInfo < 3) then {
