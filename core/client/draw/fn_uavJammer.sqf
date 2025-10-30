@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_asset", "_owner"];
 
-private _side = side _owner;
+private _side = [_asset] call WL2_fnc_getAssetSide;
 
 // Jammer checker (5s loop)
 [_asset, _side] spawn {
@@ -101,7 +101,7 @@ private _side = side _owner;
         if (_jammerStrength >= 1 && !_isTvMunition) then {
             if (getPosATL _asset # 2 > 1) then {
                 // flyers take damage
-                _asset setDamage [damage _asset + 0.1, true, _closestJammer];
+                [_asset, _closestJammer] remoteExec ["WL2_fnc_uavJammed", 2];
             } else {
                 // all others, disable control
                 if (isAutonomous _asset) then {
