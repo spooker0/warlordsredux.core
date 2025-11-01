@@ -68,6 +68,7 @@ if (player getVariable ["WL_hasGoggles", false]) then {
 } else {
 	removeGoggles player;
 };
+player setVariable ["WL2_hasGrapple", 0];
 
 call WL2_fnc_controlUAVAction;
 call WL2_fnc_buyMenuAction;

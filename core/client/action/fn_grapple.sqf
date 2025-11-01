@@ -100,8 +100,45 @@ player addAction [
 
 			if (!_endIsFlat) then {
 				uiSleep 0.2;
-				private _newFinalPosition = player modelToWorldWorld [0, 2, 1];
-				player setPosASL _newFinalPosition;
+
+				private _vaultPositionStart = player modelToWorldWorld [0, 0, 0];
+				private _vaultPositionBase = player modelToWorldWorld [0, 0, 4];
+				private _vaultPositionEnd = player modelToWorldWorld [0, 2, 4];
+
+				private _vaultIntersections1 = lineIntersectsSurfaces [
+					_vaultPositionStart,
+					_vaultPositionBase,
+					player,
+					objNull,
+					true,
+					1,
+					"FIRE",
+					"",
+					true
+				];
+
+				private _vaultIntersections2 = lineIntersectsSurfaces [
+					_vaultPositionBase,
+					_vaultPositionEnd,
+					player,
+					objNull,
+					true,
+					1,
+					"FIRE",
+					"",
+					true
+				];
+
+				if (count _vaultIntersections1 == 0 && count _vaultIntersections2 == 0) then {
+					player setPosASL _vaultPositionEnd;
+				} else {
+					private _backwards = player modelToWorldWorld [0, -1, 0];
+					player setPosASL _backwards;
+				};
+			} else {
+				if (_startPos # 2 > _endPos # 2) then {
+					player setVehiclePosition [player modelToWorld [0, 0, 0], [], 0, "NONE"];
+				};
 			};
 
 			private _maxTimeInAir = serverTime + 5;
