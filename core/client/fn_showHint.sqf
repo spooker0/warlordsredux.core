@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_layer", ["_hintParams", []], ["_timeout", -1]];
+params ["_layer", ["_hintParams", []], ["_timeout", -1], ["_isAnimation", false]];
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _showHint = _settingsMap getOrDefault [format["showHint%1", _layer], true];
@@ -40,7 +40,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         if (_actionKeyText == "") then {
             _actionKeyText = _actionKey;
         };
-        _hintArray pushBack [_actionName, _actionKeyText];
+        _hintArray pushBack [toUpper _actionName, _actionKeyText];
     } forEach (_hintParams select 1);
 
     private _hintText = toJSON _hintArray;
@@ -55,12 +55,17 @@ _texture ctrlAddEventHandler ["PageLoaded", {
 }];
 
 if (_timeout > 0) then {
-    [_timeout, _layer, _texture] spawn {
-        params ["_timeout", "_layer", "_texture"];
+    [_timeout, _layer, _texture, _isAnimation] spawn {
+        params ["_timeout", "_layer", "_texture", "_isAnimation"];
         private _startTime = serverTime;
 
         waitUntil {
-            serverTime - _startTime >= _timeout || isNull _texture
+            if (_isAnimation) then {
+                private _script = format ["updateAnimationTimer(%1);", (serverTime - _startTime) / _timeout];
+                _texture ctrlWebBrowserAction ["ExecJS", _script];
+            };
+            uiSleep 0.1;
+            serverTime - _startTime >= _timeout || isNull _texture;
         };
 
         _layer cutText ["", "PLAIN"];

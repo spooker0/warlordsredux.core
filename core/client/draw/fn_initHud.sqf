@@ -148,14 +148,9 @@ while { !BIS_WL_missionEnd } do {
 	if (count _captureDetails > 0) then {
 		_captureDetails = [_captureDetails, [], { _x # 1 }, "DESCEND"] call BIS_fnc_sortBy;
 
-		private _capturingTeamRaw = _captureDetails select {
+		_capturingTeam = _captureDetails select {
 			_x # 0 != _sectorOwner
-		} select 0;
-		_capturingTeam = if (_capturingTeamRaw select 1 == 0) then {
-			independent
-		} else {
-			_capturingTeamRaw select 0
-		};
+		} select 0 select 0;
 
 		_sectorOwnerCap = _captureDetails select {
 			_x # 0 == _sectorOwner

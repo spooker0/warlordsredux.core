@@ -13,20 +13,15 @@ player addAction [
 
 			[player, ["LadderRifleStatic"]] remoteExec ["switchMove", 0];
 			player allowDamage false;
-			private _sound = playSoundUI ["a3\sounds_f\vehicles\air\noises\wind_open_int.wss", 0.5, 2, true];
 
-			private _up = getPosASL player # 2 < 10;
-			private _rappelTime = if (_up) then {
-				5
-			} else {
-				3
-			};
 			private _boundingBox = boundingBoxReal _rope;
-
 			private _modelPositionMax = _rope modelToWorldWorld (_boundingBox # 1);
 			private _modelPositionMin = _rope modelToWorldWorld (_boundingBox # 0);
-			_modelPositionMin set [2, (_modelPositionMin # 2) max 0];
+			private _ropeMinLevel = _rope getVariable ["WL2_rappelRopeMinLevel", 0];
+			_modelPositionMin set [2, (_modelPositionMin # 2) max _ropeMinLevel];
 
+			private _playerASL = getPosASL player;
+			private _up = _playerASL distance _modelPositionMin < _playerASL distance _modelPositionMax;
 			private _startPos = if (_up) then {
 				_modelPositionMin
 			} else {
@@ -36,6 +31,12 @@ player addAction [
 				_modelPositionMax
 			} else {
 				_modelPositionMin
+			};
+			private _ropeLength = _startPos distance _endPos;
+			private _rappelTime = if (_up) then {
+				_ropeLength / 5
+			} else {
+				_ropeLength / 10
 			};
 
 			private _interval = 0;
@@ -57,17 +58,15 @@ player addAction [
 				_interval = serverTime - _startTime;
 			};
 
-			stopSound _sound;
 			[player, [""]] remoteExec ["switchMove", 0];
 
 			private _finalRelativePosition = if (_up) then {
 				(_boundingBox # 1) vectorAdd [0, 2, 0];
 			} else {
-				private _ropeBottom = _boundingBox # 0;
-				_ropeBottom set [2, (_ropeBottom # 2) max 0];
-				_ropeBottom vectorAdd [0, -2, 0];
+				(_boundingBox # 0) vectorAdd [0, -2, 0];
 			};
 			private _finalPosition = _rope modelToWorld _finalRelativePosition;
+			_finalPosition set [2, _finalPosition # 2 max _ropeMinLevel];
 			player setVehiclePosition [_finalPosition, [], 0, "CAN_COLLIDE"];
 
             uiSleep 1;

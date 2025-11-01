@@ -158,7 +158,7 @@ if (_operateAccess && _hasRadar) then {
     }, false] call WL2_fnc_addTargetMapButton;
 };
 
-if (typeof _asset == "Land_TentA_F") then {
+if (typeof _asset in ["Land_TentSolar_01_bluewhite_F", "Land_TentDome_F", "Land_TentSolar_01_redwhite_F", "Land_TentA_F"]) then {
     ["FAST TRAVEL TENT", {
         if (!alive player || lifeState player == "INCAPACITATED") exitWith {
             systemChat "Cannot fast travel.";
@@ -403,6 +403,27 @@ private _fastTravelStrongholdExecute = {
     [
         0,
         "StrongholdFT",
+        "Fast Travel"
+    ]
+] call WL2_fnc_addTargetMapButton;
+
+// Fast Travel Near Stronghold Button
+private _fastTravelNearStrongholdExecute = {
+    params ["_asset"];
+    private _findSector = (BIS_WL_sectorsArray # 2) select {
+        (_x getVariable ["WL_stronghold", objNull]) == _asset
+    };
+    BIS_WL_targetSector = (_findSector # 0);
+    [8, ""] spawn WL2_fnc_executeFastTravel;
+};
+[
+    "FAST TRAVEL NEAR STRONGHOLD",
+    _fastTravelNearStrongholdExecute,
+    true,
+    "fastTravelNearStronghold",
+    [
+        0,
+        "StrongholdFTNear",
         "Fast Travel"
     ]
 ] call WL2_fnc_addTargetMapButton;

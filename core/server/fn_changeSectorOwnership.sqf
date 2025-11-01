@@ -55,7 +55,7 @@ private _base2 = missionNamespace getVariable ["WL2_base2", objNull];
 private _base1Owner = _base1 getVariable ["BIS_WL_owner", civilian];
 private _base2Owner = _base2 getVariable ["BIS_WL_owner", independent];
 if (_base1Owner == _base2Owner) then {
-	missionNamespace setVariable ["WL2_gameWinner", _base1Owner, true];
-	0 spawn WL2_fnc_calculateEndResults;
-	0 remoteExec ["WL2_fnc_missionEndHandle", 0];
+	private _gameWinner = _base1Owner;
+	[_gameWinner] spawn WL2_fnc_calculateEndResults;
+	[_gameWinner, false] remoteExec ["WL2_fnc_missionEndHandle", 0];
 };

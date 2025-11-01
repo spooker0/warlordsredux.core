@@ -1,4 +1,6 @@
 #include "includes.inc"
+params ["_gameWinner"];
+
 private _stats = missionNamespace getVariable ["WL_stats", createHashMap];
 private _roundStats = [_stats, "Round Stats"] call WL2_fnc_generateEndResultPage;
 missionNamespace setVariable ["WL_endScreen", _roundStats, true];
@@ -28,7 +30,6 @@ private _serverStats = profileNamespace getVariable ["WL_stats", createHashMap];
     _serverStats set [_asset, _serverAsset];
 } forEach _stats;
 
-private _gameWinner = missionNamespace getVariable ["WL2_gameWinner", sideUnknown];
 if (_gameWinner == west) then {
     _serverStats set ["westWins", (_serverStats getOrDefault ["westWins", 0]) + 1];
 };

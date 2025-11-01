@@ -11,10 +11,16 @@ _asset addAction [
 
             [[0, -3, 1]] call WL2_fnc_actionLockCamera;
 
+            ["Animation", ["CLAIM", [
+                ["Cancel", "Action"],
+                ["", "ActionContext"],
+                ["", "navigateMenu"]
+            ]], WL_DURATION_CLAIM, true] call WL2_fnc_showHint;
+
 			private _soundSource = createSoundSource ["WLAlarmSound", _asset modelToWorld [0, 0, 0], [], 0];
 
             private _startCheckingUnhold = false;
-            private _timeToStop = serverTime + 8;
+            private _timeToStop = serverTime + WL_DURATION_CLAIM;
 			private _claimSuccess = false;
             while { true } do {
                 if (!alive player) then {
@@ -42,6 +48,8 @@ _asset addAction [
 
                 uiSleep 0.001;
             };
+
+            ["Animation"] call WL2_fnc_showHint;
 
 			if (_claimSuccess) then {
 				private _displayName = [_asset] call WL2_fnc_getAssetTypeName;

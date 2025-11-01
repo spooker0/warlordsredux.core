@@ -44,9 +44,17 @@ private _demolishActionId = player addAction [
                 if (typeof _demolishableTarget == "RuggedTerminal_01_communications_hub_F") then {
                     WL_DEMOLITION_FOB_STEP_TIME
                 } else {
-                    WL_DEMOLITION_STEP_TIME
+                    private _assetActualType = _demolishableTarget getVariable ["WL2_orderedClass", typeOf _demolishableTarget];
+                    WL_ASSET(_assetActualType, "demolishStepTime", WL_DEMOLITION_STEP_TIME);
                 }
             };
+
+            ["Animation", ["DEMOLITION", [
+                ["Cancel", "Action"],
+                ["", "ActionContext"],
+                ["", "navigateMenu"]
+            ]], _demolitionStepTime, true] call WL2_fnc_showHint;
+
             private _endTime = serverTime + _demolitionStepTime;
             while { true } do {
                 // interrupts
@@ -74,6 +82,8 @@ private _demolishActionId = player addAction [
                 };
                 uiSleep 0.01;
             };
+
+            ["Animation"] call WL2_fnc_showHint;
 
             if (_demolishSuccess) then {
                 [_demolishableTarget, 1] call WL2_fnc_demolishStep;

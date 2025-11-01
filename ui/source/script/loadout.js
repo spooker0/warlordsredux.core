@@ -11,9 +11,9 @@ document.addEventListener('wheel', function (e) {
     }
 }, { passive: false });
 
-document.querySelector('.close-button').addEventListener('mousedown', function () {
-    A3API.SendAlert('exit');
-});
+// document.querySelector('.close-button').addEventListener('mousedown', function () {
+//     A3API.SendAlert('exit');
+// });
 
 document.ammoFlash = false;
 setInterval(() => {
@@ -96,10 +96,11 @@ document.querySelectorAll('.slot').forEach(slot => {
 
 document.querySelectorAll('.loadout').forEach(loadout => {
     loadout.addEventListener('mousedown', function () {
-        document.querySelectorAll('.loadout').forEach(loadout => loadout.classList.remove('selected-loadout'));
+        const allLoadoutsEls = document.querySelectorAll('.loadout');
+        allLoadoutsEls.forEach(loadout => loadout.classList.remove('selected-loadout'));
         this.classList.add('selected-loadout');
 
-        const loadoutIndex = parseInt(loadout.textContent.trim(), 10) - 1;
+        const loadoutIndex = Array.from(allLoadoutsEls).indexOf(this);
         A3API.SendAlert('l' + loadoutIndex);
     });
 });
@@ -108,13 +109,13 @@ document.querySelector('.reset-all').addEventListener('mousedown', function () {
     A3API.SendAlert('r');
 });
 
-document.querySelector('.copy-current').addEventListener('mousedown', function () {
+document.querySelector('.reset-current').addEventListener('mousedown', function () {
     A3API.SendAlert('c');
 });
 
 function nextPowerOfTwo(x) {
     if (x < 1) return 1;
-    return Math.pow(2, Math.ceil(Math.log2(x)));
+    return Math.pow(2, Math.ceil(Math.log2(x)) + 1);
 }
 
 const imageObserver = new IntersectionObserver((entries, observer) => {
@@ -1002,35 +1003,35 @@ function selectDefaultForBackpack(weaponData, backpackId, panel) {
 function updateTheme(themeIndex) {
     const themes = [
         {
-            backgroundColor: "#344E41",
+            backgroundColor: "rgba(52, 78, 65, 0.5)",
             panelColor: "#3A5A40",
             borderColor: "#588157",
             lighterColor: "#A3B18A",
             textColor: "#DAD7CD"
         },
         {
-            backgroundColor: "#355482",
+            backgroundColor: "rgba(53, 84, 130, 0.5)",
             panelColor: "#35719e",
             borderColor: "#348dba",
             lighterColor: "#34a8d5",
             textColor: "#34c4f0"
         },
         {
-            backgroundColor: "#051923",
+            backgroundColor: "rgba(5, 25, 35, 0.5)",
             panelColor: "#003554",
             borderColor: "#006494",
             lighterColor: "#0582ca",
             textColor: "#00a6fb"
         },
         {
-            backgroundColor: "#880d1e",
+            backgroundColor: "rgba(136, 13, 30, 0.5)",
             panelColor: "#dd2d4a",
             borderColor: "#f26a8d",
             lighterColor: "#f49cbb",
             textColor: "#cbeef3"
         },
         {
-            backgroundColor: "#1a1a1a",
+            backgroundColor: "rgba(26, 26, 26, 0.5)",
             panelColor: "#424242",
             borderColor: "#686868",
             lighterColor: "#8f8f8f",
@@ -1060,7 +1061,22 @@ function formatNumber(num) {
     return num.toLocaleString();
 }
 
-function updateLoadout(loadout, loadoutIndex, weaponData, magazineData, playerLevel, playerScore, playerNextLevelScore, themeIndex) {
+function updateLoadoutNames(loadoutNames) {
+    const loadouts = document.querySelectorAll('.loadout');
+    loadouts.forEach((loadoutEl, index) => {
+        const loadoutName = loadoutNames[index] || [];
+        loadoutEl.querySelectorAll('.loadout-weapon-name').forEach((nameEl, nameIndex) => {
+            nameEl.textContent = loadoutName[nameIndex] || "-";
+        });
+    });
+}
+
+function updateWeight(weight, maxWeight) {
+    const titleWeightEl = document.querySelector('.title-weight');
+    titleWeightEl.textContent = `Weight: ${Math.round(weight)}kg / ${Math.round(maxWeight)}kg`;
+}
+
+function updateLoadout(loadout, loadoutIndex, weaponData, magazineData, playerLevel, playerScore, playerNextLevelScore, themeIndex, loadoutNames) {
     document.playerLoadout = undefined;
     document.readyToSend = false;
 
@@ -1074,9 +1090,13 @@ function updateLoadout(loadout, loadoutIndex, weaponData, magazineData, playerLe
     document.playerScore = playerScore;
     document.playerNextLevelScore = playerNextLevelScore;
 
-    const menuTitle = document.querySelector('.menu-title');
-    menuTitle.textContent = `Loadout (Level ${playerLevel} - Score: ${formatNumber(playerScore)}/${formatNumber(playerNextLevelScore)})`;
+    const menuTitleEl = document.querySelector('.menu-title');
+    const titleScoreEl = document.querySelector('.title-score');
+    const titleLevelEl = document.querySelector('.title-level');
+    titleLevelEl.textContent = `Level ${playerLevel}`;
+    titleScoreEl.textContent = `(Score: ${formatNumber(playerScore)}/${formatNumber(playerNextLevelScore)})`;
 
+    updateLoadoutNames(loadoutNames);
     selectLoadout(loadoutIndex);
     updateTheme(themeIndex);
 
@@ -1168,10 +1188,10 @@ function updateLoadout(loadout, loadoutIndex, weaponData, magazineData, playerLe
     createItemRow(["SmokeShellOrange", "Smoke Grenade (Orange)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_orange_ca.paa", 4, true], itemList);
     createItemRow(["SmokeShellPurple", "Smoke Grenade (Purple)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_purple_ca.paa", 4, true], itemList);
 
-    createItemRow(["Chemlight_blue", "Chemlight (Blue)", "A3\\Weapons_f\\Data\\UI\\M_chemlight_blue_CA.paa", 2, true], itemList);
-    createItemRow(["Chemlight_green", "Chemlight (Green)", "A3\\Weapons_f\\Data\\UI\\M_chemlight_green_CA.paa", 2, true], itemList);
-    createItemRow(["Chemlight_red", "Chemlight (Red)", "A3\\Weapons_f\\Data\\UI\\M_chemlight_red_CA.paa", 2, true], itemList);
-    createItemRow(["Chemlight_yellow", "Chemlight (Yellow)", "A3\\Weapons_f\\Data\\UI\\M_chemlight_yellow_CA.paa", 2, true], itemList);
+    createItemRow(["Chemlight_blue", "Chemlight (Blue) [Deploys Respawn Tent]", "A3\\Weapons_f\\Data\\UI\\M_chemlight_blue_CA.paa", 2, true], itemList);
+    createItemRow(["Chemlight_green", "Chemlight (Green) [Deploys Respawn Tent]", "A3\\Weapons_f\\Data\\UI\\M_chemlight_green_CA.paa", 2, true], itemList);
+    createItemRow(["Chemlight_red", "Chemlight (Red) [Deploys Respawn Tent]", "A3\\Weapons_f\\Data\\UI\\M_chemlight_red_CA.paa", 2, true], itemList);
+    createItemRow(["Chemlight_yellow", "Chemlight (Yellow) [Deploys Respawn Tent]", "A3\\Weapons_f\\Data\\UI\\M_chemlight_yellow_CA.paa", 2, true], itemList);
 
     const ammoIconContainer = document.querySelector('.ammo-icon-container');
 

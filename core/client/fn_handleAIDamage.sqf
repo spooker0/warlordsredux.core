@@ -16,6 +16,7 @@ if (_damage < 1) exitWith {
 moveOut _unit;
 _unit setCaptive true;
 _unit setUnconscious true;
+
 [_unit] spawn {
     params ["_unit"];
     private _downedTime = serverTime;
@@ -24,6 +25,10 @@ _unit setUnconscious true;
     _unit setVariable ["WL2_expirationTime", serverTime + 90, true];
 
     while { alive _unit && lifeState _unit == "INCAPACITATED" } do {
+        if (animationState _unit != "Acts_StaticDeath_02") then {
+            [_unit, ["Acts_StaticDeath_02"]] remoteExec ["switchMove", 0];
+        };
+
         uiSleep 1;
         if (serverTime - _downedTime > 90) then {
             deleteVehicle _unit;

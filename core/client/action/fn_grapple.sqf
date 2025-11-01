@@ -1,7 +1,19 @@
 #include "includes.inc"
+player setVariable ["WL2_hasGrapple", 3];
 player addAction [
-	"<t color='#0000ff'>Grapple</t>",
+	"<t color='#0000ff'>Grapple (3 uses)</t>",
 	{
+		params ["_target", "_caller", "_actionId", "_arguments"];
+
+		private _grappleCount = player getVariable ["WL2_hasGrapple", 0];
+		player setVariable ["WL2_hasGrapple", _grappleCount - 1];
+
+		if (_grappleCount <= 1) then {
+			player removeAction _actionId;
+		} else {
+			player setUserActionText [_actionId, format ["<t color='#0000ff'>Grapple (%1 uses)</t>", _grappleCount - 1]];
+		};
+
 		0 spawn {
 			player setVariable ["WL2_rappelling", true];
 			playSoundUI ["a3\sounds_f\air\sfx\sl_4hooksunlock.wss"];
@@ -60,7 +72,7 @@ player addAction [
 
 			private _sound = createSoundSourceLocal ["WLRopeTravelSound", player modelToWorld [0, 0, 0], [], 0];
 
-			private _rappelTime = _distanceToEnd / 60;
+			private _rappelTime = _distanceToEnd / 30;
 
 			private _interval = 0;
 			private _startTime = serverTime;
@@ -113,5 +125,5 @@ player addAction [
 	false,
 	true,
 	"",
-	""
+	"surfaceIsWater (getPosASL player)"
 ];

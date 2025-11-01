@@ -166,6 +166,7 @@ class CfgFunctions {
 			class handleChatMessages {};
 			class handleKeypress {};
 			class handlePlayerDamage {};
+			class handlePlayerDown {};
 			class initClient {};
 			class interceptAction {};
 			class lagMessageDisplay {};
@@ -511,6 +512,7 @@ class CfgFunctions {
 			class action {};
 			class buildMenu {};
 			class getLevelInfo {};
+			class getLoadoutNames {};
 			class levelUp {};
 			class loadData {};
 			class onRespawn {};

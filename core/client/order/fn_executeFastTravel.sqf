@@ -10,6 +10,7 @@ params ["_fastTravelMode", "_marker"];
 // 5: Stronghold
 // 6: Forward Base
 // 7: Vehicle Paradrop FOB
+// 8: Near Stronghold
 
 openMap [false, false];
 
@@ -66,6 +67,13 @@ switch (_fastTravelMode) do {
 		_destination = selectRandom ([_marker] call WL2_fnc_findSpawnsInMarker);
 		_destination = [_destination # 0, _destination # 1, 50];
 		deleteMarker _marker;
+	};
+	case 8: {
+		private _stronghold = BIS_WL_targetSector getVariable ["WL_stronghold", objNull];
+		private _strongholdRadius = _stronghold getVariable ["WL_strongholdRadius", 0];
+		private _randomDir = random 360;
+		private _randomDist = _strongholdRadius + random 10;
+		_destination = _stronghold getPos [_randomDist, _randomDir];
 	};
 };
 
@@ -178,7 +186,8 @@ switch (_fastTravelMode) do {
 			player setVehiclePosition [_destination, [], 0, "NONE"];
 		};
 	};
-	case 6: {
+	case 6;
+	case 8: {
 		{
 			_x setVehiclePosition [_destination, [], 3, "NONE"];
 		} forEach _tagAlong;

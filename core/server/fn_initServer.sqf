@@ -42,9 +42,9 @@ estimatedTimeLeft WL_DURATION_MISSION;
 		estimatedEndServerTime - serverTime < 1;
 	};
 	missionNamespace setVariable ["BIS_WL_missionEnd", true, true];
-	missionNamespace setVariable ["WL2_gameWinner", independent, true];
-	0 spawn WL2_fnc_calculateEndResults;
-	0 remoteExec ["WL2_fnc_missionEndHandle", 0];
+
+	[independent] spawn WL2_fnc_calculateEndResults;
+	[independent, false] remoteExec ["WL2_fnc_missionEndHandle", 0];
 };
 
 if !(isDedicated) then {

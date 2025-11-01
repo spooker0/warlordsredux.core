@@ -189,7 +189,8 @@ if (_ret) then {
 				[WL2_fnc_checkNoStronghold]
 			]
 		};
-		case "StrongholdFT": {
+		case "StrongholdFT";
+		case "StrongholdFTNear": {
 			[
 				[WL2_fnc_checkPlayerInVehicle],
 				[WL2_fnc_checkNearbyEnemies],

@@ -128,7 +128,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["slider", "Announcer text size", [0.1, 1, 0.1, 0.5, "announcerTextSize"]],
         ["slider", "Map marker scale threshold", [0, 1, 0.05, 0.4, "sectorMarkerTextThreshold"]],
         ["slider", "Map icon scale", [0.5, 2, 0.05, 1.0, "mapIconScale"]],
-        ["slider", "Loadout theme", [1, 5, 1, 1, "loadoutTheme"]],
+        ["slider", "Loadout theme", [1, 5, 1, 5, "loadoutTheme"]],
         ["slider", "Missile camera position (left %)", [0, 100, 1, 0, "missileCameraLeft"]],
         ["slider", "Missile camera position (top %)", [0, 100, 1, 100, "missileCameraTop"]],
         ["slider", "Killfeed scale", [0.5, 1.2, 0.05, 1.0, "killfeedScale"]],
@@ -144,7 +144,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["slider", "Incoming indicator position (left %)", [0, 100, 1, 5, "incomingIndicatorLeft"]],
         ["slider", "Incoming indicator position (top %)", [0, 100, 1, 20, "incomingIndicatorTop"]],
         ["category", "General settings"],
-        ["checkbox", "Disable 3rd person view (1.5x reward)", ["3rdPersonDisabled", false]],
+        ["checkbox", "Disable 3rd person view (2x reward)", ["3rdPersonDisabled", false]],
         ["checkbox", "Autonomous mode off by default", ["enableAuto", false]],
         ["checkbox", "Spawn vehicles with empty inventory", ["spawnEmpty", false]],
         ["checkbox", "Disable missile cameras", ["disableMissileCameras", false]],
@@ -172,7 +172,8 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["checkbox", "Show hint: Advanced SAMs", ["showHintAdvancedSam", true]],
         ["checkbox", "Show hint: LOAL", ["showHintLoal", true]],
         ["checkbox", "Show hint: Blackfish", ["showHintBlackfish", true]],
-        ["checkbox", "Show hint: HMD Settings", ["showHintHMDSettings", true]]
+        ["checkbox", "Show hint: HMD Settings", ["showHintHMDSettings", true]],
+        ["checkbox", "Show hint: Animation", ["showHintAnimation", true]]
     ];
 
     if (_isAdmin || _isModerator) then {

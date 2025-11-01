@@ -72,6 +72,7 @@ if (count _presetVehicles == 0) then {
 		_wp setWaypointType "CYCLE";
 
 		_vehicle allowCrewInImmobile [true, true];
+		[_vehicle, [1, 1, 1]] remoteExec ["setVehicleTIPars", 0];
 
 		if (typeOf _vehicle == "I_LT_01_scout_F") then {
 			_hasRadar = true;
@@ -125,6 +126,7 @@ if (count _presetVehicles == 0) then {
 		_wp1 setWaypointType "CYCLE";
 
 		_vehicle allowCrewInImmobile [true, true];
+		[_vehicle, [1, 1, 1]] remoteExec ["setVehicleTIPars", 0];
 	} forEach _presetVehicles;
 };
 

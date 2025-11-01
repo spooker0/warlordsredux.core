@@ -138,7 +138,7 @@ uiNamespace setVariable ["WL2_deadActionId", 0];
 
 private _display = uiNamespace getVariable ["RscWLDeathInfoMenu", displayNull];
 if (isNull _display) then {
-    "deathInfo" cutRsc ["RscWLDeathInfoMenu", "PLAIN", -1, true, true];
+    "deathInfo" cutRsc ["RscWLDeathInfoMenu", "PLAIN", -1, false, true];
     _display = uiNamespace getVariable "RscWLDeathInfoMenu";
 };
 private _texture = _display displayCtrl 5502;
@@ -186,13 +186,27 @@ _texture ctrlAddEventHandler ["JSDialog", {
             _crawlSounds pushBack format ["a3\sounds_f\characters\crawl\concrete_crawl_%1.wss", _i];
         };
         playSoundUI [selectRandom _crawlSounds];
+
+        0 spawn {
+            private _playerHelpCall = player getVariable ["WL2_playerHelpCall", objNull];
+            if (!alive _playerHelpCall) exitWith {
+                private _soundSource = createSoundSource ["WLDownedSound", player modelToWorld [0, 0, 0], [], 0];
+                player setVariable ["WL2_playerHelpCall", _soundSource];
+
+                while { alive player && lifeState player == "INCAPACITATED" } do {
+                    uiSleep 0.1;
+                };
+
+                deleteVehicle _soundSource;
+            };
+        };
     };
     true;
 }];
 
 waitUntil {
     uiSleep 0.1;
-    (alive player && lifeState player != "INCAPACITATED") || WL_IsSpectator;
+    (alive player && lifeState player != "INCAPACITATED") || WL_IsSpectator || BIS_WL_missionEnd;
 };
 
 "deathInfo" cutText ["", "PLAIN"];

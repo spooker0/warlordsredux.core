@@ -1,5 +1,5 @@
 :root {
-    --main-bg-color: #344E41;
+    --main-bg-color: rgba(52, 78, 65, 0.5);
     --panel-color: #3A5A40;
     --border-color: #588157;
     --lighter-color: #A3B18A;
@@ -11,7 +11,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Consolas', monospace;
 }
 
 body,
@@ -19,6 +19,8 @@ html {
     height: 100%;
     text-align: center;
     user-select: none;
+    background-color: var(--main-bg-color);
+    overflow: hidden;
 }
 
 img {
@@ -26,17 +28,7 @@ img {
     transition: opacity 0.2s ease;
 }
 
-.menu-title {
-    background-color: var(--panel-color);
-    color: var(--text-color);
-    padding: 1vh;
-    font-size: 2.2vh;
-    font-weight: bold;
-    border-bottom: 2px solid var(--main-bg-color);
-}
-
 .panel {
-    background-color: var(--main-bg-color);
     color: var(--text-color);
     display: inline-block;
     vertical-align: top;
@@ -52,11 +44,11 @@ img {
 }
 
 .panel.left-panel {
-    width: 600px;
+    width: 30vw;
 }
 
 .panel.right-panel {
-    width: calc(100vw - 600px - 100px);
+    width: calc(70vw - 100px);
     overflow-y: auto;
 }
 
@@ -64,18 +56,30 @@ img {
     display: none;
 }
 
-.loadout-menu-wrapper {
-    position: relative;
-    display: inline-block;
-    border-radius: 10px;
-    border: 2px solid var(--border-color);
-    margin-top: 4vh;
-    background: var(--main-bg-color);
+.loadout-menu {
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1vw;
+    font-size: 0;
+    width: auto;
+    height: auto;
 }
 
-.loadout-menu {
-    width: 100%;
-    font-size: 0;
+.menu-title {
+    font-size: 18pt;
+    margin-bottom: 15px;
+    color: white;
+    padding-top: 1vh;
+}
+
+.title-weight {
+    font-size: 16pt;
+    color: white;
 }
 
 .slot {
@@ -255,7 +259,7 @@ img {
 .ammo-row,
 .item-row {
     border: 1px solid var(--border-color);
-    padding: 10px;
+    padding-left: 10px;
     text-align: left;
 }
 
@@ -278,8 +282,8 @@ img {
 .weapon-list li,
 .outfit-list li,
 .backpack-list li {
-    height: 60px;
-    line-height: 40px;
+    height: 36px;
+    line-height: 36px;
 }
 
 .weapon-icon,
@@ -287,8 +291,8 @@ img {
 .backpack-icon,
 .ammo-icon,
 .item-icon {
-    height: 40px;
-    margin-right: 30px;
+    height: 24px;
+    margin: 0 20px 0 0;
     vertical-align: middle;
 }
 
@@ -469,31 +473,28 @@ img {
 .loadouts-title {
     margin-top: 2vh;
     margin-bottom: 1vh;
-}
-
-.loadouts-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 1vh;
-    height: 8vh;
-    margin-top: 15px;
+    font-size: 20pt;
 }
 
 .loadout {
-    flex: 1;
-    max-width: 8vh;
-    height: 100%;
-    font-size: 32pt;
     background-color: var(--panel-color);
     border: 2px solid var(--panel-color);
     border-radius: 5px;
     color: var(--text-color);
-    font-size: 20px;
-    overflow: hidden;
+    font-size: 10pt;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    flex: 1;
+    padding: 5px 15px;
+    margin-top: 3px;
+}
+
+.loadout-weapon-name {
+    flex: 33%;
+    margin: 0 10px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .selected-loadout {
@@ -508,14 +509,14 @@ img {
 .loadouts-options-row {
     display: flex;
     justify-content: space-between;
-    margin-top: 15px;
+    margin-top: 3px;
     gap: 15px;
 }
 
 .reset-all,
-.copy-current {
+.reset-current {
     flex: 1;
-    height: 50px;
+    height: 30px;
     background-color: var(--panel-color);
     border: 2px solid var(--panel-color);
     border-radius: 5px;
@@ -528,7 +529,7 @@ img {
 }
 
 .reset-all:hover,
-.copy-current:hover {
+.reset-current:hover {
     background-color: var(--border-color);
 }
 

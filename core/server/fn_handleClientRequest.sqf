@@ -142,7 +142,7 @@ if (_action == "scan") exitWith {
 	[_side, _message] call _broadcastActionToSide;
 
 	private _spawnPos = getPosATL _sector;
-	_spawnPos set [2, 1000];
+	_spawnPos set [2, 500];
 
 	private _uavGroup = createGroup _side;
 	_uavGroup deleteGroupWhenEmpty true;
@@ -185,7 +185,7 @@ if (_action == "scan") exitWith {
 			alive _uav &&
 			fuel _uav > 0 &&
 			_uav distance2D _sector < 1000 &&
-			(_uav modelToWorld [0, 0, 0]) # 2 > 500
+			(_uav modelToWorld [0, 0, 0]) # 2 > 200
 		} do {
 			uiSleep 1;
 		};

@@ -21,6 +21,19 @@ html {
     background-color: rgba(34, 34, 34, 0.8);
 }
 
+.animation-timer {
+    position: absolute;
+    width: 30vw;
+    height: 3vh;
+    left: 35vw;
+    top: 80vh;
+    text-align: center;
+    line-height: 3vh;
+    color: white;
+    font-weight: bolder;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
 p {
     color: #ffffff;
     font-size: 18pt;

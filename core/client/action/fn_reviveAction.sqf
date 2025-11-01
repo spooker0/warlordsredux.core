@@ -11,10 +11,16 @@ private _reviveActionId = player addAction [
 
             [[0, 8, 2]] call WL2_fnc_actionLockCamera;
 
+            ["Animation", ["REVIVE", [
+                ["Cancel", "Action"],
+                ["", "ActionContext"],
+                ["", "navigateMenu"]
+            ]], WL_DURATION_REVIVE, true] call WL2_fnc_showHint;
+
             [player, ["AinvPknlMstpSlayWrflDnon_medic"]] remoteExec ["switchMove", 0];
             private _reviveSuccess = false;
             private _startCheckingUnhold = false;
-            private _endTime = serverTime + 3.5;
+            private _endTime = serverTime + WL_DURATION_REVIVE;
             while { true } do {
                 // interrupts
                 if (!alive player) then {
@@ -44,6 +50,8 @@ private _reviveActionId = player addAction [
                 };
                 uiSleep 0.01;
             };
+
+            ["Animation"] call WL2_fnc_showHint;
 
             private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
             private _hitmarkerVolume = _settingsMap getOrDefault ["hitmarkerVolume", 0.5];

@@ -58,6 +58,12 @@ switch (_conditionName) do {
         };
         count _findIsStronghold > 0;
     };
+    case "fastTravelNearStronghold": {
+        private _findIsStronghold = (BIS_WL_sectorsArray # 2) select {
+            (_x getVariable ["WL_stronghold", objNull]) == _target
+        };
+        count _findIsStronghold > 0;
+    };
     case "fastTravelStrongholdTarget": {
         private _findIsStronghold = (BIS_WL_sectorsArray # 2) select {
             !isNull (_x getVariable ["WL_stronghold", objNull]) && _x == _target

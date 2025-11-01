@@ -124,10 +124,9 @@
 							missionNamespace setVariable ["BIS_WL_missionEnd", true, true];
 
 							private _oppositeTeam = if (_side == west) then { east } else { west };
-							missionNamespace setVariable ["WL2_gameWinner", _oppositeTeam, true];
 
-							0 spawn WL2_fnc_calculateEndResults;
-							0 remoteExec ["WL2_fnc_missionEndHandle", 0];
+							[_oppositeTeam] spawn WL2_fnc_calculateEndResults;
+							[_oppositeTeam, true] remoteExec ["WL2_fnc_missionEndHandle", 0];
 						};
 						default {
 							missionNamespace setVariable [_waitVar, 0];

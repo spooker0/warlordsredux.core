@@ -46,40 +46,11 @@ if (_damage < 1) exitWith {
 // Downed
 moveOut _unit;
 switchCamera player;
-
-[_unit] spawn {
-    params ["_unit"];
-#if __GAME_BUILD__ <= 153351
-    {
-        _x setCaptive true;
-        _x setUnconscious true;
-    } forEach (units _unit);
-#endif
-
-    _unit setCaptive true;
-    _unit setUnconscious true;
-
-    private _unconsciousTime = _unit getVariable ["WL_unconsciousTime", 0];
-    if (_unconsciousTime > 0) exitWith {};
-    _unit setVariable ["WL2_expirationTime", serverTime + 30, true];
-
-    private _startTime = serverTime;
-    private _downTime = 0;
-    while { alive _unit && lifeState _unit == "INCAPACITATED" } do {
-        _downTime = serverTime - _startTime;
-        setPlayerRespawnTime ((30 - _downTime) max 1);
-
-        private _expirationTime = _unit getVariable ["WL2_expirationTime", serverTime + 30];
-        if (serverTime > _expirationTime) then {
-            forceRespawn _unit;
-            break;
-        };
-
-        _unit setPosASL (getPosASL _unit);
-
-        _unit setVariable ["WL_unconsciousTime", _downTime];
-        uiSleep 0.1;
-    };
+private _unconsciousTime = _unit getVariable ["WL_unconsciousTime", 0];
+if (_unconsciousTime == 0) then {
+    _unit setVariable ["WL_unconsciousTime", 0.1];
+    [_unit] spawn WL2_fnc_handlePlayerDown;
 };
+
 [_unit, _source, _instigator] remoteExec ["WL2_fnc_handleEntityRemoval", 2];
 0.99;

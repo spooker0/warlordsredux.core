@@ -4,16 +4,9 @@ if (isNull _display) then {
     _display = createDialog ["RscWLBrowserMenu", true];
 };
 
-// _display displayAddEventHandler ["KeyDown", {
-//     params ["_display", "_key", "_shift", "_ctrl", "_alt"];
-//     if (_key == DIK_B) then {
-//         private _texture = _display displayCtrl 5501;
-//         _texture ctrlWebBrowserAction ["OpenDevConsole"];
-//     };
-// }];
-
 private _texture = _display displayCtrl 5501;
 _texture ctrlWebBrowserAction ["LoadFile", "src\ui\gen\loadout.html"];
+// _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
 _texture ctrlAddEventHandler ["JSDialog", {
     params ["_texture", "_isConfirmDialog", "_message"];
@@ -43,23 +36,12 @@ _texture ctrlAddEventHandler ["JSDialog", {
     if (_firstLetter == "c") exitWith {
         private _loadoutIndex = profileNamespace getVariable [format ["WLC_loadoutIndex_%1", BIS_WL_playerSide], 0];
         private _loadoutVar = format ["WLC_savedLoadout_%1_%2", BIS_WL_playerSide, _loadoutIndex];
-        private _profileString = profileNamespace getVariable [_loadoutVar, ""];
+        profileNamespace setVariable [_loadoutVar, []];
 
-        _profileString = format ["profileNamespace setVariable ['%1', %2];", _loadoutVar, _profileString];
-        uiNamespace setVariable ["display3DENCopy_data", ["Copy Text", _profileString]];
+        private _script = format ["updateLoadoutNames(%1)", [] call WLC_fnc_getLoadoutNames];
+        _texture ctrlWebBrowserAction ["ExecJS", _script];
 
-        private _display = ctrlParent _texture;
-        [_display] spawn {
-            params ["_display"];
-            private _copyInterface = _display createDisplay "display3denCopy";
-            private _copyButton = _copyInterface displayCtrl 204;
-
-            waitUntil {
-                _copyButton = _copyInterface displayCtrl 204;
-                isNull _copyInterface || !(isNull _copyButton);
-            };
-            _copyButton ctrlShow false;
-        };
+        true;
     };
 
     if (_message == "exit") exitWith {
@@ -71,6 +53,21 @@ _texture ctrlAddEventHandler ["JSDialog", {
     private _loadoutIndex = profileNamespace getVariable [format ["WLC_loadoutIndex_%1", BIS_WL_playerSide], 0];
     private _responseArray = fromJSON _message;
     profileNamespace setVariable [format ["WLC_savedLoadout_%1_%2", BIS_WL_playerSide, _loadoutIndex], _responseArray];
+
+    private _dummy = createVehicleLocal [typeof player, [0, 0, 0], [], 0, "NONE"];
+    _dummy setUnitLoadout _responseArray;
+    private _weight = loadAbs _dummy;
+    private _maxLoad = maxLoad _dummy;
+    deleteVehicle _dummy;
+
+    private _script = format [
+        "updateLoadoutNames(%1);updateWeight(%2, %3);",
+        [] call WLC_fnc_getLoadoutNames,
+        _weight,
+        _maxLoad
+    ];
+    _texture ctrlWebBrowserAction ["ExecJS", _script];
+    true;
 }];
 
 _texture ctrlAddEventHandler ["PageLoaded", WLC_fnc_pageLoad];

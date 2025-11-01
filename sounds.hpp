@@ -158,6 +158,19 @@ class CfgSFX {
         sound0[] = { "@a3\sounds_f\vehicles\air\noises\wind_open_int.wss", 1, 1.0, 100, 1, 0, 0, 0 };
 		empty[] = { "", 0, 0, 0, 0, 0, 0, 0 };
     };
+
+    class WLDowned {
+        sounds[] = { "sound0", "sound1", "sound2", "sound3", "sound4", "sound5", "sound6", "sound7" };
+        sound0[] = { "@a3\sounds_f\characters\human-sfx\person0\p0_moan_13_words.wss", 5, 1.0, 30, 0.125, 2, 3, 4 };
+        sound1[] = { "@a3\sounds_f\characters\human-sfx\person0\p0_moan_14_words.wss", 5, 1.0, 30, 0.125, 2, 3, 4 };
+        sound2[] = { "@a3\sounds_f\characters\human-sfx\person0\p0_moan_15_words.wss", 5, 1.0, 30, 0.125, 2, 3, 4 };
+        sound3[] = { "@a3\sounds_f\characters\human-sfx\person0\p0_moan_16_words.wss", 5, 1.0, 30, 0.125, 2, 3, 4 };
+        sound4[] = { "@a3\sounds_f\characters\human-sfx\person0\p0_moan_17_words.wss", 5, 1.0, 30, 0.125, 2, 3, 4 };
+        sound5[] = { "@a3\sounds_f\characters\human-sfx\person0\p0_moan_18_words.wss", 5, 1.0, 30, 0.125, 2, 3, 4 };
+        sound6[] = { "@a3\sounds_f\characters\human-sfx\person0\p0_moan_19_words.wss", 5, 1.0, 30, 0.125, 2, 3, 4 };
+        sound7[] = { "@a3\sounds_f\characters\human-sfx\person0\p0_moan_20_words.wss", 5, 1.0, 30, 0.125, 2, 3, 4 };
+        empty[] = { "", 0, 0, 0, 0, 0, 0, 0 };
+    };
 };
 
 class CfgVehicles {
@@ -171,5 +184,9 @@ class CfgVehicles {
 
     class WLRopeTravelSound {
         sound = "WLRopeTravel";
+    };
+
+    class WLDownedSound {
+        sound = "WLDowned";
     };
 };

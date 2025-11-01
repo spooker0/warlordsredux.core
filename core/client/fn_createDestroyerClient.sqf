@@ -83,6 +83,32 @@ private _staticProps = [
     _staticProp enableSimulation false;
 } forEach _staticProps;
 
+private _trolleyLocations = [
+    [3.5, 16, 8],
+    [-3.5, 16, 8]
+];
+{
+    private _trolley = createVehicleLocal ["Land_ToolTrolley_02_F", [0, 0, 0], [], 0, "CAN_COLLIDE"];
+    _trolley setDir (_destroyerDir + 180 * (_forEachIndex - 1));
+    _trolley setPosWorld (_destroyerBase modelToWorldWorld _x);
+    _trolley allowDamage false;
+    _trolley addAction [
+        "<t color='#00FF00'>Grab Traversal Tools</t>",
+        {
+            params ["_target", "_caller", "_actionId"];
+            call WL2_fnc_grapple;
+        },
+        [],
+        100,
+        false,
+        false,
+        "",
+        "cameraOn == player && player getVariable [""WL2_hasGrapple"", 0] <= 0",
+        5,
+        false
+    ];
+} forEach _trolleyLocations;
+
 _controller addAction [
     "<t color='#FF0000'>Control Missile Battery</t>",
     {

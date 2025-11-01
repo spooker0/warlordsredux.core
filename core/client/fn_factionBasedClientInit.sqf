@@ -5,10 +5,12 @@ switch (side group player) do {
 	case west: {
 		_unit addMagazineGlobal "Laserbatteries";
 		_unit addWeaponGlobal "Laserdesignator";
+		_unit removeItem "B_UAVTerminal";
 	};
 	case east: {
 		_unit addMagazineGlobal "Laserbatteries";
 		_unit addWeaponGlobal "Laserdesignator_02";
+		_unit removeItem "O_UAVTerminal";
 	};
 	case independent: {
 		_unit addMagazineGlobal "Laserbatteries";

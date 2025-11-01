@@ -21,9 +21,10 @@ private _playerNextLevelScore = ["getNextLevelScore"] call WLC_fnc_getLevelInfo;
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _themeIndex = _settingsMap getOrDefault ["loadoutTheme", 1];
+private _loadoutNames = [] call WLC_fnc_getLoadoutNames;
 
 private _script = format [
-    "updateLoadout(atobr(""%1""), %2, atobr(""%3""), atobr(""%4""), %5, %6, %7, %8);",
+    "updateLoadout(atobr(""%1""), %2, atobr(""%3""), atobr(""%4""), %5, %6, %7, %8, %9);",
     _loadoutText,
     _loadoutIndex,
     _weaponDataText,
@@ -31,7 +32,8 @@ private _script = format [
     _playerLevel,
     _playerScore,
     _playerNextLevelScore,
-    _themeIndex
+    _themeIndex,
+    _loadoutNames
 ];
 
 _texture ctrlWebBrowserAction ["ExecJS", _script];
