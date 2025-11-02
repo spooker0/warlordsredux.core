@@ -78,6 +78,7 @@ call WL2_fnc_demolishAction;
 call WL2_fnc_hmdSettingsAction;
 
 0 spawn WL2_fnc_drawRadarName;
+0 spawn WL2_fnc_interceptAction;	// just in case it's overridden
 
 call POLL_fnc_pollAction;
 call WL2_fnc_afkAction;

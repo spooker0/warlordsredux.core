@@ -49,6 +49,13 @@ private _vehicleInfoText = toJSON (
             _vehicleName = format ["(SHARED) %1", _vehicleName];
         };
 
+        private _vehicleIcon = getText (configFile >> "CfgVehicles" >> typeOf _vehicle >> "picture");
+		_vehicleIcon = if (_vehicleIcon in ["pictureThing", "pictureStaticObject"]) then {
+			"a3\ui_f\data\map\vehicleicons\iconcratesupp_ca.paa";
+		} else {
+			_vehicleIcon regexReplace ["^\\", ""];
+		};
+
         private _availableActions = ["remove"];
 
         private _unwantedPassengers = (crew _vehicle) select {
@@ -100,7 +107,7 @@ private _vehicleInfoText = toJSON (
             _availableActions pushBack "refuel";
         };
 
-        [netid _vehicle, _vehicleName, _availableActions]
+        [netid _vehicle, _vehicleName, _vehicleIcon, _availableActions]
     }
 );
 _vehicleInfoText = _texture ctrlWebBrowserAction ["ToBase64", _vehicleInfoText];

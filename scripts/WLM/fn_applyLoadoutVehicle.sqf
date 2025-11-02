@@ -82,12 +82,6 @@ if (_eligibleFreeRearm) then {
     private _rearmTime = WL_ASSET(_assetActualType, "rearm", 600);
     _asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
 
-    private _loadoutDefaults = profileNamespace getVariable ["WLM_loadoutDefaults", createHashmap];
-    _loadoutDefaults set [_assetActualType, _magTurretsToAdd];
-    if (count _magTurretsToRemove > 0) then {
-        profileNamespace setVariable ["WLM_loadoutDefaults", _loadoutDefaults];
-    };
-
     playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Rearm.wss", _asset, false, getPosASL _asset, 2, 1, 75];
     [toUpper localize "STR_A3_WL_popup_asset_rearmed"] spawn WL2_fnc_smoothText;
 } else {

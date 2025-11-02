@@ -5,6 +5,8 @@ private _destroyerBase = createSimpleObject ["Land_Destroyer_01_base_F", _positi
 _destroyerBase setDir _destroyerDir;
 private _destroyerPos = getPosWorld _destroyerBase;
 
+_destroyerBase setVariable ["WL2_destroyerId", _destroyerId, true];
+
 private _destroyerPitchBank = _destroyerBase call bis_fnc_getPitchBank;
 _destroyerPitchBank params [["_destroyerPitch", 0], ["_destroyerBank", 0]];
 
@@ -96,35 +98,6 @@ private _createMrls = {
 
 call _createMrls;
 
-private _ropeLocations = [
-    [0, -110.5, 14],
-    [0, 92, 10.5],
-    [11, 60, 17],
-    [-11, 60, 17]
-];
-private _ropeDirections = [0, 180, 180, 180];
-private _ropeMinLevel = [0, 0, 9, 9];
-
-{
-    private _ropeLocation = _x;
-
-    private _ropePosition = _destroyerBase modelToWorldWorld _ropeLocation;
-    private _rope = createSimpleObject ["Land_Rope_F", _ropePosition, true];
-    _rope setDir (getDir _destroyerBase + _ropeDirections # _forEachIndex);
-    _rope setPosASL _ropePosition;
-    _rope setVariable ["WL2_rappelRopeMinLevel", _ropeMinLevel # _forEachIndex];
-
-    private _marker = format ["destroyer%1_rappel%2", _destroyerId, _forEachIndex];
-    createMarkerLocal [_marker, _ropePosition];
-    _marker setMarkerTypeLocal "loc_Quay";
-    _marker setMarkerAlphaLocal 0.4;
-    _marker setMarkerSizeLocal [0.7, 0.7];
-
-    private _existingRopes = missionNamespace getVariable ["WL2_rappelRopes", []];
-    _existingRopes pushBack _rope;
-    missionNamespace setVariable ["WL2_rappelRopes", _existingRopes];
-} forEach _ropeLocations;
-
 private _outlineMarkerLocation = _destroyerBase modelToWorld [0, -10, 0];
 private _outlineMarker = createMarkerLocal [format ["marker_%1_outline", _destroyerName], _outlineMarkerLocation];
 _outlineMarker setMarkerShapeLocal "RECTANGLE";
@@ -137,12 +110,6 @@ _destroyerMarker setMarkerShapeLocal "ICON";
 _destroyerMarker setMarkerTypeLocal "loc_boat";
 _destroyerMarker setMarkerTextLocal format ["%1 (DDG-%2)", _destroyerName, _hullNumber];
 _destroyerMarker setMarkerColor "ColorWhite";
-
-if (isDedicated) then {
-    uiSleep 60;
-} else {
-    uiSleep 10;
-};
 
 [_destroyerBase, _mrls, _controller, true] remoteExec ["WL2_fnc_createDestroyerClient", 0, true];
 
