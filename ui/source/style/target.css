@@ -79,8 +79,13 @@ h1 {
 
 h2 {
     font-size: calc(var(--base-font-size) * 1.2);
-    display: inline-block;
     margin-right: var(--base-font-size);
+}
+
+.range-warning {
+    font-size: calc(var(--base-font-size) * 0.9);
+    color: red;
+    margin-top: calc(var(--base-font-size) * 0.3);
 }
 
 .gps-controls {

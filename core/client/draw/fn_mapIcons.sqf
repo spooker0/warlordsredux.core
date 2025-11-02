@@ -111,6 +111,14 @@
 		};
 		_mapData set ["sideVehiclesAll", _sideVehiclesAll];
 
+		private _fobSupplies = _sideVehicles select {
+			typeOf _x in [
+				"Land_Cargo20_blue_F",
+				"Land_Cargo20_red_F"
+			]
+		};
+		_mapData set ["fobSupplies", _fobSupplies];
+
 		private _alwaysShowEwUnits = _ewNetworkUnits apply {
 			[_x, 10]
 		};

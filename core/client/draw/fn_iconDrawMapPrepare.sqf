@@ -203,14 +203,16 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		_baseColor,
 		_fillTexture
 	];
-	_drawEllipses pushBack [
-		_position,
-		WL_FOB_MIN_DISTANCE,
-		WL_FOB_MIN_DISTANCE,
-		0,
-		_baseColor,
-		""
-	];
+	if (WL_AssetActionTarget == _base) then {
+		_drawEllipses pushBack [
+			_position,
+			WL_FOB_MIN_DISTANCE,
+			WL_FOB_MIN_DISTANCE,
+			0,
+			_baseColor,
+			""
+		];
+	};
 
 	private _sectorsInRange = _x getVariable ["WL2_forwardBaseSectors", []];
 	{
@@ -230,6 +232,21 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		];
 	} forEach _sectorsInRange;
 } forEach _forwardBases;
+
+private _fobSupplies = _mapData getOrDefault ["fobSupplies", []];
+{
+	if (WL_AssetActionTarget != _x) then {
+		continue;
+	};
+	_drawEllipses pushBack [
+		getPosASL _x,
+		WL_FOB_CAPTURE_RANGE,
+		WL_FOB_CAPTURE_RANGE,
+		0,
+		[_x, _mapColorCache] call WL2_fnc_iconColor,
+		""
+	];
+} forEach _fobSupplies;
 
 // Draw strongholds
 private _strongholds = missionNamespace getVariable ["WL_strongholds", []];

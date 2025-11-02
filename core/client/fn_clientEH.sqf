@@ -63,6 +63,7 @@ addMissionEventHandler ["HandleChatMessage", {
 		} forEach actionKeys ["networkStats"];
 
 		if (_isPressed) then {
+			0 spawn WL2_fnc_interceptAction;
 			0 spawn WL2_fnc_scoreboard;
 		};
 	}];

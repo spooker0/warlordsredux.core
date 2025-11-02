@@ -183,7 +183,7 @@ while { alive _asset && cameraOn == _asset } do {
 
     private _munitions = (8 allObjects 2) select { _x distance _asset < _ecmRange } select {
         private _munition = _x;
-        _ecmJammerType findIf { _munition isKindOf _x } >= 0 && {
+        _ecmJammerType findIf { _munition isKindOf _x && typeOf _munition != "ammo_Missile_Cruise_01" } >= 0 && {
 #if WL_ECM_TEST
             true;
 #else

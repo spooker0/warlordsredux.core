@@ -66,17 +66,26 @@ function setGPSData(selectionIndex, gridCoord, targetRange, assetRange, inRange)
     }
 
     const targetRangeDisplayEl = document.querySelector('.mode-gps .target-range-display');
-    targetRangeDisplayEl.textContent = `TGT: ${targetRange}`;
+    targetRangeDisplayEl.textContent = `TARGET DISTANCE: ${targetRange} KM`;
 
     const assetRangeDisplayEl = document.querySelector('.mode-gps .asset-range-display');
-    assetRangeDisplayEl.textContent = `RNG: ${assetRange}`;
+    assetRangeDisplayEl.textContent = `EFFECTIVE RANGE: ${assetRange} KM`;
 
+    const rangeWarningEl = document.querySelector('.mode-gps .range-warning');
     if (inRange) {
         targetRangeDisplayEl.style.color = "green";
         assetRangeDisplayEl.style.color = "green";
+        rangeWarningEl.textContent = "FIRE NOW";
+        rangeWarningEl.style.color = "green";
     } else {
         targetRangeDisplayEl.style.color = "red";
         assetRangeDisplayEl.style.color = "red";
+        if (targetRange <= 0.5) {
+            rangeWarningEl.textContent = "TOO CLOSE TO TARGET";
+        } else {
+            rangeWarningEl.textContent = "ALIGN HEADING AND GET CLOSER / HIGHER / FASTER";
+        }
+        rangeWarningEl.style.color = "red";
     }
 }
 
