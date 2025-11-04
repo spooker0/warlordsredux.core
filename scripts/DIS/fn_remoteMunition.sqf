@@ -61,7 +61,8 @@ _projectile setVelocityModelSpace _projectileVelocity;
 [_projectile, [player, player]] remoteExec ["setShotParents", 2];
 [_projectile, driver _asset] remoteExec ["DIS_fnc_startMissileCamera", _asset];
 
-if (_bunkerBuster) then {
+if (_bunkerBuster > 0) then {
+    _projectile setVariable ["DIS_bunkerBusterSteps", _bunkerBuster];
     _projectile addEventHandler ["Explode", {
         _this spawn DIS_fnc_bunkerBuster;
     }];

@@ -1,6 +1,8 @@
 #include "includes.inc"
 params ["_projectile", "_position"];
 
+private _bunkerBusterSteps = _projectile getVariable ["DIS_bunkerBusterSteps", 7];
+
 private _bombClass = typeof _projectile;
 private _penetrator = createVehicle [_bombClass, _position, [], 0, "NONE"];
 _penetrator enableSimulation false;
@@ -34,6 +36,7 @@ triggerAmmo _penetrator;
 private _nearDestroyables = (_position nearObjects 30) select {
     _x getVariable ["WL2_canDemolish", false];
 };
+
 {
-    [_x, 7] call WL2_fnc_demolishStep;
+    [_x, _bunkerBusterSteps] call WL2_fnc_demolishStep;
 } forEach _nearDestroyables;

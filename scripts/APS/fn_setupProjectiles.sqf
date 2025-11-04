@@ -41,7 +41,7 @@ _this addEventHandler ["Fired", {
 		};
 	};
 	private _projectileRemote = _projectileConfig getOrDefault ["remote", false];
-	private _projectileBunker = _projectileConfig getOrDefault ["bunker", false];
+	private _projectileBunker = _projectileConfig getOrDefault ["bunker", 0];
 	if (_projectileRemote) then {
 		private _remoteController = _unit getVariable ["WL2_selectedTargetPlayer", objNull];
 		if (alive _remoteController) then {
@@ -89,7 +89,8 @@ _this addEventHandler ["Fired", {
 		[_projectile, _unit] spawn DIS_fnc_advancedSam;
 	};
 
-	if (_projectileBunker) then {
+	if (_projectileBunker > 0) then {
+		_projectile setVariable ["DIS_bunkerBusterSteps", _projectileBunker];
 		_projectile addEventHandler ["Explode", {
 			_this spawn DIS_fnc_bunkerBuster;
 		}];
