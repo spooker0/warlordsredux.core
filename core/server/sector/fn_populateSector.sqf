@@ -220,7 +220,7 @@ while {_i < _garrisonSize} do {
 
 	private _i2 = 0;
 	for "_i2" from 0 to _grpSize do {
-		private _newUnit = _newGrp createUnit [selectRandom _unitsPool, _pos, [], 100, "NONE"];
+		private _newUnit = _newGrp createUnit [selectRandom _unitsPool, _pos, [], 30, "NONE"];
 		private _posAboveGround = getPosATL _newUnit;
 		_posAboveGround set [2, 100];
 		_newUnit setVehiclePosition [_posAboveGround, [], 0, "CAN_COLLIDE"];
@@ -238,7 +238,7 @@ while {_i < _garrisonSize} do {
 
 	_newWP = _newGrp addWaypoint [_pos, 0];
 	_newWP setWaypointType "HOLD";
-	uiSleep 0.001;
+	uiSleep 0.1;
 };
 
 // {

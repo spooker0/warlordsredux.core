@@ -77,7 +77,6 @@ function renderScoreboard(players, firstRender) {
 
     const bluforTotals = zeroTotals();
     const opforTotals = zeroTotals();
-    let scrollTarget = null;
 
     const buildRows = (list, body, side) => {
         const frag = document.createDocumentFragment();
@@ -115,9 +114,6 @@ function renderScoreboard(players, firstRender) {
             frag.appendChild(row);
 
             if (player.isPlayer) {
-                if (firstRender) {
-                    scrollTarget = row;
-                }
                 row.style.border = '2px solid yellow';
             };
 
@@ -139,11 +135,6 @@ function renderScoreboard(players, firstRender) {
 
     renderFooter(bluFooterRow, 'BLUFOR', bluforTotals);
     renderFooter(opfFooterRow, 'OPFOR', opforTotals);
-
-    if (scrollTarget && firstRender) {
-        const scroller = document.getElementById('scoreboard-scroll');
-        scroller.scrollTop = scrollTarget.offsetTop - 51;
-    }
 }
 
 const STEP = 50;

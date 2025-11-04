@@ -31,22 +31,18 @@ if (count _baseArr == 0) exitWith {
 };
 
 private _base = _baseArr # 0;
-private _knots = [_base];
-private _linked = _knots;
-
-while {count _knots > 0} do {
-	private _knotsCurrent = _knots;
-	_knots = [];
+private _lastLinkCount = 0;
+private _linked = [_base];
+while { _lastLinkCount < count _linked } do {
+	_lastLinkCount = count _linked;
 	{
 		{
 			private _link = _x;
-			if (!(_link in _linked) && (_link in _owned)) then {
-				_linked pushBack _link;
-				_knots pushBack _link;
+			if (_link in _owned) then {
+				_linked pushBackUnique _link;
 			};
 		} forEach (_x getVariable ["WL2_connectedSectors", []]);
-	} forEach _knotsCurrent;
-	uiSleep 0.0001;
+	} forEach _linked;
 };
 
 {

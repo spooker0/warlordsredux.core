@@ -185,6 +185,7 @@ private _makeGPSBombTextArray = {
 	};
 };
 
+private _lastCameraOn = cameraOn;
 while { !BIS_WL_missionEnd } do {
 	uiSleep 0.05;
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
@@ -196,6 +197,14 @@ while { !BIS_WL_missionEnd } do {
 	uiNamespace setVariable ["DIS_currentTargetingMode", _currentMode];
 
 	private _script = "";
+
+	if (cameraOn != _lastCameraOn) then {
+		_lastCameraOn = cameraOn;
+		{
+			private _hintEntry = _y;
+			_y set [2, false];
+		} forEach _hintMap;
+	};
 
 	private _hintEntry = _hintMap getOrDefault [_currentMode, []];
 	if (count _hintEntry > 0) then {

@@ -135,22 +135,24 @@ inGameUISetEventHandler ["Action", toString _interceptAction];
 
 private _interceptScrollUp = {
     private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
-    if (isNull _display) exitWith {
+    if (isNull _display) then {
         false;
+    } else {
+        private _texture = _display displayCtrl 5502;
+        _texture ctrlWebBrowserAction ["ExecJS", "scrollUp();"];
+        true;
     };
-    private _texture = _display displayCtrl 5502;
-    _texture ctrlWebBrowserAction ["ExecJS", "scrollUp();"];
-    true;
 };
 inGameUISetEventHandler ["PrevAction", toString _interceptScrollUp];
 
 private _interceptScrollDown = {
     private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
-    if (isNull _display) exitWith {
+    if (isNull _display) then {
         false;
+    } else {
+        private _texture = _display displayCtrl 5502;
+        _texture ctrlWebBrowserAction ["ExecJS", "scrollDown();"];
+        true;
     };
-    private _texture = _display displayCtrl 5502;
-    _texture ctrlWebBrowserAction ["ExecJS", "scrollDown();"];
-    true;
 };
 inGameUISetEventHandler ["NextAction", toString _interceptScrollDown];

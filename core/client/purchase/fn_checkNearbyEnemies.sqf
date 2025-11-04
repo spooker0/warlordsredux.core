@@ -4,6 +4,7 @@ if (isWeaponDeployed player) exitWith {
     [false, "Bipod must not be deployed."];
 };
 
+// Make sure to update cancel vehicle order as well
 private _enemiesNearPlayer = (allUnits inAreaArray [player, 150, 150]) select {
     _x isKindOf "Man"
 } select {

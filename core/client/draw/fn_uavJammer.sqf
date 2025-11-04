@@ -36,7 +36,9 @@ private _side = [_asset] call WL2_fnc_getAssetSide;
         _asset setVariable ["BIS_WL_relevantJammers", _jammersInRange];
         _asset setVariable ["BIS_WL_relevantJammersActivating", _activatingInRange];
 
-        [[_asset], 10] remoteExec ["WL2_fnc_reportTargets", (BIS_WL_competingSides - [_side]) # 0];
+        if (count _jammersInRange > 0) then {
+            [[_asset], 10] remoteExec ["WL2_fnc_reportTargets", (BIS_WL_competingSides - [_side]) # 0];
+        };
 
         uiSleep 5;
     };

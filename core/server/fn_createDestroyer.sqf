@@ -122,6 +122,6 @@ while { true } do {
         deleteVehicle _mrls;
         uiSleep WL_DESTROYER_RESPAWN;
         call _createMrls;
-        [objNull, _mrls, objNull, false] remoteExec ["WL2_fnc_createDestroyerClient", 0, true];
+        [_destroyerBase, _mrls, objNull, false] remoteExec ["WL2_fnc_createDestroyerClient", 0, true];
     };
 };

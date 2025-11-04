@@ -30,8 +30,6 @@ while { alive _unit && lifeState _unit == "INCAPACITATED" } do {
         break;
     };
 
-    _unit setPosASL (getPosASL _unit);
-
     _unit setVariable ["WL_unconsciousTime", _downTime];
     uiSleep 0.1;
 };

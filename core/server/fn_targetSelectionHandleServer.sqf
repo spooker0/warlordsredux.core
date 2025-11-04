@@ -74,7 +74,13 @@
 			call _wipeVotes;
 
 			_calculation = call _calculateMostVotedSector;
-			missionNamespace setVariable [format ["BIS_WL_sectorVoteTallyDisplay_%1", _side], _calculation # 1, true];
+
+			private _tallyDisplayVar = format ["BIS_WL_sectorVoteTallyDisplay_%1", _side];
+			private _tallyValue = _calculation # 1;
+			private _tallyPreviousValue = missionNamespace getVariable [_tallyDisplayVar, []];
+			if (_tallyPreviousValue isNotEqualTo _tallyValue) then {
+				missionNamespace setVariable [_tallyDisplayVar, _tallyValue, true];
+			};
 
 			waitUntil {
 				uiSleep WL_TIMEOUT_SHORT;
@@ -101,8 +107,21 @@
 
 					if (serverTime >= _nextUpdate) then {
 						_calculation = call _calculateMostVotedSector;
-						missionNamespace setVariable [format ["BIS_WL_mostVoted_%1", _side], [_calculation # 0, _votingEnd], true];
-						missionNamespace setVariable [format ["BIS_WL_sectorVoteTallyDisplay_%1", _side], _calculation # 1, true];
+
+						private _mostVotedVar = format ["BIS_WL_mostVoted_%1", _side];
+						private _mostVotedData = [_calculation # 0, _votingEnd];
+						private _mostVotedPreviousData = missionNamespace getVariable [_mostVotedVar, [objNull, 0]];
+						if (_mostVotedPreviousData isNotEqualTo _mostVotedData) then {
+							missionNamespace setVariable [_mostVotedVar, _mostVotedData, true];
+						};
+
+						private _tallyDisplayVar = format ["BIS_WL_sectorVoteTallyDisplay_%1", _side];
+						private _tallyValue = _calculation # 1;
+						private _tallyPreviousValue = missionNamespace getVariable [_tallyDisplayVar, []];
+						if (_tallyPreviousValue isNotEqualTo _tallyValue) then {
+							missionNamespace setVariable [_tallyDisplayVar, _tallyValue, true];
+						};
+
 						_nextUpdate = serverTime + WL_TIMEOUT_STANDARD;
 					};
 

@@ -3,7 +3,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Courier New', monospace;
-    font-size: 14pt;
+    font-size: 10pt;
 }
 
 body,
@@ -12,13 +12,44 @@ html {
 }
 
 .hint-wrapper {
+    position: absolute;
+    top: 30vh;
+    left: 50vw;
+    transform: translateX(-50%) scale(2);
     display: inline-block;
     white-space: nowrap;
-    padding: 20px;
+    padding: 15px;
     border-radius: 10px;
-    margin-top: 30vh;
-    margin-left: 20px;
     background-color: rgba(34, 34, 34, 0.8);
+    animation: hintSlide 1s ease-out forwards;
+}
+
+.settings-hint {
+    font-size: 12pt;
+    margin: 0;
+    padding: 10px 0 0 0;
+    color: #cc5555;
+    clear: both;
+}
+
+@keyframes hintSlide {
+    0% {
+        left: 50vw;
+        transform: translateX(-50%) scale(2);
+        opacity: 0.9;
+    }
+
+    80% {
+        left: 50vw;
+        transform: translateX(-50%) scale(2);
+        opacity: 1;
+    }
+
+    100% {
+        left: 2vw;
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 .animation-timer {
@@ -31,12 +62,13 @@ html {
     line-height: 3vh;
     color: white;
     font-weight: bolder;
+    font-size: 16pt;
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
 p {
     color: #ffffff;
-    font-size: 18pt;
+    font-size: 14pt;
     text-align: center;
     margin-bottom: 10px;
 }

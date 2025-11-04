@@ -19,6 +19,7 @@ function updateHint(hint, keysText) {
         const rightSpan = document.createElement('span');
         rightSpan.textContent = `[${key[1]}]`;
         rightSpan.style.float = 'right';
+        rightSpan.style.clear = 'both';
         rightSpan.style.color = '#00ff00';
         li.appendChild(rightSpan);
 

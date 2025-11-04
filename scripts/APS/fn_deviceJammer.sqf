@@ -1,6 +1,8 @@
 #include "includes.inc"
 params ["_asset", "_turret"];
 
+if (isDedicated) exitWith {};
+
 private _assetSide = [_asset] call WL2_fnc_getAssetSide;
 
 while { alive _asset } do {

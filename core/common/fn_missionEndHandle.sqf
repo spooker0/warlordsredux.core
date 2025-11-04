@@ -85,6 +85,11 @@ if (!isDedicated) then {
 
 	private _debriefing = format ["WL2_%1_%2_%3", _status, _playerSide, _surrender];
 	[_debriefing, true] call BIS_fnc_endMission;
+
+	while { true } do {
+		uiSleep 0.1;
+		showScoretable 0;
+	};
 } else {
 	private _teamVariable = switch (_gameWinner) do {
 		case west: { "BIS_WL_eastOwnedVehicles" };
