@@ -28,7 +28,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
         };
 
         private _nearbyUnconscious = (player nearObjects ["Man", 8]) select {
-            lifeState _x == "INCAPACITATED" && side group _x == BIS_WL_playerSide
+            lifeState _x == "INCAPACITATED"
         };
         _nearbyUnconscious = _nearbyUnconscious select {
             [getPosASL player, getDir player, 90, getPosASL _x] call WL2_fnc_inAngleCheck
@@ -45,17 +45,27 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
         private _reviveTarget = if (count _nearbyUnconscious > 0) then { _nearbyUnconscious # 0 } else { objNull };
         if (!isNull _reviveTarget) then {
             private _reviveActionId = player getVariable ["WL2_reviveActionId", -1];
-            private _displayText = name _reviveTarget;
-            private _reviveText = format ["<t color='#00ff00'>Revive %1</t>", _displayText];
-            private _reviveImage = format [
-                "<img size='3' color='#00ff00' image='a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa'/> <t size='1.5' color='#00ff00'>Revive %1</t>",
-                _displayText
-            ];
-            player setUserActionText [_reviveActionId, _reviveText, _reviveImage];
+            if (side group _reviveTarget == BIS_WL_playerSide) then {
+                private _displayText = name _reviveTarget;
+                private _reviveText = format ["<t color='#00ff00'>Revive %1</t>", _displayText];
+                private _reviveImage = format [
+                    "<img size='3' color='#00ff00' image='a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa'/> <t size='1.5' color='#00ff00'>Revive %1</t>",
+                    _displayText
+                ];
+                player setUserActionText [_reviveActionId, _reviveText, _reviveImage];
+            } else {
+                private _displayText = name _reviveTarget;
+                private _secureText = format ["<t color='#ff0000'>Secure %1</t>", _displayText];
+                private _secureImage = format [
+                    "<img size='3' color='#ff0000' image='a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa'/> <t size='1.5' color='#ff0000'>Secure %1</t>",
+                    _displayText
+                ];
+                player setUserActionText [_reviveActionId, _secureText, _secureImage];
+            };
         };
         player setVariable ["WL2_reviveTarget", _reviveTarget];
 
-        private _nearbyDemolishableItems = (cameraOn nearObjects 35) select {
+        private _nearbyDemolishableItems = (cameraOn nearObjects 100) select {
             _x getVariable ["WL2_canDemolish", false];
         };
 
@@ -67,7 +77,9 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
         // do distance checks after, visible within 35 anyway
         _nearbyDemolishableItems = _nearbyDemolishableItems select {
             private _isNotStronghold = isNull (_x getVariable ["WL_strongholdSector", objNull]);
-            private _distanceLimit = if (_isNotStronghold) then { 10 } else { 35 };
+            private _distanceLimit = if (_isNotStronghold) then {
+                if (_x isKindOf "StaticShip") then { 100 }  else { 10 };
+            } else { 35 };
             private _inAngle = if (_isNotStronghold) then {
                 [getPosASL player, getDir player, 90, getPosASL _x] call WL2_fnc_inAngleCheck;
             } else {

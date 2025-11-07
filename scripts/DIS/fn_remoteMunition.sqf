@@ -64,7 +64,9 @@ _projectile setVelocityModelSpace _projectileVelocity;
 if (_bunkerBuster > 0) then {
     _projectile setVariable ["DIS_bunkerBusterSteps", _bunkerBuster];
     _projectile addEventHandler ["Explode", {
-        _this spawn DIS_fnc_bunkerBuster;
+        params ["_projectile", "_position"];
+        private _bunkerBusterSteps = _projectile getVariable ["DIS_bunkerBusterSteps", 7];
+        [typeOf _projectile, _position, _bunkerBusterSteps] spawn DIS_fnc_bunkerBuster;
     }];
 };
 

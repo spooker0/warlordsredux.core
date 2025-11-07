@@ -14,7 +14,7 @@ while { !BIS_WL_missionEnd } do {
 			default { 0 };
 		};
 
-		[_calculatedIncome, getPlayerUID _x] call WL2_fnc_fundsDatabaseWrite;
+		[_calculatedIncome, getPlayerUID _x, false] call WL2_fnc_fundsDatabaseWrite;
 	} forEach _notBlocked;
 
 	private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];

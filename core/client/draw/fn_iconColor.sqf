@@ -71,6 +71,12 @@ if (_areInSquad) exitWith {
     _color;
 };
 
+if (_unit isKindOf "Camping_base_F" && _unit getVariable ["BIS_WL_ownerAsset", "123"] == getPlayerUID player) exitWith {
+    private _color = [1, 1, 0, 1];
+    _mapColorCache set [hashValue _unit, _color];
+    _color;
+};
+
 private _unitSide = [_unit] call WL2_fnc_getAssetSide;
 if (_unitSide == sideUnknown) then {
     _unitSide = side group player;

@@ -92,7 +92,9 @@ _this addEventHandler ["Fired", {
 	if (_projectileBunker > 0) then {
 		_projectile setVariable ["DIS_bunkerBusterSteps", _projectileBunker];
 		_projectile addEventHandler ["Explode", {
-			_this spawn DIS_fnc_bunkerBuster;
+			params ["_projectile", "_position"];
+			private _bunkerBusterSteps = _projectile getVariable ["DIS_bunkerBusterSteps", 7];
+			[typeOf _projectile, _position, _bunkerBusterSteps] spawn DIS_fnc_bunkerBuster;
 		}];
 	};
 

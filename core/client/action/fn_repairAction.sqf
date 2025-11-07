@@ -67,7 +67,7 @@ private _repairWheels = _asset addAction [
                 ["Cancel", "Action"],
                 ["", "ActionContext"],
                 ["", "navigateMenu"]
-            ]], 10, true] call WL2_fnc_showHint;
+            ]], 10, true] spawn WL2_fnc_showHint;
 
             private _startCheckingUnhold = false;
             private _timeToRemove = serverTime + 5;
@@ -111,7 +111,7 @@ private _repairWheels = _asset addAction [
                 uiSleep 0.001;
             };
 
-            ["Animation"] call WL2_fnc_showHint;
+            ["Animation"] spawn WL2_fnc_showHint;
 
             cameraOn cameraEffect ["Terminate", "BACK"];
             [player, [""]] remoteExec ["switchMove", 0];

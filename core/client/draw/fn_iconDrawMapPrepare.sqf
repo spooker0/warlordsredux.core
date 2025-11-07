@@ -117,26 +117,7 @@ private _currentPosition = getPosASL cameraOn;
 	];
 
 	_currentPosition = _waypointPosition;
-} forEach (waypoints _currentGroup);
-
-// Draw player tent
-private _respawnBag = player getVariable ["WL2_respawnBag", objNull];
-if (alive _respawnBag) then {
-	private _bagPos = getPosATL _respawnBag;
-	_drawIcons pushBack [
-		"\A3\ui_f\data\map\markers\military\triangle_CA.paa",
-		[1, 1, 0, 1],
-		_bagPos,
-		35 * _mapIconScale,
-		35 * _mapIconScale,
-		0,
-		"Tent",
-		1,
-		0.04 * _mapIconScale,
-		"PuristaBold"
-	];
-	_drawIconsSelectable pushBack [_respawnBag, _bagPos];
-};
+} forEach (_mapData getOrDefault ["uavWaypoints", []]);
 
 // Draw forward bases
 private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
@@ -469,6 +450,23 @@ if (_drawAll) then {
 		_drawIcons pushBack _marker;
 	} forEach _enemySectorMarkers;
 };
+
+{
+	private _position = getPosASL _x;
+	_drawIcons pushBack [
+		"\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missile_ca.paa",
+		[1, 0, 0, 1],
+		_position,
+		20 * _mapIconScale,
+		20 * _mapIconScale,
+		0,
+		_x getVariable ["WL2_missileType", ""],
+		0,
+		0.04 * _mapIconScale,
+		"PuristaBold",
+		"right"
+	];
+} forEach (_mapData getOrDefault ["trackedProjectiles", []]);
 
 // Spectator draw
 if (_drawAll) then {

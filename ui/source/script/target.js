@@ -42,13 +42,26 @@ function setMunitionList(munitions) {
     });
 }
 
-function setGPSData(selectionIndex, gridCoord, targetRange, assetRange, inRange) {
+function setGPSData(nextKeyName, selectionList, selectionIndex, gridCoord, targetRange, assetRange, inRange) {
     const controlsEl = document.querySelector('.mode-gps .gps-controls');
-    if (selectionIndex === 1) {
-        controlsEl.innerHTML = `<li>[ ] READY</li><li>[&gt;] ENTER NEW COORDS</li>`;
-    } else {
-        controlsEl.innerHTML = `<li>[&gt;] READY</li><li>[ ] ENTER NEW COORDS</li>`;
-    }
+    controlsEl.innerHTML = "";
+
+    selectionList.unshift("ENTER CORDS [0-9]");
+    selectionList.unshift(`PRESS ${nextKeyName} TO ENTER GRID`);
+    selectionList.forEach((item, index) => {
+        const listItem = document.createElement('li');
+        let selectionState = " ";
+        if (index === selectionIndex) {
+            selectionState = ">";
+        }
+
+        if (index < 2) {
+            listItem.textContent = `[${selectionState}] ${item}`;
+        } else {
+            listItem.textContent = `[${selectionState}] GRID ${item.slice(0, -3)} ${item.slice(-3)}`;
+        }
+        controlsEl.appendChild(listItem);
+    });
 
     const gridCoordEl = document.querySelector('.mode-gps .grid-coord-display');
     if (gridCoord === "") {

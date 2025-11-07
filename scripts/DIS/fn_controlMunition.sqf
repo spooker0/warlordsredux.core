@@ -30,7 +30,7 @@ private _controlParams = ["TV GUIDED MUNITION", [
 if (_flightMode in [1, 2]) then {
     _controlParams pushBack ["Lock/Unlock Controls", "lockTarget"];
 };
-["TV", _controlParams] call WL2_fnc_showHint;
+["TV", _controlParams] spawn WL2_fnc_showHint;
 
 private _yaw = getDir _projectile;
 
@@ -210,4 +210,4 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
 uiSleep 1;
 deleteVehicle _projectile;
 "munitionControl" cutText ["", "PLAIN"];
-["TV"] call WL2_fnc_showHint;
+["TV"] spawn WL2_fnc_showHint;

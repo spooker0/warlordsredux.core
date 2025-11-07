@@ -26,7 +26,7 @@ if (count _squadLeader == 0) exitWith {
 };
 _squadLeader = _squadLeader # 0;
 
-if (!alive _squadLeader || lifeState _squadLeader == "INCAPACITATED") exitWith {
+if (!alive _squadLeader || lifeState _squadLeader == "INCAPACITATED" || (vehicle _squadLeader == _squadLeader && !(isTouchingGround _squadLeader))) exitWith {
     [false, localize "STR_SQUADS_fastTravelSquadLeaderUnavailable"];
 };
 

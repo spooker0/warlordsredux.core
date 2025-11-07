@@ -585,10 +585,10 @@ private _fastTravelStrongholdTestExecute = {
     };
 
     _dialog closeDisplay 1;
-    WL2_TargetButtonSetup = [objNull, [], 0, 0];
+    WL2_TargetButtonSetup = [displayNull, [], 0, 0];
 };
 
 if (count _menuButtons == 0) then {
     _dialog closeDisplay 1;
-    WL2_TargetButtonSetup = [objNull, [], 0, 0];
+    WL2_TargetButtonSetup = [displayNull, [], 0, 0];
 };

@@ -235,7 +235,7 @@ if !(isDedicated) then {
 		} forEach _vehicles;
 
 		private _newVehicles = _vehicles select {
-			alive _x && _x getVariable ["BIS_WL_ownerAsset", "123"] == getPlayerUID player
+			_x == player || _x getVariable ["BIS_WL_ownerAsset", "123"] == getPlayerUID player
 		};
 		if !(_vehicles isEqualTo _newVehicles) then {
 			missionNamespace setVariable [_ownedVehicleVar, _newVehicles, [2, clientOwner]];
@@ -282,7 +282,7 @@ uiNamespace setVariable ["WL2_modOverrideUid", ""];
 WL2_lastLoadout = getUnitLoadout player;
 [player, true] call WLC_fnc_onRespawn;
 [] spawn WL2_fnc_factionBasedClientInit;
-0 spawn WL2_fnc_captureList;
+0 spawn WL2_fnc_captureDisplay;
 0 spawn WL2_fnc_mineLimitHint;
 
 call WL2_fnc_spectrumInterface;
@@ -383,3 +383,14 @@ showScoretable 0;
 0 spawn WL2_fnc_ammoConfigChange;
 0 spawn DIS_fnc_setupTargetingMenu;
 0 spawn WL2_fnc_refreshKillfeed;
+
+private _display = uiNamespace getVariable ["RscWLHintMenu", displayNull];
+if (isNull _display) then {
+    "hintLayer" cutRsc ["RscWLHintMenu", "PLAIN", -1, true, true];
+    _display = uiNamespace getVariable "RscWLHintMenu";
+};
+
+private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
+private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];
+_ownedVehicles pushBack player;
+missionNamespace setVariable [_ownedVehiclesVar, _ownedVehicles, [2, clientOwner]];

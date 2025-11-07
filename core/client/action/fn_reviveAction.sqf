@@ -9,18 +9,36 @@ private _reviveActionId = player addAction [
             private _reviveTarget = player getVariable ["WL2_reviveTarget", objNull];
             if (isNull _reviveTarget) exitWith {};
 
+            private _isRevive = side group _reviveTarget == BIS_WL_playerSide;
+
+            private _displayText = if (_isRevive) then {
+                "REVIVE"
+            } else {
+                "SECURE"
+            };
+            private _duration = if (_isRevive) then {
+                WL_DURATION_REVIVE
+            } else {
+                WL_DURATION_SECURE
+            };
+            private _animation = if (_isRevive) then {
+                "AinvPknlMstpSlayWrflDnon_medic"
+            } else {
+                "Acts_Executioner_Forehand"
+            };
+
             [[0, 8, 2]] call WL2_fnc_actionLockCamera;
 
-            ["Animation", ["REVIVE", [
+            ["Animation", [_displayText, [
                 ["Cancel", "Action"],
                 ["", "ActionContext"],
                 ["", "navigateMenu"]
-            ]], WL_DURATION_REVIVE, true] call WL2_fnc_showHint;
+            ]], _duration, true] spawn WL2_fnc_showHint;
 
-            [player, ["AinvPknlMstpSlayWrflDnon_medic"]] remoteExec ["switchMove", 0];
-            private _reviveSuccess = false;
+            [player, [_animation]] remoteExec ["switchMove", 0];
+            private _actionSuccess = false;
             private _startCheckingUnhold = false;
-            private _endTime = serverTime + WL_DURATION_REVIVE;
+            private _endTime = serverTime + _duration;
             while { true } do {
                 // interrupts
                 if (!alive player) then {
@@ -45,35 +63,38 @@ private _reviveActionId = player addAction [
                 };
 
                 if (serverTime >= _endTime) then {
-                    _reviveSuccess = true;
+                    _actionSuccess = true;
                     break;
                 };
                 uiSleep 0.01;
             };
 
-            ["Animation"] call WL2_fnc_showHint;
+            ["Animation"] spawn WL2_fnc_showHint;
 
             private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
             private _hitmarkerVolume = _settingsMap getOrDefault ["hitmarkerVolume", 0.5];
-            if (_reviveSuccess) then {
-                playSoundUI ["AddItemOk", _hitmarkerVolume * 2];
-
+            if (_actionSuccess) then {
                 if (!isNull _reviveTarget) then {
-                    [_reviveTarget] remoteExec ["WL2_fnc_revive", _reviveTarget];
+                    if (_isRevive) then {
+                        playSoundUI ["AddItemOk", _hitmarkerVolume * 2];
+                        [_reviveTarget] remoteExec ["WL2_fnc_revive", _reviveTarget];
 
-                    if (isPlayer [_reviveTarget]) then {
-                        private _reviveRewardTimers = player getVariable ["WL_reviveRewardTimers", createHashMap];
-                        private _unitTimer = _reviveRewardTimers getOrDefault [hashValue _reviveTarget, 0];
-                        if (_unitTimer < serverTime) then {
-                            [player, "revived", 50] remoteExec ["WL2_fnc_handleClientRequest", 2];
-                            private _newTimer = serverTime + 300;
-                            _reviveRewardTimers set [hashValue _reviveTarget, _newTimer];
-                            player setVariable ["WL_reviveRewardTimers", _reviveRewardTimers];
+                        if (isPlayer [_reviveTarget]) then {
+                            private _reviveRewardTimers = player getVariable ["WL_reviveRewardTimers", createHashMap];
+                            private _unitTimer = _reviveRewardTimers getOrDefault [hashValue _reviveTarget, 0];
+                            if (_unitTimer < serverTime) then {
+                                [player, "revived", 50] remoteExec ["WL2_fnc_handleClientRequest", 2];
+                                private _newTimer = serverTime + 300;
+                                _reviveRewardTimers set [hashValue _reviveTarget, _newTimer];
+                                player setVariable ["WL_reviveRewardTimers", _reviveRewardTimers];
+                            } else {
+                                [player, "revived", 0] remoteExec ["WL2_fnc_handleClientRequest", 2];
+                            };
                         } else {
                             [player, "revived", 0] remoteExec ["WL2_fnc_handleClientRequest", 2];
                         };
                     } else {
-                        [player, "revived", 0] remoteExec ["WL2_fnc_handleClientRequest", 2];
+                        [player, "secure", _reviveTarget] remoteExec ["WL2_fnc_handleClientRequest", 2];
                     };
                 };
             } else {

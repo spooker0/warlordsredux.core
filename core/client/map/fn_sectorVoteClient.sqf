@@ -4,35 +4,72 @@
     private _lastTargetFriendly = objNull;
     private _lastTargetEnemy = objNull;
     private _lastTargetReset = false;
+
+    private _display = uiNamespace getVariable ["RscWLHintMenu", displayNull];
+    if (isNull _display) then {
+        "hintLayer" cutRsc ["RscWLHintMenu", "PLAIN", -1, true, true];
+        _display = uiNamespace getVariable "RscWLHintMenu";
+    };
+    private _texture = _display displayCtrl 5502;
+
     while { !BIS_WL_missionEnd } do {
         if (!(BIS_WL_playerSide in BIS_WL_competingSides) || WL_IsSpectator) exitWith {
             WL_VotePhase = 0;
-            private _voteDisplay = uiNamespace getVariable ["RscWLVoteDisplay", objNull];
-            if (!isNull _voteDisplay) then {
-                private _indicator = _voteDisplay displayCtrl 7002;
-                private _indicatorBackground = _voteDisplay displayCtrl 7003;
-                _indicator ctrlSetText "";
-                _indicatorBackground ctrlSetBackgroundColor [0, 0, 0, 0];
-            };
+            _texture ctrlWebBrowserAction ["ExecJS", "hideSectorVote();"];
         };
 
         private _targetReset = missionNamespace getVariable [format ["WL_targetReset_%1", BIS_WL_playerSide], false];
         if (isNull WL_TARGET_FRIENDLY || _targetReset) then {
-            call WL2_fnc_sectorVoteDisplay;
+            private _mostVotedVar = format ["BIS_WL_mostVoted_%1", BIS_WL_playerSide];
+            private _voteTallyDisplayVar = format ["BIS_WL_sectorVoteTallyDisplay_%1", BIS_WL_playerSide];
+            private _sortedVoteList = missionNamespace getVariable [_voteTallyDisplayVar, []];
+            private _mostVoted = missionNamespace getVariable [_mostVotedVar, []];
+
+            private _eta = if (count _mostVoted > 0) then {
+                round (_mostVoted # 1 - serverTime);
+            } else {
+                -1;
+            };
+            private _etaDisplay = if (_eta >= 0) then {
+                format ["TIME LEFT: %1", _eta];
+            } else {
+                "WAITING...";
+            };
+
+            private _captureSectors = _sortedVoteList apply {
+                private _vote = _x # 0;
+                private _voteCount = _x # 1;
+
+                private _sectorName = _vote getVariable ["WL2_name", "Sector"];
+                private _isSectorRevealed = BIS_WL_playerSide in (_vote getVariable ["BIS_WL_revealedBy", []]);
+
+                private _owner = if (_isSectorRevealed) then {
+                    private _sectorOwner = _vote getVariable ["BIS_WL_owner", independent];
+                    ["BLUFOR", "OPFOR", "INDEP"] # ([west, east, independent] find _sectorOwner);
+                } else {
+                    "UNKNOWN";
+                };
+                [_sectorName, _voteCount, _owner]
+            };
+
+            private _script = format ["updateSectorVote(""%1"", %2);", _etaDisplay, toJSON _captureSectors];
+            _texture ctrlWebBrowserAction ["ExecJS", _script];
+
+            private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+            private _voteVolume = _settingsMap getOrDefault ["voteVolume", 1];
+            if (_voteVolume > 0) then {
+                if (_eta <= 10 && _eta >= 0) then {
+                    private _volume = 6 - (_eta / 2);
+                    playSoundUI ["a3\ui_f\data\sound\readout\readouthideclick1.wss", _volume * _voteVolume];
+                };
+            };
         };
 
         if (_lastTargetFriendly != WL_TARGET_FRIENDLY || _targetReset != _lastTargetReset) then {
             ["client"] call WL2_fnc_updateSectorArrays;
 
             if (!isNull WL_TARGET_FRIENDLY && !_targetReset) then {
-                private _voteDisplay = uiNamespace getVariable ["RscWLVoteDisplay", objNull];
-                if (!isNull _voteDisplay) then {
-                    private _indicator = _voteDisplay displayCtrl 7002;
-                    private _indicatorBackground = _voteDisplay displayCtrl 7003;
-                    _indicator ctrlSetText "";
-                    _indicatorBackground ctrlSetBackgroundColor [0, 0, 0, 0];
-                };
-
+                _texture ctrlWebBrowserAction ["ExecJS", "hideSectorVote();"];
                 "Selected" call WL2_fnc_announcer;
                 [toUpper format [localize "STR_A3_WL_popup_voting_done", WL_TARGET_FRIENDLY getVariable "WL2_name"]] spawn WL2_fnc_smoothText;
             };
@@ -41,7 +78,7 @@
         if (_lastTargetEnemy != WL_TARGET_ENEMY) then {
             private _enemySectorKnowers = _lastTargetEnemy getVariable ["BIS_WL_revealedBy", []];
             if (BIS_WL_playerSide in _enemySectorKnowers) then {
-                systemChat "Enemy target sector reset.";
+                systemChat "Enemy target sector changed.";
             };
         };
 
@@ -98,16 +135,6 @@ while { !BIS_WL_missionEnd } do {
                     "Voting" call WL2_fnc_announcer;
                     [toUpper localize "STR_A3_WL_popup_voting"] spawn WL2_fnc_smoothText;
                 };
-
-                private _voteDisplay = uiNamespace getVariable ["RscWLVoteDisplay", objNull];
-                if (isNull _voteDisplay) then {
-                    "VoteDisplay" cutRsc ["RscWLVoteDisplay", "PLAIN", -1, true, true];
-                    _voteDisplay = uiNamespace getVariable "RscWLVoteDisplay";
-                };
-
-                private _indicator = _voteDisplay displayCtrl 7002;
-                private _indicatorBackground = _voteDisplay displayCtrl 7003;
-                _indicatorBackground ctrlSetBackgroundColor [0, 0, 0, 0.7];
             };
             // Voted
             case 2: {};

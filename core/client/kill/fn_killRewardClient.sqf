@@ -53,6 +53,7 @@ uiNamespace setVariable ["WL_killRewardMap", _killRewardMap];
 private _displayIcon = switch (toUpper _displayText) do {
 	case "KILL";
 	case "PLAYER KILL": { "a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa" };
+	case "SECURED": { "a3\ui_f\data\igui\cfg\holdactions\holdaction_secure_ca.paa" };
 	case "VEHICLE DISABLED": { "a3\ui_f\data\igui\cfg\vehicletoggles\wheelbreakiconon_ca.paa" };
 	case "DEMOLITION": { "a3\ui_f\data\igui\cfg\simpletasks\types\destroy_ca.paa" };
 	case "ATTACKING SECTOR";
@@ -82,9 +83,11 @@ private _displayIcon = switch (toUpper _displayText) do {
 
 [_displayText, _unitType, _reward] call RWD_fnc_handleReward;
 
-if (_customColor == "#de0808") then {
+if !(toUpper _displayText in ["SQUAD ASSIST", "SECTOR CAPTURED"]) then {
 	missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_DURATION_AFKTIME];
+};
 
+if (_customColor == "#de0808") then {
 	private _rewardHistory = uiNamespace getVariable ["WL2_rewardHistory", createHashMap];
 	private _rewardEntry = _rewardHistory getOrDefault [_displayText, [0, 0]];
 	_rewardEntry set [0, _rewardEntry # 0 + 1];

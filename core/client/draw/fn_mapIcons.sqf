@@ -58,6 +58,9 @@
 		private _side = BIS_WL_playerSide;
 		_mapData set ["side", _side];
 
+		private _waypoints = waypoints group cameraOn;
+		_mapData set ["uavWaypoints", _waypoints];
+
 		private _vehicles = vehicles select { alive _x };
 		private _activeVehicles = +_vehicles;
 		_activeVehicles append ("Land_MobileRadar_01_radar_F" allObjects 0);
@@ -90,7 +93,8 @@
 			default { "" };
 		};
 		private _sideVehicles = if (_teamVariable != "") then {
-			missionNamespace getVariable [_teamVariable, []];
+			private _sideVics = missionNamespace getVariable [_teamVariable, []];
+			+_sideVics
 		} else {
 			[]
 		};
@@ -165,6 +169,9 @@
 		} forEach BIS_WL_allSectors;
 		_mapData set ["teamSectorMarkers", _teamSectorMarkers];
 		_mapData set ["enemySectorMarkers", _allSectorMarkers];
+
+		private _munitionList = cameraOn getVariable ["DIS_munitionList", []];
+		_mapData set ["trackedProjectiles", _munitionList];
 
 		uiSleep 1;
 	};

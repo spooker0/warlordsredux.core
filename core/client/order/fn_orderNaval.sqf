@@ -21,7 +21,9 @@ _mapClickEH = addMissionEventHandler ["MapSingleClick", {
 	private _cancel = false;
 	switch (_class) do {
 		case "B_Boat_Armed_01_autocannon_F";
-		case "O_Boat_Armed_01_autocannon_F": {
+		case "O_Boat_Armed_01_autocannon_F";
+		case "B_Boat_Bomb_01_F";
+		case "O_Boat_Bomb_01_F": {
 			private _sectorsInRange = (BIS_WL_sectorsArray # 0) findIf {
 				_pos distance _x < 4000 && "W" in (_x getVariable ["WL2_services", []]);
 			};

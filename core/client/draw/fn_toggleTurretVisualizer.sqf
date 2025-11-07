@@ -87,7 +87,7 @@ private _draw3dHandler = addMissionEventHandler ["Draw3D", {
 if (typeof cameraOn == "B_T_VTOL_01_armed_F") then {
     ["Blackfish", ["BLACKFISH CONTROLS", [
         ["Set Reference Point", "headlights"]
-    ]], 10] call WL2_fnc_showHint;
+    ]], 10] spawn WL2_fnc_showHint;
 
     0 spawn {
         private _display = uiNamespace getVariable ["RscWLTurretMenu", displayNull];

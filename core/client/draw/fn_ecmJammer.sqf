@@ -100,6 +100,8 @@ private _ecmDraw = addMissionEventHandler ["Draw3D", {
 [_asset, _jammerPods, _ecmRange, _ecmSpeed] spawn {
     params ["_asset", "_jammerPods", "_ecmRange", "_ecmSpeed"];
 
+    private _isAir = _asset isKindOf "Air";
+
     while { alive _asset && cameraOn == _asset } do {
         uiSleep 0.1;
         private _ecmMunitions = uiNamespace getVariable ["WL2_ECMMunitions", []];
@@ -108,6 +110,13 @@ private _ecmDraw = addMissionEventHandler ["Draw3D", {
         private _charges = _asset getVariable ["WL2_ecmCharges", 0];
         if (_charges <= 0) then {
             continue;
+        };
+
+        if (_isAir) then {
+            private _assetAGL = _asset modelToWorld [0, 0, 0];
+            if (_assetAGL # 2 < 50) then {
+                continue;
+            };
         };
 
         private _fovMultiplier = getObjectFOV cameraOn / 0.5;
@@ -138,7 +147,7 @@ private _ecmDraw = addMissionEventHandler ["Draw3D", {
             };
 
             private _munitionDistance = _munitionPos distance cameraOn;
-            private _addPercent = linearConversion [0, _ecmRange, _munitionDistance, 20 * _ecmSpeed, 2 * _ecmSpeed];
+            private _addPercent = linearConversion [0, _ecmRange ^ 2, _munitionDistance ^ 2, 5 * _ecmSpeed, _ecmSpeed];
 
             private _chargesRemaining = _asset getVariable ["WL2_ecmCharges", 0];
             if (_chargesRemaining <= 0) then {
@@ -181,17 +190,21 @@ private _apsVolume = _settingsMap getOrDefault ["apsVolume", 1];
 while { alive _asset && cameraOn == _asset } do {
     uiSleep 0.25;
 
-    private _munitions = (8 allObjects 2) select { _x distance _asset < _ecmRange } select {
+    private _munitions = (8 allObjects 2) select {
+        _x distance _asset < _ecmRange
+    } select {
+        typeOf _x != "ammo_Missile_Cruise_01"
+    } select {
         private _munition = _x;
-        _ecmJammerType findIf { _munition isKindOf _x && typeOf _munition != "ammo_Missile_Cruise_01" } >= 0 && {
-#if WL_ECM_TEST
-            true;
-#else
-            private _shotParent = getShotParents _munition # 0;
-            BIS_WL_playerSide != [_shotParent] call WL2_fnc_getAssetSide
-#endif
-        };
+        _ecmJammerType findIf { _munition isKindOf _x } >= 0
     };
+#if WL_ECM_TEST == 0
+    _munitions = _munitions select {
+        private _shotParent = getShotParents _x # 0;
+        BIS_WL_playerSide != [_shotParent] call WL2_fnc_getAssetSide
+    };
+#endif
+
     uiNamespace setVariable ["WL2_ECMMunitions", _munitions];
 
     private _currentCharges = _asset getVariable ["WL2_ecmCharges", _ecmCharges];

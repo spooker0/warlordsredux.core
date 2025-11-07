@@ -15,7 +15,7 @@ _asset addAction [
                 ["Cancel", "Action"],
                 ["", "ActionContext"],
                 ["", "navigateMenu"]
-            ]], WL_DURATION_CLAIM, true] call WL2_fnc_showHint;
+            ]], WL_DURATION_CLAIM, true] spawn WL2_fnc_showHint;
 
 			private _soundSource = createSoundSource ["WLAlarmSound", _asset modelToWorld [0, 0, 0], [], 0];
 
@@ -49,7 +49,7 @@ _asset addAction [
                 uiSleep 0.001;
             };
 
-            ["Animation"] call WL2_fnc_showHint;
+            ["Animation"] spawn WL2_fnc_showHint;
 
 			if (_claimSuccess) then {
 				private _displayName = [_asset] call WL2_fnc_getAssetTypeName;

@@ -93,7 +93,7 @@ private _deployParams = ["DEPLOYMENT CONTROLS", [
     ["Rotate right", "nextAction"],
     [localize "STR_ca_cancel", "navigateMenu"]
 ]];
-["Deploy", _deployParams] call WL2_fnc_showHint;
+["Deploy", _deployParams] spawn WL2_fnc_showHint;
 
 private _originalPosition = getPosATL player;
 
@@ -206,6 +206,6 @@ detach _asset;
 deleteVehicle _asset;
 removeMissionEventHandler ["Draw3D", _drawRestrictionId];
 
-["Deploy"] call WL2_fnc_showHint;
+["Deploy"] spawn WL2_fnc_showHint;
 
 [WL_DeploymentSuccess && _canStillOrderVehicle, _finalPosition, _offset, _finalDirection];

@@ -1,6 +1,10 @@
 #include "includes.inc"
 params ["_vehicle", "_mapIconCache"];
 
+if (_vehicle isKindOf "Camping_base_F") exitWith {
+	"\A3\ui_f\data\map\markers\military\triangle_CA.paa";
+};
+
 if (!alive _vehicle) exitWith {
 	"\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa";
 };

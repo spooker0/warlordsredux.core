@@ -111,6 +111,6 @@ _readyList pushBackUnique _uid;
 
 private _playerFunds = _playerFundsDB getOrDefault [_uid, -1];
 if (_playerFunds == -1) then {
-    [1000, _uid] call WL2_fnc_fundsDatabaseWrite;
+    [1000, _uid, false] call WL2_fnc_fundsDatabaseWrite;
 };
 [_playerFundsDB, _uid] call WL2_fnc_fundsDatabaseUpdate;

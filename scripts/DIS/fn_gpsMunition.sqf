@@ -9,20 +9,30 @@ if (_overrideRange > 0) then {
 
 if (!isNull (missileTarget _projectile)) exitWith {};
 
-private _gpsBombs = _unit getVariable ["DIS_gpsBombs", []];
-_gpsBombs pushBack _projectile;
-_gpsBombs = _gpsBombs select { alive _x };
-_unit setVariable ["DIS_gpsBombs", _gpsBombs];
+_projectile setVariable ["WL2_missileType", "GPS"];
+
+private _munitionList = _unit getVariable ["DIS_munitionList", []];
+_munitionList pushBack _projectile;
+_munitionList = _munitionList select { alive _x };
+_unit setVariable ["DIS_munitionList", _munitionList];
 
 private _coordinates = +(_projectile getVariable ["DIS_targetCoordinates", getPosATL _unit]);
 private _laserTarget = createVehicleLocal ["LaserTargetC", _coordinates, [], 0, "CAN_COLLIDE"];
 _coordinates set [2, 400];
 _laserTarget setPosATL _coordinates;
 
+private _savedCords = _unit getVariable ["DIS_savedGPSCoordinates", []];
+private _newSavedCord = _unit getVariable ["DIS_gpsCord", ""];
+_savedCords insert [0, [_newSavedCord], true];
+_savedCords = _savedCords select [0, 10];
+_unit setVariable ["DIS_savedGPSCoordinates", _savedCords];
+_unit setVariable ["DIS_selectionIndex", 0];
+
 private _terminalManeuver = false;
 private _originalDistance = _projectile distance _laserTarget;
 private _launchTime = serverTime;
 private _originalSpeed = (velocityModelSpace _unit) # 1;
+_originalSpeed = _originalSpeed * 1.2;
 
 if (_overrideRange > 0) then {
     _coordinates set [2, 1000];
@@ -48,6 +58,7 @@ uiSleep 1;
 _projectile setMissileTarget [_laserTarget, true];
 
 private _finalPosition = [];
+private _finalTarget = objNull;
 while { alive _projectile } do {
     private _distanceToTarget = _projectile distance _laserTarget;
     private _speed = _originalSpeed - (serverTime - _launchTime) * 0.1;
@@ -57,10 +68,15 @@ while { alive _projectile } do {
     } else {
         private _currentPosition = getPosASL _projectile;
         private _missileTarget = missileTarget _projectile;
-        if (alive _missileTarget) then {
-            _finalPosition = getPosASL _missileTarget;
+        if (alive _finalTarget) then {
+            _finalPosition = getPosASL _finalTarget;
+        } else {
+            if (alive _missileTarget) then {
+                _finalPosition = getPosASL _missileTarget;
+            };
         };
         private _targetVectorDirAndUp = [_currentPosition, _finalPosition] call BIS_fnc_findLookAt;
+
         private _currentVectorDir = vectorDir _projectile;
         private _currentVectorUp = vectorUp _projectile;
 
@@ -76,10 +92,13 @@ while { alive _projectile } do {
 
         _coordinates set [2, 0];
         private _enemiesNear = (_coordinates nearEntities 250) select {
-            ([_x] call WL2_fnc_getAssetSide) != BIS_WL_playerSide &&
-            alive _x &&
-            lifeState _x != "INCAPACITATED" &&
+            alive _x && lifeState _x != "INCAPACITATED"
+        } select {
+            ([_x] call WL2_fnc_getAssetSide) != BIS_WL_playerSide
+        } select {
             (_x getVariable ["WL_spawnedAsset", false] || isPlayer _x)
+        } select {
+            !alive (_x getVariable ["DIS_targetedByGPSMunition", objNull])
         };
 
         _finalPosition = [];
@@ -104,6 +123,10 @@ while { alive _projectile } do {
 
             _finalPosition = getPosASL _closestEnemy;
             _projectile setMissileTarget [_closestEnemy, true];
+
+            _finalTarget = _closestEnemy;
+
+            _closestEnemy setVariable ["DIS_targetedByGPSMunition", _projectile];
         };
     };
 

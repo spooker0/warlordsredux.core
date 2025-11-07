@@ -71,8 +71,6 @@ _killReward = round _killReward;
 
 [_unit, _killReward, _customText, "#de0808", _assetActualType] remoteExec ["WL2_fnc_killRewardClient", _responsibleLeader];
 
-["earnPoints", [_killerUid, _killReward]] call SQD_fnc_server;
-
 // Vehicle crew reward
 private _reward = round (_killReward / 4);
 private _vehicle = objectParent _responsibleLeader;
@@ -84,6 +82,4 @@ private _crew = (crew _vehicle) select {
 	[_reward, _crewUid] call WL2_fnc_fundsDatabaseWrite;
 
 	[_unit, _reward] remoteExec ["WL2_fnc_killRewardClient", _x];
-
-	["earnPoints", [_crewUid, _reward]] call SQD_fnc_server;
 } forEach _crew;

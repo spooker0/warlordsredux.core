@@ -126,6 +126,19 @@ private _interceptAction = {
             uiNamespace setVariable ["WL2_remoteControlSeat", "Gunner"];
             false;
         };
+        case "UserType": {
+            if (_text == "Close door") then {
+                if (_target getVariable ["WL2_doorsLocked", false]) then {
+                    systemChat "Door locked.";
+                    playSoundUI ["AddItemFailed"];
+                    true;
+                } else {
+                    false;
+                };
+            } else {
+                false;
+            };
+        };
         default {
             false;
         };

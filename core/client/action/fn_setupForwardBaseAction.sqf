@@ -86,6 +86,7 @@ private _setupActionId = [
 				if !(_deploymentResult # 0) exitWith {
 					playSound "AddItemFailed";
 					_target setVariable ["WL2_deploying", false];
+					false;
 				};
 
 				_position =  _deploymentResult # 1;

@@ -53,7 +53,7 @@ private _demolishActionId = player addAction [
                 ["Cancel", "Action"],
                 ["", "ActionContext"],
                 ["", "navigateMenu"]
-            ]], _demolitionStepTime, true] call WL2_fnc_showHint;
+            ]], _demolitionStepTime, true] spawn WL2_fnc_showHint;
 
             private _endTime = serverTime + _demolitionStepTime;
             while { true } do {
@@ -83,7 +83,7 @@ private _demolishActionId = player addAction [
                 uiSleep 0.01;
             };
 
-            ["Animation"] call WL2_fnc_showHint;
+            ["Animation"] spawn WL2_fnc_showHint;
 
             if (_demolishSuccess) then {
                 [_demolishableTarget, 1] call WL2_fnc_demolishStep;

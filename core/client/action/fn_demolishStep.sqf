@@ -6,6 +6,7 @@ _steps = _steps min _existingHealth;
 _existingHealth = _existingHealth - _steps;
 _targetObject setVariable ["WL2_demolitionHealth", _existingHealth, true];
 _targetObject setVariable ["WL_lastHitter", player, 2];
+_targetObject setVariable ["WL2_canRepairTime", serverTime + 60, true];
 
 private _assetSide = [_targetObject] call WL2_fnc_getAssetSide;
 if (_assetSide != BIS_WL_playerSide) then {

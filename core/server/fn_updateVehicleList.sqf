@@ -19,25 +19,26 @@ while { !BIS_WL_missionEnd } do {
         };
     } forEach (call BIS_fnc_listPlayers);
 
+    private _serverVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_123", []];
+    _guerOwnedVehicles append _serverVehicles;
+
     _westOwnedVehicles = _westOwnedVehicles select { alive _x };
     _eastOwnedVehicles = _eastOwnedVehicles select { alive _x };
+    _guerOwnedVehicles = _guerOwnedVehicles select { alive _x };
 
-    private _originalWestOwnedVehicles = missionNamespace getVariable ["BIS_WL_westOwnedVehicles", []];
-    private _originalEastOwnedVehicles = missionNamespace getVariable ["BIS_WL_eastOwnedVehicles", []];
+    private _originalWestOwnedVehicles = missionNamespace getVariable ["BIS_WL_westOwnedVehicles", [objNull]];
+    private _originalEastOwnedVehicles = missionNamespace getVariable ["BIS_WL_eastOwnedVehicles", [objNull]];
+    private _originalGuerOwnedVehicles = missionNamespace getVariable ["BIS_WL_guerOwnedVehicles", [objNull]];
 
-    if !(_originalWestOwnedVehicles isEqualTo _westOwnedVehicles) then {
+    if (_originalWestOwnedVehicles isNotEqualTo _westOwnedVehicles) then {
         missionNamespace setVariable ["BIS_WL_westOwnedVehicles", _westOwnedVehicles, true];
     };
-    if !(_originalEastOwnedVehicles isEqualTo _eastOwnedVehicles) then {
+    if (_originalEastOwnedVehicles isNotEqualTo _eastOwnedVehicles) then {
         missionNamespace setVariable ["BIS_WL_eastOwnedVehicles", _eastOwnedVehicles, true];
     };
-
-#if WL_FACTION_THREE_ENABLED
-    private _originalGuerOwnedVehicles = missionNamespace getVariable ["BIS_WL_guerOwnedVehicles", []];
-    if !(_originalGuerOwnedVehicles isEqualTo _guerOwnedVehicles) then {
+    if (_originalGuerOwnedVehicles isNotEqualTo _guerOwnedVehicles) then {
         missionNamespace setVariable ["BIS_WL_guerOwnedVehicles", _guerOwnedVehicles, true];
     };
-#endif
 
     {
         private _side = _x;

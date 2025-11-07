@@ -24,9 +24,22 @@ _unit setUnconscious true;
     if (_unconsciousTime > 0) exitWith {};
     _unit setVariable ["WL2_expirationTime", serverTime + 90, true];
 
+    private _deadAnimations = [
+        "Acts_StaticDeath_01",
+        "Acts_StaticDeath_02",
+        "Acts_StaticDeath_03",
+        "Acts_StaticDeath_05",
+        "Acts_StaticDeath_06",
+        "Acts_StaticDeath_08",
+        "Acts_StaticDeath_09",
+        "Acts_StaticDeath_10",
+        "Acts_StaticDeath_13"
+    ];
+    private _deadAnimation = selectRandom _deadAnimations;
+
     while { alive _unit && lifeState _unit == "INCAPACITATED" } do {
-        if (animationState _unit != "Acts_StaticDeath_02") then {
-            [_unit, ["Acts_StaticDeath_02"]] remoteExec ["switchMove", 0];
+        if (animationState _unit != _deadAnimation) then {
+            [_unit, [_deadAnimation]] remoteExec ["switchMove", 0];
         };
 
         uiSleep 1;

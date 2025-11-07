@@ -46,4 +46,9 @@ _freshTent setVariable ["WL_spawnedAsset", true, true];
 _freshTent setVariable ["BIS_WL_ownerAsset", getPlayerUID player, true];
 _freshTent setVariable ["BIS_WL_ownerAssetSide", side group player, true];
 
+private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
+private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
+_ownedVehicles pushBack _freshTent;
+missionNamespace setVariable [_ownedVehicleVar, _ownedVehicles, true];
+
 deleteVehicle _projectile;

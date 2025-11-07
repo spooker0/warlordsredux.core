@@ -1,17 +1,19 @@
 #include "includes.inc"
-params ["_projectile", "_position"];
+params ["_projectileClass", "_position", ["_bunkerBusterSteps", 7], ["_delay", 5]];
 
-private _bunkerBusterSteps = _projectile getVariable ["DIS_bunkerBusterSteps", 7];
-
-private _bombClass = typeof _projectile;
-private _penetrator = createVehicle [_bombClass, _position, [], 0, "NONE"];
+private _penetrator = createVehicle [_projectileClass, _position, [], 0, "NONE"];
 _penetrator enableSimulation false;
+
+private _nearDestroyables = (nearestObjects [_position, [], 100, true]) select {
+    private _distanceLimit = if (_x isKindOf "StaticShip") then { 100 } else { 30 };
+    _x distance _position < _distanceLimit && _x getVariable ["WL2_canDemolish", false];
+};
 
 private _inDestroyerArea = {
     _position inArea _x
 } count ["marker_USS Liberty_outline", "marker_USS Freedom_outline", "marker_USS Independence_outline"] > 0;
 if (_inDestroyerArea) then {
-    _position set [2, 9.5];
+    _position set [2, 9.8];
     _penetrator setPosASL _position;
 } else {
     private _inCarrierSector = {
@@ -28,14 +30,10 @@ if (_inDestroyerArea) then {
 
 [_penetrator, [player, player]] remoteExec ["setShotParents", 2];
 
-uiSleep 5;
+uiSleep _delay;
 
 _penetrator enableSimulation true;
 triggerAmmo _penetrator;
-
-private _nearDestroyables = (_position nearObjects 30) select {
-    _x getVariable ["WL2_canDemolish", false];
-};
 
 {
     [_x, _bunkerBusterSteps] call WL2_fnc_demolishStep;

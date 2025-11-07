@@ -6,7 +6,7 @@ if (isDedicated) exitWith {};
 if (_playerUID == getPlayerUID player) then {
     ["Recon", ["RECON CONTROLS", [
         ["Scan", "lockTarget"]
-    ]], 10] call WL2_fnc_showHint;
+    ]], 10] spawn WL2_fnc_showHint;
 };
 
 while { alive _asset } do {

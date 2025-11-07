@@ -2,19 +2,15 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="style/menu.css" inline>
     <link rel="stylesheet" href="style/vehicles.css" inline>
 </head>
 
 <body>
-    <div class="menu-wrapper">
-        <div class="menu-title">Vehicle Manager</div>
-        <div class="vehicle-menu">
-            <div class="panel"></div>
-        </div>
-    </div>
+    <div id="loading-overlay" class="loading-overlay">LOADING</div>
+    <div class="vehicle-menu"></div>
+    <div class="empty-state">No vehicles belonging to player found. Buy vehicles using the buy menu.</div>
+    <div class="close-button">&times;</div>
     <script src="script/vehicles.js" inline></script>
-    <script src="script/menu.js" inline></script>
     <script src="script/utility.js" inline></script>
 </body>
 

@@ -17,8 +17,8 @@ private _broadcastActionToSide = {
 private _playerFunds = (serverNamespace getVariable "fundsDatabase") getOrDefault [_uid, 0];
 
 private _addFunds = {
-	params ["_amount", ["_accountUid", _uid]];
-	[_amount, _accountUid] call WL2_fnc_fundsDatabaseWrite;
+	params ["_amount", ["_accountUid", _uid], ["_countAsTeamEarning", true]];
+	[_amount, _accountUid, _countAsTeamEarning] call WL2_fnc_fundsDatabaseWrite;
 };
 
 private _deductFunds = {
@@ -246,7 +246,7 @@ if (_action == "fundsTransfer") exitWith {
 	if (_sender getVariable ["WL2_afk", false]) exitWith {};
 	if !([_transferCost + _transferAmount] call _deductFunds) exitWith {};
 
-	[_transferAmount, getPlayerUID _recipient] call _addFunds;
+	[_transferAmount, getPlayerUID _recipient, false] call _addFunds;
 
 	private _sentMoney = format ["%1%2", WL_MoneySign, _transferAmount];
 	private _message = format [localize "STR_A3_WL_donate_cp", name _sender, name _recipient, _sentMoney];
@@ -264,9 +264,18 @@ if (_action == "kill") exitWith {
 	_sender setDamage 1;
 };
 
+if (_action == "secure") exitWith {
+	private _target = _param1;
+	_target setDamage 1;
+
+	private _reward = 50;
+	[_reward] call _addFunds;
+	[objNull, _reward, "Secured", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+};
+
 if (_action == "10K") exitWith {
 	if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
-		[10000, _uid] call WL2_fnc_fundsDatabaseWrite;
+		[10000, _uid, false] call WL2_fnc_fundsDatabaseWrite;
 	};
 };
 
@@ -287,7 +296,7 @@ if (_action == "sectorReward") exitWith {
 
 if (_action == "droneExplode") exitWith {
 	private _drone = vehicle _param1;
-	private _expl = createVehicle ["IEDUrbanBig_Remote_Ammo", getPos _drone, [], 0, "FLY"];
+	private _expl = createVehicle ["HelicopterExploBig", getPos _drone, [], 0, "FLY"];
 	_expl setPosWorld (getPosWorld _drone);
 	_expl setShotParents [_drone, _sender];
 	triggerAmmo _expl;

@@ -79,8 +79,10 @@ _texture ctrlAddEventHandler ["JSDialog", {
             if (_access # 0) then {
                 if (isAutonomous _vehicle) then {
                     [_vehicle, false] remoteExec ["setAutonomous", 0];
+                    playSoundUI ["a3\sounds_f_bootcamp\sfx\vr\simulation_fatal.wss"];
                 } else {
                     [_vehicle, true] remoteExec ["setAutonomous", 0];
+                    playSoundUI ["a3\sounds_f_bootcamp\sfx\vr\simulation_restart.wss"];
                 };
             };
         };
@@ -126,7 +128,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
         };
     };
 
-    [_texture] call WL2_fnc_sendVehicleData;
+    [_texture] spawn WL2_fnc_sendVehicleData;
     true;
 }];
 

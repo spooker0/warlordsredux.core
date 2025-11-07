@@ -9,31 +9,6 @@ waitUntil {
 _mrls addEventHandler ["Fired", {
     _this spawn {
         params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
-
-        if (player distance2D _unit < 1000) then {
-            [_unit, _projectile] spawn {
-                params ["_unit", "_projectile"];
-                private _destroyerId = _unit getVariable ["WL2_destroyerId", 0];
-
-                private _camera = "camera" camCreate (getPosASL _unit);
-                _camera cameraEffect ["Terminate", "BACK", format ["destroyercam%1", _destroyerId]];
-                _camera cameraEffect ["Internal", "BACK", format ["destroyercam%1", _destroyerId]];
-                _camera camSetTarget _projectile;
-                _camera camSetRelPos [0, -3, 0.4];
-                _camera camCommit 0;
-                _camera attachTo [_projectile];
-
-                [_camera, _projectile, _unit] spawn {
-                    params ["_camera", "_projectile", "_unit"];
-                    while { alive _projectile } do {
-                        uiSleep 1;
-                    };
-
-                    camDestroy _camera;
-                };
-            };
-        };
-
         if (cameraOn != _unit) exitWith {};
 
         private _inRangeCalculation = [_unit] call DIS_fnc_calculateInRange;
@@ -55,7 +30,61 @@ _mrls addEventHandler ["Fired", {
 
 if (!_firstSpawn) exitWith {};
 
+private _destroyerParts = getArray (configFile >> "CfgVehicles" >> typeOf _destroyerBase >> "multiStructureParts");
+private _destroyerPartsArray = [];
+
+private _destroyerPos = getPosWorld _destroyerBase;
 private _destroyerDir = getDir _destroyerBase;
+
+private _destroyerPitchBank = _destroyerBase call bis_fnc_getPitchBank;
+_destroyerPitchBank params [["_destroyerPitch", 0], ["_destroyerBank", 0]];
+
+private _destroyerHullNumbers = _destroyerBase getVariable ["WL2_destroyerHullNumbers", [0, 0, 0]];
+private _hullNum1 = _destroyerHullNumbers select 0;
+private _hullNum2 = _destroyerHullNumbers select 1;
+private _hullNum3 = _destroyerHullNumbers select 2;
+
+{
+    private _dummyClassName = _x select 0;
+    private _dummyPosition = _x select 1;
+    private _dummy = createVehicleLocal [_dummyClassName, _destroyerPos, [], 0, "CAN_COLLIDE"];
+    // private _dummy = createSimpleObject [_dummyClassName, _destroyerPos, true];
+    _dummy setDir _destroyerDir;
+
+    [_dummy, _destroyerPitch, _destroyerBank] call bis_fnc_setPitchBank;
+
+    private _destroyerPartPos = _destroyerBase modelToWorldWorld (_destroyerBase selectionPosition _dummyPosition);
+    _dummy setPosWorld _destroyerPartPos;
+
+    _destroyerPartsArray pushBack _dummy;
+
+    _dummy allowDamage false;
+
+    if (_dummyClassName == "Land_Destroyer_01_hull_01_F") then {
+        _dummy setObjectTexture [0, format ["\A3\Boat_F_Destroyer\Destroyer_01\Data\Destroyer_01_N_0%1_co.paa", _hullNum1]];
+        _dummy setObjectTexture [1, format ["\A3\Boat_F_Destroyer\Destroyer_01\Data\Destroyer_01_N_0%1_co.paa", _hullNum2]];
+        _dummy setObjectTexture [2, format ["\A3\Boat_F_Destroyer\Destroyer_01\Data\Destroyer_01_N_0%1_co.paa", _hullNum3]];
+    };
+
+    private _doorNumber = getNumber (configFile >> "CfgVehicles" >> _dummyClassName >> "numberOfDoors");
+    for "_i" from 1 to _doorNumber do {
+        _dummy animateSource [format ["Door_%1_source", _i], 1];
+    };
+
+    if (_dummyClassName == "Land_Destroyer_01_hull_04_F") then {
+        _dummy animateSource ["Door_Hangar_1_1_open", 1];
+        _dummy animateSource ["Door_Hangar_1_2_open", 1];
+        _dummy animateSource ["Door_Hangar_1_3_open", 1];
+        _dummy animateSource ["Door_Hangar_2_1_open", 1];
+        _dummy animateSource ["Door_Hangar_2_2_open", 1];
+        _dummy animateSource ["Door_Hangar_2_3_open", 1];
+    };
+
+    _dummy setVariable ["WL2_doorsLocked", true];
+} foreach _destroyerParts;
+
+private _destroyerDir = getDir _destroyerBase;
+private _destroyerProps = [];
 
 private _staticProps = [
     ["Land_PortableDesk_01_olive_F", [-0.579102,-34.438,19.6331], 0],
@@ -70,7 +99,11 @@ private _staticProps = [
     ["Land_BatteryPack_01_closed_sand_F", [1.21875, -34.3982, 19.6868], -1.62357],
     ["Land_PortableServer_01_sand_F", [1.15527, -34.5205, 19.3637], -3.05557],
     ["Land_DeskChair_01_black_F", [2.62598, -34.708, 19.4234], 152.338],
-    ["Land_Router_01_sand_F", [2.79883, -34.4292, 20.1897], -177.399]
+    ["Land_Router_01_sand_F", [2.79883, -34.4292, 20.1897], -177.399],
+    ["Land_Plank_01_8m_F", [15, 0, 21.0], 90.0],
+    ["Land_Plank_01_8m_F", [15, 0.8, 21.0], 90.0],
+    ["Land_Plank_01_8m_F", [-15, 0, 21.0], -90.0],
+    ["Land_Plank_01_8m_F", [-15, 0.8, 21.0], -90.0]
 ];
 
 {
@@ -86,6 +119,8 @@ private _staticProps = [
 
     _staticProp allowDamage false;
     _staticProp enableSimulation false;
+
+    _destroyerProps pushBack _staticProp;
 } forEach _staticProps;
 
 private _trolleyLocations = [
@@ -112,6 +147,8 @@ private _trolleyLocations = [
         5,
         false
     ];
+
+    _destroyerProps pushBack _trolley;
 } forEach _trolleyLocations;
 
 private _destroyerId = _destroyerBase getVariable ["WL2_destroyerId", 0];
@@ -120,11 +157,14 @@ private _ropeLocations = [
     [0, -110.5, 14],
     [0, 92, 10.5],
     [11, 60, 17],
-    [-11, 60, 17]
+    [-11, 60, 17],
+    [19, 0.4, 21.5],
+    [-19, 0.4, 21.5]
 ];
-private _ropeDirections = [0, 180, 180, 180];
-private _ropeMinLevel = [0, 0, 9, 9];
+private _ropeDirections = [0, 180, 180, 180, 270, 90];
+private _ropeMinLevel = [0, 0, 9, 9, 0, 0];
 
+private _ropeMarkers = [];
 {
     private _ropeLocation = _x;
 
@@ -139,10 +179,13 @@ private _ropeMinLevel = [0, 0, 9, 9];
     _marker setMarkerTypeLocal "loc_Quay";
     _marker setMarkerAlphaLocal 0.4;
     _marker setMarkerSizeLocal [0.7, 0.7];
+    _ropeMarkers pushBack _marker;
 
     private _existingRopes = missionNamespace getVariable ["WL2_rappelRopes", []];
     _existingRopes pushBack _rope;
     missionNamespace setVariable ["WL2_rappelRopes", _existingRopes];
+
+    _destroyerProps pushBack _rope;
 } forEach _ropeLocations;
 
 _controller addAction [
@@ -183,3 +226,45 @@ _controller addAction [
     30,
     false
 ];
+
+while { alive _destroyerBase } do {
+    uiSleep 1;
+};
+
+{
+    deleteVehicle _x;
+} forEach _destroyerProps;
+
+{
+    deleteMarkerLocal _x;
+} forEach _ropeMarkers;
+
+private _destroyerPartPos = _destroyerPartsArray apply {
+    [_x, getPosASL _x];
+};
+
+private _startTime = serverTime;
+while { serverTime < _startTime + 120 } do {
+    uiSleep 0.0001;
+    {
+        private _part = _x select 0;
+        private _startPos = _x select 1;
+        private _endPos = _startPos vectorAdd [0, 0, -75];
+
+        _part setVelocityTransformation [
+            _startPos,
+            _endPos,
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 1],
+            [0, 0, 1],
+            [0, 0, 1],
+            [0, 0, 1],
+            (serverTime - _startTime) / 120
+        ];
+    } forEach _destroyerPartPos;
+};
+
+{
+    deleteVehicle _x;
+} forEach _destroyerPartsArray;

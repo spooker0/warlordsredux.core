@@ -9,7 +9,9 @@ private _compensation = 50;
 private _shooterUid = _shooter getVariable ["BIS_WL_ownerAsset", "123"];
 private _originator = _originatorUid call BIS_fnc_getUnitByUID;
 
-if (side group _originator == side group _shooter) then {
+private _originatorSide = side group _originator;
+
+if (_originatorSide == side group _shooter) then {
     _reward = 0;
     _compensation = 0;
 };
@@ -23,3 +25,5 @@ if (isPlayer _originator) then {
     [_compensation, _originatorUid] call WL2_fnc_fundsDatabaseWrite;
     [objNull, _compensation, "Projectile jammed", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _originator];
 };
+
+[[_shooter], 60] remoteExec ["WL2_fnc_reportTargets", _originatorSide];

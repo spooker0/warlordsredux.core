@@ -316,7 +316,7 @@ class CfgFunctions {
 			class assetButtonRadarRotate {};
 			class assetMapButtons {};
 			class assetMapControl {};
-			class captureList {};
+			class captureDisplay {};
 			class createInfoMarkers {};
 			class deleteAssetFromMap {};
 			class detectUnits {};
@@ -340,7 +340,6 @@ class CfgFunctions {
 			class sectorScanHandle {};
 			class sectorsInitClient {};
 			class sectorVoteClient {};
-			class sectorVoteDisplay {};
 			class selectedTargetsHandle {};
 			class targetSelected {};
 			class uavMapButtons {};

@@ -3,36 +3,36 @@ params ["_key"];
 
 private _display = uiNamespace getVariable ["RscWLTargetingMenu", displayNull];
 if (isNull _display) exitWith {};
-private _texture = _display displayCtrl 5502;
 
-private _toggle = false;
-if (_key in actionKeys "gunElevUp" || _key in actionKeys "gunElevDown") then {
-    _toggle = true;
+private _delta = 0;
+if (_key in actionKeys "gunElevUp") then {
+    _delta = -1;
+};
+
+if (_key in actionKeys "gunElevDown") then {
+    _delta = 1;
 };
 
 private _currentIndex = cameraOn getVariable ["DIS_selectionIndex", 0];
-if (_toggle) exitWith {
-    private _newIndex = if (_currentIndex == 0) then {
-        1
-    } else {
-        0
+if (_delta != 0) then {
+    private _savedCords = cameraOn getVariable ["DIS_savedGPSCoordinates", []];
+    private _countCords = count _savedCords;
+
+    private _newIndex = (_currentIndex + _delta) mod (_countCords + 2);
+    if (_newIndex < 0) then {
+        _newIndex = _countCords + 1;
     };
     cameraOn setVariable ["DIS_selectionIndex", _newIndex];
 
-    if (_newIndex == 1) then {
-        cameraOn setVariable ["DIS_gpsCord", ""];
-    } else {
-        private _existingCord = cameraOn getVariable ["DIS_gpsCord", ""];
-        while { count _existingCord < 6 } do {
-            _existingCord = "0" + _existingCord;
-        };
-        cameraOn setVariable ["DIS_gpsCord", _existingCord];
+    if (_newIndex > 1) then {
+        private _newCord = _savedCords select (_newIndex - 2);
+        cameraOn setVariable ["DIS_gpsCord", _newCord];
     };
 
     playSoundUI ["a3\ui_f\data\sound\rsccombo\soundexpand.wss", 2];
 };
 
-if (_currentIndex == 0) exitWith {};
+if (_currentIndex != 1) exitWith {};
 
 private _isNumberKey = true;
 private _addToCode = switch (_key) do {
@@ -66,11 +66,10 @@ if (!_isNumberKey) exitWith {};
 
 private _existingCord = cameraOn getVariable ["DIS_gpsCord", ""];
 private _newCord = _existingCord + _addToCode;
-cameraOn setVariable ["DIS_gpsCord", _newCord];
-
-if (count _newCord >= 6) then {
-    cameraOn setVariable ["DIS_selectionIndex", 0];
+if (count _newCord > 6) then {
+    _newCord = _newCord select [count _newCord - 6, 6];
 };
+cameraOn setVariable ["DIS_gpsCord", _newCord];
 
 playSoundUI ["a3\ui_f\data\sound\rsccombo\soundexpand.wss", 2];
 

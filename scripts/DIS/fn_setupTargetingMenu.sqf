@@ -96,44 +96,30 @@ private _makeMunitionTextArray = {
 		};
 
 		private _missileType = _projectile getVariable ["WL2_missileType", ""];
-		private _projectileTarget = _projectile getVariable ["DIS_ultimateTarget", objNull];
 
-		private _munitionText = if (!alive _projectileTarget) then {
-			format ["%1 -> N/A", _missileType]
+		private _munitionText = if (_missileType == "GPS") then {
+			private _terminalTarget = _projectile getVariable ["DIS_terminalTarget", ""];
+			if (_terminalTarget == "") then {
+				private _target = _projectile getVariable ["DIS_targetCoordinates", [0, 0, 0]];
+				private _distance = _projectile distance _target;
+				format ["GPS -> AREA [%1KM]", (_distance / 1000) toFixed 1];
+			} else {
+				format ["GPS -> %1 [TERMINAL]", toUpper _terminalTarget];
+			};
 		} else {
-			private _projectileTargetName = [_projectileTarget] call WL2_fnc_getAssetTypeName;
-			private _projectileDistance = _projectile distance _projectileTarget;
-			format ["%1 -> %2 [%3KM]", _missileType, toUpper _projectileTargetName, (_projectileDistance / 1000) toFixed 1]
+			private _projectileTarget = _projectile getVariable ["DIS_ultimateTarget", objNull];
+			if (!alive _projectileTarget) then {
+				format ["%1 -> N/A", _missileType]
+			} else {
+				private _projectileTargetName = [_projectileTarget] call WL2_fnc_getAssetTypeName;
+				private _projectileDistance = _projectile distance _projectileTarget;
+				format ["%1 -> %2 [%3KM]", _missileType, toUpper _projectileTargetName, (_projectileDistance / 1000) toFixed 1]
+			};
 		};
+
 		_munitionTextArray pushBack _munitionText;
 	} forEach _munitionList;
 	_munitionTextArray;
-};
-
-private _makeGPSBombTextArray = {
-	private _gpsBombs = cameraOn getVariable ["DIS_gpsBombs", []];
-	private _bombsTextArray = [];
-	{
-		private _projectile = _x;
-		if (!alive _projectile) then {
-			continue;
-		};
-
-		private _posAGL = _projectile modelToWorld [0, 0, 0];
-		if (_posAGL select 2 < 50) then {
-			continue;
-		};
-
-		private _terminalTarget = _projectile getVariable ["DIS_terminalTarget", ""];
-		if (_terminalTarget == "") then {
-			private _target = _projectile getVariable ["DIS_targetCoordinates", [0, 0, 0]];
-			private _distance = _projectile distance _target;
-			_bombsTextArray pushBack format ["GPS -> AREA [%1KM]", (_distance / 1000) toFixed 1];
-		} else {
-			_bombsTextArray pushBack format ["GPS -> %1 [TERMINAL]", toUpper _terminalTarget];
-		};
-	} forEach _gpsBombs;
-	_bombsTextArray;
 };
 
 [_texture] spawn {
@@ -213,13 +199,12 @@ while { !BIS_WL_missionEnd } do {
 		private _shown = _hintEntry # 2;
 		if (!_shown) then {
 			_hintMap set [_currentMode, [_hintId, _controlParams, true]];
-			[_hintId, _controlParams, 10] call WL2_fnc_showHint;
+			[_hintId, _controlParams, 10] spawn WL2_fnc_showHint;
 		};
 	};
 
 	private _munitionList = cameraOn getVariable ["DIS_munitionList", []];
 	private _munitionsTextArray = [_munitionList] call _makeMunitionTextArray;
-	_munitionsTextArray append (call _makeGPSBombTextArray);
 
 	if (count _munitionsTextArray > 0) then {
 		private _munitionsText = toJSON _munitionsTextArray;
@@ -241,13 +226,18 @@ while { !BIS_WL_missionEnd } do {
 			_script = _script + format ["setMode(""aa"", ""%1"");setAATargetData(atobr(""%2""));", _currentModeTitle, _targetsText];
 		};
 		case "gps": {
+			private _nextActionText = (actionKeysNames "gunElevDown") regexReplace ["""", ""];
+			_nextActionText = toUpper _nextActionText;
+			private _savedCords = cameraOn getVariable ["DIS_savedGPSCoordinates", []];
 			private _gpsSelectionIndex = cameraOn getVariable ["DIS_selectionIndex", 0];
 			private _gpsCord = cameraOn getVariable ["DIS_gpsCord", ""];
 			private _inRangeCalculation = [cameraOn] call DIS_fnc_calculateInRange;
 
 			_script = _script + format [
-				"setMode(""gps"", ""%1"");setGPSData(%2, ""%3"", ""%4"", ""%5"", %6);",
+				"setMode(""gps"", ""%1"");setGPSData(""%2"", %3, %4, ""%5"", ""%6"", ""%7"", %8);",
 				_currentModeTitle,
+				_nextActionText,
+				_savedCords,
 				_gpsSelectionIndex,
 				_gpsCord,
 				(_inRangeCalculation # 2 / 1000) toFixed 1,

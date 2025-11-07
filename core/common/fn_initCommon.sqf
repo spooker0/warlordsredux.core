@@ -4,6 +4,7 @@ if !(isDedicated) then {
 		!(isNull (findDisplay 46)) && !(isNull player);
 	};
 };
+"common" call WL2_fnc_varsInit;
 
 if (hasInterface) then {
 	["main"] call BIS_fnc_startLoadingScreen;
@@ -62,8 +63,6 @@ private _catapultTriggers = allMissionObjects "EmptyDetector" select {
 {
 	deleteVehicle _x;
 } forEach _catapultTriggers;
-
-"common" call WL2_fnc_varsInit;
 
 enableSaving [false, false];
 

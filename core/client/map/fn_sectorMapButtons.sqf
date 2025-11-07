@@ -205,10 +205,10 @@ if (_playerLevel >= 50) then {
     };
 
     _display closeDisplay 1;
-    WL2_TargetButtonSetup = [objNull, [], 0, 0];
+    WL2_TargetButtonSetup = [displayNull, [], 0, 0];
 };
 
 if (count _menuButtons == 0) then {
     _display closeDisplay 1;
-    WL2_TargetButtonSetup = [objNull, [], 0, 0];
+    WL2_TargetButtonSetup = [displayNull, [], 0, 0];
 };

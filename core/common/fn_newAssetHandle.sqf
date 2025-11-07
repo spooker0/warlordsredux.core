@@ -17,6 +17,17 @@ if (isPlayer _owner) then {
 	missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_DURATION_AFKTIME];
 };
 
+private _playerUID = if (isPlayer _owner) then {
+	getPlayerUID _owner
+} else {
+	"123"
+};
+
+private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", _playerUID];
+private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
+_ownedVehicles pushBack _asset;
+missionNamespace setVariable [_ownedVehicleVar, _ownedVehicles, true];
+
 if (_asset isKindOf "Man") then {
 	_asset call APS_fnc_setupProjectiles;
 
@@ -34,11 +45,6 @@ if (_asset isKindOf "Man") then {
 	} else {
 		independent
 	};
-	private _playerUID = if (isPlayer _owner) then {
-		getPlayerUID _owner
-	} else {
-		"123"
-	};
 
 	private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
 
@@ -52,11 +58,6 @@ if (_asset isKindOf "Man") then {
 
 	_asset setVariable ["WL2_nextRepair", 0, true];
 	_asset setVariable ["BIS_WL_ownerAssetSide", _side, true];
-
-	private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", _playerUID];
-	private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
-	_ownedVehicles pushBack _asset;
-	missionNamespace setVariable [_ownedVehicleVar, _ownedVehicles, true];
 
 	[_asset, true] remoteExec ["setVehicleReceiveRemoteTargets", _asset, true];
 	[_asset, true] remoteExec ["setVehicleReportRemoteTargets", _asset, true];
@@ -195,8 +196,27 @@ if (_asset isKindOf "Man") then {
 		case "O_UAV_06_F";
 		case "I_UAV_06_F": {
 			_asset addEventHandler ["Killed", {
-				params ["_unit", "_killer", "_instigator", "_useEffects"];
+				params ["_unit"];
 				[player, "droneExplode", _unit] remoteExec ["WL2_fnc_handleClientRequest", 2];
+			}];
+		};
+
+		case "B_Boat_Bomb_01_F";
+		case "O_Boat_Bomb_01_F": {
+			_asset addEventHandler ["EpeContact", {
+				params ["_unit", "_object2", "_selection1", "_selection2", "_force", "_reactVect", "_worldPos"];
+				if (speed _unit < 30) exitWith {};
+				if (_unit getVariable ["WL2_explosionActivated", false]) exitWith {};
+				_unit setVariable ["WL2_explosionActivated", true];
+				[player, "droneExplode", _unit] remoteExec ["WL2_fnc_handleClientRequest", 2];
+				["Bo_Mk82", getPosASL _unit, 7, 2] spawn DIS_fnc_bunkerBuster;
+			}];
+			_asset addEventHandler ["Killed", {
+				params ["_unit"];
+				if (_unit getVariable ["WL2_explosionActivated", false]) exitWith {};
+				_unit setVariable ["WL2_explosionActivated", true];
+				[player, "droneExplode", _unit] remoteExec ["WL2_fnc_handleClientRequest", 2];
+				["Bo_Mk82", getPosASL _unit, 7, 2] spawn DIS_fnc_bunkerBuster;
 			}];
 		};
 	};

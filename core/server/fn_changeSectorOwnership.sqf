@@ -17,7 +17,7 @@ if !(_owner in _previousOwners) then {
 			private _reward = ((round (_closestNeighborDistance / 3)) min 1000) max 100;
 			{
 				private _uid = getPlayerUID _x;
-				[_reward, _uid] call WL2_fnc_fundsDatabaseWrite;
+				[_reward, _uid, false] call WL2_fnc_fundsDatabaseWrite;
 				[objNull, _reward, "Sector captured", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _x];
 			} forEach (allPlayers select {
 				side group _x == _owner

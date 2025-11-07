@@ -11,7 +11,7 @@ player addAction [
                 ["Increase value", "BuldRight"],
                 ["Next setting", "BuldBack"],
                 ["Previous setting", "BuldForward"]
-            ]], 10] call WL2_fnc_showHint;
+            ]], 10] spawn WL2_fnc_showHint;
         } else {
             "hmd" cutText ["", "PLAIN"];
         };

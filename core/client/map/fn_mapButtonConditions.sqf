@@ -38,7 +38,8 @@ switch (_conditionName) do {
     case "fastTravelSL": {
         private _mySquadLeader = ['getMySquadLeader'] call SQD_fnc_client;
         private _isMySquadLeader = getPlayerID _target == _mySquadLeader || getPlayerID (vehicle _target) == _mySquadLeader;
-        _target != player && isPlayer _target && _isMySquadLeader && alive _target && lifeState _target != "INCAPACITATED";
+        private _isTouchingGround = isTouchingGround _target || vehicle _target != _target;
+        _target != player && isPlayer _target && _isMySquadLeader && alive _target && lifeState _target != "INCAPACITATED" && _isTouchingGround;
     };
     case "fastTravelSquad": {
         private _squadMember = if (vehicle _target == _target) then {
@@ -47,10 +48,11 @@ switch (_conditionName) do {
             vehicle _target
         };
         private _areInSquad = ["areInSquad", [getPlayerID _squadMember, getPlayerID player]] call SQD_fnc_client;
-        _target != player && isPlayer _target && _areInSquad && alive _target && lifeState _target != "INCAPACITATED";
+        private _isTouchingGround = isTouchingGround _squadMember || vehicle _target != _target;
+        _target != player && isPlayer _target && _areInSquad && alive _target && lifeState _target != "INCAPACITATED" && _isTouchingGround;
     };
     case "fastTravelAI": {
-        alive _target && lifeState _target != "INCAPACITATED" && _target != player && _target in (units player);
+        alive _target && lifeState _target != "INCAPACITATED" && _target != player && _target in (units player) && isTouchingGround _target;
     };
     case "fastTravelStronghold": {
         private _findIsStronghold = (BIS_WL_sectorsArray # 2) select {
@@ -117,20 +119,25 @@ switch (_conditionName) do {
     case "repairFOB": {
         private _maxHealth = _target getVariable ["WL2_demolitionMaxHealth", 12];
         private _hasIntruders = _target getVariable ["WL2_forwardBaseIntruders", false];
+        private _canRepairTime = _target getVariable ["WL2_canRepairTime", 0];
 
         alive _target &&
         !_hasIntruders &&
         _target getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide &&
         _target getVariable ["WL2_forwardBaseSupplies", -1] >= WL_FOB_REPAIR_COST &&
-        _target getVariable ["WL2_demolitionHealth", _maxHealth] < _maxHealth
+        _target getVariable ["WL2_demolitionHealth", _maxHealth] < _maxHealth &&
+        serverTime >= _canRepairTime;
     };
     case "repairStronghold": {
         private _strongholdSector = _target getVariable ["WL_strongholdSector", objNull];
         private _maxHealth = _target getVariable ["WL2_demolitionMaxHealth", 8];
         private _hasIntruders = _target getVariable ["WL2_strongholdIntruders", false];
+        private _canRepairTime = _target getVariable ["WL2_canRepairTime", 0];
+
         alive _target &&
         !(isNull _strongholdSector) &&
         _target getVariable ["WL2_demolitionHealth", _maxHealth] < _maxHealth &&
-        !_hasIntruders;
+        !_hasIntruders &&
+        serverTime >= _canRepairTime;
     };
 };

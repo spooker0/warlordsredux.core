@@ -64,7 +64,12 @@ private _relevantVehicles = if (_awacs) then {
         [_assetPos, getDir _asset, 60, _vehiclePos] call WL2_fnc_inAngleCheck;
     };
 } else {
-    (vehicles + allUnits) select {
+    private _enemyUnits = switch (_assetSide) do {
+        case west: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
+        case east: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
+        default { [] };
+    };
+    _enemyUnits select {
         private _vehiclePos = _x modelToWorldVisual [0, 0, 0];
         (_x getVariable ["WL_spawnedAsset", false] || isPlayer _x)
     };

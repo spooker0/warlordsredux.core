@@ -19,7 +19,8 @@ private _uavsWithAccess = allUnitsUAV select {
     _uavAccess # 0;
 };
 _playerVehicles insert [-1, _uavsWithAccess, true];
-_playerVehicles = _playerVehicles select { alive _x };
+_playerVehicles = _playerVehicles select { alive _x } select { !(_x isKindOf "Man") };
+_playerVehicles = [_playerVehicles, [], { _x distance cameraOn }, "ASCEND"] call BIS_fnc_sortBy;
 
 private _vehicleInfoText = toJSON (
     _playerVehicles apply {
@@ -35,7 +36,7 @@ private _vehicleInfoText = toJSON (
         private _vehicleMaxAps = _vehicle call APS_fnc_getMaxAmmo;
         private _apsAmmo = if (_vehicleMaxAps > 0) then {
             private _actualApsAmmo = _vehicle getVariable ["apsAmmo", 0];
-            format ["(APS: %1/%2)", _actualApsAmmo, _vehicleMaxAps]
+            format ["APS: %1/%2", _actualApsAmmo, _vehicleMaxAps]
         } else {
             ""
         };
@@ -43,18 +44,17 @@ private _vehicleInfoText = toJSON (
         private _accessControl = _vehicle getVariable ["WL2_accessControl", -1];
         (_accessControl call WL2_fnc_getVehicleLockStatus) params ["_lockColor", "_lockLabel"];
 
-        private _vehicleName = format ["%1 @ %2 %3 | %4", _displayName, _assetLocation, _apsAmmo, _lockLabel];
         private _vehicleOwner = _vehicle getVariable ["BIS_WL_ownerAsset", "123"];
         if (_vehicleOwner != _playerUid) then {
-            _vehicleName = format ["(SHARED) %1", _vehicleName];
+            _displayName = format ["(SHARED) %1", _displayName];
         };
 
-        // private _vehicleIcon = getText (configFile >> "CfgVehicles" >> typeOf _vehicle >> "picture");
-		// _vehicleIcon = if (_vehicleIcon in ["pictureThing", "pictureStaticObject"]) then {
-		// 	"a3\ui_f\data\map\vehicleicons\iconcratesupp_ca.paa";
-		// } else {
-		// 	_vehicleIcon regexReplace ["^\\", ""];
-		// };
+        private _vehicleIcon = getText (configFile >> "CfgVehicles" >> typeOf _vehicle >> "picture");
+		_vehicleIcon = if (_vehicleIcon in ["pictureThing", "pictureStaticObject"]) then {
+			"a3\ui_f\data\map\vehicleicons\iconcratesupp_ca.paa";
+		} else {
+			_vehicleIcon regexReplace ["^\\", ""];
+		};
 
         private _availableActions = ["remove"];
 
@@ -74,14 +74,18 @@ private _vehicleInfoText = toJSON (
         };
 
         private _driverAccess = [_vehicle, player, "driver"] call WL2_fnc_accessControl;
-        if (unitIsUAV _vehicle && _driverAccess # 0) then {
+        private _assetActualType = _vehicle getVariable ["WL2_orderedClass", typeOf _vehicle];
+        private _isDrone = unitIsUAV _vehicle || (WL_ASSET(_assetActualType, "drone", 0) > 0);
+        if (_isDrone && _driverAccess # 0) then {
             if (alive (gunner _vehicle)) then {
                 _availableActions pushBack "connect-gunner";
             };
             if (alive (driver _vehicle)) then {
                 _availableActions pushBack "connect-driver";
             };
-            _availableActions pushBack "set-auto";
+            if (unitIsUAV _vehicle) then {
+                _availableActions pushBack "set-auto";
+            };
         };
 
         private _fullAccess = [_vehicle, player, "full"] call WL2_fnc_accessControl;
@@ -107,13 +111,10 @@ private _vehicleInfoText = toJSON (
             _availableActions pushBack "refuel";
         };
 
-        [netid _vehicle, _vehicleName, _availableActions]
+        [netid _vehicle, [_displayName, _assetLocation, _apsAmmo, _lockLabel], _availableActions, _vehicleIcon]
     }
 );
 _vehicleInfoText = _texture ctrlWebBrowserAction ["ToBase64", _vehicleInfoText];
 
-private _script = format [
-    "updateData(atobr(""%1""));",
-    _vehicleInfoText
-];
+private _script = format ["updateData(atobr(""%1""));", _vehicleInfoText];
 _texture ctrlWebBrowserAction ["ExecJS", _script];

@@ -10,6 +10,9 @@ switch (_locality) do {
 		BIS_WL_mapSize = getNumber (configFile >> "cfgWorlds" >> worldName >> "mapSize");
 		if (BIS_WL_mapSize == 0) then {BIS_WL_mapSize = getNumber (configFile >> "cfgWorlds" >> worldName >> "Grid" >> "OffsetY")};
 		WL_MoneySign = [BIS_WL_playerSide] call WL2_fnc_getMoneySign;
+		BIS_WL_westOwnedVehicles = [];
+		BIS_WL_eastOwnedVehicles = [];
+		BIS_WL_guerOwnedVehicles = [];
 	};
 	case "client": {
 		BIS_WL_enemySide = (BIS_WL_competingSides - [BIS_WL_playerSide]) # 0;

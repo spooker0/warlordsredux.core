@@ -3,6 +3,7 @@
 params ["_demolishableItems"];
 
 if (cameraOn != player) exitWith { objNull };
+if (!isTouchingGround player) exitWith { objNull };
 
 if (count _demolishableItems == 0) exitWith { objNull };
 if (count _demolishableItems > 1) then {

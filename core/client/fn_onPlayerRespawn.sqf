@@ -22,12 +22,11 @@ if (side group player == independent) then {
 };
 #endif
 
-private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID _newUnit];
+private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
 private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];
 private _newOwnedVehicles = _ownedVehicles select { alive _x };
-if !(_ownedVehicles isEqualTo _newOwnedVehicles) then {
-	missionNamespace setVariable [_ownedVehiclesVar, _newOwnedVehicles, [2, clientOwner]];
-};
+_newOwnedVehicles pushBack _newUnit;
+missionNamespace setVariable [_ownedVehiclesVar, _newOwnedVehicles, [2, clientOwner]];
 
 if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
 	player addAction [
