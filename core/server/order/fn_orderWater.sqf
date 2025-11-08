@@ -35,6 +35,7 @@ if (_drone > 0) then {
     };
 
     _asset lockDriver true;
+    _asset setVariable ["WL2_manualDrone", true, true];
     _assetGrp deleteGroupWhenEmpty true;
 };
 

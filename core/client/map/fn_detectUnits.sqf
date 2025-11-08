@@ -2,8 +2,8 @@
 params ["_side", "_area"];
 
 private _enemyUnits = switch (_side) do {
-    case west: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
-    case east: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
+    case west: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
+    case east: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
     default { [] };
 };
 

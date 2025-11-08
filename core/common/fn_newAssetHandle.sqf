@@ -305,6 +305,7 @@ if (_asset isKindOf "Man") then {
 
 	if (_asset isKindOf "Plane") then {
 		[_asset] remoteExec ["WL2_fnc_catapultAction", 0];
+		_asset setVariable ["bis_ejected", true, true];
 	};
 
 	if (typeOf _asset == "VirtualReammoBox_camonet_F") then {

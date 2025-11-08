@@ -3,7 +3,7 @@ params ["_shooter", "_originatorUid"];
 
 if (isNil "_originatorUid") exitWith {};
 
-private _reward = 300;
+private _reward = 100;
 private _compensation = 50;
 
 private _shooterUid = _shooter getVariable ["BIS_WL_ownerAsset", "123"];

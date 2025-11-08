@@ -127,16 +127,31 @@ private _interceptAction = {
             false;
         };
         case "UserType": {
-            if (_text == "Close door") then {
-                if (_target getVariable ["WL2_doorsLocked", false]) then {
-                    systemChat "Door locked.";
-                    playSoundUI ["AddItemFailed"];
-                    true;
-                } else {
+            switch (_text) do {
+                case "Close door": {
+                    if (_target getVariable ["WL2_doorsLocked", false]) then {
+                        systemChat "Door locked.";
+                        playSoundUI ["AddItemFailed"];
+                        true;
+                    } else {
+                        false;
+                    };
+                };
+                case "Eject": {
+                    private _vehicle = vehicle player;
+                    private _eligible = _vehicle isKindOf "Plane" && speed _vehicle > 1;
+                    if (_eligible) then {
+                        playSoundUI ["a3\sounds_f_jets\vehicles\air\shared\fx_plane_jet_ejection_in.wss"];
+                        moveOut player;
+                        [player] spawn WL2_fnc_parachuteSetup;
+                        true;
+                    } else {
+                        false;
+                    };
+                };
+                default {
                     false;
                 };
-            } else {
-                false;
             };
         };
         default {

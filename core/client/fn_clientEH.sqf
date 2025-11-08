@@ -120,6 +120,15 @@ addMissionEventHandler ["HandleChatMessage", {
 		[_key] call WL2_fnc_handleBuyMenuKeypress;
 	}];
 
+	addUserActionEventHandler ["Eject", "Activate", {
+		private _vehicle = vehicle player;
+		if (_vehicle isKindOf "Plane" && speed _vehicle > 1) then {
+			playSoundUI ["a3\sounds_f_jets\vehicles\air\shared\fx_plane_jet_ejection_in.wss"];
+			moveOut player;
+			[player] spawn WL2_fnc_parachuteSetup;
+		};
+	}];
+
 	while { !BIS_WL_missionEnd } do {
 		private _purchaseMenu = uiNamespace getVariable ["BIS_WL_purchaseMenuDisplay", displayNull];
 		if (isNull _purchaseMenu) then {

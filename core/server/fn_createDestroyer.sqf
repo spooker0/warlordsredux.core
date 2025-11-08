@@ -99,8 +99,12 @@ while { alive _destroyerBase } do {
 };
 
 deleteVehicle _controller;
-// deleteVehicle _screen;
 deleteVehicle _mrls;
+
+_outlineMarker setMarkerColor "ColorBlack";
+_destroyerMarker setMarkerTextLocal format ["%1 (DDG-%2) - SINKING", _destroyerName, _hullNumber];
+
+uiSleep 60;
 
 deleteMarker _outlineMarker;
 deleteMarker _destroyerMarker;

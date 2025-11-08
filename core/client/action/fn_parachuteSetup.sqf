@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_unit", "_actionId"];
+params ["_unit"];
 
 private _parachuteActionId = _unit addAction [
     "<t color='#00ff00'>Open Parachute</t>",

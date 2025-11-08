@@ -33,12 +33,19 @@ while { alive player } do {
         player connectTerminalToUAV objNull;
     };
 
+    private _isManualDrone = _currentCamera getVariable ["WL2_manualDrone", false];
     private _thirdPersonDisabled = _settingsMap getOrDefault ["3rdPersonDisabled", false];
-    if (_thirdPersonDisabled) then {
+    if (_thirdPersonDisabled && !_isManualDrone) then {
         if (cameraView == "EXTERNAL") then {
             cameraOn switchCamera "Internal";
         };
     };
+    if (_isManualDrone) then {
+        if (cameraView != "EXTERNAL") then {
+            cameraOn switchCamera "External";
+        };
+    };
+
     private _playerThirdPersonDisabled = player getVariable ["WL2_3rdPersonDisabled", false];
     if (_playerThirdPersonDisabled != _thirdPersonDisabled) then {
         player setVariable ["WL2_3rdPersonDisabled", _thirdPersonDisabled, true];

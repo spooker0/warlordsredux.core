@@ -251,15 +251,18 @@ while { serverTime < _startTime + 120 } do {
         private _startPos = _x select 1;
         private _endPos = _startPos vectorAdd [0, 0, -75];
 
+        private _vectorDir = vectorDir _part;
+        private _vectorUp = vectorUp _part;
+
         _part setVelocityTransformation [
             _startPos,
             _endPos,
             [0, 0, 0],
             [0, 0, 0],
-            [0, 0, 1],
-            [0, 0, 1],
-            [0, 0, 1],
-            [0, 0, 1],
+            _vectorDir,
+            _vectorDir,
+            _vectorUp,
+            _vectorUp,
             (serverTime - _startTime) / 120
         ];
     } forEach _destroyerPartPos;
