@@ -65,8 +65,8 @@ private _relevantVehicles = if (_awacs) then {
     };
 } else {
     private _enemyUnits = switch (_assetSide) do {
-        case west: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
-        case east: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
+        case west: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
+        case east: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
         default { [] };
     };
     _enemyUnits select {
