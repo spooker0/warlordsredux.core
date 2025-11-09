@@ -6,7 +6,7 @@ _penetrator enableSimulation false;
 
 private _nearDestroyables = (nearestObjects [_position, [], 100, true]) select {
     private _distanceLimit = if (_x isKindOf "StaticShip") then { 100 } else { 30 };
-    _x distance _position < _distanceLimit && _x getVariable ["WL2_canDemolish", false];
+    _x distance2D _position < _distanceLimit && _x getVariable ["WL2_canDemolish", false];
 };
 
 private _inDestroyerArea = {
