@@ -10,6 +10,8 @@ if (vehicle player != player) exitWith {
 private _ropes = missionNamespace getVariable ["WL2_rappelRopes", []];
 private _ropesInRange = _ropes select {
     _x distance2D player < 5
+} select {
+    _x getVariable ["WL2_rappelRopeMinLevel", 0] < ((getPosASL player) # 2 + 3)
 };
 if (count _ropesInRange > 0) then {
     _ropesInRange # 0

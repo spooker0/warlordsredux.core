@@ -452,7 +452,7 @@ private _removeStrongholdExecute = {
     true,
     "removeStronghold",
     [
-        500,
+        WL_COST_STRONGHOLD,
         "RemoveStronghold",
         "Fast Travel"
     ]
@@ -472,7 +472,7 @@ private _repairStrongholdExecute = {
     true,
     "repairStronghold",
     [
-        250,
+        WL_COST_STRONGHOLD / 2,
         "RepairStronghold",
         "Fast Travel"
     ]
@@ -527,7 +527,7 @@ private _fortifyStrongholdExecute = {
     true,
     "fortifyStronghold",
     [
-        2000,
+        WL_COST_FORTIFY,
         "FortifyStronghold",
         "Fortify Stronghold"
     ]

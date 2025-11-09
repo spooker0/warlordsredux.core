@@ -62,11 +62,6 @@ player spawn APS_fnc_setupProjectiles;
 
 0 spawn WL2_fnc_updateLevelDisplay;
 
-if (player getVariable ["WL_hasGoggles", false]) then {
-	player addGoggles "G_Tactical_Clear";
-} else {
-	removeGoggles player;
-};
 player setVariable ["WL2_hasGrapple", 0];
 
 call WL2_fnc_controlUAVAction;

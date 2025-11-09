@@ -39,16 +39,6 @@ private _purchaseable = [];
 				"\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
 				"Loadouts menu for respawn loadout."
 			];
-			#if WL_AR_GLASSES_TOGGLE
-			_categoryData pushBack [
-				"BuyGlasses",
-				1000,
-				[],
-				"Buy AR Glasses",
-				"\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
-				"Buy AR glasses, which show you enemies spotted by friendly datalink, while you are in range of an EW network. Use +/- keys to increase/decrease range."
-			];
-			#endif
 		};
 	};
 
@@ -234,7 +224,7 @@ private _fastTravelArr = [
 		format ["Purchases equipment that can be airlifted or deployed into a forward position and setup into a base.<br/>Deploy requirements:<br/>1. Must be squad leader.<br/>2. Squad size >= 3.<br/>3. Outside of sectors.<br/>4. At least %1 away from other forward bases.<br/>5. Can have 3 total at once.<br/>Can also be used to add 20,000 supplies to an existing FOB.", WL_FOB_MIN_DISTANCE]
 	], [
 		"BuyStronghold",
-		500,
+		WL_COST_STRONGHOLD,
 		[],
 		"Purchase sector stronghold",
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",

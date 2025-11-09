@@ -36,8 +36,8 @@ private _actionCost = switch (_action) do {
 	case "orderAsset" : { WL_ASSET(_param3, "cost", 50001) };
 	case "resetVehicle" : { 10 };
 	case "equip" : { _param1 max 0 };
-	case "buyStronghold" : { 500 };
-	case "fortifyStronghold" : { 2000 };
+	case "buyStronghold" : { WL_COST_STRONGHOLD };
+	case "fortifyStronghold" : { WL_COST_FORTIFY };
 	case "orderArsenal" : { WL_COST_ARSENAL };
 	case "fastTravelContested" : { WL_COST_FTCONTESTED };
 	case "fastTravelAirAssault" : { WL_COST_AIRASSAULT };
@@ -51,7 +51,7 @@ private _actionCost = switch (_action) do {
 	case "camouflage" : { 500 };
 	case "cruiseMissiles" : { 15000 };
 	case "repairFOB" : { 500 };
-	case "repairStronghold" : { 250 };
+	case "repairStronghold" : { WL_COST_STRONGHOLD / 2 };
 	case "jetRTB" : { WL_COST_JETRTB };
 	default { 0 };
 };

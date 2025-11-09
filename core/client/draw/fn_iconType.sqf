@@ -17,12 +17,13 @@ if (_vehicle getVariable ["WL_ewNetActive", false]) exitWith {
 	"\a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa";
 };
 
-private _iconFromCache = _mapIconCache getOrDefault [typeof _vehicle, ""];
+private _vehicleType = typeOf (vehicle _vehicle);
+private _iconFromCache = _mapIconCache getOrDefault [_vehicleType, ""];
 if (_iconFromCache != "") exitWith {
 	_iconFromCache;
 };
 
-private _vehicleIcon = getText (configFile >> 'CfgVehicles' >> typeOf (vehicle _vehicle) >> 'icon');
+private _vehicleIcon = getText (configFile >> 'CfgVehicles' >> _vehicleType >> 'icon');
 
-_mapIconCache set [typeof _vehicle, _vehicleIcon];
+_mapIconCache set [_vehicleType, _vehicleIcon];
 _vehicleIcon;

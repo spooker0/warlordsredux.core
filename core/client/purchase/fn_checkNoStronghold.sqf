@@ -7,14 +7,6 @@ if (count _findCurrentSector == 0) exitWith {
     [false, localize "STR_A3_WL_menu_arsenal_restr1"];
 };
 
-#if WL_STRONGHOLD_DEBUG == 0
-private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
-private _strongholdTimer =  60 * 30;
-if (_timeSinceStart < _strongholdTimer) exitWith {
-    [false, format ["You cannot create a stronghold until %1 minutes into the mission.", round (_strongholdTimer / 60)]];
-};
-#endif
-
 private _currentSector = _findCurrentSector # 0;
 
 private _isCarrierSector = _currentSector getVariable ["WL2_isAircraftCarrier", false];
@@ -28,6 +20,11 @@ if (_isHomeBase) exitWith {
     [false, "You cannot put a stronghold in your home base."];
 };
 #endif
+
+private _isTargetedSector = _currentSector == WL_TARGET_ENEMY;
+if (_isTargetedSector) exitWith {
+    [false, "You cannot put a stronghold in the contested sector."];
+};
 
 private _findStrongholdBuildings = call WL2_fnc_findStrongholdBuilding;
 if (count _findStrongholdBuildings == 0) exitWith {

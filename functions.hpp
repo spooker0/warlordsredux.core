@@ -378,7 +378,6 @@ class CfgFunctions {
 			class checkFastTravelSL {};
 			class checkFastTravelSquad {};
 			class checkFunds {};
-			class checkGlasses {};
 			class checkGreenSwitch {};
 			class checkGroundVehicleDriver {};
 			class checkIndependents {};

@@ -70,6 +70,14 @@
 		};
 		_mapData set ["ewNetworks", _ewNetworkUnits];
 
+		private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
+		private _visibleStrongholds = _strongholds select {
+			private _sector = _x getVariable ["WL_strongholdSector", objNull];
+			private _revealedBy = _sector getVariable ["BIS_WL_revealedBy", []];
+			BIS_WL_playerSide in _revealedBy
+		};
+		_mapData set ["strongholds", _visibleStrongholds];
+
 		private _scannerUnits = _activeVehicles select {
 			_x getVariable ["WL_scannerOn", false]
 		};

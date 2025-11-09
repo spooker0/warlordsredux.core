@@ -147,12 +147,23 @@ switch (_action) do {
         };
         _squadLeader = _squadLeader # 0;
 
+        if (isNil "_squadLeader" || !alive _squadLeader) exitWith {
+            systemChat "Squad fast travel target is not valid.";
+            _return = 1;
+        };
+
         [player, "fastTravelSquadLeader"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
         titleCut ["", "BLACK OUT", 1];
         openMap [false, false];
 
         uiSleep 1;
+
+        if (!alive _squadLeader) exitWith {
+            systemChat "Squad fast travel target is not valid.";
+            titleCut ["", "BLACK IN", 1];
+            _return = 1;
+        };
 
         private _tagAlong = (units player) select {
             (_x distance2D player <= 100) &&
@@ -186,10 +197,21 @@ switch (_action) do {
         private _squadTarget = _params select 0;
         private _squadTargetPlayer = _allPlayers select {getPlayerID _x == _squadTarget} select 0;
 
+        if (isNil "_squadTargetPlayer" || !alive _squadTargetPlayer) exitWith {
+            systemChat "Squad fast travel target is not valid.";
+            _return = 1;
+        };
+
         titleCut ["", "BLACK OUT", 1];
         openMap [false, false];
 
         uiSleep 1;
+
+        if (!alive _squadTargetPlayer) exitWith {
+            systemChat "Squad fast travel target is not valid.";
+            titleCut ["", "BLACK IN", 1];
+            _return = 1;
+        };
 
         private _tagAlong = (units player) select {
             (_x distance2D player <= 100) &&

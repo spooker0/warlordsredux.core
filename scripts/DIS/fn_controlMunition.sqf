@@ -49,10 +49,6 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
     private _elapsedTime = serverTime - _lastTime;
     _lastTime = serverTime;
 
-    if ((getPosASL _projectile) isEqualTo [0, 0, 0]) then {
-        break;
-    };
-
     private _pitchInput = (inputAction "AimUp") - (inputAction "AimDown");
     private _yawInput = (inputAction "AimLeft") - (inputAction "AimRight");
 

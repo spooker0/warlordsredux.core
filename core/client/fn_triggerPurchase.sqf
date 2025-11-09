@@ -47,12 +47,6 @@ switch (_className) do {
         "RequestMenu_close" call WL2_fnc_setupUI;
         0 spawn WLC_fnc_buildMenu;
     };
-    case "BuyGlasses": {
-        "RequestMenu_close" call WL2_fnc_setupUI;
-        [player, "equip", 1000] remoteExec ["WL2_fnc_handleClientRequest", 2];
-        player addGoggles "G_Tactical_Clear";
-        player setVariable ["WL_hasGoggles", true, true];
-    };
     case "Scan": { 0 spawn WL2_fnc_orderSectorScan };
     case "FTHome": {
         BIS_WL_targetSector = [BIS_WL_playerSide] call WL2_fnc_getSideBase;

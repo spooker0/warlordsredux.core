@@ -230,7 +230,6 @@ private _fobSupplies = _mapData getOrDefault ["fobSupplies", []];
 } forEach _fobSupplies;
 
 // Draw strongholds
-private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
 {
 	private _stronghold = _x;
 
@@ -270,7 +269,7 @@ private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
 	];
 
 	_drawIconsSelectable pushBack [_stronghold, _strongholdPos];
-} forEach _strongholds;
+} forEach (_mapData getOrDefault ["strongholds", []]);
 
 // Draw scanned units
 private _scannedUnits = _mapData getOrDefault ["scannedUnits", []];

@@ -128,7 +128,7 @@ private _interceptAction = {
         };
         case "UserType": {
             switch (_text) do {
-                case "Close door": {
+                case (localize "STR_DN_OUT_C_DOOR"): {
                     if (_target getVariable ["WL2_doorsLocked", false]) then {
                         systemChat "Door locked.";
                         playSoundUI ["AddItemFailed"];
@@ -137,7 +137,7 @@ private _interceptAction = {
                         false;
                     };
                 };
-                case "Eject": {
+                case (localize "STR_A3_action_eject"): {
                     private _vehicle = vehicle player;
                     private _eligible = _vehicle isKindOf "Plane" && speed _vehicle > 1;
                     if (_eligible) then {

@@ -351,8 +351,6 @@ call WL2_fnc_vehicleManagerAction;
 player setVariable ["WL2_currentBadge", profileNamespace getVariable ["WL2_currentBadge", "Player"], true];
 0 spawn WL2_fnc_updateLevelDisplay;
 
-removeGoggles player;
-
 0 spawn WL2_fnc_restrictedArea;
 
 call WL2_fnc_buyMenuAction;

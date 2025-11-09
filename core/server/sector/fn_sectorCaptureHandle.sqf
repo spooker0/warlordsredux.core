@@ -20,7 +20,11 @@ while { !BIS_WL_missionEnd } do {
 		private _progressMovement = _actualTimeElapsed / _minCaptureTime;
 
 		private _sortedInfo = _sector call WL2_fnc_getCapValues;
-		_sector setVariable ["WL_captureDetails", _sortedInfo, true];
+
+		private _previousCaptureDetails = _sector getVariable ["WL_captureDetails", []];
+		if (_previousCaptureDetails isNotEqualTo _sortedInfo) then {
+			_sector setVariable ["WL_captureDetails", _sortedInfo, true];
+		};
 
 		private _topEntry = _sortedInfo # 0;
 		private _winner = _topEntry # 0;

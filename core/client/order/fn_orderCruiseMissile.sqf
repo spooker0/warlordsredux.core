@@ -200,7 +200,7 @@ _launchPosition set [2, 2000];
 [player, "cruiseMissiles"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 systemChat format ["Launching %1 cruise missiles from %2.", count _targets, _launchCarrier getVariable ["WL2_name", "Carrier"]];
 [] remoteExec ["WL2_fnc_cruiseMissileWarning", BIS_WL_enemySide, false];
-profileNamespace setVariable ["WL2_cruiseMissileTimeout", serverTime + 600];
+missionNamespace setVariable [format["WL2_cruiseMissileTimeout_%1", getPlayerUID player], serverTime + 600, true];
 
 // Launch
 private _missiles = [];
