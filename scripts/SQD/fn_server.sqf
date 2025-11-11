@@ -3,8 +3,10 @@ params ["_action", "_params"];
 
 private _allPlayers = call BIS_fnc_listPlayers;
 
-_message = nil;
-_return = nil;
+private _message = nil;
+private _return = nil;
+
+private _previousSquadManager = +(missionNamespace getVariable ["SQUAD_MANAGER", []]);
 
 switch (_action) do {
     case "create": {
@@ -251,6 +253,8 @@ switch (_action) do {
     };
 };
 
-missionNamespace setVariable ["SQUAD_MANAGER", SQUAD_MANAGER, true];
+if (_previousSquadManager isNotEqualTo SQUAD_MANAGER) then {
+    missionNamespace setVariable ["SQUAD_MANAGER", SQUAD_MANAGER, true];
+};
 
 _return;

@@ -69,7 +69,6 @@
 		};
 
 		while {!BIS_WL_missionEnd} do {
-			_t = serverTime + 10 + random 10;
 			missionNamespace setVariable [_votingResetVar, false];
 			call _wipeVotes;
 
