@@ -5,8 +5,10 @@ private _allPlayers = call BIS_fnc_listPlayers;
 
 private _message = nil;
 private _return = nil;
+private _dirty = false;
 
-private _previousSquadManager = +(missionNamespace getVariable ["SQUAD_MANAGER", []]);
+private _squadManager = missionNamespace getVariable ["SQUAD_MANAGER", []];
+private _oldSquadManager = +_squadManager;
 
 switch (_action) do {
     case "create": {
@@ -16,17 +18,18 @@ switch (_action) do {
         private _side = _params select 2;
 
         private _newSquad = [_squadName, _leader, [_leader], _side];
-        SQUAD_MANAGER pushBack _newSquad;
+        _squadManager pushBack _newSquad;
+        _dirty = true;
 
         _message = format ["Squad %1 created by %2 on %3", _squadName, _leader, _side];
-        _return = count SQUAD_MANAGER - 1;
+        _return = count _squadManager - 1;
     };
     case "invite": {
         // Invite player to squad
         private _playerId = _params select 0;
         private _inviter = _params select 1;
 
-        private _squad = SQUAD_MANAGER select {(_x select 2) find _inviter > -1} select 0;
+        private _squad = _squadManager select {(_x select 2) find _inviter > -1} select 0;
         if (isNil "_squad") exitWith {
             _message = format ["Inviter squad for %1 not found", _inviter];
             _return = 1;
@@ -39,7 +42,7 @@ switch (_action) do {
             _return = 1;
         };
 
-        private _inviteeSquad = SQUAD_MANAGER select {(_x select 2) find _playerId > -1};
+        private _inviteeSquad = _squadManager select {(_x select 2) find _playerId > -1};
         if (count _inviteeSquad > 0) exitWith {
             _message = format ["Player %1 is already in a squad", _playerId];
             _return = 1;
@@ -68,7 +71,7 @@ switch (_action) do {
 
         ["remove", [_playerId]] call SQD_fnc_server;
 
-        private _squad = SQUAD_MANAGER select {(_x select 2) find _inviter > -1} select 0;
+        private _squad = _squadManager select {(_x select 2) find _inviter > -1} select 0;
         if (isNil "_squad") exitWith {
             _message = format ["Inviter squad for %1 not found", _inviter];
             _return = 1;
@@ -84,6 +87,7 @@ switch (_action) do {
         };
 
         _playersInSquad pushBack _playerId;
+        _dirty = true;
 
         private _targets = _allPlayers select { getPlayerID _x in _playersInSquad };
         ["newjoin", [_playerId]] remoteExec ["SQD_fnc_client", _targets];
@@ -95,7 +99,7 @@ switch (_action) do {
         // Remove player from squad
         private _playerId = _params select 0;
 
-        private _squads = SQUAD_MANAGER select {(_x select 2) find _playerId > -1};
+        private _squads = _squadManager select {(_x select 2) find _playerId > -1};
 
         {
             private _squad = _x;
@@ -123,7 +127,8 @@ switch (_action) do {
         } forEach _squads;
 
         // Clean up empty squads
-        SQUAD_MANAGER = SQUAD_MANAGER select { !isNil { _x # 1 } && count (_x # 2) > 0 };
+        _squadManager = _squadManager select { !isNil { _x # 1 } && count (_x # 2) > 0 };
+        _dirty = true;
 
         _message = format ["Player %1 removed from all squads.", _playerId];
         _return = 0;
@@ -143,6 +148,8 @@ switch (_action) do {
             ["promoted", []] remoteExec ["SQD_fnc_client", _newSLPlayer];
 
             _squad set [1, _playerId];
+            _dirty = true;
+
             _message = format ["Player %1 promoted to Squad Leader of %2", _playerId, (_squad select 0)];
             _return = 0;
         };
@@ -151,7 +158,7 @@ switch (_action) do {
         // Get squadmates of player
         private _playerId = _params select 0;
 
-        private _squads = SQUAD_MANAGER select {(_x select 2) find _playerId > -1};
+        private _squads = _squadManager select {(_x select 2) find _playerId > -1};
         if (count _squads == 0) then {
             _message = format ["Player %1 not in any squad", _playerId];
             _return = [];
@@ -168,13 +175,14 @@ switch (_action) do {
         private _playerId = _params select 0;
         private _newName = _params select 1;
 
-        private _squad = SQUAD_MANAGER select {(_x select 1) == _playerId} select 0;
+        private _squad = _squadManager select {(_x select 1) == _playerId} select 0;
         if (isNil "_squad") exitWith {
             _message = format ["Squad for player %1 not found", _playerId];
             _return = 1;
         };
 
         _squad set [0, _newName];
+        _dirty = true;
 
         _message = format ["Player %1 renamed squad to %2", _playerId, _newName];
         _return = 0;
@@ -253,8 +261,10 @@ switch (_action) do {
     };
 };
 
-if (_previousSquadManager isNotEqualTo SQUAD_MANAGER) then {
-    missionNamespace setVariable ["SQUAD_MANAGER", SQUAD_MANAGER, true];
+if (_dirty) then {
+    if (_squadManager isNotEqualTo _oldSquadManager) then {
+        missionNamespace setVariable ["SQUAD_MANAGER", _squadManager, true];
+    };
 };
 
 _return;
