@@ -336,8 +336,6 @@ if (_operateAccess && unitIsUAV _asset) then {
 private _fastTravelSLExecute = {
     params ["_asset"];
     ["ftSquadLeader"] spawn SQD_fnc_client;
-    // private _ftNextUseVar = format ["BIS_WL_FTSLNextUse_%1", getPlayerUID player];
-    // missionNamespace setVariable [_ftNextUseVar, serverTime + WL_COOLDOWN_FTSL];
 };
 [
     "FAST TRAVEL SL",

@@ -13,20 +13,20 @@ if (isServer) then {
 	_asset setVariable ["WLM_savedDefaultMags", _defaultMags, true];
 };
 
-if (isPlayer _owner) then {
-	missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_DURATION_AFKTIME];
-};
-
 private _playerUID = if (isPlayer _owner) then {
 	getPlayerUID _owner
 } else {
 	"123"
 };
 
-private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", _playerUID];
-private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
-_ownedVehicles pushBack _asset;
-missionNamespace setVariable [_ownedVehicleVar, _ownedVehicles, true];
+if (isPlayer _owner) then {
+	missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_DURATION_AFKTIME];
+
+	private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", _playerUID];
+	private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
+	_ownedVehicles pushBack _asset;
+	missionNamespace setVariable [_ownedVehicleVar, _ownedVehicles, true];
+};
 
 if (_asset isKindOf "Man") then {
 	_asset call APS_fnc_setupProjectiles;

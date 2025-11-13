@@ -46,6 +46,8 @@
 	private _mapData = createHashMap;
 	private _assetData = WL_ASSET_DATA;
 	missionNamespace setVariable ["WL2_mapData", _mapData];
+	private _playerId = getPlayerID player;
+
 	while { !BIS_WL_missionEnd } do {
 		private _isAfk = player getVariable ["WL2_afk", false];
 		if (_isAfk) then {
@@ -90,7 +92,7 @@
 		};
 		_mapData set ["scannersTeam", _scannerUnitTeam];
 
-		private _allSquadmates = ["getAllInSquad"] call SQD_fnc_client;
+		private _allSquadmates = ["getSquadmates", [_playerId, true]] call SQD_fnc_query;
 		_allSquadmates = _allSquadmates apply { vehicle _x };
 		_mapData set ["allSquadmates", _allSquadmates];
 

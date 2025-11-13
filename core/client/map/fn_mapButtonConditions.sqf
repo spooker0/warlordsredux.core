@@ -36,8 +36,8 @@ switch (_conditionName) do {
         _target in _availableSectors;
     };
     case "fastTravelSL": {
-        private _mySquadLeader = ['getMySquadLeader'] call SQD_fnc_client;
-        private _isMySquadLeader = getPlayerID _target == _mySquadLeader || getPlayerID (vehicle _target) == _mySquadLeader;
+        private _mySquadLeader = ["getSquadLeaderForPlayer", [getPlayerID player]] call SQD_fnc_query;
+        private _isMySquadLeader = _target == _mySquadLeader || vehicle _target == _mySquadLeader;
         private _isTouchingGround = isTouchingGround _target || vehicle _target != _target;
         _target != player && isPlayer _target && _isMySquadLeader && alive _target && lifeState _target != "INCAPACITATED" && _isTouchingGround;
     };
@@ -47,7 +47,7 @@ switch (_conditionName) do {
         } else {
             vehicle _target
         };
-        private _areInSquad = ["areInSquad", [getPlayerID _squadMember, getPlayerID player]] call SQD_fnc_client;
+        private _areInSquad = ["areInSquad", [getPlayerID _squadMember, getPlayerID player]] call SQD_fnc_query;
         private _isTouchingGround = isTouchingGround _squadMember || vehicle _target != _target;
         _target != player && isPlayer _target && _areInSquad && alive _target && lifeState _target != "INCAPACITATED" && _isTouchingGround;
     };

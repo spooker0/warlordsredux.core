@@ -9,6 +9,11 @@ private _controlMunitionRequest = [
 ] call WL2_fnc_prompt;
 if (!_controlMunitionRequest) exitWith {};
 
+waitUntil {
+    uiSleep 0.001;
+    inputAction "defaultAction" <= 0;
+};
+
 private _controllingProjectile = player getVariable ["DIS_controllingProjectile", objNull];
 triggerAmmo _controllingProjectile;
 

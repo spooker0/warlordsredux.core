@@ -7,5 +7,6 @@ private _multiplier = _playersWest / (_playersWest + _playersEast) * 2;
 
 private _incomeWest = round ((west call WL2_fnc_income) * (2 - _multiplier));
 private _incomeEast = round ((east call WL2_fnc_income) * _multiplier);
-missionNamespace setVariable ["WL2_actualIncome_west", _incomeWest max 50, true];
-missionNamespace setVariable ["WL2_actualIncome_east", _incomeEast max 50, true];
+
+missionNamespace setVariable ["WL2_actualIncome_west", _incomeWest max 50];
+missionNamespace setVariable ["WL2_actualIncome_east", _incomeEast max 50];

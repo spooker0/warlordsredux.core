@@ -1,30 +1,9 @@
 #include "includes.inc"
-// Cooldown check
-// private _ftNextUseVar = format ["BIS_WL_FTSLNextUse_%1", getPlayerUID player];
-// private _ftNextUse = missionNamespace getVariable [_ftNextUseVar, 0];
-// if (serverTime < _ftNextUse) exitWith {
-//     private _cooldownText = localize "STR_SQUADS_cooldown";
-//     private _timeoutDisplay = [_ftNextUse - serverTime, "MM:SS"] call BIS_fnc_secondsToString;
-//     [false, format [_cooldownText, _timeoutDisplay]];
-// };
+private _squadLeader = ["getSquadLeaderForPlayer", [getPlayerID player]] call SQD_fnc_query;
 
-// Has valid squad leader
-private _squadLeaderID = ['getMySquadLeader'] call SQD_fnc_client;
-if (_squadLeaderID == getPlayerID player) exitWith {
+if (_squadLeader == player) exitWith {
     [false, localize "STR_SQUADS_fastTravelSquadLeaderInvalid"];
 };
-if (_squadLeaderID == "-1") exitWith {
-    [false, localize "STR_SQUADS_fastTravelSquadInvalidNoSquad"];
-};
-
-// Squad leader in valid state
-private _squadLeader = allPlayers select {
-    getPlayerID _x == _squadLeaderID
-};
-if (count _squadLeader == 0) exitWith {
-    [false, localize "STR_SQUADS_fastTravelSquadLeaderInvalid"];
-};
-_squadLeader = _squadLeader # 0;
 
 if (!alive _squadLeader || lifeState _squadLeader == "INCAPACITATED" || (vehicle _squadLeader == _squadLeader && !(isTouchingGround _squadLeader))) exitWith {
     [false, localize "STR_SQUADS_fastTravelSquadLeaderUnavailable"];

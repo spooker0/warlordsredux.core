@@ -33,6 +33,7 @@ private _getTeamColorRGB = {
 };
 
 private _lastMoney = 0;
+private _playerId = getPlayerID player;
 
 while { !BIS_WL_missionEnd } do {
 	uiSleep 0.5;
@@ -69,7 +70,7 @@ while { !BIS_WL_missionEnd } do {
 
 	_squadControl ctrlSetStructuredText parseText format [
 		"<t shadow='2' size ='1.1'>SQD: %1</t>",
-		count (["getAllInSquad"] call SQD_fnc_client)
+		count (["getSquadmates", [_playerId, true]] call SQD_fnc_query)
 	];
 
 	private _rearmText = if (cameraOn isKindOf "Man") then {

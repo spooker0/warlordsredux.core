@@ -110,13 +110,8 @@ if (_isBattleyeMessage) exitWith {
     true;
 };
 
-private _showInSquadChat = ["showInSquadChat", [_person, _channel]] call SQD_fnc_client;
-if (!_showInSquadChat) exitWith {
-    true;
-};
-
-private _killMessaage = _chatMessageType == 2;
-if (_killMessaage) exitWith {
+private _killMessage = _chatMessageType == 2;
+if (_killMessage) exitWith {
     true;
 };
 
@@ -140,6 +135,12 @@ if (_channel == 1) exitWith {
     private _playerLevel = _person getVariable ["WL_playerLevel", "Recruit"];
     private _newFrom = format ["%1 [%2]", _name, _playerLevel];
     [_newFrom, _filteredText];
+};
+
+if (_channel > 5 && _channel < 16) then {
+    private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+    private _volume = _settingsMap getOrDefault ["squadChatNotificationVolume", 1];
+    playSoundUI ["a3\missions_f_oldman\data\sound\phone_sms\chime\phone_sms_chime_04.wss", _volume, 1];
 };
 
 _filteredText;

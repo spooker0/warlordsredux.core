@@ -356,7 +356,7 @@ private _scanners = if (_drawAll) then {
 private _allSquadmates = _mapData getOrDefault ["allSquadmates", []];
 if (WL_AssetActionTarget in _allSquadmates) then {
 	private _squadLeader = _allSquadmates select {
-		["isSquadLeader", [getPlayerID _x]] call SQD_fnc_client;
+		["isSquadLeader", [getPlayerID _x]] call SQD_fnc_query;
 	};
 
 	if (count _squadLeader > 0) then {

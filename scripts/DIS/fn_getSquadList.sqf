@@ -3,13 +3,10 @@ private _selectedPlayerTarget = cameraOn getVariable ["WL2_selectedTargetPlayer"
 
 private _playerInList = false;
 private _playerTargetList = [["none", "NO PLAYER SELECTED", false]];
-private _allSquadmates = ["getAllInSquad"] call SQD_fnc_client;
+private _allSquadmates = ["getSquadmates", [getPlayerID player, true]] call SQD_fnc_query;
 
 {
     private _squadmate = _x;
-    // if (_squadmate == player) then {
-    //     continue;
-    // };
 
     if (_playerTargetList findIf { _x # 0 == netid _squadmate } > -1) then {
         continue;

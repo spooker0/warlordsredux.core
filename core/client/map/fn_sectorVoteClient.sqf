@@ -65,7 +65,7 @@
             };
         };
 
-        if (_lastTargetFriendly != WL_TARGET_FRIENDLY || _targetReset != _lastTargetReset) then {
+        if (_lastTargetFriendly isNotEqualTo WL_TARGET_FRIENDLY || _targetReset isNotEqualTo _lastTargetReset) then {
             ["client"] call WL2_fnc_updateSectorArrays;
 
             if (!isNull WL_TARGET_FRIENDLY && !_targetReset) then {
@@ -75,7 +75,7 @@
             };
         };
 
-        if (_lastTargetEnemy != WL_TARGET_ENEMY) then {
+        if (_lastTargetEnemy isNotEqualTo WL_TARGET_ENEMY) then {
             private _enemySectorKnowers = _lastTargetEnemy getVariable ["BIS_WL_revealedBy", []];
             if (BIS_WL_playerSide in _enemySectorKnowers) then {
                 systemChat "Enemy target sector changed.";
@@ -98,7 +98,7 @@ while { !BIS_WL_missionEnd } do {
     private _isTargetReset = missionNamespace getVariable [format ["WL_targetReset_%1", BIS_WL_playerSide], false];
     private _isVoting = isNull WL_TARGET_FRIENDLY || _isTargetReset;
     private _isVoted = !isNull BIS_WL_targetVote;
-    private _isRegularSquadMember = ["isRegularSquadMember", [getPlayerID player]] call SQD_fnc_client;
+    private _isRegularSquadMember = ["isRegularSquadMember", [getPlayerID player]] call SQD_fnc_query;
 
     private _newPhase = if (_isRegularSquadMember || !_isVoting) then {
         0

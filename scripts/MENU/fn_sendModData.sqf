@@ -22,7 +22,6 @@ private _playerDataJson = toJSON _playerData;
 _playerDataJson = _texture ctrlWebBrowserAction ["ToBase64", _playerDataJson];
 
 private _chatHistory = uiNamespace getVariable ["WL2_chatHistory", []];
-private _squadChannels = missionNamespace getVariable ["SQD_VoiceChannels", [-1, -1]];
 private _chatHistoryData = _chatHistory apply {
     private _channel = _x # 0;
     private _name = _x # 1;
@@ -38,9 +37,7 @@ private _chatHistoryData = _chatHistory apply {
         case 5: { "DIRECT" };
         case 6;
         case 16: { "SYSTEM" };
-        case (_squadChannels # 0 + 5);
-        case (_squadChannels # 1 + 5): { "SQUAD" };
-        default { "UNKNOWN" };
+        default { "SQUAD" };
     };
     private _systemTimeDisplay = [_systemTime, false] call MENU_fnc_printSystemTime;
     [_systemTimeDisplay, _channelDisplay, _name, _text]

@@ -19,7 +19,7 @@ while { !BIS_WL_missionEnd } do {
         };
     } forEach (call BIS_fnc_listPlayers);
 
-    private _serverVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_123", []];
+    private _serverVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
     _guerOwnedVehicles append _serverVehicles;
 
     _westOwnedVehicles = _westOwnedVehicles select { alive _x };
@@ -44,7 +44,7 @@ while { !BIS_WL_missionEnd } do {
         private _side = _x;
         private _currentSideTargetVar = format ["BIS_WL_currentTarget_%1", _side];
         private _currentSideTarget = missionNamespace getVariable [_currentSideTargetVar, objNull];
-        private _currentSideTargetOwner = _currentSideTarget getVariable ["BIS_WL_owner", sideUnknown];;
+        private _currentSideTargetOwner = _currentSideTarget getVariable ["BIS_WL_owner", sideUnknown];
         if (_currentSideTargetOwner == _side) then {
             missionNamespace setVariable [_currentSideTargetVar, objNull, true];
             [_currentSideTarget, _currentSideTargetOwner] remoteExec ["WL2_fnc_sectorMarkerUpdate", 0];

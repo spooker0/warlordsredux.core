@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_target", "_caller", ["_addSupplies", false]];
+params ["_target", "_caller", ["_addSupplies", false], ["_finalCheck", false]];
 
 if (!alive _target) exitWith {
     "Destroyed.";
@@ -13,7 +13,7 @@ if ((getPosASL _target) # 2 < -10) exitWith {
     "Cannot be used underwater.";
 };
 
-if (_target getVariable ["WL2_deploying", false]) exitWith {
+if (!_finalCheck && _target getVariable ["WL2_deploying", false]) exitWith {
     "Deploying.";
 };
 
@@ -43,7 +43,7 @@ if (count _teamForwardBases >= 3) exitWith {
     format ["Forward base limit reached. Current: %1", count _teamForwardBases];
 };
 
-private _isSquadLeader = ["isSquadLeader", [getPlayerID _caller]] call SQD_fnc_client;
+private _isSquadLeader = ["isSquadLeader", [getPlayerID _caller]] call SQD_fnc_query;
 if (!_isSquadLeader) exitWith {
     "You need to be a squad leader to set up a forward base.";
 };
@@ -54,7 +54,7 @@ private _squadMembersNeeded =
 #else
     1;
 #endif
-private _isQualifyingSL = ["isSquadLeaderOfSize", [getPlayerID _caller, _squadMembersNeeded]] call SQD_fnc_client;
+private _isQualifyingSL = ["isSquadLeaderOfSize", [getPlayerID _caller, _squadMembersNeeded]] call SQD_fnc_query;
 if (!_isQualifyingSL) exitWith {
     "You need at least 3 squad members to set up a forward base.";
 };
@@ -93,7 +93,7 @@ if (count _nearbyTeamForwardBases > 0) exitWith {
     format ["Forward base must be deployed at least %1 M away from other forward bases.", WL_FOB_MIN_DISTANCE];
 };
 
-if (_caller distance _target > 10) exitWith {
+if (!_finalCheck && _caller distance _target > 10) exitWith {
     "You are too far away.";
 };
 

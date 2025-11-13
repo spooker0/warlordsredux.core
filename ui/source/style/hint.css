@@ -1,3 +1,7 @@
+:root {
+    --bar-height: 8px;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -142,24 +146,54 @@ li {
 }
 
 .sector-capture-list li {
+    position: relative;
     display: flex;
     justify-content: space-between;
     padding: 4px 0;
     font-size: 10pt;
-    padding-bottom: 15px;
+    padding-bottom: calc(var(--bar-height) + 7px);
     margin-bottom: 10px;
     background: linear-gradient(to right,
             var(--bar-left-color, #ccc) 0%,
-            var(--bar-left-color, #ccc) calc(var(--bar-width, 50%) - 1.5px),
-            black calc(var(--bar-width, 50%) - 1.5px),
-            black calc(var(--bar-width, 50%) + 1.5px),
-            var(--bar-right-color, #333) calc(var(--bar-width, 50%) + 1.5px),
-            var(--bar-right-color, #333) 100%) bottom / 100% 8px no-repeat;
+            var(--bar-left-color, #ccc) var(--bar-width, 50%),
+            var(--bar-right-color, #333) var(--bar-width, 50%),
+            var(--bar-right-color, #333) 100%) bottom / 100% var(--bar-height) no-repeat;
 }
 
 .sector-capture-list span {
     font-size: 9pt;
     font-weight: bold;
+}
+
+.capture-arrow {
+    position: absolute;
+    color: black;
+    left: var(--bar-width, 50%);
+    transform: translateX(-50%);
+    bottom: 0;
+    height: var(--bar-height);
+    line-height: var(--bar-height);
+    font-size: var(--bar-height) !important;
+}
+
+.capture-arrow.right {
+    border-top: calc(var(--bar-height) / 2) solid transparent;
+    border-bottom: calc(var(--bar-height) / 2) solid transparent;
+    border-left: calc(var(--bar-height) * 0.6) solid currentColor;
+}
+
+.capture-arrow.left {
+    border-top: calc(var(--bar-height) / 2) solid transparent;
+    border-bottom: calc(var(--bar-height) / 2) solid transparent;
+    border-right: calc(var(--bar-height) * 0.6) solid currentColor;
+}
+
+.capture-arrow-fast {
+    left: calc(var(--bar-width, 50%) + 4px) !important;
+}
+
+.capture-arrow-very-fast {
+    left: calc(var(--bar-width, 50%) + 8px) !important;
 }
 
 .eta-display {

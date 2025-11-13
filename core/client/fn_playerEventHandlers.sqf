@@ -84,22 +84,6 @@ player addEventHandler ["InventoryOpened", {
     };
 }];
 
-player addEventHandler ["Respawn", {
-    params ["_unit", "_corpse"];
-
-    private _voiceChannels = missionNamespace getVariable ["SQD_VoiceChannels", [-1, -1]];
-    switch (side group _unit) do {
-        case WEST: {
-            _sideCustomChannel = _voiceChannels # 0;
-            _sideCustomChannel radioChannelAdd [_unit];
-        };
-        case EAST: {
-            _sideCustomChannel = _voiceChannels # 1;
-            _sideCustomChannel radioChannelAdd [_unit];
-        };
-    };
-}];
-
 #if __GAME_BUILD__ > 153351
 (group player) addEventHandler ["LeaderChanged", {
 	params ["_group", "_newLeader"];

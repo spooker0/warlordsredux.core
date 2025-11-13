@@ -3,20 +3,16 @@ if (side group player == independent) exitWith {};
 
 0 spawn {
     private _playerID = getPlayerID player;
-
-    private _voiceChannels = missionNamespace getVariable ["SQD_VoiceChannels", [-1, -1]];
-    private _sideCustomChannel = if (side player == WEST) then {
-        _voiceChannels # 0
-    } else {
-        _voiceChannels # 1
-    };
-    _sideCustomChannel radioChannelAdd [player];
-
-    0 spawn SQD_fnc_voice;
-
     while { !BIS_WL_missionEnd } do {
-        if (getPlayerChannel player > 5 && !(["isInSquad", [_playerID]] call SQD_fnc_client)) then {
+        if (getPlayerChannel player > 5 && !(["isInASquad", [_playerID]] call SQD_fnc_query)) then {
             0 spawn SQD_fnc_menu;
+        };
+
+        private _isSquadLeaderOfSize = ["isSquadLeaderOfSize", [_playerID, SQD_MIN_COMMAND_CHAT]] call SQD_fnc_query;
+        if (_isSquadLeaderOfSize) then {
+            2 enableChannel [true, true];
+        } else {
+            2 enableChannel [false, false];
         };
 
         uiSleep 0.5;
@@ -31,8 +27,9 @@ if (side group player == independent) exitWith {};
         if (isNull _dialog) then{
             continue;
         };
+
         private _squadManager = missionNamespace getVariable ["SQUAD_MANAGER", []];
-        if !(_squadManager isEqualTo _squadManagerLastValue) then {
+        if (_squadManager isNotEqualTo _squadManagerLastValue) then {
             private _texture = _dialog displayCtrl 5501;
             [_texture] call SQD_fnc_sendData;
             _squadManagerLastValue = +_squadManager;

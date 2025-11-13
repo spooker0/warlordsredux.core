@@ -101,6 +101,14 @@ private _setupActionId = [
 					_target setVariable ["WL2_deploying", false];
 					false;
 				};
+
+				private _eligibility = [_target, player, false, true] call WL2_fnc_setupForwardBaseEligibility;
+				if (_eligibility != "") exitWith {
+					systemChat _eligibility;
+					playSound "AddItemFailed";
+					_target setVariable ["WL2_deploying", false];
+					false;
+				};
 				true;
 			};
 

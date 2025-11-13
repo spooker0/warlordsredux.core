@@ -42,19 +42,19 @@ switch (_accessControl) do {
     };
     case 3: {
         // Squad (Full)
-        private _areInSquad = ["areInSquad", [_callerID, _ownerID]] call SQD_fnc_client;
+        private _areInSquad = ["areInSquad", [_callerID, _ownerID]] call SQD_fnc_query;
         _access = _isOwner || _areInSquad;
         _message = "Access: Squad (Full)";
     };
     case 4: {
         // Squad (Operate)
-        private _areInSquad = ["areInSquad", [_callerID, _ownerID]] call SQD_fnc_client;
+        private _areInSquad = ["areInSquad", [_callerID, _ownerID]] call SQD_fnc_query;
         _access = _isOwner || (_areInSquad && _role != "full");
         _message = "Access: Squad (Operate)";
     };
     case 5: {
         // Squad (Passenger Only)
-        private _areInSquad = ["areInSquad", [_callerID, _ownerID]] call SQD_fnc_client;
+        private _areInSquad = ["areInSquad", [_callerID, _ownerID]] call SQD_fnc_query;
         _access = _isOwner || (_areInSquad && _role == "cargo");
         _message = "Access: Squad (Passenger Only)";
     };

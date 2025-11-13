@@ -50,14 +50,14 @@ if (_unit in (units player) && _unit != player) exitWith {
 private _playerID = getPlayerID player;
 
 private _areInSquad = if (isPlayer _unit) then {
-    ["areInSquad", [getPlayerID _unit, _playerID]] call SQD_fnc_client;
+    ["areInSquad", [getPlayerID _unit, _playerID]] call SQD_fnc_query;
 } else {
     private _playerCrew = (crew _unit) select {
         isPlayer _x
     };
     private _anyInSquad = false;
     {
-        private _crewInSquad = ["areInSquad", [getPlayerID _x, _playerID]] call SQD_fnc_client;
+        private _crewInSquad = ["areInSquad", [getPlayerID _x, _playerID]] call SQD_fnc_query;
         if (_crewInSquad) then {
             _anyInSquad = true;
             break;

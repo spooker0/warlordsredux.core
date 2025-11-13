@@ -249,3 +249,7 @@ while {_i < _garrisonSize} do {
 // } forEach _infantryUnits;
 
 [_infantryUnits, _sector] spawn WL2_fnc_assetRelevanceCheck;
+
+private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
+_ownedVehicles append (_vehicleUnits + _infantryUnits);
+missionNamespace setVariable ["BIS_WL_ownedVehicles_server", _ownedVehicles, true];

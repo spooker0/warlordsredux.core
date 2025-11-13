@@ -161,6 +161,8 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
         _detectableUnits pushBackUnique cursorTarget;
         _detectableUnits pushBackUnique _cursorObject;
         private _playerIcons = [];
+
+        private _playerId = getPlayerID player;
         {
             if (_x == player) then { continue; };
             if !(isNull objectParent _x) then { continue; };
@@ -175,7 +177,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
             private _isntCursorTarget = _x != cursorTarget && _x != _cursorObject;
             if (_x distance cameraOn > _viewDistance && _isntCursorTarget) then { continue; };
 
-            private _isInMySquad = ["isInMySquad", [getPlayerID _x]] call SQD_fnc_client;
+            private _isInMySquad = ["areInSquad", [_playerId, getPlayerID _x]] call SQD_fnc_query;
             if (!_isInMySquad && _x distance cameraOn > 100 && _isntCursorTarget) then { continue; };
 
             if (!(_x isKindOf "Man") && !alive _x) then { continue; };

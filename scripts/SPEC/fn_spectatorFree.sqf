@@ -32,8 +32,9 @@ private _newPosition = _camera modelToWorld [
     _moveForward * _speed * _deltaTime,
     _moveUp * _speed * _deltaTime
 ];
-_newPosition set [2, _newPosition # 2 max 1];
-_camera setPosASL (AGLtoASL _newPosition);
+private _newPosATL = ASLtoATL (AGLtoASL _newPosition);
+_newPosATL set [2, _newPosATL # 2 max 1];
+_camera setPosATL _newPosATL;
 
 private _rotateSpeed = 100;
 

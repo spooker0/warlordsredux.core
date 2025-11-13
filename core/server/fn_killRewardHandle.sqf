@@ -52,18 +52,14 @@ if (_unitSide != independent && _unitSide != sideUnknown) then {
 };
 
 private _playerId = getPlayerID _responsibleLeader;
-private _squadmatesIDs = ["getSquadmates", [_playerId]] call SQD_fnc_server;
-private _squadReward = round (_killReward * 0.3 / (sqrt (count _squadmatesIDs) max 1));
+private _squadmates = ["getSquadmates", [_playerId, false]] call SQD_fnc_query;
+private _squadReward = round (_killReward * 0.3 / (sqrt (count _squadmates) max 1));
 {
-	private _userInfo = getUserInfo _x;
-	if (count _userInfo < 3) then {
-		continue;
-	};
-	private _squadmateUid = _userInfo # 2;
+	private _squadmateUid = getPlayerUID _x;
 	[_squadReward, _squadmateUid] call WL2_fnc_fundsDatabaseWrite;
 
-	[_unit, _squadReward, "Squad assist", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", (getUserInfo _x) # 1];
-} forEach _squadmatesIDs;
+	[_unit, _squadReward, "Squad assist", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _x];
+} forEach _squadmates;
 
 private _killerUid = getPlayerUID _responsibleLeader;
 _killReward = round _killReward;

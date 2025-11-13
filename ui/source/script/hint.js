@@ -126,9 +126,12 @@ function updateSectorCapture(captureData) {
     captureData.forEach((sector) => {
         const listItem = document.createElement('li');
 
+        const leftValue = sector[1];
+        const rightValue = sector[2];
+
         const progressLeftSpan = document.createElement('span');
         progressLeftSpan.className = 'sector-progress-left';
-        progressLeftSpan.textContent = `${Math.floor(sector[1])}`;
+        progressLeftSpan.textContent = `${Math.floor(leftValue)}`;
         listItem.appendChild(progressLeftSpan);
 
         const leftPercent = sector[3];
@@ -140,7 +143,7 @@ function updateSectorCapture(captureData) {
 
         const progressRightSpan = document.createElement('span');
         progressRightSpan.className = 'sector-progress-right';
-        progressRightSpan.textContent = `${Math.floor(sector[2])}`;
+        progressRightSpan.textContent = `${Math.floor(rightValue)}`;
         listItem.appendChild(progressRightSpan);
 
         const attackingColor = sideToColor(sector[4]);
@@ -154,6 +157,31 @@ function updateSectorCapture(captureData) {
         listItem.style.setProperty('--sector-text-color', defendingColor);
         listItem.style.setProperty('--sector-left-text-color', attackingColor);
         listItem.style.setProperty('--sector-right-text-color', defendingColor);
+
+        const diff = leftValue - rightValue;
+        const direction = diff >= 0 ? 'right' : 'left';
+
+        const arrowSpan = document.createElement('span');
+        arrowSpan.classList.add('capture-arrow', direction);
+        arrowSpan.style.setProperty('--bar-width', `${leftPercent}%`);
+        listItem.appendChild(arrowSpan);
+
+        const isFastCapture = Math.abs(diff) > 8;
+        if (isFastCapture) {
+            const arrowFastSpan = document.createElement('span');
+            arrowFastSpan.classList.add('capture-arrow', 'capture-arrow-fast', direction);
+            arrowFastSpan.style.setProperty('--bar-width', `${leftPercent}%`);
+            listItem.appendChild(arrowFastSpan);
+        }
+
+        const isVeryFastCapture = Math.abs(diff) > 16;
+        if (isVeryFastCapture) {
+            const arrowVeryFastSpan = document.createElement('span');
+            arrowVeryFastSpan.classList.add('capture-arrow', 'capture-arrow-very-fast', direction);
+            arrowVeryFastSpan.style.setProperty('--bar-width', `${leftPercent}%`);
+            listItem.appendChild(arrowVeryFastSpan);
+        }
+
         sectorList.appendChild(listItem);
     });
 

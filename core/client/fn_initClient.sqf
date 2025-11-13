@@ -235,6 +235,8 @@ if !(isDedicated) then {
 		} forEach _vehicles;
 
 		private _newVehicles = _vehicles select {
+			alive _x
+		} select {
 			_x == player || _x getVariable ["BIS_WL_ownerAsset", "123"] == getPlayerUID player
 		};
 		if !(_vehicles isEqualTo _newVehicles) then {
@@ -265,6 +267,10 @@ if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
 			{
 				[_x] call WL2_fnc_newAssetHandle;
 			} forEach (crew _entity);
+
+			private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
+			_ownedVehicles pushBack _entity;
+			missionNamespace setVariable ["BIS_WL_ownedVehicles_server", _ownedVehicles, true];
 		}];
 	} forEach allCurators;
 };

@@ -21,12 +21,15 @@ _playerInfoText = _texture ctrlWebBrowserAction ["ToBase64", _playerInfoText];
 
 private _squadInfo = missionNamespace getVariable ["SQUAD_MANAGER", []];
 private _squadInfoText = toJSON (_squadInfo apply {
-    private _newSquadInfo = +_x;
+    private _newSquadInfo = [];
 
-    private _squadLeader = _x # 1;
+    private _squadName = _x getOrDefault ["name", ""];
+    _newSquadInfo set [0, _squadName];
+
+    private _squadLeader = _x getOrDefault ["leader", ""];
     _newSquadInfo set [1, _squadLeader];
 
-    private _squadMemberIds = _x # 2;
+    private _squadMemberIds = _x getOrDefault ["members", []];
     private _squadMembers = [];
     {
         private _playerId = _x;
@@ -48,7 +51,7 @@ private _squadInfoText = toJSON (_squadInfo apply {
     } forEach _squadMemberIds;
     _newSquadInfo set [2, _squadMembers];
 
-    _newSquadInfo set [3, [_x # 3] call WL2_fnc_sideToFaction];
+    _newSquadInfo set [3, [_x getOrDefault ["side", ""]] call WL2_fnc_sideToFaction];
     _newSquadInfo
 });
 _squadInfoText = _texture ctrlWebBrowserAction ["ToBase64", _squadInfoText];

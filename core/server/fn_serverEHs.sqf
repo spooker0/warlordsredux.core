@@ -1,17 +1,31 @@
 #include "includes.inc"
 addMissionEventHandler ["HandleDisconnect", {
 	params ["_unit", "_id", "_uid", "_name"];
-	private _ownedVehicles = format ["BIS_WL_ownedVehicles_%1", _uid];
-	{
-		if (unitIsUAV _x) then {
-			private _grp = group effectiveCommander _x;
-			{_x deleteVehicleCrew _x} forEach crew _x;
-			deleteGroup _grp;
-		};
+	[_uid] spawn {
+		params ["_uid"];
 
-		deleteVehicle _x;
-	} forEach ((missionNamespace getVariable [_ownedVehicles, []]) select {!(isNull _x)});
-	missionNamespace setVariable [_ownedVehicles, nil];
+		uiSleep 120;
+
+		private _playerUnit = _uid call BIS_fnc_getUnitByUid;
+		if (!isNull _playerUnit) exitWith {};
+
+		private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", _uid];
+		private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];
+		_ownedVehicles = _ownedVehicles select { alive _x };
+
+		{
+			if (unitIsUAV _x) then {
+				private _group = group effectiveCommander _x;
+				{
+					_x deleteVehicleCrew _x;
+				} forEach crew _x;
+				deleteGroup _group;
+			};
+
+			deleteVehicle _x;
+		} forEach _ownedVehicles;
+		missionNamespace setVariable [_ownedVehiclesVar, []];
+	};
 
 	private _minesDB = format ["BIS_WL2_minesDB_%1", _uid];
 	{

@@ -2,6 +2,7 @@
 params ["_sector", "_owner"];
 
 if (isDedicated) exitWith {};
+if (isNull _sector) exitWith {};
 
 if (_sector getVariable ["WL2_name", "Sector"] in WL_SPECIAL_SECTORS) exitWith {};
 

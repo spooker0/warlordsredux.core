@@ -416,19 +416,21 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
             "";
         };
 
-        private _targetPosition = getPosASL _target;
-        private _currentWeapon = currentWeapon _target;
+        private _targetVehicle = vehicle _target;
+
+        private _targetPosition = getPosASL _targetVehicle;
+        private _currentWeapon = currentWeapon _targetVehicle;
         private _currentWeaponType = getText (configfile >> "CfgWeapons" >> _currentWeapon >> "displayName");
         if (_currentWeaponType != "") then {
             _currentWeaponType = format ["Weapon: %1<br/>", _currentWeaponType];
         };
-        private _currentMagazine = currentMagazine _target;
+        private _currentMagazine = currentMagazine _targetVehicle;
         private _currentMagazineType = [_currentMagazine] call WL2_fnc_getMagazineName;
         if (_currentMagazineType != "") then {
             _currentMagazineType = format ["Magazine: %1<br/>", _currentMagazineType];
         };
 
-		private _rearmCooldown = _target getVariable ["BIS_WL_nextRearm", -9999];
+		private _rearmCooldown = _targetVehicle getVariable ["BIS_WL_nextRearm", -9999];
 
         private _rearmTimer = if (_rearmCooldown == -9999) then {
             "";
@@ -441,7 +443,7 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
             };
         };
 
-        private _repairCooldown = _target getVariable ["WL2_nextRepair", -9999];
+        private _repairCooldown = _targetVehicle getVariable ["WL2_nextRepair", -9999];
         private _repairTimer = if (_repairCooldown == -9999) then {
             "";
         } else {
@@ -453,7 +455,7 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
             };
         };
 
-        private _apsAmmo = _target getVariable ["apsAmmo", -1];
+        private _apsAmmo = _targetVehicle getVariable ["apsAmmo", -1];
         private _apsInfo = if (_apsAmmo >= 0) then {
             format ["APS: %1<br/>", _apsAmmo];
         } else {
@@ -466,8 +468,8 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
             (_targetPosition # 0 / 100) toFixed 2,
             (_targetPosition # 1 / 100) toFixed 2,
             round (_targetPosition # 2),
-            ((1 - damage _target) * 100) toFixed 1,
-            (speed _target) toFixed 1,
+            ((1 - damage _target) * 100) toFixed 1, // keep damage for target
+            (speed _targetVehicle) toFixed 1,
             _currentWeaponType,
             _currentMagazineType,
             _rearmTimer,

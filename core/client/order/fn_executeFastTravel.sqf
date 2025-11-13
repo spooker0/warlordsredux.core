@@ -82,10 +82,14 @@ if (count _destination != 3 || _destination isEqualTo [0, 0, 0]) exitWith {
 };
 
 private _tagAlong = (units player) select {
-	(isNull objectParent _x) &&
-	(alive _x) &&
-	(_x != player) &&
-	_x distance player < 200 &&
+	isNull objectParent _x
+} select {
+	alive _x
+} select {
+	_x != player
+} select {
+	_x distance player < 200
+} select {
 	_x getVariable ["BIS_WL_ownerAsset", "123"] == getPlayerUID player
 };
 

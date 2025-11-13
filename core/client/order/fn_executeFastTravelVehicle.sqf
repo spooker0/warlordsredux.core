@@ -23,10 +23,13 @@ openMap false;
 uiSleep 1;
 
 private _unitsToMove = (units player) select {
-	_x distance2D player <= 100 &&
-	isNull objectParent _x &&
-	alive _x &&
-	_x getVariable ["BIS_WL_ownerAsset", "123"] == getPlayerUID player
+    isNull objectParent _x
+} select {
+    alive _x
+} select {
+    _x distance player < 200
+} select {
+    _x getVariable ["BIS_WL_ownerAsset", "123"] == getPlayerUID player
 };
 
 {
@@ -37,7 +40,7 @@ private _unitsToMove = (units player) select {
         if (isNull _targetVehicle) then {
             _targetVehicle = player;
         };
-        
+
         private _buildingPositions = _targetVehicle buildingPos -1;
         if (count _buildingPositions > 0) then {
             private _destination = selectRandom _buildingPositions;

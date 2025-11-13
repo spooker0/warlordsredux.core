@@ -141,9 +141,9 @@ class CfgFunctions {
 			class initClient {};
 			class initServer {};
 			class menu {};
+			class query {};
 			class sendData {};
 			class server {};
-			class voice {};
 		};
 	};
 	class WL2 {

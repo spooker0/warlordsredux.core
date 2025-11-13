@@ -3,268 +3,202 @@ params ["_action", "_params"];
 
 private _allPlayers = call BIS_fnc_listPlayers;
 
-private _message = nil;
-private _return = nil;
-private _dirty = false;
-
 private _squadManager = missionNamespace getVariable ["SQUAD_MANAGER", []];
 private _oldSquadManager = +_squadManager;
 
-switch (_action) do {
-    case "create": {
-        // Create squad with name & leader
-        private _squadName = _params select 0;
-        private _leader = _params select 1;
-        private _side = _params select 2;
-
-        private _newSquad = [_squadName, _leader, [_leader], _side];
-        _squadManager pushBack _newSquad;
-        _dirty = true;
-
-        _message = format ["Squad %1 created by %2 on %3", _squadName, _leader, _side];
-        _return = count _squadManager - 1;
-    };
-    case "invite": {
-        // Invite player to squad
-        private _playerId = _params select 0;
-        private _inviter = _params select 1;
-
-        private _squad = _squadManager select {(_x select 2) find _inviter > -1} select 0;
-        if (isNil "_squad") exitWith {
-            _message = format ["Inviter squad for %1 not found", _inviter];
-            _return = 1;
-        };
-
-        private _userInfo = getUserInfo _playerId;
-
-        if (isNil "_userInfo" || count _userInfo < 1) exitWith {
-            _message = format ["Player %1 not found", _playerId];
-            _return = 1;
-        };
-
-        private _inviteeSquad = _squadManager select {(_x select 2) find _playerId > -1};
-        if (count _inviteeSquad > 0) exitWith {
-            _message = format ["Player %1 is already in a squad", _playerId];
-            _return = 1;
-        };
-
-        private _squadLeader = _squad select 1;
-        if (_squadLeader != _inviter) then {
-            private _inviterInfo = getUserInfo _inviter;
-            _message = format ["%1 has invited %2 to the squad.", _inviterInfo # 4, _userInfo # 4];
-
-            private _squadLeaderInfo = getUserInfo _squadLeader;
-            [_message] remoteExec ["systemChat", _squadLeaderInfo # 1];
-        };
-
-        private _owner = _userInfo select 1;
-
-        ['invited', [_inviter]] remoteExec ["SQD_fnc_client", _owner];
-
-        _message = format ["%1 invited to Squad %2", _playerId, _squad];
-        _return = 0;
-    };
-    case "add": {
-        // Player join squad
-        private _inviter = _params select 0;
-        private _playerId = _params select 1;
-
-        ["remove", [_playerId]] call SQD_fnc_server;
-
-        private _squad = _squadManager select {(_x select 2) find _inviter > -1} select 0;
-        if (isNil "_squad") exitWith {
-            _message = format ["Inviter squad for %1 not found", _inviter];
-            _return = 1;
-        };
-
-        private _playersInSquad = _squad select 2;
-        private _squadSize = count _playersInSquad;
-        if (_squadSize >= SQD_MAX_SQUAD_SIZE) exitWith {
-            _message = format ["Squad ""%1"" is full: %2/%3", _squad select 0, _squadSize, SQD_MAX_SQUAD_SIZE];
-            private _player = _allPlayers select { getPlayerID _x == _playerId } select 0;
-            [_message] remoteExec ["systemChat", _player];
-            _return = 1;
-        };
-
-        _playersInSquad pushBack _playerId;
-        _dirty = true;
-
-        private _targets = _allPlayers select { getPlayerID _x in _playersInSquad };
-        ["newjoin", [_playerId]] remoteExec ["SQD_fnc_client", _targets];
-
-        _message = format ["Player %1 joined Squad %2", _playerId, (_squad select 0)];
-        _return = 0;
-    };
-    case "remove": {
-        // Remove player from squad
-        private _playerId = _params select 0;
-
-        private _squads = _squadManager select {(_x select 2) find _playerId > -1};
-
-        {
-            private _squad = _x;
-            private _members = _squad select 2;
-            _members = _members - [_playerId];
-            _squad set [2, _members];
-
-            if (_playerId == (_squad select 1)) then {
-                if (count _members > 0) then {
-                    private _playerContribution = missionNamespace getVariable ["WL_PlayerSquadContribution", createHashMap];
-                    _members = [_members, [_playerContribution], {
-                        private _playerUid = _x getUserInfo 2;
-                        _input0 getOrDefault [_playerUid, 0];
-                    }, "DESCEND"] call BIS_fnc_sortBy;
-
-                    private _newSquadLeader = _members select 0;
-                    _squad set [1, _newSquadLeader];
-
-                    private _newSLOwner = _newSquadLeader getUserInfo 1;
-                    if (_newSLOwner > 2) then {
-                        ["promoted", []] remoteExec ["SQD_fnc_client", _newSLOwner];
-                    };
-                };
-            };
-        } forEach _squads;
-
-        // Clean up empty squads
-        _squadManager = _squadManager select { !isNil { _x # 1 } && count (_x # 2) > 0 };
-        _dirty = true;
-
-        _message = format ["Player %1 removed from all squads.", _playerId];
-        _return = 0;
-    };
-    case "promote": {
-        // Promote player to squad leader
-        private _playerId = _params select 0;
-
-        private _squads = SQUAD_MANAGER select {(_x select 2) find _playerId > -1};
-        if  (count _squads == 0) then {
-            _message = format ["Player %1 not in any squad", _playerId];
-            _return = 1;
-        } else {
-            private _squad = _squads select 0;
-
-            private _newSLPlayer = _allPlayers select { getPlayerID _x == _playerId } select 0;
-            ["promoted", []] remoteExec ["SQD_fnc_client", _newSLPlayer];
-
-            _squad set [1, _playerId];
-            _dirty = true;
-
-            _message = format ["Player %1 promoted to Squad Leader of %2", _playerId, (_squad select 0)];
-            _return = 0;
-        };
-    };
-    case "getSquadmates": {
-        // Get squadmates of player
-        private _playerId = _params select 0;
-
-        private _squads = _squadManager select {(_x select 2) find _playerId > -1};
-        if (count _squads == 0) then {
-            _message = format ["Player %1 not in any squad", _playerId];
-            _return = [];
-        } else {
-            private _squad = _squads select 0;
-            private _squadmates = _squad select 2;
-
-            _message = format ["Squadmates of %1: %2", _playerId, _squadmates];
-            _return = _squadmates - [_playerId];
-        };
-    };
-    case "rename": {
-        // Rename squad
-        private _playerId = _params select 0;
-        private _newName = _params select 1;
-
-        private _squad = _squadManager select {(_x select 1) == _playerId} select 0;
-        if (isNil "_squad") exitWith {
-            _message = format ["Squad for player %1 not found", _playerId];
-            _return = 1;
-        };
-
-        _squad set [0, _newName];
-        _dirty = true;
-
-        _message = format ["Player %1 renamed squad to %2", _playerId, _newName];
-        _return = 0;
-    };
-    case "isSquadLeader": {
-        // Check if player is squad leader
-        private _playerId = _params select 0;
-
-        private _squad = SQUAD_MANAGER select {(_x select 1) == _playerId};
-        private _isLeader = !isNil "_squad";
-
-        _message = format ["Player %1 is squad leader: %2", _playerId, _isLeader];
-        _return = _isLeader;
-    };
-    case "isInASquad": {
-        // Check if player is in squad
-        private _playerId = _params select 0;
-
-        private _squad = SQUAD_MANAGER select {(_x select 2) find _playerId > -1};
-        private _isInSquad = !isNil "_squad";
-
-        _message = format ["Player %1 is in squad: %2", _playerId, _isInSquad];
-        _return = _isInSquad;
-    };
-    case "isRegularSquadMember": {
-        // Check if player is regular squad member
-        private _playerId = _params select 0;
-
-        _isRegular = ["isInASquad", [_playerId]] call SQD_fnc_server && !(["isSquadLeader", [_playerId]] call SQD_fnc_server);
-
-        _message = format ["Player %1 is regular squad member: %2", _playerId, _isRegular];
-        _return = _isRegular;
-    };
-    case "getSquadVotingPower": {
-        // Get squad voting power of squad leader
-        private _playerId = _params select 0;
-
-        WL_PlayerSquadContribution = missionNamespace getVariable ["WL_PlayerSquadContribution", createHashMap];
-
-        private _squad = SQUAD_MANAGER select {(_x select 1) == _playerId} select 0;
-        private _squadVotingPower = if (isNil "_squad") then {
-            private _playerUid = (getUserInfo _playerId) # 2;
-            private _points = WL_PlayerSquadContribution getOrDefault [_playerUid, 0];
-            _points max 1;
-        } else {
-            private _sum = 0;
-            {
-                private _squadMemberId = _x;
-                private _squadMemberUid = _squadMemberId getUserInfo 2;
-                if !(isNil "_squadMemberUid") then {
-                    private _points = WL_PlayerSquadContribution getOrDefault [_squadMemberUid, 0];
-                    _sum = _sum + (_points max 1);
-                };
-            } forEach (_squad select 2);
-            _sum max 1;
-        };
-
-        _message = format ["Voting power of squad leader %1: %2", _playerId, _squadVotingPower];
-        _return = _squadVotingPower;
-    };
-
-    case "earnPoints": {
-        private _playerId = _params select 0;
-        private _points = _params select 1;
-
-        WL_PlayerSquadContribution = missionNamespace getVariable ["WL_PlayerSquadContribution", createHashMap];
-
-        _oldPoints = WL_PlayerSquadContribution getOrDefault [_playerId, 0];
-        _points = _points + _oldPoints;
-        WL_PlayerSquadContribution set [_playerId, _points];
-
-        missionNamespace setVariable ["WL_PlayerSquadContribution", WL_PlayerSquadContribution, true];
-
-        _message = format ["Player %1 earned %2 points", _playerId, _points];
-        _return = 0;
-    };
-};
-
-if (_dirty) then {
+private _propagateChanges = {
     if (_squadManager isNotEqualTo _oldSquadManager) then {
         missionNamespace setVariable ["SQUAD_MANAGER", _squadManager, true];
     };
 };
 
-_return;
+if (_action == "create") exitWith {
+    // Create squad with name & leader
+    private _squadName = _params select 0;
+    private _leader = _params select 1;
+    private _side = _params select 2;
+
+    private _freeChannel = ["getCreatedFreeChannel", []] call SQD_fnc_query;
+    private _customChannelId = if (_freeChannel > 0) then {
+        _freeChannel
+    } else {
+        radioChannelCreate [[0.56, 0.93, 0.56, 1], _squadName, "%UNIT_NAME", []];
+    };
+
+    private _newSquad = createHashMapFromArray [
+        ["name", _squadName],
+        ["leader", _leader],
+        ["members", [_leader]],
+        ["side", _side],
+        ["channel", _customChannelId]
+    ];
+    _squadManager pushBack _newSquad;
+    call _propagateChanges;
+
+    if (_customChannelId != 0) then {
+        private _leaderPlayer = ["getPlayerForID", [_leader]] call SQD_fnc_query;
+        _customChannelId radioChannelAdd [_leaderPlayer];
+    };
+};
+
+if (_action == "invite") exitWith {
+    // Invite player to squad
+    private _playerId = _params select 0;
+    private _inviter = _params select 1;
+
+    private _squad = ["getSquadForPlayer", [_inviter]] call SQD_fnc_query;
+    if (count _squad == 0) exitWith {}; // inviter not in a squad
+
+    private _inviteeSquad = ["getSquadForPlayer", [_playerId]] call SQD_fnc_query;
+    if (count _inviteeSquad > 0) exitWith {};   // player is already in a squad
+
+    private _squadLeader = _squad getOrDefault ["leader", ""];
+    private _inviteePlayer = ["getPlayerForID", [_playerId]] call SQD_fnc_query;
+    if (_squadLeader != _inviter) then {
+        private _inviterPlayer = ["getPlayerForID", [_inviter]] call SQD_fnc_query;
+
+        if !(isNull _inviterPlayer || isNull _inviteePlayer) then {
+            private _message = format ["%1 has invited %2 to the squad.", name _inviterPlayer, name _inviteePlayer];
+            [_message] remoteExec ["systemChat", _squadLeaderInfo # 1];
+        };
+    };
+
+    ["invited", [_inviter]] remoteExec ["SQD_fnc_client", _inviteePlayer];
+};
+
+if (_action == "add") exitWith {
+    // Player join squad
+    private _inviter = _params select 0;
+    private _playerId = _params select 1;
+
+    ["remove", [_playerId]] call SQD_fnc_server;
+
+    private _squad = ["getSquadForPlayer", [_inviter]] call SQD_fnc_query;
+    if (count _squad == 0) exitWith {}; // inviter not in a squad
+
+    private _playersInSquad = _squad getOrDefault ["members", []];
+    private _squadSize = count _playersInSquad;
+    if (_squadSize >= SQD_MAX_SQUAD_SIZE) exitWith {
+        private _message = format ["Squad ""%1"" is full: %2/%3", _squad getOrDefault ["name", ""], _squadSize, SQD_MAX_SQUAD_SIZE];
+        [_message] remoteExec ["systemChat", remoteExecutedOwner];
+    };
+
+    _playersInSquad pushBackUnique _playerId;
+    _squad set ["members", _playersInSquad];
+    call _propagateChanges;
+
+    private _newPlayer = ["getPlayerForID", [_playerId]] call SQD_fnc_query;
+    private _squadChannelId = _squad getOrDefault ["channel", 0];
+    if (_squadChannelId != 0) then {
+        _squadChannelId radioChannelAdd [_newPlayer];
+    };
+
+    private _targets = _allPlayers select { getPlayerID _x in _playersInSquad };
+    ["newjoin", [_playerId]] remoteExec ["SQD_fnc_client", _targets];
+};
+
+if (_action == "remove") exitWith {
+    // Remove player from squad
+    private _playerId = _params select 0;
+
+    private _squads = ["getSquadsForPlayer", [_playerId]] call SQD_fnc_query;
+    private _player = ["getPlayerForID", [_playerId]] call SQD_fnc_query;
+
+    {
+        private _squad = _x;
+
+        private _members = _squad getOrDefault ["members", []];
+        _members = _members select { _x != _playerId };
+        _squad set ["members", _members];
+
+        private _channel = _squad getOrDefault ["channel", 0];
+        if (_channel != 0) then {
+            _channel radioChannelRemove [_player];
+        };
+
+        if (_playerId == (_squad getOrDefault ["leader", ""])) then {
+            if (count _members > 0) then {
+                private _playerContribution = missionNamespace getVariable ["WL_PlayerSquadContribution", createHashMap];
+                private _sortedMembers = [_members, [_playerContribution], {
+                    private _playerUid = _x getUserInfo 2;
+                    _input0 getOrDefault [_playerUid, 0];
+                }, "DESCEND"] call BIS_fnc_sortBy;
+
+                private _newSquadLeader = _sortedMembers select 0;
+                _squad set ["leader", _newSquadLeader];
+
+                private _newSquadLeaderPlayer = ["getPlayerForID", [_newSquadLeader]] call SQD_fnc_query;
+                ["promoted", []] remoteExec ["SQD_fnc_client", _newSquadLeaderPlayer];
+            };
+        };
+    } forEach _squads;
+
+    _squadManager = _squadManager select {
+        count (_x getOrDefault ["members", []]) > 0
+    };
+
+    call _propagateChanges;
+};
+
+if (_action == "promote") exitWith {
+    // Promote player to squad leader
+    private _playerId = _params select 0;
+
+    private _squad = ["getSquadForPlayer", [_playerId]] call SQD_fnc_query;
+    if (count _squad == 0) exitWith {}; // player not in any squad
+
+    _squad set ["leader", _playerId];
+    call _propagateChanges;
+
+    private _player = ["getPlayerForID", [_playerId]] call SQD_fnc_query;
+    ["promoted", []] remoteExec ["SQD_fnc_client", _player];
+};
+
+if (_action == "rename") exitWith {
+    // Rename squad
+    private _playerId = _params select 0;
+    private _newName = _params select 1;
+
+    private _squad = ["getSquadForPlayer", [_playerId]] call SQD_fnc_query;
+    if (count _squad == 0) exitWith {}; // player not in any squad
+
+    _squad set ["name", _newName];
+    call _propagateChanges;
+};
+
+if (_action == "earnPoints") exitWith {
+    // Earn squad contribution points
+    private _playerId = _params select 0;
+    private _points = _params select 1;
+
+    WL_PlayerSquadContribution = missionNamespace getVariable ["WL_PlayerSquadContribution", createHashMap];
+
+    _oldPoints = WL_PlayerSquadContribution getOrDefault [_playerId, 0];
+    _points = _points + _oldPoints;
+    WL_PlayerSquadContribution set [_playerId, _points];
+
+    missionNamespace setVariable ["WL_PlayerSquadContribution", WL_PlayerSquadContribution, true];
+};
+
+if (_action == "cleanUp") exitWith {
+    private _allPlayerIds = _allPlayers apply { getPlayerID _x };
+
+    {
+        private _squad = _x;
+        private _members = _squad getOrDefault ["members", []];
+        {
+            private _member = _x;
+            private _danglingSquadmate = !(_member in _allPlayerIds);
+
+            if (_danglingSquadmate) then {
+                ["remove", [_member]] call SQD_fnc_server;
+            };
+        } forEach _members;
+    } forEach _squadManager;
+
+    _squadManager = _squadManager select {
+        count (_x getOrDefault ["members", []]) > 0
+    };
+
+    call _propagateChanges;
+};

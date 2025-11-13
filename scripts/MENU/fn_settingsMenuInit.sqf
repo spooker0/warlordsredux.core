@@ -113,6 +113,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["slider", "Earplugs", [0, 0.5, 0.05, 0.1, "earplugVolume"]],
         ["slider", "Hitmarker", [0, 1, 0.1, 0.5, "hitmarkerVolume"]],
         ["slider", "Level up music", [0, 1, 0.1, 0.8, "levelUpMusic"]],
+        ["slider", "Squad chat notification", [0, 5, 0.1, 1, "squadChatNotificationVolume"]],
         ["slider", "Vote countdown", [0, 1, 0.1, 1, "voteVolume"]],
         ["slider", "Drone jamming", [0, 5, 0.1, 1, "droneJammingVolume"]],
         ["slider", "Drone ping", [0, 1, 0.1, 1, "dronePingVolume"]],

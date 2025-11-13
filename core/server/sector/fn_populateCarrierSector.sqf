@@ -76,3 +76,7 @@ private _presetVehicles = _sector getVariable ["WL2_vehiclesToSpawn", []];
     _vehicle setFuel 0;
 } forEach _presetVehicles;
 [_vehicleUnits, _sector] spawn WL2_fnc_assetRelevanceCheck;
+
+private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
+_ownedVehicles append (_vehicleUnits + _infantryUnits);
+missionNamespace setVariable ["BIS_WL_ownedVehicles_server", _ownedVehicles, true];

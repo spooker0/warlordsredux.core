@@ -13,6 +13,10 @@
 			private _players = _warlords select {isPlayer _x};
 
 			private _votesByPlayers = createHashMap;
+			private _votingPlayers = _players select {
+				private _isRegularSquadMember = ["isRegularSquadMember", [getPlayerID _x]] call SQD_fnc_query;
+				!_isRegularSquadMember
+			};
 			{
 				private _player = _x;
 				private _variableName = format ["BIS_WL_targetVote_%1", getPlayerID _player];
@@ -30,12 +34,12 @@
 						private _playerVotes = _squadContribution getOrDefault [getPlayerUID _player, 0];
 						_voteCount = round (_playerVotes * 0.2);
 					} else {
-						private _squadVotingPower = ["getSquadVotingPower", [getPlayerID _x]] call SQD_fnc_server;
+						private _squadVotingPower = ["getSquadVotingPower", [getPlayerID _x]] call SQD_fnc_query;
 						_voteCount = _squadVotingPower + (_votesByPlayers getOrDefault [_voteName, [objNull, 0]] select 1);
 					};
 					_votesByPlayers set [_voteName, [_vote, _voteCount]];
 				};
-			} forEach (_players select { !(["isRegularSquadMember", [getPlayerID _x]] call SQD_fnc_server) });
+			} forEach _votingPlayers;
 
 			private _sortedVoteList = (toArray _votesByPlayers) # 1; // discard keys
 			_sortedVoteList = [_sortedVoteList, [], { _x # 1  }, "DESCEND"] call BIS_fnc_sortBy;
