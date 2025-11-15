@@ -40,6 +40,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["ft-stronghold-near", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
         ["ft-stronghold-test", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
         ["ft-tent", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
+        ["loiter", "A3\ui_f\data\map\markers\military\box_CA.paa"],
         ["kick", "a3\modules_f\data\iconunlock_ca.paa"],
         ["mark-sector", "A3\ui_f\data\map\markers\handdrawn\flag_CA.paa"],
         ["move", "A3\ui_f\data\map\markers\military\box_CA.paa"],
@@ -50,6 +51,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["repair-stronghold", "a3\ui_f\data\igui\cfg\actions\repair_ca.paa"],
         ["sector-scan", "a3\drones_f\air_f_gamma\uav_02\data\ui\map_uav_02_ca.paa"],
         ["target-altitude", "a3\ui_f\data\igui\cfg\simpletasks\types\Heli_ca.paa"],
+        ["target-loiter-radius", "A3\ui_f\data\map\markers\military\circle_CA.paa"],
         ["vehicle-paradrop", "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa"]
     ];
 

@@ -41,11 +41,6 @@ addMissionEventHandler ["HandleDisconnect", {
 		if !(isPlayer _x) then {deleteVehicle _x;};
 	} forEach ((allUnits) select {(_x getVariable ["BIS_WL_ownerAsset", "132"] == _uid)});
 
-	private _tent = _unit getVariable ["WL2_respawnBag", objNull];
-	if (!isNull _tent) then {
-		deleteVehicle _tent;
-	};
-
 	call WL2_fnc_calcImbalance;
 }];
 

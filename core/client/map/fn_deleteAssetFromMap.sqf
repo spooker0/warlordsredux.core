@@ -45,6 +45,15 @@ if (_result) then {
 	};
 
 	deleteVehicle _target;
+
+	if (!isNull _target) then {
+		_target setVariable ["WL2_orderedClass", typeof _target, true];
+        _target setVariable ["WL_spawnedAsset", false, true];
+        _target setVariable ["BIS_WL_ownerAsset", "123", true];
+        _target setVariable ["BIS_WL_ownerAssetSide", sideUnknown, true];
+		_target setVariable ["WL2_canDemolish", false, true];
+	};
+
 	((ctrlParent WL_CONTROL_MAP) getVariable "BIS_sectorInfoBox") ctrlShow false;
 	((ctrlParent WL_CONTROL_MAP) getVariable "BIS_sectorInfoBox") ctrlEnable true;
 

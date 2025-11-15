@@ -111,6 +111,7 @@
 #define WL_DURATION_CLAIM 3
 
 #define WL_UAV_ALT_VALUES [50, 100, 200, 300, 400, 500, 750, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 7000]
+#define WL_UAV_LOITER_VALUES [50, 100, 200, 300, 400, 500, 750, 1000, 1500, 2000, 2500, 3000]
 
 #define WL_TARGET_FRIENDLY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_playerSide], objNull])
 #define WL_TARGET_ENEMY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_enemySide], objNull])

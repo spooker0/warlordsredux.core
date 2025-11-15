@@ -207,6 +207,7 @@ class CfgFunctions {
 			class catapultActionEligibility {};
 			class claimAction {};
 			class claimEligibility {};
+			class constructRallyPoint {};
 			class controlGunnerAction {};
 			class controlGunnerEligibility {};
 			class controlUAVAction {};
@@ -256,6 +257,7 @@ class CfgFunctions {
 			class setupForwardBaseAction {};
 			class setupForwardBaseEligibility {};
 			class setupForwardBaseMp {};
+			class setupSimpleAsset {};
 			class slingAddAction {};
 			class smokeCurtainAction {};
 			class smokeCurtainParticles {};

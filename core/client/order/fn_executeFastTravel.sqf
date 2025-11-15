@@ -172,7 +172,7 @@ switch (_fastTravelMode) do {
 			if (!isNull _respawnBag) then {
 				deleteVehicle _respawnBag;
 			};
-            player setVariable ["WL2_respawnBag", objNull, [2, clientOwner]];
+            player setVariable ["WL2_respawnBag", objNull];
         };
 	};
 	case 5: {

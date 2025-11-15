@@ -67,6 +67,7 @@ class CfgRemoteExec {
 		class WL2_fnc_scannerAction {allowedTargets = 0;};
 		class WL2_fnc_setupForwardBaseAction {allowedTargets = 0;};
 		class WL2_fnc_setupForwardBaseMp {allowedTargets = 0;};
+		class WL2_fnc_setupSimpleAsset {allowedTargets = 0;};
 		class WL2_fnc_slingAddAction {allowedTargets = 1;};
 		class WL2_fnc_slingloadInit {allowedTargets = 0;};
 		class WL2_fnc_smokeCurtainAction {allowedTargets = 0;};
