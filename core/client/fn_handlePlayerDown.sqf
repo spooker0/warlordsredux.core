@@ -2,12 +2,6 @@
 params ["_unit"];
 
 _unit setVelocity [0, 0, 0];
-#if __GAME_BUILD__ <= 153351
-{
-    _x setCaptive true;
-    _x setUnconscious true;
-} forEach (units _unit);
-#endif
 
 _unit setCaptive true;
 _unit setUnconscious true;

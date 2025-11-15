@@ -6,7 +6,7 @@ private _display = findDisplay WLM_DISPLAY;
 
 private _access = [_asset, player, "full"] call WL2_fnc_accessControl;
 if !(_access # 0) exitWith {
-    systemChat format ["Cannot apply loadout: %1", _access # 1];
+    [format ["Cannot apply loadout: %1", _access # 1]] call WL2_fnc_smoothText;
     playSound "AddItemFailed";
     _display closeDisplay 1;
 };
@@ -76,5 +76,5 @@ _asset setVariable ["WLM_assetAttachments", _attachments, true];
 
 if (_eligibleFreeRearm) then {
     playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Rearm.wss", _asset, false, getPosASL _asset, 2, 1, 75];
-    [toUpper localize "STR_A3_WL_popup_asset_rearmed"] spawn WL2_fnc_smoothText;
+    [localize "STR_A3_WL_popup_asset_rearmed"] call WL2_fnc_smoothText;
 };

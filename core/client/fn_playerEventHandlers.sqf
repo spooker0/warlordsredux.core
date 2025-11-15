@@ -14,18 +14,6 @@ player addEventHandler ["GetInMan", {
 	};
 }];
 
-player addEventHandler ["InventoryOpened",{
-	params ["_unit","_container"];
-	_override = false;
-	_allUnitBackpackContainers = (player nearEntities ["Man", 50]) select {isPlayer _x} apply {backpackContainer _x};
-
-	if (_container in _allUnitBackpackContainers) then {
-		systemChat "Access denied!";
-		_override = true;
-	};
-	_override;
-}];
-
 player addEventHandler ["Killed", {
 	"RequestMenu_close" call WL2_fnc_setupUI;
 
@@ -76,7 +64,7 @@ player addEventHandler ["InventoryOpened", {
 
     private _access = [_container, player, "cargo"] call WL2_fnc_accessControl;
     if !(_access # 0) then {
-        systemChat format ["Inventory locked. (%1)", _access # 1];
+        [format ["Inventory locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
         playSoundUI ["AddItemFailed"];
         true;
     } else {

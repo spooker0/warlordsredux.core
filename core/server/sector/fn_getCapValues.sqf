@@ -103,13 +103,13 @@ private _sideCapValues = createHashMap;
 
 	private _points = if (_unit isKindOf "Man") then {
 		private _score = if (_unit distance2D _stronghold < _strongholdRadius && vehicle _unit == _unit) then {
-			5;
+			7;
 		} else {
 			1;
 		};
 		_score * _sideModifier;
 	} else {
-		private _aliveCrew = (crew _unit) select { alive _x && !(typeOf _x in _disallowManList) };
+		private _aliveCrew = (crew _unit) select { alive _x && lifeState _x != "INCAPACITATED" && !(typeOf _x in _disallowManList) };
 		private _crewCount = count _aliveCrew;
 		if (_crewCount > 0) then {
 			private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];

@@ -78,9 +78,9 @@ _destroyerMarker setMarkerColor "ColorWhite";
 [_destroyerBase, objNull, _controller, true] remoteExec ["WL2_fnc_createDestroyerClient", 0, true];
 
 private _nextReloadTime = serverTime + WL_DESTROYER_RELOAD;
-private _nextRespawnTime = serverTime + 120;
+private _nextRespawnTime = serverTime + 1200;
 while { alive _destroyerBase } do {
-    uiSleep 1;
+    uiSleep 30;
     if (serverTime >= _nextReloadTime) then {
         private _turretOwner = _mrls turretOwner [0];
         [_mrls] remoteExec ["WL2_fnc_addMissileToMag", _turretOwner];
@@ -90,11 +90,19 @@ while { alive _destroyerBase } do {
     if (alive _mrls) then {
         _nextRespawnTime = serverTime + WL_DESTROYER_RESPAWN;
     } else {
-        if (serverTime >= _nextRespawnTime) then {
+        private _controllerImage = if (serverTime >= _nextRespawnTime) then {
             call _createMrls;
             [_destroyerBase, _mrls, objNull, false] remoteExec ["WL2_fnc_createDestroyerClient", 0, true];
             _nextRespawnTime = serverTime + WL_DESTROYER_RESPAWN;
+            "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.2,""#000000"",""#ffffff"",""MISSILE\nBATTERY\nCONTROL"")"
+        } else {
+            format [
+                "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.2,""#000000"",""#ffffff"",""RESPAWN\n%1 MIN"")",
+                ceil ((_nextRespawnTime - serverTime) / 60)
+            ];
         };
+
+        _controller setObjectTextureGlobal [1, _controllerImage];
     };
 };
 
@@ -102,7 +110,7 @@ deleteVehicle _controller;
 deleteVehicle _mrls;
 
 _outlineMarker setMarkerColor "ColorBlack";
-_destroyerMarker setMarkerTextLocal format ["%1 (DDG-%2) - SINKING", _destroyerName, _hullNumber];
+_destroyerMarker setMarkerText format ["%1 (DDG-%2) - SINKING", _destroyerName, _hullNumber];
 
 uiSleep 60;
 

@@ -12,7 +12,7 @@ _spawnParams params ["_spawnPos", "_dir"];
 
 if (count _spawnPos == 0) exitWith {
 	diag_log format ["Ordering aircraft failed. Spawn position not found in sector %1.", _sector getVariable "WL2_name"];
-	"No suitable spawn position found. Clear the runways." remoteExec ["systemChat", _owner];
+	["No suitable spawn position found. Clear the runways."] remoteExec ["WL2_fnc_smoothText", _owner];
 	_sender setVariable ["BIS_WL_isOrdering", false, [2, _owner]];
 
 	// refund if nothing spawned

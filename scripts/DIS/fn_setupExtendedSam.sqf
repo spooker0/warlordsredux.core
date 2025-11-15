@@ -5,7 +5,7 @@ if (!isRemoteExecutedJIP && side group player != _side) then {
 	[_asset] spawn {
 		params ["_asset"];
 
-		systemChat "Enemy long-range air defenses detected.";
+		["Enemy long-range air defenses detected."] call WL2_fnc_smoothText;
 
 		private _warningDisplay = uiNamespace getVariable ["RscWLExtendedSamWarningDisplay", displayNull];
 		if (isNull _warningDisplay) then {
@@ -41,7 +41,7 @@ if (!isRemoteExecutedJIP && side group player != _side) then {
 		};
 
 		"SamWarning" cutText ["", "PLAIN"];
-		systemChat "Enemy long-range air defenses active.";
+		["Enemy long-range air defenses active."] call WL2_fnc_smoothText;
 	};
 };
 

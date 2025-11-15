@@ -13,7 +13,7 @@ private _removeActionID = _asset addAction [
 
 		private _access = [_unit, player, "full"] call WL2_fnc_accessControl;
 		if !(_access # 0) exitWith {
-			systemChat format ["Cannot remove: %1", _access # 1];
+			[format ["Cannot remove: %1", _access # 1]] call WL2_fnc_smoothText;
 			playSound "AddItemFailed";
 		};
 

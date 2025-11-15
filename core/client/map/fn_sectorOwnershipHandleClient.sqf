@@ -30,5 +30,5 @@ if (BIS_WL_playerSide in (_sector getVariable ["BIS_WL_revealedBy", []])) then {
 	if (_owner != BIS_WL_playerSide) then {
 		"Enemy_advancing" call WL2_fnc_announcer;
 	};
-	[toUpper format [localize "STR_A3_WL_popup_sector_seized", _sector getVariable "WL2_name", _owner call WL2_fnc_sideToFaction]] spawn WL2_fnc_smoothText;
+	[format [localize "STR_A3_WL_popup_sector_seized", _sector getVariable "WL2_name", _owner call WL2_fnc_sideToFaction]] call WL2_fnc_smoothText;
 };

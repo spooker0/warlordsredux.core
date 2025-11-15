@@ -13,7 +13,7 @@ missionNamespace setVariable ["WL2_scanningSectors", _currentScannedSectors];
 
 "Scan" call WL2_fnc_announcer;
 playSound "Beep_Target";
-[toUpper format [localize "STR_A3_WL_popup_scan_active", _sector getVariable "WL2_name"]] spawn WL2_fnc_smoothText;
+[format [localize "STR_A3_WL_popup_scan_active", _sector getVariable "WL2_name"]] call WL2_fnc_smoothText;
 
 private _sectorArea = _sector getVariable "objectAreaComplete";
 
@@ -39,4 +39,4 @@ _currentScannedSectors = _currentScannedSectors select {_x != _sector};
 missionNamespace setVariable ["WL2_scanningSectors", _currentScannedSectors];
 
 "Scan_terminated" call WL2_fnc_announcer;
-[toUpper format [localize "STR_A3_WL_popup_scan_ended", _sector getVariable "WL2_name"]] spawn WL2_fnc_smoothText;
+[format [localize "STR_A3_WL_popup_scan_ended", _sector getVariable "WL2_name"]] call WL2_fnc_smoothText;

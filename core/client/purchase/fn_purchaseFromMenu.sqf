@@ -23,6 +23,6 @@ if (_availability # 0) then {
         "RequestMenu_close" call WL2_fnc_setupUI;
     };
 } else {
-    systemChat format ["Invalid buy action: %1", (_availability # 1) joinString ", "];
+    [format ["Invalid buy action: %1", (_availability # 1) joinString ", "]] call WL2_fnc_smoothText;
     playSound "AddItemFailed";
 };

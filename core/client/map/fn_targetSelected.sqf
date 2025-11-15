@@ -7,13 +7,13 @@ if (_side != BIS_WL_playerSide) exitWith {
 
 		if ((_sector getVariable "BIS_WL_owner") == BIS_WL_playerSide || {_sector == WL_TARGET_FRIENDLY}) then {
 			"Incoming" call WL2_fnc_announcer;
-			[toUpper format [localize "STR_A3_WL_incoming", _sector getVariable "WL2_name", BIS_WL_enemySide call WL2_fnc_sideToFaction]] spawn WL2_fnc_smoothText;
+			[format [localize "STR_A3_WL_incoming", _sector getVariable "WL2_name", BIS_WL_enemySide call WL2_fnc_sideToFaction]] call WL2_fnc_smoothText;
 		};
 
 		if (_sector == (BIS_WL_playerSide call WL2_fnc_getSideBase)) then {
 			playSound "air_raid";
 			playSound "air_raid";
-			[toUpper localize "STR_A3_WL_popup_base_vulnerable"] spawn WL2_fnc_smoothText;
+			[localize "STR_A3_WL_popup_base_vulnerable"] call WL2_fnc_smoothText;
 		};
 
 		_sector spawn {

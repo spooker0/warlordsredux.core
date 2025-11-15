@@ -17,7 +17,7 @@ private _deployActionId = _asset addAction [
             };
             if (_crateType == "") exitWith {
                 playSound "AddItemFailed";
-                systemChat "Deploy Crate not available for this side!";
+                ["Deploy Crate not available for this side!"] call WL2_fnc_smoothText;
             };
 
             private _distanceToVehicle = player distance2D _asset;
@@ -34,14 +34,14 @@ private _deployActionId = _asset addAction [
 
             if (count _nearbyEntities > 0) exitWith {
                 private _nearbyObjectName = [_nearbyEntities # 0] call WL2_fnc_getAssetTypeName;
-                systemChat format ["Deploying too close to %1!", _nearbyObjectName];
+                ["Deploying too close to %1!", _nearbyObjectName] call WL2_fnc_smoothText;
                 playSound "AddItemFailed";
             };
 
             private _deployCrates = _asset getVariable ["WL2_deployCrates", 0];
             if (_deployCrates <= 0) exitWith {
                 playSound "AddItemFailed";
-                systemChat "No deploy crates available!";
+                ["No deploy crates available!"] call WL2_fnc_smoothText;
             };
             _asset setVariable ["WL2_deployCrates", _deployCrates - 1, true];
 

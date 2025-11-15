@@ -195,7 +195,7 @@ _controller addAction [
             params ["_target", "_caller", "_actionId"];
             private _mrls = _target getVariable ["WL2_destroyerVLS", objNull];
             if (isNull _mrls) exitWith {
-                systemChat "Missile Battery not found.";
+                ["Missile Battery not found."] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
             };
             _target setVariable ["WL2_controller", _caller, true];

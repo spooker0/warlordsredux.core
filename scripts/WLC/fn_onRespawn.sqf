@@ -145,7 +145,7 @@ if (count _customizationLoadout > 0) then {
         private _sanityCheckResult = [_unit] call _sanityChecks;
         if (_sanityCheckResult != "") then {
             _unit setUnitLoadout _lastLoadout;
-            systemChat _sanityCheckResult;
+            [_sanityCheckResult] call WL2_fnc_smoothText;
         } else {
             [player, "equip", _totalCost] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
@@ -154,7 +154,7 @@ if (count _customizationLoadout > 0) then {
             } else {
                 "Equipment and customizations applied for free.";
             };
-            systemChat _message;
+            [_message] call WL2_fnc_smoothText;
         };
     };
 } else {

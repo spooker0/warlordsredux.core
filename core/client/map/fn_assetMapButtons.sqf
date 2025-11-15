@@ -1,23 +1,10 @@
 #include "includes.inc"
-private _dialog = (findDisplay 12) createDisplay "WL_MapButtonDisplay";
-uiNamespace setVariable ["WL2_mapButtonDisplay", _dialog];
-
-getMousePosition params ["_mouseX", "_mouseY"];
-
-private _offsetX = _mouseX + 0.03;
-private _offsetY = _mouseY + 0.04;
-
-private _menuButtons = [];
-
-WL2_TargetButtonSetup = [_dialog, _menuButtons, _offsetX, _offsetY];
+private _menuButtons = createHashMap;
+uiNamespace setVariable ["WL2_mapButtons", _menuButtons];
 
 private _asset = uiNamespace getVariable ["WL2_assetTargetSelected", objNull];
 private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
 
-private _titleBar = _dialog ctrlCreate ["RscStructuredText", -1];
-_titleBar ctrlSetPosition [_offsetX, _offsetY - 0.05, 0.5, 0.05];
-_titleBar ctrlSetBackgroundColor [0.3, 0.3, 0.3, 1];
-_titleBar ctrlSetTextColor [0.7, 0.7, 1, 1];
 private _assetName = if (isPlayer _asset) then {
     name _asset;
 } else {
@@ -28,31 +15,29 @@ private _assetName = if (isPlayer _asset) then {
         [_asset] call WL2_fnc_getAssetTypeName;
     };
 };
-_titleBar ctrlSetStructuredText parseText format ["<t align='center' font='PuristaBold'>%1</t>", toUpper _assetName];
-_titleBar ctrlCommit 0;
 
 private _ownsVehicle = (_asset getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player;
 if (!isPlayer _asset && _ownsVehicle) then {
-    ["DELETE", {
+    ["delete", "<span class='red'>Delete</span>", {
         params ["_asset"];
         if ((_asset getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player) then {
             _asset spawn WL2_fnc_deleteAssetFromMap;
         } else {
             playSoundUI ["AddItemFailed"];
-            systemChat "You do not own this asset.";
+            ["You do not own this asset."] call WL2_fnc_smoothText;
         };
     }, true] call WL2_fnc_addTargetMapButton;
 };
 
 if (side group player == independent && _asset isKindOf "Man" && !isPlayer _asset) then {
-    ["CONTROL", {
+    ["control", "Control", {
         params ["_asset"];
 
         private _assetIsNotMine = (_asset getVariable ["BIS_WL_ownerAsset", "123"]) != getPlayerUID player;
         private _noMoreClaims = BIS_WL_matesAvailable <= 0;
         if (!alive _asset || (_assetIsNotMine && _noMoreClaims)) then {
             playSoundUI ["AddItemFailed"];
-            systemChat "No available slots for this unit, or the unit is dead.";
+            ["No available slots for this unit, or the unit is dead."] call WL2_fnc_smoothText;
         } else {
             private _maxSubordinates = missionNamespace getVariable [format ["BIS_WL_maxSubordinates_%1", BIS_WL_playerSide], 1];
             private _refreshTimerVar = format ["WL2_manpowerRefreshTimers_%1", getPlayerUID player];
@@ -88,7 +73,17 @@ private _accessControl = _asset getVariable ["WL2_accessControl", -1];
 if (_ownsVehicle && _accessControl != -1 && !(_asset isKindOf "Man")) then {
     private _lockText = [_accessControl] call WL2_fnc_assetButtonAccessControl;
 
-    [_lockText, {
+    private _accessControlNext = {
+        params ["_asset"];
+        private _accessControl = _asset getVariable ["WL2_accessControl", 0];
+        private _newAccess = (_accessControl - 1 + 8) % 8;
+        _asset setVariable ["WL2_accessControl", _newAccess, true];
+        playSound3D ["a3\sounds_f\sfx\objects\upload_terminal\terminal_lock_close.wss", _asset, false, getPosASL _asset, 1, 1, 0, 0];
+
+        // return
+        [_newAccess] call WL2_fnc_assetButtonAccessControl;
+    };
+    private _accessControlPrevious = {
         params ["_asset"];
         private _accessControl = _asset getVariable ["WL2_accessControl", 0];
         private _newAccess = (_accessControl + 1) % 8;
@@ -97,7 +92,9 @@ if (_ownsVehicle && _accessControl != -1 && !(_asset isKindOf "Man")) then {
 
         // return
         [_newAccess] call WL2_fnc_assetButtonAccessControl;
-    }, false] call WL2_fnc_addTargetMapButton;
+    };
+
+    ["access-control", _lockText, [_accessControlNext, _accessControlPrevious], false] call WL2_fnc_addTargetMapButton;
 };
 
 private _hasCrew = count ((crew _asset) select {
@@ -105,7 +102,7 @@ private _hasCrew = count ((crew _asset) select {
 }) > 0;
 private _isNotFlying = (getPosATL _asset # 2) < 10;
 if (_hasCrew && _isNotFlying && !(_asset isKindOf "Man") && _ownsVehicle) then {
-    ["KICK", {
+    ["kick", "Kick", {
         params ["_asset"];
         if ((getPosATL _asset # 2) < 10) then {
             private _unwantedPassengers = (crew _asset) select {
@@ -123,7 +120,7 @@ private _operateAccess = ([_asset, player, "driver"] call WL2_fnc_accessControl)
 if (_operateAccess && typeof _asset in ["O_T_Truck_03_device_ghex_F", "O_Truck_03_device_F", "Land_MobileRadar_01_radar_F"]) then {
     private _jammerText = [_asset] call WL2_fnc_assetButtonJammer;
 
-    [_jammerText, {
+    ["ew", _jammerText, {
         params ["_asset"];
         [_asset] call WL2_fnc_jammerToggle;
     }, true] call WL2_fnc_addTargetMapButton;
@@ -132,7 +129,7 @@ if (_operateAccess && typeof _asset in ["O_T_Truck_03_device_ghex_F", "O_Truck_0
 if (_operateAccess && typeof _asset in ["B_Radar_System_01_F", "O_Radar_System_01_F", "I_E_Radar_System_01_F"]) then {
     private _radarRotateText = [_asset] call WL2_fnc_assetButtonRadarRotate;
 
-    [_radarRotateText, {
+    ["radar-rotate", _radarRotateText, {
         params ["_asset"];
         _asset setVariable ["radarRotation", !(_asset getVariable ["radarRotation", false]), true];
         playSoundUI ["AddItemOK"];
@@ -148,7 +145,7 @@ private _hasRadar = count _radarSensor > 0 && (count _crewPosition > 1 || unitIs
 if (_operateAccess && _hasRadar) then {
     private _radarOperateText = [_asset] call WL2_fnc_assetButtonRadarOperate;
 
-    [_radarOperateText, {
+    ["radar-operate", _radarOperateText, {
         params ["_asset"];
         _asset setVariable ["radarOperation", !(_asset getVariable ["radarOperation", false]), true];
         playSoundUI ["AddItemOK"];
@@ -158,10 +155,11 @@ if (_operateAccess && _hasRadar) then {
     }, false] call WL2_fnc_addTargetMapButton;
 };
 
-if (typeof _asset in ["Land_TentSolar_01_bluewhite_F", "Land_TentDome_F", "Land_TentSolar_01_redwhite_F", "Land_TentA_F"]) then {
-    ["FAST TRAVEL TENT", {
+private _isTent = typeof _asset in ["Land_TentSolar_01_bluewhite_F", "Land_TentDome_F", "Land_TentSolar_01_redwhite_F", "Land_TentA_F"];
+if (_ownsVehicle && _isTent) then {
+    ["ft-tent", "Fast travel tent", {
         if (!alive player || lifeState player == "INCAPACITATED") exitWith {
-            systemChat "Cannot fast travel.";
+            ["Cannot fast travel."] call WL2_fnc_smoothText;
             playSoundUI ["AddItemFailed"];
         };
         [4, ""] spawn WL2_fnc_executeFastTravel;
@@ -170,14 +168,14 @@ if (typeof _asset in ["Land_TentSolar_01_bluewhite_F", "Land_TentDome_F", "Land_
 
 private _canFastTravel = WL_ASSET(_assetActualType, "hasFastTravel", 0) > 0;
 if (_canFastTravel) then {
-    ["FAST TRAVEL", {
+    ["ft-asset", "Fast travel", {
         params ["_asset"];
         if (!alive player || lifeState player == "INCAPACITATED") exitWith {
-            systemChat "Cannot fast travel while dead.";
+            ["Cannot fast travel while dead."] call WL2_fnc_smoothText;
             playSoundUI ["AddItemFailed"];
         };
         if (isWeaponDeployed player) exitWith {
-            systemChat "Cannot fast travel while weapon is deployed.";
+            ["Cannot fast travel while weapon is deployed."] call WL2_fnc_smoothText;
             playSoundUI ["AddItemFailed"];
         };
         [_asset] spawn WL2_fnc_executeFastTravelVehicle;
@@ -197,7 +195,8 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         [6, "WL2_fastTravelFOBMarker"] spawn WL2_fnc_executeFastTravel;
     };
     [
-        "FAST TRAVEL FOB",
+        "ft-fob",
+        "Fast travel forward base",
         _fastTravelFOBExecute,
         true,
         "fastTravelFOB",
@@ -218,7 +217,8 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         [7, "WL2_fastTravelFOBMarker"] spawn WL2_fnc_executeFastTravel;
     };
     [
-        "VEHICLE PARADROP",
+        "vehicle-paradrop",
+        "Vehicle paradrop",
         _vehicleParadropFOBExecute,
         true,
         "vehicleParadropFOB",
@@ -239,7 +239,8 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         deleteVehicle _asset;
     };
     [
-        "DELETE FOB",
+        "delete-fob",
+        "Delete forward base",
         _deleteFOBExecute,
         true,
         "deleteFOB",
@@ -263,7 +264,8 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         [player, "repairFOB"] remoteExec ["WL2_fnc_handleClientRequest", 2];
     };
     [
-        "REPAIR BASE",
+        "repair-fob",
+        "Repair forward base",
         _repairFOBExecute,
         true,
         "repairFOB",
@@ -278,7 +280,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     // Fast Travel FOB Test
     private _fastTravelFOBTestExecute = {
         params ["_asset"];
-        systemChat "Testing Sector Stronghold spawns. Force respawn to end test.";
+        ["Testing Sector Stronghold spawns. Force respawn to end test."] call WL2_fnc_smoothText;
         while { alive player } do {
             private _marker = createMarkerLocal ["WL2_fastTravelFOBMarker", getPosATL _asset];
             _marker setMarkerShapeLocal "ELLIPSE";
@@ -290,7 +292,8 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         };
     };
     [
-        "FOB SPAWN TEST",
+        "ft-fob-test",
+        "Forward base test fast travel",
         _fastTravelFOBTestExecute,
         true,
         "fastTravelFOB",
@@ -303,9 +306,10 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
 #endif
 };
 
-if (_operateAccess && unitIsUAV _asset) then {
+private _isUav = unitIsUAV _asset || WL_ASSET(_assetActualType, "drone", 0) > 0;
+if (_operateAccess && _isUav) then {
     if (alive driver _asset) then {
-        ["CONTROL DRIVER", {
+        ["control-driver", "Control driver", {
             params ["_asset"];
             private _access = [_asset, player, "driver"] call WL2_fnc_accessControl;
             if (_access # 0) then {
@@ -318,7 +322,7 @@ if (_operateAccess && unitIsUAV _asset) then {
         }, true] call WL2_fnc_addTargetMapButton;
     };
     if (alive gunner _asset) then {
-        ["CONTROL GUNNER", {
+        ["control-gunner", "Control gunner", {
             params ["_asset"];
             private _access = [_asset, player, "driver"] call WL2_fnc_accessControl;
             if (_access # 0) then {
@@ -338,7 +342,8 @@ private _fastTravelSLExecute = {
     ["ftSquadLeader"] spawn SQD_fnc_client;
 };
 [
-    "FAST TRAVEL SL",
+    "ft-squad-leader",
+    "Fast travel squad leader",
     _fastTravelSLExecute,
     true,
     "fastTravelSL",
@@ -356,7 +361,8 @@ private _fastTravelSquadmateExecute = {
     ["ftSquad", [_playerId]] spawn SQD_fnc_client;
 };
 [
-    "FAST TRAVEL SQUAD",
+    "ft-squad",
+    "Fast travel squad member",
     _fastTravelSquadmateExecute,
     true,
     "fastTravelSquad",
@@ -373,7 +379,8 @@ private _fastTravelAIExecute = {
     [_asset] spawn WL2_fnc_executeFastTravelVehicle;
 };
 [
-    "FAST TRAVEL AI",
+    "ft-ai",
+    "Fast travel AI",
     _fastTravelAIExecute,
     true,
     "fastTravelAI",
@@ -390,11 +397,14 @@ private _fastTravelStrongholdExecute = {
     private _findSector = (BIS_WL_sectorsArray # 2) select {
         (_x getVariable ["WL_stronghold", objNull]) == _asset
     };
+    if (count _findSector == 0) exitWith {};
+
     BIS_WL_targetSector = (_findSector # 0);
     [5, ""] spawn WL2_fnc_executeFastTravel;
 };
 [
-    "FAST TRAVEL STRONGHOLD",
+    "ft-stronghold",
+    "Fast travel stronghold",
     _fastTravelStrongholdExecute,
     true,
     "fastTravelStronghold",
@@ -411,11 +421,14 @@ private _fastTravelNearStrongholdExecute = {
     private _findSector = (BIS_WL_sectorsArray # 2) select {
         (_x getVariable ["WL_stronghold", objNull]) == _asset
     };
+    if (count _findSector == 0) exitWith {};
+
     BIS_WL_targetSector = (_findSector # 0);
     [8, ""] spawn WL2_fnc_executeFastTravel;
 };
 [
-    "FAST TRAVEL NEAR STRONGHOLD",
+    "ft-stronghold-near",
+    "Fast travel near stronghold",
     _fastTravelNearStrongholdExecute,
     true,
     "fastTravelNearStronghold",
@@ -432,6 +445,7 @@ private _removeStrongholdExecute = {
     private _findSector = (BIS_WL_sectorsArray # 2) select {
         (_x getVariable ["WL_stronghold", objNull]) == _asset
     };
+    if (count _findSector == 0) exitWith {};
     private _sector = (_findSector # 0);
 
     private _sectorName = _sector getVariable ["WL2_name", ""];
@@ -445,7 +459,8 @@ private _removeStrongholdExecute = {
     [player, "buyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 };
 [
-    "REMOVE STRONGHOLD",
+    "remove-stronghold",
+    "Remove stronghold",
     _removeStrongholdExecute,
     true,
     "removeStronghold",
@@ -465,7 +480,8 @@ private _repairStrongholdExecute = {
     [player, "repairStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 };
 [
-    "REPAIR STRONGHOLD",
+    "repair-stronghold",
+    "Repair stronghold",
     _repairStrongholdExecute,
     true,
     "repairStronghold",
@@ -520,7 +536,8 @@ private _fortifyStrongholdExecute = {
     [player, "fortifyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 };
 [
-    "FORTIFY STRONGHOLD",
+    "fortify-stronghold",
+    "Fortify stronghold",
     _fortifyStrongholdExecute,
     true,
     "fortifyStronghold",
@@ -539,14 +556,15 @@ private _fastTravelStrongholdTestExecute = {
         (_x getVariable ["WL_stronghold", objNull]) == _asset
     };
     BIS_WL_targetSector = (_findSector # 0);
-    systemChat "Testing Sector Stronghold spawns. Force respawn to end test.";
+    ["Testing Sector Stronghold spawns. Force respawn to end test."] call WL2_fnc_smoothText;
     while { alive player } do {
         [5, ""] spawn WL2_fnc_executeFastTravel;
         uiSleep 3;
     };
 };
 [
-    "STRONGHOLD SPAWN TEST",
+    "ft-stronghold-test",
+    "Stronghold test fast travel",
     _fastTravelStrongholdTestExecute,
     true,
     "fastTravelStronghold",
@@ -558,35 +576,10 @@ private _fastTravelStrongholdTestExecute = {
 ] call WL2_fnc_addTargetMapButton;
 #endif
 
-[_dialog, _offsetX, _offsetY, _menuButtons] spawn {
-    params ["_dialog", "_originalMouseX", "_originalMouseY", "_menuButtons"];
-    private _keepDialog = true;
-    private _menuHeight = (count _menuButtons) * 0.05;
-    private _startTime = serverTime;
-    waitUntil {
-        uiSleep 0.1;
-        !visibleMap || inputMouse 0 == 0 || serverTime - _startTime > 1;
-    };
-    while { visibleMap && _keepDialog } do {
-        getMousePosition params ["_mouseX", "_mouseY"];
+if (count _menuButtons > 0) then {
+    getMousePosition params ["_mouseX", "_mouseY"];
+    private _offsetX = (_mouseX - safeZoneX) / safeZoneW * 100;
+    private _offsetY = (_mouseY - safeZoneY) / safeZoneH * 100;
 
-        private _deltaX = _mouseX - _originalMouseX;
-        private _deltaY = _mouseY - _originalMouseY;
-
-        if (_deltaX < 0 || _deltaX > 0.5 || _deltaY < -0.05 || _deltaY > _menuHeight) then {
-            _keepDialog = inputMouse 0 == 0 && inputMouse 1 == 0;
-        };
-    };
-
-    waitUntil {
-        inputMouse 0 == 0 && inputMouse 1 == 0
-    };
-
-    _dialog closeDisplay 1;
-    WL2_TargetButtonSetup = [displayNull, [], 0, 0];
-};
-
-if (count _menuButtons == 0) then {
-    _dialog closeDisplay 1;
-    WL2_TargetButtonSetup = [displayNull, [], 0, 0];
+    [_assetName, _offsetX, _offsetY] spawn WL2_fnc_addMapButtons;
 };

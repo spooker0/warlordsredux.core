@@ -4,14 +4,14 @@ params ["_targetVehicle"];
 "RequestMenu_close" call WL2_fnc_setupUI;
 
 if (!alive _targetVehicle) exitWith {
-    systemChat "Cannot fast travel to a destroyed vehicle.";
+    ["Cannot fast travel to a destroyed vehicle."] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
 private _assetPos = getPosASL _targetVehicle;
 private _altitude = _assetPos # 2;
 if (_altitude < -1 && surfaceIsWater _assetPos) exitWith {
-    systemChat "Cannot fast travel to a submerged vehicle.";
+    ["Cannot fast travel to a submerged vehicle."] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 

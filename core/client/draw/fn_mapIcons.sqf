@@ -170,10 +170,10 @@
 
 			private _revealedBy = _sector getVariable ["BIS_WL_revealedBy", []];
 
-			if (_sectorMarkerTeam # 1 != "NONE") then {
+			if (_sectorMarkerTeam # 1 != "None") then {
 				_teamSectorMarkers pushBack [_sector, _sectorMarkerTeam];
 			};
-			if (_sectorMarkerEnemy # 1 != "NONE") then {
+			if (_sectorMarkerEnemy # 1 != "None") then {
 				_allSectorMarkers pushBack [_sector, _sectorMarkerEnemy];
 			};
 		} forEach BIS_WL_allSectors;

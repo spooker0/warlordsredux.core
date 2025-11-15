@@ -1,25 +1,9 @@
 #include "includes.inc"
-private _display = (findDisplay 12) createDisplay "WL_MapButtonDisplay";
-uiNamespace setVariable ["WL2_mapButtonDisplay", _display];
-
-getMousePosition params ["_mouseX", "_mouseY"];
-
-private _offsetX = _mouseX + 0.03;
-private _offsetY = _mouseY + 0.04;
-
-private _menuButtons = [];
-
-WL2_TargetButtonSetup = [_display, _menuButtons, _offsetX, _offsetY];
+private _menuButtons = createHashMap;
+uiNamespace setVariable ["WL2_mapButtons", _menuButtons];
 
 private _sector = uiNamespace getVariable ["WL2_assetTargetSelected", objNull];
-
-private _titleBar = _display ctrlCreate ["RscStructuredText", -1];
-_titleBar ctrlSetPosition [_offsetX, _offsetY - 0.05, 0.5, 0.05];
-_titleBar ctrlSetBackgroundColor [0.3, 0.3, 0.3, 1];
-_titleBar ctrlSetTextColor [0.7, 0.7, 1, 1];
 private _sectorName = _sector getVariable ["WL2_name", "Sector"];
-_titleBar ctrlSetStructuredText parseText format ["<t align='center' font='PuristaBold'>%1</t>", toUpper _sectorName];
-_titleBar ctrlCommit 0;
 
 // Fast Travel Seized Button
 private _fastTravelSeizedExecute = {
@@ -28,7 +12,8 @@ private _fastTravelSeizedExecute = {
     [0, ""] spawn WL2_fnc_executeFastTravel;
 };
 [
-    "FAST TRAVEL",
+    "ft",
+    "Fast travel",
     _fastTravelSeizedExecute,
     true,
     "fastTravelSeized",
@@ -46,7 +31,8 @@ private _fastTravelHomeExecute = {
     [0, ""] spawn WL2_fnc_executeFastTravel;
 };
 [
-    "FAST TRAVEL HOME",
+    "ft-home",
+    "Fast travel home",
     _fastTravelHomeExecute,
     true,
     "fastTravelHome",
@@ -64,7 +50,8 @@ private _fastTravelStrongholdExecute = {
     [5, ""] spawn WL2_fnc_executeFastTravel;
 };
 [
-    "FAST TRAVEL STRONGHOLD",
+    "ft-stronghold",
+    "Fast travel stronghold",
     _fastTravelStrongholdExecute,
     true,
     "fastTravelStrongholdTarget",
@@ -89,7 +76,8 @@ private _fastTravelConflictExecute = {
     deleteMarkerLocal _markerText;
 };
 [
-    "FAST TRAVEL CONTESTED",
+    "ft-conflict",
+    "Fast travel contested",
     _fastTravelConflictExecute,
     true,
     "fastTravelConflict",
@@ -114,7 +102,8 @@ private _airAssaultExecute = {
     deleteMarkerLocal _markerText;
 };
 [
-    "AIR ASSAULT",
+    "ft-conflict-air",
+    "Fast travel air assault",
     _airAssaultExecute,
     true,
     "airAssault",
@@ -132,7 +121,8 @@ private _vehicleParadropExecute = {
     [3, ""] call WL2_fnc_executeFastTravel;
 };
 [
-    "VEHICLE PARADROP",
+    "vehicle-paradrop",
+    "Vehicle paradrop",
     _vehicleParadropExecute,
     true,
     "vehicleParadrop",
@@ -150,7 +140,8 @@ private _scanExecute = {
     [player, "scan", [], _sector] remoteExec ["WL2_fnc_handleClientRequest", 2];
 };
 [
-    "SECTOR SCAN",
+    "sector-scan",
+    "Sector scan",
     _scanExecute,
     true,
     "scan",
@@ -161,54 +152,27 @@ private _scanExecute = {
     ]
 ] call WL2_fnc_addTargetMapButton;
 
-private _playerLevel = ["getLevel"] call WLC_fnc_getLevelInfo;
-if (_playerLevel >= 50) then {
-    // Mark Sector button
-    private _markSectorExecuteLast = {
-        params ["_sector"];
-        [_sector, false] call WL2_fnc_sectorButtonMark;
-    };
-    private _markSectorExecuteNext = {
-        params ["_sector"];
-        [_sector, true] call WL2_fnc_sectorButtonMark;
-    };
-    [
-        ([_sector, BIS_WL_playerSide] call WL2_fnc_sectorButtonMarker) # 0,
-        [_markSectorExecuteNext, _markSectorExecuteLast],
-        false,
-        "markSector"
-    ] call WL2_fnc_addTargetMapButton;
+// Mark Sector button
+private _markSectorExecuteLast = {
+    params ["_sector"];
+    [_sector, false] call WL2_fnc_sectorButtonMark;
 };
-
-[_display, _offsetX, _offsetY, _menuButtons] spawn {
-    params ["_display", "_originalMouseX", "_originalMouseY", "_menuButtons"];
-    private _keepDialog = true;
-    private _menuHeight = (count _menuButtons) * 0.05;
-    private _startTime = serverTime;
-    waitUntil {
-        uiSleep 0.1;
-        !visibleMap || inputMouse 0 == 0 || serverTime - _startTime > 1;
-    };
-    while { visibleMap && _keepDialog } do {
-        getMousePosition params ["_mouseX", "_mouseY"];
-
-        private _deltaX = _mouseX - _originalMouseX;
-        private _deltaY = _mouseY - _originalMouseY;
-
-        if (_deltaX < 0 || _deltaX > 0.5 || _deltaY < -0.05 || _deltaY > _menuHeight) then {
-            _keepDialog = inputMouse 0 == 0 && inputMouse 1 == 0;
-        };
-    };
-
-    waitUntil {
-        inputMouse 0 == 0 && inputMouse 1 == 0
-    };
-
-    _display closeDisplay 1;
-    WL2_TargetButtonSetup = [displayNull, [], 0, 0];
+private _markSectorExecuteNext = {
+    params ["_sector"];
+    [_sector, true] call WL2_fnc_sectorButtonMark;
 };
+[
+    "mark-sector",
+    ([_sector, BIS_WL_playerSide] call WL2_fnc_sectorButtonMarker) # 0,
+    [_markSectorExecuteNext, _markSectorExecuteLast],
+    false,
+    "markSector"
+] call WL2_fnc_addTargetMapButton;
 
-if (count _menuButtons == 0) then {
-    _display closeDisplay 1;
-    WL2_TargetButtonSetup = [displayNull, [], 0, 0];
+if (count _menuButtons > 0) then {
+    getMousePosition params ["_mouseX", "_mouseY"];
+    private _offsetX = (_mouseX - safeZoneX) / safeZoneW * 100;
+    private _offsetY = (_mouseY - safeZoneY) / safeZoneH * 100;
+
+    [_sectorName, _offsetX, _offsetY] spawn WL2_fnc_addMapButtons;
 };

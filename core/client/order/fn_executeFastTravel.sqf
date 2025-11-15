@@ -78,7 +78,7 @@ switch (_fastTravelMode) do {
 };
 
 if (count _destination != 3 || _destination isEqualTo [0, 0, 0]) exitWith {
-	systemChat "Fast travel failed, no valid position found.";
+	["Fast travel failed, no valid position found."] call WL2_fnc_smoothText;
 };
 
 private _tagAlong = (units player) select {
@@ -102,7 +102,7 @@ uiSleep 1;
 switch (_fastTravelMode) do {
 	case 0;
 	case 1: {
-		[toUpper format [localize "STR_A3_WL_popup_travelling", BIS_WL_targetSector getVariable "WL2_name"], nil, 3] spawn WL2_fnc_smoothText;
+		[format [localize "STR_A3_WL_popup_travelling", BIS_WL_targetSector getVariable "WL2_name"]] call WL2_fnc_smoothText;
 		{
 			_x setVehiclePosition [_destination, [], 3, "NONE"];
 		} forEach _tagAlong;

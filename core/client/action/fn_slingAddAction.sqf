@@ -11,7 +11,7 @@ private _slingActionId = _asset addAction [
         if (isNull _assetLoadedItem && isNull (getSlingLoad _asset)) then {
             private _speed = abs (speed _asset);
             if (_speed > 5) exitWith {
-                systemChat "Cannot load/unload deployable while moving!";
+                ["Cannot load/unload deployable while moving!"] call WL2_fnc_smoothText;
                 playSound "AddItemFailed";
             };
 

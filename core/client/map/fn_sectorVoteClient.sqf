@@ -71,14 +71,14 @@
             if (!isNull WL_TARGET_FRIENDLY && !_targetReset) then {
                 _texture ctrlWebBrowserAction ["ExecJS", "hideSectorVote();"];
                 "Selected" call WL2_fnc_announcer;
-                [toUpper format [localize "STR_A3_WL_popup_voting_done", WL_TARGET_FRIENDLY getVariable "WL2_name"]] spawn WL2_fnc_smoothText;
+                [format [localize "STR_A3_WL_popup_voting_done", WL_TARGET_FRIENDLY getVariable "WL2_name"]] call WL2_fnc_smoothText;
             };
         };
 
         if (_lastTargetEnemy isNotEqualTo WL_TARGET_ENEMY) then {
             private _enemySectorKnowers = _lastTargetEnemy getVariable ["BIS_WL_revealedBy", []];
             if (BIS_WL_playerSide in _enemySectorKnowers) then {
-                systemChat "Enemy target sector changed.";
+                ["Enemy target sector changed."] call WL2_fnc_smoothText;
             };
         };
 
@@ -133,7 +133,7 @@ while { !BIS_WL_missionEnd } do {
                     };
                 } else {
                     "Voting" call WL2_fnc_announcer;
-                    [toUpper localize "STR_A3_WL_popup_voting"] spawn WL2_fnc_smoothText;
+                    [localize "STR_A3_WL_popup_voting"] call WL2_fnc_smoothText;
                 };
             };
             // Voted

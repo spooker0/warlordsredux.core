@@ -29,7 +29,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
             private _loadoutVar = format ["WLC_savedLoadout_%1_%2", BIS_WL_playerSide, _i];
             profileNamespace setVariable [_loadoutVar, []];
         };
-        systemChat "All loadouts reset.";
+        ["All loadouts reset."] call WL2_fnc_smoothText;
         closeDialog 0;
     };
 
@@ -78,6 +78,5 @@ _texture ctrlAddEventHandler ["PageLoaded", WLC_fnc_pageLoad];
         uiSleep 0.2;
     };
 
-    ["LOADOUT SAVED FOR NEXT RESPAWN"] spawn WL2_fnc_smoothText;
-    systemChat "Loadout saved for next respawn.";
+    ["Loadout saved for next respawn"] call WL2_fnc_smoothText;
 };

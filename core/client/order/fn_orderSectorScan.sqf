@@ -2,7 +2,7 @@
 params ["_toContested"];
 
 "Sector" call WL2_fnc_announcer;
-[toUpper localize "STR_A3_WL_popup_scan"] spawn WL2_fnc_smoothText;
+[localize "STR_A3_WL_popup_scan"] call WL2_fnc_smoothText;
 
 "RequestMenu_close" call WL2_fnc_setupUI;
 if !(visibleMap) then {
@@ -32,7 +32,7 @@ if (BIS_WL_currentSelection == WL_ID_SELECTION_SCAN) then {
 
 if (isNull BIS_WL_targetSector) exitWith {
 	"Canceled" call WL2_fnc_announcer;
-	[toUpper localize "STR_A3_WL_scan_canceled"] spawn WL2_fnc_smoothText;
+	[localize "STR_A3_WL_scan_canceled"] call WL2_fnc_smoothText;
 
 	uiSleep 1;
 	WL_MapBusy = WL_MapBusy - ["orderSectorScan"];

@@ -53,7 +53,7 @@ _asset addAction [
 
 			if (_claimSuccess) then {
 				private _displayName = [_asset] call WL2_fnc_getAssetTypeName;
-				systemChat format ["%1 has been claimed.", _displayName];
+				[format ["%1 has been claimed.", _displayName]] call WL2_fnc_smoothText;
 				playSound3D ["\a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", _asset, false, getPosASL _asset, 2, 1, 200];
 
 				_asset setVariable ["BIS_WL_ownerAsset", getPlayerUID player, true];

@@ -119,7 +119,7 @@ if (_itemDone) then {
     private _selectedCategory = WL_PLAYER_REQUISITION_LIST # _categoryCode;
 
     if (_itemCode > (count _selectedCategory - 1)) exitWith {
-        systemChat "Invalid buy code item.";
+        ["Invalid buy code item."] call WL2_fnc_smoothText;
         playSound "AddItemFailed";
         WL_TEMP_BUY_MENU = false;
         true;
@@ -138,7 +138,7 @@ if (_itemDone) then {
 
     private _tasksRequireUIList = ["FundsTransfer"];
     if (_className in _tasksRequireUIList) exitWith {
-        systemChat format ["Invalid task requires UI: %1", _displayName];
+        [format ["Invalid task requires UI: %1", _displayName]] call WL2_fnc_smoothText;
         playSound "AddItemFailed";
     };
 
@@ -151,11 +151,11 @@ if (_itemDone) then {
     private _availability = _assetDetails call WL2_fnc_purchaseMenuAssetAvailability;
     if (_availability # 0) then {
         _assetDetails call WL2_fnc_triggerPurchase;
-        systemChat format ["Selected [%1]: %2", _newCode, _displayName];
+        [format ["Selected [%1]: %2", _newCode, _displayName]] call WL2_fnc_smoothText;
         playSound "AddItemOK";
         "RequestMenu_close" call WL2_fnc_setupUI;
     } else {
-        systemChat format ["Invalid buy action: %1", (_availability # 1) joinString ", "];
+        [format ["Invalid buy action: %1", (_availability # 1) joinString ", "]] call WL2_fnc_smoothText;
         playSound "AddItemFailed";
     };
 } else {
@@ -163,7 +163,7 @@ if (_itemDone) then {
         if (_categoryCode > (count WL_PLAYER_REQUISITION_LIST - 1)) exitWith {
             hintSilent "";
             uiNamespace setVariable ["WL_BuyMenuCode", ""];
-            systemChat "Invalid buy code category.";
+            ["Invalid buy code category."] call WL2_fnc_smoothText;
             playSound "AddItemFailed";
             WL_TEMP_BUY_MENU = false;
             true;

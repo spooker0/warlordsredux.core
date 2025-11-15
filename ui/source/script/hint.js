@@ -3,6 +3,9 @@ const hintText = hintWrapper.querySelector('p');
 const keysList = hintWrapper.querySelector('.keys-list');
 
 const animationTimer = document.querySelector('.animation-timer');
+const notificationWrapper = document.querySelector('.notification-wrapper');
+const notificationList = document.querySelector('.notification-list');
+
 const sectorWrapperDiv = document.querySelector('.sector-wrapper');
 const sectorCaptureDiv = sectorWrapperDiv.querySelector('.sector-capture-display');
 const sectorVoteDiv = sectorWrapperDiv.querySelector('.sector-vote-display');
@@ -59,6 +62,40 @@ function updateAnimationTimer(progress) {
     const clampedProgress = Math.max(0, Math.min(1, progress));
     animationTimer.textContent = `${(clampedProgress * 100).toFixed(0)}%`;
     animationTimer.style.background = `linear-gradient(to right, #00ff00 ${clampedProgress * 100}%, rgba(0,0,0,0.5) ${clampedProgress * 100}%)`;
+}
+
+function playNotificationAnimation(isShort) {
+    notificationWrapper.style.visibility = 'visible';
+    notificationWrapper.classList.remove('is-animating');
+    notificationWrapper.classList.remove('animation-done');
+    void notificationWrapper.offsetWidth;   // trigger reflow to restart animation
+    notificationWrapper.classList.add('is-animating');
+
+    if (!isShort) {
+        notificationWrapper.addEventListener('animationend', () => {
+            notificationWrapper.classList.remove('is-animating');
+            notificationWrapper.classList.add('animation-done');
+        });
+    }
+}
+
+function addNotification(message, fontSize, timeout) {
+    document.documentElement.style.setProperty('--notification-timeout', `${timeout}s`);
+
+    const listItem = document.createElement('li');
+    listItem.textContent = message;
+    listItem.style.setProperty('--notification-font-size', fontSize ? fontSize.toString() : '1.0');
+    notificationList.prepend(listItem);
+
+    playNotificationAnimation(timeout <= 1);
+
+    setTimeout(() => {
+        listItem.remove();
+
+        if (notificationList.children.length === 0) {
+            notificationWrapper.style.visibility = 'hidden';
+        }
+    }, timeout * 1000);
 }
 
 function playSectorAnimation() {
@@ -235,3 +272,6 @@ function updateSectorVote(etaDisplay, sectorData) {
     playSectorAnimation();
     sectorVoteHiding = false;
 }
+
+hideSectorCapture();
+hideSectorVote();

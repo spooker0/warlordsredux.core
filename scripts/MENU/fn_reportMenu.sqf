@@ -50,7 +50,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
             _reason = _texture ctrlWebBrowserAction ["FromBase64", _reason];
 
             [player, _uid, _reason] remoteExec ["MENU_fnc_reportPlayer", 2];
-            systemChat format["Reported %1 for %2", _playerName, _reason];
+            [format["Reported %1 for %2", _playerName, _reason]] call WL2_fnc_smoothText;
 
             closeDialog 0;
         };

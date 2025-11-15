@@ -66,7 +66,7 @@ private _side = [_asset] call WL2_fnc_getAssetSide;
             private _droneJammingVolume = _settingsMap getOrDefault ["droneJammingVolume", 1];
 
             playSoundUI ["a3\sounds_f\vehicles\air\CAS_01\noise.wss", _droneJammingVolume, 1, false, 3.6];
-            systemChat (localize "STR_A3_UAV_jammed");
+            [localize "STR_A3_UAV_jammed"] call WL2_fnc_smoothText;
 
             // Effect
             if (getPosATL _asset # 2 <= 1 && !isNull _controller) then {

@@ -3,15 +3,15 @@ params ["_asset"];
 
 private _radarOperation = _asset getVariable ["radarOperation", false];
 private _radarColor = if (_radarOperation) then {
-    "#4bff58"
+    "green"
 } else {
-    "#ff4b4b"
+    "red"
 };
 private _radarOnText = if (_radarOperation) then {
-    "ON"
+    "On"
 } else {
-    "OFF"
+    "Off"
 };
 
-private _buttonText = format ["RADAR CONTROL: <t color='%1'>%2</t>", _radarColor, _radarOnText];
+private _buttonText = format ["<span class='%1'>Radar control: %2</span>", _radarColor, _radarOnText];
 _buttonText;

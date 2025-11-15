@@ -42,17 +42,14 @@ if (_projectile isKindOf "SubmunitionBase") then {
     _camera attachTo [_projectile];
 };
 
-uiNamespace setVariable ["APS_Camera_Projectile", _projectile];
 private _targetDrawer = addMissionEventHandler ["Draw3D", {
-    private _projectile = uiNamespace getVariable ["APS_Camera_Projectile", objNull];
+    private _projectileNetId = _thisArgs select 0;
+    private _projectile = objectFromNetId _projectileNetId;
     if (isNull _projectile) exitWith {};
-    private _coordinates = _projectile getVariable ["DIS_targetCoordinates", []];
-    private _targetPosATL = if (count _coordinates == 0) then {
-        (missileTarget _projectile) modelToWorld [0, 0, 0]
-    } else {
-        _coordinates
-    };
+
+    private _targetPosATL = (missileTarget _projectile) modelToWorld [0, 0, 0];
     if (_targetPosATL isEqualTo [0, 0, 0]) exitWith {};
+
     drawIcon3D [
         "\A3\ui_f\data\IGUI\RscIngameUI\RscOptics\AzimuthMark.paa",
         [1, 0, 0, 1],
@@ -69,7 +66,7 @@ private _targetDrawer = addMissionEventHandler ["Draw3D", {
         0,
         0.01
     ];
-}];
+}, [netid _projectile]];
 
 [_camera, _display] spawn {
     params ["_camera", "_display"];

@@ -38,7 +38,7 @@ if (_class isKindOf "Man") then {
 			private _nearbyObjectPosition = getPosASL _nearbyObject;
 
 			playSound3D ["a3\3den\data\sound\cfgsound\notificationwarning.wss", objNull, false, _nearbyObjectPosition, 5];
-			systemChat format ["Too close to another %1!", _nearbyObjectName];
+			[format ["Too close to another %1!", _nearbyObjectName]] call WL2_fnc_smoothText;
 			player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 		} else {
 			playSound "assemble_target";
@@ -66,7 +66,7 @@ if (_class isKindOf "Man") then {
 		};
 	} else {
 		"Canceled" call WL2_fnc_announcer;
-		[toUpper localize "STR_A3_WL_deploy_canceled"] spawn WL2_fnc_smoothText;
+		[localize "STR_A3_WL_deploy_canceled"] call WL2_fnc_smoothText;
 		player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 	};
 };

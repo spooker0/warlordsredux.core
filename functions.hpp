@@ -309,6 +309,7 @@ class CfgFunctions {
 		};
 		class ClientMap {
 			file = "src\core\client\map";
+			class addMapButtons {};
 			class addTargetMapButton {};
 			class assetButtonAccessControl {};
 			class assetButtonJammer {};

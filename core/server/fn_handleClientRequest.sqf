@@ -159,7 +159,7 @@ if (_action == "scan") exitWith {
 	_uav setVariable ["BIS_WL_ownerAssetSide", _side, true];
 	_uav setVariable ["WL_spawnedAsset", true, true];
 
-	_uav setPosATL _spawnPos;
+	_uav setPosASL (AGLtoASL _spawnPos);
 
 	private _crewType = if (_side == west) then {
 		"B_UAV_AI"

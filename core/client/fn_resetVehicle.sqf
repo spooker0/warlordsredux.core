@@ -35,7 +35,7 @@ if (_deploymentResult # 0) then {
         private _nearbyObjectName = [_nearbyObject] call WL2_fnc_getAssetTypeName;
         private _nearbyObjectPosition = getPosASL _nearbyObject;
         playSound3D ["a3\3den\data\sound\cfgsound\notificationwarning.wss", objNull, false, _nearbyObjectPosition, 5];
-        systemChat format ["Too close to another %1!", _nearbyObjectName];
+        [format ["Too close to another %1!", _nearbyObjectName]] call WL2_fnc_smoothText;
     } else {
         playSound "assemble_target";
         [player, "resetVehicle", _vehicle, _position, _direction] remoteExec ["WL2_fnc_handleClientRequest", 2];

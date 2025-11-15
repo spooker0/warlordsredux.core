@@ -23,12 +23,12 @@ _texture ctrlAddEventHandler ["JSDialog", {
     if (!alive _vehicle) exitWith {
         closeDialog 0;
         playSoundUI ["AddItemFailed"];
-        systemChat "Vehicle is no longer available.";
+        ["Vehicle is no longer available."] call WL2_fnc_smoothText;
     };
     if (!alive player || lifeState player == "INCAPACITATED") exitWith {
         closeDialog 0;
         playSoundUI ["AddItemFailed"];
-        systemChat "You are incapacitated.";
+        ["You are incapacitated."] call WL2_fnc_smoothText;
     };
 
     switch (_actionId) do {
@@ -116,7 +116,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
             if (_nextRepairTime <= serverTime) then {
                 [player, "repair", _nextRepairTime, 0, _vehicle] remoteExec ["WL2_fnc_handleClientRequest", 2];
                 playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Repair.wss", _vehicle, false, getPosASL _vehicle, 2, 1, 75];
-                [toUpper localize "STR_A3_WL_popup_asset_repaired"] spawn WL2_fnc_smoothText;
+                [localize "STR_A3_WL_popup_asset_repaired"] call WL2_fnc_smoothText;
                 _vehicle setVariable ["WL2_nextRepair", serverTime + WL_COOLDOWN_REPAIR, true];
             } else {
                 playSound "AddItemFailed";
@@ -143,7 +143,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
 
         private _override = uiNamespace getVariable ["WL2_modOverrideUid", ""];
         if (_override != "") then {
-            systemChat "Mod vehicle access expired.";
+            ["Mod vehicle access expired."] call WL2_fnc_smoothText;
             uiNamespace setVariable ["WL2_modOverrideUid", ""];
         };
     };

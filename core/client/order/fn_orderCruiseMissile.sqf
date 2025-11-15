@@ -1,7 +1,7 @@
 #include "includes.inc"
 private _lockState = uiNamespace getVariable ["WL2_cruiseMissileLockState", "NONE"];
 if (_lockState != "NONE") exitWith {
-    systemChat "Cruise missile strike in progress. Please wait.";
+    ["Cruise missile strike in progress. Please wait."] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
@@ -10,7 +10,7 @@ private _carrierSectors = (BIS_WL_sectorsArray # 0) select {
     _x getVariable ["WL2_isAircraftCarrier", false]
 };
 if (count _carrierSectors == 0) exitWith {
-    systemChat "No aircraft carriers available for cruise missile strike.";
+    ["No aircraft carriers available for cruise missile strike."] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
@@ -162,7 +162,7 @@ while { _designatingTargets } do {
             _designatingTargets = false;
             break;
         } else {
-            systemChat "No targets found for cruise missile strike. Check datalink, re-target, and try again.";
+            ["No targets found for cruise missile strike. Check datalink, re-target, and try again."] call WL2_fnc_smoothText;
             playSoundUI ["AddItemFailed"];
         };
     };
@@ -182,7 +182,7 @@ while { _designatingTargets } do {
 if (_strikeCancelled) exitWith {
     removeMissionEventHandler ["Draw3D", _cruiseMissleInterface];
     uiNamespace setVariable ["WL2_cruiseMissileLockState", "NONE"];
-    systemChat "Cruise missile strike cancelled.";
+    ["Cruise missile strike cancelled."] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
@@ -198,7 +198,7 @@ _launchPosition set [2, 2000];
 
 // Summarize strike
 [player, "cruiseMissiles"] remoteExec ["WL2_fnc_handleClientRequest", 2];
-systemChat format ["Launching %1 cruise missiles from %2.", count _targets, _launchCarrier getVariable ["WL2_name", "Carrier"]];
+[format ["Launching %1 cruise missiles from %2.", count _targets, _launchCarrier getVariable ["WL2_name", "Carrier"]]] call WL2_fnc_smoothText;
 [] remoteExec ["WL2_fnc_cruiseMissileWarning", BIS_WL_enemySide, false];
 missionNamespace setVariable [format["WL2_cruiseMissileTimeout_%1", getPlayerUID player], serverTime + 600, true];
 
@@ -257,7 +257,7 @@ private _missiles = [];
     uiSleep 2;
 } forEach _targets;
 
-systemChat format ["Launch complete.", count _missiles];
+["Launch complete.", count _missiles] call WL2_fnc_smoothText;
 playSoundUI ["a3\dubbing_f\modules\supports\artillery_rounds_complete.ogg", 1, 1, true];
 
 [_missiles # 0, player] spawn DIS_fnc_startMissileCamera;

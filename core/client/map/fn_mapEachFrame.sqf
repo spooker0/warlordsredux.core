@@ -66,14 +66,13 @@ if (isNull (findDisplay 160 displayCtrl 51)) then {
     } forEach BIS_WL_allSectors;
 };
 
-private _mapButtonDisplay = uiNamespace getVariable ["WL2_mapButtonDisplay", displayNull];
-if (!isNull _mapButtonDisplay) exitWith {};
-
 private _mapMouseActionComplete = uiNamespace getVariable ["WL2_mapMouseActionComplete", true];
 private _mouseClicked = inputMouse 0 > 0;
 if (_mouseClicked && _mapMouseActionComplete && inputAction "BuldTurbo" == 0) then {
     uiNamespace setVariable ["WL2_mapMouseActionComplete", false];
-    0 spawn {
+    [_map] spawn {
+        params ["_map"];
+
         waitUntil {
             inputMouse 0 == 0
         };
@@ -82,31 +81,52 @@ if (_mouseClicked && _mapMouseActionComplete && inputAction "BuldTurbo" == 0) th
             uiNamespace setVariable ["WL2_mapMouseActionComplete", true];
         };
 
+        private _mapButtonDisplay = uiNamespace getVariable ["WL2_mapButtonDisplay", displayNull];
+        if (!isNull _mapButtonDisplay) exitWith {
+            uiNamespace setVariable ["WL2_mapMouseActionComplete", true];
+        };
+
+        private _cancelInProcessClick = uiNamespace getVariable ["WL2_cancelInProcessClick", false];
+        if (_cancelInProcessClick) exitWith {
+            uiNamespace setVariable ["WL2_cancelInProcessClick", false];
+            uiNamespace setVariable ["WL2_mapMouseActionComplete", true];
+        };
+
         uiNamespace setVariable ["WL2_assetTargetSelectedTime", serverTime];
 
-        private _showUavMenu = true;
-
-        if !(isNull WL_AssetActionTarget) then {
-            _showUavMenu = false;
-            uiNamespace setVariable ["WL2_assetTargetSelected", WL_AssetActionTarget];
-            call WL2_fnc_assetMapButtons;
-            playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss", 0.15, 1];
-        };
-
-        if !(isNull WL_SectorActionTarget) then {
-            _showUavMenu = false;
-            private _isVotingThisSector = WL_SectorActionTarget in BIS_WL_selection_availableSectors;
-            if (!_isVotingThisSector) then {
-                uiNamespace setVariable ["WL2_assetTargetSelected", WL_SectorActionTarget];
-                call WL2_fnc_sectorMapButtons;
+        switch (true) do {
+            case (!isNull WL_AssetActionTarget): {
+                uiNamespace setVariable ["WL2_assetTargetSelected", WL_AssetActionTarget];
+                call WL2_fnc_assetMapButtons;
                 playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss", 0.15, 1];
             };
-        };
-
-        if (_showUavMenu && unitIsUAV cameraOn && alive driver cameraOn) then {
-            uiNamespace setVariable ["WL2_assetTargetSelected", cameraOn];
-            call WL2_fnc_uavMapButtons;
-            playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss", 0.15, 1];
+            case (!isNull WL_SectorActionTarget): {
+                private _isVotingThisSector = WL_SectorActionTarget in BIS_WL_selection_availableSectors;
+                if (!_isVotingThisSector) then {
+                    uiNamespace setVariable ["WL2_assetTargetSelected", WL_SectorActionTarget];
+                    call WL2_fnc_sectorMapButtons;
+                    playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss", 0.15, 1];
+                };
+            };
+            case (unitIsUAV cameraOn && alive driver cameraOn): {
+                uiNamespace setVariable ["WL2_assetTargetSelected", cameraOn];
+                call WL2_fnc_uavMapButtons;
+                playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss", 0.15, 1];
+            };
+            case (cameraOn getVariable ["DIS_selectionIndex", 0] == 1 && uiNamespace getVariable ["DIS_currentTargetingMode", "none"] == "gps"): {
+                playSoundUI ["AddItemOK", 1];
+                private _coordinate = _map ctrlMapScreenToWorld getMousePosition;
+                private _cordX = (_coordinate # 0 / 100) toFixed 0;
+                private _cordY = (_coordinate # 1 / 100) toFixed 0;
+                while {count _cordX < 3} do {
+                    _cordX = format ["0%1", _cordX];
+                };
+                while {count _cordY < 3} do {
+                    _cordY = format ["0%1", _cordY];
+                };
+                private _cordString = format ["%1%2", _cordX, _cordY];
+                cameraOn setVariable ["DIS_gpsCord", _cordString];
+            };
         };
 
         WL_AssetActionTarget = objNull;

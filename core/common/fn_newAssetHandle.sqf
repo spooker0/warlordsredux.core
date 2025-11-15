@@ -195,6 +195,7 @@ if (_asset isKindOf "Man") then {
 		case "B_UAV_06_F";
 		case "O_UAV_06_F";
 		case "I_UAV_06_F": {
+			_asset setVariable ["WL2_isBombDrone", true, true];
 			_asset addEventHandler ["Killed", {
 				params ["_unit"];
 				[player, "droneExplode", _unit] remoteExec ["WL2_fnc_handleClientRequest", 2];

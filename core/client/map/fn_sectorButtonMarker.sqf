@@ -4,32 +4,32 @@ params ["_sector", "_side"];
 private _sectorMarker = _sector getVariable [format ["WL2_MapMarker_%1", _side], "unknown"];
 
 private _sectorSide = switch (_sectorMarker) do {
-    case "unknown": { "NONE" };
-    case "enemy": { "ENEMY" };
-    case "enemyhome": { "ENEMY BASE" };
-    case "green": { "INDEPENDENT" };
-    case "attack": { "ATTACK" };
-    case "attack2": { "ATTACK 2" };
-    case "camped": { "CAMPED" };
-    default { "NONE" };
+    case "unknown": { "None" };
+    case "enemy": { "Enemy" };
+    case "enemyhome": { "Enemy base" };
+    case "green": { "Independent" };
+    case "attack": { "Attack" };
+    case "attack2": { "Attack 2" };
+    case "camped": { "Camped" };
+    default { "None" };
 };
 
 private _enemyColor = if (BIS_WL_playerSide == west) then {
-    "#800000";
+    "red";
 } else {
-    "#004C99";
+    "blue";
 };
 
-private _sectorColor = switch (_sectorMarker) do {
-    case "unknown": { "#FFFFFF" };
+private _sectorColorClass = switch (_sectorMarker) do {
+    case "unknown": { "" };
     case "enemy": { _enemyColor };
     case "enemyhome": { _enemyColor };
-    case "green": { "#008000" };
-    case "attack": { "#FFFFFF" };
-    case "attack2": { "#CCCCCC" };
-    case "camped": { "#FF0000" };
-    default { "#FFFFFF" };
+    case "green": { "green" };
+    case "attack": { "red" };
+    case "attack2": { "red" };
+    case "camped": { "red" };
+    default { "" };
 };
 
-private _text = format ["MARK SECTOR: <t color='%1'>%2</t>", _sectorColor, _sectorSide];
-[_text, _sectorSide]
+private _sectorText = format ["<span class='%1'>Mark sector: %2</span>", _sectorColorClass, _sectorSide];
+[_sectorText, _sectorSide]

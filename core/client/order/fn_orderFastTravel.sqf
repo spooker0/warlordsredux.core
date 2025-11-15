@@ -2,7 +2,7 @@
 params ["_fastTravelMode"];
 
 "Destination" call WL2_fnc_announcer;
-[toUpper localize "STR_A3_WL_popup_destination"] spawn WL2_fnc_smoothText;
+[localize "STR_A3_WL_popup_destination"] call WL2_fnc_smoothText;
 
 "RequestMenu_close" call WL2_fnc_setupUI;
 if !(visibleMap) then {
@@ -60,7 +60,7 @@ if (isNull BIS_WL_targetSector) exitWith {
 		BIS_WL_currentSelection = WL_ID_SELECTION_NONE;
 	};
 	"Canceled" call WL2_fnc_announcer;
-	[toUpper localize "STR_A3_WL_menu_fasttravel_canceled"] spawn WL2_fnc_smoothText;
+	[localize "STR_A3_WL_menu_fasttravel_canceled"] call WL2_fnc_smoothText;
 	deleteMarkerLocal _marker;
 	deleteMarkerLocal _markerText;
 

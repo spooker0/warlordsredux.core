@@ -96,7 +96,7 @@ private _setupActionId = [
 
 				if (count _nearbyEntities > 0) exitWith {
 					private _nearbyObjectName = [_nearbyEntities # 0] call WL2_fnc_getAssetTypeName;
-					systemChat format ["Deploying too close to %1!", _nearbyObjectName];
+					[format ["Deploying too close to %1!", _nearbyObjectName]] call WL2_fnc_smoothText;
 					playSound "AddItemFailed";
 					_target setVariable ["WL2_deploying", false];
 					false;
@@ -104,7 +104,7 @@ private _setupActionId = [
 
 				private _eligibility = [_target, player, false, true] call WL2_fnc_setupForwardBaseEligibility;
 				if (_eligibility != "") exitWith {
-					systemChat _eligibility;
+					[_eligibility] call WL2_fnc_smoothText;
 					playSound "AddItemFailed";
 					_target setVariable ["WL2_deploying", false];
 					false;
@@ -120,7 +120,7 @@ private _setupActionId = [
 				uiSleep 1;
 			};
 
-			systemChat format ["Forward base under construction. %1 seconds remaining.", WL_FOB_SETUP_TIME];
+			[format ["Forward base under construction. %1 seconds remaining.", WL_FOB_SETUP_TIME]] call WL2_fnc_smoothText;
 			private _endTime = serverTime + WL_FOB_SETUP_TIME;
 
 			private _forwardBase = createVehicle [_terminalClass, _position, [], 0, "CAN_COLLIDE"];
@@ -131,7 +131,7 @@ private _setupActionId = [
 			private _side = side group player;
 			[_forwardBase, serverTime, _endTime, _side, false] remoteExec ["WL2_fnc_setupForwardBaseMp", 0, true];
 
-			_forwardBase setVariable ["WL2_forwardBasePlacer", true];
+			_forwardBase setVariable ["WL2_forwardBasePlacer", player, true];
 
 			playSound3D [
 				"a3\sounds_f_decade\assets\props\linkterminal_01_node_2_f\link_terminal02_antenna_open.wss",
@@ -209,13 +209,13 @@ private _setupActionId = [
 			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == side group player
 		};
 		if (count _forwardBases == 0) exitWith {
-			systemChat "No friendly forward base in range!";
+			["No friendly forward base in range!"] call WL2_fnc_smoothText;
 			playSound "AddItemFailed";
 		};
 
 		private _forwardBase = _forwardBases # 0;
 		if (_forwardBase getVariable ["WL2_forwardBaseTime", 0] > serverTime) exitWith {
-			systemChat "Forward base is still under construction!";
+			["Forward base is still under construction!"] call WL2_fnc_smoothText;
 			playSound "AddItemFailed";
 		};
 

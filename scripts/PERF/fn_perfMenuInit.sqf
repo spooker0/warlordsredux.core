@@ -55,6 +55,6 @@ _captureButton ctrlAddEventHandler ["ButtonClick", {
     };
     _captureFrameTime = format ["%1ms", _captureFrameTime];
 
-    systemChat format ["Capture frame slower than: %1", _captureFrameTime];
+    [format ["Capture frame slower than: %1", _captureFrameTime]] call WL2_fnc_smoothText;
     call compile "diag_captureSlowFrame ['total', _captureFrameTime]";
 }];

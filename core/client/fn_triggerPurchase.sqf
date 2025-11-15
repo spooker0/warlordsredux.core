@@ -88,14 +88,14 @@ switch (_className) do {
         {
             _x setVariable ["WL2_accessControl", 6, true];
         } forEach (_ownedVehicles select { alive _x });
-        [toUpper localize "STR_A3_WL_feature_lock_all_msg"] spawn WL2_fnc_smoothText;
+        [localize "STR_A3_WL_feature_lock_all_msg"] call WL2_fnc_smoothText;
     };
     case "UnlockVehicles": {
         private _ownedVehicles = missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], []];
         {
             _x setVariable ["WL2_accessControl", 1, true];
         } forEach (_ownedVehicles select { alive _x });
-        [toUpper localize "STR_A3_WL_feature_unlock_all_msg"] spawn WL2_fnc_smoothText;
+        [localize "STR_A3_WL_feature_unlock_all_msg"] call WL2_fnc_smoothText;
     };
     case "ClearVehicles": {
         private _playerAssets = missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], []];
@@ -152,7 +152,7 @@ switch (_className) do {
 
         if (count _potentialCollaboratorsInRange == 0) exitWith {
             playSoundUI ["AddItemFailed"];
-            systemChat "No eligible collaborators in range!";
+            ["No eligible collaborators in range!"] call WL2_fnc_smoothText;
         };
 
         missionNamespace setVariable ["WL2_collaboratorCooldown", serverTime + 600];
@@ -194,12 +194,12 @@ switch (_className) do {
         private _aiToMove = (units group player) select { !isPlayer _x } select { alive _x } select { _x distance2D player < 150 } select { vehicle _x == _x };
         if (count _aiToMove == 0) exitWith {
             playSoundUI ["AddItemFailed"];
-            systemChat "No eligible AI to move!";
+            ["No eligible AI to move!"] call WL2_fnc_smoothText;
         };
 
         [_vehicle, _aiToMove] spawn {
             params ["_vehicle", "_aiToMove"];
-            systemChat format ["Moving %1 AI into vehicle when ready.", count _aiToMove];
+            ["Moving %1 AI into vehicle when ready.", count _aiToMove] call WL2_fnc_smoothText;
 
             private _startWaitTime = serverTime;
             waitUntil {
@@ -268,12 +268,12 @@ switch (_className) do {
             private _spawns = [];
             {
                 private _sectorName = _x getVariable ["WL2_name", "Unknown"];
-                systemChat format ["Finding spawns in sector: %1", _sectorName];
+                ["Finding spawns in sector: %1", _sectorName] call WL2_fnc_smoothText;
                 private _spawnsForSector = [_x] call WL2_fnc_findSpawnsInSector;
                 _spawns append _spawnsForSector;
             } forEach BIS_WL_allSectors;
 
-            systemChat format ["Found %1 spawns on map. Painting sector spawns. This can take a while...", count _spawns];
+            ["Found %1 spawns on map. Painting sector spawns. This can take a while...", count _spawns] call WL2_fnc_smoothText;
 
             private _markers = [];
             {
@@ -285,7 +285,7 @@ switch (_className) do {
                 _markers pushBack _marker;
             } forEach _spawns;
 
-            systemChat format ["%1 markers painted.", count _markers];
+            ["%1 markers painted.", count _markers] call WL2_fnc_smoothText;
 
             openMap true;
         };

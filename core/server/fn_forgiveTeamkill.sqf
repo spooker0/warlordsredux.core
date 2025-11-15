@@ -26,11 +26,11 @@ if (!_forgive) then {
 		[_victim] call WL2_fnc_getAssetTypeName;
 	};
 	private _displayMsgTeamkiller = format ["You have been punished for killing friendly %1. [-%2]", _assetType, _compensation];
-	[_displayMsgTeamkiller] remoteExec ["systemChat", _teamkillerOwner];
+	[_displayMsgTeamkiller] remoteExec ["WL2_fnc_smoothText", _teamkillerOwner];
 	[["a3\dubbing_f_bootcamp\boot_m04\50_friendly\boot_m04_50_friendly_ada_0.ogg"]] remoteExec ["playSoundUI", _teamkillerOwner];
 
 	private _displayMsgForgiver = format ["You have been compensated for teamkill. [+%1]", round (_compensation * 0.5)];
-	[_displayMsgForgiver] remoteExec ["systemChat", _forgiver];
+	[_displayMsgForgiver] remoteExec ["WL2_fnc_smoothText", _forgiver];
 
 	private _friendlyFireMap = serverNamespace getVariable ["WL2_friendlyFireMap", createHashMap];
 	private _friendlyFireIncidents = _friendlyFireMap getOrDefault [_teamkillerUid, []];

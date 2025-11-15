@@ -111,15 +111,6 @@ function updateData(playerInfo, squadData) {
 
             if (squad[1] === member[0]) {
                 memberEl.classList.add('squad-leader');
-                if (playerInfo[0] !== member[0] && inCurrentSquad && canFastTravel) {
-                    const fastTravelButton = document.createElement('button');
-                    fastTravelButton.textContent = 'Fast Travel';
-                    fastTravelButton.classList.add('ft-button');
-                    fastTravelButton.addEventListener('mousedown', function () {
-                        A3API.SendAlert(`["ftSquadLeader", []]`);
-                    });
-                    memberEl.appendChild(fastTravelButton);
-                }
             } else {
                 memberEl.classList.remove('squad-leader');
             }

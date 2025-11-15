@@ -238,8 +238,6 @@ addMissionEventHandler ["Draw3D", {
                 missionNamespace setVariable ["#EM_Progress", _lockStatus / (4 * _weaponModifier)];
 
                 if (_lockStatus > (4 * _weaponModifier)) then {
-                    systemChat (localize "STR_A3_jammer_sent");
-
                     _lockedUav setVariable ["BIS_WL_spectrumJammed", true, true];
                     _lockedUav setVariable ["WL_lastHitter", player, 2];
 
@@ -251,6 +249,12 @@ addMissionEventHandler ["Draw3D", {
                     };
 
                     playSoundUI ["a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", 1, 1, true];
+
+                    [_lockedUav] spawn {
+                        params ["_lockedUav"];
+                        uiSleep 0.5;
+                        [format ["%1 (%2%%)", localize "STR_A3_jammer_sent", round ((1 - damage _lockedUav) * 100)]] call WL2_fnc_smoothText;
+                    };
 
                     _lockStatus = 0;
                 };

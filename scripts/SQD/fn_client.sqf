@@ -29,7 +29,7 @@ if (_action == "invite") exitWith {
 
     private _inviteeName = name _inviteePlayer;
 
-    systemChat format [localize "STR_SQUADS_sendInvitationSuccessText", _inviteeName];
+    [format [localize "STR_SQUADS_sendInvitationSuccessText", _inviteeName]] call WL2_fnc_smoothText;
     playSoundUI ["a3\ui_f\data\sound\cfgnotifications\tasksucceeded.wss"];
 };
 
@@ -77,9 +77,9 @@ if (_action == "newjoin") exitWith {
 
     if (isNull _joiner) exitWith {};
     if (_joiner == player) then {
-        systemChat "You have joined a squad.";
+        ["You have joined a squad."] call WL2_fnc_smoothText;
     } else {
-        systemChat format ["%1 has joined your squad.", name _joiner];
+        [format ["%1 has joined your squad.", name _joiner]] call WL2_fnc_smoothText;
     };
 };
 
@@ -89,7 +89,7 @@ if (_action == "promote") exitWith {
 };
 
 if (_action == "promoted") exitWith {
-    systemChat "You have been promoted to squad leader.";
+    ["You have been promoted to squad leader."] call WL2_fnc_smoothText;
 
     private _sound = playSoundUI ["a3\music_f_tank\maintheme_f_tank.ogg", 1, 1, false, 1.7];
     uiSleep 2.8;
@@ -105,8 +105,8 @@ private _ftAction = {
     params ["_targetPlayer"];
     if (!alive player || lifeState player == "INCAPACITATED") exitWith {};
 
-    if (!alive _targetPlayer) exitWith {
-        systemChat "Squad fast travel target is not valid.";
+    if (!alive _targetPlayer || lifeState _targetPlayer == "INCAPACITATED") exitWith {
+        ["Squad fast travel target is not valid."] call WL2_fnc_smoothText;
     };
 
     titleCut ["", "BLACK OUT", 1];
@@ -114,8 +114,8 @@ private _ftAction = {
 
     uiSleep 1;
 
-    if (!alive _targetPlayer) exitWith {
-        systemChat "Squad fast travel target is no longer valid.";
+    if (!alive _targetPlayer || lifeState _targetPlayer == "INCAPACITATED") exitWith {
+        ["Squad fast travel target is no longer valid."] call WL2_fnc_smoothText;
         titleCut ["", "BLACK IN", 1];
     };
 

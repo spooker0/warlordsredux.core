@@ -14,10 +14,11 @@ private _enemiesNearPlayer = (allUnits inAreaArray [player, 150, 150]) select {
 } select {
     alive _x && lifeState _x != "INCAPACITATED"
 } select {
-    isTouchingGround _x
-} select {
     private _position = getPosASL _x;
     !(surfaceIsWater _position) || (_position # 2 > 20 && _position # 2 < 30)
+} select {
+    private _position = getPosATL _x;
+    _position # 2 < 20;
 };
 
 private _homeBase = BIS_WL_playerSide call WL2_fnc_getSideBase;

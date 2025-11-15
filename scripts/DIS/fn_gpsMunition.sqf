@@ -7,7 +7,8 @@ if (_overrideRange > 0) then {
     _minimumSpeed = 300;
 };
 
-if (!isNull (missileTarget _projectile)) exitWith {};
+private _alreadyHasTarget = !isNull (missileTarget _projectile) || !isNull (playerTargetLock # 0);
+if (_alreadyHasTarget) exitWith {};
 
 _projectile setVariable ["WL2_missileType", "GPS"];
 

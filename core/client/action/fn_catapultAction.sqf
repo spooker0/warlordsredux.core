@@ -8,7 +8,7 @@ private _catapultActionID = _asset addAction [
 	{
         _this params ["_asset", "_caller", "_actionId"];
 
-        systemChat "Launching in 5 seconds!";
+        ["Launching in 5 seconds!"] call WL2_fnc_smoothText;
         playSoundUI ["AddItemOk"];
 
         _asset engineOn true;
@@ -74,7 +74,7 @@ private _rebaseAction = _asset addAction [
             };
 
             if (count _airfieldSectors == 0) exitWith {
-                systemChat "No friendly airfields available!";
+                ["No friendly airfields available!"] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
             };
 
@@ -91,8 +91,8 @@ private _rebaseAction = _asset addAction [
             private _spawnParams = [_closestAirfield] call WL2_fnc_getAirSectorSpawn;
             _spawnParams params ["_spawnPos", "_dir"];
             if (count _spawnPos == 0) exitWith {
-                systemChat "No valid spawn position found at airfield!";
-                playSoundUI ["AddItemFail"];
+                ["No valid spawn position found at airfield!"] call WL2_fnc_smoothText;
+                playSoundUI ["AddItemFailed"];
             };
 
             player action ["LandGear", _asset];
@@ -102,7 +102,7 @@ private _rebaseAction = _asset addAction [
             uiSleep 1;
 
             private _startWaitTime = serverTime;
-            systemChat "Returning to base...";
+            ["Returning to base..."] call WL2_fnc_smoothText;
             while { (serverTime - _startWaitTime) < 5 } do {
                 _asset setAirplaneThrottle 0;
                 _asset engineOn false;

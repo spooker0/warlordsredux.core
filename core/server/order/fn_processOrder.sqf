@@ -22,7 +22,7 @@ if (count _currentSector == 0) then {
 		private _cost = WL_ASSET(_orderedClass, "cost", 0);
 		if (_cost > _forwardBaseSupplies) exitWith {
 			deleteVehicle _asset;
-			["Not enough supplies in forward base."] remoteExec ["systemChat", _sender];
+			["Not enough supplies in forward base."] remoteExec ["WL2_fnc_smoothText", _sender];
 			_sender setVariable ["BIS_WL_isOrdering", false, [2, _owner]];
 		};
 		_forwardBase setVariable ["WL2_forwardBaseSupplies", _forwardBaseSupplies - _cost, true];

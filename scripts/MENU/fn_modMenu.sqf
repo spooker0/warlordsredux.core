@@ -23,6 +23,11 @@ _texture ctrlAddEventHandler ["JSDialog", {
     _message = fromJSON _message;
     private _action = _message select 0;
     switch (_action) do {
+        case "error": {
+            private _errorMessage = _message select 1;
+            systemChat format ["[MOD]: %1", _errorMessage];
+            diag_log format ["[MOD] %1", _errorMessage];
+        };
         case "select": {
             private _uid = _message select 1;
 

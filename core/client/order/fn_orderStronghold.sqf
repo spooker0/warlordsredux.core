@@ -12,7 +12,7 @@ private _hasOldStronghold = !isNull _oldStronghold;
 if (_hasOldStronghold && {
     _oldStronghold getVariable ["WL2_strongholdIntruders", false];
 }) exitWith {
-    systemChat "You cannot create a new sector stronghold while there are intruders in the current one!";
+    ["You cannot create a new sector stronghold while there are intruders in the current one!"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 

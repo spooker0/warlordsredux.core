@@ -71,6 +71,7 @@ class CfgRemoteExec {
 		class WL2_fnc_slingloadInit {allowedTargets = 0;};
 		class WL2_fnc_smokeCurtainAction {allowedTargets = 0;};
 		class WL2_fnc_smokeCurtainParticles {allowedTargets = 0;};
+		class WL2_fnc_smoothText {allowedTargets = 0;};
 		class WL2_fnc_punishMessage {allowedTargets = 0;};
 		class WL2_fnc_turretVisualizerAction {allowedTargets = 0;};
 		class WL2_fnc_uavConnectRefresh {allowedTargets = 0;};

@@ -5,7 +5,7 @@ private _interceptAction = {
         case "MoveToPilot": {
             private _access = [_target, _caller, "driver"] call WL2_fnc_accessControl;
             if !(_access # 0) then {
-                systemChat format ["Pilot seat locked. (%1)", _access # 1];
+                [format ["Pilot seat locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
                 true;
             } else {
@@ -15,7 +15,7 @@ private _interceptAction = {
         case "MoveToDriver": {
             private _access = [_target, _caller, "driver"] call WL2_fnc_accessControl;
             if !(_access # 0) then {
-                systemChat format ["Driver seat locked. (%1)", _access # 1];
+                [format ["Driver seat locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
                 true;
             } else {
@@ -25,7 +25,7 @@ private _interceptAction = {
         case "MoveToTurret": {
             private _access = [_target, _caller, "gunner"] call WL2_fnc_accessControl;
             if !(_access # 0) then {
-                systemChat format ["Turret seat locked. (%1)", _access # 1];
+                [format ["Turret seat locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
                 true;
             } else {
@@ -35,7 +35,7 @@ private _interceptAction = {
         case "MoveToCargo": {
             private _access = [_target, _caller, "cargo"] call WL2_fnc_accessControl;
             if !(_access # 0) then {
-                systemChat format ["Passenger seat locked. (%1)", _access # 1];
+                [format ["Passenger seat locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
                 true;
             } else {
@@ -45,7 +45,7 @@ private _interceptAction = {
         case "GetInPilot": {
             private _access = [_target, _caller, "driver"] call WL2_fnc_accessControl;
             if !(_access # 0) then {
-                systemChat format ["Pilot seat locked. (%1)", _access # 1];
+                [format ["Pilot seat locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
                 true;
             } else {
@@ -55,7 +55,7 @@ private _interceptAction = {
         case "GetInDriver": {
             private _access = [_target, _caller, "driver"] call WL2_fnc_accessControl;
             if !(_access # 0) then {
-                systemChat format ["Driver seat locked. (%1)", _access # 1];
+                [format ["Driver seat locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
                 true;
             } else {
@@ -65,7 +65,7 @@ private _interceptAction = {
         case "GetInTurret": {
             private _access = [_target, _caller, "gunner"] call WL2_fnc_accessControl;
             if !(_access # 0) then {
-                systemChat format ["Turret seat locked. (%1)", _access # 1];
+                [format ["Turret seat locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
                 true;
             } else {
@@ -75,7 +75,7 @@ private _interceptAction = {
         case "GetInCargo": {
             private _access = [_target, _caller, "cargo"] call WL2_fnc_accessControl;
             if !(_access # 0) then {
-                systemChat format ["Passenger seat locked. (%1)", _access # 1];
+                [format ["Passenger seat locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
                 true;
             } else {
@@ -86,7 +86,7 @@ private _interceptAction = {
         case "Rearm": {
             private _access = [_target, _caller, "cargo"] call WL2_fnc_accessControl;
             if !(_access # 0) then {
-                systemChat format ["Inventory locked. (%1)", _access # 1];
+                [format ["Inventory locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
                 true;
             } else {
@@ -96,7 +96,7 @@ private _interceptAction = {
         case "TakeVehicleControl": {
             private _bannedVehicles = ["C_Plane_Civil_01_F", "I_C_Plane_Civil_01_F"];
             if (typeof _target in _bannedVehicles) then {
-                systemChat "You cannot take control of this vehicle.";
+                [format ["You cannot take control of this vehicle."]] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
                 true;
             } else {
@@ -130,7 +130,7 @@ private _interceptAction = {
             switch (_text) do {
                 case (localize "STR_DN_OUT_C_DOOR"): {
                     if (_target getVariable ["WL2_doorsLocked", false]) then {
-                        systemChat "Door locked.";
+                        [format ["Door locked."]] call WL2_fnc_smoothText;
                         playSoundUI ["AddItemFailed"];
                         true;
                     } else {

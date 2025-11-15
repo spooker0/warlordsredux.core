@@ -31,6 +31,8 @@ WL_LoadingState = 1;
 
 private _uid = getPlayerUID player;
 private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
+private _isModerator = _uid in (getArray (missionConfigFile >> "moderatorIDs"));
+private _isSpectator = _uid in (getArray (missionConfigFile >> "spectatorIDs"));
 
 "client" call WL2_fnc_varsInit;
 waitUntil {
@@ -38,7 +40,7 @@ waitUntil {
 };
 
 #if WL_STOP_TEAM_SWITCH
-if (!_isAdmin) then {
+if !(_isAdmin || _isModerator || _isSpectator) then {
 	private _uid = getPlayerUID player;
 	private _switch = format ["WL2_teamBlocked_%1", _uid];
 	waitUntil {
@@ -203,7 +205,6 @@ WL_LoadingState = 11;
 WL_LoadingState = 12;
 
 0 spawn WL2_fnc_announcerInit;
-[toUpper localize "STR_A3_WL_popup_init"] spawn WL2_fnc_smoothText;
 
 if !(isDedicated) then {
 	[true] call WL2_fnc_spawnAtBase;
@@ -393,6 +394,11 @@ if (isNull _display) then {
     "hintLayer" cutRsc ["RscWLHintMenu", "PLAIN", -1, true, true];
     _display = uiNamespace getVariable "RscWLHintMenu";
 };
+private _texture = _display displayCtrl 5502;
+_texture ctrlAddEventHandler ["PageLoaded", {
+    params ["_texture"];
+	[localize "STR_A3_WL_popup_init"] call WL2_fnc_smoothText;
+}];
 
 private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
 private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];

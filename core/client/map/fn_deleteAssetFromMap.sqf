@@ -14,22 +14,22 @@ private _result = ["Delete asset", format ["Are you sure you would like to delet
 if (_result) then {
 	private _access = [_target, player, "full"] call WL2_fnc_accessControl;
 	if !(_access # 0) exitWith {
-		systemChat format ["Cannot remove: %1", _access # 1];
+		[format ["Cannot remove: %1", _access # 1]] call WL2_fnc_smoothText;
 		playSound "AddItemFailed";
 	};
 
 	if (!alive player || lifeState player == "INCAPACITATED") exitWith {
-		systemChat "You are dead!";
+		["You are dead!"] call WL2_fnc_smoothText;
 		playSound "AddItemFailed";
 	};
 
 	if (alive _target && _target isKindOf "Air" && speed _target > 5 && !(unitIsUAV _target)) exitWith {
-		systemChat "Can't remove flying aircraft!";
+		["Can't remove flying aircraft!"] call WL2_fnc_smoothText;
 		playSound "AddItemFailed";
 	};
 
 	playSound "AddItemOK";
-	[format [toUpper localize "STR_A3_WL_popup_asset_deleted", toUpper _displayName], 2] spawn WL2_fnc_smoothText;
+	[format [localize "STR_A3_WL_popup_asset_deleted", _displayName]] call WL2_fnc_smoothText;
 	_vehicles = missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], []];
 	_vehicles deleteAt (_vehicles find _target);
 	missionNamespace setVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], _vehicles, true];

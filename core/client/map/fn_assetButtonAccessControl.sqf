@@ -1,19 +1,14 @@
 #include "includes.inc"
 params ["_accessControl"];
 
-private _lockStatus = [
-    "ALL (FULL)", "ALL (OPERATE)", "ALL (PASSENGER)",
-    "SQUAD (FULL)", "SQUAD (OPERATE)", "SQUAD (PASSENGER)",
-    "PERSONAL",
-    "LOCKED"
+(_accessControl call WL2_fnc_getVehicleLockStatus) params ["_lockColor", "_lockLabel"];
+
+private _lockColorClass = [
+    "green", "green", "green",
+    "cyan", "cyan", "cyan",
+    "red",
+    "red"
 ] select _accessControl;
 
-private _lockColor = [
-    "#4bff58", "#4bff58", "#4bff58",
-    "#00ffff", "#00ffff", "#00ffff",
-    "#ff4b4b",
-    "#ff4b4b"
-] select _accessControl;
-
-private _lockText = format ["ACCESS: <t color='%1'>%2</t>", _lockColor, _lockStatus];
+private _lockText = format ["<span class='%1'>%2</span>", _lockColorClass, _lockLabel];
 _lockText;

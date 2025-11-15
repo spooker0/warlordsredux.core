@@ -3,15 +3,15 @@ params ["_asset"];
 
 private _radarRotation = _asset getVariable ["radarRotation", false];
 private _radarColor = if (_radarRotation) then {
-    "#4bff58"
+    "green"
 } else {
-    "#ff4b4b"
+    "red"
 };
 private _radarOnText = if (_radarRotation) then {
-    "ROTATING"
+    "Rotating"
 } else {
-    "STOPPED"
+    "Stopped"
 };
 
-private _buttonText = format ["RADAR ROTATE: <t color='%1'>%2</t>", _radarColor, _radarOnText];
+private _buttonText = format ["<span class='%1'>Radar rotate: %2</span>", _radarColor, _radarOnText];
 _buttonText;

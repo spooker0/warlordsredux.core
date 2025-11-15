@@ -59,7 +59,7 @@ if (_action == "invite") exitWith {
 
         if !(isNull _inviterPlayer || isNull _inviteePlayer) then {
             private _message = format ["%1 has invited %2 to the squad.", name _inviterPlayer, name _inviteePlayer];
-            [_message] remoteExec ["systemChat", _squadLeaderInfo # 1];
+            [_message] remoteExec ["WL2_fnc_smoothText", _squadLeaderInfo # 1];
         };
     };
 
@@ -80,7 +80,7 @@ if (_action == "add") exitWith {
     private _squadSize = count _playersInSquad;
     if (_squadSize >= SQD_MAX_SQUAD_SIZE) exitWith {
         private _message = format ["Squad ""%1"" is full: %2/%3", _squad getOrDefault ["name", ""], _squadSize, SQD_MAX_SQUAD_SIZE];
-        [_message] remoteExec ["systemChat", remoteExecutedOwner];
+        [_message] remoteExec ["WL2_fnc_smoothText", remoteExecutedOwner];
     };
 
     _playersInSquad pushBackUnique _playerId;

@@ -11,7 +11,7 @@ waitUntil {
 private _projectilePosition = getPosASL _projectile;
 if (surfaceIsWater _projectilePosition && (_projectilePosition # 2) < -1) exitWith {
     deleteVehicle _projectile;
-    systemChat "Respawn tent cannot be placed under water.";
+    ["Respawn tent cannot be placed under water."] call WL2_fnc_smoothText;
 };
 
 private _previousRespawnBag = player getVariable ["WL2_respawnBag", objNull];

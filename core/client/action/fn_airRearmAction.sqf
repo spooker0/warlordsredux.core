@@ -9,7 +9,7 @@ _asset addAction [
         private _rearmSourcePos = _rearmSource modelToWorld [0, 0, 0];
         if (_rearmSourcePos # 2 < 75) exitWith {
             playSoundUI ["AddItemFailed"];
-            systemChat "Rearm source is not flying above 75M!";
+            ["Rearm source is not flying above 75M!"] call WL2_fnc_smoothText;
         };
 
         _asset setVehicleAmmo 1;
@@ -20,7 +20,7 @@ _asset addAction [
         _asset setFuel 1;
 
         playSoundUI ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Rearm.wss"];
-        [toUpper localize "STR_A3_WL_popup_asset_rearmed"] spawn WL2_fnc_smoothText;
+        [localize "STR_A3_WL_popup_asset_rearmed"] call WL2_fnc_smoothText;
     },
     [],
     200,

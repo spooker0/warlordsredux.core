@@ -6,7 +6,7 @@ private _class = WL_ASSET(_orderedClass, "spawn", _orderedClass);
 player setVariable ["BIS_WL_isOrdering", true, [2, clientOwner]];
 
 "Sector" call WL2_fnc_announcer;
-[toUpper localize "STR_A3_WL_popup_appropriate_sector_selection"] spawn WL2_fnc_smoothText;
+[localize "STR_A3_WL_popup_appropriate_sector_selection"] call WL2_fnc_smoothText;
 if !(visibleMap) then {
 	processDiaryLink createDiaryLink ["Map", player, ""];
 	WL_CONTROL_MAP ctrlMapAnimAdd [0, 0.1, player];
@@ -30,14 +30,14 @@ if (BIS_WL_currentSelection == WL_ID_SELECTION_ORDERING_AIRCRAFT) then {
 
 if (isNull BIS_WL_targetSector) exitWith {
 	"Canceled" call WL2_fnc_announcer;
-	[toUpper localize "STR_A3_WL_deploy_canceled"] spawn WL2_fnc_smoothText;
+	[localize "STR_A3_WL_deploy_canceled"] call WL2_fnc_smoothText;
 	player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 
 	uiSleep 1;
 	WL_MapBusy = WL_MapBusy - ["orderAircraft"];
 };
 
-[toUpper localize "STR_A3_WL_asset_dispatched_TODO_REWRITE"] spawn WL2_fnc_smoothText;
+[localize "STR_A3_WL_asset_dispatched_TODO_REWRITE"] call WL2_fnc_smoothText;
 player setPosATL (getPosATL player);
 
 [player, "orderAsset", "air", BIS_WL_targetSector, _orderedClass, false] remoteExec ["WL2_fnc_handleClientRequest", 2];

@@ -56,7 +56,7 @@ while { alive _projectile && alive player && lifeState player != "INCAPACITATED"
     private _altitude = _projectilePosition # 2;
 
     if (serverTime - _startTime < 1 && _flightMode == 0) then {
-        private _desiredPitch = 0;
+        private _desiredPitch = 15;
         private _pitchError = _desiredPitch - _pitch;
         _pitchInput = (_pitchError min 10) max -10;
     };

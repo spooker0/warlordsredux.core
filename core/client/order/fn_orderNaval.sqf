@@ -2,7 +2,7 @@
 params ["_class", "_cost"];
 
 "Dropzone" call WL2_fnc_announcer;
-[toUpper localize "STR_A3_WL_popup_airdrop_selection_water"] spawn WL2_fnc_smoothText;
+[localize "STR_A3_WL_popup_airdrop_selection_water"] call WL2_fnc_smoothText;
 if !(visibleMap) then {
 	processDiaryLink createDiaryLink ["Map", player, ""];
 	WL_CONTROL_MAP ctrlMapAnimAdd [0, 0.1, player];
@@ -20,16 +20,23 @@ _mapClickEH = addMissionEventHandler ["MapSingleClick", {
 
 	private _cancel = false;
 	switch (_class) do {
-		case "B_Boat_Armed_01_autocannon_F";
-		case "O_Boat_Armed_01_autocannon_F";
 		case "B_Boat_Bomb_01_F";
 		case "O_Boat_Bomb_01_F": {
+			private _distance = cameraOn distance2D _pos;
+			if (_distance > 200) then {
+				playSound "AddItemFailed";
+				["Bomb boat must be within 200 m of your position."] call WL2_fnc_smoothText;
+				_cancel = true;
+			};
+		};
+		case "B_Boat_Armed_01_autocannon_F";
+		case "O_Boat_Armed_01_autocannon_F": {
 			private _sectorsInRange = (BIS_WL_sectorsArray # 0) findIf {
 				_pos distance _x < 4000 && "W" in (_x getVariable ["WL2_services", []]);
 			};
 			if (_sectorsInRange == -1) then {
 				playSound "AddItemFailed";
-				systemChat "Heavy attack boat must be within 4 km of an owned harbor.";
+				["Heavy attack boat must be within 4 km of an owned harbor."] call WL2_fnc_smoothText;
 				_cancel = true;
 			};
 		};
@@ -40,7 +47,7 @@ _mapClickEH = addMissionEventHandler ["MapSingleClick", {
 			};
 			if (_sectorsInRange == -1) then {
 				playSound "AddItemFailed";
-				systemChat "Supply boat must be within 1.5 km of an owned harbor.";
+				["Supply boat must be within 1.5 km of an owned harbor."] call WL2_fnc_smoothText;
 				_cancel = true;
 			};
 		};
@@ -66,7 +73,7 @@ removeMissionEventHandler ["MapSingleClick", _mapClickEH];
 
 if (count BIS_WL_waterDropPos == 0) exitWith {
 	"Canceled" call WL2_fnc_announcer;
-	[toUpper localize "STR_A3_WL_airdrop_canceled"] spawn WL2_fnc_smoothText;
+	[localize "STR_A3_WL_airdrop_canceled"] call WL2_fnc_smoothText;
 
 	uiSleep 1;
 	WL_MapBusy = WL_MapBusy - ["orderNaval"];
@@ -78,7 +85,7 @@ if (BIS_WL_waterDropPos distance2D player <= 300) then {
 
 BIS_WL_waterDropPos set [2, 0];
 "Airdrop" call WL2_fnc_announcer;
-[toUpper localize "STR_A3_WL_airdrop_underway"] spawn WL2_fnc_smoothText;
+[localize "STR_A3_WL_airdrop_underway"] call WL2_fnc_smoothText;
 playSound "AddItemOK";
 
 [player, "orderAsset", "naval", BIS_WL_waterDropPos, _class, false] remoteExec ["WL2_fnc_handleClientRequest", 2];

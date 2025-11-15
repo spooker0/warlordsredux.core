@@ -23,40 +23,6 @@ if (_isModerator || _isAdmin) then {
     };
 };
 
-// if (_sentLocally && count allPlayers < 20 && count _params > 0 && {_params # 0 == "$STR_DS_VOTES_KICK"}) then {
-//     [player, getPlayerUID player, "vote kick not allowed", 120] remoteExec ["WL2_fnc_punishPlayer", 2];
-// };
-
-// if (_sentLocally && _channel in [0, 1, 2, 3] && _text != "" && !_isPlayerMessage && _person == player && count _params == 0) then {
-//     private _spamHistory = uiNamespace getVariable ["WL2_spamHistory", []];
-//     private _spammedMessages = _spamHistory select {
-//         _x # 0 == _text &&
-//         serverTime - (_x # 1) < 120
-//     };
-
-//     if (count _spammedMessages >= 3) then {
-//         {
-//             private _vonStatus = (channelEnabled _x) # 1;
-//             _x enableChannel [false, _vonStatus];
-//         } forEach [0, 1, 3];
-
-//         systemChat "Spam protection triggered. Chat disabled for 30s.";
-//         0 spawn {
-//             uiSleep 30;
-//             {
-//                 private _vonStatus = (channelEnabled _x) # 1;
-//                 _x enableChannel [true, _vonStatus];
-//             } forEach [0, 1, 3];
-//         };
-//     };
-
-//     _spamHistory pushBack [_text, serverTime];
-//     _spamHistory = _spamHistory select {
-//         serverTime - (_x # 1) < 120
-//     };
-//     uiNamespace setVariable ["WL2_spamHistory", _spamHistory];
-// };
-
 if (_text == "!lag") exitWith {
     if (_sentLocally) then {
         [player] remoteExec ["WL2_fnc_lagMessageHandler", 2];
@@ -137,9 +103,16 @@ if (_channel == 1) exitWith {
     [_newFrom, _filteredText];
 };
 
-if (_channel > 5 && _channel < 16) then {
+if (_channel > 5 && _channel < 16 && _filteredText != "") then {
+    private _isPlayerSquadLeader = ["isSquadLeader", [getPlayerID player]] call SQD_fnc_query;
+    private _isDirectNotification = (_isPlayerSquadLeader && "@SL" in (toUpper _filteredText)) || "@SQUAD" in (toUpper _filteredText);
+
     private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-    private _volume = _settingsMap getOrDefault ["squadChatNotificationVolume", 1];
+    private _volume = if (_isDirectNotification) then {
+        _settingsMap getOrDefault ["squadImportantNotificationVolume", 1];
+    } else {
+        _settingsMap getOrDefault ["squadChatNotificationVolume", 1];
+    };
     playSoundUI ["a3\missions_f_oldman\data\sound\phone_sms\chime\phone_sms_chime_04.wss", _volume, 1];
 };
 

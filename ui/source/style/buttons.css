@@ -1,0 +1,65 @@
+.buttons-wrapper {
+    position: absolute;
+    user-select: none;
+    font-family: 'Consolas', monospace;
+    font-weight: bold;
+    font-size: 12pt;
+
+    background-color: rgba(0, 0, 0, 0.95);
+    color: #ffffff;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.buttons-header {
+    font-size: 13pt;
+    margin-bottom: 5px;
+}
+
+.button {
+    border: 1px solid #ffffff;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-top: -1px;
+}
+
+.button-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.button-label {
+    margin-left: 10px;
+}
+
+.button:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.disabled {
+    opacity: 0.5;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.disabled:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.green {
+    color: #4bff58;
+}
+
+.cyan {
+    color: #00ffff;
+}
+
+.blue {
+    color: #004C99;
+}
+
+.red {
+    color: #ff4b4b;
+}

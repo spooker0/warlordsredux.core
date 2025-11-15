@@ -138,7 +138,10 @@ uiNamespace setVariable ["WL2_deadActionId", 0];
 
 private _display = uiNamespace getVariable ["RscWLDeathInfoMenu", displayNull];
 if (isNull _display) then {
-    "deathInfo" cutRsc ["RscWLDeathInfoMenu", "PLAIN", -1, false, true];
+    private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+    private _showDeathInfoInMap = _settingsMap getOrDefault ["showDeathInfoInMap", false];
+
+    "deathInfo" cutRsc ["RscWLDeathInfoMenu", "PLAIN", -1, _showDeathInfoInMap, true];
     _display = uiNamespace getVariable "RscWLDeathInfoMenu";
 };
 private _texture = _display displayCtrl 5502;

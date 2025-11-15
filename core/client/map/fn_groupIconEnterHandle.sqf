@@ -14,7 +14,8 @@ private _conditions = [
 private _sectorHasOptions = false;
 {
 	private _condition = _x;
-	if ([_sector, _condition] call WL2_fnc_mapButtonConditions) then {
+	private _eligible = [_sector, _condition] call WL2_fnc_mapButtonConditions;
+	if (_eligible == "ok") then {
 		_sectorHasOptions = true;
 	};
 } forEach _conditions;
