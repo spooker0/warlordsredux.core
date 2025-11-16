@@ -16,7 +16,7 @@ if (_hasOldStronghold && {
     playSoundUI ["AddItemFailed"];
 };
 
-private _buildings = call WL2_fnc_findStrongholdBuilding;
+private _buildings = [getPosATL player] call WL2_fnc_findStrongholdBuilding;
 if (count _buildings == 0) exitWith {
     playSoundUI ["AddItemFailed"];
 };

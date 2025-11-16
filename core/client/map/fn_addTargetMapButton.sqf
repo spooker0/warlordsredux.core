@@ -31,9 +31,9 @@ private _menuButtons = uiNamespace getVariable ["WL2_mapButtons", createHashMap]
 private _costText = if (count _costCondition > 0) then {
     private _cost = _costCondition # 0;
     if (_cost > 0) then {
-        format [" (%1%2)", WL_MoneySign, _costCondition # 0];
+        format [" (Cost: %1)", _costCondition # 0];
     } else {
-        " (free)";
+        " (Cost: free)";
     };
 } else {
     "";

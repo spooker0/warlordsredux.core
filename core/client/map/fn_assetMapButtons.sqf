@@ -163,7 +163,7 @@ if (_ownsVehicle && _isTent) then {
             playSoundUI ["AddItemFailed"];
         };
         [4, ""] spawn WL2_fnc_executeFastTravel;
-    }, true] call WL2_fnc_addTargetMapButton;
+    }, true, "", [0, "RespawnBagFT", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
 };
 
 private _canFastTravel = WL_ASSET(_assetActualType, "hasFastTravel", 0) > 0;
@@ -179,7 +179,7 @@ if (_canFastTravel) then {
             playSoundUI ["AddItemFailed"];
         };
         [_asset] spawn WL2_fnc_executeFastTravelVehicle;
-    }, true] call WL2_fnc_addTargetMapButton;
+    }, true, "", [0, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
 };
 
 if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {

@@ -43,12 +43,12 @@ playSoundUI ["a3\ui_f\data\sound\cfgnotifications\communicationmenuitemadded.wss
 
 private _isSquadLeader = ["isSquadLeader", [getPlayerID player]] call SQD_fnc_query;
 if (_isSquadLeader) then {
-    _freshTent addAction [
+    private _actionId = _freshTent addAction [
         "<t color='#00FF00'>Construct Rally Point</t>",
         {
             _this spawn {
                 params ["_target", "_caller", "_actionId", "_arguments"];
-                private _animation = "Acts_carFixingWheel";
+                private _animation = "Acts_TerminalOpen";
                 [player, [_animation]] remoteExec ["switchMove", 0];
 
                 private _validHitPoints = _arguments select 0;
@@ -108,6 +108,10 @@ if (_isSquadLeader) then {
         5,
         false
     ];
+
+    private _rallyText = "<t color='#00FF00'>Construct Rally Point</t>";
+    private _rallyImage = "<img size='2' color='#00FF00' image='A3\ui_f\data\map\mapcontrol\Ruin_CA.paa'/> <t size='1.5' color='#00FF00'>Construct Rally Point</t>";
+    _freshTent setUserActionText [_actionId, _rallyText, _rallyImage];
 };
 
 private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];

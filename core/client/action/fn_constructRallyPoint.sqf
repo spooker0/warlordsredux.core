@@ -20,7 +20,7 @@ if (!isNull _previousRallyPoint) then {
 private _buildings = if (surfaceIsWater _rallyPointLocation) then {
     [];
 } else {
-    call WL2_fnc_findStrongholdBuilding;
+    [_rallyPointLocation] call WL2_fnc_findStrongholdBuilding;
 };
 _buildings = _buildings select {
     isNull (_x getVariable ["WL_strongholdSector", objNull])

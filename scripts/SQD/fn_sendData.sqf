@@ -53,7 +53,7 @@ private _squadInfoText = toJSON (_squadInfo apply {
     } forEach _squadMemberIds;
     _newSquadInfo set [2, _squadMembers];
 
-    _newSquadInfo set [3, [_x getOrDefault ["side", ""]] call WL2_fnc_sideToFaction];
+    _newSquadInfo set [3, [_x getOrDefault ["side", ""], false] call WL2_fnc_sideToFaction];
     _newSquadInfo
 });
 _squadInfoText = _texture ctrlWebBrowserAction ["ToBase64", _squadInfoText];

@@ -29,7 +29,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
                 } else {
                     "";
                 };
-                [name _x, [side group _x] call WL2_fnc_sideToFaction, getObjectID _x, _vehicleName, _x]
+                [name _x, [side group _x, false] call WL2_fnc_sideToFaction, getObjectID _x, _vehicleName, _x]
             };
 
             private _munitions = (8 allObjects 2) select {
