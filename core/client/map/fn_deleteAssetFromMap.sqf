@@ -54,9 +54,6 @@ if (_result) then {
 		_target setVariable ["WL2_canDemolish", false, true];
 	};
 
-	((ctrlParent WL_CONTROL_MAP) getVariable "BIS_sectorInfoBox") ctrlShow false;
-	((ctrlParent WL_CONTROL_MAP) getVariable "BIS_sectorInfoBox") ctrlEnable true;
-
 	if (!isNull _texture) then {
 		[_texture] call WL2_fnc_sendVehicleData;
 	};

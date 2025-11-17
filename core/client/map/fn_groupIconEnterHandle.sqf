@@ -1,8 +1,14 @@
 #include "includes.inc"
+params ["_is3D", "_group"];
+
 private _map = uiNamespace getVariable ["BIS_WL_mapControl", controlNull];
 if (isNull _map) exitWith {};
 
-private _sector = (_this # 1) getVariable ["BIS_WL_sector", objNull];
+private _groupNextRenderTime = _group getVariable ["WL2_groupNextRenderTime", 0];
+if (_groupNextRenderTime > serverTime) exitWith {};
+_group setVariable ["WL2_groupNextRenderTime", serverTime + 1];
+
+private _sector = _group getVariable ["BIS_WL_sector", objNull];
 
 private _conditions = [
 	"fastTravelSeized",
@@ -21,11 +27,8 @@ private _sectorHasOptions = false;
 } forEach _conditions;
 WL_SectorActionTargetActive = _sectorHasOptions;
 
-private _sectorInfoBox = (ctrlParent WL_CONTROL_MAP) getVariable "BIS_sectorInfoBox";
 if (isNull _sector) exitWith {
 	BIS_WL_highlightedSector = objNull;
-	_sectorInfoBox ctrlShow false;
-	_sectorInfoBox ctrlEnable false
 };
 
 private _selectionActive = BIS_WL_currentSelection in [
@@ -38,9 +41,6 @@ private _selectionActive = BIS_WL_currentSelection in [
 ];
 private _votingActive = WL_VotePhase != 0;
 private _services = _sector getVariable ["WL2_services", []];
-private _airstrip = "A" in _services;
-private _helipad = "H" in _services;
-private _harbor = "W" in _services;
 
 private _side = BIS_WL_playerSide;
 
@@ -51,45 +51,18 @@ private _isScanning = _sector in _currentScannedSectors;
 
 private _getTeamColor = {
 	params ["_team"];
-	['#004d99', '#7f0400', '#007f04'] # ([west, east, independent] find _team);
+	[
+		[0, 0.3, 0.6, 1],
+		[0.5, 0, 0, 1],
+		[0, 0.5, 0, 1]
+	] # ([west, east, independent] find _team);
 };
 
 private _percentage = _sector getVariable ["BIS_WL_captureProgress", 0];
 private _revealed = _side in (_sector getVariable ["BIS_WL_revealedBy", []]);
-private _captureScoreText = "";
 if (!_revealed) then {
 	_percentage = 0;
 };
-
-private _info = _sector getVariable ["WL_captureDetails", []];
-private _myTeamInfo = _info select {
-	_x # 0 == BIS_WL_playerSide && _x # 1 > 0
-};
-if (count _myTeamInfo > 0) then {
-	private _teamInfo = _myTeamInfo # 0;
-
-	if (_teamInfo # 1 > 0) then {
-		private _sortedInfo = [_info, [], { _x # 1 }, "DESCEND"] call BIS_fnc_sortBy;
-
-		private _scoreTexts = [];
-		{
-			private _team = _x # 0;
-			private _score = _x # 1;
-			if (_score > 0) then {
-				_scoreTexts pushBack format ["<t color='%1'>%2</t>", [_team] call _getTeamColor, floor _score];
-			};
-		} forEach _sortedInfo;
-
-		_captureScoreText = _scoreTexts joinString " vs. ";
-		_captureScoreText = format ["(%1)", _captureScoreText];
-	};
-};
-
-private _capturingTeam = _sector getVariable ["BIS_WL_capturingTeam", independent];
-private _color = [_capturingTeam] call _getTeamColor;
-
-_sectorInfoBox ctrlSetPosition [(getMousePosition # 0) + safeZoneW / 100, (getMousePosition # 1) + safeZoneH / 50, safeZoneW, safeZoneH];
-_sectorInfoBox ctrlCommit 0;
 
 private _servicesText = [];
 if ("A" in _services) then {
@@ -102,23 +75,29 @@ if ("W" in _services) then {
 	_servicesText pushBack localize "STR_A3_WL_param30_title";
 };
 
-private _linebreak = "<br/>";
+private _scanCooldown = if (_isScanning) then {
+	["Scan active", [0, 1, 0, 1]]
+} else {
+	if (_scanCD > 0) then {
+		[
+			format ["%1: %2", localize "STR_A3_WL_param_scan_timeout", [ceil _scanCD, "MM:SS"] call BIS_fnc_secondsToString],
+			[1, 0, 0, 1]
+		];
+	} else {
+		""
+	};
+};
 
-private _scanCooldownText = [
-	localize "STR_A3_WL_param_scan_timeout",
-	": <t color='#ff4b4b'>",
-	[ceil _scanCD, "MM:SS"] call BIS_fnc_secondsToString,
-	"</t>",
-	_linebreak
-];
-
-private _enemyCaptureText = if (_revealed) then {
+private _fortification = if (_revealed) then {
 	private _previousOwners = _sector getVariable ["BIS_WL_previousOwners", []];
 	if (count _previousOwners > 1) then {
 		private _fortificationTime = _sector getVariable ["WL_fortificationTime", -1];
 		private _fortificationETA = ceil (_fortificationTime - serverTime);
-		_fortifactionETA = _fortificationETA max 0;
-		format ["<t color='#ff4b4b'>Fortifying %1</t><br/>", [_fortifactionETA, "MM:SS"] call BIS_fnc_secondsToString];
+		_fortificationETA = _fortificationETA max 0;
+		[
+			format ["Fortifying %1", [_fortificationETA, "MM:SS"] call BIS_fnc_secondsToString],
+			[0.4, 0, 0.5, 1]
+		]
 	} else {
 		""
 	}
@@ -132,51 +111,28 @@ private _sectorIncome = if !(_sectorName in WL_SPECIAL_SECTORS) then {
 		WL_MoneySign,
 		_sector getVariable "BIS_WL_value",
 		"/",
-		localize "STR_A3_rscmpprogress_min",
-		_linebreak
+		localize "STR_A3_rscmpprogress_min"
 	] joinString ""
 } else {
 	""
 };
 
-private _sectorInfoText = [
+private _sectorInfo = [
 	_sectorName,
-	_linebreak,
-
 	_sectorIncome,
-
-	if (count _servicesText > 0) then {
-		(_servicesText joinString ", ") + _linebreak
-	} else {
-		""
-	},
-
-	if (_isScanning) then {
-		"<t color='#4bff4b'>Scan Active</t>" + _linebreak
-	} else {
-		if (_scanCD > 0) then {
-			_scanCooldownText joinString ""
-		} else {
-			""
-		}
-	},
-
-	if (_percentage > 0 || count _myTeamInfo > 0) then {
-		format ["<t color='%1'>%2%3</t> %4<br/>", _color, floor (_percentage * 100), "%", _captureScoreText]
-	} else {
-		""
-	},
-	_enemyCaptureText
+	(_servicesText joinString ", "),
+	_scanCooldown,
+	_fortification
 ];
+_sectorInfo = _sectorInfo select {
+	if (_x isEqualType "") then {
+		_x != ""
+	} else {
+		count _x > 0
+	};
+};
+_sector setVariable ["WL2_sectorInfo", _sectorInfo];
 
-_sectorInfoBox ctrlSetStructuredText parseText format [
-	"<t shadow='2' size='%1'>%2</t>",
-	1 call WL2_fnc_purchaseMenuGetUIScale,
-	_sectorInfoText joinString ""
-];
-
-_sectorInfoBox ctrlShow true;
-_sectorInfoBox ctrlEnable true;
 WL_SectorActionTarget = _sector;
 call WL2_fnc_updateSelectionState;
 

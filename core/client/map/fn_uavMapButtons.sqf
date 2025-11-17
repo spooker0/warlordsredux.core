@@ -1,10 +1,9 @@
 #include "includes.inc"
-private _menuButtons = createHashMap;
-uiNamespace setVariable ["WL2_mapButtons", _menuButtons];
+params ["_asset", "_targetId"];
+_asset setVariable ["WL2_mapButtonText", [_asset] call WL2_fnc_getAssetTypeName];
 
 getMousePosition params ["_mouseX", "_mouseY"];
 uiNamespace setVariable ["WL2_mapMouseClickPosition", getMousePosition];
-private _asset = uiNamespace getVariable ["WL2_assetTargetSelected", objNull];
 
 if (_asset isKindOf "Air") then {
     private _targetAltExecuteNext = {
@@ -65,6 +64,7 @@ if (_asset isKindOf "Air") then {
 
     private _targetAlt = _asset getVariable ["WL2_assetTargetAlt", 0];
     [
+        _asset, _targetId,
         "target-altitude",
         format ["Target altitude: %1m", WL_UAV_ALT_VALUES # _targetAlt],
         [_targetAltExecuteNext, _targetAltExecuteLast],
@@ -73,7 +73,7 @@ if (_asset isKindOf "Air") then {
     ] call WL2_fnc_addTargetMapButton;
 };
 
-["move", "Move", {
+[_asset, _targetId, "move", "Move", {
     params ["_asset"];
     [_asset] spawn {
         params ["_asset"];
@@ -95,7 +95,7 @@ if (_asset isKindOf "Air") then {
     };
 }, true] call WL2_fnc_addTargetMapButton;
 
-["add-waypoint", "Add waypoint", {
+[_asset, _targetId, "add-waypoint", "Add waypoint", {
     params ["_asset"];
     private _mouseClickPos = uiNamespace getVariable ["WL2_mapMouseClickPosition", [0.5, 0.5]];
     private _worldPos = WL_CONTROL_MAP ctrlMapScreenToWorld _mouseClickPos;
@@ -110,7 +110,7 @@ if (_asset isKindOf "Air") then {
     _newWaypoint setWaypointType "MOVE";
 }, true] call WL2_fnc_addTargetMapButton;
 
-["loiter", "Loiter", {
+[_asset, _targetId, "loiter", "Loiter", {
     params ["_asset"];
     [_asset] spawn {
         params ["_asset"];
@@ -154,16 +154,10 @@ private _loiterRadiusExecuteLast = {
 
 private _targetLoiterRadius = _asset getVariable ["WL2_assetLoiterRadius", 0];
 [
+    _asset, _targetId,
     "target-loiter-radius",
     format ["Loiter radius: %1m", WL_UAV_LOITER_VALUES # _targetLoiterRadius],
     [_loiterRadiusExecuteNext, _loiterRadiusExecuteLast],
     false,
     "setLoiterRadius"
 ] call WL2_fnc_addTargetMapButton;
-
-if (count _menuButtons > 0) then {
-    private _offsetX = (_mouseX - safeZoneX) / safeZoneW * 100;
-    private _offsetY = (_mouseY - safeZoneY) / safeZoneH * 100;
-
-    ["UAV CONTROL", _offsetX, _offsetY] spawn WL2_fnc_addMapButtons;
-};

@@ -137,7 +137,6 @@ WL_LoadingState = 9;
 };
 setGroupIconsSelectable true;
 setGroupIconsVisible [true, false];
-0 spawn WL2_fnc_mapControlHandle;
 
 _mrkrTargetEnemy = createMarkerLocal ["BIS_WL_targetEnemy", position (BIS_WL_enemySide call WL2_fnc_getSideBase)];
 _mrkrTargetEnemy setMarkerColorLocal BIS_WL_colorMarkerEnemy;
@@ -404,3 +403,10 @@ private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID play
 private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];
 _ownedVehicles pushBack player;
 missionNamespace setVariable [_ownedVehiclesVar, _ownedVehicles, [2, clientOwner]];
+
+0 spawn {
+	while { true } do {
+		sleep 0.001;
+		diag_log (diag_frameNo toFixed 0);
+	};
+};

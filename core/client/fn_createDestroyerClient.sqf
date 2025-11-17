@@ -245,7 +245,7 @@ private _destroyerPartPos = _destroyerPartsArray apply {
 
 private _startTime = serverTime;
 while { serverTime < _startTime + 120 } do {
-    uiSleep 0.0001;
+    uiSleep 0.001;
     {
         private _part = _x select 0;
         private _startPos = _x select 1;

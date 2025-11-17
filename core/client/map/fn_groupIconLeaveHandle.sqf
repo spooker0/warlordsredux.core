@@ -1,9 +1,7 @@
 #include "includes.inc"
+params ["_is3D", "_group"];
 BIS_WL_highlightedSector = objNull;
 BIS_WL_hoverSamplePlayed = false;
 WL_SectorActionTarget = objNull;
-
-((ctrlParent WL_CONTROL_MAP) getVariable "BIS_sectorInfoBox") ctrlShow false;
-((ctrlParent WL_CONTROL_MAP) getVariable "BIS_sectorInfoBox") ctrlEnable false;
-
+_group setVariable ["WL2_groupNextRenderTime", 0];
 call WL2_fnc_updateSelectionState;

@@ -4,9 +4,8 @@ private _map = uiNamespace getVariable ["BIS_WL_mapControl", controlNull];
 if (isNull _map) exitWith {};
 
 private _ctrlMap = ctrlParent _map;
-private _ctrlAssetInfoBox = _ctrlMap getVariable "BIS_assetInfoBox";
 
-private _radius = ((ctrlMapScale _map) * 500) max 3;
+private _radius = ((ctrlMapScale _map) * 500) max 5;
 private _pos = _map ctrlMapScreenToWorld getMousePosition;
 
 private _drawIconsSelectable = uiNamespace getVariable ["WL2_drawIconsSelectable", []];
@@ -17,27 +16,9 @@ private _nearbyAssets = _drawIconsSelectable select {
 _nearbyAssets = [_nearbyAssets, [_pos], { _input0 distance2D (_x # 1) }, "ASCEND"] call BIS_fnc_sortBy;
 
 if (count _nearbyAssets > 0) then {
-    WL_AssetActionTarget = _nearbyAssets # 0 # 0;
-    _ctrlAssetInfoBox ctrlSetPosition [(getMousePosition # 0) + safeZoneW / 100, (getMousePosition # 1) + safeZoneH / 50, safeZoneW, safeZoneH];
-    _ctrlAssetInfoBox ctrlCommit 0;
-    _ctrlAssetInfoBox ctrlSetStructuredText parseText format [
-        "<t shadow='2' size='%1'>%2</t>",
-        1 call WL2_fnc_purchaseMenuGetUIScale,
-        format [
-            "Click for options:<br/><t color='#ff4b4b'>%1</t>",
-            if (isPlayer WL_AssetActionTarget) then {
-                name WL_AssetActionTarget
-            } else {
-                [WL_AssetActionTarget] call WL2_fnc_getAssetTypeName
-            }
-        ]
-    ];
-    _ctrlAssetInfoBox ctrlShow true;
-    _ctrlAssetInfoBox ctrlEnable true;
+    WL_AssetActionTargets = _nearbyAssets apply { _x # 0 };
 } else {
-    WL_AssetActionTarget = objNull;
-    _ctrlAssetInfoBox ctrlShow false;
-    _ctrlAssetInfoBox ctrlEnable false;
+    WL_AssetActionTargets = [];
 };
 
 if (isNull (findDisplay 160 displayCtrl 51)) then {
@@ -66,72 +47,90 @@ if (isNull (findDisplay 160 displayCtrl 51)) then {
     } forEach BIS_WL_allSectors;
 };
 
-private _mapMouseActionComplete = uiNamespace getVariable ["WL2_mapMouseActionComplete", true];
-private _mouseClicked = inputMouse 0 > 0;
-if (_mouseClicked && _mapMouseActionComplete && inputAction "BuldTurbo" == 0) then {
-    uiNamespace setVariable ["WL2_mapMouseActionComplete", false];
-    [_map] spawn {
-        params ["_map"];
+if (inputAction "BuldTurbo" > 0) exitWith {};
 
-        waitUntil {
-            inputMouse 0 == 0
-        };
+private _mapButtonDisplay = uiNamespace getVariable ["WL2_mapButtonDisplay", displayNull];
+if (!isNull _mapButtonDisplay) exitWith {
+    uiNamespace setVariable ["WL2_mapButtonDisplayFirstFrameAfterClose", true];
+};
 
-        if (count WL_MapBusy > 0) exitWith {
-            uiNamespace setVariable ["WL2_mapMouseActionComplete", true];
-        };
+private _firstFrameAfterClose = uiNamespace getVariable ["WL2_mapButtonDisplayFirstFrameAfterClose", true];
 
-        private _mapButtonDisplay = uiNamespace getVariable ["WL2_mapButtonDisplay", displayNull];
-        if (!isNull _mapButtonDisplay) exitWith {
-            uiNamespace setVariable ["WL2_mapMouseActionComplete", true];
-        };
-
-        private _cancelInProcessClick = uiNamespace getVariable ["WL2_cancelInProcessClick", false];
-        if (_cancelInProcessClick) exitWith {
-            uiNamespace setVariable ["WL2_cancelInProcessClick", false];
-            uiNamespace setVariable ["WL2_mapMouseActionComplete", true];
-        };
-
-        uiNamespace setVariable ["WL2_assetTargetSelectedTime", serverTime];
-
-        switch (true) do {
-            case (!isNull WL_AssetActionTarget): {
-                uiNamespace setVariable ["WL2_assetTargetSelected", WL_AssetActionTarget];
-                call WL2_fnc_assetMapButtons;
-                playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss", 0.15, 1];
-            };
-            case (!isNull WL_SectorActionTarget): {
-                private _isVotingThisSector = WL_SectorActionTarget in BIS_WL_selection_availableSectors;
-                if (!_isVotingThisSector) then {
-                    uiNamespace setVariable ["WL2_assetTargetSelected", WL_SectorActionTarget];
-                    call WL2_fnc_sectorMapButtons;
-                    playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss", 0.15, 1];
-                };
-            };
-            case (unitIsUAV cameraOn && alive driver cameraOn): {
-                uiNamespace setVariable ["WL2_assetTargetSelected", cameraOn];
-                call WL2_fnc_uavMapButtons;
-                playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss", 0.15, 1];
-            };
-            case (cameraOn getVariable ["DIS_selectionIndex", 0] == 1 && uiNamespace getVariable ["DIS_currentTargetingMode", "none"] == "gps"): {
-                playSoundUI ["AddItemOK", 1];
-                private _coordinate = _map ctrlMapScreenToWorld getMousePosition;
-                private _cordX = (_coordinate # 0 / 100) toFixed 0;
-                private _cordY = (_coordinate # 1 / 100) toFixed 0;
-                while {count _cordX < 3} do {
-                    _cordX = format ["0%1", _cordX];
-                };
-                while {count _cordY < 3} do {
-                    _cordY = format ["0%1", _cordY];
-                };
-                private _cordString = format ["%1%2", _cordX, _cordY];
-                cameraOn setVariable ["DIS_gpsCord", _cordString];
-            };
-        };
-
-        WL_AssetActionTarget = objNull;
-        WL_SectorActionTarget = objNull;
-
-        uiNamespace setVariable ["WL2_mapMouseActionComplete", true];
+if (inputMouse 0 == 0) exitWith {
+    if (_firstFrameAfterClose) then {
+        uiNamespace setVariable ["WL2_mapButtonDisplayFirstFrameAfterClose", false];
     };
 };
+
+if (_firstFrameAfterClose) exitWith {};
+
+private _singletonScriptHandle = uiNamespace getVariable ["WL2_mapMouseActionSingleton", scriptNull];
+if (!isNull _singletonScriptHandle) exitWith {};
+
+private _singletonScriptHandle = [_map] spawn {
+    params ["_map"];
+    if (count WL_MapBusy > 0) exitWith {};
+
+    uiNamespace setVariable ["WL2_assetTargetSelectedTime", serverTime];
+    uiNamespace setVariable ["WL2_mapButtons", createHashMap];
+
+    private _targetsClicked = [];
+
+    if (!isNull WL_SectorActionTarget) then {
+        private _isVotingThisSector = WL_SectorActionTarget in BIS_WL_selection_availableSectors;
+        if (!_isVotingThisSector) then {
+            [WL_SectorActionTarget, count _targetsClicked] call WL2_fnc_sectorMapButtons;
+            _targetsClicked pushBack WL_SectorActionTarget;
+        };
+    };
+    if (count WL_AssetActionTargets > 0) then {
+        {
+            [_x, count _targetsClicked] call WL2_fnc_assetMapButtons;
+            _targetsClicked pushBack _x;
+        } forEach WL_AssetActionTargets;
+    };
+    if (unitIsUAV cameraOn && alive driver cameraOn) then {
+        [cameraOn, count _targetsClicked] call WL2_fnc_uavMapButtons;
+        _targetsClicked pushBack cameraOn;
+    };
+    if (cameraOn getVariable ["DIS_selectionIndex", 0] == 1 && uiNamespace getVariable ["DIS_currentTargetingMode", "none"] == "gps") then {
+        private _coordinate = _map ctrlMapScreenToWorld getMousePosition;
+        private _cordX = (_coordinate # 0 / 100) toFixed 0;
+        private _cordY = (_coordinate # 1 / 100) toFixed 0;
+        while {count _cordX < 3} do {
+            _cordX = format ["0%1", _cordX];
+        };
+        while {count _cordY < 3} do {
+            _cordY = format ["0%1", _cordY];
+        };
+        private _cordString = format ["%1%2", _cordX, _cordY];
+        cameraOn setVariable ["DIS_gpsCord", _cordString];
+    };
+    uiNamespace setVariable ["WL2_assetTargetsSelected", _targetsClicked];
+
+    private _totalButtons = 0;
+    private _allMenuButtons = uiNamespace getVariable ["WL2_mapButtons", createHashMap];
+    {
+        private _menuButtons = _y;
+        _totalButtons = _totalButtons + (count _menuButtons);
+    } forEach _allMenuButtons;
+
+    if (_totalButtons > 0) then {
+        getMousePosition params ["_mouseX", "_mouseY"];
+        private _offsetX = (_mouseX - safeZoneX) / safeZoneW * 100;
+        private _offsetY = (_mouseY - safeZoneY) / safeZoneH * 100;
+
+        [_offsetX, _offsetY] spawn WL2_fnc_addMapButtons;
+    };
+
+    WL_AssetActionTargets = [];
+    WL_SectorActionTarget = objNull;
+
+    // exit singleton after mouse release
+    waitUntil {
+        uiSleep 0.01;
+        inputMouse 0 == 0
+    };
+};
+
+uiNamespace setVariable ["WL2_mapMouseActionSingleton", _singletonScriptHandle];

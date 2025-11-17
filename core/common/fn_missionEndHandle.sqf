@@ -60,7 +60,7 @@ if (!isDedicated) then {
 		private _interval = 0;
 
 		while { alive _camera && _interval < 5 } do {
-			uiSleep 0.0001;
+			uiSleep 0.001;
 			_camera setVelocityTransformation [
 				AGLtoASL _cameraPos,
 				AGLtoASL _endPos,

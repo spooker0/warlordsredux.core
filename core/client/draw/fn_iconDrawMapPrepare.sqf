@@ -23,6 +23,7 @@ private _draw = (ctrlMapScale _map) < 0.3 || _drawMode == 2;
 private _drawIcons = [];
 private _drawIconsAnimated = [];
 private _drawIconsSelectable = [];
+private _drawIconsFollowMouse = [];
 private _drawEllipses = [];
 private _drawLines = [];
 
@@ -62,27 +63,83 @@ if !(isNull BIS_WL_targetVote) then {
 };
 
 // Draw asset selector
-if !(isNull WL_AssetActionTarget) then {
-	_drawIconsAnimated pushBack [
-		"A3\ui_f\data\map\groupicons\selector_selectedMission_ca.paa",
-		[objNull, _mapColorCache] call WL2_fnc_iconColor,
-		getPosASL WL_AssetActionTarget,
-		40,
-		40,
-		0
-	];
+private _assetTargets = WL_AssetActionTargets;
+if (count _assetTargets > 0) then {
+	{
+		_drawIconsAnimated pushBack [
+			"A3\ui_f\data\map\groupicons\selector_selectedMission_ca.paa",
+			[objNull, _mapColorCache] call WL2_fnc_iconColor,
+			getPosASL _x,
+			40,
+			40,
+			0
+		];
+	} forEach _assetTargets;
 };
 
 // Draw sector selector
-if (!isNull WL_SectorActionTarget && isNull BIS_WL_highlightedSector && WL_SectorActionTargetActive) then {
-	_drawIconsAnimated pushBack [
-		"A3\ui_f\data\map\groupicons\selector_selectedMission_ca.paa",
-		[objNull, _mapColorCache] call WL2_fnc_iconColor,
-		getPosASL WL_SectorActionTarget,
-		50,
-		50,
-		0
-	];
+private _sectorTarget = WL_SectorActionTarget;
+if (!isNull _sectorTarget) then {
+	private _sectorPos = getPosASL _sectorTarget;
+	if (isNull BIS_WL_highlightedSector && WL_SectorActionTargetActive) then {
+		_drawIcons pushBack [
+			"A3\ui_f\data\map\groupicons\selector_selectedMission_ca.paa",
+			[objNull, _mapColorCache] call WL2_fnc_iconColor,
+			_sectorPos,
+			50,
+			50,
+			0
+		];
+	};
+
+	private _sectorInfo = _sectorTarget getVariable ["WL2_sectorInfo", []];
+	private _spacing = 0;
+	{
+		private _textSize = if (_forEachIndex == 0) then {
+			0.1 * _mapIconScale
+		} else {
+			0.08 * _mapIconScale
+		};
+		private _spacingAdd = if (_forEachIndex <= 1) then {
+			0.05
+		} else {
+			0.04
+		};
+		_spacing = _spacing + _spacingAdd;
+
+		if (_x isEqualType []) then {
+			private _text = _x # 0;
+			private _color = _x # 1;
+
+			_drawIconsFollowMouse pushBack [
+				"#(rgb,1,1,1)color(1,1,1,1)",
+				_color,
+				[0.03, _spacing],
+				0,
+				0,
+				0,
+				_text,
+				1,
+				_textSize,
+				"EtelkaMonospaceProBold",
+				"right"
+			];
+		} else {
+			_drawIconsFollowMouse pushBack [
+				"#(rgb,1,1,1)color(1,1,1,1)",
+				[1, 1, 1, 1],
+				[0.03, _spacing],
+				0,
+				0,
+				0,
+				_x,
+				1,
+				_textSize,
+				"EtelkaMonospaceProBold",
+				"right"
+			];
+		};
+	} forEach _sectorInfo;
 };
 
 // Draw waypoints
@@ -184,7 +241,7 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		_baseColor,
 		_fillTexture
 	];
-	if (WL_AssetActionTarget == _base) then {
+	if (_base in _assetTargets) then {
 		_drawEllipses pushBack [
 			_position,
 			WL_FOB_MIN_DISTANCE,
@@ -216,7 +273,7 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 
 private _fobSupplies = _mapData getOrDefault ["fobSupplies", []];
 {
-	if (WL_AssetActionTarget != _x) then {
+	if !(_x in _assetTargets) then {
 		continue;
 	};
 	_drawEllipses pushBack [
@@ -354,7 +411,7 @@ private _scanners = if (_drawAll) then {
 
 // Draw squad lines
 private _allSquadmates = _mapData getOrDefault ["allSquadmates", []];
-if (WL_AssetActionTarget in _allSquadmates) then {
+if (count (_assetTargets arrayIntersect _allSquadmates) > 0) then {
 	private _squadLeader = _allSquadmates select {
 		["isSquadLeader", [getPlayerID _x]] call SQD_fnc_query;
 	};
@@ -559,6 +616,7 @@ if (_drawMode == 2) then {
 	uiNamespace setVariable ["WL2_drawIcons", _drawIcons];
 	uiNamespace setVariable ["WL2_drawIconsAnimated", _drawIconsAnimated];
 	uiNamespace setVariable ["WL2_drawIconsSelectable", _drawIconsSelectable];
+	uiNamespace setVariable ["WL2_drawIconsFollowMouse", _drawIconsFollowMouse];
 	uiNamespace setVariable ["WL2_drawEllipses", _drawEllipses];
 	uiNamespace setVariable ["WL2_drawLines", _drawLines];
 };

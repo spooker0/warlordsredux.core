@@ -17,19 +17,14 @@ addMissionEventHandler ["Map", {
 		};
 	} forEach allMapMarkers;
 
-	if (_mapIsOpened) then {
-		uiNamespace setVariable ["WL2_mapMouseActionComplete", true];
-	} else {
+	if (!_mapIsOpened) then {
 		BIS_WL_highlightedSector = objNull;
 		BIS_WL_hoverSamplePlayed = false;
 		WL_SectorActionTarget = objNull;
 
-		((ctrlParent WL_CONTROL_MAP) getVariable "BIS_sectorInfoBox") ctrlShow false;
-		((ctrlParent WL_CONTROL_MAP) getVariable "BIS_sectorInfoBox") ctrlEnable false;
-
 		private _mapButtonDisplay = uiNamespace getVariable ["WL2_mapButtonDisplay", displayNull];
 		if (!isNull _mapButtonDisplay) then {
-			_mapButtonDisplay closeDisplay 0;
+			_mapButtonDisplay closeDisplay 1;
 		};
 	};
 }];

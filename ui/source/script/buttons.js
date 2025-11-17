@@ -1,50 +1,58 @@
-function setButtons(title, buttons, left, top) {
+function setButtons(buttonGroups, left, top) {
     const wrapper = document.querySelector('.buttons-wrapper');
     wrapper.style.left = left + 'vw';
     wrapper.style.top = top + 'vh';
+    wrapper.style.maxHeight = (100 - top - 2) + 'vh';
 
-    const header = document.querySelector('.buttons-header');
-    const container = document.querySelector('.buttons-container');
+    buttonGroups.forEach(group => {
+        const [targetId, targetName, buttons] = group;
+        const container = document.createElement('div');
+        container.className = 'buttons-container';
+        wrapper.appendChild(container);
 
-    header.textContent = title;
-    container.innerHTML = '';
+        const header = document.createElement('div');
+        header.className = 'buttons-header';
+        header.innerHTML = targetName;
+        container.appendChild(header);
 
-    buttons.forEach(button => {
-        const btn = document.createElement('div');
-        btn.className = 'button';
+        buttons.forEach(button => {
+            const btn = document.createElement('div');
+            btn.className = 'button';
+            btn.dataset.targetId = targetId;
 
-        const [id, label, enabled, iconUrl] = button;
-        btn.dataset.buttonId = id;
+            const [id, label, enabled, iconUrl] = button;
+            btn.dataset.buttonId = id;
 
-        if (!enabled) {
-            btn.classList.add('disabled');
-        }
+            if (!enabled) {
+                btn.classList.add('disabled');
+            }
 
-        if (iconUrl) {
-            const iconElement = document.createElement('img');
-            iconElement.className = 'button-icon';
-            A3API.RequestTexture(iconUrl, 16).then(img => {
-                iconElement.src = img;
+            if (iconUrl) {
+                const iconElement = document.createElement('img');
+                iconElement.className = 'button-icon';
+                A3API.RequestTexture(iconUrl, 16).then(img => {
+                    iconElement.src = img;
+                });
+                btn.appendChild(iconElement);
+            }
+
+            const labelElement = document.createElement('span');
+            labelElement.className = 'button-label';
+            labelElement.innerHTML = label;
+            btn.appendChild(labelElement);
+
+            btn.addEventListener('mousedown', function (event) {
+                const leftClick = event.button === 0;
+                A3API.SendAlert(`[${leftClick ? 0 : 1}, "${id}", ${targetId}]`);
             });
-            btn.appendChild(iconElement);
-        }
 
-        const labelElement = document.createElement('span');
-        labelElement.className = 'button-label';
-        labelElement.innerHTML = label;
-        btn.appendChild(labelElement);
-
-        btn.addEventListener('mousedown', function (event) {
-            const leftClick = event.button === 0;
-            A3API.SendAlert(`[${leftClick ? 0 : 1}, "${id}"]`);
+            container.appendChild(btn);
         });
-
-        container.appendChild(btn);
     });
 }
 
-function changeButtonText(buttonId, newText) {
-    const button = document.querySelector(`.button[data-button-id="${buttonId}"]`);
+function changeButtonText(targetId, buttonId, newText) {
+    const button = document.querySelector(`.button[data-target-id="${targetId}"][data-button-id="${buttonId}"]`);
     if (button) {
         button.querySelector('.button-label').innerHTML = newText;
     }

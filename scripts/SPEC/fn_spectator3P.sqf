@@ -57,7 +57,7 @@ private _camPos = _tPos vectorAdd _offset;
 
 private _forward = vectorNormalized (_tPos vectorDiff _camPos);
 private _right = _forward vectorCrossProduct [0,0,1];
-if ((vectorMagnitude _right) < 0.0001) then { _right = [1,0,0]; };
+if ((vectorMagnitude _right) < 0.0001) then { _right = [1, 0, 0]; };
 _right = vectorNormalized _right;
 private _up = vectorNormalized (_right vectorCrossProduct _forward);
 

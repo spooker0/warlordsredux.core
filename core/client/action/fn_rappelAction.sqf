@@ -43,7 +43,7 @@ player addAction [
 			private _startTime = serverTime;
 
 			while { alive player && _interval < _rappelTime } do {
-				uiSleep 0.0001;
+				uiSleep 0.001;
 				player setVelocityTransformation [
 					_startPos,
 					_endPos,

@@ -330,7 +330,6 @@ class CfgFunctions {
 			class handleEnemyCapture {};
 			class handleSelectionState {};
 			class mapButtonConditions {};
-			class mapControlHandle {};
 			class mapEachFrame {};
 			class replayMap {};
 			class replayMapClear {};

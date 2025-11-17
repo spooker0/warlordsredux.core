@@ -33,7 +33,7 @@ switch (_locality) do {
 		];
 		BIS_WL_colorFriendly = BIS_WL_colorsArray # (BIS_WL_sidesArray find BIS_WL_playerSide);
 		WL_gearKeyPressed = false;
-		WL_AssetActionTarget = objNull;
+		WL_AssetActionTargets = [];
 		WL_SectorActionTarget = objNull;
 		WL_UAVActionTarget = objNull;
 		WL_SectorActionTargetActive = false;

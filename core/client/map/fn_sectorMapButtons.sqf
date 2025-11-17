@@ -1,9 +1,7 @@
 #include "includes.inc"
-private _menuButtons = createHashMap;
-uiNamespace setVariable ["WL2_mapButtons", _menuButtons];
-
-private _sector = uiNamespace getVariable ["WL2_assetTargetSelected", objNull];
+params ["_sector", "_targetId"];
 private _sectorName = _sector getVariable ["WL2_name", "Sector"];
+_sector setVariable ["WL2_mapButtonText", _sectorName];
 
 // Fast Travel Seized Button
 private _fastTravelSeizedExecute = {
@@ -12,6 +10,7 @@ private _fastTravelSeizedExecute = {
     [0, ""] spawn WL2_fnc_executeFastTravel;
 };
 [
+    _sector, _targetId,
     "ft",
     "Fast travel",
     _fastTravelSeizedExecute,
@@ -31,6 +30,7 @@ private _fastTravelHomeExecute = {
     [0, ""] spawn WL2_fnc_executeFastTravel;
 };
 [
+    _sector, _targetId,
     "ft-home",
     "Fast travel home",
     _fastTravelHomeExecute,
@@ -50,6 +50,7 @@ private _fastTravelStrongholdExecute = {
     [5, ""] spawn WL2_fnc_executeFastTravel;
 };
 [
+    _sector, _targetId,
     "ft-stronghold",
     "Fast travel stronghold",
     _fastTravelStrongholdExecute,
@@ -76,6 +77,7 @@ private _fastTravelConflictExecute = {
     deleteMarkerLocal _markerText;
 };
 [
+    _sector, _targetId,
     "ft-conflict",
     "Fast travel contested",
     _fastTravelConflictExecute,
@@ -102,6 +104,7 @@ private _airAssaultExecute = {
     deleteMarkerLocal _markerText;
 };
 [
+    _sector, _targetId,
     "ft-conflict-air",
     "Fast travel air assault",
     _airAssaultExecute,
@@ -121,6 +124,7 @@ private _vehicleParadropExecute = {
     [3, ""] call WL2_fnc_executeFastTravel;
 };
 [
+    _sector, _targetId,
     "vehicle-paradrop",
     "Vehicle paradrop",
     _vehicleParadropExecute,
@@ -140,6 +144,7 @@ private _scanExecute = {
     [player, "scan", [], _sector] remoteExec ["WL2_fnc_handleClientRequest", 2];
 };
 [
+    _sector, _targetId,
     "sector-scan",
     "Sector scan",
     _scanExecute,
@@ -162,17 +167,10 @@ private _markSectorExecuteNext = {
     [_sector, true] call WL2_fnc_sectorButtonMark;
 };
 [
+    _sector, _targetId,
     "mark-sector",
     ([_sector, BIS_WL_playerSide] call WL2_fnc_sectorButtonMarker) # 0,
     [_markSectorExecuteNext, _markSectorExecuteLast],
     false,
     "markSector"
 ] call WL2_fnc_addTargetMapButton;
-
-if (count _menuButtons > 0) then {
-    getMousePosition params ["_mouseX", "_mouseY"];
-    private _offsetX = (_mouseX - safeZoneX) / safeZoneW * 100;
-    private _offsetY = (_mouseY - safeZoneY) / safeZoneH * 100;
-
-    [_sectorName, _offsetX, _offsetY] spawn WL2_fnc_addMapButtons;
-};

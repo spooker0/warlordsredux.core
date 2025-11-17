@@ -1,12 +1,11 @@
 #include "includes.inc"
-params ["_buttonId", "_textLabel", "_action", "_actionClose", ["_actionCondition", ""], ["_costCondition", []]];
+params ["_asset", "_targetId", "_buttonId", "_textLabel", "_action", "_actionClose", ["_actionCondition", ""], ["_costCondition", []]];
 // _costCondition = [amount, name, category]
 
 private _buttonEnabled = true;
 private _showButton = true;
-private _actionTarget = uiNamespace getVariable ["WL2_assetTargetSelected", objNull];
 if (_actionCondition != "") then {
-    private _result = [_actionTarget, _actionCondition] call WL2_fnc_mapButtonConditions;
+    private _result = [_asset, _actionCondition] call WL2_fnc_mapButtonConditions;
     if (_result != "ok") then {
         _buttonEnabled = false;
     };
@@ -26,7 +25,8 @@ if (count _costCondition > 0) then {
     };
 };
 
-private _menuButtons = uiNamespace getVariable ["WL2_mapButtons", createHashMap];
+private _allMenuButtons = uiNamespace getVariable ["WL2_mapButtons", createHashMap];
+private _menuButtons = _allMenuButtons getOrDefault [_targetId, createHashMap];
 
 private _costText = if (count _costCondition > 0) then {
     private _cost = _costCondition # 0;
@@ -48,3 +48,4 @@ _buttonData set ["actionCondition", _actionCondition];
 _buttonData set ["costCondition", _costCondition];
 
 _menuButtons set [_buttonId, [_buttonLabel, _buttonEnabled, _buttonData]];
+_allMenuButtons set [_targetId, _menuButtons];
