@@ -47,6 +47,11 @@ if (isNull (findDisplay 160 displayCtrl 51)) then {
     } forEach BIS_WL_allSectors;
 };
 
+private _nearbySectors = BIS_WL_allSectors select {
+    _x distance2D _pos < _radius
+};
+[_nearbySectors, _map] call WL2_fnc_handleSectorIcons;
+
 if (inputAction "BuldTurbo" > 0) exitWith {};
 
 private _mapButtonDisplay = uiNamespace getVariable ["WL2_mapButtonDisplay", displayNull];
@@ -83,17 +88,22 @@ private _singletonScriptHandle = [_map] spawn {
             _targetsClicked pushBack WL_SectorActionTarget;
         };
     };
+
     if (count WL_AssetActionTargets > 0) then {
         {
             [_x, count _targetsClicked] call WL2_fnc_assetMapButtons;
             _targetsClicked pushBack _x;
         } forEach WL_AssetActionTargets;
     };
-    if (unitIsUAV cameraOn && alive driver cameraOn) then {
+
+    private _isDrone = [cameraOn] call WL2_fnc_isDrone;
+    if (_isDrone && alive driver cameraOn) then {
         [cameraOn, count _targetsClicked] call WL2_fnc_uavMapButtons;
         _targetsClicked pushBack cameraOn;
     };
+
     if (cameraOn getVariable ["DIS_selectionIndex", 0] == 1 && uiNamespace getVariable ["DIS_currentTargetingMode", "none"] == "gps") then {
+        playSoundUI ["a3\ui_f\data\sound\rsccombo\soundexpand.wss", 2];
         private _coordinate = _map ctrlMapScreenToWorld getMousePosition;
         private _cordX = (_coordinate # 0 / 100) toFixed 0;
         private _cordY = (_coordinate # 1 / 100) toFixed 0;
@@ -116,15 +126,14 @@ private _singletonScriptHandle = [_map] spawn {
     } forEach _allMenuButtons;
 
     if (_totalButtons > 0) then {
+        playSoundUI ["clickSoft", 1];
+
         getMousePosition params ["_mouseX", "_mouseY"];
         private _offsetX = (_mouseX - safeZoneX) / safeZoneW * 100;
         private _offsetY = (_mouseY - safeZoneY) / safeZoneH * 100;
 
         [_offsetX, _offsetY] spawn WL2_fnc_addMapButtons;
     };
-
-    WL_AssetActionTargets = [];
-    WL_SectorActionTarget = objNull;
 
     // exit singleton after mouse release
     waitUntil {

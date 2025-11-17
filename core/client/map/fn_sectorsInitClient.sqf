@@ -54,8 +54,8 @@ BIS_WL_allSectors = BIS_WL_allSectors select { !isNull _x };
 			};
 			default {
 				_mrkrMain setMarkerTypeLocal "u_installation";
-				_mrkrMain setMarkerColorLocal "ColorUNKNOWN";
-				_mrkrArea setMarkerColorLocal "ColorOrange";
+				_mrkrMain setMarkerColorLocal "ColorUnknown";
+				_mrkrArea setMarkerColorLocal "ColorUnknown";
 			};
 		};
 	};
@@ -98,9 +98,4 @@ BIS_WL_allSectors = BIS_WL_allSectors select { !isNull _x };
 			_i = _i + 1;
 		};
 	} forEach _neighbors;
-
-	private _agentGrp = _sector getVariable "BIS_WL_agentGrp";
-	_agentGrp setVariable ["BIS_WL_sector", _sector];
-	_agentGrp addGroupIcon ["selector_selectable", [0, 0]];
-	_agentGrp setGroupIconParams [[0,0,0,0], "", 1, false];
 } forEach BIS_WL_allSectors;

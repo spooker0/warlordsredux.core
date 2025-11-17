@@ -98,6 +98,7 @@ private _fastestCapture = 20;
 private _slowestCapture = 50;
 #endif
 
+private _sectorGroup = createGroup [CIVILIAN, true];
 {
 	private _sector = _x;
 	if (isNull _sector) then {
@@ -122,10 +123,8 @@ private _slowestCapture = 50;
 	};
 	_sector setVariable ["BIS_WL_value", _sectorValue];
 
-	_agentGrp = createGroup CIVILIAN;
-	_agent = _agentGrp createUnit ["Logic", _sectorPos, [], 0, "CAN_COLLIDE"];
+	private _agent = _sectorGroup createUnit ["Logic", _sectorPos, [], 0, "CAN_COLLIDE"];
 	_agent enableSimulationGlobal false;
-	_sector setVariable ["BIS_WL_agentGrp", _agentGrp, true];
 
 	private _minCaptureTime = linearConversion [5, 30, _sectorValue, _fastestCapture, _slowestCapture, true];
 	_sector setVariable ["WL2_minCapture", _minCaptureTime];

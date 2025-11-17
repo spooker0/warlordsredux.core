@@ -47,12 +47,4 @@ private _strongholdArea = [
     false
 ];
 if !(player inArea _strongholdArea) exitWith { objNull };
-
-private _nearbyEnemies = _strongholdArea nearEntities [["Man"], false, true, false];
-_nearbyEnemies = _nearbyEnemies select {
-    lifeState _x != "INCAPACITATED" &&
-    side group _x != side group player
-};
-
-if (count _nearbyEnemies > 0) exitWith { objNull };
 _demolishTarget;

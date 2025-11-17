@@ -47,9 +47,9 @@ if (BIS_WL_playerSide in (_sector getVariable ["BIS_WL_revealedBy", []]) || BIS_
 		};
 	};
 } else {
-	_mrkrMain setMarkerColorLocal "ColorUNKNOWN";
+	_mrkrMain setMarkerColorLocal "ColorUnknown";
 	_mrkrMain setMarkerTypeLocal "u_installation";
-	_mrkrArea setMarkerColorLocal "ColorOrange";
+	_mrkrArea setMarkerColorLocal "ColorUnknown";
 };
 
 ["client", true] call WL2_fnc_updateSectorArrays;

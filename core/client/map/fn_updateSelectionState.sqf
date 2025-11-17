@@ -33,7 +33,7 @@ switch (BIS_WL_currentSelection) do {
     case WL_ID_SELECTION_FAST_TRAVEL_VEHICLE: {
         BIS_WL_selection_availableSectors = (BIS_WL_sectorsArray # 2) select {
             private _isCarrierSector = _x getVariable ["WL2_isAircraftCarrier", false];
-            private _sectorNotUnderAttack = _x != WL_TARGET_ENEMY; 
+            private _sectorNotUnderAttack = _x != WL_TARGET_ENEMY;
             !_isCarrierSector && _sectorNotUnderAttack;
         };
         BIS_WL_selection_showLinks = false;
@@ -98,13 +98,13 @@ private _sectorLinks = WL_linkSectorMarkers getOrDefault [hashValue _targetedSec
 
 {
     private _alpha = if (BIS_WL_selection_dimSectors && !(_x in BIS_WL_selection_availableSectors)) then {
-        0.2;
+        0.3;
     } else {
         1;
     };
     private _markers = _x getVariable ["BIS_WL_markers", []];
     (_markers # 0) setMarkerAlphaLocal _alpha;
-    (_markers # 1) setMarkerAlphaLocal _alpha;
+    (_markers # 1) setMarkerAlphaLocal (_alpha * 0.5);
 } forEach BIS_WL_allSectors;
 
 private _markers = _targetedSector getVariable ["BIS_WL_markers", []];

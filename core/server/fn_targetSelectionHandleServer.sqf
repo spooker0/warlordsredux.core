@@ -9,8 +9,7 @@
 
 		private _calculateMostVotedSector = {
 			private _allPlayers = call BIS_fnc_listPlayers;
-			private _warlords = _allPlayers select {side group _x == _side};
-			private _players = _warlords select {isPlayer _x};
+			private _players = _allPlayers select { side group _x == _side } select { isPlayer _x };
 
 			private _votesByPlayers = createHashMap;
 			private _votingPlayers = _players select {
@@ -65,11 +64,11 @@
 
 		private _wipeVotes = {
 			private _allPlayers = call BIS_fnc_listPlayers;
-			private _players = _allPlayers select {side group _x == _side} select {isPlayer _x};
-			private _voterVariables = _players apply {format ["BIS_WL_targetVote_%1", getPlayerID _x]};
+			private _players = _allPlayers select { side group _x == _side } select { isPlayer _x };
 			{
-				missionNamespace setVariable [_x, objNull];
-			} forEach _voterVariables;
+				private _voteVar = format ["BIS_WL_targetVote_%1", getPlayerID _x];
+				missionNamespace setVariable [_voteVar, objNull];
+			} forEach _players;
 		};
 
 		while {!BIS_WL_missionEnd} do {
@@ -87,88 +86,96 @@
 
 			waitUntil {
 				uiSleep WL_TIMEOUT_SHORT;
-				private _allPlayers = call BIS_fnc_listPlayers;
-				_warlords = _allPlayers select {side group _x == _side};
-				_players = _warlords select {isPlayer _x};
-				_playerVotingVariableNames = _players apply {format ["BIS_WL_targetVote_%1", getPlayerID _x]};
 
-				_votingReset = missionNamespace getVariable [_votingResetVar, false];
-				_playerHasVote = _playerVotingVariableNames findIf {!isNull (missionNamespace getVariable [_x, objNull])} != -1;
+				private _allPlayers = call BIS_fnc_listPlayers;
+				private _playersWithVote = _allPlayers select {
+					side group _x == _side
+				} select {
+					isPlayer _x
+				} select {
+					private _playerVoteVar = format ["BIS_WL_targetVote_%1", getPlayerID _x];
+					!isNull (missionNamespace getVariable [_playerVoteVar, objNull])
+				};
+				private _votingReset = missionNamespace getVariable [_votingResetVar, false];
 
 				// Final condition
-				_votingReset || _playerHasVote
+				_votingReset || count _playersWithVote > 0
 			};
 
-			if !(missionNamespace getVariable [_votingResetVar, false]) then {
-				_votingEnd = serverTime + WL_DURATION_SECTORVOTE;
-				_nextUpdate = serverTime;
+			if (missionNamespace getVariable [_votingResetVar, false]) then {
+				continue;
+			};
 
-				while {serverTime < _votingEnd && {!(missionNamespace getVariable [_votingResetVar, false])}} do {
-					private _allPlayers = call BIS_fnc_listPlayers;
-					_warlords = _allPlayers select {side group _x == _side};
-					_players = _warlords select {isPlayer _x};
+			private _votingEnd = serverTime + WL_DURATION_SECTORVOTE;
+			private _nextUpdate = serverTime;
 
-					if (serverTime >= _nextUpdate) then {
-						_calculation = call _calculateMostVotedSector;
-
-						private _mostVotedVar = format ["BIS_WL_mostVoted_%1", _side];
-						private _mostVotedData = [_calculation # 0, _votingEnd];
-						private _mostVotedPreviousData = missionNamespace getVariable [_mostVotedVar, [objNull, 0]];
-						if (_mostVotedPreviousData isNotEqualTo _mostVotedData) then {
-							missionNamespace setVariable [_mostVotedVar, _mostVotedData, true];
-						};
-
-						private _tallyDisplayVar = format ["BIS_WL_sectorVoteTallyDisplay_%1", _side];
-						private _tallyValue = _calculation # 1;
-						private _tallyPreviousValue = missionNamespace getVariable [_tallyDisplayVar, []];
-						if (_tallyPreviousValue isNotEqualTo _tallyValue) then {
-							missionNamespace setVariable [_tallyDisplayVar, _tallyValue, true];
-						};
-
-						_nextUpdate = serverTime + WL_TIMEOUT_STANDARD;
-					};
-
-					uiSleep WL_TIMEOUT_SHORT;
+			while { serverTime < _votingEnd } do {
+				if (missionNamespace getVariable [_votingResetVar, false]) then {
+					break;
 				};
 
-				if !(missionNamespace getVariable [_votingResetVar, false]) then {
-					_calculation = call _calculateMostVotedSector;
-					private _selectedSector = _calculation # 0;
+				if (serverTime >= _nextUpdate) then {
+					private _calculation = call _calculateMostVotedSector;
 
-					private _selectedSectorName = _selectedSector getVariable ["WL2_name", "Sector"];
-					switch (_selectedSectorName) do {
-						case "Wait": {
-							private _waitsInRow = missionNamespace getVariable [_waitVar, 0];
-							_waitsInRow = _waitsInRow + 1;
-							missionNamespace setVariable [_waitVar, _waitsInRow];
-						};
-						case "Surrender": {
-							missionNamespace setVariable ["BIS_WL_missionEnd", true, true];
-
-							private _oppositeTeam = if (_side == west) then { east } else { west };
-
-							[_oppositeTeam] spawn WL2_fnc_calculateEndResults;
-							[_oppositeTeam, true] remoteExec ["WL2_fnc_missionEndHandle", 0];
-						};
-						default {
-							missionNamespace setVariable [_waitVar, 0];
-							[_side, _selectedSector] call WL2_fnc_selectTarget;
-						};
+					private _mostVotedVar = format ["BIS_WL_mostVoted_%1", _side];
+					private _mostVotedData = [_calculation # 0, _votingEnd];
+					private _mostVotedPreviousData = missionNamespace getVariable [_mostVotedVar, [objNull, 0]];
+					if (_mostVotedPreviousData isNotEqualTo _mostVotedData) then {
+						missionNamespace setVariable [_mostVotedVar, _mostVotedData, true];
 					};
 
-					call _wipeVotes;
-					missionNamespace setVariable [format ["BIS_WL_sectorVoteTallyDisplay_%1", _side], [], true];
-					missionNamespace setVariable [format ["WL_targetReset_%1", _side], false, true];
-
-					["server", true] call WL2_fnc_updateSectorArrays;
-
-					waitUntil {
-						uiSleep WL_TIMEOUT_STANDARD;
-						isNull (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", _side], objNull]) ||
-						missionNamespace getVariable [format ["WL_targetReset_%1", _side], false];
+					private _tallyDisplayVar = format ["BIS_WL_sectorVoteTallyDisplay_%1", _side];
+					private _tallyValue = _calculation # 1;
+					private _tallyPreviousValue = missionNamespace getVariable [_tallyDisplayVar, []];
+					if (_tallyPreviousValue isNotEqualTo _tallyValue) then {
+						missionNamespace setVariable [_tallyDisplayVar, _tallyValue, true];
 					};
+
+					_nextUpdate = serverTime + WL_TIMEOUT_STANDARD;
+				};
+
+				uiSleep WL_TIMEOUT_SHORT;
+			};
+
+			// Finished voting
+			if !(missionNamespace getVariable [_votingResetVar, false]) then {
+				private _calculation = call _calculateMostVotedSector;
+				private _selectedSector = _calculation # 0;
+
+				private _selectedSectorName = _selectedSector getVariable ["WL2_name", "Sector"];
+				switch (_selectedSectorName) do {
+					case "Wait": {
+						private _waitsInRow = missionNamespace getVariable [_waitVar, 0];
+						_waitsInRow = _waitsInRow + 1;
+						missionNamespace setVariable [_waitVar, _waitsInRow];
+					};
+					case "Surrender": {
+						missionNamespace setVariable ["BIS_WL_missionEnd", true, true];
+
+						private _oppositeTeam = if (_side == west) then { east } else { west };
+
+						[_oppositeTeam] spawn WL2_fnc_calculateEndResults;
+						[_oppositeTeam, true] remoteExec ["WL2_fnc_missionEndHandle", 0];
+					};
+					default {
+						missionNamespace setVariable [_waitVar, 0];
+						[_side, _selectedSector] call WL2_fnc_selectTarget;
+					};
+				};
+
+				call _wipeVotes;
+
+				missionNamespace setVariable [format ["BIS_WL_sectorVoteTallyDisplay_%1", _side], [], true];
+				missionNamespace setVariable [format ["WL_targetReset_%1", _side], false, true];
+
+				["server", true] call WL2_fnc_updateSectorArrays;
+
+				waitUntil {
+					uiSleep WL_TIMEOUT_STANDARD;
+					isNull (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", _side], objNull]) ||
+					missionNamespace getVariable [format ["WL_targetReset_%1", _side], false];
 				};
 			};
 		};
 	};
-} forEach [WEST, EAST];
+} forEach [west, east];

@@ -168,7 +168,8 @@ private _side = [_asset] call WL2_fnc_getAssetSide;
                 500;
             };
             _nearAir = _nearAir select {
-                getPosATL _x # 2 > _nearAirHeightLimit &&
+                private _posAGL = _x modelToWorld [0, 0, 0];
+                _posAGL # 2 > _nearAirHeightLimit &&
                 [_x] call WL2_fnc_getAssetSide != BIS_WL_playerSide
             };
             _nearAir = _nearAir select {

@@ -37,13 +37,6 @@ _texture ctrlAddEventHandler ["JSDialog", {
 }];
 
 while { !BIS_WL_missionEnd } do {
-    private _useNewKillfeed = _settingsMap getOrDefault ["useNewKillfeed", true];
-
-    if (!_useNewKillfeed) then {
-        uiSleep 10;
-        continue;
-    };
-
     private _killfeedScale = _settingsMap getOrDefault ["killfeedScale", 1.0];
     private _killfeedBadgeScale = _settingsMap getOrDefault ["killfeedBadgeScale", 1.0];
     private _killfeedTimeout = (_settingsMap getOrDefault ["killfeedTimeout", 10]) * 1000;

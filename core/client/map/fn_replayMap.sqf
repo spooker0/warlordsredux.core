@@ -19,8 +19,6 @@ private _countFrames = count _profileDrawIcons;
         _x setMarkerAlphaLocal 0;
     };
 } forEach allMapMarkers;
-setGroupIconsSelectable false;
-setGroupIconsVisible [false, false];
 {
     [_x, _x getVariable "BIS_WL_owner"] call WL2_fnc_sectorMarkerUpdate;
 } forEach BIS_WL_allSectors;
@@ -48,8 +46,6 @@ uiNamespace setVariable ["WL2_drawSectorIcons", []];
         _x setMarkerAlphaLocal 1;
     };
 } forEach allMapMarkers;
-setGroupIconsSelectable true;
-setGroupIconsVisible [true, false];
 openMap [false, false];
 WL_IsReplaying = false;
 {

@@ -1,6 +1,8 @@
 #include "includes.inc"
 params ["_unit"];
 
+private _originalDeathPos = getPosWorld _unit;
+
 _unit setVelocity [0, 0, 0];
 
 _unit setCaptive true;
@@ -26,6 +28,10 @@ private _downTime = 0;
 while { alive _unit && lifeState _unit == "INCAPACITATED" } do {
     if (animationState _unit != _deadAnimation) then {
         [_unit, [_deadAnimation]] remoteExec ["switchMove", 0];
+    };
+    if (_unit distance2D _originalDeathPos > 30) then {
+        _unit setPosWorld _originalDeathPos;
+        _unit setVelocity [0, 0, 0];
     };
 
     _downTime = serverTime - _startTime;

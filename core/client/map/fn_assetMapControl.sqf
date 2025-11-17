@@ -19,7 +19,6 @@ addMissionEventHandler ["Map", {
 
 	if (!_mapIsOpened) then {
 		BIS_WL_highlightedSector = objNull;
-		BIS_WL_hoverSamplePlayed = false;
 		WL_SectorActionTarget = objNull;
 
 		private _mapButtonDisplay = uiNamespace getVariable ["WL2_mapButtonDisplay", displayNull];

@@ -201,25 +201,6 @@ if (_asset isKindOf "Man") then {
 				[player, "droneExplode", _unit] remoteExec ["WL2_fnc_handleClientRequest", 2];
 			}];
 		};
-
-		case "B_Boat_Bomb_01_F";
-		case "O_Boat_Bomb_01_F": {
-			_asset addEventHandler ["EpeContact", {
-				params ["_unit", "_object2", "_selection1", "_selection2", "_force", "_reactVect", "_worldPos"];
-				if (speed _unit < 30) exitWith {};
-				if (_unit getVariable ["WL2_explosionActivated", false]) exitWith {};
-				_unit setVariable ["WL2_explosionActivated", true];
-				[player, "droneExplode", _unit] remoteExec ["WL2_fnc_handleClientRequest", 2];
-				["Bo_Mk82", getPosASL _unit, 7, 2] spawn DIS_fnc_bunkerBuster;
-			}];
-			_asset addEventHandler ["Killed", {
-				params ["_unit"];
-				if (_unit getVariable ["WL2_explosionActivated", false]) exitWith {};
-				_unit setVariable ["WL2_explosionActivated", true];
-				[player, "droneExplode", _unit] remoteExec ["WL2_fnc_handleClientRequest", 2];
-				["Bo_Mk82", getPosASL _unit, 7, 2] spawn DIS_fnc_bunkerBuster;
-			}];
-		};
 	};
 
 	if (_asset getVariable ["apsType", -1] > -1) then {
@@ -233,6 +214,30 @@ if (_asset isKindOf "Man") then {
 		[_asset, _lightMass] remoteExec ["setMass", 0];
 	} else {
 		_asset setVariable ["WL2_massDefault", getMass _asset, true];
+	};
+
+	private _detonate = WL_ASSET(_assetActualType, "detonate", 0);
+	if (_detonate > 0) then {
+		_asset setVariable ["WL2_detonateValue", _detonate, true];
+
+		_asset addAction ["<t color='#ff0000'>Detonate (Fire)</t>", {
+			params ["_target", "_caller", "_id", "_args"];
+			if (_target getVariable ["WL2_explosionActivated", false]) exitWith {};
+			_target setVariable ["WL2_explosionActivated", true];
+			[player, "droneExplode", _target] remoteExec ["WL2_fnc_handleClientRequest", 2];
+
+			private _detonateValue = _target getVariable ["WL2_detonateValue", 0];
+			["ammo_Bomb_SDB", getPosASL _target, _detonateValue, 2] spawn DIS_fnc_bunkerBuster;
+		}, nil, 100, false, true, "ActionInMap", "cameraOn == _target", -1];
+
+		_asset addEventHandler ["Killed", {
+			params ["_unit"];
+			if (_unit getVariable ["WL2_explosionActivated", false]) exitWith {};
+			_unit setVariable ["WL2_explosionActivated", true];
+			[player, "droneExplode", _unit] remoteExec ["WL2_fnc_handleClientRequest", 2];
+			private _detonateValue = _unit getVariable ["WL2_detonateValue", 0];
+			["ammo_Bomb_SDB", getPosASL _unit, _detonateValue, 2] spawn DIS_fnc_bunkerBuster;
+		}];
 	};
 
 	if (WL_ASSET(_assetActualType, "hasESAM", 0) > 0) then {

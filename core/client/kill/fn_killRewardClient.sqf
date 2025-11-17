@@ -20,35 +20,13 @@ if (_customText != "") then {
 		_unitType = _unitTypeName;
 	};
 
-	private _useNewKillfeed = _settingsMap getOrDefault ["useNewKillfeed", true];
 	if (_unitType isKindOf "Man") then {
-		_displayText = if (_useNewKillfeed) then {
-			"KILL"
-		} else {
-			"Enemy killed"
-		};
+		_displayText = "KILL";
 	} else {
 		_displayName = [_unit, _unitType] call WL2_fnc_getAssetTypeName;
-		_displayText = if (_useNewKillfeed) then {
-			"DESTROYED %1"
-		} else {
-			"%1 destroyed"
-		};
+		_displayText = format ["DESTROYED %1", _displayName];
 	};
-	_displayText = format [_displayText, _displayName];
 };
-
-// map: displayText => [repetition, points, customColor, timestamp]
-private _killRewardMap = uiNamespace getVariable ["WL_killRewardMap", createHashMap];
-private _killRewardEntry = _killRewardMap getOrDefault [_displayText, [0, 0, "", 0]];
-private _repetitions = _killRewardEntry # 0;
-private _points = _killRewardEntry # 1;
-
-_repetitions = _repetitions + 1;
-_points = _points + _reward;
-_killRewardMap set [_displayText, [_repetitions, _points, _customColor, serverTime]];
-
-uiNamespace setVariable ["WL_killRewardMap", _killRewardMap];
 
 private _displayIcon = switch (toUpper _displayText) do {
 	case "KILL";

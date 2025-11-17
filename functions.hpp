@@ -169,6 +169,7 @@ class CfgFunctions {
 			class handlePlayerDown {};
 			class initClient {};
 			class interceptAction {};
+			class isDrone {};
 			class lagMessageDisplay {};
 			class locationScanner {};
 			class mineLimitHint {};
@@ -299,7 +300,6 @@ class CfgFunctions {
 			class askForgiveness {};
 			class deadActions {};
 			class deathInfo {};
-			class handleKillFeedUpdate {};
 			class killHistory {};
 			class killNotify {};
 			class killRewardClient {};
@@ -324,10 +324,8 @@ class CfgFunctions {
 			class deleteAssetFromMap {};
 			class detectUnits {};
 			class getSideBase {};
-			class groupIconClickHandle {};
-			class groupIconEnterHandle {};
-			class groupIconLeaveHandle {};
 			class handleEnemyCapture {};
+			class handleSectorIcons {};
 			class handleSelectionState {};
 			class mapButtonConditions {};
 			class mapEachFrame {};

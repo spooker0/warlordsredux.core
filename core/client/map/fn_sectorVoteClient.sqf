@@ -118,7 +118,6 @@ while { !BIS_WL_missionEnd } do {
             // Stopped voting
             case 0: {
                 BIS_WL_targetVote = objNull;
-                // missionNamespace setVariable [format ["BIS_WL_targetVote_%1", getPlayerID player], objNull, 2];
                 private _currentOwner = WL_TARGET_FRIENDLY getVariable ["BIS_WL_owner", independent];
                 [WL_TARGET_FRIENDLY, _currentOwner] call WL2_fnc_sectorMarkerUpdate;
             };

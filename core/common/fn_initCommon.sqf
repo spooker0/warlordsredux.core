@@ -26,8 +26,7 @@ if (isServer) then {
 		private _foundSectors = (entities "Logic") select {
 			private _name = _x getVariable ["WL2_name", ""];
 			private _objArea = _x getVariable ["WL2_objectArea", []];
-			private _agentGrp = _x getVariable ["BIS_WL_agentGrp", grpNull];
-			_name != "" && (count _objArea >= 4) && !isNull _agentGrp
+			_name != "" && (count _objArea >= 4)
 		} apply { _x getVariable ["WL2_name", ""] };
 		private _foundAllSectors = true;
 		{
@@ -111,10 +110,6 @@ if (isServer) then {
 			if (isNil {_sector getVariable "BIS_WL_previousOwners"}) then {
 				_initComplete = false;
 				diag_log format ["Missing BIS_WL_previousOwners on sector %1", _sectorName];
-			};
-			if (isNil {_sector getVariable "BIS_WL_agentGrp"}) then {
-				_initComplete = false;
-				diag_log format ["Missing BIS_WL_agentGrp on sector %1", _sectorName];
 			};
 		} forEach BIS_WL_allSectors;
 

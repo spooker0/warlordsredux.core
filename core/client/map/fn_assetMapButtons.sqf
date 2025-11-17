@@ -309,7 +309,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
 #endif
 };
 
-private _isUav = unitIsUAV _asset || WL_ASSET(_assetActualType, "drone", 0) > 0;
+private _isUav = [_asset] call WL2_fnc_isDrone;
 if (_operateAccess && _isUav) then {
     if (alive driver _asset) then {
         [_asset, _targetId, "control-driver", "Control driver", {

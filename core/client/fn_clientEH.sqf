@@ -1,8 +1,4 @@
 #include "includes.inc"
-addMissionEventHandler ["GroupIconClick", WL2_fnc_groupIconClickHandle];
-addMissionEventHandler ["GroupIconOverEnter", WL2_fnc_groupIconEnterHandle];
-addMissionEventHandler ["GroupIconOverLeave", WL2_fnc_groupIconLeaveHandle];
-
 call WL2_fnc_playerEventHandlers;
 
 addMissionEventHandler ["HandleChatMessage", {

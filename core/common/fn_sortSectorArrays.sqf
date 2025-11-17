@@ -55,12 +55,8 @@ while { _lastLinkCount < count _linked } do {
 		_available pushBack _sector;
 	};
 	if (_sectorName == "Surrender") then {
-		private _surrenderTime = 60 * 60 * 2;
-#if WL_SURRENDER_ANYTIME
-		_surrenderTime = 0;
-#endif
 		private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
-		if (_timeSinceStart > _surrenderTime) then {
+		if (_timeSinceStart > WL_SURRENDER_TIME) then {
 			_available pushBack _sector;
 		};
 	};

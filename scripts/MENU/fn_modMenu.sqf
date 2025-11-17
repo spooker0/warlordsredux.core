@@ -79,6 +79,14 @@ _texture ctrlAddEventHandler ["JSDialog", {
             _duration = _duration * 60;
             [player, _uid, _reason, _duration] remoteExec ["WL2_fnc_punishPlayer", 2];
         };
+        case "addModReceipt": {
+            private _receiptText = _message select 1;
+            _receiptText = _texture ctrlWebBrowserAction ["FromBase64", _receiptText];
+
+            private _existingInfoDisplay = profileNamespace getVariable ["WL2_infoDisplay", ""];
+            private _banText = format ["%1%2", _existingInfoDisplay, _receiptText];
+            profileNamespace setVariable ["WL2_infoDisplay", _banText];
+        };
         case "rebalance": {
             private _uid = _message select 1;
             [player, _uid] remoteExec ["WL2_fnc_rebalance", 2];

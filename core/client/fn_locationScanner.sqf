@@ -12,7 +12,8 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
 
         private _cursorObject = cursorObject;
         private _access = [_cursorObject, player, "driver"] call WL2_fnc_accessControl;
-        if (unitIsUAV _cursorObject && _access # 0) then {
+        private _isDrone = [_cursorObject] call WL2_fnc_isDrone;
+        if (_isDrone && _access # 0) then {
             private _remoteActionId = player getVariable ["WL2_controlUAVActionId", -1];
             private _assetTypeName = [_cursorObject] call WL2_fnc_getAssetTypeName;
             private _remoteText = format ["Control %1</t>", _assetTypeName];
