@@ -184,7 +184,7 @@ private _pylonInfo = getAllPylonsInfo _asset;
 	};
 
 	if (_deviceJammer != 0) then {
-		[_asset, _turret] remoteExec ["APS_fnc_deviceJammer", _asset];
+		[_asset, _turret] remoteExec ["APS_fnc_deviceJammer", 0];
 	};
 } forEach _turretOverridesForVehicle;
 

@@ -24,10 +24,6 @@ while { alive _asset } do {
         [_x] call WL2_fnc_getAssetSide != _assetSide
     };
 
-    if (count _vehiclesInRange == 0) then {
-        continue;
-    };
-
     {
         private _deviceTarget = _x;
         if (_deviceTarget getVariable ["WL2_apsActivated", false]) then {
