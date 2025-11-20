@@ -1066,7 +1066,7 @@ function updateLoadoutNames(loadoutNames) {
     loadouts.forEach((loadoutEl, index) => {
         const loadoutName = loadoutNames[index] || [];
         loadoutEl.querySelectorAll('.loadout-weapon-name').forEach((nameEl, nameIndex) => {
-            nameEl.textContent = loadoutName[nameIndex] || "-";
+            nameEl.textContent = atobr(loadoutName[nameIndex]) || "-";
         });
     });
 }

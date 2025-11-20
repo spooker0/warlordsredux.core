@@ -82,7 +82,7 @@ if (WL_IsSpectator || WL_IsReplaying) then {
 
 if (BIS_WL_selection_showLinks) then {
     {
-        _x setMarkerAlphaLocal 0.5;
+        _x setMarkerAlphaLocal 1;
     } forEach BIS_WL_sectorLinks;
 } else {
     {

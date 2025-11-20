@@ -22,7 +22,10 @@ private _canRepick = _isAdmin || _isModerator || _isSpectator;
 _canRepick = true;
 #endif
 
-if (!_canRepick && _selectedSide != civilian) exitWith {};
+if (!_canRepick && _selectedSide != civilian) exitWith {
+    switchCamera player;
+    camDestroy _camera;
+};
 
 private _display = findDisplay 5500;
 if (isNull _display) then {

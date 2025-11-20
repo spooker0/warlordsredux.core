@@ -38,7 +38,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
         private _loadoutVar = format ["WLC_savedLoadout_%1_%2", BIS_WL_playerSide, _loadoutIndex];
         profileNamespace setVariable [_loadoutVar, []];
 
-        private _script = format ["updateLoadoutNames(%1)", [] call WLC_fnc_getLoadoutNames];
+        private _script = format ["updateLoadoutNames(%1)", [_texture] call WLC_fnc_getLoadoutNames];
         _texture ctrlWebBrowserAction ["ExecJS", _script];
 
         true;
@@ -62,7 +62,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
 
     private _script = format [
         "updateLoadoutNames(%1);updateWeight(%2, %3);",
-        [] call WLC_fnc_getLoadoutNames,
+        [_texture] call WLC_fnc_getLoadoutNames,
         _weight,
         _maxLoad
     ];

@@ -77,11 +77,11 @@ BIS_WL_allSectors = BIS_WL_allSectors select { !isNull _x };
 			_size = ((_pos1 distance2D _pos2) / 2) - 150;
 			_dir = _pos1 getDir _pos2;
 			private _linkMarker = createMarkerLocal [format ["BIS_WL_linkMrkr_%1", _i], _center];
-			_linkMarker setMarkerAlphaLocal 0.5;
+			_linkMarker setMarkerAlphaLocal 1;
 			_linkMarker setMarkerColorLocal "ColorBlack";
 			_linkMarker setMarkerShapeLocal "RECTANGLE";
 			_linkMarker setMarkerDirLocal _dir;
-			_linkMarker setMarkerSizeLocal [40, _size];
+			_linkMarker setMarkerSizeLocal [20, _size];
 			BIS_WL_sectorLinks pushBack _linkMarker;
 
 			private _existingSectorMarkers = WL_linkSectorMarkers getOrDefault [hashValue _sector, []];

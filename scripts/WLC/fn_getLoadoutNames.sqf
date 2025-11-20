@@ -1,4 +1,5 @@
 #include "includes.inc"
+params ["_texture"];
 
 private _loadoutNames = [];
 for "_i" from 0 to 9 do {
@@ -15,42 +16,35 @@ for "_i" from 0 to 9 do {
     if (count _primaryWeapon > 0) then {
         _primaryWeapon = _primaryWeapon select 0;
         private _primaryWeaponName = getText (configFile >> "CfgWeapons" >> _primaryWeapon >> "displayName");
-        private _primaryWeaponNameArray = toArray _primaryWeaponName;
-        {
-            if (_x == 160) then {
-                _primaryWeaponNameArray set [_forEachIndex, 32];
-            };
-        } forEach _primaryWeaponNameArray;
-        _loadoutName pushBack (toString _primaryWeaponNameArray);
+        _loadoutName pushBack _primaryWeaponName;
     };
 
     private _secondaryWeapon = _loadoutData select 1;
     if (count _secondaryWeapon > 0) then {
         _secondaryWeapon = _secondaryWeapon select 0;
         private _secondaryWeaponName = getText (configFile >> "CfgWeapons" >> _secondaryWeapon >> "displayName");
-        private _secondaryWeaponNameArray = toArray _secondaryWeaponName;
-        {
-            if (_x == 160) then {
-                _secondaryWeaponNameArray set [_forEachIndex, 32];
-            };
-        } forEach _secondaryWeaponNameArray;
-        _loadoutName pushBack (toString _secondaryWeaponNameArray);
+        _loadoutName pushBack _secondaryWeaponName;
     };
 
     private _handgun = _loadoutData select 2;
     if (count _handgun > 0) then {
         _handgun = _handgun select 0;
         private _handgunName = getText (configFile >> "CfgWeapons" >> _handgun >> "displayName");
-        private _handgunNameArray = toArray _handgunName;
+        _loadoutName pushBack _handgunName;
+    };
+    _loadoutName = _loadoutName apply {
+        private _loadoutNameArray = toArray _x;
         {
             if (_x == 160) then {
-                _handgunNameArray set [_forEachIndex, 32];
+                _loadoutNameArray set [_forEachIndex, 32];
             };
-        } forEach _handgunNameArray;
-        _loadoutName pushBack (toString _handgunNameArray);
+        } forEach _loadoutNameArray;
+        toString _loadoutNameArray;
     };
-
     _loadoutName = _loadoutName select { _x != "" };
+    _loadoutName = _loadoutName apply {
+        _texture ctrlWebBrowserAction ["ToBase64", _x];
+    };
     _loadoutNames pushBack _loadoutName;
 };
 

@@ -31,7 +31,7 @@ if (isNull (findDisplay 160 displayCtrl 51)) then {
     _markerSizeArr = [_markerSize, _markerSize];
 
     {
-        _x setMarkerSizeLocal [40 * _mapScale * BIS_WL_mapSizeIndex, (markerSize _x) # 1];
+        _x setMarkerSizeLocal [20 * _mapScale * BIS_WL_mapSizeIndex, (markerSize _x) # 1];
     } forEach BIS_WL_sectorLinks;
 
     {
