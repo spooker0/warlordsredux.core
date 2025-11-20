@@ -20,8 +20,6 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["add-waypoint", "A3\ui_f\data\map\markers\military\box_CA.paa"],
         ["control-driver", "a3\ui_f\data\IGUI\Cfg\CommandBar\imageDriver_ca.paa"],
         ["control-gunner", "a3\ui_f\data\IGUI\Cfg\CommandBar\imageGunner_ca.paa"],
-        ["delete", "a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca.paa"],
-        ["delete-fob", "a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca.paa"],
         ["ew", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
         ["fortify-stronghold", "A3\ui_f\data\map\mapcontrol\Ruin_CA.paa"],
         ["ft", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
@@ -38,12 +36,15 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["ft-stronghold-near", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
         ["ft-stronghold-test", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
         ["ft-tent", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
+        ["lock-fob", "a3\modules_f\data\iconunlock_ca.paa"],
         ["loiter", "A3\ui_f\data\map\markers\military\box_CA.paa"],
         ["kick", "a3\modules_f\data\iconunlock_ca.paa"],
         ["mark-sector", "A3\ui_f\data\map\markers\handdrawn\flag_CA.paa"],
         ["move", "A3\ui_f\data\map\markers\military\box_CA.paa"],
         ["radar-operate", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
         ["radar-rotate", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
+        ["remove", "a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca.paa"],
+        ["remove-fob", "a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca.paa"],
         ["remove-stronghold", "a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca.paa"],
         ["repair-fob", "a3\ui_f\data\igui\cfg\actions\repair_ca.paa"],
         ["repair-stronghold", "a3\ui_f\data\igui\cfg\actions\repair_ca.paa"],
@@ -63,16 +64,20 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         {
             private _buttonId = _x;
             private _buttonLabel = _y # 0;
-            private _buttonEnabled = _y # 1;
+            private _buttonCost = _y # 1;
+            private _buttonCanAfford = _y # 2;
+            private _buttonEnabled = _y # 3;
 
             _buttonsData pushBack [
                 _buttonId,
                 _buttonLabel,
+                _buttonCost,
+                _buttonCanAfford,
                 _buttonEnabled,
                 _menuButtonIconMap getOrDefault [_buttonId, ""]
             ];
         } forEach _menuButtons;
-        _buttonsData = [_buttonsData, [], { if (_x # 2) then { _x # 0 } else { "zzz" + (_x # 0) } }, "ASCEND"] call BIS_fnc_sortBy;
+        _buttonsData = [_buttonsData, [], { if (_x # 4) then { _x # 0 } else { "zzz" + (_x # 0) } }, "ASCEND"] call BIS_fnc_sortBy;
 
         private _actionTargets = uiNamespace getVariable ["WL2_assetTargetsSelected", []];
         private _actionTarget = if (count _actionTargets > _targetId) then {
@@ -114,7 +119,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
     private _menuButton = _menuButtons getOrDefault [_buttonId, []];
 
     if (count _menuButton == 0) exitWith { false };
-    private _buttonData = _menuButton # 2;
+    private _buttonData = _menuButton # 4;
 
     scopeName "buttonClickScope";
     private _actionTargets = uiNamespace getVariable ["WL2_assetTargetsSelected", []];

@@ -9,9 +9,6 @@ player addEventHandler ["GetInMan", {
 	if (_vehicle isKindOf "Air" && typeof _vehicle != "Steerable_Parachute_F") then {
 		0 spawn WL2_fnc_betty;
 	};
-	if ((_vehicle getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player) then {
-		_vehicle setVariable ["BIS_WL_lastActive", 0];
-	};
 }];
 
 player addEventHandler ["Killed", {
@@ -42,9 +39,6 @@ player addEventHandler ["GetOutMan", {
 		params ["_unit"];
 		uiSleep 5;
 		_unit allowDamage true;
-	};
-	if (((_vehicle getVariable "BIS_WL_ownerAsset") == (getPlayerUID player)) && (pricehash getOrDefault [typeOf _vehicle, 300] <= 200)) then {
-		_vehicle setVariable ["BIS_WL_lastActive", serverTime + 600];
 	};
 
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];

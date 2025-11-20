@@ -27,68 +27,39 @@ waitUntil {
 		isPlayer player
 	}
 };
+
+private _text = toLower (name player);
+private _list = getArray (missionConfigFile >> "adminFilter");
+if ((_list findIf {
+	[_x, _text] call BIS_fnc_inString
+}) != -1) exitWith {
+	"BlockScreen" setDebriefingText ["Admin", localize "STR_A3_nameFilter_info", localize "STR_A3_nameFilter"];
+	endMission "BlockScreen";
+	forceEnd;
+};
+
 WL_LoadingState = 1;
 
+call WL2_fnc_sidePicker;
+
+waitUntil {
+	uiSleep 0.001;
+	player getVariable ["WL2_playerSide", sideUnknown] == side group player
+};
+BIS_WL_playerSide = player getVariable ["WL2_playerSide", sideUnknown];
+
+WL_LoadingState = 3;
+
 private _uid = getPlayerUID player;
-private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
-private _isModerator = _uid in (getArray (missionConfigFile >> "moderatorIDs"));
-private _isSpectator = _uid in (getArray (missionConfigFile >> "spectatorIDs"));
 
 "client" call WL2_fnc_varsInit;
 waitUntil {
 	!(isNil "BIS_WL_playerSide")
 };
 
-#if WL_STOP_TEAM_SWITCH
-if !(_isAdmin || _isModerator || _isSpectator) then {
-	private _uid = getPlayerUID player;
-	private _switch = format ["WL2_teamBlocked_%1", _uid];
-	waitUntil {
-		!isNil {
-			missionNamespace getVariable _switch
-		}
-	};
-	WL_LoadingState = 2;
-
-	if (missionNamespace getVariable _switch) exitWith {
-		["main"] call BIS_fnc_endLoadingScreen;
-		"BlockScreen" setDebriefingText ["Switch Teams", localize "STR_A3_WL_switch_teams_info", localize "STR_A3_WL_switch_teams"];
-		endMission "BlockScreen";
-		forceEnd;
-	};
-
-	private _imbalanced = format ["WL2_balanceBlocked_%1", _uid];
-	waitUntil {
-		!isNil {
-			missionNamespace getVariable _imbalanced
-		}
-	};
-	WL_LoadingState = 3;
-
-	if (missionNamespace getVariable _imbalanced) exitWith {
-		["main"] call BIS_fnc_endLoadingScreen;
-		"BlockScreen" setDebriefingText ["Switch Teams", "It seems that the teams are not balanced, please head back to the lobby and join the other team, Thank you.", "Teams are imbalanced."];
-		endMission "BlockScreen";
-		forceEnd;
-	};
-
-	private _text = toLower (name player);
-	private _list = getArray (missionConfigFile >> "adminFilter");
-	if ((_list findIf {
-		[_x, _text] call BIS_fnc_inString
-	}) != -1) exitWith {
-		["main"] call BIS_fnc_endLoadingScreen;
-		"BlockScreen" setDebriefingText ["Admin", localize "STR_A3_nameFilter_info", localize "STR_A3_nameFilter"];
-		endMission "BlockScreen";
-		forceEnd;
-	};
-};
-#endif
-
 WL_LoadingState = 4;
 
 if !(BIS_WL_playerSide in BIS_WL_sidesArray) exitWith {
-	["main"] call BIS_fnc_endLoadingScreen;
 	"BlockScreen" setDebriefingText ["Error", "Your unit is not a Warlords competitor", "Warlords Mission Error."];
 	endMission "BlockScreen";
 	forceEnd;
@@ -225,13 +196,6 @@ if !(isDedicated) then {
 	private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
 	while { !BIS_WL_missionEnd } do {
 		private _vehicles = missionNamespace getVariable [_ownedVehicleVar, []];
-		{
-			private _lastActiveTime = _x getVariable ["BIS_WL_lastActive", 0];
-			if (_lastActiveTime < serverTime && _lastActiveTime > 1 && count (crew _x) == 0) then {
-				deleteVehicle _x;
-			};
-		} forEach _vehicles;
-
 		private _newVehicles = _vehicles select {
 			alive _x
 		} select {
@@ -340,7 +304,7 @@ player spawn APS_fnc_setupProjectiles;
 	[] call MENU_fnc_updateViewDistance;
 };
 0 spawn WL2_fnc_interceptAction;
-call WL2_fnc_controlUAVAction;
+0 spawn WL2_fnc_controlDroneActions;
 if (!isServer) then {
 	0 spawn WL2_fnc_cleanupCarrier;
 };

@@ -98,7 +98,7 @@ private _fastestCapture = 20;
 private _slowestCapture = 50;
 #endif
 
-private _sectorGroup = createGroup [CIVILIAN, true];
+private _sectorGroup = createGroup [civilian, true];
 {
 	private _sector = _x;
 	if (isNull _sector) then {

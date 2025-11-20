@@ -8,9 +8,11 @@ if (!isDedicated) then {
 	// Store game data for replay
 	private _drawIcons = missionNamespace getVariable ["WL2_drawIcons", []];
 	private _drawEllipses = missionNamespace getVariable ["WL2_drawEllipses", []];
+	private _drawRectangles = missionNamespace getVariable ["WL2_drawRectangles", []];
 	private _drawSectorIcons = missionNamespace getVariable ["WL2_drawSectorIcons", []];
 	profileNamespace setVariable ["WL2_drawIcons", toJSON _drawIcons];
 	profileNamespace setVariable ["WL2_drawEllipses", toJSON _drawEllipses];
+	profileNamespace setVariable ["WL2_drawRectangles", toJSON _drawRectangles];
 	profileNamespace setVariable ["WL2_drawSectorIcons", toJSON _drawSectorIcons];
 	saveProfileNamespace;
 

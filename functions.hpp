@@ -42,6 +42,7 @@ class CfgFunctions {
 			class gpsMunition {};
 			class handleGPSKeypress {};
 			class handleKeypress {};
+			class loalAuto {};
 			class maneuver {};
 			class missileCamera {};
 			class remoteMunition {};
@@ -188,6 +189,7 @@ class CfgFunctions {
 			class rewardCapture {};
 			class setupCarrier {};
 			class showHint {};
+			class sidePicker {};
 			class sideToFaction {};
 			class spawnAtBase {};
 			class spectrumInterface {};
@@ -209,16 +211,16 @@ class CfgFunctions {
 			class claimAction {};
 			class claimEligibility {};
 			class constructRallyPoint {};
+			class controlDroneActions {};
 			class controlGunnerAction {};
 			class controlGunnerEligibility {};
-			class controlUAVAction {};
-			class controlUAVEligibility {};
 			class demolishAction {};
 			class demolishEligibility {};
 			class demolishStep {};
 			class deployableAddAction {};
 			class deployableEligibility {};
 			class deployCrateAction {};
+			class fieldFortificationAction {};
 			class getVehicleLockStatus {};
 			class grapple {};
 			class hmdSendData {};
@@ -237,6 +239,7 @@ class CfgFunctions {
 			class radarOperateUpdate {};
 			class radarRotateAction {};
 			class radarRotateUpdate {};
+			class rallyPointAction {};
 			class rappelAction {};
 			class rappelActionEligibility {};
 			class rearmAction {};

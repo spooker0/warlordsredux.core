@@ -10,7 +10,7 @@ if !(_category in ["Fixed Wing", "Rotary Wing", "Remote Control"]) exitWith {
 };
 
 #if WL_AIR_POP_LIMIT
-if ((playersNumber west) <= 7 && (playersNumber east) <= 7) exitWith {
+if (count allPlayers < 14) exitWith {
     [false, "Player count is too low to deploy heavily armed aerial assets."];
 };
 #endif

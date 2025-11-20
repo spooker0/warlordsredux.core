@@ -21,8 +21,19 @@ private _forwardBase = if (count _forwardBases > 0) then {
     objNull
 };
 
-if (!isNull _forwardBase && _forwardBase getVariable ["WL2_forwardBaseSupplies", -1] < _cost) exitWith {
+private _baseTime = _forwardBase getVariable ["WL2_forwardBaseTime", -1];
+if (!isNull _forwardBase && serverTime < _baseTime) exitWith {
+    [false, "Forward base is still under construction."];
+};
+
+private _insufficientSupplies = _forwardBase getVariable ["WL2_forwardBaseSupplies", -1] < _cost;
+if (!isNull _forwardBase && _insufficientSupplies) exitWith {
     [false, "Insufficient supplies in forward base."];
+};
+
+private _isLocked = _forwardBase getVariable ["WL2_forwardBaseLocked", false];
+if (!isNull _forwardBase && _isLocked) exitWith {
+    [false, "Forward base is locked."];
 };
 
 private _inRange = count _forwardBases > 0 || count _findCurrentSector > 0;

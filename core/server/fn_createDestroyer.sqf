@@ -28,7 +28,7 @@ _controller allowDamage false;
 _controller enableSimulationGlobal false;
 _controller setObjectTextureGlobal [1, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.2,""#000000"",""#ffffff"",""MISSILE\nBATTERY\nCONTROL"")"];
 _controller setObjectTextureGlobal [2, "\A3\Static_F_Destroyer\Ship_MRLS_01\Data\Ui\Ship_MRLS_01_picture_CA.paa"];
-_controller setObjectTextureGlobal [3, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""AMMO\n1"")"];
+_controller setObjectTextureGlobal [3, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""AMMO\n0"")"];
 _destroyerBase setVariable ["WL2_destroyerController", _controller, true];
 
 private _mrls = objNull;
@@ -78,16 +78,17 @@ _destroyerMarker setMarkerColor "ColorWhite";
 [_destroyerBase, objNull, _controller, true] remoteExec ["WL2_fnc_createDestroyerClient", 0, true];
 
 private _nextReloadTime = serverTime + WL_DESTROYER_RELOAD;
-private _nextRespawnTime = serverTime + 1200;
+private _nextRespawnTime = serverTime + WL_DESTROYER_START;
 while { alive _destroyerBase } do {
     uiSleep 30;
-    if (serverTime >= _nextReloadTime) then {
-        private _turretOwner = _mrls turretOwner [0];
-        [_mrls] remoteExec ["WL2_fnc_addMissileToMag", _turretOwner];
-        _nextReloadTime = serverTime + WL_DESTROYER_RELOAD;
-    };
 
     if (alive _mrls) then {
+        if (serverTime >= _nextReloadTime) then {
+            private _turretOwner = _mrls turretOwner [0];
+            [_mrls] remoteExec ["WL2_fnc_addMissileToMag", _turretOwner];
+            _nextReloadTime = serverTime + WL_DESTROYER_RELOAD;
+        };
+
         _nextRespawnTime = serverTime + WL_DESTROYER_RESPAWN;
     } else {
         private _controllerImage = if (serverTime >= _nextRespawnTime) then {

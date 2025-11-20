@@ -1,0 +1,76 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: 'Consolas', monospace;
+    font-weight: bold;
+    user-select: none;
+}
+
+.picker-wrapper {
+    height: 100vh;
+    width: 100vw;
+    color: white;
+    background-color: #555;
+}
+
+.instruction {
+    position: absolute;
+    text-align: center;
+    width: 100vw;
+    left: 0;
+    top: 5vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    font-size: 50pt;
+}
+
+.blufor-side,
+.opfor-side {
+    position: absolute;
+    text-align: center;
+    width: 40vw;
+    height: 60vh;
+    top: 20vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 30pt;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    border-radius: 10px;
+    border: 4px solid white;
+}
+
+.blufor-side:hover {
+    background-color: rgba(0, 0, 255, 0.2);
+}
+.opfor-side:hover {
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+.blufor-side {
+    left: 5vw;
+}
+
+.opfor-side {
+    right: 5vw;
+}
+
+.blufor-icon,
+.opfor-icon {
+    width: 70%;
+    margin: auto auto;
+}
+
+.disabled {
+    background-color: transparent !important;
+}
+
+.side-player-names {
+    font-size: 10pt;
+    margin: 0;
+    padding: 0;
+}

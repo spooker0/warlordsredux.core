@@ -10,24 +10,6 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
     while { !BIS_WL_missionEnd } do {
         uiSleep 0.5;
 
-        private _cursorObject = cursorObject;
-        private _access = [_cursorObject, player, "driver"] call WL2_fnc_accessControl;
-        private _isDrone = [_cursorObject] call WL2_fnc_isDrone;
-        if (_isDrone && _access # 0) then {
-            private _remoteActionId = player getVariable ["WL2_controlUAVActionId", -1];
-            private _assetTypeName = [_cursorObject] call WL2_fnc_getAssetTypeName;
-            private _remoteText = format ["Control %1</t>", _assetTypeName];
-            player setUserActionText [_remoteActionId, _remoteText];
-        } else {
-            private _remoteControlTarget = uiNamespace getVariable ["WL2_remoteControlTarget", objNull];
-            if (alive _remoteControlTarget) then {
-                private _remoteActionId = player getVariable ["WL2_controlUAVActionId", -1];
-                private _assetTypeName = [vehicle _remoteControlTarget] call WL2_fnc_getAssetTypeName;
-                private _remoteText = format ["Control %1</t>", _assetTypeName];
-                player setUserActionText [_remoteActionId, _remoteText];
-            };
-        };
-
         private _nearbyUnconscious = (player nearObjects ["Man", 8]) select {
             lifeState _x == "INCAPACITATED"
         };
@@ -79,7 +61,12 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
         _nearbyDemolishableItems = _nearbyDemolishableItems select {
             private _isNotStronghold = isNull (_x getVariable ["WL_strongholdSector", objNull]);
             private _distanceLimit = if (_isNotStronghold) then {
-                if (_x isKindOf "StaticShip") then { 100 }  else { 10 };
+                if (_x isKindOf "StaticShip") then { 100 } else {
+                    private _isRallyBuilding = _x getVariable ["WL2_orderedClass", ""] == "Land_RallyBuilding";
+                    if (_isRallyBuilding) then {
+                        ((boundingBoxReal _x) # 2) max 15;
+                    } else { 10 };
+                };
             } else { 35 };
             private _inAngle = if (_isNotStronghold) then {
                 [getPosASL player, getDir player, 90, getPosASL _x] call WL2_fnc_inAngleCheck;
@@ -155,6 +142,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
 
         uiNamespace setVariable ["WL2_damagedDrawIcons", _demolishIcons];
 
+        private _cursorObject = cursorObject;
         private _playerIconTextCache = uiNamespace getVariable ["WL2_playerIconTextCache", createHashMap];
         private _playerIconColorCache = uiNamespace getVariable ["WL2_playerIconColorCache", createHashMap];
         private _viewDistance = (getObjectViewDistance # 0) min 1000;
@@ -172,7 +160,8 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
 
             if (BIS_WL_playerSide != _assetSide) then {
                 private _isNotStronghold = isNull (_x getVariable ["WL_strongholdSector", objNull]);
-                if (_isNotStronghold) then { continue; };
+                private _isNotRallyPoint = (_x getVariable ["WL2_orderedClass", ""] != "Land_RallyBuilding");
+                if (_isNotStronghold && _isNotRallyPoint) then { continue; };
             };
 
             private _isntCursorTarget = _x != cursorTarget && _x != _cursorObject;

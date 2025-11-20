@@ -204,15 +204,16 @@ _controller addAction [
             player remoteControl (crew _mrls select 0);
 
             uiNamespace setVariable ["WL2_usingVLS", true];
-            private _areControlsReady = true;
             while {
                 cameraOn == _mrls &&
                 alive player &&
-                lifeState player != "INCAPACITATED"
+                lifeState player != "INCAPACITATED" &&
+                player distance2D _target < 50
             } do {
                 uiSleep 0.1;
             };
 
+            player remoteControl objNull;
             uiNamespace setVariable ["WL2_usingVLS", false];
             _target setVariable ["WL2_controller", objNull, true];
         };

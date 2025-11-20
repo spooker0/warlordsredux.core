@@ -58,6 +58,7 @@ private _mapButtonDisplay = uiNamespace getVariable ["WL2_mapButtonDisplay", dis
 if (!isNull _mapButtonDisplay) exitWith {
     uiNamespace setVariable ["WL2_mapButtonDisplayFirstFrameAfterClose", true];
 };
+if (dialog) exitWith {};
 
 private _firstFrameAfterClose = uiNamespace getVariable ["WL2_mapButtonDisplayFirstFrameAfterClose", true];
 
@@ -68,6 +69,8 @@ if (inputMouse 0 == 0) exitWith {
 };
 
 if (_firstFrameAfterClose) exitWith {};
+
+if (WL_SectorActionTarget in BIS_WL_selection_availableSectors) exitWith {};
 
 private _singletonScriptHandle = uiNamespace getVariable ["WL2_mapMouseActionSingleton", scriptNull];
 if (!isNull _singletonScriptHandle) exitWith {};
@@ -82,11 +85,8 @@ private _singletonScriptHandle = [_map] spawn {
     private _targetsClicked = [];
 
     if (!isNull WL_SectorActionTarget) then {
-        private _isVotingThisSector = WL_SectorActionTarget in BIS_WL_selection_availableSectors;
-        if (!_isVotingThisSector) then {
-            [WL_SectorActionTarget, count _targetsClicked] call WL2_fnc_sectorMapButtons;
-            _targetsClicked pushBack WL_SectorActionTarget;
-        };
+        [WL_SectorActionTarget, count _targetsClicked] call WL2_fnc_sectorMapButtons;
+        _targetsClicked pushBack WL_SectorActionTarget;
     };
 
     if (count WL_AssetActionTargets > 0) then {

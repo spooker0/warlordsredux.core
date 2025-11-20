@@ -26,6 +26,7 @@ private _drawIconsSelectable = [];
 private _drawIconsFollowMouse = [];
 private _drawEllipses = [];
 private _drawLines = [];
+private _drawRectangles = [];
 
 private _mapData = missionNamespace getVariable ["WL2_mapData", createHashMap];
 private _side = _mapData getOrDefault ["side", sideUnknown];
@@ -220,12 +221,20 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		};
 	};
 
+	private _isLocked = _base getVariable ["WL2_forwardBaseLocked", false];
+	private _baseIcon = if (_isLocked) then {
+		"a3\modules_f\data\iconlock_ca.paa"
+	} else {
+		"\A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_requestLeadership_ca.paa"
+	};
+	private _baseIconSize = if (_isLocked) then { 25 * _mapIconScale } else { 40 * _mapIconScale };
+
 	_drawIcons pushBack [
-		"\A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_requestLeadership_ca.paa",
+		_baseIcon,
 		_baseColor,
 		_position,
-		40 * _mapIconScale,
-		40 * _mapIconScale,
+		_baseIconSize,
+		_baseIconSize,
 		0,
 		format ["Forward Base %1", _baseText],
 		0,
@@ -270,6 +279,28 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		];
 	} forEach _sectorsInRange;
 } forEach _forwardBases;
+
+private _rallyPoints = _mapData getOrDefault ["rallyPoints", []];
+{
+	private _rallyPointSide = [_x] call WL2_fnc_getAssetSide;
+	if (_rallyPointSide != _side && !_drawAll && cameraOn distance2D _x > 500) then {
+		continue;
+	};
+
+	private _boundingBox = boundingBoxReal _x;
+
+	private _xLength = (_boundingBox # 1 # 0) - (_boundingBox # 0 # 0);
+	private _yLength = (_boundingBox # 1 # 1) - (_boundingBox # 0 # 1);
+
+	_drawRectangles pushBack [
+		getPosASL _x,
+		_xLength / 2,
+		_yLength / 2,
+		getDir _x,
+		[1, 1, 1, 1],
+		"#(rgb,1,1,1)color(0,0,1,0.2)"
+	];
+} forEach _rallyPoints;
 
 private _fobSupplies = _mapData getOrDefault ["fobSupplies", []];
 {
@@ -607,10 +638,12 @@ if (_drawMode == 2) then {
 if (_drawMode == 2) then {
 	private _storedDrawIcons = missionNamespace getVariable ["WL2_drawIcons", []];
 	private _storedDrawEllipses = missionNamespace getVariable ["WL2_drawEllipses", []];
+	private _storedDrawRectangles = missionNamespace getVariable ["WL2_drawRectangles", []];
 	private _storedSectorIcons = missionNamespace getVariable ["WL2_drawSectorIcons", []];
 
 	_storedDrawIcons pushBack _drawIcons;
 	_storedDrawEllipses pushBack _drawEllipses;
+	_storedDrawRectangles pushBack _drawRectangles;
 	_storedSectorIcons pushBack _drawSectorIcons;
 } else {
 	uiNamespace setVariable ["WL2_drawIcons", _drawIcons];
@@ -618,6 +651,7 @@ if (_drawMode == 2) then {
 	uiNamespace setVariable ["WL2_drawIconsSelectable", _drawIconsSelectable];
 	uiNamespace setVariable ["WL2_drawIconsFollowMouse", _drawIconsFollowMouse];
 	uiNamespace setVariable ["WL2_drawEllipses", _drawEllipses];
+	uiNamespace setVariable ["WL2_drawRectangles", _drawRectangles];
 	uiNamespace setVariable ["WL2_drawLines", _drawLines];
 };
 

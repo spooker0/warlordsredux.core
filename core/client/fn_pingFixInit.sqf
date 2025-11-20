@@ -14,7 +14,7 @@
 			private _pos = lineIntersectsSurfaces [_origin, _target, cameraOn] param [0, [_default]] select 0;
 			private _posAGL = ASLToAGL _pos;
 
-			private _targets = allPlayers select { side _x == side player && _x != player };
+			private _targets = allPlayers select { side group _x == side group player && _x != player };
 			if (count _targets > 0) then {
 				[_posAGL, isRemoteControlling player] remoteExec ["WL2_fnc_pingFix", _targets];
 			};

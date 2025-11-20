@@ -20,7 +20,7 @@ function setButtons(buttonGroups, left, top) {
             btn.className = 'button';
             btn.dataset.targetId = targetId;
 
-            const [id, label, enabled, iconUrl] = button;
+            const [id, label, cost, canAfford, enabled, iconUrl] = button;
             btn.dataset.buttonId = id;
 
             if (!enabled) {
@@ -39,6 +39,22 @@ function setButtons(buttonGroups, left, top) {
             const labelElement = document.createElement('span');
             labelElement.className = 'button-label';
             labelElement.innerHTML = label;
+
+            if (cost >= 0) {
+                const costElement = document.createElement('span');
+                costElement.className = 'button-cost';
+                const costText = cost === 0 ? 'Free' : `Cost: ${cost}`;
+                costElement.innerHTML = `(${costText})`;
+
+                if (canAfford) {
+                    costElement.style.color = 'lightgreen';
+                } else {
+                    costElement.style.color = 'red';
+                }
+
+                labelElement.appendChild(costElement);
+            }
+
             btn.appendChild(labelElement);
 
             btn.addEventListener('mousedown', function (event) {

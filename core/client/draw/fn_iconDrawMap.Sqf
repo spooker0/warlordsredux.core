@@ -8,6 +8,7 @@ private _drawIconsAnimated = uiNamespace getVariable ["WL2_drawIconsAnimated", [
 private _drawIconsFollowMouse = uiNamespace getVariable ["WL2_drawIconsFollowMouse", []];
 private _drawLines = uiNamespace getVariable ["WL2_drawLines", []];
 private _drawEllipses = uiNamespace getVariable ["WL2_drawEllipses", []];
+private _drawRectangles = uiNamespace getVariable ["WL2_drawRectangles", []];
 
 {
 	_m drawIcon _x;
@@ -40,6 +41,10 @@ private _angle = (serverTime * 75) % 360;
 {
 	_m drawEllipse _x;
 } forEach _drawEllipses;
+
+{
+	_m drawRectangle _x;
+} forEach _drawRectangles;
 
 if (WL_IsReplaying) then {
 	private _drawSectorIcons = uiNamespace getVariable ["WL2_drawSectorIcons", []];

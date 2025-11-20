@@ -119,11 +119,11 @@ private _interceptAction = {
             true;
         };
         case "SwitchToUAVDriver": {
-            uiNamespace setVariable ["WL2_remoteControlSeat", "Driver"];
+            cameraOn setVariable ["WL2_lastSeatUsed", "Driver"];
             false;
         };
         case "SwitchToUAVGunner": {
-            uiNamespace setVariable ["WL2_remoteControlSeat", "Gunner"];
+            cameraOn setVariable ["WL2_lastSeatUsed", "Gunner"];
             false;
         };
         case "UserType": {

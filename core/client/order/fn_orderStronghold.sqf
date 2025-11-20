@@ -57,6 +57,9 @@ if (_hasOldStronghold) then {
     [_currentSector, true] call WL2_fnc_removeStronghold;
 };
 
+_stronghold setVariable ["WL2_orderedClass", typeof _stronghold, true];
+_stronghold setVariable ["BIS_WL_ownerAsset", "123", true];
+
 private _markerName = format ["WL_stronghold_%1", _sectorName];
 private _markerTextName = format ["WL_strongholdText_%1", _sectorName];
 

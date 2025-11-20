@@ -8,12 +8,12 @@ while { !BIS_WL_missionEnd } do {
 	};
 
 	{
-		_x spawn WL2_fnc_setupNewPlayer;
+		[_x] spawn WL2_fnc_setupNewPlayer;
 	} forEach _newPlayers;
 
 	private _thresholds = [8, 15, 20, 30, 40];
 
-	private _players = (playersNumber west) + (playersNumber east);
+	private _players = count allPlayers;
 	private _value = 1;
 	{
 		if (_players < _x) then {

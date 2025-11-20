@@ -27,15 +27,16 @@ private _destroyerId = 0;
     private _destroyer = getNumber (_sector >> "destroyer");
     private _carrier = getNumber (_sector >> "carrier");
 
-    if (_destroyer == 1 || (_carrier == 1 && random 1 < WL_DESTROYER_CHANCE)) then {
-        private _actualArea = [_location, _area # 0, _area # 1, _area # 2, _area # 3];
+    if (_destroyer == 1) then {
+        private _destroyerDir = random 360;
+        private _actualArea = [_location, _area # 0, _area # 1, _destroyerDir, _area # 3];
         private _objectsInCarrier = (allMissionObjects "") inAreaArray _actualArea;
         {
             deleteVehicle _x;
         } forEach _objectsInCarrier;
 
         _location set [2, 0];
-        [_location, 90 + (_area # 2), _name, _destroyerId] spawn WL2_fnc_createDestroyer;
+        [_location, 90 + _destroyerDir, _name, _destroyerId] spawn WL2_fnc_createDestroyer;
         _destroyerId = _destroyerId + 1;
 
         continue;

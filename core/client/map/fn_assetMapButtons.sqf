@@ -16,7 +16,7 @@ _asset setVariable ["WL2_mapButtonText", _assetName];
 
 private _ownsVehicle = (_asset getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player;
 if (!isPlayer _asset && _ownsVehicle) then {
-    [_asset, _targetId, "delete", "<span class='red'>Delete</span>", {
+    [_asset, _targetId, "remove", "<span class='red'>Remove</span>", {
         params ["_asset"];
         if ((_asset getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player) then {
             _asset spawn WL2_fnc_deleteAssetFromMap;
@@ -229,6 +229,33 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         ]
     ] call WL2_fnc_addTargetMapButton;
 
+    // Lock FOB Button
+    private _isLocked = _asset getVariable ["WL2_forwardBaseLocked", false];
+    private _lockText = if (_isLocked) then {
+        "<span class='red'>Forward base: Locked</span>";
+    } else {
+        "<span class='green'>Forward base: Unlocked</span>";
+    };
+    private _lockFOBExecute = {
+        params ["_asset"];
+        private _isLocked = _asset getVariable ["WL2_forwardBaseLocked", false];
+        _isLocked = !_isLocked;
+        _asset setVariable ["WL2_forwardBaseLocked", _isLocked, true];
+        if (_isLocked) then {
+            "<span class='red'>Forward base: Locked</span>";
+        } else {
+            "<span class='green'>Forward base: Unlocked</span>";
+        };
+    };
+    [
+        _asset, _targetId,
+        "lock-fob",
+        _lockText,
+        _lockFOBExecute,
+        false,
+        "lockFOB"
+    ] call WL2_fnc_addTargetMapButton;
+
     // Delete FOB Button
     private _deleteFOBExecute = {
         params ["_asset"];
@@ -240,16 +267,11 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     };
     [
         _asset, _targetId,
-        "delete-fob",
-        "Delete forward base",
+        "remove-fob",
+        "<span class='red'>Remove forward base</span>",
         _deleteFOBExecute,
         true,
-        "deleteFOB",
-        [
-            0,
-            "DeleteFOB",
-            "Fast Travel"
-        ]
+        "deleteFOB"
     ] call WL2_fnc_addTargetMapButton;
 
     private _repairFOBExecute = {
@@ -274,7 +296,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         [
             500,
             "RepairFOB",
-            "Fast Travel"
+            "Strategy"
         ]
     ] call WL2_fnc_addTargetMapButton;
 
@@ -319,8 +341,11 @@ if (_operateAccess && _isUav) then {
                 openMap false;
                 switchCamera _asset;
                 player remoteControl (driver _asset);
-                uiNamespace setVariable ["WL2_remoteControlTarget", _asset];
-                uiNamespace setVariable ["WL2_remoteControlSeat", "Driver"];
+
+                private _eligibleDrones = missionNamespace getVariable ["WL2_eligibleDrones", []];
+                _eligibleDrones pushBackUnique _asset;
+                missionNamespace setVariable ["WL2_eligibleDrones", _eligibleDrones];
+                _asset setVariable ["WL2_lastSeatUsed", "Driver"];
             };
         }, true] call WL2_fnc_addTargetMapButton;
     };
@@ -332,8 +357,11 @@ if (_operateAccess && _isUav) then {
                 openMap false;
                 switchCamera _asset;
                 player remoteControl (gunner _asset);
-                uiNamespace setVariable ["WL2_remoteControlTarget", _asset];
-                uiNamespace setVariable ["WL2_remoteControlSeat", "Gunner"];
+
+                private _eligibleDrones = missionNamespace getVariable ["WL2_eligibleDrones", []];
+                _eligibleDrones pushBackUnique _asset;
+                missionNamespace setVariable ["WL2_eligibleDrones", _eligibleDrones];
+                _asset setVariable ["WL2_lastSeatUsed", "Gunner"];
             };
         }, true] call WL2_fnc_addTargetMapButton;
     };
@@ -469,14 +497,14 @@ private _removeStrongholdExecute = {
 [
     _asset, _targetId,
     "remove-stronghold",
-    "Remove stronghold",
+    "<span class='red'>Remove stronghold</span>",
     _removeStrongholdExecute,
     true,
     "removeStronghold",
     [
         WL_COST_STRONGHOLD,
         "RemoveStronghold",
-        "Fast Travel"
+        "Strategy"
     ]
 ] call WL2_fnc_addTargetMapButton;
 
@@ -498,7 +526,7 @@ private _repairStrongholdExecute = {
     [
         WL_COST_STRONGHOLD / 2,
         "RepairStronghold",
-        "Fast Travel"
+        "Strategy"
     ]
 ] call WL2_fnc_addTargetMapButton;
 
@@ -555,7 +583,7 @@ private _fortifyStrongholdExecute = {
     [
         WL_COST_FORTIFY,
         "FortifyStronghold",
-        "Fortify Stronghold"
+        "Strategy"
     ]
 ] call WL2_fnc_addTargetMapButton;
 

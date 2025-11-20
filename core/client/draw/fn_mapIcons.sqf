@@ -155,6 +155,12 @@
 		};
 		_mapData set ["advancedSams", _advancedSams];
 
+		private _rallyPoints = missionNamespace getVariable ["WL2_rallyPoints", []];
+		_rallyPoints = _rallyPoints select { alive _x } select {
+			_x getVariable ["BIS_WL_ownerAsset", "123"] != "123"
+		};
+		_mapData set ["rallyPoints", _rallyPoints];
+
 		private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 		private _sectorMarkerThreshold = _settingsMap getOrDefault ["sectorMarkerTextThreshold", 0.4];
 		_sectorMarkerThreshold = linearConversion [0, 1, _sectorMarkerThreshold, -3, 0];
@@ -181,6 +187,7 @@
 		_mapData set ["enemySectorMarkers", _allSectorMarkers];
 
 		private _munitionList = cameraOn getVariable ["DIS_munitionList", []];
+		_munitionList = _munitionList select { alive _x };
 		_mapData set ["trackedProjectiles", _munitionList];
 
 		uiSleep 1;
@@ -220,6 +227,7 @@
 0 spawn {
 	missionNamespace setVariable ["WL2_drawIcons", []];
 	missionNamespace setVariable ["WL2_drawEllipses", []];
+	missionNamespace setVariable ["WL2_drawRectangles", []];
 	missionNamespace setVariable ["WL2_drawSectorIcons", []];
 
 	while { !BIS_WL_missionEnd } do {

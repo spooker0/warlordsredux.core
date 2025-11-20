@@ -135,19 +135,6 @@ addMissionEventHandler ["HandleChatMessage", {
 	};
 };
 
-//***Fetch price from requisitions.hpp using "priceHash getOrDefault [typeOf _asset, 200]"***/
-priceHash = createHashMap;
-_fullList = (missionNamespace getVariable (format ["WL2_purchasable_%1", side player]));
-{
-	if (_forEachIndex < 7) then {
-		_category = _x;
-		{
-			_x params["_name", "_cost"];
-			priceHash set [_name, _cost]
-		} forEach _category;
-	};
-} forEach _fullList;
-
 addMissionEventHandler ["EntityCreated", {
 	params ["_entity"];
 	if (!local _entity) exitWith {};

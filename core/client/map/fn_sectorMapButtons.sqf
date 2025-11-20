@@ -28,6 +28,12 @@ private _fastTravelHomeExecute = {
     params ["_sector"];
     BIS_WL_targetSector = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
     [0, ""] spawn WL2_fnc_executeFastTravel;
+
+    private _side = BIS_WL_playerSide;
+    private _enemyGroups = allGroups select { side _x != _side };
+    {
+        _x forgetTarget player;
+    } forEach _enemyGroups;
 };
 [
     _sector, _targetId,

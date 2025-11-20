@@ -84,7 +84,7 @@ if (_asset distance2D _sectorStronghold < _strongholdRadius) exitWith {
 private _isInWaterSector = _sector getVariable ["WL2_isAircraftCarrier", false] || {
     {
         _asset inArea _x
-    } count ["marker_USS Liberty_outline", "marker_USS Freedom_outline", "marker_USS Independence_outline"] > 0
+    } count WL_DESTROYER_OUTLINES > 0
 };
 if (_isInWaterSector && ((getPosASL _asset) # 2) < 5) exitWith {
     [true, "Asset cannot be deployed so close to water."];

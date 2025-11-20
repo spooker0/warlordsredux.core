@@ -90,7 +90,7 @@ private _textureSlots = getArray (_assetConfig >> "hiddenSelections");
 private _customTexturesList = [];
 private _defaultTextureList = getArray (_assetConfig >> "hiddenSelectionsTextures");
 
-private _side = side player;
+private _side = BIS_WL_playerSide;
 /*
 _customTexturesList pushBack [localize "STR_WLM_DEFAULT", _defaultTextureList, localize "STR_WLM_OFFICIAL"];
 _customTexturesList pushBack [format ["--- %1 ---", localize "STR_WLM_OFFICIAL"], "", ""];

@@ -18,7 +18,14 @@ if (typeName _requirements == "STRING") then {
 };
 switch (_className) do {
     case "BuildABear": {
-        private _asset = (group player) createUnit [typeof player, getPosATL player, [], 2, "NONE"];
+        private _unitType = switch (BIS_WL_playerSide) do {
+            case west: {"B_Soldier_TL_F"};
+            case east: {"O_Soldier_TL_F"};
+            case independent: {"I_Soldier_TL_F"};
+            default {"B_Soldier_TL_F"};
+        };
+
+        private _asset = (group player) createUnit [_unitType, getPosATL player, [], 2, "NONE"];
         _asset setVehiclePosition [getPosATL player, [], 0, "CAN_COLLIDE"];
         _asset setVariable ["BIS_WL_ownerAsset", getPlayerUID player, [2, clientOwner]];
         [player, "buildABear"] remoteExec ["WL2_fnc_handleClientRequest", 2];
@@ -51,6 +58,12 @@ switch (_className) do {
     case "FTHome": {
         BIS_WL_targetSector = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
         [0, ""] spawn WL2_fnc_executeFastTravel;
+
+        private _side = BIS_WL_playerSide;
+        private _enemyGroups = allGroups select { side _x != _side };
+        {
+            _x forgetTarget player;
+        } forEach _enemyGroups;
     };
     case "FTSeized": { 0 spawn WL2_fnc_orderFastTravel };
     case "FTConflict": { 1 spawn WL2_fnc_orderFastTravel };
@@ -99,9 +112,7 @@ switch (_className) do {
     };
     case "ClearVehicles": {
         private _playerAssets = missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], []];
-        private _eligibleAssets = _playerAssets select {
-            alive _x && ((getPosATL _x) # 2) < 10
-        };
+        private _eligibleAssets = _playerAssets select { alive _x };
         {
             private _unwantedPassengers = (crew _x) select {
                 _x != player &&
@@ -322,6 +333,9 @@ switch (_className) do {
                 uiSleep (random 1);
             } forEach WL_ASSET_DATA;
         };
+    };
+    case "TestRebalance": {
+        [player, getPlayerUID player] remoteExec ["WL2_fnc_rebalance", 2];
     };
     case "SwitchToGreen": {
         private _greenUnits = allUnits select {

@@ -23,7 +23,7 @@ if (_iconFromCache != "") exitWith {
 	_iconFromCache;
 };
 
-private _vehicleIcon = getText (configFile >> 'CfgVehicles' >> _vehicleType >> 'icon');
+private _vehicleIcon = getText (configFile >> "CfgVehicles" >> _vehicleType >> "icon");
 
 _mapIconCache set [_vehicleType, _vehicleIcon];
 _vehicleIcon;

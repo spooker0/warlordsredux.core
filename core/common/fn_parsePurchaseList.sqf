@@ -369,6 +369,14 @@ private _strategyArr = [
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"Show all possible sector spawns."
 	];
+	_strategyArr pushBack [
+		"TestRebalance",
+		0,
+		[],
+		"Test: rebalance me",
+		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
+		"Rebalance me to the other team."
+	];
 #endif
 
 #if WL_FACTION_THREE_ENABLED

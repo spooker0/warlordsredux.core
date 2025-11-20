@@ -116,3 +116,19 @@ class RscWLBrowserMenu {
 		};
 	};
 };
+
+class RscWLSidePickerMenu {
+	idd = 5500;
+	class controls {
+		class RscWLSidePickerMenu_Texture: RscText {
+			type = 106;
+			idc = 5501;
+			x = safeZoneX;
+			y = safeZoneY;
+			w = safeZoneW;
+			h = safeZoneH;
+			url = "file://src/ui/gen/picker.html";
+			onKeyDown = "(_this select 1) isEqualTo 1";
+		};
+	};
+};

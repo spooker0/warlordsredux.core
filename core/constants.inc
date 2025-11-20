@@ -70,9 +70,9 @@
 #define WL_SURRENDER_TIME 3600
 
 #define WL_DESTROYER_MAXAMMO 5
-#define WL_DESTROYER_RELOAD 120
-#define WL_DESTROYER_RESPAWN 900
-#define WL_DESTROYER_CHANCE 0.3
+#define WL_DESTROYER_RELOAD 180
+#define WL_DESTROYER_RESPAWN 1200
+#define WL_DESTROYER_START 1800
 
 #define WL_MAP_RESTRICTION_BUFFER 5000
 #define WL_MAINTENANCE_RADIUS 30
@@ -99,6 +99,7 @@
 #define WL_COOLDOWN_AIREFRESH 300
 #define WL_COOLDOWN_REPAIR 300
 #define WL_COOLDOWN_GC 60
+#define WL_COOLDOWN_GC_CHEAP 300
 #define WL_COOLDOWN_PARADROP 300
 #define WL_COOLDOWN_PARADROP_DMG 30
 #define WL_COOLDOWN_JETRTB_DMG 120
@@ -118,6 +119,7 @@
 #define WL_TARGET_ENEMY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_enemySide], objNull])
 #define WL_CONTROL_MAP (uiNamespace getVariable ["BIS_WL_mapControl", controlNull])
 #define WL_SPECIAL_SECTORS (["Wait", "Surrender"])
+#define WL_DESTROYER_OUTLINES ["marker_USS Khe Sanh_outline", "marker_USS Liberty_outline", "marker_USS Tanoa_outline"]
 #define WL_PLAYER_REQUISITION_LIST (missionNamespace getVariable format ["WL2_purchasable_%1", BIS_WL_playerSide])
 #define WL_REQUISITION_CATEGORIES ["Infantry", "Light Vehicles", "Heavy Vehicles", "Rotary Wing", "Fixed Wing", "Remote Control", "Air Defense", "Sector Defense", "Structures", "Naval", "Gear", "Fast Travel", "Strategy"]
 #define WL_BASES [WL2_base1, WL2_base2]

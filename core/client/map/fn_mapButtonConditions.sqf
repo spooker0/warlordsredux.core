@@ -212,6 +212,11 @@ switch (_conditionName) do {
             "Must be at least Level 50 to mark sectors on the map.";
         };
     };
+    case "lockFOB": {
+        private _fobPlacer = _target getVariable ["WL2_forwardBasePlacer", objNull];
+        if (_fobPlacer != player) exitWith { format ["This forward base was placed by: %1", name _fobPlacer] };
+        "ok";
+    };
     case "deleteFOB": {
         private _fobPlacer = _target getVariable ["WL2_forwardBasePlacer", objNull];
         if (isNull _fobPlacer) exitWith { "ok" };

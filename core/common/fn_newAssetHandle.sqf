@@ -203,6 +203,12 @@ if (_asset isKindOf "Man") then {
 		};
 	};
 
+	if ([_asset] call WL2_fnc_isDrone) then {
+		private _eligibleDrones = missionNamespace getVariable ["WL2_eligibleDrones", []];
+		_eligibleDrones pushBackUnique _asset;
+		missionNamespace setVariable ["WL2_eligibleDrones", _eligibleDrones];
+	};
+
 	if (_asset getVariable ["apsType", -1] > -1) then {
 		_asset setVariable ["WL2_apsActivated", true, true];
 	};
@@ -284,18 +290,7 @@ if (_asset isKindOf "Man") then {
 		_assetGrp setVariable ["WL2_assetTypeName", _assetTypeName, true];
 		[_asset] call WL2_fnc_uavConnectRefresh;
 
-		if (_side == west) then {
-			_asset addItemCargoGlobal ["B_UAVTerminal", 1];
-		} else {
-			_asset addItemCargoGlobal ["O_UAVTerminal", 1];
-		};
-
 		_asset setBehaviourStrong "COMBAT";
-
-		private _remoteControlTarget = uiNamespace getVariable ["WL2_remoteControlTarget", objNull];
-		if (!alive _remoteControlTarget) then {
-			uiNamespace setVariable ["WL2_remoteControlTarget", _asset];
-		};
 	};
 
 	if (_asset isKindOf "ReammoBox_F") then {

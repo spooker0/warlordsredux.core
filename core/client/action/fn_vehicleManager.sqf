@@ -59,8 +59,12 @@ _texture ctrlAddEventHandler ["JSDialog", {
             if (_access # 0) then {
                 switchCamera _vehicle;
                 player remoteControl (driver _vehicle);
-                uiNamespace setVariable ["WL2_remoteControlTarget", _vehicle];
-                uiNamespace setVariable ["WL2_remoteControlSeat", "Driver"];
+
+                private _eligibleDrones = missionNamespace getVariable ["WL2_eligibleDrones", []];
+                _eligibleDrones pushBackUnique _vehicle;
+                missionNamespace setVariable ["WL2_eligibleDrones", _eligibleDrones];
+                _vehicle setVariable ["WL2_lastSeatUsed", "Driver"];
+
                 closeDialog 0;
             };
         };
@@ -69,8 +73,12 @@ _texture ctrlAddEventHandler ["JSDialog", {
             if (_access # 0) then {
                 switchCamera _vehicle;
                 player remoteControl (gunner _vehicle);
-                uiNamespace setVariable ["WL2_remoteControlTarget", _vehicle];
-                uiNamespace setVariable ["WL2_remoteControlSeat", "Gunner"];
+
+                private _eligibleDrones = missionNamespace getVariable ["WL2_eligibleDrones", []];
+                _eligibleDrones pushBackUnique _vehicle;
+                missionNamespace setVariable ["WL2_eligibleDrones", _eligibleDrones];
+                _vehicle setVariable ["WL2_lastSeatUsed", "Gunner"];
+
                 closeDialog 0;
             };
         };

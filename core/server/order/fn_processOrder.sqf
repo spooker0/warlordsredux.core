@@ -3,6 +3,7 @@ params ["_asset", "_sender", "_orderedClass"];
 
 private _side = side group _sender;
 private _owner = owner _sender;
+private _cost = WL_ASSET(_orderedClass, "cost", 0);
 
 private _drone = WL_ASSET(_orderedClass, "drone", 0);
 if (_drone > 0) then {
@@ -49,7 +50,6 @@ if (count _currentSector == 0) then {
 	if (count _forwardBases > 0) then {
 		private _forwardBase = _forwardBases # 0;
 		private _forwardBaseSupplies = _forwardBase getVariable ["WL2_forwardBaseSupplies", 0];
-		private _cost = WL_ASSET(_orderedClass, "cost", 0);
 		if (_cost > _forwardBaseSupplies) exitWith {
 			deleteVehicle _asset;
 			["Not enough supplies in forward base."] remoteExec ["WL2_fnc_smoothText", _sender];
@@ -226,7 +226,17 @@ private _ownerUid = getPlayerUID _sender;
 if (_ownerUid != "") then {
 	_asset setVariable ["BIS_WL_ownerAsset", _ownerUid, true];
 };
-_asset setVariable ["BIS_WL_lastActive", 0, _owner];
 _asset setVariable ["WL2_orderedClass", _orderedClass, true];
 [_asset, _sender] remoteExec ["WL2_fnc_newAssetHandle", _owner];
 _sender setVariable ["BIS_WL_isOrdering", false, [2, _owner]];
+
+private _lifetime = WL_ASSET(_orderedClass, "lifetime", 0);
+if (_lifetime > 0) then {
+	[_asset, _lifetime] spawn {
+		params ["_asset", "_lifetime"];
+		uiSleep _lifetime;
+		if (alive _asset) then {
+			deleteVehicle _asset;
+		};
+	};
+};

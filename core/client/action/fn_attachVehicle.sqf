@@ -25,7 +25,7 @@ if (_isAttaching) then {
     {
         _x forgetTarget _childAsset;
     } forEach _enemyGroups;
-    private _enemyUnits = allUnits select { side _x != _side };
+    private _enemyUnits = allUnits select { side group _x != _side };
     {
         _x forgetTarget _childAsset;
     } forEach _enemyUnits;

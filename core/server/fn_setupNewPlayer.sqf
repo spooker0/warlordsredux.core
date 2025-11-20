@@ -58,51 +58,38 @@ if (isNil "_playerList") exitWith {
     ["Cannot find playerList. Aborting."] call _initLog;
 };
 
-private _teamBlockVar = format ["WL2_teamBlocked_%1", _uid];
-private _balanceBlockVar = format ["WL2_balanceBlocked_%1", _uid];
-
-private _lockedToTeam = _playerList getOrDefault [_uid, sideUnknown];
-private _currentSide = side group _warlord;
+private _lockedToTeam = _playerList getOrDefault [_uid, civilian];
 private _owner = owner _warlord;
 
 _warlord setVariable ["BIS_WL_ownerAsset", _uid, true];
 _warlord setVariable ["WL2_accessControl", 0, true];
 [_warlord] call WL2_fnc_lastHitHandler;
 
-if (_lockedToTeam != sideUnknown) then {
-    private _correctSide = _lockedToTeam == _currentSide;
-    missionNamespace setVariable [_teamBlockVar, !_correctSide, _owner];
-	missionNamespace setVariable [_balanceBlockVar, false, _owner];
+private _punishmentMap = missionNamespace getVariable ["WL2_punishmentMap", createHashMap];
+private _punishIncident = _punishmentMap getOrDefault [_uid, []];
+[_punishIncident] remoteExec ["WL2_fnc_punishmentClient", _owner];
 
-    if (_correctSide) then {
-        private _punishmentMap = missionNamespace getVariable ["WL2_punishmentMap", createHashMap];
-        private _punishIncident = _punishmentMap getOrDefault [_uid, []];
-        [_punishIncident] remoteExec ["WL2_fnc_punishmentClient", _owner];
-    };
-} else {
-    private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
-    private _exceedGracePeriod = _timeSinceStart > 60 * 5;
-    private _isImbalanced = if (_exceedGracePeriod) then {
-        private _friendlyCount = playersNumber _currentSide;
-        private _enemySide = if (_currentSide == west) then {
-            east
-        } else {
-            west
-        };
-        private _enemyCount = playersNumber _enemySide;
+// Wait for player to pick side
+_warlord setVariable ["WL2_selectedSide", _lockedToTeam, true];
 
-        (_friendlyCount - _enemyCount) > 3;
-    } else {
-        false;
-    };
+private _targetSide = sideUnknown;
 
-    if (!_isImbalanced) then {
-        _playerList set [_uid, _currentSide];
-    };
-
-    missionNamespace setVariable [_teamBlockVar, false, _owner];
-    missionNamespace setVariable [_balanceBlockVar, _isImbalanced, _owner];
+waitUntil {
+    uiSleep 0.1;
+    _targetSide = _warlord getVariable ["WL2_selectedSide", sideUnknown];
+    _targetSide != civilian && _targetSide != sideUnknown;
 };
+
+_playerList set [_uid, _targetSide];
+private _warlordGroup = createGroup [_targetSide, true];
+[_warlord] joinSilent _warlordGroup;
+
+private _scoreboard = missionNamespace getVariable ["WL2_scoreboardData", createHashMap];
+private _playerEntry = _scoreboard getOrDefault [getPlayerUID _warlord, createHashMap];
+_scoreboard set [getPlayerUID _warlord, _playerEntry];
+missionNamespace setVariable ["WL2_scoreboardData", _scoreboard];
+
+_warlord setVariable ["WL2_playerSide", _targetSide, true];
 
 call WL2_fnc_calcImbalance;
 

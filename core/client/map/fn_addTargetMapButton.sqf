@@ -28,18 +28,14 @@ if (count _costCondition > 0) then {
 private _allMenuButtons = uiNamespace getVariable ["WL2_mapButtons", createHashMap];
 private _menuButtons = _allMenuButtons getOrDefault [_targetId, createHashMap];
 
-private _costText = if (count _costCondition > 0) then {
-    private _cost = _costCondition # 0;
-    if (_cost > 0) then {
-        format [" (Cost: %1)", _costCondition # 0];
-    } else {
-        " (Cost: free)";
-    };
+private _cost = if (count _costCondition > 0) then {
+    _costCondition # 0;
 } else {
-    "";
+    -1;
 };
 
-private _buttonLabel = format ["%1%2", _textLabel, _costText];
+private _funds = (missionNamespace getVariable "fundsDatabaseClients") getOrDefault [getPlayerUID player, 0];
+private _canAfford = _funds >= _cost;
 
 private _buttonData = createHashMap;
 _buttonData set ["action", _action];
@@ -47,5 +43,5 @@ _buttonData set ["actionClose", _actionClose];
 _buttonData set ["actionCondition", _actionCondition];
 _buttonData set ["costCondition", _costCondition];
 
-_menuButtons set [_buttonId, [_buttonLabel, _buttonEnabled, _buttonData]];
+_menuButtons set [_buttonId, [_textLabel, _cost, _canAfford, _buttonEnabled, _buttonData]];
 _allMenuButtons set [_targetId, _menuButtons];

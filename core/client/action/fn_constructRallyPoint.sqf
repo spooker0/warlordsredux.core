@@ -23,7 +23,9 @@ private _buildings = if (surfaceIsWater _rallyPointLocation) then {
     [_rallyPointLocation] call WL2_fnc_findStrongholdBuilding;
 };
 _buildings = _buildings select {
-    isNull (_x getVariable ["WL_strongholdSector", objNull])
+    isNull (_x getVariable ["WL_strongholdSector", objNull]);
+} select {
+    alive _x && !(_x isKindOf "Ruins");
 };
 private _rallyPoint = if (count _buildings == 0) then {
     private _rallyPointClass = if (BIS_WL_playerSide == west) then {
@@ -34,6 +36,7 @@ private _rallyPoint = if (count _buildings == 0) then {
 
     private _rallyTent = createVehicle [_rallyPointClass, _rallyPointLocation, [], 0, "NONE"];
     _rallyTent setVehiclePosition [_rallyPointLocation, [], 0, "CAN_COLLIDE"];
+    _rallyTent setDir (getDir player);
 
     [_rallyTent, player] remoteExec ["WL2_fnc_setupSimpleAsset", 0, true];
     _rallyTent;
@@ -44,6 +47,9 @@ private _rallyPoint = if (count _buildings == 0) then {
     _rallyBuilding;
 };
 
+private _allRallyPoints = missionNamespace getVariable ["WL2_rallyPoints", []];
+_allRallyPoints pushBack _rallyPoint;
+missionNamespace setVariable ["WL2_rallyPoints", _allRallyPoints, true];
 
 player setVariable ["WL2_rallyPoint", _rallyPoint];
 

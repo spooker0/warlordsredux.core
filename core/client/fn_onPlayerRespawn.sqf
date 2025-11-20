@@ -56,7 +56,7 @@ player spawn APS_fnc_setupProjectiles;
 
 player setVariable ["WL2_hasGrapple", 0];
 
-call WL2_fnc_controlUAVAction;
+0 spawn WL2_fnc_controlDroneActions;
 call WL2_fnc_buyMenuAction;
 call WL2_fnc_vehicleManagerAction;
 call WL2_fnc_rappelAction;

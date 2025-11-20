@@ -9,18 +9,22 @@ body {
     font-weight: bold;
     font-size: 12pt;
 
-    background-color: rgba(0, 0, 0, 0.95);
+    background-color: rgba(55, 55, 55, 0.95);
     color: #ffffff;
-    padding: 5px;
-    border-radius: 3px;
+    padding: 6px 12px;
+    border-radius: 6px;
 
     overflow-y: auto;
     scrollbar-color: #444444 #2a2a2a;
     scrollbar-width: thin;
 }
 
+.buttons-container {
+    margin-bottom: 5px;
+}
+
 .buttons-container+.buttons-container {
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .buttons-header {
@@ -35,6 +39,11 @@ body {
     align-items: center;
     position: relative;
     margin-top: -1px;
+    border-radius: 5px;
+}
+
+.button {
+    margin-top: 2px;
 }
 
 .button-icon {
@@ -47,17 +56,21 @@ body {
     margin-left: 10px;
 }
 
+.button-cost {
+    margin-left: 8px;
+}
+
 .button:hover {
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 .disabled {
     opacity: 0.5;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 .disabled:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 .green {

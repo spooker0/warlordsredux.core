@@ -17,6 +17,12 @@ playSound "Beep_Target";
 
 private _sectorArea = _sector getVariable "objectAreaComplete";
 
+private _sensors = listVehicleSensors _uav;
+{
+    private _sensorClass = _x # 0;
+    _uav enableVehicleSensor [_sensorClass, false];
+} forEach _sensors;
+
 waitUntil {
     uiSleep 1;
 

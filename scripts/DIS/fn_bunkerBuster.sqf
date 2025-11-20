@@ -11,7 +11,7 @@ private _nearDestroyables = (nearestObjects [_position, [], 100, true]) select {
 
 private _inDestroyerArea = {
     _position inArea _x
-} count ["marker_USS Liberty_outline", "marker_USS Freedom_outline", "marker_USS Independence_outline"] > 0;
+} count WL_DESTROYER_OUTLINES > 0;
 if (_inDestroyerArea) then {
     _position set [2, 9.8];
     _penetrator setPosASL _position;

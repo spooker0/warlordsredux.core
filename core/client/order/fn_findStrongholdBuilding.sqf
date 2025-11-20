@@ -16,8 +16,13 @@ _buildings = _buildings select {
 
     _playerPosModel # 0 > _xMin && _playerPosModel # 0 < _xMax &&
     _playerPosModel # 1 > _yMin && _playerPosModel # 1 < _yMax &&
-    _buildingArea > 80 &&
-    (_x getVariable ["BIS_WL_ownerAsset", "123"]) == "123"
+    _buildingArea > 80
+} select {
+    if (alive _x) then {
+        (_x getVariable ["BIS_WL_ownerAsset", "123"]) == "123"
+    } else {
+        true
+    };
 };
 
 _buildings = [_buildings, [], {
