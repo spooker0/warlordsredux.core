@@ -121,6 +121,8 @@ if (!isDedicated && hasInterface) then {
 	call WL2_fnc_initClient;
 };
 
+call APS_fnc_setupProjectiles;
+
 if (hasInterface) then {
 	["main"] call BIS_fnc_endLoadingScreen;
 };

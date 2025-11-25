@@ -1,27 +1,5 @@
 #include "includes.inc"
 WL_LoadingState = 0;
-0 spawn {
-	private _startTime = serverTime;
-
-	private _stepText = "";
-	private _totalLoadSteps = 12;
-	waitUntil {
-		uiSleep 0.1;
-		serverTime - _startTime > 60 || WL_LoadingState >= _totalLoadSteps
-	};
-
-	if (WL_LoadingState < _totalLoadSteps) exitWith {
-		["main"] call BIS_fnc_endLoadingScreen;
-		"BlockScreen" setDebriefingText [
-			"Load Failed",
-			format ["It seems that client loading has failed to complete in time. It was stuck on %1. Please rejoin from the lobby. Thanks for understanding.", _stepText],
-			"Loading failed. Please rejoin."
-		];
-		endMission "BlockScreen";
-		forceEnd;
-	};
-};
-
 waitUntil {
 	!isNull player && {
 		isPlayer player
@@ -251,7 +229,6 @@ WL2_lastLoadout = getUnitLoadout player;
 [player, true] call WLC_fnc_onRespawn;
 [] spawn WL2_fnc_factionBasedClientInit;
 0 spawn WL2_fnc_captureDisplay;
-0 spawn WL2_fnc_mineLimitHint;
 
 call WL2_fnc_spectrumInterface;
 
@@ -262,30 +239,6 @@ call WL2_fnc_pingFixInit;
 0 spawn MENU_fnc_settingsMenu;
 0 spawn MENU_fnc_playerDataRefresh;
 
-missionNamespace setVariable [format ["BIS_WL2_minesDB_%1", getPlayerUID player],
-	createHashMapFromArray [
-		// ***Automatic mines***/
-		["APERSMine_Range_Ammo", [10, []]],
-		["APERSTripMine_Wire_Ammo", [10, []]],
-		["APERSBoundingMine_Range_Ammo", [10, []]],
-		["ATMine_Range_Ammo", [10, []]],
-		["SLAMDirectionalMine_Wire_Ammo", [10, []]],
-		// ***Manually Detonated***/
-		["ClaymoreDirectionalMine_Remote_Ammo", [5, []]],
-		["SatchelCharge_Remote_Ammo", [5, []]],
-		["DemoCharge_Remote_Ammo", [5, []]]
-		// ***Blacklisted***/
-		/*
-			["APERSMineDispenser_Mine_Ammo", [0, []]],
-			["IEDUrbanSmall_Remote_Ammo", [0, []]],
-			["IEDLandSmall_Remote_Ammo", [0, []]],
-			["IEDUrbanBig_Remote_Ammo", [0, []]],
-			["IEDLandBig_Remote_Ammo", [0, []]]
-		*/
-	],
-	[2, clientOwner]
-];
-
 0 spawn {
 	while { !BIS_WL_missionEnd } do {
 		{
@@ -295,7 +248,6 @@ missionNamespace setVariable [format ["BIS_WL2_minesDB_%1", getPlayerUID player]
 	};
 };
 
-player spawn APS_fnc_setupProjectiles;
 0 spawn WL2_fnc_handleSelectionState;
 0 spawn WL2_fnc_handleEnemyCapture;
 0 spawn WL2_fnc_killHistory;

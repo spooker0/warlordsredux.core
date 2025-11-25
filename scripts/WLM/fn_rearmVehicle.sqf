@@ -37,3 +37,7 @@ private _weaponsByTurret = createHashMap;
 
 _asset spawn APS_fnc_rearmAPS;
 _asset setVariable ['WL2_smokeCurtains', 2];
+
+if (_asset getVariable ["WL2_mortarShellCountHE", -1] != -1) then {
+    _asset setVariable ["WL2_mortarShellCountHE", 8, true];
+};

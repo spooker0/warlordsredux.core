@@ -10,7 +10,6 @@ class CfgRemoteExec {
 		class APS_fnc_projectileStateUpdate {allowedTargets = 0;};
 		class APS_fnc_report {allowedTargets = 0;};
 		class APS_fnc_serverHandleAPS {allowedTargets = 2;};
-		class APS_fnc_setupProjectiles {allowedTargets = 0;};
 		class DIS_fnc_remoteMunition {allowedTargets = 0;};
 		class DIS_fnc_setupExtendedSam {allowedTargets = 0;};
 		class DIS_fnc_startMissileCamera {allowedTargets = 0;};
@@ -67,6 +66,7 @@ class CfgRemoteExec {
 		class WL2_fnc_scannerAction {allowedTargets = 0;};
 		class WL2_fnc_setupForwardBaseAction {allowedTargets = 0;};
 		class WL2_fnc_setupForwardBaseMp {allowedTargets = 0;};
+		class WL2_fnc_setupMiniMortarAction {allowedTargets = 0;};
 		class WL2_fnc_setupSimpleAsset {allowedTargets = 0;};
 		class WL2_fnc_slingAddAction {allowedTargets = 1;};
 		class WL2_fnc_slingloadInit {allowedTargets = 0;};

@@ -1066,7 +1066,8 @@ function updateLoadoutNames(loadoutNames) {
     loadouts.forEach((loadoutEl, index) => {
         const loadoutName = loadoutNames[index] || [];
         loadoutEl.querySelectorAll('.loadout-weapon-name').forEach((nameEl, nameIndex) => {
-            nameEl.textContent = atobr(loadoutName[nameIndex]) || "-";
+            const encodedName = loadoutName[nameIndex] || "";
+            nameEl.textContent = atobr(encodedName) || "-";
         });
     });
 }
@@ -1177,21 +1178,40 @@ function updateLoadout(loadout, loadoutIndex, weaponData, magazineData, playerLe
     document.playerLoadout = loadout;
     const itemList = ammoPanel.querySelector('.item-list');
     itemList.innerHTML = '';
-    createItemRow(["FirstAidKit", "First Aid Kit", "A3\\Weapons_F\\Items\\data\\UI\\gear_FirstAidKit_CA.paa", 8, false], itemList);
-    createItemRow(["HandGrenade", "RGO Grenade", "A3\\Weapons_F\\Data\\UI\\gear_M67_CA.paa", 10, true], itemList);
-    createItemRow(["MiniGrenade", "RGN Grenade", "A3\\Weapons_F\\Data\\UI\\gear_M67_CA.paa", 6, true], itemList);
-    createItemRow(["SmokeShell", "Smoke Grenade (White)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_white_ca.paa", 4, true], itemList);
-    createItemRow(["SmokeShellRed", "Smoke Grenade (Red)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_red_ca.paa", 4, true], itemList);
-    createItemRow(["SmokeShellGreen", "Smoke Grenade (Green)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_green_ca.paa", 4, true], itemList);
-    createItemRow(["SmokeShellBlue", "Smoke Grenade (Blue)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_blue_ca.paa", 4, true], itemList);
-    createItemRow(["SmokeShellYellow", "Smoke Grenade (Yellow)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_yellow_ca.paa", 4, true], itemList);
-    createItemRow(["SmokeShellOrange", "Smoke Grenade (Orange)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_orange_ca.paa", 4, true], itemList);
-    createItemRow(["SmokeShellPurple", "Smoke Grenade (Purple)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_purple_ca.paa", 4, true], itemList);
 
-    createItemRow(["Chemlight_blue", "Chemlight (Blue) [Deploys Respawn Tent]", "A3\\Weapons_f\\Data\\UI\\M_chemlight_blue_CA.paa", 2, true], itemList);
-    createItemRow(["Chemlight_green", "Chemlight (Green) [Deploys Respawn Tent]", "A3\\Weapons_f\\Data\\UI\\M_chemlight_green_CA.paa", 2, true], itemList);
-    createItemRow(["Chemlight_red", "Chemlight (Red) [Deploys Respawn Tent]", "A3\\Weapons_f\\Data\\UI\\M_chemlight_red_CA.paa", 2, true], itemList);
-    createItemRow(["Chemlight_yellow", "Chemlight (Yellow) [Deploys Respawn Tent]", "A3\\Weapons_f\\Data\\UI\\M_chemlight_yellow_CA.paa", 2, true], itemList);
+    const hardcodedItems = [
+        ["FirstAidKit", "First Aid Kit", "A3\\Weapons_F\\Items\\data\\UI\\gear_FirstAidKit_CA.paa", 8, false],
+
+        ["HandGrenade", "RGO Grenade", "A3\\Weapons_F\\Data\\UI\\gear_M67_CA.paa", 10, true],
+        ["MiniGrenade", "RGN Grenade", "A3\\Weapons_F\\Data\\UI\\gear_M67_CA.paa", 6, true],
+
+        ["SmokeShell", "Smoke Grenade (White)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_white_ca.paa", 4, true],
+        ["SmokeShellRed", "Smoke Grenade (Red)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_red_ca.paa", 4, true],
+        ["SmokeShellGreen", "Smoke Grenade (Green)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_green_ca.paa", 4, true],
+        ["SmokeShellBlue", "Smoke Grenade (Blue)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_blue_ca.paa", 4, true],
+        ["SmokeShellYellow", "Smoke Grenade (Yellow)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_yellow_ca.paa", 4, true],
+        ["SmokeShellOrange", "Smoke Grenade (Orange)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_orange_ca.paa", 4, true],
+        ["SmokeShellPurple", "Smoke Grenade (Purple)", "A3\\Weapons_f\\data\\ui\\gear_smokegrenade_purple_ca.paa", 4, true],
+
+        ["Chemlight_blue", "Chemlight (Blue) [Deploys Respawn Tent]", "A3\\Weapons_f\\Data\\UI\\M_chemlight_blue_CA.paa", 2, true],
+        ["Chemlight_green", "Chemlight (Green) [Deploys Respawn Tent]", "A3\\Weapons_f\\Data\\UI\\M_chemlight_green_CA.paa", 2, true],
+        ["Chemlight_red", "Chemlight (Red) [Deploys Respawn Tent]", "A3\\Weapons_f\\Data\\UI\\M_chemlight_red_CA.paa", 2, true],
+        ["Chemlight_yellow", "Chemlight (Yellow) [Deploys Respawn Tent]", "A3\\Weapons_f\\Data\\UI\\M_chemlight_yellow_CA.paa", 2, true],
+
+        ["APERSBoundingMine_Range_Mag", "APERS Bounding Mine", "A3\\Weapons_F\\Data\\UI\\gear_mine_AP_bouncing_CA.paa", 20, true],
+        ["APERSMine_Range_Mag", "APERS Mine", "A3\\Weapons_F\\Data\\UI\\gear_mine_AP_CA.paa", 10, true],
+        ["APERSMineDispenser_Mag", "APERS Mine Dispenser", "A3\\Weapons_F_Orange\\Explosives\\Data\\UI\\gear_APERSmineDispenser_CA.paa", 60, true],
+        ["APERSTripMine_Wire_Mag", "APERS Tripwire Mine", "A3\\Weapons_F\\Data\\UI\\gear_mine_AP_tripwire_CA.paa", 20, true],
+        ["ATMine_Range_Mag", "AT Mine", "A3\\Weapons_F\\Data\\UI\\gear_mine_AT_CA.paa", 80, true],
+        ["ClaymoreDirectionalMine_Remote_Mag", "Claymore Charge", "A3\\Weapons_F\\Data\\UI\\gear_mine_AP_miniclaymore_CA.paa", 20, true],
+        ["DemoCharge_Remote_Mag", "Explosive Charge", "A3\\Weapons_F\\Data\\UI\\gear_c4_charge_small_CA.paa", 20, true],
+        ["SatchelCharge_Remote_Mag", "Explosive Satchel", "A3\\Weapons_F\\Data\\UI\\gear_satchel_CA.paa", 80, true],
+        ["SLAMDirectionalMine_Wire_Mag", "M6 SLAM Mine", "A3\\Weapons_F\\Data\\UI\\gear_mine_SLAM_directional_CA.paa", 20, true]
+    ];
+
+    hardcodedItems.forEach(item => {
+        createItemRow(item, itemList);
+    });
 
     const ammoIconContainer = document.querySelector('.ammo-icon-container');
 

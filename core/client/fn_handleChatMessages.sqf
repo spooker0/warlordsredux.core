@@ -103,6 +103,23 @@ if (_channel == 1) exitWith {
     [_newFrom, _filteredText];
 };
 
+if (_channel == 2) exitWith {
+    private _playerSquad = ["getSquadForPlayer", [getPlayerID _person]] call SQD_fnc_query;
+    private _playerSquadName = _playerSquad getOrDefault ["name", "???"];
+    private _newFrom = format ["%1 [%2]", _name, _playerSquadName];
+
+    if ("@TEAM" in (toUpper _filteredText)) then {
+        private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+        private _volume = _settingsMap getOrDefault ["squadChatNotificationVolume", 1];
+        playSoundUI ["a3\missions_f_oldman\data\sound\phone_sms\chime\phone_sms_chime_05.wss", _volume];
+
+        private _notification = format ["%1: %2", _newFrom, _filteredText];
+        [_notification] call WL2_fnc_smoothText;
+    };
+
+    [_newFrom, _filteredText];
+};
+
 if (_channel > 5 && _channel < 16 && _filteredText != "") then {
     private _isPlayerSquadLeader = ["isSquadLeader", [getPlayerID player]] call SQD_fnc_query;
     private _isDirectNotification = (_isPlayerSquadLeader && "@SL" in (toUpper _filteredText)) || "@SQUAD" in (toUpper _filteredText);
@@ -114,6 +131,9 @@ if (_channel > 5 && _channel < 16 && _filteredText != "") then {
         _settingsMap getOrDefault ["squadChatNotificationVolume", 1];
     };
     playSoundUI ["a3\missions_f_oldman\data\sound\phone_sms\chime\phone_sms_chime_04.wss", _volume, 1];
+
+    private _notification = format ["%1: %2", _name, _filteredText];
+    [_notification] call WL2_fnc_smoothText;
 };
 
 _filteredText;

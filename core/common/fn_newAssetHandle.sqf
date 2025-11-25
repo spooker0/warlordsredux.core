@@ -8,9 +8,11 @@ if (isServer) then {
 		_asset setSkill (0.2 + random 0.3);
 	};
 
-	private _defaultMags = magazinesAllTurrets _asset;
-	_asset setVariable ["BIS_WL_defaultMagazines", _defaultMags, true];
-	_asset setVariable ["WLM_savedDefaultMags", _defaultMags, true];
+	if !(_asset isKindOf "Man") then {
+		private _defaultMags = magazinesAllTurrets _asset;
+		_asset setVariable ["BIS_WL_defaultMagazines", _defaultMags, true];
+		_asset setVariable ["WLM_savedDefaultMags", _defaultMags, true];
+	};
 };
 
 private _playerUID = if (isPlayer _owner) then {
@@ -29,8 +31,6 @@ if (isPlayer _owner) then {
 };
 
 if (_asset isKindOf "Man") then {
-	_asset call APS_fnc_setupProjectiles;
-
 	if (isPlayer _owner) then {
 		private _refreshTimerVar = format ["WL2_manpowerRefreshTimers_%1", getPlayerUID player];
 		private _manpowerRefreshTimers = missionNamespace getVariable [_refreshTimerVar, []];
@@ -50,7 +50,6 @@ if (_asset isKindOf "Man") then {
 
 	[_asset] call APS_fnc_registerVehicle;
 
-	_asset remoteExec ["APS_fnc_setupProjectiles", 0, true];
 	[_asset] remoteExec ["WL2_fnc_rearmAction", 0, true];
 	[_asset] remoteExec ["WL2_fnc_repairAction", 0, true];
 	[_asset] remoteExec ["WL2_fnc_refuelAction", 0, true];
@@ -73,8 +72,9 @@ if (_asset isKindOf "Man") then {
 		[_asset, false] remoteExec ["WL2_fnc_scannerAction", 0, true];
 	};
 
-	if (WL_ASSET(_assetActualType, "hasReconOptics", 0) > 0) then {
-		[_asset, _playerUID] remoteExec ["WL2_fnc_reconOpticsAction", 0, true];
+	private _reconOptics = WL_ASSET(_assetActualType, "hasReconOptics", 0);
+	if (_reconOptics > 0) then {
+		[_asset, _playerUID, _reconOptics] remoteExec ["WL2_fnc_reconOpticsAction", 0, true];
 		_asset setVariable ["WL2_hasReconOptics", true, true];
 	};
 
@@ -254,6 +254,11 @@ if (_asset isKindOf "Man") then {
 		_asset setVariable ["DIS_advancedSamRange", 14000, true];
 	};
 
+	if (WL_ASSET(_assetActualType, "hasMiniMortar", 0) > 0) then {
+		_asset setVariable ["WL2_mortarShellCountHE", 8, true];
+		[_asset] remoteExec ["WL2_fnc_setupMiniMortarAction", 0, true];
+	};
+
 	private _threatDetection = WL_ASSET(_assetActualType, "threatDetection", 0);
 	if (_threatDetection > 0) then {
 		_asset setVariable ["DIS_missileDetector", _threatDetection, true];
@@ -334,18 +339,16 @@ if (_asset isKindOf "Man") then {
 
 	if (getNumber (configFile >> "CfgVehicles" >> typeOf _asset >> "transportAmmo") > 0) then {
 		[_asset, 0] remoteExec ["setAmmoCargo", 0];
-		_amount = 10000;
-		if (typeOf _asset == "B_Truck_01_ammo_F" || {typeOf _asset == "O_Truck_03_ammo_F" || {typeOf _asset == "Land_Pod_Heli_Transport_04_ammo_F" || {typeOf _asset == "B_Slingload_01_Ammo_F"}}}) then {
-			_amount = ((getNumber (configfile >> "CfgVehicles" >> typeof _asset >> "transportAmmo")) min 30000);
-		};
-		_asset setVariable ["WLM_ammoCargo", _amount, true];
 	};
-
 	if (getNumber (configFile >> "CfgVehicles" >> typeOf _asset >> "transportRepair") > 0) then {
 		[_asset, 0] remoteExec ["setRepairCargo", 0];
 	};
 	if (getNumber (configFile >> "CfgVehicles" >> typeOf _asset >> "transportFuel") > 0) then {
 		[_asset, 0] remoteExec ["setFuelCargo", 0];
+	};
+
+	if (WL_ASSET(_assetActualType, "hasRearm", 0) > 0) then {
+		_asset setVariable ["WLM_ammoCargo", 10000, true];
 	};
 
 	private _rearmTime = WL_ASSET(_assetActualType, "rearm", 600);

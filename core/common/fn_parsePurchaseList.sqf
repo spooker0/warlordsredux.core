@@ -278,6 +278,13 @@ private _strategyArr = [
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"This doesn't include you or your AI."
 	], [
+		"PruneMines",
+		0,
+		[],
+		"Clear personal mines",
+		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
+		"Deletes all deployed mines."
+	], [
 		"ResetVehicle",
 		10,
 		[],

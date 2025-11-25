@@ -173,7 +173,6 @@ class CfgFunctions {
 			class isDrone {};
 			class lagMessageDisplay {};
 			class locationScanner {};
-			class mineLimitHint {};
 			class mutePlayer {};
 			class onPause {};
 			class onPlayerRespawn {};
@@ -262,6 +261,7 @@ class CfgFunctions {
 			class setupForwardBaseEligibility {};
 			class setupForwardBaseMp {};
 			class setupSimpleAsset {};
+			class setupMiniMortarAction {};
 			class slingAddAction {};
 			class smokeCurtainAction {};
 			class smokeCurtainParticles {};

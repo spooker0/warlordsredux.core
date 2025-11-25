@@ -1,7 +1,8 @@
 #include "includes.inc"
-params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
+// params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
+params ["_projectile", "_unit"];
 
-private _firedPosition = getPosATL _gunner;
+private _firedPosition = _unit modelToWorld [0, 0, 0];
 private _minDistSqr = APS_MIN_DISTANCE_SQR;
 private _maxDistSqr = APS_MAX_DISTANCE_SQR;
 
@@ -29,10 +30,10 @@ private _interception = {
 		_projectileAPSConsumption = _overrideAmmoConsumption;
 	};
 
-	private _ammo = _target getVariable "apsAmmo";
-	_target setVariable ["apsAmmo", (_ammo - _projectileAPSConsumption) max 0, true];
+	private _apsAmmo = _target getVariable "apsAmmo";
+	_target setVariable ["apsAmmo", (_apsAmmo - _projectileAPSConsumption) max 0, true];
 
-	private _projectilePosition = getPosATL _projectile;
+	private _projectilePosition = _projectile modelToWorld [0, 0, 0];
 	private _projectileDirection = _firedPosition getDir _target;
 	private _relativeDirection = if (isNull _target) then {
 		0;
@@ -49,7 +50,7 @@ private _interception = {
 	_explosionPosition set [2, _explosionHeight];
 	createVehicle ["SmallSecondary", _explosionPosition, [], 0, "FLY"];
 
-	[_target, _relativeDirection, true, _apsProjectileType, _gunner] remoteExec ["APS_fnc_report", _target];
+	[_target, _relativeDirection, true, _apsProjectileType, _unit] remoteExec ["APS_fnc_report", _target];
 
 	private _ownerSide = _x getVariable ["BIS_WL_ownerAssetSide", sideUnknown];
 	if (side group _unit == _ownerSide) then {
@@ -61,8 +62,8 @@ private _interception = {
 			hint localize "STR_A3_WL_aps_friendly_warning";
 		};
 	} else {
-		private _actualAmmoUsed = _ammo min _projectileAPSConsumption;
-		[_gunner, _dazzled, _actualAmmoUsed, _target] remoteExec ["APS_fnc_serverHandleAPS", 2];
+		private _actualAmmoUsed = _apsAmmo min _projectileAPSConsumption;
+		[_unit, _dazzled, _actualAmmoUsed, _target] remoteExec ["APS_fnc_serverHandleAPS", 2];
 	};
 };
 

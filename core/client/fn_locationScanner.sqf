@@ -61,12 +61,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
         _nearbyDemolishableItems = _nearbyDemolishableItems select {
             private _isNotStronghold = isNull (_x getVariable ["WL_strongholdSector", objNull]);
             private _distanceLimit = if (_isNotStronghold) then {
-                if (_x isKindOf "StaticShip") then { 100 } else {
-                    private _isRallyBuilding = _x getVariable ["WL2_orderedClass", ""] == "Land_RallyBuilding";
-                    if (_isRallyBuilding) then {
-                        ((boundingBoxReal _x) # 2) max 15;
-                    } else { 10 };
-                };
+                if (_x isKindOf "StaticShip") then { 100 } else { 10 };
             } else { 35 };
             private _inAngle = if (_isNotStronghold) then {
                 [getPosASL player, getDir player, 90, getPosASL _x] call WL2_fnc_inAngleCheck;
@@ -160,8 +155,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
 
             if (BIS_WL_playerSide != _assetSide) then {
                 private _isNotStronghold = isNull (_x getVariable ["WL_strongholdSector", objNull]);
-                private _isNotRallyPoint = (_x getVariable ["WL2_orderedClass", ""] != "Land_RallyBuilding");
-                if (_isNotStronghold && _isNotRallyPoint) then { continue; };
+                if (_isNotStronghold) then { continue; };
             };
 
             private _isntCursorTarget = _x != cursorTarget && _x != _cursorObject;

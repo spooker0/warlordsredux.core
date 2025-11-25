@@ -1,3 +1,3 @@
-#define SQD_MIN_COMMAND_CHAT 3
+#define SQD_MIN_COMMAND_CHAT 1
 #define SQD_MAX_SQUAD_SIZE 9
 #define SQD_DISABLE_SIDE false

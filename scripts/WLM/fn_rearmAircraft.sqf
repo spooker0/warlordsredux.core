@@ -7,24 +7,33 @@ private _display = findDisplay WLM_DISPLAY;
 private _access = [_asset, player, "full"] call WL2_fnc_accessControl;
 if !(_access # 0) exitWith {
     [format ["Cannot rearm: %1", _access # 1]] call WL2_fnc_smoothText;
-    playSound "AddItemFailed";
+    playSoundUI ["AddItemFailed"];
     _display closeDisplay 1;
 };
 
 private _cooldown = ((_asset getVariable "BIS_WL_nextRearm") - serverTime) max 0;
+if (_cooldown > 0) exitWith {
+    ["Rearm on cooldown."] call WL2_fnc_smoothText;
+    playSoundUI ["AddItemFailed"];
+};
+
 private _nearbyVehicles = (_asset nearEntities WL_MAINTENANCE_RADIUS) select { alive _x };
-private _rearmVehicleIndex = _nearbyVehicles findIf {getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "transportAmmo") > 0};
-private _rearmSource = _nearbyVehicles # _rearmVehicleIndex;
+if (count _nearbyVehicles == 0) exitWith {
+    ["No rearm sources nearby."] call WL2_fnc_smoothText;
+    playSoundUI ["AddItemFailed"];
+};
 
+_nearbyVehicles = [_nearbyVehicles, [], { _x getVariable ["WLM_ammoCargo", 0] }, "DESCEND"] call BIS_fnc_sortBy;
+private _rearmSource = _nearbyVehicles # 0;
 private _amount = _rearmSource getVariable ["WLM_ammoCargo", 0];
-
-if (_cooldown > 0 || _amount <= 0) exitWith {
-    playSound "AddItemFailed";
+if (_amount <= 0) exitWith {
+    ["No ammo remaining."] call WL2_fnc_smoothText;
+    playSoundUI ["AddItemFailed"];
 };
 
 if (player distance _asset > WL_MAINTENANCE_RADIUS) exitWith {
     ["You are too far away from the vehicle to rearm it."] call WL2_fnc_smoothText;
-    playSound "AddItemFailed";
+    playSoundUI ["AddItemFailed"];
 };
 
 private _pylonsInfo = getAllPylonsInfo _asset;
@@ -77,8 +86,8 @@ _massTally = _massTally min 3000;
 
 private _newAmmo = _amount - _massTally;
 if (_newAmmo < 0) exitWith {
-    playSound "AddItemFailed";
-    hint format [localize "STR_WLM_KG_AMMO_REQUIRED", _massTally];
+    [format [localize "STR_WLM_KG_AMMO_REQUIRED", _massTally]] call WL2_fnc_smoothText;
+    playSoundUI ["AddItemFailed"];
 };
 
 _rearmSource setVariable ["WLM_ammoCargo", _newAmmo, true];

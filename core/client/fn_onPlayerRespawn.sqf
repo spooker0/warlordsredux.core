@@ -50,8 +50,6 @@ player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 
 0 spawn MENU_fnc_settingsMenu;
 
-player spawn APS_fnc_setupProjectiles;
-
 0 spawn WL2_fnc_updateLevelDisplay;
 
 player setVariable ["WL2_hasGrapple", 0];

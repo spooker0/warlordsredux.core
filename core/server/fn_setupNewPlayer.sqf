@@ -69,7 +69,13 @@ private _punishmentMap = missionNamespace getVariable ["WL2_punishmentMap", crea
 private _punishIncident = _punishmentMap getOrDefault [_uid, []];
 [_punishIncident] remoteExec ["WL2_fnc_punishmentClient", _owner];
 
-// Wait for player to pick side
+private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
+private _isModerator = _uid in (getArray (missionConfigFile >> "moderatorIDs"));
+private _isSpectator = _uid in (getArray (missionConfigFile >> "spectatorIDs"));
+if (_isAdmin || _isModerator || _isSpectator) then {
+    _lockedToTeam = civilian;
+};
+
 _warlord setVariable ["WL2_selectedSide", _lockedToTeam, true];
 
 private _targetSide = sideUnknown;

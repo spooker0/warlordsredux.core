@@ -123,6 +123,16 @@ switch (_className) do {
             } forEach _unwantedPassengers;
         } forEach _eligibleAssets;
     };
+    case "PruneMines": {
+        private _ownedMineVar = format ["WL2_ownedMines_%1", getPlayerUID player];
+        private _allOwnedMines = missionNamespace getVariable [_ownedMineVar, []];
+        {
+            if (alive _x) then {
+                deleteVehicle _x;
+            };
+        } forEach _allOwnedMines;
+        missionNamespace setVariable [_ownedMineVar, [], true];
+    };
     case "ResetVehicle": {
         "RequestMenu_close" call WL2_fnc_setupUI;
         0 spawn WL2_fnc_resetVehicle;

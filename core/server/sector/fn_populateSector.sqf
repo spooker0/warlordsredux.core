@@ -2,7 +2,7 @@
 params ["_sector", "_owner"];
 
 private _sectorValue = _sector getVariable ["BIS_WL_value", 50];
-private _garrisonSize = _sectorValue * 2.3;
+private _garrisonSize = _sectorValue * 1.3;
 
 private _vehicleUnits = [];
 
@@ -13,7 +13,7 @@ if (count _presetVehicles == 0) then {
 	private _numVehicleSpawn = if (_hardAIMode) then {
 		((_sectorValue / 5) max 1) min 4;
 	} else {
-		2;
+		3;
 	};
 
 	private _randomSpots = [_sector] call WL2_fnc_findSpawnsInSector;
@@ -194,8 +194,8 @@ private _unitsPool = [];
 
 private _infantryUnits = [];
 private _infantryGroups = [];
-_i = 0;
-while {_i < _garrisonSize} do {
+private _spawnedUnitCount = 0;
+while {_spawnedUnitCount < _garrisonSize} do {
 	private _pos = selectRandom _spawnPosArr;
 	/*
 	//***Spawning Diag code, visual tool for spawn points***
@@ -213,43 +213,29 @@ while {_i < _garrisonSize} do {
     _mrkr setMarkerSizeLocal [1.5, 1.5];
 	//***end diag code block***
 	*/
-	private _newGrp = createGroup _owner;
-	_infantryGroups pushBack _newGrp;
-	private _grpSize = floor (7 + random 3);
-	private _cnt = (count allPlayers) max 1;
+	private _infantryGroup = createGroup [_owner, true];
+	_infantryGroups pushBack _infantryGroup;
 
-	private _i2 = 0;
-	for "_i2" from 0 to _grpSize do {
-		private _newUnit = _newGrp createUnit [selectRandom _unitsPool, _pos, [], 30, "NONE"];
+	private _grpSize = floor (5 + random 3);
+	for "_i" from 1 to _grpSize do {
+		private _newUnit = _infantryGroup createUnit [selectRandom _unitsPool, _pos, [], 30, "NONE"];
 		private _posAboveGround = getPosATL _newUnit;
 		_posAboveGround set [2, 100];
 		_newUnit setVehiclePosition [_posAboveGround, [], 0, "CAN_COLLIDE"];
 		_newUnit call WL2_fnc_newAssetHandle;
+		doStop _newUnit;
 		_infantryUnits pushBack _newUnit;
 
-		_i = _i + (((_cnt/50) max 0.6) min 2);
-		if (_i >= _garrisonSize) exitwith {};
+		_spawnedUnitCount = _spawnedUnitCount + 1;
+		if (_spawnedUnitCount >= _garrisonSize) then {
+			break;
+		};
+		uiSleep 0.001;
 	};
-
-	_newGrp setBehaviour "COMBAT";
-	_newGrp setSpeedMode "LIMITED";
-	[_newGrp, 0] setWaypointPosition [_pos, 0];
-	_newGrp deleteGroupWhenEmpty true;
-
-	_newWP = _newGrp addWaypoint [_pos, 0];
-	_newWP setWaypointType "HOLD";
-	uiSleep 0.1;
 };
-
-// {
-// 	private _infantryUnit = _x;
-// 	{
-// 		_x reveal [_infantryUnit, 4];
-// 	} forEach _infantryGroups
-// } forEach _infantryUnits;
 
 [_infantryUnits, _sector] spawn WL2_fnc_assetRelevanceCheck;
 
 private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
 _ownedVehicles append (_vehicleUnits + _infantryUnits);
-missionNamespace setVariable ["BIS_WL_ownedVehicles_server", _ownedVehicles, true];
+missionNamespace setVariable ["BIS_WL_ownedVehicles_server", _ownedVehicles];

@@ -43,6 +43,7 @@ addMissionEventHandler ["HandleChatMessage", {
 
 	_display displayAddEventHandler ["KeyDown", {
 		params ["_display", "_key", "_shift", "_ctrl", "_alt"];
+		if (BIS_WL_missionEnd) exitWith {};
 		if (_key != 1) exitWith {};	// escape to kill scoreboard
 		private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
 		if !(isNull _display) then {
@@ -53,6 +54,7 @@ addMissionEventHandler ["HandleChatMessage", {
 
 	_display displayAddEventHandler ["KeyUp", {
 		params ["_display", "_key", "_shift", "_ctrl", "_alt"];
+		if (BIS_WL_missionEnd) exitWith {};
 		private _isPressed = false;
 		{
 			_isPressed = _isPressed || [_x, _key, _shift, _ctrl, _alt] call WL2_fnc_isKeyPressed;
@@ -134,36 +136,6 @@ addMissionEventHandler ["HandleChatMessage", {
 		uiSleep 1;
 	};
 };
-
-addMissionEventHandler ["EntityCreated", {
-	params ["_entity"];
-	if (!local _entity) exitWith {};
-	_entityType = (typeOf _entity);
-	if (isClass (configFile >> "CfgAmmo" >> _entityType)) then {
-		_minesDB = (missionNamespace getVariable [format ["BIS_WL2_minesDB_%1", getPlayerUID player], []]);
-		if ((_minesDB getOrdefault [_entityType, 0]) isEqualType []) then {
-			_limit = (_minesDB get _entityType) # 0;
-			_mines = ((_minesDB get _entityType) # 1) select {alive _x};
-			if (count _mines >= _limit) then {
-				private _t = _mines find objNull;
-				if (_t != -1) then {_mines deleteAt _t;};
-					if (count _mines >= _limit) then {
-						deleteVehicle _entity;
-						missionNameSpace setVariable ["mineDisplayActive", serverTime + 5];
-						return;
-					} else {
-						_mines pushBack _entity;
-						_minesDB set [_entityType, [_limit, _mines]];
-					};
-				} else {
-				_mines pushBack _entity;
-				_minesDB set [_entityType, [_limit, _mines]];
-			};
-			missionNameSpace setVariable ["mineDisplayActive", serverTime + 5];
-			missionNamespace setVariable [format ["BIS_WL2_minesDB_%1", getPlayerUID player], _minesDB, [2, clientOwner]];
-		};
-	};
-}];
 
 addMissionEventHandler ["EntityRespawned", {
 	params ["_newEntity", "_oldEntity"];

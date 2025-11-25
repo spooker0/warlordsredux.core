@@ -114,7 +114,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["slider", "Hitmarker", [0, 1, 0.1, 0.5, "hitmarkerVolume"]],
         ["slider", "Level up music", [0, 1, 0.1, 0.8, "levelUpMusic"]],
         ["slider", "Squad chat notification", [0, 5, 0.1, 1, "squadChatNotificationVolume"]],
-        ["slider", "Squad important notification", [1, 5, 0.1, 1, "squadImportantNotificationVolume"]],
+        ["slider", "Squad important notification", [1, 5, 0.1, 3, "squadImportantNotificationVolume"]],
         ["slider", "Vote countdown", [0, 1, 0.1, 1, "voteVolume"]],
         ["slider", "Drone jamming", [0, 5, 0.1, 1, "droneJammingVolume"]],
         ["slider", "Drone ping", [0, 1, 0.1, 1, "dronePingVolume"]],

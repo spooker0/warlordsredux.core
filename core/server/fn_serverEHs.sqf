@@ -9,10 +9,10 @@ addMissionEventHandler ["HandleDisconnect", {
 		private _playerUnit = _uid call BIS_fnc_getUnitByUid;
 		if (!isNull _playerUnit) exitWith {};
 
+		// Remove owned vehicles
 		private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", _uid];
 		private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];
 		_ownedVehicles = _ownedVehicles select { alive _x };
-
 		{
 			if (unitIsUAV _x) then {
 				private _group = group effectiveCommander _x;
@@ -25,17 +25,17 @@ addMissionEventHandler ["HandleDisconnect", {
 			deleteVehicle _x;
 		} forEach _ownedVehicles;
 		missionNamespace setVariable [_ownedVehiclesVar, []];
-	};
 
-	private _minesDB = format ["BIS_WL2_minesDB_%1", _uid];
-	{
-		_mineData = (missionNamespace getVariable _minesDB) getOrDefault [_x, [0, []]];
-		_mines = (_mineData select 1);
+		// Remove owned mines
+		private _ownedMineVar = format ["WL2_ownedMines_%1", _uid];
+		private _ownedMines = missionNamespace getVariable [_ownedMineVar, []];
 		{
-			if (!(isNull _x)) then {deleteVehicle _x};
-		} forEach _mines;
-	} forEach (missionNamespace getVariable _minesDB);
-	missionNamespace setVariable [_minesDB, nil];
+			if (alive _x) then {
+				deleteVehicle _x;
+			};
+		} forEach _ownedMines;
+		missionNamespace setVariable [_ownedMineVar, [], true];
+	};
 
 	{
 		if !(isPlayer _x) then {deleteVehicle _x;};

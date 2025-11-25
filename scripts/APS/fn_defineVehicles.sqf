@@ -17,6 +17,7 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
     private _projectileGPS = getNumber (_x >> "gps") == 1;
     private _projectileImmunity = getNumber (_x >> "immunity");
     private _projectileLoal = getNumber (_x >> "loal") == 1;
+    private _projectileMine = getNumber (_x >> "mine") == 1;
     private _projectileRemote = getNumber (_x >> "remote") == 1;
     private _projectileSam = getNumber (_x >> "sam") == 1;
     private _projectileSead = getNumber (_x >> "sead") == 1;
@@ -39,6 +40,7 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
             ["gps", _projectileGPS],
             ["immunity", _projectileImmunity],
             ["loal", _projectileLoal],
+            ["mine", _projectileMine],
             ["name", _ammo],
             ["remote", _projectileRemote],
             ["sam", _projectileSam],

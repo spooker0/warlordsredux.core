@@ -42,6 +42,8 @@ private _ammoConfig = _unit getVariable ["WL2_currentAmmoConfig", createHashMap]
 if (_ammoConfig getOrDefault ["loal", false]) then {
     private _selectedTarget = _unit getVariable ["WL2_selectedTargetAA", objNull];
     if (!isNull _selectedTarget && isNull _originalTarget) then {
+        private _isFlying = (_selectedTarget modelToWorld [0, 0, 0]) # 2 > 5;
+        if (!_isFlying) exitWith {};
         private _unitSpeed = speed _unit;
         _projectile setVelocityModelSpace [0, _unitSpeed * 3.6 + 100, 0];
         _projectile setMissileTarget [_selectedTarget, true];
@@ -65,10 +67,14 @@ if (_ammoConfig getOrDefault ["loal", false]) then {
             _distanceBeforeNotch = 5000 + (_projAlt - _targetAlt) * 2;
             _distanceBeforeNotch = (_distanceBeforeNotch max 3500) min 16000;
         } else {
-            _distanceBeforeNotch = _ammoConfig getOrDefault ["immunity", 3500];
+            _distanceBeforeNotch = 3500;
         };
     };
 };
+
+private _immunity = _ammoConfig getOrDefault ["immunity", 1500];
+_distanceBeforeNotch = _distanceBeforeNotch max _immunity;
+
 _projectile setVariable ["DIS_ultimateTarget", _originalTarget];
 
 private _originalPosition = getPosASL _unit;

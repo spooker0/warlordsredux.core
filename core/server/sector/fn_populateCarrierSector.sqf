@@ -79,4 +79,4 @@ private _presetVehicles = _sector getVariable ["WL2_vehiclesToSpawn", []];
 
 private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
 _ownedVehicles append (_vehicleUnits + _infantryUnits);
-missionNamespace setVariable ["BIS_WL_ownedVehicles_server", _ownedVehicles, true];
+missionNamespace setVariable ["BIS_WL_ownedVehicles_server", _ownedVehicles];

@@ -140,3 +140,5 @@ while { alive _projectile } do {
 };
 
 deleteVehicle _laserTarget;
+
+[[_unit], 10] remoteExec ["WL2_fnc_reportTargets", BIS_WL_enemySide];

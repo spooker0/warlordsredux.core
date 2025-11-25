@@ -60,8 +60,6 @@ if (side group player == independent && _asset isKindOf "Man" && !isPlayer _asse
             selectPlayer _asset;
             _playerGroup selectLeader player;
 
-            player spawn APS_fnc_setupProjectiles;
-
             playSoundUI ["AddItemOK"];
         };
     }, true] call WL2_fnc_addTargetMapButton;

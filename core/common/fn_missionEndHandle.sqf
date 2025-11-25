@@ -16,13 +16,17 @@ if (!isDedicated) then {
 	profileNamespace setVariable ["WL2_drawSectorIcons", toJSON _drawSectorIcons];
 	saveProfileNamespace;
 
+	openMap false;
+
+	BIS_WL_missionEnd = true;
+	private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
+	if (isNull _display) then {
+		0 spawn WL2_fnc_scoreboard;
+	};
+
 	if (_gameWinner == independent) exitWith {
 		"Victory" call WL2_fnc_announcer;
-		private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
-		if (isNull _display) then {
-			0 spawn WL2_fnc_scoreboard;
-		};
-		uiSleep 5;
+		uiSleep 15;
 		["WL2_End_Timeout", true] call BIS_fnc_endMission;
 	};
 
@@ -78,12 +82,7 @@ if (!isDedicated) then {
 		};
 	};
 
-	private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
-	if (isNull _display) then {
-		0 spawn WL2_fnc_scoreboard;
-	};
-
-	uiSleep 5;
+	uiSleep 15;
 
 	private _debriefing = format ["WL2_%1_%2_%3", _status, _playerSide, _surrender];
 	[_debriefing, true] call BIS_fnc_endMission;
@@ -93,17 +92,29 @@ if (!isDedicated) then {
 		showScoretable 0;
 	};
 } else {
-	private _teamVariable = switch (_gameWinner) do {
-		case west: { "BIS_WL_eastOwnedVehicles" };
-		case east: { "BIS_WL_westOwnedVehicles" };
-		case independent: { "" };
-		default { "" };
+	private _base = if (_gameWinner == west) then {
+		WL2_base2;
+	} else {
+		WL2_base1;
 	};
-	private _ownedVehicles = missionNamespace getVariable [_teamVariable, []];
-	{
-		_x setDamage 1;
-	} forEach _ownedVehicles;
 
-	uiSleep 20;
+	private _startTime = serverTime;
+	private _startPos = _base modelToWorld [0, -400, 300];
+	for "_i" from 1 to 5 do {
+		for "_j" from 1 to 20 do {
+			private _explosion = createVehicle ["R_80mm_HE", _startPos, [], 0, "CAN_COLLIDE"];
+
+			private _targetPos = _base modelToWorld [random 400 - 200, random 400 - 200, 0];
+			private _targetVectorDirAndUp = [_startPos, _targetPos] call BIS_fnc_findLookAt;
+			_explosion setVectorDirAndUp _targetVectorDirAndUp;
+			_explosion setVelocityModelSpace [0, 200, 0];
+
+			uiSleep (random 0.1);
+		};
+		uiSleep (random 5);
+	};
+	private _timeElapsed = serverTime - _startTime;
+	uiSleep (30 - _timeElapsed);
+
 	endMission "End1";
 };

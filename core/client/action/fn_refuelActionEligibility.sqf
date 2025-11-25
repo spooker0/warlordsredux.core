@@ -1,13 +1,26 @@
 #include "includes.inc"
 params ["_target", "_caller"];
 
-private _isAlive = alive _target;
-private _stopped = speed _target < 1;
+if (!alive _target) exitWith {
+    false
+};
+
+if (speed _target > 1) exitWith {
+    false
+};
+
 private _hasAccess = ([_target, _caller, "full"] call WL2_fnc_accessControl) # 0;
+if (!_hasAccess) exitWith {
+    false
+};
+
 private _nearbyRefuel = (_target nearEntities ["All", WL_MAINTENANCE_RADIUS]) select {
-    alive _x &&
-    getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "transportFuel") > 0 &&
+    alive _x
+} select {
+    private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+    WL_ASSET(_assetActualType, "hasRefuel", 0) > 0
+} select {
     ([_x, _caller, "cargo"] call WL2_fnc_accessControl) # 0
 };
 
-_isAlive && _stopped && _hasAccess && count _nearbyRefuel > 0;
+count _nearbyRefuel > 0;

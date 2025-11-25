@@ -13,7 +13,8 @@ if (!_hasAccess) exitWith {
 private _nearbyRepair = (_target nearEntities ["All", WL_MAINTENANCE_RADIUS]) select {
     alive _x
 } select {
-    getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "transportRepair") > 0
+    private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+    WL_ASSET(_assetActualType, "hasRepair", 0) > 0
 } select {
     ([_x, _caller, "cargo"] call WL2_fnc_accessControl) # 0
 };

@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_asset", "_playerUID"];
+params ["_asset", "_playerUID", "_reconType"];
 
 if (isDedicated) exitWith {};
 
@@ -45,6 +45,16 @@ while { alive _asset } do {
         private _targetIntersection = _targetIntersections # 0 # 0;
         private _area = [ASLtoAGL _targetIntersection, 125, 125, 0, false];
         private _unitsInArea = [BIS_WL_playerSide, _area] call WL2_fnc_detectUnits;
+
+        if (_reconType == 2) then {
+            private _airArea = [ASLtoAGL _targetIntersection, 3000, 3000, 0, false];
+            private _airUnitsInArea = [BIS_WL_playerSide, _airArea] call WL2_fnc_detectUnits;
+            _airUnitsInArea = _airUnitsInArea select { _x isKindOf "Air" } select {
+                private _posAGL = _x modelToWorld [0, 0, 0];
+                _posAGL # 2 > 50
+            };
+            _unitsInArea insert [-1, _airUnitsInArea, true];
+        };
 
         [_unitsInArea, 20] remoteExec ["WL2_fnc_reportTargets", BIS_WL_playerSide];
 

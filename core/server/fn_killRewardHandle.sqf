@@ -56,7 +56,7 @@ private _squadmates = ["getSquadmates", [_playerId, false]] call SQD_fnc_query;
 private _squadReward = round (_killReward * 0.3 / (sqrt (count _squadmates) max 1));
 {
 	private _squadmateUid = getPlayerUID _x;
-	[_squadReward, _squadmateUid] call WL2_fnc_fundsDatabaseWrite;
+	[_squadReward, _squadmateUid, false] call WL2_fnc_fundsDatabaseWrite;
 
 	[_unit, _squadReward, "Squad assist", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _x];
 } forEach _squadmates;
