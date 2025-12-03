@@ -13,8 +13,12 @@ _texture ctrlWebBrowserAction ["LoadFile", "src\ui\gen\buttons.html"];
 _texture setVariable ["WL2_buttonsMenuOffsetX", _offsetX];
 _texture setVariable ["WL2_buttonsMenuOffsetY", _offsetY];
 
+systemChat format ["Buttons loaded: %1", diag_frameNo toFixed 0];
+
 _texture ctrlAddEventHandler ["PageLoaded", {
     params ["_texture"];
+    systemChat format ["Menu texture loaded: %1", diag_frameNo toFixed 0];
+
     private _menuButtonIconMap = createHashMapFromArray [
         ["access-control", "a3\modules_f\data\iconunlock_ca.paa"],
         ["add-waypoint", "A3\ui_f\data\map\markers\military\box_CA.paa"],
@@ -98,6 +102,8 @@ _texture ctrlAddEventHandler ["PageLoaded", {
     private _buttonsDataJSON = toJSON _allButtonsData;
     private _script = format ["setButtons(%1, %2, %3);", _buttonsDataJSON, _offsetX, _offsetY];
     _texture ctrlWebBrowserAction ["ExecJS", _script];
+
+    systemChat format ["Buttons loaded: %1", diag_frameNo toFixed 0];
 }];
 
 _texture ctrlAddEventHandler ["JSDialog", {

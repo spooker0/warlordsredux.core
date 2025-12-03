@@ -93,7 +93,8 @@ private _singletonScriptHandle = [_map] spawn {
     params ["_map"];
     if (count WL_MapBusy > 0) exitWith {};
 
-    uiNamespace setVariable ["WL2_assetTargetSelectedTime", serverTime];
+    systemChat format ["Buttons start trigger: %1", diag_frameNo toFixed 0];
+
     uiNamespace setVariable ["WL2_mapButtons", createHashMap];
 
     private _targetsClicked = [];

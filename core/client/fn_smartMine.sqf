@@ -3,7 +3,6 @@ params ["_asset"];
 
 private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
 _asset setVariable ["WL2_smartMines", WL_ASSET(_assetActualType, "smartMine", 0), true];
-private _side = [_asset] call WL2_fnc_getAssetSide;
 
 private _dispenseSounds = [
     "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_01.wss",
@@ -24,6 +23,8 @@ private _assetData = WL_ASSET_DATA;
 
 while { alive _asset } do {
     uiSleep 1;
+
+    private _side = [_asset] call WL2_fnc_getAssetSide;
 
     if (!isNull attachedTo _asset) then {
         continue;
