@@ -30,9 +30,9 @@ function setButtons(buttonGroups, left, top) {
             if (iconUrl) {
                 const iconElement = document.createElement('img');
                 iconElement.className = 'button-icon';
-                A3API.RequestTexture(iconUrl, 16).then(img => {
-                    iconElement.src = img;
-                });
+                // A3API.RequestTexture(iconUrl, 16).then(img => {
+                //     iconElement.src = img;
+                // });
                 btn.appendChild(iconElement);
             }
 
