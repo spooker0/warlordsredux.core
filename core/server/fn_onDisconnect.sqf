@@ -1,6 +1,13 @@
 #include "includes.inc"
 params ["_uid", ["_instant", false]];
 
+private _ownedAI = allUnits select { _x getVariable ["BIS_WL_ownerAsset", "123"] == _uid };
+{
+    if (!isPlayer _x) then {
+        deleteVehicle _x;
+    };
+} forEach _ownedAI;
+
 if (!_instant) then {
     uiSleep 120;
 };
