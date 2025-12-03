@@ -47,7 +47,7 @@ private _deployActionId = _asset addAction [
 
                 if (count _nearbyEntities > 0) exitWith {
                     private _nearbyObjectName = [_nearbyEntities # 0] call WL2_fnc_getAssetTypeName;
-                    ["Deploying too close to %1!", _nearbyObjectName] call WL2_fnc_smoothText;
+                    [format ["Deploying too close to %1!", _nearbyObjectName]] call WL2_fnc_smoothText;
                     playSound "AddItemFailed";
                     _asset setVariable ["WL2_loadingAsset", false, true];
                 };

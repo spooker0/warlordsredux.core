@@ -3,8 +3,6 @@ const hintText = hintWrapper.querySelector('p');
 const keysList = hintWrapper.querySelector('.keys-list');
 
 const animationTimer = document.querySelector('.animation-timer');
-const notificationWrapper = document.querySelector('.notification-wrapper');
-const notificationList = document.querySelector('.notification-list');
 
 const sectorWrapperDiv = document.querySelector('.sector-wrapper');
 const sectorCaptureDiv = sectorWrapperDiv.querySelector('.sector-capture-display');
@@ -64,40 +62,6 @@ function updateAnimationTimer(progress) {
     animationTimer.style.background = `linear-gradient(to right, #00ff00 ${clampedProgress * 100}%, rgba(0,0,0,0.5) ${clampedProgress * 100}%)`;
 }
 
-function playNotificationAnimation(isShort) {
-    notificationWrapper.style.visibility = 'visible';
-    notificationWrapper.classList.remove('is-animating');
-    notificationWrapper.classList.remove('animation-done');
-    void notificationWrapper.offsetWidth;   // trigger reflow to restart animation
-    notificationWrapper.classList.add('is-animating');
-
-    if (!isShort) {
-        notificationWrapper.addEventListener('animationend', () => {
-            notificationWrapper.classList.remove('is-animating');
-            notificationWrapper.classList.add('animation-done');
-        });
-    }
-}
-
-function addNotification(message, fontSize, timeout) {
-    document.documentElement.style.setProperty('--notification-timeout', `${timeout}s`);
-
-    const listItem = document.createElement('li');
-    listItem.textContent = message;
-    listItem.style.setProperty('--notification-font-size', fontSize ? fontSize.toString() : '1.0');
-    notificationList.prepend(listItem);
-
-    playNotificationAnimation(timeout <= 1);
-
-    setTimeout(() => {
-        listItem.remove();
-
-        if (notificationList.children.length === 0) {
-            notificationWrapper.style.visibility = 'hidden';
-        }
-    }, timeout * 1000);
-}
-
 function playSectorAnimation() {
     if (!sectorVoteHiding || !sectorCaptureHiding) {
         return;
@@ -150,7 +114,7 @@ function hideSectorCapture() {
     hideSectorWrapper();
 }
 
-function updateSectorCapture(captureData) {
+function updateSectorCapture(captureData, fontSize) {
     if (captureData.length === 0) {
         hideSectorCapture();
         return;
@@ -159,6 +123,8 @@ function updateSectorCapture(captureData) {
 
     const sectorList = sectorCaptureDiv.querySelector('.sector-capture-list');
     sectorList.innerHTML = '';
+
+    fontSize = fontSize ? `${fontSize}pt` : '10pt';
 
     captureData.forEach((sector) => {
         const listItem = document.createElement('li');
@@ -169,6 +135,7 @@ function updateSectorCapture(captureData) {
         const progressLeftSpan = document.createElement('span');
         progressLeftSpan.className = 'sector-progress-left';
         progressLeftSpan.textContent = `${Math.floor(leftValue)}`;
+        progressLeftSpan.style.fontSize = fontSize;
         listItem.appendChild(progressLeftSpan);
 
         const leftPercent = sector[3];
@@ -176,11 +143,13 @@ function updateSectorCapture(captureData) {
         const nameSpan = document.createElement('span');
         nameSpan.className = 'sector-progress-name';
         nameSpan.textContent = `${sector[0]} (${Math.round(leftPercent)}%)`;
+        nameSpan.style.fontSize = fontSize;
         listItem.appendChild(nameSpan);
 
         const progressRightSpan = document.createElement('span');
         progressRightSpan.className = 'sector-progress-right';
         progressRightSpan.textContent = `${Math.floor(rightValue)}`;
+        progressRightSpan.style.fontSize = fontSize;
         listItem.appendChild(progressRightSpan);
 
         const attackingColor = sideToColor(sector[4]);

@@ -57,7 +57,6 @@ _texture ctrlAddEventHandler ["PageLoaded", {
             private _bluforCount = count _bluforPlayers;
             private _opforCount = count _opforPlayers;
 
-            // if (_isAdmin) then {
             private _playerArray = [
                 _bluforPlayers apply { name _x },
                 _opforPlayers apply { name _x }
@@ -70,13 +69,6 @@ _texture ctrlAddEventHandler ["PageLoaded", {
                 str (_isAdmin || _isModerator || _isSpectator),
                 _playerJSON
             ]];
-            // } else {
-            //     _texture ctrlWebBrowserAction ["ExecJS", format [
-            //         "setPlayers(%1, %2, %3);",
-            //         _bluforCount, _opforCount,
-            //         str (_isAdmin || _isModerator || _isSpectator)
-            //     ]];
-            // };
 
             uiSleep 0.1;
         };

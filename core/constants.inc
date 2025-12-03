@@ -1,5 +1,5 @@
 // Live: update to latest version
-#define WL_VERSION "2.7.0"
+#define WL_VERSION "2.7.1"
 
 // Live: set all to 0
 #define WL_HARD_AI_MODE 0
@@ -94,6 +94,7 @@
 #define WL_MAX_BUILDINGS 25
 #define WL_MAX_AUTOASSETS 2
 #define WL_MAX_MINES 30
+#define WL_MAX_ADVANCED_MINES 3
 
 #define WL_COOLDOWN_SCAN 300
 #define WL_COOLDOWN_FTSL 60
@@ -115,12 +116,14 @@
 
 #define WL_UAV_ALT_VALUES [50, 100, 200, 300, 400, 500, 750, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000, 7000]
 #define WL_UAV_LOITER_VALUES [50, 100, 200, 300, 400, 500, 750, 1000, 1500, 2000, 2500, 3000]
+#define WL_SMART_MINE_DISTANCES [500, 400, 300, 200, 100, 0]
+#define WL_SMART_MINE_ANGLES [15, 30, 45, 90, 360, 0]
 
 #define WL_TARGET_FRIENDLY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_playerSide], objNull])
 #define WL_TARGET_ENEMY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_enemySide], objNull])
 #define WL_CONTROL_MAP (uiNamespace getVariable ["BIS_WL_mapControl", controlNull])
 #define WL_SPECIAL_SECTORS (["Wait", "Surrender"])
-#define WL_DESTROYER_OUTLINES ["marker_USS Khe Sanh_outline", "marker_USS Liberty_outline", "marker_USS Tanoa_outline"]
+#define WL_DESTROYER_OUTLINES ["marker_USS Khe Sanh_outline", "marker_USS Liberty_outline"]
 #define WL_PLAYER_REQUISITION_LIST (missionNamespace getVariable format ["WL2_purchasable_%1", BIS_WL_playerSide])
 #define WL_REQUISITION_CATEGORIES ["Infantry", "Light Vehicles", "Heavy Vehicles", "Rotary Wing", "Fixed Wing", "Remote Control", "Air Defense", "Sector Defense", "Structures", "Naval", "Gear", "Fast Travel", "Strategy"]
 #define WL_BASES [WL2_base1, WL2_base2]

@@ -4,6 +4,7 @@ params ["_forwardBase", "_startTime", "_endTime", "_side"];
 _forwardBase setVariable ["WL2_canDemolish", true];
 _forwardBase animateSource ["Terminal_source", 100, true];
 _forwardBase setVariable ["WL2_forwardBaseOwner", _side];
+_forwardBase setVariable ["WL2_mapCircleRadius", WL_FOB_MIN_DISTANCE];
 
 private _currentForwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 _currentForwardBases pushBack _forwardBase;

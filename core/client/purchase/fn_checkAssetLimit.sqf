@@ -23,6 +23,14 @@ if ([_class] call _isBuildable) then {
     _typeLimit = WL_MAX_ASSETS;
 };
 
+private _isSmartMine = WL_ASSET(_class, "smartMine", 0) > 0;
+if (_isSmartMine) then {
+    _limitedVehicles = _limitedVehicles select {
+        _x getVariable ["WL2_isAdvancedMines", false];
+    };
+    _typeLimit = WL_MAX_ADVANCED_MINES;
+};
+
 if (count _limitedVehicles >= _typeLimit) exitWith {
     [false, localize "STR_A3_WL_popup_asset_limit_reached"];
 };

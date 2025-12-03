@@ -135,6 +135,63 @@ if (_operateAccess && typeof _asset in ["B_Radar_System_01_F", "O_Radar_System_0
     }, false] call WL2_fnc_addTargetMapButton;
 };
 
+if (_operateAccess && WL_ASSET(_assetActualType, "smartMine", 0) > 0) then {
+    private _smartMineNext = {
+        params ["_asset"];
+        private _smartMineDistance = _asset getVariable ["WL2_smartMineDistance", 0];
+        private _newSmartMineDistance = (_smartMineDistance - 1 + 6) % 6;
+        _asset setVariable ["WL2_smartMineDistance", _newSmartMineDistance, true];
+        playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss"];
+
+        private _distanceText = WL_SMART_MINE_DISTANCES # _newSmartMineDistance;
+        private _distanceColor = if (_distanceText == 0) then { "red" } else { "green" };
+        format ["<span class='%1'>Trigger distance: %2 m</span>", _distanceColor, _distanceText];
+    };
+    private _smartMinePrevious = {
+        params ["_asset"];
+        private _smartMineDistance = _asset getVariable ["WL2_smartMineDistance", 0];
+        private _newSmartMineDistance = (_smartMineDistance + 1) % 6;
+        _asset setVariable ["WL2_smartMineDistance", _newSmartMineDistance, true];
+        playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss"];
+
+        private _distanceText = WL_SMART_MINE_DISTANCES # _newSmartMineDistance;
+        private _distanceColor = if (_distanceText == 0) then { "red" } else { "green" };
+        format ["<span class='%1'>Trigger distance: %2 m</span>", _distanceColor, _distanceText];
+    };
+
+    private _detonationDistance = WL_SMART_MINE_DISTANCES # (_asset getVariable ["WL2_smartMineDistance", 0]);
+    private _detonationDistanceColor = if (_detonationDistance == 0) then { "red" } else { "green" };
+    private _smartDistanceText = format ["<span class='%1'>Trigger distance: %2m</span>", _detonationDistanceColor, _detonationDistance];
+
+    [_asset, _targetId, "smart-mine-adjust", _smartDistanceText, [_smartMineNext, _smartMinePrevious], false] call WL2_fnc_addTargetMapButton;
+
+    private _smartMineTypeChange = {
+        params ["_asset"];
+        private _smartMineType = _asset getVariable ["WL2_smartMineType", 0];
+        private _newSmartMineType = (_smartMineType + 1) % 3;
+        _asset setVariable ["WL2_smartMineType", _newSmartMineType, true];
+        playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss"];
+
+        private _smartMineTypeText = switch (_newSmartMineType) do {
+            case 0: { "Trigger type: All" };
+            case 1: { "Trigger type: Anti-tank" };
+            case 2: { "Trigger type: Anti-personnel" };
+            default { "Trigger type: All" };
+        };
+        format ["<span class='green'>%1</span>", _smartMineTypeText];
+    };
+
+    private _smartMineType = _asset getVariable ["WL2_smartMineType", 0];
+    private _smartMineTypeText = switch (_smartMineType) do {
+        case 0: { "Trigger type: All" };
+        case 1: { "Trigger type: Anti-tank" };
+        case 2: { "Trigger type: Anti-personnel" };
+        default { "Trigger type: All" };
+    };
+    _smartMineTypeText = format ["<span class='green'>%1</span>", _smartMineTypeText];
+    [_asset, _targetId, "smart-mine-type", _smartMineTypeText, _smartMineTypeChange, false] call WL2_fnc_addTargetMapButton;
+};
+
 private _crewPosition = (fullCrew [_asset, "", true]) select {!("cargo" in _x)};
 private _radarSensor = (listVehicleSensors _asset) select {{"ActiveRadarSensorComponent" in _x} forEach _x};
 private _hasRadar = count _radarSensor > 0 && (count _crewPosition > 1 || unitIsUAV _asset);

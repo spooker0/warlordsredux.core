@@ -143,6 +143,7 @@ if (_asset isKindOf "Man") then {
 
 		case "Land_Cargo20_blue_F";
 		case "Land_Cargo20_red_F": {
+			_asset setVariable ["WL2_mapCircleRadius", WL_FOB_CAPTURE_RANGE, true];
 			[_asset] remoteExec ["WL2_fnc_setupForwardBaseAction", 0, true];
 		};
 
@@ -192,15 +193,15 @@ if (_asset isKindOf "Man") then {
 		};
 
 		// Suicide drones
-		case "B_UAV_06_F";
-		case "O_UAV_06_F";
-		case "I_UAV_06_F": {
-			_asset setVariable ["WL2_isBombDrone", true, true];
-			_asset addEventHandler ["Killed", {
-				params ["_unit"];
-				[player, "droneExplode", _unit] remoteExec ["WL2_fnc_handleClientRequest", 2];
-			}];
-		};
+		// case "B_UAV_06_F";
+		// case "O_UAV_06_F";
+		// case "I_UAV_06_F": {
+		// 	_asset setVariable ["WL2_isBombDrone", true, true];
+		// 	_asset addEventHandler ["Killed", {
+		// 		params ["_unit"];
+		// 		[player, "droneExplode", _unit] remoteExec ["WL2_fnc_handleClientRequest", 2];
+		// 	}];
+		// };
 	};
 
 	if ([_asset] call WL2_fnc_isDrone) then {
@@ -233,7 +234,9 @@ if (_asset isKindOf "Man") then {
 			[player, "droneExplode", _target] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
 			private _detonateValue = _target getVariable ["WL2_detonateValue", 0];
-			["ammo_Bomb_SDB", getPosASL _target, _detonateValue, 2] spawn DIS_fnc_bunkerBuster;
+
+			private _targetPos = _target modelToWorldWorld [0, 2.5, -1];
+			["M_Vorona_HEAT", _targetPos, [vectorDir _target, vectorUp _target], _detonateValue, 2, true] spawn DIS_fnc_bunkerBuster;
 		}, nil, 100, false, true, "ActionInMap", "cameraOn == _target", -1];
 
 		_asset addEventHandler ["Killed", {
@@ -242,7 +245,9 @@ if (_asset isKindOf "Man") then {
 			_unit setVariable ["WL2_explosionActivated", true];
 			[player, "droneExplode", _unit] remoteExec ["WL2_fnc_handleClientRequest", 2];
 			private _detonateValue = _unit getVariable ["WL2_detonateValue", 0];
-			["ammo_Bomb_SDB", getPosASL _unit, _detonateValue, 2] spawn DIS_fnc_bunkerBuster;
+
+			private _targetPos = _unit modelToWorldWorld [0, 2.5, -1];
+			["M_Vorona_HEAT", _targetPos, [vectorDir _unit, vectorUp _unit], _detonateValue, 2, true] spawn DIS_fnc_bunkerBuster;
 		}];
 	};
 
@@ -259,9 +264,15 @@ if (_asset isKindOf "Man") then {
 		[_asset] remoteExec ["WL2_fnc_setupMiniMortarAction", 0, true];
 	};
 
+	if (WL_ASSET(_assetActualType, "smartMine", 0) > 0) then {
+		_asset setVariable ["WL2_isAdvancedMines", true, true];
+		[_asset] spawn WL2_fnc_smartMine;
+	};
+
 	private _threatDetection = WL_ASSET(_assetActualType, "threatDetection", 0);
 	if (_threatDetection > 0) then {
 		_asset setVariable ["DIS_missileDetector", _threatDetection, true];
+		_asset setVariable ["WL2_mapCircleRadius", _threatDetection, true];
 		_asset setVariable ["WL_scannerOn", true, true];
 	};
 

@@ -20,13 +20,14 @@
 
         private _targetReset = missionNamespace getVariable [format ["WL_targetReset_%1", BIS_WL_playerSide], false];
         if (isNull WL_TARGET_FRIENDLY || _targetReset) then {
-            private _mostVotedVar = format ["BIS_WL_mostVoted_%1", BIS_WL_playerSide];
+            private _voteEndVar = format ["WL2_voteEnd_%1", BIS_WL_playerSide];
+            private _voteEndTime = missionNamespace getVariable [_voteEndVar, -1];
+
             private _voteTallyDisplayVar = format ["BIS_WL_sectorVoteTallyDisplay_%1", BIS_WL_playerSide];
             private _sortedVoteList = missionNamespace getVariable [_voteTallyDisplayVar, []];
-            private _mostVoted = missionNamespace getVariable [_mostVotedVar, []];
 
-            private _eta = if (count _mostVoted > 0) then {
-                round (_mostVoted # 1 - serverTime);
+            private _eta = if (count _sortedVoteList > 0) then {
+                round (_voteEndTime - serverTime);
             } else {
                 -1;
             };

@@ -75,8 +75,7 @@ private _sectors = uiNamespace getVariable ["WL2_spectatorDrawSectors", []];
         true,
         _iconTextSize,
         "RobotoCondensedBold",
-        "center",
-        true
+        "center"
     ];
 } forEach _vehicles;
 
@@ -97,8 +96,7 @@ private _cameraPos = positionCameraToWorld [0, 0, 0];
         true,
         0.04 * _projectileSize,
         "RobotoCondensedBold",
-        "center",
-        true
+        "center"
     ];
 } forEach _projectiles;
 

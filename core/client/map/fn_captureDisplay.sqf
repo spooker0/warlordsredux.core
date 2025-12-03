@@ -12,6 +12,8 @@ private _sideToText = {
     ["BLUFOR", "OPFOR", "INDEP"] # ([west, east, independent] find _side);
 };
 
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+
 while { !BIS_WL_missionEnd } do {
 	uiSleep WL_TIMEOUT_STANDARD;
 
@@ -50,5 +52,7 @@ while { !BIS_WL_missionEnd } do {
         [_sectorName, _capturingTeamCap, _defendingTeamCap, _captureProgressPercent, _capturingTeamText, _defendingTeamText];
 	};
 
-    _texture ctrlWebBrowserAction ["ExecJS", format ["updateSectorCapture(%1);", toJSON _sectorCaptureList]];
+    private _captureInterfaceFontSize = _settingsMap getOrDefault ["captureInterfaceFontSize", 10];
+
+    _texture ctrlWebBrowserAction ["ExecJS", format ["updateSectorCapture(%1, %2);", toJSON _sectorCaptureList, _captureInterfaceFontSize]];
 };

@@ -6,6 +6,7 @@ switch (_locality) do {
 		BIS_WL_playerSide = side group player;
 		BIS_WL_sidesArray = [west, east, resistance];
 		BIS_WL_competingSides = [west, east];
+		BIS_WL_enemySide = (BIS_WL_competingSides - [BIS_WL_playerSide]) # 0;
 		BIS_WL_missionEnd = false;
 		BIS_WL_mapSize = getNumber (configFile >> "cfgWorlds" >> worldName >> "mapSize");
 		if (BIS_WL_mapSize == 0) then {BIS_WL_mapSize = getNumber (configFile >> "cfgWorlds" >> worldName >> "Grid" >> "OffsetY")};
@@ -15,7 +16,6 @@ switch (_locality) do {
 		BIS_WL_guerOwnedVehicles = [];
 	};
 	case "client": {
-		BIS_WL_enemySide = (BIS_WL_competingSides - [BIS_WL_playerSide]) # 0;
 		BIS_WL_mapSizeIndex = BIS_WL_mapSize / 8192;
 		BIS_WL_colorMarkerFriendly = ["colorBLUFOR", "colorOPFOR", "colorIndependent"] # (BIS_WL_sidesArray find BIS_WL_playerSide);
 		BIS_WL_colorMarkerEnemy = ["colorBLUFOR", "colorOPFOR", "colorIndependent"] # (BIS_WL_sidesArray find BIS_WL_enemySide);

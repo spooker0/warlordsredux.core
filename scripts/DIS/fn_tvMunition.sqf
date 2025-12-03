@@ -52,6 +52,8 @@ if (_dazzleable) then {
 _projectile setVariable ["WL2_isTvMunition", true];
 [_projectile, player] spawn WL2_fnc_uavJammer;
 
+[_camera, getPlayerUID player, 1] spawn WL2_fnc_reconOpticsAction;
+
 private _flightMode = if (_projectileIsShell) then {
     1
 } else {

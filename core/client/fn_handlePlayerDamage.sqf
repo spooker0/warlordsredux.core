@@ -11,6 +11,13 @@ if (_hitPoint == "incapacitated") then {
     _damage = 0.8 min _damage;
 };
 
+if (_projectile isKindOf "MineCore" || _projectile isKindOf "TimeBombCore") then {
+    private _instigator = [_source, _instigator] call WL2_fnc_handleInstigator;
+    if (side group _instigator == side group _unit) then {
+        _damage = _unit getHit _selection;
+    };
+};
+
 if (lifeState _unit == "INCAPACITATED") exitWith {
     _damage min 0.99;
 };
@@ -36,7 +43,7 @@ private _playerVehicle = vehicle _unit;
 private _isInVehicle = _playerVehicle != _unit && alive _playerVehicle;
 private _vehicleMaxAps = _playerVehicle call APS_fnc_getMaxAmmo;
 if (_isImpactDamage && _isInVehicle && _vehicleMaxAps > 0) exitWith {
-    0;
+    _unit getHit _selection;
 };
 
 if (_damage < 1) exitWith {

@@ -1,6 +1,47 @@
 #include "includes.inc"
 params [["_unit", player], ["_paidFor", false]];
 
+private _isItemVanilla = {
+    params ["_item", "_itemType"];
+    private _modList = configSourceModList (configFile >> _itemType >> _item);
+    _modList = _modList select {
+        "@" in _x;
+    };
+    count _modList == 0;
+};
+
+private _isItemValid = {
+    params ["_item"];
+    if (_item == "") exitWith { true };
+    if (isClass (configFile >> "CfgVehicles" >> _item)) exitWith {
+        [_item, "CfgVehicles"] call _isItemVanilla;
+    };
+    if (isClass (configFile >> "CfgMagazines" >> _item)) exitWith {
+        [_item, "CfgMagazines"] call _isItemVanilla;
+    };
+    if (isClass (configFile >> "CfgWeapons" >> _item)) exitWith {
+        [_item, "CfgWeapons"] call _isItemVanilla;
+    };
+    false;
+};
+
+private _loadoutSanitize = {
+    params ["_loadout"];
+    {
+        if (_x isEqualType "") then {
+            private _itemValid = [_x] call _isItemValid;
+            if (!_itemValid) then {
+                [format ["Removed invalid item from loadout: %1", _x]] call WL2_fnc_smoothText;
+                _loadout set [_forEachIndex, ""];
+            };
+        } else {
+            if (_x isEqualType []) then {
+                [_x] call _loadoutSanitize;
+            };
+        };
+    } forEach _loadout;
+};
+
 private _countRockets = {
     params ["_loadout"];
 
@@ -121,6 +162,8 @@ private _sanityChecks = {
 private _loadoutIndex = profileNamespace getVariable [format ["WLC_loadoutIndex_%1", BIS_WL_playerSide], 0];
 private _customizationLoadout = profileNamespace getVariable [format ["WLC_savedLoadout_%1_%2", BIS_WL_playerSide, _loadoutIndex], []];
 if (count _customizationLoadout > 0) then {
+    [_customizationLoadout] call _loadoutSanitize;
+
     private _lastLoadout = WL2_lastLoadout;
     private _rocketCountBefore = if (count _lastLoadout > 0) then {
         [_lastLoadout] call _countRockets

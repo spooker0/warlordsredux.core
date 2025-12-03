@@ -94,6 +94,27 @@ document.querySelectorAll('.slot').forEach(slot => {
     });
 });
 
+const loadoutsEl = document.querySelector('.loadouts');
+for (let i = 1; i <= 30; i++) {
+    const loadoutEl = document.createElement('div');
+    loadoutEl.classList.add('loadout');
+    loadoutEl.classList.add(`loadout-${i}`);
+
+    document.createElement('span');
+    const loadoutNumberEl = document.createElement('span');
+    loadoutNumberEl.classList.add('loadout-number');
+    loadoutNumberEl.textContent = `${i}`;
+    loadoutEl.appendChild(loadoutNumberEl);
+
+    for (let j = 0; j < 3; j++) {
+        const slotEl = document.createElement('span');
+        slotEl.classList.add('loadout-weapon-name');
+
+        loadoutEl.appendChild(slotEl);
+    }
+    loadoutsEl.appendChild(loadoutEl);
+}
+
 document.querySelectorAll('.loadout').forEach(loadout => {
     loadout.addEventListener('mousedown', function () {
         const allLoadoutsEls = document.querySelectorAll('.loadout');
@@ -1223,6 +1244,9 @@ function updateLoadout(loadout, loadoutIndex, weaponData, magazineData, playerLe
 
     const firstAidKitImage = ammoIconContainer.querySelector('.fak-icon');
     populateImage(firstAidKitImage, "A3\\Weapons_f\\Items\\data\\UI\\gear_FirstAidKit_CA.paa");
+
+    const tentImage = ammoIconContainer.querySelector('.tent-icon');
+    populateImage(tentImage, "a3\\modules_f_curator\\data\\portraitchemlightblue_ca.paa");
 
     handleAttachmentSelection();
     weaponChanged();

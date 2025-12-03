@@ -3,10 +3,13 @@ WL_IsReplaying = true;
 
 private _profileDrawIcons = profileNamespace getVariable ["WL2_drawIcons", ""];
 private _profileDrawEllipses = profileNamespace getVariable ["WL2_drawEllipses", ""];
+private _profileDrawSemiCircles = profileNamespace getVariable ["WL2_drawSemiCircles", ""];
 private _profileDrawRectangles = profileNamespace getVariable ["WL2_drawRectangles", ""];
 private _profileDrawSectorIcons = profileNamespace getVariable ["WL2_drawSectorIcons", ""];
 _profileDrawIcons = fromJSON _profileDrawIcons;
 _profileDrawEllipses = fromJSON _profileDrawEllipses;
+_profileDrawSemiCircles = fromJSON _profileDrawSemiCircles;
+_profileDrawRectangles = fromJSON _profileDrawRectangles;
 _profileDrawSectorIcons = fromJSON _profileDrawSectorIcons;
 
 if (isNil "_profileDrawIcons") exitWith {
@@ -33,6 +36,7 @@ for "_i" from 0 to _countFrames - 1 do {
 
     uiNamespace setVariable ["WL2_drawIcons", _frameIcons];
     uiNamespace setVariable ["WL2_drawEllipses", _frameEllipses];
+    uiNamespace setVariable ["WL2_drawSemiCircles", _frameSemiCircles];
     uiNamespace setVariable ["WL2_drawRectangles", _frameRectangles];
     uiNamespace setVariable ["WL2_drawSectorIcons", _frameSectorIcons];
 
@@ -41,6 +45,7 @@ for "_i" from 0 to _countFrames - 1 do {
 
 uiNamespace setVariable ["WL2_drawIcons", []];
 uiNamespace setVariable ["WL2_drawEllipses", []];
+uiNamespace setVariable ["WL2_drawSemiCircles", []];
 uiNamespace setVariable ["WL2_drawRectangles", []];
 uiNamespace setVariable ["WL2_drawSectorIcons", []];
 

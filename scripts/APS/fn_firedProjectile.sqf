@@ -1,8 +1,7 @@
 #include "includes.inc"
-// params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
 params ["_projectile", "_unit"];
 
-private _firedPosition = _unit modelToWorld [0, 0, 0];
+private _firedPosition = _projectile modelToWorld [0, 0, 0];
 private _minDistSqr = APS_MIN_DISTANCE_SQR;
 private _maxDistSqr = APS_MAX_DISTANCE_SQR;
 
@@ -48,7 +47,24 @@ private _interception = {
 	private _explosionPosition = _target getRelPos [sqrt _maxDistSqr, _projectileRelDir];
 	private _explosionHeight = (_projectilePosition # 2) min (sqrt _maxDistSqr);
 	_explosionPosition set [2, _explosionHeight];
-	createVehicle ["SmallSecondary", _explosionPosition, [], 0, "FLY"];
+	[_explosionPosition, [
+		["ImpactSparksSabot1", 0.1],
+		["ImpactSparksSabot1", 0.1],
+		["ImpactSparksSabot1", 0.1],
+		["ImpactSparksSabot1", 0.1],
+		["ImpactSparksSabot1", 0.1],
+		["CannonFired2", 0.5],
+		["SecondaryExp", 0.5],
+		["SecondarySmoke", 1]
+	]] remoteExec ["WL2_fnc_particleEffect", 0];
+
+	private _apsSounds = [
+		"a3\sounds_f\arsenal\explosives\grenades\explosion_mini_grenade_01.wss",
+		"a3\sounds_f\arsenal\explosives\grenades\explosion_mini_grenade_02.wss",
+		"a3\sounds_f\arsenal\explosives\grenades\explosion_mini_grenade_03.wss",
+		"a3\sounds_f\arsenal\explosives\grenades\explosion_mini_grenade_04.wss"
+	];
+	playSound3D [selectRandom _apsSounds, objNull, false, AGLtoASL _explosionPosition];
 
 	[_target, _relativeDirection, true, _apsProjectileType, _unit] remoteExec ["APS_fnc_report", _target];
 

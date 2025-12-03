@@ -22,28 +22,42 @@ if (count _nearbyAssets > 0) then {
 };
 
 if (isNull (findDisplay 160 displayCtrl 51)) then {
-    _mapScale = ctrlMapScale WL_CONTROL_MAP;
+    private _mapScale = ctrlMapScale WL_CONTROL_MAP;
     private _pulseFrequency = 1;
     private _pulseIconSize = 1.5;
-    _timer = (serverTime % _pulseFrequency);
+    private _timer = (serverTime % _pulseFrequency);
     _timer = if (_timer <= (_pulseFrequency / 2)) then {_timer} else {_pulseFrequency - _timer};
-    _markerSize = linearConversion [0, _pulseFrequency / 2, _timer, 1, _pulseIconSize];
-    _markerSizeArr = [_markerSize, _markerSize];
+    private _markerSize = linearConversion [0, _pulseFrequency / 2, _timer, 1, _pulseIconSize];
+    private _markerSizeArr = [_markerSize, _markerSize];
 
     {
         _x setMarkerSizeLocal [20 * _mapScale * BIS_WL_mapSizeIndex, (markerSize _x) # 1];
     } forEach BIS_WL_sectorLinks;
 
+    private _surrenderWarningActive = uiNamespace getVariable ["WL2_surrenderWarningActive", false];
     {
-        if !(_x in BIS_WL_selection_availableSectors) then {
-            ((_x getVariable "BIS_WL_markers") # 0) setMarkerSizeLocal [1, 1];
-        } else {
+        private _marker = (_x getVariable "BIS_WL_markers") # 0;
+        private _currentMarkerSize = if (_x in BIS_WL_selection_availableSectors) then {
             if (_x == BIS_WL_targetVote) then {
-                ((_x getVariable "BIS_WL_markers") # 0) setMarkerSizeLocal [_pulseIconSize, _pulseIconSize];
+                _markerSizeArr vectorMultiply 1.5;
             } else {
-                ((_x getVariable "BIS_WL_markers") # 0) setMarkerSizeLocal _markerSizeArr;
+                _markerSizeArr;
+            };
+        } else {
+            [1, 1];
+        };
+
+        private _sectorName = _x getVariable ["WL2_name", "Sector"];
+        if (_sectorName == "Surrender") then {
+            if (_surrenderWarningActive) then {
+                _currentMarkerSize = _markerSizeArr vectorMultiply 5;
+                _marker setMarkerColorLocal "ColorRed";
+            } else {
+                _marker setMarkerColorLocal "ColorWhite";
             };
         };
+
+        _marker setMarkerSizeLocal _currentMarkerSize;
     } forEach BIS_WL_allSectors;
 };
 
@@ -102,20 +116,21 @@ private _singletonScriptHandle = [_map] spawn {
         _targetsClicked pushBack cameraOn;
     };
 
-    if (cameraOn getVariable ["DIS_selectionIndex", 0] == 1 && uiNamespace getVariable ["DIS_currentTargetingMode", "none"] == "gps") then {
-        playSoundUI ["a3\ui_f\data\sound\rsccombo\soundexpand.wss", 2];
-        private _coordinate = _map ctrlMapScreenToWorld getMousePosition;
-        private _cordX = (_coordinate # 0 / 100) toFixed 0;
-        private _cordY = (_coordinate # 1 / 100) toFixed 0;
-        while {count _cordX < 3} do {
-            _cordX = format ["0%1", _cordX];
-        };
-        while {count _cordY < 3} do {
-            _cordY = format ["0%1", _cordY];
-        };
-        private _cordString = format ["%1%2", _cordX, _cordY];
-        cameraOn setVariable ["DIS_gpsCord", _cordString];
-    };
+    // if (cameraOn getVariable ["DIS_selectionIndex", 0] == 1 && uiNamespace getVariable ["DIS_currentTargetingMode", "none"] == "gps") then {
+    //     playSoundUI ["a3\ui_f\data\sound\rsccombo\soundexpand.wss", 2];
+    //     private _coordinate = _map ctrlMapScreenToWorld getMousePosition;
+    //     private _cordX = (_coordinate # 0 / 100) toFixed 0;
+    //     private _cordY = (_coordinate # 1 / 100) toFixed 0;
+    //     while {count _cordX < 3} do {
+    //         _cordX = format ["0%1", _cordX];
+    //     };
+    //     while {count _cordY < 3} do {
+    //         _cordY = format ["0%1", _cordY];
+    //     };
+    //     private _cordString = format ["%1%2", _cordX, _cordY];
+    //     cameraOn setVariable ["DIS_gpsCord", _cordString];
+    // };
+
     uiNamespace setVariable ["WL2_assetTargetsSelected", _targetsClicked];
 
     private _totalButtons = 0;

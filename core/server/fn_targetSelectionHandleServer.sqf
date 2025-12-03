@@ -6,6 +6,7 @@
 		params ["_side", "_sideIndex"];
 		private _votingResetVar = format ["BIS_WL_resetTargetSelection_server_%1", _side];
 		private _waitVar = format ["WL2_waitsInRow_%1", _side];
+		private _surrenderVotingVar = format ["WL2_surrenderVoting_%1", _side];
 
 		private _calculateMostVotedSector = {
 			private _allPlayers = call BIS_fnc_listPlayers;
@@ -117,11 +118,10 @@
 				if (serverTime >= _nextUpdate) then {
 					private _calculation = call _calculateMostVotedSector;
 
-					private _mostVotedVar = format ["BIS_WL_mostVoted_%1", _side];
-					private _mostVotedData = [_calculation # 0, _votingEnd];
-					private _mostVotedPreviousData = missionNamespace getVariable [_mostVotedVar, [objNull, 0]];
-					if (_mostVotedPreviousData isNotEqualTo _mostVotedData) then {
-						missionNamespace setVariable [_mostVotedVar, _mostVotedData, true];
+					private _voteEndVar = format ["WL2_voteEnd_%1", _side];
+					private _voteEndPreviousData = missionNamespace getVariable [_voteEndVar, 0];
+					if (_voteEndPreviousData isNotEqualTo _votingEnd) then {
+						missionNamespace setVariable [_voteEndVar, _votingEnd, true];
 					};
 
 					private _tallyDisplayVar = format ["BIS_WL_sectorVoteTallyDisplay_%1", _side];
@@ -148,25 +148,34 @@
 						private _waitsInRow = missionNamespace getVariable [_waitVar, 0];
 						_waitsInRow = _waitsInRow + 1;
 						missionNamespace setVariable [_waitVar, _waitsInRow];
+
+						missionNamespace setVariable [_surrenderVotingVar, false];
 					};
 					case "Surrender": {
-						missionNamespace setVariable ["BIS_WL_missionEnd", true, true];
+						private _isSurrenderVoting = missionNamespace getVariable [_surrenderVotingVar, false];
+						if (!_isSurrenderVoting) then {
+							missionNamespace setVariable [_surrenderVotingVar, true];
+							[] remoteExec ["WL2_fnc_surrenderWarning", _side];
+						} else {
+							missionNamespace setVariable ["BIS_WL_missionEnd", true, true];
+							private _oppositeTeam = if (_side == west) then { east } else { west };
+							[_oppositeTeam] spawn WL2_fnc_calculateEndResults;
 
-						private _oppositeTeam = if (_side == west) then { east } else { west };
-
-						[_oppositeTeam] spawn WL2_fnc_calculateEndResults;
-						[_oppositeTeam, true] remoteExec ["WL2_fnc_missionEndHandle", 0];
+							[_oppositeTeam, true, true] remoteExec ["WL2_fnc_missionEndHandle", 0];
+							[_oppositeTeam, true, false] spawn WL2_fnc_missionEndHandle;
+						};
 					};
 					default {
 						missionNamespace setVariable [_waitVar, 0];
+						missionNamespace setVariable [_surrenderVotingVar, false];
 						[_side, _selectedSector] call WL2_fnc_selectTarget;
+
+						missionNamespace setVariable [format ["BIS_WL_sectorVoteTallyDisplay_%1", _side], [], true];
+						missionNamespace setVariable [format ["WL_targetReset_%1", _side], false, true];
 					};
 				};
 
 				call _wipeVotes;
-
-				missionNamespace setVariable [format ["BIS_WL_sectorVoteTallyDisplay_%1", _side], [], true];
-				missionNamespace setVariable [format ["WL_targetReset_%1", _side], false, true];
 
 				["server", true] call WL2_fnc_updateSectorArrays;
 

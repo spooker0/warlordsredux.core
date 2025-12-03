@@ -13,12 +13,16 @@ if !(_isAdmin || _isModerator) exitWith {};
 #endif
 
 private _playerList = serverNamespace getVariable ["playerList", createHashMap];
+private _rebalancedPlayer = [_targetUid] call BIS_fnc_getUnitByUID;
 private _currentSide = _playerList getOrDefault [_targetUid, sideUnknown];
-if (_currentSide == west) then {
-    _playerList set [_targetUid, east];
-} else {
-    _playerList set [_targetUid, west];
-};
+[_targetUid, true] spawn WL2_fnc_onDisconnect;
+private _newSide = if (_currentSide == west) then { east } else { west };
 
-private _punishedPlayer = _targetUid call BIS_fnc_getUnitByUID;
-[[serverTime + 10, "team balance"]] remoteExec ["WL2_fnc_punishmentClient", _punishedPlayer];
+["remove", [getPlayerID _rebalancedPlayer]] call SQD_fnc_server;
+_playerList set [_targetUid, _newSide];
+private _newGroup = createGroup [_newSide, true];
+[_rebalancedPlayer] joinSilent _newGroup;
+
+uiSleep 10;
+
+[] remoteExec ["WL2_fnc_rebalanced", _rebalancedPlayer];

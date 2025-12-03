@@ -58,8 +58,9 @@ if (_assetSide != side group player) exitWith {};
 
 private _relevantVehicles = if (_awacs) then {
     vehicles select {
+        _x isKindOf "Air"
+    } select {
         private _vehiclePos = _x modelToWorldVisual [0, 0, 0];
-        _x isKindOf "Air" &&
         _vehiclePos # 2 > 50 &&
         [_assetPos, getDir _asset, 60, _vehiclePos] call WL2_fnc_inAngleCheck;
     };
@@ -77,8 +78,10 @@ private _relevantVehicles = if (_awacs) then {
 
 private _vehiclesInRadius = _relevantVehicles select {
     private _vehiclePos = _x modelToWorldVisual [0, 0, 0];
-    _vehiclePos distance2D _assetPos < _scanRadius &&
-    alive _x &&
+    _vehiclePos distance2D _assetPos < _scanRadius;
+} select {
+    alive _x;
+} select {
     vehicle _x == _x;
 };
 private _scannedObjects = _vehiclesInRadius select {

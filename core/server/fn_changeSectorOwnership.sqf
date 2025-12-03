@@ -57,5 +57,7 @@ private _base2Owner = _base2 getVariable ["BIS_WL_owner", independent];
 if (_base1Owner == _base2Owner) then {
 	private _gameWinner = _base1Owner;
 	[_gameWinner] spawn WL2_fnc_calculateEndResults;
-	[_gameWinner, false] remoteExec ["WL2_fnc_missionEndHandle", 0];
+
+	[_gameWinner, false, true] remoteExec ["WL2_fnc_missionEndHandle", 0];
+	[_gameWinner, false, false] spawn WL2_fnc_missionEndHandle;
 };

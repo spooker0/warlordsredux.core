@@ -1,7 +1,9 @@
 #include "includes.inc"
-params ["_projectileClass", "_position", ["_bunkerBusterSteps", 7], ["_delay", 5]];
+params ["_projectileClass", "_position", "_dirAndUp", "_bunkerBusterSteps", ["_delay", 5], ["_ignoreHeight", false]];
 
 private _penetrator = createVehicle [_projectileClass, _position, [], 0, "NONE"];
+_penetrator setVariable ["APS_ammoOverride", "BunkerBuster"];
+_penetrator setVectorDirAndUp _dirAndUp;
 _penetrator enableSimulation false;
 
 private _nearDestroyables = (nearestObjects [_position, [], 100, true]) select {
@@ -9,22 +11,29 @@ private _nearDestroyables = (nearestObjects [_position, [], 100, true]) select {
     _x distance2D _position < _distanceLimit && _x getVariable ["WL2_canDemolish", false];
 };
 
-private _inDestroyerArea = {
-    _position inArea _x
-} count WL_DESTROYER_OUTLINES > 0;
-if (_inDestroyerArea) then {
-    _position set [2, 9.8];
+if (_ignoreHeight) then {
+    private _posAltitude = _position # 2;
+    private _terrainAltitude = getTerrainHeightASL _position;
+    _position set [2, _posAltitude max (_terrainAltitude + 1.2)];
     _penetrator setPosASL _position;
 } else {
-    private _inCarrierSector = {
-        _position inArea (_x getVariable "objectAreaComplete") && _x getVariable ["WL2_isAircraftCarrier", false];
-    } count BIS_WL_allSectors > 0;
-    if (_inCarrierSector) then {
-        _position set [2, 24.5];
+    private _inDestroyerArea = {
+        _position inArea _x
+    } count WL_DESTROYER_OUTLINES > 0;
+    if (_inDestroyerArea) then {
+        _position set [2, 9.8];
         _penetrator setPosASL _position;
     } else {
-        _position set [2, 0.5];
-        _penetrator setPosATL _position;
+        private _inCarrierSector = {
+            _position inArea (_x getVariable "objectAreaComplete") && _x getVariable ["WL2_isAircraftCarrier", false];
+        } count BIS_WL_allSectors > 0;
+        if (_inCarrierSector) then {
+            _position set [2, 24.5];
+            _penetrator setPosASL _position;
+        } else {
+            _position set [2, 0.7];
+            _penetrator setPosATL _position;
+        };
     };
 };
 

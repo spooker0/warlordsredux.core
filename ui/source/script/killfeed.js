@@ -368,10 +368,16 @@ function showRibbon({ badgeName, iconUrl, badgeLevel }) {
         const minTimer = setTimeout(() => {
             ribbon.classList.remove("ribbon-enter");
             ribbon.classList.add("ribbon-exit");
-            ribbon.addEventListener("animationend", () => {
+
+            if (MINIMALISTIC) {
                 ribbon.remove();
                 resolve();
-            }, { once: true });
+            } else {
+                ribbon.addEventListener("animationend", () => {
+                    ribbon.remove();
+                    resolve();
+                }, { once: true });
+            }
         }, RIBBON_MIN_SHOW_MS);
 
         ribbon.addEventListener("DOMNodeRemoved", () => {

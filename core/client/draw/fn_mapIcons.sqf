@@ -57,6 +57,8 @@
 			continue;
 		};
 
+		private _isSpectator = WL_IsSpectator;
+
 		private _side = BIS_WL_playerSide;
 		_mapData set ["side", _side];
 
@@ -75,8 +77,8 @@
 		private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
 		private _visibleStrongholds = _strongholds select {
 			private _sector = _x getVariable ["WL_strongholdSector", objNull];
-			private _revealedBy = _sector getVariable ["BIS_WL_revealedBy", []];
-			BIS_WL_playerSide in _revealedBy
+			private _sectorOwner = _sector getVariable ["BIS_WL_owner", independent];
+			BIS_WL_playerSide == _sectorOwner || _sector == WL_TARGET_FRIENDLY
 		};
 		_mapData set ["strongholds", _visibleStrongholds];
 
@@ -108,30 +110,21 @@
 		} else {
 			[]
 		};
-		private _vehiclesOnSide = _vehicles select { count crew _x > 0 } select { side _x == _side };
+		private _vehiclesOnSide = _vehicles select { count crew _x > 0 } select { side _x == _side || _isSpectator };
 		_sideVehicles insert [-1, _vehiclesOnSide, true];	// append but only if unique
-		private _playersOnSide = allPlayers select { side group _x == _side };
+		private _playersOnSide = allPlayers select { side group _x == _side || _isSpectator };
 		_sideVehicles insert [-1, _playersOnSide, true];
 		private _playerAi = units player;
 		_sideVehicles insert [-1, _playerAi, true];
+
+		if (_isSpectator) then {
+			_sideVehicles insert [-1, allUnits select { _x isKindOf "Man" }, true];
+		};
+
 		_sideVehicles = _sideVehicles select {
 			isNull objectParent _x
 		};
 		_mapData set ["sideVehicles", _sideVehicles];
-
-		private _sideVehiclesAll = (_vehicles + allUnits) select { simulationEnabled _x } select { !(_x isKindOf "LaserTarget") } select {
-			private _targetSide = [_x] call WL2_fnc_getAssetSide;
-			_targetSide in [west, east, independent]
-		};
-		_mapData set ["sideVehiclesAll", _sideVehiclesAll];
-
-		private _fobSupplies = _sideVehicles select {
-			typeOf _x in [
-				"Land_Cargo20_blue_F",
-				"Land_Cargo20_red_F"
-			]
-		};
-		_mapData set ["fobSupplies", _fobSupplies];
 
 		private _alwaysShowEwUnits = _ewNetworkUnits apply {
 			[_x, 10]
@@ -154,6 +147,11 @@
 			count (_x getVariable ["DIS_advancedSamDetectionLocation", []]) > 0
 		};
 		_mapData set ["advancedSams", _advancedSams];
+
+		private _advancedMines = _sideVehicles select {
+			_x getVariable ["WL2_smartMines", 0] > 0
+		};
+		_mapData set ["advancedMines", _advancedMines];
 
 		private _rallyPoints = missionNamespace getVariable ["WL2_rallyPoints", []];
 		_rallyPoints = _rallyPoints select { alive _x } select {
@@ -227,6 +225,7 @@
 0 spawn {
 	missionNamespace setVariable ["WL2_drawIcons", []];
 	missionNamespace setVariable ["WL2_drawEllipses", []];
+	missionNamespace setVariable ["WL2_drawSemiCircles", []];
 	missionNamespace setVariable ["WL2_drawRectangles", []];
 	missionNamespace setVariable ["WL2_drawSectorIcons", []];
 

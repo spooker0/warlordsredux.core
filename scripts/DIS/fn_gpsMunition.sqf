@@ -126,6 +126,8 @@ while { alive _projectile } do {
             _projectile setMissileTarget [_closestEnemy, true];
 
             _finalTarget = _closestEnemy;
+            private _enemySide = [_closestEnemy] call WL2_fnc_getAssetSide;
+            [[_unit], 10] remoteExec ["WL2_fnc_reportTargets", _enemySide];
 
             _closestEnemy setVariable ["DIS_targetedByGPSMunition", _projectile];
         };
@@ -140,5 +142,3 @@ while { alive _projectile } do {
 };
 
 deleteVehicle _laserTarget;
-
-[[_unit], 10] remoteExec ["WL2_fnc_reportTargets", BIS_WL_enemySide];

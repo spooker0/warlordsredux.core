@@ -44,7 +44,9 @@ estimatedTimeLeft WL_DURATION_MISSION;
 	missionNamespace setVariable ["BIS_WL_missionEnd", true, true];
 
 	[independent] spawn WL2_fnc_calculateEndResults;
-	[independent, false] remoteExec ["WL2_fnc_missionEndHandle", 0];
+
+	[independent, false, true] remoteExec ["WL2_fnc_missionEndHandle", 0];
+	[independent, false, false] spawn WL2_fnc_missionEndHandle;
 };
 
 if !(isDedicated) then {
@@ -64,6 +66,7 @@ if !(isDedicated) then {
 0 spawn WL2_fnc_targetSelectionHandleServer;
 0 spawn WL2_fnc_incomePayoff;
 0 spawn WL2_fnc_garbageCollector;
+0 spawn WL2_fnc_runwayCollector;
 call WL2_fnc_processRunways;
 
 0 spawn WL2_fnc_cleanupCarrier;
@@ -92,6 +95,52 @@ call WL2_fnc_processRunways;
 		};
 		uiSleep (60 * 2);
 	};
+};
+
+0 spawn {
+	[
+		"a3\data_f\snowflake4_ca.paa",
+		4,
+		0.01,
+		25,
+		0.05,
+		2.5,
+		0.5,
+		0.5,
+		0.07,
+		0.07,
+		[1, 1, 1, 0.5],
+		0.0,
+		0.2,
+		0.5,
+		0.5,
+		true,
+		false
+	] call BIS_fnc_setRain;
+
+	private _timesTriggered = 0;
+	while { !BIS_WL_missionEnd && _timesTriggered < 3 } do {
+		private _snowIntensity = random 1;
+		if (_snowIntensity < 0.4) then {
+			_snowIntensity = 0.4;
+		};
+
+		0 setOvercast (_snowIntensity * 2);
+		0 setRain _snowIntensity;
+		0 setFog (0.2 * _snowIntensity);
+		setHumidity (0.9 * _snowIntensity);
+		forceWeatherChange;
+
+		_timesTriggered = _timesTriggered + 1;
+
+		uiSleep (60 * 30);
+	};
+
+	0 setOvercast 0;
+	0 setRain 0;
+	0 setFog 0;
+	setHumidity 0;
+	forceWeatherChange;
 };
 
 0 spawn {

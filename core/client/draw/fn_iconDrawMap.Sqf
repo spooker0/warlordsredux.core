@@ -8,6 +8,7 @@ private _drawIconsAnimated = uiNamespace getVariable ["WL2_drawIconsAnimated", [
 private _drawIconsFollowMouse = uiNamespace getVariable ["WL2_drawIconsFollowMouse", []];
 private _drawLines = uiNamespace getVariable ["WL2_drawLines", []];
 private _drawEllipses = uiNamespace getVariable ["WL2_drawEllipses", []];
+private _drawSemiCircles = uiNamespace getVariable ["WL2_drawSemiCircles", []];
 private _drawRectangles = uiNamespace getVariable ["WL2_drawRectangles", []];
 
 {
@@ -20,6 +21,7 @@ private _angle = (serverTime * 75) % 360;
 	_m drawIcon _x;
 } forEach _drawIconsAnimated;
 
+private _scale = ctrlMapScale _m;
 {
 	private _icon = +_x;
 	private _mousePosition = getMousePosition;
@@ -28,7 +30,7 @@ private _angle = (serverTime * 75) % 360;
 	_icon set [2, _mapPosition];
 
 	private _textScale = _icon # 8;
-	private _textSize = linearConversion [0.05, 0.1, ctrlMapScale _m, _textScale / 2, _textScale, true];
+	private _textSize = linearConversion [0.05, 0.1, _scale, _textScale / 2, _textScale, true];
 	_icon set [8, _textSize];
 
 	_m drawIcon _icon;
@@ -41,6 +43,33 @@ private _angle = (serverTime * 75) % 360;
 {
 	_m drawEllipse _x;
 } forEach _drawEllipses;
+
+private _circleScale = 6.4 * worldSize / 8192 * _scale;
+{
+	_x params ["_sectorAngle", "_color", "_position", "_size", "_direction", "_scanLines"];
+	_m drawIcon [
+		format ["\a3\ui_f\data\IGUI\RscCustomInfo\Sensors\Sectors\sector%1_ca.paa", _sectorAngle],
+		_color,
+		_position,
+		_size / _circleScale,
+		_size / _circleScale,
+		_direction
+	];
+
+	// if (!_scanLines) then {
+	// 	continue;
+	// };
+
+	// private _scanAngleStart = _direction - (_sectorAngle / 2);
+	// private _scanAngleEnd = _direction + (_sectorAngle / 2);
+	// private _scanAngleActual = linearConversion [0, 2, serverTime % 2, _scanAngleStart, _scanAngleEnd, true];
+	// _m drawLine [
+	// 	_position,
+	// 	_position getPos [_size * 0.95, _scanAngleActual],
+	// 	[1, 1, 1, 0.3],
+	// 	6
+	// ];
+} forEach _drawSemiCircles;
 
 {
 	_m drawRectangle _x;

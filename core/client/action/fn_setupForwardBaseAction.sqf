@@ -112,13 +112,20 @@ private _setupActionId = [
 				true;
 			};
 
+			private _exit = false;
 			while { alive player && lifeState player != "INCAPACITATED" } do {
 				private _deployResult = [_target] call _deploymentAction;
 				if (_deployResult) then {
 					break;
 				};
+				if (inputAction "navigateMenu" > 0) then {
+					_exit = true;
+					break;
+				};
 				uiSleep 1;
 			};
+
+			if (_exit) exitWith {};
 
 			[format ["Forward base under construction. %1 seconds remaining.", WL_FOB_SETUP_TIME]] call WL2_fnc_smoothText;
 			private _endTime = serverTime + WL_FOB_SETUP_TIME;

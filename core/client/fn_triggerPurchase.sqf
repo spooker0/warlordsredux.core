@@ -345,6 +345,7 @@ switch (_className) do {
         };
     };
     case "TestRebalance": {
+        ["Rebalancing... Wait 10 seconds..."] call WL2_fnc_smoothText;
         [player, getPlayerUID player] remoteExec ["WL2_fnc_rebalance", 2];
     };
     case "SwitchToGreen": {

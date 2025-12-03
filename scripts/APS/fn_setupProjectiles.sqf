@@ -2,19 +2,22 @@
 
 addMissionEventHandler ["ProjectileCreated", {
 	params ["_projectile"];
-	if !(local _projectile) exitWith { true };
-
-    // ["", "", "", "", "", "", _projectile] call BIS_fnc_effectFiredHeliRocket;
+	if !(local _projectile) exitWith {};
 
     private _unit = getShotParents _projectile # 0;
-    if (isNil "_unit") exitWith { true };
-    if (isNull _unit) exitWith { true };
+    if (isNil "_unit") then {
+        _unit = player;
+    };
+    if (isNull _unit) then {
+        _unit = player;
+    };
 
     if (_projectile isKindOf "Chemlight_base") exitWith {
         [_projectile] spawn WL2_fnc_placeRespawnBag;
     };
 
     private _projectileType = typeOf _projectile;
+    if ("#" in _projectileType) exitWith {};
 
     private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
     private _projectileAmmoOverrides = WL_ASSET(_assetActualType, "ammoOverrides", []);
@@ -27,7 +30,7 @@ addMissionEventHandler ["ProjectileCreated", {
     };
 
     private _apsProjectileType = _projectile getVariable ["APS_ammoOverride", _projectileType];
-    if !(_apsProjectileType in APS_projectileConfig) exitWith { true };
+    if !(_apsProjectileType in APS_projectileConfig) exitWith {};
 
     private _projectileConfig = APS_projectileConfig getOrDefault [_apsProjectileType, createHashMap];
 
@@ -52,10 +55,6 @@ addMissionEventHandler ["ProjectileCreated", {
         };
 
         BIS_WL_playerSide revealMine _projectile;
-        _projectile addEventHandler ["MineActivated", {
-            params ["_projectile", "_isActive"];
-            systemChat str _this;
-        }];
 
         _allOwnedMines pushBack _projectile;
         _allOwnedMines = _allOwnedMines select { alive _x };
@@ -123,7 +122,7 @@ addMissionEventHandler ["ProjectileCreated", {
         _projectile addEventHandler ["Explode", {
             params ["_projectile", "_position"];
             private _bunkerBusterSteps = _projectile getVariable ["DIS_bunkerBusterSteps", 7];
-            [typeOf _projectile, _position, _bunkerBusterSteps] spawn DIS_fnc_bunkerBuster;
+            [typeOf _projectile, _position, [vectorDir _projectile, vectorUp _projectile], _bunkerBusterSteps] spawn DIS_fnc_bunkerBuster;
         }];
     };
 

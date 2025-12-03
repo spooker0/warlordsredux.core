@@ -49,6 +49,8 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["repair-fob", "a3\ui_f\data\igui\cfg\actions\repair_ca.paa"],
         ["repair-stronghold", "a3\ui_f\data\igui\cfg\actions\repair_ca.paa"],
         ["sector-scan", "a3\drones_f\air_f_gamma\uav_02\data\ui\map_uav_02_ca.paa"],
+        ["smart-mine-adjust", "a3\ui_f\data\map\vehicleicons\iconexplosiveuw_ca.paa"],
+        ["smart-mine-type", "a3\ui_f\data\map\vehicleicons\iconexplosiveuw_ca.paa"],
         ["target-altitude", "a3\ui_f\data\igui\cfg\simpletasks\types\Heli_ca.paa"],
         ["target-loiter-radius", "A3\ui_f\data\map\markers\military\circle_CA.paa"],
         ["vehicle-paradrop", "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa"]

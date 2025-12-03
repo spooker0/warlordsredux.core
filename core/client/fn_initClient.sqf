@@ -224,6 +224,7 @@ player setUserActionText [_squadActionId, _squadActionText, "<img size='2' image
 uiNamespace setVariable ["WL2_canBuy", true];
 uiNamespace setVariable ["WL2_chatHistory", []];
 uiNamespace setVariable ["WL2_modOverrideUid", ""];
+uiNamespace setVariable ["WL2_currentNotification", []];
 
 WL2_lastLoadout = getUnitLoadout player;
 [player, true] call WLC_fnc_onRespawn;
@@ -292,6 +293,7 @@ uiNamespace setVariable ["WL2_cruiseMissileLockState", "NONE"];
 uiNamespace setVariable ["WL2_guidMap", createHashMap];
 uiNamespace setVariable ["WL2_scoreboardData", []];
 uiNamespace setVariable ["WL2_damagedProjectiles", createHashMap];
+uiNamespace setVariable ["WL2_surrenderWarningActive", false];
 
 showScoretable 0;
 "deathInfo" cutFadeOut 0;
@@ -316,3 +318,5 @@ private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID play
 private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];
 _ownedVehicles pushBack player;
 missionNamespace setVariable [_ownedVehiclesVar, _ownedVehicles, [2, clientOwner]];
+
+[true] spawn WL2_fnc_pingSounds;

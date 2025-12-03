@@ -71,7 +71,7 @@ if (_bunkerBuster > 0) then {
     _projectile addEventHandler ["Explode", {
         params ["_projectile", "_position"];
         private _bunkerBusterSteps = _projectile getVariable ["DIS_bunkerBusterSteps", 7];
-        [typeOf _projectile, _position, _bunkerBusterSteps] spawn DIS_fnc_bunkerBuster;
+        [typeOf _projectile, _position, [vectorDir _projectile, vectorUp _projectile], _bunkerBusterSteps] spawn DIS_fnc_bunkerBuster;
     }];
 };
 

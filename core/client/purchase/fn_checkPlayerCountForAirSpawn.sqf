@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_category", "_cost"];
 
-if (_cost < 5000) exitWith {
+if (_cost < 10000) exitWith {
     [true, ""]
 };
 

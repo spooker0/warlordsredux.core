@@ -1,6 +1,6 @@
 #include "includes.inc"
-params ["_gameWinner", "_isSurrender"];
-if (!isDedicated) then {
+params ["_gameWinner", "_isSurrender", "_isClient"];
+if (_isClient) then {
 	{
 		deleteMarkerLocal _x
 	} forEach ["BIS_WL_targetEnemy", "BIS_WL_targetFriendly"];
@@ -8,10 +8,12 @@ if (!isDedicated) then {
 	// Store game data for replay
 	private _drawIcons = missionNamespace getVariable ["WL2_drawIcons", []];
 	private _drawEllipses = missionNamespace getVariable ["WL2_drawEllipses", []];
+	private _drawSemiCircles = missionNamespace getVariable ["WL2_drawSemiCircles", []];
 	private _drawRectangles = missionNamespace getVariable ["WL2_drawRectangles", []];
 	private _drawSectorIcons = missionNamespace getVariable ["WL2_drawSectorIcons", []];
 	profileNamespace setVariable ["WL2_drawIcons", toJSON _drawIcons];
 	profileNamespace setVariable ["WL2_drawEllipses", toJSON _drawEllipses];
+	profileNamespace setVariable ["WL2_drawSemiCircles", toJSON _drawSemiCircles];
 	profileNamespace setVariable ["WL2_drawRectangles", toJSON _drawRectangles];
 	profileNamespace setVariable ["WL2_drawSectorIcons", toJSON _drawSectorIcons];
 	saveProfileNamespace;
@@ -51,7 +53,19 @@ if (!isDedicated) then {
 		_camera switchCamera "INTERNAL";
 
 		private _basePos = _base modelToWorld [0, 0, 0];
-		private _cameraPos = _base modelToWorld [0, -400, 300];
+
+		private _targetDistance = 400;
+		private _initialX = random 400;
+		if (random 1 < 0.5) then {
+			_initialX = -1 * _initialX;
+		};
+		private _initialY = sqrt (_targetDistance ^ 2 - _initialX ^ 2);
+		if (random 1 < 0.5) then {
+			_initialY = -1 * _initialY;
+		};
+
+		private _initialVector = [_initialX, _initialY, 300];
+		private _cameraPos = _base modelToWorld _initialVector;
 
 		private _targetVectorDirAndUp = [_cameraPos, _basePos] call BIS_fnc_findLookAt;
 		_camera setVectorDirAndUp _targetVectorDirAndUp;
@@ -59,7 +73,8 @@ if (!isDedicated) then {
 
 		_camera switchCamera "INTERNAL";
 
-		private _endPos = _base modelToWorld [0, -200, 150];
+		private _finalVector = _initialVector vectorMultiply 0.5;
+		private _endPos = _base modelToWorld _finalVector;
 		private _endTargetVectorDirAndUp = [_endPos, _basePos] call BIS_fnc_findLookAt;
 
 		private _startTime = serverTime;
@@ -82,6 +97,58 @@ if (!isDedicated) then {
 		};
 	};
 
+	[_base] spawn {
+		params ["_base"];
+		playSoundUI ["a3\sounds_f\ambient\battlefield\battlefield_explosions1.wss", 2];
+
+		private _detonateSounds = [
+			"a3\sounds_f\arsenal\explosives\shells\shellheavyb_distexp.wss",
+			"a3\sounds_f\arsenal\explosives\shells\shellheavyb_distexp_01.wss",
+			"a3\sounds_f\arsenal\explosives\shells\shellheavyb_distexp_02.wss",
+			"a3\sounds_f\arsenal\explosives\shells\shellheavyb_distexp_03.wss",
+			"a3\sounds_f\arsenal\explosives\shells\shelllighta_distexp_01.wss",
+			"a3\sounds_f\arsenal\explosives\shells\shelllighta_distexp_02.wss",
+			"a3\sounds_f\arsenal\explosives\shells\shelllighta_distexp_03.wss",
+			"a3\sounds_f\arsenal\explosives\shells\shellmedium_distexp_01.wss",
+			"a3\sounds_f\arsenal\explosives\shells\shellmedium_distexp_02.wss",
+			"a3\sounds_f\arsenal\explosives\shells\shellmedium_distexp_03.wss"
+		];
+
+		private _startPos = _base modelToWorldWorld [500, 500, 500];
+		private _targetBase = -300;
+		while { alive _base } do {
+			private _targetPos = _base modelToWorld [_targetBase + (random 20 - 10), random 300 - 150, 0];
+			_targetPos set [2, 1];
+
+			[_targetPos, [
+				["DeminingExplosiveCircleDust", 1],
+				["BombExp1", random 0.8],
+				["BombSmk1", random 0.2],
+				["SecondaryExp", 0.5],
+				["SecondarySmoke", 2]
+			]] spawn WL2_fnc_particleEffect;
+
+			playSound3D [
+				selectRandom _detonateSounds,
+				objNull,
+				false,
+				AGLtoASL _targetPos,
+				5,
+				1,
+				0,
+				0,
+				true
+			];
+
+			_targetBase = _targetBase + 5;
+
+			if (_targetBase > 300) then {
+				_targetBase = -300;
+			};
+			uiSleep (random 0.2);
+		};
+	};
+
 	uiSleep 15;
 
 	private _debriefing = format ["WL2_%1_%2_%3", _status, _playerSide, _surrender];
@@ -92,29 +159,6 @@ if (!isDedicated) then {
 		showScoretable 0;
 	};
 } else {
-	private _base = if (_gameWinner == west) then {
-		WL2_base2;
-	} else {
-		WL2_base1;
-	};
-
-	private _startTime = serverTime;
-	private _startPos = _base modelToWorld [0, -400, 300];
-	for "_i" from 1 to 5 do {
-		for "_j" from 1 to 20 do {
-			private _explosion = createVehicle ["R_80mm_HE", _startPos, [], 0, "CAN_COLLIDE"];
-
-			private _targetPos = _base modelToWorld [random 400 - 200, random 400 - 200, 0];
-			private _targetVectorDirAndUp = [_startPos, _targetPos] call BIS_fnc_findLookAt;
-			_explosion setVectorDirAndUp _targetVectorDirAndUp;
-			_explosion setVelocityModelSpace [0, 200, 0];
-
-			uiSleep (random 0.1);
-		};
-		uiSleep (random 5);
-	};
-	private _timeElapsed = serverTime - _startTime;
-	uiSleep (30 - _timeElapsed);
-
+	uiSleep 30;
 	endMission "End1";
 };

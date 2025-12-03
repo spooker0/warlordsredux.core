@@ -33,10 +33,19 @@ addMissionEventHandler ["Draw3D", {
     private _targetVehicleIcons = uiNamespace getVariable ["WL_HelmetInterfaceTargetVehicleIcons", []];
     {
         private _target = _x # 2;
+        if (_target isEqualType []) then {
+            drawIcon3D _x;
+            continue;
+        };
+
         private _icon = +_x;
-        private _centerOfMass = getCenterOfMass _target;
-        _centerOfMass set [2, _centerOfMass # 2 + 3];
-        _icon set [2, _target modelToWorldVisual _centerOfMass];
+        if (_x # 6 != "") then {
+            private _centerOfMass = getCenterOfMass _target;
+            _centerOfMass set [2, _centerOfMass # 2 + 3];
+            _icon set [2, _target modelToWorldVisual _centerOfMass];
+        } else {
+            _icon set [2, _target modelToWorldVisual [0, 0, 0]];
+        };
         drawIcon3D _icon;
     } forEach _targetVehicleIcons;
 
@@ -520,7 +529,14 @@ addMissionEventHandler ["Draw3D", {
             ];
         };
 
+        private _currentTargetingMode = uiNamespace getVariable ["DIS_currentTargetingMode", ""];
         {
+            if (_x == "AA" && !(_currentTargetingMode in ["loal", "asam", "esam"])) then {
+                continue;
+            };
+            if (_x == "SEAD" && _currentTargetingMode != "sead") then {
+                continue;
+            };
             private _selectedTarget = _vehicle getVariable [format ["WL2_selectedTarget%1", _x], objNull];
             if (alive _selectedTarget) then {
                 private _isInAngle = if (unitIsUAV _vehicle) then {
@@ -529,21 +545,29 @@ addMissionEventHandler ["Draw3D", {
                     [getPosATL _vehicle, getDir _vehicle, 120, getPosATL _selectedTarget] call WL2_fnc_inAngleCheck;
                 };
 
-                private _angleColor = if (_isInAngle || _x == "AA") then {
-                    [1, 0, 0, 1]
+                private _lockVolume = _settingsMap getOrDefault ["loalLockVolume", 1];
+
+                private _lockIcon = if (_isInAngle || _x == "AA") then {
+                    if (_lockVolume > 0) then {
+                        playSoundUI ["a3\sounds_f\arsenal\weapons\launchers\titan\locked_titan.wss", _lockVolume * 0.5, 2, true];
+                    };
+                    "\A3\ui_f\data\IGUI\Cfg\Targeting\Seeker_full_ca.paa"
                 } else {
-                    [0, 0, 0, 1]
+                    if (_lockVolume > 0) then {
+                        playSoundUI ["a3\sounds_f\arsenal\weapons\launchers\titan\locking_titan.wss", _lockVolume * 0.5, 1, true];
+                    };
+                    "\A3\ui_f\data\IGUI\Cfg\Targeting\Seeker_ca.paa"
                 };
 
                 _targetVehicleIcons pushBack [
-                    "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Threats\locking_ca.paa",
-                    _angleColor,
+                    _lockIcon,
+                    [1, 1, 1, 1],
                     _selectedTarget,
-                    1.0,
-                    1.0,
+                    1.75,
+                    1.75,
                     0,
-                    format ["LOCK %1", _x],
-                    true,
+                    "",
+                    false,
                     0.035,
                     "RobotoCondensedBold",
                     "center",
@@ -551,6 +575,43 @@ addMissionEventHandler ["Draw3D", {
                 ];
             };
         } forEach ["AA", "SEAD"];
+
+        private _gpsCords = _vehicle getVariable ["DIS_gpsCord", ""];
+        if (_gpsCords != "" && _currentTargetingMode == "gps") then {
+            private _gpsTargetData = [_vehicle] call DIS_fnc_calculateInRange;
+            private _isInRange = _gpsTargetData # 0;
+
+            private _lockVolume = _settingsMap getOrDefault ["loalLockVolume", 1];
+            private _lockIcon = if (_isInRange) then {
+                if (_lockVolume > 0) then {
+                    playSoundUI ["a3\sounds_f\arsenal\weapons\launchers\titan\locked_titan.wss", _lockVolume * 0.5, 2, true];
+                };
+                "\A3\ui_f\data\IGUI\Cfg\Targeting\Seeker_full_ca.paa"
+            } else {
+                if (_lockVolume > 0) then {
+                    playSoundUI ["a3\sounds_f\arsenal\weapons\launchers\titan\locking_titan.wss", _lockVolume * 0.5, 1, true];
+                };
+                "\A3\ui_f\data\IGUI\Cfg\Targeting\Seeker_ca.paa"
+            };
+
+            private _targetPos = _gpsTargetData # 3;
+
+            private _actualDistance = _vehicle distance _targetPos;
+            _targetVehicleIcons pushBack [
+                _lockIcon,
+                [1, 1, 1, 1],
+                _targetPos,
+                1.75,
+                1.75,
+                0,
+                format ["%1", (_actualDistance / 1000) toFixed 1],
+                true,
+                0.035,
+                "RobotoCondensedBold",
+                "center",
+                true
+            ];
+        };
 
         uiNamespace setVariable ["WL_HelmetInterfaceTargetInfantryIcons", _targetInfantryIcons];
         uiNamespace setVariable ["WL_HelmetInterfaceTargetVehicleIcons", _targetVehicleIcons];

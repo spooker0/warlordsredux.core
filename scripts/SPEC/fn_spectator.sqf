@@ -144,16 +144,19 @@ _mainDisplay displayAddEventHandler ["KeyDown", {
         private _fromPos = getPosASL cameraOn;
         private _toPos = ((cameraOn screenToWorldDirection [0.5, 0.5]) vectorMultiply 1000) vectorAdd _fromPos;
 
-        private _intersects = lineIntersectsWith [_fromPos, _toPos, objNull, objNull, true];
+        private _intersects = lineIntersectsSurfaces [_fromPos, _toPos, objNull, objNull, true, 1];
+
         private _newTarget = if (count _intersects > 0) then {
-            _intersects select (count _intersects - 1);
+            _intersects select 0 select 3;
         } else {
+            objNull;
+        };
+
+        if (isNull _newTarget) then {
             private _spot = screenToWorld [0.5, 0.5];
             private _objects = nearestObjects [_spot, ["AllVehicles", "Man"], 10];
             if (count _objects > 0) then {
-                _objects select 0;
-            } else {
-                objNull;
+                _newTarget = _objects select 0;
             };
         };
 

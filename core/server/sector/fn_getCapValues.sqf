@@ -7,7 +7,7 @@ private _sideCaptureModifier = createHashMap;
 	private _side = _x;
 
 	if (_side == independent) then {
-		_sideCaptureModifier set [_side, 2];
+		_sideCaptureModifier set [_side, 2.5];
 		continue;
 	};
 

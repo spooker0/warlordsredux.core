@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_firstSpawn"];
 
-private _side = side group player;
+private _side = BIS_WL_playerSide;
 private _homeBase = [_side] call WL2_fnc_getSideBase;
 
 if (_firstSpawn) exitWith {

@@ -46,15 +46,16 @@ _clearFrameButton ctrlAddEventHandler ["ButtonClick", {
 
 _captureButton ctrlAddEventHandler ["ButtonClick", {
     params ["_control"];
-    private _display = ctrlParent _control;
-    private _captureEntry = _display displayCtrl PERF_CAPTURE_ENTRY_TEXT;
-    private _captureFrameTime = parseNumber (ctrlText _captureEntry);
-    if (_captureFrameTime <= 0) exitWith {
-        private _errorText = _display displayCtrl PERF_ERROR_TEXT;
-        _errorText ctrlSetText "Invalid frame time. Please enter a number.";
-    };
-    _captureFrameTime = format ["%1ms", _captureFrameTime];
+    systemChat "Disabled for multiplayer.";
+    // private _display = ctrlParent _control;
+    // private _captureEntry = _display displayCtrl PERF_CAPTURE_ENTRY_TEXT;
+    // private _captureFrameTime = parseNumber (ctrlText _captureEntry);
+    // if (_captureFrameTime <= 0) exitWith {
+    //     private _errorText = _display displayCtrl PERF_ERROR_TEXT;
+    //     _errorText ctrlSetText "Invalid frame time. Please enter a number.";
+    // };
+    // _captureFrameTime = format ["%1ms", _captureFrameTime];
 
-    [format ["Capture frame slower than: %1", _captureFrameTime]] call WL2_fnc_smoothText;
-    call compile "diag_captureSlowFrame ['total', _captureFrameTime]";
+    // [format ["Capture frame slower than: %1", _captureFrameTime]] call WL2_fnc_smoothText;
+    // call compile "diag_captureSlowFrame ['total', _captureFrameTime]";
 }];

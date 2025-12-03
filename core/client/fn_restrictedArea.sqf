@@ -5,9 +5,9 @@ private _endEffect = {
     uiSleep 2;
 };
 
-private _side = BIS_WL_playerSide;
-
 while { !BIS_WL_missionEnd } do {
+    private _side = BIS_WL_playerSide;
+
     private _pos = getPosASL player;
     private _findCurrentSector = BIS_WL_allSectors select {
         _pos inArea (_x getVariable "objectAreaComplete")

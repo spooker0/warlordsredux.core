@@ -46,7 +46,7 @@ function setGPSData(nextKeyName, selectionList, selectionIndex, gridCoord, targe
     const controlsEl = document.querySelector('.mode-gps .gps-controls');
     controlsEl.innerHTML = "";
 
-    selectionList.unshift("ENTER CORDS [0-9] OR CLICK MAP");
+    selectionList.unshift("ENTER CORDS [0-9]");
     selectionList.unshift(`PRESS ${nextKeyName} TO ENTER GRID`);
     selectionList.forEach((item, index) => {
         const listItem = document.createElement('li');

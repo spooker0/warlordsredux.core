@@ -21,15 +21,14 @@ private _infantryGroups = [];
 private _infantryUnits = [];
 private _spawnLocations = _sector getVariable ["WL2_aircraftCarrierInf", []];
 
-private _spawned = 0;
-{
+for "_i" from 0 to 5 do {
     private _infantryGroup = createGroup independent;
     _infantryGroup deleteGroupWhenEmpty true;
     _infantryGroups pushBack _infantryGroup;
 
-    private _spawnPosition = _x;
+    private _spawnPosition = selectRandom _spawnLocations;
 
-    for "_i" from 0 to 6 do {
+    for "_j" from 0 to 8 do {
         private _infantry = _infantryGroup createUnit [selectRandom _unitsPool, _spawnPosition, [], 0, "NONE"];
         _infantry setVehiclePosition [_spawnPosition, [], 10, "NONE"];
 
@@ -38,7 +37,6 @@ private _spawned = 0;
             deleteVehicle _infantry;
         } else {
             _infantry call WL2_fnc_newAssetHandle;
-            _spawned = _spawned + 1;
             doStop _infantry;
             _infantry setUnitPos "MIDDLE";
             _infantry disableAI "PATH";
@@ -49,7 +47,7 @@ private _spawned = 0;
     };
 
     _infantryGroup setBehaviour "COMBAT";
-} forEach (_spawnLocations call BIS_fnc_arrayShuffle);
+};
 
 [_infantryUnits, _sector] spawn WL2_fnc_assetRelevanceCheck;
 

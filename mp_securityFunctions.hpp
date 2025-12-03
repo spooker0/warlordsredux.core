@@ -45,6 +45,7 @@ class CfgRemoteExec {
 		class WL2_fnc_lagMessageHandler {allowedTargets = 2;};
 		class WL2_fnc_missileDestroy {allowedTargets = 2;};
 		class WL2_fnc_mutePlayer {allowedTargets = 0;};
+		class WL2_fnc_particleEffect {allowedTargets = 0;};
 		class WL2_fnc_punishPlayer {allowedTargets = 2;};
 		class WL2_fnc_pingFix {allowedTargets = 1;};
 		class WL2_fnc_prepareStronghold {allowedTargets = 0;};
@@ -70,6 +71,7 @@ class CfgRemoteExec {
 		class WL2_fnc_setupSimpleAsset {allowedTargets = 0;};
 		class WL2_fnc_slingAddAction {allowedTargets = 1;};
 		class WL2_fnc_slingloadInit {allowedTargets = 0;};
+		class WL2_fnc_surrenderWarning {allowedTargets = 0;};
 		class WL2_fnc_smokeCurtainAction {allowedTargets = 0;};
 		class WL2_fnc_smokeCurtainParticles {allowedTargets = 0;};
 		class WL2_fnc_smoothText {allowedTargets = 0;};

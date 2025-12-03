@@ -176,10 +176,13 @@ class CfgFunctions {
 			class mutePlayer {};
 			class onPause {};
 			class onPlayerRespawn {};
+			class particleEffect {};
 			class pingFix {};
 			class pingFixInit {};
+			class pingSounds {};
 			class playerEventHandlers {};
 			class prompt {};
+			class rebalanced {};
 			class repackMagazines {};
 			class reportTargets {};
 			class resetVehicle {};
@@ -191,7 +194,9 @@ class CfgFunctions {
 			class sidePicker {};
 			class sideToFaction {};
 			class spawnAtBase {};
+			class smartMine {};
 			class spectrumInterface {};
+			class surrenderWarning {};
 			class teammatesAvailability {};
 			class triggerPurchase {};
 			class updateLevelDisplay {};
@@ -478,10 +483,12 @@ class CfgFunctions {
 			class lagMessageHandler {};
 			class laserTracker {};
 			class missileDestroy {};
+			class onDisconnect {};
 			class processRunways {};
 			class punishPlayer {};
 			class rebalance {};
 			class requestScoreboard {};
+			class runwayCollector {};
 			class selectTarget {};
 			class serverEHs {};
 			class setScoreboardEntry {};

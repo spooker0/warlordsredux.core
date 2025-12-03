@@ -28,7 +28,7 @@ _controller allowDamage false;
 _controller enableSimulationGlobal false;
 _controller setObjectTextureGlobal [1, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.2,""#000000"",""#ffffff"",""MISSILE\nBATTERY\nCONTROL"")"];
 _controller setObjectTextureGlobal [2, "\A3\Static_F_Destroyer\Ship_MRLS_01\Data\Ui\Ship_MRLS_01_picture_CA.paa"];
-_controller setObjectTextureGlobal [3, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""AMMO\n0"")"];
+_controller setObjectTextureGlobal [3, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""AMMO\n-"")"];
 _destroyerBase setVariable ["WL2_destroyerController", _controller, true];
 
 private _mrls = objNull;
@@ -58,6 +58,7 @@ private _createMrls = {
 
     _mrls removeMagazineTurret ["magazine_Missiles_Cruise_01_Cluster_x18", [0]];
     _mrls setMagazineTurretAmmo ["magazine_Missiles_Cruise_01_x18", 1, [0]];
+    _controller setObjectTextureGlobal [3, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""AMMO\n1"")"];
 
     _mrls setVariable ["WL2_accessControl", 7, true];
 };
@@ -97,6 +98,9 @@ while { alive _destroyerBase } do {
             _nextRespawnTime = serverTime + WL_DESTROYER_RESPAWN;
             "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.2,""#000000"",""#ffffff"",""MISSILE\nBATTERY\nCONTROL"")"
         } else {
+            private _ammoControllerImage = "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""AMMO\n-"")";
+            _controller setObjectTextureGlobal [3, _ammoControllerImage];
+
             format [
                 "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.2,""#000000"",""#ffffff"",""RESPAWN\n%1 MIN"")",
                 ceil ((_nextRespawnTime - serverTime) / 60)

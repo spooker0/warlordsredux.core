@@ -1,6 +1,8 @@
 #include "includes.inc"
 params ["_newUnit", "_oldUnit", "_respawn", "_respawnDelay"];
 
+[false] spawn WL2_fnc_pingSounds;
+
 private _newGroup = group _newUnit;
 if (leader _newGroup != _newUnit) then {
 	[_newGroup, _newUnit] remoteExec ["selectLeader", groupOwner _newGroup];

@@ -42,7 +42,7 @@ private _ammoConfig = _unit getVariable ["WL2_currentAmmoConfig", createHashMap]
 if (_ammoConfig getOrDefault ["loal", false]) then {
     private _selectedTarget = _unit getVariable ["WL2_selectedTargetAA", objNull];
     if (!isNull _selectedTarget && isNull _originalTarget) then {
-        private _isFlying = (_selectedTarget modelToWorld [0, 0, 0]) # 2 > 5;
+        private _isFlying = (_selectedTarget modelToWorld [0, 0, 0]) # 2 > 30;
         if (!_isFlying) exitWith {};
         private _unitSpeed = speed _unit;
         _projectile setVelocityModelSpace [0, _unitSpeed * 3.6 + 100, 0];

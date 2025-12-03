@@ -5,6 +5,13 @@ if (_hitPoint == "incapacitated") then {
     _damage = 0.8 min _damage;
 };
 
+if (_projectile isKindOf "MineCore" || _projectile isKindOf "TimeBombCore") then {
+    private _instigator = [_source, _instigator] call WL2_fnc_handleInstigator;
+    if (side group _instigator == side group _unit) then {
+        _damage = _unit getHit _selection;
+    };
+};
+
 if (lifeState _unit == "INCAPACITATED") exitWith {
     _damage min 0.99;
 };

@@ -25,6 +25,7 @@ private _drawIconsAnimated = [];
 private _drawIconsSelectable = [];
 private _drawIconsFollowMouse = [];
 private _drawEllipses = [];
+private _drawSemiCircles = [];
 private _drawLines = [];
 private _drawRectangles = [];
 
@@ -66,15 +67,28 @@ if !(isNull BIS_WL_targetVote) then {
 // Draw asset selector
 private _assetTargets = WL_AssetActionTargets;
 if (count _assetTargets > 0) then {
+	private _color = [objNull, _mapColorCache] call WL2_fnc_iconColor;
 	{
 		_drawIconsAnimated pushBack [
 			"A3\ui_f\data\map\groupicons\selector_selectedMission_ca.paa",
-			[objNull, _mapColorCache] call WL2_fnc_iconColor,
+			_color,
 			getPosASL _x,
 			40,
 			40,
 			0
 		];
+
+		private _mapCircleRadius = _x getVariable ["WL2_mapCircleRadius", 0];
+		if (_mapCircleRadius > 0) then {
+			_drawEllipses pushBack [
+				getPosASL _x,
+				_mapCircleRadius,
+				_mapCircleRadius,
+				0,
+				_color,
+				""
+			];
+		};
 	} forEach _assetTargets;
 };
 
@@ -250,16 +264,6 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		_baseColor,
 		_fillTexture
 	];
-	if (_base in _assetTargets) then {
-		_drawEllipses pushBack [
-			_position,
-			WL_FOB_MIN_DISTANCE,
-			WL_FOB_MIN_DISTANCE,
-			0,
-			_baseColor,
-			""
-		];
-	};
 
 	private _sectorsInRange = _x getVariable ["WL2_forwardBaseSectors", []];
 	{
@@ -301,21 +305,6 @@ private _rallyPoints = _mapData getOrDefault ["rallyPoints", []];
 		"#(rgb,1,1,1)color(0,0,1,0.2)"
 	];
 } forEach _rallyPoints;
-
-private _fobSupplies = _mapData getOrDefault ["fobSupplies", []];
-{
-	if !(_x in _assetTargets) then {
-		continue;
-	};
-	_drawEllipses pushBack [
-		getPosASL _x,
-		WL_FOB_CAPTURE_RANGE,
-		WL_FOB_CAPTURE_RANGE,
-		0,
-		[_x, _mapColorCache] call WL2_fnc_iconColor,
-		""
-	];
-} forEach _fobSupplies;
 
 // Draw strongholds
 {
@@ -399,7 +388,6 @@ private _scannedUnits = _mapData getOrDefault ["scannedUnits", []];
 
 // Draw scanner
 private _assetData = WL_ASSET_DATA;
-private _scale = 6.4 * worldSize / 8192 * ctrlMapScale _map;
 
 private _scanners = if (_drawAll) then {
 	_mapData getOrDefault ["scannersAll", []]
@@ -416,15 +404,16 @@ private _scanners = if (_drawAll) then {
     private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
 	private _isAWACS = WL_ASSET_FIELD(_assetData, _assetActualType, "hasAWACS", 0) > 0;
 	if (_isAWACS) then {
-		private _size = _scanRadius / _scale;
-		_drawIcons pushBack [
-			"\a3\ui_f\data\IGUI\RscCustomInfo\Sensors\Sectors\sector60_ca.paa",
-			[1, 1, 1, 0.3],
-			_position,
-			_size,
-			_size,
-			getDirVisual _x
-		];
+		if (cameraOn == _x || _x in _assetTargets) then {
+			_drawSemiCircles pushBack [
+				60,
+				[1, 1, 1, 0.3],
+				_position,
+				_scanRadius,
+				getDirVisual _x,
+				true
+			];
+		};
 	} else {
 		private _isNotThreatDetector = WL_ASSET_FIELD(_assetData, _assetActualType, "threatDetection", 0) == 0;
 		if (_isNotThreatDetector) then {
@@ -462,27 +451,9 @@ if (count (_assetTargets arrayIntersect _allSquadmates) > 0) then {
 };
 
 // Draw vehicles
-private _sideVehicles = if (_drawAll) then {
-	_mapData getOrDefault ["sideVehiclesAll", []]
-} else {
-	_mapData getOrDefault ["sideVehicles", []]
-};
-
+private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 {
 	private _position = getPosASL _x;
-
-	private _threatDetector = _x getVariable ["DIS_missileDetector", 0];
-	if (_threatDetector > 0) then {
-		_drawEllipses pushBack [
-			_position,
-			_threatDetector,
-			_threatDetector,
-			0,
-			[_x, _mapColorCache] call WL2_fnc_iconColor,
-			""
-		];
-	};
-
 	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
 	_drawIcons pushBack [
 		[_x, _mapIconCache] call WL2_fnc_iconType,
@@ -520,6 +491,46 @@ private _advancedSams = _mapData getOrDefault ["advancedSams", []];
 		"right"
 	];
 } forEach _advancedSams;
+
+private _advancedMines = _mapData getOrDefault ["advancedMines", []];
+{
+	private _ownsMine = (_x getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player;
+	if !(_ownsMine || _x in _assetTargets) then {
+		continue;
+	};
+
+	private _position = getPosASL _x;
+	private _smartMineDistanceIndex = _x getVariable ["WL2_smartMineDistance", 0];
+	private _detonationDistance = WL_SMART_MINE_DISTANCES # _smartMineDistanceIndex;
+    private _angle = WL_SMART_MINE_ANGLES # _smartMineDistanceIndex;
+
+	private _iconPos = _x modelToWorld [0, _detonationDistance / 2, 0];
+	private _smartMines = _x getVariable ["WL2_smartMines", 0];
+
+	_drawIcons pushBack [
+		"a3\ui_f_curator\data\cfgmarkers\minefieldap_ca.paa",
+		[1, 0, 0, 1],
+		_iconPos,
+		30 * _mapIconScale,
+		30 * _mapIconScale,
+		0,
+		format ["MINES: %1", _smartMines],
+		1,
+		0.038 * _mapIconScale,
+		"PuristaBold",
+		"right"
+	];
+
+	if (_detonationDistance <= 0) then { continue; };
+	_drawSemiCircles pushBack [
+		_angle,
+		[1, 1, 1, 0.3],
+		_position,
+		_detonationDistance,
+		getDirVisual _x,
+		false
+	];
+} forEach _advancedMines;
 
 private _drawSectorMarkerThreshold = _mapData getOrDefault ["sectorMarkerThreshold", 0.4];
 private _drawSectorMarkerText = (ctrlMapScale _map) < _drawSectorMarkerThreshold;
@@ -638,6 +649,7 @@ if (_drawMode == 2) then {
 if (_drawMode == 2) then {
 	private _storedDrawIcons = missionNamespace getVariable ["WL2_drawIcons", []];
 	private _storedDrawEllipses = missionNamespace getVariable ["WL2_drawEllipses", []];
+	private _storedDrawSemiCircles = missionNamespace getVariable ["WL2_drawSemiCircles", []];
 	private _storedDrawRectangles = missionNamespace getVariable ["WL2_drawRectangles", []];
 	private _storedSectorIcons = missionNamespace getVariable ["WL2_drawSectorIcons", []];
 
@@ -651,6 +663,7 @@ if (_drawMode == 2) then {
 	uiNamespace setVariable ["WL2_drawIconsSelectable", _drawIconsSelectable];
 	uiNamespace setVariable ["WL2_drawIconsFollowMouse", _drawIconsFollowMouse];
 	uiNamespace setVariable ["WL2_drawEllipses", _drawEllipses];
+	uiNamespace setVariable ["WL2_drawSemiCircles", _drawSemiCircles];
 	uiNamespace setVariable ["WL2_drawRectangles", _drawRectangles];
 	uiNamespace setVariable ["WL2_drawLines", _drawLines];
 };

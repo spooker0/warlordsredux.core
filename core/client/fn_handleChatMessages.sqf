@@ -112,9 +112,6 @@ if (_channel == 2) exitWith {
         private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
         private _volume = _settingsMap getOrDefault ["squadChatNotificationVolume", 1];
         playSoundUI ["a3\missions_f_oldman\data\sound\phone_sms\chime\phone_sms_chime_05.wss", _volume];
-
-        private _notification = format ["%1: %2", _newFrom, _filteredText];
-        [_notification] call WL2_fnc_smoothText;
     };
 
     [_newFrom, _filteredText];
@@ -131,9 +128,6 @@ if (_channel > 5 && _channel < 16 && _filteredText != "") then {
         _settingsMap getOrDefault ["squadChatNotificationVolume", 1];
     };
     playSoundUI ["a3\missions_f_oldman\data\sound\phone_sms\chime\phone_sms_chime_04.wss", _volume, 1];
-
-    private _notification = format ["%1: %2", _name, _filteredText];
-    [_notification] call WL2_fnc_smoothText;
 };
 
 _filteredText;

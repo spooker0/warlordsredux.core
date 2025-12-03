@@ -135,103 +135,6 @@ li {
     }
 }
 
-.notification-wrapper {
-    position: absolute;
-    top: 5vh;
-    left: 20vw;
-    max-height: 40vh;
-    overflow-y: hidden;
-    transform: scale(2);
-    display: inline-block;
-    padding: 15px;
-    border-radius: 10px;
-    background-color: rgba(34, 34, 34, 0.9);
-    visibility: hidden;
-}
-
-.notification-wrapper.is-animating {
-    animation: notificationSlide 1s ease-out forwards;
-    visibility: visible;
-}
-
-.notification-wrapper.animation-done {
-    top: 30vh;
-    left: 1vw;
-    transform: scale(1);
-    opacity: 1;
-}
-
-.notification-list {
-    max-width: 20vw;
-    margin: 0;
-    padding: 0;
-    overflow-y: hidden;
-}
-
-.notification-list li {
-    position: relative;
-    font-size: calc(var(--notification-font-size, 1.0) * 9pt);
-    padding-bottom: 5px;
-    overflow: hidden;
-}
-
-.notification-list li::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    height: 2px;
-    width: 100%;
-    background: white;
-    animation: notification-timer var(--notification-timeout, 10s) linear forwards;
-}
-
-@keyframes notification-timer {
-    from {
-        width: 100%;
-    }
-
-    to {
-        width: 0%;
-    }
-}
-
-.notification-list li+li {
-    margin-top: 10px;
-    opacity: 1.0;
-    height: auto;
-}
-
-.notification-wrapper.is-animating li+li {
-    padding-bottom: 0 !important;
-    margin-top: 0 !important;
-    height: 0 !important;
-    opacity: 0 !important;
-}
-
-@keyframes notificationSlide {
-    0% {
-        top: 5vh;
-        left: 50vw;
-        transform: translateX(-50%) scale(1.5);
-        opacity: 0.9;
-    }
-
-    80% {
-        top: 5vh;
-        left: 50vw;
-        transform: translateX(-50%) scale(1.5);
-        opacity: 1;
-    }
-
-    100% {
-        top: 30vh;
-        left: 1vw;
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
 .sector-title {
     font-size: 14pt;
     margin-bottom: 5px;
@@ -248,7 +151,6 @@ li {
     display: flex;
     justify-content: space-between;
     padding: 4px 0;
-    font-size: 10pt;
     padding-bottom: calc(var(--bar-height) + 7px);
     margin-bottom: 10px;
     background: linear-gradient(to right,
@@ -259,7 +161,6 @@ li {
 }
 
 .sector-capture-list span {
-    font-size: 9pt;
     font-weight: bold;
 }
 

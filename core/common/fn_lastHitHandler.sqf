@@ -48,8 +48,10 @@ _asset addEventHandler ["HandleDamage", {
 		uiNamespace setVariable ["WL2_damagedProjectiles", _existingProjectiles];
 	};
 
-	if (_selection == "" && _projectile == "ammo_Bomb_SDB") then {
-		_damage = 1;
+	if (_selection == "") then {
+		if (_projectile == "ammo_Bomb_SDB") then {
+			_damage = 1;
+		};
 	};
 
 	if (_unit isKindOf "Man" && side group _unit != independent) then {
@@ -60,7 +62,14 @@ _asset addEventHandler ["HandleDamage", {
 		private _unitApsType = _unit call APS_fnc_getMaxAmmo;
 		private _sourceApsType = _source call APS_fnc_getMaxAmmo;
 		if (_unitApsType > _sourceApsType) then {
-			_damage = 0;
+			_damage = _unit getHit _selection;
+		};
+	};
+
+	if (_projectile isKindOf "MineCore" || _projectile isKindOf "TimeBombCore") then {
+		private _instigator = [_source, _instigator] call WL2_fnc_handleInstigator;
+		if (side group _instigator == side group _unit) then {
+			_damage = _unit getHit _selection;
 		};
 	};
 

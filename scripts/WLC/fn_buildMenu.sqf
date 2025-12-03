@@ -14,7 +14,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
     private _firstLetter = _message select [0, 1];
 
     if (_firstLetter == "l") exitWith {
-        private _newLoadoutIndex = _message select [1, 1];
+        private _newLoadoutIndex = _message select [1];
         _newLoadoutIndex = parseNumber _newLoadoutIndex;
 
         private _loadoutIndexVar = format ["WLC_loadoutIndex_%1", BIS_WL_playerSide];
@@ -25,7 +25,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
 
     if (_firstLetter == "r") exitWith {
         private _loadoutIndex = profileNamespace getVariable [format ["WLC_loadoutIndex_%1", BIS_WL_playerSide], 0];
-        for "_i" from 0 to 9 do {
+        for "_i" from 0 to 30 do {
             private _loadoutVar = format ["WLC_savedLoadout_%1_%2", BIS_WL_playerSide, _i];
             profileNamespace setVariable [_loadoutVar, []];
         };

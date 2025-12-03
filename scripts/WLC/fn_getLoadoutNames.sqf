@@ -2,7 +2,7 @@
 params ["_texture"];
 
 private _loadoutNames = [];
-for "_i" from 0 to 9 do {
+for "_i" from 0 to 30 do {
     private _loadoutVar = format ["WLC_savedLoadout_%1_%2", BIS_WL_playerSide, _i];
     private _loadoutData = profileNamespace getVariable [_loadoutVar, []];
 

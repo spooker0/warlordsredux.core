@@ -184,7 +184,7 @@ WL_DeploymentEnd = false;
 };
 
 waitUntil {
-    uiSleep 0.1;
+    uiSleep 0.01;
     WL_DeploymentEnd;
 };
 

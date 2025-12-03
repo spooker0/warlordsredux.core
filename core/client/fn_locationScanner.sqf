@@ -314,10 +314,11 @@ addMissionEventHandler ["Draw3D", {
     } forEach _sectorIcons;
 }];
 
-private _side = BIS_WL_playerSide;
 private _fobNextWarn = 0;
 private _strongholdNextWarn = 0;
 while { !BIS_WL_missionEnd } do {
+    private _side = BIS_WL_playerSide;
+
     private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
     private _newStrongholds = [];
     private _allScannedUnits = [];
@@ -363,7 +364,7 @@ while { !BIS_WL_missionEnd } do {
             if (serverTime >= _strongholdNextWarn) then {
                 _strongholdNextWarn = serverTime + 30;
                 private _sectorName = _strongholdSector getVariable ["WL2_name", "Unknown"];
-                [format ["Stronghold intrusion: %1!", _sectorName]] call WL2_fnc_smoothText;
+                [format ["Stronghold intrusion: %1", _sectorName]] call WL2_fnc_smoothText;
             };
         } else {
             _stronghold setVariable ["WL2_strongholdIntruders", false];
@@ -388,7 +389,7 @@ while { !BIS_WL_missionEnd } do {
                 _forwardBase setVariable ["WL2_forwardBaseIntruders", true];
                 if (serverTime >= _fobNextWarn) then {
                     _fobNextWarn = serverTime + 30;
-                    ["Forward base intrusion!"] call WL2_fnc_smoothText;
+                    ["Forward base intrusion."] call WL2_fnc_smoothText;
                 };
             } else {
                 _forwardBase setVariable ["WL2_forwardBaseIntruders", false];

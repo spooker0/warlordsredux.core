@@ -22,6 +22,8 @@ private _apsAmmoControl = _display displayCtrl 2107;
 private _captureProgressBar = _display displayCtrl 2108;
 private _captureText = _display displayCtrl 2109;
 
+private _notificationControl = _display displayCtrl 2110;
+
 private _getTeamColorHex = {
 	params ["_team"];
 	['#004d99', '#7f0400', '#007f04'] # ([west, east, independent] find _team);
@@ -126,6 +128,24 @@ while { !BIS_WL_missionEnd } do {
 
 		_apsAmmoControl ctrlSetStructuredText parseText format ["<t shadow='2' size='1.1' color='%1'>AMMO: %2</t>", _apsAmmoColor, _apsAmmo max 0];
 		_apsAmmoControl ctrlShow true;
+	};
+
+	private _currentNotification = uiNamespace getVariable ["WL2_currentNotification", []];
+	if (count _currentNotification > 0) then {
+		private _notificationTime = _currentNotification select 1;
+		if (serverTime <= _notificationTime) then {
+			private _size = if (_notificationTime - serverTime > 4) then { 2.5 } else { 1.2 };
+			_notificationControl ctrlSetStructuredText parseText format [
+				"<t shadow='2' size='%1' align='center'>%2</t>",
+				_size,
+				_currentNotification select 0
+			];
+		} else {
+			uiNamespace setVariable ["WL2_currentNotification", []];
+			_notificationControl ctrlSetStructuredText parseText "";
+		};
+	} else {
+		_notificationControl ctrlSetStructuredText parseText "";
 	};
 
 	private _visitedSectorId = BIS_WL_allSectors findIf { player inArea (_x getVariable "objectAreaComplete") };

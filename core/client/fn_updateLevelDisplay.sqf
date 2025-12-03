@@ -40,6 +40,13 @@ if ((_isAdmin || _isModerator) && _hideMyIdentity) then {
 };
 
 private _currentBadge = player getVariable ["WL2_currentBadge", ""];
+
+private _badgeConfigs = call RWD_fnc_getBadgeConfigs;
+if !(_currentBadge in _badgeConfigs) then {
+	_currentBadge = "Player";
+	profileNamespace setVariable ["WL2_currentBadge", _currentBadge];
+};
+
 private _level = ["getLevel"] call WLC_fnc_getLevelInfo;
 private _playerLevel = format ["%1 | %2", _level, _currentBadge];
 [_playerLevel] call _setLevel;
