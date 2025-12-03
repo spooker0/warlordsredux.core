@@ -109,6 +109,7 @@ while { alive _asset } do {
     };
 
     private _projectile = createVehicle [_projectileType, _asset modelToWorld [0, 0, 1], [], 0, "FLY"];
+    _projectile setPosASL (AGLtoASL _startPos);
 
     private _initialVectorDirAndUp = [getPosASL _projectile, AGLtoASL _startPos] call BIS_fnc_findLookAt;
     _projectile setVectorDirAndUp _initialVectorDirAndUp;

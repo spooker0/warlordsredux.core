@@ -41,6 +41,9 @@ player addEventHandler ["GetOutMan", {
 		_unit allowDamage true;
 	};
 
+	private _vehicleOwnerUid = _vehicle getVariable ["BIS_WL_ownerAsset", "123"];
+	if (_vehicleOwnerUid != getPlayerUID player) exitWith {};
+
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 	if (_settingsMap getOrDefault ["deleteSmallTransports", true]) then {
 		if (typeof _vehicle in [

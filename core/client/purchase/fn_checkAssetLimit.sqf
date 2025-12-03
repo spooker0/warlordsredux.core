@@ -25,7 +25,7 @@ if ([_class] call _isBuildable) then {
 
 private _isSmartMine = WL_ASSET(_class, "smartMine", 0) > 0;
 if (_isSmartMine) then {
-    _limitedVehicles = _limitedVehicles select {
+    _limitedVehicles = _ownedVehicles select {
         _x getVariable ["WL2_isAdvancedMines", false];
     };
     _typeLimit = WL_MAX_ADVANCED_MINES;

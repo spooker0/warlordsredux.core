@@ -220,7 +220,7 @@ switch (_className) do {
 
         [_vehicle, _aiToMove] spawn {
             params ["_vehicle", "_aiToMove"];
-            ["Moving %1 AI into vehicle when ready.", count _aiToMove] call WL2_fnc_smoothText;
+            [format ["Moving %1 AI into vehicle when ready.", count _aiToMove]] call WL2_fnc_smoothText;
 
             private _startWaitTime = serverTime;
             waitUntil {

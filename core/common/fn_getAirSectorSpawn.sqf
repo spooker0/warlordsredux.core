@@ -11,7 +11,9 @@ if (_sector getVariable ["WL2_isAircraftCarrier", false]) then {
 		private _potentialSpawnDir = _x # 1;
 
 		private _potentialSpawnPosASL = ATLtoASL _potentialSpawnPos;
-		private _collisionObjects = (_potentialSpawnPosASL nearObjects ["AllVehicles", 20]) select {
+
+		private _vehiclesNear = nearestObjects [_potentialSpawnPosASL, ["AllVehicles", "ReammoBox_F"], 20, true];
+		private _collisionObjects = _vehiclesNear select {
 			!(_x isKindOf "Man")
 		};
 		if (count _collisionObjects == 0) then {
@@ -24,15 +26,20 @@ if (_sector getVariable ["WL2_isAircraftCarrier", false]) then {
 	private _taxiNodes = _sector getVariable ["BIS_WL_runwaySpawnPosArr", []];
 	private _taxiNodesCnt = count _taxiNodes;
 	private _checks = 0;
-	while {count _spawnPos == 0 && _checks < 100} do {
+	while { count _spawnPos == 0 && _checks < 100 } do {
 		_checks = _checks + 1;
 		private _i = (floor random _taxiNodesCnt) max 1;
 		private _pointB = _taxiNodes # _i;
 		private _pointA = _taxiNodes # (_i - 1);
 		_dir = _pointA getDir _pointB;
 		private _pos = [_pointA, random (_pointA distance2D _pointB), _dir] call BIS_fnc_relPos;
-		if (count (_pos nearObjects ["AllVehicles", 20]) == 0) then {
+		private _vehiclesNear = nearestObjects [_pos, ["AllVehicles", "ReammoBox_F"], 20, true];
+		private _collisionObjects = _vehiclesNear select {
+			!(_x isKindOf "Man")
+		};
+		if (count _collisionObjects == 0) then {
 			_spawnPos = _pos;
+			break;
 		};
 		uiSleep 0.001;
 	};

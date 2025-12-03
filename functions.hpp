@@ -335,6 +335,7 @@ class CfgFunctions {
 			class handleEnemyCapture {};
 			class handleSectorIcons {};
 			class handleSelectionState {};
+			class mapButtonClick {};
 			class mapButtonConditions {};
 			class mapEachFrame {};
 			class replayMap {};

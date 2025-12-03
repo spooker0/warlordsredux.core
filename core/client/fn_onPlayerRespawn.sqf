@@ -47,6 +47,11 @@ if (isRemoteControlling player) then {
 	player remoteControl objNull;
 };
 
+private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
+private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];
+_ownedVehicles pushBack player;
+missionNamespace setVariable [_ownedVehiclesVar, _ownedVehicles, [2, clientOwner]];
+
 player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 [] call WLC_fnc_onRespawn;
 

@@ -4,6 +4,7 @@ function setButtons(buttonGroups, left, top) {
     wrapper.style.top = top + 'vh';
     wrapper.style.maxHeight = (100 - top - 2) + 'vh';
 
+    let buttonNumpad = 1;
     buttonGroups.forEach(group => {
         const [targetId, targetName, buttons] = group;
         const container = document.createElement('div');
@@ -56,6 +57,14 @@ function setButtons(buttonGroups, left, top) {
             }
 
             btn.appendChild(labelElement);
+
+            if (buttonNumpad <= 9) {
+                const hotkeyElement = document.createElement('span');
+                hotkeyElement.className = 'button-hotkey';
+                hotkeyElement.textContent = `[${buttonNumpad}]`;
+                btn.appendChild(hotkeyElement);
+                buttonNumpad++;
+            }
 
             btn.addEventListener('mousedown', function (event) {
                 const leftClick = event.button === 0;

@@ -25,6 +25,11 @@ waitUntil {
 	player getVariable ["WL2_playerSide", sideUnknown] == side group player
 };
 BIS_WL_playerSide = player getVariable ["WL2_playerSide", sideUnknown];
+if (BIS_WL_playerSide == west) then {
+	BIS_WL_enemySide = east;
+} else {
+	BIS_WL_enemySide = west;
+};
 
 WL_LoadingState = 3;
 

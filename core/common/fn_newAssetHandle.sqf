@@ -341,7 +341,9 @@ if (_asset isKindOf "Man") then {
 
 		[_asset] remoteExec ["WL2_fnc_restockAction", 0, true];
 	} else {
-		if (_settingsMap getOrDefault ["spawnEmpty", false]) then {
+		private _spawnEmpty = _settingsMap getOrDefault ["spawnEmpty", false];
+		private _isEmptyBox = WL_ASSET(_assetActualType, "empty", 0) > 0;
+		if (_spawnEmpty || _isEmptyBox) then {
 			clearMagazineCargoGlobal _asset;
 			clearItemCargoGlobal _asset;
 			clearWeaponCargoGlobal _asset;
