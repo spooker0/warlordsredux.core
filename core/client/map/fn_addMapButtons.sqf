@@ -1,64 +1,15 @@
 #include "includes.inc"
-params ["_offsetX", "_offsetY"];
-private _display = findDisplay 5500;
-if (isNull _display) then {
-    _display = createDialog ["RscWLBrowserMenu", true];
-    // _display = (findDisplay 12) createDisplay "RscWLBrowserMenu";
-};
-uiNamespace setVariable ["WL2_mapButtonDisplay", _display];
-
-private _texture = _display displayCtrl 5501;
-_texture ctrlWebBrowserAction ["LoadFile", "src\ui\gen\buttons.html"];
-// _texture ctrlWebBrowserAction ["OpenDevConsole"];
+params ["_display", "_texture", "_offsetX", "_offsetY"];
 _texture setVariable ["WL2_buttonsMenuOffsetX", _offsetX];
 _texture setVariable ["WL2_buttonsMenuOffsetY", _offsetY];
 
-private _menuButtonIconMap = createHashMapFromArray [
-    ["access-control", "a3\modules_f\data\iconunlock_ca.paa"],
-    ["add-waypoint", "A3\ui_f\data\map\markers\military\box_CA.paa"],
-    ["control-driver", "a3\ui_f\data\IGUI\Cfg\CommandBar\imageDriver_ca.paa"],
-    ["control-gunner", "a3\ui_f\data\IGUI\Cfg\CommandBar\imageGunner_ca.paa"],
-    ["ew", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
-    ["fortify-stronghold", "A3\ui_f\data\map\mapcontrol\Ruin_CA.paa"],
-    ["ft", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
-    ["ft-ai", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
-    ["ft-asset", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
-    ["ft-conflict", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
-    ["ft-conflict-air", "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa"],
-    ["ft-fob", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
-    ["ft-fob-test", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
-    ["ft-home", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
-    ["ft-squad", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
-    ["ft-squad-leader", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
-    ["ft-stronghold", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
-    ["ft-stronghold-near", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
-    ["ft-stronghold-test", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
-    ["ft-tent", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
-    ["lock-fob", "a3\modules_f\data\iconunlock_ca.paa"],
-    ["loiter", "A3\ui_f\data\map\markers\military\box_CA.paa"],
-    ["kick", "a3\modules_f\data\iconunlock_ca.paa"],
-    ["mark-sector", "A3\ui_f\data\map\markers\handdrawn\flag_CA.paa"],
-    ["move", "A3\ui_f\data\map\markers\military\box_CA.paa"],
-    ["radar-operate", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
-    ["radar-rotate", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
-    ["remove", "a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca.paa"],
-    ["remove-fob", "a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca.paa"],
-    ["remove-stronghold", "a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca.paa"],
-    ["repair-fob", "a3\ui_f\data\igui\cfg\actions\repair_ca.paa"],
-    ["repair-stronghold", "a3\ui_f\data\igui\cfg\actions\repair_ca.paa"],
-    ["sector-scan", "a3\drones_f\air_f_gamma\uav_02\data\ui\map_uav_02_ca.paa"],
-    ["smart-mine-adjust", "a3\ui_f\data\map\vehicleicons\iconexplosiveuw_ca.paa"],
-    ["smart-mine-type", "a3\ui_f\data\map\vehicleicons\iconexplosiveuw_ca.paa"],
-    ["target-altitude", "a3\ui_f\data\igui\cfg\simpletasks\types\Heli_ca.paa"],
-    ["target-loiter-radius", "A3\ui_f\data\map\markers\military\circle_CA.paa"],
-    ["vehicle-paradrop", "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa"]
-];
+private _menuButtonIconMap = uiNamespace getVariable ["WL2_mapMenuButtonIcons", createHashMap];
+private _allMenuButtons = uiNamespace getVariable ["WL2_mapButtons", []];
 
-private _allMenuButtons = uiNamespace getVariable ["WL2_mapButtons", createHashMap];
 private _allButtonsData = [];
 {
-    private _targetId = _x;
-    private _menuButtons = _y;
+    private _targetId = _x # 0;
+    private _menuButtons = _x # 1;
 
     private _buttonsData = [];
     {
@@ -109,6 +60,7 @@ _display setVariable ["WL2_mapButtonNumpadData", _numpadData];
 _display displayAddEventHandler ["KeyDown", {
     params ["_display", "_key", "_shift", "_ctrl", "_alt"];
     private _keyCode = switch (_key) do {
+        case DIK_SPACE;
         case DIK_NUMPAD1;
         case DIK_1: {0};
         case DIK_NUMPAD2;
@@ -140,17 +92,12 @@ _display displayAddEventHandler ["KeyDown", {
     [_display, 0, _entry # 1, _entry # 0] call WL2_fnc_mapButtonClick;
 }];
 
-_texture ctrlAddEventHandler ["PageLoaded", {
-    params ["_texture"];
-    private _allButtonsData = _texture getVariable ["WL2_allButtonsData", []];
-
-    private _offsetX = _texture getVariable ["WL2_buttonsMenuOffsetX", 0];
-    private _offsetY = _texture getVariable ["WL2_buttonsMenuOffsetY", 0];
-
-    private _buttonsDataJSON = toJSON _allButtonsData;
-    private _script = format ["setButtons(%1, %2, %3);", _buttonsDataJSON, _offsetX, _offsetY];
-    _texture ctrlWebBrowserAction ["ExecJS", _script];
-}];
+private _texturePageAlreadyLoaded = _texture getVariable ["WL2_pageLoaded", false];
+if (!_texturePageAlreadyLoaded) then {
+    _texture ctrlAddEventHandler ["PageLoaded", WL2_fnc_addMapButtonPageLoad];
+} else {
+    [_texture] call WL2_fnc_addMapButtonPageLoad;
+};
 
 _texture ctrlAddEventHandler ["JSDialog", {
     params ["_texture", "_isConfirmDialog", "_message"];
@@ -164,7 +111,8 @@ _texture ctrlAddEventHandler ["JSDialog", {
     private _params = fromJSON _message;
     _params params ["_clickType", "_buttonId", "_targetId"];
 
-    [_display, _clickType, _buttonId, _targetId] call WL2_fnc_mapButtonClick;
+    [_display, _clickType, _buttonId, _targetId] spawn WL2_fnc_mapButtonClick;
+    true;
 }];
 
 while { !isNull _texture } do {

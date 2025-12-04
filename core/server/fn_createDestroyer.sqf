@@ -1,6 +1,8 @@
 #include "includes.inc"
 params ["_position", "_destroyerDir", "_destroyerName", "_destroyerId"];
 
+uiSleep WL_DESTROYER_START;
+
 private _destroyerBase = createSimpleObject ["Land_Destroyer_01_base_F", _position];
 _destroyerBase setDir _destroyerDir;
 
@@ -79,7 +81,7 @@ _destroyerMarker setMarkerColor "ColorWhite";
 [_destroyerBase, objNull, _controller, true] remoteExec ["WL2_fnc_createDestroyerClient", 0, true];
 
 private _nextReloadTime = serverTime + WL_DESTROYER_RELOAD;
-private _nextRespawnTime = serverTime + WL_DESTROYER_START;
+private _nextRespawnTime = serverTime;
 while { alive _destroyerBase } do {
     uiSleep 30;
 

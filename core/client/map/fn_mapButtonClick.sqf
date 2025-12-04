@@ -5,11 +5,19 @@ private _closeFunction = {
     _display closeDisplay 0;
 };
 
-private _allMenuButtons = uiNamespace getVariable ["WL2_mapButtons", createHashMap];
-private _menuButtons = _allMenuButtons getOrDefault [_targetId, createHashMap];
+private _allMenuButtons = uiNamespace getVariable ["WL2_mapButtons", []];
+private _menuButtons = _allMenuButtons select {
+    _x # 0 == _targetId
+};
+_menuButtons = if (count _menuButtons > 0) then {
+    _menuButtons # 0 # 1;
+} else {
+    createHashMap;
+};
+
 private _menuButton = _menuButtons getOrDefault [_buttonId, []];
 
-if (count _menuButton == 0) exitWith { false };
+if (count _menuButton == 0) exitWith {};
 private _buttonData = _menuButton # 4;
 
 scopeName "buttonClickScope";
@@ -70,5 +78,3 @@ if !(isNull _actionTarget) then {
 if (_targetButtonSetupActionClose) then {
     call _closeFunction;
 };
-
-true;

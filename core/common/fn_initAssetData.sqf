@@ -66,3 +66,45 @@ private _requisitionPreset = missionConfigFile >> "CfgWLRequisitionPresets" >> "
 } forEach configProperties [_requisitionPreset];
 
 missionNamespace setVariable ["WL2_assetData", _requisitionData];
+
+private _menuButtonIconMap = createHashMapFromArray [
+    ["add-waypoint", "A3\ui_f\data\map\markers\military\box_CA.paa"],
+    ["control-driver", "a3\ui_f\data\IGUI\Cfg\CommandBar\imageDriver_ca.paa"],
+    ["control-gunner", "a3\ui_f\data\IGUI\Cfg\CommandBar\imageGunner_ca.paa"],
+    ["ew", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
+    ["fortify-stronghold", "A3\ui_f\data\map\mapcontrol\Ruin_CA.paa"],
+    ["ft", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
+    ["ft-ai", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
+    ["ft-air-assault", "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa"],
+    ["ft-asset", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
+    ["ft-conflict", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
+    ["ft-fob", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
+    ["ft-fob-test", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
+    ["ft-home", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
+    ["ft-squad", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
+    ["ft-squad-leader", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
+    ["ft-stronghold", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
+    ["ft-stronghold-near", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
+    ["ft-stronghold-test", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
+    ["ft-tent", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
+	["lock-access-control", "a3\modules_f\data\iconunlock_ca.paa"],
+	["lock-fob", "a3\modules_f\data\iconunlock_ca.paa"],
+    ["loiter", "A3\ui_f\data\map\markers\military\box_CA.paa"],
+    ["kick", "a3\modules_f\data\iconunlock_ca.paa"],
+    ["mark-sector", "A3\ui_f\data\map\markers\handdrawn\flag_CA.paa"],
+    ["move", "A3\ui_f\data\map\markers\military\box_CA.paa"],
+    ["radar-operate", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
+    ["radar-rotate", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
+    ["remove", "a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca.paa"],
+    ["remove-fob", "a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca.paa"],
+    ["remove-stronghold", "a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca.paa"],
+    ["repair-fob", "a3\ui_f\data\igui\cfg\actions\repair_ca.paa"],
+    ["repair-stronghold", "a3\ui_f\data\igui\cfg\actions\repair_ca.paa"],
+    ["sector-scan", "a3\drones_f\air_f_gamma\uav_02\data\ui\map_uav_02_ca.paa"],
+    ["smart-mine-adjust", "a3\ui_f\data\map\vehicleicons\iconexplosiveuw_ca.paa"],
+    ["smart-mine-type", "a3\ui_f\data\map\vehicleicons\iconexplosiveuw_ca.paa"],
+    ["target-altitude", "a3\ui_f\data\igui\cfg\simpletasks\types\Heli_ca.paa"],
+    ["target-loiter-radius", "A3\ui_f\data\map\markers\military\circle_CA.paa"],
+    ["vehicle-paradrop", "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa"]
+];
+uiNamespace setVariable ["WL2_mapMenuButtonIcons", _menuButtonIconMap];

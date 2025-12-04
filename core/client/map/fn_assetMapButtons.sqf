@@ -90,7 +90,7 @@ if (_ownsVehicle && _accessControl != -1 && !(_asset isKindOf "Man")) then {
         [_newAccess] call WL2_fnc_assetButtonAccessControl;
     };
 
-    [_asset, _targetId, "access-control", _lockText, [_accessControlNext, _accessControlPrevious], false] call WL2_fnc_addTargetMapButton;
+    [_asset, _targetId, "lock-access-control", _lockText, [_accessControlNext, _accessControlPrevious], false] call WL2_fnc_addTargetMapButton;
 };
 
 private _hasCrew = count ((crew _asset) select {

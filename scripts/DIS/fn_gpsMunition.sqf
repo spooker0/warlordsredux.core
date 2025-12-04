@@ -92,14 +92,20 @@ while { alive _projectile } do {
         _terminalManeuver = true;
 
         _coordinates set [2, 0];
-        private _enemiesNear = (_coordinates nearEntities 250) select {
-            alive _x && lifeState _x != "INCAPACITATED"
+
+        private _enemyUnits = switch (BIS_WL_playerSide) do {
+            case west: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
+            case east: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
+            default { [] };
+        };
+        private _enemiesNear = _enemyUnits select {
+            alive _x;
         } select {
-            ([_x] call WL2_fnc_getAssetSide) != BIS_WL_playerSide
+            (_x distance2D _coordinates) < 250;
         } select {
-            (_x getVariable ["WL_spawnedAsset", false] || isPlayer _x)
+            getText (configFile >> "CfgVehicles" >> typeOf _x >> "destrType") != "DestructNo";
         } select {
-            !alive (_x getVariable ["DIS_targetedByGPSMunition", objNull])
+            !alive (_x getVariable ["DIS_targetedByGPSMunition", objNull]);
         };
 
         _finalPosition = [];

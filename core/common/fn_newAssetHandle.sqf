@@ -236,7 +236,7 @@ if (_asset isKindOf "Man") then {
 			private _detonateValue = _target getVariable ["WL2_detonateValue", 0];
 
 			private _targetPos = _target modelToWorldWorld [0, 2.5, -1];
-			["M_Vorona_HEAT", _targetPos, [vectorDir _target, vectorUp _target], _detonateValue, 2, true] spawn DIS_fnc_bunkerBuster;
+			["M_Vorona_HEAT", _targetPos, [vectorDir _target, vectorUp _target], _detonateValue, 1, true] spawn DIS_fnc_bunkerBuster;
 		}, nil, 100, false, true, "ActionInMap", "cameraOn == _target", -1];
 
 		_asset addEventHandler ["Killed", {
@@ -247,7 +247,7 @@ if (_asset isKindOf "Man") then {
 			private _detonateValue = _unit getVariable ["WL2_detonateValue", 0];
 
 			private _targetPos = _unit modelToWorldWorld [0, 2.5, -1];
-			["M_Vorona_HEAT", _targetPos, [vectorDir _unit, vectorUp _unit], _detonateValue, 2, true] spawn DIS_fnc_bunkerBuster;
+			["M_Vorona_HEAT", _targetPos, [vectorDir _unit, vectorUp _unit], _detonateValue, 1, true] spawn DIS_fnc_bunkerBuster;
 		}];
 	};
 

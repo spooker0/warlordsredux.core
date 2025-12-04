@@ -8,61 +8,54 @@ if !(visibleMap) then {
 	WL_CONTROL_MAP ctrlMapAnimAdd [0, 0.1, player];
 	ctrlMapAnimCommit WL_CONTROL_MAP;
 };
-BIS_WL_waterDropPos = [];
+
+uiNamespace setVariable ["WL2_waterDropCost", _cost];
+uiNamespace setVariable ["WL2_waterDropPos", []];
+
 private _selectionBefore = BIS_WL_currentSelection;
 BIS_WL_currentSelection = WL_ID_SELECTION_ORDERING_NAVAL;
 WL_MapBusy pushBack "orderNaval";
-uiSleep WL_TIMEOUT_SHORT;
 
-_mapClickEH = addMissionEventHandler ["MapSingleClick", {
+private _mapClickEH = addMissionEventHandler ["MapSingleClick", {
 	params ["_units", "_pos", "_alt", "_shift"];
-	_thisArgs params ["_class"];
+	private _cost = uiNamespace getVariable ["WL2_waterDropCost", -1];
 
-	private _cancel = false;
-	switch (_class) do {
-		case "B_Boat_Bomb_01_F";
-		case "O_Boat_Bomb_01_F": {
-			private _distance = cameraOn distance2D _pos;
-			if (_distance > 200) then {
-				playSound "AddItemFailed";
-				["Bomb boat must be within 200 m of your position."] call WL2_fnc_smoothText;
-				_cancel = true;
-			};
+	private _checkBoat = {
+		params ["_cost", "_pos"];
+		if (!surfaceIsWater _pos) exitWith {
+			["Boat must be placed on water surface."] call WL2_fnc_smoothText;
+			false;
 		};
-		case "B_Boat_Armed_01_autocannon_F";
-		case "O_Boat_Armed_01_autocannon_F": {
-			private _sectorsInRange = (BIS_WL_sectorsArray # 0) findIf {
-				_pos distance _x < 4000 && "W" in (_x getVariable ["WL2_services", []]);
-			};
-			if (_sectorsInRange == -1) then {
-				playSound "AddItemFailed";
-				["Heavy attack boat must be within 4 km of an owned harbor."] call WL2_fnc_smoothText;
-				_cancel = true;
-			};
+		if (player distance2D _pos > 300) exitWith {
+			["Boat must be placed within 300 meters from your current position."] call WL2_fnc_smoothText;
+			false;
 		};
-		case "B_Boat_Transport_02_F";
-		case "O_Boat_Transport_02_F": {
-			private _sectorsInRange = (BIS_WL_sectorsArray # 0) findIf {
-				_pos distance _x < 1500;
-			};
-			if (_sectorsInRange == -1) then {
-				playSound "AddItemFailed";
-				["Supply boat must be within 1.5 km of an owned harbor."] call WL2_fnc_smoothText;
-				_cancel = true;
-			};
+		if (_cost < 1000) exitWith {
+			true;
 		};
+		private _sectorsInRange = (BIS_WL_sectorsArray # 0) select {
+			_pos distance2D _x < 1500;
+		};
+		private _invalidPlacement = count _sectorsInRange == 0;
+		if (_invalidPlacement) then {
+			["Boat must be placed within 1.5 km of an owned sector."] call WL2_fnc_smoothText;
+		};
+		!_invalidPlacement;
 	};
 
-	if (surfaceIsWater _pos && !_cancel) then {
-		BIS_WL_waterDropPos = _pos;
+	private _validPlacement = [_cost, _pos] call _checkBoat;
+
+	if (_validPlacement) then {
+		uiNamespace setVariable ["WL2_waterDropPos", _pos];
 	} else {
 		playSound "AddItemFailed";
 	};
-}, [_class]];
+}];
 
 waitUntil {
 	uiSleep WL_TIMEOUT_MIN;
-	count BIS_WL_waterDropPos > 0 || !visibleMap;
+	private _waterDropPos = uiNamespace getVariable ["WL2_waterDropPos", []];
+	count _waterDropPos > 0 || !visibleMap;
 };
 
 if (BIS_WL_currentSelection == WL_ID_SELECTION_ORDERING_NAVAL) then {
@@ -71,7 +64,8 @@ if (BIS_WL_currentSelection == WL_ID_SELECTION_ORDERING_NAVAL) then {
 
 removeMissionEventHandler ["MapSingleClick", _mapClickEH];
 
-if (count BIS_WL_waterDropPos == 0) exitWith {
+private _waterDropPos = uiNamespace getVariable ["WL2_waterDropPos", []];
+if (count _waterDropPos == 0) exitWith {
 	"Canceled" call WL2_fnc_announcer;
 	[localize "STR_A3_WL_airdrop_canceled"] call WL2_fnc_smoothText;
 
@@ -79,16 +73,14 @@ if (count BIS_WL_waterDropPos == 0) exitWith {
 	WL_MapBusy = WL_MapBusy - ["orderNaval"];
 };
 
-if (BIS_WL_waterDropPos distance2D player <= 300) then {
-	playSound3D ["A3\Data_F_Warlords\sfx\flyby.wss", objNull, false, [BIS_WL_waterDropPos # 0, BIS_WL_waterDropPos # 1, 100]];
-};
+playSound3D ["A3\Data_F_Warlords\sfx\flyby.wss", objNull, false, [_waterDropPos # 0, _waterDropPos # 1, 100]];
 
-BIS_WL_waterDropPos set [2, 0];
+_waterDropPos set [2, 0];
 "Airdrop" call WL2_fnc_announcer;
 [localize "STR_A3_WL_airdrop_underway"] call WL2_fnc_smoothText;
 playSound "AddItemOK";
 
-[player, "orderAsset", "naval", BIS_WL_waterDropPos, _class, false] remoteExec ["WL2_fnc_handleClientRequest", 2];
+[player, "orderAsset", "naval", _waterDropPos, _class, false] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
 uiSleep 1;
 WL_MapBusy = WL_MapBusy - ["orderNaval"];

@@ -64,9 +64,6 @@ if ("A" in _services) then {
 if ("H" in _services) then {
     _servicesText pushBack localize "STR_A3_WL_module_service_helipad";
 };
-if ("W" in _services) then {
-    _servicesText pushBack localize "STR_A3_WL_param30_title";
-};
 
 private _lastScan = (_sector getVariable ["WL2_lastScanned", -9999]);
 private _scanCD = (_lastScan + WL_COOLDOWN_SCAN - serverTime) max 0;

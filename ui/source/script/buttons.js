@@ -61,7 +61,7 @@ function setButtons(buttonGroups, left, top) {
             if (buttonNumpad <= 9) {
                 const hotkeyElement = document.createElement('span');
                 hotkeyElement.className = 'button-hotkey';
-                hotkeyElement.textContent = `[${buttonNumpad}]`;
+                hotkeyElement.textContent = `[${buttonNumpad !== 1 ? buttonNumpad : '1 or Space'}]`;
                 btn.appendChild(hotkeyElement);
                 buttonNumpad++;
             }

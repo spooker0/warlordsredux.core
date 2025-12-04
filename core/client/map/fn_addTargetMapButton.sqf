@@ -25,8 +25,10 @@ if (count _costCondition > 0) then {
     };
 };
 
-private _allMenuButtons = uiNamespace getVariable ["WL2_mapButtons", createHashMap];
-private _menuButtons = _allMenuButtons getOrDefault [_targetId, createHashMap];
+private _allMenuButtons = uiNamespace getVariable ["WL2_mapButtons", []];
+private _existingMenuButtons = _allMenuButtons select {
+    _x # 0 == _targetId
+};
 
 private _cost = if (count _costCondition > 0) then {
     _costCondition # 0;
@@ -43,5 +45,11 @@ _buttonData set ["actionClose", _actionClose];
 _buttonData set ["actionCondition", _actionCondition];
 _buttonData set ["costCondition", _costCondition];
 
-_menuButtons set [_buttonId, [_textLabel, _cost, _canAfford, _buttonEnabled, _buttonData]];
-_allMenuButtons set [_targetId, _menuButtons];
+if (count _existingMenuButtons > 0) then {
+    private _menuButtons = _existingMenuButtons # 0 # 1;
+    _menuButtons set [_buttonId, [_textLabel, _cost, _canAfford, _buttonEnabled, _buttonData]];
+} else {
+    private _menuButtons = createHashMap;
+    _menuButtons set [_buttonId, [_textLabel, _cost, _canAfford, _buttonEnabled, _buttonData]];
+    _allMenuButtons pushBack [_targetId, _menuButtons];
+};

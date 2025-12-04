@@ -319,6 +319,7 @@ class CfgFunctions {
 		};
 		class ClientMap {
 			file = "src\core\client\map";
+			class addMapButtonPageLoad {};
 			class addMapButtons {};
 			class addTargetMapButton {};
 			class assetButtonAccessControl {};

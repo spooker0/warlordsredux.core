@@ -93,7 +93,22 @@ private _singletonScriptHandle = [_map] spawn {
     params ["_map"];
     if (count WL_MapBusy > 0) exitWith {};
 
-    uiNamespace setVariable ["WL2_mapButtons", createHashMap];
+    private _display = findDisplay 5500;
+    if (isNull _display) then {
+        _display = createDialog ["RscWLBrowserMenu", true];
+    };
+    uiNamespace setVariable ["WL2_mapButtonDisplay", _display];
+
+    private _texture = _display displayCtrl 5501;
+    _texture ctrlWebBrowserAction ["LoadFile", "src\ui\gen\buttons.html"];
+    // _texture ctrlWebBrowserAction ["OpenDevConsole"];
+
+    _texture ctrlAddEventHandler ["PageLoaded", {
+        params ["_texture"];
+        _texture setVariable ["WL2_pageLoaded", true];
+    }];
+
+    uiNamespace setVariable ["WL2_mapButtons", []];
 
     private _targetsClicked = [];
 
@@ -132,21 +147,25 @@ private _singletonScriptHandle = [_map] spawn {
 
     uiNamespace setVariable ["WL2_assetTargetsSelected", _targetsClicked];
 
-    private _totalButtons = 0;
-    private _allMenuButtons = uiNamespace getVariable ["WL2_mapButtons", createHashMap];
+    private _hasButtons = false;
+    private _allMenuButtons = uiNamespace getVariable ["WL2_mapButtons", []];
     {
-        private _menuButtons = _y;
-        _totalButtons = _totalButtons + (count _menuButtons);
+        private _menuButtons = _x # 1;
+        if (count _menuButtons > 0) then {
+            _hasButtons = true;
+        };
     } forEach _allMenuButtons;
 
-    if (_totalButtons > 0) then {
+    if (_hasButtons) then {
         playSoundUI ["clickSoft", 1];
 
         getMousePosition params ["_mouseX", "_mouseY"];
         private _offsetX = (_mouseX - safeZoneX) / safeZoneW * 100;
         private _offsetY = (_mouseY - safeZoneY) / safeZoneH * 100;
 
-        [_offsetX, _offsetY] spawn WL2_fnc_addMapButtons;
+        [_display, _texture, _offsetX, _offsetY] spawn WL2_fnc_addMapButtons;
+    } else {
+        _display closeDisplay 0;
     };
 
     // exit singleton after mouse release

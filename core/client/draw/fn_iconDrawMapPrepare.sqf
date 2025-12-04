@@ -64,6 +64,38 @@ if !(isNull BIS_WL_targetVote) then {
 	];
 };
 
+if (BIS_WL_currentSelection == WL_ID_SELECTION_ORDERING_NAVAL) then {
+	// All sectors within 1.5km
+	private _mousePosition = getMousePosition;
+	private _mouseWorldPosition = _map ctrlMapScreenToWorld _mousePosition;
+
+	private _waterDropCost = uiNamespace getVariable ["WL2_waterDropCost", -1];
+	if (_waterDropCost >= 1000) then {
+		private _ownedSectorsInRange = (BIS_WL_sectorsArray # 0) select {
+			_mouseWorldPosition distance _x < 1500;
+		};
+		{
+			_drawEllipses pushBack [
+				getPosASL _x,
+				1500,
+				1500,
+				0,
+				[1, 1, 1, 1],
+				""
+			];
+		} forEach _ownedSectorsInRange;
+	};
+
+	_drawEllipses pushBack [
+		getPosASL player,
+		200,
+		200,
+		0,
+		[1, 1, 1, 1],
+		""
+	];
+};
+
 // Draw asset selector
 private _assetTargets = WL_AssetActionTargets;
 if (count _assetTargets > 0) then {

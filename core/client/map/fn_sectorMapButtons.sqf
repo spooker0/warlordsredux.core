@@ -111,7 +111,7 @@ private _airAssaultExecute = {
 };
 [
     _sector, _targetId,
-    "ft-conflict-air",
+    "ft-air-assault",
     "Fast travel air assault",
     _airAssaultExecute,
     true,
