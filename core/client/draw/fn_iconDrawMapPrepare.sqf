@@ -71,7 +71,13 @@ if (BIS_WL_currentSelection == WL_ID_SELECTION_ORDERING_NAVAL) then {
 
 	private _waterDropCost = uiNamespace getVariable ["WL2_waterDropCost", -1];
 	if (_waterDropCost >= 1000) then {
-		private _ownedSectorsInRange = (BIS_WL_sectorsArray # 0) select {
+		private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
+		private _spawnLocations = _forwardBases select {
+			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
+		};
+		_spawnLocations append (BIS_WL_sectorsArray # 0);
+
+		private _ownedSectorsInRange = _spawnLocations select {
 			_mouseWorldPosition distance _x < 1500;
 		};
 		{

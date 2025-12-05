@@ -1,7 +1,5 @@
 #include "includes.inc"
-params ["_display", "_texture", "_offsetX", "_offsetY"];
-_texture setVariable ["WL2_buttonsMenuOffsetX", _offsetX];
-_texture setVariable ["WL2_buttonsMenuOffsetY", _offsetY];
+params ["_display", "_texture"];
 
 private _menuButtonIconMap = uiNamespace getVariable ["WL2_mapMenuButtonIcons", createHashMap];
 private _allMenuButtons = uiNamespace getVariable ["WL2_mapButtons", []];
@@ -91,13 +89,6 @@ _display displayAddEventHandler ["KeyDown", {
     playSoundUI ["a3\ui_f\data\sound\rsclistbox\soundselect.wss", 0.5];
     [_display, 0, _entry # 1, _entry # 0] call WL2_fnc_mapButtonClick;
 }];
-
-private _texturePageAlreadyLoaded = _texture getVariable ["WL2_pageLoaded", false];
-if (!_texturePageAlreadyLoaded) then {
-    _texture ctrlAddEventHandler ["PageLoaded", WL2_fnc_addMapButtonPageLoad];
-} else {
-    [_texture] call WL2_fnc_addMapButtonPageLoad;
-};
 
 _texture ctrlAddEventHandler ["JSDialog", {
     params ["_texture", "_isConfirmDialog", "_message"];

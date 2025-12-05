@@ -88,5 +88,49 @@ function generateLeftNav() {
     });
 }
 
+document.addEventListener('copy', (e) => {
+    if (!document.copyData) return;
+    e.clipboardData.setData('text/plain', document.copyData);
+    document.copyData = '';
+    e.preventDefault();
+});
+
+const copyInfoBtn = document.querySelector('.btn-copy-discord');
+const flashingButton = setInterval(() => {
+    copyInfoBtn.style.backgroundColor = copyInfoBtn.style.backgroundColor === 'red' ? '' : 'red';
+}, 500);
+copyInfoBtn.addEventListener('click', () => {
+    document.copyData = "https://discord.gg/grmzsZE4ua";
+    document.execCommand('copy');
+    const originalText = copyInfoBtn.innerHTML;
+    copyInfoBtn.textContent = 'Copied!';
+    clearInterval(flashingButton);
+    copyInfoBtn.style.backgroundColor = '';
+    setTimeout(() => {
+        copyInfoBtn.innerHTML = originalText;
+    }, 2000);
+});
+
+function populateTextInfo(textArray) {
+    textArray = JSON.parse(textArray) || [];
+    const welcomeTextDiv = document.getElementById('welcome-text');
+    textArray.forEach(item => {
+        const [textItem, itemType] = item;
+
+        if (itemType === 'heading') {
+            const h3 = document.createElement('h3');
+            h3.textContent = textItem;
+            welcomeTextDiv.appendChild(h3);
+        } else {
+            const p = document.createElement('p');
+
+            // highlight press and hold "something"
+            p.innerHTML = textItem.replace(/(press and hold ".")/g, "<span class=\"highlight\">$1</span>");
+
+            welcomeTextDiv.appendChild(p);
+        }
+    });
+}
+
 // Call the function to populate the left navigation panel
 document.addEventListener('DOMContentLoaded', generateLeftNav);

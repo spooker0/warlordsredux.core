@@ -325,3 +325,8 @@ _ownedVehicles pushBack player;
 missionNamespace setVariable [_ownedVehiclesVar, _ownedVehicles, [2, clientOwner]];
 
 [true] spawn WL2_fnc_pingSounds;
+
+private _showWelcomeMenu = _settingsMap getOrDefault ["showWelcomeMenu", true];
+if (_showWelcomeMenu) then {
+	0 spawn WL2_fnc_welcome;
+};

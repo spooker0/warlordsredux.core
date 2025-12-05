@@ -1,5 +1,7 @@
 function setButtons(buttonGroups, left, top) {
     const wrapper = document.querySelector('.buttons-wrapper');
+    wrapper.innerHTML = '';
+
     wrapper.style.left = left + 'vw';
     wrapper.style.top = top + 'vh';
     wrapper.style.maxHeight = (100 - top - 2) + 'vh';

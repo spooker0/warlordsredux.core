@@ -2,6 +2,14 @@
 params ["_texture"];
 private _allButtonsData = _texture getVariable ["WL2_allButtonsData", []];
 
+waitUntil {
+    uiSleep 0.001;
+    _allButtonsData = _texture getVariable ["WL2_allButtonsData", []];
+    count _allButtonsData > 0 || isNull _texture
+};
+
+if (isNull _texture) exitWith {};
+
 private _offsetX = _texture getVariable ["WL2_buttonsMenuOffsetX", 0];
 private _offsetY = _texture getVariable ["WL2_buttonsMenuOffsetY", 0];
 

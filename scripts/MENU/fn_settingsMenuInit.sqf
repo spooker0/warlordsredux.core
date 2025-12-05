@@ -162,6 +162,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["checkbox", "Enable allied demolition (punishable)", ["enableAlliedDemolition", false]],
         ["checkbox", "Show death info over map", ["showDeathInfoInMap", false]],
         ["checkbox", "Hide notification in interface", ["hideNotificationInterface", false]],
+        ["checkbox", "Show welcome menu", ["showWelcomeMenu", true]],
         ["category", "Hide scroll menus (requires respawn)"],
         ["checkbox", "Hide: Squad menu", ["hideSquadMenu", false]],
         ["checkbox", "Hide: Buy menu", ["hideBuyMenu", false]],

@@ -33,12 +33,19 @@ private _mapClickEH = addMissionEventHandler ["MapSingleClick", {
 		if (_cost < 1000) exitWith {
 			true;
 		};
-		private _sectorsInRange = (BIS_WL_sectorsArray # 0) select {
+
+		private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
+		private _spawnLocations = _forwardBases select {
+			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
+		};
+		_spawnLocations append (BIS_WL_sectorsArray # 0);
+
+		private _sectorsInRange = _spawnLocations select {
 			_pos distance2D _x < 1500;
 		};
 		private _invalidPlacement = count _sectorsInRange == 0;
 		if (_invalidPlacement) then {
-			["Boat must be placed within 1.5 km of an owned sector."] call WL2_fnc_smoothText;
+			["Boat must be placed within 1.5 km of an owned sector or forward base."] call WL2_fnc_smoothText;
 		};
 		!_invalidPlacement;
 	};

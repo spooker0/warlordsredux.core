@@ -103,9 +103,18 @@ private _singletonScriptHandle = [_map] spawn {
     _texture ctrlWebBrowserAction ["LoadFile", "src\ui\gen\buttons.html"];
     // _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
+    getMousePosition params ["_mouseX", "_mouseY"];
+    private _offsetX = (_mouseX - safeZoneX) / safeZoneW * 100;
+    private _offsetY = (_mouseY - safeZoneY) / safeZoneH * 100;
+
+    _texture setVariable ["WL2_buttonsMenuOffsetX", _offsetX];
+    _texture setVariable ["WL2_buttonsMenuOffsetY", _offsetY];
+
+    _texture setVariable ["WL2_allButtonsData", []];
+
     _texture ctrlAddEventHandler ["PageLoaded", {
         params ["_texture"];
-        _texture setVariable ["WL2_pageLoaded", true];
+        [_texture] spawn WL2_fnc_addMapButtonPageLoad;
     }];
 
     uiNamespace setVariable ["WL2_mapButtons", []];
@@ -158,19 +167,14 @@ private _singletonScriptHandle = [_map] spawn {
 
     if (_hasButtons) then {
         playSoundUI ["clickSoft", 1];
-
-        getMousePosition params ["_mouseX", "_mouseY"];
-        private _offsetX = (_mouseX - safeZoneX) / safeZoneW * 100;
-        private _offsetY = (_mouseY - safeZoneY) / safeZoneH * 100;
-
-        [_display, _texture, _offsetX, _offsetY] spawn WL2_fnc_addMapButtons;
+        [_display, _texture] spawn WL2_fnc_addMapButtons;
     } else {
         _display closeDisplay 0;
     };
 
     // exit singleton after mouse release
     waitUntil {
-        uiSleep 0.01;
+        uiSleep 0.001;
         inputMouse 0 == 0
     };
 };
