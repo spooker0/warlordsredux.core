@@ -94,7 +94,7 @@ while { alive _projectile } do {
         _coordinates set [2, 0];
 
         private _enemyUnits = switch (BIS_WL_playerSide) do {
-            case west: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
+            case west: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
             case east: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
             default { [] };
         };

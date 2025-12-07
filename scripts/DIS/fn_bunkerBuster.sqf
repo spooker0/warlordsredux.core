@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_projectileClass", "_position", "_dirAndUp", "_bunkerBusterSteps", ["_delay", 5], ["_ignoreHeight", false]];
+params ["_projectileClass", "_position", "_dirAndUp", "_bunkerBusterSteps", ["_ignoreHeight", false]];
 
 private _penetrator = createVehicle [_projectileClass, _position, [], 0, "NONE"];
 _penetrator setVariable ["APS_ammoOverride", "BunkerBuster"];
@@ -39,7 +39,12 @@ if (_ignoreHeight) then {
 
 [_penetrator, [player, player]] remoteExec ["setShotParents", 2];
 
-uiSleep _delay;
+private _startTime = serverTime;
+waitUntil {
+    uiSleep 0.001;
+    private _shotParents = getShotParents _penetrator;
+    !isNull (_shotParents # 0) || serverTime - _startTime > 5
+};
 
 _penetrator enableSimulation true;
 triggerAmmo _penetrator;

@@ -29,6 +29,9 @@ private _getCurrentMode = {
 	if (_ammoConfig getOrDefault ["gps", false]) exitWith {
 		["gps", _weaponName]
 	};
+	if (_ammoConfig getOrDefault ["laser", false]) exitWith {
+		["laser", _weaponName]
+	};
 	if (_ammoConfig getOrDefault ["loal", false]) exitWith {
 		["loal", _weaponName]
 	};
@@ -69,6 +72,9 @@ private _hintMap = createHashMapFromArray [
 	], [
 		"esam",
 		["ESam", ["ESAM CONTROLS", _targetingControls], false]
+	], [
+		"laser",
+		["Laser", ["LASER CONTROLS", _targetingControls], false]
 	], [
 		"loal",
 		["LOAL", ["LOAL CONTROLS", _targetingControls], false]
@@ -244,6 +250,12 @@ while { !BIS_WL_missionEnd } do {
 				(_inRangeCalculation # 1 / 1000) toFixed 1,
 				_inRangeCalculation # 0
 			];
+		};
+		case "laser": {
+			private _targetList = [] call DIS_fnc_getLaserList;
+			private _targetsText = toJSON _targetList;
+			_targetsText = _texture ctrlWebBrowserAction ["ToBase64", _targetsText];
+			_script = _script + format ["setMode(""laser"", ""%1"");setLaserTargetData(atobr(""%2""));", _currentModeTitle, _targetsText];
 		};
 		case "remote": {
 			private _targetList = [] call DIS_fnc_getSquadList;

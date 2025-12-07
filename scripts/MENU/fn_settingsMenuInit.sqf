@@ -176,6 +176,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["checkbox", "Show hint: TV Munitions", ["showHintTV", true]],
         ["checkbox", "Show hint: Remote Munitions", ["showHintRemote", true]],
         ["checkbox", "Show hint: Advanced SAMs", ["showHintAdvancedSam", true]],
+        ["checkbox", "Show hint: Laser", ["showHintLaser", true]],
         ["checkbox", "Show hint: LOAL", ["showHintLoal", true]],
         ["checkbox", "Show hint: Blackfish", ["showHintBlackfish", true]],
         ["checkbox", "Show hint: HMD Settings", ["showHintHMDSettings", true]],

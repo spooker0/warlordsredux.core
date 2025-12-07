@@ -1,5 +1,19 @@
 #include "includes.inc"
 
+private _result = [
+	"Enter spectator mode",
+	"Once you enter spectator mode, you will no longer be able to go back without logging out and back in again. Do you wish to proceed?",
+	"Spectate", "Don't spectate"
+] call WL2_fnc_prompt;
+if (!_result) exitWith {
+    private _uid = getPlayerUID player;
+    private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
+    if (_isAdmin) then {
+        private _specExit = profileNamespace getVariable ["WL2_specExit", {}];
+        call _specExit;
+    };
+};
+
 if (WL_IsSpectator) exitWith {};
 WL_IsSpectator = true;
 

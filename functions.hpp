@@ -33,6 +33,7 @@ class CfgFunctions {
 			class controlMunition {};
 			class extendedSam {};
 			class frag {};
+			class getLaserList {};
 			class getMissileType {};
 			class getNotchResult {};
 			class getSamTarget {};
@@ -42,6 +43,7 @@ class CfgFunctions {
 			class gpsMunition {};
 			class handleGPSKeypress {};
 			class handleKeypress {};
+			class laserMunition {};
 			class loalAuto {};
 			class maneuver {};
 			class missileCamera {};

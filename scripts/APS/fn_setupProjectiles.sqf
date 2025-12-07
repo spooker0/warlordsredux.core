@@ -105,6 +105,11 @@ addMissionEventHandler ["ProjectileCreated", {
         };
     };
 
+    private _projectileLaser = _projectileConfig getOrDefault ["laser", false];
+    if (_projectileLaser) then {
+        [_projectile, _unit] spawn DIS_fnc_laserMunition;
+    };
+
     private _projectileESam = _projectileConfig getOrDefault ["esam", false];
     if (_projectileESam) then {
         [_projectile, _unit] spawn DIS_fnc_extendedSam;

@@ -31,6 +31,9 @@ addMissionEventHandler ["HandleChatMessage", {
 			case "gps": {
 				[_key] call DIS_fnc_handleGPSKeypress;
 			};
+			case "laser": {
+				[_key, DIS_fnc_getLaserList, [], "WL2_selectedTargetLaser"] call DIS_fnc_handleKeypress;
+			};
 			case "remote": {
 				[_key, DIS_fnc_getSquadList, [], "WL2_selectedTargetPlayer"] call DIS_fnc_handleKeypress;
 			};

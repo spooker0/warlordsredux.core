@@ -59,11 +59,12 @@ deleteVehicle _originalProjectile;
 
 _projectileVelocity = _projectileVelocity vectorMultiply 2;
 
-private _projectile = createVehicle ["Bomb_04_F", [0, 0, 0], [], 0, "FLY"];
+private _projectile = createVehicle ["Missile_AGM_02_F", [0, 0, 0], [], 0, "FLY"];
 _projectile setPosASL _projectileASL;
 _projectile setVectorDirAndUp _projectileVectorDirAndUp;
 _projectile setVelocityModelSpace _projectileVelocity;
-[_projectile, [player, player]] remoteExec ["setShotParents", 2];
+private _playerVehicle = vehicle player;
+[_projectile, [_asset, _asset]] remoteExec ["setShotParents", 2];
 [_projectile, driver _asset] remoteExec ["DIS_fnc_startMissileCamera", _asset];
 
 if (_bunkerBuster > 0) then {
@@ -76,6 +77,7 @@ if (_bunkerBuster > 0) then {
 };
 
 _projectile setVariable ["APS_speedOverride", vectorMagnitude _projectileVelocity];
+_projectile setVariable ["APS_ammoOverride", "Missile_AGM_02_TV_F"];
 player setVariable ["DIS_controllingProjectile", _projectile];
 
 _camera setVectorDirAndUp [vectorDir _projectile, vectorUp _projectile];

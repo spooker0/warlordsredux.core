@@ -30,6 +30,11 @@ function setSEADTargetData(targets) {
     setTargetList(targetListEl, targets);
 }
 
+function setLaserTargetData(targets) {
+    const targetListEl = document.querySelector('.mode-laser .target-list');
+    setTargetList(targetListEl, targets);
+}
+
 function setMunitionList(munitions) {
     munitions = JSON.parse(munitions || '[]');
 
