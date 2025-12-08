@@ -161,3 +161,14 @@ private _targetLoiterRadius = _asset getVariable ["WL2_assetLoiterRadius", 0];
     false,
     "setLoiterRadius"
 ] call WL2_fnc_addTargetMapButton;
+
+[_asset, _targetId, "cycle-waypoint", "Cycle waypoint", {
+    params ["_asset"];
+    private _mouseClickPos = uiNamespace getVariable ["WL2_mapMouseClickPosition", [0.5, 0.5]];
+    private _worldPos = WL_CONTROL_MAP ctrlMapScreenToWorld _mouseClickPos;
+
+    private _assetGroup = group _asset;
+
+    private _newWaypoint = _assetGroup addWaypoint [_worldPos, 0];
+    _newWaypoint setWaypointType "CYCLE";
+}, true] call WL2_fnc_addTargetMapButton;

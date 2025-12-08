@@ -537,6 +537,9 @@ addMissionEventHandler ["Draw3D", {
             if (_x == "SEAD" && _currentTargetingMode != "sead") then {
                 continue;
             };
+            if (_x == "Laser" && _currentTargetingMode != "laser") then {
+                continue;
+            };
             private _selectedTarget = _vehicle getVariable [format ["WL2_selectedTarget%1", _x], objNull];
             if (alive _selectedTarget) then {
                 private _isInAngle = if (unitIsUAV _vehicle) then {
@@ -559,13 +562,27 @@ addMissionEventHandler ["Draw3D", {
                     "\A3\ui_f\data\IGUI\Cfg\Targeting\Seeker_ca.paa"
                 };
 
+                private _iconAngle = if (_x == "AA") then {
+                    private _currentSpeed = speed _vehicle;
+                    if (_currentSpeed < WL_SAM_FAST_THRESHOLD) then {
+                        0;
+                    } else {
+                        private _targetSpeed = speed _selectedTarget;
+                        if (_currentSpeed > _targetSpeed) then {
+                            45;
+                        } else {
+                            0;
+                        };
+                    };
+                } else { 0 };
+
                 _targetVehicleIcons pushBack [
                     _lockIcon,
                     [1, 1, 1, 1],
                     _selectedTarget,
                     1.75,
                     1.75,
-                    0,
+                    _iconAngle,
                     "",
                     false,
                     0.035,
@@ -574,7 +591,7 @@ addMissionEventHandler ["Draw3D", {
                     true
                 ];
             };
-        } forEach ["AA", "SEAD"];
+        } forEach ["AA", "SEAD", "Laser"];
 
         private _gpsCords = _vehicle getVariable ["DIS_gpsCord", ""];
         if (_gpsCords != "" && _currentTargetingMode == "gps") then {

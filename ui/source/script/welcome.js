@@ -6,7 +6,7 @@ document.addEventListener('mousedown', function (e) {
         const decodedHref = decodeURIComponent(href.replace(/[()\/]/g, '').replace(/\s+/g, '-').toLowerCase());
 
         const subheading = document.querySelector(decodedHref);
-        console.log(subheading);
+
         if (subheading && subheading.tagName !== 'DIV') {
             const parentPanel = subheading.closest('.right-panel');
             if (parentPanel) {

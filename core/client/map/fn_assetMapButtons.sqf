@@ -464,12 +464,12 @@ private _fastTravelSquadmateExecute = {
 // Fast Travel AI Button
 private _fastTravelAIExecute = {
     params ["_asset"];
-    [_asset] spawn WL2_fnc_executeFastTravelVehicle;
+    _asset setPosASL (getPosASL player);
 };
 [
     _asset, _targetId,
     "ft-ai",
-    "Fast travel AI",
+    "Fast travel AI to you",
     _fastTravelAIExecute,
     true,
     "fastTravelAI",

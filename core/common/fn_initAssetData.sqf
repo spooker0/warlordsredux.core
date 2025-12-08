@@ -71,6 +71,7 @@ private _menuButtonIconMap = createHashMapFromArray [
     ["add-waypoint", "A3\ui_f\data\map\markers\military\box_CA.paa"],
     ["control-driver", "a3\ui_f\data\IGUI\Cfg\CommandBar\imageDriver_ca.paa"],
     ["control-gunner", "a3\ui_f\data\IGUI\Cfg\CommandBar\imageGunner_ca.paa"],
+    ["cycle-waypoint", "A3\ui_f\data\map\markers\military\box_CA.paa"],
     ["ew", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
     ["fortify-stronghold", "A3\ui_f\data\map\mapcontrol\Ruin_CA.paa"],
     ["ft", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],

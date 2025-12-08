@@ -427,6 +427,7 @@ class CfgFunctions {
 			class findSpawnsInMarker {};
 			class findSpawnsInSector {};
 			class getAirSectorSpawn {};
+			class getAngle {};
 			class getAssetSide {};
 			class getAssetOwnerName {};
 			class getAssetTypeName {};

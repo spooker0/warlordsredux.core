@@ -49,6 +49,8 @@ if (_ammoConfig getOrDefault ["loal", false]) then {
         _projectile setMissileTarget [_selectedTarget, true];
         _originalTarget = _selectedTarget;
 
+        private _angleToEnemy = [getPosASL _unit, getDir _unit, getPosASL _selectedTarget] call WL2_fnc_getAngle;
+
         [_selectedTarget, _unit, _projectile] remoteExec ["WL2_fnc_warnIncomingMissile", _selectedTarget];
 
         uiSleep 1;
@@ -65,6 +67,8 @@ if (_ammoConfig getOrDefault ["loal", false]) then {
         private _targetAlt = _targetPos # 2;
         if (_unitSpeed > WL_SAM_FAST_THRESHOLD) then {
             _distanceBeforeNotch = 5000 + (_projAlt - _targetAlt) * 2;
+            private _angleToDistanceFactor = linearConversion [0, 180, _angleToEnemy, 1, 0, true];
+            _distanceBeforeNotch = _distanceBeforeNotch * _angleToDistanceFactor;
             _distanceBeforeNotch = (_distanceBeforeNotch max 3500) min 16000;
         } else {
             _distanceBeforeNotch = 3500;

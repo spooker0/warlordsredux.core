@@ -33,7 +33,7 @@ private _allLasedTargets = [];
     private _enemiesNear = _enemyUnits select {
         alive _x;
     } select {
-        (_x distance2D _lasePosition) < 100;
+        (_x distance2D _lasePosition) < 150;
     } select {
         !(_x isKindOf "Man");
     } select {

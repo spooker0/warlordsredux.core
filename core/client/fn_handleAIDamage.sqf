@@ -26,6 +26,8 @@ _unit setUnconscious true;
 
 [_unit] spawn {
     params ["_unit"];
+    private _originalDeathPos = getPosWorld _unit;
+
     private _downedTime = serverTime;
     private _unconsciousTime = _unit getVariable ["WL_unconsciousTime", 0];
     if (_unconsciousTime > 0) exitWith {};
@@ -47,6 +49,10 @@ _unit setUnconscious true;
     while { alive _unit && lifeState _unit == "INCAPACITATED" } do {
         if (animationState _unit != _deadAnimation) then {
             [_unit, [_deadAnimation]] remoteExec ["switchMove", 0];
+        };
+        if (_unit distance2D _originalDeathPos > 30) then {
+            _unit setPosWorld _originalDeathPos;
+            _unit setVelocity [0, 0, 0];
         };
 
         uiSleep 1;
