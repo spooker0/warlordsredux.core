@@ -23,9 +23,9 @@ while { alive player } do {
 
     if (_currentFocus != _previousFocus || _currentCamera != _previousCamera) then {
         [] call MENU_fnc_updateViewDistance;
-        _previousFocus = _currentFocus;
-        _previousCamera = _currentCamera;
     };
+    _previousFocus = _currentFocus;
+    _previousCamera = _currentCamera;
 
     private _connectedUAV = getConnectedUAV player;
     private _isConnectable = _connectedUAV getVariable ["WL_canConnectUav", false];

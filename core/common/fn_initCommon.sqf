@@ -67,13 +67,6 @@ enableSaving [false, false];
 
 call WL2_fnc_initAssetData;
 
-private _lastUpdateVersion = profileNamespace getVariable ["WL2_lastUpdateVersion", ""];
-if (_lastUpdateVersion != WL_VERSION) then {
-	profileNamespace setVariable ["WL2_lastUpdateVersion", WL_VERSION];
-	profileNamespace setVariable ["WL2_loadoutDefaults", createHashmap];
-	profileNamespace setVariable ["WLM_appearanceDefaults", createHashmap];
-};
-
 if (isServer) then {
 	call WL2_fnc_initServer;
 } else {

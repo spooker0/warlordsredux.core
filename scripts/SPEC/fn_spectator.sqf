@@ -18,7 +18,7 @@ if (WL_IsSpectator) exitWith {};
 WL_IsSpectator = true;
 
 // hide spectator on land
-// player setPosASL [2304.97, 9243.11, 11.5];
+player setPosASL [2304.97, 9243.11, 11.5];
 // player allowDamage false;
 // [player] remoteExec ["WL2_fnc_hideObjectOnAll", 2];
 
@@ -30,6 +30,8 @@ missionNamespace setVariable ["WL2_spectators", _missionSpectators, true];
 setPlayerRespawnTime 10000000;
 forceRespawn player;
 [player] remoteExec ["WL2_fnc_hideObjectOnAll", 2];
+
+player removeAllEventHandlers "HandleDamage";
 
 0 spawn {
     while { WL_IsSpectator } do {
