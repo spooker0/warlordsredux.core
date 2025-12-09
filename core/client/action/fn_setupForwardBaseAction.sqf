@@ -138,7 +138,7 @@ private _setupActionId = [
 			private _side = side group player;
 			[_forwardBase, serverTime, _endTime, _side, false] remoteExec ["WL2_fnc_setupForwardBaseMp", 0, true];
 
-			_forwardBase setVariable ["WL2_forwardBasePlacer", player, true];
+			_forwardBase setVariable ["WL2_forwardBasePlacer", getPlayerUID player, true];
 
 			playSound3D [
 				"a3\sounds_f_decade\assets\props\linkterminal_01_node_2_f\link_terminal02_antenna_open.wss",

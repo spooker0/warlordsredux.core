@@ -8,7 +8,7 @@ _unit setVelocity [0, 0, 0];
 _unit setCaptive true;
 _unit setUnconscious true;
 
-_unit setVariable ["WL2_expirationTime", serverTime + 30, true];
+_unit setVariable ["WL2_expirationTime", serverTime + WL_DURATION_RESPAWN, true];
 
 private _deadAnimations = [
     "Acts_StaticDeath_01",
@@ -35,7 +35,7 @@ while { alive _unit && lifeState _unit == "INCAPACITATED" } do {
     };
 
     _downTime = serverTime - _startTime;
-    setPlayerRespawnTime ((30 - _downTime) max 1);
+    setPlayerRespawnTime ((WL_DURATION_RESPAWN - _downTime) max 1);
 
     private _expirationTime = _unit getVariable ["WL2_expirationTime", serverTime + 30];
     if (serverTime > _expirationTime) then {

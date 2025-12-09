@@ -3,7 +3,7 @@ params ["_uid", ["_instant", false]];
 
 private _ownedAI = allUnits select { _x getVariable ["BIS_WL_ownerAsset", "123"] == _uid };
 {
-    if (!isPlayer _x) then {
+    if !(isPlayer _x || typeof _x in ["B_UAV_AI", "O_UAV_AI", "I_UAV_AI"]) then {
         deleteVehicle _x;
     };
 } forEach _ownedAI;

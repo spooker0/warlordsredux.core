@@ -126,6 +126,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["slider", "Target lock", [0, 1, 0.1, 1, "loalLockVolume"]],
         ["slider", "Killfeed: Notification", [0, 1, 0.1, 1, "killfeedNotification"]],
         ["slider", "Killfeed: Celebration", [0, 1, 0.1, 1, "killfeedCelebration"]],
+        ["slider", "Event music", [0, 1, 0.1, 1, "eventMusicVolume"]],
         ["category", "Adjustable settings"],
         ["slider", "Parachute auto deploy height", [0, 500, 5, 100, "parachuteAutoDeployHeight"]],
         ["slider", "Announcer notification time multiplier", [0.05, 2, 0.05, 1.0, "announcerTime"]],

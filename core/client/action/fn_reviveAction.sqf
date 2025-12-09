@@ -122,4 +122,4 @@ player setVariable ["WL2_reviveActionId", _reviveActionId];
 player setCaptive false;
 player setVariable ["WL2_alreadyHandled", false, 2];
 player setVariable ["WL_unconsciousTime", 0];
-setPlayerRespawnTime (getMissionConfigValue ["respawnDelay", 30]);
+setPlayerRespawnTime WL_DURATION_RESPAWN;

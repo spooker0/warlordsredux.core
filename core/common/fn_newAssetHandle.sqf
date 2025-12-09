@@ -78,7 +78,9 @@ if (_asset isKindOf "Man") then {
 		_asset setVariable ["WL2_hasReconOptics", true, true];
 	};
 
-	if (WL_ASSET(_assetActualType, "hasAWACS", 0) > 0) then {
+	private _hasAirRadar = WL_ASSET(_assetActualType, "hasAirRadar", 0);
+	if (_hasAirRadar > 0) then {
+		_asset setVariable ["WL2_airRadarRange", _hasAirRadar, true];
 		[_asset, true] remoteExec ["WL2_fnc_scannerAction", 0, true];
 	};
 

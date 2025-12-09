@@ -39,6 +39,6 @@ _flag setUserActionText [_index, "<t color = '#4bff58'>Customization</t>", "<img
 		setPlayerRespawnTime 1;
 	}, [], 5];
 	_flag addAction ["<t color = '#ffff00'>(Debug) Set Normal Respawn</t>", {
-		setPlayerRespawnTime (getMissionConfigValue ["respawnDelay", 30]);
+		setPlayerRespawnTime WL_DURATION_RESPAWN;
 	}, [], 5];
 #endif

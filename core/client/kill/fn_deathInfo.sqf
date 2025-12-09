@@ -50,6 +50,9 @@ private _killerIcon = if (vehicle _killer isKindOf "Man") then {
     _weaponIcon;
 } else {
     private _vehicleIcon = getText (configfile >> "CfgVehicles" >> typeOf _killerVehicle >> "picture"); // use spawned vehicle type
+    if (_vehicleIcon in ["pictureThing", "pictureStaticObject"]) then {
+        _vehicleIcon = "a3\ui_f\data\map\vehicleicons\iconcratesupp_ca.paa";
+    };
     _vehicleIcon;
 };
 

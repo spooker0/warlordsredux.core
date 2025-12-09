@@ -213,14 +213,20 @@ switch (_conditionName) do {
         };
     };
     case "lockFOB": {
-        private _fobPlacer = _target getVariable ["WL2_forwardBasePlacer", objNull];
-        if (_fobPlacer != player) exitWith { format ["This forward base was placed by: %1", name _fobPlacer] };
+        private _fobPlacer = _target getVariable ["WL2_forwardBasePlacer", ""];
+        if (_fobPlacer != getPlayerUID player) exitWith {
+            private _fobPlacerPlayer = _fobPlacer call BIS_fnc_getUnitByUid;
+            format ["This forward base was placed by: %1", name _fobPlacerPlayer]
+        };
         "ok";
     };
     case "deleteFOB": {
-        private _fobPlacer = _target getVariable ["WL2_forwardBasePlacer", objNull];
-        if (isNull _fobPlacer) exitWith { "ok" };
-        if (_fobPlacer != player) exitWith { format ["This forward base was placed by: %1", name _fobPlacer] };
+        private _fobPlacer = _target getVariable ["WL2_forwardBasePlacer", ""];
+        if (_fobPlacer == "") exitWith { "ok" };
+        if (_fobPlacer != getPlayerUID player) exitWith {
+            private _fobPlacerPlayer = _fobPlacer call BIS_fnc_getUnitByUid;
+            format ["This forward base was placed by: %1", name _fobPlacerPlayer]
+        };
         "ok";
     };
     case "repairFOB": {

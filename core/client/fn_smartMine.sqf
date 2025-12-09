@@ -42,7 +42,7 @@ while { alive _asset } do {
     };
 
     private _enemyUnits = switch (_side) do {
-        case west: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
+        case west: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
         case east: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
         default { [] };
     };
@@ -53,7 +53,9 @@ while { alive _asset } do {
     private _angle = WL_SMART_MINE_ANGLES # _smartMineDistanceIndex;
     private _smartMineType = _asset getVariable ["WL2_smartMineType", 0];
 
-    private _enemyVehicles = _enemyUnits select { alive _x } select {
+    private _enemyVehicles = _enemyUnits select {
+        alive _x && lifeState _x != "INCAPACITATED"
+    } select {
         _x distance _asset < _detonationDistance
     } select {
         private _unitActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
@@ -110,6 +112,7 @@ while { alive _asset } do {
 
     private _projectile = createVehicle [_projectileType, _asset modelToWorld [0, 0, 1], [], 0, "FLY"];
     _projectile setPosASL (AGLtoASL _startPos);
+    _projectile setVariable ["APS_ammoOverride", "ammo_SmartMine"];
 
     private _initialVectorDirAndUp = [getPosASL _projectile, AGLtoASL _startPos] call BIS_fnc_findLookAt;
     _projectile setVectorDirAndUp _initialVectorDirAndUp;

@@ -440,8 +440,8 @@ private _scanners = if (_drawAll) then {
     private _scanRadius = _x getVariable ["WL_scanRadius", 100];
 	if (_scanRadius == 0) then { continue; };
     private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
-	private _isAWACS = WL_ASSET_FIELD(_assetData, _assetActualType, "hasAWACS", 0) > 0;
-	if (_isAWACS) then {
+	private _hasAirRadar = WL_ASSET_FIELD(_assetData, _assetActualType, "hasAirRadar", 0) > 0;
+	if (_hasAirRadar) then {
 		if (cameraOn == _x || _x in _assetTargets) then {
 			_drawSemiCircles pushBack [
 				60,

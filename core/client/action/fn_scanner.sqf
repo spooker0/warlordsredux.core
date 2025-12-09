@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_asset", "_actionId", "_awacs", "_iteration", ["_radiusOverride", -1]];
+params ["_asset", "_actionId", "_isAirRadar", "_iteration", ["_radiusOverride", -1]];
 
 private _scannerOn = _asset getVariable ["WL_scannerOn", false];
 
@@ -9,7 +9,7 @@ private _actionColor = if (_scannerOn) then {
     "#ff4b4b";
 };
 
-private _scannerTypeText = if (_awacs) then {
+private _scannerTypeText = if (_isAirRadar) then {
     "AESA RADAR";
 } else {
     "SCANNER";
@@ -31,21 +31,21 @@ private _assetSide = [_asset] call WL2_fnc_getAssetSide;
 
 private _assetPos = _asset modelToWorldVisual [0, 0, 0];
 private _assetHeight = (_assetPos # 2) min (getPosASL _asset # 2);
-if (!_awacs && _assetHeight > 2000) exitWith {
+if (!_isAirRadar && _assetHeight > 2000) exitWith {
     _asset setVariable ["WL_scannedObjects", []];
     _asset setVariable ["WL_scanRadius", 0];
 };
-if (_awacs && _assetHeight < 50) exitWith {
+if (_isAirRadar && _assetHeight < 50) exitWith {
     _asset setVariable ["WL_scannedObjects", []];
     _asset setVariable ["WL_scanRadius", 0];
 };
-if (!_awacs && surfaceIsWater _assetPos) exitWith {
+if (!_isAirRadar && surfaceIsWater _assetPos) exitWith {
     _asset setVariable ["WL_scannedObjects", []];
     _asset setVariable ["WL_scanRadius", 0];
 };
 
-private _scanRadius = if (_awacs) then {
-    WL_AWACS_RANGE;
+private _scanRadius = if (_isAirRadar) then {
+    _asset getVariable ["WL2_airRadarRange", 20000];
 } else {
     ((_assetHeight * 2) min 1000) max 350;
 };
@@ -56,7 +56,7 @@ _asset setVariable ["WL_scanRadius", _scanRadius];
 
 if (_assetSide != side group player) exitWith {};
 
-private _relevantVehicles = if (_awacs) then {
+private _relevantVehicles = if (_isAirRadar) then {
     vehicles select {
         _x isKindOf "Air"
     } select {
@@ -102,7 +102,7 @@ private _scannedObjects = _vehiclesInRadius select {
 });
 
 if (cameraOn == _asset) then {
-    if (_awacs) then {
+    if (_isAirRadar) then {
         if (_iteration % 8 == 0) then {
             playSoundUI ["radarTargetLost", 2, 1, true];
         };
