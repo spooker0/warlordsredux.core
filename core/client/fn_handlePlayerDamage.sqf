@@ -5,6 +5,8 @@ if (_projectile != "" && _context == 2) then {
     private _existingProjectiles = uiNamespace getVariable ["WL2_damagedProjectiles", createHashMap];
     _existingProjectiles set [diag_tickTime, _projectile];
     uiNamespace setVariable ["WL2_damagedProjectiles", _existingProjectiles];
+    uiNamespace setVariable ["WL2_damageSource", _source];
+    uiNamespace setVariable ["WL2_damagedWeapon", currentWeapon _source];
 };
 
 if (_hitPoint == "incapacitated") then {

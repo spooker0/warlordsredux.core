@@ -16,7 +16,7 @@ if (_key in actionKeys "gunElevDown") then {
 
 if (_delta != 0) then {
     private _targetList = _targetListParams call _targetListFunction;
-    private _selectedTarget = cameraOn getVariable [_targetVariable, objNull];
+    private _selectedTarget = cameraOn getVariable [format ["WL2_selectedTarget%1", _targetVariable], objNull];
     private _targetIndex = 0;
     {
         private _target = objectFromNetId (_x # 0);
@@ -29,16 +29,14 @@ if (_delta != 0) then {
     private _newSelectedTarget = objectFromNetId _newSelectedTargetId;
 
     private _assetActualType = cameraOn getVariable ["WL2_orderedClass", typeof cameraOn];
-    private _isAdvancedThreat = WL_ASSET(_assetActualType, "hasASAM", 0) > 0;
-    if (_isAdvancedThreat) then {
-        if (!isNull _selectedTarget) then {
-            _selectedTarget setVariable ["WL2_advancedThreat", objNull, true];
-        };
-        if (_newSelectedTargetId != "none") then {
-            _newSelectedTarget setVariable ["WL2_advancedThreat", cameraOn, true];
-        };
+    if (!isNull _selectedTarget) then {
+        _selectedTarget setVariable ["WL2_advancedThreat", objNull, true];
     };
+    if (_newSelectedTargetId != "none" && _newSelectedTarget isKindOf "Air") then {
+        _newSelectedTarget setVariable ["WL2_advancedThreat", cameraOn, true];
+    };
+    cameraOn setVariable [format ["WL2_selectedLockPercent%1", _targetVariable], 0];
 
-    cameraOn setVariable [_targetVariable, _newSelectedTarget];
+    cameraOn setVariable [format ["WL2_selectedTarget%1", _targetVariable], _newSelectedTarget];
     playSoundUI ["a3\ui_f\data\sound\rsccombo\soundexpand.wss", 2];
 };

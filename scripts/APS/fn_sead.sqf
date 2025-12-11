@@ -15,7 +15,8 @@ if (!alive _target) then {
     };
 };
 
-if (!isNull (missileTarget _projectile) || !alive _target) exitWith {
+private _lockPercent = _unit getVariable ["WL2_selectedLockPercentSEAD", 0];
+if (!isNull (missileTarget _projectile) || !alive _target || _lockPercent < 100) exitWith {
     _projectile setVariable ["APS_ammoConsumptionOverride", 1];
 };
 

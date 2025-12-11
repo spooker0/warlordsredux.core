@@ -34,10 +34,16 @@ private _damageDone = if (alive _killer && lifeState _killer != "INCAPACITATED")
 };
 private _health = round ((1 - _damageDone) * 100);
 
-private _killerVehicle = vehicle _killer;
-private _killerWeapon = currentWeapon _killer;
+private _killerVehicle = uiNamespace getVariable ["WL2_damageSource", objNull];
+if (isNull _killerVehicle) then {
+    _killerVehicle = vehicle _killer;
+};
+private _killerWeapon = uiNamespace getVariable ["WL2_damagedWeapon", currentWeapon _killer];
+if (_killerWeapon == "") then {
+    _killerWeapon = currentWeapon _killer;
+};
 
-private _killerText = if (vehicle _killer isKindOf "Man") then {
+private _killerText = if (_killerVehicle isKindOf "Man") then {
     private _weaponText = getText (configfile >> "CfgWeapons" >> _killerWeapon >> "displayName");
     _weaponText;
 } else {
@@ -45,7 +51,7 @@ private _killerText = if (vehicle _killer isKindOf "Man") then {
     _vehicleText;
 };
 
-private _killerIcon = if (vehicle _killer isKindOf "Man") then {
+private _killerIcon = if (_killerVehicle isKindOf "Man") then {
     private _weaponIcon = getText (configfile >> "CfgWeapons" >> _killerWeapon >> "picture");
     _weaponIcon;
 } else {
@@ -177,6 +183,8 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         };
 
         uiNamespace setVariable ["WL2_damagedProjectiles", createHashMap];
+        uiNamespace setVariable ["WL2_damageSource", objNull];
+        uiNamespace setVariable ["WL2_damagedWeapon", nil];
     };
 }];
 

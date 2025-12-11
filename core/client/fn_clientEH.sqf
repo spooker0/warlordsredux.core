@@ -26,19 +26,19 @@ addMissionEventHandler ["HandleChatMessage", {
 			case "asam";
 			case "esam";
 			case "loal": {
-				[_key, DIS_fnc_getTargetList, [DIS_fnc_getSamTarget, "NO TARGET", "WL2_selectedTargetAA"], "WL2_selectedTargetAA"] call DIS_fnc_handleKeypress;
+				[_key, DIS_fnc_getTargetList, [DIS_fnc_getSamTarget, "NO TARGET", "WL2_selectedTargetAA"], "AA"] call DIS_fnc_handleKeypress;
 			};
 			case "gps": {
 				[_key] call DIS_fnc_handleGPSKeypress;
 			};
 			case "laser": {
-				[_key, DIS_fnc_getLaserList, [], "WL2_selectedTargetLaser"] call DIS_fnc_handleKeypress;
+				[_key, DIS_fnc_getLaserList, [], "Laser"] call DIS_fnc_handleKeypress;
 			};
 			case "remote": {
-				[_key, DIS_fnc_getSquadList, [], "WL2_selectedTargetPlayer"] call DIS_fnc_handleKeypress;
+				[_key, DIS_fnc_getSquadList, [], "Player"] call DIS_fnc_handleKeypress;
 			};
 			case "sead": {
-				[_key, DIS_fnc_getTargetList, [DIS_fnc_getSeadTarget, "TARGET: AUTO", "WL2_selectedTargetSEAD"], "WL2_selectedTargetSEAD"] call DIS_fnc_handleKeypress;
+				[_key, DIS_fnc_getTargetList, [DIS_fnc_getSeadTarget, "TARGET: AUTO", "WL2_selectedTargetSEAD"], "SEAD"] call DIS_fnc_handleKeypress;
 			};
 			default {};
 		};

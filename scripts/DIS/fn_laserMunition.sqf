@@ -13,6 +13,9 @@ if (!alive _target) exitWith {};
 private _isInAngle = [getPosATL _projectile, getDir _projectile, 120, getPosATL _target] call WL2_fnc_inAngleCheck;
 if (!_isInAngle) exitWith {};
 
+private _lockPercent = _unit getVariable ["WL2_selectedLockPercentLaser", 0];
+if (_lockPercent < 100) exitWith {};
+
 _projectile setVariable ["DIS_ultimateTarget", _target];
 
 if (_target isKindOf "Air") exitWith {

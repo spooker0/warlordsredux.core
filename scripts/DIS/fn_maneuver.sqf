@@ -41,7 +41,8 @@ private _originalTarget = missileTarget _projectile;
 private _ammoConfig = _unit getVariable ["WL2_currentAmmoConfig", createHashMap];
 if (_ammoConfig getOrDefault ["loal", false]) then {
     private _selectedTarget = _unit getVariable ["WL2_selectedTargetAA", objNull];
-    if (!isNull _selectedTarget && isNull _originalTarget) then {
+    private _selectedLockPercent = _unit getVariable ["WL2_selectedLockPercentAA", 0];
+    if (!isNull _selectedTarget && isNull _originalTarget && _selectedLockPercent >= 100) then {
         private _isFlying = (_selectedTarget modelToWorld [0, 0, 0]) # 2 > 30;
         if (!_isFlying) exitWith {};
         private _unitSpeed = speed _unit;
@@ -69,7 +70,7 @@ if (_ammoConfig getOrDefault ["loal", false]) then {
             _distanceBeforeNotch = 5000 + (_projAlt - _targetAlt) * 2;
             private _angleToDistanceFactor = linearConversion [0, 180, _angleToEnemy, 1, 0, true];
             _distanceBeforeNotch = _distanceBeforeNotch * _angleToDistanceFactor;
-            _distanceBeforeNotch = (_distanceBeforeNotch max 3500) min 16000;
+            _distanceBeforeNotch = (_distanceBeforeNotch max 3500) min 12000;
         } else {
             _distanceBeforeNotch = 3500;
         };
