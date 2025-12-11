@@ -520,6 +520,21 @@ addMissionEventHandler ["Draw3D", {
                 playSoundUI ["a3\sounds_f\arsenal\weapons\launchers\nlaw\locked_nlaw.wss", _lockVolume * 0.5, 1, true];
                 uiNamespace setVariable ["WL2_advancedThreatLastSound", serverTime];
             };
+
+            _targetVehicleIcons pushBack [
+                "\A3\ui_f\data\IGUI\Cfg\Targeting\Seeker_ca.paa",
+                [1, 0, 0, 1],
+                _advancedThreat,
+                1.85,
+                1.85,
+                0,
+                "",
+                true,
+                0.035,
+                "RobotoCondensedBold",
+                "center",
+                true
+            ];
         };
 
         private _currentTargetingMode = uiNamespace getVariable ["DIS_currentTargetingMode", ""];
@@ -535,8 +550,12 @@ addMissionEventHandler ["Draw3D", {
             };
             private _selectedTarget = _vehicle getVariable [format ["WL2_selectedTarget%1", _x], objNull];
             if (alive _selectedTarget) then {
-                private _cameraDirection = (positionCameraToWorld [0, 0, 0]) getDir (positionCameraToWorld [0, 0, 100]);
-                private _isInAngle = [getPosATL _vehicle, _cameraDirection, 120, getPosATL _selectedTarget] call WL2_fnc_inAngleCheck;
+                private _isInAngle = if (_vehicle isKindOf "Air") then {
+                    [getPosATL _vehicle, getDir _vehicle, 120, getPosATL _selectedTarget] call WL2_fnc_inAngleCheck;
+                } else {
+                    private _cameraDirection = (positionCameraToWorld [0, 0, 0]) getDir (positionCameraToWorld [0, 0, 100]);
+                    [getPosATL _vehicle, _cameraDirection, 120, getPosATL _selectedTarget] call WL2_fnc_inAngleCheck;
+                };
 
                 private _lockPercentage = _vehicle getVariable [format ["WL2_selectedLockPercent%1", _x], 0];
                 _lockPercentage = if (_isInAngle) then {
