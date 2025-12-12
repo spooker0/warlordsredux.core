@@ -60,16 +60,11 @@ private _trackSpeedPercent = (_perpendicularVelocity / _actualTrackSpeed) min 1;
 private _tolerancePercent = (_normalizedVelocity / _actualTolerance) min 1;
 private _maxRangePercent = (_distanceRemaining / _actualMaxRange) min 1;
 private _distanceTraveledPercent = (_distanceTraveled / _distanceBeforeNotch) min 1;
-
-private _bonuses = 0;
-if (speed _target > WL_SAM_FAST_THRESHOLD && speed _target > speed _launcher) then {
-    _bonuses = _bonuses + 1;
-};
-if (_flaresNearby > 100) then {
-    _bonuses = _bonuses + 1;
-};
-if ((_projectile distance _launcher) > 6000) then {
-    _bonuses = _bonuses + 1;
+if (_distanceTraveledPercent < 1) then {
+    private _dodgeResult = speed _target > WL_SAM_FAST_THRESHOLD && speed _target > speed _launcher && (_projectile distance _launcher) > 6000;
+    if (_dodgeResult) then {
+        _distanceTraveledPercent = 1;
+    };
 };
 
 if (isNull _projectile) then {
@@ -79,5 +74,5 @@ if (isNull _projectile) then {
         2 - (_trackSpeedPercent + _tolerancePercent);
     };
 } else {
-    _trackSpeedPercent + _tolerancePercent + _maxRangePercent + _distanceTraveledPercent + _bonuses;
+    _trackSpeedPercent + _tolerancePercent + _maxRangePercent + _distanceTraveledPercent;
 };
