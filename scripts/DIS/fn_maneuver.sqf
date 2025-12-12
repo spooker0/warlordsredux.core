@@ -102,7 +102,7 @@ private _originalPosition = getPosASL _unit;
 
         // Notching mechanic
         private _notchResult = [_originalTarget, _unit, _projectile, _distanceBeforeNotch] call DIS_fnc_getNotchResult;
-        if (_notchResult == 4) then {
+        if (_notchResult >= 4) then {
             _projectile setVariable ["DIS_notched", true];
         };
 
