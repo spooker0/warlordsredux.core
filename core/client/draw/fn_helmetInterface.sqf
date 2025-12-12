@@ -513,18 +513,15 @@ addMissionEventHandler ["Draw3D", {
 
         private _lockVolume = _settingsMap getOrDefault ["loalLockVolume", 1];
 
-        private _advancedThreat = _vehicle getVariable ["WL2_advancedThreat", objNull];
-        if (alive _advancedThreat) then {
-            private _lastSoundPlayed = uiNamespace getVariable ["WL2_advancedThreatLastSound", 0];
-            if (serverTime - _lastSoundPlayed > 1) then {
-                playSoundUI ["a3\sounds_f\arsenal\weapons\launchers\nlaw\locked_nlaw.wss", _lockVolume * 0.5, 1, true];
-                uiNamespace setVariable ["WL2_advancedThreatLastSound", serverTime];
-            };
-
+        private _advancedThreats = _vehicle getVariable ["WL2_advancedThreats", []];
+        _advancedThreats = _advancedThreats select {
+            alive _x;
+        };
+        {
             _targetVehicleIcons pushBack [
-                "\A3\ui_f\data\IGUI\Cfg\Targeting\Seeker_ca.paa",
+                "a3\ui_f\data\igui\rsccustominfo\sensors\targets\airremote_ca.paa",
                 [1, 0, 0, 1],
-                _advancedThreat,
+                _x,
                 1.85,
                 1.85,
                 0,
@@ -535,6 +532,14 @@ addMissionEventHandler ["Draw3D", {
                 "center",
                 true
             ];
+        } forEach _advancedThreats;
+
+        if (count _advancedThreats > 0) then {
+            private _lastSoundPlayed = uiNamespace getVariable ["WL2_advancedThreatLastSound", 0];
+            if (serverTime - _lastSoundPlayed > 1) then {
+                playSoundUI ["a3\sounds_f\arsenal\weapons\launchers\nlaw\locked_nlaw.wss", _lockVolume * 0.5, 1, true];
+                uiNamespace setVariable ["WL2_advancedThreatLastSound", serverTime];
+            };
         };
 
         private _currentTargetingMode = uiNamespace getVariable ["DIS_currentTargetingMode", ""];

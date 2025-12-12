@@ -30,10 +30,20 @@ if (_delta != 0) then {
 
     private _assetActualType = cameraOn getVariable ["WL2_orderedClass", typeof cameraOn];
     if (!isNull _selectedTarget) then {
-        _selectedTarget setVariable ["WL2_advancedThreat", objNull, true];
+        private _selectedTargetThreats = _selectedTarget getVariable ["WL2_advancedThreats", []];
+        _selectedTargetThreats = _selectedTargetThreats select {
+            _x != _selectedTarget && alive _x
+        };
+        _selectedTarget setVariable ["WL2_advancedThreats", _selectedTargetThreats, true];
     };
+
     if (_newSelectedTargetId != "none" && _newSelectedTarget isKindOf "Air") then {
-        _newSelectedTarget setVariable ["WL2_advancedThreat", cameraOn, true];
+        private _newSelectedTargetThreats = _newSelectedTarget getVariable ["WL2_advancedThreats", []];
+        _newSelectedTargetThreats pushBack cameraOn;
+        _newSelectedTargetThreats = _newSelectedTargetThreats select {
+            alive _x
+        };
+        _newSelectedTarget setVariable ["WL2_advancedThreats", _newSelectedTargetThreats, true];
     };
     cameraOn setVariable [format ["WL2_selectedLockPercent%1", _targetVariable], 0];
 

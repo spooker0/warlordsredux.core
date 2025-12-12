@@ -2,11 +2,14 @@
 params ["_asset"];
 private _seadTargets = [];
 
-private _advancedThreat = _asset getVariable ["WL2_advancedThreat", objNull];
-if (alive _advancedThreat) then {
-    private _name = format ["LOCKED: %1", [_advancedThreat] call WL2_fnc_getAssetTypeName];
-    _seadTargets pushBack [_advancedThreat, _name];
-};
+private _advancedThreats = _asset getVariable ["WL2_advancedThreats", []];
+{
+    if (!alive _x) then {
+        continue;
+    };
+    private _name = format ["LOCKED: %1", [_x] call WL2_fnc_getAssetTypeName];
+    _seadTargets pushBack [_x, _name];
+} forEach _advancedThreats;
 
 private _extendedSamLauncher = _asset getVariable ["WL_incomingExtendedSam", objNull];
 if (alive _extendedSamLauncher) then {
