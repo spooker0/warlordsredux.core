@@ -11,8 +11,8 @@ private _deployActionId = _asset addAction [
             params ["_asset"];
 
             private _crateType = switch (BIS_WL_playerSide) do {
-                case west: { "Land_Cargo20_blue_F"; };
-                case east: { "Land_Cargo20_red_F"; };
+                case west: { "B_Slingload_01_Cargo_F"; };
+                case east: { "Land_Pod_Heli_Transport_04_box_F"; };
                 default { ""; };
             };
             if (_crateType == "") exitWith {

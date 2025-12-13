@@ -142,7 +142,7 @@ if ("H" in _services) then {
 		};
 	} forEach WL_ASSET_DATA;
 
-	private _numAirSpawn = (round (random 3)) max 1;
+	private _numAirSpawn = (round (random 3)) max 3;
 	for "_i" from 1 to _numAirSpawn do {
 		private _randomAngle = random 360;
 		private _randomDistance = 2000 + random 500;

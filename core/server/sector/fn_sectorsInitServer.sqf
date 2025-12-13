@@ -163,14 +163,14 @@ private _sectorGroup = createGroup [civilian, true];
 [_firstBase, _secondBase] spawn {
 	private _airDefenseToSpawn = [
 		[
-			["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_E_F"],
-			["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_E_F"],
-			["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_UP_F"]
+			["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_F"],
+			["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_F"],
+			["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_F"]
 		],
 		[
-			["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_M_F"],
-			["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_M_F"],
-			["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_M_F"]
+			["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_F"],
+			["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_F"],
+			["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_F"]
 		]
 	];
 	{

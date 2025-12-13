@@ -14,6 +14,12 @@ if (_key in actionKeys "gunElevDown") then {
     _delta = 1;
 };
 
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _useNextVehicleKey = _settingsMap getOrDefault ["useNextVehicleKey", true];
+if (_useNextVehicleKey && _key in actionKeys "vehLockTargets") then {
+    _delta = 1;
+};
+
 if (_delta != 0) then {
     private _targetList = _targetListParams call _targetListFunction;
     private _selectedTarget = cameraOn getVariable [format ["WL2_selectedTarget%1", _targetVariable], objNull];

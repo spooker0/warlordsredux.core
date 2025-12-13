@@ -86,8 +86,16 @@ _display displayAddEventHandler ["KeyDown", {
 
     if (isNil "_entry") exitWith {};
 
+    private _buttonTimeout = uiNamespace getVariable ["WL2_mapButtonLastClickTime", 0];
+    if (serverTime < _buttonTimeout) exitWith {};
+
     playSoundUI ["a3\ui_f\data\sound\rsclistbox\soundselect.wss", 0.5];
     [_display, 0, _entry # 1, _entry # 0] call WL2_fnc_mapButtonClick;
+    uiNamespace setVariable ["WL2_mapButtonLastClickTime", serverTime + 0.3];
+}];
+
+_display displayAddEventHandler ["KeyUp", {
+    uiNamespace setVariable ["WL2_mapButtonLastClickTime", 0];
 }];
 
 _texture ctrlAddEventHandler ["JSDialog", {

@@ -16,9 +16,13 @@ missionNamespace setVariable ["WL2_forwardBases", _currentForwardBases];
 _forwardBase setVariable ["WL2_forwardBaseTime", _endTime];
 _forwardBase setVariable ["WL_spawnedAsset", true];
 _forwardBase setVariable ["BIS_WL_ownerAssetSide", _side];
-_forwardBase setVariable ["WL2_forwardBaseSupplies", -1];
 _forwardBase setVariable ["WL2_demolitionMaxHealth", 12];
-_forwardBase setVariable ["WL2_demolitionHealth", 12];
+_forwardBase setVariable ["WL2_demolitionHealth", 1];
+
+private _sectorsInRange = BIS_WL_allSectors select {
+    _x distance2D _forwardBase < WL_FOB_CAPTURE_RANGE
+};
+_forwardBase setVariable ["WL2_forwardBaseSectors", _sectorsInRange];
 
 waitUntil {
     uiSleep 1;
@@ -31,9 +35,4 @@ waitUntil {
     serverTime >= _endTime || !alive _forwardBase
 };
 
-_forwardBase setVariable ["WL2_forwardBaseSupplies", 2000];
-
-private _sectorsInRange = BIS_WL_allSectors select {
-    _x distance2D _forwardBase < WL_FOB_CAPTURE_RANGE
-};
-_forwardBase setVariable ["WL2_forwardBaseSectors", _sectorsInRange];
+_forwardBase setVariable ["WL2_demolitionHealth", 12];

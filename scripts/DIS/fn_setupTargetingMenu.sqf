@@ -292,9 +292,13 @@ while { !BIS_WL_missionEnd } do {
 		};
 
 		private _encodedMissilesText = _texture ctrlWebBrowserAction ["ToBase64", toJSON _missilesData];
-		_script = _script + format ["setIncomingMissiles(atobr(""%1""));", _encodedMissilesText];
+
+		private _countermeasures = count (("CMflare_Chaff_Ammo" allObjects 2) select {
+			(getShotParents _x) # 0 == cameraOn || _x distance cameraOn < 4000;
+		});
+		_script = _script + format ["setIncomingMissiles(atobr(""%1""), %2);", _encodedMissilesText, _countermeasures];
     } else {
-		_script = _script + "setIncomingMissiles('[]');";
+		_script = _script + "setIncomingMissiles('[]', 0);";
 	};
 
 	private _reconOptics = cameraOn getVariable ["WL2_hasReconOptics", false];

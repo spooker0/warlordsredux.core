@@ -20,7 +20,7 @@ private _relativeVelocity = _launcherVelocity vectorDotProduct _vectorDiffNormal
 
 private _altitude = (_launcherPos # 2) max 1;
 private _timeToGround = sqrt (_altitude / 5);
-private _range = _timeToGround * (_relativeVelocity + 200);
+private _range = _timeToGround * (_relativeVelocity + 200) min 6000;
 
 private _distanceNeeded = _targetPos distance2D _launcherPos;
 private _overrideRange = _asset getVariable ["WL2_overrideRange", 0];

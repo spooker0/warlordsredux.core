@@ -113,7 +113,9 @@ private _originalPosition = getPosASL _unit;
                 _projectile setVectorDirAndUp _targetVectorDirAndUp;
                 _projectile setMissileTarget [_originalTarget, true];
             } else {
-                triggerAmmo _projectile;
+                if (_projectile distance2D _unit > 1000) then {
+                    triggerAmmo _projectile;
+                };
             };
         };
 
@@ -158,12 +160,6 @@ if (speed _unit > WL_SAM_FAST_THRESHOLD) then {
     _maxAcceleration = _maxAcceleration * 3;
 };
 
-private _terrainTest = 4000;
-private _disableGroundAvoid = false;
-#if WL_NO_GROUND_AVOID
-_disableGroundAvoid = true;
-#endif
-
 private _lastLoopTime = serverTime;
 while { alive _projectile } do {
     private _currentVector = velocityModelSpace _projectile;
@@ -185,38 +181,9 @@ while { alive _projectile } do {
     };
 
     private _angularVector = angularVelocityModelSpace _projectile;
-    private _distanceTraveled = _projectile distance _originalPosition;
-    if (_disableGroundAvoid || _distanceTraveled > _groundAvoidDistance) then {
-        private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
-        _projectile setAngularVelocityModelSpace _newAngularVector;
-    } else {
-        private _start = getPosASL _projectile;
-        private _end = _projectile modelToWorldWorld [0, _terrainTest, -100];
-        private _intersectPosition = terrainIntersectAtASL [_start, _end];
-        private _target = missileTarget _projectile;
-        private _targetHeightATL = if !(isNull _target) then {
-            (getPosATL _target # 2) min (getPosASL _projectile # 2);
-        } else {
-            100;
-        };
-        private _projectileHeightATL = (getPosATL _projectile # 2) min (getPosASL _projectile # 2);
-        private _distanceToGround = _intersectPosition distance _start;
-        _projectileHeightATL = _projectileHeightATL min _distanceToGround;
-        private _belowTargetATL = _projectileHeightATL < _targetHeightATL;
-        private _groundAvoid = !(_intersectPosition isEqualTo [0, 0, 0]) && _belowTargetATL;
 
-        if (_groundAvoid) then {
-            _projectile setAngularVelocityModelSpace [-30 * (_terrainTest -_distanceToGround) / _terrainTest, _angularVector # 1, _angularVector # 2];
-        } else {
-            private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
-            _projectile setAngularVelocityModelSpace _newAngularVector;
-        };
-
-        private _vectorUp = vectorUp _projectile;
-        _vectorUp set [0, 0];
-        _vectorUp set [1, 0];
-        _projectile setVectorDirAndUp [vectorDir _projectile, _vectorUp];
-    };
+    private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
+    _projectile setAngularVelocityModelSpace _newAngularVector;
 
     _lastLoopTime = serverTime;
     uiSleep 0.01;

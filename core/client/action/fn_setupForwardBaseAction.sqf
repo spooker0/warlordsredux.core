@@ -139,6 +139,7 @@ private _setupActionId = [
 			[_forwardBase, serverTime, _endTime, _side, false] remoteExec ["WL2_fnc_setupForwardBaseMp", 0, true];
 
 			_forwardBase setVariable ["WL2_forwardBasePlacer", getPlayerUID player, true];
+			_forwardBase setVariable ["WL2_forwardBaseSupplies", 2000, true];
 
 			playSound3D [
 				"a3\sounds_f_decade\assets\props\linkterminal_01_node_2_f\link_terminal02_antenna_open.wss",
@@ -220,13 +221,9 @@ private _setupActionId = [
 			playSound "AddItemFailed";
 		};
 
-		private _forwardBase = _forwardBases # 0;
-		if (_forwardBase getVariable ["WL2_forwardBaseTime", 0] > serverTime) exitWith {
-			["Forward base is still under construction!"] call WL2_fnc_smoothText;
-			playSound "AddItemFailed";
-		};
-
 		deleteVehicle _target;
+
+		private _forwardBase = _forwardBases # 0;
 		private _forwardBaseSupplies = _forwardBase getVariable ["WL2_forwardBaseSupplies", 0];
 		private _newSupplies = _forwardBaseSupplies + 20000;
 		_forwardBase setVariable ["WL2_forwardBaseSupplies", _newSupplies, true];

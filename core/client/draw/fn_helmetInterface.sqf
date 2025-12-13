@@ -306,23 +306,24 @@ addMissionEventHandler ["Draw3D", {
                 ];
             } forEach _samMissiles;
 
-            private _targetLock = playerTargetLock;
-            if (!isNull (_targetLock # 0)) then {
-                private _notchResult = [_targetLock # 0, _vehicle] call DIS_fnc_getNotchResult;
-                private _targetLockPercent = round ((_notchResult * 100) max 0 min 95);
+            private _targetLock = playerTargetLock # 0;
+            if (alive _targetLock) then {
+                private _flaresNearby = count (("CMflare_Chaff_Ammo" allObjects 2) select {
+                    (getShotParents _x) # 0 == _targetLock || _x distance _targetLock < 4000;
+                });
 
                 _samIcons pushBack [
-                    "\A3\ui_f\data\IGUI\Cfg\Cursors\lock_target_ca.paa",
-                    if (_targetLockPercent > 75) then {
+                    "",
+                    if (_flaresNearby < 50) then {
                         [0, 1, 0, 1]
                     } else {
                         [1, 0, 0, 1]
                     },
-                    _targetLock # 0,
+                    _targetLock,
                     0.8,
                     0.8,
                     0,
-                    format ["TRACK %1%%", _targetLockPercent],
+                    format ["CM %1", _flaresNearby],
                     true,
                     0.035,
                     "RobotoCondensedBold",

@@ -143,8 +143,8 @@ if (_asset isKindOf "Man") then {
 			[_asset] remoteExec ["WL2_fnc_slingAddAction", 0, true];
 		};
 
-		case "Land_Cargo20_blue_F";
-		case "Land_Cargo20_red_F": {
+		case "B_Slingload_01_Cargo_F";
+		case "Land_Pod_Heli_Transport_04_box_F": {
 			_asset setVariable ["WL2_mapCircleRadius", WL_FOB_CAPTURE_RANGE, true];
 			[_asset] remoteExec ["WL2_fnc_setupForwardBaseAction", 0, true];
 		};
@@ -349,6 +349,7 @@ if (_asset isKindOf "Man") then {
 			clearMagazineCargoGlobal _asset;
 			clearItemCargoGlobal _asset;
 			clearWeaponCargoGlobal _asset;
+			clearBackpackCargoGlobal _asset;
 		};
 	};
 

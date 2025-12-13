@@ -164,6 +164,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["checkbox", "Show death info over map", ["showDeathInfoInMap", false]],
         ["checkbox", "Hide notification in interface", ["hideNotificationInterface", false]],
         ["checkbox", "Show welcome menu", ["showWelcomeMenu", true]],
+        ["checkbox", "Use next vehicle key in targeting menu", ["useNextVehicleKey", true]],
         ["category", "Hide scroll menus (requires respawn)"],
         ["checkbox", "Hide: Squad menu", ["hideSquadMenu", false]],
         ["checkbox", "Hide: Buy menu", ["hideBuyMenu", false]],

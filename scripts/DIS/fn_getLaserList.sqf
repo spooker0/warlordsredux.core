@@ -35,6 +35,8 @@ private _allLasedTargets = [];
     } select {
         (_x distance2D _lasePosition) < 150;
     } select {
+        _x distance cameraOn < 10000;
+    } select {
         !(_x isKindOf "Man");
     } select {
         getText (configFile >> "CfgVehicles" >> typeOf _x >> "destrType") != "DestructNo";

@@ -29,8 +29,8 @@ private _inRangeTeamFob = if (count _inRangeTeamForwardBases > 0) then {
 } else {
     objNull
 };
-if (!isNull _inRangeTeamFob && _inRangeTeamFob getVariable ["WL2_forwardBaseTime", 0] > serverTime) exitWith {
-    "Cannot add supplies to forward base while it's under construction.";
+if (!isNull _inRangeTeamFob && _inRangeTeamFob getVariable ["WL2_forwardBaseTime", 0] > serverTime && _addSupplies) exitWith {
+    "";
 };
 if (_addSupplies && isNull _inRangeTeamFob) exitWith {
     "No friendly forward base in range.";

@@ -81,10 +81,10 @@ switch (_className) do {
     case "BuyFOB": {
         switch (BIS_WL_playerSide) do {
             case west: {
-                ["Land_Cargo20_blue_F", 500, "Fast Travel", [], [0, 3, 0]] call WL2_fnc_requestPurchase;
+                ["B_Slingload_01_Cargo_F", 500, "Fast Travel", [], [0, 5, 0]] call WL2_fnc_requestPurchase;
             };
             case east: {
-                ["Land_Cargo20_red_F", 500, "Fast Travel", [], [0, 3, 0]] call WL2_fnc_requestPurchase;
+                ["Land_Pod_Heli_Transport_04_box_F", 500, "Fast Travel", [], [0, 5, 0]] call WL2_fnc_requestPurchase;
             };
         };
     };

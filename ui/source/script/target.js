@@ -119,7 +119,7 @@ function setMode(mode, title) {
     }
 }
 
-function setIncomingMissiles(missiles) {
+function setIncomingMissiles(missiles, countermeasures) {
     missiles = JSON.parse(missiles || '[]');
     missiles.sort((a, b) => {
         const approachA = a[2] ? 0 : 100000;
@@ -163,6 +163,13 @@ function setIncomingMissiles(missiles) {
         rowEl.style.color = rowColor;
         missileTableEl.appendChild(rowEl);
     });
+
+    const countermeasuresEl = document.querySelector('.countermeasures');
+    if (countermeasures <= 0) {
+        countermeasuresEl.textContent = "";
+    } else {
+        countermeasuresEl.textContent = `CM ${countermeasures}`;
+    }
 }
 
 function setReconOptics(state, ready) {
