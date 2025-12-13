@@ -127,7 +127,7 @@ call WL2_fnc_processRunways;
 
 		0 setOvercast (_snowIntensity * 2);
 		0 setRain _snowIntensity;
-		0 setFog (_snowIntensity max 0.15);
+		0 setFog (_snowIntensity min 0.15);
 		setHumidity (0.9 * _snowIntensity);
 		forceWeatherChange;
 
