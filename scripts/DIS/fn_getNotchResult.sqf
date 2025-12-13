@@ -15,7 +15,7 @@ private _targetTrackSpeed = linearConversion [0, 4000, _targetAltitude, 40, 440,
 
 private _launcherNoLos = _targetAltitude < 50 || terrainIntersectASL [getPosASL _launcher, getPosASL _target];
 private _flaresNearby = count (("CMflare_Chaff_Ammo" allObjects 2) select {
-    (getShotParents _x) # 0 == _target || _x distance _target < 4000;
+    (getShotParents _x) # 0 == _target && _x distance _target < 4000;
 });
 if (_launcherNoLos) then {
     _flaresNearby = _flaresNearby * 10;

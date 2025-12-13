@@ -309,7 +309,7 @@ addMissionEventHandler ["Draw3D", {
             private _targetLock = playerTargetLock # 0;
             if (alive _targetLock) then {
                 private _flaresNearby = count (("CMflare_Chaff_Ammo" allObjects 2) select {
-                    (getShotParents _x) # 0 == _targetLock || _x distance _targetLock < 4000;
+                    (getShotParents _x) # 0 == _targetLock && _x distance _targetLock < 4000;
                 });
 
                 _samIcons pushBack [

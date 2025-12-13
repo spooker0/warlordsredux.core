@@ -294,7 +294,7 @@ while { !BIS_WL_missionEnd } do {
 		private _encodedMissilesText = _texture ctrlWebBrowserAction ["ToBase64", toJSON _missilesData];
 
 		private _countermeasures = count (("CMflare_Chaff_Ammo" allObjects 2) select {
-			(getShotParents _x) # 0 == cameraOn || _x distance cameraOn < 4000;
+			(getShotParents _x) # 0 == cameraOn && _x distance cameraOn < 4000;
 		});
 		_script = _script + format ["setIncomingMissiles(atobr(""%1""), %2);", _encodedMissilesText, _countermeasures];
     } else {
