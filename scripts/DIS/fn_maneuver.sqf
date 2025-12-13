@@ -107,7 +107,7 @@ private _originalPosition = getPosASL _unit;
         };
 
         if (!isNull _originalTarget) then {
-            private _canDodge = _projectile getVariable ["DIS_notched", false] && _projectile distance2D _unit > 1000;
+            private _canDodge = _projectile getVariable ["DIS_notched", false];
             if (!_canDodge) then {  // If not already notched and not notching
                 private _targetVectorDirAndUp = [_projectilePosition, _targetPosition] call BIS_fnc_findLookAt;
                 _projectile setVectorDirAndUp _targetVectorDirAndUp;
