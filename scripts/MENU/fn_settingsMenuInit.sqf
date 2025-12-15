@@ -157,6 +157,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["checkbox", "No voice speaker", ["noVoiceSpeaker", false]],
         ["checkbox", "Disable incoming missile indicator", ["disableIncomingMissileDisplay", false]],
         ["checkbox", "Delete quad bike/water scooter on exit", ["deleteSmallTransports", true]],
+        ["checkbox", "Use new killfeed", ["useNewKillfeed", true]],
         ["checkbox", "Use new kill sound", ["useNewKillSound", true]],
         ["checkbox", "Use minimalistic killfeed", ["killfeedMinimalistic", false]],
         ["checkbox", "Show hitmarker (experimental)", ["showHitIndicator", false]],
