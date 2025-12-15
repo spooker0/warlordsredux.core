@@ -146,7 +146,7 @@ call WL2_fnc_processRunways;
 0 spawn {
 	uiSleep 10;
 	while { !BIS_WL_missionEnd } do {
-		if (random 1 < 0.02) then {
+		if (random 1 < 0.01) then {
 			[] remoteExec ["WL2_fnc_earthquake", 0];
 		};
 		uiSleep (60 * 20);

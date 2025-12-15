@@ -12,9 +12,6 @@ private _nearDestroyables = (nearestObjects [_position, [], 100, true]) select {
 };
 
 if (_ignoreHeight) then {
-    private _posAltitude = _position # 2;
-    private _terrainAltitude = getTerrainHeightASL _position;
-    _position set [2, _posAltitude max (_terrainAltitude + 1.2)];
     _penetrator setPosASL _position;
 } else {
     private _inDestroyerArea = {

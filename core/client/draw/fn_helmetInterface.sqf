@@ -305,34 +305,6 @@ addMissionEventHandler ["Draw3D", {
                     true
                 ];
             } forEach _samMissiles;
-
-            private _targetLock = playerTargetLock # 0;
-            if (alive _targetLock) then {
-                private _flaresNearby = count (("CMflare_Chaff_Ammo" allObjects 2) select {
-                    (getShotParents _x) # 0 == _targetLock && _x distance _targetLock < 4000;
-                });
-
-                _samIcons pushBack [
-                    "",
-                    if (_flaresNearby < 50) then {
-                        [0, 1, 0, 1]
-                    } else {
-                        [1, 0, 0, 1]
-                    },
-                    _targetLock,
-                    0.8,
-                    0.8,
-                    0,
-                    format ["CM %1", _flaresNearby],
-                    true,
-                    0.035,
-                    "RobotoCondensedBold",
-                    "center",
-                    true,
-                    0,
-                    0.02
-                ];
-            };
         };
         uiNamespace setVariable ["WL_HelmetInterfaceSAMIcons", _samIcons];
 

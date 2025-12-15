@@ -237,7 +237,11 @@ if (_asset isKindOf "Man") then {
 
 			private _detonateValue = _target getVariable ["WL2_detonateValue", 0];
 
-			private _targetPos = _target modelToWorldWorld [0, 2.5, -1];
+			private _targetPos = if (_target isKindOf "Air") then {
+				_target modelToWorldWorld [0, 0, 0]
+			} else {
+				_target modelToWorldWorld [0, 2.5, -1];
+			};
 			["M_Vorona_HEAT", _targetPos, [vectorDir _target, vectorUp _target], _detonateValue, true] spawn DIS_fnc_bunkerBuster;
 		}, nil, 100, false, true, "ActionInMap", "cameraOn == _target", -1];
 
@@ -248,7 +252,11 @@ if (_asset isKindOf "Man") then {
 			[player, "droneExplode", _unit] remoteExec ["WL2_fnc_handleClientRequest", 2];
 			private _detonateValue = _unit getVariable ["WL2_detonateValue", 0];
 
-			private _targetPos = _unit modelToWorldWorld [0, 2.5, -1];
+			private _targetPos = if (_unit isKindOf "Air") then {
+				_unit modelToWorldWorld [0, 0, 0]
+			} else {
+				_unit modelToWorldWorld [0, 2.5, -1];
+			};
 			["M_Vorona_HEAT", _targetPos, [vectorDir _unit, vectorUp _unit], _detonateValue, true] spawn DIS_fnc_bunkerBuster;
 		}];
 	};

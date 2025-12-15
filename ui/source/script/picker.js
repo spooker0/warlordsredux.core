@@ -12,11 +12,11 @@ setIcons('opfor-icon', "A3\\Data_F\\Flags\\flag_CSAT_CO.paa");
 const bluforEl = document.querySelector('.blufor-side');
 const opforEl = document.querySelector('.opfor-side');
 
-function setPlayers(blufor, opfor, lockSides, playersArray) {
+function setPlayers(blufor, opfor, unlockSides, playersArray) {
     const bluforPlayerEl = bluforEl.querySelector('.side-players');
     const opforPlayerEl = opforEl.querySelector('.side-players');
 
-    if (blufor - opfor > 2 && lockSides) {
+    if (blufor - opfor > 2 && !unlockSides) {
         bluforEl.classList.add('disabled');
         bluforPlayerEl.textContent = `${blufor} players (Locked)`;
     } else {
@@ -24,7 +24,7 @@ function setPlayers(blufor, opfor, lockSides, playersArray) {
         bluforPlayerEl.textContent = `${blufor} players`;
     }
 
-    if (opfor - blufor > 2 && lockSides) {
+    if (opfor - blufor > 2 && !unlockSides) {
         opforEl.classList.add('disabled');
         opforPlayerEl.textContent = `${opfor} players (Locked)`;
     } else {

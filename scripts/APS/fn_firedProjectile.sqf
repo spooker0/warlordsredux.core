@@ -44,7 +44,7 @@ private _interception = {
 	deleteVehicle _projectile;
 
 	private _projectileRelDir = _target getRelDir _firedPosition;
-	private _explosionPosition = _target getRelPos [sqrt _maxDistSqr, _projectileRelDir];
+	private _explosionPosition = _target getRelPos [(sqrt _maxDistSqr) / 2, _projectileRelDir];
 	private _explosionHeight = (_projectilePosition # 2) min (sqrt _maxDistSqr);
 	_explosionPosition set [2, _explosionHeight];
 	[_explosionPosition, [
