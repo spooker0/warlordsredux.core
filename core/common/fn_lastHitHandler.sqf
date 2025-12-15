@@ -60,7 +60,7 @@ _asset addEventHandler ["HandleDamage", {
 		_damage = _this call WL2_fnc_handleAIDamage;
 	};
 
-	if (_projectile == "FuelExplosion") then {
+	if (_projectile isKindOf "FuelExplosion") then {
 		private _unitApsType = _unit call APS_fnc_getMaxAmmo;
 		private _sourceApsType = _source call APS_fnc_getMaxAmmo;
 		if (_unitApsType > _sourceApsType) then {
