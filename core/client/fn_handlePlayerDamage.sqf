@@ -40,7 +40,7 @@ if (_homeBase != _enemyTarget && _inHomeBase) exitWith {
     0;
 };
 
-private _isImpactDamage = isNull _source && _projectile == "";
+private _isImpactDamage = isNull _source && (_projectile == "" || _projectile == "FuelExplosion");
 private _playerVehicle = vehicle _unit;
 private _isInVehicle = _playerVehicle != _unit && alive _playerVehicle;
 private _vehicleMaxAps = _playerVehicle call APS_fnc_getMaxAmmo;

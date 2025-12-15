@@ -38,9 +38,9 @@ private _killerVehicle = uiNamespace getVariable ["WL2_damageSource", objNull];
 if (isNull _killerVehicle) then {
     _killerVehicle = vehicle _killer;
 };
-private _killerWeapon = uiNamespace getVariable ["WL2_damagedWeapon", currentWeapon _killer];
+private _killerWeapon = uiNamespace getVariable ["WL2_damagedWeapon", ""];
 if (_killerWeapon == "") then {
-    _killerWeapon = currentWeapon _killer;
+    _killerWeapon = currentWeapon _killerVehicle;
 };
 
 private _killerText = if (_killerVehicle isKindOf "Man") then {
