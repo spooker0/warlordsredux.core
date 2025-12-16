@@ -2,7 +2,7 @@
 params ["_uav", "_jammer"];
 
 private _damageAdd = if (_uav getVariable ["WL2_isBombDrone", false]) then {
-    1
+    0.4
 } else {
     0.1
 };

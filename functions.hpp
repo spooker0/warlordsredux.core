@@ -435,6 +435,7 @@ class CfgFunctions {
 			class getMoneySign {};
 			class getVehicleWeapons {};
 			class grieferCheck {};
+			class handleDamage {};
 			class handleInstigator {};
 			class inAngleCheck {};
 			class income {};

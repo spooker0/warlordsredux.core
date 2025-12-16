@@ -51,6 +51,11 @@ private _getTeamColor = {
     ] # ([west, east, independent] find _team);
 };
 
+private _getTeamName = {
+    params ["_team"];
+    ["BLUFOR", "OPFOR", "INDEP"] # ([west, east, independent] find _team);
+};
+
 private _percentage = _sector getVariable ["BIS_WL_captureProgress", 0];
 private _revealed = _side in (_sector getVariable ["BIS_WL_revealedBy", []]);
 if (!_revealed) then {
@@ -114,7 +119,36 @@ private _sectorIncome = if !(_sectorName in WL_SPECIAL_SECTORS) then {
 
 private _sectorInfo = [
     _sectorName,
-    _sectorIncome,
+    _sectorIncome
+];
+
+private _captureDetails = _sector getVariable ["WL_captureDetails", []];
+private _showCaptureDetails = if (_revealed) then {
+    private _captureDetailPlayerTeamValid = _captureDetails select {
+        _x # 0 == _side && _x # 1 >= 1
+    };
+    count _captureDetailPlayerTeamValid > 0
+} else {
+    false
+};
+if (_showCaptureDetails) then {
+    private _captureDetailsArray = _captureDetails apply {
+        private _side = _x # 0;
+        private _sideName = [_side] call _getTeamName;
+        private _score = floor (_x # 1);
+        if (_score < 1) then {
+            "";
+        } else {
+            [
+                format ["%1 (%2x): %3", _sideName, _x # 2, _score],
+                [_side] call _getTeamColor
+            ];
+        };
+    };
+    _sectorInfo append _captureDetailsArray;
+};
+
+_sectorInfo append [
     (_servicesText joinString ", "),
     _scanCooldown,
     _fortification

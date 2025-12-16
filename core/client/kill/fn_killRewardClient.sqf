@@ -62,7 +62,7 @@ private _useNewKillfeed = _settingsMap getOrDefault ["useNewKillfeed", true];
 if (_useNewKillfeed) then {
 	[_displayText, _reward, _customColor, _displayIcon] call WL2_fnc_updateKillFeed;
 } else {
-	systemChat format ["%1 (+%2)", _displayText, _reward];
+	systemChat format ["%1 (+%2)", toUpper _displayText, _reward];
 };
 
 [_displayText, _unitType, _reward] call RWD_fnc_handleReward;

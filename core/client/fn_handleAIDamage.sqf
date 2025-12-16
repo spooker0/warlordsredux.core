@@ -40,9 +40,7 @@ _unit setUnconscious true;
         "Acts_StaticDeath_05",
         "Acts_StaticDeath_06",
         "Acts_StaticDeath_08",
-        "Acts_StaticDeath_09",
-        "Acts_StaticDeath_10",
-        "Acts_StaticDeath_13"
+        "Acts_StaticDeath_09"
     ];
     private _deadAnimation = selectRandom _deadAnimations;
 

@@ -172,9 +172,9 @@ if (!isNull _sectorTarget) then {
 				0,
 				0,
 				_text,
-				1,
+				2,
 				_textSize,
-				"EtelkaMonospaceProBold",
+				"PuristaSemibold",
 				"right"
 			];
 		} else {
@@ -186,9 +186,9 @@ if (!isNull _sectorTarget) then {
 				0,
 				0,
 				_x,
-				1,
+				2,
 				_textSize,
-				"EtelkaMonospaceProBold",
+				"PuristaSemibold",
 				"right"
 			];
 		};
@@ -488,11 +488,17 @@ if (count (_assetTargets arrayIntersect _allSquadmates) > 0) then {
 	};
 };
 
+private _mapIconTextScale = _settingsMap getOrDefault ["mapIconTextScale", 1];
+private _iconTextSize = _mapIconTextScale * 0.043;
+
 // Draw vehicles
 private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 {
 	private _position = getPosASL _x;
 	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
+	private _showName = if (_x isKindOf "Building") then {
+		_x in _assetTargets
+	} else { _draw };
 	_drawIcons pushBack [
 		[_x, _mapIconCache] call WL2_fnc_iconType,
 		[_x, _mapColorCache] call WL2_fnc_iconColor,
@@ -500,9 +506,9 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 		_size * _mapIconScale,
 		_size * _mapIconScale,
 		[_x] call WL2_fnc_getDir,
-		[_x, _draw, true, _mapTextCache] call WL2_fnc_iconText,
+		[_x, _showName, true, _mapTextCache] call WL2_fnc_iconText,
 		1,
-		0.043 * _mapIconScale,
+		_iconTextSize * _mapIconScale,
 		"PuristaBold",
 		"right"
 	];

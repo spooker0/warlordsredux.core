@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_asset", ["_owner", objNull]];
 
-[_asset] call WL2_fnc_lastHitHandler;
+[_asset] remoteExec ["WL2_fnc_handleDamage", 0];
 
 if (isServer) then {
 	if !(unitIsUAV _asset) then {
@@ -195,15 +195,11 @@ if (_asset isKindOf "Man") then {
 		};
 
 		// Suicide drones
-		// case "B_UAV_06_F";
-		// case "O_UAV_06_F";
-		// case "I_UAV_06_F": {
-		// 	_asset setVariable ["WL2_isBombDrone", true, true];
-		// 	_asset addEventHandler ["Killed", {
-		// 		params ["_unit"];
-		// 		[player, "droneExplode", _unit] remoteExec ["WL2_fnc_handleClientRequest", 2];
-		// 	}];
-		// };
+		case "B_UAV_06_F";
+		case "O_UAV_06_F";
+		case "I_UAV_06_F": {
+			_asset setVariable ["WL2_isBombDrone", true, true];
+		};
 	};
 
 	if ([_asset] call WL2_fnc_isDrone) then {

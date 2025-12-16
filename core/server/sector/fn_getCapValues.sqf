@@ -136,7 +136,9 @@ private _info = _sideArr apply {
     };
     private _sideScore = _sideCapValues getOrDefault [_side, 0];
 
-	[_side, _sideScore + _tiebreaker];
+	private _modifier = _sideCaptureModifier getOrDefault [_side, 0];
+
+	[_side, _sideScore + _tiebreaker, _modifier];
 };
 private _sortedInfo = [_info, [], { _x # 1 }, "DESCEND"] call BIS_fnc_sortBy;
 _sortedInfo;

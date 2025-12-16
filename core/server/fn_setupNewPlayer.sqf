@@ -63,7 +63,7 @@ private _owner = owner _warlord;
 
 _warlord setVariable ["BIS_WL_ownerAsset", _uid, true];
 _warlord setVariable ["WL2_accessControl", 0, true];
-[_warlord] call WL2_fnc_lastHitHandler;
+[_warlord] remoteExec ["WL2_fnc_handleDamage", 0];
 
 private _punishmentMap = missionNamespace getVariable ["WL2_punishmentMap", createHashMap];
 private _punishIncident = _punishmentMap getOrDefault [_uid, []];
