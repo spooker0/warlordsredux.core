@@ -162,3 +162,28 @@ addMissionEventHandler ["PlayerViewChanged", {
 		[_newCameraOn] spawn WL2_fnc_ecmJammer;
 	};
 }];
+
+addMissionEventHandler ["MarkerCreated", {
+	params ["_marker", "_channelNumber", "_owner", "_local"];
+	if (!isPlayer _owner) exitWith {};
+
+	// Global markers disabled
+	if (_channelNumber == 0) exitWith {
+		deleteMarker _marker;
+	};
+
+	private _markerTeamMap = missionNamespace getVariable ["WL2_markerTeamMap", createHashMap];
+	_markerTeamMap set [_marker, side group _owner];
+	missionNamespace setVariable ["WL2_markerTeamMap", _markerTeamMap, true];
+
+	private _markerText = markerText _marker;
+	if (_markerText == "") exitWith {};
+
+	private _disallowList = getArray (missionConfigFile >> "adminFilter");
+	private _triggeredFilters = _disallowList select {
+		_x in _markerText
+	};
+	if (count _triggeredFilters > 0) exitWith {
+		deleteMarker _marker;
+	};
+}];

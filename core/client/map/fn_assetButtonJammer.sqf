@@ -4,12 +4,12 @@ params ["_asset"];
 private _jammerActivated = _asset getVariable ["WL_ewNetActive", false];
 private _jammerActivating = _asset getVariable ["WL_ewNetActivating", false];
 private _jammerColor = if (_jammerActivated) then {
-    "green"
+    "#00ff00"
 } else {
     if (_jammerActivating) then {
-        "cyan"
+        "#00ffff"
     } else {
-        "red"
+        "#ff0000"
     };
 };
 private _jammerText = if (_jammerActivated) then {
@@ -21,5 +21,5 @@ private _jammerText = if (_jammerActivated) then {
         "Off"
     };
 };
-private _buttonText = format ["<span class='%1'>EW network: %2</span>", _jammerColor, _jammerText];
+private _buttonText = format ["<t color='%1'>EW network: %2</t>", _jammerColor, _jammerText];
 _buttonText;

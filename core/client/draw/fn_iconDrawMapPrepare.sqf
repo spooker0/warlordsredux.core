@@ -292,7 +292,7 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		0,
 		0.045 * _mapIconScale
 	];
-	_drawIconsSelectable pushBack [_base, _position];
+	_drawIconsSelectable pushBack _base;
 
 	_drawEllipses pushBack [
 		_position,
@@ -383,7 +383,7 @@ private _rallyPoints = _mapData getOrDefault ["rallyPoints", []];
 		"#(rgb,8,8,3)color(1,1,1,0.2)"
 	];
 
-	_drawIconsSelectable pushBack [_stronghold, _strongholdPos];
+	_drawIconsSelectable pushBack _stronghold;
 } forEach (_mapData getOrDefault ["strongholds", []]);
 
 // Draw scanned units
@@ -512,7 +512,7 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 		"PuristaBold",
 		"right"
 	];
-	_drawIconsSelectable pushBack [_x, _position];
+	_drawIconsSelectable pushBack _x;
 } forEach (_sideVehicles inAreaArray [_mapCenter, _mapBoundW, _mapBoundH, 0, true]);
 
 private _advancedSams = _mapData getOrDefault ["advancedSams", []];

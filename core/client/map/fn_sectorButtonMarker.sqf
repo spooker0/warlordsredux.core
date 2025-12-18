@@ -15,21 +15,21 @@ private _sectorSide = switch (_sectorMarker) do {
 };
 
 private _enemyColor = if (BIS_WL_playerSide == west) then {
-    "red";
+    "#ff0000";
 } else {
-    "blue";
+    "#0000ff";
 };
 
 private _sectorColorClass = switch (_sectorMarker) do {
     case "unknown": { "" };
     case "enemy": { _enemyColor };
     case "enemyhome": { _enemyColor };
-    case "green": { "green" };
-    case "attack": { "red" };
-    case "attack2": { "red" };
-    case "camped": { "red" };
+    case "green": { "#00ff00" };
+    case "attack": { "#ff0000" };
+    case "attack2": { "#ff0000" };
+    case "camped": { "#ff0000" };
     default { "" };
 };
 
-private _sectorText = format ["<span class='%1'>Mark sector: %2</span>", _sectorColorClass, _sectorSide];
+private _sectorText = format ["<t color='%1'>Mark sector: %2</t>", _sectorColorClass, _sectorSide];
 [_sectorText, _sectorSide]

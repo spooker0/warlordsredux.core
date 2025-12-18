@@ -9,61 +9,50 @@ private _radius = ((ctrlMapScale _map) * 500) max 5;
 private _pos = _map ctrlMapScreenToWorld getMousePosition;
 
 private _drawIconsSelectable = uiNamespace getVariable ["WL2_drawIconsSelectable", []];
-private _nearbyAssets = _drawIconsSelectable select {
-    private _assetPos = _x # 1;
-    (_assetPos distance2D _pos) < _radius
-};
-_nearbyAssets = [_nearbyAssets, [_pos], { _input0 distance2D (_x # 1) }, "ASCEND"] call BIS_fnc_sortBy;
+private _nearbyAssets = _drawIconsSelectable inAreaArray [_pos, _radius, _radius, 0, false];
+_nearbyAssets = [_nearbyAssets, [_pos], { _input0 distance2D _x }, "ASCEND"] call BIS_fnc_sortBy;
+WL_AssetActionTargets = _nearbyAssets;
 
-if (count _nearbyAssets > 0) then {
-    WL_AssetActionTargets = _nearbyAssets apply { _x # 0 };
-} else {
-    WL_AssetActionTargets = [];
-};
+private _mapScale = ctrlMapScale WL_CONTROL_MAP;
 
-if (isNull (findDisplay 160 displayCtrl 51)) then {
-    private _mapScale = ctrlMapScale WL_CONTROL_MAP;
-    private _pulseFrequency = 1;
-    private _pulseIconSize = 1.5;
-    private _timer = (serverTime % _pulseFrequency);
-    _timer = if (_timer <= (_pulseFrequency / 2)) then {_timer} else {_pulseFrequency - _timer};
-    private _markerSize = linearConversion [0, _pulseFrequency / 2, _timer, 1, _pulseIconSize];
-    private _markerSizeArr = [_markerSize, _markerSize];
+{
+    _x setMarkerSizeLocal [20 * _mapScale * BIS_WL_mapSizeIndex, (markerSize _x) # 1];
+} forEach BIS_WL_sectorLinks;
 
-    {
-        _x setMarkerSizeLocal [20 * _mapScale * BIS_WL_mapSizeIndex, (markerSize _x) # 1];
-    } forEach BIS_WL_sectorLinks;
+private _surrenderWarningActive = uiNamespace getVariable ["WL2_surrenderWarningActive", false];
+{
+    private _marker = (_x getVariable "BIS_WL_markers") # 0;
+    private _currentMarkerSize = if (_x in BIS_WL_selection_availableSectors) then {
+        private _pulseFrequency = 1;
+        private _pulseIconSize = 1.5;
+        private _timer = (serverTime % _pulseFrequency);
+        _timer = if (_timer <= (_pulseFrequency / 2)) then {_timer} else {_pulseFrequency - _timer};
+        private _markerSize = linearConversion [0, _pulseFrequency / 2, _timer, 1, _pulseIconSize];
+        private _markerSizeArr = [_markerSize, _markerSize];
 
-    private _surrenderWarningActive = uiNamespace getVariable ["WL2_surrenderWarningActive", false];
-    {
-        private _marker = (_x getVariable "BIS_WL_markers") # 0;
-        private _currentMarkerSize = if (_x in BIS_WL_selection_availableSectors) then {
-            if (_x == BIS_WL_targetVote) then {
-                _markerSizeArr vectorMultiply 1.5;
-            } else {
-                _markerSizeArr;
-            };
+        if (_x == BIS_WL_targetVote) then {
+            _markerSizeArr vectorMultiply 1.5;
         } else {
-            [1, 1];
+            _markerSizeArr;
         };
+    } else {
+        [1, 1];
+    };
 
-        private _sectorName = _x getVariable ["WL2_name", "Sector"];
-        if (_sectorName == "Surrender") then {
-            if (_surrenderWarningActive) then {
-                _currentMarkerSize = _markerSizeArr vectorMultiply 5;
-                _marker setMarkerColorLocal "ColorRed";
-            } else {
-                _marker setMarkerColorLocal "ColorWhite";
-            };
+    private _sectorName = _x getVariable ["WL2_name", "Sector"];
+    if (_sectorName == "Surrender") then {
+        if (_surrenderWarningActive) then {
+            _currentMarkerSize = [5, 5];
+            _marker setMarkerColorLocal "ColorRed";
+        } else {
+            _marker setMarkerColorLocal "ColorWhite";
         };
+    };
 
-        _marker setMarkerSizeLocal _currentMarkerSize;
-    } forEach BIS_WL_allSectors;
-};
+    _marker setMarkerSizeLocal _currentMarkerSize;
+} forEach BIS_WL_allSectors;
 
-private _nearbySectors = BIS_WL_allSectors select {
-    _x distance2D _pos < _radius
-};
+private _nearbySectors = BIS_WL_allSectors inAreaArray [_pos, _radius, _radius, 0, false];
 [_nearbySectors, _map] call WL2_fnc_handleSectorIcons;
 
 if (inputAction "BuldTurbo" > 0) exitWith {};
@@ -93,29 +82,10 @@ private _singletonScriptHandle = [_map] spawn {
     params ["_map"];
     if (count WL_MapBusy > 0) exitWith {};
 
-    private _display = findDisplay 5500;
-    if (isNull _display) then {
-        _display = createDialog ["RscWLBrowserMenu", true];
-    };
+    private _display = createDialog ["WL_MapButtonDisplay", true];
     uiNamespace setVariable ["WL2_mapButtonDisplay", _display];
 
-    private _texture = _display displayCtrl 5501;
-    _texture ctrlWebBrowserAction ["LoadFile", "src\ui\gen\buttons.html"];
-    // _texture ctrlWebBrowserAction ["OpenDevConsole"];
-
-    getMousePosition params ["_mouseX", "_mouseY"];
-    private _offsetX = (_mouseX - safeZoneX) / safeZoneW * 100;
-    private _offsetY = (_mouseY - safeZoneY) / safeZoneH * 100;
-
-    _texture setVariable ["WL2_buttonsMenuOffsetX", _offsetX];
-    _texture setVariable ["WL2_buttonsMenuOffsetY", _offsetY];
-
-    _texture setVariable ["WL2_allButtonsData", []];
-
-    _texture ctrlAddEventHandler ["PageLoaded", {
-        params ["_texture"];
-        [_texture] spawn WL2_fnc_addMapButtonPageLoad;
-    }];
+    _display setVariable ["WL2_allButtonsData", []];
 
     uiNamespace setVariable ["WL2_mapButtons", []];
 
@@ -133,27 +103,6 @@ private _singletonScriptHandle = [_map] spawn {
         } forEach WL_AssetActionTargets;
     };
 
-    private _isDrone = [cameraOn] call WL2_fnc_isDrone;
-    if (_isDrone && alive driver cameraOn) then {
-        [cameraOn, count _targetsClicked] call WL2_fnc_uavMapButtons;
-        _targetsClicked pushBack cameraOn;
-    };
-
-    // if (cameraOn getVariable ["DIS_selectionIndex", 0] == 1 && uiNamespace getVariable ["DIS_currentTargetingMode", "none"] == "gps") then {
-    //     playSoundUI ["a3\ui_f\data\sound\rsccombo\soundexpand.wss", 2];
-    //     private _coordinate = _map ctrlMapScreenToWorld getMousePosition;
-    //     private _cordX = (_coordinate # 0 / 100) toFixed 0;
-    //     private _cordY = (_coordinate # 1 / 100) toFixed 0;
-    //     while {count _cordX < 3} do {
-    //         _cordX = format ["0%1", _cordX];
-    //     };
-    //     while {count _cordY < 3} do {
-    //         _cordY = format ["0%1", _cordY];
-    //     };
-    //     private _cordString = format ["%1%2", _cordX, _cordY];
-    //     cameraOn setVariable ["DIS_gpsCord", _cordString];
-    // };
-
     uiNamespace setVariable ["WL2_assetTargetsSelected", _targetsClicked];
 
     private _hasButtons = false;
@@ -167,7 +116,7 @@ private _singletonScriptHandle = [_map] spawn {
 
     if (_hasButtons) then {
         playSoundUI ["clickSoft", 1];
-        [_display, _texture] spawn WL2_fnc_addMapButtons;
+        [_display] spawn WL2_fnc_addMapButtonsDisplay;
     } else {
         _display closeDisplay 0;
     };

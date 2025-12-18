@@ -32,7 +32,7 @@ if (_delta != 0) then {
     if (!isNull _selectedTarget) then {
         private _selectedTargetThreats = _selectedTarget getVariable ["WL2_advancedThreats", []];
         _selectedTargetThreats = _selectedTargetThreats select {
-            _x != _selectedTarget && alive _x
+            _x != cameraOn && alive _x
         };
         _selectedTarget setVariable ["WL2_advancedThreats", _selectedTargetThreats, true];
     };

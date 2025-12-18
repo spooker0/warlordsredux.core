@@ -80,6 +80,14 @@ class WL_MapButtonDisplay {
 	class controls {};
 };
 
+class WLDummyButton: RscButtonMenu {
+	idc = 8002;
+	x = 0;
+	y = 0;
+	w = 0;
+	h = 0;
+};
+
 class WLRscButtonMenu: RscButtonMenu {
 	soundClick[] = {"", 0, 1};
 };

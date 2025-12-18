@@ -16,7 +16,7 @@ _asset setVariable ["WL2_mapButtonText", _assetName];
 
 private _ownsVehicle = (_asset getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player;
 if (!isPlayer _asset && _ownsVehicle) then {
-    [_asset, _targetId, "remove", "<span class='red'>Remove</span>", {
+    [_asset, _targetId, "remove", "<t color='#ff0000'>Remove</t>", {
         params ["_asset"];
         if ((_asset getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player) then {
             _asset spawn WL2_fnc_deleteAssetFromMap;
@@ -144,8 +144,8 @@ if (_operateAccess && WL_ASSET(_assetActualType, "smartMine", 0) > 0) then {
         playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss"];
 
         private _distanceText = WL_SMART_MINE_DISTANCES # _newSmartMineDistance;
-        private _distanceColor = if (_distanceText == 0) then { "red" } else { "green" };
-        format ["<span class='%1'>Trigger distance: %2 m</span>", _distanceColor, _distanceText];
+        private _distanceColor = if (_distanceText == 0) then { "#ff0000" } else { "#00ff00" };
+        format ["<t color='%1'>Trigger distance: %2 m</t>", _distanceColor, _distanceText];
     };
     private _smartMinePrevious = {
         params ["_asset"];
@@ -155,13 +155,13 @@ if (_operateAccess && WL_ASSET(_assetActualType, "smartMine", 0) > 0) then {
         playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss"];
 
         private _distanceText = WL_SMART_MINE_DISTANCES # _newSmartMineDistance;
-        private _distanceColor = if (_distanceText == 0) then { "red" } else { "green" };
-        format ["<span class='%1'>Trigger distance: %2 m</span>", _distanceColor, _distanceText];
+        private _distanceColor = if (_distanceText == 0) then { "#ff0000" } else { "#00ff00" };
+        format ["<t color='%1'>Trigger distance: %2 m</t>", _distanceColor, _distanceText];
     };
 
     private _detonationDistance = WL_SMART_MINE_DISTANCES # (_asset getVariable ["WL2_smartMineDistance", 0]);
-    private _detonationDistanceColor = if (_detonationDistance == 0) then { "red" } else { "green" };
-    private _smartDistanceText = format ["<span class='%1'>Trigger distance: %2m</span>", _detonationDistanceColor, _detonationDistance];
+    private _detonationDistanceColor = if (_detonationDistance == 0) then { "#ff0000" } else { "#00ff00" };
+    private _smartDistanceText = format ["<t color='%1'>Trigger distance: %2m</t>", _detonationDistanceColor, _detonationDistance];
 
     [_asset, _targetId, "smart-mine-adjust", _smartDistanceText, [_smartMineNext, _smartMinePrevious], false] call WL2_fnc_addTargetMapButton;
 
@@ -178,7 +178,7 @@ if (_operateAccess && WL_ASSET(_assetActualType, "smartMine", 0) > 0) then {
             case 2: { "Trigger type: Anti-personnel" };
             default { "Trigger type: All" };
         };
-        format ["<span class='green'>%1</span>", _smartMineTypeText];
+        format ["<t color='#00ff00'>%1</t>", _smartMineTypeText];
     };
 
     private _smartMineType = _asset getVariable ["WL2_smartMineType", 0];
@@ -188,7 +188,7 @@ if (_operateAccess && WL_ASSET(_assetActualType, "smartMine", 0) > 0) then {
         case 2: { "Trigger type: Anti-personnel" };
         default { "Trigger type: All" };
     };
-    _smartMineTypeText = format ["<span class='green'>%1</span>", _smartMineTypeText];
+    _smartMineTypeText = format ["<t color='#00ff00'>%1</t>", _smartMineTypeText];
     [_asset, _targetId, "smart-mine-type", _smartMineTypeText, _smartMineTypeChange, false] call WL2_fnc_addTargetMapButton;
 };
 
@@ -287,9 +287,9 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     // Lock FOB Button
     private _isLocked = _asset getVariable ["WL2_forwardBaseLocked", false];
     private _lockText = if (_isLocked) then {
-        "<span class='red'>Forward base: Locked</span>";
+        "<t color='#ff0000'>Forward base: Locked</t>";
     } else {
-        "<span class='green'>Forward base: Unlocked</span>";
+        "<t color='#00ff00'>Forward base: Unlocked</t>";
     };
     private _lockFOBExecute = {
         params ["_asset"];
@@ -297,9 +297,9 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         _isLocked = !_isLocked;
         _asset setVariable ["WL2_forwardBaseLocked", _isLocked, true];
         if (_isLocked) then {
-            "<span class='red'>Forward base: Locked</span>";
+            "<t color='#ff0000'>Forward base: Locked</t>";
         } else {
-            "<span class='green'>Forward base: Unlocked</span>";
+            "<t color='#00ff00'>Forward base: Unlocked</t>";
         };
     };
     [
@@ -323,7 +323,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     [
         _asset, _targetId,
         "remove-fob",
-        "<span class='red'>Remove forward base</span>",
+        "<t color='#ff0000'>Remove forward base</t>",
         _deleteFOBExecute,
         true,
         "deleteFOB"
@@ -552,7 +552,7 @@ private _removeStrongholdExecute = {
 [
     _asset, _targetId,
     "remove-stronghold",
-    "<span class='red'>Remove stronghold</span>",
+    "<t color='#ff0000'>Remove stronghold</t>",
     _removeStrongholdExecute,
     true,
     "removeStronghold",

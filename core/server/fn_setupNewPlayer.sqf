@@ -83,12 +83,16 @@ private _targetSide = sideUnknown;
 waitUntil {
     uiSleep 0.1;
     _targetSide = _warlord getVariable ["WL2_selectedSide", sideUnknown];
-    _targetSide != civilian && _targetSide != sideUnknown;
+    _targetSide != civilian && _targetSide != sideUnknown && _targetSide in BIS_WL_competingSides;
 };
 
 _playerList set [_uid, _targetSide];
-private _warlordGroup = createGroup [_targetSide, true];
-[_warlord] joinSilent _warlordGroup;
+
+while { side group _warlord != _targetSide } do {
+    private _warlordGroup = createGroup [_targetSide, true];
+    [_warlord] joinSilent _warlordGroup;
+    uiSleep 0.1;
+};
 
 private _scoreboard = missionNamespace getVariable ["WL2_scoreboardData", createHashMap];
 private _playerEntry = _scoreboard getOrDefault [getPlayerUID _warlord, createHashMap];

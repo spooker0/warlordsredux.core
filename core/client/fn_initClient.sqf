@@ -22,7 +22,9 @@ call WL2_fnc_sidePicker;
 
 waitUntil {
 	uiSleep 0.001;
-	player getVariable ["WL2_playerSide", sideUnknown] == side group player
+	private _playerSide = player getVariable ["WL2_playerSide", sideUnknown];
+	_playerSide == side group player &&
+	_playerSide in BIS_WL_competingSides
 };
 BIS_WL_playerSide = player getVariable ["WL2_playerSide", sideUnknown];
 if (BIS_WL_playerSide == west) then {
@@ -233,7 +235,6 @@ uiNamespace setVariable ["WL2_currentNotification", []];
 
 WL2_lastLoadout = getUnitLoadout player;
 [player, true] call WLC_fnc_onRespawn;
-[] spawn WL2_fnc_factionBasedClientInit;
 0 spawn WL2_fnc_captureDisplay;
 
 call WL2_fnc_spectrumInterface;

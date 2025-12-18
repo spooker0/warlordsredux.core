@@ -103,21 +103,6 @@ private _interceptAction = {
                 false;
             };
         };
-        case "UAVTerminalOpen": {
-            0 spawn {
-                private _result = [
-                    "Control UAV",
-                    "The supported way to take control of UAVs is through the map or vehicle manager interface. Do you want to go to that instead?",
-                    "Yes", "No"
-                ] call WL2_fnc_prompt;
-                if (_result) then {
-                    0 spawn WL2_fnc_vehicleManager;
-                } else {
-                    player action ["UAVTerminalOpen", player];
-                };
-            };
-            true;
-        };
         case "SwitchToUAVDriver": {
             cameraOn setVariable ["WL2_lastSeatUsed", "Driver"];
             false;

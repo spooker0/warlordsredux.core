@@ -12,6 +12,7 @@ _asset setPosASL _position;
 
 [_asset, _sender, _orderedClass] call WL2_fnc_processOrder;
 
-if (_sender distance2D _asset < 100) then {
+private _drone = WL_ASSET(_orderedClass, "drone", 0);
+if (_drone == 0) then {
     [_sender, _asset] remoteExec ["moveInDriver", _sender];
 };

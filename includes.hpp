@@ -3,6 +3,7 @@ import RscButtonMenu;
 import RscCheckBox;
 import RscCombo;
 import RscControlsGroup;
+import RscControlsGroupNoScrollbars;
 import RscEdit;
 import RscListBox;
 import RscMapControl;

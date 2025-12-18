@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_display", "_clickType", "_buttonId", "_targetId"];
+params ["_display", "_control", "_clickType", "_buttonId", "_targetId"];
 
 private _closeFunction = {
     _display closeDisplay 0;
@@ -66,12 +66,16 @@ if !(isNull _actionTarget) then {
         [_actionTarget] spawn _targetButtonSetupAction;
     } else {
         private _actionResult = [_actionTarget] call _targetButtonSetupAction;
-        private _script = format ["changeButtonText(""%1"", ""%2"", ""%3"");", _targetId, _buttonId, _actionResult];
+        _control ctrlSetStructuredText parseText format ["     <t font='PuristaBold'>%1</t>", _actionResult];
 
-        private _texture = _display displayCtrl 5501;
-        _texture ctrlWebBrowserAction ["ExecJS", _script];
+        private _dummyButton = _display displayCtrl 1338;
+        [_dummyButton] spawn {
+            params ["_dummyButton"];
+            uiSleep 0.1;
+            ctrlSetFocus _dummyButton;
+        };
     };
-    ctrlSetFocus controlNull;
+    // ctrlSetFocus controlNull;
     playSoundUI ["\A3\ui_f\data\sound\RscButtonMenu\soundClick.wss", 0.1];
 };
 

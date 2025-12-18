@@ -16,11 +16,11 @@
 #define WL_PERF_TEST 0
 #define WL_ECM_TEST 0
 #define WL_AFK_ADMIN_TEST 0
+#define WL_AIR_POP_LIMIT 0
 
 // Live: set all to 1
 #define WL_STOP_TEAM_SWITCH 1
 #define WL_FOB_SQUAD_REQUIREMENT 1
-#define WL_AIR_POP_LIMIT 1
 
 // Configuration
 #define WL_TIMEOUT_MIN 0.055

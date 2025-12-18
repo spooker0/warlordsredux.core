@@ -149,6 +149,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["slider", "Capture interface font size", [8, 20, 1, 10, "captureInterfaceFontSize"]],
         ["slider", "Incoming indicator position (left %)", [0, 100, 1, 5, "incomingIndicatorLeft"]],
         ["slider", "Incoming indicator position (top %)", [0, 100, 1, 20, "incomingIndicatorTop"]],
+        ["slider", "Map button scale", [0.75, 1.5, 0.05, 1, "mapButtonScale"]],
         ["category", "General settings"],
         ["checkbox", "Disable 3rd person view (2x reward)", ["3rdPersonDisabled", false]],
         ["checkbox", "Autonomous mode off by default", ["enableAuto", false]],

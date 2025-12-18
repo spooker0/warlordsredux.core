@@ -28,6 +28,9 @@ private _isItemValid = {
 private _loadoutSanitize = {
     params ["_loadout"];
     {
+        if (isNil "_x") then {
+            continue;
+        };
         if (_x isEqualType "") then {
             private _itemValid = [_x] call _isItemValid;
             if (!_itemValid) then {
@@ -201,6 +204,11 @@ if (count _customizationLoadout > 0) then {
         };
     };
 } else {
+    if (BIS_WL_playerSide == west) then {
+        _unit setUnitLoadout "B_Soldier_TL_F";
+    } else {
+        _unit setUnitLoadout "O_Soldier_TL_F";
+    };
     0 spawn WLC_fnc_buildMenu;
 };
 
