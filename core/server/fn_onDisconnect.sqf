@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_uid", ["_instant", false]];
+params ["_uid"];
 
 private _ownedAI = allUnits select { _x getVariable ["BIS_WL_ownerAsset", "123"] == _uid };
 {
@@ -8,12 +8,18 @@ private _ownedAI = allUnits select { _x getVariable ["BIS_WL_ownerAsset", "123"]
     };
 } forEach _ownedAI;
 
-if (!_instant) then {
-    uiSleep 120;
-};
+// Remove owned mines
+private _ownedMineVar = format ["WL2_ownedMines_%1", _uid];
+private _ownedMines = missionNamespace getVariable [_ownedMineVar, []];
+{
+    deleteVehicle _x;
+} forEach _ownedMines;
+missionNamespace setVariable [_ownedMineVar, [], true];
+
+uiSleep 120;
 
 private _playerUnit = _uid call BIS_fnc_getUnitByUid;
-if (!isNull _playerUnit && !_instant) exitWith {};
+if (!isNull _playerUnit) exitWith {};
 
 // Remove owned vehicles
 private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", _uid];
@@ -31,13 +37,3 @@ _ownedVehicles = _ownedVehicles select { alive _x };
     deleteVehicle _x;
 } forEach _ownedVehicles;
 missionNamespace setVariable [_ownedVehiclesVar, []];
-
-// Remove owned mines
-private _ownedMineVar = format ["WL2_ownedMines_%1", _uid];
-private _ownedMines = missionNamespace getVariable [_ownedMineVar, []];
-{
-    if (alive _x) then {
-        deleteVehicle _x;
-    };
-} forEach _ownedMines;
-missionNamespace setVariable [_ownedMineVar, [], true];

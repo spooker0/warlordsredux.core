@@ -3,24 +3,24 @@ params [["_unit", player], ["_paidFor", false]];
 
 private _isItemVanilla = {
     params ["_item", "_itemType"];
-    private _modList = configSourceModList (configFile >> _itemType >> _item);
-    _modList = _modList select {
-        "@" in _x;
-    };
-    count _modList == 0;
+    private _whitelist = getArray (missionConfigFile >> "CfgWLWhiteList" >> _itemType);
+    _item in _whitelist
 };
 
 private _isItemValid = {
     params ["_item"];
     if (_item == "") exitWith { true };
-    if (isClass (configFile >> "CfgVehicles" >> _item)) exitWith {
-        [_item, "CfgVehicles"] call _isItemVanilla;
-    };
     if (isClass (configFile >> "CfgMagazines" >> _item)) exitWith {
-        [_item, "CfgMagazines"] call _isItemVanilla;
+        [_item, "magazines"] call _isItemVanilla;
+    };
+    if (isClass (configFile >> "CfgVehicles" >> _item)) exitWith {
+        [_item, "vehicles"] call _isItemVanilla;
     };
     if (isClass (configFile >> "CfgWeapons" >> _item)) exitWith {
-        [_item, "CfgWeapons"] call _isItemVanilla;
+        [_item, "weapons"] call _isItemVanilla;
+    };
+    if (isClass (configFile >> "CfgGlasses" >> _item)) exitWith {
+        [_item, "glasses"] call _isItemVanilla;
     };
     false;
 };

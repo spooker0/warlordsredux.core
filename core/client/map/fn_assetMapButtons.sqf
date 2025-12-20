@@ -15,7 +15,8 @@ private _assetName = if (isPlayer _asset) then {
 _asset setVariable ["WL2_mapButtonText", _assetName];
 
 private _ownsVehicle = (_asset getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player;
-if (!isPlayer _asset && _ownsVehicle) then {
+private _hasFullAccess = _asset getVariable ["WL2_accessControl", -1] == 0;
+if (!isPlayer _asset && (_ownsVehicle || _hasFullAccess)) then {
     [_asset, _targetId, "remove", "<t color='#ff0000'>Remove</t>", {
         params ["_asset"];
         if ((_asset getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player) then {

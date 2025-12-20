@@ -163,6 +163,7 @@ class CfgFunctions {
 			class clientEH {};
 			class createDestroyerClient {};
 			class earthquake {};
+			class exitToLobby {};
 			class factionBasedClientInit {};
 			class handleAIDamage {};
 			class handleBuyMenuKeypress {};

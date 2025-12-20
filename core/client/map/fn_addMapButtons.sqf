@@ -26,7 +26,7 @@ private _allButtonsData = [];
             _menuButtonIconMap getOrDefault [_buttonId, ""]
         ];
     } forEach _menuButtons;
-    _buttonsData = [_buttonsData, [], { if (_x # 4) then { _x # 0 } else { "zzz" + (_x # 0) } }, "ASCEND"] call BIS_fnc_sortBy;
+    _buttonsData = [_buttonsData, [], { _x # 0 }, "ASCEND"] call BIS_fnc_sortBy;
 
     private _actionTargets = uiNamespace getVariable ["WL2_assetTargetsSelected", []];
     private _actionTarget = if (count _actionTargets > _targetId) then {

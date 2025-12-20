@@ -1,7 +1,7 @@
 #include "includes.inc"
 addMissionEventHandler ["HandleDisconnect", {
 	params ["_unit", "_id", "_uid", "_name"];
-	[_uid, false] spawn WL2_fnc_onDisconnect;
+	[_uid] spawn WL2_fnc_onDisconnect;
 	call WL2_fnc_calcImbalance;
 }];
 

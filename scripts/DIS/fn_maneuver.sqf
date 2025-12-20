@@ -148,7 +148,6 @@ private _projectileType = typeOf _projectile;
 private _projectileActualType = _projectile getVariable ["APS_ammoOverride", _projectileType];
 private _projectileConfig = APS_projectileConfig getOrDefault [_projectileActualType, createHashMap];
 private _projectileSpeedOverride = _projectileConfig getOrDefault ["speed", 1];
-_projectileSpeedOverride = _projectileSpeedOverride max 1;
 private _maxAcceleration = (getNumber (configfile >> "CfgAmmo" >> _projectileType >> "thrust")) * WL_SAM_ACCELERATION * _projectileSpeedOverride;
 private _maxSpeed = getNumber (configfile >> "CfgAmmo" >> _projectileType >> "maxSpeed") * WL_SAM_MAX_SPEED_FACTOR * _projectileSpeedOverride;
 

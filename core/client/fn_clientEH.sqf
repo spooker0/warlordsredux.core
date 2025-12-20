@@ -172,11 +172,7 @@ addMissionEventHandler ["MarkerCreated", {
 		deleteMarker _marker;
 	};
 
-	private _markerTeamMap = missionNamespace getVariable ["WL2_markerTeamMap", createHashMap];
-	_markerTeamMap set [_marker, side group _owner];
-	missionNamespace setVariable ["WL2_markerTeamMap", _markerTeamMap, true];
-
-	private _markerText = markerText _marker;
+	private _markerText = toLower markerText _marker;
 	if (_markerText == "") exitWith {};
 
 	private _disallowList = getArray (missionConfigFile >> "adminFilter");

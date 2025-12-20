@@ -28,13 +28,27 @@ if (BIS_WL_currentSelection == WL_ID_SELECTION_ORDERING_AIRCRAFT) then {
 	BIS_WL_currentSelection = _selectionBefore;
 };
 
-if (isNull BIS_WL_targetSector) exitWith {
+private _exitOrderAircraft = {
 	"Canceled" call WL2_fnc_announcer;
 	[localize "STR_A3_WL_deploy_canceled"] call WL2_fnc_smoothText;
 	player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 
 	uiSleep 1;
 	WL_MapBusy = WL_MapBusy - ["orderAircraft"];
+};
+
+if (isNull BIS_WL_targetSector) exitWith {
+	call _exitOrderAircraft;
+};
+
+private _sectorMarker = BIS_WL_targetSector getVariable [format ["WL2_MapMarker_%1", BIS_WL_playerSide], "unknown"];
+private _result = if (_sectorMarker == "camped") then {
+	["Camped airbase", "Your team has marked this airbase as camped! Are you sure you would like to spawn your aircraft here?", "Yes", "Cancel"] call WL2_fnc_prompt;
+} else {
+	true;
+};
+if (!_result) exitWith {
+	call _exitOrderAircraft;
 };
 
 [localize "STR_A3_WL_asset_dispatched_TODO_REWRITE"] call WL2_fnc_smoothText;

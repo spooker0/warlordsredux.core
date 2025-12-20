@@ -11,26 +11,14 @@ private _list = getArray (missionConfigFile >> "adminFilter");
 if ((_list findIf {
 	[_x, _text] call BIS_fnc_inString
 }) != -1) exitWith {
-	"BlockScreen" setDebriefingText ["Admin", localize "STR_A3_nameFilter_info", localize "STR_A3_nameFilter"];
-	endMission "BlockScreen";
-	forceEnd;
+	[localize "STR_A3_nameFilter_info", localize "STR_A3_nameFilter"] call WL2_fnc_exitToLobby;
 };
 
 WL_LoadingState = 1;
 
-call WL2_fnc_sidePicker;
-
 waitUntil {
 	uiSleep 0.001;
-	private _playerSide = player getVariable ["WL2_playerSide", sideUnknown];
-	_playerSide == side group player &&
-	_playerSide in BIS_WL_competingSides
-};
-BIS_WL_playerSide = player getVariable ["WL2_playerSide", sideUnknown];
-if (BIS_WL_playerSide == west) then {
-	BIS_WL_enemySide = east;
-} else {
-	BIS_WL_enemySide = west;
+	player getVariable ["WL2_playerSetupComplete", false];
 };
 
 WL_LoadingState = 3;
@@ -38,16 +26,11 @@ WL_LoadingState = 3;
 private _uid = getPlayerUID player;
 
 "client" call WL2_fnc_varsInit;
-waitUntil {
-	!(isNil "BIS_WL_playerSide")
-};
 
 WL_LoadingState = 4;
 
 if !(BIS_WL_playerSide in BIS_WL_sidesArray) exitWith {
-	"BlockScreen" setDebriefingText ["Error", "Your unit is not a Warlords competitor", "Warlords Mission Error."];
-	endMission "BlockScreen";
-	forceEnd;
+	["Your unit is not a Warlords competitor", "Warlords Mission Error."] call WL2_fnc_exitToLobby;
 };
 
 enableRadio true;

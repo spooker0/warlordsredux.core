@@ -35,6 +35,7 @@ class CfgRemoteExec {
 		class WL2_fnc_deployCrateAction {allowedTargets = 1;};
 		class WL2_fnc_destroyStronghold {allowedTargets = 0;};
 		class WL2_fnc_earthquake {allowedTargets = 0;};
+		class WL2_fnc_exitToLobby {allowedTargets = 0;};
 		class WL2_fnc_forgiveTeamkill {allowedTargets = 2;};
 		class WL2_fnc_handleClientRequest {allowedTargets = 2;};
 		class WL2_fnc_handleDamage {allowedTargets = 0;};
@@ -111,7 +112,6 @@ class CfgRemoteExec {
 		class lockCameraTo {allowedTargets = 0;};
 		class lookAt {allowedTargets = 0;};
 		class moveInDriver {allowedTargets = 0;};
-		class playSoundUI {allowedTargets = 0;};
 		class removeWeaponGlobal {allowedTargets = 0;};
 		class selectLeader {allowedTargets = 0;};
 		class setAmmoCargo {allowedTargets = 0;};

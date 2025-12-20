@@ -28,7 +28,7 @@ while { alive _asset } do {
         private _deviceTarget = _x;
         if (_deviceTarget getVariable ["WL2_apsActivated", false]) then {
             _deviceTarget setVariable ["WL2_apsActivated", false, true];
-            [["a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", 1, 0.5, true]] remoteExec ["playSoundUI", [_asset, _deviceTarget]];
+            // [["a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", 1, 0.5, true]] remoteExec ["playSoundUI", [_asset, _deviceTarget]];
         };
     } forEach _vehiclesInRange;
 };

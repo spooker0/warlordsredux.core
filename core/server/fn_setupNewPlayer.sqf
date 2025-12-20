@@ -67,39 +67,52 @@ _warlord setVariable ["WL2_accessControl", 0, true];
 
 private _punishmentMap = missionNamespace getVariable ["WL2_punishmentMap", createHashMap];
 private _punishIncident = _punishmentMap getOrDefault [_uid, []];
-[_punishIncident] remoteExec ["WL2_fnc_punishmentClient", _owner];
+
+if (count _punishIncident > 0) then {
+    [_punishIncident] remoteExec ["WL2_fnc_punishmentClient", _owner];
+};
 
 private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
 private _isModerator = _uid in (getArray (missionConfigFile >> "moderatorIDs"));
 private _isSpectator = _uid in (getArray (missionConfigFile >> "spectatorIDs"));
-if (_isAdmin || _isModerator || _isSpectator) then {
-    _lockedToTeam = civilian;
+
+private _currentSide = side group _warlord;
+private _isRightTeam = if (_isAdmin || _isModerator || _isSpectator) then { true } else {
+    _lockedToTeam in [_currentSide, civilian];
 };
 
-_warlord setVariable ["WL2_selectedSide", _lockedToTeam, true];
-
-private _targetSide = sideUnknown;
-
-waitUntil {
-    uiSleep 0.1;
-    _targetSide = _warlord getVariable ["WL2_selectedSide", sideUnknown];
-    _targetSide != civilian && _targetSide != sideUnknown && _targetSide in BIS_WL_competingSides;
+if (!_isRightTeam) exitWith {
+    private _lockTeamName = if (_lockedToTeam == west) then { "BLUFOR" } else { "OPFOR" };
+    private _message = format ["You are locked to %1. Rejoin from lobby.", _lockTeamName];
+    [_message, "Team Locked"] remoteExec ["WL2_fnc_exitToLobby", _owner];
 };
 
-_playerList set [_uid, _targetSide];
-
-while { side group _warlord != _targetSide } do {
-    private _warlordGroup = createGroup [_targetSide, true];
-    [_warlord] joinSilent _warlordGroup;
-    uiSleep 0.1;
+private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
+private _exceedGracePeriod = _timeSinceStart > 60 * 5;
+private _isImbalanced = if (_exceedGracePeriod) then {
+    private _friendlyCount = playersNumber _currentSide;
+    private _enemySide = if (_currentSide == west) then {
+        east
+    } else {
+        west
+    };
+    private _enemyCount = playersNumber _enemySide;
+    _friendlyCount - _enemyCount > 3;
+} else {
+    false
 };
+
+if (_isImbalanced) exitWith {
+    private _message = "Teams are imbalanced. Rejoin from lobby.";
+    [_message, "Team Imbalance"] remoteExec ["WL2_fnc_exitToLobby", _owner];
+};
+
+_playerList set [_uid, _currentSide];
 
 private _scoreboard = missionNamespace getVariable ["WL2_scoreboardData", createHashMap];
-private _playerEntry = _scoreboard getOrDefault [getPlayerUID _warlord, createHashMap];
-_scoreboard set [getPlayerUID _warlord, _playerEntry];
+private _playerEntry = _scoreboard getOrDefault [_uid, createHashMap];
+_scoreboard set [_uid, _playerEntry];
 missionNamespace setVariable ["WL2_scoreboardData", _scoreboard];
-
-_warlord setVariable ["WL2_playerSide", _targetSide, true];
 
 call WL2_fnc_calcImbalance;
 
@@ -111,3 +124,5 @@ if (_playerFunds == -1) then {
     [1000, _uid, false] call WL2_fnc_fundsDatabaseWrite;
 };
 [_playerFundsDB, _uid] call WL2_fnc_fundsDatabaseUpdate;
+
+_warlord setVariable ["WL2_playerSetupComplete", true, _owner];

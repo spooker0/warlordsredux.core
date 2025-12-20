@@ -13,16 +13,12 @@ if !(_isAdmin || _isModerator) exitWith {};
 #endif
 
 private _playerList = serverNamespace getVariable ["playerList", createHashMap];
-private _rebalancedPlayer = [_targetUid] call BIS_fnc_getUnitByUID;
 private _currentSide = _playerList getOrDefault [_targetUid, sideUnknown];
-[_targetUid, true] spawn WL2_fnc_onDisconnect;
 private _newSide = if (_currentSide == west) then { east } else { west };
-
-["remove", [getPlayerID _rebalancedPlayer]] call SQD_fnc_server;
 _playerList set [_targetUid, _newSide];
-private _newGroup = createGroup [_newSide, true];
-[_rebalancedPlayer] joinSilent _newGroup;
 
-uiSleep 10;
+private _rebalancedPlayer = [_targetUid] call BIS_fnc_getUnitByUID;
 
-[] remoteExec ["WL2_fnc_rebalanced", _rebalancedPlayer];
+private _lockTeamName = if (_newSide == west) then { "BLUFOR" } else { "OPFOR" };
+private _message = format ["You have been rebalanced to %1. Rejoin from lobby.", _lockTeamName];
+[_message, "Rebalanced"] remoteExec ["WL2_fnc_exitToLobby", _rebalancedPlayer];

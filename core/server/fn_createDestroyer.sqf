@@ -52,6 +52,10 @@ private _createMrls = {
     _mrls setVariable ["WL2_destroyerId", _destroyerId, true];
     _mrls setVariable ["WL_spawnedAsset", true, true];
 
+    private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
+    _ownedVehicles pushBack _mrls;
+    missionNamespace setVariable ["BIS_WL_ownedVehicles_server", _ownedVehicles];
+
     private _assetGroup = createGroup independent;
     private _unit = _assetGroup createUnit ["I_UAV_AI", [0, 0, 0], [], 0, "NONE"];
     _unit moveInAny _mrls;

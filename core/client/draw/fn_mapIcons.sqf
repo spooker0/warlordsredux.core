@@ -37,18 +37,6 @@
 		uiNamespace setVariable ["WL2_playerIconTextCache", createHashMap];
 		uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
 
-		// clean non-team markers
-		private _markerTeamMap = missionNamespace getVariable ["WL2_markerTeamMap", createHashMap];
-		private _allUserMarkers = allMapMarkers select { "_USER_DEFINED" in _x };
-		{
-			private _marker = _x;
-			private _markerTeam = _markerTeamMap getOrDefault [_marker, BIS_WL_playerSide];
-			if (_markerTeam != BIS_WL_playerSide) then {
-				systemChat format ["Deleted %1", _marker];
-				deleteMarkerLocal _marker;
-			};
-		} forEach _allUserMarkers;
-
 		uiSleep 3;
 	};
 };

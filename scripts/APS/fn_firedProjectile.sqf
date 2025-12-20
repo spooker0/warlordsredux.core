@@ -53,7 +53,6 @@ private _interception = {
 		["ImpactSparksSabot1", 0.1],
 		["ImpactSparksSabot1", 0.1],
 		["ImpactSparksSabot1", 0.1],
-		["CannonFired2", 0.5],
 		["SecondaryExp", 0.5],
 		["SecondarySmoke", 1]
 	]] remoteExec ["WL2_fnc_particleEffect", 0];
