@@ -18,7 +18,7 @@ WL_LoadingState = 1;
 
 waitUntil {
 	uiSleep 0.001;
-	player getVariable ["WL2_playerSetupComplete", false];
+	missionNamespace getVariable ["WL2_playerSetupComplete", false];
 };
 
 WL_LoadingState = 3;

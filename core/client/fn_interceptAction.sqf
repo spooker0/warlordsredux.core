@@ -111,6 +111,17 @@ private _interceptAction = {
             cameraOn setVariable ["WL2_lastSeatUsed", "Gunner"];
             false;
         };
+        case "Eject": {
+            private _altitude = (player modelToWorld [0, 0, 0]) # 2;
+            private _eligible = _altitude > 20;
+            if (_eligible) then {
+                moveOut player;
+                [player] spawn WL2_fnc_parachuteSetup;
+                true;
+            } else {
+                false;
+            };
+        };
         case "UserType": {
             switch (_text) do {
                 case (localize "STR_DN_OUT_C_DOOR"): {
@@ -123,8 +134,9 @@ private _interceptAction = {
                     };
                 };
                 case (localize "STR_A3_action_eject"): {
-                    private _vehicle = vehicle player;
-                    private _eligible = _vehicle isKindOf "Plane" && speed _vehicle > 1;
+                    systemChat "Eject action intercepted.";
+                    private _altitude = (player modelToWorld [0, 0, 0]) # 2;
+                    private _eligible = _altitude > 20;
                     if (_eligible) then {
                         playSoundUI ["a3\sounds_f_jets\vehicles\air\shared\fx_plane_jet_ejection_in.wss"];
                         moveOut player;

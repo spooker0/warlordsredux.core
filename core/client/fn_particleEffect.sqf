@@ -1,6 +1,6 @@
 #include "includes.inc"
 params ["_positionAGL", "_particleClasses"];
-
+if (isDedicated) exitWith {};
 {
     private _particleClass = _x # 0;
     private _particleParam = _x # 1;

@@ -59,7 +59,11 @@ if (_action == "invite") exitWith {
 
         if !(isNull _inviterPlayer || isNull _inviteePlayer) then {
             private _message = format ["%1 has invited %2 to the squad.", name _inviterPlayer, name _inviteePlayer];
-            [_message] remoteExec ["WL2_fnc_smoothText", _squadLeaderInfo # 1];
+
+            private _squadLeaderInfo = _squadLeader getUserInfo 1;
+            if (!isNil "_squadLeaderInfo") then {
+                [_message] remoteExec ["WL2_fnc_smoothText", _squadLeaderInfo # 1];
+            };
         };
     };
 

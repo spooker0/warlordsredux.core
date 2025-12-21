@@ -122,8 +122,9 @@ addMissionEventHandler ["HandleChatMessage", {
 	}];
 
 	addUserActionEventHandler ["Eject", "Activate", {
-		private _vehicle = vehicle player;
-		if (_vehicle isKindOf "Plane" && speed _vehicle > 1) then {
+		private _altitude = (player modelToWorld [0, 0, 0]) # 2;
+		private _eligible = _altitude > 20;
+		if (_eligible) then {
 			playSoundUI ["a3\sounds_f_jets\vehicles\air\shared\fx_plane_jet_ejection_in.wss"];
 			moveOut player;
 			[player] spawn WL2_fnc_parachuteSetup;

@@ -446,33 +446,6 @@ if (_asset isKindOf "Man") then {
 		[_asset] remoteExec ["WL2_fnc_turretVisualizerAction", 0, true];
 	};
 
-	private _parachuteCount = count ((backpackCargo _asset) select {_x == "B_Parachute"});
-	if (_parachuteCount > 0) then {
-		_asset addEventHandler ["GetOut", {
-			params ["_vehicle", "_role", "_unit", "_turret", "_isEject"];
-
-			if (!_isEject) exitWith {};
-
-			[_vehicle, _unit] spawn {
-				params ["_vehicle", "_unit"];
-
-				private _height = (getPos _unit) # 2;
-				private _distance = _vehicle distance _unit;
-
-				waitUntil {
-					uiSleep 1;
-					_height = (getPos _unit) # 2;
-					_distance = _vehicle distance _unit;
-					_height < 5 || _distance > 10 || !alive _unit || !alive _vehicle;
-				};
-
-				if (_height > 5 && alive _unit) then {
-					[_unit] spawn WL2_fnc_parachuteSetup;
-				};
-			};
-		}];
-	};
-
 	if ("hide_rail" in (animationNames _asset)) then {
 		_asset animateSource ["hide_rail", 0];
 	};

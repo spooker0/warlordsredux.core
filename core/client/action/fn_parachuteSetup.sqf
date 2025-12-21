@@ -12,8 +12,8 @@ private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashM
 private _parachuteAutoDeployHeight = _settingsMap getOrDefault ["parachuteAutoDeployHeight", 100];
 waitUntil {
     uiSleep 0.01;
-    (getPosATL _unit # 2) < _parachuteAutoDeployHeight ||
-    (getPosASL _unit # 2) < _parachuteAutoDeployHeight ||
+    private _altitude = (_unit modelToWorld [0, 0, 0]) # 2;
+    _altitude < _parachuteAutoDeployHeight ||
     isTouchingGround (vehicle _unit) ||
     !alive _unit || vehicle _unit != _unit;
 };
