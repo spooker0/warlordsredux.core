@@ -62,7 +62,7 @@ if (_action == "invite") exitWith {
 
             private _squadLeaderInfo = _squadLeader getUserInfo 1;
             if (!isNil "_squadLeaderInfo") then {
-                [_message] remoteExec ["WL2_fnc_smoothText", _squadLeaderInfo # 1];
+                [_message] remoteExec ["WL2_fnc_smoothText", _squadLeaderInfo];
             };
         };
     };
