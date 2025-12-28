@@ -82,10 +82,7 @@ private _isRightTeam = if (_isAdmin || _isModerator || _isSpectator) then { true
 };
 
 if (!_isRightTeam) exitWith {
-    missionNamespace setVariable ["WL2_playerSetupComplete", true, _owner];
-    private _lockTeamName = if (_lockedToTeam == west) then { "BLUFOR" } else { "OPFOR" };
-    private _message = format ["You are locked to %1. Rejoin from lobby.", _lockTeamName];
-    [_message, "Team Locked"] remoteExec ["WL2_fnc_exitToLobby", _owner];
+    _warlord setVariable ["WL2_playerSetupState", "Teamlocked", _owner];
 };
 
 private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
@@ -104,9 +101,7 @@ private _isImbalanced = if (_exceedGracePeriod) then {
 };
 
 if (_isImbalanced) exitWith {
-    missionNamespace setVariable ["WL2_playerSetupComplete", true, _owner];
-    private _message = "Teams are imbalanced. Rejoin from lobby.";
-    [_message, "Team Imbalance"] remoteExec ["WL2_fnc_exitToLobby", _owner];
+    _warlord setVariable ["WL2_playerSetupState", "Imbalance", _owner];
 };
 
 _playerList set [_uid, _currentSide];
@@ -127,4 +122,4 @@ if (_playerFunds == -1) then {
 };
 [_playerFundsDB, _uid] call WL2_fnc_fundsDatabaseUpdate;
 
-missionNamespace setVariable ["WL2_playerSetupComplete", true, _owner];
+_warlord setVariable ["WL2_playerSetupState", "Complete", _owner];

@@ -16,9 +16,22 @@ if ((_list findIf {
 
 WL_LoadingState = 1;
 
+private _setupState = "";
 waitUntil {
 	uiSleep 0.001;
-	missionNamespace getVariable ["WL2_playerSetupComplete", false];
+	_setupState = player getVariable ["WL2_playerSetupState", ""];
+	_setupState != ""
+};
+
+if (_setupState == "Teamlocked") exitWith {
+	private _lockTeamName = if (side group player == west) then { "OPFOR" } else { "BLUFOR" };
+    private _message = format ["You are locked to %1. Rejoin from lobby.", _lockTeamName];
+    [_message, "Team Locked"] call WL2_fnc_exitToLobby;
+};
+
+if (_setupState == "Imbalance") exitWith {
+	private _message = "Teams are imbalanced. Rejoin from lobby.";
+	[_message, "Team Imbalance"] call WL2_fnc_exitToLobby;
 };
 
 WL_LoadingState = 3;

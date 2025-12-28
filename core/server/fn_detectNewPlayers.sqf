@@ -4,7 +4,11 @@ missionNamespace setVariable ["WL2_readyList", []];
 while { !BIS_WL_missionEnd } do {
 	private _allPlayers = call BIS_fnc_listPlayers;
 	private _newPlayers = _allPlayers select {
-		(!isNull _x) && !(_x getVariable ["WL2_playerSetupStarted", false])
+		!isNull _x;
+	} select {
+		!(_x getVariable ["WL2_playerSetupStarted", false]);
+	} select {
+		owner _x > 2 || !isDedicated;
 	};
 
 	{
