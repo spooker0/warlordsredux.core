@@ -55,6 +55,7 @@ switch (_className) do {
         0 spawn WLC_fnc_buildMenu;
     };
     case "Scan": { 0 spawn WL2_fnc_orderSectorScan };
+    case "CombatAir": { 0 spawn WL2_fnc_orderCombatAir };
     case "FTHome": {
         BIS_WL_targetSector = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
         [0, ""] spawn WL2_fnc_executeFastTravel;

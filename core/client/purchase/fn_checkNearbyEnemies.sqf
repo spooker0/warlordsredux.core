@@ -1,5 +1,11 @@
 #include "includes.inc"
 
+params [["_category", ""]];
+
+if (_category isEqualType "" && { _category == "Naval" }) exitWith {
+    [true, ""];
+};
+
 if (isWeaponDeployed player) exitWith {
     [false, "Bipod must not be deployed."];
 };

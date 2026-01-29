@@ -134,7 +134,9 @@ addMissionEventHandler ["Draw3D", {
             0.035,
             "RobotoCondensedBold",
             "center",
-            true
+            true,
+            0,
+            -0.05
         ];
     } forEach _incomingMissiles;
 

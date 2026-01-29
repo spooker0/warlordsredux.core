@@ -163,6 +163,46 @@ private _scanExecute = {
     ]
 ] call WL2_fnc_addTargetMapButton;
 
+// Combat air patrol button
+private _combatAirExecute = {
+    params ["_sector"];
+    [player, "combatAir", [], _sector] remoteExec ["WL2_fnc_handleClientRequest", 2];
+};
+[
+    _sector, _targetId,
+    "order-cap",
+    "Order combat air patrol",
+    _combatAirExecute,
+    true,
+    "combatAirPatrol",
+    [
+        WL_COST_COMBATAIR,
+        "CombatAir",
+        "Fast Travel"
+    ]
+] call WL2_fnc_addTargetMapButton;
+
+// Debug combat air patrol button
+#if WL_CAP_DEBUG
+private _debugCombatAirExecute = {
+    params ["_sector"];
+    [player, "debugCombatAir", [], _sector] remoteExec ["WL2_fnc_handleClientRequest", 2];
+};
+[
+    _sector, _targetId,
+    "order-cap-debug",
+    "Debug: order combat air patrol",
+    _debugCombatAirExecute,
+    true,
+    "combatAirPatrolDebug",
+    [
+        WL_COST_COMBATAIR,
+        "CombatAir",
+        "Fast Travel"
+    ]
+] call WL2_fnc_addTargetMapButton;
+#endif
+
 // Mark Sector button
 private _markSectorExecuteLast = {
     params ["_sector"];

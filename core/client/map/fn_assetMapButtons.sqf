@@ -136,7 +136,7 @@ if (_operateAccess && typeof _asset in ["B_Radar_System_01_F", "O_Radar_System_0
     }, false] call WL2_fnc_addTargetMapButton;
 };
 
-if (_operateAccess && WL_ASSET(_assetActualType, "smartMine", 0) > 0) then {
+if (_operateAccess && WL_ASSET(_assetActualType, "smartMineAP", 0) > 0) then {
     private _smartMineNext = {
         params ["_asset"];
         private _smartMineDistance = _asset getVariable ["WL2_smartMineDistance", 0];

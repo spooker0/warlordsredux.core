@@ -2,7 +2,8 @@
 params ["_asset"];
 
 private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
-_asset setVariable ["WL2_smartMines", WL_ASSET(_assetActualType, "smartMine", 0), true];
+_asset setVariable ["WL2_smartMinesAP", WL_ASSET(_assetActualType, "smartMineAP", 0), true];
+_asset setVariable ["WL2_smartMinesAT", WL_ASSET(_assetActualType, "smartMineAT", 0), true];
 
 private _dispenseSounds = [
     "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_01.wss",
@@ -30,8 +31,9 @@ while { alive _asset } do {
         continue;
     };
 
-    private _smartMines = _asset getVariable ["WL2_smartMines", 0];
-    if (_smartMines == 0) then {
+    private _smartMinesAP = _asset getVariable ["WL2_smartMinesAP", 0];
+    private _smartMinesAT = _asset getVariable ["WL2_smartMinesAT", 0];
+    if (_smartMinesAP == 0 && _smartMinesAT == 0) then {
         continue;
     };
 
@@ -62,6 +64,13 @@ while { alive _asset } do {
         WL_ASSET_FIELD(_assetData, _unitActualType, "demolishable", 0) == 0
     } select {
         [_assetPos, _assetDir, _angle, getPosASL _x] call WL2_fnc_inAngleCheck
+    };
+
+    if (_smartMinesAP == 0) then {
+        _enemyVehicles = _enemyVehicles select { !(_x isKindOf "Man") };
+    };
+    if (_smartMinesAT == 0) then {
+        _enemyVehicles = _enemyVehicles select { _x isKindOf "Man" && vehicle _x == _x };
     };
 
     _enemyVehicles = _enemyVehicles select {
@@ -95,9 +104,6 @@ while { alive _asset } do {
     private _selectedTarget = _enemyVehicles # 0;
     private _targetName = [_selectedTarget] call WL2_fnc_getAssetTypeName;  // leave here in case asset dies
 
-    _smartMines = _smartMines - 1;
-    _asset setVariable ["WL2_smartMines", _smartMines, true];
-
     [_assetPosAGL, [
 		["DeminingExplosiveCircleDust", 0.3],
 		["ATMineExplosionParticles", 0.1]
@@ -105,8 +111,14 @@ while { alive _asset } do {
     playSound3D [selectRandom _dispenseSounds, _asset];
 
     private _projectileType = if (_selectedTarget isKindOf "Man") then {
+        _smartMinesAP = _smartMinesAP - 1;
+        _asset setVariable ["WL2_smartMinesAP", _smartMinesAP, true];
+
         "M_Titan_AP"
     } else {
+        _smartMinesAT = _smartMinesAT - 1;
+        _asset setVariable ["WL2_smartMinesAT", _smartMinesAT, true];
+
         "M_Titan_AT"
     };
 

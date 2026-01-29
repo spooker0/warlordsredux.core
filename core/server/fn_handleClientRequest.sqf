@@ -44,6 +44,8 @@ private _actionCost = switch (_action) do {
 	case "fastTravelParadrop" : { WL_COST_PARADROP };
 	case "fastTravelSquadLeader" : { WL_COST_FTSL };
 	case "scan" : { WL_COST_SCAN };
+	case "combatAir" : { WL_COST_COMBATAIR };
+	case "debugCombatAir" : { WL_COST_COMBATAIR };
 	case "targetReset" : { WL_COST_TARGETRESET };
 	case "orderAI" : { WL_ASSET(_param1, "cost", 150) };
 	case "buildABear" : { 300 };
@@ -195,6 +197,62 @@ if (_action == "scan") exitWith {
 		_sector setVariable ["WL2_lastScanned", serverTime, true];
 	};
 };
+
+if (_action == "combatAir") exitWith {
+	private _sector = _param2;
+
+	private _sectorName = _sector getVariable ["WL2_name", "???"];
+	private _sideName = [_side] call WL2_fnc_sideToFaction;
+
+	private _friendlyMessage = format ["%1 has initiated combat air patrol over %2.", name _sender, _sectorName];
+	[_side, _friendlyMessage] call _broadcastActionToSide;
+
+	private _enemyMessage = format ["%1 has initiated combat air patrol over %2.", _sideName, _sectorName];
+	private _enemySide = switch (_side) do {
+		case west : { east };
+		case east : { west };
+		default { civilian };
+	};
+	[_enemySide, _enemyMessage] call _broadcastActionToSide;
+
+	_sector setVariable ["WL2_combatAirActive", true, true];
+	_sector setVariable ["WL2_combatAirRequester", _uid, true];
+	_sector setVariable ["WL2_nextCombatAir", serverTime + WL_DURATION_CAP + WL_COOLDOWN_CAP, true];
+
+	[_sector, _side] remoteExec ["WL2_fnc_combatAirHandle", 0];
+	[_sector] spawn {
+		params ["_sector"];
+
+		uiSleep WL_DURATION_CAP;
+
+		_sector setVariable ["WL2_combatAirActive", false, true];
+	};
+};
+
+#if WL_CAP_DEBUG
+if (_action == "debugCombatAir") exitWith {
+	private _sector = _param2;
+
+	private _sectorName = _sector getVariable ["WL2_name", "???"];
+	private _sideName = [_side] call WL2_fnc_sideToFaction;
+
+	private _friendlyMessage = format ["%1 has initiated debug combat air patrol over %2.", name _sender, _sectorName];
+	[_side, _friendlyMessage] call _broadcastActionToSide;
+
+	_sector setVariable ["WL2_combatAirActive", true, true];
+	_sector setVariable ["WL2_combatAirRequester", _uid, true];
+	_sector setVariable ["WL2_nextCombatAir", serverTime + WL_DURATION_CAP + WL_COOLDOWN_CAP, true];
+
+	[_sector, independent] remoteExec ["WL2_fnc_combatAirHandle", 0];
+	[_sector] spawn {
+		params ["_sector"];
+
+		uiSleep WL_DURATION_CAP;
+
+		_sector setVariable ["WL2_combatAirActive", false, true];
+	};
+};
+#endif
 
 if (_action == "ftSupportPoints") exitWith {
 	private _ftVehicle = _param1;

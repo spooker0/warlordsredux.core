@@ -422,19 +422,54 @@ class RscTitles {
 		fadeout = 0;
 		name = "RscWLExtendedSamWarningDisplay";
 		onLoad = "uiNamespace setVariable ['RscWLExtendedSamWarningDisplay', _this select 0];";
+		class controlsBackground {
+			class RscWLExtendedSamWarningDisplay_Cover: RscText {
+				idc = -1;
+				type = CT_STATIC;
+				style = ST_CENTER;
+				x = safezoneX;
+				y = safezoneY;
+				w = safezoneW;
+				h = safezoneH;
+				font = "EtelkaNarrowMediumPro";
+				sizeEx = 1;
+				colorBackground[] = {0.3, 0, 0, 0.15};
+				colorText[] = {0, 0, 0, 0.3};
+				text = "";
+				lineSpacing = 0;
+			};
+		};
 		class controls {
-			class RscWLExtendedSamWarningDisplay_Text: RscStructuredText {
-				idc = 14300;
-				style = ST_CENTER + ST_MULTI;
+			class RscWLExtendedSamWarningDisplay_Text: RscText {
+				idc = -1;
+				type = CT_STATIC;
+				style = ST_CENTER;
 				x = 0;
-				y = safeZoneY + 0.1;
+				y = safeZoneY + 0.05;
 				w = 1;
-				h = 0.5;
+				h = 0.2;
 				font = "EtelkaNarrowMediumPro";
 				sizeEx = 0.08;
 				colorBackground[] = {0, 0, 0, 0};
 				colorText[] = {1, 1, 1, 1};
-				text = "ENEMY LONG-RANGE AIR DEFENSE DETECTED!";
+				text = "ENEMY COMBAT AIR PATROL DETECTED!";
+				lineSpacing = 0;
+			};
+			class RscWLExtendedSamWarningDisplay_Time: RscText {
+				idc = 14300;
+				type = CT_STATIC;
+				style = ST_CENTER;
+				x = 0;
+				y = safeZoneY + 0.15;
+				w = 1;
+				h = 0.3;
+				font = "RobotoCondensedBold";
+				sizeEx = 0.25;
+				colorBackground[] = {0, 0, 0, 0};
+				colorText[] = {1, 0, 0, 1};
+				text = "";
+				shadow = 0;
+				lineSpacing = 1;
 			};
 		};
 	};

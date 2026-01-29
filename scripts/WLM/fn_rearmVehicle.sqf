@@ -42,7 +42,17 @@ if (_asset getVariable ["WL2_mortarShellCountHE", -1] != -1) then {
     _asset setVariable ["WL2_mortarShellCountHE", 8, true];
 };
 
-if (_asset getVariable ["WL2_smartMines", -1] != -1) then {
-    private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
-    _asset setVariable ["WL2_smartMines", WL_ASSET(_assetActualType, "smartMine", 0), true];
+private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+
+if (_asset getVariable ["WL2_smartMinesAT", -1] != -1) then {
+    _asset setVariable ["WL2_smartMinesAT", WL_ASSET(_assetActualType, "smartMineAT", 0), true];
+};
+
+if (_asset getVariable ["WL2_smartMinesAP", -1] != -1) then {
+    _asset setVariable ["WL2_smartMinesAP", WL_ASSET(_assetActualType, "smartMineAP", 0), true];
+};
+
+private _loadedItem = WL_ASSET(_assetActualType, "loaded", "");
+if (_loadedItem != "") then {
+    _asset setVariable ["WL2_deployCrates", 1, true];
 };

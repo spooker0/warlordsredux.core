@@ -451,7 +451,8 @@ if (
     count _nonHornWeapons == 0 &&
     _asset getVariable ["apsType", -1] != 3 &&
     _asset getVariable ["WL2_ecmCharges", -1] == -1 &&
-    _asset getVariable ["WL2_smartMines", -1] == -1
+    _asset getVariable ["WL2_smartMinesAP", -1] == -1 &&
+    _asset getVariable ["WL2_smartMinesAT", -1] == -1
 ) exitWith {
     private _rearmButtonControl = _display displayCtrl WLM_REARM_BUTTON;
     _rearmButtonControl ctrlSetText "No weapons";

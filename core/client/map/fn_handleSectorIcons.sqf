@@ -35,7 +35,8 @@ private _selectionActive = BIS_WL_currentSelection in [
     WL_ID_SELECTION_FAST_TRAVEL_CONTESTED,
     WL_ID_SELECTION_FAST_TRAVEL_VEHICLE,
     WL_ID_SELECTION_FAST_TRAVEL_STRONGHOLD,
-    WL_ID_SELECTION_SCAN
+    WL_ID_SELECTION_SCAN,
+    WL_ID_SELECTION_COMBAT_AIR
 ];
 private _votingActive = WL_VotePhase != 0;
 private _services = _sector getVariable ["WL2_services", []];
@@ -70,7 +71,7 @@ if ("H" in _services) then {
     _servicesText pushBack localize "STR_A3_WL_module_service_helipad";
 };
 
-private _lastScan = (_sector getVariable ["WL2_lastScanned", -9999]);
+private _lastScan = _sector getVariable ["WL2_lastScanned", -9999];
 private _scanCD = (_lastScan + WL_COOLDOWN_SCAN - serverTime) max 0;
 private _currentScannedSectors = missionNamespace getVariable ["WL2_scanningSectors", []];
 private _isScanning = _sector in _currentScannedSectors;
@@ -81,6 +82,26 @@ private _scanCooldown = if (_isScanning) then {
     if (_scanCD > 0) then {
         [
             format ["%1: %2", localize "STR_A3_WL_param_scan_timeout", [ceil _scanCD, "MM:SS"] call BIS_fnc_secondsToString],
+            [1, 0, 0, 1]
+        ];
+    } else {
+        ""
+    };
+};
+
+private _nextCombatAir = _sector getVariable ["WL2_nextCombatAir", -9999];
+private _combatAirCD = (_nextCombatAir - serverTime) max 0;
+private _isCombatAirActive = _sector getVariable ["WL2_combatAirActive", false];
+
+private _combatAirText = if (_isCombatAirActive) then {
+    [
+        format ["Combat air patrol active: %1", [_nextCombatAir - WL_COOLDOWN_CAP - serverTime, "MM:SS"] call BIS_fnc_secondsToString],
+        [0, 1, 0, 1]
+    ]
+} else {
+    if (_combatAirCD > 0) then {
+        [
+            format ["%1: %2", "Combat air patrol timeout", [ceil _combatAirCD, "MM:SS"] call BIS_fnc_secondsToString],
             [1, 0, 0, 1]
         ];
     } else {
@@ -151,6 +172,7 @@ if (_showCaptureDetails) then {
 _sectorInfo append [
     (_servicesText joinString ", "),
     _scanCooldown,
+    _combatAirText,
     _fortification
 ];
 _sectorInfo = _sectorInfo select {
@@ -191,9 +213,10 @@ private _singletonScriptHandle = [_sector, _map] spawn {
         WL_ID_SELECTION_FAST_TRAVEL_STRONGHOLD
     ];
     private _scanSelectionActive = BIS_WL_currentSelection == WL_ID_SELECTION_SCAN;
+    private _combatAirActive = BIS_WL_currentSelection == WL_ID_SELECTION_COMBAT_AIR;
     private _votingActive = WL_VotePhase != 0;
 
-    if !(_orderSelectionActive || _scanSelectionActive || _votingActive) exitWith {
+    if !(_orderSelectionActive || _scanSelectionActive || _combatAirActive || _votingActive) exitWith {
         BIS_WL_highlightedSector = objNull;
         waitUntil {
             uiSleep 0.001;
@@ -236,6 +259,20 @@ private _singletonScriptHandle = [_sector, _map] spawn {
 
     if (_scanSelectionActive) exitWith {
         if ((_sector getVariable ["WL2_lastScanned", -9999]) < serverTime - WL_COOLDOWN_SCAN) then {
+            BIS_WL_targetSector = _sector;
+            playSound "AddItemOK";
+        } else {
+            playSound "AddItemFailed";
+        };
+
+        waitUntil {
+            uiSleep 0.001;
+            inputMouse 0 == 0;
+        };
+    };
+
+    if (_combatAirActive) exitWith {
+        if ((_sector getVariable ["WL2_nextCombatAir", -9999]) < serverTime) then {
             BIS_WL_targetSector = _sector;
             playSound "AddItemOK";
         } else {

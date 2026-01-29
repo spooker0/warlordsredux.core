@@ -97,6 +97,7 @@ call WL2_fnc_processRunways;
 	};
 };
 
+#if WL_SNOW_ENABLED
 0 spawn {
 	[
 		"a3\data_f\snowflake4_ca.paa",
@@ -142,7 +143,9 @@ call WL2_fnc_processRunways;
 	setHumidity 0;
 	forceWeatherChange;
 };
+#endif
 
+#if WL_EARTHQUAKE_ENABLED
 0 spawn {
 	uiSleep 10;
 	while { !BIS_WL_missionEnd } do {
@@ -152,6 +155,7 @@ call WL2_fnc_processRunways;
 		uiSleep (60 * 20);
 	};
 };
+#endif
 
 0 spawn WL2_fnc_updateVehicleList;
 0 spawn WL2_fnc_generateScoreboard;

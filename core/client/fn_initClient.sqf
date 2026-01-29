@@ -323,7 +323,9 @@ private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];
 _ownedVehicles pushBack player;
 missionNamespace setVariable [_ownedVehiclesVar, _ownedVehicles, [2, clientOwner]];
 
+#if WL_WINTER_EVENT
 [true] spawn WL2_fnc_pingSounds;
+#endif
 
 private _showWelcomeMenu = _settingsMap getOrDefault ["showWelcomeMenu", true];
 if (_showWelcomeMenu) then {

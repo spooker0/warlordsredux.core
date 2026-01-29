@@ -149,7 +149,7 @@
 		_mapData set ["advancedSams", _advancedSams];
 
 		private _advancedMines = _sideVehicles select {
-			_x getVariable ["WL2_smartMines", 0] > 0
+			_x getVariable ["WL2_smartMinesAP", 0] > 0 || _x getVariable ["WL2_smartMinesAT", 0] > 0
 		};
 		_mapData set ["advancedMines", _advancedMines];
 
@@ -158,6 +158,11 @@
 			_x getVariable ["BIS_WL_ownerAsset", "123"] != "123"
 		};
 		_mapData set ["rallyPoints", _rallyPoints];
+
+		private _combatPatrolSectors = BIS_WL_allSectors select {
+			_x getVariable ["WL2_combatAirActive", false];
+		};
+		_mapData set ["combatAirSectors", _combatPatrolSectors];
 
 		private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 		private _sectorMarkerThreshold = _settingsMap getOrDefault ["sectorMarkerTextThreshold", 0.4];

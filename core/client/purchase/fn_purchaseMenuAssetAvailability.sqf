@@ -228,7 +228,7 @@ if (_ret) then {
 					[WL2_fnc_checkInfantryAvailable, [_class]],
 					[WL2_fnc_checkCarrierLimits, [_sector, _category]],
 					[WL2_fnc_checkAssetLimit, [_class]],
-					[WL2_fnc_checkNearbyEnemies],
+					[WL2_fnc_checkNearbyEnemies, [_category]],
 					[WL2_fnc_checkPlayerInVehicle, [_requirements]],
 					[WL2_fnc_checkInFriendlySector, [_cost, _requirements]],
 					[WL2_fnc_checkIsOrdering],

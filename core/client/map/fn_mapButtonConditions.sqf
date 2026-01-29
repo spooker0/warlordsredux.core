@@ -55,6 +55,33 @@ switch (_conditionName) do {
 
         "ok";
     };
+    case "combatAirPatrol": {
+        private _airfieldSectors = (BIS_WL_sectorsArray # 2) select {
+            private _services = _x getVariable ["WL2_services", []];
+            "A" in _services;
+        };
+        if !(_target in _airfieldSectors) exitWith { "" };
+
+        private _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
+        if (_combatAirActive) exitWith { "Combat air patrol is already active for this airfield." };
+
+        private _nextCombatAirTime = _target getVariable ["WL2_nextCombatAir", -9999];
+        if (_nextCombatAirTime > serverTime) exitWith { "Combat air patrol is on cooldown for this airfield." };
+
+        "ok";
+    };
+    case "combatAirPatrolDebug": {
+        private _airfieldSectors = (BIS_WL_sectorsArray # 2) select {
+            private _services = _x getVariable ["WL2_services", []];
+            "A" in _services;
+        };
+        if !(_target in _airfieldSectors) exitWith { "" };
+
+        private _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
+        if (_combatAirActive) exitWith { "Combat air patrol is already active for this airfield." };
+
+        "ok";
+    };
     case "fastTravelSL": {
         if (_target == player) exitWith { "" };
 

@@ -467,6 +467,34 @@ private _scanners = if (_drawAll) then {
 	};
 } forEach _scanners;
 
+// Combat air patrol sectors
+private _combatAirSectors = _mapData getOrDefault ["combatAirSectors", []];
+{
+	private _sectorPos = getPosASL _x;
+	private _sectorOwner = _x getVariable ["BIS_WL_owner", sideUnknown];
+	private _mapColor = switch (_sectorOwner) do {
+		case west: { [0, 0.3, 0.6, 0.9] };
+		case east: { [0.5, 0, 0, 0.9] };
+		case independent: { [0, 0.6, 0, 0.9] };
+		default { [1, 1, 1, 0.15] };
+	};
+	private _mapTexture = switch (_sectorOwner) do {
+		case west: { "#(rgb,1,1,1)color(0,0,1,0.15)" };
+		case east: { "#(rgb,1,1,1)color(1,0,0,0.15)" };
+		case independent: { "#(rgb,1,1,1)color(0,1,0,0.15)" };
+		default { "#(rgb,1,1,1)color(1,0,1,0.15)" };
+	};
+
+	_drawEllipses pushBack [
+		_sectorPos,
+		WL_RADIUS_COMBAT_AIR,
+		WL_RADIUS_COMBAT_AIR,
+		0,
+		_mapColor,
+		_mapTexture
+	];
+} forEach _combatAirSectors;
+
 // Draw squad lines
 private _allSquadmates = _mapData getOrDefault ["allSquadmates", []];
 if (count (_assetTargets arrayIntersect _allSquadmates) > 0) then {
@@ -549,7 +577,9 @@ private _advancedMines = _mapData getOrDefault ["advancedMines", []];
     private _angle = WL_SMART_MINE_ANGLES # _smartMineDistanceIndex;
 
 	private _iconPos = _x modelToWorld [0, _detonationDistance / 2, 0];
-	private _smartMines = _x getVariable ["WL2_smartMines", 0];
+	private _smartMinesAP = _x getVariable ["WL2_smartMinesAP", 0];
+	private _smartMinesAT = _x getVariable ["WL2_smartMinesAT", 0];
+	private _smartMines = format ["AP: %1 | AT: %2", _smartMinesAP, _smartMinesAT];
 
 	_drawIcons pushBack [
 		"a3\ui_f_curator\data\cfgmarkers\minefieldap_ca.paa",
@@ -558,7 +588,7 @@ private _advancedMines = _mapData getOrDefault ["advancedMines", []];
 		30 * _mapIconScale,
 		30 * _mapIconScale,
 		0,
-		format ["MINES: %1", _smartMines],
+		_smartMines,
 		1,
 		0.038 * _mapIconScale,
 		"PuristaBold",

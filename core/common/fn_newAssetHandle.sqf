@@ -156,12 +156,6 @@ if (_asset isKindOf "Man") then {
 			[_asset] spawn WL2_fnc_stabilizeBoatAction;
 		};
 
-		case "B_Boat_Transport_02_F";
-		case "O_Boat_Transport_02_F": {
-			_asset setVariable ["WL2_deployCrates", 1, true];
-			[_asset] remoteExec ["WL2_fnc_deployCrateAction", 0, true];
-		};
-
 		// case "B_AAA_System_01_F": {
 		// 	[_asset] spawn APS_fnc_ciws;
 		// };
@@ -200,6 +194,12 @@ if (_asset isKindOf "Man") then {
 		case "I_UAV_06_F": {
 			_asset setVariable ["WL2_isBombDrone", true, true];
 		};
+	};
+
+	private _loadedItem = WL_ASSET(_assetActualType, "loaded", "");
+	if (_loadedItem != "") then {
+		_asset setVariable ["WL2_deployCrates", 1, true];
+		[_asset, _loadedItem] remoteExec ["WL2_fnc_deployCrateAction", 0, true];
 	};
 
 	if ([_asset] call WL2_fnc_isDrone) then {
@@ -270,7 +270,7 @@ if (_asset isKindOf "Man") then {
 		[_asset] remoteExec ["WL2_fnc_setupMiniMortarAction", 0, true];
 	};
 
-	if (WL_ASSET(_assetActualType, "smartMine", 0) > 0) then {
+	if (WL_ASSET(_assetActualType, "smartMineAP", 0) > 0 || WL_ASSET(_assetActualType, "smartMineAT", 0) > 0) then {
 		_asset setVariable ["WL2_isAdvancedMines", true, true];
 		[_asset] spawn WL2_fnc_smartMine;
 	};

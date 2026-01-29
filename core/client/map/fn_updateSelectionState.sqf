@@ -59,10 +59,23 @@ switch (BIS_WL_currentSelection) do {
     case WL_ID_SELECTION_SCAN: {
         private _allScannableSectors = BIS_WL_sectorsArray # 3;
         private _lastScanEligible = serverTime - WL_COOLDOWN_SCAN;
+        private _currentScannedSectors = missionNamespace getVariable ["WL2_scanningSectors", []];
         private _availableSectors = _allScannableSectors select {
-            private _currentScannedSectors = missionNamespace getVariable ["WL2_scanningSectors", []];
             _x getVariable ["WL2_lastScanned", -9999] < _lastScanEligible &&
             !(_x in _currentScannedSectors)
+        };
+        BIS_WL_selection_availableSectors = _availableSectors;
+        BIS_WL_selection_showLinks = false;
+        BIS_WL_selection_dimSectors = true;
+    };
+    case WL_ID_SELECTION_COMBAT_AIR: {
+        private _airfieldSectors = (BIS_WL_sectorsArray # 2) select {
+            private _services = _x getVariable ["WL2_services", []];
+            "A" in _services;
+        };
+        private _availableSectors = _airfieldSectors select {
+            (_x getVariable ["WL2_nextCombatAir", -9999]) < serverTime &&
+            !(_x getVariable ["WL2_combatAirActive", false]);
         };
         BIS_WL_selection_availableSectors = _availableSectors;
         BIS_WL_selection_showLinks = false;

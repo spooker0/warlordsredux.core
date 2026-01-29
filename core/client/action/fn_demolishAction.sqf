@@ -107,7 +107,7 @@ private _demolishActionId = player addAction [
         };
     },
     [],
-    10,
+    3,
     false,
     false,
     "",

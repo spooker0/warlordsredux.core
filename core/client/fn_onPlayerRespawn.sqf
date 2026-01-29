@@ -1,7 +1,9 @@
 #include "includes.inc"
 params ["_newUnit", "_oldUnit", "_respawn", "_respawnDelay"];
 
+#if WL_WINTER_EVENT
 [false] spawn WL2_fnc_pingSounds;
+#endif
 
 private _newGroup = group _newUnit;
 if (leader _newGroup != _newUnit) then {

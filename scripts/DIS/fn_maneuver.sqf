@@ -70,9 +70,9 @@ if (_ammoConfig getOrDefault ["loal", false]) then {
             _distanceBeforeNotch = 5000 + (_projAlt - _targetAlt) * 2;
             private _angleToDistanceFactor = linearConversion [0, 180, _angleToEnemy, 1, 0, true];
             _distanceBeforeNotch = _distanceBeforeNotch * _angleToDistanceFactor;
-            _distanceBeforeNotch = (_distanceBeforeNotch max 3500) min 12000;
+            _distanceBeforeNotch = (_distanceBeforeNotch max 4000) min 12000;
         } else {
-            _distanceBeforeNotch = 3500;
+            _distanceBeforeNotch = 4000;
         };
     };
 };

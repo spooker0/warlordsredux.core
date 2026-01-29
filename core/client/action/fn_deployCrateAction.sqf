@@ -1,20 +1,18 @@
 #include "includes.inc"
-params ["_asset"];
+params ["_asset", "_crateType"];
 if (isDedicated) exitWith {};
 
+private _crateTypeDisplayText = WL_ASSET(_crateType, "name", getText (configFile >> "CfgVehicles" >> _crateType >> "displayName"));
+
 private _deployActionId = _asset addAction [
-	"<t color='#4b58ff'>Deploy Crate</t>",
+	format ["<t color='#4b58ff'>Deploy %1</t>", _crateTypeDisplayText],
 	{
-		_this params ["_asset", "_caller", "_deployActionId"];
+		_this params ["_asset", "_caller", "_deployActionId", "_arguments"];
 
-        [_asset] spawn {
-            params ["_asset"];
+        private _crateType = _arguments # 0;
 
-            private _crateType = switch (BIS_WL_playerSide) do {
-                case west: { "B_Slingload_01_Cargo_F"; };
-                case east: { "Land_Pod_Heli_Transport_04_box_F"; };
-                default { ""; };
-            };
+        [_asset, _crateType] spawn {
+            params ["_asset", "_crateType"];
             if (_crateType == "") exitWith {
                 playSound "AddItemFailed";
                 ["Deploy Crate not available for this side!"] call WL2_fnc_smoothText;
@@ -22,7 +20,9 @@ private _deployActionId = _asset addAction [
 
             private _distanceToVehicle = player distance2D _asset;
             private _offset = [0, _distanceToVehicle, 0];
-            private _deploymentResult = [_crateType, _crateType, _offset, 30, true, _asset] call WL2_fnc_deployment;
+
+            private _deployClass = WL_ASSET(_crateType, "spawn", _crateType);
+            private _deploymentResult = [_deployClass, _crateType, _offset, 30, true, _asset] call WL2_fnc_deployment;
 
             if !(_deploymentResult # 0) exitWith {
                 playSound "AddItemFailed";
@@ -30,7 +30,7 @@ private _deployActionId = _asset addAction [
 
             private _position =  _deploymentResult # 1;
             private _direction = _deploymentResult # 3;
-            private _nearbyEntities = [typeOf _asset, _position, _direction, "dontcheckuid", [_asset]] call WL2_fnc_grieferCheck;
+            private _nearbyEntities = [_crateType, _position, _direction, getPlayerUID player, [_asset]] call WL2_fnc_grieferCheck;
 
             if (count _nearbyEntities > 0) exitWith {
                 private _nearbyObjectName = [_nearbyEntities # 0] call WL2_fnc_getAssetTypeName;
@@ -47,9 +47,11 @@ private _deployActionId = _asset addAction [
 
             private _offset = _deploymentResult # 2;
 			[player, "orderAsset", "vehicle", _position, _crateType, _direction, true] remoteExec ["WL2_fnc_handleClientRequest", 2];
+
+            playSoundUI ["assemble_target", 1];
         };
 	},
-	[],
+	[_crateType],
 	5,
 	false,
 	true,

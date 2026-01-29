@@ -243,6 +243,13 @@ private _strategyArr = [
 		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
 		localize "STR_A3_WL_menu_scan_info"
 	], [
+		"CombatAir",
+		WL_COST_COMBATAIR,
+		[],
+		"Combat air patrol",
+		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
+		"Call in a temporary combat air patrol to assist your team's air defense over the selected airfield sector. Enemy aircraft that enter the marked map area while flying above 250m altitude will be given 10-25 seconds to leave before being automatically engaged by lethal air-to-air assets. Recommended to augment with short range air defenses and to use this opportunity to take off with air superiority assets."
+	], [
 		"FundsTransfer",
 		WL_COST_FUNDTRANSFER,
 		[],

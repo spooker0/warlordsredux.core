@@ -94,6 +94,7 @@ private _menuButtonIconMap = createHashMapFromArray [
     ["kick", "a3\modules_f\data\iconunlock_ca.paa"],
     ["mark-sector", "A3\ui_f\data\map\markers\handdrawn\flag_CA.paa"],
     ["move", "A3\ui_f\data\map\markers\military\box_CA.paa"],
+    ["order-cap", "a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa"],
     ["radar-operate", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
     ["radar-rotate", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
     ["remove", "a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca.paa"],

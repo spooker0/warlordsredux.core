@@ -30,6 +30,7 @@ class CfgFunctions {
 			class advancedSam {};
 			class bunkerBuster {};
 			class calculateInRange {};
+			class combatAirPatrol {};
 			class controlMunition {};
 			class extendedSam {};
 			class frag {};
@@ -333,6 +334,7 @@ class CfgFunctions {
 			class assetMapButtons {};
 			class assetMapControl {};
 			class captureDisplay {};
+			class combatAirHandle {};
 			class createInfoMarkers {};
 			class deleteAssetFromMap {};
 			class detectUnits {};
