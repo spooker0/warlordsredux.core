@@ -2,16 +2,17 @@
 WL_LoadingState = 0;
 
 0 spawn {
-	private _uid = getPlayerUID player;
-	private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
-	if (_isAdmin) then {
-		["main"] call BIS_fnc_endLoadingScreen;
-	};
-
+	private _startTime = serverTime;
 	while { WL_LoadingState < 12 } do {
 		uiSleep 2;
 		diag_log format ["Warlords Client Loading State: %1", WL_LoadingState];
+
+		if (serverTime - _startTime > 30) then {
+			break;
+		};
 	};
+
+	["main"] call BIS_fnc_endLoadingScreen;
 };
 
 waitUntil {
