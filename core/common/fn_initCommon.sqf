@@ -1,17 +1,33 @@
 #include "includes.inc"
+WL_Server_LoadingState = 0;
+
+0 spawn {
+	uiSleep 1;
+	while { WL_Server_LoadingState < 12 } do {
+		private _message = format ["[Server Init] Stage %1", WL_Server_LoadingState];
+		[_message] remoteExec ["diag_log", 0];
+		uiSleep 1;
+	};
+};
+
 if !(isDedicated) then {
 	waitUntil {
 		!(isNull (findDisplay 46)) && !(isNull player);
 	};
 };
+
+WL_Server_LoadingState = 1;
 "common" call WL2_fnc_varsInit;
 
+WL_Server_LoadingState = 2;
 if (hasInterface) then {
 	["main"] call BIS_fnc_startLoadingScreen;
 };
 
+WL_Server_LoadingState = 3;
 0 spawn APS_fnc_defineVehicles;
 
+WL_Server_LoadingState = 4;
 if (isServer) then {
 	call WL2_fnc_initSectors;
 } else {
@@ -40,6 +56,7 @@ if (isServer) then {
 	};
 };
 
+WL_Server_LoadingState = 5;
 BIS_WL_allSectors = (entities "Logic") select { _x getVariable ["WL2_name", ""] != "" };
 
 {
@@ -55,6 +72,7 @@ BIS_WL_allSectors = (entities "Logic") select { _x getVariable ["WL2_name", ""] 
 	_sector setVariable ["objectAreaComplete", [position _sector] + _sectorArea];
 } forEach BIS_WL_allSectors;
 
+WL_Server_LoadingState = 6;
 private _catapultTriggers = allMissionObjects "EmptyDetector" select {
 	private _carrierParts = _x getVariable ["bis_carrierParts", []];
 	count _carrierParts > 0
@@ -63,10 +81,13 @@ private _catapultTriggers = allMissionObjects "EmptyDetector" select {
 	deleteVehicle _x;
 } forEach _catapultTriggers;
 
+WL_Server_LoadingState = 7;
 enableSaving [false, false];
 
+WL_Server_LoadingState = 8;
 call WL2_fnc_initAssetData;
 
+WL_Server_LoadingState = 9;
 if (isServer) then {
 	call WL2_fnc_initServer;
 } else {
@@ -110,12 +131,16 @@ if (isServer) then {
 	};
 };
 
+WL_Server_LoadingState = 10;
 if (!isDedicated && hasInterface) then {
 	call WL2_fnc_initClient;
 };
 
+WL_Server_LoadingState = 11;
 call APS_fnc_setupProjectiles;
 
 if (hasInterface) then {
 	["main"] call BIS_fnc_endLoadingScreen;
 };
+
+WL_Server_LoadingState = 12;
