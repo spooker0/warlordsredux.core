@@ -1,5 +1,13 @@
 #include "includes.inc"
 WL_LoadingState = 0;
+
+0 spawn {
+	while { WL_LoadingState < 12 } do {
+		uiSleep 2;
+		diag_log format ["Warlords Client Loading State: %1", WL_LoadingState];
+	};
+};
+
 waitUntil {
 	!isNull player && {
 		isPlayer player
@@ -34,13 +42,13 @@ if (_setupState == "Imbalance") exitWith {
 	[_message, "Team Imbalance"] call WL2_fnc_exitToLobby;
 };
 
-WL_LoadingState = 3;
+WL_LoadingState = 2;
 
 private _uid = getPlayerUID player;
 
 "client" call WL2_fnc_varsInit;
 
-WL_LoadingState = 4;
+WL_LoadingState = 3;
 
 if !(BIS_WL_playerSide in BIS_WL_sidesArray) exitWith {
 	["Your unit is not a Warlords competitor", "Warlords Mission Error."] call WL2_fnc_exitToLobby;
@@ -52,7 +60,7 @@ enableSentences true;
 setCurrentChannel 1;
 enableEnvironment [false, true];
 
-WL_LoadingState = 5;
+WL_LoadingState = 4;
 
 uiNamespace setVariable ["BIS_WL_purchaseMenuLastSelection", [0, 0, 0]];
 uiNamespace setVariable ["activeControls", []];
@@ -63,13 +71,13 @@ if (isNil "_settingsMap") then {
     profileNamespace setVariable ["WL2_settings", createHashMap];
 };
 
-WL_LoadingState = 6;
+WL_LoadingState = 5;
 
 call WL2_fnc_sectorsInitClient;
-WL_LoadingState = 7;
+WL_LoadingState = 6;
 
 ["client", true] call WL2_fnc_updateSectorArrays;
-WL_LoadingState = 8;
+WL_LoadingState = 7;
 
 {
 	[_x, _x getVariable "BIS_WL_owner"] call WL2_fnc_sectorMarkerUpdate;
@@ -78,7 +86,7 @@ WL_LoadingState = 8;
 if !(isServer) then {
 	BIS_WL_playerSide call WL2_fnc_parsePurchaseList;
 };
-WL_LoadingState = 9;
+WL_LoadingState = 8;
 
 0 spawn WL2_fnc_initHud;
 0 spawn {
@@ -101,7 +109,7 @@ _mrkrTargetFriendly setMarkerColorLocal BIS_WL_colorMarkerFriendly;
 
 0 spawn WL2_fnc_clientEH;
 call WL2_fnc_arsenalSetup;
-WL_LoadingState = 10;
+WL_LoadingState = 9;
 
 0 spawn {
 	waitUntil {
@@ -116,7 +124,7 @@ WL_LoadingState = 10;
 	_x setMarkerAlphaLocal 0
 } forEach BIS_WL_sectorLinks;
 
-WL_LoadingState = 11;
+WL_LoadingState = 10;
 
 0 spawn WL2_fnc_repackMagazines;
 
@@ -151,7 +159,7 @@ WL_LoadingState = 11;
 0 spawn WL2_fnc_mapIcons;
 
 [46] spawn GFE_fnc_earplugs;
-WL_LoadingState = 12;
+WL_LoadingState = 11;
 
 0 spawn WL2_fnc_announcerInit;
 
@@ -331,3 +339,5 @@ private _showWelcomeMenu = _settingsMap getOrDefault ["showWelcomeMenu", true];
 if (_showWelcomeMenu) then {
 	0 spawn WL2_fnc_welcome;
 };
+
+WL_LoadingState = 12;
