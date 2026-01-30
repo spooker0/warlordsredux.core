@@ -6,7 +6,7 @@ _warlord setVariable ["WL2_playerSetupStarted", true];
 
 private _initLog = {
     params ["_error"];
-    private _message = format ["[Server Init Error] %1", _error];
+    private _message = format ["[Warlord Init] %1", _error];
     diag_log _message;
     [_error] remoteExec ["diag_log", _warlord];
 };
@@ -58,6 +58,8 @@ if (isNil "_playerList") exitWith {
     ["Cannot find playerList. Aborting."] call _initLog;
 };
 
+[format ["Player UID found: %1", _uid]] call _initLog;
+
 private _lockedToTeam = _playerList getOrDefault [_uid, civilian];
 private _owner = owner _warlord;
 
@@ -80,6 +82,8 @@ private _currentSide = side group _warlord;
 private _isRightTeam = if (_isAdmin || _isModerator || _isSpectator) then { true } else {
     _lockedToTeam in [_currentSide, civilian];
 };
+
+["Starting lockouts."] call _initLog;
 
 if (!_isRightTeam) exitWith {
     _warlord setVariable ["WL2_playerSetupState", "Teamlocked", _owner];
@@ -104,6 +108,8 @@ if (_isImbalanced) exitWith {
     _warlord setVariable ["WL2_playerSetupState", "Imbalance", _owner];
 };
 
+["Lockouts complete."] call _initLog;
+
 _playerList set [_uid, _currentSide];
 
 private _scoreboard = missionNamespace getVariable ["WL2_scoreboardData", createHashMap];
@@ -111,7 +117,11 @@ private _playerEntry = _scoreboard getOrDefault [_uid, createHashMap];
 _scoreboard set [_uid, _playerEntry];
 missionNamespace setVariable ["WL2_scoreboardData", _scoreboard];
 
+["Scoreboard setup complete."] call _initLog;
+
 call WL2_fnc_calcImbalance;
+
+["Imbalance calculations complete."] call _initLog;
 
 private _readyList = missionNamespace getVariable ["WL2_readyList", []];
 _readyList pushBackUnique _uid;
@@ -121,5 +131,7 @@ if (_playerFunds == -1) then {
     [1000, _uid, false] call WL2_fnc_fundsDatabaseWrite;
 };
 [_playerFundsDB, _uid] call WL2_fnc_fundsDatabaseUpdate;
+
+["Database writes complete."] call _initLog;
 
 _warlord setVariable ["WL2_playerSetupState", "Complete", _owner];
