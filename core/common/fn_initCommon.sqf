@@ -2,11 +2,13 @@
 WL_Server_LoadingState = 0;
 
 0 spawn {
-	uiSleep 1;
-	while { WL_Server_LoadingState < 12 } do {
-		private _message = format ["[Server Init] Stage %1", WL_Server_LoadingState];
-		[_message] remoteExec ["diag_log", 0];
+	if (isServer) then {
 		uiSleep 1;
+		while { WL_Server_LoadingState < 12 } do {
+			private _message = format ["[Server Init] Stage %1", WL_Server_LoadingState];
+			[_message] remoteExec ["diag_log", 0];
+			uiSleep 1;
+		};
 	};
 };
 
