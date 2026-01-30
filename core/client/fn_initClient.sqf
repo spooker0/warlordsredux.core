@@ -2,12 +2,14 @@
 WL_LoadingState = 0;
 
 0 spawn {
-	private _startTime = serverTime;
+	private _startTime = time;
 	while { WL_LoadingState < 12 } do {
 		uiSleep 2;
-		diag_log format ["Warlords Client Loading State: %1", WL_LoadingState];
+		diag_log format ["[Warlords Client] Loading %1 | %2", WL_LoadingState, serverTime];
 
-		if (serverTime - _startTime > 30) then {
+		["main"] call BIS_fnc_endLoadingScreen;
+
+		if (time - _startTime > 30) then {
 			break;
 		};
 	};
