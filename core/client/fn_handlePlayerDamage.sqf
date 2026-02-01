@@ -20,7 +20,7 @@ if (_projectile isKindOf "MineCore" || _projectile isKindOf "TimeBombCore") then
     };
 };
 
-if (lifeState _unit == "INCAPACITATED") exitWith {
+if (WL_ISUNCONSCIOUS(_unit)) exitWith {
     _damage min 0.99;
 };
 

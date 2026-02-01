@@ -42,10 +42,16 @@ private _actionId = _asset addAction [
 
             private _assetPos = getPosASL _asset;
 
+            private _projectile = createVehicle ["M_Titan_AP", _asset modelToWorld [0, 0, 1], [], 0, "FLY"];
+            _projectile setDir _direction;
+            [_projectile, 10, 0] call BIS_fnc_setPitchBank;
+            _projectile setVelocityModelSpace [0, 200, 0];
+
             [_asset modelToWorld [0, 0, 0], [
                 ["DeminingExplosiveCircleDust", 0.6],
                 ["SecondaryExp", 0.4],
-                ["SecondarySmoke", 0.4]
+                ["SecondarySmoke", 0.4],
+                ["FX_MissileTrail_SAM", _projectile]
             ]] remoteExec ["WL2_fnc_particleEffect", 0];
 
             private _detonatePositions = [];
@@ -60,9 +66,10 @@ private _actionId = _asset addAction [
             private _dummyStart = createVehicle ["I_TargetSoldier", _dummyStartPos, [], 0, "CAN_COLLIDE"];
             _dummyStart enableRopeAttach true;
 
-            private _dummyEndPos = _asset modelToWorld [0, 100, 0];
-            _dummyEndPos set [2, 0];
+            private _dummyEndPos = _asset modelToWorld [0, 90, 0];
+            _dummyEndPos set [2, 20];
             private _dummyEnd = createVehicle ["I_TargetSoldier", _dummyEndPos, [], 0, "CAN_COLLIDE"];
+            _dummyEnd setPosASL (AGLtoASL _dummyEndPos);
             _dummyEnd enableRopeAttach true;
 
             private _cable = ropeCreate [_dummyStart, [0, 0, 0], _dummyEnd, [0, 0, 0], 100];

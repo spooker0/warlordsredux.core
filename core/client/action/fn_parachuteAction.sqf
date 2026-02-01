@@ -13,7 +13,7 @@ _parachute setDir (getDir _caller);
     waitUntil {
         uiSleep 0.2;
         private _cutting = inputAction "GetOver" == 1;
-        _cutting || !alive _parachute || !alive _caller || {lifeState _caller == "INCAPACITATED"}
+        _cutting || !alive _parachute || WL_ISDOWN(_caller);
     };
     moveOut _caller;
     deleteVehicle _parachute;

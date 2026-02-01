@@ -2,7 +2,6 @@
 #define WL_VERSION "2.7.2"
 
 // Live: set all to 0
-#define WL_HARD_AI_MODE 0
 #define WL_FACTION_THREE_ENABLED 0
 #define WL_AIRPORT_BASES 0
 #define WL_OVERRIDE_BASES 0
@@ -144,3 +143,7 @@
 #define WL_ASSET_DATA (missionNamespace getVariable ["WL2_assetData", createHashMap])
 #define WL_ASSET_FIELD(data,class,field,default) ((data getOrDefault [class, createHashMap]) getOrDefault [field, default])
 #define WL_ASSET(class,field,default) WL_ASSET_FIELD(WL_ASSET_DATA,class,field,default)
+#define WL_ISUNCONSCIOUS(unit) ((unit) getVariable ["WL2_unconscious", false])
+#define WL_ISDBNO(unit) (alive (unit) && WL_ISUNCONSCIOUS(unit))
+#define WL_ISUP(unit) (alive (unit) && !WL_ISUNCONSCIOUS(unit))
+#define WL_ISDOWN(unit) !(WL_ISUP(unit))

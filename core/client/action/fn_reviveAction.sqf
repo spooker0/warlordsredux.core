@@ -41,16 +41,13 @@ private _reviveActionId = player addAction [
             private _endTime = serverTime + _duration;
             while { true } do {
                 // interrupts
-                if (!alive player) then {
-                    break;
-                };
-                if (lifeState player == "INCAPACITATED") then {
+                if (WL_ISDOWN(player)) then {
                     break;
                 };
                 if (!alive _reviveTarget) then {
                     break;
                 };
-                if (lifeState _reviveTarget != "INCAPACITATED") then {
+                if (WL_ISUP(_reviveTarget)) then {
                     break;
                 };
 

@@ -12,7 +12,7 @@ if (_projectile isKindOf "MineCore" || _projectile isKindOf "TimeBombCore") then
     };
 };
 
-if (lifeState _unit == "INCAPACITATED") exitWith {
+if (WL_ISUNCONSCIOUS(_unit)) exitWith {
     _damage min 0.99;
 };
 
@@ -23,6 +23,7 @@ if (_damage < 1) exitWith {
 moveOut _unit;
 _unit setCaptive true;
 _unit setUnconscious true;
+_unit setVariable ["WL2_unconscious", true, true];
 
 [_unit] spawn {
     params ["_unit"];
@@ -44,7 +45,7 @@ _unit setUnconscious true;
     ];
     private _deadAnimation = selectRandom _deadAnimations;
 
-    while { alive _unit && lifeState _unit == "INCAPACITATED" } do {
+    while { WL_ISDBNO(_unit) } do {
         if (animationState _unit != _deadAnimation) then {
             [_unit, [_deadAnimation]] remoteExec ["switchMove", 0];
         };

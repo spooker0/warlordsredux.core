@@ -348,8 +348,8 @@ addMissionEventHandler ["Draw3D", {
         };
 
         _targets = _targets select {
-            alive _x &&
-            lifeState _x != "INCAPACITATED" &&
+            WL_ISUP(_x);
+        } select {
             (_x getVariable ["WL_spawnedAsset", false] || isPlayer _x) &&
             _x != _vehicle;
         };

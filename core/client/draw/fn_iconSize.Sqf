@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_asset", "_mapSizeCache"];
 
-if (lifeState _x == "INCAPACITATED") exitWith {
+if (WL_ISUNCONSCIOUS(_asset)) exitWith {
     35;
 };
 

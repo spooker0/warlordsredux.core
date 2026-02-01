@@ -58,10 +58,7 @@ private _demolishActionId = player addAction [
             private _endTime = serverTime + _demolitionStepTime;
             while { true } do {
                 // interrupts
-                if (!alive player) then {
-                    break;
-                };
-                if (lifeState player == "INCAPACITATED") then {
+                if (WL_ISDOWN(player)) then {
                     break;
                 };
                 if (!alive _demolishableTarget) then {

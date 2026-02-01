@@ -190,10 +190,7 @@ switch (_className) do {
         [_selectedCollaborator] spawn {
             params ["_collaborator"];
             private _startTime = serverTime;
-            while {
-                alive _collaborator && lifeState _collaborator != "INCAPACITATED" &&
-                alive player && lifeState player != "INCAPACITATED"
-            } do {
+            while { WL_ISUP(_collaborator) && WL_ISUP(player) } do {
                 uiSleep 1;
             };
 

@@ -5,7 +5,11 @@ _pos params ["_posX", "_posY", "_posZ"];
 if !(isServer) exitWith {};
 
 _asset = createVehicle [_class, [_posX, _posY, _posZ - 50], [], 0, "CAN_COLLIDE"];
-_asset setVectorDirAndUp _direction;
+if (_direction isEqualType 0) then {
+	_asset setDir _direction;
+} else {
+	_asset setVectorDirAndUp _direction;
+};
 
 private _assetMass = WL_ASSET(_orderedClass, "mass", 0);
 if (_assetMass > 0) then {

@@ -18,7 +18,7 @@ if (_result) then {
 		playSound "AddItemFailed";
 	};
 
-	if (!alive player || lifeState player == "INCAPACITATED") exitWith {
+	if (WL_ISDOWN(player)) exitWith {
 		["You are dead!"] call WL2_fnc_smoothText;
 		playSound "AddItemFailed";
 	};

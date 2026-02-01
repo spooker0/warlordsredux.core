@@ -83,7 +83,7 @@ addMissionEventHandler ["HandleChatMessage", {
 
 	_display displayAddEventHandler ["KeyDown", {
 		params ["_display", "_key"];
-		if (alive player && lifeState player != "INCAPACITATED") exitWith {};
+		if (WL_ISUP(player)) exitWith {};
 		if (_key in actionKeys "ActionContext" || _key in actionKeys "Action") then {
 			["Select"] call WL2_fnc_deadActions;
 			true;
@@ -92,7 +92,7 @@ addMissionEventHandler ["HandleChatMessage", {
 
 	_display displayAddEventHandler ["KeyUp", {
 		params ["_display", "_key"];
-		if (alive player && lifeState player != "INCAPACITATED") exitWith {};
+		if (WL_ISUP(player)) exitWith {};
 		if (_key in actionKeys "ActionContext" || _key in actionKeys "Action") then {
 			["Unselect"] call WL2_fnc_deadActions;
 			true;
@@ -101,7 +101,7 @@ addMissionEventHandler ["HandleChatMessage", {
 
 	_display displayAddEventHandler ["MouseZChanged", {
 		params ["_displayOrControl", "_scroll"];
-		if (alive player && lifeState player != "INCAPACITATED") exitWith {};
+		if (WL_ISUP(player)) exitWith {};
 		private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
 		if (!isNull _display) exitWith {};
 

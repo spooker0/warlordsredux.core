@@ -10,8 +10,7 @@ private _terrainIntersect = terrainIntersectAtASL [
 private _coordinates = [_terrainIntersect # 0, _terrainIntersect # 1, 0];
 private _enemiesNear = (_coordinates nearEntities 500) select {
     ([_x] call WL2_fnc_getAssetSide) != BIS_WL_playerSide &&
-    alive _x &&
-    lifeState _x != "INCAPACITATED"
+    WL_ISUP(_x)
 };
 
 private _assetData = WL_ASSET_DATA;

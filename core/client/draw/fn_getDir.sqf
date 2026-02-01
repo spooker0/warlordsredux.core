@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_unit"];
 
-if (!alive _unit || lifeState _unit == "INCAPACITATED") exitWith {
+if (WL_ISDOWN(_unit)) exitWith {
     0;
 };
 if (_unit getVariable ["WL_ewNetActive", false]) exitWith {

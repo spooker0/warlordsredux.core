@@ -77,7 +77,7 @@ while { _combatAirActive } do {
     };
 
     private _asset = cameraOn;
-    if (!alive _asset || lifeState _asset == "INCAPACITATED") then {
+    if (WL_ISDOWN(_asset)) then {
         call _endEffect;
         continue;
     };

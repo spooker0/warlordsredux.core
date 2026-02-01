@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_action"];
 
-if (alive player && lifeState player != "INCAPACITATED") exitWith {};
+if (WL_ISUP(player)) exitWith {};
 
 private _deadActions = [
     true,

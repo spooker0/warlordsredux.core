@@ -47,7 +47,7 @@ uiSleep WL_TIMEOUT_SHORT;
 
 waitUntil {
 	uiSleep WL_TIMEOUT_MIN;
-	!isNull BIS_WL_targetSector || !visibleMap || !alive player || lifeState player == "INCAPACITATED"
+	!isNull BIS_WL_targetSector || !visibleMap || WL_ISDOWN(player);
 };
 
 if (isNull BIS_WL_targetSector) exitWith {

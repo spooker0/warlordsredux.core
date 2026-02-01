@@ -8,9 +8,9 @@ if (_attach) then {
 
     _load attachTo [_asset, _offset];
     private _loadActualType = _load getVariable ["WL2_orderedClass", typeOf _load];
-    private _flipLoadable = WL_ASSET(_loadActualType, "flipLoadable", 0);
-    if (_flipLoadable > 0) then {
-        _load setDir _flipLoadable;
+    private _loadableAngle = WL_ASSET(_loadActualType, "loadableAngle", 0);
+    if (_loadableAngle > 0) then {
+        _load setDir _loadableAngle;
         _load setPosWorld getPosWorld _load;
     };
     if (_load isKindOf "Air") then {

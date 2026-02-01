@@ -26,7 +26,7 @@ if (_isTargetedSector) exitWith {
     [false, "You cannot put a stronghold in the contested sector."];
 };
 
-private _findStrongholdBuildings = [getPosATL player] call WL2_fnc_findStrongholdBuilding;
+private _findStrongholdBuildings = [getPosATL player, 50, false] call WL2_fnc_findStrongholdBuilding;
 if (count _findStrongholdBuildings == 0) exitWith {
     [false, "You are not in/near a building that can be made into a stronghold."];
 };

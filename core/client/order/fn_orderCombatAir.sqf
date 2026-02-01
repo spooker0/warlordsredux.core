@@ -22,8 +22,7 @@ waitUntil {
 
 	!isNull BIS_WL_targetSector ||
 	!visibleMap ||
-	!alive player ||
-	lifeState player == "INCAPACITATED";
+	WL_ISDOWN(player);
 };
 
 if (BIS_WL_currentSelection == WL_ID_SELECTION_COMBAT_AIR) then {

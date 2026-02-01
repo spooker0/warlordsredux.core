@@ -71,6 +71,8 @@ call WL2_fnc_processRunways;
 
 0 spawn WL2_fnc_cleanupCarrier;
 0 spawn WL2_fnc_laserTracker;
+0 spawn WL2_fnc_assetRelevanceCheck;
+0 spawn WL2_fnc_sectorRespawner;
 
 0 spawn {
 	if (random 1 > 0.1) exitWith {};

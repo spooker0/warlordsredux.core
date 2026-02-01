@@ -4,8 +4,8 @@ params ["_originalPosition", "_limitDistance", "_ignoreSector", "_asset"];
 if (vehicle player != player) exitWith {
     [true, "Player is in vehicle."];
 };
-if (!alive player || lifeState player == "INCAPACITATED") exitWith {
-    [true, "Player is dead."];
+if (WL_ISDOWN(player)) exitWith {
+    [true, "Player is down."];
 };
 if ((_originalPosition distance2D _asset) > _limitDistance) exitWith {
     [true, "Asset moved too far from original position."];
@@ -42,7 +42,7 @@ private _enemiesNearPlayer = (allUnits inAreaArray [player, 150, 150]) select {
 } select {
     _x != player
 } select {
-    alive _x && lifeState _x != "INCAPACITATED"
+    WL_ISUP(_x)
 } select {
     isTouchingGround _x
 } select {

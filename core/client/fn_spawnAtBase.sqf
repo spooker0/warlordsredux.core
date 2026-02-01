@@ -4,27 +4,31 @@ params ["_firstSpawn"];
 private _side = BIS_WL_playerSide;
 private _homeBase = [_side] call WL2_fnc_getSideBase;
 
-private _frontlineActionId = player addAction [
-	"<t color='#4bff58'>Travel to Frontline</t>",
-	{
-        params ["_target", "_caller", "_actionId", "_arguments"];
-		private _travelResult = [true] call WL2_fnc_travelTeamPriority;
-        if (_travelResult) then {
-            playSoundUI ["AddItemOk"];
-        } else {
-            playSoundUI ["AddItemFailed"];
-            ["No team priority designated."] call WL2_fnc_smoothText;
-        };
-	},
-	[],
-	100,
-	false,
-	false,
-	"",
-	"!isWeaponDeployed player && vehicle player == player && player distance2D ([BIS_WL_playerSide] call WL2_fnc_getSideBase) < 100",
-	20,
-	false
-];
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _hideFrontlineMenu = _settingsMap getOrDefault ["hideFrontlineMenu", false];
+if (!_hideFrontlineMenu) then  {
+    private _frontlineActionId = player addAction [
+        format ["<t color='#4bff58'>%1</t>", localize "STR_A3_WL_travelFrontline"],
+        {
+            params ["_target", "_caller", "_actionId", "_arguments"];
+            private _travelResult = [true] call WL2_fnc_travelTeamPriority;
+            if (_travelResult) then {
+                playSoundUI ["AddItemOk"];
+            } else {
+                playSoundUI ["AddItemFailed"];
+                ["No team priority designated."] call WL2_fnc_smoothText;
+            };
+        },
+        [],
+        100,
+        false,
+        false,
+        "",
+        "!isWeaponDeployed player && vehicle player == player && player distance2D ([BIS_WL_playerSide] call WL2_fnc_getSideBase) < 100",
+        20,
+        false
+    ];
+};
 
 private _homeBaseLocation = _homeBase modelToWorld [0, 0, 0];
 if (_firstSpawn) exitWith {

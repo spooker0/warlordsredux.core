@@ -186,7 +186,7 @@ if (_operateAccess && _hasRadar) then {
 private _isTent = typeof _asset in ["Land_TentSolar_01_bluewhite_F", "Land_TentDome_F", "Land_TentSolar_01_redwhite_F", "Land_TentA_F"];
 if (_ownsVehicle && _isTent) then {
     [_asset, _targetId, "ft-tent", "Fast travel tent", {
-        if (!alive player || lifeState player == "INCAPACITATED") exitWith {
+        if (WL_ISDOWN(player)) exitWith {
             ["Cannot fast travel."] call WL2_fnc_smoothText;
             playSoundUI ["AddItemFailed"];
         };
@@ -198,7 +198,7 @@ private _canFastTravel = WL_ASSET(_assetActualType, "hasFastTravel", 0) > 0;
 if (_canFastTravel) then {
     [_asset, _targetId, "ft-asset", "Fast travel", {
         params ["_asset"];
-        if (!alive player || lifeState player == "INCAPACITATED") exitWith {
+        if (WL_ISDOWN(player)) exitWith {
             ["Cannot fast travel while dead."] call WL2_fnc_smoothText;
             playSoundUI ["AddItemFailed"];
         };

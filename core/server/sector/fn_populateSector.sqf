@@ -7,15 +7,37 @@ private _garrisonSize = _sectorValue * 1.3;
 private _vehicleUnits = [];
 
 private _presetVehicles = _sector getVariable ["WL2_vehiclesToSpawn", []];
-if (count _presetVehicles == 0) then {
-	private _hasRadar = false;
-	private _hardAIMode = WL_HARD_AI_MODE == 1;
-	private _numVehicleSpawn = if (_hardAIMode) then {
-		((_sectorValue / 5) max 1) min 4;
-	} else {
-		3;
-	};
 
+private _spawnVehicle = {
+	params ["_vehicleType", "_spawnPos", "_direction"];
+
+	private _vehicle = [objNull, _spawnPos, _vehicleType, _direction, false] call WL2_fnc_orderGround;
+	private _group = createVehicleCrew _vehicle;
+	private _crew = crew _vehicle;
+
+	_vehicleUnits pushBack _vehicle;
+
+	{
+		_x call WL2_fnc_newAssetHandle;
+		_vehicleUnits pushBack _x;
+	} forEach _crew;
+
+	[_group, 0] setWaypointPosition [position _vehicle, 100];
+	_group setBehaviour "COMBAT";
+	_group deleteGroupWhenEmpty true;
+
+	_wp = _group addWaypoint [_spawnPos, 100];
+	_wp setWaypointType "SAD";
+
+	_wp = _group addWaypoint [_spawnPos, 100];
+	_wp setWaypointType "CYCLE";
+
+	_vehicle allowCrewInImmobile [true, true];
+	[_vehicle, [1, 1, 1]] remoteExec ["setVehicleTIPars", 0];
+};
+
+if (count _presetVehicles == 0) then {
+	private _numVehicleSpawn = 3;
 	private _randomSpots = [_sector] call WL2_fnc_findSpawnsInSector;
 
 	private _vehiclesPool = [];
@@ -47,86 +69,12 @@ if (count _presetVehicles == 0) then {
 			_x distance2D _spawnPos > 30
 		};
 
-		private _vehicleArray = [_spawnPos, random 360, selectRandom _vehiclesPool, _owner] call BIS_fnc_spawnVehicle;
-		_vehicleArray params ["_vehicle", "_crew", "_group"];
-
-		_vehicle setVehiclePosition [getPosATL _vehicle, [], 10, "NONE"];
-
-		_vehicleUnits pushBack _vehicle;
-
-		{
-			_x call WL2_fnc_newAssetHandle;
-			_vehicleUnits pushBack _x;
-		} forEach _crew;
-
-		[_vehicle, driver _vehicle, typeof _vehicle] call WL2_fnc_processOrder;
-
-		[_group, 0] setWaypointPosition [position _vehicle, 100];
-		_group setBehaviour "COMBAT";
-		_group deleteGroupWhenEmpty true;
-
-		_wp = _group addWaypoint [_spawnPos, 100];
-		_wp setWaypointType "SAD";
-
-		_wp = _group addWaypoint [_spawnPos, 100];
-		_wp setWaypointType "CYCLE";
-
-		_vehicle allowCrewInImmobile [true, true];
-		[_vehicle, [1, 1, 1]] remoteExec ["setVehicleTIPars", 0];
-
-		if (typeOf _vehicle == "I_LT_01_scout_F") then {
-			_hasRadar = true;
-
-			_vehicle setVehicleReportRemoteTargets true;
-			_vehicle setVehicleReceiveRemoteTargets true;
-			_vehicle setVehicleReportOwnPosition true;
-		};
-	};
-
-	if (_hasRadar && _hardAIMode) then {
-		private _samLocation = selectRandom ([_sector] call WL2_fnc_findSpawnsInSector);
-		private _createSamResult = [_samLocation, 0, "I_E_SAM_System_03_F", resistance] call BIS_fnc_spawnVehicle;
-		private _sam = _createSamResult select 0;
-		for "_i" from 1 to 10 do {
-			_sam addMagazineTurret ["magazine_Missile_mim145_x4", [0]];
-		};
-
-		_sam setVehicleReportRemoteTargets true;
-		_sam setVehicleReceiveRemoteTargets true;
-		_sam setVehicleReportOwnPosition true;
-
-		_sam call WL2_fnc_newAssetHandle;
-		_vehicleUnits pushBack _sam;
+		private _vehicleType = selectRandom _vehiclesPool;
+		[_vehicleType, _spawnPos, random 360] call _spawnVehicle;
 	};
 } else {
 	{
-		private _vehicleInfo = _x;
-		_vehicleInfo params ["_type", "_pos", "_dir"];
-		private _vehicleArray = [_pos, _dir, _type, _owner] call BIS_fnc_spawnVehicle;
-		_vehicleArray params ["_vehicle", "_crew", "_group"];
-
-		_vehicleUnits pushBack _vehicle;
-
-		{
-			_x call WL2_fnc_newAssetHandle;
-			_vehicleUnits pushBack _x;
-		} forEach _crew;
-
-		[_vehicle, driver _vehicle, typeof _vehicle] call WL2_fnc_processOrder;
-
-		private _posVic = position _vehicle;
-		[_group, 0] setWaypointPosition [_posVic, 100];
-		_group setBehaviour "COMBAT";
-		_group deleteGroupWhenEmpty true;
-
-		private _wp = _group addWaypoint [_posVic, 100];
-		_wp setWaypointType "SAD";
-
-		private _wp1 = _group addWaypoint [_posVic, 100];
-		_wp1 setWaypointType "CYCLE";
-
-		_vehicle allowCrewInImmobile [true, true];
-		[_vehicle, [1, 1, 1]] remoteExec ["setVehicleTIPars", 0];
+		_x call _spawnVehicle;
 	} forEach _presetVehicles;
 };
 
@@ -177,7 +125,6 @@ if ("H" in _services) then {
 		[_vehicle, [1, 1, 1]] remoteExec ["setVehicleTIPars", 0];
 	};
 };
-[_vehicleUnits, _sector] spawn WL2_fnc_assetRelevanceCheck;
 
 private _spawnPosArr = [_sector] call WL2_fnc_findSpawnsInSector;
 if (count _spawnPosArr == 0) exitWith {};
@@ -223,6 +170,8 @@ while {_spawnedUnitCount < _garrisonSize} do {
 		_posAboveGround set [2, 100];
 		_newUnit setVehiclePosition [_posAboveGround, [], 0, "CAN_COLLIDE"];
 		_newUnit call WL2_fnc_newAssetHandle;
+
+		_newUnit setVariable ["WL2_sectorDefender", _sector];
 		doStop _newUnit;
 		_infantryUnits pushBack _newUnit;
 
@@ -234,8 +183,26 @@ while {_spawnedUnitCount < _garrisonSize} do {
 	};
 };
 
-[_infantryUnits, _sector] spawn WL2_fnc_assetRelevanceCheck;
+private _allUnits = _vehicleUnits + _infantryUnits;
+_sector setVariable ["WL2_sectorDefenders", _allUnits];
+_sector setVariable ["WL2_sectorPop", round (_garrisonSize * 2), true];
+
+private _objectArea = _sector getVariable "objectAreaComplete";
+private _maxRadius = (_objectArea # 1) max (_objectArea # 2);
+private _findStrongholdBuildings = [getPosATL _sector, _maxRadius, true] call WL2_fnc_findStrongholdBuilding;
+
+private _eligibleBuildings = _findStrongholdBuildings inAreaArray _objectArea;
+_eligibleBuildings = [_eligibleBuildings, [_sector], {
+    private _cost = getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "cost");
+	private _distanceToSector = _x distance2D _input0;
+	_cost * 100 - _distanceToSector;
+}, "DESCEND"] call BIS_fnc_sortBy;
+
+if (count _eligibleBuildings > 0) then {
+	private _stronghold = _eligibleBuildings # 0;
+	[_stronghold, _sector] call WL2_fnc_establishStronghold;
+};
 
 private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
-_ownedVehicles append (_vehicleUnits + _infantryUnits);
+_ownedVehicles append _allUnits;
 missionNamespace setVariable ["BIS_WL_ownedVehicles_server", _ownedVehicles];

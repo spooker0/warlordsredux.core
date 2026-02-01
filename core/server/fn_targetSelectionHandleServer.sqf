@@ -175,6 +175,15 @@
 					};
 				};
 
+				private _travelTestResult = [false] call WL2_fnc_travelTeamPriority;
+				if (!_travelTestResult) then {
+					private _teamPriorityVar = format ["WL2_teamPriority_%1", _side];
+					missionNamespace setVariable [_teamPriorityVar, _selectedSector, true];
+
+					private _teamPriorityTypeVar = format ["WL2_teamPriorityType_%1", _side];
+					missionNamespace setVariable [_teamPriorityTypeVar, "sector", true];
+				};
+
 				call _wipeVotes;
 
 				["server", true] call WL2_fnc_updateSectorArrays;

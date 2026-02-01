@@ -28,7 +28,7 @@ while { !BIS_WL_missionEnd } do {
         };
     } forEach _findCurrentSector;
 
-    if (!alive player || lifeState player == "INCAPACITATED") exitWith {
+    if (WL_ISDOWN(player)) exitWith {
         call _endEffect;
         continue;
     };

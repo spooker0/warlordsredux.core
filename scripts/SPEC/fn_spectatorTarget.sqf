@@ -41,8 +41,7 @@ while { WL_IsSpectator } do {
     };
 
     private _allVehicles = (vehicles + allUnits) select {
-        alive _x &&
-        lifeState _x != "INCAPACITATED" &&
+        WL_ISUP(_x) &&
         simulationEnabled _x &&
         !(_x isKindOf "LaserTarget");
     };

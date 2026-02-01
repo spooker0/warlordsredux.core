@@ -67,7 +67,7 @@ private _deployMortarAction = _asset addAction [
                 if (!alive _asset) then {
                     break;
                 };
-                if (!alive player || lifeState player == "INCAPACITATED") then {
+                if (WL_ISDOWN(player)) then {
                     break;
                 };
                 if !(player in _asset) then {

@@ -25,12 +25,15 @@ _soundSource attachTo [_asset, [0, 0, 0]];
 private _assetPos = getPosASL _asset;
 private _assetData = WL_ASSET_DATA;
 
+private _side = [_asset] call WL2_fnc_getAssetSide;
+if (_side == independent) then {
+    _asset setVariable ["WL2_smartMineDistance", 4];
+};
+
 while { alive _asset } do {
     uiSleep 1;
 
-    private _side = [_asset] call WL2_fnc_getAssetSide;
-
-    if (damage _asset > 0.1) then {
+    if (damage _asset > 0.05) then {
         break;
     };
 
@@ -53,6 +56,7 @@ while { alive _asset } do {
     private _enemyUnits = switch (_side) do {
         case west: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
         case east: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
+        case independent: { BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles };
         default { [] };
     };
 
@@ -62,7 +66,7 @@ while { alive _asset } do {
     private _angle = WL_SMART_MINE_ANGLES # _smartMineDistanceIndex;
 
     private _enemyVehicles = _enemyUnits select {
-        alive _x && lifeState _x != "INCAPACITATED"
+        WL_ISUP(_x)
     } select {
         _x distance _asset < _detonationDistance
     } select {

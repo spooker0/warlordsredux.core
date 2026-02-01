@@ -87,7 +87,7 @@ addMissionEventHandler ["Draw3D", {
 
         WL_SpectrumInterface = currentWeapon player == "hgun_esd_01_F" &&
             cameraOn == player &&
-            alive player && lifeState player != "INCAPACITATED";
+            WL_ISUP(player);
 
         if (!WL_SpectrumInterface) then {
             _indicator ctrlSetText "";

@@ -1,20 +1,27 @@
 #include "includes.inc"
 params ["_sector"];
 
+private _ownerSide = _sector getVariable ["BIS_WL_owner", independent];
+
 private _sideArr = [west, east, independent];
 private _sideCaptureModifier = createHashMap;
 {
 	private _side = _x;
 
 	if (_side == independent) then {
-		_sideCaptureModifier set [_side, 2.5];
+		private _reserves = _sector getVariable ["WL2_sectorPop", 0];
+		if (_reserves > 0) then {
+			_sideCaptureModifier set [_side, 3];
+		} else {
+			_sideCaptureModifier set [_side, 1];
+		};
 		continue;
 	};
 
 	private _sideLinkedSectors = BIS_WL_sectorsArrays # (BIS_WL_competingSides find _side) # 2;
 	private _neighboringSectors = synchronizedObjects _sector;
 	private _connectedNeighboringSectors = _neighboringSectors select {
-		typeof _x == "Logic" && _side == _x getVariable "BIS_WL_owner" && _x in _sideLinkedSectors;
+		typeof _x == "Logic" && _side == _x getVariable ["BIS_WL_owner", independent] && _x in _sideLinkedSectors;
 	};
 	private _hasConnection = count _connectedNeighboringSectors > 0;
 	if (!_hasConnection) then {
@@ -50,7 +57,7 @@ private _sideCaptureModifier = createHashMap;
 private _relevantEntities = entities [["LandVehicle", "Man"], ["Logic"], true, true];
 private _sectorAO = _sector getVariable "objectAreaComplete";
 private _allInArea = (_relevantEntities inAreaArray _sectorAO) select {
-	alive _x && lifeState _x != "INCAPACITATED";
+	WL_ISUP(_x)
 };
 
 // Perf benchmarking result: entities w/ inAreaArray is faster than nearEntities
@@ -96,20 +103,15 @@ private _sideCapValues = createHashMap;
 	if (typeOf _unit in _disallowManList) then {
 		continue;
 	};
-	private _sideModifier = _sideCaptureModifier getOrDefault [_side, 0];
-	if (_sideModifier == 0) then {
-		continue;
-	};
 
 	private _points = if (_unit isKindOf "Man") then {
-		private _score = if (_unit distance2D _stronghold < _strongholdRadius && vehicle _unit == _unit) then {
+		if (_ownerSide != independent && _unit distance2D _stronghold < _strongholdRadius && vehicle _unit == _unit) then {
 			7;
 		} else {
 			1;
 		};
-		_score * _sideModifier;
 	} else {
-		private _aliveCrew = (crew _unit) select { alive _x && lifeState _x != "INCAPACITATED" && !(typeOf _x in _disallowManList) };
+		private _aliveCrew = (crew _unit) select { WL_ISUP(_x) && !(typeOf _x in _disallowManList) };
 		private _crewCount = count _aliveCrew;
 		if (_crewCount > 0) then {
 			private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
@@ -128,8 +130,7 @@ private _sideCapValues = createHashMap;
 private _info = _sideArr apply {
 	private _side = _x;
 
-    private _originalOwner = _sector getVariable ["BIS_WL_owner", independent];
-    private _tiebreaker = if (_side == _originalOwner) then {
+    private _tiebreaker = if (_side == _ownerSide) then {
         0.5;    // half point defender advantage
     } else {
         0;
@@ -138,7 +139,7 @@ private _info = _sideArr apply {
 
 	private _modifier = _sideCaptureModifier getOrDefault [_side, 0];
 
-	[_side, _sideScore + _tiebreaker, _modifier];
+	[_side, _sideScore * _modifier + _tiebreaker, _modifier];
 };
 private _sortedInfo = [_info, [], { _x # 1 }, "DESCEND"] call BIS_fnc_sortBy;
 _sortedInfo;

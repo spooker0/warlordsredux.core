@@ -23,10 +23,7 @@ _asset addAction [
             private _timeToStop = serverTime + WL_DURATION_CLAIM;
 			private _claimSuccess = false;
             while { true } do {
-                if (!alive player) then {
-                    break;
-                };
-                if (lifeState player == "INCAPACITATED") then {
+                if (WL_ISDOWN(player)) then {
                     break;
                 };
 				if (count ((crew _asset) select { alive _x }) > 0) then {

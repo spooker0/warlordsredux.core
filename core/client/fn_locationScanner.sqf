@@ -11,7 +11,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
         uiSleep 0.5;
 
         private _nearbyUnconscious = (player nearObjects ["Man", 8]) select {
-            lifeState _x == "INCAPACITATED"
+            WL_ISUNCONSCIOUS(_x)
         };
         _nearbyUnconscious = _nearbyUnconscious select {
             [getPosASL player, getDir player, 90, getPosASL _x] call WL2_fnc_inAngleCheck
@@ -171,7 +171,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
             private _displayName = [_x, true, true, _playerIconTextCache] call WL2_fnc_iconText;
             private _boundingSize = ((boundingBoxReal _x) # 2) / 2;
 
-            if (lifeState _x == "INCAPACITATED") then {
+            if (WL_ISUNCONSCIOUS(_x)) then {
                 _playerIcons pushBack [
                     "a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa",
                     _color,
@@ -354,7 +354,7 @@ while { !BIS_WL_missionEnd } do {
 
         // don't consider unconscious units as intruders
         _scannedUnits = _scannedUnits select {
-            alive _x && lifeState _x != "INCAPACITATED"
+            WL_ISUP(_x)
         } select {
             _x isKindOf "Man"
         };
@@ -387,7 +387,7 @@ while { !BIS_WL_missionEnd } do {
             private _scannedUnits = [_side, _forwardBaseArea] call WL2_fnc_detectUnits;
             _allScannedUnits append _scannedUnits;
             _scannedUnits = _scannedUnits select {
-                alive _x && lifeState _x != "INCAPACITATED"
+                WL_ISUP(_x)
             };
 
             if (count _scannedUnits > 0) then {

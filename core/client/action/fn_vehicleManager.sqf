@@ -25,7 +25,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
         playSoundUI ["AddItemFailed"];
         ["Vehicle is no longer available."] call WL2_fnc_smoothText;
     };
-    if (!alive player || lifeState player == "INCAPACITATED") exitWith {
+    if (WL_ISDOWN(player)) exitWith {
         closeDialog 0;
         playSoundUI ["AddItemFailed"];
         ["You are incapacitated."] call WL2_fnc_smoothText;

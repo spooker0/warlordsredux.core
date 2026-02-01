@@ -7,8 +7,6 @@ WL_LoadingState = 0;
 		uiSleep 2;
 		diag_log format ["[Warlords Client] Loading %1 | %2", WL_LoadingState, serverTime];
 
-		["main"] call BIS_fnc_endLoadingScreen;
-
 		if (time - _startTime > 30) then {
 			break;
 		};

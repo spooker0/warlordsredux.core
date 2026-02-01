@@ -1,5 +1,6 @@
 #include "includes.inc"
 params ["_unit", "_killer", "_instigator"];
+private _unitSide = [_unit] call WL2_fnc_getAssetSide;
 
 private _isSpawnedAsset = _unit getVariable ["WL_spawnedAsset", false];
 private _isUnitPlayer = isPlayer [_unit];
@@ -8,6 +9,18 @@ if !(_isSpawnedAsset || _isUnitPlayer) exitWith {};
 private _alreadyHandled = _unit getVariable ["WL2_alreadyHandled", false];
 if (_alreadyHandled) exitWith {};
 _unit setVariable ["WL2_alreadyHandled", true];
+
+private _sector = _unit getVariable ["WL2_sectorDefender", objNull];
+if (!isNull _sector) then {
+    private _sectorPop = _sector getVariable ["WL2_sectorPop", 0];
+    private _sectorOwner = _sector getVariable ["BIS_WL_owner", sideUnknown];
+
+    if (_sectorOwner == independent && _sectorPop > 0) then {
+        private _sectorRespawnPool = _sector getVariable ["WL2_sectorRespawnPool", []];
+        _sectorRespawnPool pushBack (typeof _unit);
+        _sector setVariable ["WL2_sectorRespawnPool", _sectorRespawnPool];
+    };
+};
 
 private _children = _unit getVariable ["WL2_children", []];
 {
@@ -25,7 +38,7 @@ _deathStats set ["deaths", _deathValue + 1];
 _stats set [_assetActualType, _deathStats];
 
 private _responsiblePlayer = [_killer, _instigator] call WL2_fnc_handleInstigator;
-if (!isPlayer _responsiblePlayer || ([_unit] call WL2_fnc_getAssetSide) == (side group _responsiblePlayer)) then {
+if (!isPlayer _responsiblePlayer || (_unitSide == side group _responsiblePlayer)) then {
     private _lastHitter = _unit getVariable ["WL_lastHitter", objNull];
     if (!isNull _lastHitter) then {
         _responsiblePlayer = _lastHitter;
@@ -41,7 +54,6 @@ private _victimEntry = _scoreboard getOrDefault [getPlayerUID _unit, createHashM
 private _killerEntry = _scoreboard getOrDefault [getPlayerUID _responsiblePlayer, createHashMap];
 
 private _killerSide = side group _responsiblePlayer;
-private _unitSide = [_unit] call WL2_fnc_getAssetSide;
 
 if (_isUnitPlayer && _unit isKindOf "Man") then {
     _victimEntry set ["deaths", (_victimEntry getOrDefault ["deaths", 0]) + 1];

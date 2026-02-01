@@ -1,5 +1,5 @@
 #include "includes.inc"
-if (!alive player || lifeState player == "INCAPACITATED") then {
+if (WL_ISDOWN(player)) then {
     [false, localize "STR_A3_WL_fasttravel_restr6"];
 } else {
     [true, ""];

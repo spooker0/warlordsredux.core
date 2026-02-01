@@ -5,7 +5,7 @@ if (_squadLeader == player) exitWith {
     [false, localize "STR_SQUADS_fastTravelSquadLeaderInvalid"];
 };
 
-if (!alive _squadLeader || lifeState _squadLeader == "INCAPACITATED") exitWith {
+if (WL_ISDOWN(_squadLeader)) exitWith {
     [false, localize "STR_SQUADS_fastTravelSquadLeaderUnavailable"];
 };
 

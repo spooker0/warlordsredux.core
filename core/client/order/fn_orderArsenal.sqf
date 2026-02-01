@@ -35,7 +35,7 @@ if (isNull (findDisplay 602)) then {
 			if !(isNull (findDisplay 602)) then {
 				(findDisplay 602) closeDisplay 1;
 			};
-			if (lifeState player == "INCAPACITATED") then {
+			if (WL_ISDOWN(player)) then {
 				(uiNamespace getVariable ["RscDisplayArsenal", displayNull]) closeDisplay 1;
 			};
 			uiSleep 0.01;

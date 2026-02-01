@@ -11,7 +11,7 @@ if (!isNull _sectorFtAsset) then {
     private _fastTravelAssetExecute = {
         params ["_sector"];
         private _asset = [_sector, true] call WL2_fnc_getSectorFTAsset;
-        if (!alive player || lifeState player == "INCAPACITATED") exitWith {
+        if (WL_ISDOWN(player)) exitWith {
             ["Cannot fast travel while dead."] call WL2_fnc_smoothText;
             playSoundUI ["AddItemFailed"];
         };

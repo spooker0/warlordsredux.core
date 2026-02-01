@@ -5,7 +5,7 @@ if (isObjectHidden _unit) exitWith {
     [0, 0, 0, 0];
 };
 
-if (lifeState _unit == "INCAPACITATED") exitWith {
+if (WL_ISUNCONSCIOUS(_unit)) exitWith {
     private _expirationTime = _unit getVariable ["WL2_expirationTime", 0];
     private _timeLife = ((_expirationTime - serverTime) / 30) min 1;
     [1, _timeLife, _timeLife, 1];

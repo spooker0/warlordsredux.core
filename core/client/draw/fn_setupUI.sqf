@@ -7,7 +7,7 @@ private _side = BIS_WL_playerSide;
 if (_displayClass == "RequestMenu_open") then {
 	WL2_tutorialComplete = true;
 	if (WL_GEAR_BUY_MENU) exitWith {};
-	if (lifeState player == "INCAPACITATED") exitWith {};
+	if (WL_ISUNCONSCIOUS(player)) exitWith {};
 
 	disableSerialization;
 
@@ -43,7 +43,7 @@ if (_displayClass == "RequestMenu_open") then {
 
 	_myDisplay spawn {
 		disableSerialization;
-		waitUntil {uiSleep WL_TIMEOUT_SHORT; lifeState player == "INCAPACITATED" || {isNull _this}};
+		waitUntil {uiSleep WL_TIMEOUT_SHORT; WL_ISUNCONSCIOUS(player) || {isNull _this}};
 		"RequestMenu_close" call WL2_fnc_setupUI;
 	};
 

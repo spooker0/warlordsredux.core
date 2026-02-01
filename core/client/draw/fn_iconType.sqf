@@ -9,7 +9,7 @@ if (!alive _vehicle) exitWith {
 	"\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa";
 };
 
-if (lifeState _vehicle == "INCAPACITATED") exitWith {
+if (WL_ISUNCONSCIOUS(_vehicle)) exitWith {
 	"a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa";
 };
 

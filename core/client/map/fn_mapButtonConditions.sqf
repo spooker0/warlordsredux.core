@@ -99,9 +99,7 @@ switch (_conditionName) do {
         if (_target isKindOf "Man") then {
             if (_target != _mySquadLeader) exitWith { "" };
 
-            if (!alive _target) exitWith { "Squad leader is dead." };
-
-            if (lifeState _target == "INCAPACITATED") exitWith { "Squad leader is incapacitated." };
+            if (WL_ISDOWN(_target)) exitWith { "Squad leader is down." };
 
             private _position = getPosASL _target;
             if (surfaceIsWater _position && _position # 2 < 5) exitWith { "Squad leader is in water." };
@@ -114,9 +112,7 @@ switch (_conditionName) do {
             if (count _crewSL == 0) exitWith { "" };
 
             private _squadLeader = _crewSL # 0;
-            if (!alive _squadLeader) exitWith { "Squad leader is dead." };
-
-            if (lifeState _squadLeader == "INCAPACITATED") exitWith { "Squad leader is incapacitated." };
+            if (WL_ISDOWN(_squadLeader)) exitWith { "Squad leader is down." };
 
             private _position = getPosASL _squadLeader;
             if (surfaceIsWater _position && _position # 2 < 5) exitWith { "Squad leader is in water." };
@@ -133,9 +129,7 @@ switch (_conditionName) do {
 
             if (!_areInSquad) exitWith { "" };
 
-            if (!alive _target) exitWith { "Squad member is dead." };
-
-            if (lifeState _target == "INCAPACITATED") exitWith { "Squad member is incapacitated." };
+            if (WL_ISDOWN(_target)) exitWith { "Squad member is down." };
 
             private _position = getPosASL _target;
             if (surfaceIsWater _position && _position # 2 < 5) exitWith { "Squad member is in water." };
@@ -152,14 +146,9 @@ switch (_conditionName) do {
             if (count _crewMembersInSquad == 0) exitWith { "" };
 
             private _aliveCrewMembersInSquad = _crewMembersInSquad select {
-                alive _x
+                WL_ISUP(_x)
             };
-            if (count _aliveCrewMembersInSquad == 0) exitWith { "Squad member is dead." };
-
-            _aliveCrewMembersInSquad = _aliveCrewMembersInSquad select {
-                lifeState _x != "INCAPACITATED"
-            };
-            if (count _aliveCrewMembersInSquad == 0) exitWith { "Squad member is incapacitated." };
+            if (count _aliveCrewMembersInSquad == 0) exitWith { "Squad member is down." };
 
             _aliveCrewMembersInSquad = _aliveCrewMembersInSquad select {
                 private _position = getPosASL _x;
@@ -173,8 +162,7 @@ switch (_conditionName) do {
     case "fastTravelAI": {
         if !(_target in (units player)) exitWith { "" };
         if (_target == player) exitWith { "" };
-        if (!alive _target) exitWith { "AI is dead." };
-        if (lifeState _target == "INCAPACITATED") exitWith { "AI is incapacitated." };
+        if (WL_ISDOWN(_target)) exitWith { "AI is down." };
         private _position = getPosASL _target;
         if (surfaceIsWater _position && _position # 2 < 5) exitWith { "AI is in water." };
         "ok";

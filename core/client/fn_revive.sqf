@@ -2,6 +2,8 @@
 params ["_unit"];
 
 _unit setUnconscious false;
+_unit setVariable ["WL2_unconscious", false, true];
+
 _unit setCaptive false;
 _unit setDamage 0;
 [_unit, ["AidlPpneMstpSnonWnonDnon_AI"]] remoteExec ["switchMove", 0];

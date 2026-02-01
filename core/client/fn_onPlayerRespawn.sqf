@@ -80,3 +80,5 @@ call WL2_fnc_afkAction;
 BIS_WL_playerSide call WL2_fnc_parsePurchaseList;
 
 [false] call WL2_fnc_spawnAtBase;
+
+player setVariable ["WL2_unconscious", false, true];

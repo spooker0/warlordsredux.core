@@ -1,9 +1,9 @@
 #include "includes.inc"
 params ["_reconnedObjects"];
 
-private _newTargets = _reconnedObjects select {
+private _newTargets = _reconnedObjects select { WL_ISUP(_x) } select {
     private _lastReconTime = _x getVariable ["WL_scannedByPlayer", -300];
-    alive _x && lifeState _x != "INCAPACITATED" && _lastReconTime < serverTime - 300
+    _lastReconTime < serverTime - 300
 };
 private _targetPoints = 0;
 {

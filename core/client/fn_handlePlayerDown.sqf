@@ -7,6 +7,7 @@ _unit setVelocity [0, 0, 0];
 
 _unit setCaptive true;
 _unit setUnconscious true;
+_unit setVariable ["WL2_unconscious", true, true];
 
 _unit setVariable ["WL2_expirationTime", serverTime + WL_DURATION_RESPAWN, true];
 
@@ -23,7 +24,7 @@ private _deadAnimation = selectRandom _deadAnimations;
 
 private _startTime = serverTime;
 private _downTime = 0;
-while { alive _unit && lifeState _unit == "INCAPACITATED" } do {
+while { WL_ISDBNO(_unit) } do {
     if (animationState _unit != _deadAnimation) then {
         [_unit, [_deadAnimation]] remoteExec ["switchMove", 0];
     };

@@ -206,8 +206,7 @@ _controller addAction [
             uiNamespace setVariable ["WL2_usingVLS", true];
             while {
                 cameraOn == _mrls &&
-                alive player &&
-                lifeState player != "INCAPACITATED" &&
+                WL_ISUP(player) &&
                 player distance2D _target < 50
             } do {
                 uiSleep 0.1;

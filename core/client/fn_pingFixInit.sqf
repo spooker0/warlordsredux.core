@@ -21,7 +21,7 @@
 
 			// find enemies near ping
 			private _enemiesNear = (_posAGL nearEntities 20) select {
-				([_x] call WL2_fnc_getAssetSide) != (side group player) && alive _x && lifeState _x != "INCAPACITATED"
+				([_x] call WL2_fnc_getAssetSide) != (side group player) && WL_ISUP(_x)
 			};
 			private _sortedEnemies = [_enemiesNear, [], { _posAGL distance _x }, "ASCEND"] call BIS_fnc_sortBy;
 			if (count _sortedEnemies > 0) then {

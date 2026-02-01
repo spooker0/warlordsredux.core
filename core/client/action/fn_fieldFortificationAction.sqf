@@ -26,11 +26,7 @@ private _actionId = _freshTent addAction [
             private _constructionSuccess = true;
             private _timeToDone = serverTime + _deployTime;
             while { _timeToDone > serverTime } do {
-                if (!alive player) then {
-                    _constructionSuccess = false;
-                    break;
-                };
-                if (lifeState player == "INCAPACITATED") then {
+                if (WL_ISDOWN(player)) then {
                     _constructionSuccess = false;
                     break;
                 };

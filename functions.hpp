@@ -432,6 +432,7 @@ class CfgFunctions {
 			class accessControl {};
 			class airWreckHandler {};
 			class cleanupCarrier {};
+			class establishStronghold {};
 			class findSpawnsInArea {};
 			class findSpawnsInMarker {};
 			class findSpawnsInSector {};
@@ -519,6 +520,7 @@ class CfgFunctions {
 			class populateSector {};
 			class populateCarrierSector {};
 			class sectorCaptureHandle {};
+			class sectorRespawner {};
 			class sectorsInitServer {};
 		};
 		class ServerOrder {

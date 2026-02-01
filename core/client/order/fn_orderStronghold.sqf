@@ -16,7 +16,7 @@ if (_hasOldStronghold && {
     playSoundUI ["AddItemFailed"];
 };
 
-private _buildings = [getPosATL player] call WL2_fnc_findStrongholdBuilding;
+private _buildings = [getPosATL player, 50, false] call WL2_fnc_findStrongholdBuilding;
 if (count _buildings == 0) exitWith {
     playSoundUI ["AddItemFailed"];
 };
@@ -53,33 +53,10 @@ if (!_result) exitWith {
     playSoundUI ["AddItemFailed"];
 };
 
-if (_hasOldStronghold) then {
-    [_currentSector, true] call WL2_fnc_removeStronghold;
-};
-
-_stronghold setVariable ["WL2_orderedClass", typeof _stronghold, true];
-_stronghold setVariable ["BIS_WL_ownerAsset", "123", true];
-
-private _markerName = format ["WL_stronghold_%1", _sectorName];
-private _markerTextName = format ["WL_strongholdText_%1", _sectorName];
-
+[player, "buyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 _stronghold setVariable ["WL_strongholdOwner", player, true];
 
-private _strongholdRadius = (boundingBoxReal _stronghold) # 2;
-_stronghold setVariable ["WL_strongholdRadius", _strongholdRadius, true];
-_stronghold setVariable ["WL_strongholdSector", _currentSector, true];
-
-_currentSector setVariable ["WL_stronghold", _stronghold, true];
-
-[player, "buyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
-[_stronghold, _currentSector] remoteExec ["WL2_fnc_prepareStronghold", 2];
-
-private _allStrongholds = missionNamespace getVariable ["WL_strongholds", []];
-_allStrongholds = _allStrongholds select {
-    _x != _oldStronghold
- };
-_allStrongholds pushBack _stronghold;
-missionNamespace setVariable ["WL_strongholds", _allStrongholds, true];
+[_stronghold, _currentSector] call WL2_fnc_establishStronghold;
 
 for "_i" from 1 to 10 do {
     if (random 1 > 0.5) then {

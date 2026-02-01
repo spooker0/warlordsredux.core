@@ -130,7 +130,7 @@
 			[_x, 10]
 		};
 		private _targetsOnDatalink = (_alwaysShowEwUnits + listRemoteTargets _side) select {
-			alive (_x # 0) && lifeState (_x # 0) != "INCAPACITATED"
+			WL_ISUP(_x # 0)
 		} select {
 			(_x # 1) >= -10
 		} select {

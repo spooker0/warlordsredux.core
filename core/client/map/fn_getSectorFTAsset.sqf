@@ -26,7 +26,7 @@ if (_allowInfantry) then {
         };
     };
     _sideVehicles = _sideVehicles select {
-        alive _x && lifeState _x != "INCAPACITATED" && _x != player
+        WL_ISUP(_x) && _x != player
     };
 };
 

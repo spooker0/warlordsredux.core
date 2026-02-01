@@ -113,7 +113,7 @@ private _setupActionId = [
 			};
 
 			private _exit = false;
-			while { alive player && lifeState player != "INCAPACITATED" } do {
+			while { WL_ISUP(player) } do {
 				private _deployResult = [_target] call _deploymentAction;
 				if (_deployResult) then {
 					break;

@@ -172,6 +172,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["checkbox", "Hide: Buy menu", ["hideBuyMenu", false]],
         ["checkbox", "Hide: Vehicle manager", ["hideVehicleManager", false]],
         ["checkbox", "Hide: Help menu", ["hideHelpMenu", false]],
+        ["checkbox", "Hide: Frontline action", ["hideFrontlineMenu", false]],
         ["category", "Control hints"],
         ["checkbox", "Show hint: Deployment", ["showHintDeploy", true]],
         ["checkbox", "Show hint: Recon Optics", ["showHintRecon", true]],

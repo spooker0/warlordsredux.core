@@ -158,11 +158,22 @@ if (_showCaptureDetails) then {
         private _side = _x # 0;
         private _sideName = [_side] call _getTeamName;
         private _score = floor (_x # 1);
+        private _multiplier = _x # 2;
         if (_score < 1) then {
             "";
         } else {
+            private _reserveText = if (_side == independent) then {
+                private _reserves = _sector getVariable ["WL2_sectorPop", 0];
+                if (_reserves > 0) then {
+                    format [" (Reserves: %1)", round (_reserves * _multiplier)];
+                } else {
+                    " (Reserves depleted)"
+                };
+            } else {
+                ""
+            };
             [
-                format ["%1 (%2x): %3", _sideName, _x # 2, _score],
+                format ["%1 (%2x): %3%4", _sideName, _multiplier, _score, _reserveText],
                 [_side] call _getTeamColor
             ];
         };

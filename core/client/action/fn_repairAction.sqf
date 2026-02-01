@@ -74,10 +74,7 @@ private _repairWheels = _asset addAction [
             private _timeToRepair = serverTime + 10;
             private _timeToStop = serverTime + 11;
             while { _timeToStop > serverTime } do {
-                if (!alive player) then {
-                    break;
-                };
-                if (lifeState player == "INCAPACITATED") then {
+                if (WL_ISDOWN(player)) then {
                     break;
                 };
 

@@ -39,6 +39,8 @@ private _immobile = WL_ASSET(_orderedClass, "immobile", 0);
 if (_immobile > 0) then {
 	if (unitIsUAV _asset) then {
 		deleteVehicle (driver _asset);
+	} else {
+		(driver _asset) disableAI "ALL";
 	};
 
 	{
@@ -254,3 +256,5 @@ if (_lifetime > 0) then {
 		};
 	};
 };
+
+_asset;

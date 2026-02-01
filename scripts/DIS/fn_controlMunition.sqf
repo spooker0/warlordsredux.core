@@ -45,7 +45,7 @@ private _timeToLive = getNumber (configFile >> "CfgAmmo" >> (typeOf _projectile)
 private _projectileSpeed = _projectile getVariable ["APS_speedOverride", 100];
 private _fuelUsed = 0;
 
-while { alive _projectile && alive player && lifeState player != "INCAPACITATED" } do {
+while { alive _projectile && WL_ISUP(player) } do {
     private _elapsedTime = serverTime - _lastTime;
     _lastTime = serverTime;
 

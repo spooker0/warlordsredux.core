@@ -22,7 +22,7 @@ if (_existingHealth <= 0) then {
         if (_targetObject == _strongholdSectorCheck) then {
             [_strongholdSector] call WL2_fnc_removeStronghold;
             if (_assetSide != BIS_WL_playerSide) then {
-                [player] remoteExec ["WL2_fnc_destroyStronghold", 2];
+                [player, _strongholdSector] remoteExec ["WL2_fnc_destroyStronghold", 2];
             };
         };
     };

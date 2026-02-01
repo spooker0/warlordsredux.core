@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_stronghold", "_currentSector"];
+params ["_stronghold"];
 
 _stronghold setDamage 0;
 private _hitPoints = getAllHitPointsDamage _stronghold;

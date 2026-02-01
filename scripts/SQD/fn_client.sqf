@@ -103,9 +103,9 @@ if (_action == "kick") exitWith {
 
 private _ftAction = {
     params ["_targetPlayer"];
-    if (!alive player || lifeState player == "INCAPACITATED") exitWith {};
+    if (WL_ISDOWN(player)) exitWith {};
 
-    if (!alive _targetPlayer || lifeState _targetPlayer == "INCAPACITATED") exitWith {
+    if (WL_ISDOWN(_targetPlayer)) exitWith {
         ["Squad fast travel target is not valid."] call WL2_fnc_smoothText;
     };
 
@@ -114,7 +114,7 @@ private _ftAction = {
 
     uiSleep 1;
 
-    if (!alive _targetPlayer || lifeState _targetPlayer == "INCAPACITATED") exitWith {
+    if (WL_ISDOWN(_targetPlayer)) exitWith {
         ["Squad fast travel target is no longer valid."] call WL2_fnc_smoothText;
         titleCut ["", "BLACK IN", 1];
     };

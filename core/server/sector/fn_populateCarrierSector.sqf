@@ -49,8 +49,6 @@ for "_i" from 0 to 5 do {
     _infantryGroup setBehaviour "COMBAT";
 };
 
-[_infantryUnits, _sector] spawn WL2_fnc_assetRelevanceCheck;
-
 private _vehicleUnits = [];
 private _presetVehicles = _sector getVariable ["WL2_vehiclesToSpawn", []];
 {
@@ -73,8 +71,10 @@ private _presetVehicles = _sector getVariable ["WL2_vehiclesToSpawn", []];
 
     _vehicle setFuel 0;
 } forEach _presetVehicles;
-[_vehicleUnits, _sector] spawn WL2_fnc_assetRelevanceCheck;
+
+private _allUnits = _vehicleUnits + _infantryUnits;
+_sector setVariable ["WL2_sectorDefenders", _allUnits];
 
 private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
-_ownedVehicles append (_vehicleUnits + _infantryUnits);
+_ownedVehicles append _allUnits;
 missionNamespace setVariable ["BIS_WL_ownedVehicles_server", _ownedVehicles];

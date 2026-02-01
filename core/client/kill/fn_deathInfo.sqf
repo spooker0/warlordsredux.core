@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_unit", "_responsiblePlayer", "_killer"];
 
-if (_unit != player || (alive player && lifeState player != "INCAPACITATED")) exitWith {};
+if (_unit != player || WL_ISUP(player)) exitWith {};
 if ((_killer == _unit || isNull _killer) && !isNull _responsiblePlayer) then {
     _killer = _responsiblePlayer;
 };
@@ -23,7 +23,7 @@ if (_killerSide == sideUnknown) then {
     _killerSide = side group _killer;
 };
 
-private _damageDone = if (alive _killer && lifeState _killer != "INCAPACITATED") then {
+private _damageDone = if (WL_ISUP(_killer)) then {
     if (vehicle _killer isKindOf "Man") then {
         damage _killer;
     } else {
@@ -207,7 +207,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
                 private _soundSource = createSoundSource ["WLDownedSound", player modelToWorld [0, 0, 0], [], 0];
                 player setVariable ["WL2_playerHelpCall", _soundSource];
 
-                while { alive player && lifeState player == "INCAPACITATED" } do {
+                while { WL_ISDBNO(player) } do {
                     uiSleep 0.1;
                 };
 
@@ -220,7 +220,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
 
 waitUntil {
     uiSleep 0.1;
-    (alive player && lifeState player != "INCAPACITATED") || WL_IsSpectator || BIS_WL_missionEnd;
+    WL_ISUP(player) || WL_IsSpectator || BIS_WL_missionEnd;
 };
 
 "deathInfo" cutText ["", "PLAIN"];

@@ -16,7 +16,8 @@ if (!_canBuy) exitWith {
 private _intercept = false;
 if (_key in actionKeys "Gear") then {
     private _keyAlreadyPressed = missionNamespace getVariable ["WL_gearKeyPressed", false];
-    if (_keyAlreadyPressed || !(alive player) && lifeState player == "INCAPACITATED") exitWith {};
+    if (_keyAlreadyPressed) exitWith {};
+    if (WL_ISDOWN(player)) exitWith {};
     if !(isNull (uiNamespace getVariable ["BIS_WL_purchaseMenuDisplay", displayNull])) exitWith {
         "RequestMenu_close" call WL2_fnc_setupUI;
     };
