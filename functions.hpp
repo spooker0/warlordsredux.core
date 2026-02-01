@@ -240,6 +240,7 @@ class CfgFunctions {
 			class lockActionEligibility {};
 			class lockActionUpdate {};
 			class logisticsAddAction {};
+			class mineClearAction {};
 			class parachuteAction {};
 			class parachuteSetup {};
 			class placeRespawnBag {};
@@ -337,7 +338,9 @@ class CfgFunctions {
 			class combatAirHandle {};
 			class createInfoMarkers {};
 			class deleteAssetFromMap {};
+			class designateTeamPriority {};
 			class detectUnits {};
+			class getSectorFTAsset {};
 			class getSideBase {};
 			class handleEnemyCapture {};
 			class handleSectorIcons {};
@@ -358,6 +361,7 @@ class CfgFunctions {
 			class sectorVoteClient {};
 			class selectedTargetsHandle {};
 			class targetSelected {};
+			class travelTeamPriority {};
 			class uavMapButtons {};
 			class updateSelectionState {};
 		};
@@ -426,6 +430,7 @@ class CfgFunctions {
 		class Common {
 			file = "src\core\common";
 			class accessControl {};
+			class airWreckHandler {};
 			class cleanupCarrier {};
 			class findSpawnsInArea {};
 			class findSpawnsInMarker {};

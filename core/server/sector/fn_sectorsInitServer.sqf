@@ -63,6 +63,9 @@ systemChat format ["First base: %1", _firstBase getVariable ["WL2_name", ""]];
 systemChat format ["Second base: %1", _secondBase getVariable ["WL2_name", ""]];
 #endif
 
+createMarker ["respawn_west", getPosATL _firstBase];
+createMarker ["respawn_east", getPosATL _secondBase];
+
 missionNamespace setVariable ["WL2_base1", _firstBase, true];
 missionNamespace setVariable ["WL2_base2", _secondBase, true];
 waitUntil {!isNil "WL2_base1" && {!isNil "WL2_base2"}};

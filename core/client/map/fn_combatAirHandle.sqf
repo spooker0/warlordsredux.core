@@ -8,24 +8,46 @@ waitUntil {
     _combatAirActive
 };
 
-if (isDedicated) exitWith {
-    while { _combatAirActive } do {
-        uiSleep 20;
+private _startTime = serverTime;
+if (isServer) then {
+    [_sector, _side] spawn {
+        params ["_sector", "_side"];
 
-        _combatAirActive = _sector getVariable ["WL2_combatAirActive", false];
-        if (!_combatAirActive) then {
-            break;
-        };
+        private _combatAirActive = true;
+        private _sectorArea = [
+            getPosASL _sector,
+            WL_COMBAT_AIR_RADIUS,
+            WL_COMBAT_AIR_RADIUS,
+            0,
+            false
+        ];
 
-        private _independentAircraft = vehicles select {
-            independent == [_x] call WL2_fnc_getAssetSide;
+        while { _combatAirActive } do {
+            uiSleep 10;
+
+            _combatAirActive = _sector getVariable ["WL2_combatAirActive", false];
+            if (!_combatAirActive) then {
+                break;
+            };
+
+            private _independentAircraft = vehicles select {
+                independent == [_x] call WL2_fnc_getAssetSide
+            } select {
+                alive _x;
+            } select {
+                _x isKindOf "Air";
+            } select {
+                _x inArea _sectorArea
+            };
+
+            {
+                [_x, _sector, false] spawn DIS_fnc_combatAirPatrol;
+            } forEach _independentAircraft;
         };
-        {
-            [_x, _sector] spawn DIS_fnc_combatAirPatrol;
-        } forEach _independentAircraft;
     };
 };
 
+if (isDedicated) exitWith {};
 if (BIS_WL_playerSide == _side) exitWith {};
 
 private _responseTimeEstimate = -1;
@@ -39,8 +61,8 @@ private _endEffect = {
 
 private _sectorArea = [
     getPosASL _sector,
-    WL_RADIUS_COMBAT_AIR,
-    WL_RADIUS_COMBAT_AIR,
+    WL_COMBAT_AIR_RADIUS,
+    WL_COMBAT_AIR_RADIUS,
     0,
     false
 ];
@@ -71,22 +93,23 @@ while { _combatAirActive } do {
     };
 
     private _altitude = _assetPos # 2;
-    if (_altitude < 250) then {
+    if (_altitude < WL_COMBAT_AIR_MINALT) then {
         call _endEffect;
         continue;
     };
 
     if (_responseTimeEstimate < 0) then {
         private _responseTime = if (_warned) then {
-            10
+            5
         } else {
-            25
+            private _timeSinceStart = serverTime - _startTime;
+            45 min ((45 - _timeSinceStart) max 5)
         };
         _responseTimeEstimate = serverTime + _responseTime;
     };
 
     if (!_warned) then {
-        ["Enemy combat air detected"] call WL2_fnc_smoothText;
+        ["Enemy combat air detected."] call WL2_fnc_smoothText;
         _warned = true;
     };
 
@@ -100,7 +123,7 @@ while { _combatAirActive } do {
     _warningTimer ctrlSetText format ["%1", round _timeRemaining];
 
     if (_timeRemaining <= 0) then {
-        [_asset, _sector] spawn DIS_fnc_combatAirPatrol;
+        [_asset, _sector, true] spawn DIS_fnc_combatAirPatrol;
         _responseTimeEstimate = -1;
     };
 };

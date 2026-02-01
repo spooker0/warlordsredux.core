@@ -7,6 +7,12 @@ if !(isServer) exitWith {};
 _asset = createVehicle [_class, [_posX, _posY, _posZ - 50], [], 0, "CAN_COLLIDE"];
 _asset setVectorDirAndUp _direction;
 
+private _assetMass = WL_ASSET(_orderedClass, "mass", 0);
+if (_assetMass > 0) then {
+	_asset setVariable ["WL2_massDefault", _assetMass, true];
+	_asset setMass _assetMass;
+};
+
 private _isInWaterSector = count (BIS_WL_allSectors select {
 	_pos inArea (_x getVariable "objectAreaComplete") && _x getVariable ["WL2_isAircraftCarrier", false];
 }) > 0 || {

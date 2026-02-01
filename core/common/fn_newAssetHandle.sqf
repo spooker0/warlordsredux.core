@@ -130,6 +130,7 @@ if (_asset isKindOf "Man") then {
 		case "B_Heli_Transport_01_F";
 		case "B_Heli_Transport_01_UP_F";
 		case "B_Heli_Transport_03_F";
+		case "B_Heli_Transport_03_supply_F";
 		case "B_Heli_Transport_01_pylons_F";
 		case "B_Heli_Attack_01_dynamicLoadout_F";
 		case "B_Heli_Attack_01_pylons_dynamicLoadout_F";
@@ -137,6 +138,7 @@ if (_asset isKindOf "Man") then {
 		case "O_Heli_Light_02_dynamicLoadout_F";
 		case "O_Heli_Transport_04_F";
 		case "O_Heli_Transport_02_F";
+		case "O_Heli_Transport_02_supply_F";
 		case "O_Heli_Transport_02_ATGM_F";
 		case "O_Heli_Attack_02_dynamicLoadout_F";
 		case "I_Heli_Transport_02_F": {
@@ -270,6 +272,12 @@ if (_asset isKindOf "Man") then {
 		[_asset] remoteExec ["WL2_fnc_setupMiniMortarAction", 0, true];
 	};
 
+	private _mineClear = WL_ASSET(_assetActualType, "mineClear", 0);
+	if (_mineClear > 0) then {
+		_asset setVariable ["WL2_mineClearCharges", _mineClear, true];
+		[_asset, _mineClear] remoteExec ["WL2_fnc_mineClearAction", 0, true];
+	};
+
 	if (WL_ASSET(_assetActualType, "smartMineAP", 0) > 0 || WL_ASSET(_assetActualType, "smartMineAT", 0) > 0) then {
 		_asset setVariable ["WL2_isAdvancedMines", true, true];
 		[_asset] spawn WL2_fnc_smartMine;
@@ -291,9 +299,10 @@ if (_asset isKindOf "Man") then {
 	// 	[_asset] remoteExec ["WL2_fnc_smokeCurtainAction", 0, true];
 	// };
 
-	// if (_asset isKindOf "Air") then {
+	if (_asset isKindOf "Air" && !unitIsUAV _asset) then {
 		// [_asset] remoteExec ["WL2_fnc_airRearmAction", 0, true];
-	// };
+		[_asset] remoteExec ["WL2_fnc_airWreckHandler", 0];
+	};
 
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 	if (unitIsUAV _asset) then {

@@ -167,13 +167,6 @@ private _fastTravelArr = [
 		"\A3\Data_F_Warlords\Data\preview_ft_owned.jpg",
 		localize "STR_A3_WL_menu_fasttravel_info"
 	], [
-		"FTConflict",
-		WL_COST_FTCONTESTED,
-		[],
-		localize "STR_A3_WL_menu_fasttravel_conflict",
-		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-		localize "STR_A3_WL_menu_fasttravel_info"
-	], [
 		"FTAirAssault",
 		WL_COST_AIRASSAULT,
 		[],
@@ -232,6 +225,17 @@ private _fastTravelArr = [
 	]
 ];
 
+#if WL_FASTTRAVEL_CONFLICT
+_strategyArr pushBack [
+	"FTConflict",
+	WL_COST_FTCONTESTED,
+	[],
+	localize "STR_A3_WL_menu_fasttravel_conflict",
+	"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
+	localize "STR_A3_WL_menu_fasttravel_info"
+];
+#endif
+
 _purchaseable pushBack _fastTravelArr;
 
 private _strategyArr = [
@@ -248,7 +252,7 @@ private _strategyArr = [
 		[],
 		"Combat air patrol",
 		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
-		"Call in a temporary combat air patrol to assist your team's air defense over the selected airfield sector. Enemy aircraft that enter the marked map area while flying above 250m altitude will be given 10-25 seconds to leave before being automatically engaged by lethal air-to-air assets. Recommended to augment with short range air defenses and to use this opportunity to take off with air superiority assets."
+		"Call in a temporary combat air patrol to assist your team's air defense over the selected airbase/helipad sector. Enemy aircraft that enter the marked map area while flying above 1 km altitude will be given 45 seconds to leave before being automatically engaged by lethal air-to-air assets. Recommended to augment with short range air defenses and to use this opportunity to take off with air superiority assets."
 	], [
 		"FundsTransfer",
 		WL_COST_FUNDTRANSFER,
@@ -351,57 +355,57 @@ private _strategyArr = [
 ];
 
 #if WL_PERF_TEST
-	_strategyArr pushBack [
-		"StressTestSector",
-		0,
-		[],
-		"Stress test: assets in current sector",
-		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"Order up to 50 vehicles in current sector to test performance under stress."
-	];
-	_strategyArr pushBack [
-		"StressTestMap",
-		0,
-		[],
-		"Stress test: assets in every sector",
-		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"Order up to 5 vehicles in every sector to test performance under stress."
-	];
-	_strategyArr pushBack [
-		"StressTestKillfeed",
-		0,
-		[],
-		"Stress test: killfeed",
-		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"Add some random killfeed items."
-	];
-	_strategyArr pushBack [
-		"StressTestSpawns",
-		0,
-		[],
-		"Stress test: show sector spawns",
-		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"Show all possible sector spawns."
-	];
-	_strategyArr pushBack [
-		"TestRebalance",
-		0,
-		[],
-		"Test: rebalance me",
-		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"Rebalance me to the other team."
-	];
+_strategyArr pushBack [
+	"StressTestSector",
+	0,
+	[],
+	"Stress test: assets in current sector",
+	"\A3\Data_F_Warlords\Data\preview_empty.jpg",
+	"Order up to 50 vehicles in current sector to test performance under stress."
+];
+_strategyArr pushBack [
+	"StressTestMap",
+	0,
+	[],
+	"Stress test: assets in every sector",
+	"\A3\Data_F_Warlords\Data\preview_empty.jpg",
+	"Order up to 5 vehicles in every sector to test performance under stress."
+];
+_strategyArr pushBack [
+	"StressTestKillfeed",
+	0,
+	[],
+	"Stress test: killfeed",
+	"\A3\Data_F_Warlords\Data\preview_empty.jpg",
+	"Add some random killfeed items."
+];
+_strategyArr pushBack [
+	"StressTestSpawns",
+	0,
+	[],
+	"Stress test: show sector spawns",
+	"\A3\Data_F_Warlords\Data\preview_empty.jpg",
+	"Show all possible sector spawns."
+];
+_strategyArr pushBack [
+	"TestRebalance",
+	0,
+	[],
+	"Test: rebalance me",
+	"\A3\Data_F_Warlords\Data\preview_empty.jpg",
+	"Rebalance me to the other team."
+];
 #endif
 
 #if WL_FACTION_THREE_ENABLED
-	_strategyArr pushBack [
-		"SwitchToGreen",
-		0,
-		[],
-		"Switch to green",
-		"\a3\data_f\flags\flag_green_co.paa",
-		"Switch to Green side"
-	];
+_strategyArr pushBack [
+	"SwitchToGreen",
+	0,
+	[],
+	"Switch to green",
+	"\a3\data_f\flags\flag_green_co.paa",
+	"Switch to Green side"
+];
 #endif
 
 _strategyArr = [_strategyArr, [], { _x # 3 }, "ASCEND"] call BIS_fnc_sortBy;

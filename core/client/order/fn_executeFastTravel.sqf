@@ -27,7 +27,12 @@ private _strongholdHasSpot = false;
 
 switch (_fastTravelMode) do {
 	case 0: {
-		_destination = selectRandom ([BIS_WL_targetSector] call WL2_fnc_findSpawnsInSector);
+		private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
+		if (_homeBase == BIS_WL_targetSector) then {
+			_destination = _homeBase modelToWorld [0, 0, 0];
+		} else {
+			_destination = selectRandom ([BIS_WL_targetSector] call WL2_fnc_findSpawnsInSector);
+		};
 	};
 	case 1: {
 		_destination = selectRandom ([_marker] call WL2_fnc_findSpawnsInMarker);

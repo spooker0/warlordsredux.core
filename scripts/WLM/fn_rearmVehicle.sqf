@@ -52,6 +52,10 @@ if (_asset getVariable ["WL2_smartMinesAP", -1] != -1) then {
     _asset setVariable ["WL2_smartMinesAP", WL_ASSET(_assetActualType, "smartMineAP", 0), true];
 };
 
+if (_asset getVariable ["WL2_mineClearCharges", -1] != -1) then {
+    _asset setVariable ["WL2_mineClearCharges", WL_ASSET(_assetActualType, "mineClear", 0), true];
+};
+
 private _loadedItem = WL_ASSET(_assetActualType, "loaded", "");
 if (_loadedItem != "") then {
     _asset setVariable ["WL2_deployCrates", 1, true];

@@ -12,6 +12,14 @@ switch (_conditionName) do {
             "";
         };
     };
+    case "fastTravelFrontline": {
+        private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
+        if (_homeBase == _target) then {
+            "";
+        } else {
+            "ok";
+        };
+    };
     case "fastTravelHome": {
         private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
         if (_homeBase == _target) then {
@@ -50,35 +58,37 @@ switch (_conditionName) do {
         if (_target in _scanningSectors) exitWith { "Sector is already being scanned."};
 
         private _lastScanEligible = serverTime - WL_COOLDOWN_SCAN;
-        private _lastScanned = _target getVariable ["WL2_lastScanned", -9999];
-        if (_lastScanned > _lastScanEligible) exitWith { "Sector scan is on cooldown." };
+        private _lastScannedVar = format ["WL2_lastScanned_%1", BIS_WL_playerSide];
+        private _lastScan = _target getVariable [_lastScannedVar, -9999];
+
+        if (_lastScan > _lastScanEligible) exitWith { "Sector scan is on cooldown." };
 
         "ok";
     };
     case "combatAirPatrol": {
         private _airfieldSectors = (BIS_WL_sectorsArray # 2) select {
             private _services = _x getVariable ["WL2_services", []];
-            "A" in _services;
+            "H" in _services;
         };
         if !(_target in _airfieldSectors) exitWith { "" };
 
         private _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
-        if (_combatAirActive) exitWith { "Combat air patrol is already active for this airfield." };
+        if (_combatAirActive) exitWith { "Combat air patrol is already active for this airbase." };
 
         private _nextCombatAirTime = _target getVariable ["WL2_nextCombatAir", -9999];
-        if (_nextCombatAirTime > serverTime) exitWith { "Combat air patrol is on cooldown for this airfield." };
+        if (_nextCombatAirTime > serverTime) exitWith { "Combat air patrol is on cooldown for this airbase." };
 
         "ok";
     };
     case "combatAirPatrolDebug": {
         private _airfieldSectors = (BIS_WL_sectorsArray # 2) select {
             private _services = _x getVariable ["WL2_services", []];
-            "A" in _services;
+            "H" in _services;
         };
         if !(_target in _airfieldSectors) exitWith { "" };
 
         private _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
-        if (_combatAirActive) exitWith { "Combat air patrol is already active for this airfield." };
+        if (_combatAirActive) exitWith { "Combat air patrol is already active for this airbase." };
 
         "ok";
     };
@@ -169,26 +179,6 @@ switch (_conditionName) do {
         if (surfaceIsWater _position && _position # 2 < 5) exitWith { "AI is in water." };
         "ok";
     };
-    case "fastTravelStronghold": {
-        private _findIsStronghold = (BIS_WL_sectorsArray # 2) select {
-            (_x getVariable ["WL_stronghold", objNull]) == _target
-        };
-        if (count _findIsStronghold > 0) then {
-            "ok";
-        } else {
-            "";
-        };
-    };
-    case "fastTravelNearStronghold": {
-        private _findIsStronghold = (BIS_WL_sectorsArray # 2) select {
-            (_x getVariable ["WL_stronghold", objNull]) == _target
-        };
-        if (count _findIsStronghold > 0) then {
-            "ok";
-        } else {
-            "";
-        };
-    };
     case "fastTravelStrongholdTarget": {
         private _findIsStronghold = (BIS_WL_sectorsArray # 2) select {
             !isNull (_x getVariable ["WL_stronghold", objNull]) && _x == _target
@@ -277,6 +267,20 @@ switch (_conditionName) do {
 
         "ok";
     };
+    case "upgradeFOB": {
+        private _fobOwner = _target getVariable ["WL2_forwardBaseOwner", sideUnknown];
+        if (_fobOwner != BIS_WL_playerSide) exitWith { "" };
+
+        private _isUpgraded = _target getVariable ["WL2_forwardBaseUpgraded", false];
+        if (_isUpgraded) exitWith { "" };
+
+        if (!alive _target) exitWith { "Forward base has been destroyed." };
+
+        private _supplies = _target getVariable ["WL2_forwardBaseSupplies", -1];
+        if (_supplies < WL_FOB_UPGRADE_COST) exitWith { format ["Need %1 supplies to upgrade forward base to airbase.", WL_FOB_UPGRADE_COST] };
+
+        "ok";
+    };
     case "repairStronghold": {
         private _strongholdSector = _target getVariable ["WL_strongholdSector", objNull];
         if (isNull _strongholdSector) exitWith { "" };
@@ -292,6 +296,20 @@ switch (_conditionName) do {
 
         private _canRepairTime = _target getVariable ["WL2_canRepairTime", 0];
         if (serverTime < _canRepairTime) exitWith { "Stronghold damaged too recently for repairs." };
+
+        "ok";
+    };
+    case "designateTeamPriority": {
+        private _isSquadLeader = ["isSquadLeader", [getPlayerID player]] call SQD_fnc_query;
+        if (!_isSquadLeader) exitWith {
+            "Must be squad leader to designate team priority.";
+        };
+
+        private _teamPriorityVar = format ["WL2_teamPriority_%1", BIS_WL_playerSide];
+        private _currentPriority = missionNamespace getVariable [_teamPriorityVar, objNull];
+        if (_target == _currentPriority) exitWith {
+            "This is already designated as your team's priority target.";
+        };
 
         "ok";
     };

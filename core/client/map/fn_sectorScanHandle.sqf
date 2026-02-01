@@ -23,6 +23,11 @@ private _sensors = listVehicleSensors _uav;
     _uav enableVehicleSensor [_sensorClass, false];
 } forEach _sensors;
 
+private _minesInSector = allMines inAreaArray _sectorArea;
+{
+    _side revealMine _x;
+} forEach _minesInSector;
+
 waitUntil {
     uiSleep 1;
 
@@ -33,7 +38,7 @@ waitUntil {
     } forEach _allDetected;
 
     _sector setVariable ["WL2_detectedUnits", _allDetected];
-    _sector setVariable ["WL2_lastScanned", serverTime];
+
     _uav setVariable ["WL2_accessControl", 7];
 
     player disableUAVConnectability [_uav, true];

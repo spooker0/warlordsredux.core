@@ -13,7 +13,7 @@ private _deployActionId = _asset addAction [
             playSound "AddItemFailed";
         };
 
-        private _eligibilityQuery = [_asset, _caller, false] call WL2_fnc_deployableEligibility;
+        private _eligibilityQuery = [_asset, _caller, false, _deployActionId] call WL2_fnc_deployableEligibility;
         _asset setVariable ["WL2_loadingAsset", true, true];
 
         private _assetLoadedItem = _asset getVariable ["WL2_loadedItem", objNull];
@@ -54,30 +54,26 @@ private _deployActionId = _asset addAction [
 
                 private _offset = _deploymentResult # 2;
                 [false, [_asset, _assetLoadedItem, _offset, _position, _direction]] remoteExec ["WL2_fnc_attachDetach", _assetLoadedItem];
+
+                playSoundUI ["assemble_target"];
             };
         };
 	},
 	[],
-	5,
+	3,
 	false,
 	true,
 	"",
-	"([_target, _this, false] call WL2_fnc_deployableEligibility) # 0",
+	"([_target, _this, false, _actionId] call WL2_fnc_deployableEligibility) # 0",
 	15,
 	false
 ];
 
-[_asset, _deployActionId] spawn {
-    params ["_asset", "_deployActionId"];
+[_asset] spawn {
+    params ["_asset"];
     while { alive _asset } do {
         private _assetLoadedItem = _asset getVariable ["WL2_loadedItem", objNull];
         private _hasLoad = !isNull _assetLoadedItem;
-
-        private _actionText = if (_hasLoad) then {
-            "Unload deployable";
-        } else {
-            "Load deployable";
-        };
 
         if (_hasLoad) then {
             if (isAutonomous _assetLoadedItem) then {
@@ -90,14 +86,6 @@ private _deployActionId = _asset addAction [
                 moveOut _x;
             } forEach (crew _assetLoadedItem);
         };
-
-        private _actionIcon = if (_hasLoad) then {
-            '\A3\ui_f\data\map\markers\handdrawn\end_CA.paa'
-        } else {
-            '\A3\ui_f\data\map\markers\handdrawn\start_CA.paa'
-        };
-
-        _asset setUserActionText [_deployActionId, _actionText, format ["<img size='3' image='%1'/>", _actionIcon]];
         uiSleep 1;
     };
 };

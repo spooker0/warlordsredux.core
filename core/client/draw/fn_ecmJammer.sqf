@@ -33,6 +33,7 @@ private _charges = _asset getVariable ["WL2_ecmCharges", -100];
 if (_charges == -100) then {
     _asset setVariable ["WL2_ecmCharges", _ecmCharges];
 };
+_asset setVariable ["WL2_ecmMaxCharges", _ecmCharges];
 
 uiNamespace setVariable ["WL2_ECMMunitions", []];
 uiNamespace setVariable ["WL2_ECMMunitionLocks", []];
@@ -68,7 +69,9 @@ private _ecmDraw = addMissionEventHandler ["Draw3D", {
             0.035,
             "RobotoCondensedBold",
             "center",
-            true
+            true,
+            0,
+            0.015
         ];
     } forEach _ecmMunitions;
 

@@ -24,6 +24,8 @@ private _captureText = _display displayCtrl 2109;
 
 private _notificationControl = _display displayCtrl 2110;
 
+private _teamPriorityControl = _display displayCtrl 2111;
+
 private _getTeamColorHex = {
 	params ["_team"];
 	['#004d99', '#7f0400', '#007f04'] # ([west, east, independent] find _team);
@@ -147,6 +149,40 @@ while { !BIS_WL_missionEnd } do {
 	} else {
 		_notificationControl ctrlSetStructuredText parseText "";
 	};
+
+	private _teamPriorityVar = format ["WL2_teamPriority_%1", _side];
+	private _teamPriorityTypeVar = format ["WL2_teamPriorityType_%1", _side];
+	private _teamPriority = missionNamespace getVariable [_teamPriorityVar, objNull];
+	private _teamPriorityType = missionNamespace getVariable [_teamPriorityTypeVar, ""];
+
+	private _travelResult = [false] call WL2_fnc_travelTeamPriority;
+	private _travelPriorityText = if (_travelResult) then {
+		switch (_teamPriorityType) do {
+			case "asset": {
+				private _assetTypeName = [_teamPriority] call WL2_fnc_getAssetTypeName;
+				_assetTypeName
+			};
+			case "fob": {
+				"FORWARD BASE"
+			};
+			case "stronghold": {
+				"STRONGHOLD"
+			};
+			case "sector": {
+				private _sectorName = _teamPriority getVariable ["WL2_name", "UNKNOWN"];
+				_sectorName
+			};
+			default {
+				"NONE"
+			};
+		};
+	} else {
+		"NONE";
+	};
+	_teamPriorityControl ctrlSetStructuredText parseText format [
+		"<t shadow='2' size='0.85' align='left'>TEAM PRIORITY: %1</t>",
+		toUpper _travelPriorityText
+	];
 
 	private _visitedSectorId = BIS_WL_allSectors findIf { player inArea (_x getVariable "objectAreaComplete") };
 	if (_visitedSectorId == -1) then {

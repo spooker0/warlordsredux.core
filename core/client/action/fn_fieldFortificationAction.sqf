@@ -76,7 +76,7 @@ private _actionId = _freshTent addAction [
                 };
 
                 private _offset = _deploymentResult # 2;
-                [player, "orderAsset", "vehicle", _position, _sandbags, _direction, true] remoteExec ["WL2_fnc_handleClientRequest", 2];
+                [player, "orderAsset", "vehicle", _position, _sandbags, _direction, true, true] remoteExec ["WL2_fnc_handleClientRequest", 2];
             } else {
                 ["Construction cancelled."] call WL2_fnc_smoothText;
             };

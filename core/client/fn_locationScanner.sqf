@@ -359,6 +359,11 @@ while { !BIS_WL_missionEnd } do {
             _x isKindOf "Man"
         };
 
+        private _minesInStronghold = allMines inAreaArray _strongholdArea;
+        {
+            _side revealMine _x;
+        } forEach _minesInStronghold;
+
         if (count _scannedUnits > 0) then {
             _stronghold setVariable ["WL2_strongholdIntruders", true];
             if (serverTime >= _strongholdNextWarn) then {
@@ -394,6 +399,11 @@ while { !BIS_WL_missionEnd } do {
             } else {
                 _forwardBase setVariable ["WL2_forwardBaseIntruders", false];
             };
+
+            private _minesInForwardBase = allMines inAreaArray _forwardBaseArea;
+            {
+                _side revealMine _x;
+            } forEach _minesInForwardBase;
         } else {
             private _sectorsInRange = _forwardBase getVariable ["WL2_forwardBaseSectors", []];
             _sectorsInRange = _sectorsInRange select {

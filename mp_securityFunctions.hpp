@@ -22,6 +22,7 @@ class CfgRemoteExec {
 		class SQD_fnc_server {allowedTargets = 2;};
 		class WL2_fnc_addMissileToMag {allowedTargets = 0;};
 		class WL2_fnc_airRearmAction {allowedTargets = 0;};
+		class WL2_fnc_airWreckHandler {allowedTargets = 0;};
 		class WL2_fnc_attachDetach {allowedTargets = 0;};
 		class WL2_fnc_catapultAction {allowedTargets = 0;};
 		class WL2_fnc_claimAction {allowedTargets = 1;};
@@ -44,6 +45,7 @@ class CfgRemoteExec {
 		class WL2_fnc_killNotify {allowedTargets = 0;};
 		class WL2_fnc_killRewardHandle {allowedTargets = 2;};
 		class WL2_fnc_lagMessageHandler {allowedTargets = 2;};
+		class WL2_fnc_mineClearAction {allowedTargets = 0;};
 		class WL2_fnc_missileDestroy {allowedTargets = 2;};
 		class WL2_fnc_mutePlayer {allowedTargets = 0;};
 		class WL2_fnc_particleEffect {allowedTargets = 0;};

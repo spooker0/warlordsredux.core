@@ -74,14 +74,14 @@ private _menuButtonIconMap = createHashMapFromArray [
     ["cycle-waypoint", "A3\ui_f\data\map\markers\military\box_CA.paa"],
     ["ew", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
     ["fortify-stronghold", "A3\ui_f\data\map\mapcontrol\Ruin_CA.paa"],
-    ["ft", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
     ["ft-ai", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
-    ["ft-air-assault", "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa"],
     ["ft-asset", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
     ["ft-conflict", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
     ["ft-fob", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
     ["ft-fob-test", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
     ["ft-home", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
+    ["ft-parachute", "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa"],
+    ["ft-regular", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
     ["ft-squad", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
     ["ft-squad-leader", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
     ["ft-stronghold", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
@@ -104,9 +104,10 @@ private _menuButtonIconMap = createHashMapFromArray [
     ["repair-stronghold", "a3\ui_f\data\igui\cfg\actions\repair_ca.paa"],
     ["sector-scan", "a3\drones_f\air_f_gamma\uav_02\data\ui\map_uav_02_ca.paa"],
     ["smart-mine-adjust", "a3\ui_f\data\map\vehicleicons\iconexplosiveuw_ca.paa"],
-    ["smart-mine-type", "a3\ui_f\data\map\vehicleicons\iconexplosiveuw_ca.paa"],
     ["target-altitude", "a3\ui_f\data\igui\cfg\simpletasks\types\Heli_ca.paa"],
     ["target-loiter-radius", "A3\ui_f\data\map\markers\military\circle_CA.paa"],
+	["team-designate", "a3\ui_f\data\igui\cfg\simpletasks\types\move_ca.paa"],
+	["upgrade-fob", "A3\ui_f\data\map\markers\military\flag_CA.paa"],
     ["vehicle-paradrop", "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa"]
 ];
 uiNamespace setVariable ["WL2_mapMenuButtonIcons", _menuButtonIconMap];

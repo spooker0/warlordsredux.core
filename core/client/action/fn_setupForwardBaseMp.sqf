@@ -1,6 +1,11 @@
 #include "includes.inc"
 params ["_forwardBase", "_startTime", "_endTime", "_side"];
 
+waitUntil {
+    uiSleep 1;
+    !isNil "BIS_WL_allSectors";
+};
+
 _forwardBase setVariable ["WL2_canDemolish", true];
 _forwardBase animateSource ["Terminal_source", 100, true];
 _forwardBase setVariable ["WL2_forwardBaseOwner", _side];

@@ -165,32 +165,6 @@ if (_operateAccess && WL_ASSET(_assetActualType, "smartMineAP", 0) > 0) then {
     private _smartDistanceText = format ["<t color='%1'>Trigger distance: %2m</t>", _detonationDistanceColor, _detonationDistance];
 
     [_asset, _targetId, "smart-mine-adjust", _smartDistanceText, [_smartMineNext, _smartMinePrevious], false] call WL2_fnc_addTargetMapButton;
-
-    private _smartMineTypeChange = {
-        params ["_asset"];
-        private _smartMineType = _asset getVariable ["WL2_smartMineType", 0];
-        private _newSmartMineType = (_smartMineType + 1) % 3;
-        _asset setVariable ["WL2_smartMineType", _newSmartMineType, true];
-        playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss"];
-
-        private _smartMineTypeText = switch (_newSmartMineType) do {
-            case 0: { "Trigger type: All" };
-            case 1: { "Trigger type: Anti-tank" };
-            case 2: { "Trigger type: Anti-personnel" };
-            default { "Trigger type: All" };
-        };
-        format ["<t color='#00ff00'>%1</t>", _smartMineTypeText];
-    };
-
-    private _smartMineType = _asset getVariable ["WL2_smartMineType", 0];
-    private _smartMineTypeText = switch (_smartMineType) do {
-        case 0: { "Trigger type: All" };
-        case 1: { "Trigger type: Anti-tank" };
-        case 2: { "Trigger type: Anti-personnel" };
-        default { "Trigger type: All" };
-    };
-    _smartMineTypeText = format ["<t color='#00ff00'>%1</t>", _smartMineTypeText];
-    [_asset, _targetId, "smart-mine-type", _smartMineTypeText, _smartMineTypeChange, false] call WL2_fnc_addTargetMapButton;
 };
 
 private _crewPosition = (fullCrew [_asset, "", true]) select {!("cargo" in _x)};
@@ -234,6 +208,11 @@ if (_canFastTravel) then {
         };
         [_asset] spawn WL2_fnc_executeFastTravelVehicle;
     }, true, "", [0, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
+
+    [_asset, _targetId, "team-designate", "Designate team priority", {
+        params ["_asset"];
+        [_asset, "asset"] call WL2_fnc_designateTeamPriority;
+    }, true, "designateTeamPriority", [0, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
 };
 
 if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
@@ -355,6 +334,37 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
             "Strategy"
         ]
     ] call WL2_fnc_addTargetMapButton;
+
+    private _upgradeFOBExecute = {
+        params ["_asset"];
+        private _upgradeCost = WL_FOB_UPGRADE_COST;
+        private _supplyFinal = (_asset getVariable ["WL2_forwardBaseSupplies", -1]) - _upgradeCost;
+        _asset setVariable ["WL2_forwardBaseSupplies", _supplyFinal, true];
+
+        playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Repair.wss", _asset, false, getPosASL _asset, 2, 1, 75];
+
+        _asset setVariable ["WL2_forwardBaseUpgraded", true, true];
+        _asset setVariable ["WL2_demolitionMaxHealth", 24, true];
+        _asset setVariable ["WL2_demolitionHealth", 24, true];
+    };
+    [
+        _asset, _targetId,
+        "upgrade-fob",
+        "Upgrade forward base",
+        _upgradeFOBExecute,
+        true,
+        "upgradeFOB",
+        [
+            0,
+            "UpgradeFOB",
+            "Strategy"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
+
+    [_asset, _targetId, "team-designate", "Designate team priority", {
+        params ["_asset"];
+        [_asset, "fob"] call WL2_fnc_designateTeamPriority;
+    }, true, "designateTeamPriority", [0, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
 
 #if WL_STRONGHOLD_DEBUG
     // Fast Travel FOB Test
@@ -481,193 +491,204 @@ private _fastTravelAIExecute = {
     ]
 ] call WL2_fnc_addTargetMapButton;
 
-// Fast Travel Stronghold Button
-private _fastTravelStrongholdExecute = {
-    params ["_asset"];
-    private _findSector = (BIS_WL_sectorsArray # 2) select {
-        (_x getVariable ["WL_stronghold", objNull]) == _asset
-    };
-    if (count _findSector == 0) exitWith {};
-
-    BIS_WL_targetSector = (_findSector # 0);
-    [5, ""] spawn WL2_fnc_executeFastTravel;
+private _findIsStronghold = (BIS_WL_sectorsArray # 2) select {
+    (_x getVariable ["WL_stronghold", objNull]) == _asset
 };
-[
-    _asset, _targetId,
-    "ft-stronghold",
-    "Fast travel stronghold",
-    _fastTravelStrongholdExecute,
-    true,
-    "fastTravelStronghold",
-    [
-        0,
-        "StrongholdFT",
-        "Fast Travel"
-    ]
-] call WL2_fnc_addTargetMapButton;
 
-// Fast Travel Near Stronghold Button
-private _fastTravelNearStrongholdExecute = {
-    params ["_asset"];
-    private _findSector = (BIS_WL_sectorsArray # 2) select {
-        (_x getVariable ["WL_stronghold", objNull]) == _asset
-    };
-    if (count _findSector == 0) exitWith {};
+if (count _findIsStronghold > 0) then {
+    // Fast Travel Stronghold Button
+    private _fastTravelStrongholdExecute = {
+        params ["_asset"];
+        private _findSector = (BIS_WL_sectorsArray # 2) select {
+            (_x getVariable ["WL_stronghold", objNull]) == _asset
+        };
+        if (count _findSector == 0) exitWith {};
 
-    BIS_WL_targetSector = (_findSector # 0);
-    [8, ""] spawn WL2_fnc_executeFastTravel;
-};
-[
-    _asset, _targetId,
-    "ft-stronghold-near",
-    "Fast travel near stronghold",
-    _fastTravelNearStrongholdExecute,
-    true,
-    "fastTravelNearStronghold",
-    [
-        0,
-        "StrongholdFTNear",
-        "Fast Travel"
-    ]
-] call WL2_fnc_addTargetMapButton;
-
-// Remove Stronghold button
-private _removeStrongholdExecute = {
-    params ["_asset"];
-    private _findSector = (BIS_WL_sectorsArray # 2) select {
-        (_x getVariable ["WL_stronghold", objNull]) == _asset
-    };
-    if (count _findSector == 0) exitWith {};
-    private _sector = (_findSector # 0);
-
-    private _sectorName = _sector getVariable ["WL2_name", ""];
-    private _message = format ["Are you sure you want to pay to remove the Sector Stronghold in %1?", _sectorName];
-    private _result = [_message, "Remove Sector Stronghold", "Remove", "Cancel"] call BIS_fnc_guiMessage;
-    if (!_result) exitWith {
-        playSoundUI ["AddItemFailed"];
-    };
-
-    [_sector] call WL2_fnc_removeStronghold;
-    [player, "buyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
-};
-[
-    _asset, _targetId,
-    "remove-stronghold",
-    "<t color='#ff0000'>Remove stronghold</t>",
-    _removeStrongholdExecute,
-    true,
-    "removeStronghold",
-    [
-        WL_COST_STRONGHOLD,
-        "RemoveStronghold",
-        "Strategy"
-    ]
-] call WL2_fnc_addTargetMapButton;
-
-private _repairStrongholdExecute = {
-    params ["_asset"];
-    private _maxHealth = _asset getVariable ["WL2_demolitionMaxHealth", 8];
-    _asset setVariable ["WL2_demolitionHealth", _maxHealth, true];
-    playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Repair.wss", _asset, false, getPosASL _asset, 2, 1, 75];
-
-    [player, "repairStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
-};
-[
-    _asset, _targetId,
-    "repair-stronghold",
-    "Repair stronghold",
-    _repairStrongholdExecute,
-    true,
-    "repairStronghold",
-    [
-        WL_COST_STRONGHOLD / 2,
-        "RepairStronghold",
-        "Strategy"
-    ]
-] call WL2_fnc_addTargetMapButton;
-
-// Fortify Stronghold button
-private _fortifyStrongholdExecute = {
-    params ["_asset"];
-    private _findSector = (BIS_WL_sectorsArray # 2) select {
-        (_x getVariable ["WL_stronghold", objNull]) == _asset
-    };
-    private _sector = (_findSector # 0);
-    private _fortificationTime = _sector getVariable ["WL_fortificationTime", -1];
-    if (_fortificationTime < serverTime) exitWith {};
-    private _fortificationTimeRemaining = _fortificationTime - serverTime;
-    _sector setVariable ["WL_fortificationTime", serverTime + _fortificationTimeRemaining / 5, true];
-
-#if WL_QUICK_CAPTURE
-    _sector setVariable ["WL_fortificationTime", serverTime + 10, true];
-#endif
-
-    _sector setVariable ["WL_strongholdFortified", true, true];
-
-    private _impactSounds = [
-        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_01.wss",
-        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_02.wss",
-        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_03.wss",
-        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_04.wss",
-        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_soft_01.wss",
-        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_soft_02.wss",
-        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_soft_03.wss",
-        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_01.wss",
-        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_02.wss",
-        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_03.wss",
-        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_04.wss",
-        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_01.wss",
-        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_02.wss",
-        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_03.wss",
-        "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_04.wss"
-    ];
-
-    for "_i" from 1 to 10 do {
-        playSound3D [selectRandom _impactSounds, player, false, getPosASL player, 2, 1, 200, 0];
-        uiSleep 0.3;
-    };
-
-    [player, "fortifyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
-};
-[
-    _asset, _targetId,
-    "fortify-stronghold",
-    "Fortify stronghold",
-    _fortifyStrongholdExecute,
-    true,
-    "fortifyStronghold",
-    [
-        WL_COST_FORTIFY,
-        "FortifyStronghold",
-        "Strategy"
-    ]
-] call WL2_fnc_addTargetMapButton;
-
-#if WL_STRONGHOLD_DEBUG
-// Fast Travel Stronghold Test
-private _fastTravelStrongholdTestExecute = {
-    params ["_asset"];
-    private _findSector = (BIS_WL_sectorsArray # 2) select {
-        (_x getVariable ["WL_stronghold", objNull]) == _asset
-    };
-    BIS_WL_targetSector = (_findSector # 0);
-    ["Testing Sector Stronghold spawns. Force respawn to end test."] call WL2_fnc_smoothText;
-    while { alive player } do {
+        BIS_WL_targetSector = (_findSector # 0);
         [5, ""] spawn WL2_fnc_executeFastTravel;
-        uiSleep 3;
     };
-};
-[
-    _asset, _targetId,
-    "ft-stronghold-test",
-    "Stronghold test fast travel",
-    _fastTravelStrongholdTestExecute,
-    true,
-    "fastTravelStronghold",
     [
-        0,
-        "StrongholdFT",
-        "Fast Travel"
-    ]
-] call WL2_fnc_addTargetMapButton;
-#endif
+        _asset, _targetId,
+        "ft-stronghold",
+        "Fast travel stronghold",
+        _fastTravelStrongholdExecute,
+        true,
+        "",
+        [
+            0,
+            "StrongholdFT",
+            "Fast Travel"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
+
+    // Fast Travel Near Stronghold Button
+    private _fastTravelNearStrongholdExecute = {
+        params ["_asset"];
+        private _findSector = (BIS_WL_sectorsArray # 2) select {
+            (_x getVariable ["WL_stronghold", objNull]) == _asset
+        };
+        if (count _findSector == 0) exitWith {};
+
+        BIS_WL_targetSector = (_findSector # 0);
+        [8, ""] spawn WL2_fnc_executeFastTravel;
+    };
+    [
+        _asset, _targetId,
+        "ft-stronghold-near",
+        "Fast travel near stronghold",
+        _fastTravelNearStrongholdExecute,
+        true,
+        "",
+        [
+            0,
+            "StrongholdFTNear",
+            "Fast Travel"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
+
+    // Remove Stronghold button
+    private _removeStrongholdExecute = {
+        params ["_asset"];
+        private _findSector = (BIS_WL_sectorsArray # 2) select {
+            (_x getVariable ["WL_stronghold", objNull]) == _asset
+        };
+        if (count _findSector == 0) exitWith {};
+        private _sector = (_findSector # 0);
+
+        private _sectorName = _sector getVariable ["WL2_name", ""];
+        private _message = format ["Are you sure you want to pay to remove the Sector Stronghold in %1?", _sectorName];
+        private _result = [_message, "Remove Sector Stronghold", "Remove", "Cancel"] call BIS_fnc_guiMessage;
+        if (!_result) exitWith {
+            playSoundUI ["AddItemFailed"];
+        };
+
+        [_sector] call WL2_fnc_removeStronghold;
+        [player, "buyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+    };
+    [
+        _asset, _targetId,
+        "remove-stronghold",
+        "<t color='#ff0000'>Remove stronghold</t>",
+        _removeStrongholdExecute,
+        true,
+        "removeStronghold",
+        [
+            WL_COST_STRONGHOLD,
+            "RemoveStronghold",
+            "Strategy"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
+
+    private _repairStrongholdExecute = {
+        params ["_asset"];
+        private _maxHealth = _asset getVariable ["WL2_demolitionMaxHealth", 8];
+        _asset setVariable ["WL2_demolitionHealth", _maxHealth, true];
+        playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Repair.wss", _asset, false, getPosASL _asset, 2, 1, 75];
+
+        [player, "repairStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+    };
+    [
+        _asset, _targetId,
+        "repair-stronghold",
+        "Repair stronghold",
+        _repairStrongholdExecute,
+        true,
+        "repairStronghold",
+        [
+            WL_COST_STRONGHOLD / 2,
+            "RepairStronghold",
+            "Strategy"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
+
+    // Fortify Stronghold button
+    private _fortifyStrongholdExecute = {
+        params ["_asset"];
+        private _findSector = (BIS_WL_sectorsArray # 2) select {
+            (_x getVariable ["WL_stronghold", objNull]) == _asset
+        };
+        private _sector = (_findSector # 0);
+        private _fortificationTime = _sector getVariable ["WL_fortificationTime", -1];
+        if (_fortificationTime < serverTime) exitWith {};
+        private _fortificationTimeRemaining = _fortificationTime - serverTime;
+        _sector setVariable ["WL_fortificationTime", serverTime + _fortificationTimeRemaining / 5, true];
+
+    #if WL_QUICK_CAPTURE
+        _sector setVariable ["WL_fortificationTime", serverTime + 10, true];
+    #endif
+
+        _sector setVariable ["WL_strongholdFortified", true, true];
+
+        private _impactSounds = [
+            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_01.wss",
+            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_02.wss",
+            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_03.wss",
+            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_04.wss",
+            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_soft_01.wss",
+            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_soft_02.wss",
+            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_soft_03.wss",
+            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_01.wss",
+            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_02.wss",
+            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_03.wss",
+            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_04.wss",
+            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_01.wss",
+            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_02.wss",
+            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_03.wss",
+            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_04.wss"
+        ];
+
+        for "_i" from 1 to 10 do {
+            playSound3D [selectRandom _impactSounds, player, false, getPosASL player, 2, 1, 200, 0];
+            uiSleep 0.3;
+        };
+
+        [player, "fortifyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+    };
+    [
+        _asset, _targetId,
+        "fortify-stronghold",
+        "Fortify stronghold",
+        _fortifyStrongholdExecute,
+        true,
+        "fortifyStronghold",
+        [
+            WL_COST_FORTIFY,
+            "FortifyStronghold",
+            "Strategy"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
+
+    [_asset, _targetId, "team-designate", "Designate team priority", {
+        params ["_asset"];
+        [_asset, "stronghold"] call WL2_fnc_designateTeamPriority;
+    }, true, "designateTeamPriority", [0, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
+
+    #if WL_STRONGHOLD_DEBUG
+    // Fast Travel Stronghold Test
+    private _fastTravelStrongholdTestExecute = {
+        params ["_asset"];
+        private _findSector = (BIS_WL_sectorsArray # 2) select {
+            (_x getVariable ["WL_stronghold", objNull]) == _asset
+        };
+        BIS_WL_targetSector = (_findSector # 0);
+        ["Testing Sector Stronghold spawns. Force respawn to end test."] call WL2_fnc_smoothText;
+        while { alive player } do {
+            [5, ""] spawn WL2_fnc_executeFastTravel;
+            uiSleep 3;
+        };
+    };
+    [
+        _asset, _targetId,
+        "ft-stronghold-test",
+        "Stronghold test fast travel",
+        _fastTravelStrongholdTestExecute,
+        true,
+        "fastTravelStronghold",
+        [
+            0,
+            "StrongholdFT",
+            "Fast Travel"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
+    #endif
+};

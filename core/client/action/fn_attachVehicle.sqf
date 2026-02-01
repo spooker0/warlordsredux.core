@@ -39,6 +39,12 @@ if (_isAttaching) then {
         ropeDestroy _x;
     } forEach _ropes;
 
+    private _slingDummyEnd = _asset getVariable ["WL2_slingDummyEnd", objNull];
+    if (!isNull _slingDummyEnd) then {
+        deleteVehicle _slingDummyEnd;
+        _asset setVariable ["WL2_slingDummyEnd", objNull, true];
+    };
+
     private _wasAutonomous = _childAsset getVariable ["WL2_autonomousBeforeLoad", false];
     [_childAsset, _wasAutonomous] remoteExec ["setAutonomous", 0];
 

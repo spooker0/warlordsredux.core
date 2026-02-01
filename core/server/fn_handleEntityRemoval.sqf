@@ -11,7 +11,9 @@ _unit setVariable ["WL2_alreadyHandled", true];
 
 private _children = _unit getVariable ["WL2_children", []];
 {
-    deleteVehicle _x;
+    if (alive _x) then {
+        _x setDamage [1, true, _killer, _instigator];
+    };
 } forEach _children;
 
 private _stats = missionNamespace getVariable ["WL_stats", createHashMap];

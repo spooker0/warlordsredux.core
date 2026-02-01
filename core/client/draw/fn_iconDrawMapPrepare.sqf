@@ -281,6 +281,13 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 	};
 	private _baseIconSize = if (_isLocked) then { 25 * _mapIconScale } else { 40 * _mapIconScale };
 
+	private _isUpgraded = _base getVariable ["WL2_forwardBaseUpgraded", false];
+	private _baseTypeText = if (_isUpgraded) then {
+		"Forward Airbase"
+	} else {
+		"Forward Base"
+	};
+
 	_drawIcons pushBack [
 		_baseIcon,
 		_baseColor,
@@ -288,7 +295,7 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		_baseIconSize,
 		_baseIconSize,
 		0,
-		format ["Forward Base %1", _baseText],
+		format ["%1 %2", _baseTypeText, _baseText],
 		0,
 		0.045 * _mapIconScale
 	];
@@ -487,8 +494,8 @@ private _combatAirSectors = _mapData getOrDefault ["combatAirSectors", []];
 
 	_drawEllipses pushBack [
 		_sectorPos,
-		WL_RADIUS_COMBAT_AIR,
-		WL_RADIUS_COMBAT_AIR,
+		WL_COMBAT_AIR_RADIUS,
+		WL_COMBAT_AIR_RADIUS,
 		0,
 		_mapColor,
 		_mapTexture
@@ -525,7 +532,7 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 	private _position = getPosASL _x;
 	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
 	private _showName = if (_x isKindOf "Building") then {
-		_x in _assetTargets
+		_x isKindOf "Camping_base_F" || _x in _assetTargets
 	} else { _draw };
 	_drawIcons pushBack [
 		[_x, _mapIconCache] call WL2_fnc_iconType,
@@ -543,6 +550,28 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 	_drawIconsSelectable pushBack _x;
 } forEach (_sideVehicles inAreaArray [_mapCenter, _mapBoundW, _mapBoundH, 0, true]);
 
+// Draw plane wrecks
+private _airWrecks = _mapData getOrDefault ["airWrecks", []];
+{
+	private _position = getPosASL _x;
+	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
+	private _assetTypeName = [_x] call WL2_fnc_getAssetTypeName;
+	_drawIcons pushBack [
+		"\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa",
+		[0, 0, 0, 1],
+		_position,
+		_size * _mapIconScale,
+		_size * _mapIconScale,
+		0,
+		format ["Securable Wreck (%1)", _assetTypeName],
+		1,
+		_iconTextSize * _mapIconScale,
+		"PuristaBold",
+		"right"
+	];
+} forEach (_airWrecks inAreaArray [_mapCenter, _mapBoundW, _mapBoundH, 0, true]);
+
+// Draw advanced SAMs
 private _advancedSams = _mapData getOrDefault ["advancedSams", []];
 {
 	private _position = getPosASL _x;

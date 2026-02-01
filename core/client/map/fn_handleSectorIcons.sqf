@@ -71,7 +71,8 @@ if ("H" in _services) then {
     _servicesText pushBack localize "STR_A3_WL_module_service_helipad";
 };
 
-private _lastScan = _sector getVariable ["WL2_lastScanned", -9999];
+private _lastScannedVar = format ["WL2_lastScanned_%1", _side];
+private _lastScan = _sector getVariable [_lastScannedVar, -9999];
 private _scanCD = (_lastScan + WL_COOLDOWN_SCAN - serverTime) max 0;
 private _currentScannedSectors = missionNamespace getVariable ["WL2_scanningSectors", []];
 private _isScanning = _sector in _currentScannedSectors;
@@ -257,8 +258,12 @@ private _singletonScriptHandle = [_sector, _map] spawn {
         };
     };
 
+    private _side = BIS_WL_playerSide;
+    private _lastScannedVar = format ["WL2_lastScanned_%1", _side];
+    private _lastScan = _sector getVariable [_lastScannedVar, -9999];
+
     if (_scanSelectionActive) exitWith {
-        if ((_sector getVariable ["WL2_lastScanned", -9999]) < serverTime - WL_COOLDOWN_SCAN) then {
+        if (_lastScan < serverTime - WL_COOLDOWN_SCAN) then {
             BIS_WL_targetSector = _sector;
             playSound "AddItemOK";
         } else {

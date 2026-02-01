@@ -1,5 +1,5 @@
 #include "includes.inc"
-params [["_sender", objNull, [objNull]], ["_action", "", [""]], "_param1", "_param2", "_param3", "_param4", "_param5"];
+params [["_sender", objNull, [objNull]], ["_action", "", [""]], "_param1", "_param2", "_param3", "_param4", "_param5", "_param6"];
 
 if (isNull _sender) exitWith {};
 if !(isServer) exitWith {};
@@ -33,7 +33,14 @@ private _deductFunds = {
 };
 
 private _actionCost = switch (_action) do {
-	case "orderAsset" : { WL_ASSET(_param3, "cost", 50001) };
+	case "orderAsset" : {
+		private _paidFor = if (isNil "_param6") then { false } else { _param6 };
+		if (_paidFor) then {
+			0
+		} else {
+			WL_ASSET(_param3, "cost", 50001)
+		};
+	};
 	case "resetVehicle" : { 10 };
 	case "equip" : { _param1 max 0 };
 	case "buyStronghold" : { WL_COST_STRONGHOLD };
@@ -180,8 +187,8 @@ if (_action == "scan") exitWith {
 	_waypoint setWaypointLoiterType "CIRCLE";
 
 	[_sector, _uav] remoteExec ["WL2_fnc_sectorScanHandle", _side];
-	[_sector, _uav] spawn {
-		params ["_sector", "_uav"];
+	[_sector, _uav, _side] spawn {
+		params ["_sector", "_uav", "_side"];
 
 		while {
 			alive _uav &&
@@ -194,7 +201,9 @@ if (_action == "scan") exitWith {
 		if (!isNull _uav) then {
 			deleteVehicle _uav;
 		};
-		_sector setVariable ["WL2_lastScanned", serverTime, true];
+
+		private _lastScannedVar = format ["WL2_lastScanned_%1", _side];
+		_sector setVariable [_lastScannedVar, serverTime, true];
 	};
 };
 
@@ -322,6 +331,14 @@ if (_action == "kill") exitWith {
 	_sender setDamage 1;
 };
 
+if (_action == "demine") exitWith {
+	private _asset = _param1;
+	private _targets = _param2;
+	{
+		_x setDamage [1, true, _asset, _sender];
+	} forEach _targets;
+};
+
 if (_action == "secure") exitWith {
 	private _target = _param1;
 	_target setDamage 1;
@@ -348,6 +365,11 @@ if (_action == "updateZeus") exitWith {
 };
 
 if (_action == "sectorReward") exitWith {
+	private _reward = _param1;
+	[_reward] call _addFunds;
+};
+
+if (_action == "secureAircraft") exitWith {
 	private _reward = _param1;
 	[_reward] call _addFunds;
 };

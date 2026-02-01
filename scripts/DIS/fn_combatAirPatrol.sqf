@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_target", "_sector"];
+params ["_target", "_sector", "_avoidable"];
 
 private _sectorPos = getPosASL _sector;
 private _distanceToTop = _sectorPos # 1;
@@ -59,12 +59,18 @@ if (!isNull _combatAirRequester) then {
 while { alive _projectile && alive _target } do {
     _projectile setMissileTarget [_target, true];
 
-    _projectile setVelocityModelSpace [0, 1200, 0];
+    _projectile setVelocityModelSpace [0, 1800, 0];
     private _currentPosition = getPosASL _projectile;
     private _finalPosition = getPosASL _target;
 
     private _targetVectorDirAndUp = [_currentPosition, _finalPosition] call BIS_fnc_findLookAt;
     _projectile setVectorDirAndUp _targetVectorDirAndUp;
+
+    private _projectileAGL = _projectile modelToWorld [0, 0, 0];
+    if (_projectileAGL # 2 < WL_COMBAT_AIR_MINALT && _avoidable) then {
+        triggerAmmo _projectile;
+        break;
+    };
 
     if (_target distance _projectile < 100) then {
         private _detonationPoint = getPosASL _target;

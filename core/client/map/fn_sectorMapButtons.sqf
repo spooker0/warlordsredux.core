@@ -3,6 +3,39 @@ params ["_sector", "_targetId"];
 private _sectorName = _sector getVariable ["WL2_name", "Sector"];
 _sector setVariable ["WL2_mapButtonText", _sectorName];
 
+private _sectorFtAsset = [_sector, true] call WL2_fnc_getSectorFTAsset;
+if (!isNull _sectorFtAsset) then {
+    private _assetName = [_sectorFtAsset] call WL2_fnc_getAssetTypeName;
+
+    // Fast Travel Asset Button
+    private _fastTravelAssetExecute = {
+        params ["_sector"];
+        private _asset = [_sector, true] call WL2_fnc_getSectorFTAsset;
+        if (!alive player || lifeState player == "INCAPACITATED") exitWith {
+            ["Cannot fast travel while dead."] call WL2_fnc_smoothText;
+            playSoundUI ["AddItemFailed"];
+        };
+        if (isWeaponDeployed player) exitWith {
+            ["Cannot fast travel while weapon is deployed."] call WL2_fnc_smoothText;
+            playSoundUI ["AddItemFailed"];
+        };
+        [_asset] spawn WL2_fnc_executeFastTravelVehicle;
+    };
+    [
+        _sector, _targetId,
+        "ft-asset",
+        format ["<t color='#00ff00'>Fast travel frontline (%1)</t>", _assetName],
+        _fastTravelAssetExecute,
+        true,
+        "fastTravelFrontline",
+        [
+            0,
+            "FTSeized",
+            "Fast Travel"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
+};
+
 // Fast Travel Seized Button
 private _fastTravelSeizedExecute = {
     params ["_sector"];
@@ -11,7 +44,7 @@ private _fastTravelSeizedExecute = {
 };
 [
     _sector, _targetId,
-    "ft",
+    "ft-regular",
     "Fast travel",
     _fastTravelSeizedExecute,
     true,
@@ -28,12 +61,6 @@ private _fastTravelHomeExecute = {
     params ["_sector"];
     BIS_WL_targetSector = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
     [0, ""] spawn WL2_fnc_executeFastTravel;
-
-    private _side = BIS_WL_playerSide;
-    private _enemyGroups = allGroups select { side _x != _side };
-    {
-        _x forgetTarget player;
-    } forEach _enemyGroups;
 };
 [
     _sector, _targetId,
@@ -69,6 +96,7 @@ private _fastTravelStrongholdExecute = {
     ]
 ] call WL2_fnc_addTargetMapButton;
 
+#if WL_FASTTRAVEL_CONFLICT
 // Fast Travel Conflict Button
 private _fastTravelConflictExecute = {
     params ["_sector"];
@@ -95,6 +123,7 @@ private _fastTravelConflictExecute = {
         "Fast Travel"
     ]
 ] call WL2_fnc_addTargetMapButton;
+#endif
 
 // Air Assault Button
 private _airAssaultExecute = {
@@ -111,7 +140,7 @@ private _airAssaultExecute = {
 };
 [
     _sector, _targetId,
-    "ft-air-assault",
+    "ft-parachute",
     "Fast travel air assault",
     _airAssaultExecute,
     true,
@@ -220,3 +249,11 @@ private _markSectorExecuteNext = {
     false,
     "markSector"
 ] call WL2_fnc_addTargetMapButton;
+
+private _sectorFtNonInfantryAsset = [_sector, false] call WL2_fnc_getSectorFTAsset;
+if (_sector in (BIS_WL_sectorsArray # 3) || (!isNull _sectorFtNonInfantryAsset)) then {
+    [_sector, _targetId, "team-designate", "Designate team priority", {
+        params ["_sector"];
+        [_sector, "sector"] call WL2_fnc_designateTeamPriority;
+    }, true, "designateTeamPriority", [0, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
+};

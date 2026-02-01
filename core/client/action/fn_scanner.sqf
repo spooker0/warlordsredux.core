@@ -93,6 +93,12 @@ private _scannedObjects = _vehiclesInRadius select {
     _assetSide reportRemoteTarget [_x, 10];
 } forEach _scannedObjects;
 
+private _scanArea = [_assetPos, _scanRadius, _scanRadius, 0, false];
+private _minesInRadius = allMines inAreaArray _scanArea;
+{
+    _assetSide revealMine _x;
+} forEach _minesInRadius;
+
 {
     if (_x getVariable ["WL_lastSpotted", objNull] != player) then {
         _x setVariable ["WL_lastSpotted", player, [2, clientOwner]];

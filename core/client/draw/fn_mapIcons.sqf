@@ -164,6 +164,13 @@
 		};
 		_mapData set ["combatAirSectors", _combatPatrolSectors];
 
+		private _airWrecks = allDead select {
+			_x isKindOf "Air"
+		} select {
+			_x distance2D cameraOn < 4000
+		};
+		_mapData set ["airWrecks", _airWrecks];
+
 		private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 		private _sectorMarkerThreshold = _settingsMap getOrDefault ["sectorMarkerTextThreshold", 0.4];
 		_sectorMarkerThreshold = linearConversion [0, 1, _sectorMarkerThreshold, -3, 0];

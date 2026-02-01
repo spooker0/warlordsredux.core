@@ -188,6 +188,7 @@ addMissionEventHandler ["Draw3D", {
     private _apsProjectileConfig = APS_projectileConfig;
     private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 
+    private _lastLoopTime = serverTime;
     while { !BIS_WL_missionEnd } do {
         if (WL_HelmetInterface == 2) then {
             uiSleep 0.1;
@@ -212,6 +213,9 @@ addMissionEventHandler ["Draw3D", {
         } else {
             createHashMap;
         };
+
+        private _timeSinceLastLoop = serverTime - _lastLoopTime;
+        _lastLoopTime = serverTime;
 
         private _side = BIS_WL_playerSide;
         private _laserTargets = entities "LaserTarget";
@@ -539,7 +543,8 @@ addMissionEventHandler ["Draw3D", {
 
                 private _lockPercentage = _vehicle getVariable [format ["WL2_selectedLockPercent%1", _x], 0];
                 _lockPercentage = if (_isInAngle) then {
-                    (_lockPercentage + 5) min 100;
+                    private _lockTimeElapsed = _timeSinceLastLoop / 0.1;
+                    (_lockPercentage + 5 * _lockTimeElapsed) min 100;
                 } else {
                     0;
                 };

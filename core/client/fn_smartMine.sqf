@@ -18,14 +18,21 @@ private _detonateSounds = [
     "a3\sounds_f\arsenal\explosives\grenades\explosion_gng_grenades_04.wss"
 ];
 
-private _assetPos = getPosASL _asset;
+private _effectAGL = _asset modelToWorld [0, 0, 1];
+private _soundSource = createSoundSource ["WLMineBeepSound", _effectAGL, [], 0];
+_soundSource attachTo [_asset, [0, 0, 0]];
 
+private _assetPos = getPosASL _asset;
 private _assetData = WL_ASSET_DATA;
 
 while { alive _asset } do {
     uiSleep 1;
 
     private _side = [_asset] call WL2_fnc_getAssetSide;
+
+    if (damage _asset > 0.1) then {
+        break;
+    };
 
     if (!isNull attachedTo _asset) then {
         continue;
@@ -53,7 +60,6 @@ while { alive _asset } do {
     private _assetDir = getDir _asset;
 
     private _angle = WL_SMART_MINE_ANGLES # _smartMineDistanceIndex;
-    private _smartMineType = _asset getVariable ["WL2_smartMineType", 0];
 
     private _enemyVehicles = _enemyUnits select {
         alive _x && lifeState _x != "INCAPACITATED"
@@ -64,6 +70,8 @@ while { alive _asset } do {
         WL_ASSET_FIELD(_assetData, _unitActualType, "demolishable", 0) == 0
     } select {
         [_assetPos, _assetDir, _angle, getPosASL _x] call WL2_fnc_inAngleCheck
+    } select {
+        !(_x isKindOf "ParachuteBase") && !(vehicle _x isKindOf "ParachuteBase")
     };
 
     if (_smartMinesAP == 0) then {
@@ -71,15 +79,6 @@ while { alive _asset } do {
     };
     if (_smartMinesAT == 0) then {
         _enemyVehicles = _enemyVehicles select { _x isKindOf "Man" && vehicle _x == _x };
-    };
-
-    _enemyVehicles = _enemyVehicles select {
-        switch (_smartMineType) do {
-            case 0: { true };
-            case 1: { !(_x isKindOf "Man") };
-            case 2: { _x isKindOf "Man" && vehicle _x == _x };
-            default { true };
-        };
     };
 
     if (count _enemyVehicles == 0) then {
@@ -187,3 +186,5 @@ while { alive _asset } do {
 ]] remoteExec ["WL2_fnc_particleEffect", 0];
 playSound3D [selectRandom _detonateSounds, objNull, false, _assetPos];
 deleteVehicle _asset;
+
+deleteVehicle _soundSource;

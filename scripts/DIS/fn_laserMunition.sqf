@@ -5,7 +5,7 @@ private _munitionList = _unit getVariable ["DIS_munitionList", []];
 _munitionList pushBack _projectile;
 _munitionList = _munitionList select { alive _x };
 _unit setVariable ["DIS_munitionList", _munitionList];
-_projectile setVariable ["WL2_missileType", "ARM"];
+_projectile setVariable ["WL2_missileType", "AGM"];
 
 private _target = _unit getVariable ["WL2_selectedTargetLaser", objNull];
 if (!alive _target) exitWith {};
@@ -28,6 +28,9 @@ private _laser = objNull;
 
 private _projectileSpeed = getNumber (configfile >> "CfgAmmo" >> typeof _projectile >> "maxSpeed");
 _projectileSpeed = _projectileSpeed max 500;
+
+private _enemySide = BIS_WL_enemySide;
+[[_unit], 120] remoteExec ["WL2_fnc_reportTargets", _enemySide];
 
 while { alive _projectile } do {
     if (alive _target) then {

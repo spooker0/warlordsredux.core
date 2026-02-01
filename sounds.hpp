@@ -153,6 +153,12 @@ class CfgSFX {
 		empty[] = { "", 0, 0, 0, 0, 0, 0, 0 };
 	};
 
+    class WLMineBeep {
+		sounds[] = { "sound0" };
+        sound0[] = { "@a3\sounds_f\arsenal\tools\minedetector_beep_01.wss", 3, 1.0, 200, 1, 5, 5, 5 };
+		empty[] = { "", 0, 0, 0, 0, 0, 0, 0 };
+	};
+
     class WLRopeTravel {
         sounds[] = { "sound0" };
         sound0[] = { "@a3\sounds_f\vehicles\air\noises\wind_open_int.wss", 1, 1.0, 100, 1, 0, 0, 0 };
@@ -181,6 +187,10 @@ class CfgVehicles {
     class WLAlarmSound {
 		sound = "WLAlarm";
 	};
+
+    class WLMineBeepSound {
+        sound = "WLMineBeep";
+    };
 
     class WLRopeTravelSound {
         sound = "WLRopeTravel";

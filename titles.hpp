@@ -248,6 +248,16 @@ class RscTitles {
 				text = "";
 				size = 0.038;
 			};
+
+			class RscWarlordsHUD_TeamPriority: RscStructuredText {
+				idc = 2111;
+				x = safeZoneX + 0.028;
+				y = safeZoneH + safeZoneY - 0.2;
+				w = 0.5;
+				h = 0.05;
+				text = "";
+				size = 0.045;
+			};
 		};
 	};
 

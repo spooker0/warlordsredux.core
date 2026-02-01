@@ -13,6 +13,10 @@ if (_attach) then {
         _load setDir _flipLoadable;
         _load setPosWorld getPosWorld _load;
     };
+    if (_load isKindOf "Air") then {
+        _load setDir 45;
+        _load setPosWorld getPosWorld _load;
+    };
 
     _asset setVariable ["WL2_loadingAsset", false, true];
 

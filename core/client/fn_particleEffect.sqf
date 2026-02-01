@@ -13,12 +13,21 @@ if (isDedicated) exitWith {};
             uiSleep _particleParam;
             deleteVehicle _source;
         } else {
-            _source attachTo [_particleParam, [0, 0, 0]];
-            waitUntil {
-                uiSleep 0.1;
-                !alive _particleParam
+            if (_particleParam isEqualType []) then {
+                private _timer = _particleParam # 0;
+                private _actualPos = _particleParam # 1;
+                _source setPosASL (AGLtoASL _actualPos);
+
+                uiSleep _timer;
+                deleteVehicle _source;
+            } else {
+                _source attachTo [_particleParam, [0, 0, 0]];
+                waitUntil {
+                    uiSleep 0.1;
+                    !alive _particleParam
+                };
+                deleteVehicle _source;
             };
-            deleteVehicle _source;
         };
     };
 } forEach _particleClasses;

@@ -35,6 +35,20 @@ if (_drone > 0) then {
     _assetGrp deleteGroupWhenEmpty true;
 };
 
+private _immobile = WL_ASSET(_orderedClass, "immobile", 0);
+if (_immobile > 0) then {
+	if (unitIsUAV _asset) then {
+		deleteVehicle (driver _asset);
+	};
+
+	{
+		_asset setHitPointDamage [_x, 1.0];
+	} forEach ["HitLMWheel", "HitRMWheel", "HitLFWheel", "HitRFWheel", "HitLF2Wheel", "HitRF2Wheel", "HitLBWheel", "HitRBWheel"];
+
+	_asset setFuel 0;
+	_asset setFuelConsumptionCoef 1000;
+};
+
 private _currentSector = BIS_WL_allSectors select {
 	_asset inArea (_x getVariable "objectAreaComplete") &&
 	_x getVariable ["BIS_WL_owner", sideUnknown] == _side

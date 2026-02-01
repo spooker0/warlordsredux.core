@@ -1,6 +1,10 @@
 #include "includes.inc"
 params ["_asset", "_actionID"];
 
+if (waterDamaged _asset) then {
+    _asset setVariable ["WL_ewNetActive", false];
+};
+
 private _isActive = _asset getVariable ["WL_ewNetActive", false];
 private _isActivating = _asset getVariable ["WL_ewNetActivating", false];
 private _actionColor = if (_isActive) then {

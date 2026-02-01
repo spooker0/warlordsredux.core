@@ -44,7 +44,7 @@ private _sideCaptureModifier = createHashMap;
 	};
 	_connections = _connections + count _inRangeTeamForwardBases;
 
-	_sideCaptureModifier set [_side, _connections min 3];
+	_sideCaptureModifier set [_side, _connections];
 } forEach _sideArr;
 
 private _relevantEntities = entities [["LandVehicle", "Man"], ["Logic"], true, true];
