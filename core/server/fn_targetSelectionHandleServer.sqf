@@ -7,6 +7,9 @@
 		private _votingResetVar = format ["BIS_WL_resetTargetSelection_server_%1", _side];
 		private _waitVar = format ["WL2_waitsInRow_%1", _side];
 		private _surrenderVotingVar = format ["WL2_surrenderVoting_%1", _side];
+		private _currentTargetVar = format ["BIS_WL_currentTarget_%1", _side];
+
+		private _previousTargetSelection = objNull;
 
 		private _calculateMostVotedSector = {
 			private _allPlayers = call BIS_fnc_listPlayers;
@@ -175,14 +178,37 @@
 					};
 				};
 
-				private _travelTestResult = [false] call WL2_fnc_travelTeamPriority;
-				if (!_travelTestResult) then {
-					private _teamPriorityVar = format ["WL2_teamPriority_%1", _side];
-					missionNamespace setVariable [_teamPriorityVar, _selectedSector, true];
+				private _teamPriorityVar = format ["WL2_teamPriority_%1", _side];
+				private _teamPriorityTypeVar = format ["WL2_teamPriorityType_%1", _side];
 
-					private _teamPriorityTypeVar = format ["WL2_teamPriorityType_%1", _side];
+				private _teamPriority = missionNamespace getVariable [_teamPriorityVar, objNull];
+				private _teamPriorityType = missionNamespace getVariable [_teamPriorityTypeVar, ""];
+
+				private _shouldAdvancePriority = switch (_teamPriorityType) do {
+					case "asset";
+					case "fob";
+					case "stronghold": {
+						if (alive _teamPriority) then {
+							private _previousTargetArea = _previousTargetSelection getVariable "objectAreaComplete";
+							_teamPriority inArea _previousTargetArea
+						} else {
+							true;
+						};
+					};
+					case "sector": {
+						_teamPriority == _previousTargetSelection
+					};
+					default {
+						true
+					};
+				};
+
+				if (_shouldAdvancePriority) then {
+					missionNamespace setVariable [_teamPriorityVar, _selectedSector, true];
 					missionNamespace setVariable [_teamPriorityTypeVar, "sector", true];
 				};
+
+				_previousTargetSelection = _selectedSector;
 
 				call _wipeVotes;
 
@@ -190,7 +216,7 @@
 
 				waitUntil {
 					uiSleep WL_TIMEOUT_STANDARD;
-					isNull (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", _side], objNull]) ||
+					isNull (missionNamespace getVariable [_currentTargetVar, objNull]) ||
 					missionNamespace getVariable [format ["WL_targetReset_%1", _side], false];
 				};
 			};
