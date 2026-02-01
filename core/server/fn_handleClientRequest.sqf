@@ -334,9 +334,20 @@ if (_action == "kill") exitWith {
 if (_action == "demine") exitWith {
 	private _asset = _param1;
 	private _targets = _param2;
+
 	{
 		_x setDamage [1, true, _asset, _sender];
 	} forEach _targets;
+
+	private _enemyMines = _targets select {
+		private _shotParents = getShotParents _x;
+		private _instigator = _shotParents call WL2_fnc_handleInstigator;
+		side group _instigator != side group _sender;
+	};
+
+	private _reward = 10 * count _enemyMines;
+	[_reward] call _addFunds;
+	[objNull, _reward, "Mine destroyed", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
 if (_action == "secure") exitWith {

@@ -94,6 +94,10 @@ if (_isInWaterSector) exitWith {
     [false, ""];
 };
 
+if (_asset isKindOf "BagFence_base_F") exitWith {
+    [false, ""];
+};
+
 if (((getPosATL _asset) # 2) > 1) exitWith {
     [true, "Asset cannot be deployed too far above ground."];
 };

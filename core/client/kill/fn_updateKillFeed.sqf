@@ -22,6 +22,9 @@ if (_displayText == "DAZZLER") then {
 if (_displayText == "DEMOLITION") then {
 	_times = (floor (_reward / 20)) max 1;
 };
+if (_displayText == "MINE DESTROYED") then {
+	_times = (floor (_reward / 10)) max 1;
+};
 private _texture = _display displayCtrl 5502;
 
 private _killFeedItems = [

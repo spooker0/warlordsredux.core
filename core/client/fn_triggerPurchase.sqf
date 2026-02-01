@@ -60,6 +60,17 @@ switch (_className) do {
         BIS_WL_targetSector = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
         [0, ""] spawn WL2_fnc_executeFastTravel;
     };
+    case "FTPriority": {
+        0 spawn {
+            private _travelResult = [true] call WL2_fnc_travelTeamPriority;
+            if (_travelResult) then {
+                playSoundUI ["AddItemOk"];
+            } else {
+                playSoundUI ["AddItemFailed"];
+                ["No team priority designated."] call WL2_fnc_smoothText;
+            };
+        };
+    };
     case "FTSeized": { 0 spawn WL2_fnc_orderFastTravel };
     case "FTConflict": { 1 spawn WL2_fnc_orderFastTravel };
     case "FTAirAssault": { 2 spawn WL2_fnc_orderFastTravel };

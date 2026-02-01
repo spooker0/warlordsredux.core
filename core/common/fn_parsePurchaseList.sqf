@@ -160,6 +160,13 @@ private _purchaseable = [];
 
 private _fastTravelArr = [
 	[
+		"FTPriority",
+		0,
+		[],
+		"Fast travel to frontline",
+		"\A3\Data_F_Warlords\Data\preview_ft_owned.jpg",
+		"Fast travel to the team priority location, which is designated by squad leaders."
+	], [
 		"FTSeized",
 		0,
 		[],

@@ -42,7 +42,7 @@ private _actionId = _asset addAction [
 
             private _assetPos = getPosASL _asset;
 
-            private _projectile = createVehicle ["M_Titan_AP", _asset modelToWorld [0, 0, 1], [], 0, "FLY"];
+            private _projectile = createVehicle ["SmokeShell", _asset modelToWorld [0, 0, 1], [], 0, "FLY"];
             _projectile setDir _direction;
             [_projectile, 10, 0] call BIS_fnc_setPitchBank;
             _projectile setVelocityModelSpace [0, 200, 0];
@@ -93,9 +93,30 @@ private _actionId = _asset addAction [
                 uiSleep (random 0.2);
             } forEach _detonatePositions;
 
+            deleteVehicle _projectile;
+
             uiSleep 3;
 
+            private _side = BIS_WL_playerSide;
+
             private _minesInArea = allMines inAreaArray _mineClearArea;
+
+            private _enemyUnits = switch (_side) do {
+                case west: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
+                case east: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
+                case independent: { BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles };
+                default { [] };
+            };
+
+            private _enemyMineVehicles = _enemyUnits select {
+                WL_ISUP(_x)
+            } select {
+                private _unitActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+                WL_ASSET(_unitActualType, "smartMineAP", 0) > 0 || WL_ASSET(_unitActualType, "smartMineAT", 0) > 0
+            };
+            private _enemyMineVehiclesInArea = _enemyMineVehicles inAreaArray _mineClearArea;
+
+            _minesInArea append _enemyMineVehiclesInArea;
 
             [player, "demine", _asset, _minesInArea] remoteExec ["WL2_fnc_handleClientRequest", 2];
 

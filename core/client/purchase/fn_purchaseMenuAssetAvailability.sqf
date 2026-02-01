@@ -83,7 +83,8 @@ private _sector = if (count _findCurrentOwnedSector > 0) then {
 
 if (_ret) then {
 	private _conditions = switch (_class) do {
-		case "FTSeized": {
+		case "FTSeized";
+		case "FTPriority": {
 			[
 				[WL2_fnc_checkPlayerInVehicle],
 				[WL2_fnc_checkNearbyEnemies]
@@ -226,7 +227,7 @@ if (_ret) then {
 				private _assetConditions = [
 					[WL2_fnc_checkRequirements, [_sector, _requirements]],
 					[WL2_fnc_checkInfantryAvailable, [_class]],
-					[WL2_fnc_checkCarrierLimits, [_sector, _category]],
+					// [WL2_fnc_checkCarrierLimits, [_sector, _category]],
 					[WL2_fnc_checkAssetLimit, [_class]],
 					[WL2_fnc_checkNearbyEnemies, [_category]],
 					[WL2_fnc_checkPlayerInVehicle, [_requirements]],

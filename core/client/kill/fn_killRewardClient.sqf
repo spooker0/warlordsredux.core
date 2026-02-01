@@ -30,7 +30,8 @@ if (_customText != "") then {
 
 private _displayIcon = switch (toUpper _displayText) do {
 	case "KILL";
-	case "PLAYER KILL": { "a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa" };
+	case "PLAYER KILL";
+	case "MINE DESTROYED": { "a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa" };
 	case "SECURED";
 	case "AIRCRAFT SECURED": { "a3\ui_f\data\igui\cfg\holdactions\holdaction_secure_ca.paa" };
 	case "VEHICLE DISABLED": { "a3\ui_f\data\igui\cfg\vehicletoggles\wheelbreakiconon_ca.paa" };

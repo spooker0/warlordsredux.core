@@ -42,16 +42,21 @@ addMissionEventHandler ["ProjectileCreated", {
 
         private _currentCount = count _allOwnedMines;
         if (_currentCount >= WL_MAX_MINES) then {
-            private _oldestMine = _allOwnedMines # 0;
-            private _oldestMineDefaultMag = getText (configFile >> "CfgAmmo" >> typeOf _oldestMine >> "defaultMagazine");
-            private _oldestMineType = getText (configFile >> "CfgMagazines" >> _oldestMineDefaultMag >> "displayName");
+            private _overflowAmount = _currentCount - WL_MAX_MINES + 1;
+            private _overflowMines = _allOwnedMines select [0, _overflowAmount];
+            {
+                private _oldestMine = _x;
+                private _oldestMineDefaultMag = getText (configFile >> "CfgAmmo" >> typeOf _oldestMine >> "defaultMagazine");
+                private _oldestMineType = getText (configFile >> "CfgMagazines" >> _oldestMineDefaultMag >> "displayName");
 
-            if (_oldestMineType == "") then {
-                _oldestMineType = "Deployed Mine";
-            };
+                if (_oldestMineType == "") then {
+                    _oldestMineType = "Deployed Mine";
+                };
 
-            [format ["Maximum of %1 deployed explosives reached. Removing oldest: %2", WL_MAX_MINES, _oldestMineType]] call WL2_fnc_smoothText;
-            deleteVehicle _oldestMine;
+                [format ["Maximum of %1 deployed explosives reached. Removing oldest %2", WL_MAX_MINES, _oldestMineType]] call WL2_fnc_smoothText;
+
+                deleteVehicle _x;
+            } forEach _overflowMines;
         };
 
         BIS_WL_playerSide revealMine _projectile;
