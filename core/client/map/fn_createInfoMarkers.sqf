@@ -64,17 +64,17 @@ while { !BIS_WL_missionEnd } do {
 	private _enemyControlledArea = missionNamespace getVariable [_enemyAreaVar, 0];
 
 	private _areaText = switch (true) do {
-		case (_controlledArea < 5000000): { "<5" };
-		case (_controlledArea < 10000000): { "5-10" };
-		case (_controlledArea < 15000000): { "10-15" };
-		case (_controlledArea < 20000000): { "15-20" };
-		case (_controlledArea < 25000000): { "20-25" };
-		case (_controlledArea < 30000000): { "25-30" };
-		case (_controlledArea < 35000000): { "30-35" };
-		case (_controlledArea < 40000000): { "35-40" };
-		case (_controlledArea < 45000000): { "40-45" };
-		case (_controlledArea < 50000000): { "45-50" };
-		case (_controlledArea >= 50000000): { ">50" };
+		case (_enemyControlledArea < 5000000): { "<5" };
+		case (_enemyControlledArea < 10000000): { "5-10" };
+		case (_enemyControlledArea < 15000000): { "10-15" };
+		case (_enemyControlledArea < 20000000): { "15-20" };
+		case (_enemyControlledArea < 25000000): { "20-25" };
+		case (_enemyControlledArea < 30000000): { "25-30" };
+		case (_enemyControlledArea < 35000000): { "30-35" };
+		case (_enemyControlledArea < 40000000): { "35-40" };
+		case (_enemyControlledArea < 45000000): { "40-45" };
+		case (_enemyControlledArea < 50000000): { "45-50" };
+		case (_enemyControlledArea >= 50000000): { ">50" };
 		default { "<5" };
 	};
 	_enemyAreaMarker setMarkerTextLocal format ["    Enemy: %1 km²", _areaText];
