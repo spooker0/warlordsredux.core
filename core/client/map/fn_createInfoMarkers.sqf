@@ -33,3 +33,51 @@ private _infoMarkers = [
 	_marker setMarkerTypeLocal (_x # 1);
 	_marker setMarkerColorLocal (_x # 2);
 } forEach _infoMarkers;
+
+private _flag = if (BIS_WL_playerSide == west) then {
+	"flag_NATO"
+} else {
+	"flag_CSAT"
+};
+private _enemyFlag = if (BIS_WL_playerSide == west) then {
+	"flag_CSAT"
+} else {
+	"flag_NATO"
+};
+
+private _friendlyAreaMarker = createMarkerLocal ["WL2_infoMarker_areaFriendly", [15000, 15000, 0]];
+_friendlyAreaMarker setMarkerTypeLocal _flag;
+_friendlyAreaMarker setMarkerColorLocal "ColorWhite";
+
+private _enemyAreaMarker = createMarkerLocal ["WL2_infoMarker_areaEnemy", [15000, 14000, 0]];
+_enemyAreaMarker setMarkerTypeLocal _enemyFlag;
+_enemyAreaMarker setMarkerColorLocal "ColorWhite";
+
+while { !BIS_WL_missionEnd } do {
+	private _side = if (BIS_WL_playerSide == west) then { "west" } else { "east" };
+	private _areaVar = format ["WL2_%1ControlledArea", _side];
+	private _controlledArea = missionNamespace getVariable [_areaVar, 0];
+	_friendlyAreaMarker setMarkerTextLocal format ["    Friendly: %1 km²", (_controlledArea / 1000000) toFixed 1];
+
+	private _enemySide = if (BIS_WL_playerSide == west) then { "east" } else { "west" };
+	private _enemyAreaVar = format ["WL2_%1ControlledArea", _enemySide];
+	private _enemyControlledArea = missionNamespace getVariable [_enemyAreaVar, 0];
+
+	private _areaText = switch (true) do {
+		case (_controlledArea < 5000000): { "<5" };
+		case (_controlledArea < 10000000): { "5-10" };
+		case (_controlledArea < 15000000): { "10-15" };
+		case (_controlledArea < 20000000): { "15-20" };
+		case (_controlledArea < 25000000): { "20-25" };
+		case (_controlledArea < 30000000): { "25-30" };
+		case (_controlledArea < 35000000): { "30-35" };
+		case (_controlledArea < 40000000): { "35-40" };
+		case (_controlledArea < 45000000): { "40-45" };
+		case (_controlledArea < 50000000): { "45-50" };
+		case (_controlledArea >= 50000000): { ">50" };
+		default { "<5" };
+	};
+	_enemyAreaMarker setMarkerTextLocal format ["    Enemy: %1 km²", _areaText];
+
+	uiSleep 30;
+};

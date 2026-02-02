@@ -41,7 +41,6 @@ switch (_locality) do {
 		WL_GEAR_BUY_MENU = false;
 		WL_TEMP_BUY_MENU = false;
 		WL_VotePhase = 0;
-		WL_linkSectorMarkers = createHashmap;
 		WL_HelmetInterface = 0;
 		WL_SpectrumInterface = false;
 		WL_IsSpectator = false;

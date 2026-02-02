@@ -15,10 +15,6 @@ WL_AssetActionTargets = _nearbyAssets;
 
 private _mapScale = ctrlMapScale WL_CONTROL_MAP;
 
-{
-    _x setMarkerSizeLocal [20 * _mapScale * BIS_WL_mapSizeIndex, (markerSize _x) # 1];
-} forEach BIS_WL_sectorLinks;
-
 private _surrenderWarningActive = uiNamespace getVariable ["WL2_surrenderWarningActive", false];
 {
     private _marker = (_x getVariable "BIS_WL_markers") # 0;

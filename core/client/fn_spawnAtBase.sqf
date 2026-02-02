@@ -22,7 +22,7 @@ if (!_hideFrontlineMenu) then  {
         [],
         100,
         false,
-        false,
+        true,
         "",
         "!isWeaponDeployed player && vehicle player == player && player distance2D ([BIS_WL_playerSide] call WL2_fnc_getSideBase) < 100",
         20,

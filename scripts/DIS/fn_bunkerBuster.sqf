@@ -9,6 +9,9 @@ _penetrator enableSimulation false;
 private _nearDestroyables = (nearestObjects [_position, [], 100, true]) select {
     private _distanceLimit = if (_x isKindOf "StaticShip") then { 100 } else { 30 };
     _x distance2D _position < _distanceLimit && _x getVariable ["WL2_canDemolish", false];
+} select {
+    private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+    WL_ASSET(_assetActualType, "crater", 0) == 0;
 };
 
 if (_ignoreHeight) then {

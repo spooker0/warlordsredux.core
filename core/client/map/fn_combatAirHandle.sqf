@@ -22,6 +22,7 @@ if (isServer) then {
             false
         ];
 
+        private _lastNotifyTime = 0;
         while { _combatAirActive } do {
             uiSleep 10;
 
@@ -43,6 +44,15 @@ if (isServer) then {
             {
                 [_x, _sector, false] spawn DIS_fnc_combatAirPatrol;
             } forEach _independentAircraft;
+
+            if (count _independentAircraft == 0) then {
+                continue;
+            };
+
+            if (serverTime - _lastNotifyTime > 30) then {
+                [_independentAircraft, 30] remoteExec ["WL2_fnc_reportTargets", _side];
+                _lastNotifyTime = serverTime;
+            };
         };
     };
 };
@@ -67,6 +77,7 @@ private _sectorArea = [
     false
 ];
 
+private _lastNotifyTime = 0;
 while { _combatAirActive } do {
     uiSleep 0.5;
 
@@ -90,6 +101,11 @@ while { _combatAirActive } do {
     if !(_assetPos inArea _sectorArea) then {
         call _endEffect;
         continue;
+    };
+
+    if (serverTime - _lastNotifyTime > 30) then {
+        [[_asset], 30] remoteExec ["WL2_fnc_reportTargets", _side];
+        _lastNotifyTime = serverTime;
     };
 
     private _altitude = _assetPos # 2;

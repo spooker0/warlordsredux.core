@@ -30,12 +30,12 @@ if (_customText != "") then {
 
 private _displayIcon = switch (toUpper _displayText) do {
 	case "KILL";
-	case "PLAYER KILL";
-	case "MINE DESTROYED": { "a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa" };
+	case "PLAYER KILL": { "a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa" };
 	case "SECURED";
 	case "AIRCRAFT SECURED": { "a3\ui_f\data\igui\cfg\holdactions\holdaction_secure_ca.paa" };
 	case "VEHICLE DISABLED": { "a3\ui_f\data\igui\cfg\vehicletoggles\wheelbreakiconon_ca.paa" };
-	case "DEMOLITION": { "a3\ui_f\data\igui\cfg\simpletasks\types\destroy_ca.paa" };
+	case "DEMOLITION";
+	case "MINE DESTROYED": { "a3\ui_f\data\igui\cfg\simpletasks\types\destroy_ca.paa" };
 	case "ATTACKING SECTOR";
 	case "DESTROYED STRONGHOLD": { "a3\ui_f\data\igui\cfg\simpletasks\types\attack_ca.paa" };
 	case "DEFENDING SECTOR": { "a3\ui_f\data\igui\cfg\simpletasks\types\defend_ca.paa" };
@@ -43,7 +43,7 @@ private _displayIcon = switch (toUpper _displayText) do {
 	case "DAZZLER";
 	case "PROJECTILE JAMMED";
 	case "PROJECTILE DESTROYED": { "A3\ui_f\data\map\markers\military\pickup_CA.paa" };
-	case "SECTOR CAPTURED": { "A3\ui_f\data\map\markers\handdrawn\flag_CA.paa" };
+	case "REGION CAPTURED": { "A3\ui_f\data\map\markers\handdrawn\flag_CA.paa" };
 	case "REVIVED TEAMMATE": { "a3\ui_f\data\igui\cfg\simpletasks\types\Heal_ca.paa" };
 	case "SPECTATE TARGET EARNED SCORE": { "a3\Ui_f\data\IGUI\Cfg\CommandBar\imageCommander_ca.paa" };
 	case "RECON";

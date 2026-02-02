@@ -1,7 +1,4 @@
 #include "includes.inc"
-BIS_WL_sectorLinks = [];
-WL_linkSectorMarkers = createHashmap;
-private _i = 0;
 
 BIS_WL_allSectors = BIS_WL_allSectors select { !isNull _x };
 
@@ -11,14 +8,6 @@ BIS_WL_allSectors = BIS_WL_allSectors select { !isNull _x };
 	private _sectorPos = position _sector;
 	private _area = _sector getVariable "WL2_objectArea";
 
-	if (_sector in WL_BASES && ((_sector getVariable "BIS_WL_owner") == (side group player))) then {
-		_sector setVariable ["BIS_WL_value", WL_BASE_VALUE];
-	} else {
-		_area params ["_a", "_b", "_angle", "_isRectangle"];
-		_size = _a * _b * (if (_isRectangle) then {4} else {pi});
-		_sector setVariable ["BIS_WL_value", round (_size / 13000)];
-	};
-
 	private _mrkrArea = createMarkerLocal [format ["BIS_WL_sectorMarker_%1_area", _forEachIndex], _sectorPos];
 	_mrkrArea setMarkerShapeLocal (if (_area # 3) then {"RECTANGLE"} else {"ELLIPSE"});
 	_mrkrArea setMarkerDirLocal (_area # 2);
@@ -27,6 +16,7 @@ BIS_WL_allSectors = BIS_WL_allSectors select { !isNull _x };
 	_mrkrArea setMarkerSizeLocal [(_area # 0), (_area # 1)];
 } forEach BIS_WL_allSectors;
 
+private _allLinks = createHashMap;
 {
 	private _sector = _x;
 
@@ -62,40 +52,22 @@ BIS_WL_allSectors = BIS_WL_allSectors select { !isNull _x };
 
 	[_sector] spawn WL2_fnc_sectorRevealHandle;
 
-	private _neighbors = _sector getVariable ["WL2_connectedSectors", []];
-	_sector setVariable ["BIS_WL_pairedWith", []];
-	_pairedWith = _sector getVariable "BIS_WL_pairedWith";
-
+	private _links = _x getVariable ["WL2_connectedSectors", []];
 	{
-		_neighbor = _x;
-		_neighborPairedWith = +(_x getVariable ["BIS_WL_pairedWith", []]);
-		if !(_sector in _neighborPairedWith) then {
-			_pos1 = position _sector;
-			_pos2 = position _neighbor;
-			_pairedWith pushBack _neighbor;
-			_center = [((_pos1 # 0) + (_pos2 # 0)) / 2, ((_pos1 # 1) + (_pos2 # 1)) / 2];
-			_size = ((_pos1 distance2D _pos2) / 2) - 150;
-			_dir = _pos1 getDir _pos2;
-			private _linkMarker = createMarkerLocal [format ["BIS_WL_linkMrkr_%1", _i], _center];
-			_linkMarker setMarkerAlphaLocal 1;
-			_linkMarker setMarkerColorLocal "ColorBlack";
-			_linkMarker setMarkerShapeLocal "RECTANGLE";
-			_linkMarker setMarkerDirLocal _dir;
-			_linkMarker setMarkerSizeLocal [20, _size];
-			BIS_WL_sectorLinks pushBack _linkMarker;
-
-			private _existingSectorMarkers = WL_linkSectorMarkers getOrDefault [hashValue _sector, []];
-			_existingSectorMarkers pushBack _linkMarker;
-			WL_linkSectorMarkers set [hashValue _sector, _existingSectorMarkers];
-
-			private _existingNeighborMarkers = WL_linkSectorMarkers getOrDefault [hashValue _neighbor, []];
-			_existingNeighborMarkers pushBack _linkMarker;
-			WL_linkSectorMarkers set [hashValue _neighbor, _existingNeighborMarkers];
-
-			{
-				_x setVariable ["BIS_WL_linkMarkerIndex", _i];
-			} forEach [_sector, _neighbor];
-			_i = _i + 1;
+		private _link = _x;
+		private _pairKey1 = hashValue _sector + hashValue _link;
+		private _pairKey2 = hashValue _link + hashValue _sector;
+		if ((_pairKey1 in _allLinks) || (_pairKey2 in _allLinks)) then {
+			continue;
 		};
-	} forEach _neighbors;
+
+		private _linkPos = getPosASL _link;
+		private _direction = _sectorPos getDir _link;
+		private _startPos = _sectorPos getPos [150, _direction];
+		private _endPos = _link getPos [150, _direction + 180];
+
+		_allLinks set [_pairKey1, [_startPos, _endPos, _sector, _link]];
+	} forEach _links;
 } forEach BIS_WL_allSectors;
+
+missionNamespace setVariable ["WL2_linkSectorMarkers", _allLinks];

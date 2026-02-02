@@ -10,11 +10,13 @@ if (_isClient) then {
 	private _drawEllipses = missionNamespace getVariable ["WL2_drawEllipses", []];
 	private _drawSemiCircles = missionNamespace getVariable ["WL2_drawSemiCircles", []];
 	private _drawRectangles = missionNamespace getVariable ["WL2_drawRectangles", []];
+	private _drawPolygons = missionNamespace getVariable ["WL2_drawPolygons", []];
 	private _drawSectorIcons = missionNamespace getVariable ["WL2_drawSectorIcons", []];
 	profileNamespace setVariable ["WL2_drawIcons", toJSON _drawIcons];
 	profileNamespace setVariable ["WL2_drawEllipses", toJSON _drawEllipses];
 	profileNamespace setVariable ["WL2_drawSemiCircles", toJSON _drawSemiCircles];
 	profileNamespace setVariable ["WL2_drawRectangles", toJSON _drawRectangles];
+	profileNamespace setVariable ["WL2_drawPolygons", toJSON _drawPolygons];
 	profileNamespace setVariable ["WL2_drawSectorIcons", toJSON _drawSectorIcons];
 	saveProfileNamespace;
 

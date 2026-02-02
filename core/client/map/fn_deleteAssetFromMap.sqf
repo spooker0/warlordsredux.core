@@ -9,7 +9,12 @@ private _assetLocation = if (count _assetSector > 0) then {
 	mapGridPosition _target;
 };
 
-private _result = ["Delete asset", format ["Are you sure you would like to delete: %1 @ %2", _displayName, _assetLocation], "Yes", "Cancel"] call WL2_fnc_prompt;
+private _isBulkRemoveActive = missionNamespace getVariable ["WL2_bulkRemoveActive", false];
+private _result = if (_isBulkRemoveActive) then {
+	true
+} else {
+	["Delete asset", format ["Are you sure you would like to delete: %1 @ %2", _displayName, _assetLocation], "Yes", "Cancel"] call WL2_fnc_prompt;
+};
 
 if (_result) then {
 	private _access = [_target, player, "full"] call WL2_fnc_accessControl;

@@ -127,6 +127,9 @@ if (_asset isKindOf "Man") then {
 		case "B_T_VTOL_01_vehicle_F": {
 			_asset call WL2_fnc_logisticsAddAction;
 		};
+
+		// Slingloading
+		case "B_APC_Tracked_01_CRV_F";
 		case "B_Heli_Transport_01_F";
 		case "B_Heli_Transport_01_UP_F";
 		case "B_Heli_Transport_03_F";
@@ -156,6 +159,11 @@ if (_asset isKindOf "Man") then {
 		case "O_Boat_Armed_01_autocannon_F";
 		case "O_Boat_Armed_01_hmg_F": {
 			[_asset] spawn WL2_fnc_stabilizeBoatAction;
+		};
+
+		case "B_Land_Bomb_Trolley_01_F";
+		case "O_Land_Bomb_Trolley_01_F": {
+			[_asset] spawn WL2_fnc_runwayBuster;
 		};
 
 		// case "B_AAA_System_01_F": {
@@ -299,7 +307,7 @@ if (_asset isKindOf "Man") then {
 	// 	[_asset] remoteExec ["WL2_fnc_smokeCurtainAction", 0, true];
 	// };
 
-	if (_asset isKindOf "Air" && !unitIsUAV _asset) then {
+	if (_asset isKindOf "Air") then {
 		// [_asset] remoteExec ["WL2_fnc_airRearmAction", 0, true];
 		[_asset] remoteExec ["WL2_fnc_airWreckHandler", 0];
 	};

@@ -9,12 +9,18 @@ private _removeActionID = _asset addAction [
 		private _unit = _this # 0;
 
 		private _displayName = [_unit] call WL2_fnc_getAssetTypeName;
-		private _result = ["Delete asset", format ["Are you sure you would like to delete: %1", _displayName], "Yes", "Cancel"] call WL2_fnc_prompt;
 
 		private _access = [_unit, player, "full"] call WL2_fnc_accessControl;
 		if !(_access # 0) exitWith {
 			[format ["Cannot remove: %1", _access # 1]] call WL2_fnc_smoothText;
 			playSound "AddItemFailed";
+		};
+
+		private _isBulkRemoveActive = missionNamespace getVariable ["WL2_bulkRemoveActive", false];
+		private _result = if (_isBulkRemoveActive) then {
+			true
+		} else {
+			["Delete asset", format ["Are you sure you would like to delete: %1", _displayName], "Yes", "Cancel"] call WL2_fnc_prompt;
 		};
 
 		if (_result) exitWith {

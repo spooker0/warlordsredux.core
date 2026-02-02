@@ -239,6 +239,7 @@
 	missionNamespace setVariable ["WL2_drawEllipses", []];
 	missionNamespace setVariable ["WL2_drawSemiCircles", []];
 	missionNamespace setVariable ["WL2_drawRectangles", []];
+	missionNamespace setVariable ["WL2_drawPolygons", []];
 	missionNamespace setVariable ["WL2_drawSectorIcons", []];
 
 	while { !BIS_WL_missionEnd } do {

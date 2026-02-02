@@ -8,7 +8,6 @@ private _owned = _pool select {
 };
 
 private _available = [];
-private _income = 0;
 private _services = [];
 private _curTarget = missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", _side], objNull];
 private _unlocked = _pool select {_x == _curTarget || {_side in (_x getVariable ["BIS_WL_previousOwners", []])}};
@@ -16,11 +15,29 @@ private _baseArr = WL_BASES select {(_x getVariable ["BIS_WL_owner", sideUnknown
 
 {
 	private _sector = _x;
-	_income = _income + (_sector getVariable ["BIS_WL_value", 0]);
 	{
 		_services pushBackUnique _x;
 	} forEach (_sector getVariable ["WL2_services", []]);
 } forEach _owned;
+
+private _facesData = missionNamespace getVariable ["WL2_sectorFaces", []];
+private _income = 50;
+{
+	_x params ["_sectorsInFace", "_area"];
+	private _ownsFace = true;
+	{
+		private _sector = _x;
+		private _sectorOwner = _sector getVariable ["BIS_WL_owner", sideUnknown];
+		if (_sectorOwner != _side) then {
+			_ownsFace = false;
+			break;
+		};
+	} forEach _sectorsInFace;
+	if (_ownsFace) then {
+		_income = _income + _area * WL_INCOME_M2;
+	};
+} forEach _facesData;
+_income = round _income;
 
 if (_side == independent) exitWith {
 	[_owned, _owned, _owned, _owned, _income, _services, [], []];

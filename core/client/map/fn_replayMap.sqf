@@ -5,11 +5,13 @@ private _profileDrawIcons = profileNamespace getVariable ["WL2_drawIcons", ""];
 private _profileDrawEllipses = profileNamespace getVariable ["WL2_drawEllipses", ""];
 private _profileDrawSemiCircles = profileNamespace getVariable ["WL2_drawSemiCircles", ""];
 private _profileDrawRectangles = profileNamespace getVariable ["WL2_drawRectangles", ""];
+private _profileDrawPolygons = profileNamespace getVariable ["WL2_drawPolygons", ""];
 private _profileDrawSectorIcons = profileNamespace getVariable ["WL2_drawSectorIcons", ""];
 _profileDrawIcons = fromJSON _profileDrawIcons;
 _profileDrawEllipses = fromJSON _profileDrawEllipses;
 _profileDrawSemiCircles = fromJSON _profileDrawSemiCircles;
 _profileDrawRectangles = fromJSON _profileDrawRectangles;
+_profileDrawPolygons = fromJSON _profileDrawPolygons;
 _profileDrawSectorIcons = fromJSON _profileDrawSectorIcons;
 
 if (isNil "_profileDrawIcons") exitWith {
@@ -32,12 +34,16 @@ openMap [true, false];
 for "_i" from 0 to _countFrames - 1 do {
     private _frameIcons = _profileDrawIcons # _i;
     private _frameEllipses = _profileDrawEllipses # _i;
+    private _frameSemiCircles = _profileDrawSemiCircles # _i;
+    private _frameRectangles = _profileDrawRectangles # _i;
+    private _framePolygons = _profileDrawPolygons # _i;
     private _frameSectorIcons = _profileDrawSectorIcons # _i;
 
     uiNamespace setVariable ["WL2_drawIcons", _frameIcons];
     uiNamespace setVariable ["WL2_drawEllipses", _frameEllipses];
     uiNamespace setVariable ["WL2_drawSemiCircles", _frameSemiCircles];
     uiNamespace setVariable ["WL2_drawRectangles", _frameRectangles];
+    uiNamespace setVariable ["WL2_drawPolygons", _framePolygons];
     uiNamespace setVariable ["WL2_drawSectorIcons", _frameSectorIcons];
 
     uiSleep 1;
@@ -47,6 +53,7 @@ uiNamespace setVariable ["WL2_drawIcons", []];
 uiNamespace setVariable ["WL2_drawEllipses", []];
 uiNamespace setVariable ["WL2_drawSemiCircles", []];
 uiNamespace setVariable ["WL2_drawRectangles", []];
+uiNamespace setVariable ["WL2_drawPolygons", []];
 uiNamespace setVariable ["WL2_drawSectorIcons", []];
 
 {

@@ -259,7 +259,7 @@ private _strategyArr = [
 		[],
 		"Combat air patrol",
 		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
-		"Call in a temporary combat air patrol to assist your team's air defense over the selected airbase/helipad sector. Enemy aircraft that enter the marked map area while flying above 1 km altitude will be given 45 seconds to leave before being automatically engaged by lethal air-to-air assets. Recommended to augment with short range air defenses and to use this opportunity to take off with air superiority assets."
+		"Call in a temporary combat air patrol to assist your team's air defense over the selected airbase/helipad sector. Enemy aircraft that enter the marked map area are immediately spotted, and those flying above 1 km altitude will be given 45 seconds to leave before being automatically engaged by lethal air-to-air assets. Recommended to augment with short range air defenses and to use this opportunity to take off with air superiority assets."
 	], [
 		"FundsTransfer",
 		WL_COST_FUNDTRANSFER,
@@ -351,6 +351,13 @@ private _strategyArr = [
 		localize "STR_A3_WL_feature_dismiss_selected",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		""
+	], [
+		"BulkRemove",
+		0,
+		[],
+		"Bulk remove",
+		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
+		"Once activated, you will have 30 seconds in which any asset you remove will not prompt you for confirmation."
 	], [
 		"WelcomeScreen",
 		0,

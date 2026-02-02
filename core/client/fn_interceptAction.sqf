@@ -134,7 +134,6 @@ private _interceptAction = {
                     };
                 };
                 case (localize "STR_A3_action_eject"): {
-                    systemChat "Eject action intercepted.";
                     private _altitude = (player modelToWorld [0, 0, 0]) # 2;
                     private _eligible = _altitude > 20;
                     if (_eligible) then {

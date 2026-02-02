@@ -232,6 +232,32 @@ private _debugCombatAirExecute = {
 ] call WL2_fnc_addTargetMapButton;
 #endif
 
+#if WL_CLEAR_SECTOR_DEBUG
+private _clearSectorExecute = {
+    params ["_sector"];
+    private _objectArea = _sector getVariable "objectAreaComplete";
+    private _vehicles = (allUnits + vehicles) inAreaArray _objectArea;
+    _vehicles = _vehicles select { _x != player && _x != vehicle player };
+    {
+        _x setDamage 1;
+    } forEach _vehicles;
+};
+[
+    _sector, _targetId,
+    "order-clear-sector",
+    "Debug: clear sector",
+    _clearSectorExecute,
+    true,
+    "airAssault",
+    [
+        0,
+        "FTSeized",
+        "Fast Travel"
+    ]
+] call WL2_fnc_addTargetMapButton;
+#endif
+
+
 // Mark Sector button
 private _markSectorExecuteLast = {
     params ["_sector"];

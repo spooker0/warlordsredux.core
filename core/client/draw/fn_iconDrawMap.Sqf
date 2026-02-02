@@ -10,6 +10,26 @@ private _drawLines = uiNamespace getVariable ["WL2_drawLines", []];
 private _drawEllipses = uiNamespace getVariable ["WL2_drawEllipses", []];
 private _drawSemiCircles = uiNamespace getVariable ["WL2_drawSemiCircles", []];
 private _drawRectangles = uiNamespace getVariable ["WL2_drawRectangles", []];
+private _drawPolygons = uiNamespace getVariable ["WL2_drawPolygons", []];
+
+{
+    _x params ["_points", "_color", "_fill"];
+
+    if (count _points < 3) then {
+		continue;
+	};
+
+    private _anchor = _points # (count _points - 1);
+
+    for "_i" from 0 to (count _points - 3) do {
+        private _triangle = [
+            _points # _i,
+            _points # (_i + 1),
+            _anchor
+        ];
+        _m drawTriangle [_triangle, _color, _fill];
+    };
+} forEach _drawPolygons;
 
 {
 	_m drawIcon _x;

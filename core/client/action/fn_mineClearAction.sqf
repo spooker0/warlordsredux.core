@@ -11,22 +11,20 @@ private _actionId = _asset addAction [
             playSound "AddItemFailed";
             ["No mine clearing charges available!"] call WL2_fnc_smoothText;
         };
+
+        private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+        private _isFirstShot = WL_ASSET(_assetActualType, "mineClear", 0) == _mineClearCharges;
+
         _asset setVariable ["WL2_mineClearCharges", _mineClearCharges - 1, true];
 
-        [_asset] spawn {
-            params ["_asset"];
+        [_asset, _isFirstShot] spawn {
+            params ["_asset", "_isFirstShot"];
 
             private _dispenseSounds = [
-                "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_01.wss",
-                "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_02.wss",
-                "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_03.wss",
-                "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_04.wss"
-            ];
-            private _detonateSounds = [
-                "a3\sounds_f\arsenal\explosives\grenades\explosion_gng_grenades_01.wss",
-                "a3\sounds_f\arsenal\explosives\grenades\explosion_gng_grenades_02.wss",
-                "a3\sounds_f\arsenal\explosives\grenades\explosion_gng_grenades_03.wss",
-                "a3\sounds_f\arsenal\explosives\grenades\explosion_gng_grenades_04.wss"
+                "a3\sounds_f\weapons\mortar\mortar_01.wss",
+                "a3\sounds_f\weapons\mortar\mortar_02.wss",
+                "a3\sounds_f\weapons\mortar\mortar_06.wss",
+                "a3\sounds_f\weapons\mortar\mortar_07.wss"
             ];
 
             private _length = 500;
@@ -34,15 +32,14 @@ private _actionId = _asset addAction [
             private _width = 50;
             private _direction = getDir _asset;
 
-            playSound3D [selectRandom _dispenseSounds, _asset];
-            playSound3D [selectRandom _dispenseSounds, _asset];
+            playSound3D [selectRandom _dispenseSounds, _asset, false, getPosASL _asset, 5];
 
             private _mineClearOrigin = _asset modelToWorld [0, _length, 0];
             private _mineClearArea = [_mineClearOrigin, _width, _length, _direction, true];
 
             private _assetPos = getPosASL _asset;
 
-            private _projectile = createVehicle ["SmokeShell", _asset modelToWorld [0, 0, 1], [], 0, "FLY"];
+            private _projectile = createVehicle ["GrenadeHand", _asset modelToWorld [0, 0, 1], [], 0, "FLY"];
             _projectile setDir _direction;
             [_projectile, 10, 0] call BIS_fnc_setPitchBank;
             _projectile setVelocityModelSpace [0, 200, 0];
@@ -75,6 +72,7 @@ private _actionId = _asset addAction [
             private _cable = ropeCreate [_dummyStart, [0, 0, 0], _dummyEnd, [0, 0, 0], 100];
 
             private _detonateFx = [];
+            private _lineCharges = [];
             private _jitter = 7;
             {
                 private _bombPos = _x;
@@ -88,40 +86,60 @@ private _actionId = _asset addAction [
                     ["SecondarySmoke", 0.2]
                 ]] remoteExec ["WL2_fnc_particleEffect", 0];
 
-                _detonateFx pushBack ["SecondaryExp", [random 0.6, _bombPos]];
+                _detonateFx pushBack ["ImpactSparksSabot1", [random 0.3, _effectPos]];
+                _detonateFx pushBack ["SecondaryExp", [random 0.6, _effectPos]];
+
+                if (random 1 > 0.5) then {
+                    private _lineCharge = createVehicle ["BombDemine_01_SubAmmo_F", _effectPos, [], 0, "CAN_COLLIDE"];
+                    _lineCharge enableSimulation false;
+                    [_lineCharge, [player, player]] remoteExec ["setShotParents", 2];
+                    _lineCharges pushBack _lineCharge;
+                };
 
                 uiSleep (random 0.2);
             } forEach _detonatePositions;
 
             deleteVehicle _projectile;
 
-            uiSleep 3;
+            uiSleep 4.5;
+
+            if (_isFirstShot) then {
+                playSoundUI ["a3\dubbing_f_epa\a_m01\x20_detonate_casualties\a_m01_x20_detonate_casualties_med_0.ogg", 2];
+            };
+
+            uiSleep 1.5;
+
+            [_mineClearOrigin, _detonateFx] remoteExec ["WL2_fnc_particleEffect", 0];
+            {
+                _x enableSimulation true;
+                triggerAmmo _x;
+                uiSleep (random 0.2);
+            } forEach _lineCharges;
 
             private _side = BIS_WL_playerSide;
 
             private _minesInArea = allMines inAreaArray _mineClearArea;
 
-            private _enemyUnits = switch (_side) do {
-                case west: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
-                case east: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
-                case independent: { BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles };
-                default { [] };
-            };
-
-            private _enemyMineVehicles = _enemyUnits select {
+            private _allUnitsInArea = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) select {
                 WL_ISUP(_x)
-            } select {
-                private _unitActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
-                WL_ASSET(_unitActualType, "smartMineAP", 0) > 0 || WL_ASSET(_unitActualType, "smartMineAT", 0) > 0
-            };
-            private _enemyMineVehiclesInArea = _enemyMineVehicles inAreaArray _mineClearArea;
+            } inAreaArray _mineClearArea;
 
-            _minesInArea append _enemyMineVehiclesInArea;
+            private _smartMinesInArea = _allUnitsInArea select {
+                private _unitActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+                private _isSmartMine = WL_ASSET(_unitActualType, "smartMineAP", 0) > 0 || WL_ASSET(_unitActualType, "smartMineAT", 0) > 0;
+                _isSmartMine
+            };
+            _minesInArea append _smartMinesInArea;
 
             [player, "demine", _asset, _minesInArea] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
-            playSound3D [selectRandom _detonateSounds, objNull, false, _assetPos, 5];
-            [_mineClearOrigin, _detonateFx] remoteExec ["WL2_fnc_particleEffect", 0];
+            private _cratersInArea = _allUnitsInArea select {
+                private _unitActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+                WL_ASSET(_unitActualType, "crater", 0) > 0;
+            };
+            {
+                [_x, player] remoteExec ["WL2_fnc_demolishComplete", 2];
+            } forEach _cratersInArea;
 
             uiSleep 1;
             ropeDestroy _cable;
@@ -132,8 +150,8 @@ private _actionId = _asset addAction [
 	},
 	[],
 	7,
-	true,
 	false,
+	true,
 	"",
 	"driver _target == _this && _target getVariable ['WL2_mineClearCharges', 0] > 0",
 	-98,

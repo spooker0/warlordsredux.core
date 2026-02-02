@@ -264,6 +264,7 @@ class CfgFunctions {
 			class repairActionUpdate {};
 			class restockAction {};
 			class reviveAction {};
+			class runwayBuster {};
 			class scanner {};
 			class scannerAction {};
 			class sendVehicleData {};
@@ -472,7 +473,6 @@ class CfgFunctions {
 			file = "src\core\server";
 			class assetRelevanceCheck {};
 			class attachDetach {};
-			class calcImbalance {};
 			class calculateEndResults {};
 			class changeSectorOwnership {};
 			class clearPlayerReports {};

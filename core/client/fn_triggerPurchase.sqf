@@ -161,6 +161,15 @@ switch (_className) do {
             deleteVehicle _x;
         } forEach ((groupSelectedUnits player) select {_x != player && {_x getVariable ["BIS_WL_ownerAsset", "123"] == getPlayerUID player}});
     };
+    case "BulkRemove": {
+        missionNamespace setVariable ["WL2_bulkRemoveActive", true];
+        ["Bulk remove activated for 30 seconds."] call WL2_fnc_smoothText;
+        0 spawn {
+            uiSleep 30;
+            missionNamespace setVariable ["WL2_bulkRemoveActive", false];
+            ["Bulk remove deactivated."] call WL2_fnc_smoothText;
+        };
+    };
     case "WipeMap": {
         {
             if ("_USER_DEFINED #" in _x) then {
@@ -260,8 +269,7 @@ switch (_className) do {
                 if (_orderedClass isKindOf "Man") then {
                     continue;
                 };
-                [player, "orderAsset", "vehicle", _pos, _orderedClass, _direction, false] remoteExec ["WL2_fnc_handleClientRequest", 2];
-                [player, "10K"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+                [player, "orderAsset", "vehicle", _pos, _orderedClass, _direction, false, true] remoteExec ["WL2_fnc_handleClientRequest", 2];
                 uiSleep 0.1;
             };
         };
@@ -280,8 +288,7 @@ switch (_className) do {
                     if (_orderedClass isKindOf "Man") then {
                         continue;
                     };
-                    [player, "orderAsset", "vehicle", _pos, _orderedClass, _direction, false] remoteExec ["WL2_fnc_handleClientRequest", 2];
-                    [player, "10K"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+                    [player, "orderAsset", "vehicle", _pos, _orderedClass, _direction, false, true] remoteExec ["WL2_fnc_handleClientRequest", 2];
                     uiSleep 0.1;
                 };
             } forEach BIS_WL_allSectors;
@@ -323,7 +330,7 @@ switch (_className) do {
                 ["DAZZLER", "#de0808"],
                 ["PROJECTILE JAMMED", "#de0808"],
                 ["PROJECTILE DESTROYED", "#de0808"],
-                ["SECTOR CAPTURED", "#228b22"],
+                ["REGION CAPTURED", "#228b22"],
                 ["REVIVED TEAMMATE", "#228b22"],
                 ["RECON", "#228b22"],
                 ["SPOT ASSIST", "#228b22"],

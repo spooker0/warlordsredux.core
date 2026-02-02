@@ -16,12 +16,11 @@ if (side group player == independent) then {
 };
 #endif
 
-if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
-	player addAction [
-		"+$10K",
-		{[player, "10K"] remoteExec ["WL2_fnc_handleClientRequest", 2];}
-	];
-};
+#if WL_FREE_MONEY
+	player addAction ["+$50K", {
+		[player, "50K"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+	}];
+#endif
 
 0 spawn WL2_fnc_reviveAction;
 

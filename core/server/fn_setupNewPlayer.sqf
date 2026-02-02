@@ -119,8 +119,6 @@ missionNamespace setVariable ["WL2_scoreboardData", _scoreboard];
 
 ["Scoreboard setup complete."] call _initLog;
 
-call WL2_fnc_calcImbalance;
-
 ["Imbalance calculations complete."] call _initLog;
 
 private _readyList = missionNamespace getVariable ["WL2_readyList", []];

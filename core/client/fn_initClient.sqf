@@ -127,10 +127,6 @@ WL_LoadingState = 9;
 	ctrlMapAnimCommit (uiNamespace getVariable ["BIS_WL_mapControl", controlNull]);
 };
 
-{
-	_x setMarkerAlphaLocal 0
-} forEach BIS_WL_sectorLinks;
-
 WL_LoadingState = 10;
 
 0 spawn WL2_fnc_repackMagazines;
@@ -204,19 +200,20 @@ if !(isDedicated) then {
 	};
 };
 
-if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
-	player addAction [
-		"+$10K",
-		{
-			[player, "10K"] remoteExec ["WL2_fnc_handleClientRequest", 2];
-		}
-	];
+#if WL_FREE_MONEY
+	player addAction ["+$50K", {
+		[player, "50K"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+	}];
+#endif
 
+#if WL_TEST_SERVER
 	0 spawn {
 		uiSleep 10;
 		["Play Tester", true] call RWD_fnc_addBadge;
 	};
+#endif
 
+#if WL_ZEUS_ENABLED
 	{
 		private _curator = _x;
 		_curator addEventHandler ["CuratorObjectPlaced", {
@@ -231,7 +228,7 @@ if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
 			missionNamespace setVariable ["BIS_WL_ownedVehicles_server", _ownedVehicles, true];
 		}];
 	} forEach allCurators;
-};
+#endif
 
 private _squadActionText = format ["<t color='#00FFFF'>%1</t>", localize "STR_SQUADS_squads"];
 private _squadActionId = player addAction[_squadActionText, {

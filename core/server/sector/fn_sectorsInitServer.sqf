@@ -119,11 +119,8 @@ private _sectorGroup = createGroup [civilian, true];
 	_area set [4, 38];
 	_area params ["_a", "_b", "_angle", "_isRectangle"];
 	private _size = _a * _b * (if (_isRectangle) then {4} else {pi});
-	private _sectorValue = if (_sector in [_firstBase, _secondBase]) then {
-		WL_BASE_VALUE;
-	} else {
-		round (_size / 13000);
-	};
+	private _sectorValue = round (_size / 13000);
+
 	_sector setVariable ["BIS_WL_value", _sectorValue];
 
 	private _agent = _sectorGroup createUnit ["Logic", _sectorPos, [], 0, "CAN_COLLIDE"];
@@ -224,3 +221,145 @@ private _sectorGroup = createGroup [civilian, true];
 	} forEach _this;
 };
 #endif
+
+
+
+private _faces = [];
+private _outNeighborsBySectorId = createHashMap;
+private _neighborIndexBySectorId = createHashMap;
+private _visitedHalfEdges = createHashMap;
+
+private _allSectors = BIS_WL_allSectors;
+
+private _getAngleDegrees2D = {
+	params ["_fromSector", "_toSector"];
+
+	private _fromPos = getPosASL _fromSector;
+	private _toPos = getPosASL _toSector;
+
+	private _dx = (_toPos # 0) - (_fromPos # 0);
+	private _dy = (_toPos # 1) - (_fromPos # 1);
+
+	private _angle = _dy atan2 _dx;
+	if (_angle < 0) then { _angle = _angle + 360 };
+	_angle
+};
+
+private _halfEdgeKey = {
+	params ["_fromSector", "_toSector"];
+	format ["%1>%2", netId _fromSector, netId _toSector]
+};
+
+private _getNextHalfEdge = {
+	params ["_fromSector", "_toSector"];
+
+	private _toSectorId = netId _toSector;
+
+	private _sortedNeighbors = _outNeighborsBySectorId get _toSectorId;
+	private _neighborIndexMap = _neighborIndexBySectorId get _toSectorId;
+
+	private _reverseIndex = _neighborIndexMap get (netId _fromSector);
+	private _degree = count _sortedNeighbors;
+
+	private _nextIndex = (_reverseIndex - 1 + _degree) mod _degree;
+	private _nextSector = _sortedNeighbors # _nextIndex;
+
+	[_toSector, _nextSector]
+};
+
+private _getFaceArea2D = {
+	params ["_sectorsInFace"];
+
+	private _count = count _sectorsInFace;
+	private _sum = 0;
+
+	for "_i" from 0 to (_count - 1) do {
+		private _a = _sectorsInFace # _i;
+		private _b = _sectorsInFace # ((_i + 1) mod _count);
+
+		private _pa = getPosASL _a;
+		private _pb = getPosASL _b;
+
+		private _ax = _pa # 0;
+		private _ay = _pa # 1;
+
+		private _bx = _pb # 0;
+		private _by = _pb # 1;
+
+		_sum = _sum + (_ax * _by - _bx * _ay);
+	};
+
+	abs (_sum * 0.5)
+};
+
+{
+	private _sector = _x;
+	private _sectorId = netId _sector;
+
+	private _neighbors = _sector getVariable ["WL2_connectedSectors", []];
+
+	private _sortedNeighbors = [_neighbors, [], {
+		params ["_neighbor"];
+		[_sector, _neighbor] call _getAngleDegrees2D
+	}, "ASCEND"] call BIS_fnc_sortBy;
+
+	_outNeighborsBySectorId set [_sectorId, _sortedNeighbors];
+
+	private _neighborIndexMap = createHashMap;
+	for "_index" from 0 to ((count _sortedNeighbors) - 1) do {
+		private _neighbor = _sortedNeighbors # _index;
+		_neighborIndexMap set [netId _neighbor, _index];
+	};
+
+	_neighborIndexBySectorId set [_sectorId, _neighborIndexMap];
+
+} forEach _allSectors;
+
+{
+	private _fromSector = _x;
+	private _fromSectorId = netId _fromSector;
+	private _fromSortedNeighbors = _outNeighborsBySectorId get _fromSectorId;
+
+	{
+		private _toSector = _x;
+
+		private _startKey = [_fromSector, _toSector] call _halfEdgeKey;
+		if (_visitedHalfEdges getOrDefault [_startKey, false]) then { continue };
+
+		private _sectorsInFace = [];
+		private _currentFrom = _fromSector;
+		private _currentTo = _toSector;
+
+		while { !(_visitedHalfEdges getOrDefault [[_currentFrom, _currentTo] call _halfEdgeKey, false]) } do {
+			private _currentKey = [_currentFrom, _currentTo] call _halfEdgeKey;
+			_visitedHalfEdges set [_currentKey, true];
+
+			_sectorsInFace pushBack _currentFrom;
+
+			private _next = [_currentFrom, _currentTo] call _getNextHalfEdge;
+			_currentFrom = _next # 0;
+			_currentTo = _next # 1;
+		};
+
+		_faces pushBack _sectorsInFace;
+
+	} forEach _fromSortedNeighbors;
+
+} forEach _allSectors;
+
+private _facesData = [];
+{
+	private _sectorsInFace = _x;
+	private _area = [_sectorsInFace] call _getFaceArea2D;
+
+	if (_area > 15000000) then {
+		continue;
+	};
+
+	private _sectorNames = _sectorsInFace apply {
+		_x getVariable ["WL2_name", ""]
+	};
+
+	_facesData pushBack [_sectorsInFace, _area];
+} forEach _faces;
+missionNamespace setVariable ["WL2_sectorFaces", _facesData, true];

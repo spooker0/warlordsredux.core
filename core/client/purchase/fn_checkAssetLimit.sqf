@@ -6,7 +6,10 @@ if (_class isKindOf "Man") exitWith {
 
 private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
 private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];
-_ownedVehicles = _ownedVehicles select { alive _x };
+_ownedVehicles = _ownedVehicles select { alive _x } select {
+    private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+    WL_ASSET(_assetActualType, "crater", 0) == 0
+};
 private _limitedVehicles = [];
 private _typeLimit = 0;
 

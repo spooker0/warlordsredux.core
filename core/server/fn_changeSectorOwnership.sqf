@@ -8,22 +8,38 @@ private _previousOwners = _sector getVariable "BIS_WL_previousOwners";
 private _isNeutralSector = count _previousOwners == 0;
 if !(_owner in _previousOwners) then {
 	_previousOwners pushBack _owner;
-	if (serverTime > 0 && {count _previousOwners == 1}) then {
-		private _relevantNeighbors = (synchronizedObjects _sector) select {(_x getVariable "BIS_WL_owner") == _owner};
-		private _neighborList = _relevantNeighbors apply {[_x distance2D _sector, _x]};
-		_neighborList sort true;
-		if (count _neighborList > 0) then {
-			private _closestNeighborDistance = (_neighborList # 0) # 0;
-			private _reward = ((round (_closestNeighborDistance / 3)) min 1000) max 100;
+
+	private _facesData = missionNamespace getVariable ["WL2_sectorFaces", []];
+	{
+		_x params ["_sectorsInFace", "_area"];
+		if (_sector in _sectorsInFace) then {
+			private _ownsFace = true;
 			{
-				private _uid = getPlayerUID _x;
-				[_reward, _uid, false] call WL2_fnc_fundsDatabaseWrite;
-				[objNull, _reward, "Sector captured", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _x];
-			} forEach (allPlayers select {
-				side group _x == _owner
-			});
+				private _sectorInFace = _x;
+				private _sectorOwner = _sectorInFace getVariable ["BIS_WL_owner", civilian];
+				if (_sectorOwner != _owner) then {
+					_ownsFace = false;
+					break;
+				};
+			} forEach _sectorsInFace;
+			if (_ownsFace) then {
+				private _faceVertices = count _sectorsInFace;;
+				private _reward = _faceVertices * 500;
+
+				private _recipients = allPlayers select {
+					!(_x getVariable ["WL2_afk", false])
+				} select {
+					side group _x == _owner
+				};
+
+				{
+					private _uid = getPlayerUID _x;
+					[_reward, _uid, false] call WL2_fnc_fundsDatabaseWrite;
+					[objNull, _reward, "Region captured", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _x];
+				} forEach _recipients;
+			};
 		};
-	};
+	} forEach _facesData;
 };
 
 _previousOwners pushBackUnique _owner;
@@ -36,7 +52,6 @@ if (_sector == (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", 
 };
 
 ["server", true] call WL2_fnc_updateSectorArrays;
-call WL2_fnc_calcImbalance;
 
 _side = [west, east];
 _side deleteAt (_side find _owner);

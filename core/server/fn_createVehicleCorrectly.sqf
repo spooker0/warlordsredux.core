@@ -31,7 +31,12 @@ if (_isInWaterSector) then {
 };
 
 if (_exactPosition) then {
-	_asset setVectorDirAndUp _direction;
+	if (_direction isEqualType 0) then {
+		_asset setDir _direction;
+	} else {
+		_asset setVectorDirAndUp _direction;
+	};
+
 	_asset setPosWorld _pos;
 };
 

@@ -167,13 +167,28 @@ addMissionEventHandler ["PlayerViewChanged", {
 addMissionEventHandler ["MarkerCreated", {
 	params ["_marker", "_channelNumber", "_owner", "_local"];
 	if (!isPlayer _owner) exitWith {};
+	private _markerText = toLower markerText _marker;
+
+#if WL_TP_ENABLED
+	if (_local) then {
+		if ((toLower _markerText) in ["x", "tp"]) exitWith {
+			private _markerPos = getMarkerPos _marker;
+			cameraOn setVehiclePosition [[_markerPos # 0, _markerPos # 1, 100], [], 0, "CAN_COLLIDE"];
+			deleteMarker _marker;
+		};
+		private _height = parseNumber _markerText;
+		if (_height > 0 && _height < 15000) exitWith {
+			private _markerPos = getMarkerPos _marker;
+			cameraOn setPosASL [_markerPos # 0, _markerPos # 1, _height];
+			deleteMarker _marker;
+		};
+	};
+#endif
 
 	// Global markers disabled
 	if (_channelNumber == 0) exitWith {
 		deleteMarker _marker;
 	};
-
-	private _markerText = toLower markerText _marker;
 	if (_markerText == "") exitWith {};
 
 	private _disallowList = getArray (missionConfigFile >> "adminFilter");

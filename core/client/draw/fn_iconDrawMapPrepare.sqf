@@ -28,6 +28,7 @@ private _drawEllipses = [];
 private _drawSemiCircles = [];
 private _drawLines = [];
 private _drawRectangles = [];
+private _drawPolygons = [];
 
 private _mapData = missionNamespace getVariable ["WL2_mapData", createHashMap];
 private _side = _mapData getOrDefault ["side", sideUnknown];
@@ -39,6 +40,69 @@ private _mapSizeCache = uiNamespace getVariable ["WL2_mapSizeCache", createHashM
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _mapIconScale = _settingsMap getOrDefault ["mapIconScale", 1];
+
+// Draw sector links
+private _sectorTarget = WL_SectorActionTarget;
+private _allLinks = missionNamespace getVariable ["WL2_linkSectorMarkers", createHashMap];
+private _mapSectorLineGrayscale = _settingsMap getOrDefault ["mapSectorLineGrayscale", 1];
+private _neutralLinkColor = [_mapSectorLineGrayscale, _mapSectorLineGrayscale, _mapSectorLineGrayscale, 1];
+private _ownedSectorLinkColor = if (BIS_WL_playerSide == west) then {
+	[0, 0.3, 0.6, 1]
+} else {
+	[0.5, 0, 0, 1]
+};
+if (BIS_WL_selection_showLinks) then {
+	{
+		private _pairKey = _x;
+		private _linkData = _y;
+		_y params ["_startPos", "_endPos", "_sector", "_link"];
+		private _sectorOwner = _sector getVariable ["BIS_WL_owner", sideUnknown];
+		private _linkOwner = _link getVariable ["BIS_WL_owner", sideUnknown];
+		private _linkColor = if (_sectorOwner == BIS_WL_playerSide && _linkOwner == BIS_WL_playerSide) then {
+			_ownedSectorLinkColor;
+		} else {
+			_neutralLinkColor;
+		};
+
+		_drawLines pushBack [
+			_startPos,
+			_endPos,
+			_linkColor,
+			10
+		];
+	} forEach _allLinks
+} else {
+	if (!isNull _sectorTarget) then {
+		private _links = _sectorTarget getVariable ["WL2_connectedSectors", []];
+		{
+			private _link = _x;
+			private _pairKey1 = hashValue _sectorTarget + hashValue _link;
+			private _pairKey2 = hashValue _link + hashValue _sectorTarget;
+			private _pairKey = if (_pairKey1 in _allLinks) then {
+				_pairKey1
+			} else {
+				_pairKey2
+			};
+
+			private _linkData = _allLinks getOrDefault [_pairKey, []];
+			_linkData params ["_startPos", "_endPos", "_sector", "_link"];
+			private _sectorOwner = _sector getVariable ["BIS_WL_owner", sideUnknown];
+			private _linkOwner = _link getVariable ["BIS_WL_owner", sideUnknown];
+			private _linkColor = if (_sectorOwner == BIS_WL_playerSide && _linkOwner == BIS_WL_playerSide) then {
+				_ownedSectorLinkColor;
+			} else {
+				_neutralLinkColor;
+			};
+
+			_drawLines pushBack [
+				_startPos,
+				_endPos,
+				_linkColor,
+				10
+			];
+		} forEach _links;
+	};
+};
 
 // Draw white hover selector
 if !(isNull BIS_WL_highlightedSector) then {
@@ -131,7 +195,6 @@ if (count _assetTargets > 0) then {
 };
 
 // Draw sector selector
-private _sectorTarget = WL_SectorActionTarget;
 if (!isNull _sectorTarget) then {
 	private _sectorPos = getPosASL _sectorTarget;
 	if (isNull BIS_WL_highlightedSector && WL_SectorActionTargetActive) then {
@@ -193,6 +256,77 @@ if (!isNull _sectorTarget) then {
 			];
 		};
 	} forEach _sectorInfo;
+};
+
+// Draw sector areas
+if (!isNull _sectorTarget || BIS_WL_selection_showLinks) then {
+	private _facesData = missionNamespace getVariable ["WL2_sectorFaces", []];
+
+	private _neutralRGBA = [0, 0.6, 0, 0.4];
+	private _sideColorRGBA = switch (BIS_WL_playerSide) do {
+		case west: { [0, 0.3, 0.6, 0.4] };
+		case east: { [0.5, 0, 0, 0.4] };
+		case independent: { _neutralRGBA };
+		default { _neutralRGBA };
+	};
+
+	{
+		_x params ["_sectors", "_area"];
+
+		if !(_sectorTarget in _sectors || BIS_WL_selection_showLinks) then {
+			continue;
+		};
+
+		private _ownsFace = true;
+		{
+			private _sectorOwner = _x getVariable ["BIS_WL_owner", sideUnknown];
+			if (_sectorOwner != BIS_WL_playerSide) then {
+				_ownsFace = false;
+				break;
+			};
+		} forEach _sectors;
+
+		private _location = [0, 0, 0];
+		{
+			_location = _location vectorAdd (getPosASL _x);
+		} forEach _sectors;
+		_location = _location vectorMultiply (1 / count _sectors);
+
+		private _incomeText = if (_ownsFace) then {
+			format ["+%1", round (_area * WL_INCOME_M2)]
+		} else {
+			format ["%1", round (_area * WL_INCOME_M2)]
+		};
+
+		_drawIcons pushBack [
+			"#(rgb,1,1,1)color(1,1,1,1)",
+			[1, 1, 1, 1],
+			_location,
+			0,
+			0,
+			0,
+			_incomeText,
+			1,
+			0.06 * _mapIconScale,
+			"PuristaSemibold",
+			"center"
+		];
+
+		private _sectorDrawPoints = _sectors apply {
+			getPosASL _x;
+		};
+
+		private _colorToUse = if (_ownsFace) then {
+			_sideColorRGBA
+		} else {
+			_neutralRGBA
+		};
+		_drawPolygons pushBack [
+			_sectorDrawPoints,
+			_colorToUse,
+			"#(rgb,1,1,1)color(1,1,1,1)"
+		];
+	} forEach _facesData;
 };
 
 // Draw waypoints
@@ -754,11 +888,13 @@ if (_drawMode == 2) then {
 	private _storedDrawEllipses = missionNamespace getVariable ["WL2_drawEllipses", []];
 	private _storedDrawSemiCircles = missionNamespace getVariable ["WL2_drawSemiCircles", []];
 	private _storedDrawRectangles = missionNamespace getVariable ["WL2_drawRectangles", []];
+	private _storedDrawPolygons = missionNamespace getVariable ["WL2_drawPolygons", []];
 	private _storedSectorIcons = missionNamespace getVariable ["WL2_drawSectorIcons", []];
 
 	_storedDrawIcons pushBack _drawIcons;
 	_storedDrawEllipses pushBack _drawEllipses;
 	_storedDrawRectangles pushBack _drawRectangles;
+	_storedDrawPolygons pushBack _drawPolygons;
 	_storedSectorIcons pushBack _drawSectorIcons;
 } else {
 	uiNamespace setVariable ["WL2_drawIcons", _drawIcons];
@@ -768,6 +904,7 @@ if (_drawMode == 2) then {
 	uiNamespace setVariable ["WL2_drawEllipses", _drawEllipses];
 	uiNamespace setVariable ["WL2_drawSemiCircles", _drawSemiCircles];
 	uiNamespace setVariable ["WL2_drawRectangles", _drawRectangles];
+	uiNamespace setVariable ["WL2_drawPolygons", _drawPolygons];
 	uiNamespace setVariable ["WL2_drawLines", _drawLines];
 };
 

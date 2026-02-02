@@ -346,8 +346,10 @@ if (_action == "demine") exitWith {
 	};
 
 	private _reward = 10 * count _enemyMines;
-	[_reward] call _addFunds;
-	[objNull, _reward, "Mine destroyed", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+	if (count _targets > 0) then {
+		[_reward] call _addFunds;
+		[objNull, _reward, "Mine destroyed", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+	};
 };
 
 if (_action == "secure") exitWith {
@@ -359,11 +361,11 @@ if (_action == "secure") exitWith {
 	[objNull, _reward, "Secured", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
-if (_action == "10K") exitWith {
-	if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
-		[10000, _uid, false] call WL2_fnc_fundsDatabaseWrite;
-	};
+#if WL_FREE_MONEY
+if (_action == "50K") exitWith {
+	[50000, _uid, false] call WL2_fnc_fundsDatabaseWrite;
 };
+#endif
 
 if (_action == "updateZeus") exitWith {
 	if (getPlayerUID _sender in (getArray (missionConfigFile >> "adminIDs"))) then {

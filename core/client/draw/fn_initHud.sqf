@@ -59,11 +59,13 @@ while { !BIS_WL_missionEnd } do {
 		call WL2_fnc_purchaseMenuRefresh;
 	};
 
+	private _sectorsArray = missionNamespace getVariable ["BIS_WL_sectorsArray", []];
+	private _income = if (count _sectorsArray > 4) then { _sectorsArray # 4 } else { 0 };
 	_moneyControl ctrlSetStructuredText parseText format [
 		"<t shadow='2' size ='1.1' align='middle'>%1%2</t>    <t shadow='2' size ='0.9' align='middle'>+%3</t>",
 		WL_MoneySign,
 		_currentMoney,
-		missionNamespace getVariable [format ["WL2_actualIncome_%1", _side], 0]
+		_income
 	];
 
 	_subordinateControl ctrlSetStructuredText parseText format [

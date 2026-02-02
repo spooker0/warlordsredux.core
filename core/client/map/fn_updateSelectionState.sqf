@@ -95,21 +95,11 @@ if (WL_IsSpectator || WL_IsReplaying) then {
     BIS_WL_selection_showLinks = true;
 };
 
-if (BIS_WL_selection_showLinks) then {
-    {
-        _x setMarkerAlphaLocal 1;
-    } forEach BIS_WL_sectorLinks;
-} else {
-    {
-        _x setMarkerAlphaLocal 0;
-    } forEach BIS_WL_sectorLinks;
-};
-
 private _targetedSector = WL_SectorActionTarget;
-private _sectorLinks = WL_linkSectorMarkers getOrDefault [hashValue _targetedSector, []];
-{
-    _x setMarkerAlphaLocal 1;
-} forEach _sectorLinks;
+// private _sectorLinks = WL_linkSectorMarkers getOrDefault [hashValue _targetedSector, []];
+// {
+//     _x setMarkerAlphaLocal 1;
+// } forEach _sectorLinks;
 
 {
     private _alpha = if (BIS_WL_selection_dimSectors && !(_x in BIS_WL_selection_availableSectors)) then {

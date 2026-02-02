@@ -4,7 +4,7 @@ private _assetData = WL_ASSET_DATA;
 
 private _shouldGarbageCollect = {
 	params ["_asset"];
-	if (_asset isKindOf "Air" && !unitIsUAV _asset && _asset getVariable ["WL_spawnedAsset", false]) exitWith { false };
+	if (_asset isKindOf "Air" && _asset getVariable ["WL_spawnedAsset", false]) exitWith { false };
 	if (!alive _asset) exitWith { true };
 	if (_asset getEntityInfo 12) exitWith { true };
 	if (_asset getEntityInfo 2) exitWith { true };

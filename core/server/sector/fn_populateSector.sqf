@@ -1,6 +1,10 @@
 #include "includes.inc"
 params ["_sector", "_owner"];
 
+#if WL_EMPTY_SECTORS
+if (true) exitWith {};
+#endif
+
 private _sectorValue = _sector getVariable ["BIS_WL_value", 50];
 private _garrisonSize = _sectorValue * 1.3;
 

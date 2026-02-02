@@ -36,13 +36,14 @@ private _secureWreckAction = _asset addAction [
 	format ["Secure Wreck for %1 (%2%3)", _assetDisplayName, WL_MoneySign, _rewardAmount],
 	{
         params ["_asset", "_caller", "_actionId", "_arguments"];
-        private _inFriendlySector = [-2, []] call WL2_fnc_checkInFriendlySector;
-        if !(_inFriendlySector # 0) exitWith {
-            ["You can secure the wreck by moving it to a friendly sector or forward base with a flatbed or via slingloading."] call WL2_fnc_smoothText;
+        private _rewardAmount = _arguments select 0;
+
+        private _inFriendlySector = ([-2, []] call WL2_fnc_checkInFriendlySector) # 0;
+        if (!_inFriendlySector && _rewardAmount > 1333) exitWith {
+            ["You can secure this wreck by moving it to a friendly sector or forward base with a flatbed or via slingloading."] call WL2_fnc_smoothText;
             playSoundUI ["AddItemFailed"];
         };
 
-        private _rewardAmount = _arguments select 0;
         [player, "secureAircraft", _rewardAmount] remoteExec ["WL2_fnc_handleClientRequest", 2];
         [objNull, _rewardAmount, "Aircraft secured", "#228b22"] call WL2_fnc_killRewardClient;
 
