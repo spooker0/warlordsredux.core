@@ -121,7 +121,7 @@ private _sectorGroup = createGroup [civilian, true];
 	private _size = _a * _b * (if (_isRectangle) then {4} else {pi});
 	private _sectorValue = round (_size / 13000);
 
-	_sector setVariable ["BIS_WL_value", _sectorValue];
+	_sector setVariable ["BIS_WL_value", _sectorValue, true];
 
 	private _agent = _sectorGroup createUnit ["Logic", _sectorPos, [], 0, "CAN_COLLIDE"];
 	_agent enableSimulationGlobal false;
