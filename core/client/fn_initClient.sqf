@@ -271,6 +271,7 @@ call WL2_fnc_pingFixInit;
 	[] call MENU_fnc_updateViewDistance;
 };
 0 spawn WL2_fnc_interceptAction;
+0 spawn WL2_fnc_secureWreckAction;
 0 spawn WL2_fnc_controlDroneActions;
 if (!isServer) then {
 	0 spawn WL2_fnc_cleanupCarrier;

@@ -51,30 +51,6 @@ if (_immobile > 0) then {
 	_asset setFuelConsumptionCoef 1000;
 };
 
-private _currentSector = BIS_WL_allSectors select {
-	_asset inArea (_x getVariable "objectAreaComplete") &&
-	_x getVariable ["BIS_WL_owner", sideUnknown] == _side
-};
-
-if (count _currentSector == 0) then {
-	private _potentialBases = missionNamespace getVariable ["WL2_forwardBases", []];
-	private _forwardBases = _potentialBases select {
-		_asset distance2D _x < WL_FOB_RANGE &&
-		_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side
-	};
-
-	if (count _forwardBases > 0) then {
-		private _forwardBase = _forwardBases # 0;
-		private _forwardBaseSupplies = _forwardBase getVariable ["WL2_forwardBaseSupplies", 0];
-		if (_cost > _forwardBaseSupplies) exitWith {
-			deleteVehicle _asset;
-			["Not enough supplies in forward base."] remoteExec ["WL2_fnc_smoothText", _sender];
-			_sender setVariable ["BIS_WL_isOrdering", false, [2, _owner]];
-		};
-		_forwardBase setVariable ["WL2_forwardBaseSupplies", _forwardBaseSupplies - _cost, true];
-	};
-};
-
 private _isAircraft = _asset isKindOf "Air";
 private _variant = WL_ASSET(_orderedClass, "variant", 0);
 if (!_isAircraft && _variant > 0) then {

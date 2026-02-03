@@ -4,7 +4,6 @@ private _assetData = WL_ASSET_DATA;
 
 private _shouldGarbageCollect = {
 	params ["_asset"];
-	if (_asset isKindOf "Air" && _asset getVariable ["WL_spawnedAsset", false]) exitWith { false };
 	if (!alive _asset) exitWith { true };
 	if (_asset getEntityInfo 12) exitWith { true };
 	if (_asset getEntityInfo 2) exitWith { true };
@@ -25,7 +24,20 @@ while { !BIS_WL_missionEnd } do {
 				deleteVehicle _x;
 			};
 		} else {
-			deleteVehicle _x;
+			private _isAirWreck = _x isKindOf "Air" && _x getVariable ["WL_spawnedAsset", false];
+			if (_isAirWreck) then {
+				private _ticks = _x getVariable ["WL2_garbageCollectorTicks", 0];
+				if (isNull attachedTo _x || _x getEntityInfo 3 > 600) then {
+					_ticks = _ticks + 1;
+					if (_ticks > 3) then {
+						deleteVehicle _x;
+					} else {
+						_x setVariable ["WL2_garbageCollectorTicks", _ticks, true];
+					};
+				};
+			} else {
+				deleteVehicle _x;
+			};
 		};
 	} forEach _collectables;
 

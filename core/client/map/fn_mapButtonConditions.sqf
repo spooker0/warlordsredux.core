@@ -255,17 +255,17 @@ switch (_conditionName) do {
 
         "ok";
     };
-    case "upgradeFOB": {
+    case "defendFOB": {
         private _fobOwner = _target getVariable ["WL2_forwardBaseOwner", sideUnknown];
         if (_fobOwner != BIS_WL_playerSide) exitWith { "" };
 
-        private _isUpgraded = _target getVariable ["WL2_forwardBaseUpgraded", false];
-        if (_isUpgraded) exitWith { "" };
+        private _defenseLevel = _target getVariable ["WL2_forwardBaseDefenseLevel", 0];
+        if (_defenseLevel >= 4) exitWith { "" };
 
         if (!alive _target) exitWith { "Forward base has been destroyed." };
 
         private _supplies = _target getVariable ["WL2_forwardBaseSupplies", -1];
-        if (_supplies < WL_FOB_UPGRADE_COST) exitWith { format ["Need %1 supplies to upgrade forward base to airbase.", WL_FOB_UPGRADE_COST] };
+        if (_supplies < WL_FOB_DEFENSE_COST) exitWith { format ["Need %1 supplies to add defenses to forward base.", WL_FOB_DEFENSE_COST] };
 
         "ok";
     };

@@ -107,7 +107,7 @@ private _menuButtonIconMap = createHashMapFromArray [
     ["target-altitude", "a3\ui_f\data\igui\cfg\simpletasks\types\Heli_ca.paa"],
     ["target-loiter-radius", "A3\ui_f\data\map\markers\military\circle_CA.paa"],
 	["team-designate", "a3\ui_f\data\igui\cfg\simpletasks\types\move_ca.paa"],
-	["upgrade-fob", "A3\ui_f\data\map\markers\military\flag_CA.paa"],
+	["upgrade-defend-fob", "a3\ui_f\data\igui\cfg\simpletasks\types\defend_ca.paa"],
     ["vehicle-paradrop", "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa"]
 ];
 uiNamespace setVariable ["WL2_mapMenuButtonIcons", _menuButtonIconMap];

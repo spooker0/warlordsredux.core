@@ -267,6 +267,7 @@ class CfgFunctions {
 			class runwayBuster {};
 			class scanner {};
 			class scannerAction {};
+			class secureWreckAction {};
 			class sendVehicleData {};
 			class setupForwardBaseAction {};
 			class setupForwardBaseEligibility {};
@@ -431,7 +432,6 @@ class CfgFunctions {
 		class Common {
 			file = "src\core\common";
 			class accessControl {};
-			class airWreckHandler {};
 			class cleanupCarrier {};
 			class establishStronghold {};
 			class findSpawnsInArea {};

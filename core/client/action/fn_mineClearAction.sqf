@@ -2,7 +2,7 @@
 params ["_asset"];
 
 private _actionId = _asset addAction [
-	"<t color='#00ff00'>Clear Mines</t>",
+	"<t color='#00ff00'>Launch Line Charge</t>",
 	{
 		params ["_asset", "_caller", "_actionID"];
 

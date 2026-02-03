@@ -298,6 +298,9 @@ if (_asset isKindOf "Man") then {
 		_asset setVariable ["WL_scannerOn", true, true];
 	};
 
+	private _hideNameOnMap = WL_ASSET(_assetActualType, "hideName", 0) > 0;
+	_asset setVariable ["WL2_hideNameOnMap", _hideNameOnMap, true];
+
 	// if (WL_ASSET(_assetActualType, "hasAirRearm", 0) > 0) then {
 	// 	_asset setVariable ['WL2_hasInflightRearm', true, true];
 	// };
@@ -309,7 +312,7 @@ if (_asset isKindOf "Man") then {
 
 	if (_asset isKindOf "Air") then {
 		// [_asset] remoteExec ["WL2_fnc_airRearmAction", 0, true];
-		[_asset] remoteExec ["WL2_fnc_airWreckHandler", 0];
+		removeFromRemainsCollector [_asset];
 	};
 
 	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];

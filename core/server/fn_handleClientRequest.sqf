@@ -68,6 +68,7 @@ private _actionCost = switch (_action) do {
 // Deduct cost and exit early if funds are insufficient
 if (_actionCost > 0 && { !([_actionCost] call _deductFunds) }) exitWith {};
 
+private _side = side group _sender;
 if (_action == "orderAsset") exitWith {
 	private _orderType = _param1;
 	private _position = _param2;
@@ -82,18 +83,52 @@ if (_action == "orderAsset") exitWith {
 	_stats set [_orderedClass, _orderedClassStats];
 	missionNamespace setVariable ["WL_stats", _stats];
 
-	switch (_orderType) do {
-		case "air" : {
-			[_sender, _position, _orderedClass, WL_ASSET(_param3, "cost", 50001)] spawn WL2_fnc_orderAir;
+	private _currentSector = BIS_WL_allSectors select {
+		_position inArea (_x getVariable "objectAreaComplete") &&
+		_x getVariable ["BIS_WL_owner", sideUnknown] == _side
+	};
+
+	private _paidFor = if (isNil "_param6") then { false } else { _param6 };
+	private _success = if (!_paidFor && count _currentSector == 0) then {
+		private _potentialBases = missionNamespace getVariable ["WL2_forwardBases", []];
+		private _forwardBases = _potentialBases select {
+			_position distance2D _x < WL_FOB_RANGE &&
+			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side
 		};
-		case "naval" : {
-			[_sender, _position, _orderedClass] spawn WL2_fnc_orderWater;
+
+		if (count _forwardBases > 0) then {
+			private _forwardBase = _forwardBases # 0;
+			private _forwardBaseSupplies = _forwardBase getVariable ["WL2_forwardBaseSupplies", 0];
+			if (_actionCost > _forwardBaseSupplies) then {
+				false
+			} else {
+				_forwardBase setVariable ["WL2_forwardBaseSupplies", _forwardBaseSupplies - _actionCost, true];
+				true
+			};
+		} else {
+			false
 		};
-		default {
-			private _direction = _param4;
-			private _exactPosition = _param5;
-			[_sender, _position, _orderedClass, _direction, _exactPosition] spawn WL2_fnc_orderGround;
+	} else {
+		true
+	};
+
+	if (_success) then {
+		switch (_orderType) do {
+			case "air" : {
+				[_sender, _position, _orderedClass, WL_ASSET(_param3, "cost", 50001)] spawn WL2_fnc_orderAir;
+			};
+			case "naval" : {
+				[_sender, _position, _orderedClass] spawn WL2_fnc_orderWater;
+			};
+			default {
+				private _direction = _param4;
+				private _exactPosition = _param5;
+				[_sender, _position, _orderedClass, _direction, _exactPosition] spawn WL2_fnc_orderGround;
+			};
 		};
+	} else {
+		private _owner = owner _sender;
+		_sender setVariable ["BIS_WL_isOrdering", false, [2, _owner]];
 	};
 };
 
@@ -136,13 +171,33 @@ if (_action == "orderArsenal") exitWith {
 	0 remoteExec ["WL2_fnc_orderArsenal", remoteExecutedOwner];
 };
 
+if (_action == "defendFOB") exitWith {
+	private _forwardBase = _param1;
+	private _level = _param2;
+
+	private _fobDome = _forwardBase getVariable ["WL2_forwardBaseDome", objNull];
+	if (!isNull _fobDome) then {
+		deleteVehicle _fobDome;
+	};
+
+	private _position = _forwardBase modelToWorld [0, 0, 0];
+	private _direction = getDir _forwardBase;
+	private _domeType = switch (_level) do {
+		case 0 : { "Land_Dome_Small_WIP_F" };
+		case 1 : { "Land_Dome_Small_WIP2_F" };
+		case 2 : { "Land_Dome_Small_F" };
+		case 3 : { "Land_Dome_Big_F" };
+	};
+	private _newDome = [_sender, _position, _domeType, _direction, false] call WL2_fnc_orderGround;
+	_forwardBase setVariable ["WL2_forwardBaseDome", _newDome];
+};
+
 if (_action == "immobilized") exitWith {
 	private _reward = 50;
 	[_reward] call _addFunds;
 	[objNull, _reward, "Vehicle Disabled", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
-private _side = side group _sender;
 if (_action == "scan") exitWith {
 	private _sector = _param2;
 

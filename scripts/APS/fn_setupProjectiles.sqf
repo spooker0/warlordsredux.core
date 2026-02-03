@@ -35,7 +35,7 @@ addMissionEventHandler ["ProjectileCreated", {
     private _projectileConfig = APS_projectileConfig getOrDefault [_apsProjectileType, createHashMap];
 
     private _projectileMine = _projectileConfig getOrDefault ["mine", false];
-    if (_projectileMine) then {
+    if (_projectileMine && !isDedicated) then {
         private _ownedMineVar = format ["WL2_ownedMines_%1", getPlayerUID player];
         private _allOwnedMines = missionNamespace getVariable [_ownedMineVar, []];
         _allOwnedMines = _allOwnedMines select { alive _x };

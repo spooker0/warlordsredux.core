@@ -251,7 +251,7 @@ private _clearSectorExecute = {
     "airAssault",
     [
         0,
-        "FTSeized",
+        "ClearSectorDebug",
         "Fast Travel"
     ]
 ] call WL2_fnc_addTargetMapButton;

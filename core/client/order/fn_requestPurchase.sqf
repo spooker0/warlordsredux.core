@@ -15,7 +15,8 @@ private _upgradedForwardBases = _potentialBases select {
 } select {
     _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
 } select {
-	_x getVariable ["WL2_forwardBaseUpgraded", false]
+	private _defenseLevel = _x getVariable ["WL2_forwardBaseDefenseLevel", 0];
+	_defenseLevel > 3
 };
 
 if (_isPlane && count _upgradedForwardBases == 0) then {

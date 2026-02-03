@@ -335,28 +335,28 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         ]
     ] call WL2_fnc_addTargetMapButton;
 
-    private _upgradeFOBExecute = {
+    private _defendFOBExecute = {
         params ["_asset"];
-        private _upgradeCost = WL_FOB_UPGRADE_COST;
+        private _upgradeCost = WL_FOB_DEFENSE_COST;
         private _supplyFinal = (_asset getVariable ["WL2_forwardBaseSupplies", -1]) - _upgradeCost;
         _asset setVariable ["WL2_forwardBaseSupplies", _supplyFinal, true];
 
         playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Repair.wss", _asset, false, getPosASL _asset, 2, 1, 75];
 
-        _asset setVariable ["WL2_forwardBaseUpgraded", true, true];
-        _asset setVariable ["WL2_demolitionMaxHealth", 24, true];
-        _asset setVariable ["WL2_demolitionHealth", 24, true];
+        private _currentDefenseLevel = _asset getVariable ["WL2_forwardBaseDefenseLevel", 0];
+        [player, "defendFOB", _asset, _currentDefenseLevel] remoteExec ["WL2_fnc_handleClientRequest", 2];
+        _asset setVariable ["WL2_forwardBaseDefenseLevel", _currentDefenseLevel + 1, true];
     };
     [
         _asset, _targetId,
-        "upgrade-fob",
-        "Upgrade forward base",
-        _upgradeFOBExecute,
+        "upgrade-defend-fob",
+        format ["Upgrade forward base [%1K Supplies]", WL_FOB_DEFENSE_COST / 1000 toFixed 0],
+        _defendFOBExecute,
         true,
-        "upgradeFOB",
+        "defendFOB",
         [
             0,
-            "UpgradeFOB",
+            "DefendFOB",
             "Strategy"
         ]
     ] call WL2_fnc_addTargetMapButton;

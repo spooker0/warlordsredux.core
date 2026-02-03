@@ -415,11 +415,14 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 	};
 	private _baseIconSize = if (_isLocked) then { 25 * _mapIconScale } else { 40 * _mapIconScale };
 
-	private _isUpgraded = _base getVariable ["WL2_forwardBaseUpgraded", false];
-	private _baseTypeText = if (_isUpgraded) then {
-		"Forward Airbase"
-	} else {
-		"Forward Base"
+	private _defenseLevel = _base getVariable ["WL2_forwardBaseDefenseLevel", 0];
+	private _baseTypeText = switch (_defenseLevel) do {
+		case 0: { "Forward Base" };
+		case 1: { "Forward Base 1/4" };
+		case 2: { "Forward Base 2/4" };
+		case 3: { "Forward Base 3/4" };
+		case 4: { "Forward Airbase" };
+		default { "Forward Base" };
 	};
 
 	_drawIcons pushBack [
@@ -665,9 +668,8 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 {
 	private _position = getPosASL _x;
 	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
-	private _showName = if (_x isKindOf "Building") then {
-		_x isKindOf "Camping_base_F" || _x in _assetTargets
-	} else { _draw };
+	private _hideNameOnMap = _x getVariable ["WL2_hideNameOnMap", false];
+	private _showName = !_hideNameOnMap && _draw;
 	_drawIcons pushBack [
 		[_x, _mapIconCache] call WL2_fnc_iconType,
 		[_x, _mapColorCache] call WL2_fnc_iconColor,
