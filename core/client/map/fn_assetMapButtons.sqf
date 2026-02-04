@@ -337,7 +337,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
 
     private _defendFOBExecute = {
         params ["_asset"];
-        private _upgradeCost = WL_FOB_DEFENSE_COST;
+        private _upgradeCost = WL_FOB_UPGRADE_COST;
         private _supplyFinal = (_asset getVariable ["WL2_forwardBaseSupplies", -1]) - _upgradeCost;
         _asset setVariable ["WL2_forwardBaseSupplies", _supplyFinal, true];
 
@@ -346,11 +346,16 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         private _currentDefenseLevel = _asset getVariable ["WL2_forwardBaseDefenseLevel", 0];
         [player, "defendFOB", _asset, _currentDefenseLevel] remoteExec ["WL2_fnc_handleClientRequest", 2];
         _asset setVariable ["WL2_forwardBaseDefenseLevel", _currentDefenseLevel + 1, true];
+
+        private _maxHealth = _asset getVariable ["WL2_demolitionMaxHealth", 12];
+        _maxHealth = _maxHealth + 3;
+        _asset setVariable ["WL2_demolitionMaxHealth", _maxHealth, true];
+        _asset setVariable ["WL2_demolitionHealth", _maxHealth, true];
     };
     [
         _asset, _targetId,
         "upgrade-defend-fob",
-        format ["Upgrade forward base [%1K Supplies]", WL_FOB_DEFENSE_COST / 1000 toFixed 0],
+        format ["Upgrade forward base [%1K Supplies]", WL_FOB_UPGRADE_COST / 1000 toFixed 0],
         _defendFOBExecute,
         true,
         "defendFOB",
@@ -365,6 +370,25 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         params ["_asset"];
         [_asset, "fob"] call WL2_fnc_designateTeamPriority;
     }, true, "designateTeamPriority", [0, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
+
+    // Combat air patrol button
+    private _combatAirExecute = {
+        params ["_asset"];
+        [player, "combatAir", [], _asset] remoteExec ["WL2_fnc_handleClientRequest", 2];
+    };
+    [
+        _asset, _targetId,
+        "order-cap",
+        "Order combat air patrol",
+        _combatAirExecute,
+        true,
+        "combatAirPatrolFOB",
+        [
+            WL_COST_COMBATAIR,
+            "CombatAir",
+            "Fast Travel"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
 
 #if WL_STRONGHOLD_DEBUG
     // Fast Travel FOB Test

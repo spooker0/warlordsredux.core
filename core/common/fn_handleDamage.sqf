@@ -21,12 +21,6 @@ _asset addEventHandler ["HandleDamage", {
 		};
 	};
 
-	if (_projectile == "") then {
-		if (typeof _unit in ["B_Slingload_01_Cargo_F", "Land_Pod_Heli_Transport_04_box_F"]) then {
-			_damage = 0;
-		};
-	};
-
 	if (_unit isKindOf "Man" && side group _unit != independent) then {
 		_damage = _this call WL2_fnc_handleAIDamage;
 	};

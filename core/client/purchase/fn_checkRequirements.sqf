@@ -24,6 +24,18 @@ if ("F" in _requirements) exitWith {
     };
 };
 
+private _forwardAirBases = _forwardBases select {
+    private _defenseLevel = _x getVariable ["WL2_forwardBaseDefenseLevel", 0];
+    _defenseLevel >= 4
+};
+if ("FA" in _requirements) exitWith {
+    if (count _forwardAirBases > 0) then {
+        [true, ""];
+    } else {
+        [false, "Must be in a forward airbase."];
+    };
+};
+
 if ("S" in _requirements) exitWith {
     private _sectorUnderAttack = _sector == WL_TARGET_ENEMY;
     if (_sectorUnderAttack) then {

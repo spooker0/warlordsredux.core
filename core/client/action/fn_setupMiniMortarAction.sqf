@@ -2,7 +2,7 @@
 params ["_asset"];
 
 private _deployMortarAction = _asset addAction [
-    "Deploy Integral Mortar",
+    "<t color='#00ff00'>Use Integral Mortar</t>",
     {
         _this spawn {
             params ["_asset", "_caller", "_actionId", "_arguments"];
@@ -90,7 +90,7 @@ private _deployMortarAction = _asset addAction [
         };
     },
     nil,
-    5,
+    6,
     false,
     false,
     "",

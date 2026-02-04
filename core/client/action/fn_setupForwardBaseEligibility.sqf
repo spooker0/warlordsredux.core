@@ -39,8 +39,8 @@ if (_addSupplies && !isNull _inRangeTeamFob) exitWith {
     "";
 };
 
-if (count _teamForwardBases >= 3) exitWith {
-    format ["Forward base limit reached. Current: %1", count _teamForwardBases];
+if (count _teamForwardBases >= 4) exitWith {
+    "Forward base limit reached.";
 };
 
 private _isSquadLeader = ["isSquadLeader", [getPlayerID _caller]] call SQD_fnc_query;

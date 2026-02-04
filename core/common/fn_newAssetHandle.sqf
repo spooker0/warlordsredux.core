@@ -148,12 +148,6 @@ if (_asset isKindOf "Man") then {
 			[_asset] remoteExec ["WL2_fnc_slingAddAction", 0, true];
 		};
 
-		case "B_Slingload_01_Cargo_F";
-		case "Land_Pod_Heli_Transport_04_box_F": {
-			_asset setVariable ["WL2_mapCircleRadius", WL_FOB_CAPTURE_RANGE, true];
-			[_asset] remoteExec ["WL2_fnc_setupForwardBaseAction", 0, true];
-		};
-
 		case "B_Boat_Armed_01_minigun_F";
 		case "B_Boat_Armed_01_autocannon_F";
 		case "O_Boat_Armed_01_autocannon_F";
@@ -206,10 +200,16 @@ if (_asset isKindOf "Man") then {
 		};
 	};
 
+	if (_assetActualType in WL_FOBCRATES) then {
+		_asset setVariable ["WL2_mapCircleRadius", WL_FOB_CAPTURE_RANGE, true];
+		[_asset] remoteExec ["WL2_fnc_setupForwardBaseAction", 0, true];
+	};
+
 	private _loadedItem = WL_ASSET(_assetActualType, "loaded", "");
 	if (_loadedItem != "") then {
 		_asset setVariable ["WL2_deployCrates", 1, true];
-		[_asset, _loadedItem] remoteExec ["WL2_fnc_deployCrateAction", 0, true];
+		private _crateIsConversion = WL_ASSET(_loadedItem, "conversion", 0) != 0;
+		[_asset, _loadedItem, _crateIsConversion] remoteExec ["WL2_fnc_deployCrateAction", 0, true];
 	};
 
 	if ([_asset] call WL2_fnc_isDrone) then {
@@ -276,7 +276,7 @@ if (_asset isKindOf "Man") then {
 	};
 
 	if (WL_ASSET(_assetActualType, "hasMiniMortar", 0) > 0) then {
-		_asset setVariable ["WL2_mortarShellCountHE", 8, true];
+		_asset setVariable ["WL2_mortarShellCountHE", 12, true];
 		[_asset] remoteExec ["WL2_fnc_setupMiniMortarAction", 0, true];
 	};
 
@@ -291,6 +291,10 @@ if (_asset isKindOf "Man") then {
 		[_asset] spawn WL2_fnc_smartMine;
 	};
 
+	if (WL_ASSET(_assetActualType, "dumbMine", 0) > 0) then {
+		[_asset] spawn WL2_fnc_dumbMine;
+	};
+
 	private _threatDetection = WL_ASSET(_assetActualType, "threatDetection", 0);
 	if (_threatDetection > 0) then {
 		_asset setVariable ["DIS_missileDetector", _threatDetection, true];
@@ -298,8 +302,8 @@ if (_asset isKindOf "Man") then {
 		_asset setVariable ["WL_scannerOn", true, true];
 	};
 
-	private _hideNameOnMap = WL_ASSET(_assetActualType, "hideName", 0) > 0;
-	_asset setVariable ["WL2_hideNameOnMap", _hideNameOnMap, true];
+	private _hideMap = WL_ASSET(_assetActualType, "hideMap", 0);
+	_asset setVariable ["WL2_hideMap", _hideMap, true];
 
 	// if (WL_ASSET(_assetActualType, "hasAirRearm", 0) > 0) then {
 	// 	_asset setVariable ['WL2_hasInflightRearm', true, true];
@@ -423,13 +427,13 @@ if (_asset isKindOf "Man") then {
 		};
 	};
 
-	if (typeOf _asset == "B_APC_Tracked_01_AA_F" || typeOf _asset == "O_APC_Tracked_02_AA_F") then {
+	if (typeOf _asset == "B_APC_Tracked_01_AA_F" || typeOf _asset == "O_APC_Tracked_02_AA_F" || _assetActualType == "Plane_Fighter_01_Stealth_Unarmed_F") then {
 		_asset addEventHandler ["Fired", {
 			params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
 			if (_muzzle == "autocannon_35mm") then {
 				private _ammoCount = _unit ammo "autocannon_35mm";
 				if (_ammoCount % 5 == 0) then {
-					_projectile spawn WL2_fnc_airburst;
+					[_projectile, _unit] spawn WL2_fnc_airburst;
 				};
 			};
 		}];

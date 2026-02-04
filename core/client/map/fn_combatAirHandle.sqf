@@ -1,21 +1,21 @@
 #include "includes.inc"
-params ["_sector", "_side"];
+params ["_target", "_side"];
 
-private _combatAirActive = _sector getVariable ["WL2_combatAirActive", false];
+private _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
 waitUntil {
     uiSleep 0.001;
-    _combatAirActive = _sector getVariable ["WL2_combatAirActive", false];
+    _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
     _combatAirActive
 };
 
 private _startTime = serverTime;
 if (isServer) then {
-    [_sector, _side] spawn {
-        params ["_sector", "_side"];
+    [_target, _side] spawn {
+        params ["_target", "_side"];
 
         private _combatAirActive = true;
-        private _sectorArea = [
-            getPosASL _sector,
+        private _targetArea = [
+            getPosASL _target,
             WL_COMBAT_AIR_RADIUS,
             WL_COMBAT_AIR_RADIUS,
             0,
@@ -26,7 +26,7 @@ if (isServer) then {
         while { _combatAirActive } do {
             uiSleep 10;
 
-            _combatAirActive = _sector getVariable ["WL2_combatAirActive", false];
+            _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
             if (!_combatAirActive) then {
                 break;
             };
@@ -38,11 +38,11 @@ if (isServer) then {
             } select {
                 _x isKindOf "Air";
             } select {
-                _x inArea _sectorArea
+                _x inArea _targetArea
             };
 
             {
-                [_x, _sector, false] spawn DIS_fnc_combatAirPatrol;
+                [_x, _target, false] spawn DIS_fnc_combatAirPatrol;
             } forEach _independentAircraft;
 
             if (count _independentAircraft == 0) then {
@@ -69,8 +69,8 @@ private _endEffect = {
     uiSleep 1;
 };
 
-private _sectorArea = [
-    getPosASL _sector,
+private _targetArea = [
+    getPosASL _target,
     WL_COMBAT_AIR_RADIUS,
     WL_COMBAT_AIR_RADIUS,
     0,
@@ -81,7 +81,7 @@ private _lastNotifyTime = 0;
 while { _combatAirActive } do {
     uiSleep 0.5;
 
-    _combatAirActive = _sector getVariable ["WL2_combatAirActive", false];
+    _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
     if (!_combatAirActive) then {
         call _endEffect;
         break;
@@ -98,7 +98,7 @@ while { _combatAirActive } do {
     };
 
     private _assetPos = _asset modelToWorld [0, 0, 0];
-    if !(_assetPos inArea _sectorArea) then {
+    if !(_assetPos inArea _targetArea) then {
         call _endEffect;
         continue;
     };
@@ -139,7 +139,7 @@ while { _combatAirActive } do {
     _warningTimer ctrlSetText format ["%1", round _timeRemaining];
 
     if (_timeRemaining <= 0) then {
-        [_asset, _sector, true] spawn DIS_fnc_combatAirPatrol;
+        [_asset, _target, true] spawn DIS_fnc_combatAirPatrol;
         _responseTimeEstimate = -1;
     };
 };

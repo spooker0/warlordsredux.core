@@ -255,6 +255,23 @@ switch (_conditionName) do {
 
         "ok";
     };
+    case "combatAirPatrolFOB": {
+        private _fobOwner = _target getVariable ["WL2_forwardBaseOwner", sideUnknown];
+        if (_fobOwner != BIS_WL_playerSide) exitWith { "" };
+
+        private _defenseLevel = _target getVariable ["WL2_forwardBaseDefenseLevel", 0];
+        if (_defenseLevel < 4) exitWith { "" };
+
+        if (!alive _target) exitWith { "Forward base has been destroyed." };
+
+        private _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
+        if (_combatAirActive) exitWith { "Combat air patrol is already active for this airbase." };
+
+        private _nextCombatAirTime = _target getVariable ["WL2_nextCombatAir", -9999];
+        if (_nextCombatAirTime > serverTime) exitWith { "Combat air patrol is on cooldown for this airbase." };
+
+        "ok";
+    };
     case "defendFOB": {
         private _fobOwner = _target getVariable ["WL2_forwardBaseOwner", sideUnknown];
         if (_fobOwner != BIS_WL_playerSide) exitWith { "" };
@@ -262,10 +279,13 @@ switch (_conditionName) do {
         private _defenseLevel = _target getVariable ["WL2_forwardBaseDefenseLevel", 0];
         if (_defenseLevel >= 4) exitWith { "" };
 
+        private _hasIntruders = _target getVariable ["WL2_forwardBaseIntruders", false];
+        if (_hasIntruders) exitWith { "Cannot upgrade forward base with intruders present." };
+
         if (!alive _target) exitWith { "Forward base has been destroyed." };
 
         private _supplies = _target getVariable ["WL2_forwardBaseSupplies", -1];
-        if (_supplies < WL_FOB_DEFENSE_COST) exitWith { format ["Need %1 supplies to add defenses to forward base.", WL_FOB_DEFENSE_COST] };
+        if (_supplies < WL_FOB_UPGRADE_COST) exitWith { format ["Need %1 supplies to add defenses to forward base.", WL_FOB_UPGRADE_COST] };
 
         "ok";
     };

@@ -317,6 +317,13 @@ while { !BIS_WL_missionEnd } do {
 		_script = _script + "setEcmCharges(false, 0, 0);";
 	};
 
+	private _shellCountHE = cameraOn getVariable ["WL2_mortarShellCountHE", -100];
+	if (_shellCountHE >= 0) then {
+		_script = _script + format ["setIntegralMortar(true, %1);", _shellCountHE];
+	} else {
+		_script = _script + "setIntegralMortar(false, 0);";
+	};
+
 	private _weaponNameOverride = uiNamespace getVariable ["WL2_ammoOverrideName", ""];
 	_script = _script + format ["setWeaponName(""%1"");", _weaponNameOverride];
 

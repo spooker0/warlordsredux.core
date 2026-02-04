@@ -72,7 +72,7 @@
 #define WL_FOB_RANGE 75
 #define WL_FOB_CAPTURE_RANGE 2000
 #define WL_FOB_REPAIR_COST 5000
-#define WL_FOB_DEFENSE_COST 25000
+#define WL_FOB_UPGRADE_COST 25000
 #define WL_FORTIFICATION_TIME 2700
 #define WL_DEMOLITION_STEP_TIME 6
 #define WL_DEMOLITION_FOB_STEP_TIME 3
@@ -92,6 +92,7 @@
 
 #define WL_COST_SCAN 1500
 #define WL_COST_COMBATAIR 8000
+#define WL_COST_CONSCRIPT 500
 #define WL_COST_FTCONTESTED 200
 #define WL_COST_FTSL 10
 #define WL_COST_AIRASSAULT 100
@@ -138,6 +139,10 @@
 #define WL_UAV_LOITER_VALUES [50, 100, 200, 300, 400, 500, 750, 1000, 1500, 2000, 2500, 3000]
 #define WL_SMART_MINE_DISTANCES [500, 400, 300, 200, 100, 0]
 #define WL_SMART_MINE_ANGLES [15, 30, 45, 90, 360, 0]
+
+#define WL_FOBCRATE_WEST "Land_Cargo20_blue_F"
+#define WL_FOBCRATE_EAST "Land_Cargo20_brick_red_F"
+#define WL_FOBCRATES [WL_FOBCRATE_WEST, WL_FOBCRATE_EAST]
 
 #define WL_TARGET_FRIENDLY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_playerSide], objNull])
 #define WL_TARGET_ENEMY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_enemySide], objNull])

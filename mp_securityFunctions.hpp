@@ -18,6 +18,7 @@ class CfgRemoteExec {
 		class KST_fnc_setParent {allowedTargets = 0;};
 		class MENU_fnc_execCode {allowedTargets = 2;};
 		class MENU_fnc_reportPlayer {allowedTargets = 2;};
+		class POLL_fnc_pollAction {allowedTargets = 0;};
 		class POLL_fnc_selectOption {allowedTargets = 0;};
 		class SQD_fnc_server {allowedTargets = 2;};
 		class WL2_fnc_addMissileToMag {allowedTargets = 0;};
@@ -27,6 +28,7 @@ class CfgRemoteExec {
 		class WL2_fnc_claimAction {allowedTargets = 1;};
 		class WL2_fnc_clearPlayerReports {allowedTargets = 0;};
 		class WL2_fnc_clearServerStats {allowedTargets = 2;};
+		class WL2_fnc_conscription {allowedTargets = 0;};
 		class WL2_fnc_controlGunnerAction {allowedTargets = 0;};
 		class WL2_fnc_cruiseMissileWarning {allowedTargets = 0;};
 		class WL2_fnc_demolishAction {allowedTargets = 0;};

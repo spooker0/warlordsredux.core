@@ -66,6 +66,66 @@ addMissionEventHandler ["ProjectileCreated", {
         missionNamespace setVariable [_ownedMineVar, _allOwnedMines, true];
     };
 
+    // if (_projectile isKindOf "APERSMineDispenser_Ammo") then {
+    //     player addAction [
+    //         "<t color='#FF0000'>Launch AT Mine Dispenser</t>",
+    //         {
+    //             params ["_target", "_caller", "_actionId", "_arguments"];
+    //             player removeAction _actionId;
+    //             private _projectile = _arguments # 0;
+    //             if (!alive _projectile) exitWith {};
+
+    //             private _projectilePos = _projectile modelToWorld [0, 0, 0];
+
+    //             [_projectilePos, [
+    //                 ["DeminingExplosiveCircleDust", 0.3],
+    //                 ["ATMineExplosionParticles", 0.1]
+    //             ]] remoteExec ["WL2_fnc_particleEffect", 0];
+
+    //             private _dispenseSounds = [
+    //                 "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_01.wss",
+    //                 "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_02.wss",
+    //                 "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_03.wss",
+    //                 "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_04.wss"
+    //             ];
+    //             playSound3D [selectRandom _dispenseSounds, objNull, false, _projectilePos];
+
+    //             private _mines = [];
+    //             for "_i" from 0 to 30 do {
+    //                 private _directionRange = 60;
+    //                 private _projectileDirection = getDir _projectile;
+    //                 private _randomDirection = _projectileDirection + ((random 2) - 1) * _directionRange;
+    //                 private _randomDistance = 100 * sqrt random 1;
+
+    //                 private _minePosition = _projectile getPos [_randomDistance, _randomDirection];
+    //                 private _mine = createMine ["ATMine", _minePosition, [], 3];
+
+    //                 _mines pushBack _mine;
+    //             };
+
+    //             deleteVehicle _projectile;
+
+    //             [_mines] spawn {
+    //                 params ["_mines"];
+    //                 uiSleep 1;
+    //                 {
+    //                     private _mine = _x;
+    //                     BIS_WL_playerSide revealMine _mine;
+    //                     [_mine, [player, player]] remoteExec ["setShotParents", 2];
+    //                 } forEach _mines;
+    //             };
+    //         },
+    //         [_projectile],
+    //         100,
+    //         false,
+    //         true,
+    //         "",
+    //         "",
+    //         5,
+    //         false
+    //     ];
+    // };
+
     private _projectileTV = _projectileConfig getOrDefault ["tv", false];
     if (_projectileTV) then {
         private _projectileSpeed = _projectileConfig getOrDefault ["speed", 0];

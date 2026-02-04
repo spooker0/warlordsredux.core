@@ -40,7 +40,7 @@ while { alive _projectile } do {
                 _laser = createVehicleLocal ["LaserTargetC", [0, 0, 0], [], 0, "NONE"];
             };
 
-            _laser setPosASL (_targetPos vectorAdd [0, 0, 500]);
+            _laser setPosASL (_targetPos vectorAdd [0, 0, 1000]);
             _projectile setVelocityModelSpace [0, _projectileSpeed, 0];
             _projectile setMissileTarget [_laser, true];
         } else {

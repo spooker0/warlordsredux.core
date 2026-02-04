@@ -9,6 +9,7 @@ if (isServer) then {
 			["Steerable_Parachute_F", true],
 			["Land_Cargo_Tower_V4_ruins_F", true],
 			["Land_MobileRadar_01_radar_ruins_F", true],
+			["Land_TentHangar_V1_ruins_F", true],
 			["B_Ejection_Seat_Plane_Fighter_01_F", true],
 			["O_Ejection_Seat_Plane_Fighter_02_F", true],
 			["I_Ejection_Seat_Plane_Fighter_03_F", true],

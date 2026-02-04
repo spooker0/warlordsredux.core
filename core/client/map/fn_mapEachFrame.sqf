@@ -92,11 +92,16 @@ private _singletonScriptHandle = [_map] spawn {
         _targetsClicked pushBack WL_SectorActionTarget;
     };
 
-    if (count WL_AssetActionTargets > 0) then {
+    private _assetActionTargets = WL_AssetActionTargets;
+    if (count _assetActionTargets > 0) then {
+        _assetActionTargets = [_assetActionTargets, [], {
+            if (_x isKindOf "RuggedTerminal_01_communications_hub_F") then { 0 } else { 1 }
+        }, "ASCEND"] call BIS_fnc_sortBy;
+
         {
             [_x, count _targetsClicked] call WL2_fnc_assetMapButtons;
             _targetsClicked pushBack _x;
-        } forEach WL_AssetActionTargets;
+        } forEach _assetActionTargets;
     };
 
     uiNamespace setVariable ["WL2_assetTargetsSelected", _targetsClicked];

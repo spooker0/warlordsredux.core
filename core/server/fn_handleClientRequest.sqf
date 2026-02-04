@@ -106,7 +106,7 @@ if (_action == "orderAsset") exitWith {
 				true
 			};
 		} else {
-			false
+			true
 		};
 	} else {
 		true
@@ -176,20 +176,60 @@ if (_action == "defendFOB") exitWith {
 	private _level = _param2;
 
 	private _fobDome = _forwardBase getVariable ["WL2_forwardBaseDome", objNull];
-	if (!isNull _fobDome) then {
-		deleteVehicle _fobDome;
-	};
+	if (_level == 3) then {
+		private _hangarType = "Land_TentHangar_V1_F";
 
-	private _position = _forwardBase modelToWorld [0, 0, 0];
-	private _direction = getDir _forwardBase;
-	private _domeType = switch (_level) do {
-		case 0 : { "Land_Dome_Small_WIP_F" };
-		case 1 : { "Land_Dome_Small_WIP2_F" };
-		case 2 : { "Land_Dome_Small_F" };
-		case 3 : { "Land_Dome_Big_F" };
+		private _backHangar = if (isNull _fobDome) then {
+			private _position = _forwardBase modelToWorld [0, 0, 0];
+			private _direction = getDir _forwardBase;
+			[_sender, _position, _hangarType, _direction, false] call WL2_fnc_orderGround;
+		} else {
+			private _position = _fobDome modelToWorldWorld [0, -20, -2.5];
+			private _vectorDirAndUp = [vectorDir _fobDome, vectorUp _fobDome];
+			[_sender, _position, _hangarType, _vectorDirAndUp, true] call WL2_fnc_orderGround;
+		};
+		_backHangar allowDamage false;
+
+		private _forwardHangarPosition = _backHangar modelToWorldWorld [0, -18, 0];
+		private _vectorDirAndUp = [vectorDir _backHangar, vectorUp _backHangar];
+		private _forwardHangar = [_sender, _forwardHangarPosition, _hangarType, _vectorDirAndUp, true] call WL2_fnc_orderGround;
+		_forwardHangar allowDamage false;
+
+		private _hangarPosATL = getPosATL _forwardHangar;
+		if (_hangarPosATL # 2 > -1) then {
+			private _scoutPlane = if (_side == west) then {
+				"B_Plane_Fighter_01_Stealth_Unarmed_F"
+			} else {
+				"O_Plane_Fighter_02_Stealth_Unarmed_F"
+			};
+			[_sender, _hangarPosATL, _scoutPlane, (getDir _forwardHangar) + 180, false] call WL2_fnc_orderGround;
+		};
+
+		private _assetChildren = _forwardBase getVariable ["WL2_children", []];
+		_assetChildren pushBack _backHangar;
+		_assetChildren pushBack _forwardHangar;
+		_forwardBase setVariable ["WL2_children", _assetChildren];
+	} else {
+		if (!isNull _fobDome) then {
+			deleteVehicle _fobDome;
+		};
+
+		private _position = _forwardBase modelToWorld [0, 0, 0];
+		private _direction = getDir _forwardBase;
+		private _domeType = switch (_level) do {
+			case 0 : { "Land_Dome_Small_WIP_F" };
+			case 1 : { "Land_Dome_Small_WIP2_F" };
+			case 2 : { "Land_Dome_Small_F" };
+			default { "Land_Dome_Small_F" };
+		};
+		private _newDome = [_sender, _position, _domeType, _direction, false] call WL2_fnc_orderGround;
+		_newDome allowDamage false;
+		_forwardBase setVariable ["WL2_forwardBaseDome", _newDome];
+
+		private _assetChildren = _forwardBase getVariable ["WL2_children", []];
+		_assetChildren pushBack _newDome;
+		_forwardBase setVariable ["WL2_children", _assetChildren];
 	};
-	private _newDome = [_sender, _position, _domeType, _direction, false] call WL2_fnc_orderGround;
-	_forwardBase setVariable ["WL2_forwardBaseDome", _newDome];
 };
 
 if (_action == "immobilized") exitWith {
@@ -263,15 +303,15 @@ if (_action == "scan") exitWith {
 };
 
 if (_action == "combatAir") exitWith {
-	private _sector = _param2;
+	private _target = _param2;
 
-	private _sectorName = _sector getVariable ["WL2_name", "???"];
+	private _targetName = _target getVariable ["WL2_name", "Forward Airbase"];
 	private _sideName = [_side] call WL2_fnc_sideToFaction;
 
-	private _friendlyMessage = format ["%1 has initiated combat air patrol over %2.", name _sender, _sectorName];
+	private _friendlyMessage = format ["%1 has initiated combat air patrol over %2.", name _sender, _targetName];
 	[_side, _friendlyMessage] call _broadcastActionToSide;
 
-	private _enemyMessage = format ["%1 has initiated combat air patrol over %2.", _sideName, _sectorName];
+	private _enemyMessage = format ["%1 has initiated combat air patrol over %2.", _sideName, _targetName];
 	private _enemySide = switch (_side) do {
 		case west : { east };
 		case east : { west };
@@ -279,41 +319,37 @@ if (_action == "combatAir") exitWith {
 	};
 	[_enemySide, _enemyMessage] call _broadcastActionToSide;
 
-	_sector setVariable ["WL2_combatAirActive", true, true];
-	_sector setVariable ["WL2_combatAirRequester", _uid, true];
-	_sector setVariable ["WL2_nextCombatAir", serverTime + WL_DURATION_CAP + WL_COOLDOWN_CAP, true];
+	_target setVariable ["WL2_combatAirActive", true, true];
+	_target setVariable ["WL2_combatAirRequester", _uid, true];
+	_target setVariable ["WL2_nextCombatAir", serverTime + WL_DURATION_CAP + WL_COOLDOWN_CAP, true];
 
-	[_sector, _side] remoteExec ["WL2_fnc_combatAirHandle", 0];
-	[_sector] spawn {
-		params ["_sector"];
-
+	[_target, _side] remoteExec ["WL2_fnc_combatAirHandle", 0];
+	[_target] spawn {
+		params ["_target"];
 		uiSleep WL_DURATION_CAP;
-
-		_sector setVariable ["WL2_combatAirActive", false, true];
+		_target setVariable ["WL2_combatAirActive", false, true];
 	};
 };
 
 #if WL_CAP_DEBUG
 if (_action == "debugCombatAir") exitWith {
-	private _sector = _param2;
+	private _target = _param2;
 
-	private _sectorName = _sector getVariable ["WL2_name", "???"];
+	private _targetName = _target getVariable ["WL2_name", "Forward Airbase"];
 	private _sideName = [_side] call WL2_fnc_sideToFaction;
 
-	private _friendlyMessage = format ["%1 has initiated debug combat air patrol over %2.", name _sender, _sectorName];
+	private _friendlyMessage = format ["%1 has initiated debug combat air patrol over %2.", name _sender, _targetName];
 	[_side, _friendlyMessage] call _broadcastActionToSide;
 
-	_sector setVariable ["WL2_combatAirActive", true, true];
-	_sector setVariable ["WL2_combatAirRequester", _uid, true];
-	_sector setVariable ["WL2_nextCombatAir", serverTime + WL_DURATION_CAP + WL_COOLDOWN_CAP, true];
+	_target setVariable ["WL2_combatAirActive", true, true];
+	_target setVariable ["WL2_combatAirRequester", _uid, true];
+	_target setVariable ["WL2_nextCombatAir", serverTime + WL_DURATION_CAP + WL_COOLDOWN_CAP, true];
 
-	[_sector, independent] remoteExec ["WL2_fnc_combatAirHandle", 0];
-	[_sector] spawn {
-		params ["_sector"];
-
+	[_target, independent] remoteExec ["WL2_fnc_combatAirHandle", 0];
+	[_target] spawn {
+		params ["_target"];
 		uiSleep WL_DURATION_CAP;
-
-		_sector setVariable ["WL2_combatAirActive", false, true];
+		_target setVariable ["WL2_combatAirActive", false, true];
 	};
 };
 #endif

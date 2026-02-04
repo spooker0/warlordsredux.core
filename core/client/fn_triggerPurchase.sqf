@@ -56,6 +56,10 @@ switch (_className) do {
     };
     case "Scan": { 0 spawn WL2_fnc_orderSectorScan };
     case "CombatAir": { 0 spawn WL2_fnc_orderCombatAir };
+    case "Conscription": {
+        "RequestMenu_close" call WL2_fnc_setupUI;
+        [player] remoteExec ["WL2_fnc_conscription", 0];
+    };
     case "FTHome": {
         BIS_WL_targetSector = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
         [0, ""] spawn WL2_fnc_executeFastTravel;
@@ -87,10 +91,10 @@ switch (_className) do {
     case "BuyFOB": {
         switch (BIS_WL_playerSide) do {
             case west: {
-                ["B_Slingload_01_Cargo_F", 500, "Fast Travel", [], [0, 5, 0]] call WL2_fnc_requestPurchase;
+                [WL_FOBCRATE_WEST, 500, "Fast Travel", [], [0, 5, 0]] call WL2_fnc_requestPurchase;
             };
             case east: {
-                ["Land_Pod_Heli_Transport_04_box_F", 500, "Fast Travel", [], [0, 5, 0]] call WL2_fnc_requestPurchase;
+                [WL_FOBCRATE_EAST, 500, "Fast Travel", [], [0, 5, 0]] call WL2_fnc_requestPurchase;
             };
         };
     };

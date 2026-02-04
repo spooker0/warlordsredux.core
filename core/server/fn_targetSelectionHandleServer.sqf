@@ -189,7 +189,7 @@
 					case "fob";
 					case "stronghold": {
 						if (alive _teamPriority) then {
-							private _previousTargetArea = _previousTargetSelection getVariable "objectAreaComplete";
+							private _previousTargetArea = _previousTargetSelection getVariable ["objectAreaComplete", objNull];
 							_teamPriority inArea _previousTargetArea
 						} else {
 							true;

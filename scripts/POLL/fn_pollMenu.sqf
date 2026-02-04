@@ -89,7 +89,10 @@ if (count _activePoll == 0) exitWith {
             private _options = [_option1, _option2, _option3, _option4];
             _options = _options select { _x != "" };
 
-            missionNamespace setVariable ["POLL_ActivePoll", [_question, _options, -1], true];
+            if (count _options >= 2) then {
+                missionNamespace setVariable ["POLL_ActivePoll", [_question, _options, -1], true];
+                [] remoteExec ["POLL_fnc_pollAction", 0, true];
+            };
             closeDialog 0;
         }];
     } else {

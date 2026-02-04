@@ -5,7 +5,7 @@ private _actionId = player addAction [
 	"<t color='#00FF00'>Secure Wreck</t>",
 	{
         params ["_target", "_caller", "_actionId", "_args"];
-        private _asset = cursorObject;
+        private _asset = cursorTarget;
         if (isNull _asset || !(_asset isKindOf "Air")) exitWith {
             ["No aircraft wreck targeted."] call WL2_fnc_smoothText;
             playSoundUI ["AddItemFailed"];
@@ -34,7 +34,7 @@ private _actionId = player addAction [
 	false,
 	true,
 	"",
-	"!alive cursorObject && cursorObject isKindOf 'Air'",
+	"!alive cursorTarget && cursorTarget isKindOf 'Air' && cameraOn distance cursorTarget < 50",
 	30,
 	false
 ];
@@ -45,20 +45,20 @@ private _actionId = player addAction [
 	while { alive player } do {
         uiSleep 0.1;
 
-        private _cursorObject = cursorObject;
-        if (alive _cursorObject) then {
+        private _asset = cursorTarget;
+        if (alive _asset) then {
             player setUserActionText [_actionId, _originalText];
             continue;
         };
-        if !(cursorObject isKindOf "Air") then {
+        if !(_asset isKindOf "Air") then {
             player setUserActionText [_actionId, _originalText];
             continue;
         };
 
-        private _targetActualType = _cursorObject getVariable ["WL2_orderedClass", typeOf _cursorObject];
-        private _rewardAmount = WL_ASSET(_targetActualType, "cost", 0);
+        private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+        private _rewardAmount = WL_ASSET(_assetActualType, "cost", 0);
         _rewardAmount = round (_rewardAmount / 300) * 100;
-        private _targetDisplayName = [_cursorObject] call WL2_fnc_getAssetTypeName;
+        private _targetDisplayName = [_asset] call WL2_fnc_getAssetTypeName;
 
         player setUserActionText [_actionId, format ["<t color='#00FF00'>Secure Wreck for %1 (%2%3)</t>", _targetDisplayName, WL_MoneySign, _rewardAmount]];
 	};

@@ -162,7 +162,15 @@
 		private _combatPatrolSectors = BIS_WL_allSectors select {
 			_x getVariable ["WL2_combatAirActive", false];
 		};
-		_mapData set ["combatAirSectors", _combatPatrolSectors];
+
+		private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
+		private _capForwardAirbases = _forwardBases select {
+			private _defenseLevel = _x getVariable ["WL2_forwardBaseDefenseLevel", 0];
+			_defenseLevel > 3;
+		} select {
+			_x getVariable ["WL2_combatAirActive", false];
+		};
+		_mapData set ["combatAirAreas", _combatPatrolSectors + _capForwardAirbases];
 
 		private _airWrecks = allDead select {
 			_x isKindOf "Air"
@@ -170,6 +178,11 @@
 			_x distance2D cameraOn < 4000
 		};
 		_mapData set ["airWrecks", _airWrecks];
+
+		private _minefields = _sideVehicles select {
+			_x getVariable ["WL2_isMinefield", false];
+		};
+		_mapData set ["minefields", _minefields];
 
 		private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 		private _sectorMarkerThreshold = _settingsMap getOrDefault ["sectorMarkerTextThreshold", 0.4];

@@ -190,3 +190,12 @@ if (_systemTime # 1 == 4 && _systemTime # 2 <= 2) then {
 	missionNamespace setVariable ["WL_easterEggOverride", true, true];
 };
 #endif
+
+private _dummyDome1 = createSimpleObject ["Land_Dome_Small_WIP_F", [0, 0, -1000], false];
+private _dummyDome2 = createSimpleObject ["Land_Dome_Small_WIP2_F", [0, 0, -1000], false];
+private _dummyDome3 = createSimpleObject ["Land_Dome_Small_F", [0, 0, -1000], false];
+private _dummyDome4 = createSimpleObject ["Land_Dome_Big_F", [0, 0, -1000], false];
+deleteVehicle _dummyDome1;
+deleteVehicle _dummyDome2;
+deleteVehicle _dummyDome3;
+deleteVehicle _dummyDome4;

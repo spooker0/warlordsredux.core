@@ -298,8 +298,6 @@ call WL2_fnc_hmdSettingsAction;
 0 spawn WL2_fnc_locationScanner;
 0 spawn WL2_fnc_rewardCapture;
 
-call POLL_fnc_pollAction;
-
 missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_DURATION_AFKTIME];
 0 spawn WL2_fnc_afk;
 call WL2_fnc_afkAction;

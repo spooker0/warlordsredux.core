@@ -20,31 +20,12 @@ private _baseArr = WL_BASES select {(_x getVariable ["BIS_WL_owner", sideUnknown
 	} forEach (_sector getVariable ["WL2_services", []]);
 } forEach _owned;
 
-private _facesData = missionNamespace getVariable ["WL2_sectorFaces", []];
-private _income = 50;
-{
-	_x params ["_sectorsInFace", "_area"];
-	private _ownsFace = true;
-	{
-		private _sector = _x;
-		private _sectorOwner = _sector getVariable ["BIS_WL_owner", sideUnknown];
-		if (_sectorOwner != _side) then {
-			_ownsFace = false;
-			break;
-		};
-	} forEach _sectorsInFace;
-	if (_ownsFace) then {
-		_income = _income + _area * WL_INCOME_M2;
-	};
-} forEach _facesData;
-_income = round _income;
-
 if (_side == independent) exitWith {
-	[_owned, _owned, _owned, _owned, _income, _services, [], []];
+	[_owned, _owned, _owned, _owned, 200, _services, [], []];
 };
 
 if (count _baseArr == 0) exitWith {
-	[_owned, [], [], _unlocked, _income, _services, [], []]
+	[_owned, [], [], _unlocked, 50, _services, [], []]
 };
 
 private _base = _baseArr # 0;
@@ -64,19 +45,63 @@ while { _lastLinkCount < count _linked } do {
 
 {
 	private _sector = _x;
-	if ((_sector getVariable ["BIS_WL_owner", sideUnknown]) != _side && _linked findIf {_sector in (_x getVariable ["WL2_connectedSectors", []])} >= 0) then {
-		_available pushBack _sector;
+	private _wasLinkOwner = _sector getVariable ["WL2_linkedOwner", sideUnknown];
+	if (_wasLinkOwner != _side) then {
+		_sector setVariable ["WL2_linkedOwner", _side, true];
 	};
+} forEach _linked;
+
+// private _available = _pool select {
+// 	_x getVariable ["BIS_WL_owner", sideUnknown] != _side
+// } select {
+// 	private _connections = _x getVariable ["WL2_connectedSectors", []];
+// 	private _connectedToLinks = _connections arrayIntersect _linked;
+// 	count _connectedToLinks > 0
+// };
+
+{
+	private _sector = _x;
+	if (_sector getVariable ["BIS_WL_owner", sideUnknown] == _side) then {
+		continue;
+	};
+
+	private _connections = _sector getVariable ["WL2_connectedSectors", []];
+	private _connectedToLinks = _connections arrayIntersect _linked;
+	if (count _connectedToLinks > 0) then {
+		_available pushBack _sector;
+		continue;
+	};
+
 	private _sectorName = _sector getVariable ["WL2_name", "Sector"];
 	if (_sectorName == "Wait") then {
 		_available pushBack _sector;
 	};
+
 	if (_sectorName == "Surrender") then {
 		private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
 		if (_timeSinceStart > WL_SURRENDER_TIME) then {
 			_available pushBack _sector;
 		};
 	};
-} forEach (_pool - _owned);
+} forEach _pool;
+
+private _facesData = missionNamespace getVariable ["WL2_sectorFaces", []];
+private _income = 50;
+{
+	_x params ["_sectorsInFace", "_area"];
+	private _ownsFace = true;
+	{
+		private _sector = _x;
+		private _sectorOwner = _sector getVariable ["WL2_linkedOwner", sideUnknown];
+		if (_sectorOwner != _side) then {
+			_ownsFace = false;
+			break;
+		};
+	} forEach _sectorsInFace;
+	if (_ownsFace) then {
+		_income = _income + _area * WL_INCOME_M2;
+	};
+} forEach _facesData;
+_income = round _income;
 
 [_owned, _available, _linked, _unlocked, _income, _services, _owned - _linked, (_unlocked - _owned) - _available];

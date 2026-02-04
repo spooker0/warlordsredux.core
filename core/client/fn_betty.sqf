@@ -43,7 +43,7 @@ while { _vehicle isKindOf "Air" && alive player && alive _vehicle && vehicle pla
 	if (_vehicle isKindOf "Plane" && _vehicle getVariable ["WL2_rwr1Played", 0] < serverTime - 2) then {
 		private _pullUpVolume = _settingsMap getOrDefault ["rwr1", 0.3];
 		if (_altitude <= 2000 && _altitude > 100 && !_landingGear) then {
-			if (asin (vectorDir _vehicle # 2) < -((_altitude * 40) / speed _vehicle)) then {
+			if (asin (vectorDir _vehicle # 2) < -((_altitude * 40) / (1 max speed _vehicle))) then {
 				playSoundUI [_soundEffects # 0, _pullUpVolume];
 				_vehicle setVariable ["WL2_rwr1Played", serverTime];
 			};

@@ -163,6 +163,7 @@ class CfgFunctions {
 			class betty {};
 			class clientEH {};
 			class createDestroyerClient {};
+			class dumbMine {};
 			class earthquake {};
 			class exitToLobby {};
 			class factionBasedClientInit {};
@@ -218,7 +219,7 @@ class CfgFunctions {
 			class catapultActionEligibility {};
 			class claimAction {};
 			class claimEligibility {};
-			class constructRallyPoint {};
+			class conscription {};
 			class controlDroneActions {};
 			class controlGunnerAction {};
 			class controlGunnerEligibility {};
@@ -228,7 +229,6 @@ class CfgFunctions {
 			class deployableAddAction {};
 			class deployableEligibility {};
 			class deployCrateAction {};
-			class fieldFortificationAction {};
 			class getVehicleLockStatus {};
 			class grapple {};
 			class hmdSendData {};
@@ -248,7 +248,6 @@ class CfgFunctions {
 			class radarOperateUpdate {};
 			class radarRotateAction {};
 			class radarRotateUpdate {};
-			class rallyPointAction {};
 			class rappelAction {};
 			class rappelActionEligibility {};
 			class rearmAction {};
@@ -396,6 +395,7 @@ class CfgFunctions {
 			class checkCarrierLimits {};
 			class checkCruiseMissileAvailable {};
 			class checkCollaborator {};
+			class checkConscription {};
 			class checkDead {};
 			class checkFastTravelSL {};
 			class checkFastTravelSquad {};

@@ -261,6 +261,13 @@ private _strategyArr = [
 		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
 		"Call in a temporary combat air patrol to assist your team's air defense over the selected airbase/helipad sector. Enemy aircraft that enter the marked map area are immediately spotted, and those flying above 1 km altitude will be given 45 seconds to leave before being automatically engaged by lethal air-to-air assets. Recommended to augment with short range air defenses and to use this opportunity to take off with air superiority assets."
 	], [
+		"Conscription",
+		WL_COST_CONSCRIPT,
+		[],
+		"Conscript team",
+		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
+		"Conscript team to the team priority point, giving everyone the option to fast travel there immediately."
+	], [
 		"FundsTransfer",
 		WL_COST_FUNDTRANSFER,
 		[],

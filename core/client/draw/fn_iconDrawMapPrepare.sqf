@@ -51,6 +51,8 @@ private _ownedSectorLinkColor = if (BIS_WL_playerSide == west) then {
 } else {
 	[0.5, 0, 0, 1]
 };
+
+private _sectorsInLinksShown = [];
 if (BIS_WL_selection_showLinks) then {
 	{
 		private _pairKey = _x;
@@ -72,20 +74,56 @@ if (BIS_WL_selection_showLinks) then {
 		];
 	} forEach _allLinks
 } else {
+	private _sectorLineSpeed = _settingsMap getOrDefault ["mapSectorLineSpeed", 0.25];
+	private _sectorLineMax = _settingsMap getOrDefault ["mapSectorLineMax", 3];
+	_sectorLineMax = _sectorLineMax - 1;
+
 	if (!isNull _sectorTarget) then {
-		private _links = _sectorTarget getVariable ["WL2_connectedSectors", []];
+		private _links = [_sectorTarget];
+		private _lastDrawnLinks = uiNamespace getVariable ["WL2_mapLastDrawnLinks", false];
+		if (!_lastDrawnLinks) then {
+			uiNamespace setVariable ["WL2_firstDrawLinkTime", serverTime];
+			uiNamespace setVariable ["WL2_mapLastDrawnLinks", true];
+		};
+		private _firstDrawLinkTime = uiNamespace getVariable ["WL2_firstDrawLinkTime", serverTime];
+		private _linksToShow = if (_sectorLineSpeed > 0) then {
+			(serverTime - _firstDrawLinkTime) / _sectorLineSpeed;
+		} else {
+			_sectorLineMax
+		};
+		_linksToShow = _linksToShow min _sectorLineMax;
+		for "_i" from 0 to _linksToShow do {
+			private _allConnections = [];
+			{
+				private _connections = _x getVariable ["WL2_connectedSectors", []];
+				_allConnections insert [-1, _connections, true];
+			} forEach _links;
+			_links insert [-1, _allConnections, true];
+		};
+
+		_sectorsInLinksShown = _links;
+
+		private _drawnLinks = createHashMap;
 		{
-			private _link = _x;
-			private _pairKey1 = hashValue _sectorTarget + hashValue _link;
-			private _pairKey2 = hashValue _link + hashValue _sectorTarget;
-			private _pairKey = if (_pairKey1 in _allLinks) then {
-				_pairKey1
-			} else {
-				_pairKey2
+			private _pairKey = _x;
+			private _linkData = _y;
+			_y params ["_startPos", "_endPos", "_sector", "_link"];
+
+			if !(_sector in _links) then {
+				continue;
+			};
+			if !(_link in _links) then {
+				continue;
+			};
+			if (_pairKey in _drawnLinks) then {
+				continue;
+			};
+			if (_linksToShow == 0) then {
+				if (_sector != _sectorTarget && _link != _sectorTarget) then {
+					continue;
+				};
 			};
 
-			private _linkData = _allLinks getOrDefault [_pairKey, []];
-			_linkData params ["_startPos", "_endPos", "_sector", "_link"];
 			private _sectorOwner = _sector getVariable ["BIS_WL_owner", sideUnknown];
 			private _linkOwner = _link getVariable ["BIS_WL_owner", sideUnknown];
 			private _linkColor = if (_sectorOwner == BIS_WL_playerSide && _linkOwner == BIS_WL_playerSide) then {
@@ -100,7 +138,10 @@ if (BIS_WL_selection_showLinks) then {
 				_linkColor,
 				10
 			];
-		} forEach _links;
+			_drawnLinks set [_pairKey, true];
+		} forEach _allLinks;
+	} else {
+		uiNamespace setVariable ["WL2_mapLastDrawnLinks", false];
 	};
 };
 
@@ -270,10 +311,23 @@ if (!isNull _sectorTarget || BIS_WL_selection_showLinks) then {
 		default { _neutralRGBA };
 	};
 
+	private _shouldShowFace = {
+		params ["_sectors"];
+
+		if (BIS_WL_selection_showLinks) exitWith { true };
+
+		private _intersections = _sectorsInLinksShown arrayIntersect _sectors;
+		private _showFace = count _intersections == count _sectors;
+
+		if (_showFace) exitWith { true };
+
+		_sectorTarget in _sectors;
+	};
+
 	{
 		_x params ["_sectors", "_area"];
 
-		if !(_sectorTarget in _sectors || BIS_WL_selection_showLinks) then {
+		if !([_sectors] call _shouldShowFace) then {
 			continue;
 		};
 
@@ -611,18 +665,23 @@ private _scanners = if (_drawAll) then {
 	};
 } forEach _scanners;
 
-// Combat air patrol sectors
-private _combatAirSectors = _mapData getOrDefault ["combatAirSectors", []];
+// Combat air patrol areas
+private _combatAirAreas = _mapData getOrDefault ["combatAirAreas", []];
 {
-	private _sectorPos = getPosASL _x;
-	private _sectorOwner = _x getVariable ["BIS_WL_owner", sideUnknown];
-	private _mapColor = switch (_sectorOwner) do {
+	private _targetPos = getPosASL _x;
+	private _targetOwner = if (typeof _x == "RuggedTerminal_01_communications_hub_F") then {
+		_x getVariable ["WL2_forwardBaseOwner", independent];
+	} else {
+		_x getVariable ["BIS_WL_owner", independent];
+	};
+
+	private _mapColor = switch (_targetOwner) do {
 		case west: { [0, 0.3, 0.6, 0.9] };
 		case east: { [0.5, 0, 0, 0.9] };
 		case independent: { [0, 0.6, 0, 0.9] };
 		default { [1, 1, 1, 0.15] };
 	};
-	private _mapTexture = switch (_sectorOwner) do {
+	private _mapTexture = switch (_targetOwner) do {
 		case west: { "#(rgb,1,1,1)color(0,0,1,0.15)" };
 		case east: { "#(rgb,1,1,1)color(1,0,0,0.15)" };
 		case independent: { "#(rgb,1,1,1)color(0,1,0,0.15)" };
@@ -630,14 +689,14 @@ private _combatAirSectors = _mapData getOrDefault ["combatAirSectors", []];
 	};
 
 	_drawEllipses pushBack [
-		_sectorPos,
+		_targetPos,
 		WL_COMBAT_AIR_RADIUS,
 		WL_COMBAT_AIR_RADIUS,
 		0,
 		_mapColor,
 		_mapTexture
 	];
-} forEach _combatAirSectors;
+} forEach _combatAirAreas;
 
 // Draw squad lines
 private _allSquadmates = _mapData getOrDefault ["allSquadmates", []];
@@ -668,8 +727,11 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 {
 	private _position = getPosASL _x;
 	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
-	private _hideNameOnMap = _x getVariable ["WL2_hideNameOnMap", false];
-	private _showName = !_hideNameOnMap && _draw;
+	private _hideMap = _x getVariable ["WL2_hideMap", 0];
+	if (_hideMap == 2) then {
+		continue;
+	};
+	private _showName = _hideMap == 0 && _draw;
 	_drawIcons pushBack [
 		[_x, _mapIconCache] call WL2_fnc_iconType,
 		[_x, _mapColorCache] call WL2_fnc_iconColor,
@@ -770,6 +832,21 @@ private _advancedMines = _mapData getOrDefault ["advancedMines", []];
 		false
 	];
 } forEach _advancedMines;
+
+// Draw minefields
+private _minefields = _mapData getOrDefault ["minefields", []];
+{
+	private _position = getPosASL _x;
+
+	_drawRectangles pushBack [
+		_position,
+		35,
+		5,
+		getDir _x,
+		[1, 1, 1, 1],
+		"#(rgb,1,1,1)color(1,0,0,0.2)"
+	];
+} forEach _minefields;
 
 private _drawSectorMarkerThreshold = _mapData getOrDefault ["sectorMarkerThreshold", 0.4];
 private _drawSectorMarkerText = (ctrlMapScale _map) < _drawSectorMarkerThreshold;

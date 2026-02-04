@@ -39,7 +39,7 @@ _asset spawn APS_fnc_rearmAPS;
 _asset setVariable ['WL2_smokeCurtains', 2];
 
 if (_asset getVariable ["WL2_mortarShellCountHE", -1] != -1) then {
-    _asset setVariable ["WL2_mortarShellCountHE", 8, true];
+    _asset setVariable ["WL2_mortarShellCountHE", 12, true];
 };
 
 private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];

@@ -40,4 +40,5 @@ waitUntil {
     serverTime >= _endTime || !alive _forwardBase
 };
 
-_forwardBase setVariable ["WL2_demolitionHealth", 12];
+private _maxHealth = _forwardBase getVariable ["WL2_demolitionMaxHealth", 12];
+_forwardBase setVariable ["WL2_demolitionHealth", _maxHealth];

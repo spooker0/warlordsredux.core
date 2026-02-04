@@ -49,7 +49,7 @@ private _sideCaptureModifier = createHashMap;
 		_sector distance2D _x < WL_FOB_CAPTURE_RANGE &&
 		_x getVariable ["WL2_forwardBaseTime", 0] < serverTime
 	};
-	_connections = _connections + count _inRangeTeamForwardBases;
+	_connections = _connections + (count _inRangeTeamForwardBases) * 1.5;
 
 	_sideCaptureModifier set [_side, _connections];
 } forEach _sideArr;
