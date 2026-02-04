@@ -10,6 +10,12 @@ private _side = [_asset] call WL2_fnc_getAssetSide;
 
 _asset allowDamage false;
 
+private _mineOwner = if (isServer) then {
+    objNull
+} else {
+    player
+};
+
 while { alive _asset && _dumbMines > 0} do {
     uiSleep 0.5;
 
@@ -17,10 +23,10 @@ while { alive _asset && _dumbMines > 0} do {
         break;
     };
 
-    private _area = [getPosASL _asset, 35, 5, getDir _asset, true];
+    private _area = [getPosASL _asset, 50, 10, getDir _asset, true];
 
     private _enemyUnits = switch (_side) do {
-        case west: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
+        case west: { BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
         case east: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
         case independent: { BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles };
         default { [] };
@@ -57,13 +63,13 @@ while { alive _asset && _dumbMines > 0} do {
         _vehicle setVariable ["WL2_alreadyMined", _alreadyMined + 1];
 
         private _mine = createMine ["SLAMDirectionalMine", getPosASL _vehicle, [], 3];
-        [_mine, [player, player]] remoteExec ["setShotParents", 2];
+        [_mine, [_mineOwner, _mineOwner]] remoteExec ["setShotParents", 2];
 
         private _startTime = serverTime;
         waitUntil {
             uiSleep 0.001;
             private _shotParents = getShotParents _mine;
-            !isNull (_shotParents # 0) || serverTime - _startTime > 5
+            (_shotParents # 0) isEqualTo _mineOwner || serverTime - _startTime > 5
         };
 
         private _vehiclePosition = _vehicle modelToWorld [0, 1, 0];

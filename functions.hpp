@@ -484,6 +484,7 @@ class CfgFunctions {
 			class destroyStronghold {};
 			class detectNewPlayers {};
 			class forgiveTeamkill {};
+			class forwardBaseUpgrade {};
 			class friendlyFireHandleServer {};
 			class fundsDatabaseUpdate {};
 			class fundsDatabaseWrite {};

@@ -840,8 +840,8 @@ private _minefields = _mapData getOrDefault ["minefields", []];
 
 	_drawRectangles pushBack [
 		_position,
-		35,
-		5,
+		50,
+		10,
 		getDir _x,
 		[1, 1, 1, 1],
 		"#(rgb,1,1,1)color(1,0,0,0.2)"

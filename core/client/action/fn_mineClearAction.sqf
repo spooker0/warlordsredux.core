@@ -120,26 +120,28 @@ private _actionId = _asset addAction [
 
             private _minesInArea = allMines inAreaArray _mineClearArea;
 
-            private _allUnitsInArea = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) select {
+            private _allUnits = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) select {
                 WL_ISUP(_x)
-            } inAreaArray _mineClearArea;
+            };
+            private _allUnitsInArea = _allUnits inAreaArray _mineClearArea;
 
-            private _smartMinesInArea = _allUnitsInArea select {
+            private _mineEquipInArea = _allUnitsInArea select {
                 private _unitActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
                 private _isSmartMine = WL_ASSET(_unitActualType, "smartMineAP", 0) > 0 || WL_ASSET(_unitActualType, "smartMineAT", 0) > 0;
-                _isSmartMine
+                private _isDumbMine = WL_ASSET(_unitActualType, "dumbMine", 0) > 0;
+                _isSmartMine || _isDumbMine
             };
-            _minesInArea append _smartMinesInArea;
+            _minesInArea append _mineEquipInArea;
 
             [player, "demine", _asset, _minesInArea] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
-            private _cratersInArea = _allUnitsInArea select {
+            private _obstaclesInArea = _allUnitsInArea select {
                 private _unitActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
-                WL_ASSET(_unitActualType, "crater", 0) > 0;
+                WL_ASSET(_unitActualType, "obstacle", 0) == 1;
             };
             {
                 [_x, player] remoteExec ["WL2_fnc_demolishComplete", 2];
-            } forEach _cratersInArea;
+            } forEach _obstaclesInArea;
 
             uiSleep 1;
             ropeDestroy _cable;

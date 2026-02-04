@@ -80,12 +80,11 @@ while { alive _asset } do {
                 "CraterLong",
                 "CraterLong_02_F"
             ];
-            for "_i" from 1 to 15 do {
+            for "_i" from 1 to 8 do {
                 private _craterType = selectRandom _craterTypes;
 
                 private _angle = random 360;
-                private _randomSquareRoot = sqrt random 1;
-                private _distance = 30 * _randomSquareRoot;
+                private _distance = random 15;
                 private _position = _asset getPos [_distance, _angle];
 
                 private _inCarrierSector = {

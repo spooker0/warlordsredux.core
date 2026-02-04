@@ -8,6 +8,22 @@ private _catapultActionID = _asset addAction [
 	{
         _this params ["_asset", "_caller", "_actionId"];
 
+        private _allUnits = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) select {
+            WL_ISUP(_x)
+        };
+        private _unitsNearby = _allUnits inAreaArray [getPosASL _asset, 100, 100, 0, false];
+        private _railsNearby = _unitsNearby select {
+            typeof _x == "Land_CraneRail_01_F"
+        };
+
+        private _useRail = false;
+        if (count _railsNearby > 0) then {
+            _useRail = true;
+            private _railCatapult = _railsNearby # 0;
+            _asset setDir (getDir _railCatapult);
+            _asset setVehiclePosition [_railCatapult modelToWorld [0, -10, 0], [], 0, "CAN_COLLIDE"];
+        };
+
         ["Launching in 5 seconds!"] call WL2_fnc_smoothText;
         playSoundUI ["AddItemOk"];
 
@@ -17,16 +33,19 @@ private _catapultActionID = _asset addAction [
         _caller actionNow ["flapsDown", _asset];
         _caller actionNow ["flapsDown", _asset];
 
-        [_asset] spawn {
-            params ["_asset"];
+        [_asset, _useRail] spawn {
+            params ["_asset", "_useRail"];
             uiSleep 5;
 
             private _assetConfig = configFile >> "CfgVehicles" >> typeOf _asset;
-            private _stallSpeed = getNumber(_assetConfig >> "stallSpeed");
-            private _maxGForce = getNumber(_assetConfig >> "maxGForce");
+            private _stallSpeed = getNumber (_assetConfig >> "stallSpeed");
+            private _maxGForce = getNumber (_assetConfig >> "maxGForce");
 
-            private _velocityLaunch = 350 min (_stallSpeed * 1.2);
-            private _velocityIncrease = 100 min (_maxGForce * 8);
+            private _stallFactor = if (_useRail) then { 2 } else { 1.2 };
+            private _velocityFactor = if (_useRail) then { 20 } else { 8 };
+
+            private _velocityLaunch = 350 min (_stallSpeed * _stallFactor);
+            private _velocityIncrease = 100 min (_maxGForce * _velocityFactor);
             private _accelerationStep = 0.0001;
             private _direction = getDir _asset;
 

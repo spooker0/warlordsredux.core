@@ -11,7 +11,7 @@ private _nearDestroyables = (nearestObjects [_position, [], 100, true]) select {
     _x distance2D _position < _distanceLimit && _x getVariable ["WL2_canDemolish", false];
 } select {
     private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
-    WL_ASSET(_assetActualType, "crater", 0) == 0;
+    WL_ASSET(_assetActualType, "obstacle", 0) == 0;
 };
 
 if (_ignoreHeight) then {

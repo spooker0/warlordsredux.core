@@ -13,31 +13,32 @@ private _vehicleUnits = [];
 private _presetVehicles = _sector getVariable ["WL2_vehiclesToSpawn", []];
 
 private _spawnVehicle = {
-	params ["_vehicleType", "_spawnPos", "_direction"];
+	params ["_vehicleType", "_spawnPos", "_direction", "_isStatic"];
 
 	private _vehicle = [objNull, _spawnPos, _vehicleType, _direction, false] call WL2_fnc_orderGround;
-	private _group = createVehicleCrew _vehicle;
-	private _crew = crew _vehicle;
-
 	_vehicleUnits pushBack _vehicle;
 
-	{
-		_x call WL2_fnc_newAssetHandle;
-		_vehicleUnits pushBack _x;
-	} forEach _crew;
+	if (!_isStatic) then {
+		private _group = createVehicleCrew _vehicle;
+		private _crew = crew _vehicle;
+		{
+			_x call WL2_fnc_newAssetHandle;
+			_vehicleUnits pushBack _x;
+		} forEach _crew;
 
-	[_group, 0] setWaypointPosition [position _vehicle, 100];
-	_group setBehaviour "COMBAT";
-	_group deleteGroupWhenEmpty true;
+		[_group, 0] setWaypointPosition [position _vehicle, 100];
+		_group setBehaviour "COMBAT";
+		_group deleteGroupWhenEmpty true;
 
-	_wp = _group addWaypoint [_spawnPos, 100];
-	_wp setWaypointType "SAD";
+		_wp = _group addWaypoint [_spawnPos, 100];
+		_wp setWaypointType "SAD";
 
-	_wp = _group addWaypoint [_spawnPos, 100];
-	_wp setWaypointType "CYCLE";
+		_wp = _group addWaypoint [_spawnPos, 100];
+		_wp setWaypointType "CYCLE";
 
-	_vehicle allowCrewInImmobile [true, true];
-	[_vehicle, [1, 1, 1]] remoteExec ["setVehicleTIPars", 0];
+		_vehicle allowCrewInImmobile [true, true];
+		[_vehicle, [1, 1, 1]] remoteExec ["setVehicleTIPars", 0];
+	};
 };
 
 if (count _presetVehicles == 0) then {
@@ -74,12 +75,25 @@ if (count _presetVehicles == 0) then {
 		};
 
 		private _vehicleType = selectRandom _vehiclesPool;
-		[_vehicleType, _spawnPos, random 360] call _spawnVehicle;
+		[_vehicleType, _spawnPos, random 360, false] call _spawnVehicle;
 	};
 } else {
 	{
-		_x call _spawnVehicle;
+		private _data = +_x;
+		_data pushBack false;
+		_data call _spawnVehicle;
 	} forEach _presetVehicles;
+};
+
+private _objectArea = _sector getVariable "objectAreaComplete";
+
+private _roads = _sector nearRoads 500;
+_roads = _roads inAreaArray _objectArea;
+if (count _roads > 0) then {
+	if (random 1 > 0.5) then {
+		private _randomRoad = selectRandom _roads;
+		["Land_Sign_MinesDanger_English_F", getPosATL _randomRoad, random 360, true] call _spawnVehicle;
+	};
 };
 
 private _services = _sector getVariable ["WL2_services", []];
@@ -191,7 +205,6 @@ private _allUnits = _vehicleUnits + _infantryUnits;
 _sector setVariable ["WL2_sectorDefenders", _allUnits];
 _sector setVariable ["WL2_sectorPop", round (_garrisonSize * 2), true];
 
-private _objectArea = _sector getVariable "objectAreaComplete";
 private _maxRadius = (_objectArea # 1) max (_objectArea # 2);
 private _findStrongholdBuildings = [getPosATL _sector, _maxRadius, true] call WL2_fnc_findStrongholdBuilding;
 

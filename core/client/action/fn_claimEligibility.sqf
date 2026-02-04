@@ -28,6 +28,6 @@ private _isStructureNotInEnemySector = if (_isDemolishable) then {
     true;
 };
 
-private _isCrater = WL_ASSET(_assetActualType, "crater", 0) > 0;
+private _isObstacle = WL_ASSET(_assetActualType, "obstacle", 0) > 0;
 
-_isAlive && _hasNoCrew && _isNotOwner && _isNotSameSide && _isNotUAV && _isStructureNotInEnemySector &&  !_isCrater
+_isAlive && _hasNoCrew && _isNotOwner && _isNotSameSide && _isNotUAV && _isStructureNotInEnemySector &&  !_isObstacle

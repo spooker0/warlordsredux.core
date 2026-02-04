@@ -44,8 +44,23 @@ private _demolishActionId = player addAction [
                 if (typeof _demolishableTarget == "RuggedTerminal_01_communications_hub_F") then {
                     WL_DEMOLITION_FOB_STEP_TIME
                 } else {
+                    private _allUnits = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) select {
+                        WL_ISUP(_x)
+                    };
+                    private _unitsNearby = _allUnits inAreaArray [_playerPosition, 30, 30, 0, false];
+                    private _bulldozersNearby = _unitsNearby select {
+                        private _unitActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+                        WL_ASSET(_unitActualType, "mineClear", 0) > 0
+                    };
+
                     private _assetActualType = _demolishableTarget getVariable ["WL2_orderedClass", typeOf _demolishableTarget];
-                    WL_ASSET(_assetActualType, "demolishStepTime", WL_DEMOLITION_STEP_TIME);
+                    private _demolitionStepTime = WL_ASSET(_assetActualType, "demolishStepTime", WL_DEMOLITION_STEP_TIME);
+
+                    if (count _bulldozersNearby > 0) then {
+                        _demolitionStepTime * 0.8;
+                    } else {
+                        _demolitionStepTime;
+                    };
                 }
             };
 
