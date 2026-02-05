@@ -9,7 +9,7 @@ if (_isLoading) exitWith {
     [false, [], [0, 0, 0]];
 };
 
-private _isPointing = cursorObject == _asset || _slingloading;
+private _isPointing = cursorObject == _asset || _slingloading || (_asset isKindOf "Air");
 if (!_isPointing) exitWith {
     [false, [], [0, 0, 0]];
 };

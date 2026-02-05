@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_forwardBase", "_startTime", "_endTime", "_side"];
+params ["_forwardBase", "_side"];
 
 waitUntil {
     uiSleep 1;
@@ -7,7 +7,6 @@ waitUntil {
 };
 
 _forwardBase setVariable ["WL2_canDemolish", true];
-_forwardBase animateSource ["Terminal_source", 100, true];
 _forwardBase setVariable ["WL2_forwardBaseOwner", _side];
 _forwardBase setVariable ["WL2_mapCircleRadius", WL_FOB_MIN_DISTANCE];
 
@@ -18,27 +17,5 @@ _currentForwardBases = _currentForwardBases select {
 };
 missionNamespace setVariable ["WL2_forwardBases", _currentForwardBases];
 
-_forwardBase setVariable ["WL2_forwardBaseTime", _endTime];
 _forwardBase setVariable ["WL_spawnedAsset", true];
 _forwardBase setVariable ["BIS_WL_ownerAssetSide", _side];
-_forwardBase setVariable ["WL2_demolitionMaxHealth", 12];
-_forwardBase setVariable ["WL2_demolitionHealth", 1];
-
-private _sectorsInRange = BIS_WL_allSectors select {
-    _x distance2D _forwardBase < WL_FOB_CAPTURE_RANGE
-};
-_forwardBase setVariable ["WL2_forwardBaseSectors", _sectorsInRange];
-
-waitUntil {
-    uiSleep 1;
-    if (isServer) then {
-        private _timeRemaining = _endTime - serverTime;
-        private _totalTime = _endTime - _startTime;
-        private _progress = 1 - (_timeRemaining / _totalTime);
-        _forwardBase animateSource ["Progress_source", _progress * 100, true];
-    };
-    serverTime >= _endTime || !alive _forwardBase
-};
-
-private _maxHealth = _forwardBase getVariable ["WL2_demolitionMaxHealth", 12];
-_forwardBase setVariable ["WL2_demolitionHealth", _maxHealth];

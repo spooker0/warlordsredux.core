@@ -6,6 +6,11 @@ if (_attach) then {
     private _load = _arguments # 1;
     private _offset = _arguments # 2;
 
+    private _assetIsAir = _asset isKindOf "Air";
+    if (_assetIsAir) then {
+        _offset = _offset vectorAdd [0, 3, -4.9];
+    };
+
     _load attachTo [_asset, _offset];
     private _loadActualType = _load getVariable ["WL2_orderedClass", typeOf _load];
     private _loadableAngle = WL_ASSET(_loadActualType, "loadableAngle", 0);
@@ -13,7 +18,7 @@ if (_attach) then {
         _load setDir _loadableAngle;
         _load setPosWorld getPosWorld _load;
     };
-    if (_load isKindOf "Air") then {
+    if (_load isKindOf "Air" && !_assetIsAir) then {
         _load setDir 45;
         _load setPosWorld getPosWorld _load;
     };

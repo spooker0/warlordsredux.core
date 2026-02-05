@@ -22,7 +22,7 @@ private _deployActionId = _asset addAction [
             params ["_asset", "_crateType", "_isConversion"];
             if (_crateType == "") exitWith {
                 playSound "AddItemFailed";
-                ["Deploy Crate not available for this side!"] call WL2_fnc_smoothText;
+                ["Deploy crate not available!"] call WL2_fnc_smoothText;
             };
 
             private _success = if (_isConversion) then {

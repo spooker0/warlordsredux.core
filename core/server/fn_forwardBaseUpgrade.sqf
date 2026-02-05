@@ -25,14 +25,18 @@ if (_level == 3) then {
 
     private _hangarPosATL = getPosATL _forwardHangar;
     if (_hangarPosATL # 2 > -1) then {
-        private _scoutPlane = if (_side == west) then {
+        private _scoutPlaneType = if (_side == west) then {
             "B_Plane_Fighter_01_Stealth_Unarmed_F"
         } else {
             "O_Plane_Fighter_02_Stealth_Unarmed_F"
         };
 
         private _planePosition = _forwardHangar modelToWorld [0, -3, 0];
-        [_sender, _planePosition, _scoutPlane, getDir _forwardHangar, false] call WL2_fnc_orderGround;
+        private _scoutPlane = [objNull, _planePosition, _scoutPlaneType, getDir _forwardHangar, false] call WL2_fnc_orderGround;
+
+        private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
+        _ownedVehicles pushBack _scoutPlane;
+        missionNamespace setVariable ["BIS_WL_ownedVehicles_server", _ownedVehicles];
     };
 
     private _assetChildren = _forwardBase getVariable ["WL2_children", []];

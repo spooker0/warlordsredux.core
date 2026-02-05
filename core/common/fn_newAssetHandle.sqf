@@ -121,11 +121,9 @@ if (_asset isKindOf "Man") then {
 
 		// Logistics
 		case "B_Truck_01_flatbed_F";
-		case "O_Truck_01_flatbed_F": {
-			[_asset] remoteExec ["WL2_fnc_deployableAddAction", 0, true];
-		};
+		case "O_Truck_01_flatbed_F";
 		case "B_T_VTOL_01_vehicle_F": {
-			_asset call WL2_fnc_logisticsAddAction;
+			[_asset] remoteExec ["WL2_fnc_deployableAddAction", 0, true];
 		};
 
 		// Slingloading
@@ -209,7 +207,7 @@ if (_asset isKindOf "Man") then {
 	if (_loadedItem != "") then {
 		_asset setVariable ["WL2_deployCrates", 1, true];
 		private _crateIsConversion = WL_ASSET(_loadedItem, "conversion", 0) != 0;
-		[_asset, _loadedItem, _crateIsConversion] remoteExec ["WL2_fnc_deployCrateAction", 0, true];
+		[_asset, _loadedItem, _crateIsConversion] call WL2_fnc_deployCrateAction;
 	};
 
 	if ([_asset] call WL2_fnc_isDrone) then {

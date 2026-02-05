@@ -21,8 +21,8 @@ private _forwardBase = if (count _forwardBases > 0) then {
     objNull
 };
 
-private _baseTime = _forwardBase getVariable ["WL2_forwardBaseTime", -1];
-if (!isNull _forwardBase && serverTime < _baseTime) exitWith {
+private _baseReady = _forwardBase getVariable ["WL2_forwardBaseReady", false];
+if (!isNull _forwardBase && !_baseReady) exitWith {
     [false, "Forward base is still under construction."];
 };
 

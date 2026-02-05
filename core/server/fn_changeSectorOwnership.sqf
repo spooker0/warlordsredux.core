@@ -6,43 +6,44 @@ _sector setVariable ["BIS_WL_owner", _owner, true];
 
 private _previousOwners = _sector getVariable "BIS_WL_previousOwners";
 private _isNeutralSector = count _previousOwners == 0;
-if !(_owner in _previousOwners) then {
-	_previousOwners pushBack _owner;
+_previousOwners pushBackUnique _owner;
 
-	private _facesData = missionNamespace getVariable ["WL2_sectorFaces", []];
-	{
-		_x params ["_sectorsInFace", "_area"];
-		if (_sector in _sectorsInFace) then {
-			private _ownsFace = true;
-			{
-				private _sectorInFace = _x;
-				private _sectorOwner = _sectorInFace getVariable ["BIS_WL_owner", civilian];
-				if (_sectorOwner != _owner) then {
-					_ownsFace = false;
-					break;
-				};
-			} forEach _sectorsInFace;
-			if (_ownsFace) then {
-				private _faceVertices = count _sectorsInFace;;
-				private _reward = _faceVertices * 500;
-
-				private _recipients = allPlayers select {
-					!(_x getVariable ["WL2_afk", false])
-				} select {
-					side group _x == _owner
-				};
-
-				{
-					private _uid = getPlayerUID _x;
-					[_reward, _uid, false] call WL2_fnc_fundsDatabaseWrite;
-					[objNull, _reward, "Region captured", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _x];
-				} forEach _recipients;
+private _reward = 0;
+private _facesData = missionNamespace getVariable ["WL2_sectorFaces", []];
+{
+	_x params ["_sectorsInFace", "_area"];
+	if (_sector in _sectorsInFace) then {
+		private _ownsFace = true;
+		{
+			private _sectorInFace = _x;
+			private _sectorOwner = _sectorInFace getVariable ["BIS_WL_owner", civilian];
+			if (_sectorOwner != _owner) then {
+				_ownsFace = false;
+				break;
 			};
+		} forEach _sectorsInFace;
+		if (_ownsFace) then {
+			private _baseIncome = round (_area * WL_INCOME_M2);
+			private _faceVertices = count _sectorsInFace;
+			_reward = _reward + (_baseIncome * _faceVertices * WL_INCOME_CAPBONUS);
 		};
-	} forEach _facesData;
+	};
+} forEach _facesData;
+
+if (_reward > 0) then {
+	private _recipients = allPlayers select {
+		!(_x getVariable ["WL2_afk", false])
+	} select {
+		side group _x == _owner
+	};
+
+	{
+		private _uid = getPlayerUID _x;
+		[_reward, _uid, false] call WL2_fnc_fundsDatabaseWrite;
+		[objNull, _reward, "Region captured", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _x];
+	} forEach _recipients;
 };
 
-_previousOwners pushBackUnique _owner;
 _sector setVariable ["BIS_WL_previousOwners", _previousOwners, true];
 _sector setVariable ["WL_fortificationTime", serverTime + WL_FORTIFICATION_TIME, true];
 _sector setVariable ["WL_strongholdFortified", false, true];

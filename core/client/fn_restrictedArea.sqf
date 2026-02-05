@@ -21,6 +21,7 @@ while { !BIS_WL_missionEnd } do {
             if !(_side in _revealedBy) then {
                 _revealedBy pushBackUnique _side;
                 _x setVariable ["BIS_WL_revealedBy", _revealedBy, true];
+                [player, "revealSector"] remoteExec ["WL2_fnc_handleClientRequest", 2];
                 [_x, _side] remoteExec ["WL2_fnc_sectorRevealHandle", 0];
             };
         } else {

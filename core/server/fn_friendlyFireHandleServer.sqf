@@ -7,6 +7,9 @@ private _victim = _uid call BIS_fnc_getUnitByUid;
 private _owner = owner _victim;
 if (_owner <= 2) exitWith {};
 
+private _unitActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
+if (WL_ASSET(_unitActualType, "obstacle", 0) == 2) exitWith {};
+
 if (_unit isKindOf "Man") then {
 	if (side group _unit == side group _responsibleLeader) then {
 		[_responsibleLeader, _unit] remoteExec ["WL2_fnc_askForgiveness", _owner];

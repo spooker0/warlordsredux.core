@@ -206,7 +206,7 @@ switch (_conditionName) do {
     case "fastTravelFOB": {
         if (!alive _target) exitWith { "Forward base has been destroyed." };
         if (_target getVariable ["WL2_forwardBaseOwner", sideUnknown] != BIS_WL_playerSide) exitWith { "" };
-        if (_target getVariable ["WL2_forwardBaseTime", serverTime] > serverTime) exitWith { "Forward base under construction." };
+        if !(_target getVariable ["WL2_forwardBaseReady", false]) exitWith { "Forward base under construction." };
         "ok";
     };
     case "markSector": {

@@ -47,6 +47,7 @@ private _displayIcon = switch (toUpper _displayText) do {
 	case "REVIVED TEAMMATE": { "a3\ui_f\data\igui\cfg\simpletasks\types\Heal_ca.paa" };
 	case "SPECTATE TARGET EARNED SCORE": { "a3\Ui_f\data\IGUI\Cfg\CommandBar\imageCommander_ca.paa" };
 	case "RECON";
+	case "REVEAL SECTOR";
 	case "SPOT ASSIST": { "a3\ui_f\data\gui\rsc\rscdisplayarsenal\binoculars_ca.paa" };
 	case "SPAWN REWARD": { "a3\ui_f\data\igui\cfg\simpletasks\types\car_ca.paa" };
 	case "SQUAD ASSIST": { "a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa" };

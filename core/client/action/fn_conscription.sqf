@@ -7,6 +7,8 @@ if (_disableConscription) exitWith {};
 
 uiSleep 1;
 
+if (WL_ISUP(player) && vehicle player != player) exitWith {};
+
 private _callText = format ["Squad leader %1 has called the team to the frontline. Do you want to fast travel there now?", name _conscripter];
 private _result = [
 	"Called to Frontline",

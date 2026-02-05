@@ -23,9 +23,8 @@ while { !BIS_WL_missionEnd } do {
 	} forEach _notBlocked;
 
 	private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
-	_forwardBases = _forwardBases select {
-		alive _x &&
-		_x getVariable ["WL2_forwardBaseTime", 0] < serverTime
+	_forwardBases = _forwardBases select { alive _x } select {
+		_x getVariable ["WL2_forwardBaseReady", false]
 	};
 
     {

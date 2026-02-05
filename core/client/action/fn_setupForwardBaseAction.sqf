@@ -128,7 +128,6 @@ private _setupActionId = [
 			if (_exit) exitWith {};
 
 			[format ["Forward base under construction. %1 seconds remaining.", WL_FOB_SETUP_TIME]] call WL2_fnc_smoothText;
-			private _endTime = serverTime + WL_FOB_SETUP_TIME;
 
 			private _forwardBase = createVehicle [_terminalClass, _position, [], 0, "CAN_COLLIDE"];
 			_forwardBase setVectorDirAndUp _direction;
@@ -136,7 +135,7 @@ private _setupActionId = [
 			deleteVehicle _target;
 
 			private _side = side group player;
-			[_forwardBase, serverTime, _endTime, _side, false] remoteExec ["WL2_fnc_setupForwardBaseMp", 0, true];
+			[_forwardBase, _side, false] remoteExec ["WL2_fnc_setupForwardBaseMp", 0, true];
 
 			_forwardBase setVariable ["WL2_forwardBasePlacer", getPlayerUID player, true];
 			_forwardBase setVariable ["WL2_forwardBaseSupplies", 2000, true];
@@ -145,6 +144,8 @@ private _setupActionId = [
 				"a3\sounds_f_decade\assets\props\linkterminal_01_node_2_f\link_terminal02_antenna_open.wss",
 				_forwardBase, false, getPosASL _forwardBase, 2, 1, 200, 0
 			];
+
+			[player, "setupFOB", _forwardBase] remoteExec ["WL2_fnc_handleClientRequest", 2];
 		};
 	},
 	{},

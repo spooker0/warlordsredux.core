@@ -239,7 +239,6 @@ class CfgFunctions {
 			class jammerUpdate {};
 			class lockActionEligibility {};
 			class lockActionUpdate {};
-			class logisticsAddAction {};
 			class mineClearAction {};
 			class parachuteAction {};
 			class parachuteSetup {};
@@ -251,6 +250,7 @@ class CfgFunctions {
 			class rappelAction {};
 			class rappelActionEligibility {};
 			class rearmAction {};
+			class rebase {};
 			class rebaseActionEligibility {};
 			class reconOpticsAction {};
 			class reconReward {};

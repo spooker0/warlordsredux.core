@@ -29,7 +29,7 @@ private _inRangeTeamFob = if (count _inRangeTeamForwardBases > 0) then {
 } else {
     objNull
 };
-if (!isNull _inRangeTeamFob && _inRangeTeamFob getVariable ["WL2_forwardBaseTime", 0] > serverTime && _addSupplies) exitWith {
+if (!isNull _inRangeTeamFob && _inRangeTeamFob getVariable ["WL2_forwardBaseReady", false] && _addSupplies) exitWith {
     "";
 };
 if (_addSupplies && isNull _inRangeTeamFob) exitWith {

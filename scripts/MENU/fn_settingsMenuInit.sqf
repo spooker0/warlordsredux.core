@@ -152,7 +152,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["slider", "Map button scale", [0.75, 1.5, 0.05, 1, "mapButtonScale"]],
         ["slider", "Map sector line color (grayscale)", [0, 1, 0.05, 1, "mapSectorLineGrayscale"]],
         ["slider", "Map sector line reveal time", [0, 1, 0.05, 0.25, "mapSectorLineSpeed"]],
-        ["slider", "Map sector line reveal max", [1, 9, 1, 3, "mapSectorLineMax"]],
+        ["slider", "Map sector line reveal max", [1, 9, 1, 1, "mapSectorLineMax"]],
         ["category", "General settings"],
         ["checkbox", "Disable 3rd person view (2x reward)", ["3rdPersonDisabled", false]],
         ["checkbox", "Autonomous mode off by default", ["enableAuto", false]],

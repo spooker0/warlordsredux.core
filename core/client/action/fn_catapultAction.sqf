@@ -19,6 +19,7 @@ private _catapultActionID = _asset addAction [
         private _useRail = false;
         if (count _railsNearby > 0) then {
             _useRail = true;
+            _railsNearby = [_railsNearby, [], { cameraOn distance _x }, "ASCEND"] call BIS_fnc_sortBy;
             private _railCatapult = _railsNearby # 0;
             _asset setDir (getDir _railCatapult);
             _asset setVehiclePosition [_railCatapult modelToWorld [0, -10, 0], [], 0, "CAN_COLLIDE"];
@@ -57,10 +58,14 @@ private _catapultActionID = _asset addAction [
             private _timeStart = serverTime;
             private _timeDelta = 0;
 
-            while { speed _asset < _velocityLaunch } do {
+            while { speed _asset < _velocityLaunch && serverTime - _timeStart < 10 } do {
                 _timeDelta = serverTime - _timeStart;
                 _velocity = _velocityIncrease * _timeDelta;
-                _asset setVelocity [sin _direction * _velocity, cos _direction * _velocity, velocity _asset select 2];
+                if (_useRail) then {
+                    _asset setVelocityModelSpace [0, _velocity, 0.5];
+                } else {
+                    _asset setVelocity [sin _direction * _velocity, cos _direction * _velocity, velocity _asset select 2];
+                };
                 uiSleep _accelerationStep;
             };
         };
@@ -85,67 +90,25 @@ private _rebaseAction = _asset addAction [
 	format ["Return to Base (%1%2)", WL_MoneySign, WL_COST_JETRTB],
 	{
         _this params ["_asset", "_caller", "_actionId"];
-        [_asset] spawn {
-            params ["_asset"];
-            private _airfieldSectors = (BIS_WL_sectorsArray # 2) select {
-                private _services = _x getVariable ["WL2_services", []];
-                "A" in _services;
-            };
+        private _eligibility = [_asset] call WL2_fnc_rebaseActionEligibility;
 
-            if (count _airfieldSectors == 0) exitWith {
-                ["No friendly airfields available!"] call WL2_fnc_smoothText;
-                playSoundUI ["AddItemFailed"];
-            };
+        private _showAction = _eligibility # 0;
+        if (!_showAction) exitWith {};
 
-            private _airfieldsByDistance = [_airfieldSectors, [_asset], { _input0 distance _x }, "ASCEND"] call BIS_fnc_sortBy;
-            private _closestAirfield = _airfieldsByDistance # 0;
-            private _sectorName = _closestAirfield getVariable ["WL2_name", "sector"];
-            private _message = format ["Are you sure you want to return to %1 for %2%3?<br/>Make sure your landing gear is functional!", _sectorName, WL_MoneySign, WL_COST_JETRTB];
-            private _result = [_message, "Return to Nearest Airfield", "Rebase", "Cancel"] call BIS_fnc_guiMessage;
-
-            if (!_result) exitWith {
-                playSoundUI ["AddItemFailed"];
-            };
-
-            private _spawnParams = [_closestAirfield] call WL2_fnc_getAirSectorSpawn;
-            _spawnParams params ["_spawnPos", "_dir"];
-            if (count _spawnPos == 0) exitWith {
-                ["No valid spawn position found at airfield!"] call WL2_fnc_smoothText;
-                playSoundUI ["AddItemFailed"];
-            };
-
-            player action ["LandGear", _asset];
-
-            titleCut ["", "BLACK OUT", 1];
-
-            uiSleep 1;
-
-            private _startWaitTime = serverTime;
-            ["Returning to base..."] call WL2_fnc_smoothText;
-            while { (serverTime - _startWaitTime) < 5 } do {
-                _asset setAirplaneThrottle 0;
-                _asset engineOn false;
-                _asset setVectorDirAndUp [[0, 1, 0], [0, 0, 1]];
-                _asset setVelocity [0, 0, 0];
-                uiSleep 0.1;
-            };
-
-            _asset setVehiclePosition [_spawnPos, [], 0, "CAN_COLLIDE"];
-            _asset setVectorDirAndUp [[0, 1, 0], [0, 0, 1]];
-            _asset setDir _dir;
-            _asset setVelocity [0, 0, 0];
-
-            [player, "jetRTB"] remoteExec ["WL2_fnc_handleClientRequest", 2];
-
-            titleCut ["", "BLACK IN", 1];
+        private _failReason = _eligibility # 1;
+        if (_failReason != "") exitWith {
+            playSoundUI ["AddItemFailed"];
+            [_failReason] call WL2_fnc_smoothText;
         };
+
+        [_asset] spawn WL2_fnc_rebase;
 	},
 	[],
 	10,
 	false,
 	true,
 	"",
-	"[_target] call WL2_fnc_rebaseActionEligibility",
+	"([_target] call WL2_fnc_rebaseActionEligibility) # 0",
     30,
 	false
 ];

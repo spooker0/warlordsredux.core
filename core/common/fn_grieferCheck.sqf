@@ -10,10 +10,6 @@ private _radiusA = _circleA select 2;
 
 private _BUFFER = 1;
 private _nearbyEntities = (_simulatedObject nearEntities 30) select {
-    private _circleB = boundingBoxReal [_x, "FireGeometry"];
-    private _radiusB = _circleB select 2;
-    _x distance _simulatedObject < (_radiusA + _radiusB + _BUFFER)
-} select {
     private _assetOwner = _x getVariable ["BIS_WL_ownerAsset", "notAsset"];
     _assetOwner != "notAsset"
 } select {
@@ -24,6 +20,10 @@ private _nearbyEntities = (_simulatedObject nearEntities 30) select {
     !(_x isKindOf "Building")
 } select {
     _uid != (_x getVariable ["BIS_WL_ownerAsset", "123"])
+} select {
+    private _circleB = boundingBoxReal [_x, "FireGeometry"];
+    private _radiusB = _circleB select 2;
+    _x distance _simulatedObject < (_radiusA + _radiusB + _BUFFER)
 };
 
 deleteVehicle _simulatedObject;

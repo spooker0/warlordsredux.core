@@ -46,8 +46,9 @@ private _sideCaptureModifier = createHashMap;
 		_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side
 	};
 	private _inRangeTeamForwardBases = _teamForwardBases select {
-		_sector distance2D _x < WL_FOB_CAPTURE_RANGE &&
-		_x getVariable ["WL2_forwardBaseTime", 0] < serverTime
+		_sector distance2D _x < WL_FOB_CAPTURE_RANGE
+	} select {
+		_x getVariable ["WL2_forwardBaseReady", false]
 	};
 	_connections = _connections + (count _inRangeTeamForwardBases) * 1.5;
 

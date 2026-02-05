@@ -160,6 +160,12 @@ if (_action == "spot") exitWith {
 	[objNull, _reward, "Recon", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
+if (_action == "revealSector") exitWith {
+	private _reward = WL_REWARD_REVEALSECTOR;
+	[_reward] call _addFunds;
+	[objNull, _reward, "Reveal Sector", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+};
+
 if (_action == "demolished") exitWith {
 	private _steps = _param1;
 	private _reward = 20 * _steps;
@@ -176,6 +182,27 @@ if (_action == "defendFOB") exitWith {
 	private _level = _param2;
 
 	[_sender, _side, _forwardBase, _level] call WL2_fnc_forwardBaseUpgrade;
+};
+
+if (_action == "setupFOB") exitWith {
+	private _forwardBase = _param1;
+
+	_forwardBase setVariable ["WL2_demolitionMaxHealth", 12, true];
+	_forwardBase setVariable ["WL2_demolitionHealth", 1, true];
+	_forwardBase setVariable ["WL2_forwardBaseReady", false, true];
+
+	private _sectorsInRange = BIS_WL_allSectors select {
+		_x distance2D _forwardBase < WL_FOB_CAPTURE_RANGE
+	};
+	_forwardBase setVariable ["WL2_forwardBaseSectors", _sectorsInRange, true];
+
+	uiSleep WL_FOB_SETUP_TIME;
+
+	if (!alive _forwardBase) exitWith {};
+
+	private _maxHealth = _forwardBase getVariable ["WL2_demolitionMaxHealth", 12];
+	_forwardBase setVariable ["WL2_demolitionHealth", _maxHealth, true];
+	_forwardBase setVariable ["WL2_forwardBaseReady", true, true];
 };
 
 if (_action == "immobilized") exitWith {

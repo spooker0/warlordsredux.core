@@ -384,7 +384,7 @@ while { !BIS_WL_missionEnd } do {
 
         if (_forwardBase getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side) then {
             private _forwardBaseArea = [_forwardBase, WL_FOB_RANGE, WL_FOB_RANGE, 0, false];
-            private _scannedUnits = [_side, _forwardBaseArea] call WL2_fnc_detectUnits;
+            private _scannedUnits = [_side, _forwardBaseArea, false] call WL2_fnc_detectUnits;
             _allScannedUnits append _scannedUnits;
             _scannedUnits = _scannedUnits select {
                 WL_ISUP(_x)

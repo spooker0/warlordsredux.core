@@ -75,7 +75,7 @@ if (BIS_WL_selection_showLinks) then {
 	} forEach _allLinks
 } else {
 	private _sectorLineSpeed = _settingsMap getOrDefault ["mapSectorLineSpeed", 0.25];
-	private _sectorLineMax = _settingsMap getOrDefault ["mapSectorLineMax", 3];
+	private _sectorLineMax = _settingsMap getOrDefault ["mapSectorLineMax", 1];
 	_sectorLineMax = _sectorLineMax - 1;
 
 	if (!isNull _sectorTarget) then {
@@ -303,7 +303,7 @@ if (!isNull _sectorTarget) then {
 if (!isNull _sectorTarget || BIS_WL_selection_showLinks) then {
 	private _facesData = missionNamespace getVariable ["WL2_sectorFaces", []];
 
-	private _neutralRGBA = [0, 0.6, 0, 0.4];
+	private _neutralRGBA = [0.2, 0.2, 0.2, 0.3];
 	private _sideColorRGBA = switch (BIS_WL_playerSide) do {
 		case west: { [0, 0.3, 0.6, 0.4] };
 		case east: { [0.5, 0, 0, 0.4] };
@@ -346,10 +346,29 @@ if (!isNull _sectorTarget || BIS_WL_selection_showLinks) then {
 		} forEach _sectors;
 		_location = _location vectorMultiply (1 / count _sectors);
 
+		private _income = round (_area * WL_INCOME_M2);
 		private _incomeText = if (_ownsFace) then {
-			format ["+%1", round (_area * WL_INCOME_M2)]
+			format ["+%1", _income]
 		} else {
-			format ["%1", round (_area * WL_INCOME_M2)]
+			private _vertices = count _sectors;
+			private _bonus = _income * WL_INCOME_CAPBONUS * _vertices;
+			private _bonusText = if (_bonus >= 1000) then {
+				private _bonusK = floor (_bonus / 1000);
+				private _bonusR = _bonus mod 1000;
+				_bonusR = if (_bonusR >= 100) then {
+					format ["%1", _bonusR]
+				} else {
+					if (_bonusR >= 10) then {
+						format ["0%1", _bonusR]
+					} else {
+						format ["00%1", _bonusR]
+					};
+				};
+				format ["%1,%2", _bonusK, _bonusR]
+			} else {
+				format ["%1", _bonus]
+			};
+			format ["%1 (+%2)", _bonusText, _income]
 		};
 
 		_drawIcons pushBack [
@@ -443,12 +462,10 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		""
 	};
 
-	private _baseTime = _base getVariable ["WL2_forwardBaseTime", -1];
+	private _baseReady = _base getVariable ["WL2_forwardBaseReady", false];
 
-	private _baseText = if (serverTime < _baseTime) then {
-		private _timeRemaining = _baseTime - serverTime;
-		private _timeString = [_timeRemaining, "MM:SS"] call BIS_fnc_secondsToString;
-		format ["(Constructing %1)", _timeString];
+	private _baseText = if (!_baseReady) then {
+		"(Under Construction)";
 	} else {
 		private _maxHealth = _base getVariable ["WL2_demolitionMaxHealth", 5];
 		private _fobHealth = _base getVariable ["WL2_demolitionHealth", _maxHealth];
@@ -761,7 +778,7 @@ private _airWrecks = _mapData getOrDefault ["airWrecks", []];
 		_size * _mapIconScale,
 		_size * _mapIconScale,
 		0,
-		format ["Securable Wreck (%1)", _assetTypeName],
+		format ["%1 (Wreck)", _assetTypeName],
 		1,
 		_iconTextSize * _mapIconScale,
 		"PuristaBold",
