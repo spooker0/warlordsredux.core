@@ -88,9 +88,16 @@
 		_mapData set ["scannersAll", _scannerUnits];
 
 		private _scannerUnitTeam = _scannerUnits select {
-			private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
-			([_x] call WL2_fnc_getAssetSide) == _side ||
-			WL_ASSET_FIELD(_assetData, _assetActualType, "hasScanner", 0) == 1
+			if (([_x] call WL2_fnc_getAssetSide) == _side) then {
+				true
+			} else {
+				if (_x distance cameraOn < 2000) then {
+					private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+					WL_ASSET_FIELD(_assetData, _assetActualType, "hasScanner", 0) == 1
+				} else {
+					false
+				};
+			};
 		};
 		_mapData set ["scannersTeam", _scannerUnitTeam];
 

@@ -85,13 +85,18 @@ if (BIS_WL_selection_showLinks) then {
 			uiNamespace setVariable ["WL2_firstDrawLinkTime", serverTime];
 			uiNamespace setVariable ["WL2_mapLastDrawnLinks", true];
 		};
+
 		private _firstDrawLinkTime = uiNamespace getVariable ["WL2_firstDrawLinkTime", serverTime];
+		private _timeSinceFirstDraw = serverTime - _firstDrawLinkTime;
+		uiNamespace setVariable ["WL2_mapShowBonus", _timeSinceFirstDraw >= _sectorLineSpeed * 2];
+
 		private _linksToShow = if (_sectorLineSpeed > 0) then {
-			(serverTime - _firstDrawLinkTime) / _sectorLineSpeed;
+			_timeSinceFirstDraw / _sectorLineSpeed;
 		} else {
 			_sectorLineMax
 		};
 		_linksToShow = _linksToShow min _sectorLineMax;
+
 		for "_i" from 0 to _linksToShow do {
 			private _allConnections = [];
 			{
@@ -346,9 +351,11 @@ if (!isNull _sectorTarget || BIS_WL_selection_showLinks) then {
 		} forEach _sectors;
 		_location = _location vectorMultiply (1 / count _sectors);
 
+		private _showBonus = uiNamespace getVariable ["WL2_mapShowBonus", false];
+
 		private _income = round (_area * WL_INCOME_M2);
-		private _incomeText = if (_ownsFace) then {
-			format ["+%1", _income]
+		private _incomeText = if (!_showBonus || _ownsFace) then {
+			format ["%1", _income]
 		} else {
 			private _vertices = count _sectors;
 			private _bonus = _income * WL_INCOME_CAPBONUS * _vertices;
@@ -368,7 +375,7 @@ if (!isNull _sectorTarget || BIS_WL_selection_showLinks) then {
 			} else {
 				format ["%1", _bonus]
 			};
-			format ["%1 (+%2)", _bonusText, _income]
+			format ["%1 (+%2)", _income, _bonusText]
 		};
 
 		_drawIcons pushBack [

@@ -14,11 +14,7 @@ if (surfaceIsWater _projectilePosition && (_projectilePosition # 2) < -1) exitWi
     ["Respawn tent cannot be placed under water."] call WL2_fnc_smoothText;
 };
 
-private _previousRespawnBag = player getVariable ["WL2_respawnBag", objNull];
-if (!isNull _previousRespawnBag) then {
-    player setVariable ["WL2_respawnBag", objNull];
-    deleteVehicle _previousRespawnBag;
-};
+[false] call WL2_fnc_deleteTent;
 
 private _pos = _projectile modelToWorld [0, 0, 0];
 // _pos set [2, 0];

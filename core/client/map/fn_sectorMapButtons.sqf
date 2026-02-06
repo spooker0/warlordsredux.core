@@ -211,27 +211,6 @@ private _combatAirExecute = {
     ]
 ] call WL2_fnc_addTargetMapButton;
 
-// Debug combat air patrol button
-#if WL_CAP_DEBUG
-private _debugCombatAirExecute = {
-    params ["_sector"];
-    [player, "debugCombatAir", [], _sector] remoteExec ["WL2_fnc_handleClientRequest", 2];
-};
-[
-    _sector, _targetId,
-    "order-cap-debug",
-    "Debug: order combat air patrol",
-    _debugCombatAirExecute,
-    true,
-    "combatAirPatrolDebug",
-    [
-        WL_COST_COMBATAIR,
-        "CombatAir",
-        "Fast Travel"
-    ]
-] call WL2_fnc_addTargetMapButton;
-#endif
-
 #if WL_CLEAR_SECTOR_DEBUG
 private _clearSectorExecute = {
     params ["_sector"];

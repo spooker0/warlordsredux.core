@@ -5,6 +5,17 @@ if (!alive _asset) exitWith {
 	[false, ""];
 };
 
+private _pos = getPosASL _asset;
+
+if (_pos # 0 > -WL_MAP_RESTRICTION_BUFFER &&
+	_pos # 0 < worldSize + WL_MAP_RESTRICTION_BUFFER &&
+	_pos # 1 > -WL_MAP_RESTRICTION_BUFFER &&
+	_pos # 1 < worldSize + WL_MAP_RESTRICTION_BUFFER) exitWith {
+	[false, ""];
+};
+
+// Make sure false are returned first
+
 private _allUnits = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) select {
 	WL_ISUP(_x)
 };
@@ -29,15 +40,6 @@ if (damage _asset > 0.1 && _lastDamageTime > 0 && _lastDamageTime < WL_COOLDOWN_
 private _playerFunds = (missionNamespace getVariable ["fundsDatabaseClients", createHashMap]) getOrDefault [getPlayerUID player, 0];
 if (_playerFunds < WL_COST_JETRTB) exitWith {
 	[true, "Insufficient funds."];
-};
-
-private _pos = getPosASL _asset;
-
-if (_pos # 0 > -WL_MAP_RESTRICTION_BUFFER &&
-	_pos # 0 < worldSize + WL_MAP_RESTRICTION_BUFFER &&
-	_pos # 1 > -WL_MAP_RESTRICTION_BUFFER &&
-	_pos # 1 < worldSize + WL_MAP_RESTRICTION_BUFFER) exitWith {
-	[false, ""];
 };
 
 // team owns airbase

@@ -162,6 +162,7 @@ class CfgFunctions {
 			class announcerInit {};
 			class betty {};
 			class clientEH {};
+			class combatAirClient {};
 			class createDestroyerClient {};
 			class dumbMine {};
 			class earthquake {};
@@ -223,6 +224,7 @@ class CfgFunctions {
 			class controlDroneActions {};
 			class controlGunnerAction {};
 			class controlGunnerEligibility {};
+			class deleteTent {};
 			class demolishAction {};
 			class demolishEligibility {};
 			class demolishStep {};
@@ -336,7 +338,6 @@ class CfgFunctions {
 			class assetMapButtons {};
 			class assetMapControl {};
 			class captureDisplay {};
-			class combatAirHandle {};
 			class createInfoMarkers {};
 			class deleteAssetFromMap {};
 			class designateTeamPriority {};
@@ -477,6 +478,7 @@ class CfgFunctions {
 			class changeSectorOwnership {};
 			class clearPlayerReports {};
 			class clearServerStats {};
+			class combatAirServer {};
 			class createDestroyer {};
 			class createUAVCrew {};
 			class createVehicleCorrectly {};

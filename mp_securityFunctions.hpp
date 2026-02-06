@@ -31,6 +31,7 @@ class CfgRemoteExec {
 		class WL2_fnc_conscription {allowedTargets = 0;};
 		class WL2_fnc_controlGunnerAction {allowedTargets = 0;};
 		class WL2_fnc_cruiseMissileWarning {allowedTargets = 0;};
+		class WL2_fnc_deleteTent {allowedTargets = 0;};
 		class WL2_fnc_demolishAction {allowedTargets = 0;};
 		class WL2_fnc_demolishComplete {allowedTargets = 0;};
 		class WL2_fnc_deployableAddAction {allowedTargets = 1;};

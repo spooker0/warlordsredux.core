@@ -74,7 +74,7 @@ private _deployActionId = _asset addAction [
                 true
             };
 
-            if (!_success) then {
+            if (!_success) exitWith {
                 ["Construction cancelled."] call WL2_fnc_smoothText;
             };
 

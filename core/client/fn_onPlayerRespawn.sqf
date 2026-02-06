@@ -81,3 +81,4 @@ BIS_WL_playerSide call WL2_fnc_parsePurchaseList;
 [false] call WL2_fnc_spawnAtBase;
 
 player setVariable ["WL2_unconscious", false, true];
+player setVariable ["WL2_canSecure", true, true];

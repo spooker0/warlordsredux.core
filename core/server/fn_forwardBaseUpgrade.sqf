@@ -20,7 +20,7 @@ if (_level == 3) then {
     private _forwardHangar = [_hangarType, _hangarType, _forwardHangarPosition, _vectorDirAndUp, true] call WL2_fnc_createVehicleCorrectly;
     _forwardHangar allowDamage false;
 
-    private _railPosition = _forwardHangar modelToWorld [0, 18, 0];
+    private _railPosition = _forwardHangar modelToWorld [0, 25, 0];
     private _catapultRail = [_sender, _railPosition, "Land_CraneRail_01_F", getDir _forwardBase, false] call WL2_fnc_orderGround;
 
     private _hangarPosATL = getPosATL _forwardHangar;
@@ -31,11 +31,11 @@ if (_level == 3) then {
             "O_Plane_Fighter_02_Stealth_Unarmed_F"
         };
 
-        private _planePosition = _forwardHangar modelToWorld [0, -3, 0];
+        private _planePosition = _forwardHangar modelToWorld [0, -8, 0];
         private _scoutPlane = [objNull, _planePosition, _scoutPlaneType, getDir _forwardHangar, false] call WL2_fnc_orderGround;
 
         private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
-        _ownedVehicles pushBack _scoutPlane;
+        _ownedVehicles pushBackUnique _scoutPlane;
         missionNamespace setVariable ["BIS_WL_ownedVehicles_server", _ownedVehicles];
     };
 

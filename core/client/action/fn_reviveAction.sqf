@@ -44,8 +44,14 @@ private _reviveActionId = player addAction [
                 if (WL_ISDOWN(player)) then {
                     break;
                 };
-                if (!alive _reviveTarget) then {
-                    break;
+                if (_isRevive) then {
+                    if (!alive _reviveTarget) then {
+                        break;
+                    };
+                } else {
+                    if !(_reviveTarget getVariable ["WL2_canSecure", true]) then {
+                        break;
+                    };
                 };
                 if (WL_ISUP(_reviveTarget)) then {
                     break;
@@ -65,6 +71,8 @@ private _reviveActionId = player addAction [
                 };
                 uiSleep 0.01;
             };
+
+            uiSleep 0.1;
 
             ["Animation"] spawn WL2_fnc_showHint;
 
@@ -91,6 +99,7 @@ private _reviveActionId = player addAction [
                             [player, "revived", 0] remoteExec ["WL2_fnc_handleClientRequest", 2];
                         };
                     } else {
+                        _reviveTarget setVariable ["WL2_canSecure", false, true];
                         [player, "secure", _reviveTarget] remoteExec ["WL2_fnc_handleClientRequest", 2];
                     };
                 };
@@ -108,7 +117,7 @@ private _reviveActionId = player addAction [
     false,
     false,
     "",
-    "alive (player getVariable ['WL2_reviveTarget', objNull]) && cameraOn == player",
+    "!isNull (player getVariable ['WL2_reviveTarget', objNull]) && cameraOn == player",
     0,
     false,
     "",

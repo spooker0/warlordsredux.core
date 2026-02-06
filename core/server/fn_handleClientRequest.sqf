@@ -293,39 +293,16 @@ if (_action == "combatAir") exitWith {
 	[_enemySide, _enemyMessage] call _broadcastActionToSide;
 
 	_target setVariable ["WL2_combatAirActive", true, true];
+	_target setVariable ["WL2_combatAirStart", serverTime + 45, true];
 	_target setVariable ["WL2_combatAirRequester", _uid, true];
 	_target setVariable ["WL2_nextCombatAir", serverTime + WL_DURATION_CAP + WL_COOLDOWN_CAP, true];
 
-	[_target, _side] remoteExec ["WL2_fnc_combatAirHandle", 0];
 	[_target] spawn {
 		params ["_target"];
 		uiSleep WL_DURATION_CAP;
 		_target setVariable ["WL2_combatAirActive", false, true];
 	};
 };
-
-#if WL_CAP_DEBUG
-if (_action == "debugCombatAir") exitWith {
-	private _target = _param2;
-
-	private _targetName = _target getVariable ["WL2_name", "Forward Airbase"];
-	private _sideName = [_side] call WL2_fnc_sideToFaction;
-
-	private _friendlyMessage = format ["%1 has initiated debug combat air patrol over %2.", name _sender, _targetName];
-	[_side, _friendlyMessage] call _broadcastActionToSide;
-
-	_target setVariable ["WL2_combatAirActive", true, true];
-	_target setVariable ["WL2_combatAirRequester", _uid, true];
-	_target setVariable ["WL2_nextCombatAir", serverTime + WL_DURATION_CAP + WL_COOLDOWN_CAP, true];
-
-	[_target, independent] remoteExec ["WL2_fnc_combatAirHandle", 0];
-	[_target] spawn {
-		params ["_target"];
-		uiSleep WL_DURATION_CAP;
-		_target setVariable ["WL2_combatAirActive", false, true];
-	};
-};
-#endif
 
 if (_action == "ftSupportPoints") exitWith {
 	private _ftVehicle = _param1;
@@ -418,6 +395,7 @@ if (_action == "demine") exitWith {
 
 if (_action == "secure") exitWith {
 	private _target = _param1;
+	[true] remoteExec ["WL2_fnc_deleteTent", _target];
 	_target setDamage 1;
 
 	private _reward = 50;

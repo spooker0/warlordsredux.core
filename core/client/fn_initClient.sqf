@@ -265,6 +265,7 @@ call WL2_fnc_pingFixInit;
 
 0 spawn WL2_fnc_handleSelectionState;
 0 spawn WL2_fnc_handleEnemyCapture;
+0 spawn WL2_fnc_combatAirClient;
 0 spawn WL2_fnc_killHistory;
 0 spawn {
 	uiSleep 5;
@@ -309,6 +310,7 @@ uiNamespace setVariable ["WL2_damagedProjectiles", createHashMap];
 uiNamespace setVariable ["WL2_damageSource", objNull];
 uiNamespace setVariable ["WL2_damagedWeapon", nil];
 uiNamespace setVariable ["WL2_surrenderWarningActive", false];
+player setVariable ["WL2_canSecure", true, true];
 
 showScoretable 0;
 "deathInfo" cutFadeOut 0;

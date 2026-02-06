@@ -10,8 +10,14 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
     while { !BIS_WL_missionEnd } do {
         uiSleep 0.5;
 
+        private _side = BIS_WL_playerSide;
         private _nearbyUnconscious = (player nearObjects ["Man", 8]) select {
-            WL_ISUNCONSCIOUS(_x)
+            private _targetSide = side group _x;
+            if (_targetSide == _side) then {
+                WL_ISUNCONSCIOUS(_x)
+            } else {
+                WL_ISDOWN(_x) && _x getVariable ["WL2_canSecure", true]
+            };
         };
         _nearbyUnconscious = _nearbyUnconscious select {
             [getPosASL player, getDir player, 90, getPosASL _x] call WL2_fnc_inAngleCheck
@@ -28,7 +34,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
         private _reviveTarget = if (count _nearbyUnconscious > 0) then { _nearbyUnconscious # 0 } else { objNull };
         if (!isNull _reviveTarget) then {
             private _reviveActionId = player getVariable ["WL2_reviveActionId", -1];
-            if (side group _reviveTarget == BIS_WL_playerSide) then {
+            if (side group _reviveTarget == _side) then {
                 private _displayText = name _reviveTarget;
                 private _reviveText = format ["<t color='#00ff00'>Revive %1</t>", _displayText];
                 private _reviveImage = format [

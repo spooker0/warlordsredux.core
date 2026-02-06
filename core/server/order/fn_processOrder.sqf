@@ -2,7 +2,7 @@
 params ["_asset", "_sender", "_orderedClass"];
 
 private _side = side group _sender;
-private _owner = owner _sender;
+private _owner = if (isNull _sender) then { 2 } else { owner _sender };
 private _cost = WL_ASSET(_orderedClass, "cost", 0);
 
 private _drone = WL_ASSET(_orderedClass, "drone", 0);

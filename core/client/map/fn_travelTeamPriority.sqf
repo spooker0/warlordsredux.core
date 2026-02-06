@@ -75,8 +75,13 @@ if (_teamPriorityType == "sector") exitWith {
                 BIS_WL_targetSector = _teamPriority;
                 [5, ""] spawn WL2_fnc_executeFastTravel;
             } else {
-                BIS_WL_targetSector = _teamPriority;
-                [0, ""] spawn WL2_fnc_executeFastTravel;
+                private _asset = [_teamPriority, true] call WL2_fnc_getSectorFTAsset;
+                if (isNull _asset) then {
+                    BIS_WL_targetSector = _teamPriority;
+                    [0, ""] spawn WL2_fnc_executeFastTravel;
+                } else {
+                    [_asset] spawn WL2_fnc_executeFastTravelVehicle;
+                };
             };
         };
         true;

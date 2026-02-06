@@ -12,6 +12,14 @@ private _shouldGarbageCollect = {
 	false;
 };
 
+private _isAirWreck = {
+	params ["_asset"];
+	if !(_asset isKindOf "Air") exitWith { false };
+	if !(_asset getVariable ["WL_spawnedAsset", false]) exitWith { false };
+	private _position = getPosASL _asset;
+	!(surfaceIsWater _position)
+};
+
 while { !BIS_WL_missionEnd } do {
 	private _collectables = (allMissionObjects "") select {
 		[_x] call _shouldGarbageCollect;
@@ -24,7 +32,7 @@ while { !BIS_WL_missionEnd } do {
 				deleteVehicle _x;
 			};
 		} else {
-			private _isAirWreck = _x isKindOf "Air" && _x getVariable ["WL_spawnedAsset", false];
+			private _isAirWreck = [_x] call _isAirWreck;
 			if (_isAirWreck) then {
 				private _ticks = _x getVariable ["WL2_garbageCollectorTicks", 0];
 				if (isNull attachedTo _x || _x getEntityInfo 3 > 600) then {

@@ -425,7 +425,7 @@ if (_asset isKindOf "Man") then {
 		};
 	};
 
-	if (typeOf _asset == "B_APC_Tracked_01_AA_F" || typeOf _asset == "O_APC_Tracked_02_AA_F" || _assetActualType == "Plane_Fighter_01_Stealth_Unarmed_F") then {
+	if (typeOf _asset == "B_APC_Tracked_01_AA_F" || typeOf _asset == "O_APC_Tracked_02_AA_F" || WL_ASSET(_assetActualType, "hasAirburst", 0) > 0) then {
 		_asset addEventHandler ["Fired", {
 			params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
 			if (_muzzle == "autocannon_35mm") then {

@@ -68,6 +68,7 @@ if !(isDedicated) then {
 0 spawn WL2_fnc_garbageCollector;
 0 spawn WL2_fnc_runwayCollector;
 call WL2_fnc_processRunways;
+0 spawn WL2_fnc_combatAirServer;
 
 0 spawn WL2_fnc_cleanupCarrier;
 0 spawn WL2_fnc_laserTracker;
