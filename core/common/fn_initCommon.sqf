@@ -1,6 +1,7 @@
 #include "includes.inc"
 WL_Server_LoadingState = 0;
 
+#if WL_DEBUG_INIT
 0 spawn {
 	if (isServer) then {
 		uiSleep 1;
@@ -11,6 +12,7 @@ WL_Server_LoadingState = 0;
 		};
 	};
 };
+#endif
 
 if !(isDedicated) then {
 	waitUntil {

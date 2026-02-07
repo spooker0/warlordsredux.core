@@ -25,6 +25,7 @@
 #define WL_WINTER_EVENT 0
 #define WL_FASTTRAVEL_CONFLICT 0
 #define WL_TP_ENABLED 0
+#define WL_DEBUG_INIT 0
 
 // Live: set all to 1
 #define WL_STOP_TEAM_SWITCH 1

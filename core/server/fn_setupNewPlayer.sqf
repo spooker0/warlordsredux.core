@@ -6,9 +6,11 @@ _warlord setVariable ["WL2_playerSetupStarted", true];
 
 private _initLog = {
     params ["_error"];
+#if WL_DEBUG_INIT
     private _message = format ["[Warlord Init] %1", _error];
     diag_log _message;
     [_error] remoteExec ["diag_log", _warlord];
+#endif
 };
 
 private _startTime = serverTime;

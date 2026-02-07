@@ -1,6 +1,7 @@
 #include "includes.inc"
 WL_LoadingState = 0;
 
+#if WL_DEBUG_INIT
 0 spawn {
 	private _startTime = time;
 	while { WL_LoadingState < 12 } do {
@@ -14,6 +15,7 @@ WL_LoadingState = 0;
 
 	["main"] call BIS_fnc_endLoadingScreen;
 };
+#endif
 
 waitUntil {
 	!isNull player && {
