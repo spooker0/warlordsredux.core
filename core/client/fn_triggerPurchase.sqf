@@ -58,7 +58,7 @@ switch (_className) do {
     case "CombatAir": { 0 spawn WL2_fnc_orderCombatAir };
     case "Conscription": {
         "RequestMenu_close" call WL2_fnc_setupUI;
-        [player] remoteExec ["WL2_fnc_conscription", 0];
+        [player] remoteExec ["WL2_fnc_conscription", BIS_WL_playerSide];
     };
     case "FTHome": {
         BIS_WL_targetSector = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
@@ -91,10 +91,10 @@ switch (_className) do {
     case "BuyFOB": {
         switch (BIS_WL_playerSide) do {
             case west: {
-                [WL_FOBCRATE_WEST, 500, "Fast Travel", [], [0, 5, 0]] call WL2_fnc_requestPurchase;
+                [WL_FOBCRATE_WEST, WL_COST_SUPPLIES, "Fast Travel", [], [0, 5, 0]] call WL2_fnc_requestPurchase;
             };
             case east: {
-                [WL_FOBCRATE_EAST, 500, "Fast Travel", [], [0, 5, 0]] call WL2_fnc_requestPurchase;
+                [WL_FOBCRATE_EAST, WL_COST_SUPPLIES, "Fast Travel", [], [0, 5, 0]] call WL2_fnc_requestPurchase;
             };
         };
     };

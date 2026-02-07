@@ -16,7 +16,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
             if (_targetSide == _side) then {
                 WL_ISUNCONSCIOUS(_x)
             } else {
-                WL_ISDOWN(_x) && _x getVariable ["WL2_canSecure", true]
+                WL_ISDOWN(_x) && _x getVariable ["WL2_canSecure", false]
             };
         };
         _nearbyUnconscious = _nearbyUnconscious select {

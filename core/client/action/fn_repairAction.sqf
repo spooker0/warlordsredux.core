@@ -37,10 +37,10 @@ _asset setVariable ["WL2_repairActionID", _actionID];
 private _allHitPoints = getAllHitPointsDamage _asset;
 if (count _allHitPoints == 0) exitWith {};
 private _validWheels = _allHitPoints select 0 select {
-    _x regexMatch "hit.*wheel";
+    _x regexMatch "hit.*wheel" || _x == "hitengine";
 };
 private _validTracks = _allHitPoints select 0 select {
-    _x regexMatch "hit.*track";
+    _x regexMatch "hit.*track" || _x == "hitengine";
 };
 private _validHitPoints = _validWheels + _validTracks;
 

@@ -49,12 +49,17 @@ while { alive _asset } do {
             private _soundSource = createSoundSource ["WLRapidBeepSound", _assetLocation, [], 0];
             _soundSource attachTo [_asset, [0, 0, 0]];
 
-            uiSleep 60;
-
-            if (!alive _asset) exitWith {
-                deleteVehicle _asset;
-                deleteVehicle _soundSource;
+            private _startTime = serverTime;
+            while { serverTime - _startTime < 5 } do {
+                uiSleep 1;
+                if (!alive _asset) then {
+                    deleteVehicle _soundSource;
+                    deleteVehicle _asset;
+                    break;
+                };
             };
+
+            if (!alive _asset) exitWith {};
 
             _assetLocation = _asset modelToWorld [0, 0, 0];
 
@@ -98,8 +103,8 @@ while { alive _asset } do {
                 };
             };
 
-            deleteVehicle _asset;
             deleteVehicle _soundSource;
+            deleteVehicle _asset;
         };
 
         break;

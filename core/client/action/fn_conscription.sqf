@@ -1,6 +1,8 @@
 #include "includes.inc"
 params ["_conscripter"];
 
+if (side group _conscripter != side group player) exitWith {};
+
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _disableConscription = _settingsMap getOrDefault ["disableConscription", false];
 if (_disableConscription) exitWith {};

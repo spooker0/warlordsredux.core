@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_originalPosition", "_limitDistance", "_ignoreSector", "_asset"];
+params ["_originalPosition", "_limitDistance", "_ignoreSector", "_asset", "_allowAboveGround"];
 
 if (vehicle player != player) exitWith {
     [true, "Player is in vehicle."];
@@ -94,7 +94,7 @@ if (_isInWaterSector) exitWith {
     [false, ""];
 };
 
-if (_asset isKindOf "BagFence_base_F") exitWith {
+if (_allowAboveGround) exitWith {
     [false, ""];
 };
 

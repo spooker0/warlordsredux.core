@@ -49,7 +49,7 @@ private _reviveActionId = player addAction [
                         break;
                     };
                 } else {
-                    if !(_reviveTarget getVariable ["WL2_canSecure", true]) then {
+                    if !(_reviveTarget getVariable ["WL2_canSecure", false]) then {
                         break;
                     };
                 };

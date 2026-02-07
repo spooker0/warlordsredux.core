@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_nearbySectors", "_map"];
+params ["_nearbySectors"];
 
 // previous: no sectors, now: no sectors
 if (count _nearbySectors == 0 && isNull WL_SectorActionTarget) exitWith {};
@@ -8,13 +8,8 @@ if (count _nearbySectors == 0 && isNull WL_SectorActionTarget) exitWith {};
 if (count _nearbySectors == 0) exitWith {
     BIS_WL_highlightedSector = objNull;
     WL_SectorActionTarget = objNull;
-    _group setVariable ["WL2_groupNextRenderTime", 0];
     call WL2_fnc_updateSelectionState;
 };
-
-private _groupNextRenderTime = _group getVariable ["WL2_groupNextRenderTime", 0];
-if (_groupNextRenderTime > serverTime) exitWith {};
-_group setVariable ["WL2_groupNextRenderTime", serverTime + 1];
 
 private _sector = _nearbySectors # 0;
 
@@ -210,8 +205,8 @@ if (inputMouse 0 == 0) exitWith {};
 private _singletonScriptHandle = uiNamespace getVariable ["WL2_mapSectorIconSingleton", scriptNull];
 if (!isNull _singletonScriptHandle) exitWith {};
 
-private _singletonScriptHandle = [_sector, _map] spawn {
-    params ["_sector", "_map"];
+private _singletonScriptHandle = [_sector] spawn {
+    params ["_sector"];
     private _orderSelectionActive = BIS_WL_currentSelection in [
         WL_ID_SELECTION_ORDERING_AIRCRAFT,
         WL_ID_SELECTION_FAST_TRAVEL,

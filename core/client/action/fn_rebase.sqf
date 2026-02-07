@@ -14,6 +14,8 @@ private _railUnits = _allUnits select {
 private _forwardBasesWithRail = _forwardBases select {
     private _railsInBase = _railUnits inAreaArray [getPosASL _x, WL_FOB_RANGE, WL_FOB_RANGE, 0, false];
     count _railsInBase > 0
+}  select {
+	_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
 };
 
 private _landableAreas = _airfieldSectors + _forwardBasesWithRail;

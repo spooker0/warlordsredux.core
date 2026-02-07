@@ -85,7 +85,7 @@ private _deployActionId = _asset addAction [
                 _offset = [0, 8, 0];
             };
 
-            private _deploymentResult = [_deployClass, _crateType, _offset, 30, true, _asset] call WL2_fnc_deployment;
+            private _deploymentResult = [_deployClass, _crateType, _offset, 30, true, true] call WL2_fnc_deployment;
 
             if !(_deploymentResult # 0) exitWith {
                 playSound "AddItemFailed";

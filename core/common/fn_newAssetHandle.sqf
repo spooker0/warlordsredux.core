@@ -425,15 +425,22 @@ if (_asset isKindOf "Man") then {
 		};
 	};
 
-	if (typeOf _asset == "B_APC_Tracked_01_AA_F" || typeOf _asset == "O_APC_Tracked_02_AA_F" || WL_ASSET(_assetActualType, "hasAirburst", 0) > 0) then {
+	if (typeOf _asset == "B_APC_Tracked_01_AA_F" || typeOf _asset == "O_APC_Tracked_02_AA_F") then {
 		_asset addEventHandler ["Fired", {
 			params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
 			if (_muzzle == "autocannon_35mm") then {
 				private _ammoCount = _unit ammo "autocannon_35mm";
 				if (_ammoCount % 5 == 0) then {
-					[_projectile, _unit] spawn WL2_fnc_airburst;
+					[_projectile, _unit, 20] spawn WL2_fnc_airburst;
 				};
 			};
+		}];
+	};
+
+	if (WL_ASSET(_assetActualType, "hasAirburst", 0) > 0) then {
+		_asset addEventHandler ["Fired", {
+			params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
+			[_projectile, _unit, 12] spawn WL2_fnc_airburst;
 		}];
 	};
 

@@ -1,8 +1,8 @@
 #include "includes.inc"
-params ["_projectile", "_asset"];
+params ["_projectile", "_asset", "_radius"];
 
-while {alive _projectile} do {
-    private _targets = _projectile nearEntities ["Air", 20];
+while { alive _projectile } do {
+    private _targets = _projectile nearEntities ["Air", _radius];
     _targets = _targets select {
         _x != _asset
     };

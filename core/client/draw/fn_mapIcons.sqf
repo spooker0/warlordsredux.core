@@ -25,8 +25,14 @@
 				_map ctrlRemoveAllEventHandlers "Draw";
 				_map ctrlAddEventHandler ["Draw", WL2_fnc_iconDrawMap];
 				_map setVariable ["WL2_mapDrawn", true];
+
+				if (_x == _mainMap) then {
+					_map ctrlAddEventHandler ["Draw", WL2_fnc_mapEachFrame];
+				};
 			};
 		} forEach _maps;
+
+		uiNamespace setVariable ["WL2_allMaps", _maps];
 
 		uiNamespace setVariable ["WL2_mapColorCache", createHashMap];
 		uiNamespace setVariable ["WL2_mapIconCache", createHashMap];
@@ -105,27 +111,15 @@
 		_allSquadmates = _allSquadmates apply { vehicle _x };
 		_mapData set ["allSquadmates", _allSquadmates];
 
-		private _teamVariable = switch (_side) do {
-			case west: { "BIS_WL_westOwnedVehicles" };
-			case east: { "BIS_WL_eastOwnedVehicles" };
-			case independent: { "BIS_WL_guerOwnedVehicles" };
-			default { "" };
-		};
-		private _sideVehicles = if (_teamVariable != "") then {
-			private _sideVics = missionNamespace getVariable [_teamVariable, []];
-			+_sideVics
+		private _sideVehicles = if (_isSpectator) then {
+			BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles;
 		} else {
-			[]
-		};
-		private _vehiclesOnSide = _vehicles select { count crew _x > 0 } select { side _x == _side || _isSpectator };
-		_sideVehicles insert [-1, _vehiclesOnSide, true];	// append but only if unique
-		private _playersOnSide = allPlayers select { side group _x == _side || _isSpectator };
-		_sideVehicles insert [-1, _playersOnSide, true];
-		private _playerAi = units player;
-		_sideVehicles insert [-1, _playerAi, true];
-
-		if (_isSpectator) then {
-			_sideVehicles insert [-1, allUnits select { _x isKindOf "Man" }, true];
+			switch (_side) do {
+				case west: { BIS_WL_westOwnedVehicles };
+				case east: { BIS_WL_eastOwnedVehicles };
+				case independent: { BIS_WL_guerOwnedVehicles };
+				default { [] };
+			};
 		};
 
 		_sideVehicles = _sideVehicles select {
@@ -161,10 +155,24 @@
 		_mapData set ["advancedMines", _advancedMines];
 
 		private _rallyPoints = missionNamespace getVariable ["WL2_rallyPoints", []];
-		_rallyPoints = _rallyPoints select { alive _x } select {
-			_x getVariable ["BIS_WL_ownerAsset", "123"] != "123"
-		};
+		_rallyPoints = _rallyPoints select { alive _x };
 		_mapData set ["rallyPoints", _rallyPoints];
+
+		private _enemyUnits = switch (_side) do {
+			case west: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
+			case east: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
+			case independent: { BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles };
+			default { [] };
+		};
+
+		private _visibleEnemyUnits = _enemyUnits select {
+			WL_ISUP(_x)
+		} select {
+			private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+			private _showToEnemies = WL_ASSET_FIELD(_assetData, _assetActualType, "showToEnemies", 0);
+			_showToEnemies > cameraOn distance _x
+		};
+		_mapData set ["visibleEnemyUnits", _visibleEnemyUnits];
 
 		private _combatPatrolSectors = BIS_WL_allSectors select {
 			_x getVariable ["WL2_combatAirActive", false];

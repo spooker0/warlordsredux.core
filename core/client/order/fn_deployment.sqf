@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_class", "_orderedClass", "_offset", "_range", "_ignoreSector"];
+params ["_class", "_orderedClass", "_offset", "_range", "_ignoreSector", "_allowAboveGround"];
 
 private _asset = createVehicleLocal [_class, player modelToWorld [0, 0, 1000], [], 0, "NONE"];
 _asset setPhysicsCollisionFlag false;
@@ -98,8 +98,8 @@ private _deployParams = ["DEPLOYMENT CONTROLS", [
 private _originalPosition = getPosATL player;
 
 WL_DeploymentEnd = false;
-[_asset, _offset, _originalPosition, _range, _ignoreSector] spawn {
-    params ["_asset", "_offset", "_originalPosition", "_range", "_ignoreSector"];
+[_asset, _offset, _originalPosition, _range, _ignoreSector, _allowAboveGround] spawn {
+    params ["_asset", "_offset", "_originalPosition", "_range", "_ignoreSector", "_allowAboveGround"];
 
     waitUntil {
         uiSleep 0.001;
@@ -169,7 +169,7 @@ WL_DeploymentEnd = false;
 
         if (serverTime - _lastTime > 0.1) then {
             _lastTime = serverTime;
-            private _cancel = [_originalPosition, _range, _ignoreSector, _asset] call WL2_fnc_cancelVehicleOrder;
+            private _cancel = [_originalPosition, _range, _ignoreSector, _asset, _allowAboveGround] call WL2_fnc_cancelVehicleOrder;
             if (_cancel # 0) then {
                 _asset setVariable ["WL2_vehicleOrderError", _cancel # 1];
             } else {
@@ -199,7 +199,7 @@ if (!WL_DeploymentLock) then {
 private _finalPosition = getPosWorldVisual _asset;
 private _finalDirection = [vectorDir _asset, vectorUp _asset];
 
-private _finalCancel = [_originalPosition, _range, _ignoreSector, _asset] call WL2_fnc_cancelVehicleOrder;
+private _finalCancel = [_originalPosition, _range, _ignoreSector, _asset, _allowAboveGround] call WL2_fnc_cancelVehicleOrder;
 private _canStillOrderVehicle = !(_finalCancel # 0);
 
 detach _asset;

@@ -772,6 +772,26 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 	_drawIconsSelectable pushBack _x;
 } forEach (_sideVehicles inAreaArray [_mapCenter, _mapBoundW, _mapBoundH, 0, true]);
 
+// Draw visible enemy units
+private _visibleEnemyUnits = _mapData getOrDefault ["visibleEnemyUnits", []];
+{
+	private _position = getPosASL _x;
+	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
+	_drawIcons pushBack [
+		[_x, _mapIconCache] call WL2_fnc_iconType,
+		[_x, _mapColorCache] call WL2_fnc_iconColor,
+		_position,
+		_size * _mapIconScale,
+		_size * _mapIconScale,
+		[_x] call WL2_fnc_getDir,
+		[_x, _draw, true, _mapTextCache] call WL2_fnc_iconText,
+		1,
+		_iconTextSize * _mapIconScale,
+		"PuristaBold",
+		"right"
+	];
+} forEach (_visibleEnemyUnits inAreaArray [_mapCenter, _mapBoundW, _mapBoundH, 0, true]);
+
 // Draw plane wrecks
 private _airWrecks = _mapData getOrDefault ["airWrecks", []];
 {

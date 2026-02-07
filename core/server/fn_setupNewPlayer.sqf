@@ -103,6 +103,9 @@ private _isImbalanced = if (_exceedGracePeriod) then {
 } else {
     false
 };
+if (_isAdmin || _isModerator || _isSpectator) then {
+    _isImbalanced = false;
+};
 
 if (_isImbalanced) exitWith {
     _warlord setVariable ["WL2_playerSetupState", "Imbalance", _owner];

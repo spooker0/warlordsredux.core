@@ -52,13 +52,16 @@ if (count _presetVehicles == 0) then {
 		private _vehicleSpawn = _data getOrDefault ["vehicleSpawn", 0];
 		if (_vehicleSpawn > 0) then {
 			private _cost = _data getOrDefault ["cost", 0];
-			if (_sectorValue <= 10 && _cost >= 3000) then {
+			if (_sectorValue <= 5 && _cost >= 3000) then {
 				continue;
 			};
-			if (_sectorValue <= 20 && _cost >= 8000) then {
+			if (_sectorValue <= 10 && _cost >= 8000) then {
 				continue;
 			};
-			if (_sectorValue > 20 && _cost <= 3000) then {
+			if (_sectorValue >= 15 && _cost <= 3000) then {
+				continue;
+			};
+			if (_sectorValue >= 20 && _cost < 5000) then {
 				continue;
 			};
 			_vehiclesPool pushBack _class;
@@ -77,6 +80,12 @@ if (count _presetVehicles == 0) then {
 		private _vehicleType = selectRandom _vehiclesPool;
 		[_vehicleType, _spawnPos, random 360, false] call _spawnVehicle;
 	};
+
+	if (random 1 > 0.5) then {
+		private _spawnPos = selectRandom _randomSpots;
+		["I_SmartMine_01_F", _spawnPos, random 360, true] call _spawnVehicle;
+	};
+
 } else {
 	{
 		private _data = +_x;

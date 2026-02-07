@@ -54,6 +54,7 @@ private _victimEntry = _scoreboard getOrDefault [getPlayerUID _unit, createHashM
 private _killerEntry = _scoreboard getOrDefault [getPlayerUID _responsiblePlayer, createHashMap];
 
 private _killerSide = side group _responsiblePlayer;
+private _killerActualType = _killer getVariable ["WL2_orderedClass", typeOf _killer];
 
 if (_isUnitPlayer && _unit isKindOf "Man") then {
     _victimEntry set ["deaths", (_victimEntry getOrDefault ["deaths", 0]) + 1];
@@ -63,7 +64,19 @@ if (_isUnitPlayer && _unit isKindOf "Man") then {
         } else {
             ""
         };
-        format["%1 was killed by %2.%3", name _unit, name _responsiblePlayer, _ffText];
+        if (_killer isKindOf "Man") then {
+            format["%1 was killed by %2.%3", name _unit, name _responsiblePlayer, _ffText];
+        } else {
+            private _assetType = WL_ASSET(_killerActualType, "name", "");
+            if (_assetType == "") then {
+                _assetType = getText (configFile >> "CfgVehicles" >> _killerActualType >> "displayName");
+            };
+            if (_assetType == "") then {
+                format["%1 was killed by %2.%3", name _unit, name _responsiblePlayer, _ffText];
+            } else {
+                format["%1 was killed by %2 with %3.%4", name _unit, name _responsiblePlayer, _assetType, _ffText];
+            };
+        };
     } else {
         format["%1 was killed.", name _unit];
     };
@@ -78,7 +91,6 @@ private _unitCost = if (_unit isKindOf "Man") then {
     WL_ASSET(_assetActualType, "cost", 0);
 };
 
-private _killerActualType = _killer getVariable ["WL2_orderedClass", typeOf _killer];
 private _killerStats = _stats getOrDefault [_killerActualType, createHashMap];
 private _killerKillValue = _killerStats getOrDefault ["killValue", 0];
 if (_unitCost > 0 && _responsiblePlayer != _unit) then {

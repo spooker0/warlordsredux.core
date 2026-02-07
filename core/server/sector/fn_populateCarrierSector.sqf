@@ -21,14 +21,14 @@ private _infantryGroups = [];
 private _infantryUnits = [];
 private _spawnLocations = _sector getVariable ["WL2_aircraftCarrierInf", []];
 
-for "_i" from 0 to 5 do {
+for "_i" from 0 to 4 do {
     private _infantryGroup = createGroup independent;
     _infantryGroup deleteGroupWhenEmpty true;
     _infantryGroups pushBack _infantryGroup;
 
     private _spawnPosition = selectRandom _spawnLocations;
 
-    for "_j" from 0 to 8 do {
+    for "_j" from 0 to 6 do {
         private _infantry = _infantryGroup createUnit [selectRandom _unitsPool, _spawnPosition, [], 0, "NONE"];
         _infantry setVehiclePosition [_spawnPosition, [], 10, "NONE"];
 
@@ -37,6 +37,8 @@ for "_i" from 0 to 5 do {
             deleteVehicle _infantry;
         } else {
             _infantry call WL2_fnc_newAssetHandle;
+
+            _infantry setVariable ["WL2_sectorDefender", _sector];
             doStop _infantry;
             _infantry setUnitPos "MIDDLE";
             _infantry disableAI "PATH";
@@ -74,6 +76,7 @@ private _presetVehicles = _sector getVariable ["WL2_vehiclesToSpawn", []];
 
 private _allUnits = _vehicleUnits + _infantryUnits;
 _sector setVariable ["WL2_sectorDefenders", _allUnits];
+_sector setVariable ["WL2_sectorPop", 48, true];
 
 private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
 _ownedVehicles append _allUnits;

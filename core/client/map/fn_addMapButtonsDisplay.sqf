@@ -54,6 +54,7 @@ private _iconHeight = _buttonHeight * 0.8;
 private _dummyButton = _display ctrlCreate ["WLDummyButton", 1338];
 _dummyButton ctrlCommit 0;
 
+private _numpadData = [];
 {
     _x params ["_targetId", "_targetText", "_buttonsData"];
     private _targetLabel = _display ctrlCreate ["RscStructuredText", -1];
@@ -119,11 +120,17 @@ _dummyButton ctrlCommit 0;
         _icon ctrlSetText _buttonIcon;
         _icon ctrlCommit 0;
 
+        if (count _numpadData < 9) then {
+            _numpadData pushBack [_targetId, _buttonId, _button];
+        };
+
         _yPos = _yPos + _buttonHeight;
     } forEach _buttonsData;
 
     _yPos = _yPos + 0.01 * _buttonScale;
 } forEach _allButtonsData;
+
+_display setVariable ["WL2_mapButtonNumpadData", _numpadData];
 
 private _xMax = _xPos + _buttonWidth;
 private _yMax = _yPos;
@@ -149,6 +156,46 @@ _display displayAddEventHandler  ["MouseButtonDown", {
         playSoundUI ["a3\ui_f\data\sound\rsclistbox\soundselect.wss", 0.5];
         _control closeDisplay 0;
     };
+}];
+
+_display displayAddEventHandler ["KeyDown", {
+    params ["_display", "_key", "_shift", "_ctrl", "_alt"];
+    private _keyCode = switch (_key) do {
+        case DIK_SPACE;
+        case DIK_NUMPAD1;
+        case DIK_1: {0};
+        case DIK_NUMPAD2;
+        case DIK_2: {1};
+        case DIK_NUMPAD3;
+        case DIK_3: {2};
+        case DIK_NUMPAD4;
+        case DIK_4: {3};
+        case DIK_NUMPAD5;
+        case DIK_5: {4};
+        case DIK_NUMPAD6;
+        case DIK_6: {5};
+        case DIK_NUMPAD7;
+        case DIK_7: {6};
+        case DIK_NUMPAD8;
+        case DIK_8: {7};
+        case DIK_NUMPAD9;
+        case DIK_9: {8};
+        default {-1};
+    };
+    if (_keyCode == -1) exitWith {};
+
+    private _numpadData = _display getVariable ["WL2_mapButtonNumpadData", []];
+    private _entry = _numpadData select _keyCode;
+
+    if (isNil "_entry") exitWith {};
+
+    private _buttonTimeout = uiNamespace getVariable ["WL2_mapButtonLastClickTime", 0];
+    if (serverTime < _buttonTimeout) exitWith {};
+
+    playSoundUI ["a3\ui_f\data\sound\rsclistbox\soundselect.wss", 0.5];
+
+    [_display, _entry # 2, 0, _entry # 1, _entry # 0] call WL2_fnc_mapButtonClick;
+    uiNamespace setVariable ["WL2_mapButtonLastClickTime", serverTime + 0.3];
 }];
 
 while { !isNull _display } do {

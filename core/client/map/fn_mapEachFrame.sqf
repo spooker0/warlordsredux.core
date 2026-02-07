@@ -1,8 +1,5 @@
 #include "includes.inc"
-if (!visibleMap) exitWith {};
-private _map = uiNamespace getVariable ["BIS_WL_mapControl", controlNull];
-if (isNull _map) exitWith {};
-
+params ["_map"];
 private _ctrlMap = ctrlParent _map;
 
 private _radius = ((ctrlMapScale _map) * 500) max 5;

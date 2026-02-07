@@ -50,7 +50,7 @@ private _sideCaptureModifier = createHashMap;
 	} select {
 		_x getVariable ["WL2_forwardBaseReady", false]
 	};
-	_connections = _connections + (count _inRangeTeamForwardBases) * 1.5;
+	_connections = _connections + (count _inRangeTeamForwardBases) * WL_FOB_CAPMODIFIER;
 
 	_sideCaptureModifier set [_side, _connections];
 } forEach _sideArr;

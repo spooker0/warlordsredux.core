@@ -10,6 +10,8 @@ uiNamespace setVariable ["SPEC_MapDisplay", _spectatorDisplay];
 private _mapControl = _spectatorDisplay displayCtrl 5503;
 _mapControl ctrlMapAnimAdd [0, 0.2, getPosASL cameraOn];
 ctrlMapAnimCommit _mapControl;
+
+_mapControl ctrlAddEventHandler ["Draw", WL2_fnc_mapEachFrame];
 _mapControl ctrlAddEventHandler ["Draw", WL2_fnc_iconDrawMap];
 
 _mapControl ctrlAddEventHandler ["Draw", {

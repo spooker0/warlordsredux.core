@@ -1,6 +1,4 @@
 #include "includes.inc"
-addMissionEventHandler ["EachFrame", WL2_fnc_mapEachFrame];
-
 addMissionEventHandler ["Map", {
 	params ["_mapIsOpened", "_mapIsForced"];
 	if (WL_IsReplaying) exitWith {};
@@ -18,12 +16,20 @@ addMissionEventHandler ["Map", {
 	} forEach allMapMarkers;
 
 	if (!_mapIsOpened) then {
-		BIS_WL_highlightedSector = objNull;
-		WL_SectorActionTarget = objNull;
+		0 spawn {
+			uiSleep 1;
+			BIS_WL_highlightedSector = objNull;
+			WL_SectorActionTarget = objNull;
 
-		private _mapButtonDisplay = uiNamespace getVariable ["WL2_mapButtonDisplay", displayNull];
-		if (!isNull _mapButtonDisplay) then {
-			_mapButtonDisplay closeDisplay 1;
+			private _mapButtonDisplay = uiNamespace getVariable ["WL2_mapButtonDisplay", displayNull];
+			if (!isNull _mapButtonDisplay) then {
+				_mapButtonDisplay closeDisplay 1;
+			};
+
+			private _allMaps = uiNamespace getVariable ["WL2_allMaps", []];
+			{
+				[[], _x] call WL2_fnc_handleSectorIcons;
+			} forEach _allMaps;
 		};
 	};
 }];

@@ -122,8 +122,9 @@ addMissionEventHandler ["HandleChatMessage", {
 	}];
 
 	addUserActionEventHandler ["Eject", "Activate", {
+		if !(cameraOn isKindOf "Air") exitWith {};
 		private _altitude = (player modelToWorld [0, 0, 0]) # 2;
-		private _eligible = _altitude > 20;
+		private _eligible = _altitude > 50;
 		if (_eligible) then {
 			playSoundUI ["a3\sounds_f_jets\vehicles\air\shared\fx_plane_jet_ejection_in.wss"];
 			moveOut player;

@@ -43,11 +43,9 @@ while { alive _asset && _dumbMines > 0} do {
     } select {
         !(_x isKindOf "ParachuteBase") && !(vehicle _x isKindOf "ParachuteBase")
     } select {
-        _x getVariable ["WL2_alreadyMined", 0] < 3
-    } select {
         isEngineOn _x
     } select {
-        speed _x > 1
+        abs (speed _x) > 1
     };
 
     private _altitude = 0.3 + (getPosASL _asset) # 2;
@@ -58,9 +56,6 @@ while { alive _asset && _dumbMines > 0} do {
             break;
         };
         _dumbMines = _dumbMines - 1;
-
-        private _alreadyMined = _vehicle getVariable ["WL2_alreadyMined", 0];
-        _vehicle setVariable ["WL2_alreadyMined", _alreadyMined + 1];
 
         private _mine = createMine ["SLAMDirectionalMine", getPosASL _vehicle, [], 3];
         [_mine, [_mineOwner, _mineOwner]] remoteExec ["setShotParents", 2];
