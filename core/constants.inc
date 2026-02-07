@@ -1,5 +1,5 @@
 // Live: update to latest version
-#define WL_VERSION "2.7.2"
+#define WL_VERSION "2.8.0"
 
 // Live: set all to 0
 #define WL_FREE_MONEY 0
