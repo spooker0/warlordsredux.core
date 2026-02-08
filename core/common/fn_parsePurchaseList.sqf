@@ -1,163 +1,7 @@
 #include "includes.inc"
 params ["_side"];
 
-private _purchaseable = [];
-
-{
-	private _category = (_x splitString " ") joinString "";
-	if (_category in ["FastTravel", "Strategy"]) then {
-		continue;
-	};
-
-	private _categoryData = [];
-
-	switch (_category) do {
-		case "Infantry": {
-			_categoryData pushBack [
-				"BuildABear",
-				300,
-				[],
-				"Customized Unit",
-				"\A3\Data_F_Warlords\Data\preview_loadout.jpg",
-				"Buy infantry with your customized loadout."
-			];
-		};
-		case "Gear": {
-			_categoryData pushBack [
-				"Arsenal",
-				WL_COST_ARSENAL,
-				[],
-				localize "STR_A3_Arsenal",
-				"\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
-				localize "STR_A3_WL_arsenal_open"
-			];
-			_categoryData pushBack [
-				"Loadouts",
-				0,
-				[],
-				"Loadouts",
-				"\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
-				"Loadouts menu for respawn loadout."
-			];
-		};
-	};
-
-	private _assetData = WL_ASSET_DATA;
-
-	private _preset = missionConfigFile >> "CfgWLRequisitionPresets" >> "A3ReduxAll";
-	{
-		private _className = configName _x;
-		private _actualClassName = WL_ASSET_FIELD(_assetData, _className, "spawn", "");
-
-		if (_actualClassName == "") then {
-			_actualClassName = _className;
-		};
-
-		private _class = configFile >> "CfgVehicles" >> _actualClassName;
-		private _cost = WL_ASSET_FIELD(_assetData, _className, "cost", 0);
-		private _requirements = WL_ASSET_FIELD(_assetData, _className, "requirements", []);
-		private _offset = WL_ASSET_FIELD(_assetData, _className, "offset", []);
-		private _displayName = [objNull, _className] call WL2_fnc_getAssetTypeName;
-
-		private _picture = getText (_class >> "editorPreview");
-
-		if (_cost == 0) then {
-			continue;
-		};
-
-		private _text = switch (_category) do {
-			case "Infantry": {
-				private _wpns = getArray (_class >> "weapons");
-				private _wpnArrPrimary = _wpns select { getNumber (configFile >> "CfgWeapons" >> _x >> "type") == 1 };
-				private _wpnArrSecondary = _wpns select { getNumber (configFile >> "CfgWeapons" >> _x >> "type") == 4 };
-				private _wpnArrHandgun = _wpns select { getNumber (configFile >> "CfgWeapons" >> _x >> "type") == 2 };
-				private _wpn = if (count _wpnArrSecondary > 0) then {
-					_wpnArrSecondary # 0;
-				} else {
-					if (count _wpnArrPrimary > 0) then {
-						_wpnArrPrimary # 0;
-					} else {
-						if (count _wpnArrHandgun > 0) then {
-							_wpnArrPrimary # 0;
-						} else {
-							""
-						};
-					};
-				};
-
-				private _infText = "";
-				{
-					_infText = format ["%1%2<br/>", _infText, getText (configFile >> "CfgWeapons" >> _x >> "displayName")];
-				} forEach (_wpnArrPrimary + _wpnArrSecondary + _wpnArrHandgun);
-				_infText = _infText + "<br/>";
-
-				private _linked = getArray (_class >> "linkedItems");
-				if (count _linked > 0) then {
-					_infText = format ["%1%2<br/>", _infText, getText (configFile >> "CfgWeapons" >> _linked # 0 >> "displayName")];
-				};
-
-				private _backpack = getText (_class >> "backpack");
-				if (_backpack != "") then {
-					_infText = format ["%1%2<br/>", _infText, getText (configFile >> "CfgVehicles" >> _backpack >> "displayName")];
-				};
-
-				_infText;
-			};
-			case "LightVehicles";
-			case "HeavyVehicles";
-			case "RotaryWing";
-			case "FixedWing";
-			case "RemoteControl";
-			case "AirDefense";
-			case "SectorDefense";
-			case "Structures";
-			case "Naval": {
-				private _assetText = getText (_class >> "Library" >> "LibTextDesc");
-				if (_assetText == "") then {
-					_assetText = getText (_class >> "Armory" >> "description");
-				};
-				if (_assetText == "") then {
-					private _validClassArr = "toLower getText (_x >> 'vehicle') == toLower _entryClass" configClasses (configFile >> "CfgHints");
-					if (count _validClassArr > 0) then {
-						private _hintLibClass = ("toLower getText (_x >> 'vehicle') == toLower _entryClass" configClasses (configFile >> "CfgHints")) # 0;
-						_assetText = getText (_hintLibClass >> "description");
-					};
-				};
-
-				if (_assetText != "") then {
-					_textNew = (_assetText splitString "$") # 0;
-					if (_textNew != _assetText) then {
-						_assetText = localize _textNew
-					};
-					_assetText = _assetText regexReplace ["\. ", "="];
-					_assetText = ((_assetText splitString "=") # 0) + ".";
-				};
-
-				private _description = WL_ASSET_FIELD(_assetData, _className, "description", "");
-				if (_description != "") then {
-					_assetText = _description;
-				};
-
-				private _vehicleWeapons = [_className, _actualClassName] call WL2_fnc_getVehicleWeapons;
-				private _scale = 1 call WL2_fnc_purchaseMenuGetUIScale;
-				_assetText = format ["%1<br/><t color='#ffffff' shadow='0' size='%2'>Armament</t><br/>%3", _assetText, _scale, _vehicleWeapons];
-
-				_assetText;
-			};
-			default {
-				WL_ASSET_FIELD(_assetData, _className, "description", "")
-			};
-		};
-
-		if (_text == "") then {_text = " "};
-		if (_picture == "") then {_picture = " "};
-
-		_categoryData pushBack [_className, _cost, _requirements, _displayName, _picture, _text, _offset];
-	} forEach (configProperties [_preset >> str _side >> _category, "isClass _x"]);
-
-	_purchaseable pushBack _categoryData;
-} forEach WL_REQUISITION_CATEGORIES;
-
+private _purchaseable = [_side] call WL2_fnc_parseAssetPurchases;
 private _fastTravelArr = [
 	[
 		"FTPriority",
@@ -233,7 +77,7 @@ private _fastTravelArr = [
 ];
 
 #if WL_FASTTRAVEL_CONFLICT
-_strategyArr pushBack [
+_fastTravelArr pushBack [
 	"FTConflict",
 	WL_COST_FTCONTESTED,
 	[],
@@ -243,7 +87,10 @@ _strategyArr pushBack [
 ];
 #endif
 
-_purchaseable pushBack _fastTravelArr;
+private _ftCategoryIndex = WL_REQUISITION_CATEGORIES find "Fast Travel";
+if (_ftCategoryIndex != -1) then {
+	_purchaseable set [_ftCategoryIndex, _fastTravelArr];
+};
 
 private _strategyArr = [
 	[
@@ -431,6 +278,9 @@ _strategyArr pushBack [
 
 _strategyArr = [_strategyArr, [], { _x # 3 }, "ASCEND"] call BIS_fnc_sortBy;
 
-_purchaseable pushBack _strategyArr;
+private _strategyCategoryIndex = WL_REQUISITION_CATEGORIES find "Strategy";
+if (_strategyCategoryIndex != -1) then {
+	_purchaseable set [_strategyCategoryIndex, _strategyArr];
+};
 
 missionNamespace setVariable [format ["WL2_purchasable_%1", _side], _purchaseable];

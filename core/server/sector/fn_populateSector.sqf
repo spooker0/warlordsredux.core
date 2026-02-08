@@ -13,9 +13,9 @@ private _vehicleUnits = [];
 private _presetVehicles = _sector getVariable ["WL2_vehiclesToSpawn", []];
 
 private _spawnVehicle = {
-	params ["_vehicleType", "_spawnPos", "_direction", "_isStatic"];
+	params ["_vehicleType", "_spawnPos", "_direction", "_isStatic", "_isAircraft"];
 
-	private _vehicle = [objNull, _spawnPos, _vehicleType, _direction, false] call WL2_fnc_orderGround;
+	private _vehicle = [objNull, _spawnPos, _vehicleType, _direction, _isAircraft, _isAircraft] call WL2_fnc_orderGround;
 	_vehicleUnits pushBack _vehicle;
 
 	if (!_isStatic) then {
@@ -26,19 +26,21 @@ private _spawnVehicle = {
 			_vehicleUnits pushBack _x;
 		} forEach _crew;
 
-		[_group, 0] setWaypointPosition [position _vehicle, 100];
+		[_group, 0] setWaypointPosition [_sector, 100];
 		_group setBehaviour "COMBAT";
 		_group deleteGroupWhenEmpty true;
 
-		_wp = _group addWaypoint [_spawnPos, 100];
+		private _wp = _group addWaypoint [_sector, 100];
 		_wp setWaypointType "SAD";
 
-		_wp = _group addWaypoint [_spawnPos, 100];
+		_wp = _group addWaypoint [_sector, 100];
 		_wp setWaypointType "CYCLE";
 
 		_vehicle allowCrewInImmobile [true, true];
 		[_vehicle, [1, 1, 1]] remoteExec ["setVehicleTIPars", 0];
 	};
+
+	_vehicle;
 };
 
 if (count _presetVehicles == 0) then {
@@ -48,7 +50,16 @@ if (count _presetVehicles == 0) then {
 	private _vehiclesPool = [];
 	{
 		private _class = _x;
+		if (_class == "Green_Infantry") then {
+			continue;
+		};
+
 		private _data = _y;
+		private _sides = _data getOrDefault ["side", []];
+		if !("guer" in _sides) then {
+			continue;
+		};
+
 		private _vehicleSpawn = _data getOrDefault ["vehicleSpawn", 0];
 		if (_vehicleSpawn > 0) then {
 			private _cost = _data getOrDefault ["cost", 0];
@@ -78,17 +89,17 @@ if (count _presetVehicles == 0) then {
 		};
 
 		private _vehicleType = selectRandom _vehiclesPool;
-		[_vehicleType, _spawnPos, random 360, false] call _spawnVehicle;
+		[_vehicleType, _spawnPos, random 360, false, false] call _spawnVehicle;
 	};
 
 	if (random 1 > 0.5) then {
 		private _spawnPos = selectRandom _randomSpots;
-		["I_SmartMine_01_F", _spawnPos, random 360, true] call _spawnVehicle;
+		["I_Smart_Mine", _spawnPos, random 360, true, false] call _spawnVehicle;
 	};
-
 } else {
 	{
 		private _data = +_x;
+		_data pushBack false;
 		_data pushBack false;
 		_data call _spawnVehicle;
 	} forEach _presetVehicles;
@@ -101,7 +112,7 @@ _roads = _roads inAreaArray _objectArea;
 if (count _roads > 0) then {
 	if (random 1 > 0.5) then {
 		private _randomRoad = selectRandom _roads;
-		["Land_Sign_MinesDanger_English_F", getPosATL _randomRoad, random 360, true] call _spawnVehicle;
+		["AT_Minefield", getPosATL _randomRoad, random 360, true, false] call _spawnVehicle;
 	};
 };
 
@@ -122,34 +133,14 @@ if ("H" in _services) then {
 		private _randomAngle = random 360;
 		private _randomDistance = 2000 + random 500;
 		private _randomPos = _sector getPos [_randomDistance, _randomAngle];
-		_randomPos set [2, 800];
+		_randomPos set [2, 1000];
 
-		private _vehicleArray = [_randomPos, 0, selectRandom _aircraftPool, _owner] call BIS_fnc_spawnVehicle;
-		_vehicleArray params ["_vehicle", "_crew", "_group"];
-
-		_vehicle call WL2_fnc_newAssetHandle;
-		_vehicleUnits pushBack _vehicle;
-
-		{
-			_x call WL2_fnc_newAssetHandle;
-			_vehicleUnits pushBack _x;
-		} forEach _crew;
-
-		[_group, 0] setWaypointPosition [position _vehicle, 300];
-		_group setBehaviour "COMBAT";
-		_group deleteGroupWhenEmpty true;
-
-		_wp1 = _group addWaypoint [position _sector vectorAdd [0, 0, 300], 300];
-		_wp1 setWaypointType "SAD";
-
-		_wp2 = _group addWaypoint [position _sector vectorAdd [0, 0, 300], 300];
-		_wp2 setWaypointType "SAD";
-
-		_wp3 = _group addWaypoint [waypointPosition _wp1 vectorAdd [0, 0, 300], 300];
-		_wp3 setWaypointType "CYCLE";
-
-		_vehicle allowCrewInImmobile [true, true];
-		[_vehicle, [1, 1, 1]] remoteExec ["setVehicleTIPars", 0];
+		private _aircraft = [selectRandom _aircraftPool, _randomPos, random 360, false, true] call _spawnVehicle;
+		if (_aircraft isKindOf "Helicopter") then {
+			_aircraft setVelocityModelSpace [0, 100, 0];
+		} else {
+			_aircraft setVelocityModelSpace [0, 200, 0];
+		};
 	};
 };
 

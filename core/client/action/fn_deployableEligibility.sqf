@@ -28,10 +28,10 @@ private _hasLoadedItem = !isNull _loadedItem || count _loadedVehicles > 0 || !is
 private _nearLoadableEntities = (_asset nearObjects 30) select {
     (isNull attachedTo _x) && (count ropesAttachedTo _x == 0) && _asset != _x;
 } select {
-    if (_slingloading) then {
-        true
+    if (_x isKindOf "Air") then {
+        _slingloading && !alive _x
     } else {
-        alive _x != (_x isKindOf "Air")
+        alive _x;
     };
 };
 

@@ -282,7 +282,7 @@ addMissionEventHandler ["Draw3D", {
         private _hasThreatDetector = WL_ASSET_FIELD(_assetData, _vehicleActualType, "threatDetection", 0);
         private _samIcons = [];
         private _missileViewDistance = _settingProfileData getOrDefault ["MISSILE", 5000];
-        if (_vehicleCategory == "AirDefense" || _hasThreatDetector > 0) then {
+        if (_vehicleCategory == "Air Defense" || _hasThreatDetector > 0) then {
             private _samMissiles = (8 allObjects 2) select {
                 if !(_x isKindOf "MissileCore") then {
                     false;
@@ -350,7 +350,8 @@ addMissionEventHandler ["Draw3D", {
         _targets = _targets select {
             WL_ISUP(_x);
         } select {
-            (_x getVariable ["WL_spawnedAsset", false] || isPlayer _x) &&
+            (_x getVariable ["WL_spawnedAsset", false] || isPlayer _x)
+        } select {
             _x != _vehicle;
         };
 
@@ -397,7 +398,7 @@ addMissionEventHandler ["Draw3D", {
             };
 
             if (_target isKindOf "Man") then {
-                if (_vehicleCategory == "AirDefense") then {
+                if (_vehicleCategory == "Air Defense") then {
                     continue;
                 };
                 if (_target distance _vehicle > _infantryViewDistance) then {
@@ -449,7 +450,7 @@ addMissionEventHandler ["Draw3D", {
 
                 private _targetIcon = "";
                 private _targetIconSize = 0.8;
-                if (_assetCategory == "AirDefense") then {
+                if (_assetCategory == "Air Defense") then {
                     _targetIcon = "\A3\ui_f\data\map\markers\nato\b_antiair.paa";
                     _targetIconSize = 0.6;
                     if (_target distance _vehicle > _airDefenseViewDistance) then {

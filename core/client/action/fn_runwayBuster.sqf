@@ -50,7 +50,7 @@ while { alive _asset } do {
             _soundSource attachTo [_asset, [0, 0, 0]];
 
             private _startTime = serverTime;
-            while { serverTime - _startTime < 5 } do {
+            while { serverTime - _startTime < 60 } do {
                 uiSleep 1;
                 if (!alive _asset) then {
                     deleteVehicle _soundSource;

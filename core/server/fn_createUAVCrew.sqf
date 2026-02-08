@@ -10,7 +10,7 @@ private _crewCount = {
 private _myArray = [0];
 _myArray resize _crewCount;
 
-_asset = [_class, _orderedClass, _pos, _direction, _exactPosition] call WL2_fnc_createVehicleCorrectly;
+_asset = [_class, _orderedClass, _pos, _direction, _exactPosition, false] call WL2_fnc_createVehicleCorrectly;
 
 private _side = if (isNull _sender) then {
 	independent;

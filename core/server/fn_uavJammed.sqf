@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_uav", "_jammer"];
 
-private _damageAdd = if (_uav getVariable ["WL2_isBombDrone", false]) then {
+private _damageAdd = if (_uav getVariable ["WL2_isFragileDrone", false]) then {
     0.4
 } else {
     0.1

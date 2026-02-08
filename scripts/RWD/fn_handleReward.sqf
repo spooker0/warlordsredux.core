@@ -19,15 +19,15 @@ private _getVehicleType = {
 
 	private _category = WL_ASSET(_assetType, "category", "Other");
 	switch (_category) do {
-		case "AirDefense": { "SAM"; };
-		case "FixedWing": { "PLANE"; };
-		case "HeavyVehicles": { "HEAVY"; };
+		case "Air Defense": { "SAM"; };
+		case "Fixed Wing": { "PLANE"; };
+		case "Heavy Vehicles": { "HEAVY"; };
 		case "Infantry": { "INFANTRY"; };
-		case "LightVehicles": { "LIGHT"; };
+		case "Light Vehicles": { "LIGHT"; };
 		case "Naval": { "NAVAL"; };
-		case "RemoteControl": { "UAV"; };
-		case "RotaryWing": { "HELO"; };
-		case "SectorDefense": { "STATIC"; };
+		case "Remote Control": { "UAV"; };
+		case "Rotary Wing": { "HELO"; };
+		case "Sector Defense": { "STATIC"; };
 		case "Structures": { "STRUCTURE"; };
 		default { "UNKNOWN"; };
 	};

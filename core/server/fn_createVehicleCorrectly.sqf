@@ -1,10 +1,15 @@
 #include "includes.inc"
-params ["_class", "_orderedClass", "_pos", "_direction", "_exactPosition"];
+params ["_class", "_orderedClass", "_pos", "_direction", "_exactPosition", "_spawnInAir"];
 _pos params ["_posX", "_posY", "_posZ"];
 
 if !(isServer) exitWith {};
 
-_asset = createVehicle [_class, [_posX, _posY, _posZ - 50], [], 0, "CAN_COLLIDE"];
+private _asset = if (_spawnInAir) then {
+	createVehicle [_class, _pos, [], 0, "FLY"];
+} else {
+	createVehicle [_class, [_posX, _posY, _posZ - 50], [], 0, "CAN_COLLIDE"];
+};
+
 if (_direction isEqualType 0) then {
 	_asset setDir _direction;
 } else {

@@ -16,7 +16,7 @@ private _deployMortarAction = _asset addAction [
             private _side = BIS_WL_playerSide;
 
             private _mortar = createVehicle ["B_Mortar_01_F", [0, 0, 0], [], 0, "NONE"];
-            _mortar setVariable ["WL2_orderedClass", "B_Mortar_01_Integral_F", true];
+            _mortar setVariable ["WL2_orderedClass", "B_Integral_Mortar", true];
             _mortar setVariable ["WL2_manualDrone", true, true];
             _mortar attachTo [_asset, [-0.75, -3, 0.8], "OtocVez", true];
             _mortar removeWeaponTurret ["mortar_82mm", [0]];

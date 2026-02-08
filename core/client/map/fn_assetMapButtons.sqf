@@ -114,7 +114,7 @@ if (_hasCrew && _isNotFlying && !(_asset isKindOf "Man") && _ownsVehicle) then {
 
 private _operateAccess = ([_asset, player, "driver"] call WL2_fnc_accessControl) # 0;
 
-if (_operateAccess && typeof _asset in ["O_T_Truck_03_device_ghex_F", "O_Truck_03_device_F", "Land_MobileRadar_01_radar_F"]) then {
+if (_operateAccess && WL_ASSET(_assetActualType, "ewRange", 0) > 0) then {
     private _jammerText = [_asset] call WL2_fnc_assetButtonJammer;
 
     [_asset, _targetId, "ew", _jammerText, {
@@ -123,7 +123,7 @@ if (_operateAccess && typeof _asset in ["O_T_Truck_03_device_ghex_F", "O_Truck_0
     }, true] call WL2_fnc_addTargetMapButton;
 };
 
-if (_operateAccess && typeof _asset in ["B_Radar_System_01_F", "O_Radar_System_01_F", "I_E_Radar_System_01_F"]) then {
+if (_operateAccess && WL_ASSET(_assetActualType, "isRadar", 0) > 0) then {
     private _radarRotateText = [_asset] call WL2_fnc_assetButtonRadarRotate;
 
     [_asset, _targetId, "radar-rotate", _radarRotateText, {

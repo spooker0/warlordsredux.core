@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_asset"];
 
-private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+private _assetActualType = WL_ASSET_TYPE(_asset);
 private _dumbMines = WL_ASSET(_assetActualType, "dumbMine", 0);
 _asset setVariable ["WL2_isMinefield", true, true];
 
@@ -23,10 +23,14 @@ while { alive _asset && _dumbMines > 0} do {
         break;
     };
 
+    if (!isNull attachedTo _asset) then {
+        continue;
+    };
+
     private _area = [getPosASL _asset, 50, 10, getDir _asset, true];
 
     private _enemyUnits = switch (_side) do {
-        case west: { BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
+        case west: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
         case east: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
         case independent: { BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles };
         default { [] };
@@ -42,6 +46,9 @@ while { alive _asset && _dumbMines > 0} do {
         WL_ASSET_FIELD(_assetData, _unitActualType, "demolishable", 0) == 0
     } select {
         !(_x isKindOf "ParachuteBase") && !(vehicle _x isKindOf "ParachuteBase")
+    } select {
+        private _posAGL = _x modelToWorld [0, 0, 0];
+        _posAGL # 2 < 10;
     } select {
         isEngineOn _x
     } select {

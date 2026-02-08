@@ -182,7 +182,7 @@ private _sectorGroup = createGroup [civilian, true];
 			private _realClass = _x # 0;
 			private _orderedClass = _x # 1;
 
-			private _asset = [_realClass, _orderedClass, _pos, _direction, false] call WL2_fnc_createVehicleCorrectly;
+			private _asset = [_realClass, _orderedClass, _pos, _direction, false, _spawnInAir] call WL2_fnc_createVehicleCorrectly;
 			waitUntil {
 				uiSleep 0.1;
 				!(isNull _asset)

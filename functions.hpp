@@ -457,6 +457,7 @@ class CfgFunctions {
 			class lastHitHandler {};
 			class missionEndHandle {};
 			class newAssetHandle {};
+			class parseAssetPurchases {};
 			class parsePurchaseList {};
 			class prepareStronghold {};
 			class protectStronghold {};

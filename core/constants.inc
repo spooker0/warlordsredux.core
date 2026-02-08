@@ -149,6 +149,8 @@
 #define WL_FOBCRATE_EAST "Land_Cargo20_brick_red_F"
 #define WL_FOBCRATES [WL_FOBCRATE_WEST, WL_FOBCRATE_EAST]
 
+#define WL_CLEANUP_TRANSPORTS ["B_Quadbike_01_F", "O_Quadbike_01_F", "I_Quadbike_01_F", "C_Scooter_Transport_01_F"]
+
 #define WL_TARGET_FRIENDLY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_playerSide], objNull])
 #define WL_TARGET_ENEMY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_enemySide], objNull])
 #define WL_CONTROL_MAP (uiNamespace getVariable ["BIS_WL_mapControl", controlNull])
@@ -159,7 +161,9 @@
 #define WL_BASES [WL2_base1, WL2_base2]
 #define WL_ASSET_DATA (missionNamespace getVariable ["WL2_assetData", createHashMap])
 #define WL_ASSET_FIELD(data,class,field,default) ((data getOrDefault [class, createHashMap]) getOrDefault [field, default])
+#define WL_ASSET_GET(data,field,default) (data getOrDefault [field, default])
 #define WL_ASSET(class,field,default) WL_ASSET_FIELD(WL_ASSET_DATA,class,field,default)
+#define WL_ASSET_TYPE(asset) (asset getVariable ["WL2_orderedClass", typeOf asset])
 #define WL_ISUNCONSCIOUS(unit) ((unit) getVariable ["WL2_unconscious", false])
 #define WL_ISDBNO(unit) (alive (unit) && WL_ISUNCONSCIOUS(unit))
 #define WL_ISUP(unit) (alive (unit) && !WL_ISUNCONSCIOUS(unit))

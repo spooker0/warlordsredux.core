@@ -23,7 +23,7 @@ if (isManualFire cameraOn) then {
 private _currentMagazine = cameraOn currentMagazineTurret _turret;
 private _ammo = getText (configFile >> "CfgMagazines" >> _currentMagazine >> "ammo");
 
-private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+private _assetActualType = WL_ASSET_TYPE(_asset);
 private _projectileAmmoOverrides = WL_ASSET(_assetActualType, "ammoOverrides", []);
 private _projectileConfig = APS_projectileConfig;
 

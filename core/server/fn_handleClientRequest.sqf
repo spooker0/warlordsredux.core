@@ -123,7 +123,7 @@ if (_action == "orderAsset") exitWith {
 			default {
 				private _direction = _param4;
 				private _exactPosition = _param5;
-				[_sender, _position, _orderedClass, _direction, _exactPosition] spawn WL2_fnc_orderGround;
+				[_sender, _position, _orderedClass, _direction, _exactPosition, false] spawn WL2_fnc_orderGround;
 			};
 		};
 	} else {
@@ -232,9 +232,16 @@ if (_action == "scan") exitWith {
 
 	private _uav = createVehicle [_uavType, _spawnPos, [], 0, "FLY"];
 	_uav setVehicleAmmo 0;
-	_uav setVariable ["BIS_WL_ownerAsset", getPlayerUID _sender, true];
+
+	private _senderUid = getPlayerUID _sender;
+	_uav setVariable ["BIS_WL_ownerAsset", _senderUid, true];
 	_uav setVariable ["BIS_WL_ownerAssetSide", _side, true];
 	_uav setVariable ["WL_spawnedAsset", true, true];
+
+	private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", _senderUid];
+	private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
+	_ownedVehicles pushBack _uav;
+	missionNamespace setVariable [_ownedVehicleVar, _ownedVehicles, true];
 
 	_uav setPosASL (AGLtoASL _spawnPos);
 

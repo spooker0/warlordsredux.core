@@ -47,6 +47,8 @@ if (_asset isKindOf "Man") then {
 	};
 
 	private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+	private _assetData = WL_ASSET_DATA;
+	private _data = _assetData getOrDefault [_assetActualType, createHashMap];
 
 	[_asset] call APS_fnc_registerVehicle;
 
@@ -68,27 +70,27 @@ if (_asset isKindOf "Man") then {
 		[_target, _vehicle, _missile] call WL2_fnc_warnIncomingMissile;
 	}];
 
-	if (WL_ASSET(_assetActualType, "hasScanner", 0) > 0) then {
+	if (WL_ASSET_GET(_data, "hasScanner", 0) > 0) then {
 		[_asset, false] remoteExec ["WL2_fnc_scannerAction", 0, true];
 	};
 
-	private _reconOptics = WL_ASSET(_assetActualType, "hasReconOptics", 0);
+	private _reconOptics = WL_ASSET_GET(_data, "hasReconOptics", 0);
 	if (_reconOptics > 0) then {
 		[_asset, _playerUID, _reconOptics] remoteExec ["WL2_fnc_reconOpticsAction", 0, true];
 		_asset setVariable ["WL2_hasReconOptics", true, true];
 	};
 
-	private _hasAirRadar = WL_ASSET(_assetActualType, "hasAirRadar", 0);
+	private _hasAirRadar = WL_ASSET_GET(_data, "hasAirRadar", 0);
 	if (_hasAirRadar > 0) then {
 		_asset setVariable ["WL2_airRadarRange", _hasAirRadar, true];
 		[_asset, true] remoteExec ["WL2_fnc_scannerAction", 0, true];
 	};
 
-	if (WL_ASSET(_assetActualType, "hasGunnerAction", 0) > 0) then {
+	if (WL_ASSET_GET(_data, "hasGunnerAction", 0) > 0) then {
 		[_asset] remoteExec ["WL2_fnc_controlGunnerAction", 0, true];
 	};
 
-	if (WL_ASSET(_assetActualType, "hasHMD", 0) > 0) then {
+	if (WL_ASSET_GET(_data, "hasHMD", 0) > 0) then {
 		_asset setVariable ["WL2_hasHMD", true, true];
 	};
 
@@ -96,114 +98,19 @@ if (_asset isKindOf "Man") then {
 		_asset addItemCargoGlobal ["ToolKit", 1];
 	};
 
-	// Vehicle special actions
-	switch (_assetActualType) do {
-		// Dazzlers
-		case "B_T_Truck_03_device_F";
-		case "O_Truck_03_device_F": {
-			_asset setVariable ["WL_ewNetActive", false, true];
-			_asset setVariable ["WL_ewNetRange", WL_JAMMER_RANGE_OUTER, true];
-
-			[_asset] remoteExec ["WL2_fnc_jammerAction", 0, true];
-		};
-		case "Land_MobileRadar_01_radar_F": {
-			_asset setVariable ["WL_ewNetActive", false, true];
-			_asset setVariable ["WL_ewNetRange", WL_JAMMER_RANGE_OUTER * 2, true];
-
-			// reduce height for demolish action
-			// private _assetPos = getPosATL _asset;
-			// _asset setPosATL [_assetPos # 0, _assetPos # 1, _assetPos # 2 - 8];
-
-			// too hardy otherwise, start off at 10% health
-			// _asset setDamage 0.9;
-			[_asset] remoteExec ["WL2_fnc_jammerAction", 0, true];
-		};
-
-		// Logistics
-		case "B_Truck_01_flatbed_F";
-		case "O_Truck_01_flatbed_F";
-		case "B_T_VTOL_01_vehicle_F": {
-			[_asset] remoteExec ["WL2_fnc_deployableAddAction", 0, true];
-		};
-
-		// Slingloading
-		case "B_APC_Tracked_01_CRV_F";
-		case "B_Heli_Transport_01_F";
-		case "B_Heli_Transport_01_UP_F";
-		case "B_Heli_Transport_03_F";
-		case "B_Heli_Transport_03_supply_F";
-		case "B_Heli_Transport_01_pylons_F";
-		case "B_Heli_Attack_01_dynamicLoadout_F";
-		case "B_Heli_Attack_01_pylons_dynamicLoadout_F";
-		case "O_Heli_Light_02_unarmed_F";
-		case "O_Heli_Light_02_dynamicLoadout_F";
-		case "O_Heli_Transport_04_F";
-		case "O_Heli_Transport_02_F";
-		case "O_Heli_Transport_02_supply_F";
-		case "O_Heli_Transport_02_ATGM_F";
-		case "O_Heli_Attack_02_dynamicLoadout_F";
-		case "I_Heli_Transport_02_F": {
-			[_asset] remoteExec ["WL2_fnc_slingAddAction", 0, true];
-		};
-
-		case "B_Boat_Armed_01_minigun_F";
-		case "B_Boat_Armed_01_autocannon_F";
-		case "O_Boat_Armed_01_autocannon_F";
-		case "O_Boat_Armed_01_hmg_F": {
-			[_asset] spawn WL2_fnc_stabilizeBoatAction;
-		};
-
-		case "B_Land_Bomb_Trolley_01_F";
-		case "O_Land_Bomb_Trolley_01_F": {
-			[_asset] spawn WL2_fnc_runwayBuster;
-		};
-
-		// case "B_AAA_System_01_F": {
-		// 	[_asset] spawn APS_fnc_ciws;
-		// };
-
-		// Radars
-		case "B_Radar_System_01_F";
-		case "O_Radar_System_02_F";
-		case "O_Radar_System_02_ecm_F";
-		case "I_E_Radar_System_01_F": {
-			_asset setVariable ["radarRotation", false, true];
-			[_asset] remoteExec ["WL2_fnc_radarRotateAction", 0, true];
-
-			[_asset] spawn {
-				params ["_asset"];
-				private _lookAtAngles = [0, 90, 180, 270];
-				private _radarIter = 0;
-				while {alive _asset} do {
-					private _radarRotation = _asset getVariable ["radarRotation", false];
-					if (_radarRotation) then {
-						private _lookAtPos = _asset getRelPos [100, _lookAtAngles # _radarIter];
-						if (local _asset) then {
-							_asset lookAt _lookAtPos;
-						} else {
-							[_asset, _lookAtPos] remoteExec ["lookAt", _asset];
-						};
-						_radarIter = (_radarIter + 1) % 4;
-					};
-					uiSleep 2.4;
-				};
-			};
-		};
-
-		// Suicide drones
-		case "B_UAV_06_F";
-		case "O_UAV_06_F";
-		case "I_UAV_06_F": {
-			_asset setVariable ["WL2_isBombDrone", true, true];
-		};
-	};
-
 	if (_assetActualType in WL_FOBCRATES) then {
 		_asset setVariable ["WL2_mapCircleRadius", WL_FOB_CAPTURE_RANGE, true];
 		[_asset] remoteExec ["WL2_fnc_setupForwardBaseAction", 0, true];
 	};
 
-	private _loadedItem = WL_ASSET(_assetActualType, "loaded", "");
+	private _ewRange = WL_ASSET_GET(_data, "ewRange", 0);
+	if (_ewRange > 0) then {
+		_asset setVariable ["WL_ewNetActive", false, true];
+		_asset setVariable ["WL_ewNetRange", WL_JAMMER_RANGE_OUTER * _ewRange, true];
+		[_asset] remoteExec ["WL2_fnc_jammerAction", 0, true];
+	};
+
+	private _loadedItem = WL_ASSET_GET(_data, "loaded", "");
 	if (_loadedItem != "") then {
 		_asset setVariable ["WL2_deployCrates", 1, true];
 		private _crateIsConversion = WL_ASSET(_loadedItem, "conversion", 0) != 0;
@@ -220,7 +127,7 @@ if (_asset isKindOf "Man") then {
 		_asset setVariable ["WL2_apsActivated", true, true];
 	};
 
-	if (WL_ASSET(_assetActualType, "isLight", 0) > 0) then {
+	if (WL_ASSET_GET(_data, "isLight", 0) > 0) then {
 		private _originalMass = getMass _asset;
 		private _lightMass = _originalMass * 0.65;
 		_asset setVariable ["WL2_massDefault", _lightMass, true];
@@ -229,7 +136,39 @@ if (_asset isKindOf "Man") then {
 		_asset setVariable ["WL2_massDefault", getMass _asset, true];
 	};
 
-	private _detonate = WL_ASSET(_assetActualType, "detonate", 0);
+	if (WL_ASSET_GET(_data, "isRadar", 0) > 0) then {
+		_asset setVariable ["radarRotation", false, true];
+		[_asset] remoteExec ["WL2_fnc_radarRotateAction", 0, true];
+
+		[_asset] spawn {
+			params ["_asset"];
+			private _lookAtAngles = [0, 90, 180, 270];
+			private _radarIter = 0;
+			while { alive _asset } do {
+				private _radarRotation = _asset getVariable ["radarRotation", false];
+				if (_radarRotation) then {
+					private _lookAtPos = _asset getRelPos [100, _lookAtAngles # _radarIter];
+					if (local _asset) then {
+						_asset lookAt _lookAtPos;
+					} else {
+						[_asset, _lookAtPos] remoteExec ["lookAt", _asset];
+					};
+					_radarIter = (_radarIter + 1) % 4;
+				};
+				uiSleep 2.4;
+			};
+		};
+	};
+
+	if (WL_ASSET_GET(_data, "fragileDrone", 0) > 0) then {
+		_asset setVariable ["WL2_isFragileDrone", true, true];
+	};
+
+	if (WL_ASSET_GET(_data, "isRunwayBuster", 0) > 0) then {
+		[_asset] spawn WL2_fnc_runwayBuster;
+	};
+
+	private _detonate = WL_ASSET_GET(_data, "detonate", 0);
 	if (_detonate > 0) then {
 		_asset setVariable ["WL2_detonateValue", _detonate, true];
 
@@ -265,52 +204,55 @@ if (_asset isKindOf "Man") then {
 		}];
 	};
 
-	if (WL_ASSET(_assetActualType, "hasESAM", 0) > 0) then {
+	if (WL_ASSET_GET(_data, "hasLoader", 0) > 0) then {
+		[_asset] remoteExec ["WL2_fnc_deployableAddAction", 0, true];
+	};
+
+	if (WL_ASSET_GET(_data, "hasSling", 0) > 0) then {
+		[_asset] remoteExec ["WL2_fnc_slingAddAction", 0, true];
+	};
+
+	if (WL_ASSET_GET(_data, "hasESAM", 0) > 0) then {
 		[_asset, _side] remoteExec ["DIS_fnc_setupExtendedSam", 0, true];
 	};
 
-	if (WL_ASSET(_assetActualType, "hasASAM", 0) > 0) then {
+	if (WL_ASSET_GET(_data, "hasASAM", 0) > 0) then {
 		_asset setVariable ["DIS_advancedSamRange", 14000, true];
 	};
 
-	if (WL_ASSET(_assetActualType, "hasMiniMortar", 0) > 0) then {
+	if (WL_ASSET_GET(_data, "hasMiniMortar", 0) > 0) then {
 		_asset setVariable ["WL2_mortarShellCountHE", 12, true];
 		[_asset] remoteExec ["WL2_fnc_setupMiniMortarAction", 0, true];
 	};
 
-	private _mineClear = WL_ASSET(_assetActualType, "mineClear", 0);
+	if (WL_ASSET_GET(_data, "hasStabilize", 0) > 0) then {
+		[_asset] spawn WL2_fnc_stabilizeBoatAction;
+	};
+
+	private _mineClear = WL_ASSET_GET(_data, "mineClear", 0);
 	if (_mineClear > 0) then {
 		_asset setVariable ["WL2_mineClearCharges", _mineClear, true];
 		[_asset, _mineClear] remoteExec ["WL2_fnc_mineClearAction", 0, true];
 	};
 
-	if (WL_ASSET(_assetActualType, "smartMineAP", 0) > 0 || WL_ASSET(_assetActualType, "smartMineAT", 0) > 0) then {
+	if (WL_ASSET_GET(_data, "smartMineAP", 0) > 0 || WL_ASSET_GET(_data, "smartMineAT", 0) > 0) then {
 		_asset setVariable ["WL2_isAdvancedMines", true, true];
 		[_asset] spawn WL2_fnc_smartMine;
 	};
 
-	if (WL_ASSET(_assetActualType, "dumbMine", 0) > 0) then {
+	if (WL_ASSET_GET(_data, "dumbMine", 0) > 0) then {
 		[_asset] spawn WL2_fnc_dumbMine;
 	};
 
-	private _threatDetection = WL_ASSET(_assetActualType, "threatDetection", 0);
+	private _threatDetection = WL_ASSET_GET(_data, "threatDetection", 0);
 	if (_threatDetection > 0) then {
 		_asset setVariable ["DIS_missileDetector", _threatDetection, true];
 		_asset setVariable ["WL2_mapCircleRadius", _threatDetection, true];
 		_asset setVariable ["WL_scannerOn", true, true];
 	};
 
-	private _hideMap = WL_ASSET(_assetActualType, "hideMap", 0);
+	private _hideMap = WL_ASSET_GET(_data, "hideMap", 0);
 	_asset setVariable ["WL2_hideMap", _hideMap, true];
-
-	// if (WL_ASSET(_assetActualType, "hasAirRearm", 0) > 0) then {
-	// 	_asset setVariable ['WL2_hasInflightRearm', true, true];
-	// };
-
-	// if (WL_ASSET(_assetActualType, "hasSmokeCurtain", 0) > 0) then {
-	// 	_asset setVariable ['WL2_smokeCurtains', 2, true];
-	// 	[_asset] remoteExec ["WL2_fnc_smokeCurtainAction", 0, true];
-	// };
 
 	if (_asset isKindOf "Air") then {
 		// [_asset] remoteExec ["WL2_fnc_airRearmAction", 0, true];
@@ -354,7 +296,7 @@ if (_asset isKindOf "Man") then {
 	};
 
 	if (typeOf _asset == "VirtualReammoBox_camonet_F") then {
-		private _containerItems = WL_ASSET(_assetActualType, "container", []);
+		private _containerItems = WL_ASSET_GET(_data, "container", []);
 		{
 			private _containerItemType = _x # 0;
 			private _containerItemCount = _x # 1;
@@ -370,7 +312,7 @@ if (_asset isKindOf "Man") then {
 		[_asset] remoteExec ["WL2_fnc_restockAction", 0, true];
 	} else {
 		private _spawnEmpty = _settingsMap getOrDefault ["spawnEmpty", false];
-		private _isEmptyBox = WL_ASSET(_assetActualType, "empty", 0) > 0;
+		private _isEmptyBox = WL_ASSET_GET(_data, "empty", 0) > 0;
 		if (_spawnEmpty || _isEmptyBox) then {
 			clearMagazineCargoGlobal _asset;
 			clearItemCargoGlobal _asset;
@@ -389,11 +331,11 @@ if (_asset isKindOf "Man") then {
 		[_asset, 0] remoteExec ["setFuelCargo", 0];
 	};
 
-	if (WL_ASSET(_assetActualType, "hasRearm", 0) > 0) then {
+	if (WL_ASSET_GET(_data, "hasRearm", 0) > 0) then {
 		_asset setVariable ["WLM_ammoCargo", 10000, true];
 	};
 
-	private _rearmTime = WL_ASSET(_assetActualType, "rearm", 600);
+	private _rearmTime = WL_ASSET_GET(_data, "rearm", 600);
 	_asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
 
 	private _crewPosition = (fullCrew [_asset, "", true]) select {!("cargo" in _x)};
@@ -437,7 +379,7 @@ if (_asset isKindOf "Man") then {
 		}];
 	};
 
-	if (WL_ASSET(_assetActualType, "hasAirburst", 0) > 0) then {
+	if (WL_ASSET_GET(_data, "hasAirburst", 0) > 0) then {
 		_asset addEventHandler ["Fired", {
 			params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
 			[_projectile, _unit, 12] spawn WL2_fnc_airburst;
@@ -452,8 +394,7 @@ if (_asset isKindOf "Man") then {
 		_asset setTurretLimits [[0], 0, 0, 0, 0];
 	};
 
-	if (_assetActualType == "B_MBT_01_mlrs_sdb_F") then {
-		_asset setVariable ["WL2_overrideRange", 8000, true];
+	if (_assetActualType in ["B_MLRS_Guided", "O_MRLS_Guided"]) then {
 		[_asset] spawn {
 			params ["_asset"];
 			while { alive _asset } do {
@@ -464,14 +405,14 @@ if (_asset isKindOf "Man") then {
 		};
 	};
 
-	private _demolishable = WL_ASSET(_assetActualType, "demolishable", 0);
+	private _demolishable = WL_ASSET_GET(_data, "demolishable", 0);
 	if (_demolishable > 0) then {
 		_asset setVariable ["WL2_demolitionHealth", _demolishable, true];
 		_asset setVariable ["WL2_demolitionMaxHealth", _demolishable, true];
 		_asset setVariable ["WL2_canDemolish", true, true];
 	};
 
-	if (WL_ASSET(_assetActualType, "hasTurretVisualizer", 0) > 0) then {
+	if (WL_ASSET_GET(_data, "hasTurretVisualizer", 0) > 0) then {
 		[_asset] remoteExec ["WL2_fnc_turretVisualizerAction", 0, true];
 	};
 

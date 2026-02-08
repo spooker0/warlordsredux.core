@@ -46,14 +46,8 @@ private _validHitPoints = _validWheels + _validTracks;
 
 if (count _validHitPoints == 0) exitWith {};
 
-private _repairTitle = if (count _validTracks > 0) then {
-    "Track Repair"
-} else {
-    "Tire Change"
-};
-
 private _repairWheels = _asset addAction [
-	format ["<t color = '#4bff58'>%1</t>", _repairTitle],
+	"<t color = '#4bff58'>Field Mobility Repairs</t>",
 	{
         _this spawn {
             params ["_asset", "_caller", "_actionId", "_arguments"];

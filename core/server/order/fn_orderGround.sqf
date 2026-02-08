@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_sender", "_pos", "_orderedClass", "_direction", "_exactPosition"];
+params ["_sender", "_pos", "_orderedClass", "_direction", "_exactPosition", "_spawnInAir"];
 
 if !(isServer) exitWith {};
 
@@ -9,7 +9,7 @@ private _isUav = getNumber (configFile >> "CfgVehicles" >> _class >> "isUav") ==
 private _asset = if (_isUav) then {
 	[_pos, _class, _orderedClass, _direction, _exactPosition, _sender] call WL2_fnc_createUAVCrew;
 } else {
-	[_class, _orderedClass, _pos, _direction, _exactPosition] call WL2_fnc_createVehicleCorrectly;
+	[_class, _orderedClass, _pos, _direction, _exactPosition, _spawnInAir] call WL2_fnc_createVehicleCorrectly;
 };
 
 waitUntil {

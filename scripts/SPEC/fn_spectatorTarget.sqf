@@ -113,7 +113,7 @@ while { WL_IsSpectator } do {
             private _assetActualType = _target getVariable ["WL2_orderedClass", typeof _target];
             private _assetCategory = WL_ASSET_FIELD(_assetData, _assetActualType, "category", "Other");
 
-            if (_assetCategory == "AirDefense") then {
+            if (_assetCategory == "Air Defense") then {
                 if (_target distance _cameraPos > _airDefenseViewDistance) then {
                     continue;
                 };

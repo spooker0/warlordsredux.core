@@ -126,18 +126,3 @@ if (!isNull _responsiblePlayer && { isPlayer [_responsiblePlayer] }) then {
         [_unit, _spotReward, "Spot assist", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _lastSpotted];
     };
 };
-
-_unit spawn {
-    params ["_unit"];
-    if ((typeOf _unit) == "Land_IRMaskingCover_01_F") then {
-        {
-            _asset = _x;
-            if !(alive _x) then {
-                deleteVehicle _asset;
-            };
-        } forEach ((allMissionObjects "") select {(["BIS_WL_", str _x, false] call BIS_fnc_inString) && {!(["BIS_WL_init", str _x, false] call BIS_fnc_inString)}});
-    };
-    if ((typeOf _unit) == "Land_Pod_Heli_Transport_04_medevac_F" || {(typeOf _unit) == "B_Slingload_01_Medevac_F"}) then {
-        deleteVehicle _unit;
-    };
-};

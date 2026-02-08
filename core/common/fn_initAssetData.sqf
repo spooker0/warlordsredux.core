@@ -26,44 +26,33 @@ if (isServer) then {
 };
 
 private _requisitionData = createHashMap;
-
 private _requisitionPreset = missionConfigFile >> "CfgWLRequisitionPresets" >> "A3ReduxAll";
 {
-	private _categories = configProperties [_x];
+	private _classConfig = _x;
+	private _className = configName _classConfig;
+	private _classMap = createHashMap;
+
 	{
-		private _categoryName = configName _x;
-		private _classes = configProperties [_x];
+		private _entry = _x;
+		private _key = configName _entry;
+		if (isText _entry) then {
+			_classMap set [_key, getText _entry];
+			continue;
+		};
+		if (isNumber _entry) then {
+			_classMap set [_key, getNumber _entry];
+			continue;
+		};
+		if (isArray _entry) then {
+			_classMap set [_key, getArray _entry];
+			continue;
+		};
+	} forEach configProperties [_classConfig];
 
-		{
-			private _classConfig = _x;
-			private _className = configName _classConfig;
-			private _classMap = createHashMap;
+	private _turretOverrides = configProperties [_classConfig, "isClass _x", true];
+	_classMap set ["turretOverrides", _turretOverrides];
 
-			_classMap set ["category", _categoryName];
-
-			{
-				private _entry = _x;
-				private _key = configName _entry;
-				if (isText _entry) then {
-					_classMap set [_key, getText _entry];
-					continue;
-				};
-				if (isNumber _entry) then {
-					_classMap set [_key, getNumber _entry];
-					continue;
-				};
-				if (isArray _entry) then {
-					_classMap set [_key, getArray _entry];
-					continue;
-				};
-			} forEach configProperties [_classConfig];
-
-			private _turretOverrides = "inheritsFrom _x == (missionConfigFile >> 'WLTurretDefaults')" configClasses _classConfig;
-			_classMap set ["turretOverrides", _turretOverrides];
-
-			_requisitionData set [_className, _classMap];
-		} forEach _classes;
-	} forEach _categories;
+	_requisitionData set [_className, _classMap];
 } forEach configProperties [_requisitionPreset];
 
 missionNamespace setVariable ["WL2_assetData", _requisitionData];

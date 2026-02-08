@@ -7,32 +7,32 @@ if (_level == 3) then {
     private _backHangar = if (isNull _fobDome) then {
         private _position = _forwardBase modelToWorld [0, 0, 0];
         private _direction = getDir _forwardBase;
-        [_hangarType, _hangarType, _position, _direction, false] call WL2_fnc_createVehicleCorrectly;
+        [_hangarType, _hangarType, _position, _direction, false, false] call WL2_fnc_createVehicleCorrectly;
     } else {
         private _position = _fobDome modelToWorldWorld [0, 20, -2.5];
         private _vectorDirAndUp = [vectorDir _fobDome, vectorUp _fobDome];
-        [_hangarType, _hangarType, _position, _vectorDirAndUp, true] call WL2_fnc_createVehicleCorrectly;
+        [_hangarType, _hangarType, _position, _vectorDirAndUp, true, false] call WL2_fnc_createVehicleCorrectly;
     };
     _backHangar allowDamage false;
 
     private _forwardHangarPosition = _backHangar modelToWorldWorld [0, 18, 0];
     private _vectorDirAndUp = [vectorDir _backHangar, vectorUp _backHangar];
-    private _forwardHangar = [_hangarType, _hangarType, _forwardHangarPosition, _vectorDirAndUp, true] call WL2_fnc_createVehicleCorrectly;
+    private _forwardHangar = [_hangarType, _hangarType, _forwardHangarPosition, _vectorDirAndUp, true, false] call WL2_fnc_createVehicleCorrectly;
     _forwardHangar allowDamage false;
 
     private _railPosition = _forwardHangar modelToWorld [0, 25, 0];
-    private _catapultRail = [_sender, _railPosition, "Land_CraneRail_01_F", getDir _forwardBase, false] call WL2_fnc_orderGround;
+    private _catapultRail = [_sender, _railPosition, "Land_CraneRail_01_F", getDir _forwardBase, false, false] call WL2_fnc_orderGround;
 
     private _hangarPosATL = getPosATL _forwardHangar;
     if (_hangarPosATL # 2 > -1) then {
         private _scoutPlaneType = if (_side == west) then {
-            "B_Plane_Fighter_01_Stealth_Unarmed_F"
+            "B_Scout_Wasp"
         } else {
-            "O_Plane_Fighter_02_Stealth_Unarmed_F"
+            "O_Scout_Shikra"
         };
 
         private _planePosition = _forwardHangar modelToWorld [0, -8, 0];
-        private _scoutPlane = [objNull, _planePosition, _scoutPlaneType, getDir _forwardHangar, false] call WL2_fnc_orderGround;
+        private _scoutPlane = [objNull, _planePosition, _scoutPlaneType, getDir _forwardHangar, false, false] call WL2_fnc_orderGround;
 
         private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
         _ownedVehicles pushBackUnique _scoutPlane;
@@ -57,7 +57,7 @@ if (_level == 3) then {
         case 2 : { "Land_Dome_Small_F" };
         default { "Land_Dome_Small_F" };
     };
-    private _newDome = [_domeType, _domeType, _position, _direction, false] call WL2_fnc_createVehicleCorrectly;
+    private _newDome = [_domeType, _domeType, _position, _direction, false, false] call WL2_fnc_createVehicleCorrectly;
     _newDome allowDamage false;
     _forwardBase setVariable ["WL2_forwardBaseDome", _newDome];
 
