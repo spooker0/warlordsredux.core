@@ -97,8 +97,7 @@ _customTexturesList pushBack [format ["--- %1 ---", localize "STR_WLM_OFFICIAL"]
 */
 
 private _defaultIncluded = false;
-private _orderedClass = _asset getVariable ["WL2_orderedClass", typeOf _asset];
-private _defaultTextures = WL_ASSET(_orderedClass, "textures", getArray (_assetConfig >> "hiddenSelectionsTextures"));
+private _defaultTextures = WL_UNIT(_asset, "textures", getArray (_assetConfig >> "hiddenSelectionsTextures"));
 
 private _comparePaths = {
     params ["_input1", "_input2"];
@@ -240,26 +239,6 @@ _camoSelectControl ctrlAddEventHandler ["LBSelChanged", {
             _control lbSetColor [_i, [1, 1, 1, 1]];
         };
     };
-
-    // Colored turret texture
-    // private _orderedClass = _asset getVariable ["WL2_orderedClass", typeOf _asset];
-    // if (typeof _asset != _orderedClass) then {
-    //     private _textures = getObjectTextures _asset;
-    //     private _side = _asset getVariable ["BIS_WL_ownerAssetSide", sideUnknown];
-    //     private _sideColor = if (_side == west) then {
-    //         "#(argb,8,8,3)color(0,0.1,0.2,1)"
-    //     } else {
-    //         "#(argb,8,8,3)color(0.2,0.1,0,1)"
-    //     };
-
-    //     {
-    //         // if the string includes texture
-    //         private _isTurret = ["turret", _x] call BIS_fnc_inString || ["tow", _x] call BIS_fnc_inString;
-    //         if (_isTurret) then {
-    //             _asset setObjectTextureGlobal [_forEachIndex, _sideColor];
-    //         };
-    //     } forEach _textures;
-    // };
 }];
 
 private _customizationSelectControl = _display displayCtrl WLM_CUSTOMIZATION_SELECT;

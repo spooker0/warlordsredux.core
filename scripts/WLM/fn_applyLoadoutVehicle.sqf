@@ -77,9 +77,7 @@ private _magazineSelectBoxes = uiNamespace getVariable "WLM_magazineSelectBoxes"
 };
 
 if (_eligibleFreeRearm) then {
-    private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
-
-    private _rearmTime = WL_ASSET(_assetActualType, "rearm", 600);
+    private _rearmTime = WL_UNIT(_asset, "rearm", 600);
     _asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
 
     playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Rearm.wss", _asset, false, getPosASL _asset, 2, 1, 75];

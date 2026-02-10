@@ -139,8 +139,7 @@ if (_action == "resetVehicle") exitWith {
 
 	_asset setVectorDirAndUp _direction;
 
-	private _orderedClass = _asset getVariable ["WL2_orderedClass", typeOf _asset];
-	private _isDemolishable = WL_ASSET(_orderedClass, "demolishable", 0) > 0;
+	private _isDemolishable = WL_UNIT(_asset, "demolishable", 0) > 0;
 	if (_isDemolishable) then {
 		_asset setPosWorld _position;
 	} else {

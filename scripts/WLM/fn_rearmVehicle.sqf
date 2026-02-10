@@ -42,7 +42,7 @@ if (_asset getVariable ["WL2_mortarShellCountHE", -1] != -1) then {
     _asset setVariable ["WL2_mortarShellCountHE", 12, true];
 };
 
-private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+private _assetActualType = WL_ASSET_TYPE(_asset);
 
 if (_asset getVariable ["WL2_smartMinesAT", -1] != -1) then {
     _asset setVariable ["WL2_smartMinesAT", WL_ASSET(_assetActualType, "smartMineAT", 0), true];

@@ -1,6 +1,6 @@
 #include "includes.inc"
 params ["_asset", "_targetId"];
-private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+private _assetActualType = WL_ASSET_TYPE(_asset);
 
 private _assetName = if (isPlayer _asset) then {
     name _asset;
@@ -19,7 +19,10 @@ private _hasFullAccess = _asset getVariable ["WL2_accessControl", -1] == 0;
 if (!isPlayer _asset && (_ownsVehicle || _hasFullAccess)) then {
     [_asset, _targetId, "remove", "<t color='#ff0000'>Remove</t>", {
         params ["_asset"];
-        if ((_asset getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player) then {
+        private _ownsVehicle = (_asset getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player;
+        private _hasFullAccess = _asset getVariable ["WL2_accessControl", -1] == 0;
+
+        if (_ownsVehicle || _hasFullAccess) then {
             _asset spawn WL2_fnc_deleteAssetFromMap;
         } else {
             playSoundUI ["AddItemFailed"];

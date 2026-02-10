@@ -12,11 +12,14 @@ if (_assetCost <= 2000) exitWith {
 
 private _entitiesInRange = player nearEntities ["Air", 3500];
 _entitiesInRange = _entitiesInRange select {
-    private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
-    private _entityCost = WL_ASSET(_assetActualType, "cost", 0);
-    private _height = (getPosASL _x # 2) min (getPosATL _x # 2);
-    private _isEnemy = ([_x] call WL2_fnc_getAssetSide) != (side group player);
-    alive _x && _entityCost >= 8000 && _height > 20 && _isEnemy
+    alive _x
+} select {
+    [_x] call WL2_fnc_getAssetSide != side group player
+} select {
+    WL_UNIT(_x, "cost", 0) >= 8000
+} select {
+    private _posAGL = _x modelToWorld [0, 0, 0];
+    _posAGL # 2 > 20
 };
 
 if (count _entitiesInRange > 0) then {

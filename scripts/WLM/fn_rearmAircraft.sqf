@@ -105,8 +105,7 @@ if (count _attachments > 0 && (_attachments # 0 # 0 == "default")) then {
 
 [_asset, _attachments, true] remoteExec ["WLM_fnc_applyPylon", _asset];
 
-private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
-private _rearmTime = WL_ASSET(_assetActualType, "rearm", 600);
+private _rearmTime = WL_UNIT(_asset, "rearm", 600);
 _asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
 
 playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Rearm.wss", _asset, false, getPosASL _asset, 2, 1, 75];

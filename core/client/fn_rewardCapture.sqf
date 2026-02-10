@@ -50,7 +50,7 @@ while { !BIS_WL_missionEnd } do {
             continue;
         };
 
-        private _assetActualType = _vehicle getVariable ["WL2_orderedClass", typeOf _vehicle];
+        private _assetActualType = WL_ASSET_TYPE(_vehicle);
         private _capValue = WL_ASSET_FIELD(_assetData, _assetActualType, "capValue", 0);
 
         if (_sectorOwner == BIS_WL_playerSide) then {

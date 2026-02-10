@@ -118,6 +118,7 @@
 #define WL_COOLDOWN_CAP 1800
 #define WL_COOLDOWN_FTSL 60
 #define WL_COOLDOWN_AIREFRESH 300
+#define WL_COOLDOWN_TARGETRESET 300
 #define WL_COOLDOWN_REPAIR 300
 #define WL_COOLDOWN_GC 60
 #define WL_COOLDOWN_GC_CHEAP 300
@@ -164,6 +165,7 @@
 #define WL_ASSET_GET(data,field,default) (data getOrDefault [field, default])
 #define WL_ASSET(class,field,default) WL_ASSET_FIELD(WL_ASSET_DATA,class,field,default)
 #define WL_ASSET_TYPE(asset) (asset getVariable ["WL2_orderedClass", typeOf asset])
+#define WL_UNIT(unit,field,default) (WL_ASSET(WL_ASSET_TYPE(unit),field,default))
 #define WL_ISUNCONSCIOUS(unit) ((unit) getVariable ["WL2_unconscious", false])
 #define WL_ISDBNO(unit) (alive (unit) && WL_ISUNCONSCIOUS(unit))
 #define WL_ISUP(unit) (alive (unit) && !WL_ISUNCONSCIOUS(unit))

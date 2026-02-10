@@ -158,8 +158,7 @@ addMissionEventHandler ["PlayerViewChanged", {
 
 	[_newCameraOn] spawn WL2_fnc_drawAssetName;
 
-	private _assetActualType = WL_ASSET_TYPE(_newCameraOn);
-	private _ecmParameters = WL_ASSET(_assetActualType, "ecm", []);
+	private _ecmParameters = WL_UNIT(_newCameraOn, "ecm", []);
 	if (count _ecmParameters >= 3) then {
 		[_newCameraOn] spawn WL2_fnc_ecmJammer;
 	};

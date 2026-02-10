@@ -32,7 +32,7 @@ private _saveData = if (_isAircraft) then {
     _savedMagazines;
 };
 
-private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+private _assetActualType = WL_ASSET_TYPE(_asset);
 private _variableName = format ["WLM_savedLoadout_%1", _assetActualType];
 private _loadoutSave = profileNamespace getVariable [_variableName, []];
 

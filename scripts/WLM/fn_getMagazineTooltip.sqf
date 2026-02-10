@@ -2,7 +2,6 @@
 params ["_magazine"];
 
 private _asset = uiNamespace getVariable ["WLM_asset", objNull];
-private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
 
 private _magazineName = [_magazine] call WL2_fnc_getMagazineName;
 private _magazineConfig = configFile >> "CfgMagazines" >> _magazine;
@@ -180,7 +179,7 @@ if (_magDescTracersEvery != 0) then {
     _magDesc pushBack ["Tracers Every", format ["%1", _magDescTracersEvery]];
 };
 
-private _assetAmmoOverrides = WL_ASSET(_assetActualType, "ammoOverrides", []);
+private _assetAmmoOverrides = WL_UNIT(_asset, "ammoOverrides", []);
 private _actualAmmoType = _assetAmmoOverrides select {
     _x # 0 == _magAmmoType
 };

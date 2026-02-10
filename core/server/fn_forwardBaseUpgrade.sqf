@@ -11,7 +11,7 @@ if (_level == 3) then {
     } else {
         private _position = _fobDome modelToWorldWorld [0, 20, -2.5];
         private _vectorDirAndUp = [vectorDir _fobDome, vectorUp _fobDome];
-        [_hangarType, _hangarType, _position, _vectorDirAndUp, true, false] call WL2_fnc_createVehicleCorrectly;
+        [_hangarType, _hangarType, _position, _vectorDirAndUp, false, false] call WL2_fnc_createVehicleCorrectly;
     };
     _backHangar allowDamage false;
 

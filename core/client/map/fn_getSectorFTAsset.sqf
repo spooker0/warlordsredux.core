@@ -5,8 +5,7 @@ private _mapData = missionNamespace getVariable ["WL2_mapData", createHashMap];
 private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];;
 _sideVehicles = _sideVehicles inAreaArray (_sector getVariable "objectAreaComplete");
 _sideVehicles = _sideVehicles select { alive _x } select {
-    private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
-    WL_ASSET(_assetActualType, "hasFastTravel", 0) > 0;
+    WL_UNIT(_x, "hasFastTravel", 0) > 0;
 };
 
 if (_allowInfantry) then {

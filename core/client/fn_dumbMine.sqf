@@ -1,8 +1,7 @@
 #include "includes.inc"
 params ["_asset"];
 
-private _assetActualType = WL_ASSET_TYPE(_asset);
-private _dumbMines = WL_ASSET(_assetActualType, "dumbMine", 0);
+private _dumbMines = WL_UNIT(_asset, "dumbMine", 0);
 _asset setVariable ["WL2_isMinefield", true, true];
 
 private _assetData = WL_ASSET_DATA;
@@ -42,7 +41,7 @@ while { alive _asset && _dumbMines > 0} do {
     } select {
         !(_x isKindOf "Man")
     } select {
-        private _unitActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+        private _unitActualType = WL_ASSET_TYPE(_x);
         WL_ASSET_FIELD(_assetData, _unitActualType, "demolishable", 0) == 0
     } select {
         !(_x isKindOf "ParachuteBase") && !(vehicle _x isKindOf "ParachuteBase")

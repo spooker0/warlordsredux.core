@@ -136,14 +136,18 @@ private _sectorInfo = [
 
 private _captureDetails = _sector getVariable ["WL_captureDetails", []];
 private _showCaptureDetails = if (_revealed) then {
-    private _captureDetailPlayerTeamValid = _captureDetails select {
-        _x # 0 == _side && _x # 1 >= 1
+    if (WL_TARGET_ENEMY == _sector) then {
+        true
+    } else {
+        private _captureDetailPlayerTeamValid = _captureDetails select {
+            _x # 0 == _side && _x # 1 >= 1
+        };
+        count _captureDetailPlayerTeamValid > 0
     };
-    count _captureDetailPlayerTeamValid > 0
 } else {
     false
 };
-if (_showCaptureDetails) then {
+if (_revealed) then {
     private _captureDetailsArray = _captureDetails apply {
         private _side = _x # 0;
         private _sideName = [_side] call _getTeamName;

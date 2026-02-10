@@ -28,7 +28,6 @@ if (_delta != 0) then {
     private _newSelectedTargetId = _targetList select _newIndex select 0;
     private _newSelectedTarget = objectFromNetId _newSelectedTargetId;
 
-    private _assetActualType = cameraOn getVariable ["WL2_orderedClass", typeof cameraOn];
     if (!isNull _selectedTarget) then {
         private _selectedTargetThreats = _selectedTarget getVariable ["WL2_advancedThreats", []];
         _selectedTargetThreats = _selectedTargetThreats select {

@@ -6,9 +6,7 @@ waitUntil {
     cameraOn == _asset;
 };
 
-private _assetActualType = _asset getVariable ["WL2_orderedClass", typeof _asset];
-
-private _ecmParameters = WL_ASSET(_assetActualType, "ecm", []);
+private _ecmParameters = WL_UNIT(_asset, "ecm", []);
 if (count _ecmParameters < 3) exitWith {};
 
 private _ecmJammerType = _ecmParameters # 0;

@@ -115,7 +115,7 @@ private _sideCapValues = createHashMap;
 		private _aliveCrew = (crew _unit) select { WL_ISUP(_x) && !(typeOf _x in _disallowManList) };
 		private _crewCount = count _aliveCrew;
 		if (_crewCount > 0) then {
-			private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
+			private _assetActualType = WL_ASSET_TYPE(_unit);
 			WL_ASSET_FIELD(_assetData, _assetActualType, "capValue", 0);
 		} else {
 			0;

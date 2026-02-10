@@ -12,9 +12,7 @@ private _actionId = _asset addAction [
             ["No mine clearing charges available!"] call WL2_fnc_smoothText;
         };
 
-        private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
-        private _isFirstShot = WL_ASSET(_assetActualType, "mineClear", 0) == _mineClearCharges;
-
+        private _isFirstShot = WL_UNIT(_asset, "mineClear", 0) == _mineClearCharges;
         _asset setVariable ["WL2_mineClearCharges", _mineClearCharges - 1, true];
 
         [_asset, _isFirstShot] spawn {
@@ -126,7 +124,7 @@ private _actionId = _asset addAction [
             private _allUnitsInArea = _allUnits inAreaArray _mineClearArea;
 
             private _mineEquipInArea = _allUnitsInArea select {
-                private _unitActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+                private _unitActualType = WL_ASSET_TYPE(_x);
                 private _isSmartMine = WL_ASSET(_unitActualType, "smartMineAP", 0) > 0 || WL_ASSET(_unitActualType, "smartMineAT", 0) > 0;
                 private _isDumbMine = WL_ASSET(_unitActualType, "dumbMine", 0) > 0;
                 _isSmartMine || _isDumbMine
@@ -136,8 +134,7 @@ private _actionId = _asset addAction [
             [player, "demine", _asset, _minesInArea] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
             private _obstaclesInArea = _allUnitsInArea select {
-                private _unitActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
-                WL_ASSET(_unitActualType, "obstacle", 0) == 1;
+                WL_UNIT(_x, "obstacle", 0) == 1;
             };
             {
                 [_x, player] remoteExec ["WL2_fnc_demolishComplete", 2];

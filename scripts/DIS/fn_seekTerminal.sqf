@@ -15,7 +15,7 @@ private _enemiesNear = (_coordinates nearEntities 500) select {
 
 private _assetData = WL_ASSET_DATA;
 private _filteredEnemies = _enemiesNear select {
-    private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+    private _assetActualType = WL_ASSET_TYPE(_x);
     WL_ASSET_FIELD(_assetData, _assetActualType, "cost", 0) > 0;
 };
 

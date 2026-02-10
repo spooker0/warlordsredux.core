@@ -42,7 +42,7 @@ private _getCurrentMode = {
 		["sead", _weaponName]
 	};
 
-	private _assetActualType = cameraOn getVariable ["WL2_orderedClass", typeof cameraOn];
+	private _assetActualType = WL_ASSET_TYPE(cameraOn);
 	if (WL_ASSET_FIELD(_assetData, _assetActualType, "hasASAM", 0) > 0) exitWith {
 		["asam", "Hercules AA"]
 	};

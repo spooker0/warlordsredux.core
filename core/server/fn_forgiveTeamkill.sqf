@@ -9,9 +9,7 @@ if (!_forgive) then {
 	if (_teamkillerOwner < 3) exitwith {};
 
 	private _teamkillerUid = getPlayerUID _teamkiller;
-
-	private _victimActualType = _victim getVariable ["WL2_orderedClass", typeof _victim];
-	private _itemCost = WL_ASSET(_victimActualType, "cost", 100);
+	private _itemCost = WL_UNIT(_victim, "cost", 100);
 
 	private _fundsDB = serverNamespace getVariable "fundsDatabase";
 	private _teamkillerFunds = _fundsDB getOrDefault [_teamkillerUid, 0];

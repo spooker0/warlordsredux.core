@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_asset"];
 
-private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+private _assetActualType = WL_ASSET_TYPE(_asset);
 _asset setVariable ["WL2_smartMinesAP", WL_ASSET(_assetActualType, "smartMineAP", 0), true];
 _asset setVariable ["WL2_smartMinesAT", WL_ASSET(_assetActualType, "smartMineAT", 0), true];
 
@@ -70,7 +70,7 @@ while { alive _asset } do {
     } select {
         _x distance _asset < _detonationDistance
     } select {
-        private _unitActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+        private _unitActualType = WL_ASSET_TYPE(_x);
         WL_ASSET_FIELD(_assetData, _unitActualType, "demolishable", 0) == 0
     } select {
         [_assetPos, _assetDir, _angle, getPosASL _x] call WL2_fnc_inAngleCheck
@@ -101,7 +101,7 @@ while { alive _asset } do {
 
     _enemyVehicles = [_enemyVehicles, [_assetData], {
         private _assetData = _input0;
-        private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+        private _assetActualType = WL_ASSET_TYPE(_x);
         WL_ASSET_FIELD(_assetData, _assetActualType, "cost", 0);
     }, "DESCEND"] call BIS_fnc_sortBy;
     private _selectedTarget = _enemyVehicles # 0;

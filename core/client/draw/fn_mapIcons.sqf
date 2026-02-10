@@ -98,7 +98,7 @@
 				true
 			} else {
 				if (_x distance cameraOn < 2000) then {
-					private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+					private _assetActualType = WL_ASSET_TYPE(_x);
 					WL_ASSET_FIELD(_assetData, _assetActualType, "hasScanner", 0) == 1
 				} else {
 					false
@@ -168,7 +168,7 @@
 		private _visibleEnemyUnits = _enemyUnits select {
 			WL_ISUP(_x)
 		} select {
-			private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+			private _assetActualType = WL_ASSET_TYPE(_x);
 			private _showToEnemies = WL_ASSET_FIELD(_assetData, _assetActualType, "showToEnemies", 0);
 			_showToEnemies > cameraOn distance _x
 		};

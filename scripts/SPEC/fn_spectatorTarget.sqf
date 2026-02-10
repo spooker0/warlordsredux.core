@@ -110,7 +110,7 @@ while { WL_IsSpectator } do {
             };
             _assetName = format ["%1 [%2 KM]", _assetName, (_distance / 1000) toFixed 1];
 
-            private _assetActualType = _target getVariable ["WL2_orderedClass", typeof _target];
+            private _assetActualType = WL_ASSET_TYPE(_target);
             private _assetCategory = WL_ASSET_FIELD(_assetData, _assetActualType, "category", "Other");
 
             if (_assetCategory == "Air Defense") then {

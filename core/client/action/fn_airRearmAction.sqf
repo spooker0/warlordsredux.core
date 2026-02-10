@@ -13,8 +13,8 @@ _asset addAction [
         };
 
         _asset setVehicleAmmo 1;
-        private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
-        private _rearmTime = WL_ASSET(_assetActualType, "rearm", 600);
+
+        private _rearmTime = WL_UNIT(_asset, "rearm", 600);
         _asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
 
         _asset setFuel 1;

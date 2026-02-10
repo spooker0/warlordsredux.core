@@ -46,7 +46,7 @@ if (_asset isKindOf "Man") then {
 		independent
 	};
 
-	private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+	private _assetActualType = WL_ASSET_TYPE(_asset);
 	private _assetData = WL_ASSET_DATA;
 	private _data = _assetData getOrDefault [_assetActualType, createHashMap];
 

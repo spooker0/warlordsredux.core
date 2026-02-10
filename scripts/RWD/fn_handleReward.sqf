@@ -11,7 +11,7 @@ if (_rewardType select [0, 10] == "DESTROYED ") then {
 };
 
 private _rewardStack = missionNamespace getVariable ["WL2_rewardStack", createHashMap];
-private _assetType = cameraOn getVariable ["WL2_orderedClass", typeOf cameraOn];
+private _assetActualType = WL_ASSET_TYPE(cameraOn);
 
 private _getVehicleType = {
 	params ["_assetType"];
@@ -33,7 +33,7 @@ private _getVehicleType = {
 	};
 };
 
-private _killerType = [_assetType] call _getVehicleType;
+private _killerType = [_assetActualType] call _getVehicleType;
 private _killedType = [_unitType] call _getVehicleType;
 
 if (_rewardType in ["KILL", "PLAYER KILL"]) then {

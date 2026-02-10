@@ -95,8 +95,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
             };
         };
         case "rearm": {
-            private _assetActualType = _vehicle getVariable ["WL2_orderedClass", typeOf _vehicle];
-            private _rearmTime = WL_ASSET(_assetActualType, "rearm", 600);
+            private _rearmTime = WL_UNIT(_vehicle, "rearm", 600);
             _vehicle setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
 
             private _pylonConfig = configFile >> "CfgVehicles" >> typeOf _vehicle >> "Components" >> "TransportPylonsComponent";

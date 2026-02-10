@@ -37,10 +37,12 @@ _asset setVariable ["WLM_savedMagazines", _savedMagazines];
 private _assetDefaultMagazines = _asset getVariable ["BIS_WL_defaultMagazines", []];
 
 // private _menuTextOverrides = call WLM_fnc_menuTextOverrides;
-private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+private _assetActualType = WL_ASSET_TYPE(_asset);
 private _assetData = WL_ASSET_DATA;
 
 private _assetAmmoOverrides = WL_ASSET(_assetActualType, "ammoOverrides", []);
+private _incompatibleMagazines = WL_ASSET(_assetActualType, "disallowMagazines", []);
+
 {
     private _turretPath = _x;
 
@@ -51,7 +53,6 @@ private _assetAmmoOverrides = WL_ASSET(_assetActualType, "ammoOverrides", []);
     private _allowedMagazinesByWeapon = [];
     {
         private _magazinesForWeapon = [];
-        private _incompatibleMagazines = WL_ASSET_FIELD(_assetData, _assetActualType, "disallowMagazines", []);
         private _compatibleMagazines = compatibleMagazines _x - _incompatibleMagazines;
 
         {

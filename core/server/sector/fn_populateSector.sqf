@@ -117,7 +117,8 @@ if (count _roads > 0) then {
 };
 
 private _services = _sector getVariable ["WL2_services", []];
-if ("H" in _services) then {
+private _alreadySpawnedAircraft = _sector getVariable ["WL2_aircraftSpawned", false];
+if ("H" in _services && !_alreadySpawnedAircraft) then {
 	private _aircraftPool = [];
 	{
 		private _class = _x;
@@ -142,6 +143,7 @@ if ("H" in _services) then {
 			_aircraft setVelocityModelSpace [0, 200, 0];
 		};
 	};
+	_sector setVariable ["WL2_aircraftSpawned", true];
 };
 
 private _spawnPosArr = [_sector] call WL2_fnc_findSpawnsInSector;

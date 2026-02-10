@@ -15,7 +15,7 @@ private _callText = format ["Squad leader %1 has called the team to the frontlin
 private _result = [
 	"Called to Frontline",
 	_callText,
-	"Go", "Refuse"
+	"Go (Space)", "Refuse (Esc)"
 ] call WL2_fnc_prompt;
 
 if (_result) then {

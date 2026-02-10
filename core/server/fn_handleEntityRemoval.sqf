@@ -31,7 +31,7 @@ private _children = _unit getVariable ["WL2_children", []];
 
 private _stats = missionNamespace getVariable ["WL_stats", createHashMap];
 
-private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
+private _assetActualType = WL_ASSET_TYPE(_unit);
 private _deathStats = _stats getOrDefault [_assetActualType, createHashMap];
 private _deathValue = _deathStats getOrDefault ["deaths", 0];
 _deathStats set ["deaths", _deathValue + 1];
@@ -54,7 +54,7 @@ private _victimEntry = _scoreboard getOrDefault [getPlayerUID _unit, createHashM
 private _killerEntry = _scoreboard getOrDefault [getPlayerUID _responsiblePlayer, createHashMap];
 
 private _killerSide = side group _responsiblePlayer;
-private _killerActualType = _killer getVariable ["WL2_orderedClass", typeOf _killer];
+private _killerActualType = WL_ASSET_TYPE(_killer);
 
 if (_isUnitPlayer && _unit isKindOf "Man") then {
     _victimEntry set ["deaths", (_victimEntry getOrDefault ["deaths", 0]) + 1];

@@ -34,7 +34,7 @@ waitUntil {
 };
 
 private _vehicleType = typeof _vehicle;
-private _vehicleActualType = _vehicle getVariable ["WL2_orderedClass", _vehicleType];
+private _vehicleActualType = WL_ASSET_TYPE(_vehicle);
 private _vehicleBaseType = getText (configFile >> "CfgVehicles" >> _vehicleType >> "displayName");
 private _vehicleActualType = [_vehicle] call WL2_fnc_getAssetTypeName;
 

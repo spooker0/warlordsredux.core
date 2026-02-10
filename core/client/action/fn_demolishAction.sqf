@@ -49,15 +49,12 @@ private _demolishActionId = player addAction [
                     };
                     private _unitsNearby = _allUnits inAreaArray [_playerPosition, 30, 30, 0, false];
                     private _bulldozersNearby = _unitsNearby select {
-                        private _unitActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
-                        WL_ASSET(_unitActualType, "mineClear", 0) > 0
+                        WL_UNIT(_x, "mineClear", 0) > 0
                     };
 
-                    private _assetActualType = _demolishableTarget getVariable ["WL2_orderedClass", typeOf _demolishableTarget];
-                    private _demolitionStepTime = WL_ASSET(_assetActualType, "demolishStepTime", WL_DEMOLITION_STEP_TIME);
-
+                    private _demolitionStepTime = WL_UNIT(_demolishableTarget, "demolishStepTime", WL_DEMOLITION_STEP_TIME);
                     if (count _bulldozersNearby > 0) then {
-                        _demolitionStepTime * 0.8;
+                        _demolitionStepTime * 0.5;
                     } else {
                         _demolitionStepTime;
                     };

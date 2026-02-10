@@ -19,8 +19,7 @@ addMissionEventHandler ["ProjectileCreated", {
     private _projectileType = typeOf _projectile;
     if ("#" in _projectileType) exitWith {};
 
-    private _assetActualType = _unit getVariable ["WL2_orderedClass", typeOf _unit];
-    private _projectileAmmoOverrides = WL_ASSET(_assetActualType, "ammoOverrides", []);
+    private _projectileAmmoOverrides = WL_UNIT(_unit, "ammoOverrides", []);
     _projectileAmmoOverrides = _projectileAmmoOverrides select {
         _x # 0 == _projectileType
     };

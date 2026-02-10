@@ -74,7 +74,7 @@ private _deployActionId = _asset addAction [
                 params ["_asset", "_assetLoadedItem"];
 
                 private _assetLoadedItemClass = typeOf _assetLoadedItem;
-                private _orderedClass = _assetLoadedItem getVariable ["WL2_orderedClass", _assetLoadedItemClass];
+                private _orderedClass = WL_ASSET_TYPE(_assetLoadedItem);
                 private _distanceToVehicle = player distance2D _asset;
                 private _offset = [0, _distanceToVehicle, 0];
 

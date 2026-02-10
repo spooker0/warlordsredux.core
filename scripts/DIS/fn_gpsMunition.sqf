@@ -116,7 +116,7 @@ while { alive _projectile } do {
         } else {
             private _sortedEnemies = [_enemiesNear, [WL_ASSET_DATA], {
                 private _assetData = _input0;
-                private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+                private _assetActualType = WL_ASSET_TYPE(_x);
                 WL_ASSET_FIELD(_assetData, _assetActualType, "cost", 0);
             }, "DESCEND"] call BIS_fnc_sortBy;
 

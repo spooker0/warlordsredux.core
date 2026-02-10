@@ -74,7 +74,6 @@ private _vehicleInfoText = toJSON (
         };
 
         private _driverAccess = [_vehicle, player, "driver"] call WL2_fnc_accessControl;
-        private _assetActualType = _vehicle getVariable ["WL2_orderedClass", typeOf _vehicle];
         private _isDrone = [_vehicle] call WL2_fnc_isDrone;
         if (_isDrone && _driverAccess # 0) then {
             if (alive (gunner _vehicle)) then {

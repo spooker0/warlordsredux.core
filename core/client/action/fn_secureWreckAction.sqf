@@ -11,8 +11,7 @@ private _actionId = player addAction [
             playSoundUI ["AddItemFailed"];
         };
 
-        private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
-        private _rewardAmount = WL_ASSET(_assetActualType, "cost", 0);
+        private _rewardAmount = WL_UNIT(_asset, "cost", 0);
         _rewardAmount = round (_rewardAmount / 300) * 100;
 
         private _inFriendlySector = ([-2, []] call WL2_fnc_checkInFriendlySector) # 0;
@@ -55,8 +54,7 @@ private _actionId = player addAction [
             continue;
         };
 
-        private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
-        private _rewardAmount = WL_ASSET(_assetActualType, "cost", 0);
+        private _rewardAmount = WL_UNIT(_asset, "cost", 0);
         _rewardAmount = round (_rewardAmount / 300) * 100;
         private _targetDisplayName = [_asset] call WL2_fnc_getAssetTypeName;
 

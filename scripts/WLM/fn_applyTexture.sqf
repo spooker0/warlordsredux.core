@@ -10,7 +10,7 @@ _asset = if (_asset isEqualTo objNull) then {
     _asset
 };
 
-private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+private _assetActualType = WL_ASSET_TYPE(_asset);
 
 private _appearanceDefaults = profileNamespace getVariable ["WLM_appearanceDefaults", createHashmap];
 private _assetAppearanceDefaults = _appearanceDefaults getOrDefault [_assetActualType, createHashmap];

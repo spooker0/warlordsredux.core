@@ -18,8 +18,7 @@ while { !BIS_WL_missionEnd } do {
 	} select {
 		count crew _x == 0
 	} select {
-        private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
-        WL_ASSET(_assetActualType, "cost", 0) <= 10000
+        WL_UNIT(_x, "cost", 0) <= 10000
     };
 	{
 		private _assetsInArea = _cleanupAssets inAreaArray _x;

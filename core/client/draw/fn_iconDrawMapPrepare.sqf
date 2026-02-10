@@ -514,7 +514,10 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		0,
 		0.045 * _mapIconScale
 	];
-	_drawIconsSelectable pushBack _base;
+
+	if (_baseOwner == _side) then {
+		_drawIconsSelectable pushBack _base;
+	};
 
 	_drawEllipses pushBack [
 		_position,
@@ -605,7 +608,11 @@ private _rallyPoints = _mapData getOrDefault ["rallyPoints", []];
 		"#(rgb,8,8,3)color(1,1,1,0.2)"
 	];
 
-	_drawIconsSelectable pushBack _stronghold;
+	private _strongholdSector = _stronghold getVariable ["WL_strongholdSector", objNull];
+	private _sectorOwner = _strongholdSector getVariable ["BIS_WL_owner", sideUnknown];
+	if (_sectorOwner == _side) then {
+		_drawIconsSelectable pushBack _stronghold;
+	};
 } forEach (_mapData getOrDefault ["strongholds", []]);
 
 // Draw scanned units
@@ -661,7 +668,7 @@ private _scanners = if (_drawAll) then {
 
     private _scanRadius = _x getVariable ["WL_scanRadius", 100];
 	if (_scanRadius == 0) then { continue; };
-    private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+    private _assetActualType = WL_ASSET_TYPE(_x);
 	private _hasAirRadar = WL_ASSET_FIELD(_assetData, _assetActualType, "hasAirRadar", 0) > 0;
 	if (_hasAirRadar) then {
 		if (cameraOn == _x || _x in _assetTargets) then {
@@ -769,6 +776,9 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 		"PuristaBold",
 		"right"
 	];
+	if (_x == player) then {
+		continue;
+	};
 	_drawIconsSelectable pushBack _x;
 } forEach (_sideVehicles inAreaArray [_mapCenter, _mapBoundW, _mapBoundH, 0, true]);
 

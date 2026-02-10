@@ -277,7 +277,7 @@ addMissionEventHandler ["Draw3D", {
         // } forEach _flares;
         // uiNamespace setVariable ["WL_HelmetInterfaceFlareIcons", _flareIcons];
 
-        private _vehicleActualType = _vehicle getVariable ["WL2_orderedClass", typeOf _vehicle];
+        private _vehicleActualType = WL_ASSET_TYPE(_vehicle);
         private _vehicleCategory = WL_ASSET_FIELD(_assetData, _vehicleActualType, "category", "Other");
         private _hasThreatDetector = WL_ASSET_FIELD(_assetData, _vehicleActualType, "threatDetection", 0);
         private _samIcons = [];
@@ -445,7 +445,7 @@ addMissionEventHandler ["Draw3D", {
                     _assetName = format ["%1 - ALT %2", _assetName, (_altitude / 1000) toFixed 1];
                 };
 
-                private _assetActualType = _target getVariable ["WL2_orderedClass", typeof _target];
+                private _assetActualType = WL_ASSET_TYPE(_target);
                 private _assetCategory = WL_ASSET_FIELD(_assetData, _assetActualType, "category", "Other");
 
                 private _targetIcon = "";
@@ -689,8 +689,7 @@ addMissionEventHandler ["Draw3D", {
 
         private _vehicle = cameraOn;
 
-        private _vehicleActualType = _vehicle getVariable ["WL2_orderedClass", typeOf _vehicle];
-        private _inWhitelistedVehicle = WL_ASSET(_vehicleActualType, "hasHMD", 0) > 0;
+        private _inWhitelistedVehicle = WL_UNIT(_vehicle, "hasHMD", 0) > 0;
 
         if (_inWhitelistedVehicle) then {
             WL_HelmetInterface = 2;

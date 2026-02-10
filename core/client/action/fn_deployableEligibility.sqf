@@ -28,17 +28,13 @@ private _hasLoadedItem = !isNull _loadedItem || count _loadedVehicles > 0 || !is
 private _nearLoadableEntities = (_asset nearObjects 30) select {
     (isNull attachedTo _x) && (count ropesAttachedTo _x == 0) && _asset != _x;
 } select {
-    if (_x isKindOf "Air") then {
-        _slingloading && !alive _x
-    } else {
-        alive _x;
-    };
+    alive _x != (_x isKindOf "Air")
 };
 
 private _assetData = WL_ASSET_DATA;
 private _nearLoadable = _nearLoadableEntities select {
     if (alive _x) then {
-        private _assetActualType = _x getVariable ["WL2_orderedClass", typeOf _x];
+        private _assetActualType = WL_ASSET_TYPE(_x);
         private _access = [_x, _caller, "full"] call WL2_fnc_accessControl;
         private _loadable = WL_ASSET_FIELD(_assetData, _assetActualType, "loadable", []);
         if (typeof _asset == "I_Heli_Transport_02_F") then {
@@ -63,7 +59,7 @@ private _sortedNearLoadable = if (_hasNearLoadable) then {
 
 private _offset = if (_hasNearLoadable) then {
     private _loadable = _sortedNearLoadable # 0;
-    private _loadableType = _loadable getVariable ["WL2_orderedClass", typeOf _loadable];
+    private _loadableType = WL_ASSET_TYPE(_loadable);
     private _defaultArray = [0, 0, 1];
     WL_ASSET_FIELD(_assetData, _loadableType, "loadable", _defaultArray);
 } else {

@@ -16,7 +16,7 @@ if (count _vehicles == 0) exitWith {};
 private _vehicle = _vehicles # 0;
 
 private _class = typeOf _vehicle;
-private _orderedClass = _vehicle getVariable ["WL2_orderedClass", _class];
+private _orderedClass = WL_ASSET_TYPE(_vehicle);
 private _offset = player worldToModel (getPosATL _vehicle);
 
 private _deploymentResult = [_class, _orderedClass, _offset, 30, true, false] call WL2_fnc_deployment;
