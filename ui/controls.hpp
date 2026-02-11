@@ -92,6 +92,33 @@ class WLRscButtonMenu: RscButtonMenu {
 	soundClick[] = {"", 0, 1};
 };
 
+class WLRscInventoryButton: WLRscButtonMenu {
+	colorBackground[] = {0, 0, 0, 1};
+	colorBackgroundFocused[] = {0.5, 0.5, 0.5, 1};
+	colorBackground2[] = {0.5, 0.5, 0.5, 1};
+
+	color[] = {1, 1, 1, 1};
+	color2[] = {1, 1, 1, 1};
+
+	colorFocused[] = {1, 1, 1, 1};
+	colorFocusedSecondary[] = {1, 1, 1, 1};
+
+	colorText[] = {1, 1, 1, 1};
+
+	colorSecondary[] = {1, 1, 1, 1};
+	color2Secondary[] = {1, 1, 1, 1};
+};
+
+class WLRscInventoryCenterButton: WLRscInventoryButton {
+	class TextPos {
+		left = 0;
+		top = 0;
+		right = 0;
+		bottom = 0;
+		forceMiddle = true;
+	};
+};
+
 class RscTextRight: RscText {
 	colorBackground[] = {0.5, 0.5, 0.5, 1};
 	shadow = 0;

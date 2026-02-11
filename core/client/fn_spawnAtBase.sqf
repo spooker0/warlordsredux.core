@@ -8,7 +8,7 @@ private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashM
 private _hideFrontlineMenu = _settingsMap getOrDefault ["hideFrontlineMenu", false];
 if (!_hideFrontlineMenu) then  {
     private _frontlineActionId = player addAction [
-        format ["<t color='#4bff58'>%1</t>", localize "STR_A3_WL_travelFrontline"],
+        format ["<t color='#4bff58'>%1</t>", localize "STR_WL_travelFrontline"],
         {
             params ["_target", "_caller", "_actionId", "_arguments"];
             private _travelResult = [true] call WL2_fnc_travelTeamPriority;
@@ -16,7 +16,7 @@ if (!_hideFrontlineMenu) then  {
                 playSoundUI ["AddItemOk"];
             } else {
                 playSoundUI ["AddItemFailed"];
-                ["No team priority designated."] call WL2_fnc_smoothText;
+                [localize "STR_WL_conscriptFailed"] call WL2_fnc_smoothText;
             };
         },
         [],

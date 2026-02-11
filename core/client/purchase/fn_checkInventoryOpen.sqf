@@ -1,6 +1,6 @@
 #include "includes.inc"
 if !(isNull (findDisplay 602)) then {
-    [false, localize "STR_A3_WL_menu_arsenal_restr2"];
+    [false, localize "STR_WL_closeInventory"];
 } else {
     [true, ""];
 };

@@ -74,7 +74,7 @@ private _interception = {
 			uiSleep 0.5;
 
 			playSoundUI ["alarm", 2];
-			hint localize "STR_A3_WL_aps_friendly_warning";
+			hint localize "STR_WL_apsFriendlyWarning";
 		};
 	} else {
 		private _actualAmmoUsed = _apsAmmo min _projectileAPSConsumption;

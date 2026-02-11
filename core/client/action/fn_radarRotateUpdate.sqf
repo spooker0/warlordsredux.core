@@ -8,8 +8,8 @@ private _actionColor = if (_radarRotation) then {
     "#4bff58"
 };
 private _actionText = if (_radarRotation) then {
-    localize "STR_A3_radar_rotation_disable"
+    localize "STR_WL_disableAutoRotate"
 } else {
-    localize "STR_A3_radar_rotation_enable"
+    localize "STR_WL_enableAutoRotate"
 };
 _asset setUserActionText [_radarActionID, format ["<t color = '%1'>%2</t>", _actionColor, _actionText]];

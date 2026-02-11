@@ -216,9 +216,6 @@ if (_ret) then {
 				[WL2_fnc_checkPlayerInVehicle]
 			]
 		};
-		case "Loadouts": {
-			[]
-		};
 		case "SwitchToGreen": {
 			[
 				[WL2_fnc_checkIndependents],

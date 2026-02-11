@@ -113,16 +113,8 @@ private _arsenal = [
     "\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
     localize "STR_A3_WL_arsenal_open"
 ];
-private _loadouts = [
-    "Loadouts",
-    0,
-    [],
-    "Loadouts",
-    "\A3\Data_F_Warlords\Data\preview_arsenal.jpg",
-    "Loadouts menu for respawn loadout."
-];
 private _gearIndex = _categories find "Gear";
 private _gearArray = _purchaseable # _gearIndex;
-_gearArray insert [0, [_arsenal, _loadouts]];
+_gearArray insert [0, [_arsenal]];
 
 _purchaseable;

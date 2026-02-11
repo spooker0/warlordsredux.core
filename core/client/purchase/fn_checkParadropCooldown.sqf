@@ -2,7 +2,7 @@
 // Cooldown check
 private _paradropNextUse = (vehicle player) getVariable ["WL2_paradropNextUse", 0];
 if (serverTime < _paradropNextUse) exitWith {
-    private _cooldownText = localize "STR_SQUADS_cooldown";
+    private _cooldownText = localize "STR_WL_cooldownIndicator";
     private _timeoutDisplay = [_paradropNextUse - serverTime, "MM:SS"] call BIS_fnc_secondsToString;
     [false, format [_cooldownText, _timeoutDisplay]];
 };

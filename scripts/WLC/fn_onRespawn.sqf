@@ -166,42 +166,14 @@ private _loadoutIndex = profileNamespace getVariable [format ["WLC_loadoutIndex_
 private _customizationLoadout = profileNamespace getVariable [format ["WLC_savedLoadout_%1_%2", BIS_WL_playerSide, _loadoutIndex], []];
 if (count _customizationLoadout > 0) then {
     [_customizationLoadout] call _loadoutSanitize;
-
     private _lastLoadout = WL2_lastLoadout;
-    private _rocketCountBefore = if (count _lastLoadout > 0) then {
-        [_lastLoadout] call _countRockets
-    } else {
-        0
-    };
+    _unit setUnitLoadout _customizationLoadout;
 
-    private _rocketCountAfter = [_customizationLoadout] call _countRockets;
-    private _rocketDifference = (_rocketCountAfter - _rocketCountBefore) max 0;
-
-    private _totalCost = if (_paidFor) then {
-        0;
-    } else {
-        _rocketDifference * 50;
-    };
-
-    private _playerFunds = (missionNamespace getVariable ["fundsDatabaseClients", createHashMap]) getOrDefault [getPlayerUID player, 0];
-    if (_totalCost <= _playerFunds) then {
-        _unit setUnitLoadout _customizationLoadout;
-
-        // sanity checks
-        private _sanityCheckResult = [_unit] call _sanityChecks;
-        if (_sanityCheckResult != "") then {
-            _unit setUnitLoadout _lastLoadout;
-            [_sanityCheckResult] call WL2_fnc_smoothText;
-        } else {
-            [player, "equip", _totalCost] remoteExec ["WL2_fnc_handleClientRequest", 2];
-
-            private _message = if (_totalCost > 0) then {
-                format ["Equipment and customizations applied for %1%2.", WL_MoneySign, _totalCost];
-            } else {
-                "Equipment and customizations applied for free.";
-            };
-            [_message] call WL2_fnc_smoothText;
-        };
+    // sanity checks
+    private _sanityCheckResult = [_unit] call _sanityChecks;
+    if (_sanityCheckResult != "") then {
+        _unit setUnitLoadout _lastLoadout;
+        [_sanityCheckResult] call WL2_fnc_smoothText;
     };
 } else {
     if (BIS_WL_playerSide == west) then {
@@ -209,7 +181,6 @@ if (count _customizationLoadout > 0) then {
     } else {
         _unit setUnitLoadout "O_Soldier_TL_F";
     };
-    0 spawn WLC_fnc_buildMenu;
 };
 
 _unit enableStamina false;

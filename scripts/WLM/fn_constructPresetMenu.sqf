@@ -13,9 +13,9 @@ private _presets = configProperties [_pylonConfig >> "Presets"];
 _loadSelectControl lbAdd "Loadouts";
 
 if (!_isAircraft) then {
-    private _defaultSelection = _loadSelectControl lbAdd (localize "STR_WLM_RESET");
+    private _defaultSelection = _loadSelectControl lbAdd (localize "STR_WL_reset");
     _loadSelectControl lbSetData [_defaultSelection, "Reset"];
-    _loadSelectControl lbSetTooltip [_defaultSelection, localize "STR_WLM_RESET_TOOLTIP"];
+    _loadSelectControl lbSetTooltip [_defaultSelection, localize "STR_WL_resetInfo"];
 };
 
 private _assetActualType = WL_ASSET_TYPE(_asset);

@@ -1,0 +1,3 @@
+#define INV_BUTTON_WIDTH 0.14
+#define INV_BUTTON_FONT 0.03
+#define INV_MAX_SLOTS 30

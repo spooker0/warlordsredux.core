@@ -5,6 +5,7 @@ private _purchase_items_list = _display displayCtrl 101;
 lbClear _purchase_items_list;
 _id = lbCurSel _purchase_category;
 
+private _assetData = WL_ASSET_DATA;
 {
 	private _gearCode = "";
 	private _zeroes = _forEachIndex / 9;
@@ -24,10 +25,17 @@ _id = lbCurSel _purchase_category;
 		["_offset", [0,0,0]]
 	];
 
-	_purchase_items_list lbAdd format ["%1 [%2]", _displayName, _gearCode];
+	private _idc = _purchase_items_list lbAdd format ["%1 [%2]", _displayName, _gearCode];
 	if (_className == "RemoveUnits") then {uiNamespace setVariable ["BIS_WL_removeUnitsListID", -1 + lbSize _purchase_items_list]};
-	_purchase_items_list lbSetData [_forEachIndex, format ["%1|||%2|||%3|||%4|||%5|||%6", _className, _requirements, _displayName, _picture, _text, _offset]];
-	_purchase_items_list lbSetValue [_forEachIndex, _x # 1];
+	_purchase_items_list lbSetData [_idc, format ["%1|||%2|||%3|||%4|||%5|||%6", _className, _requirements, _displayName, _picture, _text, _offset]];
+
+	private _assetClass = WL_ASSET_FIELD(_assetData, _className, "spawn", _className);
+	private _assetIcon = getText (configfile >> "CfgVehicles" >> _assetClass >> "picture");
+	if (_assetIcon != "" && "\" in _assetIcon) then {
+		_purchase_items_list lbSetPictureRight [_idc, _assetIcon];
+	};
+
+	_purchase_items_list lbSetValue [_idc, _x # 1];
 } forEach (WL_PLAYER_REQUISITION_LIST # _id);
 
 _purchase_items_list lbSetCurSel ((uiNamespace getVariable ["BIS_WL_purchaseMenuLastSelection", [0, 0, 0]]) # 1);;
@@ -75,14 +83,14 @@ private _slotsScale = 0.7 call WL2_fnc_purchaseMenuGetUIScale;
 	"<t align = 'left' size = '%2'>%1</t>",
 	[
 		format ["Subordinates (Max: %1)<br/><t size = '%2'>%3</t>", _maxSubordinates, _slotsScale, _refreshTimerText],
-		localize "STR_A3_WL_LightVehicle_Info",
-		localize "STR_A3_WL_HeavyVehicle_Info",
-		localize "STR_A3_WL_RotaryWing_Info",
-		localize "STR_A3_WL_FixedWing_Info",
-		localize "STR_A3_WL_RemoteControl_Info",
-		localize "STR_A3_WL_AirDefense_Info",
-		localize "STR_A3_WL_SectorDefense_Info",
-		localize "STR_A3_WL_Structures_Info",
+		localize "STR_WL_lightVehicleInfo",
+		localize "STR_WL_heavyVehicleInfo",
+		localize "STR_WL_rotaryWingInfo",
+		localize "STR_WL_fixedWingInfo",
+		localize "STR_WL_remoteControlInfo",
+		localize "STR_WL_airDefenseInfo",
+		localize "STR_WL_sectorDefenseInfo",
+		localize "STR_WL_structuresInfo",
 	 	localize "STR_A3_WL_asset_naval_info",
 	 	localize "STR_A3_WL_asset_gear_info",
 	 	""

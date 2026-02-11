@@ -27,7 +27,7 @@ private _currentAssetPylonInfo = _asset getVariable ["WLM_pylonInfo", getAllPylo
     private _pylonConfigName = configName _x;
     private _currentPylonInfo = _currentAssetPylonInfo select { _pylonConfigName == (_x # 1) } select 0;
 
-    private _emptyId = _selectBox lbAdd (localize "STR_WLM_EMPTY");
+    private _emptyId = _selectBox lbAdd (localize "STR_WL_emptyLabel");
     _selectBox lbSetTooltip [_emptyId, _pylonConfigName];
     _selectBox lbSetCurSel 0;
 

@@ -17,18 +17,18 @@ if (_showWarning && !_eligibleFreeRearm) exitWith {
     private _confirmDialog = _display createDisplay "WLM_Modal_Dialog";
 
     private _titleControl = _confirmDialog displayCtrl WLM_MODAL_TITLE;
-    _titleControl ctrlSetText (localize "STR_WLM_PYLON_APPLY_WARNING");
+    _titleControl ctrlSetText (localize "STR_WL_pylonApplyTitle");
 
     private _textControl = _confirmDialog displayCtrl WLM_MODAL_TEXT;
-    _textControl ctrlSetText (localize "STR_WLM_APPLY_PYLONS_AMMO_WARNING");
+    _textControl ctrlSetText (localize "STR_WL_applyAmmoInfo");
 
     private _confirmButtonControl = _confirmDialog displayCtrl WLM_MODAL_CONFIRM_BUTTON;
     private _cancelButtonContrl = _confirmDialog displayCtrl WLM_MODAL_EXIT_BUTTON;
 
-    _confirmButtonControl ctrlSetText (localize "STR_WLM_APPLY");
-    _confirmButtonControl ctrlSetTooltip (localize "STR_WLM_APPLY_SELECTED_PYLONS");
+    _confirmButtonControl ctrlSetText (localize "STR_WL_apply");
+    _confirmButtonControl ctrlSetTooltip (localize "STR_WL_applyInfo");
 
-    _cancelButtonContrl ctrlSetTooltip (localize "STR_WLM_RETURN_PREVIOUS_SCREEN");
+    _cancelButtonContrl ctrlSetTooltip (localize "STR_WL_returnPreviousScreen");
 
     _cancelButtonContrl ctrlAddEventHandler ["ButtonClick", {
         (findDisplay WLM_MODAL) closeDisplay 1;
@@ -81,7 +81,7 @@ if (_eligibleFreeRearm) then {
     _asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
 
     playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Rearm.wss", _asset, false, getPosASL _asset, 2, 1, 75];
-    [localize "STR_A3_WL_popup_asset_rearmed"] call WL2_fnc_smoothText;
+    [localize "STR_WL_assetRearmed"] call WL2_fnc_smoothText;
 } else {
     private _regularRearmTimer = _asset getVariable ["BIS_WL_nextRearm", 0];
     _asset setVariable ["WLM_ineligibleForRearmTimer", _regularRearmTimer, true];

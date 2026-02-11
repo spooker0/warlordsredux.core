@@ -34,7 +34,7 @@ if (_result) then {
 	};
 
 	playSound "AddItemOK";
-	[format [localize "STR_A3_WL_popup_asset_deleted", _displayName]] call WL2_fnc_smoothText;
+	[format [localize "STR_WL_assetDeleted", _displayName]] call WL2_fnc_smoothText;
 	_vehicles = missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], []];
 	_vehicles deleteAt (_vehicles find _target);
 	missionNamespace setVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], _vehicles, true];

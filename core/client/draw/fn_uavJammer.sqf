@@ -66,7 +66,7 @@ private _side = [_asset] call WL2_fnc_getAssetSide;
             private _droneJammingVolume = _settingsMap getOrDefault ["droneJammingVolume", 1];
 
             playSoundUI ["a3\sounds_f\vehicles\air\CAS_01\noise.wss", _droneJammingVolume, 1, false, 3.6];
-            [localize "STR_A3_UAV_jammed"] call WL2_fnc_smoothText;
+            [localize "STR_WL_uavJammed"] call WL2_fnc_smoothText;
 
             // Effect
             if (getPosATL _asset # 2 <= 1 && !isNull _controller) then {
@@ -142,7 +142,7 @@ private _side = [_asset] call WL2_fnc_getAssetSide;
         _display = uiNamespace getVariable "RscJammingIndicator";
     };
     private _indicator = _display displayCtrl 7001;
-    private _indicatorWidth = (localize "STR_A3_jammer_strength") getTextWidth ["PuristaMedium", 0.04];
+    private _indicatorWidth = (localize "STR_WL_jammerStrength") getTextWidth ["PuristaMedium", 0.04];
     _indicator ctrlSetPosition [1, 0, _indicatorWidth + 0.05, 0.1];
     _indicator ctrlCommit 0;
 
@@ -205,7 +205,7 @@ private _side = [_asset] call WL2_fnc_getAssetSide;
             private _isControllingThisAsset = (UAVControl _asset) # 1 != "";
             if (_isControllingThisAsset || _isTvMunition) then {
                 if (_jammerStrength > 0) then {
-                    private _indicatorText = format [localize "STR_A3_jammer_strength", round (_jammerStrength * 100)];
+                    private _indicatorText = format [localize "STR_WL_jammerStrength", round (_jammerStrength * 100)];
                     _indicator ctrlSetText _indicatorText;
                     _indicator ctrlSetBackgroundColor [0, 0, 0, 0.5];
 

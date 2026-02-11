@@ -29,7 +29,7 @@ if (_action == "invite") exitWith {
 
     private _inviteeName = name _inviteePlayer;
 
-    [format [localize "STR_SQUADS_sendInvitationSuccessText", _inviteeName]] call WL2_fnc_smoothText;
+    [format [localize "STR_WL_sentSquadInvite", _inviteeName]] call WL2_fnc_smoothText;
     playSoundUI ["a3\ui_f\data\sound\cfgnotifications\tasksucceeded.wss"];
 };
 
@@ -56,10 +56,10 @@ if (_action == "invited") exitWith {
     playSoundUI ["a3\sounds_f\sfx\blip1.wss"];
 
     private _acceptInvite = [
-        localize "STR_SQUADS_joinSquadTitle",
-        format [localize "STR_SQUADS_receiveInvitationText", _inviterName, _squad getOrDefault ["name", ""]],
-        localize "STR_SQUADS_joinSquadAccept",
-        localize "STR_SQUADS_joinSquadDecline"
+        localize "STR_WL_joinSquad",
+        format [localize "STR_WL_gotSquadInvite", _inviterName, _squad getOrDefault ["name", ""]],
+        localize "STR_WL_accept",
+        localize "STR_WL_decline"
     ] call WL2_fnc_prompt;
 
     missionNamespace setVariable ["SQD_playerHasInvite", false];

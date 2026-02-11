@@ -24,6 +24,7 @@ class CfgRemoteExec {
 		class WL2_fnc_addMissileToMag {allowedTargets = 0;};
 		class WL2_fnc_airRearmAction {allowedTargets = 0;};
 		class WL2_fnc_attachDetach {allowedTargets = 0;};
+		class WL2_fnc_broadcastRating {allowedTargets = 0;};
 		class WL2_fnc_catapultAction {allowedTargets = 0;};
 		class WL2_fnc_claimAction {allowedTargets = 1;};
 		class WL2_fnc_clearPlayerReports {allowedTargets = 0;};
@@ -69,6 +70,7 @@ class CfgRemoteExec {
 		class WL2_fnc_revive {allowedTargets = 0;};
 		class WL2_fnc_runwayBuster {allowedTargets = 0;};
 		class WL2_fnc_sectorRevealHandle {allowedTargets = 0;};
+		class WL2_fnc_showRating {allowedTargets = 0;};
 		class WL2_fnc_scannerAction {allowedTargets = 0;};
 		class WL2_fnc_setupForwardBaseAction {allowedTargets = 0;};
 		class WL2_fnc_setupForwardBaseMp {allowedTargets = 0;};

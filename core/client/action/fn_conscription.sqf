@@ -11,11 +11,12 @@ uiSleep 1;
 
 if (WL_ISUP(player) && vehicle player != player) exitWith {};
 
-private _callText = format ["Squad leader %1 has called the team to the frontline. Do you want to fast travel there now?", name _conscripter];
+private _callText = format [localize "STR_WL_conscriptMessage", name _conscripter];
 private _result = [
-	"Called to Frontline",
+	localize "STR_WL_conscriptTitle",
 	_callText,
-	"Go (Space)", "Refuse (Esc)"
+	localize "STR_WL_goButton",
+    localize "STR_WL_refuseButton"
 ] call WL2_fnc_prompt;
 
 if (_result) then {
@@ -32,6 +33,6 @@ if (_result) then {
         playSoundUI ["AddItemOk"];
     } else {
         playSoundUI ["AddItemFailed"];
-        ["No team priority designated."] call WL2_fnc_smoothText;
+        [localize "STR_WL_conscriptFailed"] call WL2_fnc_smoothText;
     };
 };

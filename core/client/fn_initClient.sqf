@@ -28,7 +28,7 @@ private _list = getArray (missionConfigFile >> "adminFilter");
 if ((_list findIf {
 	[_x, _text] call BIS_fnc_inString
 }) != -1) exitWith {
-	[localize "STR_A3_nameFilter_info", localize "STR_A3_nameFilter"] call WL2_fnc_exitToLobby;
+	[localize "STR_WL_badNameInfo", localize "STR_WL_badNameInfo"] call WL2_fnc_exitToLobby;
 };
 
 WL_LoadingState = 1;
@@ -232,7 +232,7 @@ if !(isDedicated) then {
 	} forEach allCurators;
 #endif
 
-private _squadActionText = format ["<t color='#00FFFF'>%1</t>", localize "STR_SQUADS_squads"];
+private _squadActionText = format ["<t color='#00FFFF'>%1</t>", localize "STR_WL_squads"];
 private _squadActionId = player addAction[_squadActionText, {
 	0 spawn SQD_fnc_menu
 }, [], -100, false, false, "", "", 0];

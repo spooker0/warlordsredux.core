@@ -199,3 +199,11 @@ addMissionEventHandler ["MarkerCreated", {
 		deleteMarker _marker;
 	};
 }];
+
+addMissionEventHandler ["EachFrame", {
+	private _display = findDisplay 602;
+    if (isNull _display) exitWith {};
+    private _controlGroup = _display displayCtrl 6000;
+    if (!isNull _controlGroup) exitWith {};
+	call WL2_fnc_initInventory;
+}];

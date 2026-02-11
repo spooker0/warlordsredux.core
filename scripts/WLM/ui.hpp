@@ -17,7 +17,7 @@ class WLM_PylonUI {
             y = -0.05;
             w = 1;
             h = 0.05;
-            text = $STR_WLM_TITLE;
+            text = $STR_WL_vehicleManagerTitle;
             style = ST_CENTER;
         };
         class WLM_Background: IGUIBackMRTM {
@@ -98,8 +98,8 @@ class WLM_PylonUI {
         };
         class WLM_ApplyButton: RscButtonMRTM {
             idc = 5304;
-            text = $STR_WLM_APPLY;
-            tooltip = $STR_WLM_APPLY_DESC;
+            text = $STR_WL_apply;
+            tooltip = $STR_WL_applyAmmoWarning;
             sizeEx = 0.035;
             colorBackground[] = {1, 1, 1, 0.1};
             x = 0.8;
@@ -116,15 +116,15 @@ class WLM_PylonUI {
             w = 0.194;
             h = 0.055;
             sizeEx = 0.05;
-            text = $STR_WLM_LOADOUT;
+            text = $STR_WL_loadout;
             colorText[] = {1, 1, 1, 1};
             font = "PuristaMedium";
             shadow = 0;
         };
         class WLM_SaveButton: RscButtonMRTM {
             idc = 5305;
-            text = $STR_WLM_SAVE;
-            tooltip = $STR_WLM_SAVE_DESC;
+            text = $STR_WL_save;
+            tooltip = $STR_WL_saveInfo;
             sizeEx = 0.035;
             colorBackground[] = {1, 1, 1, 0.1};
             x = 0.8;
@@ -137,8 +137,8 @@ class WLM_PylonUI {
 
         class WLM_LoadSelect: RscCombo {
             idc = 5306;
-            text = $STR_WLM_LOADOUT;
-            tooltip = $STR_WLM_SELECT_LOADOUT;
+            text = $STR_WL_loadout;
+            tooltip = $STR_WL_selectLoadoutInfo;
             sizeEx = 0.035;
             colorBackground[] = {0, 0, 0, 1};
             x = 0.8;
@@ -152,8 +152,8 @@ class WLM_PylonUI {
 
         class WLM_WipeButton: RscButtonMRTM {
             idc = 5307;
-            text = $STR_WLM_WIPE_ALL;
-            tooltip = $STR_WLM_WIPE_ALL_DESC;
+            text = $STR_WL_wipeAll;
+            tooltip = $STR_WL_wipeAllInfo;
             sizeEx = 0.035;
             colorBackground[] = {1, 1, 1, 0.1};
             x = 0.8;
@@ -165,8 +165,8 @@ class WLM_PylonUI {
         };
         class WLM_RearmButton: RscButtonMRTM {
             idc = 5308;
-            text = $STR_WLM_REARM;
-            tooltip = $STR_WLM_REARM_DESC;
+            text = $STR_WL_rearm;
+            tooltip = $STR_WL_rearmInfo;
             sizeEx = 0.035;
             colorBackground[] = {1, 1, 1, 0.1};
             x = 0.8;
@@ -183,7 +183,7 @@ class WLM_PylonUI {
             w = 0.194;
             h = 0.055;
             sizeEx = 0.05;
-            text = $STR_WLM_APPEARANCE;
+            text = $STR_appearance;
             colorText[] = {1, 1, 1, 1};
             font = "PuristaMedium";
             shadow = 0;
@@ -191,7 +191,7 @@ class WLM_PylonUI {
         class WLM_CamoSelect: RscCombo {
             idc = 5311;
             text = "Camo";
-            tooltip = $STR_WLM_SELECT_TEXTURE;
+            tooltip = $STR_WL_selectTextureInfo;
             sizeEx = 0.035;
             colorBackground[] = {0, 0, 0, 1};
             x = 0.8;
@@ -204,8 +204,8 @@ class WLM_PylonUI {
         };
         class WLM_CustomizationSelect: RscCombo {
             idc = 5314;
-            text = $STR_WLM_CUSTOMIZATION;
-            tooltip = $STR_WLM_CUSTOMIZATION_TOOLTIP;
+            text = $STR_WL_customization;
+            tooltip = $STR_WL_customizationInfo;
             sizeEx = 0.035;
             colorBackground[] = {0, 0, 0, 1};
             x = 0.8;
@@ -363,7 +363,7 @@ class WLM_Modal_Dialog {
         };
         class WLM_Modal_Title : RscTextMRTM {
             idc = 5702;
-            text = $STR_WLM_PYLON_MISMATCH_WARNING;
+            text = $STR_WL_pylonMismatchWarning;
             sizeEx = 0.04;
             x = 0.015;
             y = 0.263;
@@ -384,8 +384,8 @@ class WLM_Modal_Dialog {
         };
         class WLM_Modal_ConfirmButton: RscButtonMRTM {
             idc = 5704;
-            text = $STR_WLM_REARM;
-            tooltip = $STR_WLM_PYLON_OLD_SETTINGS;
+            text = $STR_WL_rearm;
+            tooltip = $STR_WL_oldPylonWarning;
             sizeEx = 0.035;
             colorBackground[] = {0, 0, 0, 0.9};
             x = 0.015;
@@ -396,8 +396,8 @@ class WLM_Modal_Dialog {
         };
         class WLM_Modal_ExitButton: RscButtonMRTM {
             idc = 5705;
-            text = $STR_WLM_GO_BACK;
-            tooltip = $STR_WLM_PYLON_SELECTION_SCREEN;
+            text = $STR_WL_goBack;
+            tooltip = $STR_WL_applyPylonWarning;
             sizeEx = 0.035;
             colorBackground[] = {0, 0, 0, 0.9};
             x = 0.839;
@@ -408,7 +408,7 @@ class WLM_Modal_Dialog {
         };
         class WLM_Modal_Text: RscTextMRTM {
             idc = 5706;
-            text = $STR_WLM_PYLON_MISMATCH_MESSAGE;
+            text = $STR_WL_pylonMismatchInfo;
             sizeEx = 0.035;
             x = 0.020;
             y = 0.328;

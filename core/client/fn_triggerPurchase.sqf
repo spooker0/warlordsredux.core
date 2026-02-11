@@ -50,15 +50,13 @@ switch (_className) do {
         };
     };
     case "Arsenal": {if (isNull (findDisplay 602)) then {"RequestMenu_close" call WL2_fnc_setupUI; [player, "orderArsenal"] remoteExec ["WL2_fnc_handleClientRequest", 2]} else {playSound "AddItemFailed"}};
-    case "Loadouts": {
-        "RequestMenu_close" call WL2_fnc_setupUI;
-        0 spawn WLC_fnc_buildMenu;
-    };
     case "Scan": { 0 spawn WL2_fnc_orderSectorScan };
     case "CombatAir": { 0 spawn WL2_fnc_orderCombatAir };
     case "Conscription": {
         "RequestMenu_close" call WL2_fnc_setupUI;
+        playSoundUI ["AddItemOk"];
         [player] remoteExec ["WL2_fnc_conscription", BIS_WL_playerSide];
+        [player, "conscript"] remoteExec ["WL2_fnc_handleClientRequest", 2];
     };
     case "FTHome": {
         BIS_WL_targetSector = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
@@ -71,7 +69,7 @@ switch (_className) do {
                 playSoundUI ["AddItemOk"];
             } else {
                 playSoundUI ["AddItemFailed"];
-                ["No team priority designated."] call WL2_fnc_smoothText;
+                [localize "STR_WL_conscriptFailed"] call WL2_fnc_smoothText;
             };
         };
     };
@@ -104,7 +102,7 @@ switch (_className) do {
     case "TargetReset": {
         "RequestMenu_close" call WL2_fnc_setupUI;
         missionNamespace setVariable ["WL_targetResetTime", serverTime];
-        [player, "targetReset"] remoteExec ["WL2_fnc_handleClientRequest", 2]
+        [player, "targetReset"] remoteExec ["WL2_fnc_handleClientRequest", 2];
     };
     case "LockVehicles": {
         private _ownedVehicles = missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], []];

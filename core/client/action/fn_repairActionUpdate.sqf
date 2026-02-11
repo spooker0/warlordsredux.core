@@ -29,12 +29,12 @@ while { !BIS_WL_missionEnd } do {
     private _repairCooldown = ((_cursorObject getVariable ["WL2_nextRepair", 0]) - serverTime) max 0;
     private _cursorObjectTypeName = [_cursorObject] call WL2_fnc_getAssetTypeName;
     private _actionText = if (_repairCooldown == 0) then {
-        format ["<t color = '#4bff58'>%1 %2</t>", localize "STR_repair", _cursorObjectTypeName];
+        format ["<t color='#4bff58'>%1 %2</t>", localize "STR_repair", _cursorObjectTypeName];
     } else {
         private _cooldownText = [_repairCooldown, "MM:SS"] call BIS_fnc_secondsToString;
-        format ["<t color = '#7e7e7e'><t align = 'left'>%1 %2</t><t align = 'right'>%3     </t></t>", localize "STR_repair", _cursorObjectTypeName, _cooldownText];
+        format ["<t color='#7e7e7e'><t align='left'>%1 %2</t><t align='right'>%3     </t></t>", localize "STR_repair", _cursorObjectTypeName, _cooldownText];
     };
-    private _actionImage = format ["<img size='2' color = '%1' image='\A3\ui_f\data\IGUI\Cfg\Actions\repair_ca.paa'/>", if (_repairCooldown == 0) then {"#ffffff"} else {"#7e7e7e"}];
+    private _actionImage = format ["<img size='2' color='%1' image='\A3\ui_f\data\IGUI\Cfg\Actions\repair_ca.paa'/>", if (_repairCooldown == 0) then {"#ffffff"} else {"#7e7e7e"}];
 
     _cursorObject setUserActionText [_cursorObjectActionID, _actionText, _actionImage];
 };

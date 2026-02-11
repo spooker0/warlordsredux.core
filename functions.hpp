@@ -197,6 +197,7 @@ class CfgFunctions {
 			class rewardCapture {};
 			class setupCarrier {};
 			class showHint {};
+			class showRating {};
 			class sidePicker {};
 			class sideToFaction {};
 			class spawnAtBase {};
@@ -310,6 +311,18 @@ class CfgFunctions {
 			class toggleTurretVisualizer {};
 			class turretLimits {};
 			class uavJammer {};
+		};
+		class ClientInventory {
+			file = "src\core\client\inventory";
+			class clearButtonClicked {};
+			class getLoadouts {};
+			class initInventory {};
+			class loadoutButtonClicked {};
+			class nextButtonClicked {};
+			class pageChanged {};
+			class previousButtonClicked {};
+			class saveButtonClicked {};
+			class trimInventoryText {};
 		};
 		class ClientKill {
 			file = "src\core\client\kill";
@@ -474,7 +487,9 @@ class CfgFunctions {
 			file = "src\core\server";
 			class assetRelevanceCheck {};
 			class attachDetach {};
+			class broadcastRating {};
 			class calculateEndResults {};
+			class calculateRating {};
 			class changeSectorOwnership {};
 			class clearPlayerReports {};
 			class clearServerStats {};

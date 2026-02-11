@@ -34,7 +34,7 @@ if (_isSmartMine) then {
 };
 
 if (count _limitedVehicles >= _typeLimit) exitWith {
-    [false, localize "STR_A3_WL_popup_asset_limit_reached"];
+    [false, localize "STR_WL_assetLimitReached"];
 };
 
 [true, ""];

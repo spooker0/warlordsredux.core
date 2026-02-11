@@ -28,4 +28,4 @@ private _rearmActionId = _asset addAction [
 	false
 ];
 
-_asset setUserActionText [_rearmActionId, format ["<t color = '#4bff58'>Modify/%1</t>", localize "STR_rearm"], "<img size='1.5' image='a3\ui_f\data\igui\cfg\simpletasks\types\rearm_ca.paa'/>"];
+_asset setUserActionText [_rearmActionId, format ["<t color='#4bff58'>Modify/%1</t>", localize "STR_rearm"], "<img size='1.5' image='a3\ui_f\data\igui\cfg\simpletasks\types\rearm_ca.paa'/>"];

@@ -15,17 +15,17 @@ _texture ctrlAddEventHandler ["PageLoaded", {
     private _revealKey = actionKeysNames ["revealTarget", 1, "Combo"];
 
     private _textInfo = [
-        [localize "WL2_InfoText_1", "text"],
-        [localize "WL2_InfoText_2", "text"],
-        [localize "WL2_InfoText_3", "heading"],
-        [format [localize "WL2_InfoText_4", _menuKey], "text"],
-        [format [localize "WL2_InfoText_5", _menuKey], "text"],
-        [format [localize "WL2_InfoText_6", _pingKey], "text"],
-        [format [localize "WL2_InfoText_7", _pttKey, _chatKey], "text"],
-        [localize "WL2_InfoText_8", "heading"],
-        [localize "WL2_InfoText_9", "text"],
-        [localize "WL2_InfoText_10", "text"],
-        [format [localize "WL2_InfoText_11", _revealKey], "text"]
+        [localize "STR_WL_mapInfoText1", "text"],
+        [localize "STR_WL_mapInfoText2", "text"],
+        [localize "STR_WL_mapInfoText3", "heading"],
+        [format [localize "STR_WL_mapInfoText4", _menuKey], "text"],
+        [format [localize "STR_WL_mapInfoText5", _menuKey], "text"],
+        [format [localize "STR_WL_mapInfoText6", _pingKey], "text"],
+        [format [localize "STR_WL_mapInfoText7", _pttKey, _chatKey], "text"],
+        [localize "STR_WL_mapInfoText8", "heading"],
+        [localize "STR_WL_mapInfoText9", "text"],
+        [localize "STR_WL_mapInfoText10", "text"],
+        [format [localize "STR_WL_mapInfoText11", _revealKey], "text"]
     ];
     private _textInfoJSON = _texture ctrlWebBrowserAction ["ToBase64", toJSON _textInfo];
 

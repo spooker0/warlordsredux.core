@@ -20,7 +20,7 @@ _asset addAction [
         _asset setFuel 1;
 
         playSoundUI ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Rearm.wss"];
-        [localize "STR_A3_WL_popup_asset_rearmed"] call WL2_fnc_smoothText;
+        [localize "STR_WL_assetRearmed"] call WL2_fnc_smoothText;
     },
     [],
     200,

@@ -253,7 +253,7 @@ addMissionEventHandler ["Draw3D", {
                     [_lockedUav] spawn {
                         params ["_lockedUav"];
                         uiSleep 0.5;
-                        [format ["%1 (%2%%)", localize "STR_A3_jammer_sent", round ((1 - damage _lockedUav) * 100)]] call WL2_fnc_smoothText;
+                        [format ["%1 (%2%%)", localize "STR_WL_jammingSent", round ((1 - damage _lockedUav) * 100)]] call WL2_fnc_smoothText;
                     };
 
                     _lockStatus = 0;

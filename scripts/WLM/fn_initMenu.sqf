@@ -92,8 +92,8 @@ private _defaultTextureList = getArray (_assetConfig >> "hiddenSelectionsTexture
 
 private _side = BIS_WL_playerSide;
 /*
-_customTexturesList pushBack [localize "STR_WLM_DEFAULT", _defaultTextureList, localize "STR_WLM_OFFICIAL"];
-_customTexturesList pushBack [format ["--- %1 ---", localize "STR_WLM_OFFICIAL"], "", ""];
+_customTexturesList pushBack [localize "STR_WL_default", _defaultTextureList, localize "STR_WL_default"];
+_customTexturesList pushBack [format ["--- %1 ---", localize "STR_WL_official"], "", ""];
 */
 
 private _defaultIncluded = false;
@@ -115,23 +115,23 @@ private _additionalTextureSources = [_side] call WLM_fnc_textureLists;
         _defaultIncluded = true;
         _customTexturesList pushBack [_textureName, _textures, "Current"];
     } else {
-        _customTexturesList pushBack [_textureName, _textures, localize "STR_WLM_OFFICIAL"];
+        _customTexturesList pushBack [_textureName, _textures, localize "STR_WL_official"];
     };
 } forEach _additionalTextureSources;
 
 if (!_defaultIncluded) then {
-    _customTexturesList pushBack [localize "STR_WLM_DEFAULT", _defaultTextures, localize "STR_WLM_OFFICIAL"];
+    _customTexturesList pushBack [localize "STR_WL_default", _defaultTextures, localize "STR_WL_default"];
 };
 
 /* Disabled as it doesn't fit into Warlords
 // Image textures
-_customTexturesList pushBack [format ["--- %1 ---", localize "STR_WLM_CUSTOM"], "", ""];
+_customTexturesList pushBack [format ["--- %1 ---", localize "STR_WL_custom"], "", ""];
 
 private _pushCustomTexture = {
     params ["_textureName", "_customTexturesList"];
     private _texturePath = format ["img\camo\%1\%2.paa", (toLower format ["%1", _side]), toLower _textureName];
     if !(fileExists _texturePath) exitWith {};
-    _customTexturesList pushBack [_textureName, _texturePath, localize "STR_WLM_CUSTOM"];
+    _customTexturesList pushBack [_textureName, _texturePath, localize "STR_WL_custom"];
 };
 
 private _dir = "img\camo\" + (toLower format ["%1", _side]) + "\";
@@ -142,7 +142,7 @@ private _dir = "img\camo\" + (toLower format ["%1", _side]) + "\";
 
 
 // Color textures
-_customTexturesList pushBack [localize "STR_WLM_SOLID_COLORS", "", ""];
+_customTexturesList pushBack [localize "STR_WL_solidColors", "", ""];
 if (_side == west) then {
     _customTexturesList pushBack ["Stealth Black", "#(rgb,8,8,3)color(0.23,0.23,0.24,0.05)", "Solid Color"];
     _customTexturesList pushBack ["NATO Blue", "#(rgb,8,8,3)color(0.01,0.24,0.76,0.05)", "Solid Color"];
@@ -181,7 +181,7 @@ private _customTexturesMap = createHashMap;
     if (_singleTexture == "") then {
         private _camoItem = _camoSelectControl lbAdd _textureName;
         _camoSelectControl lbSetData [_camoItem, "-1"];
-        _camoSelectControl lbSetTooltip [_camoItem, localize "STR_WLM_CATEGORY"];
+        _camoSelectControl lbSetTooltip [_camoItem, localize "STR_WL_category"];
         continue;
     };
 
@@ -270,11 +270,11 @@ private _availableCustomizations = [];
 
 uiNamespace setVariable ["WLM_assetAvailableAnimations", _availableCustomizations];
 
-private _header = _customizationSelectControl lbAdd (localize "STR_WLM_CUSTOMIZATION");
+private _header = _customizationSelectControl lbAdd (localize "STR_WL_customization");
 _customizationSelectControl lbSetData [_header, "header"];
 
 if (count _availableCustomizations > 0) then {
-    private _everythingItem = _customizationSelectControl lbAdd (localize "STR_WLM_APPLY_ALL_EXTRAS");
+    private _everythingItem = _customizationSelectControl lbAdd (localize "STR_WL_applyExtras");
     _customizationSelectControl lbSetData [_everythingItem, "everything"];
 };
 
@@ -479,10 +479,10 @@ _asset spawn {
 		private _amount = selectMax _rearmVehicleCargos;
 
         private _rearmText = if (_cooldown == 0) then {
-            format ["%1 (%2 kg)", localize "STR_WLM_REARM", round _amount];
+            format ["%1 (%2 kg)", localize "STR_WL_rearm", round _amount];
         } else {
             private _cooldownTimer = [_cooldown, "MM:SS"] call BIS_fnc_secondsToString;
-            format ["%1 (%2)", localize "STR_WLM_REARM", _cooldownTimer];
+            format ["%1 (%2)", localize "STR_WL_rearm", _cooldownTimer];
         };
 
 		_rearmButtonControl ctrlSetText _rearmText;
@@ -491,9 +491,9 @@ _asset spawn {
         private _isAircraft = uiNamespace getVariable ["WLM_assetIsAircraft", false];
         private _eligibleFreeRearm = [_asset, _isAircraft] call WLM_fnc_calculateFreeRearmEligibility;
         if (_eligibleFreeRearm) then {
-            _applyButtonControl ctrlSetText (localize "STR_WLM_APPLY_FREE");
+            _applyButtonControl ctrlSetText (localize "STR_WL_applyRearm");
         } else {
-            _applyButtonControl ctrlSetText (localize "STR_WLM_APPLY");
+            _applyButtonControl ctrlSetText (localize "STR_WL_apply");
         };
 
 		uiSleep 1;

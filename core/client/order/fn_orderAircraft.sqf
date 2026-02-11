@@ -6,7 +6,7 @@ private _class = WL_ASSET(_orderedClass, "spawn", _orderedClass);
 player setVariable ["BIS_WL_isOrdering", true, [2, clientOwner]];
 
 "Sector" call WL2_fnc_announcer;
-[localize "STR_A3_WL_popup_appropriate_sector_selection"] call WL2_fnc_smoothText;
+[localize "STR_WL_selectSector"] call WL2_fnc_smoothText;
 if !(visibleMap) then {
 	processDiaryLink createDiaryLink ["Map", player, ""];
 	WL_CONTROL_MAP ctrlMapAnimAdd [0, 0.1, player];
@@ -51,7 +51,7 @@ if (!_result) exitWith {
 	call _exitOrderAircraft;
 };
 
-[localize "STR_A3_WL_asset_dispatched_TODO_REWRITE"] call WL2_fnc_smoothText;
+[localize "STR_WL_assetDispatched"] call WL2_fnc_smoothText;
 player setPosATL (getPosATL player);
 
 [player, "orderAsset", "air", BIS_WL_targetSector, _orderedClass, false] remoteExec ["WL2_fnc_handleClientRequest", 2];

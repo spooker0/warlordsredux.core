@@ -5,18 +5,18 @@ if (_showWarning) exitWith {
     private _confirmDialog = findDisplay WLM_DISPLAY createDisplay "WLM_Modal_Dialog";
 
     private _titleControl = _confirmDialog displayCtrl WLM_MODAL_TITLE;
-    _titleControl ctrlSetText (localize "STR_WLM_WIPE_SAVE_WARNING");
+    _titleControl ctrlSetText (localize "STR_WL_wipeSaveWarning");
 
     private _textControl = _confirmDialog displayCtrl WLM_MODAL_TEXT;
-    _textControl ctrlSetText (localize "STR_WLM_REMOVE_ALL_SAVED_LOADOUTS_WARNING");
+    _textControl ctrlSetText (localize "STR_WL_wipeSaveLoadouts");
 
     private _confirmButtonControl = _confirmDialog displayCtrl WLM_MODAL_CONFIRM_BUTTON;
     private _cancelButtonControl = _confirmDialog displayCtrl WLM_MODAL_EXIT_BUTTON;
 
-    _confirmButtonControl ctrlSetText (localize "STR_WLM_WIPE");
-    _confirmButtonControl ctrlSetTooltip (localize "STR_WLM_WIPE_ALL_SAVED_LOADOUTS");
+    _confirmButtonControl ctrlSetText (localize "STR_WL_wipe");
+    _confirmButtonControl ctrlSetTooltip (localize "STR_WL_wipeAllSaved");
 
-    _cancelButtonControl ctrlSetTooltip (localize "STR_WLM_RETURN_PREVIOUS_SCREEN");
+    _cancelButtonControl ctrlSetTooltip (localize "STR_WL_returnPreviousScreen");
 
     _cancelButtonControl ctrlAddEventHandler ["ButtonClick", {
         (findDisplay WLM_MODAL) closeDisplay 1;

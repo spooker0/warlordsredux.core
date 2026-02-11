@@ -52,6 +52,7 @@ private _actionCost = switch (_action) do {
 	case "fastTravelSquadLeader" : { WL_COST_FTSL };
 	case "scan" : { WL_COST_SCAN };
 	case "combatAir" : { WL_COST_COMBATAIR };
+	case "conscript" : { WL_COST_CONSCRIPT };
 	case "debugCombatAir" : { WL_COST_COMBATAIR };
 	case "targetReset" : { WL_COST_TARGETRESET };
 	case "orderAI" : { WL_ASSET(_param1, "cost", 150) };
@@ -363,7 +364,7 @@ if (_action == "fundsTransfer") exitWith {
 	[_transferAmount, getPlayerUID _recipient, false] call _addFunds;
 
 	private _sentMoney = format ["%1%2", WL_MoneySign, _transferAmount];
-	private _message = format [localize "STR_A3_WL_donate_cp", name _sender, name _recipient, _sentMoney];
+	private _message = format [localize "STR_WL_donateMoneyInfo", name _sender, name _recipient, _sentMoney];
 
 	[_side, _message] call _broadcastActionToSide;
 };

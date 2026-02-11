@@ -5,7 +5,6 @@ if (WL_ISUP(player)) exitWith {};
 
 private _deadActions = [
     true,
-    { 0 spawn WLC_fnc_buildMenu; },
     { 0 spawn WL2_fnc_vehicleManager; },
     { 0 spawn RWD_fnc_badgeMenu; },
     { 0 spawn MENU_fnc_reportMenu; },

@@ -2,7 +2,7 @@
 params ["_toContested"];
 
 "Sector" call WL2_fnc_announcer;
-[localize "STR_A3_WL_popup_appropriate_sector_selection"] call WL2_fnc_smoothText;
+[localize "STR_WL_selectSector"] call WL2_fnc_smoothText;
 
 "RequestMenu_close" call WL2_fnc_setupUI;
 if !(visibleMap) then {

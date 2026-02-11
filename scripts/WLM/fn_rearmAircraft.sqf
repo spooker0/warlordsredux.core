@@ -86,7 +86,7 @@ _massTally = _massTally min 3000;
 
 private _newAmmo = _amount - _massTally;
 if (_newAmmo < 0) exitWith {
-    [format [localize "STR_WLM_KG_AMMO_REQUIRED", _massTally]] call WL2_fnc_smoothText;
+    [format [localize "STR_WL_ammoMassRequired", _massTally]] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
@@ -109,4 +109,4 @@ private _rearmTime = WL_UNIT(_asset, "rearm", 600);
 _asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
 
 playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Rearm.wss", _asset, false, getPosASL _asset, 2, 1, 75];
-[localize "STR_A3_WL_popup_asset_rearmed"] call WL2_fnc_smoothText;
+[localize "STR_WL_assetRearmed"] call WL2_fnc_smoothText;

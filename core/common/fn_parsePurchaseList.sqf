@@ -7,9 +7,16 @@ private _fastTravelArr = [
 		"FTPriority",
 		0,
 		[],
-		"Fast travel to frontline",
+		localize "STR_WL_ftFrontline",
 		"\A3\Data_F_Warlords\Data\preview_ft_owned.jpg",
-		"Fast travel to the team priority location, which is designated by squad leaders."
+		localize "STR_WL_ftFrontlineInfo"
+	], [
+		"FTHome",
+		0,
+		[],
+		localize "STR_WL_ftHome",
+		"\A3\EditorPreviews_F_Decade\Data\CfgVehicles\PortableFlagPole_01_F.jpg",
+		localize "STR_WL_ftHome"
 	], [
 		"FTSeized",
 		0,
@@ -21,58 +28,51 @@ private _fastTravelArr = [
 		"FTAirAssault",
 		WL_COST_AIRASSAULT,
 		[],
-		"Fast travel air assault",
-		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-		"Attack the contested sector by dropping into it with a parachute."
+		localize "STR_WL_ftAirAssault",
+		"\A3\EditorPreviews_F\Data\CfgVehicles\VR_Area_01_circle_4_grey_F.jpg",
+		localize "STR_WL_ftAirAssaultInfo"
 	], [
 		"FTParadropVehicle",
 		WL_COST_PARADROP,
 		[],
-		"Fast travel vehicle paradrop",
-		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-		"Move your vehicle to a friendly sector from a helipad/airfield sector by paradropping it.<br/>Requirements:<br/>1. In an owned sector.<br/>2. In a vehicle as the driver.<br/>3. No enemies nearby.<br/>4. Cooldown: 5 minutes."
+		localize "STR_WL_ftParadrop",
+		"\A3\EditorPreviews_F\Data\CfgVehicles\VR_Area_01_circle_4_grey_F.jpg",
+		localize "STR_WL_ftParadropInfo"
 	], [
 		"FTSquadLeader",
 		WL_COST_FTSL,
 		[],
-		localize "STR_SQUADS_fastTravelToSquadLeader",
+		localize "STR_WL_ftSquadLeader",
 		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-		localize "STR_SQUADS_fastTravelToSquadLeader"
+		localize "STR_WL_ftSquadLeader"
 	], [
 		"RespawnBagFT",
 		0,
 		[],
-		"Fast travel to tent",
-		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-		""
+		localize "STR_WL_ftTent",
+		"\A3\EditorPreviews_F\Data\CfgVehicles\Land_TentA_F.jpg",
+		localize "STR_WL_ftTentInfo"
 	], [
 		"StrongholdFT",
 		0,
 		[],
-		"Fast travel to sector stronghold",
-		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-		""
-	], [
-		"FTHome",
-		0,
-		[],
-		"Fast travel to home sector",
-		"\A3\Data_F_Warlords\Data\preview_ft_owned.jpg",
-		""
+		localize "STR_WL_ftStronghold",
+		"\A3\EditorPreviews_F\Data\CfgVehicles\Land_Cargo_Tower_V3_F.jpg",
+		localize "STR_WL_ftStrongholdInfo"
 	], [
 		"BuyFOB",
 		WL_COST_SUPPLIES,
 		[],
-		"Purchase forward base supplies",
-		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-		format ["Purchases equipment that can be airlifted or deployed into a forward position and setup into a base.<br/>Deploy requirements:<br/>1. Must be squad leader.<br/>2. Squad size >= 3.<br/>3. Outside of sectors.<br/>4. At least %1 away from other forward bases.<br/>5. Can have 4 total at once.<br/>Can also be used to add 20,000 supplies to an existing FOB.", WL_FOB_MIN_DISTANCE]
+		localize "STR_WL_ftBuySupplies",
+		"\A3\EditorPreviews_F_Decade\Data\CfgVehicles\RuggedTerminal_01_communications_hub_F.jpg",
+		localize "STR_WL_ftBuySuppliesInfo"
 	], [
 		"BuyStronghold",
 		WL_COST_STRONGHOLD,
 		[],
-		"Purchase sector stronghold",
-		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-		"Fortifies the nearest building in your sector with a stronghold (one per sector at a time). This will replace the current stronghold if one exists. Strongholds provide a 5x bonus to infantry capture power in its small area, regardless of owner. Assets can be deployed onto strongholds. Strongholds can be used to speed up sector fortification process to reduce backcapping."
+		localize "STR_WL_ftBuyStronghold",
+		"\A3\EditorPreviews_F\Data\CfgVehicles\Land_Cargo_Tower_V3_F.jpg",
+		localize "STR_WL_ftBuyStrongholdInfo"
 	]
 ];
 
@@ -104,21 +104,21 @@ private _strategyArr = [
 		"CombatAir",
 		WL_COST_COMBATAIR,
 		[],
-		"Combat air patrol",
-		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
-		"Call in a temporary combat air patrol to assist your team's air defense over the selected airbase/helipad sector. Enemy aircraft that enter the marked map area are immediately spotted, and those flying above 1 km altitude will be given 45 seconds to leave before being automatically engaged by lethal air-to-air assets. Recommended to augment with short range air defenses and to use this opportunity to take off with air superiority assets."
+		localize "STR_WL_combatAirPatrol",
+		"\a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa",
+		localize "STR_WL_combatAirPatrolInfo"
 	], [
 		"Conscription",
 		WL_COST_CONSCRIPT,
 		[],
-		"Conscript team",
-		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
-		"Conscript team to the team priority point, giving everyone the option to fast travel there immediately."
+		localize "STR_WL_conscript",
+		"\a3\ui_f\data\igui\cfg\simpletasks\types\rifle_ca.paa",
+		localize "STR_WL_conscriptInfo"
 	], [
 		"FundsTransfer",
 		WL_COST_FUNDTRANSFER,
 		[],
-		localize "STR_A3_WL_menu_moneytransfer",
+		localize "STR_WL_transferMoney",
 		"\A3\Data_F_Warlords\Data\preview_cp_transfer.jpg",
 		localize "STR_A3_WL_menu_fundstransfer_info"
 	], [
@@ -216,7 +216,7 @@ private _strategyArr = [
 		"WelcomeScreen",
 		0,
 		[],
-		localize "STR_A3_WL_infoScreen",
+		localize "STR_WL_infoMenuInfo",
 		"src\img\wl_logo_ca.paa",
 		""
 	]

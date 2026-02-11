@@ -5,5 +5,5 @@ private _ownedSelectedUnits = _selectedUnits select {
 };
 
 if (count _ownedSelectedUnits == 0) exitWith {
-    [false, localize "STR_A3_WL_info_no_units_selected"];
+    [false, localize "STR_WL_noUnitsSelected"];
 };
