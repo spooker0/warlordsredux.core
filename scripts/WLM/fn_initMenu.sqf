@@ -432,7 +432,7 @@ if (
     _asset getVariable ["WL2_ecmCharges", -1] == -1 &&
     _asset getVariable ["WL2_smartMinesAP", -1] == -1 &&
     _asset getVariable ["WL2_smartMinesAT", -1] == -1 &&
-    _asset getVariable ["WL2_deployCrates", -1] == -1
+    _asset getVariable ["WL2_installable", "empty"] == "empty"
 ) exitWith {
     private _rearmButtonControl = _display displayCtrl WLM_REARM_BUTTON;
     _rearmButtonControl ctrlSetText "No weapons";

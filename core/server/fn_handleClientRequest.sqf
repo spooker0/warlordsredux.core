@@ -402,7 +402,7 @@ if (_action == "demine") exitWith {
 
 if (_action == "secure") exitWith {
 	private _target = _param1;
-	[true] remoteExec ["WL2_fnc_deleteTent", _target];
+	[true, _target] remoteExec ["WL2_fnc_deleteTent", _target];
 	_target setDamage 1;
 
 	private _reward = 50;

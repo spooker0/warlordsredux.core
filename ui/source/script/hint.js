@@ -164,15 +164,16 @@ function updateSectorCapture(captureData, fontSize) {
         listItem.style.setProperty('--sector-left-text-color', attackingColor);
         listItem.style.setProperty('--sector-right-text-color', defendingColor);
 
-        const diff = leftValue - rightValue;
-        const direction = diff >= 0 ? 'right' : 'left';
+        const speedRatio = leftValue / (leftValue + rightValue + 0.01);
+        const direction = leftValue >= rightValue ? 'right' : 'left';
+        const diff = Math.abs(speedRatio - 0.5);
 
         const arrowSpan = document.createElement('span');
         arrowSpan.classList.add('capture-arrow', direction);
         arrowSpan.style.setProperty('--bar-width', `${leftPercent}%`);
         listItem.appendChild(arrowSpan);
 
-        const isFastCapture = Math.abs(diff) > 8;
+        const isFastCapture = diff > 0.2;
         if (isFastCapture) {
             const arrowFastSpan = document.createElement('span');
             arrowFastSpan.classList.add('capture-arrow', 'capture-arrow-fast', direction);
@@ -180,7 +181,7 @@ function updateSectorCapture(captureData, fontSize) {
             listItem.appendChild(arrowFastSpan);
         }
 
-        const isVeryFastCapture = Math.abs(diff) > 16;
+        const isVeryFastCapture = diff > 0.4;
         if (isVeryFastCapture) {
             const arrowVeryFastSpan = document.createElement('span');
             arrowVeryFastSpan.classList.add('capture-arrow', 'capture-arrow-very-fast', direction);

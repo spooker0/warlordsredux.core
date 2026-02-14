@@ -1,8 +1,8 @@
 #include "includes.inc"
 private _currentPage = uiNamespace getVariable ["WL2_inventoryPage", 0];
 
-private _previousButton = uiNamespace getVariable ["WL2_inventoryPreviousButton", objNull];
-private _nextButton = uiNamespace getVariable ["WL2_inventoryNextButton", objNull];
+private _previousButton = uiNamespace getVariable ["WL2_inventoryPreviousButton", controlNull];
+private _nextButton = uiNamespace getVariable ["WL2_inventoryNextButton", controlNull];
 
 if (!isNull _previousButton) then {
     _previousButton ctrlEnable (_currentPage > 0);

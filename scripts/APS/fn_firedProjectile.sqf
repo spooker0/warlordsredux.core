@@ -142,13 +142,8 @@ while {_continue && alive _projectile} do {
 
 		private _vehicleAPSType = _x getVariable ["apsType", -1];
 		if (_vehicleAPSType == 3) then {
-			if (!isNull (missileTarget _projectile)) then {
-				_isGuided = true;
-			};
-
-			if (_dazzleable && _isGuided) exitWith {
+			if (_dazzleable) exitWith {
 				_continue = false;
-
 				[_x, true] call _interception;
 			};
 		} else {

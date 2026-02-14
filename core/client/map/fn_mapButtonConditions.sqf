@@ -181,6 +181,10 @@ switch (_conditionName) do {
         private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
         if !(_target in _strongholds) exitWith { "" };
 
+        private _strongholdSector = _target getVariable ["WL_strongholdSector", objNull];
+        private _isTargetedSector = _strongholdSector == WL_TARGET_ENEMY;
+        if (_isTargetedSector) exitWith { "Cannot remove stronghold from map in contested sector." };
+
         private _hasIntruders = _target getVariable ["WL2_strongholdIntruders", false];
         if (_hasIntruders) exitWith { "Cannot remove stronghold with intruders present." };;
 

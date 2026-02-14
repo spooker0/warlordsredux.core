@@ -85,7 +85,7 @@ while { alive _asset } do {
                 "CraterLong",
                 "CraterLong_02_F"
             ];
-            for "_i" from 1 to 8 do {
+            for "_i" from 1 to 6 do {
                 private _craterType = selectRandom _craterTypes;
 
                 private _angle = random 360;

@@ -12,14 +12,10 @@ private _deployActionId = _asset addAction [
             playSoundUI ["assemble_target"];
             [_asset, _assetLoadedItem] spawn {
                 params ["_asset", "_vehicle"];
-
-                private _vehicleStartPosition = getPosASL _vehicle;
-                _vehicleStartPosition set [2, _vehicleStartPosition # 2 - 5];
+                _vehicle attachTo [_asset, [0, 0, -10]];
                 detach _vehicle;
                 [_asset, _vehicle, false] call WL2_fnc_attachVehicle;
-                _vehicle setPosASL _vehicleStartPosition;
-
-                uiSleep 1;
+                _vehicle setPosASL (_vehicle modelToWorldWorld [0, 0, -10]);
 
                 private _parachuteClass = switch (BIS_WL_playerSide) do {
                     case west: {
@@ -33,7 +29,8 @@ private _deployActionId = _asset addAction [
                     };
                 };
 
-                private _parachute = createVehicle [_parachuteClass, _vehicle modelToWorld [0, 0, 0], [], 0, "NONE"];
+                private _parachute = createVehicle [_parachuteClass, _vehicle, [], 0, "NONE"];
+                _parachute setPosASL (_vehicle modelToWorldWorld [0, 0, 0]);
                 _parachute setDir (getDir _vehicle);
                 _vehicle attachTo [_parachute, [0, 0, 0]];
 
@@ -41,7 +38,8 @@ private _deployActionId = _asset addAction [
                     uiSleep 0.2;
                     _parachute setVelocity [0, 0, (velocity _parachute) # 2];
                     _parachute setVectorUp [0, 0, 1];
-                    (getPosATL _vehicle # 2) < 5
+                    private _alt = (getPosVisual _vehicle) # 2;
+                    _alt < 5;
                 };
                 detach _vehicle;
                 deleteVehicle _parachute;

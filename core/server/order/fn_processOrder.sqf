@@ -206,6 +206,15 @@ private _disallowListForAsset = WL_ASSET(_orderedClass, "disallowMagazines", [])
 	} forEach (getAllPylonsInfo _asset);
 } forEach _disallowListForAsset;
 
+private _turrets = [[-1]] + allTurrets _asset;
+{
+	private _disallowedMag = _x;
+	{
+		private _turret = _x;
+		_asset removeMagazinesTurret [_disallowedMag, _turret];
+	} forEach _turrets;
+} forEach _disallowListForAsset;
+
 private _defaultMags = magazinesAllTurrets _asset;
 _asset setVariable ["BIS_WL_defaultMagazines", _defaultMags, true];
 _asset setVariable ["WLM_savedDefaultMags", _defaultMags, true];

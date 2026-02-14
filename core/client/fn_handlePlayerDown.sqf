@@ -22,6 +22,8 @@ private _deadAnimations = [
 ];
 private _deadAnimation = selectRandom _deadAnimations;
 
+player setVariable ["WL2_keepTent", false];
+
 private _startTime = serverTime;
 private _downTime = 0;
 while { WL_ISDBNO(_unit) } do {
@@ -37,6 +39,9 @@ while { WL_ISDBNO(_unit) } do {
     setPlayerRespawnTime ((WL_DURATION_RESPAWN - _downTime) max 1);
 
     private _expirationTime = _unit getVariable ["WL2_expirationTime", serverTime + 30];
+    if (_expirationTime - serverTime < 3) then {
+        player setVariable ["WL2_keepTent", true];
+    };
     if (serverTime > _expirationTime) then {
         forceRespawn _unit;
         break;

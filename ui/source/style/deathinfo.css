@@ -345,6 +345,14 @@ body {
     border-color: var(--hud-text);
 }
 
+.action.is-disabled {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.action.is-disabled.is-selected {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
 .action::before {
     content: "";
     position: absolute;

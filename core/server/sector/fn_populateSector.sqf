@@ -6,7 +6,7 @@ if (true) exitWith {};
 #endif
 
 private _sectorValue = _sector getVariable ["BIS_WL_value", 50];
-private _garrisonSize = _sectorValue * 1.3;
+private _garrisonSize = _sectorValue * WL_SECTOR_GARRISON;
 
 private _vehicleUnits = [];
 

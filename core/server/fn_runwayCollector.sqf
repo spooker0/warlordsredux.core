@@ -20,8 +20,19 @@ while { !BIS_WL_missionEnd } do {
 	} select {
         WL_UNIT(_x, "cost", 0) <= 10000
     };
+
 	{
 		private _assetsInArea = _cleanupAssets inAreaArray _x;
+
+		if (!surfaceIsWater (_x # 0)) then {
+			private _tents = _assetsInArea select {
+				WL_UNIT(_x, "name", "") == "Tent"
+			};
+			{
+				deleteVehicle _x;
+			} forEach _tents;
+		};
+
 		{
             private _asset = _x;
             if (_asset getVariable ["WL2_accessControl", 0] == 0) then {

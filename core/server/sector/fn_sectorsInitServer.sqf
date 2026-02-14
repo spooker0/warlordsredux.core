@@ -97,8 +97,8 @@ waitUntil {!isNil "WL2_base1" && {!isNil "WL2_base2"}};
 private _fastestCapture = 0.2;
 private _slowestCapture = 0.5;
 #else
-private _fastestCapture = 20;
-private _slowestCapture = 50;
+private _fastestCapture = 40;
+private _slowestCapture = 100;
 #endif
 
 private _sectorGroup = createGroup [civilian, true];
@@ -126,7 +126,7 @@ private _sectorGroup = createGroup [civilian, true];
 	private _agent = _sectorGroup createUnit ["Logic", _sectorPos, [], 0, "CAN_COLLIDE"];
 	_agent enableSimulationGlobal false;
 
-	private _minCaptureTime = linearConversion [5, 30, _sectorValue, _fastestCapture, _slowestCapture, true];
+	private _minCaptureTime = linearConversion [1, 30, _sectorValue, _fastestCapture, _slowestCapture, true];
 	_sector setVariable ["WL2_minCapture", _minCaptureTime];
 } forEach BIS_WL_allSectors;
 

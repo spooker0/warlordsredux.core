@@ -58,5 +58,5 @@ if (_asset getVariable ["WL2_mineClearCharges", -1] != -1) then {
 
 private _loadedItem = WL_ASSET(_assetActualType, "loaded", "");
 if (_loadedItem != "") then {
-    _asset setVariable ["WL2_deployCrates", 1, true];
+    _asset setVariable ["WL2_installable", _loadedItem, true];
 };

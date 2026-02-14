@@ -10,18 +10,6 @@ private _alreadyHandled = _unit getVariable ["WL2_alreadyHandled", false];
 if (_alreadyHandled) exitWith {};
 _unit setVariable ["WL2_alreadyHandled", true];
 
-private _sector = _unit getVariable ["WL2_sectorDefender", objNull];
-if (!isNull _sector) then {
-    private _sectorPop = _sector getVariable ["WL2_sectorPop", 0];
-    private _sectorOwner = _sector getVariable ["BIS_WL_owner", sideUnknown];
-
-    if (_sectorOwner == independent && _sectorPop > 0) then {
-        private _sectorRespawnPool = _sector getVariable ["WL2_sectorRespawnPool", []];
-        _sectorRespawnPool pushBack (typeof _unit);
-        _sector setVariable ["WL2_sectorRespawnPool", _sectorRespawnPool];
-    };
-};
-
 private _children = _unit getVariable ["WL2_children", []];
 {
     if (alive _x) then {

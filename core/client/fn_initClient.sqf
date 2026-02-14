@@ -280,6 +280,7 @@ if (!isServer) then {
 	0 spawn WL2_fnc_cleanupCarrier;
 };
 0 spawn WL2_fnc_reviveAction;
+0 spawn WL2_fnc_installAction;
 0 spawn WL2_fnc_helmetInterface;
 0 spawn WL2_fnc_repairActionUpdate;
 0 spawn WL2_fnc_lockActionUpdate;
@@ -312,7 +313,6 @@ uiNamespace setVariable ["WL2_damagedProjectiles", createHashMap];
 uiNamespace setVariable ["WL2_damageSource", objNull];
 uiNamespace setVariable ["WL2_damagedWeapon", nil];
 uiNamespace setVariable ["WL2_surrenderWarningActive", false];
-player setVariable ["WL2_canSecure", true, true];
 
 showScoretable 0;
 "deathInfo" cutFadeOut 0;

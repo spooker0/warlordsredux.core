@@ -1,7 +1,10 @@
 #include "includes.inc"
 params ["_newUnit", "_oldUnit", "_respawn", "_respawnDelay"];
 
-deleteVehicle _oldUnit;
+private _keepTent = player getVariable ["WL2_keepTent", false];
+if (!_keepTent) then {
+	[true, _oldUnit] call WL2_fnc_deleteTent;
+};
 
 #if WL_WINTER_EVENT
 [false] spawn WL2_fnc_pingSounds;
@@ -25,6 +28,7 @@ if (side group player == independent) then {
 #endif
 
 0 spawn WL2_fnc_reviveAction;
+0 spawn WL2_fnc_installAction;
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _hideSquadMenu = _settingsMap getOrDefault ["hideSquadMenu", false];
@@ -83,4 +87,3 @@ BIS_WL_playerSide call WL2_fnc_parsePurchaseList;
 [false] call WL2_fnc_spawnAtBase;
 
 player setVariable ["WL2_unconscious", false, true];
-player setVariable ["WL2_canSecure", true, true];

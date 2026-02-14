@@ -11,14 +11,14 @@ private _actionId = player addAction [
             playSoundUI ["AddItemFailed"];
         };
 
-        private _rewardAmount = WL_UNIT(_asset, "cost", 0);
-        _rewardAmount = round (_rewardAmount / 300) * 100;
-
+        private _cost = WL_UNIT(_asset, "cost", 0);
         private _inFriendlySector = ([-2, []] call WL2_fnc_checkInFriendlySector) # 0;
-        if (!_inFriendlySector && _rewardAmount > 1333) exitWith {
+        if (!_inFriendlySector && _cost > 4000) exitWith {
             ["You can secure this wreck by moving it to a friendly sector or forward base with a flatbed or via slingloading."] call WL2_fnc_smoothText;
             playSoundUI ["AddItemFailed"];
         };
+
+        private _rewardAmount = round (_cost / 300) * 100;
 
         [player, "secureAircraft", _rewardAmount] remoteExec ["WL2_fnc_handleClientRequest", 2];
         [objNull, _rewardAmount, "Aircraft secured", "#228b22"] call WL2_fnc_killRewardClient;
@@ -54,8 +54,8 @@ private _actionId = player addAction [
             continue;
         };
 
-        private _rewardAmount = WL_UNIT(_asset, "cost", 0);
-        _rewardAmount = round (_rewardAmount / 300) * 100;
+        private _cost = WL_UNIT(_asset, "cost", 0);
+        private _rewardAmount = round (_cost / 300) * 100;
         private _targetDisplayName = [_asset] call WL2_fnc_getAssetTypeName;
 
         player setUserActionText [_actionId, format ["<t color='#00FF00'>Secure Wreck for %1 (%2%3)</t>", _targetDisplayName, WL_MoneySign, _rewardAmount]];

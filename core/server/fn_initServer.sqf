@@ -192,9 +192,17 @@ if (_systemTime # 1 == 4 && _systemTime # 2 <= 2) then {
 };
 #endif
 
-private _dummyDome1 = createSimpleObject ["Land_Dome_Small_WIP_F", [0, 0, -1000], false];
-private _dummyDome2 = createSimpleObject ["Land_Dome_Small_WIP2_F", [0, 0, -1000], false];
-private _dummyDome3 = createSimpleObject ["Land_Dome_Small_F", [0, 0, -1000], false];
-deleteVehicle _dummyDome1;
-deleteVehicle _dummyDome2;
-deleteVehicle _dummyDome3;
+private _objectsToPreload = [
+	"Land_Dome_Small_WIP_F",
+	"Land_Dome_Small_WIP2_F",
+	"Land_Dome_Small_F",
+	"Land_CraneRail_01_F",
+	"Land_BagBunker_Small_F",
+	"Land_HBarrierWall_corridor_F",
+	"Land_Cargo_Tower_V4_F",
+	"Land_HBarrierTower_F"
+];
+{
+	private _dummy = createSimpleObject [_x, [0, 0, -1000], false];
+	deleteVehicle _dummy;
+} forEach _objectsToPreload;

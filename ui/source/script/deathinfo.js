@@ -334,6 +334,11 @@ function cancelHold() {
     if (el) el.style.removeProperty('--hold-progress');
 }
 
+function disableButton(actionId) {
+    const el = actions[actionId];
+    if (el) el.classList.add('is-disabled');
+}
+
 function updateSelectedItem(actionId) {
     const clamped = Math.max(0, Math.min(actions.length - 1, (actionId | 0)));
     if (clamped === selectedIndex) return;

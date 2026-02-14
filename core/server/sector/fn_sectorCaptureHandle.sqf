@@ -11,7 +11,7 @@ while { !BIS_WL_missionEnd } do {
 	{
 		private _sector = _x;
 
-		private _minCaptureTime = _sector getVariable ["WL2_minCapture", 20];
+		private _minCaptureTime = _sector getVariable ["WL2_minCapture", 40];
 		private _originalOwner = _sector getVariable ["BIS_WL_owner", independent];
 
 		private _capturingTeam = _sector getVariable ["BIS_WL_capturingTeam", independent];
@@ -45,9 +45,8 @@ while { !BIS_WL_missionEnd } do {
 			_winner = _originalOwner;
 		};
 
-		private _scoreGap = _winningScore - _secondScore;
-		private _movementMultiplier = linearConversion [1, 20, _scoreGap, 0.1, 1, true];
-		private _movement = _progressMovement * _movementMultiplier;
+		private _scoreGap = _winningScore / (_winningScore + _secondScore + 0.01);
+		private _movement = _progressMovement * _scoreGap;
 
 		if (_winner == _capturingTeam) then {
 			if (_capturingTeam != _originalOwner) then {

@@ -109,7 +109,7 @@ if (_isAdmin || _isModerator || _isSpectator) then {
     _isImbalanced = false;
 };
 
-if (_isImbalanced) exitWith {
+if (_isImbalanced && _lockedToTeam == civilian) exitWith {
     _warlord setVariable ["WL2_playerSetupState", "Imbalance", _owner];
 };
 

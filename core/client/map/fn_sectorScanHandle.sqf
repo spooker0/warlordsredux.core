@@ -3,6 +3,8 @@ params ["_sector", "_uav"];
 
 if (isDedicated) exitWith {};
 
+uiSleep 10;
+
 private _side = BIS_WL_playerSide;
 
 _uav setVehicleTIPars [1, 1, 1];

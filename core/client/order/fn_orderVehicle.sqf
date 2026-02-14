@@ -11,8 +11,6 @@ if (_class isKindOf "Man") then {
 	_asset setVariable ["BIS_WL_ownerAsset", getPlayerUID player, true];
 	[player, "orderAI", _class] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	[_asset, player] spawn WL2_fnc_newAssetHandle;
-
-	_asset setVariable ["WL2_canSecure", true, true];
 	player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 } else {
 	if (visibleMap) then {

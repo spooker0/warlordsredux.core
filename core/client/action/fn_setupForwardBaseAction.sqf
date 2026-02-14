@@ -2,6 +2,10 @@
 params ["_asset"];
 
 if (isDedicated) exitWith {};
+waitUntil {
+    uiSleep 1;
+    !isNil "BIS_WL_allSectors";
+};
 
 private _drawRestrictionId = addMissionEventHandler ["Draw3D", {
 	private _assetNetId = _thisArgs # 0;

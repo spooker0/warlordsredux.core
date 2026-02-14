@@ -145,7 +145,6 @@ if (_ret) then {
 			[
 				[WL2_fnc_checkPlayerInVehicle],
 				[WL2_fnc_checkInFriendlySector, [_cost, []]],
-				[WL2_fnc_checkInventoryOpen],
 				[WL2_fnc_checkNearbyEnemies]
 			]
 		};

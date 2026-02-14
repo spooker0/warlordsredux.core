@@ -12,12 +12,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
 
         private _side = BIS_WL_playerSide;
         private _nearbyUnconscious = (player nearObjects ["Man", 8]) select {
-            private _targetSide = side group _x;
-            if (_targetSide == _side) then {
-                WL_ISUNCONSCIOUS(_x)
-            } else {
-                WL_ISDOWN(_x) && _x getVariable ["WL2_canSecure", false]
-            };
+            WL_ISUNCONSCIOUS(_x)
         };
         _nearbyUnconscious = _nearbyUnconscious select {
             [getPosASL player, getDir player, 90, getPosASL _x] call WL2_fnc_inAngleCheck
@@ -54,7 +49,48 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
         };
         player setVariable ["WL2_reviveTarget", _reviveTarget];
 
-        private _nearbyDemolishableItems = (cameraOn nearObjects 100) select {
+        private _nearbyItems = cameraOn nearObjects 100;
+        private _nearbyInstallable = _nearbyItems select {
+            cameraOn distance _x < 30;
+        } select {
+            [getPosASL cameraOn, getDir cameraOn, 90, getPosASL _x] call WL2_fnc_inAngleCheck;
+        } select {
+            private _access = [_x, player, "full"] call WL2_fnc_accessControl;
+            _access # 0;
+        } select {
+            private _installable = _x getVariable ["WL2_installable", ""];
+            _installable != ""
+        };
+
+        if (count _nearbyInstallable > 0) then {
+            _nearbyInstallable = [_nearbyInstallable, [], {
+                if (_x == cursorTarget) then {
+                    -1
+                } else {
+                    player distance _x
+                };
+            }, "ASCEND"] call BIS_fnc_sortBy;
+            private _currentTarget = _nearbyInstallable # 0;
+
+            player setVariable ["WL2_installableTarget", _currentTarget];
+
+            private _installable = _currentTarget getVariable ["WL2_installable", ""];
+            private _displayText = WL_ASSET(_installable, "name", getText (configFile >> "CfgVehicles" >> _installable >> "displayName"));
+
+            private _isConversion = WL_ASSET(_installable, "conversion", 0) != 0;
+            private _installText = if (_isConversion) then {
+                format ["<t color='#ADD8E6'>Convert to %1</t>", _displayText]
+            } else {
+                format ["<t color='#ADD8E6'>Deploy %1</t>", _displayText]
+            };
+
+            private _installActionId = player getVariable ["WL2_installActionId", -1];
+            player setUserActionText [_installActionId, _installText];
+        } else {
+            player setVariable ["WL2_installableTarget", objNull];
+        };
+
+        private _nearbyDemolishableItems = _nearbyItems select {
             _x getVariable ["WL2_canDemolish", false];
         };
 

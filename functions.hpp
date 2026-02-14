@@ -231,12 +231,12 @@ class CfgFunctions {
 			class demolishStep {};
 			class deployableAddAction {};
 			class deployableEligibility {};
-			class deployCrateAction {};
 			class getVehicleLockStatus {};
 			class grapple {};
 			class hmdSendData {};
 			class hmdSettings {};
 			class hmdSettingsAction {};
+			class installAction {};
 			class jammerAction {};
 			class jammerToggle {};
 			class jammerUpdate {};
@@ -418,7 +418,6 @@ class CfgFunctions {
 			class checkIndependents {};
 			class checkInfantryAvailable {};
 			class checkInFriendlySector {};
-			class checkInventoryOpen {};
 			class checkIsOrdering {};
 			class checkNearbyEnemies {};
 			class checkNoStronghold {};

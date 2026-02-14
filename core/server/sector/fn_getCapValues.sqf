@@ -3,6 +3,16 @@ params ["_sector"];
 
 private _ownerSide = _sector getVariable ["BIS_WL_owner", independent];
 
+private _westArea = missionNamespace getVariable ["WL2_westControlledArea", 0];
+private _eastArea = missionNamespace getVariable ["WL2_eastControlledArea", 0];
+_westArea = _westArea max 1;
+_eastArea = _eastArea max 1;
+private _westAreaRatio = _westArea / (_westArea + _eastArea);
+private _eastAreaRatio = 1 - _westAreaRatio;
+private _westMod = _westAreaRatio * 2;
+private _eastMod = _eastAreaRatio * 2;
+private _modifiers = [_westMod, _eastMod, 0];
+
 private _sideArr = [west, east, independent];
 private _sideCaptureModifier = createHashMap;
 {
@@ -13,7 +23,7 @@ private _sideCaptureModifier = createHashMap;
 		if (_reserves > 0) then {
 			_sideCaptureModifier set [_side, 3];
 		} else {
-			_sideCaptureModifier set [_side, 1];
+			_sideCaptureModifier set [_side, 2];
 		};
 		continue;
 	};
@@ -51,6 +61,9 @@ private _sideCaptureModifier = createHashMap;
 		_x getVariable ["WL2_forwardBaseReady", false]
 	};
 	_connections = _connections + (count _inRangeTeamForwardBases) * WL_FOB_CAPMODIFIER;
+
+	private _sideModifier = _modifiers # _forEachIndex;
+	_connections = _connections + _sideModifier;
 
 	_sideCaptureModifier set [_side, _connections];
 } forEach _sideArr;

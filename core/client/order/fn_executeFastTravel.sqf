@@ -154,7 +154,8 @@ switch (_fastTravelMode) do {
 				uiSleep 0.2;
 				_parachute setVelocity [0, 0, (velocity _parachute) # 2];
 				_parachute setVectorUp [0, 0, 1];
-				(getPosATL _vehicle # 2) < 5
+				private _alt = (getPosVisual _vehicle) # 2;
+				_alt < 5;
 			};
 			detach _vehicle;
 			deleteVehicle _parachute;

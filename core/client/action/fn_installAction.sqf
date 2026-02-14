@@ -1,29 +1,20 @@
 #include "includes.inc"
-params ["_asset", "_crateType", "_isConversion"];
-if (isDedicated) exitWith {};
 
-private _crateTypeDisplayText = WL_ASSET(_crateType, "name", getText (configFile >> "CfgVehicles" >> _crateType >> "displayName"));
-
-if (_isConversion) then {
-    _crateTypeDisplayText = format ["Convert to %1", _crateTypeDisplayText];
-} else {
-    _crateTypeDisplayText = format ["Deploy %1", _crateTypeDisplayText];
-};
-
-private _deployActionId = _asset addAction [
-	format ["<t color='#ADD8E6'>%1</t>", _crateTypeDisplayText],
+private _installActionId = player addAction [
+	"<t color='#ADD8E6'>Deploy Item</t>",
 	{
-		_this params ["_asset", "_caller", "_deployActionId", "_arguments"];
+        _this spawn {
+            params ["_target", "_caller", "_actionId", "_arguments"];
+            private _installableTarget = player getVariable ["WL2_installableTarget", objNull];
+            if (isNull _installableTarget) exitWith {};
 
-        private _crateType = _arguments # 0;
-        private _isConversion = _arguments # 1;
-
-        [_asset, _crateType, _isConversion] spawn {
-            params ["_asset", "_crateType", "_isConversion"];
-            if (_crateType == "") exitWith {
+            private _installable = _installableTarget getVariable ["WL2_installable", ""];
+            if (_installable == "") exitWith {
                 playSound "AddItemFailed";
-                ["Deploy crate not available!"] call WL2_fnc_smoothText;
+                ["Installation not available!"] call WL2_fnc_smoothText;
             };
+
+            private _isConversion = WL_ASSET(_installable, "conversion", 0) != 0;
 
             private _success = if (_isConversion) then {
                 private _animation = "Acts_TerminalOpen";
@@ -78,14 +69,14 @@ private _deployActionId = _asset addAction [
                 ["Construction cancelled."] call WL2_fnc_smoothText;
             };
 
-            private _deployClass = WL_ASSET(_crateType, "spawn", _crateType);
+            private _deployClass = WL_ASSET(_installable, "spawn", _installable);
 
-            private _offset = WL_ASSET(_crateType, "offset", []);
+            private _offset = WL_ASSET(_installable, "offset", []);
             if (count _offset != 3) then {
                 _offset = [0, 8, 0];
             };
 
-            private _deploymentResult = [_deployClass, _crateType, _offset, 30, true, true] call WL2_fnc_deployment;
+            private _deploymentResult = [_deployClass, _installable, _offset, 30, true, true] call WL2_fnc_deployment;
 
             if !(_deploymentResult # 0) exitWith {
                 playSound "AddItemFailed";
@@ -93,7 +84,7 @@ private _deployActionId = _asset addAction [
 
             private _position =  _deploymentResult # 1;
             private _direction = _deploymentResult # 3;
-            private _nearbyEntities = [_crateType, _position, _direction, getPlayerUID player, [_asset]] call WL2_fnc_grieferCheck;
+            private _nearbyEntities = [_installable, _position, _direction, getPlayerUID player, [_installableTarget]] call WL2_fnc_grieferCheck;
 
             if (count _nearbyEntities > 0) exitWith {
                 private _nearbyObjectName = [_nearbyEntities # 0] call WL2_fnc_getAssetTypeName;
@@ -101,29 +92,43 @@ private _deployActionId = _asset addAction [
                 playSound "AddItemFailed";
             };
 
-            private _deployCrates = _asset getVariable ["WL2_deployCrates", 0];
-            if (_deployCrates <= 0) exitWith {
+            private _installable = _installableTarget getVariable ["WL2_installable", ""];
+            if (_installable == "") exitWith {
                 playSound "AddItemFailed";
-                ["No deployment available!"] call WL2_fnc_smoothText;
+                ["Installation not available!"] call WL2_fnc_smoothText;
             };
-            _asset setVariable ["WL2_deployCrates", _deployCrates - 1, true];
+            _installableTarget setVariable ["WL2_installable", "", true];
+
+            private _singleton = WL_ASSET(_installable, "singleton", 0) > 0;
+            if (_singleton) then {
+                private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
+                private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
+                private _limitedOwnedVehicle = _ownedvehicles select {
+                    WL_ASSET_TYPE(_x) == _installable
+                };
+                {
+                    deleteVehicle _x;
+                } forEach _limitedOwnedVehicle;
+            };
 
             private _offset = _deploymentResult # 2;
-			[player, "orderAsset", "vehicle", _position, _crateType, _direction, true, true] remoteExec ["WL2_fnc_handleClientRequest", 2];
+			[player, "orderAsset", "vehicle", _position, _installable, _direction, true, true] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
             playSoundUI ["assemble_target", 1];
 
             if (_isConversion) then {
-                deleteVehicle _asset;
+                deleteVehicle _installableTarget;
             };
         };
 	},
-	[_crateType, _isConversion],
+	[],
 	5,
 	false,
 	true,
 	"",
-	"cursorObject == _target && alive _target && _target getVariable ['WL2_deployCrates', 0] > 0",
+	"!isNull (player getVariable ['WL2_installableTarget', objNull]) && cameraOn == player",
 	15,
 	false
 ];
+
+player setVariable ["WL2_installActionId", _installActionId];

@@ -7,7 +7,7 @@ private _victim = _uid call BIS_fnc_getUnitByUid;
 private _owner = owner _victim;
 if (_owner <= 2) exitWith {};
 
-if (WL_UNIT(_unit, "obstacle", 0) == 2) exitWith {};
+if (WL_UNIT(_unit, "obstacle", 0) == 3) exitWith {};
 
 if (_unit isKindOf "Man") then {
 	if (side group _unit == side group _responsibleLeader) then {

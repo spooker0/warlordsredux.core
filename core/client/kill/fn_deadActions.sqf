@@ -5,6 +5,12 @@ if (WL_ISUP(player)) exitWith {};
 
 private _deadActions = [
     true,
+    {
+        if (alive player) then {
+            player setVariable ["WL2_keepTent", true];
+        };
+        forceRespawn player;
+    },
     { 0 spawn WL2_fnc_vehicleManager; },
     { 0 spawn RWD_fnc_badgeMenu; },
     { 0 spawn MENU_fnc_reportMenu; },
@@ -48,7 +54,7 @@ if (_idHasChanged) then {
 };
 
 if (!alive player) exitWith {
-    _texture ctrlWebBrowserAction ["ExecJS", "cancelHold();"];
+    _texture ctrlWebBrowserAction ["ExecJS", "cancelHold();disableButton(0);disableButton(1);"];
 };
 
 if (_actionIsHold) then {

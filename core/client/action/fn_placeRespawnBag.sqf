@@ -14,7 +14,7 @@ if (surfaceIsWater _projectilePosition && (_projectilePosition # 2) < -1) exitWi
     ["Respawn tent cannot be placed under water."] call WL2_fnc_smoothText;
 };
 
-[false] call WL2_fnc_deleteTent;
+[false, objNull] call WL2_fnc_deleteTent;
 
 private _pos = _projectile modelToWorld [0, 0, 0];
 // _pos set [2, 0];
@@ -37,8 +37,6 @@ playSoundUI ["a3\ui_f\data\sound\cfgnotifications\communicationmenuitemadded.wss
 
 [_freshTent, player] remoteExec ["WL2_fnc_setupSimpleAsset", 0, true];
 
-_freshTent setVariable ["WL2_deployCrates", 1, true];
-
 private _isSquadLeader = ["isSquadLeader", [getPlayerID player]] call SQD_fnc_query;
 if (_isSquadLeader) then {
     private _rallyPointClass = if (BIS_WL_playerSide == west) then {
@@ -46,10 +44,10 @@ if (_isSquadLeader) then {
     } else {
         "Land_MedicalTent_01_CSAT_brownhex_generic_open_F"
     };
-
-    [_freshTent, _rallyPointClass, true] call WL2_fnc_deployCrateAction;
+    _freshTent setVariable ["WL2_installable", _rallyPointClass, true];
+} else {
+    _freshTent setVariable ["WL2_installable", "Land_BagFence_Long_F", true];
 };
-[_freshTent, "Land_BagFence_Long_F", false] call WL2_fnc_deployCrateAction;
 
 private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
 private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];

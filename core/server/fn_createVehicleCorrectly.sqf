@@ -4,10 +4,15 @@ _pos params ["_posX", "_posY", "_posZ"];
 
 if !(isServer) exitWith {};
 
-private _asset = if (_spawnInAir) then {
-	createVehicle [_class, _pos, [], 0, "FLY"];
+private _isObstacle = WL_ASSET(_orderedClass, "obstacle", 0) > 0;
+private _asset = if (_isObstacle) then {
+	createSimpleObject [_class, _pos, false];
 } else {
-	createVehicle [_class, [_posX, _posY, _posZ - 50], [], 0, "CAN_COLLIDE"];
+	if (_spawnInAir) then {
+		createVehicle [_class, _pos, [], 0, "FLY"];
+	} else {
+		createVehicle [_class, [_posX, _posY, _posZ - 50], [], 0, "CAN_COLLIDE"];
+	};
 };
 
 if (_direction isEqualType 0) then {
@@ -43,6 +48,18 @@ if (_exactPosition) then {
 	};
 
 	_asset setPosWorld _pos;
+};
+
+if (_isObstacle) then {
+	if (_isInWaterSector) then {
+		private _currentPosition = getPosASL _asset;
+		_currentPosition set [2, 23.5];
+		_asset setPosASL _currentPosition;
+	} else {
+		private _currentPosition = getPosATL _asset;
+		_currentPosition set [2, 0];
+		_asset setPosATL _currentPosition;
+	};
 };
 
 _asset setDamage 0;

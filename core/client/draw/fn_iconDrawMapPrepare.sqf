@@ -204,8 +204,8 @@ if (BIS_WL_currentSelection == WL_ID_SELECTION_ORDERING_NAVAL) then {
 
 	_drawEllipses pushBack [
 		getPosASL player,
-		200,
-		200,
+		300,
+		300,
 		0,
 		[1, 1, 1, 1],
 		""

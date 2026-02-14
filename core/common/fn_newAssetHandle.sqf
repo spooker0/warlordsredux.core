@@ -112,9 +112,7 @@ if (_asset isKindOf "Man") then {
 
 	private _loadedItem = WL_ASSET_GET(_data, "loaded", "");
 	if (_loadedItem != "") then {
-		_asset setVariable ["WL2_deployCrates", 1, true];
-		private _crateIsConversion = WL_ASSET(_loadedItem, "conversion", 0) != 0;
-		[_asset, _loadedItem, _crateIsConversion] call WL2_fnc_deployCrateAction;
+		_asset setVariable ["WL2_installable", _loadedItem, true];
 	};
 
 	if ([_asset] call WL2_fnc_isDrone) then {
