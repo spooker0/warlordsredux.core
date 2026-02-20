@@ -124,7 +124,7 @@ function currentSettingPrev() {
     A3API.SendAlert(`["${name}"]`);
 }
 
-function updateData(settingsData, currentIndex) {
+function updateHmdData(settingsData, currentIndex) {
     settingsData = JSON.parse(settingsData) || [];
 
     const wrapper = getWrapper();

@@ -272,7 +272,10 @@ switch (_conditionName) do {
         if (_combatAirActive) exitWith { "Combat air patrol is already active for this airbase." };
 
         private _nextCombatAirTime = _target getVariable ["WL2_nextCombatAir", -9999];
-        if (_nextCombatAirTime > serverTime) exitWith { "Combat air patrol is on cooldown for this airbase." };
+        if (_nextCombatAirTime > serverTime) exitWith {
+            private _timeRemaining = [(_nextCombatAirTime - serverTime) max 0, "MM:SS"] call BIS_fnc_secondsToString;
+            format ["Combat air patrol is on cooldown for this airbase: %1", _timeRemaining]
+        };
 
         "ok";
     };

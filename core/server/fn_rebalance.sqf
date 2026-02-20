@@ -22,3 +22,19 @@ private _rebalancedPlayer = [_targetUid] call BIS_fnc_getUnitByUID;
 private _lockTeamName = if (_newSide == west) then { "BLUFOR" } else { "OPFOR" };
 private _message = format ["You have been rebalanced to %1. Rejoin from lobby.", _lockTeamName];
 [_rebalancedPlayer, _message] remoteExec ["WL2_fnc_rebalanced", _rebalancedPlayer];
+
+private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", _targetUid];
+private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];
+_ownedVehicles = _ownedVehicles select { alive _x };
+{
+    if (unitIsUAV _x) then {
+        private _group = group effectiveCommander _x;
+        {
+            _x deleteVehicleCrew _x;
+        } forEach crew _x;
+        deleteGroup _group;
+    };
+
+    deleteVehicle _x;
+} forEach _ownedVehicles;
+missionNamespace setVariable [_ownedVehiclesVar, []];

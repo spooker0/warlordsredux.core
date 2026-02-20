@@ -31,7 +31,7 @@ function formatPoints(points) {
     return `Points: ${points}`;
 }
 
-function updateData(playerInfo, squadData) {
+function updateSquadData(playerInfo, squadData) {
     playerInfo = JSON.parse(playerInfo || '{}');
     squadData = JSON.parse(squadData || '{}');
 

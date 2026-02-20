@@ -3,11 +3,16 @@ params ["_sector", "_uav"];
 
 if (isDedicated) exitWith {};
 
+private _sensors = listVehicleSensors _uav;
+{
+    private _sensorClass = _x # 0;
+    _uav enableVehicleSensor [_sensorClass, false];
+} forEach _sensors;
+_uav setVehicleTIPars [1, 1, 1];
+
 uiSleep 10;
 
 private _side = BIS_WL_playerSide;
-
-_uav setVehicleTIPars [1, 1, 1];
 
 private _currentScannedSectors = missionNamespace getVariable ["WL2_scanningSectors", []];
 _currentScannedSectors pushBack _sector;
@@ -18,12 +23,6 @@ playSound "Beep_Target";
 [format [localize "STR_A3_WL_popup_scan_active", _sector getVariable "WL2_name"]] call WL2_fnc_smoothText;
 
 private _sectorArea = _sector getVariable "objectAreaComplete";
-
-private _sensors = listVehicleSensors _uav;
-{
-    private _sensorClass = _x # 0;
-    _uav enableVehicleSensor [_sensorClass, false];
-} forEach _sensors;
 
 private _minesInSector = allMines inAreaArray _sectorArea;
 {

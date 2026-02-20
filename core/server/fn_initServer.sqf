@@ -197,8 +197,14 @@ private _objectsToPreload = [
 	"Land_Dome_Small_WIP2_F",
 	"Land_Dome_Small_F",
 	"Land_CraneRail_01_F",
+	"Land_TentHangar_V1_F",
 	"Land_BagBunker_Small_F",
-	"Land_HBarrierWall_corridor_F",
+	"Land_BagBunker_01_large_green_F",
+	"Land_BagFence_Long_F",
+	"Land_SandbagBarricade_01_F",
+	"Land_New_WiredFence_10m_F",
+	"Land_DragonsTeeth_01_4x2_new_F",
+	"Land_CzechHedgehog_01_new_F",
 	"Land_Cargo_Tower_V4_F",
 	"Land_HBarrierTower_F"
 ];

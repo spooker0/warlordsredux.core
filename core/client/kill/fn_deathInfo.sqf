@@ -162,7 +162,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
     private _deathInfoText = toJSON _gameData;
     _deathInfoText = _texture ctrlWebBrowserAction ["ToBase64", _deathInfoText];
 
-    private _script = format ["updateData(atobr(""%1""));", _deathInfoText];
+    private _script = format ["updateDeathInfoData(atobr(""%1""));", _deathInfoText];
     _texture ctrlWebBrowserAction ["ExecJS", _script];
 
     _this spawn {

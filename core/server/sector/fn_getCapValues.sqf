@@ -21,7 +21,7 @@ private _sideCaptureModifier = createHashMap;
 	if (_side == independent) then {
 		private _reserves = _sector getVariable ["WL2_sectorPop", 0];
 		if (_reserves > 0) then {
-			_sideCaptureModifier set [_side, 3];
+			_sideCaptureModifier set [_side, 4];
 		} else {
 			_sideCaptureModifier set [_side, 2];
 		};

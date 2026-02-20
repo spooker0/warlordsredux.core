@@ -52,11 +52,15 @@ private _displayIcon = switch (toUpper _displayText) do {
 	case "SPAWN REWARD": { "a3\ui_f\data\igui\cfg\simpletasks\types\car_ca.paa" };
 	case "SQUAD ASSIST": { "a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa" };
 	default {
-		private _unitIcon = getText (configFile >> "CfgVehicles" >> _unitType >> "picture");
-		if (_unitIcon in ["pictureThing", "pictureStaticObject"]) then {
-			"a3\ui_f\data\map\vehicleicons\iconcratesupp_ca.paa";
+		if ("KILL" in toUpper _displayText) then {
+			"a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa";
 		} else {
-			_unitIcon regexReplace ["^\\", ""];
+			private _unitIcon = getText (configFile >> "CfgVehicles" >> _unitType >> "picture");
+			if (_unitIcon in ["pictureThing", "pictureStaticObject"]) then {
+				"a3\ui_f\data\map\vehicleicons\iconcratesupp_ca.paa";
+			} else {
+				_unitIcon regexReplace ["^\\", ""];
+			};
 		};
 	};
 };

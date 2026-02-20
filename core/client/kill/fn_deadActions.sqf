@@ -7,9 +7,8 @@ private _deadActions = [
     true,
     {
         if (alive player) then {
-            player setVariable ["WL2_keepTent", true];
+            forceRespawn player;
         };
-        forceRespawn player;
     },
     { 0 spawn WL2_fnc_vehicleManager; },
     { 0 spawn RWD_fnc_badgeMenu; },

@@ -110,7 +110,7 @@ private _objectArea = _sector getVariable "objectAreaComplete";
 private _roads = _sector nearRoads 500;
 _roads = _roads inAreaArray _objectArea;
 if (count _roads > 0) then {
-	if (random 1 > 0.5) then {
+	for "_i" from 1 to (random 4) do {
 		private _randomRoad = selectRandom _roads;
 		["AT_Minefield", getPosATL _randomRoad, random 360, true, false] call _spawnVehicle;
 	};
@@ -129,18 +129,22 @@ if ("H" in _services && !_alreadySpawnedAircraft) then {
 		};
 	} forEach WL_ASSET_DATA;
 
-	private _numAirSpawn = (round (random 3)) max 3;
+	private _numAirSpawn = (round (random 3)) max 1;
 	for "_i" from 1 to _numAirSpawn do {
 		private _randomAngle = random 360;
 		private _randomDistance = 2000 + random 500;
 		private _randomPos = _sector getPos [_randomDistance, _randomAngle];
-		_randomPos set [2, 1000];
+		_randomPos set [2, 300];
 
 		private _aircraft = [selectRandom _aircraftPool, _randomPos, random 360, false, true] call _spawnVehicle;
 		if (_aircraft isKindOf "Helicopter") then {
 			_aircraft setVelocityModelSpace [0, 100, 0];
 		} else {
 			_aircraft setVelocityModelSpace [0, 200, 0];
+			_randomPos set [2, 1000];
+			_aircraft setPosASL _randomPos;
+			[_aircraft, 0, 0] call BIS_fnc_setPitchBank;
+			_aircraft flyInHeightASL [1000, 1000, 1000];
 		};
 	};
 	_sector setVariable ["WL2_aircraftSpawned", true];
@@ -225,3 +229,10 @@ if (count _eligibleBuildings > 0) then {
 private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
 _ownedVehicles append _allUnits;
 missionNamespace setVariable ["BIS_WL_ownedVehicles_server", _ownedVehicles];
+
+#if WL_ZEUS_ENABLED
+private _allEntities = entities [[], ["Logic"], true];
+{
+	_x addCuratorEditableObjects [_allEntities, true];
+} forEach allCurators;
+#endif

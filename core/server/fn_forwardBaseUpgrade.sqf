@@ -1,5 +1,7 @@
 params ["_sender", "_side", "_forwardBase", "_level"];
 
+if (_level > 4) exitWith {};
+
 private _fobDome = _forwardBase getVariable ["WL2_forwardBaseDome", objNull];
 if (_level == 3) then {
     private _hangarType = "Land_TentHangar_V1_F";
@@ -59,7 +61,7 @@ if (_level == 3) then {
     };
     private _newDome = [_domeType, _domeType, _position, _direction, false, false] call WL2_fnc_createVehicleCorrectly;
     _newDome allowDamage false;
-    _forwardBase setVariable ["WL2_forwardBaseDome", _newDome];
+    _forwardBase setVariable ["WL2_forwardBaseDome", _newDome, true];
 
     private _assetChildren = _forwardBase getVariable ["WL2_children", []];
     _assetChildren pushBack _newDome;

@@ -201,14 +201,6 @@ private _canFastTravel = WL_ASSET(_assetActualType, "hasFastTravel", 0) > 0;
 if (_canFastTravel) then {
     [_asset, _targetId, "ft-asset", "Fast travel", {
         params ["_asset"];
-        if (WL_ISDOWN(player)) exitWith {
-            ["Cannot fast travel while dead."] call WL2_fnc_smoothText;
-            playSoundUI ["AddItemFailed"];
-        };
-        if (isWeaponDeployed player) exitWith {
-            ["Cannot fast travel while weapon is deployed."] call WL2_fnc_smoothText;
-            playSoundUI ["AddItemFailed"];
-        };
         [_asset] spawn WL2_fnc_executeFastTravelVehicle;
     }, true, "", [0, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
 
@@ -221,14 +213,19 @@ if (_canFastTravel) then {
 if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     private _fastTravelFOBExecute = {
         params ["_asset"];
-        BIS_WL_targetSector = nil;
+        private _dome = _asset getVariable ["WL2_forwardBaseDome", objNull];
+        if (isNull _dome) then {
+            BIS_WL_targetSector = nil;
 
-        private _marker = createMarkerLocal ["WL2_fastTravelFOBMarker", getPosATL _asset];
-        _marker setMarkerShapeLocal "ELLIPSE";
-        _marker setMarkerSizeLocal [WL_FOB_RANGE, WL_FOB_RANGE];
-        _marker setMarkerAlphaLocal 0;
+            private _marker = createMarkerLocal ["WL2_fastTravelFOBMarker", getPosATL _asset];
+            _marker setMarkerShapeLocal "ELLIPSE";
+            _marker setMarkerSizeLocal [WL_FOB_RANGE, WL_FOB_RANGE];
+            _marker setMarkerAlphaLocal 0;
 
-        [6, "WL2_fastTravelFOBMarker"] spawn WL2_fnc_executeFastTravel;
+            [6, "WL2_fastTravelFOBMarker"] spawn WL2_fnc_executeFastTravel;
+        } else {
+            [_dome] spawn WL2_fnc_executeFastTravelVehicle;
+        };
     };
     [
         _asset, _targetId,

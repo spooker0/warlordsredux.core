@@ -3,6 +3,16 @@ params ["_targetVehicle"];
 
 "RequestMenu_close" call WL2_fnc_setupUI;
 
+if (WL_ISDOWN(player)) exitWith {
+    ["Cannot fast travel while dead."] call WL2_fnc_smoothText;
+    playSoundUI ["AddItemFailed"];
+};
+
+if (isWeaponDeployed player) exitWith {
+    ["Cannot fast travel while weapon is deployed."] call WL2_fnc_smoothText;
+    playSoundUI ["AddItemFailed"];
+};
+
 if (!alive _targetVehicle) exitWith {
     ["Cannot fast travel to a destroyed vehicle."] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
@@ -47,7 +57,7 @@ private _unitsToMove = (units player) select {
             _unit setPosASL (AGLtoASL _destination);
         } else {
             private _destination = _targetVehicle modelToWorld [0, 0, 0];
-            _unit setVehiclePosition [_destination, [], 3, "NONE"];
+            _unit setVehiclePosition [_destination, [], 5, "CAN_COLLIDE"];
         };
     };
 } forEach _unitsToMove;

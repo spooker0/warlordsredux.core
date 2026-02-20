@@ -32,7 +32,7 @@ function sideToColorRGB(side, opacity = 1) {
     }
 }
 
-function updateData(gameData) {
+function updateDeathInfoData(gameData) {
     gameData = JSON.parse(gameData || '[]');
 
     const [health, killer, killerIcon, ratioYou, ratioThem, killedBy, killerSide, badgeText, badgeLevel, badgeIcon, hitPoints, hitProjectiles] = gameData;

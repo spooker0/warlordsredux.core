@@ -51,7 +51,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
 
         private _nearbyItems = cameraOn nearObjects 100;
         private _nearbyInstallable = _nearbyItems select {
-            cameraOn distance _x < 30;
+            cameraOn distance _x < 10;
         } select {
             [getPosASL cameraOn, getDir cameraOn, 90, getPosASL _x] call WL2_fnc_inAngleCheck;
         } select {

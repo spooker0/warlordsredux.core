@@ -73,7 +73,7 @@ function makeButtonBar(vehicleId, optionIds = []) {
     return bar;
 }
 
-function updateData(gameData) {
+function updateVehicleData(gameData) {
     let data = [];
     try { data = JSON.parse(gameData || '[]'); } catch { data = []; }
 

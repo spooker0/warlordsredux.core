@@ -194,7 +194,7 @@
 		};
 		_mapData set ["airWrecks", _airWrecks];
 
-		private _minefields = _sideVehicles select {
+		private _minefields = (_sideVehicles + _targetsOnDatalink + _visibleEnemyUnits) select {
 			_x getVariable ["WL2_isMinefield", false];
 		};
 		_mapData set ["minefields", _minefields];

@@ -16,7 +16,7 @@ if (typeof _unit == "RuggedTerminal_01_communications_hub_F") then {
 
 private _isBuilding = _unit isKindOf "Building";
 if (_isBuilding && _killReward == 0) exitWith {};
-if (_isBuilding && _unit getVariable ["BIS_WL_ownerAsset", "123"] == "123") exitWith {};
+if (_isBuilding && !(_unit getVariable ["WL_spawnedAsset", false])) exitWith {};
 
 private _killerSide = side group _responsibleLeader;
 private _unitSide = [_unit] call WL2_fnc_getAssetSide;
@@ -29,7 +29,12 @@ private _noRewardList = ["B_UAV_AI", "O_UAV_AI", "I_UAV_AI"];
 if (_unit isKindOf "Man" && !(_unit in _noRewardList)) then {
 	if (isPlayer _unit) then {
 		_killReward = 60;
-		_customText = "Player kill";
+		private _unitName = name _unit;
+		_customText = if ("Error" in _unitName) then {
+			"Player kill";
+		} else {
+			format ["Kill %1", name _unit];
+		};
 
 		[getPlayerUID _unit] remoteExec ["WL2_fnc_killNotify", _responsibleLeader];
 	} else {

@@ -25,4 +25,4 @@ _dataArray = [["PROFILE", 0, 4, _currentProfileIndex, false]] + _dataArray;
 
 private _settingsJson = toJSON _dataArray;
 _settingsJson = _texture ctrlWebBrowserAction ["ToBase64", _settingsJson];
-_texture ctrlWebBrowserAction ["ExecJS", format ["updateData(atobr('%1'), %2);", _settingsJson, 0]];
+_texture ctrlWebBrowserAction ["ExecJS", format ["updateHmdData(atobr('%1'), %2);", _settingsJson, 0]];

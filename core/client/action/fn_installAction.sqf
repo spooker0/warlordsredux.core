@@ -92,12 +92,15 @@ private _installActionId = player addAction [
                 playSound "AddItemFailed";
             };
 
-            private _installable = _installableTarget getVariable ["WL2_installable", ""];
-            if (_installable == "") exitWith {
+            private _installableAfter = _installableTarget getVariable ["WL2_installable", ""];
+            if (_installableAfter == "") exitWith {
                 playSound "AddItemFailed";
                 ["Installation not available!"] call WL2_fnc_smoothText;
             };
-            _installableTarget setVariable ["WL2_installable", "", true];
+
+            if (_installableAfter != WL_ASSET_TYPE(_installableTarget)) then {
+                _installableTarget setVariable ["WL2_installable", "", true];
+            };
 
             private _singleton = WL_ASSET(_installable, "singleton", 0) > 0;
             if (_singleton) then {

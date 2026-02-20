@@ -46,7 +46,7 @@ if (_isSquadLeader) then {
     };
     _freshTent setVariable ["WL2_installable", _rallyPointClass, true];
 } else {
-    _freshTent setVariable ["WL2_installable", "Land_BagFence_Long_F", true];
+    _freshTent setVariable ["WL2_installable", "Land_BagFence_Round_F", true];
 };
 
 private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];

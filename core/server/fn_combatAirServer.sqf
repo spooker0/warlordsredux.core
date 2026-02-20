@@ -20,6 +20,9 @@ while { !BIS_WL_missionEnd } do {
         alive _x;
     } select {
         _x isKindOf "Air";
+    } select {
+        private _posAGL = _x modelToWorld [0, 0, 0];
+        _posAGL # 2 > 50;
     };
 
     {

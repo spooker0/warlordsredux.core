@@ -110,7 +110,7 @@ private _reviveActionId = player addAction [
     false,
     false,
     "",
-    "!isNull (player getVariable ['WL2_reviveTarget', objNull]) && cameraOn == player",
+    "alive (player getVariable ['WL2_reviveTarget', objNull]) && cameraOn == player",
     0,
     false,
     "",

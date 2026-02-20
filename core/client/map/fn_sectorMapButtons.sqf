@@ -11,14 +11,6 @@ if (!isNull _sectorFtAsset) then {
     private _fastTravelAssetExecute = {
         params ["_sector"];
         private _asset = [_sector, true] call WL2_fnc_getSectorFTAsset;
-        if (WL_ISDOWN(player)) exitWith {
-            ["Cannot fast travel while dead."] call WL2_fnc_smoothText;
-            playSoundUI ["AddItemFailed"];
-        };
-        if (isWeaponDeployed player) exitWith {
-            ["Cannot fast travel while weapon is deployed."] call WL2_fnc_smoothText;
-            playSoundUI ["AddItemFailed"];
-        };
         [_asset] spawn WL2_fnc_executeFastTravelVehicle;
     };
     [

@@ -11,6 +11,7 @@ if (_isSecured) then {
     if (_distance < 100) then {
         player setVariable ["WL2_respawnBag", objNull];
         deleteVehicle _previousRespawnBag;
+        ["Tent removed."] call WL2_fnc_smoothText;
     };
 } else {
     player setVariable ["WL2_respawnBag", objNull];

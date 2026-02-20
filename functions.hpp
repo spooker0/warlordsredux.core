@@ -552,13 +552,9 @@ class CfgFunctions {
 		class Default {
 			file = "src\scripts\WLC";
 			class action {};
-			class buildMenu {};
 			class getLevelInfo {};
-			class getLoadoutNames {};
 			class levelUp {};
-			class loadData {};
 			class onRespawn {};
-			class pageLoad {};
 			class setScore {};
 		};
 	};

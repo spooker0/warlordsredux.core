@@ -36,7 +36,7 @@ private _getVehicleType = {
 private _killerType = [_assetActualType] call _getVehicleType;
 private _killedType = [_unitType] call _getVehicleType;
 
-if (_rewardType in ["KILL", "PLAYER KILL"]) then {
+if (_killedType == "INFANTRY") then {
 	private _currentKills = _rewardStack getOrDefault ["KILLS", 0];
 	_rewardStack set ["KILLS", _currentKills + 1];
 
