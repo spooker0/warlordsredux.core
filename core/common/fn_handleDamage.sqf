@@ -11,8 +11,10 @@ _asset addEventHandler ["HandleDamage", {
 		private _existingProjectiles = uiNamespace getVariable ["WL2_damagedProjectiles", createHashMap];
 		_existingProjectiles set [diag_tickTime, _projectile];
 		uiNamespace setVariable ["WL2_damagedProjectiles", _existingProjectiles];
-		uiNamespace setVariable ["WL2_damageSource", _source];
-		uiNamespace setVariable ["WL2_damagedWeapon", currentWeapon _source];
+
+		private _sourceVehicle = vehicle _source;
+		uiNamespace setVariable ["WL2_damageSource", _sourceVehicle];
+		uiNamespace setVariable ["WL2_damagedWeapon", currentWeapon _sourceVehicle];
 	};
 
 	if (_selection == "") then {

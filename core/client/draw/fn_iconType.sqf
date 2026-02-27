@@ -13,10 +13,6 @@ if (WL_ISUNCONSCIOUS(_vehicle)) exitWith {
 	"a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa";
 };
 
-if (_vehicle getVariable ["WL_ewNetActive", false]) exitWith {
-	"\a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa";
-};
-
 private _vehicleType = typeOf (vehicle _vehicle);
 private _iconFromCache = _mapIconCache getOrDefault [_vehicleType, ""];
 if (_iconFromCache != "") exitWith {

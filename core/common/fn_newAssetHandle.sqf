@@ -94,6 +94,10 @@ if (_asset isKindOf "Man") then {
 		_asset setVariable ["WL2_hasHMD", true, true];
 	};
 
+	if (WL_ASSET_GET(_data, "ewBoost", 0) > 0) then {
+		_asset setVariable ["WL2_hasEWBoost", true, true];
+	};
+
 	if !("ToolKit" in (itemCargo _asset)) then {
 		_asset addItemCargoGlobal ["ToolKit", 1];
 	};
@@ -101,13 +105,6 @@ if (_asset isKindOf "Man") then {
 	if (_assetActualType in WL_FOBCRATES) then {
 		_asset setVariable ["WL2_mapCircleRadius", WL_FOB_CAPTURE_RANGE, true];
 		[_asset] remoteExec ["WL2_fnc_setupForwardBaseAction", 0, true];
-	};
-
-	private _ewRange = WL_ASSET_GET(_data, "ewRange", 0);
-	if (_ewRange > 0) then {
-		_asset setVariable ["WL_ewNetActive", false, true];
-		_asset setVariable ["WL_ewNetRange", WL_JAMMER_RANGE_OUTER * _ewRange, true];
-		[_asset] remoteExec ["WL2_fnc_jammerAction", 0, true];
 	};
 
 	private _loadedItem = WL_ASSET_GET(_data, "loaded", "");
@@ -156,6 +153,15 @@ if (_asset isKindOf "Man") then {
 				uiSleep 2.4;
 			};
 		};
+	};
+
+	private _friendlySignalVar = format ["WL2_ewarSignal_%1", _side];
+	private _friendlySignal = missionNamespace getVariable [_friendlySignalVar, 500];
+	if (_friendlySignal >= 650) then {
+		private _cost = WL_ASSET_GET(_data, "cost", 0);
+		private _rebate = round (_cost * 0.1);
+		_rebate = _rebate min 3000;
+		[player, "droneRebate",  _rebate] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	};
 
 	if (WL_ASSET_GET(_data, "fragileDrone", 0) > 0) then {
@@ -265,7 +271,6 @@ if (_asset isKindOf "Man") then {
 			[_asset, true] remoteExec ["setAutonomous", 0];
 		};
 		_asset setVariable ["BIS_WL_ownerUavAsset", _playerUID, true];
-		[_asset, _owner] spawn WL2_fnc_uavJammer;
 		_asset setVariable ["WL_canConnectUav", true];
 
 		private _assetGrp = group _asset;
@@ -293,8 +298,8 @@ if (_asset isKindOf "Man") then {
 		_asset setVariable ["bis_ejected", true, true];
 	};
 
-	if (typeOf _asset == "VirtualReammoBox_camonet_F") then {
-		private _containerItems = WL_ASSET_GET(_data, "container", []);
+	private _containerItems = WL_ASSET_GET(_data, "container", []);
+	if (count _containerItems > 0) then {
 		{
 			private _containerItemType = _x # 0;
 			private _containerItemCount = _x # 1;

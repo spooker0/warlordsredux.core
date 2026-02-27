@@ -51,6 +51,8 @@ private _displayIcon = switch (toUpper _displayText) do {
 	case "SPOT ASSIST": { "a3\ui_f\data\gui\rsc\rscdisplayarsenal\binoculars_ca.paa" };
 	case "SPAWN REWARD": { "a3\ui_f\data\igui\cfg\simpletasks\types\car_ca.paa" };
 	case "SQUAD ASSIST": { "a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa" };
+	case "BOOSTED SIGNAL": { "a3\modules_f_curator\data\portraitlightning_ca.paa" };
+	case "DRONE REBATE": { "A3\Air_F_Jets\UAV_05\Data\UI\uav_05_icon_ca.paa" };
 	default {
 		if ("KILL" in toUpper _displayText) then {
 			"a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa";

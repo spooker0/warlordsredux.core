@@ -103,7 +103,7 @@ while { alive _projectile } do {
         } select {
             (_x distance2D _coordinates) < 250;
         } select {
-            getText (configFile >> "CfgVehicles" >> typeOf _x >> "destrType") != "DestructNo";
+            !(getText (configFile >> "CfgVehicles" >> typeOf _x >> "destrType") in ["DestructNo", "DestructTree"]);
         } select {
             !alive (_x getVariable ["DIS_targetedByGPSMunition", objNull]);
         };

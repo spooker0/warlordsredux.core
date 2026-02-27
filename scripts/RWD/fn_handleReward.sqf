@@ -151,6 +151,13 @@ if (_rewardType == "VEHICLE DISABLED") then {
 	_rewardStack set ["IMMOBILIZATIONS", _currentImmobilizations + 1];
 };
 
+if (_rewardType == "BOOSTED SIGNAL") then {
+	private _currentBoosts1 = _rewardStack getOrDefault ["BOOSTS 1", 0];
+	_rewardStack set ["BOOSTS 1", _currentBoosts1 + 1];
+	private _currentBoosts2 = _rewardStack getOrDefault ["BOOSTS 2", 0];
+	_rewardStack set ["BOOSTS 2", _currentBoosts2 + 1];
+};
+
 missionNamespace setVariable ["WL2_rewardStack", _rewardStack];
 
 call RWD_fnc_handleBadge;

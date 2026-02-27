@@ -636,23 +636,6 @@ private _scannedUnits = _mapData getOrDefault ["scannedUnits", []];
 	];
 } forEach (_scannedUnits inAreaArray [_mapCenter, _mapBoundW, _mapBoundH, 0, true]);
 
-// Draw EW networks
-{
-	if (isNull _x) then { continue; };
-
-	private _position = getPosASL _x;
-
-	private _range = _x getVariable ["WL_ewNetRange", 0];
-	_drawEllipses pushBack [
-		_position,
-		_range,
-		_range,
-		0,
-		[_x, _mapColorCache] call WL2_fnc_iconColor,
-		""
-	];
-} forEach (_mapData getOrDefault ["ewNetworks", []]);
-
 // Draw scanner
 private _assetData = WL_ASSET_DATA;
 

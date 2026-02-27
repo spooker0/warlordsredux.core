@@ -44,6 +44,9 @@ createHashMapFromArray [
 	["One of Us", ["a3\\missions_f_oldman\\data\\img\\hints\\sleeping_ca.paa", 1, "Go AFK for more than 15 minutes."]],
 	["John Warlords", ["a3\\missions_f_oldman\\data\\img\\hints\\restricted_ca.paa", 3, "Earn more than 100,000 points in a single match."]],
 
+	["Signal Booster", ["a3\\modules_f_curator\\data\\portraitlightning_ca.paa", 1, "Complete 15 signal boosts."]],
+	["I Can Do This In My Sleep", ["a3\\modules_f_curator\\data\\portraitlightning_ca.paa", 3, "Complete 100 signal boosts."]],
+
 	["Player", ["a3\\ui_f\\data\\gui\\rsc\\rscdisplaymain\\profile_player_ca.paa", 1, "Default."]],
 	["Developer", ["a3\\modules_f_beta\\data\\firingdrills\\medal_gold_ca.paa", 3, "Be a developer."]],
 	["Moderator", ["a3\\modules_f_beta\\data\\firingdrills\\medal_gold_ca.paa", 3, "Be a moderator."]],

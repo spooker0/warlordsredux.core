@@ -21,6 +21,10 @@ if (vehicle _caller != _caller) exitWith {
     false
 };
 
+if (WL_UNIT(cursorObject, "immobile", 0) > 0) exitWith {
+    false
+};
+
 private _allHitPoints = getAllHitPointsDamage _target;
 if (count _allHitPoints == 0) exitWith {};
 private _validHitPoints = _allHitPoints select 0 select {

@@ -94,53 +94,34 @@ addMissionEventHandler ["Draw3D", {
             continue;
         };
 
-        private _spectrumAttachment = ((weaponsItems player) select {
-            _x # 0 == "hgun_esd_01_F"
-        }) # 0 # 1;
+        private _spectrumData = [100, 500, 1, 0.5] call _setSpectrum;
+        _spectrumData params ["_lockDifficulty", "_frequency"];
 
-        private _spectrumData = switch (_spectrumAttachment) do {
-            case "muzzle_antenna_01_f": {
-                [70, 90, 2.25, 1.75] call _setSpectrum;
-            };
-            case "muzzle_antenna_02_f": {
-                [350, 500, 1.5, 0.5] call _setSpectrum;
-            };
-            case "muzzle_antenna_03_f": {
-                [432, 434, 0.75, 0.75] call _setSpectrum;
-            };
-            default {
-                [490, 500, 0.5, 0.45] call _setSpectrum;
-            };
-        };
-        private _weaponModifier = _spectrumData # 0;
-        private _lockRange = WL_JAMMER_SPECTRUM_RANGE * _weaponModifier;
+        private _friendlySignalVar = format ["WL2_ewarSignal_%1", BIS_WL_playerSide];
+        private _friendlySignal = missionNamespace getVariable [_friendlySignalVar, 500];
 
-
-        private _attachmentName = switch (_spectrumAttachment) do {
-            case "muzzle_antenna_01_f": {
-                "SD Military Antenna"
-            };
-            case "muzzle_antenna_02_f": {
-                "SD Experimental Antenna"
-            };
-            case "muzzle_antenna_03_f": {
-                "SD Jammer Antenna"
-            };
-            default {
-                "No Antenna"
-            };
+        private _lockRange = if (_friendlySignal >= 650) then {
+            WL_JAMMER_SPECTRUM_RANGE * _lockDifficulty
+        } else {
+            if (_friendlySignal <= 350) then {
+                5
+            } else {
+                500
+            }
         };
         _indicator ctrlSetStructuredText parseText format [
-            "<t align='center' size='1.4' shadow='2'>%1<br/>Frequency: %2MHz<br/>Max Range: %3m<br/>Lock Time: %4s</t>",
-            _attachmentName,
-            _spectrumData # 1,
-            round _lockRange,
-            (0.8 * _weaponModifier) toFixed 2
+            "<t align='center' size='1.4' shadow='2'>Frequency: %1 MHz<br/>Max Range: %2 M</t>",
+            _frequency,
+            round _lockRange
         ];
 
-        private _uavsInRange = allUnitsUAV select {
-            _x distance2D player < WL_JAMMER_SPECTRUM_DETECT_RANGE &&
-            [_x] call WL2_fnc_getAssetSide != BIS_WL_playerSide &&
+        private _uavsInRange = vehicles select {
+            _x distance2D player < WL_JAMMER_SPECTRUM_DETECT_RANGE
+        } select {
+            [_x] call WL2_fnc_getAssetSide != BIS_WL_playerSide
+        } select {
+            [_x] call WL2_fnc_isDrone;
+        } select {
             count lineIntersectsSurfaces [getPosASL _x, eyePos player, _x, player] == 0
         };
 
@@ -165,7 +146,7 @@ addMissionEventHandler ["Draw3D", {
             } else {
                 1
             };
-            _viewConeDistance = _viewConeDistance * (getObjectFOV player) * (_weaponModifier ^ 1.5);
+            _viewConeDistance = _viewConeDistance * (getObjectFOV player) * (_lockDifficulty ^ 1.5);
             _viewConeDistance = (_viewConeDistance min 0.5) * 2;
 
             _x setVariable ["WL_spectrumViewConeDistance", _viewConeDistance];
@@ -206,18 +187,7 @@ addMissionEventHandler ["Draw3D", {
         if (_findLockedUav != -1) then {
             private _lockedUav = _uavsInRange # _findLockedUav;
             private _distance = _lockedUav distance player;
-
-            private _uavSide = [_lockedUav] call WL2_fnc_getAssetSide;
-            private _activeVehicles = vehicles select {
-                alive _x
-            };
-            private _ewNetworkUnits = _activeVehicles + ("Land_MobileRadar_01_radar_F" allObjects 0) select {
-                _x getVariable ["WL_ewNetActive", false] &&
-                [_x] call WL2_fnc_getAssetSide == _uavSide &&
-                _x distance2D _lockedUav < _x getVariable ["WL_ewNetRange", 0]
-            };
-
-            private _jammable = _distance < _lockRange && (count _ewNetworkUnits == 0 || _spectrumAttachment == "muzzle_antenna_03_f");
+            private _jammable = _distance < _lockRange;
             (_spectrumIcons # _findLockedUav) set [0, if (_jammable) then {
                 "\A3\ui_f\data\IGUI\Cfg\Targeting\HitConfirm_ca.paa"
             } else {
@@ -235,25 +205,15 @@ addMissionEventHandler ["Draw3D", {
             if (_jammable && inputAction "defaultAction" > 0) then {
                 _lockStatus = _lockStatus + 1;
                 missionNamespace setVariable ["#EM_Transmit", true];
-                missionNamespace setVariable ["#EM_Progress", _lockStatus / (4 * _weaponModifier)];
+                missionNamespace setVariable ["#EM_Progress", _lockStatus / (4 * _lockDifficulty)];
 
-                if (_lockStatus > (4 * _weaponModifier)) then {
-                    _lockedUav setVariable ["BIS_WL_spectrumJammed", true, true];
+                if (_lockStatus > (4 * _lockDifficulty)) then {
                     _lockedUav setVariable ["WL_lastHitter", player, 2];
 
                     // Effect
                     if (getPosATL _lockedUav # 2 > 1) then {
                         [_lockedUav, player] remoteExec ["WL2_fnc_uavJammed", 2];
-                    } else {
-                        [_lockedUav, false] remoteExec ["setAutonomous", 0];
-                    };
-
-                    playSoundUI ["a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", 1, 1, true];
-
-                    [_lockedUav] spawn {
-                        params ["_lockedUav"];
-                        uiSleep 0.5;
-                        [format ["%1 (%2%%)", localize "STR_WL_jammingSent", round ((1 - damage _lockedUav) * 100)]] call WL2_fnc_smoothText;
+                        playSoundUI ["a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", 1, 1, true];
                     };
 
                     _lockStatus = 0;
@@ -269,10 +229,14 @@ addMissionEventHandler ["Draw3D", {
             _lockStatus = 0;
         };
 
-        private _friendlyUavs = allUnitsUAV select {
-            _x distance2D player < WL_JAMMER_SPECTRUM_DETECT_RANGE &&
+        private _friendlyUavs = vehicles select {
+            _x distance2D player < WL_JAMMER_SPECTRUM_DETECT_RANGE
+        } select {
             [_x] call WL2_fnc_getAssetSide == BIS_WL_playerSide
+        } select {
+            [_x] call WL2_fnc_isDrone;
         };
+
         {
             private _color = switch (BIS_WL_playerSide) do {
                 case west: { [0, 0.3, 0.6, 0.9] };

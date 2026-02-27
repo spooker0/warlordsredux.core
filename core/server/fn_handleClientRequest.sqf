@@ -314,7 +314,7 @@ if (_action == "combatAir") exitWith {
 if (_action == "ftSupportPoints") exitWith {
 	private _ftVehicle = _param1;
 	private _unitsToMove = _param2;
-	private _reward = 20;
+	private _reward = 100;
 
 	private _targets = [
 		missionNamespace getVariable "BIS_WL_currentTarget_west",
@@ -408,6 +408,92 @@ if (_action == "secure") exitWith {
 	private _reward = 50;
 	[_reward] call _addFunds;
 	[objNull, _reward, "Secured", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+};
+
+if (_action == "droneRebate") exitWith {
+	private _reward = _param1;
+	[_reward] call _addFunds;
+	[objNull, _reward, "Drone rebate", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+};
+
+if (_action == "boost") exitWith {
+	private _senderVehicle = vehicle _sender;
+	private _multiplier = if (_senderVehicle getVariable ["WL2_hasEWBoost", false]) then { 2 } else { 1 };
+
+	private _reward = 40 * _multiplier;
+	[_reward] call _addFunds;
+	[objNull, _reward, "Boosted signal", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+
+	private _message = _param1;
+
+	private _allPlayers = call BIS_fnc_listPlayers;
+	private _friendlyPlayers = [];
+	private _hostilePlayers = [];
+	{
+		if (_x == _sender) then {
+			continue;
+		};
+
+		private _isUsingEW = _x getVariable ["WL2_isUsingEW", false];
+		private _ewPlayerOwner = owner _x;
+
+		if (_ewPlayerOwner <= 2) then {
+			continue;
+		};
+
+		if (side group _x == _side) then {
+			_friendlyPlayers pushBack _ewPlayerOwner;
+		} else {
+			_hostilePlayers pushBack _ewPlayerOwner;
+		};
+	} forEach _allPlayers;
+
+	if (count _friendlyPlayers > 0) then {
+		[_message, true] remoteExec ["WL2_fnc_ewarMessage", _friendlyPlayers];
+	};
+	if (count _hostilePlayers > 0) then {
+		[_message, false] remoteExec ["WL2_fnc_ewarMessage", _hostilePlayers];
+	};
+
+	private _split = _message splitString ",";
+	private _signalIncrement = 5 * _multiplier;
+	if (count _split == 2) then {
+		private _cellSolution = _split select 0;
+		private _cellIndex = parseNumber (_split select 1);
+		private _puzzleVar = format ["WL2_ewarCurrentPuzzle_%1", _side];
+		private _puzzle = missionNamespace getVariable [_puzzleVar, ""];
+
+		private _solution = missionNamespace getVariable ["WL2_ewarCurrentSolution", ""];
+
+		private _sanityCheck = _cellSolution == (_solution select [_cellIndex, 1]);
+		if (_sanityCheck) then {
+			private _puzzleArray = _puzzle splitString "";
+			_puzzleArray set [_cellIndex, _cellSolution];
+			missionNamespace setVariable [_puzzleVar, _puzzleArray joinString "", true];
+
+			private _friendlySignalVar = format ["WL2_ewarSignal_%1", _side];
+			private _friendlySignal = missionNamespace getVariable [_friendlySignalVar, 500];
+			_friendlySignal = (_friendlySignal + _signalIncrement) min 1000;
+			missionNamespace setVariable [_friendlySignalVar, _friendlySignal, true];
+
+			private _hostileSignalVar = format ["WL2_ewarSignal_%1", if (_side == west) then { east } else { west }];
+			private _hostileSignal = missionNamespace getVariable [_hostileSignalVar, 500];
+			_hostileSignal = (_hostileSignal - _signalIncrement) max 0;
+			missionNamespace setVariable [_hostileSignalVar, _hostileSignal, true];
+		};
+	};
+
+	private _currentPuzzleWest = missionNamespace getVariable ["WL2_ewarCurrentPuzzle_west", ""];
+    private _currentPuzzleEast = missionNamespace getVariable ["WL2_ewarCurrentPuzzle_east", ""];
+    private _currentSolution = missionNamespace getVariable ["WL2_ewarCurrentSolution", ""];
+
+    if (_currentPuzzleWest == _currentSolution || _currentPuzzleEast == _currentSolution) then {
+		call WL2_fnc_ewarGenerate;
+		private _allRelevantPlayers = _friendlyPlayers + _hostilePlayers + [owner _sender];
+		if (count _allRelevantPlayers > 0) then {
+			["reset", true] remoteExec ["WL2_fnc_ewarMessage", _allRelevantPlayers];
+		};
+    };
 };
 
 #if WL_FREE_MONEY

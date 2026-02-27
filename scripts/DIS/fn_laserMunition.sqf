@@ -10,9 +10,6 @@ _projectile setVariable ["WL2_missileType", "AGM"];
 private _target = _unit getVariable ["WL2_selectedTargetLaser", objNull];
 if (!alive _target) exitWith {};
 
-private _isInAngle = [getPosATL _projectile, getDir _projectile, 120, getPosATL _target] call WL2_fnc_inAngleCheck;
-if (!_isInAngle) exitWith {};
-
 private _lockPercent = _unit getVariable ["WL2_selectedLockPercentLaser", 0];
 if (_lockPercent < 100) exitWith {};
 
@@ -40,7 +37,11 @@ while { alive _projectile } do {
                 _laser = createVehicleLocal ["LaserTargetC", [0, 0, 0], [], 0, "NONE"];
             };
 
-            _laser setPosASL (_targetPos vectorAdd [0, 0, 1000]);
+            private _laserTarget = _targetPos vectorAdd [0, 0, 1000];
+            _laser setPosASL _laserTarget;
+
+            private _targetVectorDirAndUp = [getPosASL _projectile, _laserTarget] call BIS_fnc_findLookAt;
+            _projectile setVectorDirAndUp _targetVectorDirAndUp;
             _projectile setVelocityModelSpace [0, _projectileSpeed, 0];
             _projectile setMissileTarget [_laser, true];
         } else {

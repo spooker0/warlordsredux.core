@@ -40,7 +40,7 @@ if (_immobile > 0) then {
 	if (unitIsUAV _asset) then {
 		deleteVehicle (driver _asset);
 	} else {
-		(driver _asset) disableAI "ALL";
+		_asset lockDriver true;
 	};
 
 	{

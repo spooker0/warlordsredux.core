@@ -61,6 +61,7 @@ missionNamespace setVariable [_ownedVehiclesVar, _ownedVehicles, [2, clientOwner
 
 player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 player setVariable ["WL_lastHitter", objNull, 2];
+player setVariable ["WL2_canAccessEW", true];
 [] call WLC_fnc_onRespawn;
 
 0 spawn MENU_fnc_settingsMenu;

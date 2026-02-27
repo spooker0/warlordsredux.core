@@ -15,6 +15,8 @@ private _nearbyRepair = (_target nearEntities ["All", WL_MAINTENANCE_RADIUS]) se
 } select {
     WL_UNIT(_x, "hasRepair", 0) > 0
 } select {
+    WL_UNIT(_x, "immobile", 0) > 0
+} select {
     ([_x, _caller, "cargo"] call WL2_fnc_accessControl) # 0
 };
 

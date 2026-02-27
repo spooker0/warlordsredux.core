@@ -166,6 +166,8 @@ class CfgFunctions {
 			class createDestroyerClient {};
 			class dumbMine {};
 			class earthquake {};
+			class ewar {};
+			class ewarMessage {};
 			class exitToLobby {};
 			class factionBasedClientInit {};
 			class handleAIDamage {};
@@ -237,9 +239,6 @@ class CfgFunctions {
 			class hmdSettings {};
 			class hmdSettingsAction {};
 			class installAction {};
-			class jammerAction {};
-			class jammerToggle {};
-			class jammerUpdate {};
 			class lockActionEligibility {};
 			class lockActionUpdate {};
 			class mineClearAction {};
@@ -294,6 +293,7 @@ class CfgFunctions {
 			class drawRadarName {};
 			class drawSectorMarker {};
 			class ecmJammer {};
+			class ewarResult {};
 			class getDir {};
 			class helmetInterface {};
 			class iconColor {};
@@ -310,7 +310,6 @@ class CfgFunctions {
 			class smoothText {};
 			class toggleTurretVisualizer {};
 			class turretLimits {};
-			class uavJammer {};
 		};
 		class ClientInventory {
 			file = "src\core\client\inventory";
@@ -344,7 +343,6 @@ class CfgFunctions {
 			class addMapButtonsDisplay {};
 			class addTargetMapButton {};
 			class assetButtonAccessControl {};
-			class assetButtonJammer {};
 			class assetButtonRadarOperate {};
 			class assetButtonRadarRotate {};
 			class assetMapButtons {};
@@ -410,6 +408,7 @@ class CfgFunctions {
 			class checkCollaborator {};
 			class checkConscription {};
 			class checkDead {};
+			class checkEwar {};
 			class checkFastTravelSL {};
 			class checkFastTravelSquad {};
 			class checkFunds {};
@@ -499,6 +498,8 @@ class CfgFunctions {
 			class demolishComplete {};
 			class destroyStronghold {};
 			class detectNewPlayers {};
+			class ewarGenerate {};
+			class ewarServer {};
 			class forgiveTeamkill {};
 			class forwardBaseUpgrade {};
 			class friendlyFireHandleServer {};

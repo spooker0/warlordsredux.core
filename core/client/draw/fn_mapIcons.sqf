@@ -71,15 +71,6 @@
 		private _waypoints = waypoints group cameraOn;
 		_mapData set ["uavWaypoints", _waypoints];
 
-		private _vehicles = vehicles select { alive _x };
-		private _activeVehicles = +_vehicles;
-		_activeVehicles append ("Land_MobileRadar_01_radar_F" allObjects 0);
-		private _ewNetworkUnits = _activeVehicles select {
-			_x getVariable ["WL_ewNetActive", false] ||
-			_x getVariable ["WL_ewNetActivating", false]
-		};
-		_mapData set ["ewNetworks", _ewNetworkUnits];
-
 		private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
 		private _visibleStrongholds = _strongholds select {
 			private _sector = _x getVariable ["WL_strongholdSector", objNull];
@@ -88,6 +79,8 @@
 		};
 		_mapData set ["strongholds", _visibleStrongholds];
 
+		private _vehicles = vehicles select { alive _x };
+		private _activeVehicles = +_vehicles;
 		private _scannerUnits = _activeVehicles select {
 			_x getVariable ["WL_scannerOn", false]
 		};
@@ -127,10 +120,7 @@
 		};
 		_mapData set ["sideVehicles", _sideVehicles];
 
-		private _alwaysShowEwUnits = _ewNetworkUnits apply {
-			[_x, 10]
-		};
-		private _targetsOnDatalink = (_alwaysShowEwUnits + listRemoteTargets _side) select {
+		private _targetsOnDatalink = (listRemoteTargets _side) select {
 			WL_ISUP(_x # 0)
 		} select {
 			(_x # 1) >= -10

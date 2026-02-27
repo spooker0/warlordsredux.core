@@ -35,10 +35,6 @@ if (_asset isKindOf "Man") exitWith {
 
 private _vehicleDisplayName = [_asset] call WL2_fnc_getAssetTypeName;
 
-if (_asset getVariable ["WL_ewNetActive", false]) then {
-	_vehicleDisplayName = "Active EW";
-};
-
 if (_showName) then {
 	private _crewCount = count crew _asset;
 	if (!(unitIsUAV _asset) && _crewCount > 0) then {

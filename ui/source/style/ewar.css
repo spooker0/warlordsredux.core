@@ -1,0 +1,336 @@
+:root {
+    --cell-size: 8vmin;
+
+    --board-border: calc(var(--cell-size) * 0.045);
+    --cell-border: calc(var(--cell-size) * 0.015);
+    --thick-border: calc(var(--cell-size) * 0.045);
+    --selection-outline: calc(var(--cell-size) * 0.045);
+
+    --container-padding: 3vh;
+    --container-gap: 3vw;
+
+    --value-font-size: calc(var(--cell-size) * 0.62);
+    --candidate-font-size: calc(var(--cell-size) * 0.20);
+    --numpad-font-size: calc(var(--cell-size) * 0.52);
+
+    --numpad-cell-size: calc(var(--cell-size) * 1.35);
+    --numpad-gap: calc(var(--cell-size) * 0.14);
+}
+
+body {
+    font-family: 'Consolas', monospace;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    user-select: none;
+    margin: 0;
+    padding: 0;
+}
+
+.loading-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    color: white;
+    font-weight: bold;
+    font-size: 10vh;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.ewar-menu {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.95);
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    position: relative;
+    opacity: 0;
+    scrollbar-color: #444444 #2a2a2a;
+    scrollbar-width: thin;
+    color: white;
+    font-size: 1.2vh;
+}
+
+.close-button {
+    position: absolute;
+    top: 1vh;
+    right: 1vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    width: 5vh;
+    height: 5vh;
+    font-size: 5vh;
+    line-height: 5vh;
+    padding: 0;
+    margin: 0;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+
+}
+
+.close-button:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #333;
+}
+
+.ewar-container {
+    display: flex;
+    gap: var(--container-gap);
+    padding: var(--container-padding);
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    align-items: flex-start;
+}
+
+.ewar-board {
+    display: grid;
+    grid-template-columns: repeat(9, var(--cell-size));
+    grid-template-rows: repeat(9, var(--cell-size));
+    gap: 0;
+    border: var(--board-border) solid rgba(255, 255, 255, 0.9);
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.ewar-cell {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    position: relative;
+    box-sizing: border-box;
+    border: var(--cell-border) solid rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+}
+
+.ewar-left-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6vh;
+}
+
+.ewar-board-instructions {
+    margin: 0;
+    padding-left: 1.4vw;
+    font-size: 1.35vh;
+    opacity: 0.9;
+}
+
+.ewar-board-instructions li {
+    margin-bottom: 0.5vh;
+}
+
+.ewar-cell.border-right-thick {
+    border-right: var(--thick-border) solid rgba(255, 255, 255, 0.75);
+}
+
+.ewar-cell.border-bottom-thick {
+    border-bottom: var(--thick-border) solid rgba(255, 255, 255, 0.75);
+}
+
+.ewar-cell.hinted {
+    background: rgba(255, 120, 120, 0.18);
+}
+
+.ewar-cell.highlight-same-number {
+    background: rgba(255, 255, 255, 0.28);
+}
+
+.ewar-cell.highlight-candidate-available {
+    background: rgba(255, 255, 255, 0.20);
+}
+
+.ewar-cell.selected {
+    outline: var(--selection-outline) solid rgba(255, 255, 255, 0.9);
+    outline-offset: calc(var(--selection-outline) * -1);
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.ewar-cell.given {
+    font-weight: bold;
+}
+
+.ewar-cell-value {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--value-font-size);
+    pointer-events: none;
+}
+
+.ewar-cell-candidates {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 0;
+
+    pointer-events: none;
+
+}
+
+.ewar-cell.selected .ewar-cell-candidates {
+    pointer-events: auto;
+}
+
+.ewar-candidate-place {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--candidate-font-size);
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    user-select: none;
+    text-shadow: none;
+}
+
+.ewar-candidate-place.not-candidate {
+    opacity: 0;
+    color: transparent;
+    background: transparent;
+}
+
+.ewar-cell.selected .ewar-candidate-place.not-candidate:hover {
+    opacity: 1;
+    color: rgba(255, 255, 255, 0.60);
+    background: rgba(255, 255, 255, 0.14);
+
+    text-shadow: -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+}
+
+.ewar-cell.selected .ewar-candidate-place.not-candidate.candidate-not-allowed:hover {
+    opacity: 0;
+    color: transparent;
+    background: transparent;
+    text-shadow: none;
+}
+
+.ewar-candidate-place.candidate {
+    opacity: 1;
+    color: rgba(255, 255, 255, 0.95);
+
+    text-shadow: -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+}
+
+.ewar-candidate-place.candidate-not-allowed {
+    pointer-events: none;
+}
+
+.ewar-cell.given .ewar-cell-candidates,
+.ewar-cell.filled .ewar-cell-candidates {
+    display: none;
+}
+
+.ewar-side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+    min-width: 18vw;
+}
+
+.ewar-numpad {
+    display: grid;
+    grid-template-columns: repeat(3, var(--numpad-cell-size));
+    grid-template-rows: repeat(3, var(--numpad-cell-size));
+    gap: var(--numpad-gap);
+}
+
+.ewar-numpad-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--numpad-font-size);
+    background: rgba(255, 255, 255, 0.12);
+    border: calc(var(--cell-size) * 0.02) solid rgba(255, 255, 255, 0.20);
+    cursor: pointer;
+}
+
+.ewar-numpad-button:hover {
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.ewar-numpad-button:active {
+    transform: translateY(1px);
+}
+
+.signal-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2vh;
+}
+
+.signal-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6vh;
+}
+
+.signal-label {
+    font-size: 1.4vh;
+    opacity: 0.9;
+}
+
+.signal-bar {
+    position: relative;
+    width: 100%;
+    height: 3.2vh;
+    background: rgba(255, 255, 255, 0.10);
+    border: calc(var(--cell-size) * 0.02) solid rgba(255, 255, 255, 0.18);
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.signal-bar-fill {
+    position: absolute;
+    inset: 0;
+    width: 50%;
+    height: 100%;
+}
+
+.signal-bar-fill.signal-normal {
+    background: rgba(120, 255, 120, 0.35);
+}
+
+.signal-bar-fill.signal-boosted {
+    background: rgba(120, 255, 120, 0.55);
+}
+
+.signal-bar-fill.signal-degraded {
+    background: rgba(255, 120, 120, 0.55);
+}
+
+.signal-bar-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4vh;
+    color: rgba(255, 255, 255, 0.92);
+    pointer-events: none;
+}
+
+.signal-instructions {
+    margin: 0.6vh 0 1.2vh 1.2vw;
+    padding: 0;
+    font-size: 1.3vh;
+    opacity: 0.9;
+}
+
+.signal-instructions li {
+    margin-bottom: 0.4vh;
+}

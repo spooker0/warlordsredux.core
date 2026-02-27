@@ -39,7 +39,7 @@ private _allLasedTargets = [];
     } select {
         !(_x isKindOf "Man");
     } select {
-        getText (configFile >> "CfgVehicles" >> typeOf _x >> "destrType") != "DestructNo";
+        !(getText (configFile >> "CfgVehicles" >> typeOf _x >> "destrType") in ["DestructNo", "DestructTree"]);
     };
 
     _allLasedTargets insert [-1, _enemiesNear, true];

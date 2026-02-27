@@ -255,7 +255,8 @@ switch (_className) do {
         [4, ""] spawn WL2_fnc_executeFastTravel;
         "RequestMenu_close" call WL2_fnc_setupUI;
     };
-    case "WelcomeScreen": {0 spawn WL2_fnc_welcome};
+    case "WelcomeScreen": { 0 spawn WL2_fnc_welcome };
+    case "Ewar": { 0 spawn WL2_fnc_ewar };
     case "StressTestSector": {
         0 spawn {
             private _direction = [vectorDir player, vectorUp player];

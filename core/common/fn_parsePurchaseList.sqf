@@ -219,6 +219,13 @@ private _strategyArr = [
 		localize "STR_WL_infoMenuInfo",
 		"src\img\wl_logo_ca.paa",
 		""
+	], [
+		"Ewar",
+		0,
+		[],
+		"Electronic warfare",
+		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
+		"Start the electronic warfare interface."
 	]
 ];
 

@@ -93,6 +93,9 @@ private _repairWheels = _asset addAction [
                         _asset setHitPointDamage [_x, 0];
                     } forEach _validHitPoints;
                     _asset setVariable ["WL2_immobilized", false, true];
+                    if (fuel _asset < 0.1) then {
+                        _asset setFuel 0.1;
+                    };
                 };
 
                 if (_timeToStop <= serverTime) then {

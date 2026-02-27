@@ -43,7 +43,6 @@ class CfgRemoteExec {
 		class WL2_fnc_handleDamage {allowedTargets = 0;};
 		class WL2_fnc_handleEntityRemoval {allowedTargets = 2;};
 		class WL2_fnc_hideObjectOnAll {allowedTargets = 0;};
-		class WL2_fnc_jammerAction {allowedTargets = 0;};
 		class WL2_fnc_killNotify {allowedTargets = 0;};
 		class WL2_fnc_killRewardHandle {allowedTargets = 2;};
 		class WL2_fnc_lagMessageHandler {allowedTargets = 2;};

@@ -221,6 +221,11 @@ if (_ret) then {
 				[WL2_fnc_checkGreenSwitch]
 			]
 		};
+		case "Ewar": {
+			[
+				[WL2_fnc_checkEwar]
+			]
+		};
 		default {
 			if (_category in ["Fast Travel", "Strategy"]) then {
 				[]
