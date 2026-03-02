@@ -171,13 +171,6 @@ private _strategyArr = [
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"Camouflage your current position with tall plants. Disappears after 5 minutes."
 	], [
-		"CruiseMissiles",
-		15000,
-		[],
-		"Call missile strike",
-		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"Call a volley of cruise missiles on your designation. Requires all targets (vehicles or infantry) to be on datalink."
-	], [
 		"WipeMap",
 		0,
 		[],
@@ -228,6 +221,17 @@ private _strategyArr = [
 		"Start the electronic warfare interface."
 	]
 ];
+
+#if WL_CRUISE_MISSILES
+_strategyArr pushBack [
+	"CruiseMissiles",
+	15000,
+	[],
+	"Call missile strike",
+	"\A3\Data_F_Warlords\Data\preview_empty.jpg",
+	"Call a volley of cruise missiles on your designation. Requires all targets (vehicles or infantry) to be on datalink."
+];
+#endif
 
 #if WL_PERF_TEST
 _strategyArr pushBack [

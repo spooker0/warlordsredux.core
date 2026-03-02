@@ -762,6 +762,13 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 	if (_x == player) then {
 		continue;
 	};
+	if (_hideMap == 1) then {
+		private _access = [_x, player, "full"] call WL2_fnc_accessControl;
+		private _hasFullAccess = _access # 0;
+		if (!_hasFullAccess) then {
+			continue;
+		};
+	};
 	_drawIconsSelectable pushBack _x;
 } forEach (_sideVehicles inAreaArray [_mapCenter, _mapBoundW, _mapBoundH, 0, true]);
 

@@ -4,7 +4,7 @@
 private _display = createDialog ["RscWLBrowserMenu", true];
 private _texture = _display displayCtrl 5501;
 _texture ctrlWebBrowserAction ["LoadFile", "src\ui\gen\ewar.html"];
-_texture ctrlWebBrowserAction ["OpenDevConsole"];
+// _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
 uiNamespace setVariable ["WL2_ewarDisplay", _display];
 player setVariable ["WL2_isUsingEW", true, [2, clientOwner]];

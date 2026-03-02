@@ -259,6 +259,7 @@ class CfgFunctions {
 			class refuelAction {};
 			class refuelActionEligibility {};
 			class removeAction {};
+			class removeAsset {};
 			class removeStronghold {};
 			class repairAction {};
 			class repairActionEligibility {};
@@ -349,7 +350,6 @@ class CfgFunctions {
 			class assetMapControl {};
 			class captureDisplay {};
 			class createInfoMarkers {};
-			class deleteAssetFromMap {};
 			class designateTeamPriority {};
 			class detectUnits {};
 			class getSectorFTAsset {};

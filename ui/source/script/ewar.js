@@ -15,7 +15,37 @@ function wrong() {
 
 let hintedCellIndices = new Set();
 
-function reveal(cellIndex, candidateNumber) {
+let selectedCellIndex = null;
+let ewarPuzzleString = '';
+let ewarSolutionString = '';
+let ewarKeyString = '';
+let keyCharactersByNumber = [];
+let numberByKeyCharacter = new Map();
+
+let forcedHighlightNumber = null;
+
+let ewarCellElementsByIndex = [];
+let ewarCellValueElementsByIndex = [];
+let ewarCandidatePlaceElementsByCellIndex = [];
+let candidatesByCellIndex = [];
+let allowedCandidatesByCellIndex = [];
+
+let friendlySignalBarFillElement = null;
+let friendlySignalBarTextElement = null;
+let hostileSignalBarFillElement = null;
+let hostileSignalBarTextElement = null;
+let friendlySignalInstructionsElement = null;
+let hostileSignalInstructionsElement = null;
+
+let ewarNumpadButtonsByNumber = [];
+let disabledNumpadNumbers = new Set();
+
+/*
+    Multiplayer methods expected to be called by the host game.
+    - reveal(candidateNumber, cellIndex): teammate reveals/places the number for the team.
+    - hint(cellIndex): opponent indicates they have the answer; we only show a low-priority red tint.
+*/
+function reveal(candidateNumber, cellIndex) {
     const safeCellIndex = Number(cellIndex);
     const safeCandidateNumber = Number(candidateNumber);
 
@@ -49,6 +79,8 @@ function reveal(cellIndex, candidateNumber) {
 
     updateAllowedCandidatesAndPruneAll(false);
     updateHighlightsForSelectedCell();
+    updateSingleCandidateHighlights();
+    updateNumpadDisabledStates();
 }
 
 function hint(cellIndex) {
@@ -71,28 +103,6 @@ function hint(cellIndex) {
     cellElement.classList.add('hinted');
 }
 
-let selectedCellIndex = null;
-let ewarPuzzleString = '';
-let ewarSolutionString = '';
-let ewarKeyString = '';
-let keyCharactersByNumber = [];
-let numberByKeyCharacter = new Map();
-
-let forcedHighlightNumber = null;
-
-let ewarCellElementsByIndex = [];
-let ewarCellValueElementsByIndex = [];
-let ewarCandidatePlaceElementsByCellIndex = [];
-let candidatesByCellIndex = [];
-let allowedCandidatesByCellIndex = [];
-
-let friendlySignalBarFillElement = null;
-let friendlySignalBarTextElement = null;
-let hostileSignalBarFillElement = null;
-let hostileSignalBarTextElement = null;
-let friendlySignalInstructionsElement = null;
-let hostileSignalInstructionsElement = null;
-
 function initScreen(puzzle, solution, key, friendlySignal, hostileSignal) {
     hideLoadingOverlay();
 
@@ -103,6 +113,11 @@ function initScreen(puzzle, solution, key, friendlySignal, hostileSignal) {
     buildKeyMappingsFromKeyString(ewarKeyString);
 
     hintedCellIndices = new Set();
+    selectedCellIndex = null;
+    forcedHighlightNumber = null;
+
+    disabledNumpadNumbers = new Set();
+    ewarNumpadButtonsByNumber = [];
 
     const ewarMenu = document.querySelector('.ewar-menu');
     ewarMenu.innerHTML = '';
@@ -121,10 +136,14 @@ function initScreen(puzzle, solution, key, friendlySignal, hostileSignal) {
 
     ewarContainer.appendChild(ewarLeftPanel);
     ewarContainer.appendChild(ewarSidePanel);
-     ewarMenu.appendChild(ewarContainer);
+    ewarMenu.appendChild(ewarContainer);
 
     updateAllowedCandidatesAndPruneAll(true);
+    updateSingleCandidateHighlights();
     updateSignals(friendlySignal, hostileSignal);
+
+    updateNumpadDisabledStates();
+    updateHighlightsForSelectedCell();
 }
 
 function buildKeyMappingsFromKeyString(keyString) {
@@ -140,7 +159,7 @@ function buildKeyMappingsFromKeyString(keyString) {
         keyCharactersByNumber[number] = keyCharacter;
 
         if (keyCharacter.length > 0) {
-            numberByKeyCharacter.set(keyCharacter, number);
+            numberByKeyCharacter.set(String(keyCharacter).toUpperCase(), number);
         }
     }
 }
@@ -256,22 +275,6 @@ function createEwarBoardInstructions() {
     return instructionsElement;
 }
 
-function handleNumpadRightMouseDown(number) {
-    if (selectedCellIndex === null) {
-        return;
-    }
-
-    const safeNumber = Number(number);
-    if (!Number.isFinite(safeNumber) || safeNumber < 1 || safeNumber > 9) {
-        return;
-    }
-
-    clearSelectedCellVisualOnly();
-
-    forcedHighlightNumber = safeNumber;
-    updateHighlightsForSelectedCell();
-}
-
 function getInstructionsForSignal(signalValue, isFriendly) {
     const instructions = [];
 
@@ -304,6 +307,8 @@ function createEwarSidePanel() {
         numpadButton.className = 'ewar-numpad-button';
         numpadButton.textContent = getDisplayCharacterForNumber(number);
         numpadButton.dataset.number = String(number);
+
+        ewarNumpadButtonsByNumber[number] = numpadButton;
 
         numpadButton.addEventListener('mousedown', function (event) {
             if (event.button === 2) {
@@ -348,6 +353,49 @@ function createEwarSidePanel() {
 
     return ewarSidePanel;
 }
+
+/* ---------------- NUMPAD DISABLE LOGIC ---------------- */
+
+function isNumpadDisabled(number) {
+    return disabledNumpadNumbers.has(Number(number));
+}
+
+function setNumpadButtonDisabled(number, disabled) {
+    const safeNumber = Number(number);
+    const button = ewarNumpadButtonsByNumber[safeNumber];
+    if (!button) {
+        return;
+    }
+
+    if (disabled) {
+        button.classList.add('disabled');
+        disabledNumpadNumbers.add(safeNumber);
+    } else {
+        button.classList.remove('disabled');
+        disabledNumpadNumbers.delete(safeNumber);
+    }
+}
+
+function updateNumpadDisabledStates() {
+    const counts = [];
+    for (let n = 0; n <= 9; n++) {
+        counts[n] = 0;
+    }
+
+    for (let cellIndex = 0; cellIndex < 81; cellIndex++) {
+        const v = getCellValueNumber(cellIndex);
+        if (v !== null && v >= 1 && v <= 9) {
+            counts[v] += 1;
+        }
+    }
+
+    for (let number = 1; number <= 9; number++) {
+        const shouldDisable = counts[number] >= 9;
+        setNumpadButtonDisabled(number, shouldDisable);
+    }
+}
+
+/* ---------------- SIGNALS ---------------- */
 
 function clampSignalValue(signalValue) {
     const safeValue = Number(signalValue);
@@ -447,6 +495,8 @@ function updateSignals(friendlySignal, hostileSignal) {
     );
 }
 
+/* ---------------- INPUT + GAMEPLAY ---------------- */
+
 function handleCellMouseDown(cellIndex) {
     setSelectedCellIndex(cellIndex);
 }
@@ -494,13 +544,13 @@ function toggleCandidate(cellIndex, candidateNumber) {
 
     renderCandidatesForCell(cellIndex);
     updateHighlightsForSelectedCell();
+    updateSingleCandidateHighlights();
 }
 
 function setSelectedCellIndex(cellIndex) {
     clearSelectedCell();
 
     selectedCellIndex = cellIndex;
-
     forcedHighlightNumber = null;
 
     const selectedCellElement = ewarCellElementsByIndex[selectedCellIndex];
@@ -514,6 +564,7 @@ function setSelectedCellIndex(cellIndex) {
 function clearSelectedCell() {
     if (selectedCellIndex === null) {
         clearHighlights();
+        updateSingleCandidateHighlights();
         return;
     }
 
@@ -524,9 +575,48 @@ function clearSelectedCell() {
 
     selectedCellIndex = null;
     clearHighlights();
+    updateSingleCandidateHighlights();
+}
+
+function clearSelectedCellVisualOnly() {
+    if (selectedCellIndex === null) {
+        return;
+    }
+
+    const selectedCellElement = ewarCellElementsByIndex[selectedCellIndex];
+    if (selectedCellElement) {
+        selectedCellElement.classList.remove('selected');
+    }
+}
+
+function handleNumpadRightMouseDown(number) {
+    const safeNumber = Number(number);
+    if (!Number.isFinite(safeNumber) || safeNumber < 1 || safeNumber > 9) {
+        return;
+    }
+
+    if (isNumpadDisabled(safeNumber)) {
+        return;
+    }
+
+    if (selectedCellIndex !== null) {
+        clearSelectedCellVisualOnly();
+    }
+
+    forcedHighlightNumber = safeNumber;
+    updateHighlightsForSelectedCell();
 }
 
 function handleNumpadMouseDown(number) {
+    const safeNumber = Number(number);
+    if (!Number.isFinite(safeNumber) || safeNumber < 1 || safeNumber > 9) {
+        return;
+    }
+
+    if (isNumpadDisabled(safeNumber)) {
+        return;
+    }
+
     if (selectedCellIndex === null) {
         return;
     }
@@ -548,14 +638,14 @@ function handleNumpadMouseDown(number) {
         return;
     }
 
-    const isCorrect = isNumberCorrectForIndex(number, selectedCellIndex);
+    const isCorrect = isNumberCorrectForIndex(safeNumber, selectedCellIndex);
 
     if (!isCorrect) {
         wrong();
         return;
     }
 
-    selectedCellValueElement.textContent = getDisplayCharacterForNumber(number);
+    selectedCellValueElement.textContent = getDisplayCharacterForNumber(safeNumber);
     selectedCellElement.classList.add('filled');
 
     candidatesByCellIndex[selectedCellIndex].clear();
@@ -564,10 +654,12 @@ function handleNumpadMouseDown(number) {
     hintedCellIndices.delete(selectedCellIndex);
     selectedCellElement.classList.remove('hinted');
 
-    place(number, selectedCellIndex);
+    place(safeNumber, selectedCellIndex);
 
     updateAllowedCandidatesAndPruneAll(false);
     updateHighlightsForSelectedCell();
+    updateSingleCandidateHighlights();
+    updateNumpadDisabledStates();
 }
 
 function isNumberCorrectForIndex(number, cellIndex) {
@@ -598,11 +690,28 @@ function handleKeyDown(event) {
         return;
     }
 
+    if (isNumpadDisabled(number)) {
+        return;
+    }
+
     event.preventDefault();
     handleNumpadMouseDown(number);
 }
 
 window.addEventListener('keydown', handleKeyDown);
+
+document.addEventListener('contextmenu', function (event) {
+    const targetElement = event && event.target ? event.target : null;
+    if (!targetElement) {
+        return;
+    }
+
+    if (targetElement.closest && targetElement.closest('.ewar-numpad')) {
+        event.preventDefault();
+    }
+});
+
+/* ---------------- CANDIDATES RENDERING ---------------- */
 
 function renderCandidatesForCell(cellIndex) {
     const candidateSet = candidatesByCellIndex[cellIndex];
@@ -637,6 +746,8 @@ function renderCandidatesForCell(cellIndex) {
     }
 }
 
+/* ---------------- HIGHLIGHTS ---------------- */
+
 function clearHighlights() {
     for (let cellIndex = 0; cellIndex < 81; cellIndex++) {
         const cellElement = ewarCellElementsByIndex[cellIndex];
@@ -660,7 +771,7 @@ function getCellValueNumber(cellIndex) {
         return null;
     }
 
-    const resolvedNumber = numberByKeyCharacter.get(valueText);
+    const resolvedNumber = numberByKeyCharacter.get(String(valueText).toUpperCase());
     if (resolvedNumber !== undefined) {
         return resolvedNumber;
     }
@@ -673,29 +784,15 @@ function getCellValueNumber(cellIndex) {
     return valueNumber;
 }
 
-function clearSelectedCellVisualOnly() {
-    if (selectedCellIndex === null) {
-        return;
-    }
-
-    const selectedCellElement = ewarCellElementsByIndex[selectedCellIndex];
-    if (selectedCellElement) {
-        selectedCellElement.classList.remove('selected');
-    }
-}
-
 function updateHighlightsForSelectedCell() {
     clearHighlights();
 
-    if (selectedCellIndex === null) {
-        return;
-    }
-
     const focusNumber = forcedHighlightNumber !== null
         ? forcedHighlightNumber
-        : getCellValueNumber(selectedCellIndex);
+        : (selectedCellIndex !== null ? getCellValueNumber(selectedCellIndex) : null);
 
     if (focusNumber === null) {
+        updateSingleCandidateHighlights();
         return;
     }
 
@@ -713,7 +810,6 @@ function updateHighlightsForSelectedCell() {
         }
 
         const isCellEmpty = cellValueNumber === null;
-
         const candidateSet = candidatesByCellIndex[cellIndex];
         const isCandidateSelected = candidateSet && candidateSet.has(focusNumber);
 
@@ -721,7 +817,31 @@ function updateHighlightsForSelectedCell() {
             cellElement.classList.add('highlight-candidate-available');
         }
     }
+
+    updateSingleCandidateHighlights();
 }
+
+function updateSingleCandidateHighlights() {
+    for (let cellIndex = 0; cellIndex < 81; cellIndex++) {
+        const cellElement = ewarCellElementsByIndex[cellIndex];
+        if (!cellElement) {
+            continue;
+        }
+
+        cellElement.classList.remove('highlight-single-candidate');
+
+        if (cellElement.classList.contains('given') || cellElement.classList.contains('filled')) {
+            continue;
+        }
+
+        const candidateSet = candidatesByCellIndex[cellIndex];
+        if (candidateSet && candidateSet.size === 1) {
+            cellElement.classList.add('highlight-single-candidate');
+        }
+    }
+}
+
+/* ---------------- CANDIDATE LEGALITY ---------------- */
 
 function createAllowedCandidateArrayAllTrue() {
     const allowedArray = [];

@@ -234,6 +234,10 @@ body {
     display: none;
 }
 
+.ewar-cell.highlight-single-candidate {
+    background: rgba(120, 160, 255, 0.14);
+}
+
 .ewar-side-panel {
     display: flex;
     flex-direction: column;
@@ -265,6 +269,21 @@ body {
 
 .ewar-numpad-button:active {
     transform: translateY(1px);
+}
+
+.ewar-numpad-button.disabled {
+    opacity: 0.40;
+    filter: grayscale(1);
+    cursor: default;
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.10);
+    color: rgba(255, 255, 255, 0.55);
+    pointer-events: none;
+}
+
+.ewar-numpad-button.disabled:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.10);
 }
 
 .signal-panel {

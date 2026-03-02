@@ -6,31 +6,8 @@ if (isDedicated) exitWith {};
 private _removeActionID = _asset addAction [
 	"",
 	{
-		private _unit = _this # 0;
-
-		private _displayName = [_unit] call WL2_fnc_getAssetTypeName;
-
-		private _access = [_unit, player, "full"] call WL2_fnc_accessControl;
-		if !(_access # 0) exitWith {
-			[format ["Cannot remove: %1", _access # 1]] call WL2_fnc_smoothText;
-			playSound "AddItemFailed";
-		};
-
-		private _isBulkRemoveActive = missionNamespace getVariable ["WL2_bulkRemoveActive", false];
-		private _result = if (_isBulkRemoveActive) then {
-			true
-		} else {
-			["Delete asset", format ["Are you sure you would like to delete: %1", _displayName], "Yes", "Cancel"] call WL2_fnc_prompt;
-		};
-
-		if (_result) exitWith {
-			if (unitIsUAV _unit) then {
-				private _grp = group effectiveCommander _unit;
-				{_unit deleteVehicleCrew _x} forEach crew _unit;
-				deleteGroup _grp;
-			};
-			deleteVehicle _unit;
-		};
+		private _asset = _this # 0;
+		[_asset] spawn WL2_fnc_removeAsset;
 	},
 	[],
 	-98,
@@ -42,4 +19,8 @@ private _removeActionID = _asset addAction [
 	false
 ];
 
-_asset setUserActionText [_removeActionID, format ["<t color = '#ff4b4b'>%1</t>", localize "STR_xbox_hint_remove"], "<img size='2' color='#ff4b4b' image='\a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca'/>"];
+_asset setUserActionText [
+	_removeActionID,
+	format ["<t color='#ff4b4b'>%1</t>", localize "STR_xbox_hint_remove"],
+	"<img size='2' color='#ff4b4b' image='\a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca'/>"
+];

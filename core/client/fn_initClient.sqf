@@ -78,6 +78,7 @@ uiNamespace setVariable ["control", 10000];
 private _settingsMap = profileNamespace getVariable "WL2_settings";
 if (isNil "_settingsMap") then {
     profileNamespace setVariable ["WL2_settings", createHashMap];
+	_settingsMap = profileNamespace getVariable "WL2_settings";
 };
 
 WL_LoadingState = 5;

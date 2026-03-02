@@ -21,4 +21,6 @@ private _assetName = if (_asset isKindOf "Logic") then {
 };
 [format ["Team priority set to %1.", _assetName]] call WL2_fnc_smoothText;
 
+[player, "designatePriority"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+
 playSoundUI ["AddItemOK"];

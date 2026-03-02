@@ -24,7 +24,9 @@ while { !BIS_WL_missionEnd } do {
 
     _westOwnedVehicles = _westOwnedVehicles select { alive _x };
     _eastOwnedVehicles = _eastOwnedVehicles select { alive _x };
-    _guerOwnedVehicles = _guerOwnedVehicles select { alive _x };
+    _guerOwnedVehicles = _guerOwnedVehicles select { alive _x } select {
+        [_x] call WL2_fnc_getAssetSide == independent;
+    };
 
     private _originalWestOwnedVehicles = missionNamespace getVariable ["BIS_WL_westOwnedVehicles", [objNull]];
     private _originalEastOwnedVehicles = missionNamespace getVariable ["BIS_WL_eastOwnedVehicles", [objNull]];

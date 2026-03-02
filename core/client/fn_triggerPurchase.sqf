@@ -167,7 +167,7 @@ switch (_className) do {
     };
     case "BulkRemove": {
         missionNamespace setVariable ["WL2_bulkRemoveActive", true];
-        ["Bulk remove activated for 30 seconds."] call WL2_fnc_smoothText;
+        ["Bulk remove activated."] call WL2_fnc_smoothText;
         0 spawn {
             uiSleep 30;
             missionNamespace setVariable ["WL2_bulkRemoveActive", false];

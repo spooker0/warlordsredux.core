@@ -151,8 +151,8 @@ switch (_fastTravelMode) do {
 		[_vehicle, _parachute] spawn {
 			params ["_vehicle", "_parachute"];
 			waitUntil {
-				uiSleep 0.2;
-				_parachute setVelocity [0, 0, (velocity _parachute) # 2];
+				uiSleep 0.01;
+				_parachute setVelocity [0, 0, -10];
 				_parachute setVectorUp [0, 0, 1];
 				private _alt = (getPosVisual _vehicle) # 2;
 				_alt < 5;

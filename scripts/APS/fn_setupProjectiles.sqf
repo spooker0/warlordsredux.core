@@ -146,6 +146,16 @@ addMissionEventHandler ["ProjectileCreated", {
         };
     };
 
+    private _projectileRunway = _projectileConfig getOrDefault ["runway", 0];
+    if (_projectileRunway > 0) then {
+        _projectile setVariable ["WL2_runwayBuster", _projectileRunway];
+        _projectile addEventHandler ["Explode", {
+            params ["_projectile", "_position", "_velocity"];
+            private _runwayBusterMunitions = _projectile getVariable ["WL2_runwayBuster", 0];
+            [_position, _runwayBusterMunitions] spawn WL2_fnc_runwayBuster;
+        }];
+    };
+
     private _projectileGPS = _projectileConfig getOrDefault ["gps", false];
     if (_projectileGPS) then {
         private _inRangeCalculation = [_unit] call DIS_fnc_calculateInRange;

@@ -48,7 +48,10 @@ switch (_conditionName) do {
         "ok";
     };
     case "vehicleParadropFOB": {
-        ""; // Disabled for now
+        if (!alive _target) exitWith { "Forward base has been destroyed." };
+        if (_target getVariable ["WL2_forwardBaseOwner", sideUnknown] != BIS_WL_playerSide) exitWith { "" };
+        if !(_target getVariable ["WL2_forwardBaseReady", false]) exitWith { "Forward base under construction." };
+        "ok";
     };
     case "scan": {
         private _allScannableSectors = BIS_WL_sectorsArray # 3;

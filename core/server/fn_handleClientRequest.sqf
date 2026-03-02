@@ -43,6 +43,7 @@ private _actionCost = switch (_action) do {
 	};
 	case "resetVehicle" : { 10 };
 	case "equip" : { _param1 max 0 };
+	case "designatePriority" : { WL_COST_DESIGNATEPRIORITY };
 	case "buyStronghold" : { WL_COST_STRONGHOLD };
 	case "fortifyStronghold" : { WL_COST_FORTIFY };
 	case "orderArsenal" : { WL_COST_ARSENAL };

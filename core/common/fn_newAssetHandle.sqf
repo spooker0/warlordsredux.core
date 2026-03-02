@@ -168,10 +168,6 @@ if (_asset isKindOf "Man") then {
 		_asset setVariable ["WL2_isFragileDrone", true, true];
 	};
 
-	if (WL_ASSET_GET(_data, "isRunwayBuster", 0) > 0) then {
-		[_asset] spawn WL2_fnc_runwayBuster;
-	};
-
 	private _detonate = WL_ASSET_GET(_data, "detonate", 0);
 	if (_detonate > 0) then {
 		_asset setVariable ["WL2_detonateValue", _detonate, true];
@@ -257,6 +253,22 @@ if (_asset isKindOf "Man") then {
 
 	private _hideMap = WL_ASSET_GET(_data, "hideMap", 0);
 	_asset setVariable ["WL2_hideMap", _hideMap, true];
+
+	private _fragile = WL_ASSET_GET(_data, "fragile", 0);
+	if (_fragile > 0) then {
+		_asset setVariable ["WL2_fragility", _fragile, true];
+	};
+
+	if (_hideMap != 1) then {
+		_asset addEventHandler ["EpeContactStart", {
+			params ["_object1", "_object2", "_selection1", "_selection2", "_force", "_reactForce", "_worldPos"];
+			private _fragility = _object2 getVariable ["WL2_fragility", 0];
+			if (_fragility == 0) exitWith {};
+			if (_fragility < vectorMagnitude _reactForce) then {
+				[_object2, player] remoteExec ["WL2_fnc_demolishComplete", 2];
+			};
+		}];
+	};
 
 	if (_asset isKindOf "Air") then {
 		// [_asset] remoteExec ["WL2_fnc_airRearmAction", 0, true];

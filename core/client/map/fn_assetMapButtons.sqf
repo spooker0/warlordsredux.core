@@ -19,15 +19,7 @@ private _hasFullAccess = _asset getVariable ["WL2_accessControl", -1] == 0;
 if (!isPlayer _asset && (_ownsVehicle || _hasFullAccess)) then {
     [_asset, _targetId, "remove", "<t color='#ff0000'>Remove</t>", {
         params ["_asset"];
-        private _ownsVehicle = (_asset getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player;
-        private _hasFullAccess = _asset getVariable ["WL2_accessControl", -1] == 0;
-
-        if (_ownsVehicle || _hasFullAccess) then {
-            _asset spawn WL2_fnc_deleteAssetFromMap;
-        } else {
-            playSoundUI ["AddItemFailed"];
-            ["You do not own this asset."] call WL2_fnc_smoothText;
-        };
+        [_asset] spawn WL2_fnc_removeAsset;
     }, true] call WL2_fnc_addTargetMapButton;
 };
 
@@ -198,7 +190,7 @@ if (_canFastTravel) then {
     [_asset, _targetId, "team-designate", "Designate team priority", {
         params ["_asset"];
         [_asset, "asset"] call WL2_fnc_designateTeamPriority;
-    }, true, "designateTeamPriority", [0, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
+    }, true, "designateTeamPriority", [50, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
 };
 
 if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
@@ -237,7 +229,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         params ["_asset"];
         private _marker = createMarkerLocal ["WL2_fastTravelFOBMarker", getPosATL _asset];
         _marker setMarkerShapeLocal "ELLIPSE";
-        _marker setMarkerSizeLocal [500, 500];
+        _marker setMarkerSizeLocal [200, 200];
         _marker setMarkerAlphaLocal 0;
         [7, "WL2_fastTravelFOBMarker"] spawn WL2_fnc_executeFastTravel;
     };
@@ -360,7 +352,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     [_asset, _targetId, "team-designate", "Designate team priority", {
         params ["_asset"];
         [_asset, "fob"] call WL2_fnc_designateTeamPriority;
-    }, true, "designateTeamPriority", [0, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
+    }, true, "designateTeamPriority", [50, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
 
     // Combat air patrol button
     private _combatAirExecute = {
@@ -676,7 +668,7 @@ if (count _findIsStronghold > 0) then {
     [_asset, _targetId, "team-designate", "Designate team priority", {
         params ["_asset"];
         [_asset, "stronghold"] call WL2_fnc_designateTeamPriority;
-    }, true, "designateTeamPriority", [0, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
+    }, true, "designateTeamPriority", [50, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
 
     #if WL_STRONGHOLD_DEBUG
     // Fast Travel Stronghold Test

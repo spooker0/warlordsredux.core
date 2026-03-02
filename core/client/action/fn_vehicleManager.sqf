@@ -8,6 +8,8 @@ private _texture = _display displayCtrl 5501;
 _texture ctrlWebBrowserAction ["LoadFile", "src\ui\gen\vehicles.html"];
 // _texture ctrlWebBrowserAction ["OpenDevConsole"];
 
+uiNamespace setVariable ["WL2_vehicleManagerTexture", _texture];
+
 _texture ctrlAddEventHandler ["JSDialog", {
     params ["_texture", "_isConfirmDialog", "_message"];
 
@@ -33,7 +35,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
 
     switch (_actionId) do {
         case "remove": {
-            [_vehicle, _texture] spawn WL2_fnc_deleteAssetFromMap;
+            [_vehicle] spawn WL2_fnc_removeAsset;
         };
         case "kick": {
             private _unwantedPassengers = (crew _vehicle) select {

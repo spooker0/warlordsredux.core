@@ -67,7 +67,6 @@ class CfgRemoteExec {
 		class WL2_fnc_requestScoreboard {allowedTargets = 2;};
 		class WL2_fnc_restockAction {allowedTargets = 0;};
 		class WL2_fnc_revive {allowedTargets = 0;};
-		class WL2_fnc_runwayBuster {allowedTargets = 0;};
 		class WL2_fnc_sectorRevealHandle {allowedTargets = 0;};
 		class WL2_fnc_showRating {allowedTargets = 0;};
 		class WL2_fnc_scannerAction {allowedTargets = 0;};
