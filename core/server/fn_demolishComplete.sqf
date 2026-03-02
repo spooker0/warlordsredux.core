@@ -8,8 +8,7 @@ if !(isNull _caller) then {
 _target setVariable ["WL2_alreadyHandled", true];
 _target setVariable ["WL_lastHitter", _caller];
 
-_target setDamage [1, true, _caller, _caller];
-deleteVehicle _target;
+uiSleep 0.5;
 
 for "_i" from 1 to 10 do {
     if (random 1 > 0.5) then {
@@ -27,7 +26,7 @@ for "_i" from 1 to 10 do {
     uiSleep 0.2;
 };
 
-uiSleep 0.5;
-if (!isNull _target) then {
-    deleteVehicle _target;
-};
+_target setDamage [1, true, _caller, _caller];
+
+uiSleep 1;
+deleteVehicle _target;

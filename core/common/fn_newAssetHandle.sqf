@@ -116,6 +116,15 @@ if (_asset isKindOf "Man") then {
 		private _eligibleDrones = missionNamespace getVariable ["WL2_eligibleDrones", []];
 		_eligibleDrones pushBackUnique _asset;
 		missionNamespace setVariable ["WL2_eligibleDrones", _eligibleDrones];
+
+		private _friendlySignalVar = format ["WL2_ewarSignal_%1", _side];
+		private _friendlySignal = missionNamespace getVariable [_friendlySignalVar, 500];
+		if (_friendlySignal >= 650) then {
+			private _cost = WL_ASSET_GET(_data, "cost", 0);
+			private _rebate = round (_cost * 0.1);
+			_rebate = _rebate min 3000;
+			[player, "droneRebate",  _rebate] remoteExec ["WL2_fnc_handleClientRequest", 2];
+		};
 	};
 
 	if (_asset getVariable ["apsType", -1] > -1) then {
@@ -153,15 +162,6 @@ if (_asset isKindOf "Man") then {
 				uiSleep 2.4;
 			};
 		};
-	};
-
-	private _friendlySignalVar = format ["WL2_ewarSignal_%1", _side];
-	private _friendlySignal = missionNamespace getVariable [_friendlySignalVar, 500];
-	if (_friendlySignal >= 650) then {
-		private _cost = WL_ASSET_GET(_data, "cost", 0);
-		private _rebate = round (_cost * 0.1);
-		_rebate = _rebate min 3000;
-		[player, "droneRebate",  _rebate] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	};
 
 	if (WL_ASSET_GET(_data, "fragileDrone", 0) > 0) then {

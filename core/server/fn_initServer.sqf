@@ -202,7 +202,7 @@ private _objectsToPreload = [
 	"Land_BagBunker_Small_F",
 	"Land_BagBunker_01_large_green_F",
 	"Land_BagFence_Long_F",
-	"Land_SandbagBarricade_01_F",
+	"Land_SandbagBarricade_01_hole_F",
 	"Land_New_WiredFence_10m_F",
 	"Land_DragonsTeeth_01_4x2_new_F",
 	"Land_CzechHedgehog_01_new_F",

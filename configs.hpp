@@ -131,7 +131,6 @@ class arsenalConfig {
 			"B_RadioBag_01_mtp_F",
 			"B_RadioBag_01_tropic_F",
 			"B_RadioBag_01_wdl_F",
-			"B_Static_Designator_01_weapon_F",
 			"B_TacticalPack_blk",
 			"B_TacticalPack_mcamo",
 			"B_TacticalPack_oli",
@@ -327,8 +326,7 @@ class arsenalConfig {
 			"B_ViperLightHarness_ghex_F",
 			"B_ViperLightHarness_hex_F",
 			"B_ViperLightHarness_khk_F",
-			"B_ViperLightHarness_oli_F",
-			"O_Static_Designator_02_weapon_F"
+			"B_ViperLightHarness_oli_F"
 		};
 		Helmets[] = {
 			"",

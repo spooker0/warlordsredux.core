@@ -421,7 +421,7 @@ if (_action == "boost") exitWith {
 	private _senderVehicle = vehicle _sender;
 	private _multiplier = if (_senderVehicle getVariable ["WL2_hasEWBoost", false]) then { 2 } else { 1 };
 
-	private _reward = 40 * _multiplier;
+	private _reward = 30 * _multiplier;
 	[_reward] call _addFunds;
 	[objNull, _reward, "Boosted signal", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 
