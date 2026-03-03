@@ -54,7 +54,6 @@ private _actionCost = switch (_action) do {
 	case "scan" : { WL_COST_SCAN };
 	case "combatAir" : { WL_COST_COMBATAIR };
 	case "conscript" : { WL_COST_CONSCRIPT };
-	case "debugCombatAir" : { WL_COST_COMBATAIR };
 	case "targetReset" : { WL_COST_TARGETRESET };
 	case "orderAI" : { WL_ASSET(_param1, "cost", 150) };
 	case "buildABear" : { 300 };
@@ -207,7 +206,11 @@ if (_action == "setupFOB") exitWith {
 };
 
 if (_action == "immobilized") exitWith {
-	private _reward = 50;
+	private _immobilizedUnit = _param1;
+
+	private _unitActualType = WL_ASSET_TYPE(_immobilizedUnit);
+	private _reward = round (0.2 * WL_ASSET(_unitActualType, "cost", 0) ^ 0.8);
+
 	[_reward] call _addFunds;
 	[objNull, _reward, "Vehicle Disabled", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };

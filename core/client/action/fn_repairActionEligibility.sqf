@@ -5,6 +5,10 @@ if (!alive _target) exitWith {
     false
 };
 
+if (WL_UNIT(_target, "immobile", 0) > 0) exitWith {
+    false
+};
+
 private _hasAccess = ([_target, _caller, "full"] call WL2_fnc_accessControl) # 0;
 if (!_hasAccess) exitWith {
     false
@@ -14,8 +18,6 @@ private _nearbyRepair = (_target nearEntities ["All", WL_MAINTENANCE_RADIUS]) se
     alive _x
 } select {
     WL_UNIT(_x, "hasRepair", 0) > 0
-} select {
-    WL_UNIT(_x, "immobile", 0) > 0
 } select {
     ([_x, _caller, "cargo"] call WL2_fnc_accessControl) # 0
 };

@@ -16,16 +16,18 @@ if (_assetSide != BIS_WL_playerSide) then {
 if (_existingHealth <= 0) then {
     player setVariable ["WL2_demolishableTarget", objNull];
 
+    private _damageBuilding = true;
     private _strongholdSector = _targetObject getVariable ["WL_strongholdSector", objNull];
     if !(isNull _strongholdSector) then {
         private _strongholdSectorCheck = _strongholdSector getVariable ["WL_stronghold", objNull];
         if (_targetObject == _strongholdSectorCheck) then {
             [_strongholdSector] call WL2_fnc_removeStronghold;
             if (_assetSide != BIS_WL_playerSide) then {
+                _damageBuilding = (_assetSide != independent);
                 [player, _strongholdSector] remoteExec ["WL2_fnc_destroyStronghold", 2];
             };
         };
     };
 
-    [_targetObject, player] remoteExec ["WL2_fnc_demolishComplete", 2];
+    [_targetObject, player, _damageBuilding] remoteExec ["WL2_fnc_demolishComplete", 2];
 };

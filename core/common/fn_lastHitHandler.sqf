@@ -14,7 +14,7 @@ if !(isPlayer [_responsiblePlayer]) exitWith {};
 if (!canMove _unit && alive driver _unit) then {
     private _wasImmobilized = _unit getVariable ["WL2_immobilized", false];
     if (!_wasImmobilized) then {
-        [] remoteExec ["WL2_fnc_vehicleImmobilized", _responsiblePlayer];
+        [_unit] remoteExec ["WL2_fnc_vehicleImmobilized", _responsiblePlayer];
         _unit setVariable ["WL2_immobilized", true, true];
     };
 };

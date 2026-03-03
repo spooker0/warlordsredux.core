@@ -116,7 +116,8 @@
 		};
 
 		_sideVehicles = _sideVehicles select {
-			isNull objectParent _x
+			private _parent = objectParent _x;
+			isNull _parent || _parent isKindOf "Steerable_Parachute_F";
 		};
 		_mapData set ["sideVehicles", _sideVehicles];
 

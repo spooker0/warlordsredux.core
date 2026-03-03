@@ -1,3 +1,3 @@
 #include "includes.inc"
-
-[player, "immobilized"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+params ["_unit"];
+[player, "immobilized", _unit] remoteExec ["WL2_fnc_handleClientRequest", 2];

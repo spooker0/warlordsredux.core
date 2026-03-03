@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_target", "_caller"];
+params ["_target", "_caller", ["_damageBuilding", true]];
 
 if !(isNull _caller) then {
     [_target, _caller] call WL2_fnc_killRewardHandle;
@@ -26,7 +26,8 @@ for "_i" from 1 to 10 do {
     uiSleep 0.2;
 };
 
-_target setDamage [1, true, _caller, _caller];
-
-uiSleep 1;
-deleteVehicle _target;
+if (_damageBuilding) then {
+    _target setDamage [1, true, _caller, _caller];
+    uiSleep 1;
+    deleteVehicle _target;
+};

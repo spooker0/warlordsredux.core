@@ -161,10 +161,14 @@ if (_revealed) then {
             } else {
                 "depleted"
             };
-            [
-                format ["%1 (%2x): %3 (Reserves: %4)", _sideName, _multiplier toFixed 1, _score toFixed 0, _reserveText],
-                [independent] call _getTeamColor
-            ];
+            if (_sector getVariable ["BIS_WL_owner", independent] != independent) then {
+                "";
+            } else {
+                [
+                    format ["%1 (%2x): %3 (Reserves: %4)", _sideName, _multiplier toFixed 1, _score toFixed 0, _reserveText],
+                    [independent] call _getTeamColor
+                ];
+            };
         } else {
             if (_score < 1) then {
                 "";

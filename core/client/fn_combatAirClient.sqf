@@ -5,7 +5,6 @@ private _endEffect = {
 };
 
 private _lastNotifyTime = 0;
-private _responseTimeEstimate = -1;
 while { !BIS_WL_missionEnd } do {
     uiSleep 0.5;
     private _side = BIS_WL_playerSide;
@@ -63,34 +62,18 @@ while { !BIS_WL_missionEnd } do {
         continue;
     };
 
-    if (_responseTimeEstimate < 0) then {
-        private _minTimeToShoot = 45;
-        {
-            private _combatAirArea = _x;
-            private _startTime = _combatAirArea getVariable ["WL2_combatAirStart", 0];
-            if (serverTime < _startTime) then {
-                _minTimeToShoot = _minTimeToShoot min (_startTime - serverTime);
-            } else {
-                _minTimeToShoot = 5;
-            };
-        } forEach _assetInCombatAirArea;
-        _responseTimeEstimate = serverTime + _minTimeToShoot;
-    };
+    _assetInCombatAirArea = [_assetInCombatAirArea, [], { cameraOn distance _x }, "ASCEND"] call BIS_fnc_sortBy;
+    private _combatAirArea = _assetInCombatAirArea # 0;
 
-    private _timeRemaining = _responseTimeEstimate - serverTime;
+    private _startTime = _combatAirArea getVariable ["WL2_combatAirStart", 0];
+    private _timeUntilStart = _startTime - serverTime;
+    if (_timeUntilStart <= 0 && _timeUntilStart > -60) then {
+        [_asset, _combatAirArea, true] spawn DIS_fnc_combatAirPatrol;
+        uiSleep 5;
+    };
 
     private _warningTextDisplay = uiNamespace getVariable ["RscWLExtendedSamWarningDisplay", displayNull];
     if (isNull _warningTextDisplay) then {
         "CapWarning" cutRsc ["RscWLExtendedSamWarningDisplay", "PLAIN", -1, true, true];
-    };
-    private _warningTimer = _warningTextDisplay displayCtrl 14300;
-    _warningTimer ctrlSetText format ["%1", round _timeRemaining];
-
-    if (_timeRemaining <= 0) then {
-        _assetInCombatAirArea = [_assetInCombatAirArea, [], { cameraOn distance _x }, "ASCEND"] call BIS_fnc_sortBy;
-
-        private _target = _assetInCombatAirArea # 0;
-        [_asset, _target, true] spawn DIS_fnc_combatAirPatrol;
-        _responseTimeEstimate = -1;
     };
 };

@@ -465,22 +465,6 @@ class RscTitles {
 				text = "ENEMY COMBAT AIR PATROL DETECTED!";
 				lineSpacing = 0;
 			};
-			class RscWLExtendedSamWarningDisplay_Time: RscText {
-				idc = 14300;
-				type = CT_STATIC;
-				style = ST_CENTER;
-				x = 0;
-				y = safeZoneY + 0.15;
-				w = 1;
-				h = 0.3;
-				font = "RobotoCondensedBold";
-				sizeEx = 0.25;
-				colorBackground[] = {0, 0, 0, 0};
-				colorText[] = {1, 0, 0, 1};
-				text = "";
-				shadow = 0;
-				lineSpacing = 1;
-			};
 		};
 	};
 

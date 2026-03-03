@@ -53,7 +53,7 @@ if ((_targets findIf {_unit inArea (_x getVariable "objectAreaComplete")}) != -1
 	_killReward = _killReward * 1.2;
 };
 if (_unitSide != independent && _unitSide != sideUnknown) then {
-	_killReward = _killReward * 2.0;
+	_killReward = _killReward * 1.75;
 };
 
 private _playerId = getPlayerID _responsibleLeader;
