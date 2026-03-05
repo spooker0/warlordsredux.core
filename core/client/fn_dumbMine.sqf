@@ -1,7 +1,6 @@
 #include "includes.inc"
 params ["_asset"];
 
-private _dumbMines = WL_UNIT(_asset, "dumbMine", 0);
 _asset setVariable ["WL2_isMinefield", true, true];
 
 private _assetData = WL_ASSET_DATA;
@@ -15,12 +14,8 @@ private _mineOwner = if (isServer) then {
     player
 };
 
-while { alive _asset && _dumbMines > 0} do {
+while { alive _asset } do {
     uiSleep 0.5;
-
-    if (_dumbMines <= 0) then {
-        break;
-    };
 
     if (!isNull attachedTo _asset) then {
         continue;
@@ -58,11 +53,6 @@ while { alive _asset && _dumbMines > 0} do {
     {
         private _vehicle = _x;
 
-        if (_dumbMines <= 0) then {
-            break;
-        };
-        _dumbMines = _dumbMines - 1;
-
         private _mine = createMine ["SLAMDirectionalMine", getPosASL _vehicle, [], 3];
         [_mine, [_mineOwner, _mineOwner]] remoteExec ["setShotParents", 2];
 
@@ -77,6 +67,8 @@ while { alive _asset && _dumbMines > 0} do {
         _vehiclePosition set [2, _altitude];
         _mine setPosASL _vehiclePosition;
         triggerAmmo _mine;
+
+        missionNamespace setVariable ["WL2_mineExplosion", true];
     } forEach _enemyVehicles;
 };
 

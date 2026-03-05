@@ -69,7 +69,8 @@ if !(isDedicated) then {
 0 spawn WL2_fnc_runwayCollector;
 call WL2_fnc_processRunways;
 0 spawn WL2_fnc_combatAirServer;
-0 spawn WL2_fnc_ewarServer;
+call WL2_fnc_ewarGenerate;
+0 spawn WL2_fnc_dumbMineAnnouncer;
 
 0 spawn WL2_fnc_cleanupCarrier;
 0 spawn WL2_fnc_laserTracker;
@@ -207,7 +208,9 @@ private _objectsToPreload = [
 	"Land_DragonsTeeth_01_4x2_new_F",
 	"Land_CzechHedgehog_01_new_F",
 	"Land_Cargo_Tower_V4_F",
-	"Land_HBarrierTower_F"
+	"Land_HBarrierTower_F",
+	"Land_MedicalTent_01_NATO_generic_open_F",
+	"Land_MedicalTent_01_CSAT_brownhex_generic_open_F"
 ];
 {
 	private _dummy = createSimpleObject [_x, [0, 0, -1000], false];

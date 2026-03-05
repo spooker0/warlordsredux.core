@@ -75,7 +75,7 @@
 		private _visibleStrongholds = _strongholds select {
 			private _sector = _x getVariable ["WL_strongholdSector", objNull];
 			private _sectorOwner = _sector getVariable ["BIS_WL_owner", independent];
-			BIS_WL_playerSide == _sectorOwner || _sector == WL_TARGET_FRIENDLY
+			BIS_WL_playerSide == _sectorOwner || _sector == WL_TARGET_FRIENDLY || WL_IsSpectator
 		};
 		_mapData set ["strongholds", _visibleStrongholds];
 
@@ -218,6 +218,27 @@
 		private _munitionList = cameraOn getVariable ["DIS_munitionList", []];
 		_munitionList = _munitionList select { alive _x };
 		_mapData set ["trackedProjectiles", _munitionList];
+
+		private _sideStr = if (BIS_WL_playerSide == west) then { "west" } else { "east" };
+		private _areaVar = format ["WL2_%1ControlledArea", _sideStr];
+		private _controlledArea = missionNamespace getVariable [_areaVar, 0];
+
+		private _enemySideStr = if (BIS_WL_playerSide == west) then { "east" } else { "west" };
+		private _enemyAreaVar = format ["WL2_%1ControlledArea", _enemySideStr];
+		private _enemyControlledArea = missionNamespace getVariable [_enemyAreaVar, 0];
+
+		_controlledArea = _controlledArea max 1;
+		_enemyControlledArea = _enemyControlledArea max 1;
+		private _controlledAreaRatio = _controlledArea / (_controlledArea + _enemyControlledArea);
+		private _enemyAreaRatio = 1 - _controlledAreaRatio;
+		private _controlledMod = _controlledAreaRatio * 2;
+		private _enemyMod = _enemyAreaRatio * 2;
+
+		private _areaControlData = [
+			format ["    %1 km² (Capture +%2x)", (_controlledArea / 1000000) toFixed 1, _controlledMod toFixed 1],
+			format ["    ~%1 km² (Capture +%2x)", round (_enemyControlledArea / 1000000), _enemyMod toFixed 1]
+		];
+		_mapData set ["areaControlData", _areaControlData];
 
 		uiSleep 1;
 	};

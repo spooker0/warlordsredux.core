@@ -53,7 +53,7 @@ private _getTeamName = {
 };
 
 private _percentage = _sector getVariable ["BIS_WL_captureProgress", 0];
-private _revealed = _side in (_sector getVariable ["BIS_WL_revealedBy", []]);
+private _revealed = _side in (_sector getVariable ["BIS_WL_revealedBy", []]) || WL_IsSpectator;
 if (!_revealed) then {
     _percentage = 0;
 };

@@ -498,8 +498,8 @@ class CfgFunctions {
 			class demolishComplete {};
 			class destroyStronghold {};
 			class detectNewPlayers {};
+			class dumbMineAnnouncer {};
 			class ewarGenerate {};
-			class ewarServer {};
 			class forgiveTeamkill {};
 			class forwardBaseUpgrade {};
 			class friendlyFireHandleServer {};

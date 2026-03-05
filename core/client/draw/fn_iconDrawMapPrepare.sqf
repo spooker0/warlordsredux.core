@@ -150,6 +150,37 @@ if (BIS_WL_selection_showLinks) then {
 	};
 };
 
+// Draw sector capture modifiers
+private _areaControlData = _mapData getOrDefault ["areaControlData", []];
+private _friendFlag = if (_side == west) then {
+	"\A3\ui_f\data\map\markers\flags\nato_ca.paa"
+} else {
+	"\A3\ui_f\data\map\markers\flags\csat_ca.paa"
+};
+private _enemyFlag = if (_side == west) then {
+	"\A3\ui_f\data\map\markers\flags\csat_ca.paa"
+} else {
+	"\A3\ui_f\data\map\markers\flags\nato_ca.paa"
+};
+_drawIcons pushBack [
+	_friendFlag,
+	[1, 1, 1, 0.8],
+	[15000, 15000, 0],
+	30,
+	30,
+	0,
+	_areaControlData # 0
+];
+_drawIcons pushBack [
+	_enemyFlag,
+	[1, 1, 1, 0.8],
+	[15000, 14800, 0],
+	30,
+	30,
+	0,
+	_areaControlData # 1
+];
+
 // Draw white hover selector
 if !(isNull BIS_WL_highlightedSector) then {
 	_drawIconsAnimated pushBack [

@@ -190,7 +190,7 @@ if (_canFastTravel) then {
     [_asset, _targetId, "team-designate", "Designate team priority", {
         params ["_asset"];
         [_asset, "asset"] call WL2_fnc_designateTeamPriority;
-    }, true, "designateTeamPriority", [50, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
+    }, true, "designateTeamPriority", [50, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
 };
 
 if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
@@ -352,7 +352,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     [_asset, _targetId, "team-designate", "Designate team priority", {
         params ["_asset"];
         [_asset, "fob"] call WL2_fnc_designateTeamPriority;
-    }, true, "designateTeamPriority", [50, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
+    }, true, "designateTeamPriority", [50, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
 
     // Combat air patrol button
     private _combatAirExecute = {
@@ -668,7 +668,7 @@ if (count _findIsStronghold > 0) then {
     [_asset, _targetId, "team-designate", "Designate team priority", {
         params ["_asset"];
         [_asset, "stronghold"] call WL2_fnc_designateTeamPriority;
-    }, true, "designateTeamPriority", [50, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
+    }, true, "designateTeamPriority", [50, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
 
     #if WL_STRONGHOLD_DEBUG
     // Fast Travel Stronghold Test

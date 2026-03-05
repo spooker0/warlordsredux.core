@@ -252,5 +252,5 @@ if (_sector in (BIS_WL_sectorsArray # 3) || (!isNull _sectorFtNonInfantryAsset))
     [_sector, _targetId, "team-designate", "Designate team priority", {
         params ["_sector"];
         [_sector, "sector"] call WL2_fnc_designateTeamPriority;
-    }, true, "designateTeamPriority", [50, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
+    }, true, "designateTeamPriority", [50, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
 };

@@ -24,7 +24,7 @@ if (side group player == independent) then {
 #if WL_FREE_MONEY
 	player addAction ["+$50K", {
 		[player, "50K"] remoteExec ["WL2_fnc_handleClientRequest", 2];
-	}];
+	}, [], -1000, false, false, "", "", 0];
 #endif
 
 0 spawn WL2_fnc_reviveAction;

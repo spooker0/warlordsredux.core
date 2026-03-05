@@ -206,7 +206,7 @@ if !(isDedicated) then {
 #if WL_FREE_MONEY
 	player addAction ["+$50K", {
 		[player, "50K"] remoteExec ["WL2_fnc_handleClientRequest", 2];
-	}];
+	}, [], -1000, false, false, "", "", 0];
 #endif
 
 #if WL_TEST_SERVER

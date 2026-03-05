@@ -6,12 +6,15 @@ private _installActionId = player addAction [
         _this spawn {
             params ["_target", "_caller", "_actionId", "_arguments"];
             private _installableTarget = player getVariable ["WL2_installableTarget", objNull];
-            if (isNull _installableTarget) exitWith {};
+            if (!alive _installableTarget) exitWith {
+                playSound "AddItemFailed";
+                ["Not available!"] call WL2_fnc_smoothText;
+            };
 
             private _installable = _installableTarget getVariable ["WL2_installable", ""];
             if (_installable == "") exitWith {
                 playSound "AddItemFailed";
-                ["Installation not available!"] call WL2_fnc_smoothText;
+                ["Not available!"] call WL2_fnc_smoothText;
             };
 
             private _isConversion = WL_ASSET(_installable, "conversion", 0) != 0;

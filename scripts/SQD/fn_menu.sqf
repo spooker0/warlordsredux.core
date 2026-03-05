@@ -23,9 +23,14 @@ _texture ctrlAddEventHandler ["PageLoaded", {
     params ["_texture"];
     [_texture] spawn {
         params ["_texture"];
+        private _squadManagerLastValue = [];
         while { !isNull _texture } do {
-            [_texture] call SQD_fnc_sendData;
-            uiSleep 5;
+            uiSleep 0.1;
+            private _squadManager = missionNamespace getVariable ["SQUAD_MANAGER", []];
+            if (_squadManager isNotEqualTo _squadManagerLastValue) then {
+                [_texture] call SQD_fnc_sendData;
+                _squadManagerLastValue = +_squadManager;
+            };
         };
     };
 }];

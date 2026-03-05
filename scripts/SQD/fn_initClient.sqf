@@ -18,21 +18,3 @@ if (side group player == independent) exitWith {};
         uiSleep 0.5;
     };
 };
-
-0 spawn {
-    private _squadManagerLastValue = [];
-    while { !BIS_WL_missionEnd } do {
-        uiSleep 0.1;
-        private _dialog = findDisplay 5500;
-        if (isNull _dialog) then{
-            continue;
-        };
-
-        private _squadManager = missionNamespace getVariable ["SQUAD_MANAGER", []];
-        if (_squadManager isNotEqualTo _squadManagerLastValue) then {
-            private _texture = _dialog displayCtrl 5501;
-            [_texture] call SQD_fnc_sendData;
-            _squadManagerLastValue = +_squadManager;
-        };
-    };
-};

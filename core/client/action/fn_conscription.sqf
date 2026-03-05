@@ -1,13 +1,15 @@
 #include "includes.inc"
 params ["_conscripter"];
 
-if (side group _conscripter != side group player) exitWith {};
-
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-private _disableConscription = _settingsMap getOrDefault ["disableConscription", false];
-if (_disableConscription) exitWith {};
+private _side = side group player;
+if (side group _conscripter != _side) exitWith {};
+if (WL_IsSpectator) exitWith {};
 
 uiSleep 1;
+
+private _teamPriorityVar = format ["WL2_teamPriority_%1", _side];
+private _teamPriority = missionNamespace getVariable [_teamPriorityVar, objNull];
+if (player distance2D _teamPriority < 500) exitWith {};
 
 if (WL_ISUP(player) && vehicle player != player) exitWith {};
 
@@ -21,11 +23,11 @@ private _result = [
 
 if (_result) then {
     if (WL_ISDOWN(player)) then {
-        setPlayerRespawnTime 0.5;
+        setPlayerRespawnTime 0.1;
         forceRespawn player;
     };
     waitUntil {
-        uiSleep 0.2;
+        uiSleep 0.1;
         WL_ISUP(player);
     };
     private _travelResult = [true] call WL2_fnc_travelTeamPriority;

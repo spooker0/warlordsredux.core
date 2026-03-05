@@ -211,19 +211,22 @@ private _allUnits = _vehicleUnits + _infantryUnits;
 _sector setVariable ["WL2_sectorDefenders", _allUnits];
 _sector setVariable ["WL2_sectorPop", round (_garrisonSize * 2), true];
 
-private _maxRadius = (_objectArea # 1) max (_objectArea # 2);
-private _findStrongholdBuildings = [getPosATL _sector, _maxRadius, true] call WL2_fnc_findStrongholdBuilding;
+private _stronghold = _sector getVariable ["WL_stronghold", objNull];
+if (isNull _stronghold) then {
+	private _maxRadius = (_objectArea # 1) max (_objectArea # 2);
+	private _findStrongholdBuildings = [getPosATL _sector, _maxRadius, true] call WL2_fnc_findStrongholdBuilding;
 
-private _eligibleBuildings = _findStrongholdBuildings inAreaArray _objectArea;
-_eligibleBuildings = [_eligibleBuildings, [_sector], {
-    private _cost = getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "cost");
-	private _distanceToSector = _x distance2D _input0;
-	_cost * 100 - _distanceToSector;
-}, "DESCEND"] call BIS_fnc_sortBy;
+	private _eligibleBuildings = _findStrongholdBuildings inAreaArray _objectArea;
+	_eligibleBuildings = [_eligibleBuildings, [_sector], {
+		private _cost = getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "cost");
+		private _distanceToSector = _x distance2D _input0;
+		_cost * 100 - _distanceToSector;
+	}, "DESCEND"] call BIS_fnc_sortBy;
 
-if (count _eligibleBuildings > 0) then {
-	private _stronghold = _eligibleBuildings # 0;
-	[_stronghold, _sector] call WL2_fnc_establishStronghold;
+	if (count _eligibleBuildings > 0) then {
+		private _stronghold = _eligibleBuildings # 0;
+		[_stronghold, _sector] call WL2_fnc_establishStronghold;
+	};
 };
 
 private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
