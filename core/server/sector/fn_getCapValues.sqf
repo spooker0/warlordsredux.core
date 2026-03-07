@@ -2,16 +2,7 @@
 params ["_sector"];
 
 private _ownerSide = _sector getVariable ["BIS_WL_owner", independent];
-
-private _westArea = missionNamespace getVariable ["WL2_westControlledArea", 0];
-private _eastArea = missionNamespace getVariable ["WL2_eastControlledArea", 0];
-_westArea = _westArea max 1;
-_eastArea = _eastArea max 1;
-private _westAreaRatio = _westArea / (_westArea + _eastArea);
-private _eastAreaRatio = 1 - _westAreaRatio;
-private _westMod = _westAreaRatio * 2;
-private _eastMod = _eastAreaRatio * 2;
-private _modifiers = [_westMod, _eastMod, 0];
+private _modifiers = missionNamespace getVariable ["WL2_capAreaModifiers", [0, 0, 0]];
 
 private _sideArr = [west, east, independent];
 private _sideCaptureModifier = createHashMap;

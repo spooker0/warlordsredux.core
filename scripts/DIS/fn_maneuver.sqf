@@ -113,6 +113,10 @@ private _originalPosition = getPosASL _unit;
                 _projectile setVectorDirAndUp _targetVectorDirAndUp;
                 _projectile setMissileTarget [_originalTarget, true];
             } else {
+                if (alive _originalTarget) then {
+                    private _distance = (_originalTarget distance _projectile);
+                    [format ["Missile lost track %1m away from target.", round _distance]] call WL2_fnc_smoothText;
+                };
                 triggerAmmo _projectile;
             };
         };
@@ -120,10 +124,16 @@ private _originalPosition = getPosASL _unit;
         private _currentMissileTarget = missileTarget _projectile;
         // Ghost missile relocking check.
         if (_isLOAL && alive _currentMissileTarget && _currentMissileTarget != _originalTarget) then {
+            if (alive _originalTarget) then {
+                ["Missile lost track on multiple targets."] call WL2_fnc_smoothText;
+            };
             triggerAmmo _projectile;
         };
 
         if (_unit distance _projectilePosition > _samMaxDistance) then {
+            if (alive _originalTarget && !(_projectilePosition isEqualTo [0, 0, 0])) then {
+                ["Missile lost track past maximum control distance from launcher."] call WL2_fnc_smoothText;
+            };
             triggerAmmo _projectile;
         };
     };
@@ -140,6 +150,7 @@ private _originalPosition = getPosASL _unit;
         private _projectileSide = side (group _unit);
         if (_missileTargetSide == _projectileSide) exitWith {
             triggerAmmo _projectile;
+            ["Missile detonated to avoid seeking friendly target."] call WL2_fnc_smoothText;
         };
     };
 };

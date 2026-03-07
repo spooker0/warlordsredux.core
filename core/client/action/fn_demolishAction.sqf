@@ -76,6 +76,9 @@ private _demolishActionId = player addAction [
                 if (!alive _demolishableTarget) then {
                     break;
                 };
+                if (_demolishableTarget getVariable ["WL2_demolitionHealth", 1] <= 0) then {
+                    break;
+                };
 
                 private _inputAction = inputAction "Action" + inputAction "ActionContext" + inputAction "navigateMenu";
                 if (_startCheckingUnhold && _inputAction > 0) then {

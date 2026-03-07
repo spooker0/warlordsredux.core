@@ -8,8 +8,7 @@ while { !BIS_WL_missionEnd } do {
     if (_mineExplosion) then {
         missionNamespace setVariable ["WL2_mineExplosion", false];
         _mineVictims = _mineVictims + 1;
-        private _message = format ["Beware! Independent AT minefield has claimed a victim (%1 so far).", _mineVictims];
-        [[west, "Base"], _message] remoteExec ["commandChat", west];
-        [[east, "Base"], _message] remoteExec ["commandChat", east];
+        private _message = format ["Beware! Independent minefield has claimed a victim (%1 so far).", _mineVictims];
+        [_message] remoteExec ["WL2_fnc_broadcastAction", -2];
     };
 };

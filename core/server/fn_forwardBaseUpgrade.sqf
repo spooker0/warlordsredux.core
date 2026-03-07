@@ -17,33 +17,20 @@ if (_level == 3) then {
     };
     _backHangar allowDamage false;
 
-    private _forwardHangarPosition = _backHangar modelToWorldWorld [0, 18, 0];
-    private _vectorDirAndUp = [vectorDir _backHangar, vectorUp _backHangar];
-    private _forwardHangar = [_hangarType, _hangarType, _forwardHangarPosition, _vectorDirAndUp, true, false] call WL2_fnc_createVehicleCorrectly;
-    _forwardHangar allowDamage false;
-
-    private _railPosition = _forwardHangar modelToWorld [0, 25, 0];
+    private _railPosition = _backHangar modelToWorld [0, 26, 0];
     private _catapultRail = [_sender, _railPosition, "Land_CraneRail_01_F", getDir _forwardBase, false, false] call WL2_fnc_orderGround;
 
-    private _hangarPosATL = getPosATL _forwardHangar;
-    if (_hangarPosATL # 2 > -1) then {
-        private _scoutPlaneType = if (_side == west) then {
-            "B_Scout_Wasp"
-        } else {
-            "O_Scout_Shikra"
-        };
-
-        private _planePosition = _forwardHangar modelToWorld [0, -8, 0];
-        private _scoutPlane = [objNull, _planePosition, _scoutPlaneType, getDir _forwardHangar, false, false] call WL2_fnc_orderGround;
-
-        private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
-        _ownedVehicles pushBackUnique _scoutPlane;
-        missionNamespace setVariable ["BIS_WL_ownedVehicles_server", _ownedVehicles];
+    private _scoutPlaneType = if (_side == west) then {
+        "B_Scout_Falcon"
+    } else {
+        "O_Scout_Falcon"
     };
+
+    private _planePosition = _forwardBase modelToWorld [0, -30, 0];
+    private _scoutPlane = [_sender, _planePosition, _scoutPlaneType, getDir _backHangar, false, false] call WL2_fnc_orderGround;
 
     private _assetChildren = _forwardBase getVariable ["WL2_children", []];
     _assetChildren pushBack _backHangar;
-    _assetChildren pushBack _forwardHangar;
     _assetChildren pushBack _catapultRail;
     _forwardBase setVariable ["WL2_children", _assetChildren];
 } else {

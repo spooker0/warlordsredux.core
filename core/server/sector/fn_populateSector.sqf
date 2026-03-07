@@ -91,11 +91,6 @@ if (count _presetVehicles == 0) then {
 		private _vehicleType = selectRandom _vehiclesPool;
 		[_vehicleType, _spawnPos, random 360, false, false] call _spawnVehicle;
 	};
-
-	if (random 1 > 0.5) then {
-		private _spawnPos = selectRandom _randomSpots;
-		["I_Smart_Mine", _spawnPos, random 360, true, false] call _spawnVehicle;
-	};
 } else {
 	{
 		private _data = +_x;
@@ -110,7 +105,7 @@ private _objectArea = _sector getVariable "objectAreaComplete";
 private _roads = _sector nearRoads 500;
 _roads = _roads inAreaArray _objectArea;
 if (count _roads > 0) then {
-	for "_i" from 1 to (random 4) do {
+	for "_i" from 1 to (random 5) do {
 		private _randomRoad = selectRandom _roads;
 		["AT_Minefield", getPosATL _randomRoad, random 360, true, false] call _spawnVehicle;
 	};

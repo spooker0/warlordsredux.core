@@ -33,7 +33,7 @@ switch (_className) do {
         player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 
         [_asset] call WL2_fnc_factionBasedClientInit;
-        [_asset, true] spawn WLC_fnc_onRespawn;
+        [_asset] spawn WLC_fnc_onRespawn;
 
         [_asset] spawn {
             params ["_asset"];
@@ -204,7 +204,7 @@ switch (_className) do {
         _selectedCollaborator setVariable ["BIS_WL_ownerAssetSide", side group player, true];
 
         [_selectedCollaborator] call WL2_fnc_factionBasedClientInit;
-        [_selectedCollaborator, true] spawn WLC_fnc_onRespawn;
+        [_selectedCollaborator] spawn WLC_fnc_onRespawn;
 
         switchCamera _selectedCollaborator;
         player remoteControl _selectedCollaborator;

@@ -91,12 +91,14 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
         };
 
         private _nearbyDemolishableItems = _nearbyItems select {
-            _x getVariable ["WL2_canDemolish", false];
+            private _currentHealth = _x getVariable ["WL2_demolitionHealth", 1];
+            _x getVariable ["WL2_canDemolish", false] && alive _x && _currentHealth > 0
         };
 
         private _nearbyDamagedItems = _nearbyDemolishableItems select {
             private _maxHealth = _x getVariable ["WL2_demolitionMaxHealth", 5];
-            alive _x && (_x getVariable ["WL2_demolitionHealth", _maxHealth] < _maxHealth)
+            private _currentHealth = _x getVariable ["WL2_demolitionHealth", _maxHealth];
+            _currentHealth < _maxHealth;
         };
 
         // do distance checks after, visible within 35 anyway
@@ -206,7 +208,11 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
             private _isInMySquad = ["areInSquad", [_playerId, getPlayerID _x]] call SQD_fnc_query;
             if (!_isInMySquad && _x distance cameraOn > 100 && _isntCursorTarget) then { continue; };
 
-            if (!(_x isKindOf "Man") && !alive _x) then { continue; };
+            if !(_x isKindOf "Man") then {
+                if (!alive _x) then { continue; };
+                private _health = _x getVariable ["WL2_demolitionHealth", 1];
+                if (_health <= 0) then { continue; };
+            };
 
             private _color = [_x, _playerIconColorCache] call WL2_fnc_iconColor;
 

@@ -618,7 +618,7 @@ if (count _findIsStronghold > 0) then {
         private _fortificationTime = _sector getVariable ["WL_fortificationTime", -1];
         if (_fortificationTime < serverTime) exitWith {};
         private _fortificationTimeRemaining = _fortificationTime - serverTime;
-        _sector setVariable ["WL_fortificationTime", serverTime + _fortificationTimeRemaining / 5, true];
+        _sector setVariable ["WL_fortificationTime", serverTime + _fortificationTimeRemaining / 15, true];
 
     #if WL_QUICK_CAPTURE
         _sector setVariable ["WL_fortificationTime", serverTime + 10, true];

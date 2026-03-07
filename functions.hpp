@@ -161,6 +161,7 @@ class CfgFunctions {
 			class announcer {};
 			class announcerInit {};
 			class betty {};
+			class broadcastAction {};
 			class clientEH {};
 			class combatAirClient {};
 			class createDestroyerClient {};

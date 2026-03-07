@@ -370,9 +370,16 @@ if (!isNull _sectorTarget || BIS_WL_selection_showLinks) then {
 		private _ownsFace = true;
 		{
 			private _sectorOwner = _x getVariable ["BIS_WL_owner", sideUnknown];
-			if (_sectorOwner != BIS_WL_playerSide) then {
-				_ownsFace = false;
-				break;
+			if (WL_IsSpectator) then {
+				if !(_sectorOwner in [west, east]) then {
+					_ownsFace = false;
+					break;
+				};
+			} else {
+				if (_sectorOwner != BIS_WL_playerSide) then {
+					_ownsFace = false;
+					break;
+				};
 			};
 		} forEach _sectors;
 
@@ -385,28 +392,10 @@ if (!isNull _sectorTarget || BIS_WL_selection_showLinks) then {
 		private _showBonus = uiNamespace getVariable ["WL2_mapShowBonus", false];
 
 		private _income = round (_area * WL_INCOME_M2);
-		private _incomeText = if (!_showBonus || _ownsFace) then {
-			format ["%1", _income]
+		private _incomeText = if (_showBonus) then {
+			format ["%1 (%2 km²)", _income, (_area / 1e6) toFixed 1]
 		} else {
-			private _vertices = count _sectors;
-			private _bonus = _income * WL_INCOME_CAPBONUS * _vertices;
-			private _bonusText = if (_bonus >= 1000) then {
-				private _bonusK = floor (_bonus / 1000);
-				private _bonusR = _bonus mod 1000;
-				_bonusR = if (_bonusR >= 100) then {
-					format ["%1", _bonusR]
-				} else {
-					if (_bonusR >= 10) then {
-						format ["0%1", _bonusR]
-					} else {
-						format ["00%1", _bonusR]
-					};
-				};
-				format ["%1,%2", _bonusK, _bonusR]
-			} else {
-				format ["%1", _bonus]
-			};
-			format ["%1 (+%2)", _income, _bonusText]
+			format ["%1", _income]
 		};
 
 		_drawIcons pushBack [
@@ -428,7 +417,26 @@ if (!isNull _sectorTarget || BIS_WL_selection_showLinks) then {
 		};
 
 		private _colorToUse = if (_ownsFace) then {
-			_sideColorRGBA
+			if (WL_IsSpectator) then {
+				private _sectorOwnerSides = [];
+				{
+					private _owner = _x getVariable ["BIS_WL_owner", sideUnknown];
+					if (_owner == west || _owner == east) then {
+						_sectorOwnerSides pushBackUnique _owner;
+					};
+				} forEach _sectors;
+				if (count _sectorOwnerSides == 1) then {
+					if (_sectorOwnerSides # 0 == west) then {
+						[0, 0.3, 0.6, 0.4]
+					} else {
+						[0.5, 0, 0, 0.4]
+					};
+				} else {
+					_neutralRGBA
+				};
+			} else {
+				_sideColorRGBA
+			};
 		} else {
 			_neutralRGBA
 		};
@@ -829,6 +837,7 @@ private _airWrecks = _mapData getOrDefault ["airWrecks", []];
 	private _position = getPosASL _x;
 	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
 	private _assetTypeName = [_x] call WL2_fnc_getAssetTypeName;
+	private _wreckTimer = [_x getEntityInfo 3, "MM:SS"] call BIS_fnc_secondsToString;
 	_drawIcons pushBack [
 		"\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa",
 		[0, 0, 0, 1],
@@ -836,7 +845,7 @@ private _airWrecks = _mapData getOrDefault ["airWrecks", []];
 		_size * _mapIconScale,
 		_size * _mapIconScale,
 		0,
-		format ["%1 (Wreck)", _assetTypeName],
+		format ["%1 (Wreck %2)", _assetTypeName, _wreckTimer],
 		1,
 		_iconTextSize * _mapIconScale,
 		"PuristaBold",

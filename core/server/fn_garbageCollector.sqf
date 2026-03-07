@@ -16,7 +16,8 @@ private _isPersistentAirWreck = {
 	params ["_asset"];
 	if !(_asset isKindOf "Air") exitWith { false };
 	if !(_asset getVariable ["WL_spawnedAsset", false]) exitWith { false };
-	if (WL_UNIT(_asset, "cost", 0) <= 4000) exitWith { false };
+	if (WL_UNIT(_asset, "cost", 0) <= 6000) exitWith { false };
+	if (_asset getEntityInfo 3 > WL_COOLDOWN_GC_LONG) exitWith { false };
 	private _position = getPosASL _asset;
 	!(surfaceIsWater _position)
 };
@@ -28,23 +29,13 @@ while { !BIS_WL_missionEnd } do {
 
 	{
 		if (typeOf _x == "Steerable_Parachute_F") then {
-			private _occupied = count (crew _x select {alive _x}) > 0;
+			private _occupied = count (crew _x select { alive _x }) > 0;
 			if (!_occupied) then {
 				deleteVehicle _x;
 			};
 		} else {
 			private _isPersistentWreck = [_x] call _isPersistentAirWreck;
-			if (_isPersistentWreck) then {
-				private _ticks = _x getVariable ["WL2_garbageCollectorTicks", 0];
-				if (isNull attachedTo _x || _x getEntityInfo 3 > 600) then {
-					_ticks = _ticks + 1;
-					if (_ticks > 3) then {
-						deleteVehicle _x;
-					} else {
-						_x setVariable ["WL2_garbageCollectorTicks", _ticks];
-					};
-				};
-			} else {
+			if (!_isPersistentWreck) then {
 				deleteVehicle _x;
 			};
 		};

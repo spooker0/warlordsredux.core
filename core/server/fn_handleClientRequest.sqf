@@ -9,9 +9,14 @@ private _uid = getPlayerUID _sender;
 
 private _broadcastActionToSide = {
 	params ["_side", "_message"];
+	private _allPlayers = call BIS_fnc_listPlayers;
+	private _sidePlayers = [];
 	{
-		[[_side, "Base"], _message] remoteExec ["commandChat", owner _x];
-	} forEach (allPlayers select {side group _x == _side});
+		if (side group _x == _side) then {
+			_sidePlayers pushBack _x;
+		};
+	} forEach _allPlayers;
+	[_message] remoteExec ["WL2_fnc_broadcastAction", _sidePlayers];
 };
 
 private _playerFunds = (serverNamespace getVariable "fundsDatabase") getOrDefault [_uid, 0];

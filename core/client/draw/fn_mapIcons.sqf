@@ -219,24 +219,19 @@
 		_munitionList = _munitionList select { alive _x };
 		_mapData set ["trackedProjectiles", _munitionList];
 
-		private _sideStr = if (BIS_WL_playerSide == west) then { "west" } else { "east" };
-		private _areaVar = format ["WL2_%1ControlledArea", _sideStr];
-		private _controlledArea = missionNamespace getVariable [_areaVar, 0];
+		private _capAreaModifiers = missionNamespace getVariable ["WL2_capAreaModifiers", [0, 0, 0]];
+		private _sideIndex = if (_side == west) then { 0 } else { 1 };
+		private _otherSideIndex = if (_side == west) then { 1 } else { 0 };
+		private _controlledMod = _capAreaModifiers # _sideIndex;
+		private _enemyMod = _capAreaModifiers # _otherSideIndex;
 
-		private _enemySideStr = if (BIS_WL_playerSide == west) then { "east" } else { "west" };
-		private _enemyAreaVar = format ["WL2_%1ControlledArea", _enemySideStr];
-		private _enemyControlledArea = missionNamespace getVariable [_enemyAreaVar, 0];
-
-		_controlledArea = _controlledArea max 1;
-		_enemyControlledArea = _enemyControlledArea max 1;
-		private _controlledAreaRatio = _controlledArea / (_controlledArea + _enemyControlledArea);
-		private _enemyAreaRatio = 1 - _controlledAreaRatio;
-		private _controlledMod = _controlledAreaRatio * 2;
-		private _enemyMod = _enemyAreaRatio * 2;
+		private _controlledAreas = missionNamespace getVariable ["WL2_controlledAreas", [0, 0]];
+		private _controlledArea = _controlledAreas # _sideIndex;
+		private _enemyControlledArea = _controlledAreas # _otherSideIndex;
 
 		private _areaControlData = [
-			format ["    %1 km² (Capture +%2x)", (_controlledArea / 1000000) toFixed 1, _controlledMod toFixed 1],
-			format ["    ~%1 km² (Capture +%2x)", round (_enemyControlledArea / 1000000), _enemyMod toFixed 1]
+			format ["    %1 km² (Capture +%2x)", (_controlledArea / 1e6) toFixed 1, _controlledMod toFixed 1],
+			format ["    ~%1 km² (Capture +%2x)", round (_enemyControlledArea / 1e6), _enemyMod toFixed 1]
 		];
 		_mapData set ["areaControlData", _areaControlData];
 

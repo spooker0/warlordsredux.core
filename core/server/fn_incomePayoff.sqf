@@ -56,6 +56,20 @@ while { !BIS_WL_missionEnd } do {
 			_eastArea = _eastArea + _area;
 		};
 	} forEach _facesData;
-	missionNamespace setVariable ["WL2_westControlledArea", _westArea, true];
-	missionNamespace setVariable ["WL2_eastControlledArea", _eastArea, true];
+	missionNamespace setVariable ["WL2_controlledAreas", [_westArea, _eastArea], true];
+
+	_westArea = _westArea max 1;
+	_eastArea = _eastArea max 1;
+	private _westAreaRatio = _westArea / (_westArea + _eastArea);
+	private _eastAreaRatio = 1 - _westAreaRatio;
+	private _westMod = _westAreaRatio * 2;
+	private _eastMod = _eastAreaRatio * 2;
+	if (_westArea > _eastArea) then {
+		_westMod = _westMod + 1;
+	};
+	if (_eastArea > _westArea) then {
+		_eastMod = _eastMod + 1;
+	};
+	private _capAreaModifiers = [_westMod, _eastMod, 0];
+	missionNamespace setVariable ["WL2_capAreaModifiers", _capAreaModifiers, true];
 };

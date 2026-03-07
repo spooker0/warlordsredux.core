@@ -13,7 +13,7 @@ private _actionId = player addAction [
 
         private _cost = WL_UNIT(_asset, "cost", 0);
         private _inFriendlySector = ([-2, []] call WL2_fnc_checkInFriendlySector) # 0;
-        if (!_inFriendlySector && _cost > 4000) exitWith {
+        if (!_inFriendlySector && _cost > 6000) exitWith {
             ["You can secure this wreck by moving it to a friendly sector or forward base with a flatbed or via slingloading."] call WL2_fnc_smoothText;
             playSoundUI ["AddItemFailed"];
         };

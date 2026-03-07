@@ -33,6 +33,8 @@ while { !BIS_WL_missionEnd } do {
         private _sectorDefenders = _sector getVariable ["WL2_sectorDefenders", []];
         _sectorDefenders = _sectorDefenders select { alive _x };
 
+        private _isAircraftCarrier = _sector getVariable ["WL2_isAircraftCarrier", false];
+
         while { count _sectorDefenders < _garrisonSize } do {
             private _unitType = selectRandom _unitsPool;
 
@@ -84,6 +86,15 @@ while { !BIS_WL_missionEnd } do {
             _posAboveGround set [2, 100];
 
             _newUnit setVehiclePosition [_posAboveGround, [], 0, "CAN_COLLIDE"];
+
+            if (_isAircraftCarrier) then {
+                private _spawnHeight = getPosASL _newUnit # 2;
+                if (_spawnHeight < 10 || _spawnHeight > 30) then {
+                    deleteVehicle _newUnit;
+                    continue;
+                };
+            };
+
             _newUnit call WL2_fnc_newAssetHandle;
 
             _newUnit setVariable ["WL2_sectorDefender", _sector];

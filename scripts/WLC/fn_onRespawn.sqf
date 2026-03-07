@@ -1,5 +1,5 @@
 #include "includes.inc"
-params [["_unit", player], ["_paidFor", false]];
+params [["_unit", player]];
 
 private _isItemVanilla = {
     params ["_item", "_itemType"];
