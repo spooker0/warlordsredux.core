@@ -27,6 +27,7 @@
 #define WL_TP_ENABLED 0
 #define WL_DEBUG_INIT 0
 #define WL_CRUISE_MISSILES 0
+#define WL_CAMOUFLAGE_ENABLED 0
 
 // Live: set all to 1
 #define WL_STOP_TEAM_SWITCH 1
@@ -122,7 +123,6 @@
 #define WL_COOLDOWN_TARGETRESET 300
 #define WL_COOLDOWN_REPAIR 300
 #define WL_COOLDOWN_GC 60
-#define WL_COOLDOWN_GC_CHEAP 300
 #define WL_COOLDOWN_GC_LONG 600
 #define WL_COOLDOWN_PARADROP 300
 #define WL_COOLDOWN_PARADROP_DMG 30
@@ -158,6 +158,8 @@
 #define WL_FOBCRATES [WL_FOBCRATE_WEST, WL_FOBCRATE_EAST]
 
 #define WL_CLEANUP_TRANSPORTS ["B_Quadbike_01_F", "O_Quadbike_01_F", "I_Quadbike_01_F", "C_Scooter_Transport_01_F"]
+
+#define WL_MONEY_SIGN (missionNamespace getVariable ["WL_MoneySign", "$"])
 
 #define WL_TARGET_FRIENDLY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_playerSide], objNull])
 #define WL_TARGET_ENEMY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_enemySide], objNull])

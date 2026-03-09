@@ -40,6 +40,8 @@ private _unitsToMove = (units player) select {
     _x distance player < 200
 } select {
     _x getVariable ["BIS_WL_ownerAsset", "123"] == getPlayerUID player
+} select {
+	_x getVariable ["WL2_aiFollow", true]
 };
 
 {

@@ -5,7 +5,7 @@ if (isDedicated) exitWith {};
 
 private _assetTypeName = [_asset] call WL2_fnc_getAssetTypeName;
 private _actionID = _asset addAction [
-	format ["<t color = '#4bff58'>%1 %2</t>", localize "STR_WL_repair", _assetTypeName],
+	format ["<t color='#4bff58'>%1 %2</t>", localize "STR_repair", _assetTypeName],
 	{
         params ["_asset"];
         private _nextRepairTime = _asset getVariable ["WL2_nextRepair", 0];
@@ -47,7 +47,7 @@ private _validHitPoints = _validWheels + _validTracks;
 if (count _validHitPoints == 0) exitWith {};
 
 private _repairWheels = _asset addAction [
-	"<t color = '#4bff58'>Field Mobility Repairs</t>",
+	"<t color='#4bff58'>Field Mobility Repairs</t>",
 	{
         _this spawn {
             params ["_asset", "_caller", "_actionId", "_arguments"];

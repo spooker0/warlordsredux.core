@@ -164,16 +164,22 @@ function updateSectorCapture(captureData, fontSize) {
         listItem.style.setProperty('--sector-left-text-color', attackingColor);
         listItem.style.setProperty('--sector-right-text-color', defendingColor);
 
-        const speedRatio = leftValue / (leftValue + rightValue + 0.01);
-        const direction = leftValue >= rightValue ? 'right' : 'left';
-        const diff = Math.abs(speedRatio - 0.5);
+        let speedRatio = 0;
+        let direction = 'left';
+        if (leftValue > rightValue) {
+            direction = 'right';
+            speedRatio = (leftValue - rightValue) / Math.max(leftValue + rightValue + 0.01, 10);
+        } else {
+            direction = 'left';
+            speedRatio = (rightValue - leftValue) / Math.max(leftValue + rightValue + 0.01, 10);
+        }
 
         const arrowSpan = document.createElement('span');
         arrowSpan.classList.add('capture-arrow', direction);
         arrowSpan.style.setProperty('--bar-width', `${leftPercent}%`);
         listItem.appendChild(arrowSpan);
 
-        const isFastCapture = diff > 0.2;
+        const isFastCapture = speedRatio > 0.2;
         if (isFastCapture) {
             const arrowFastSpan = document.createElement('span');
             arrowFastSpan.classList.add('capture-arrow', 'capture-arrow-fast', direction);
@@ -181,7 +187,7 @@ function updateSectorCapture(captureData, fontSize) {
             listItem.appendChild(arrowFastSpan);
         }
 
-        const isVeryFastCapture = diff > 0.4;
+        const isVeryFastCapture = speedRatio > 0.4;
         if (isVeryFastCapture) {
             const arrowVeryFastSpan = document.createElement('span');
             arrowVeryFastSpan.classList.add('capture-arrow', 'capture-arrow-very-fast', direction);

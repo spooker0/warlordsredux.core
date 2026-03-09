@@ -16,7 +16,6 @@ private _isPersistentAirWreck = {
 	params ["_asset"];
 	if !(_asset isKindOf "Air") exitWith { false };
 	if !(_asset getVariable ["WL_spawnedAsset", false]) exitWith { false };
-	if (WL_UNIT(_asset, "cost", 0) <= 6000) exitWith { false };
 	if (_asset getEntityInfo 3 > WL_COOLDOWN_GC_LONG) exitWith { false };
 	private _position = getPosASL _asset;
 	!(surfaceIsWater _position)
@@ -41,6 +40,7 @@ while { !BIS_WL_missionEnd } do {
 		};
 	} forEach _collectables;
 
+#if WL_CAMOUFLAGE_ENABLED
 	private _simpleObjects = allSimpleObjects [];
 	{
 		private _modelInfo = getModelInfo _x;
@@ -52,6 +52,7 @@ while { !BIS_WL_missionEnd } do {
 			};
 		};
 	} forEach _simpleObjects;
+#endif
 
 	uiSleep WL_COOLDOWN_GC;
 };

@@ -36,8 +36,8 @@ while { !BIS_WL_missionEnd } do {
             private _sectorStronghold = _sector getVariable ["WL_stronghold", objNull];
             private _strongholdRadius = _sectorStronghold getVariable ["WL_strongholdRadius", 0];
 
-            private _score = if (_vehicle distance2D _sectorStronghold < _strongholdRadius) then {
-                5;
+            private _score = if (_vehicle distance2D _sectorStronghold < _strongholdRadius && _sectorOwner != independent) then {
+                10;
             } else {
                 1;
             };
@@ -58,7 +58,7 @@ while { !BIS_WL_missionEnd } do {
         } else {
             _attackingValue = _attackingValue + _capValue;
         };
-    } forEach (_vehicles + [player]);
+    } forEach _vehicles;
 
     _attackingValue = _attackingValue * 50;
     _defendingValue = _defendingValue * 50;

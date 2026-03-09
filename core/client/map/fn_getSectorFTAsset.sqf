@@ -1,6 +1,8 @@
 #include "includes.inc"
 params ["_sector", "_allowInfantry"];
 
+if (isNull _sector) exitWith { objNull };
+
 private _mapData = missionNamespace getVariable ["WL2_mapData", createHashMap];
 private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];;
 _sideVehicles = _sideVehicles inAreaArray (_sector getVariable "objectAreaComplete");

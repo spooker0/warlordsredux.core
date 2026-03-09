@@ -6,8 +6,6 @@ _asset setVariable ["WL2_isMinefield", true, true];
 private _assetData = WL_ASSET_DATA;
 private _side = [_asset] call WL2_fnc_getAssetSide;
 
-_asset allowDamage false;
-
 private _mineOwner = if (isServer) then {
     objNull
 } else {

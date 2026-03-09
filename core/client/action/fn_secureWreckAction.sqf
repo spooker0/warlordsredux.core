@@ -58,6 +58,6 @@ private _actionId = player addAction [
         private _rewardAmount = round (_cost / 300) * 100;
         private _targetDisplayName = [_asset] call WL2_fnc_getAssetTypeName;
 
-        player setUserActionText [_actionId, format ["<t color='#00FF00'>Secure Wreck for %1 (%2%3)</t>", _targetDisplayName, WL_MoneySign, _rewardAmount]];
+        player setUserActionText [_actionId, format ["<t color='#00FF00'>Secure Wreck for %1 (%2%3)</t>", _targetDisplayName, WL_MONEY_SIGN, _rewardAmount]];
 	};
 };

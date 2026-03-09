@@ -105,10 +105,14 @@ private _objectArea = _sector getVariable "objectAreaComplete";
 private _roads = _sector nearRoads 500;
 _roads = _roads inAreaArray _objectArea;
 if (count _roads > 0) then {
-	for "_i" from 1 to (random 5) do {
-		private _randomRoad = selectRandom _roads;
-		["AT_Minefield", getPosATL _randomRoad, random 360, true, false] call _spawnVehicle;
-	};
+	private _randomRoad = selectRandom _roads;
+	["AT_Minefield", getPosATL _randomRoad, random 360, true, false] call _spawnVehicle;
+};
+
+private _numMinesToSpawn = floor (_sectorValue / 5);
+private _mineLocations = [_sector] call WL2_fnc_findSpawnsInSector;
+for "_i" from 1 to _numMinesToSpawn do {
+	["AT_Minefield", selectRandom _mineLocations, random 360, true, false] call _spawnVehicle;
 };
 
 private _services = _sector getVariable ["WL2_services", []];

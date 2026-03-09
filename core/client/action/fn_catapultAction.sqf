@@ -87,7 +87,7 @@ _asset setUserActionText [
 ];
 
 private _rebaseAction = _asset addAction [
-	format ["Return to Base (%1%2)", WL_MoneySign, WL_COST_JETRTB],
+	format ["Return to Base (%1%2)", WL_MONEY_SIGN, WL_COST_JETRTB],
 	{
         _this params ["_asset", "_caller", "_actionId"];
         private _eligibility = [_asset] call WL2_fnc_rebaseActionEligibility;
@@ -115,6 +115,6 @@ private _rebaseAction = _asset addAction [
 
 _asset setUserActionText [
     _rebaseAction,
-    format ["<t color='#4bafff'>Return to Base (%1%2)</t>", WL_MoneySign, WL_COST_JETRTB],
+    format ["<t color='#4bafff'>Return to Base (%1%2)</t>", WL_MONEY_SIGN, WL_COST_JETRTB],
     "<img size='2' color='#4bafff' image='\a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa'/>"
 ];

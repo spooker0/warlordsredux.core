@@ -345,6 +345,7 @@ class CfgFunctions {
 			class addMapButtonsDisplay {};
 			class addTargetMapButton {};
 			class assetButtonAccessControl {};
+			class assetButtonFollow {};
 			class assetButtonRadarOperate {};
 			class assetButtonRadarRotate {};
 			class assetMapButtons {};
@@ -531,6 +532,7 @@ class CfgFunctions {
 			class targetSelectionHandleServer {};
 			class uavJammed {};
 			class updateVehicleList {};
+			class wreckHandler {};
 		};
 		class ServerSector {
 			file = "src\core\server\sector";

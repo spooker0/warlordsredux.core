@@ -169,6 +169,19 @@ if (_operateAccess && _hasRadar) then {
     }, false] call WL2_fnc_addTargetMapButton;
 };
 
+if (_asset in units player) then {
+    private _followText = [_asset] call WL2_fnc_assetButtonFollow;
+
+    [_asset, _targetId, "ai-follow", _followText, {
+        params ["_asset"];
+        _asset setVariable ["WL2_aiFollow", !(_asset getVariable ["WL2_aiFollow", true]), true];
+        playSoundUI ["AddItemOK"];
+
+        // return
+        [_asset] call WL2_fnc_assetButtonFollow;
+    }, false] call WL2_fnc_addTargetMapButton;
+};
+
 private _isTent = typeof _asset in ["Land_TentSolar_01_bluewhite_F", "Land_TentDome_F", "Land_TentSolar_01_redwhite_F", "Land_TentA_F"];
 if (_ownsVehicle && _isTent) then {
     [_asset, _targetId, "ft-tent", "Fast travel tent", {
@@ -357,7 +370,20 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     // Combat air patrol button
     private _combatAirExecute = {
         params ["_asset"];
-        [player, "combatAir", [], _asset] remoteExec ["WL2_fnc_handleClientRequest", 2];
+        [_asset] spawn {
+            params ["_asset"];
+            private _message = format [
+                "Are you sure you want to call in combat air patrol? This will cost you %1%2 and put it on a %3 minute cooldown.",
+                WL_MONEY_SIGN, WL_COST_COMBATAIR, round (WL_COOLDOWN_CAP / 60)
+            ];
+            private _result = [_message, "Combat Air Patrol", "OK", "Cancel"] call BIS_fnc_guiMessage;
+
+            if (!_result) exitWith {
+                playSoundUI ["AddItemFailed"];
+            };
+
+            [player, "combatAir", [], _asset] remoteExec ["WL2_fnc_handleClientRequest", 2];
+        };
     };
     [
         _asset, _targetId,

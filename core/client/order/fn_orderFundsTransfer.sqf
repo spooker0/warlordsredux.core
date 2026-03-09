@@ -52,7 +52,7 @@ _purchase_transfer_units lbSetCurSel 0;
 
 [_purchase_transfer_units, _purchase_transfer_ok, _purchase_transfer_amount, _maxTransfer] spawn {
 	params ["_purchase_transfer_units", "_purchase_transfer_ok", "_purchase_transfer_amount", "_maxTransfer"];
-	private _moneySign = WL_MoneySign;
+	private _moneySign = WL_MONEY_SIGN;
 
 	private _valueText = ctrlText _purchase_transfer_amount;
 	private _color = BIS_WL_colorFriendly;

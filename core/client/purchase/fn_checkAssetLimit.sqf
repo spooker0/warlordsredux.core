@@ -3,6 +3,9 @@ params ["_class"];
 if (_class isKindOf "Man") exitWith {
     [true, ""];
 };
+if (WL_ASSET(_class, "obstacle", 0) > 0) exitWith {
+    [true, ""];
+};
 
 private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
 private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];
@@ -18,10 +21,10 @@ private _isBuildable = {
 };
 
 if ([_class] call _isBuildable) then {
-    _limitedVehicles = _ownedVehicles select { [_x] call _isBuildable };
+    _limitedVehicles = _ownedVehicles select { [_x] call _isBuildable } select { WL_ASSET(_class, "obstacle", 0) == 0 };
     _typeLimit = WL_MAX_BUILDINGS;
 } else {
-    _limitedVehicles = _ownedVehicles select { !([_x] call _isBuildable) };
+    _limitedVehicles = _ownedVehicles select { !([_x] call _isBuildable) } select { WL_ASSET(_class, "obstacle", 0) == 0 };
     _typeLimit = WL_MAX_ASSETS;
 };
 

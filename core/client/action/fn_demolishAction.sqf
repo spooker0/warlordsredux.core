@@ -44,21 +44,19 @@ private _demolishActionId = player addAction [
                 if (typeof _demolishableTarget == "RuggedTerminal_01_communications_hub_F") then {
                     WL_DEMOLITION_FOB_STEP_TIME
                 } else {
-                    private _allUnits = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) select {
-                        WL_ISUP(_x)
-                    };
-                    private _unitsNearby = _allUnits inAreaArray [_playerPosition, 30, 30, 0, false];
-                    private _bulldozersNearby = _unitsNearby select {
-                        WL_UNIT(_x, "mineClear", 0) > 0
-                    };
-
-                    private _demolitionStepTime = WL_UNIT(_demolishableTarget, "demolishStepTime", WL_DEMOLITION_STEP_TIME);
-                    if (count _bulldozersNearby > 0) then {
-                        _demolitionStepTime * 0.5;
-                    } else {
-                        _demolitionStepTime;
-                    };
+                    WL_UNIT(_demolishableTarget, "demolishStepTime", WL_DEMOLITION_STEP_TIME);
                 }
+            };
+
+            private _allUnits = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) select {
+                WL_ISUP(_x)
+            };
+            private _unitsNearby = _allUnits inAreaArray [_playerPosition, 30, 30, 0, false];
+            private _bulldozersNearby = _unitsNearby select {
+                WL_UNIT(_x, "mineClear", 0) > 0
+            };
+            if (count _bulldozersNearby > 0) then {
+                _demolitionStepTime = _demolitionStepTime * 0.3;
             };
 
             ["Animation", ["DEMOLITION", [

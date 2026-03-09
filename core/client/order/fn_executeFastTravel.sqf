@@ -28,7 +28,7 @@ private _strongholdHasSpot = false;
 switch (_fastTravelMode) do {
 	case 0: {
 		private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
-		if (_homeBase == BIS_WL_targetSector) then {
+		if (_homeBase == BIS_WL_targetSector && WL_TARGET_ENEMY != _homeBase) then {
 			_destination = _homeBase modelToWorld [0, 0, 0];
 		} else {
 			_destination = selectRandom ([BIS_WL_targetSector] call WL2_fnc_findSpawnsInSector);
@@ -96,6 +96,8 @@ private _tagAlong = (units player) select {
 	_x distance player < 200
 } select {
 	_x getVariable ["BIS_WL_ownerAsset", "123"] == getPlayerUID player
+} select {
+	_x getVariable ["WL2_aiFollow", true]
 };
 
 private _directionToSector = _destination getDir _sectorPos;

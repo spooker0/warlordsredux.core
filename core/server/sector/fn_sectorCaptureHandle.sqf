@@ -45,7 +45,7 @@ while { !BIS_WL_missionEnd } do {
 			_winner = _originalOwner;
 		};
 
-		private _scoreGap = _winningScore / (_winningScore + _secondScore + 0.01);
+		private _scoreGap = _winningScore / ((_winningScore + _secondScore + 0.01) max 10);
 		private _movement = _progressMovement * _scoreGap;
 
 		if (_winner == _capturingTeam) then {

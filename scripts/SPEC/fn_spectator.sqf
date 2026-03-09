@@ -410,6 +410,10 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
                 _controlKeysText = format ["%1[%2]<br/>", _controlKeysText, _actionKeyText];
             } forEach _spectatorParams;
 
+            private _timeRemaining = [(estimatedEndServerTime - serverTime) max 0, "HH:MM:SS"] call BIS_fnc_secondsToString;
+            _controlNamesText = format ["Time Remaining:<br/>%1", _controlNamesText];
+            _controlKeysText = format ["%1<br/>%2", _timeRemaining, _controlKeysText];
+
             _texture ctrlWebBrowserAction ["ExecJS", format ["setControlsInfo(['%1', '%2']);", _controlNamesText, _controlKeysText]];
         } else {
             _texture ctrlWebBrowserAction ["ExecJS", "setControlsInfo(['','']);"];

@@ -392,7 +392,7 @@ if (!isNull _sectorTarget || BIS_WL_selection_showLinks) then {
 		private _showBonus = uiNamespace getVariable ["WL2_mapShowBonus", false];
 
 		private _income = round (_area * WL_INCOME_M2);
-		private _incomeText = if (_showBonus) then {
+		private _incomeText = if (_showBonus || WL_IsSpectator) then {
 			format ["%1 (%2 km²)", _income, (_area / 1e6) toFixed 1]
 		} else {
 			format ["%1", _income]

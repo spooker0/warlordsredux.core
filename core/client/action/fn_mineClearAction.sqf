@@ -27,7 +27,7 @@ private _actionId = _asset addAction [
 
             private _length = 500;
             private _step = 25;
-            private _width = 50;
+            private _width = 100;
             private _direction = getDir _asset;
 
             playSound3D [selectRandom _dispenseSounds, _asset, false, getPosASL _asset, 5];
@@ -125,9 +125,7 @@ private _actionId = _asset addAction [
 
             private _mineEquipInArea = _allUnitsInArea select {
                 private _unitActualType = WL_ASSET_TYPE(_x);
-                private _isSmartMine = WL_ASSET(_unitActualType, "smartMineAP", 0) > 0 || WL_ASSET(_unitActualType, "smartMineAT", 0) > 0;
-                private _isDumbMine = WL_ASSET(_unitActualType, "dumbMine", 0) > 0;
-                _isSmartMine || _isDumbMine
+                WL_ASSET(_unitActualType, "smartMineAP", 0) > 0 || WL_ASSET(_unitActualType, "smartMineAT", 0) > 0;
             };
             _minesInArea append _mineEquipInArea;
 

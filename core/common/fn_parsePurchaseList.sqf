@@ -164,13 +164,6 @@ private _strategyArr = [
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"Reset vehicle. Must be within 15m and looking at the vehicle."
 	], [
-		"Camouflage",
-		500,
-		[],
-		"Camouflage",
-		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"Camouflage your current position with tall plants. Disappears after 5 minutes."
-	], [
 		"WipeMap",
 		0,
 		[],
@@ -230,6 +223,17 @@ _strategyArr pushBack [
 	"Call missile strike",
 	"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 	"Call a volley of cruise missiles on your designation. Requires all targets (vehicles or infantry) to be on datalink."
+];
+#endif
+
+#if WL_CAMOUFLAGE_ENABLED
+_strategyArr pushBack [
+	"Camouflage",
+	500,
+	[],
+	"Camouflage",
+	"\A3\Data_F_Warlords\Data\preview_empty.jpg",
+	"Camouflage your current position with tall plants. Disappears after 5 minutes."
 ];
 #endif
 

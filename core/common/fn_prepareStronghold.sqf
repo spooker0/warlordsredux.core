@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_stronghold"];
+params ["_stronghold", "_sector"];
 
 _stronghold setDamage 0;
 private _hitPoints = getAllHitPointsDamage _stronghold;
@@ -14,7 +14,14 @@ private _windowHitPointNames = _allHitPointNames select { "glass" in toLower _x 
 } forEach _windowHitPointNames;
 forceHitPointsDamageSync _stronghold;
 
-private _maxHealth = 8;
+private _sectorOwner = _sector getVariable ["BIS_WL_owner", independent];
+private _maxHealth = if (_sectorOwner == independent) then {
+    private _sectorValue = _sector getVariable ["BIS_WL_value", 50];
+    private _strongholdStrength = linearConversion [5, 25, _sectorValue, 4, 13, true];
+    round _strongholdStrength;
+} else {
+    8
+};
 _stronghold setVariable ["WL2_demolitionMaxHealth", _maxHealth, true];
 _stronghold setVariable ["WL2_demolitionHealth", _maxHealth, true];
 

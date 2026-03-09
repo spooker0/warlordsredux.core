@@ -372,7 +372,7 @@ if (_action == "fundsTransfer") exitWith {
 
 	[_transferAmount, getPlayerUID _recipient, false] call _addFunds;
 
-	private _sentMoney = format ["%1%2", WL_MoneySign, _transferAmount];
+	private _sentMoney = format ["%1%2", WL_MONEY_SIGN, _transferAmount];
 	private _message = format [localize "STR_WL_donateMoneyInfo", name _sender, name _recipient, _sentMoney];
 
 	[_side, _message] call _broadcastActionToSide;

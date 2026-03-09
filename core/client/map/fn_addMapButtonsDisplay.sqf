@@ -81,7 +81,7 @@ private _numpadData = [];
             _buttonHeight
         ];
         private _costText = if (_buttonCost > 0) then {
-            format [" <t color='%1'>(%2%3)</t>", if (_buttonCanAfford) then { "#00ff00" } else { "#f00000" }, WL_MoneySign, _buttonCost];
+            format [" <t color='%1'>(%2%3)</t>", if (_buttonCanAfford) then { "#00ff00" } else { "#f00000" }, WL_MONEY_SIGN, _buttonCost];
         } else {
             "";
         };

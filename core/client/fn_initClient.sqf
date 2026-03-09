@@ -244,11 +244,8 @@ uiNamespace setVariable ["WL2_chatHistory", []];
 uiNamespace setVariable ["WL2_modOverrideUid", ""];
 uiNamespace setVariable ["WL2_currentNotification", []];
 
-0 spawn {
-	uiSleep 2;
-	WL2_lastLoadout = getUnitLoadout player;
-	[player] call WLC_fnc_onRespawn;
-};
+WL2_lastLoadout = getUnitLoadout player;
+[player] call WLC_fnc_onRespawn;
 
 0 spawn WL2_fnc_captureDisplay;
 

@@ -182,6 +182,17 @@
 			_x isKindOf "Air"
 		} select {
 			_x distance2D cameraOn < 4000
+		} select {
+			private _attachment = attachedTo _x;
+			if (isNull _attachment) then {
+				true;
+			} else {
+				if (_attachment isKindOf "I_TargetSoldier") then {
+					isNull ropeAttachedTo _attachment;
+				} else {
+					false;
+				};
+			};
 		};
 		_mapData set ["airWrecks", _airWrecks];
 

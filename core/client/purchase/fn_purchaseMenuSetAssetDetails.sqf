@@ -33,7 +33,7 @@ private _infoAssetHeight = ctrlTextHeight _purchase_info_asset;
 _purchase_info_asset ctrlSetPositionH ((_infoAssetHeight + 0.05) max (safezoneH * 0.27));
 _purchase_info_asset ctrlCommit 0;
 
-private _moneySign = WL_MoneySign;
+private _moneySign = WL_MONEY_SIGN;
 private _scale = 1.5 call WL2_fnc_purchaseMenuGetUIScale;
 private _costDisplay = (_cost call BIS_fnc_numberText) regexReplace [" ", ","];
 

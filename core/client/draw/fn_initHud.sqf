@@ -63,7 +63,7 @@ while { !BIS_WL_missionEnd } do {
 	private _income = if (count _sectorsArray > 4) then { _sectorsArray # 4 } else { 0 };
 	_moneyControl ctrlSetStructuredText parseText format [
 		"<t shadow='2' size ='1.1' align='middle'>%1%2</t>    <t shadow='2' size ='0.9' align='middle'>+%3</t>",
-		WL_MoneySign,
+		WL_MONEY_SIGN,
 		_currentMoney,
 		_income
 	];

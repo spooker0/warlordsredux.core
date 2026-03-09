@@ -30,7 +30,7 @@ private _closestLandableArea = _landableAreasByDistance # 0;
 
 private _sectorName = _closestLandableArea getVariable ["WL2_name", "Forward Base"];
 
-private _message = format ["Are you sure you want to return to %1 for %2%3?<br/>Make sure your landing gear is functional!", _sectorName, WL_MoneySign, WL_COST_JETRTB];
+private _message = format ["Are you sure you want to return to %1 for %2%3?<br/>Make sure your landing gear is functional!", _sectorName, WL_MONEY_SIGN, WL_COST_JETRTB];
 private _result = [_message, "Return to Nearest Airbase", "Rebase", "Cancel"] call BIS_fnc_guiMessage;
 
 if (!_result) exitWith {
