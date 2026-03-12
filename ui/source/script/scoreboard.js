@@ -97,7 +97,8 @@ function renderScoreboard(players, firstRender) {
             };
 
             row.appendChild(makeCell(idx + 1));
-            const nameDiv = makeCell(player.name || '', 'player-name');
+            const playerName = `${player.name || ''} (${player.rating || 1000})`;
+            const nameDiv = makeCell(playerName, 'player-name');
             row.appendChild(nameDiv);
             row.appendChild(makeCell(stats.kills));
             row.appendChild(makeCell(stats.staticKills));

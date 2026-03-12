@@ -741,10 +741,13 @@ private _combatAirAreas = _mapData getOrDefault ["combatAirAreas", []];
 		default { "#(rgb,1,1,1)color(1,0,1,0.15)" };
 	};
 
+	private _startTime = _x getVariable ["WL2_combatAirStart", 0];
+	private _areaRadius = (serverTime - _startTime) * WL_COMBAT_AIR_PERSEC;
+	_areaRadius = _areaRadius min WL_COMBAT_AIR_RADIUS;
 	_drawEllipses pushBack [
 		_targetPos,
-		WL_COMBAT_AIR_RADIUS,
-		WL_COMBAT_AIR_RADIUS,
+		_areaRadius,
+		_areaRadius,
 		0,
 		_mapColor,
 		_mapTexture

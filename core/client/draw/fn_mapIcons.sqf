@@ -161,7 +161,7 @@
 		} select {
 			private _assetActualType = WL_ASSET_TYPE(_x);
 			private _showToEnemies = WL_ASSET_FIELD(_assetData, _assetActualType, "showToEnemies", 0);
-			_showToEnemies > cameraOn distance _x
+			_showToEnemies > cameraOn distance2D _x
 		};
 		_mapData set ["visibleEnemyUnits", _visibleEnemyUnits];
 

@@ -30,6 +30,7 @@ if (isPlayer _owner) then {
 	missionNamespace setVariable [_ownedVehicleVar, _ownedVehicles, true];
 };
 
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 if (_asset isKindOf "Man") then {
 	if (isPlayer _owner) then {
 		private _refreshTimerVar = format ["WL2_manpowerRefreshTimers_%1", getPlayerUID player];
@@ -38,6 +39,9 @@ if (_asset isKindOf "Man") then {
 		missionNamespace setVariable [_refreshTimerVar, _manpowerRefreshTimers, true];
 
 		call WL2_fnc_teammatesAvailability;
+
+		private _aiFollowDefault = _settingsMap getOrDefault ["aiFollowDefault", true];
+		_asset setVariable ["WL2_aiFollow", _aiFollowDefault];
 	};
 } else {
 	private _side = if (isPlayer _owner) then {
@@ -241,7 +245,7 @@ if (_asset isKindOf "Man") then {
 	};
 
 	if (WL_ASSET_GET(_data, "dumbMine", 0) > 0) then {
-		[_asset] spawn WL2_fnc_dumbMine;
+		_asset setVariable ["WL2_isMinefield", true, true];
 	};
 
 	private _threatDetection = WL_ASSET_GET(_data, "threatDetection", 0);
@@ -275,7 +279,6 @@ if (_asset isKindOf "Man") then {
 		removeFromRemainsCollector [_asset];
 	};
 
-	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 	if (unitIsUAV _asset) then {
 		if (_settingsMap getOrDefault ["enableAuto", false] && !isDedicated) then {
 			[_asset, false] remoteExec ["setAutonomous", 0];

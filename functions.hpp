@@ -165,7 +165,6 @@ class CfgFunctions {
 			class clientEH {};
 			class combatAirClient {};
 			class createDestroyerClient {};
-			class dumbMine {};
 			class earthquake {};
 			class ewar {};
 			class ewarMessage {};
@@ -208,6 +207,7 @@ class CfgFunctions {
 			class spectrumInterface {};
 			class surrenderWarning {};
 			class teammatesAvailability {};
+			class timedPrompt {};
 			class triggerPurchase {};
 			class updateLevelDisplay {};
 			class welcome {};
@@ -446,6 +446,7 @@ class CfgFunctions {
 			file = "src\core\common";
 			class accessControl {};
 			class cleanupCarrier {};
+			class dumbMineHandler {};
 			class establishStronghold {};
 			class findSpawnsInArea {};
 			class findSpawnsInMarker {};

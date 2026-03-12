@@ -10,18 +10,11 @@ uiSleep 1;
 private _teamPriorityVar = format ["WL2_teamPriority_%1", _side];
 private _teamPriority = missionNamespace getVariable [_teamPriorityVar, objNull];
 if (player distance2D _teamPriority < 500) exitWith {};
-
 if (WL_ISUP(player) && vehicle player != player) exitWith {};
 
 private _callText = format [localize "STR_WL_conscriptMessage", name _conscripter];
-private _result = [
-	localize "STR_WL_conscriptTitle",
-	_callText,
-	localize "STR_WL_goButton",
-    localize "STR_WL_refuseButton"
-] call WL2_fnc_prompt;
 
-if (_result) then {
+private _callback = {
     if (WL_ISDOWN(player)) then {
         setPlayerRespawnTime 0.1;
         forceRespawn player;
@@ -38,3 +31,5 @@ if (_result) then {
         [localize "STR_WL_conscriptFailed"] call WL2_fnc_smoothText;
     };
 };
+
+[_callText, localize "STR_WL_goButton", localize "STR_WL_refuseButton", _callback, 10] spawn WL2_fnc_timedPrompt;

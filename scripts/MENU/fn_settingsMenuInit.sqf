@@ -171,6 +171,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["checkbox", "Hide notification in interface", ["hideNotificationInterface", false]],
         ["checkbox", "Show welcome menu", ["showWelcomeMenu", true]],
         ["checkbox", "Spawn with UAV Terminal", ["spawnWithUAVTerminal", true]],
+        ["checkbox", "AI follow default", ["aiFollowDefault", true]],
         ["category", "Hide scroll menus (requires respawn)"],
         ["checkbox", "Hide: Squad menu", ["hideSquadMenu", false]],
         ["checkbox", "Hide: Buy menu", ["hideBuyMenu", false]],

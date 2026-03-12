@@ -43,8 +43,6 @@ switch (_conditionName) do {
         private _isCarrierSector = _target getVariable ["WL2_isAircraftCarrier", false];
         if (_isCarrierSector) exitWith { "Cannot paradrop onto aircraft carriers." };
 
-        if (_target == WL_TARGET_ENEMY) exitWith { "Cannot paradrop into contested sector." };
-
         "ok";
     };
     case "vehicleParadropFOB": {

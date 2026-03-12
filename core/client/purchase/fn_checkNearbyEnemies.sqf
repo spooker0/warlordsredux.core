@@ -11,7 +11,7 @@ if (isWeaponDeployed player) exitWith {
 };
 
 // Make sure to update cancelVehicleOrder as well
-private _enemiesNearPlayer = (allUnits inAreaArray [player, 150, 150]) select {
+private _enemiesNearPlayer = (allUnits inAreaArray [player, 75, 75]) select {
     _x isKindOf "Man"
 } select {
     BIS_WL_playerSide != side group _x

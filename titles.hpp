@@ -468,6 +468,48 @@ class RscTitles {
 		};
 	};
 
+	class RscWLPromptDisplay {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		name = "RscWLPromptDisplay";
+		onLoad = "uiNamespace setVariable ['RscWLPromptDisplay', _this select 0];";
+		class controls {
+			class RscWLPromptDisplay_Background: RscText {
+				idc = 41001;
+				x = 0;
+				y = safeZoneY + 0.4;
+				w = 1;
+				h = 0.17;
+				colorBackground[] = {0, 0, 0, 0.7};
+				colorText[] = {1, 1, 1, 1};
+				text = "";
+			};
+			class RscWLPromptDisplay_Text: RscStructuredText {
+				idc = 41002;
+				x = 0.01;
+				y = safeZoneY + 0.41;
+				w = 0.98;
+				h = 0.15;
+				text = "";
+				font = "EtelkaNarrowMediumPro";
+				style = ST_MULTI;
+				shadow = 0;
+				size = 0.045;
+			};
+			class RscWLPromptDisplay_Timer: RscProgress {
+				idc = 41003;
+				x = 0;
+				y = safeZoneY + 0.56;
+				w = 1;
+				h = 0.01;
+				colorFrame[] = {0, 0, 0, 0};
+				colorBar[] = {0.18, 1, 0.18, 1};
+			};
+		};
+	};
+
 	class RscWLCruiseMissileDisplay {
 		idd = -1;
 		duration = 1000000000;

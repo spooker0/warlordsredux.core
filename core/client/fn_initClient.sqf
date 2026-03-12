@@ -293,6 +293,7 @@ player setVariable ["WL2_currentBadge", profileNamespace getVariable ["WL2_curre
 0 spawn WL2_fnc_updateLevelDisplay;
 
 0 spawn WL2_fnc_restrictedArea;
+[false] spawn WL2_fnc_dumbMineHandler;
 
 call WL2_fnc_buyMenuAction;
 call WL2_fnc_demolishAction;

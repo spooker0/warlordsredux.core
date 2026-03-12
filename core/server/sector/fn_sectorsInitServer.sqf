@@ -347,13 +347,30 @@ private _getFaceArea2D = {
 
 } forEach _allSectors;
 
+private _getFaceCenter = {
+	params ["_sectorsInFace"];
+
+	private _totalPos = [0, 0, 0];
+	private _count = count _sectorsInFace;
+
+	{
+		_totalPos = _totalPos vectorAdd (getPosASL _x);
+	} forEach _sectorsInFace;
+	_totalPos vectorMultiply (1 / _count)
+};
+
 private _facesData = [];
 {
 	private _sectorsInFace = _x;
 	private _area = [_sectorsInFace] call _getFaceArea2D;
 
-	if (_area > 15000000) then {
+	if (_area > 14e6) then {
 		continue;
+	};
+
+	private _faceCenter = [_sectorsInFace] call _getFaceCenter;
+	if (surfaceIsWater _faceCenter && _area > 7e6) then {
+		_area = _area * 0.5;
 	};
 
 	private _sectorNames = _sectorsInFace apply {

@@ -56,7 +56,6 @@ private _actionCost = switch (_action) do {
 	case "fastTravelAirAssault" : { WL_COST_AIRASSAULT };
 	case "fastTravelParadrop" : { WL_COST_PARADROP };
 	case "fastTravelSquadLeader" : { WL_COST_FTSL };
-	case "scan" : { WL_COST_SCAN };
 	case "combatAir" : { WL_COST_COMBATAIR };
 	case "conscript" : { WL_COST_CONSCRIPT };
 	case "targetReset" : { WL_COST_TARGETRESET };
@@ -223,6 +222,15 @@ if (_action == "immobilized") exitWith {
 if (_action == "scan") exitWith {
 	private _sector = _param2;
 
+	private _lastScanCallVar = format ["WL2_lastScanCall_%1", _side];
+	private _lastScanCall = _sector getVariable [_lastScanCallVar, 0];
+	if (serverTime < _lastScanCall + 30) exitWith {
+		private _message = "Someone else on your team is already calling sector scan for this sector.";
+		[_message] remoteExec ["WL2_fnc_broadcastAction", _sender];
+	};
+	_sector setVariable [_lastScanCallVar, serverTime];
+	[WL_COST_SCAN] call _deductFunds;
+
 	private _sectorName = _sector getVariable ["WL2_name", "???"];
 	private _message = format ["%1 has initiated sector scan on %2.", name _sender, _sectorName];
 	[_side, _message] call _broadcastActionToSide;
@@ -309,7 +317,7 @@ if (_action == "combatAir") exitWith {
 	[_enemySide, _enemyMessage] call _broadcastActionToSide;
 
 	_target setVariable ["WL2_combatAirActive", true, true];
-	_target setVariable ["WL2_combatAirStart", serverTime + 45, true];
+	_target setVariable ["WL2_combatAirStart", serverTime, true];
 	_target setVariable ["WL2_combatAirRequester", _uid, true];
 	_target setVariable ["WL2_nextCombatAir", serverTime + WL_DURATION_CAP + WL_COOLDOWN_CAP, true];
 
@@ -429,10 +437,6 @@ if (_action == "boost") exitWith {
 	private _senderVehicle = vehicle _sender;
 	private _multiplier = if (_senderVehicle getVariable ["WL2_hasEWBoost", false]) then { 2 } else { 1 };
 
-	private _reward = 30 * _multiplier;
-	[_reward] call _addFunds;
-	[objNull, _reward, "Boosted signal", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
-
 	private _message = _param1;
 
 	private _allPlayers = call BIS_fnc_listPlayers;
@@ -489,6 +493,12 @@ if (_action == "boost") exitWith {
 			private _hostileSignal = missionNamespace getVariable [_hostileSignalVar, 500];
 			_hostileSignal = (_hostileSignal - _signalIncrement) max 0;
 			missionNamespace setVariable [_hostileSignalVar, _hostileSignal, true];
+
+			if (_friendlySignal < 950) then {
+				private _reward = 30 * _multiplier;
+				[_reward] call _addFunds;
+				[objNull, _reward, "Boosted signal", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+			};
 		};
 	};
 

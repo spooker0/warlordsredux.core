@@ -1,4 +1,5 @@
 #include "includes.inc"
+private _ratings = profileNamespace getVariable ["WL2_playerRatings", createHashMap];
 
 while { !BIS_WL_missionEnd } do {
     uiSleep 10;
@@ -15,6 +16,7 @@ while { !BIS_WL_missionEnd } do {
             continue;
         };
         _entry set ["uid", _playerUid];
+        _entry set ["rating", _ratings getOrDefault [_playerUid, WL_RATING_STARTER]];
 
         private _unit = [_playerUid] call BIS_fnc_getUnitByUid;
         private _unitName = [_unit] call BIS_fnc_getName;

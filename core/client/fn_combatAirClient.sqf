@@ -24,23 +24,30 @@ while { !BIS_WL_missionEnd } do {
 
     private _combatPatrolSectors = BIS_WL_allSectors select {
         _x getVariable ["WL2_combatAirActive", false];
+#if WL_CAP_DEBUG == 0
     } select {
         _x getVariable ["BIS_WL_owner", independent] != _side;
+#endif
     };
 
     private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
     private _capForwardAirbases = _forwardBases select {
         _x getVariable ["WL2_combatAirActive", false];
+#if WL_CAP_DEBUG == 0
     } select {
         _x getVariable ["WL2_forwardBaseOwner", independent] != _side;
+#endif
     };
     private _combatAirAreas = _combatPatrolSectors + _capForwardAirbases;
 
     private _assetInCombatAirArea = _combatAirAreas select {
+        private _startTime = _x getVariable ["WL2_combatAirStart", 0];
+        private _areaRadius = (serverTime - _startTime) * WL_COMBAT_AIR_PERSEC;
+        _areaRadius = _areaRadius min WL_COMBAT_AIR_RADIUS;
         _assetPos inArea [
             getPosASL _x,
-            WL_COMBAT_AIR_RADIUS,
-            WL_COMBAT_AIR_RADIUS,
+            _areaRadius,
+            _areaRadius,
             0,
             false
         ];
@@ -70,10 +77,6 @@ while { !BIS_WL_missionEnd } do {
     _assetInCombatAirArea = [_assetInCombatAirArea, [], { cameraOn distance _x }, "ASCEND"] call BIS_fnc_sortBy;
     private _combatAirArea = _assetInCombatAirArea # 0;
 
-    private _startTime = _combatAirArea getVariable ["WL2_combatAirStart", 0];
-    private _timeUntilStart = _startTime - serverTime;
-    if (_timeUntilStart <= 0 && _timeUntilStart > -300) then {
-        [_asset, _combatAirArea, true] spawn DIS_fnc_combatAirPatrol;
-        uiSleep 5;
-    };
+    [_asset, _combatAirArea, true] spawn DIS_fnc_combatAirPatrol;
+    uiSleep 5;
 };

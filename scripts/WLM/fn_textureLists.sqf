@@ -28,6 +28,10 @@ _whitelistWest pushBack ["Heli_Attack_01_base_F",
     ["Black", "A3\Air_F_Beta\heli_attack_01\data\UI\Heli_Attack_01_EDEN_CA.PAA"]
 ];
 
+_whitelistEast pushBack ["Heli_Light_01_base_F",
+    ["CSAT Hex", "src\img\camo\beluga.jpg"]
+];
+
 private _assetConfig = configFile >> "CfgVehicles" >> typeOf _asset;
 private _officialTextureSources = configProperties [_assetConfig >> "TextureSources"];
 

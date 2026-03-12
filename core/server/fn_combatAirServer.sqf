@@ -29,10 +29,13 @@ while { !BIS_WL_missionEnd } do {
         private _asset = _x;
 
         private _combatAreasForAsset = _combatAirAreas select {
+            private _startTime = _x getVariable ["WL2_combatAirStart", 0];
+            private _areaRadius = (serverTime - _startTime) * WL_COMBAT_AIR_PERSEC;
+            _areaRadius = _areaRadius min WL_COMBAT_AIR_RADIUS;
             _asset inArea [
                 getPosASL _x,
-                WL_COMBAT_AIR_RADIUS,
-                WL_COMBAT_AIR_RADIUS,
+                _areaRadius,
+                _areaRadius,
                 0,
                 false
             ];

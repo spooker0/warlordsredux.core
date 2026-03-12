@@ -9,7 +9,7 @@ private _forwardBases = _potentialBases select {
 
 private _servicesInSector = _sector getVariable ["WL2_services", []];
 if ("H" in _requirements && !("H" in _servicesInSector)) exitWith {
-    if (count _forwardBases > 0 && !("S" in _requirements)) then {
+    if (count _forwardBases > 0 && !("NF" in _requirements)) then {
         [true, ""];
     } else {
         [false, "Must be in a sector with a helipad."];
@@ -46,6 +46,10 @@ if ("S" in _requirements) exitWith {
 };
 
 if ("W" in _requirements) exitWith {
+    [true, ""];
+};
+
+if ("NF" in _requirements) exitWith {
     [true, ""];
 };
 
