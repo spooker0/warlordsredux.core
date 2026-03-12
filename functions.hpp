@@ -270,6 +270,7 @@ class CfgFunctions {
 			class runwayBuster {};
 			class scanner {};
 			class scannerAction {};
+			class secureWreck {};
 			class secureWreckAction {};
 			class sendVehicleData {};
 			class setupForwardBaseAction {};

@@ -4,29 +4,7 @@ if (isDedicated) exitWith {};
 private _actionId = player addAction [
 	"<t color='#00FF00'>Secure Wreck</t>",
 	{
-        params ["_target", "_caller", "_actionId", "_args"];
-        private _asset = cursorTarget;
-        if (isNull _asset || !(_asset isKindOf "Air")) exitWith {
-            ["No aircraft wreck targeted."] call WL2_fnc_smoothText;
-            playSoundUI ["AddItemFailed"];
-        };
-
-        private _cost = WL_UNIT(_asset, "cost", 0);
-        private _inFriendlySector = ([-2, []] call WL2_fnc_checkInFriendlySector) # 0;
-        if (!_inFriendlySector && _cost > 6000) exitWith {
-            ["You can secure this wreck by moving it to a friendly sector or forward base with a flatbed or via slingloading."] call WL2_fnc_smoothText;
-            playSoundUI ["AddItemFailed"];
-        };
-
-        private _rewardAmount = round (_cost / 300) * 100;
-
-        [player, "secureAircraft", _rewardAmount] remoteExec ["WL2_fnc_handleClientRequest", 2];
-        [objNull, _rewardAmount, "Aircraft secured", "#228b22"] call WL2_fnc_killRewardClient;
-
-        deleteVehicle _asset;
-
-        playSoundUI ["AddItemOk"];
-        playSoundUI ["a3\sounds_f\sfx\ui\vehicles\vehicle_repair.wss"];
+        0 spawn WL2_fnc_secureWreck;
 	},
 	[],
 	100,
