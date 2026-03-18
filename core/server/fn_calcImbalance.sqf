@@ -8,6 +8,8 @@ private _winningTeam = if (_westWins > _eastWins) then { west } else { east };
 if (_currentSide != _winningTeam) exitWith { false };
 
 private _ratings = profileNamespace getVariable ["WL2_playerRatings", createHashMap];
+private _playerElo = _ratings getOrDefault [_uid, WL_RATING_STARTER];
+if (_playerElo <= WL_RATING_STARTER) exitWith { false };
 
 private _currentSideElo = 0;
 private _otherSideElo = 0;
@@ -33,7 +35,6 @@ private _otherSideAverage = _otherSideElo / _otherSidePlayersCount;
 
 if (_currentSideAverage <= _otherSideAverage) exitWith { false };
 
-private _playerElo = _ratings getOrDefault [_uid, WL_RATING_STARTER];
 if (_playerElo <= _currentSideAverage) exitWith { false };
 
 true;
