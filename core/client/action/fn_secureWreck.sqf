@@ -1,5 +1,4 @@
 #include "includes.inc"
-params ["_target", "_caller", "_actionId", "_args"];
 private _asset = cursorTarget;
 if (isNull _asset || !(_asset isKindOf "Air")) exitWith {
     ["No aircraft wreck targeted."] call WL2_fnc_smoothText;

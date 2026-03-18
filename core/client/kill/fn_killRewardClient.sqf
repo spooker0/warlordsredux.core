@@ -40,7 +40,6 @@ private _displayIcon = switch (toUpper _displayText) do {
 	case "DESTROYED STRONGHOLD": { "a3\ui_f\data\igui\cfg\simpletasks\types\attack_ca.paa" };
 	case "DEFENDING SECTOR": { "a3\ui_f\data\igui\cfg\simpletasks\types\defend_ca.paa" };
 	case "ACTIVE PROTECTION SYSTEM";
-	case "DAZZLER";
 	case "PROJECTILE JAMMED";
 	case "PROJECTILE DESTROYED": { "A3\ui_f\data\map\markers\military\pickup_CA.paa" };
 	case "REGION CAPTURED": { "A3\ui_f\data\map\markers\handdrawn\flag_CA.paa" };

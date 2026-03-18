@@ -69,7 +69,6 @@ if !(isDedicated) then {
 0 spawn WL2_fnc_runwayCollector;
 call WL2_fnc_processRunways;
 0 spawn WL2_fnc_combatAirServer;
-call WL2_fnc_ewarGenerate;
 [true] spawn WL2_fnc_dumbMineHandler;
 0 spawn WL2_fnc_dumbMineAnnouncer;
 

@@ -16,8 +16,5 @@ if (_isFriendly) then {
     _texture ctrlWebBrowserAction ["ExecJS", format ["reveal(%1);", _message]];
 } else {
     playSoundUI ["a3\ui_f_curator\data\sound\cfgsound\error01.wss", 1];
-    // private _split = _message splitString ",";
-    // if (count _split != 2) exitWith {};
-    // private _solvedIndex = _split select 1;
-    // _texture ctrlWebBrowserAction ["ExecJS", format ["hint(%1);", _solvedIndex]];
+    _texture ctrlWebBrowserAction ["ExecJS", format ["reveal(%1);", _message]];
 };

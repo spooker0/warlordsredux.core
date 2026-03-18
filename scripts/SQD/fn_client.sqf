@@ -39,10 +39,6 @@ if (_action == "invited") exitWith {
 
     if (WL_IsSpectator) exitWith {};
 
-    private _squadHasInvite = missionNamespace getVariable ["SQD_playerHasInvite", false];
-    if (_squadHasInvite) exitWith {};
-    missionNamespace setVariable ["SQD_playerHasInvite", true];
-
     private _squad = ["getSquadForPlayer", [_inviter]] call SQD_fnc_query;
     if (count _squad == 0) exitWith {}; // no squad found
 
@@ -55,18 +51,21 @@ if (_action == "invited") exitWith {
 
     playSoundUI ["a3\sounds_f\sfx\blip1.wss"];
 
-    private _acceptInvite = [
-        localize "STR_WL_joinSquad",
-        format [localize "STR_WL_gotSquadInvite", _inviterName, _squad getOrDefault ["name", ""]],
-        localize "STR_WL_accept",
-        localize "STR_WL_decline"
-    ] call WL2_fnc_prompt;
-
-    missionNamespace setVariable ["SQD_playerHasInvite", false];
-
-    if (_acceptInvite) then {
+    private _callbackConfirm = {
+        params ["_inviter"];
         ["add", [_inviter, getPlayerID player]] remoteExec ["SQD_fnc_server", 2];
     };
+
+    private _callbackCancel = {
+        playSoundUI ["AddItemFailed"];
+    };
+
+    [
+        format [localize "STR_WL_gotSquadInvite", _inviterName, _squad getOrDefault ["name", ""]],
+        localize "STR_WL_accept", localize "STR_WL_decline",
+        _callbackConfirm, _callbackCancel, [_inviter],
+        15, false
+    ] spawn WL2_fnc_timedPrompt;
 };
 
 if (_action == "newjoin") exitWith {

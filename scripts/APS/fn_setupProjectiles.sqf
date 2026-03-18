@@ -35,34 +35,8 @@ addMissionEventHandler ["ProjectileCreated", {
 
     private _projectileMine = _projectileConfig getOrDefault ["mine", false];
     if (_projectileMine && !isDedicated) then {
-        private _ownedMineVar = format ["WL2_ownedMines_%1", getPlayerUID player];
-        private _allOwnedMines = missionNamespace getVariable [_ownedMineVar, []];
-        _allOwnedMines = _allOwnedMines select { alive _x };
-
-        private _currentCount = count _allOwnedMines;
-        if (_currentCount >= WL_MAX_MINES) then {
-            private _overflowAmount = _currentCount - WL_MAX_MINES + 1;
-            private _overflowMines = _allOwnedMines select [0, _overflowAmount];
-            {
-                private _oldestMine = _x;
-                private _oldestMineDefaultMag = getText (configFile >> "CfgAmmo" >> typeOf _oldestMine >> "defaultMagazine");
-                private _oldestMineType = getText (configFile >> "CfgMagazines" >> _oldestMineDefaultMag >> "displayName");
-
-                if (_oldestMineType == "") then {
-                    _oldestMineType = "Deployed Mine";
-                };
-
-                [format ["Maximum of %1 deployed explosives reached. Removing oldest %2", WL_MAX_MINES, _oldestMineType]] call WL2_fnc_smoothText;
-
-                deleteVehicle _x;
-            } forEach _overflowMines;
-        };
-
-        BIS_WL_playerSide revealMine _projectile;
-
-        _allOwnedMines pushBack _projectile;
-        _allOwnedMines = _allOwnedMines select { alive _x };
-        missionNamespace setVariable [_ownedMineVar, _allOwnedMines, true];
+        private _isExplosive = _projectileConfig getOrDefault ["explosive", false];
+        [_projectile, _isExplosive] spawn APS_fnc_limitMines;
     };
 
     // if (_projectile isKindOf "APERSMineDispenser_Ammo") then {
@@ -189,7 +163,7 @@ addMissionEventHandler ["ProjectileCreated", {
         [_projectile, _unit] spawn DIS_fnc_extendedSam;
     };
 
-    [_projectile, _unit] spawn APS_fnc_firedProjectile;
+    [_projectile, _unit] spawn APS_fnc_apsHandler;
 
     private _projectileAsam = _projectileConfig getOrDefault ["asam", false];
     if (_projectileAsam) then {
@@ -219,5 +193,10 @@ addMissionEventHandler ["ProjectileCreated", {
     private _projectileTerminal = _projectileConfig getOrDefault ["terminal", false];
     if (_projectileTerminal) then {
         [_projectile, _unit] spawn DIS_fnc_terminalGuidance;
+    };
+
+    private _projectileIncendiary = _projectileConfig getOrDefault ["incendiary", false];
+    if (_projectileIncendiary) then {
+        [_projectile] spawn WL2_fnc_incendiary;
     };
 }];

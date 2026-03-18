@@ -6,16 +6,17 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
 {
     private _projectileClass = configName _x;
     private _projectileAmmos = getArray (_x >> "ammo");
-    private _projectileAps = getNumber (_x >> "aps");
+    private _projectileAps = getArray (_x >> "aps");
     private _projectileAsam = getNumber (_x >> "asam") == 1;
     private _projectileBunker = getNumber (_x >> "bunker");
     private _projectileCamera = getNumber (_x >> "camera") == 1;
     private _projectileConsumption = getNumber (_x >> "consumption");
     private _projectileCRAM = getNumber (_x >> "cram") == 1;
-    private _projectileDazzleable = getNumber (_x >> "dazzleable") == 1;
     private _projectileESam = getNumber (_x >> "esam") == 1;
+    private _projectileExplosive = getNumber (_x >> "explosive") == 1;
     private _projectileGPS = getNumber (_x >> "gps") == 1;
     private _projectileImmunity = getNumber (_x >> "immunity");
+    private _projectileIncendiary = getNumber (_x >> "incendiary") == 1;
     private _projectileLaser = getNumber (_x >> "laser") == 1;
     private _projectileLoal = getNumber (_x >> "loal") == 1;
     private _projectileMine = getNumber (_x >> "mine") == 1;
@@ -37,10 +38,11 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
             ["camera", _projectileCamera],
             ["consumption", _projectileConsumption],
             ["cram", _projectileCRAM],
-            ["dazzleable", _projectileDazzleable],
             ["esam", _projectileESam],
+            ["explosive", _projectileExplosive],
             ["gps", _projectileGPS],
             ["immunity", _projectileImmunity],
+            ["incendiary", _projectileIncendiary],
             ["laser", _projectileLaser],
             ["loal", _projectileLoal],
             ["mine", _projectileMine],

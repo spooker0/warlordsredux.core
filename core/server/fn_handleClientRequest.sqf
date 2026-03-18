@@ -308,13 +308,15 @@ if (_action == "combatAir") exitWith {
 	private _friendlyMessage = format ["%1 has initiated combat air patrol over %2.", name _sender, _targetName];
 	[_side, _friendlyMessage] call _broadcastActionToSide;
 
-	private _enemyMessage = format ["%1 has initiated combat air patrol over %2.", _sideName, _targetName];
+	private _enemyMessage = format ["%1 (%2) has initiated combat air patrol over %3.", _sideName, name _sender, _targetName];
 	private _enemySide = switch (_side) do {
 		case west : { east };
 		case east : { west };
 		default { civilian };
 	};
 	[_enemySide, _enemyMessage] call _broadcastActionToSide;
+
+	[_targetName] remoteExec ["WL2_fnc_combatAirWarning", _enemySide];
 
 	_target setVariable ["WL2_combatAirActive", true, true];
 	_target setVariable ["WL2_combatAirStart", serverTime, true];
@@ -515,6 +517,29 @@ if (_action == "boost") exitWith {
     };
 };
 
+if (_action == "boost2") exitWith {
+	private _senderVehicle = vehicle _sender;
+	private _multiplier = if (_senderVehicle getVariable ["WL2_hasEWBoost", false]) then { 2 } else { 1 };
+
+	private _signalIncrement = 30 * _multiplier;
+
+	private _friendlySignalVar = format ["WL2_ewarSignal_%1", _side];
+	private _friendlySignal = missionNamespace getVariable [_friendlySignalVar, 500];
+	_friendlySignal = (_friendlySignal + _signalIncrement) min 1000;
+	missionNamespace setVariable [_friendlySignalVar, _friendlySignal, true];
+
+	private _hostileSignalVar = format ["WL2_ewarSignal_%1", if (_side == west) then { east } else { west }];
+	private _hostileSignal = missionNamespace getVariable [_hostileSignalVar, 500];
+	_hostileSignal = (_hostileSignal - _signalIncrement) max 0;
+	missionNamespace setVariable [_hostileSignalVar, _hostileSignal, true];
+
+	if (_friendlySignal < 950) then {
+		private _reward = 200 * _multiplier;
+		[_reward] call _addFunds;
+		[objNull, _reward, "Boosted signal", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+	};
+};
+
 #if WL_FREE_MONEY
 if (_action == "50K") exitWith {
 	[50000, _uid, false] call WL2_fnc_fundsDatabaseWrite;
@@ -548,4 +573,34 @@ if (_action == "droneExplode") exitWith {
 	_expl setShotParents [_drone, _sender];
 	triggerAmmo _expl;
 	deleteVehicle _drone;
+};
+
+if (_action == "incendiary") exitWith {
+	private _firePosition = _param1;
+	private _shotParents = _param2;
+	private _hitUnits = allUnits select {
+		WL_ISUP(_x)
+	} select {
+		vehicle _x == _x
+	} select {
+		side group _x != _side
+	} select {
+		private _radius = if (insideBuilding _x < 0.1) then { 20 } else { 40 };
+		(getPosASL _x) distance2D _firePosition < _radius
+	};
+
+	{
+		private _damageParams = [_x, "", 1, _shotParents # 0, "82mm_Incendiary", -1, _sender, "", true, 2];
+		if (isPlayer _x) then {
+			_x setDamage [0.99, true, _shotParents # 0, _shotParents # 1];
+			_damageParams remoteExec ["WL2_fnc_handlePlayerDamage", _x];
+		} else {
+			if (side group _x == independent) then {
+				_x setDamage [1, true, _shotParents # 0, _shotParents # 1];
+			} else {
+				_x setDamage [0.99, true, _shotParents # 0, _shotParents # 1];
+				_damageParams remoteExec ["WL2_fnc_handleAIDamage", _x];
+			};
+		};
+	} forEach _hitUnits;
 };

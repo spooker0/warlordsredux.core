@@ -7,22 +7,25 @@ private _maxDistSqr = APS_MAX_DISTANCE_SQR;
 
 private _apsProjectileType = _projectile getVariable ["APS_ammoOverride", typeOf _projectile];
 private _apsProjectileConfig = APS_projectileConfig getOrDefault [_apsProjectileType, createHashMap];
-private _projectileAPSType = _apsProjectileConfig getOrDefault ["aps", 10];
+private _projectileAPSTypes = _apsProjectileConfig getOrDefault ["aps", []];
+
+private _projectileAPSTypeMap = createHashMap;
+{
+    _projectileAPSTypeMap set [_x, true];
+} forEach _projectileAPSTypes;
+
 private _projectileAPSConsumption = _apsProjectileConfig getOrDefault ["consumption", 1];
-private _dazzleable = _apsProjectileConfig getOrDefault ["dazzleable", false];
-private _isGuided = _projectileAPSType < 3;		// if stoppable by APS, always dazzleable by dazzler
 
-private _radius = if (_dazzleable) then {125} else {sqrt _maxDistSqr};
-
+private _radius = sqrt _maxDistSqr;
 private _maxSpeed = getNumber (configFile >> "CfgAmmo" >> typeof _projectile >> "maxSpeed");
-private _maxAllowedDisplacement = (sqrt _maxDistSqr) / 4 * 3;
+private _maxAllowedDisplacement = _radius / 4 * 3;
 private _previousPos = getPosWorld _projectile;
 private _safeMaxDistSqr = _maxDistSqr;
 
 private _unitSide = side group _unit;
 
 private _interception = {
-	params ["_target", "_dazzled"];
+	params ["_target"];
 
 	private _overrideAmmoConsumption = _projectile getVariable ["APS_ammoConsumptionOverride", -1];
 	if (_overrideAmmoConsumption != -1) then {
@@ -67,8 +70,8 @@ private _interception = {
 
 	[_target, _relativeDirection, true, _apsProjectileType, _unit] remoteExec ["APS_fnc_report", _target];
 
-	private _ownerSide = _x getVariable ["BIS_WL_ownerAssetSide", sideUnknown];
-	if (side group _unit == _ownerSide) then {
+	private _ownerSide = _target getVariable ["BIS_WL_ownerAssetSide", sideUnknown];
+	if (_unitSide == _ownerSide) then {
 		[name player] remoteExec ["APS_fnc_friendlyWarning", _target];
 		0 spawn {
 			uiSleep 0.5;
@@ -78,17 +81,19 @@ private _interception = {
 		};
 	} else {
 		private _actualAmmoUsed = _apsAmmo min _projectileAPSConsumption;
-		[_unit, _dazzled, _actualAmmoUsed, _target] remoteExec ["APS_fnc_serverHandleAPS", 2];
+		[_unit, _actualAmmoUsed, _target] remoteExec ["APS_fnc_serverHandleAPS", 2];
 	};
 };
 
-// private _smokeScriptReady = true;
-
-private _continue = alive _projectile;
-while {_continue && alive _projectile} do {
+while { alive _projectile } do {
 	if (_projectile getVariable ["WL2_jamDestroy", false]) then {
 		deleteVehicle _projectile;
 	};
+
+    if (count _projectileAPSTypes == 0) then {
+        uiSleep 0.001;
+        continue;
+    };
 
 	private _currentPos = getPosWorld _projectile;
 	private _displacement = _currentPos distance _previousPos;
@@ -101,68 +106,37 @@ while {_continue && alive _projectile} do {
 	private _safeRadius = _radius max (sqrt _safeMaxDistSqr);
 
 	private _eligibleNearbyVehicles = (_projectile nearEntities [["LandVehicle"], _safeRadius]) select {
-		_x != _unit &&
+		_x != _unit
+    } select {  // active check
 		[_x] call APS_fnc_active;
-	};
-
-	_eligibleNearbyVehicles = _eligibleNearbyVehicles select {
+	} select {  // close radius check
 		private _ownerSide = _x getVariable ["BIS_WL_ownerAssetSide", sideUnknown];
-		private _isFriendly = _unitSide == _ownerSide;
-		if (_isFriendly) then {	// if friendly, disable insurance measures
-			(_projectile distanceSqr _x) < _maxDistSqr;
-		} else {
-			true;
-		};
-	};
+		private _isNotFriendly = _unitSide != _ownerSide;
+        (_projectile distanceSqr _x) < _maxDistSqr || _isNotFriendly
+	} select {  // aps type check
+        private _vehicleAPSType = _x getVariable ["apsType", -1];
+        private _apsTypeIncremented = _vehicleAPSType + 1;
+        _apsTypeIncremented in _projectileAPSTypeMap
+    } select {  // deadzone check
+        _firedPosition distanceSqr _x > _minDistSqr;
+    } select {  // far radius check
+        _x distanceSqr _projectile < _safeMaxDistSqr;
+    } select {  // incoming angle check
+        private _projectileVector = vectorNormalized (velocity _projectile);
+        private _vectorToVehicle = (getPosASL _projectile) vectorFromTo (getPosASL _x);
+        private _incomingAngle = acos (_projectileVector vectorDotProduct _vectorToVehicle);
+        _incomingAngle < 30;
+    };
 
-	// if (_dazzleable && _smokeScriptReady) then {
-	// 	private _missileTarget = missileTarget _projectile;
-	// 	if !(isNull _missileTarget) then {
-	// 		private _smokesNear = _missileTarget nearObjects ["SmokeShellVehicle", 50];
-	// 		private _numberSmokes = count _smokesNear;
-	// 		if (_numberSmokes > 0) then {
-	// 			// 1 smoke grenade = 50% hit chance
-	// 			// 2 smoke grenades = 25% hit chance
-	// 			// 8 smoke grenades = 6.25% hit chance
-	// 			// 16 smoke grenades = 3.125% hit chance
-	// 			private _misdirect = random _numberSmokes >= 0.5;
-	// 			if (_misdirect) then {
-	// 				_projectile setMissileTarget objNull;
-	// 			};
-	// 			_smokeScriptReady = false;
-	// 		};
-	// 	};
-	// };
-
-	_sortedEligibleList = [_eligibleNearbyVehicles, [_projectile], { _input0 distance _x }, "ASCEND"] call BIS_fnc_sortBy;
-	{
-		if (!alive _projectile || !_continue) exitWith {
-			_continue = false;
-		};
-
-		private _vehicleAPSType = _x getVariable ["apsType", -1];
-		if (_vehicleAPSType == 3) then {
-			if (_dazzleable) exitWith {
-				_continue = false;
-				[_x, true] call _interception;
-			};
-		} else {
-			if (_vehicleAPSType >= _projectileAPSType && {
-					private _distanceSqr =_x distanceSqr _projectile;
-					private _firedFromDeadzone = _firedPosition distanceSqr _x < _minDistSqr;
-					!_firedFromDeadzone && _distanceSqr < _safeMaxDistSqr;
-				} && {
-					private _projectileVector = vectorNormalized (velocity _projectile);
-					private _vectorToVehicle = (getPosASL _projectile) vectorFromTo (getPosASL _x);
-					private _incomingAngle = acos (_projectileVector vectorDotProduct _vectorToVehicle);
-					_incomingAngle < 30;
-				}) exitWith {
-				_continue = false;
-
-				[_x, false] call _interception;
-			};
-		};
-	} forEach _sortedEligibleList;
+	private _sortedEligibleList = [_eligibleNearbyVehicles, [_projectile], { _input0 distance _x }, "ASCEND"] call BIS_fnc_sortBy;
+    if (!alive _projectile) then {
+        break;
+    };
+    if (count _sortedEligibleList > 0) then {
+        private _closestVehicle = _sortedEligibleList # 0;
+        [_closestVehicle] call _interception;
+        break;
+    };
 
 	uiSleep 0.001;
 };

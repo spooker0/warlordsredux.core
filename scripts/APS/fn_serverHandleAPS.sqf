@@ -1,18 +1,10 @@
 #include "includes.inc"
-params ["_shooter", "_dazzled", "_ammoConsumption", "_target"];
+params ["_shooter", "_ammoConsumption", "_target"];
 
-private _reward = if (_dazzled) then {
-    10
-} else {
-    50
-};
+private _reward = 50;
 _reward = _reward * _ammoConsumption;
 
-private _rewardText = if (_dazzled) then {
-    "Dazzler"
-} else {
-    "Active protection system"
-};
+private _rewardText = "Active protection system";
 
 private _shooterUid = _shooter getVariable ["BIS_WL_ownerAsset", "123"];
 private _responsiblePlayer = _shooterUid call BIS_fnc_getUnitByUID;

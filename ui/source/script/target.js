@@ -198,7 +198,7 @@ function setEcmCharges(active, count, nextChargeTime) {
 function setIntegralMortar(active, shellCount) {
     const mortarIndicatorEl = document.querySelector('.mortar-indicator');
     if (active) {
-        mortarIndicatorEl.textContent = `INTEGRAL MORTAR: ${shellCount}`;
+        mortarIndicatorEl.textContent = `INCENDIARY MORTAR: ${shellCount}`;
         mortarIndicatorEl.style.color = shellCount > 0 ? "lime" : "black";
     } else {
         mortarIndicatorEl.textContent = "";

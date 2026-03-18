@@ -45,10 +45,6 @@ _projectile setVariable ["BIS_WL_ownerAssetSide", BIS_WL_playerSide];
 
 private _apsProjectileType = _projectile getVariable ["APS_ammoOverride", typeOf _projectile];
 private _apsProjectileConfig = APS_projectileConfig getOrDefault [_apsProjectileType, createHashMap];
-private _dazzleable = _apsProjectileConfig getOrDefault ["dazzleable", false];
-if (_dazzleable) then {
-    _projectile setVariable ["WL2_dazzleable", true];
-};
 
 [_camera, getPlayerUID player, 1] spawn WL2_fnc_reconOpticsAction;
 

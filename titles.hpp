@@ -465,6 +465,21 @@ class RscTitles {
 				text = "ENEMY COMBAT AIR PATROL DETECTED!";
 				lineSpacing = 0;
 			};
+			class RscWLExtendedSamWarningDisplay_Sector: RscText {
+				idc = 35600;
+				type = CT_STATIC;
+				style = ST_CENTER;
+				x = 0;
+				y = safeZoneY + 0.1;
+				w = 1;
+				h = 0.3;
+				font = "EtelkaNarrowMediumPro";
+				sizeEx = 0.15;
+				colorBackground[] = {0, 0, 0, 0};
+				colorText[] = {1, 1, 1, 1};
+				text = "SECTOR";
+				lineSpacing = 0;
+			};
 		};
 	};
 
@@ -479,7 +494,7 @@ class RscTitles {
 			class RscWLPromptDisplay_Background: RscText {
 				idc = 41001;
 				x = 0;
-				y = safeZoneY + 0.4;
+				y = safeZoneY + 0.1;
 				w = 1;
 				h = 0.17;
 				colorBackground[] = {0, 0, 0, 0.7};
@@ -489,7 +504,7 @@ class RscTitles {
 			class RscWLPromptDisplay_Text: RscStructuredText {
 				idc = 41002;
 				x = 0.01;
-				y = safeZoneY + 0.41;
+				y = safeZoneY + 0.11;
 				w = 0.98;
 				h = 0.15;
 				text = "";
@@ -501,7 +516,7 @@ class RscTitles {
 			class RscWLPromptDisplay_Timer: RscProgress {
 				idc = 41003;
 				x = 0;
-				y = safeZoneY + 0.56;
+				y = safeZoneY + 0.26;
 				w = 1;
 				h = 0.01;
 				colorFrame[] = {0, 0, 0, 0};

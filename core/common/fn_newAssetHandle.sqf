@@ -224,8 +224,9 @@ if (_asset isKindOf "Man") then {
 		_asset setVariable ["DIS_advancedSamRange", 14000, true];
 	};
 
-	if (WL_ASSET_GET(_data, "hasMiniMortar", 0) > 0) then {
-		_asset setVariable ["WL2_mortarShellCountHE", 12, true];
+	private _miniMortar = WL_ASSET_GET(_data, "miniMortar", []);
+	if (count _miniMortar > 0) then {
+		_asset setVariable ["WL2_mortarShellCountHE", _miniMortar # 0, true];
 		[_asset] remoteExec ["WL2_fnc_setupMiniMortarAction", 0, true];
 	};
 
@@ -329,14 +330,14 @@ if (_asset isKindOf "Man") then {
 
 		[_asset] remoteExec ["WL2_fnc_restockAction", 0, true];
 	} else {
-		private _spawnEmpty = _settingsMap getOrDefault ["spawnEmpty", false];
-		private _isEmptyBox = WL_ASSET_GET(_data, "empty", 0) > 0;
-		if (_spawnEmpty || _isEmptyBox) then {
-			clearMagazineCargoGlobal _asset;
-			clearItemCargoGlobal _asset;
-			clearWeaponCargoGlobal _asset;
-			clearBackpackCargoGlobal _asset;
-		};
+		// private _spawnEmpty = _settingsMap getOrDefault ["spawnEmpty", false];
+		// private _isEmptyBox = WL_ASSET_GET(_data, "empty", 0) > 0;
+		// if (_spawnEmpty || _isEmptyBox) then {
+		// 	clearMagazineCargoGlobal _asset;
+		// 	clearItemCargoGlobal _asset;
+		// 	clearWeaponCargoGlobal _asset;
+		// 	clearBackpackCargoGlobal _asset;
+		// };
 	};
 
 	if (getNumber (configFile >> "CfgVehicles" >> typeOf _asset >> "transportAmmo") > 0) then {

@@ -1,8 +1,10 @@
 #include "includes.inc"
-params ["_modalText", "_confirmText", "_cancelText", "_callback", "_timeout"];
+params ["_modalText", "_confirmText", "_cancelText", "_callbackConfirm", "_callbackCancel", "_callbackParams", "_timeout", "_defaultTrue"];
 
 private _display = uiNamespace getVariable ["RscWLPromptDisplay", displayNull];
-if (!isNull _display) exitWith {};
+if (!isNull _display) exitWith {
+    _callbackParams spawn _callbackCancel;
+};
 
 "TimedPrompt" cutRsc ["RscWLPromptDisplay", "PLAIN", -1, true, true];
 _display = uiNamespace getVariable ["RscWLPromptDisplay", displayNull];
@@ -17,9 +19,11 @@ private _displayText = format [
 _titleControl ctrlSetStructuredText parseText _displayText;
 
 private _progressControl = _display displayCtrl 41003;
+private _progressColor = if (_defaultTrue) then { [0.18, 1, 0.18, 1] } else { [1, 0.18, 0.18, 1] };
+_progressControl ctrlSetTextColor _progressColor;
 
 private _startTime = serverTime;
-private _doAction = true;
+private _doAction = _defaultTrue;
 while { serverTime < _startTime + _timeout } do {
     if (inputAction "LeanLeft" > 0) then {
         _doAction = true;
@@ -35,9 +39,9 @@ while { serverTime < _startTime + _timeout } do {
     uiSleep 0.001;
 };
 if (_doAction) then {
-    call _callback;
+    _callbackParams spawn _callbackConfirm;
 } else {
-    playSoundUI ["AddItemFailed"];
+    _callbackParams spawn _callbackCancel;
 };
 
 "TimedPrompt" cutText ["", "PLAIN"];

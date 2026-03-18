@@ -256,7 +256,7 @@ switch (_className) do {
         "RequestMenu_close" call WL2_fnc_setupUI;
     };
     case "WelcomeScreen": { 0 spawn WL2_fnc_welcome };
-    case "Ewar": { 0 spawn WL2_fnc_ewar };
+    case "Ewar": { 0 spawn WL2_fnc_ewar2 };
     case "StressTestSector": {
         0 spawn {
             private _direction = [vectorDir player, vectorUp player];
@@ -332,7 +332,6 @@ switch (_className) do {
                 ["ATTACKING SECTOR", "#228b22"],
                 ["DEFENDING SECTOR", "#228b22"],
                 ["ACTIVE PROTECTION SYSTEM", "#de0808"],
-                ["DAZZLER", "#de0808"],
                 ["PROJECTILE JAMMED", "#de0808"],
                 ["PROJECTILE DESTROYED", "#de0808"],
                 ["REGION CAPTURED", "#228b22"],

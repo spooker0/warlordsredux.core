@@ -193,22 +193,26 @@ private _ammoAPSConfig = APS_projectileConfig getOrDefault [_actualAmmoType, cre
 if (count _ammoAPSConfig > 0) then {
     private _magDescAPS = [];
 
-    private _magDescAPSType = _ammoAPSConfig getOrDefault ["aps", -1];
-    private _typeString = switch (_magDescAPSType) do {
-        case 0: {"All APS"};
-        case 1: {"Medium, Heavy APS"};
-        case 2: {"Heavy APS"};
-        default {"Nothing"};
+    private _magDescAPSType = _ammoAPSConfig getOrDefault ["aps", []];
+    private _typeString = _magDescAPSType apply {
+        switch (_magDescAPSType) do {
+            case 1: {"Light APS"};
+            case 2: {"Medium APS"};
+            case 3: {"Heavy APS"};
+            case 4: {"Dazzler"};
+        };
     };
-    _magDescAPS pushBack ["Intercepted By", _typeString];
+    if (count _magDescAPSType > 0) then {
+        _typeString = _typeString joinString ", ";
+        _magDescAPS pushBack ["Intercepted By", _typeString];
+    } else {
+        _magDescAPS pushBack ["Intercepted By", "Nothing"];
+    };
 
     private _magDescAPSConsumption = _ammoAPSConfig getOrDefault ["consumption", 1];
     if (_magDescAPSConsumption != 0) then {
         _magDescAPS pushBack ["APS Ammo Consumption", format ["%1", _magDescAPSConsumption]];
     };
-
-    private _magDescAPSDazzleable = _ammoAPSConfig getOrDefault ["dazzleable", false];
-    _magDescAPS pushBack ["Affected by Dazzler", if (_magDescAPSDazzleable) then {"Yes"} else {"No"}];
 
     private _magDescAPSCamera = _ammoAPSConfig getOrDefault ["camera", false];
     if (_magDescAPSCamera) then {

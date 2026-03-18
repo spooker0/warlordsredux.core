@@ -3,16 +3,17 @@ class CfgFunctions {
 		class Default {
 			file = "src\scripts\APS";
 			class active {};
+			class apsHandler {};
 			class ciws {};
 			class cram {};
 			class defineVehicles {};
 			class deviceJammer {};
-			class firedProjectile {};
 			class friendlyWarning {};
 			class getDirection {};
 			class getMaxAmmo {};
 			class lagProtection {};
 			class lagProtectionServer {};
+			class limitMines {};
 			class projectileStateUpdate {};
 			class rearmAPS {};
 			class registerVehicle {};
@@ -164,9 +165,11 @@ class CfgFunctions {
 			class broadcastAction {};
 			class clientEH {};
 			class combatAirClient {};
+			class combatAirWarning {};
 			class createDestroyerClient {};
 			class earthquake {};
 			class ewar {};
+			class ewar2 {};
 			class ewarMessage {};
 			class exitToLobby {};
 			class factionBasedClientInit {};
@@ -176,6 +179,7 @@ class CfgFunctions {
 			class handleKeypress {};
 			class handlePlayerDamage {};
 			class handlePlayerDown {};
+			class incendiary {};
 			class initClient {};
 			class interceptAction {};
 			class isDrone {};
@@ -253,6 +257,7 @@ class CfgFunctions {
 			class rappelAction {};
 			class rappelActionEligibility {};
 			class rearmAction {};
+			class rearmAPSEligibility {};
 			class rebase {};
 			class rebaseActionEligibility {};
 			class reconOpticsAction {};

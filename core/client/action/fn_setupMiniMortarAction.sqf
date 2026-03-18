@@ -2,7 +2,7 @@
 params ["_asset"];
 
 private _deployMortarAction = _asset addAction [
-    "<t color='#00ff00'>Use Integral Mortar</t>",
+    "<t color='#00ff00'>Use Vehicle Mortar</t>",
     {
         _this spawn {
             params ["_asset", "_caller", "_actionId", "_arguments"];
@@ -18,14 +18,22 @@ private _deployMortarAction = _asset addAction [
             private _mortar = createVehicle ["B_Mortar_01_F", [0, 0, 0], [], 0, "NONE"];
             _mortar setVariable ["WL2_orderedClass", "B_Integral_Mortar", true];
             _mortar setVariable ["WL2_manualDrone", true, true];
-            _mortar attachTo [_asset, [-0.75, -3, 0.8], "OtocVez", true];
+            _mortar enableWeaponDisassembly false;
+
+            if (_asset isKindOf "B_MBT_01_cannon_F") then {
+                _mortar attachTo [_asset, [-0.75, -3, 0.8], "OtocVez", true];
+            } else {
+                private _miniMortar = WL_UNIT(_asset, "miniMortar", []);
+                _mortar attachTo [_asset, _miniMortar # 1];
+            };
+
             _mortar removeWeaponTurret ["mortar_82mm", [0]];
             _mortar removeAllMagazinesTurret [0];
 
             private _shellCountHE = _asset getVariable ["WL2_mortarShellCountHE", 0];
             _shellCountHE = _shellCountHE min 8;
 
-            _mortar addMagazineTurret ["8Rnd_82mm_Mo_shells", [0], _shellCountHE];
+            _mortar addMagazineTurret ["8Rnd_82mm_Mo_Smoke_white", [0], _shellCountHE];
 
             _mortar addWeaponTurret ["mortar_82mm", [0]];
             _mortar addEventHandler ["Fired", {
@@ -74,6 +82,9 @@ private _deployMortarAction = _asset addAction [
                     break;
                 };
                 if (focusOn != _unit) then {
+                    break;
+                };
+                if (!someAmmo _mortar) then {
                     break;
                 };
             };

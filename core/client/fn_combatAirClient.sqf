@@ -1,8 +1,4 @@
 #include "includes.inc"
-private _endEffect = {
-    "CapWarning" cutText ["", "PLAIN"];
-    uiSleep 2;
-};
 
 private _lastNotifyTime = 0;
 while { !BIS_WL_missionEnd } do {
@@ -11,12 +7,10 @@ while { !BIS_WL_missionEnd } do {
     private _asset = cameraOn;
 
     if (WL_ISDOWN(_asset)) exitWith {
-        call _endEffect;
         continue;
     };
 
     if !(_asset isKindOf "Air") then {
-        call _endEffect;
         continue;
     };
 
@@ -54,7 +48,6 @@ while { !BIS_WL_missionEnd } do {
     };
 
     if (count _assetInCombatAirArea == 0) then {
-        call _endEffect;
         continue;
     };
 
@@ -65,13 +58,7 @@ while { !BIS_WL_missionEnd } do {
 
     private _altitude = _assetPos # 2;
     if (_altitude < WL_COMBAT_AIR_MINALT) then {
-        call _endEffect;
         continue;
-    };
-
-    private _warningTextDisplay = uiNamespace getVariable ["RscWLExtendedSamWarningDisplay", displayNull];
-    if (isNull _warningTextDisplay) then {
-        "CapWarning" cutRsc ["RscWLExtendedSamWarningDisplay", "PLAIN", -1, true, true];
     };
 
     _assetInCombatAirArea = [_assetInCombatAirArea, [], { cameraOn distance _x }, "ASCEND"] call BIS_fnc_sortBy;

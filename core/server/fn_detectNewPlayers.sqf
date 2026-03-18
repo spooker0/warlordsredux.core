@@ -17,7 +17,11 @@ while { !BIS_WL_missionEnd } do {
 
 	private _thresholds = [8, 15, 20, 30, 40];
 
-	private _players = count allPlayers;
+	private _activePlayers = _allPlayers select {
+		!(_x getVariable ["WL2_afk", false])
+	};
+
+	private _players = count _activePlayers;
 	private _value = 1;
 	{
 		if (_players < _x) then {

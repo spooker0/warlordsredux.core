@@ -46,6 +46,7 @@ createHashMapFromArray [
 
 	["Signal Booster", ["a3\\modules_f_curator\\data\\portraitlightning_ca.paa", 1, "Complete 15 signal boosts."]],
 	["I Can Do This In My Sleep", ["a3\\modules_f_curator\\data\\portraitlightning_ca.paa", 3, "Complete 100 signal boosts."]],
+	["Time Waster", ["a3\\modules_f_curator\\data\\portraitlightning_ca.paa", 3, "Complete a max difficulty sliding puzzle."]],
 
 	["Player", ["a3\\ui_f\\data\\gui\\rsc\\rscdisplaymain\\profile_player_ca.paa", 1, "Default."]],
 	["Developer", ["a3\\modules_f_beta\\data\\firingdrills\\medal_gold_ca.paa", 3, "Be a developer."]],

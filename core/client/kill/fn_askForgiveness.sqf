@@ -7,9 +7,19 @@ private _forgiveText = if (isPlayer [_victim]) then {
 } else {
 	format ["Choose to forgive %1 for killing %2?", name _killer, _assetType]
 };
-private _result = [
-	"Forgive Friendly Fire",
-	_forgiveText,
-	"Forgive", "Don't forgive"
-] call WL2_fnc_prompt;
-[_killer, player, _result, _victim] remoteExec ["WL2_fnc_forgiveTeamkill", 2];
+
+private _callbackConfirm = {
+	params ["_killer", "_victim"];
+    [_killer, player, true, _victim] remoteExec ["WL2_fnc_forgiveTeamkill", 2];
+};
+private _callbackCancel = {
+	params ["_killer", "_victim"];
+    [_killer, player, false, _victim] remoteExec ["WL2_fnc_forgiveTeamkill", 2];
+};
+
+[
+    _forgiveText,
+    "Forgive", "Don't forgive",
+    _callbackConfirm, _callbackCancel, [_killer, _victim],
+    20, false
+] spawn WL2_fnc_timedPrompt;

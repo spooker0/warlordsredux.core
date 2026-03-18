@@ -19,8 +19,6 @@ private _detonateSounds = [
 ];
 
 private _effectAGL = _asset modelToWorld [0, 0, 1];
-private _soundSource = createSoundSource ["WLMineBeepSound", _effectAGL, [], 0];
-_soundSource attachTo [_asset, [0, 0, 0]];
 
 private _assetPos = getPosASL _asset;
 private _assetData = WL_ASSET_DATA;
@@ -190,5 +188,3 @@ while { alive _asset } do {
 ]] remoteExec ["WL2_fnc_particleEffect", 0];
 playSound3D [selectRandom _detonateSounds, objNull, false, _assetPos];
 deleteVehicle _asset;
-
-deleteVehicle _soundSource;

@@ -1,0 +1,278 @@
+:root {
+    --cell-size: 8vmin;
+    --container-padding: 3vh;
+    --container-gap: 3vw;
+
+    --panel-border: calc(var(--cell-size) * 0.02);
+    --tile-gap: calc(var(--cell-size) * 0.08);
+    --tile-font-size: calc(var(--cell-size) * 0.34);
+    --text-font-size: 1.35vh;
+    --label-font-size: 1.4vh;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Consolas', monospace;
+    color: white;
+    user-select: none;
+    text-shadow:
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
+}
+
+#loading-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    color: white;
+    font-weight: bold;
+    font-size: 10vh;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.ewar-menu {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    opacity: 0;
+    color: white;
+    font-size: 1.2vh;
+    background-color: rgba(0, 0, 0, 0.95);
+    scrollbar-color: #444444 #2a2a2a;
+    scrollbar-width: thin;
+}
+
+.close-button {
+    position: absolute;
+    top: 1vh;
+    right: 1vh;
+    width: 5vh;
+    height: 5vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5vh;
+    line-height: 5vh;
+    color: #fff;
+    border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.close-button:hover {
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.ewar-container {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--container-gap);
+    width: 100%;
+    height: 100%;
+    padding: var(--container-padding);
+    box-sizing: border-box;
+}
+
+.ewar-left-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6vh;
+}
+
+.ewar-board-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.ewar-board {
+    display: grid;
+    width: min(64vmin, 42vw);
+    height: min(64vmin, 42vw);
+    gap: var(--tile-gap);
+    padding: var(--tile-gap);
+    box-sizing: border-box;
+    border: var(--panel-border) solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.ewar-board-disabled {
+    pointer-events: none;
+}
+
+.ewar-tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: var(--tile-font-size);
+    color: white;
+    border: var(--panel-border) solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.08);
+    text-shadow: inherit;
+}
+
+.ewar-tile-empty {
+    visibility: hidden;
+}
+
+.ewar-tile-correct {
+    color: rgba(210, 255, 210, 0.98);
+    border-color: rgba(120, 255, 120, 0.55);
+    background: rgba(80, 200, 120, 0.35);
+}
+
+.ewar-board-celebration-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2vh;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.92);
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 2;
+}
+
+.ewar-board-celebration-overlay.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.ewar-board-celebration-text {
+    max-width: 90%;
+    text-align: center;
+    line-height: 0.95;
+    font-weight: bold;
+    letter-spacing: 0.08em;
+    color: rgba(120, 255, 120, 0.98);
+    font-size: clamp(4.5vh, 7.5vmin, 9vh);
+    word-break: break-word;
+}
+
+.ewar-board-celebration-time {
+    text-align: center;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.96);
+    font-size: clamp(2.2vh, 3.6vmin, 4.5vh);
+}
+
+.ewar-board-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8vh;
+}
+
+.ewar-board-instructions {
+    margin: 0;
+    padding-left: 1.4vw;
+    font-size: var(--text-font-size);
+    opacity: 0.9;
+}
+
+.ewar-board-instructions li {
+    margin-bottom: 0.5vh;
+}
+
+.ewar-board-timer {
+    text-align: center;
+    font-size: clamp(3.5vh, 5vmin, 6vh);
+    font-weight: bold;
+    letter-spacing: 0.08em;
+    margin-bottom: 1vh;
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.ewar-side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+    min-width: 18vw;
+    max-width: 24vw;
+}
+
+.signal-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2vh;
+}
+
+.signal-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6vh;
+}
+
+.signal-label {
+    font-size: var(--label-font-size);
+    opacity: 0.9;
+}
+
+.signal-bar {
+    position: relative;
+    width: 100%;
+    height: 3.2vh;
+    overflow: hidden;
+    box-sizing: border-box;
+    border: var(--panel-border) solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.10);
+}
+
+.signal-bar-fill {
+    position: absolute;
+    inset: 0;
+    width: 50%;
+    height: 100%;
+}
+
+.signal-bar-fill.signal-normal {
+    background: rgba(120, 255, 120, 0.35);
+}
+
+.signal-bar-fill.signal-boosted {
+    background: rgba(120, 255, 120, 0.55);
+}
+
+.signal-bar-fill.signal-degraded {
+    background: rgba(255, 120, 120, 0.55);
+}
+
+.signal-bar-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    font-size: var(--label-font-size);
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.signal-instructions {
+    margin: 0.6vh 0 1.2vh 1.2vw;
+    padding: 0;
+    font-size: 1.3vh;
+    opacity: 0.9;
+}
+
+.signal-instructions li {
+    margin-bottom: 0.4vh;
+}

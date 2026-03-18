@@ -30,6 +30,7 @@ class CfgRemoteExec {
 		class WL2_fnc_claimAction {allowedTargets = 1;};
 		class WL2_fnc_clearPlayerReports {allowedTargets = 0;};
 		class WL2_fnc_clearServerStats {allowedTargets = 2;};
+		class WL2_fnc_combatAirWarning {allowedTargets = 0;};
 		class WL2_fnc_conscription {allowedTargets = 0;};
 		class WL2_fnc_controlGunnerAction {allowedTargets = 0;};
 		class WL2_fnc_cruiseMissileWarning {allowedTargets = 0;};

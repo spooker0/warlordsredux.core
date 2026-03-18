@@ -116,6 +116,8 @@ addMissionEventHandler ["Draw3D", {
         ];
 
         private _uavsInRange = vehicles select {
+            alive _x
+        } select {
             _x distance2D player < WL_JAMMER_SPECTRUM_DETECT_RANGE
         } select {
             [_x] call WL2_fnc_getAssetSide != BIS_WL_playerSide

@@ -16,11 +16,6 @@ private _shouldDisableJamEffect = {
     if (_asset distance player < WL_JAMMER_HARDLINE_RANGE) exitWith { true };
     if (_asset == player) exitWith { true };
     if !([_asset] call WL2_fnc_isDrone) exitWith { true };
-
-    private _friendlySignalVar = format ["WL2_ewarSignal_%1", BIS_WL_playerSide];
-    private _friendlySignal = missionNamespace getVariable [_friendlySignalVar, 500];
-    if (_friendlySignal > 350) exitWith { true };
-
     false
 };
 
@@ -30,16 +25,22 @@ while { !BIS_WL_missionEnd } do {
     uiSleep 2;
 
     private _asset = cameraOn;
-    private _eligibleDrones = missionNamespace getVariable ["WL2_eligibleDrones", []];
 
-    private _reportDrones = _eligibleDrones select {
-        alive _x;
-    } select {
-        !(_x isKindOf "StaticWeapon")
+    private _friendlySignalVar = format ["WL2_ewarSignal_%1", BIS_WL_playerSide];
+    private _friendlySignal = missionNamespace getVariable [_friendlySignalVar, 500];
+
+    if (_friendlySignal < 350) then {
+        private _eligibleDrones = missionNamespace getVariable ["WL2_eligibleDrones", []];
+
+        private _reportDrones = _eligibleDrones select {
+            alive _x;
+        } select {
+            !(_x isKindOf "StaticWeapon")
+        };
+        [_reportDrones, 10] remoteExec ["WL2_fnc_reportTargets", BIS_WL_enemySide];
     };
-    [_reportDrones, 10] remoteExec ["WL2_fnc_reportTargets", BIS_WL_enemySide];
 
-    if (call _shouldDisableJamEffect) then {
+    if (_friendlySignal >= 350 || call _shouldDisableJamEffect) then {
         _filmGrain ppEffectEnable false;
         _asset disableTIEquipment false;
         continue;
