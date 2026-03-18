@@ -92,16 +92,9 @@ if (!_isRightTeam) exitWith {
 };
 
 private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
-private _exceedGracePeriod = _timeSinceStart > 60 * 5;
+private _exceedGracePeriod = _timeSinceStart > 60;
 private _isImbalanced = if (_exceedGracePeriod) then {
-    private _friendlyCount = playersNumber _currentSide;
-    private _enemySide = if (_currentSide == west) then {
-        east
-    } else {
-        west
-    };
-    private _enemyCount = playersNumber _enemySide;
-    _friendlyCount - _enemyCount > 3;
+    [_currentSide, _uid] call WL2_fnc_calcImbalance;
 } else {
     false
 };

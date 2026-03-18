@@ -47,7 +47,7 @@ if (_setupState == "Teamlocked") exitWith {
 };
 
 if (_setupState == "Imbalance") exitWith {
-	private _message = "Teams are imbalanced. Rejoin from lobby.";
+	private _message = "Teams are imbalanced. Rejoin the other team from lobby.";
 	[_message, "Team Imbalance"] call WL2_fnc_exitToLobby;
 };
 

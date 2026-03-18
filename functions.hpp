@@ -495,6 +495,7 @@ class CfgFunctions {
 			class assetRelevanceCheck {};
 			class attachDetach {};
 			class broadcastRating {};
+			class calcImbalance {};
 			class calculateEndResults {};
 			class calculateRating {};
 			class changeSectorOwnership {};
