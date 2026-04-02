@@ -28,4 +28,4 @@ private _rewardAmount = round (_cost / 300) * 100;
 [objNull, _rewardAmount, "Aircraft secured", "#228b22"] call WL2_fnc_killRewardClient;
 
 playSoundUI ["AddItemOk"];
-playSoundUI ["a3\sounds_f\sfx\ui\vehicles\vehicle_repair.wss"];
+playSound3D ["a3\sounds_f\vehicles\armor\bobcat\bobcat_plow_up_01.wss", _asset];

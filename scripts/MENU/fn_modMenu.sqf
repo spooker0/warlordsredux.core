@@ -127,6 +127,27 @@ _texture ctrlAddEventHandler ["JSDialog", {
             _afkLogArray = [_afkLogArray, [], { _x # 0 }, "ASCEND"] call BIS_fnc_sortBy;
             [_texture, str _afkLogArray] spawn MENU_fnc_copyChat;
         };
+        case "seeRewardLog": {
+            private _uid = _message select 1;
+            private _selectedPlayer = [_uid] call BIS_fnc_getUnitByUID;
+            if (isNull _selectedPlayer) exitWith { true };
+            [_selectedPlayer, _texture] spawn {
+                params ["_selectedPlayer", "_texture"];
+                [] remoteExec ["WL2_fnc_publishRewards", _selectedPlayer];
+                private _startTime = serverTime;
+                waitUntil {
+                    uiSleep 0.1;
+                    private _rewardHistory = _selectedPlayer getVariable ["WL2_rewardHistory", createHashMap];
+                    serverTime - _startTime > 10 || count _rewardHistory > 0;
+                };
+                if (isNull _texture) exitWith {};
+
+                private _rewardHistory = _selectedPlayer getVariable ["WL2_rewardHistory", createHashMap];
+                private _rewardHistoryArray = _rewardHistory toArray false;
+                _rewardHistoryArray = [_rewardHistoryArray, [], { _x # 0 }, "ASCEND"] call BIS_fnc_sortBy;
+                [_texture, str _rewardHistoryArray] spawn MENU_fnc_copyChat;
+            };
+        };
         case "deputize": {
             private _uid = _message select 1;
             missionNamespace setVariable ["WL2_tempSpectatorUID", _uid, true];

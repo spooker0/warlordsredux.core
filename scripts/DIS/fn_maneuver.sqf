@@ -140,17 +140,18 @@ private _originalPosition = getPosASL _unit;
 };
 
 // Friendly fire check.
-[_projectile, _unit] spawn {
-    params ["_projectile", "_unit"];
+[_projectile] spawn {
+    params ["_projectile"];
+    private _playerSide = BIS_WL_playerSide;
     uiSleep 1;
     while { alive _projectile } do {
         uiSleep 0.2;
         private _missileTarget = missileTarget _projectile;
         private _missileTargetSide = [_missileTarget] call WL2_fnc_getAssetSide;
-        private _projectileSide = side (group _unit);
-        if (_missileTargetSide == _projectileSide) exitWith {
+        if (_missileTargetSide == _playerSide) then {
             triggerAmmo _projectile;
             ["Missile detonated to avoid seeking friendly target."] call WL2_fnc_smoothText;
+            break;
         };
     };
 };

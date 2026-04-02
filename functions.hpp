@@ -339,6 +339,7 @@ class CfgFunctions {
 			class killHistory {};
 			class killNotify {};
 			class killRewardClient {};
+			class publishRewards {};
 			class punishmentClient {};
 			class punishMessage {};
 			class refreshKillfeed {};
