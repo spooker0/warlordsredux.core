@@ -370,7 +370,7 @@ private _facesData = [];
 
 	private _faceCenter = [_sectorsInFace] call _getFaceCenter;
 	if (surfaceIsWater _faceCenter && _area > 7e6) then {
-		_area = _area * 0.5;
+		_area = _area * 0.6;
 	};
 
 	private _sectorNames = _sectorsInFace apply {

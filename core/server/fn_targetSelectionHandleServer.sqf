@@ -189,10 +189,14 @@
 					case "fob";
 					case "stronghold": {
 						if (alive _teamPriority) then {
-							private _previousTargetArea = _previousTargetSelection getVariable ["objectAreaComplete", objNull];
-							_teamPriority inArea _previousTargetArea
+							if (isNull _previousTargetSelection) then {
+								true
+							} else {
+								private _previousTargetArea = _previousTargetSelection getVariable ["objectAreaComplete", []];
+								_teamPriority inArea _previousTargetArea
+							};
 						} else {
-							true;
+							true
 						};
 					};
 					case "sector": {

@@ -118,6 +118,7 @@ private _originalPosition = getPosASL _unit;
                     [format ["Missile lost track %1m away from target.", round _distance]] call WL2_fnc_smoothText;
                 };
                 triggerAmmo _projectile;
+                break;
             };
         };
 
@@ -128,6 +129,7 @@ private _originalPosition = getPosASL _unit;
                 ["Missile lost track on multiple targets."] call WL2_fnc_smoothText;
             };
             triggerAmmo _projectile;
+            break;
         };
 
         if (_unit distance _projectilePosition > _samMaxDistance) then {
@@ -135,6 +137,7 @@ private _originalPosition = getPosASL _unit;
                 ["Missile lost track past maximum control distance from launcher."] call WL2_fnc_smoothText;
             };
             triggerAmmo _projectile;
+            break;
         };
     };
 };

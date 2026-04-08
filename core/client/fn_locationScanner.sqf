@@ -367,23 +367,21 @@ private _strongholdNextWarn = 0;
 while { !BIS_WL_missionEnd } do {
     private _side = BIS_WL_playerSide;
 
-    private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
-    private _newStrongholds = [];
+    private _strongholds = [];
     private _allScannedUnits = [];
     {
-        private _stronghold = _x;
-        private _strongholdSector = _stronghold getVariable ["WL_strongholdSector", objNull];
+        private _sector = _x;
+        private _stronghold = _sector getVariable ["WL_stronghold", objNull];
 
-        // check if stronghold has been deleted
-        private _sectorStronghold = _strongholdSector getVariable ["WL_stronghold", objNull];
-        if (_sectorStronghold == _stronghold) then {
-            _newStrongholds pushBack _stronghold;
-        } else {
+        // check if stronghold exists
+        if (isNull _stronghold) then {
             _stronghold setVariable ["WL2_strongholdIntruders", false];
             continue;
+        } else {
+            _strongholds pushBack _stronghold;
         };
 
-        private _sectorOwner = _strongholdSector getVariable ["BIS_WL_owner", independent];
+        private _sectorOwner = _sector getVariable ["BIS_WL_owner", independent];
         if (_sectorOwner != _side) then {
             _stronghold setVariable ["WL2_strongholdIntruders", false];
             continue;
@@ -422,8 +420,8 @@ while { !BIS_WL_missionEnd } do {
         } else {
             _stronghold setVariable ["WL2_strongholdIntruders", false];
         };
-    } forEach _strongholds;
-    missionNamespace setVariable ["WL_strongholds", _newStrongholds];
+    } forEach BIS_WL_allSectors;
+    missionNamespace setVariable ["WL_strongholds", _strongholds];
 
     private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 

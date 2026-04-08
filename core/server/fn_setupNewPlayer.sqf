@@ -81,6 +81,18 @@ private _isModerator = _uid in (getArray (missionConfigFile >> "moderatorIDs"));
 private _isSpectator = _uid in (getArray (missionConfigFile >> "spectatorIDs"));
 
 private _currentSide = side group _warlord;
+
+private _startSideCheck = serverTime;
+waitUntil {
+    uiSleep 0.1;
+    _currentSide = side group _warlord;
+    _startSideCheck - serverTime > 10 || _currentSide in [west, east];
+};
+
+if !(_currentSide in [west, east]) exitWith {
+    _warlord setVariable ["WL2_playerSetupState", "Teamlocked", _owner];
+};
+
 private _isRightTeam = if (_isAdmin || _isModerator || _isSpectator) then { true } else {
     _lockedToTeam in [_currentSide, civilian];
 };

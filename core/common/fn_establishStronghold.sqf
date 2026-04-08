@@ -17,10 +17,3 @@ _stronghold setVariable ["WL_strongholdSector", _sector, true];
 _sector setVariable ["WL_stronghold", _stronghold, true];
 
 [_stronghold, _sector] remoteExec ["WL2_fnc_prepareStronghold", 2];
-
-private _allStrongholds = missionNamespace getVariable ["WL_strongholds", []];
-_allStrongholds = _allStrongholds select {
-    _x != _oldStronghold
- };
-_allStrongholds pushBack _stronghold;
-missionNamespace setVariable ["WL_strongholds", _allStrongholds, true];

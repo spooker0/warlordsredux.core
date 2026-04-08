@@ -39,7 +39,7 @@ private _grenadeSounds = [
 ];
 
 for "_i" from 1 to 5 do {
-    playSound3D [selectRandom _grenadeSounds, objNull, false, _burstPos, 5];
+    playSound3D [selectRandom _grenadeSounds, objNull, false, _burstPos, 5, 1, 0, 0, true];
     uiSleep 0.05;
 };
 

@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_commit"];
+params ["_commit", ["_overrideTarget", objNull], ["_overrideTargetType", ""]];
 
 private _side = BIS_WL_playerSide;
 
@@ -8,6 +8,11 @@ private _teamPriorityTypeVar = format ["WL2_teamPriorityType_%1", _side];
 
 private _teamPriority = missionNamespace getVariable [_teamPriorityVar, objNull];
 private _teamPriorityType = missionNamespace getVariable [_teamPriorityTypeVar, ""];
+
+if (!isNull _overrideTarget) then {
+    _teamPriority = _overrideTarget;
+    _teamPriorityType = _overrideTargetType;
+};
 
 if (_teamPriorityType == "asset") exitWith {
     private _canTravelAsset = alive _teamPriority;

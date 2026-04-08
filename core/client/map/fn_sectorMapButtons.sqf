@@ -3,20 +3,22 @@ params ["_sector", "_targetId"];
 private _sectorName = _sector getVariable ["WL2_name", "Sector"];
 _sector setVariable ["WL2_mapButtonText", _sectorName];
 
-private _sectorFtAsset = [_sector, true] call WL2_fnc_getSectorFTAsset;
-if (!isNull _sectorFtAsset) then {
-    private _assetName = [_sectorFtAsset] call WL2_fnc_getAssetTypeName;
-
-    // Fast Travel Asset Button
+private _sectorFrontlineCheck = [false, _sector, "sector"] call WL2_fnc_travelTeamPriority;
+if (_sectorFrontlineCheck) then {
+    // Fast Travel Frontline Button
     private _fastTravelAssetExecute = {
         params ["_sector"];
-        private _asset = [_sector, true] call WL2_fnc_getSectorFTAsset;
-        [_asset] spawn WL2_fnc_executeFastTravelVehicle;
+        private _lastCheck = [true, _sector, "sector"] call WL2_fnc_travelTeamPriority;
+        if (_lastCheck) then {
+            playSoundUI ["AddItemOk"];
+        } else {
+            playSoundUI ["AddItemFailed"];
+        };
     };
     [
         _sector, _targetId,
         "ft-asset",
-        format ["<t color='#00ff00'>Fast travel frontline (%1)</t>", _assetName],
+        "<t color='#00ff00'>Fast travel frontline</t>",
         _fastTravelAssetExecute,
         true,
         "fastTravelFrontline",
