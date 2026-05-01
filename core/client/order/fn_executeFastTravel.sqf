@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_fastTravelMode", "_marker"];
+params ["_fastTravelMode", "_location"];
 
 // Fast Travel Modes
 // 0: Seized Sector
@@ -17,38 +17,47 @@ openMap [false, false];
 "Fast_travel" call WL2_fnc_announcer;
 
 private _destination = [];
-private _sectorPos = if (isNil "BIS_WL_targetSector") then {
-	[0, 0, 0];
-} else {
-	(BIS_WL_targetSector getVariable "objectAreaComplete") # 0;
-};
-
 private _strongholdHasSpot = false;
 
 switch (_fastTravelMode) do {
 	case 0: {
 		private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
-		if (_homeBase == BIS_WL_targetSector && WL_TARGET_ENEMY != _homeBase) then {
+		if (_homeBase == _location && WL_TARGET_ENEMY != _homeBase) then {
 			_destination = _homeBase modelToWorld [0, 0, 0];
 		} else {
-			_destination = selectRandom ([BIS_WL_targetSector] call WL2_fnc_findSpawnsInSector);
+			_destination = selectRandom ([_location] call WL2_fnc_findSpawnsInSector);
 		};
 	};
 	case 1: {
-		_destination = selectRandom ([_marker] call WL2_fnc_findSpawnsInMarker);
+		private _area = WL_TARGET_FRIENDLY getVariable "WL2_objectArea";
+		private _size = if (_area # 3) then {
+			sqrt (((_area # 0) ^ 2) + ((_area # 1) ^ 2));
+		} else {
+			(_area # 0) max (_area # 1);
+		};
+		private _distance = _size + WL_FAST_TRAVEL_OFFSET;
+		private _position = WL_TARGET_FRIENDLY getPos [_distance, WL_TARGET_FRIENDLY getDir player];
+		_position set [2, 0];
+		_destination = _position;
 		[player, "fastTravelContested"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	};
 	case 2: {
-		private _randomPos = _marker call BIS_fnc_randomPosTrigger;
-		private _distance = _randomPos distance2D BIS_WL_targetSector;
-		private _height = _sectorPos # 2;
-		_height = _height max 250;
-		_destination = [_randomPos # 0, _randomPos # 1, _height + _distance * 0.75];
+		private _area = WL_TARGET_FRIENDLY getVariable "WL2_objectArea";
+		private _size = if (_area # 3) then {
+			sqrt (((_area # 0) ^ 2) + ((_area # 1) ^ 2));
+		} else {
+			(_area # 0) max (_area # 1);
+		};
 
+		private _distance = _size + WL_FAST_TRAVEL_OFFSET;
+
+		private _position = WL_TARGET_FRIENDLY getPos [_distance, WL_TARGET_FRIENDLY getDir player];
+
+		_destination = [_position # 0, _position # 1, 250 + _distance * 0.75];
 		[player, "fastTravelAirAssault"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	};
 	case 3: {
-		private _safeSpot = selectRandom ([BIS_WL_targetSector] call WL2_fnc_findSpawnsInSector);
+		private _safeSpot = selectRandom ([_location] call WL2_fnc_findSpawnsInSector);
 		_destination = [_safeSpot # 0, _safeSpot # 1, 50];
 	};
 	case 4: {
@@ -58,7 +67,7 @@ switch (_fastTravelMode) do {
         };
 	};
 	case 5: {
-		private _stronghold = BIS_WL_targetSector getVariable ["WL_stronghold", objNull];
+		private _stronghold = _location getVariable ["WL_stronghold", objNull];
 		private _posArr = _stronghold buildingPos -1;
 		_destination = if (count _posArr > 0) then {
 			_strongholdHasSpot = true;
@@ -69,12 +78,11 @@ switch (_fastTravelMode) do {
 	};
 	case 6;
 	case 7: {
-		_destination = selectRandom ([_marker] call WL2_fnc_findSpawnsInMarker);
+		_destination = selectRandom ([_location] call WL2_fnc_findSpawnsInArea);
 		_destination = [_destination # 0, _destination # 1, 50];
-		deleteMarker _marker;
 	};
 	case 8: {
-		private _stronghold = BIS_WL_targetSector getVariable ["WL_stronghold", objNull];
+		private _stronghold = _location getVariable ["WL_stronghold", objNull];
 		private _strongholdRadius = _stronghold getVariable ["WL_strongholdRadius", 0];
 		private _randomDir = random 360;
 		private _randomDist = _strongholdRadius + random 10;
@@ -100,7 +108,20 @@ private _tagAlong = (units player) select {
 	_x getVariable ["WL2_aiFollow", true]
 };
 
-private _directionToSector = _destination getDir _sectorPos;
+private _directionToSector = if (isNil "_location") then {
+	getDir player
+} else {
+	if (_location isEqualType []) then {
+		private _finalPoint = if (count _location == 3) then {
+			_location
+		} else {
+			_location # 0
+		};
+		_destination getDir _finalPoint;
+	} else {
+		_destination getDir _location;
+	};
+};
 
 titleCut ["", "BLACK OUT", 1];
 
@@ -109,7 +130,7 @@ uiSleep 1;
 switch (_fastTravelMode) do {
 	case 0;
 	case 1: {
-		[format [localize "STR_A3_WL_popup_travelling", BIS_WL_targetSector getVariable "WL2_name"]] call WL2_fnc_smoothText;
+		[format [localize "STR_A3_WL_popup_travelling", _location getVariable ["WL2_name", "Sector"]]] call WL2_fnc_smoothText;
 		{
 			_x setVehiclePosition [_destination, [], 3, "NONE"];
 		} forEach _tagAlong;
@@ -204,6 +225,7 @@ switch (_fastTravelMode) do {
 			_x setVehiclePosition [_destination, [], 3, "NONE"];
 		} forEach _tagAlong;
 
+		player setDir _directionToSector;
 		player setVehiclePosition [_destination, [], 0, "NONE"];
 	};
 };

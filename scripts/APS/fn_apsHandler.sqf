@@ -114,9 +114,8 @@ while { alive _projectile } do {
 		private _isNotFriendly = _unitSide != _ownerSide;
         (_projectile distanceSqr _x) < _maxDistSqr || _isNotFriendly
 	} select {  // aps type check
-        private _vehicleAPSType = _x getVariable ["apsType", -1];
-        private _apsTypeIncremented = _vehicleAPSType + 1;
-        _apsTypeIncremented in _projectileAPSTypeMap
+        private _vehicleAPSType = _x getVariable ["APS_apsType", 0];
+        _vehicleAPSType in _projectileAPSTypeMap
     } select {  // deadzone check
         _firedPosition distanceSqr _x > _minDistSqr;
     } select {  // far radius check

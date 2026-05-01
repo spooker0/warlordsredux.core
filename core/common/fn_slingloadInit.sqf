@@ -3,6 +3,10 @@ params ["_asset", "_assetToLoad"];
 
 if (alive _assetToLoad) then {
     private _slingRopePoints = getArray (configFile >> "CfgVehicles" >> typeOf _assetToLoad >> "slingLoadCargoMemoryPoints");
+    _slingRopePoints = _slingRopePoints select {
+        private _position = _assetToLoad selectionPosition _x;
+        !(_position isEqualTo [0, 0, 0])
+    };
 
     private _ropeLength = 20;
     if (count _slingRopePoints == 0) then {

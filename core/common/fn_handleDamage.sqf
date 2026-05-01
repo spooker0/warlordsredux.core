@@ -34,6 +34,14 @@ _asset addEventHandler ["HandleDamage", {
 		};
 	};
 
+	// if (isNull _source && _projectile == "") then {
+	// 	private _unitApsType = _unit call APS_fnc_getMaxAmmo;
+	// 	if (_unitApsType > 0) then {
+	// 		private _delta = _damage - (_unit getHit _selection);
+	// 		_damage = (_unit getHit _selection) + _delta * 0.5;
+	// 	};
+	// };
+
 	if (_projectile isKindOf "MineCore" || _projectile isKindOf "TimeBombCore") then {
 		private _instigator = [_source, _instigator] call WL2_fnc_handleInstigator;
 		if (side group _instigator == side group _unit) then {

@@ -19,7 +19,6 @@ _texture ctrlAddEventHandler ["PageLoaded", {
     [_texture] spawn {
         params ["_texture"];
         private _playerUid = getPlayerUID player;
-        private _firstRender = true;
         while { !isNull _texture } do {
             private _scoreboardData = missionNamespace getVariable ["WL2_scoreboardResults", []];
             {
@@ -32,13 +31,40 @@ _texture ctrlAddEventHandler ["PageLoaded", {
             private _scoreboardDataText = toJSON _scoreboardData;
             _scoreboardDataText = _texture ctrlWebBrowserAction ["ToBase64", _scoreboardDataText];
 
+            private _bluforRating = 0;
+            private _opforRating = 0;
+            private _bluforPlayers = 0;
+            private _opforPlayers = 0;
+            {
+                private _rating = _x getVariable ["WL2_playerRating", WL_RATING_STARTER];
+                if (side group _x == west) then {
+                    _bluforRating = _bluforRating + _rating;
+                    _bluforPlayers = _bluforPlayers + 1;
+                };
+                if (side group _x == east) then {
+                    _opforRating = _opforRating + _rating;
+                    _opforPlayers = _opforPlayers + 1;
+                };
+            } forEach allPlayers;
+
+            private _bluforAverage = if (_bluforPlayers > 0) then {
+                _bluforRating / _bluforPlayers
+            } else {
+                WL_RATING_STARTER
+            };
+            private _opforAverage = if (_opforPlayers > 0) then {
+                _opforRating / _opforPlayers
+            } else {
+                WL_RATING_STARTER
+            };
+
             private _script = format [
-                "renderScoreboard(atobr(""%1""), %2);",
+                "renderScoreboard(atobr(""%1""), %2, %3);",
                 _scoreboardDataText,
-                str _firstRender
+                _bluforAverage,
+                _opforAverage
             ];
             _texture ctrlWebBrowserAction ["ExecJS", _script];
-            _firstRender = false;
             uiSleep 0.5;
         };
     };

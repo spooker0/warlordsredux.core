@@ -37,7 +37,6 @@ switch (_locality) do {
 		WL_SectorActionTarget = objNull;
 		WL_UAVActionTarget = objNull;
 		WL_SectorActionTargetActive = false;
-		WL_MapBusy = [];
 		WL_GEAR_BUY_MENU = false;
 		WL_TEMP_BUY_MENU = false;
 		WL_VotePhase = 0;

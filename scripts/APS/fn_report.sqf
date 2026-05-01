@@ -7,10 +7,10 @@ if (!isNull _gunner) then {
 	} forEach (crew _vehicle);
 };
 
-private _assetApsType = _vehicle getVariable ["apsType", -1];
-if (_assetApsType <= -1) exitWith {};
+private _assetApsType = _vehicle getVariable ["APS_apsType", 0];
+if (_assetApsType <= 0) exitWith {};
 
-if (cameraOn != _vehicle && _assetApsType != 3) exitWith {};
+if (cameraOn != _vehicle && _assetApsType != 4) exitWith {};
 
 private _existingProjectiles = uiNamespace getVariable ["WL2_damagedProjectiles", createHashMap];
 _existingProjectiles set [diag_tickTime, _projectile];
@@ -20,10 +20,12 @@ private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashM
 private _apsVolume = _settingsMap getOrDefault ["apsVolume", 1];
 
 private _type = switch (_assetApsType) do {
-	case 2: { "Heavy APS" };
-	case 1: { "Medium APS" };
-	case 0: { "Light APS" };
-	default { "Dazzler" };
+	case 5: { "Heavy+ APS" };
+	case 4: { "Device" };
+	case 3: { "Heavy APS" };
+	case 2: { "Medium APS" };
+	case 1: { "Light APS" };
+	default { "???" };
 };
 
 private _apsAmmo = _vehicle getVariable ["apsAmmo", 0];

@@ -7,7 +7,7 @@ waitUntil {
 };
 waitUntil {
     private _posAGL = _projectile modelToWorld [0, 0, 0];
-    (_posAGL # 2) < 150 || !alive _projectile
+    (_posAGL # 2) < 70 || !alive _projectile
 };
 
 if (!alive _projectile) exitWith {};
@@ -38,7 +38,7 @@ private _grenadeSounds = [
     "a3\sounds_f\arsenal\explosives\grenades\explosion_gng_grenades_04.wss"
 ];
 
-for "_i" from 1 to 5 do {
+for "_i" from 1 to 3 do {
     playSound3D [selectRandom _grenadeSounds, objNull, false, _burstPos, 5, 1, 0, 0, true];
     uiSleep 0.05;
 };
@@ -49,7 +49,10 @@ private _fires = [];
 private _coneHalfAngle = 18;
 private _burstBiasUp = -0.01;
 
-for "_i" from 1 to 20 do {
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _strandsCount = _settingsMap getOrDefault ["incendiaryStrands", 20];
+
+for "_i" from 1 to _strandsCount do {
     private _posAGL = [
         (_burstPos # 0) + (random 3 - 1.5),
         (_burstPos # 1) + (random 3 - 1.5),
@@ -194,7 +197,8 @@ while { (count _strands > 0) || (count _fires > 0) } do {
 
             _projectileIgnitions pushBack _pos;
 
-            if (_isOwner && !_projectileHasKilled && count _projectileIgnitions >= 6) then {
+            private _count = count _projectileIgnitions;
+            if (_isOwner && !_projectileHasKilled && _count >= _strandsCount / 2) then {
                 private _averageX = 0;
                 private _averageY = 0;
                 private _averageZ = 0;
@@ -204,7 +208,6 @@ while { (count _strands > 0) || (count _fires > 0) } do {
                     _averageZ = _averageZ + (_x # 2);
                 } forEach _projectileIgnitions;
 
-                private _count = count _projectileIgnitions;
                 private _averagePos = [
                     _averageX / _count,
                     _averageY / _count,

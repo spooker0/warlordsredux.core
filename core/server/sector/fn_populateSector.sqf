@@ -133,18 +133,12 @@ if ("H" in _services && !_alreadySpawnedAircraft) then {
 		private _randomAngle = random 360;
 		private _randomDistance = 2000 + random 500;
 		private _randomPos = _sector getPos [_randomDistance, _randomAngle];
-		_randomPos set [2, 300];
+		_randomPos set [2, 1000];
 
 		private _aircraft = [selectRandom _aircraftPool, _randomPos, random 360, false, true] call _spawnVehicle;
-		if (_aircraft isKindOf "Helicopter") then {
-			_aircraft setVelocityModelSpace [0, 100, 0];
-		} else {
-			_aircraft setVelocityModelSpace [0, 200, 0];
-			_randomPos set [2, 1000];
-			_aircraft setPosASL _randomPos;
-			[_aircraft, 0, 0] call BIS_fnc_setPitchBank;
-			_aircraft flyInHeightASL [1000, 1000, 1000];
-		};
+		_aircraft setPosASL _randomPos;
+		_aircraft setVelocityModelSpace [0, 100, 0];
+		_aircraft flyInHeightASL [1000, 1000, 1000];
 	};
 	_sector setVariable ["WL2_aircraftSpawned", true];
 };

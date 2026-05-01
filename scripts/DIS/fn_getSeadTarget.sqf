@@ -56,7 +56,7 @@ private _side = [_asset] call WL2_fnc_getAssetSide;
     if (_targetSide == _side) then {
         continue;
     };
-    private _isDazzler = _target getVariable ["apsType", -1] == 3;
+    private _isDazzler = _target getVariable ["APS_apsType", 0] == 4;
     if (_isDazzler && _target getVariable ["WL2_apsActivated", false]) then {
         private _name = format ["EMITTER: %1", [_target] call WL2_fnc_getAssetTypeName];
         _seadTargets pushBack [_target, _name];

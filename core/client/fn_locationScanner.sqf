@@ -51,6 +51,8 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
 
         private _nearbyItems = cameraOn nearObjects 100;
         private _nearbyInstallable = _nearbyItems select {
+            alive _x
+        } select {
             cameraOn distance _x < 10;
         } select {
             [getPosASL cameraOn, getDir cameraOn, 90, getPosASL _x] call WL2_fnc_inAngleCheck;
@@ -81,7 +83,12 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
             private _installText = if (_isConversion) then {
                 format ["<t color='#ADD8E6'>Convert to %1</t>", _displayText]
             } else {
-                format ["<t color='#ADD8E6'>Deploy %1</t>", _displayText]
+                private _decoy = WL_ASSET(_installable, "decoy", 0);
+                if (_decoy == 0) then {
+                    format ["<t color='#ADD8E6'>Deploy %1</t>", _displayText]
+                } else {
+                    format ["<t color='#ADD8E6'>Deploy Decoy (%1)</t>", _displayText]
+                };
             };
 
             private _installActionId = player getVariable ["WL2_installActionId", -1];
@@ -399,6 +406,7 @@ while { !BIS_WL_missionEnd } do {
         _allScannedUnits append _scannedUnits;
 
         // don't consider unconscious units as intruders
+        // but still scan them
         _scannedUnits = _scannedUnits select {
             WL_ISUP(_x)
         } select {
@@ -414,7 +422,7 @@ while { !BIS_WL_missionEnd } do {
             _stronghold setVariable ["WL2_strongholdIntruders", true];
             if (serverTime >= _strongholdNextWarn) then {
                 _strongholdNextWarn = serverTime + 30;
-                private _sectorName = _strongholdSector getVariable ["WL2_name", "Unknown"];
+                private _sectorName = _sector getVariable ["WL2_name", "Unknown"];
                 [format ["Stronghold intrusion: %1", _sectorName]] call WL2_fnc_smoothText;
             };
         } else {

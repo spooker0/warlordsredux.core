@@ -61,6 +61,24 @@ if (_isAircraft) then {
     if (_empty) then {
         _eligibleFreeRearm = false;
     };
+
+    private _assetActualType = WL_ASSET_TYPE(_asset);
+
+    private _mineClear = _asset getVariable ["WL2_mineClearCharges", -1];
+    if (_mineClear != -1) then {
+        private _mineClearConfig = WL_ASSET(_assetActualType, "mineClear", -1);
+        if (_mineClearConfig > _mineClear) then {
+            _eligibleFreeRearm = false;
+        };
+    };
+
+    private _installable = _asset getVariable ["WL2_installable", ""];
+    if (_installable == "") then {
+        private _installableConfig = WL_ASSET(_assetActualType, "loaded", "");
+        if (_installableConfig != "") then {
+            _eligibleFreeRearm = false;
+        };
+    };
 };
 
 _eligibleFreeRearm;

@@ -52,8 +52,10 @@ private _ownedSectorLinkColor = if (BIS_WL_playerSide == west) then {
 	[0.5, 0, 0, 1]
 };
 
+private _showSectorLinks = _drawMode != 0 || WL_VotePhase != 0;
+
 private _sectorsInLinksShown = [];
-if (BIS_WL_selection_showLinks) then {
+if (_showSectorLinks) then {
 	{
 		private _pairKey = _x;
 		private _linkData = _y;
@@ -205,7 +207,7 @@ if !(isNull BIS_WL_targetVote) then {
 	];
 };
 
-if (BIS_WL_currentSelection == WL_ID_SELECTION_ORDERING_NAVAL) then {
+if (uiNamespace getVariable ["WL2_isOrderingWater", false]) then {
 	// All sectors within 1.5km
 	private _mousePosition = getMousePosition;
 	private _mouseWorldPosition = _map ctrlMapScreenToWorld _mousePosition;
@@ -285,6 +287,31 @@ if (!isNull _sectorTarget) then {
 		];
 	};
 
+	private _sectorArea = _sectorTarget getVariable ["objectAreaComplete", []];
+
+	if (count _sectorArea >= 5) then {
+		private _isRectangle = _sectorArea # 4;
+		if (_isRectangle) then {
+			_drawRectangles pushBack [
+				_sectorArea # 0,
+				_sectorArea # 1,
+				_sectorArea # 2,
+				_sectorArea # 3,
+				[1, 1, 1, 1],
+				"#(rgb,1,1,1)color(1,1,1,0.3)"
+			];
+		} else {
+			_drawEllipses pushBack [
+				_sectorArea # 0,
+				_sectorArea # 1,
+				_sectorArea # 2,
+				_sectorArea # 3,
+				[1, 1, 1, 1],
+				"#(rgb,1,1,1)color(1,1,1,0.3)"
+			];
+		};
+	};
+
 	private _sectorInfo = _sectorTarget getVariable ["WL2_sectorInfo", []];
 	private _spacing = 0;
 	{
@@ -335,8 +362,25 @@ if (!isNull _sectorTarget) then {
 	} forEach _sectorInfo;
 };
 
+// Draw team priority
+private _teamPriorityVar = format ["WL2_teamPriority_%1", _side];
+private _teamPriority = missionNamespace getVariable [_teamPriorityVar, objNull];
+if (alive _teamPriority) then {
+	private _teamPriorityTypeVar = format ["WL2_teamPriorityType_%1", _side];
+	private _teamPriorityType = missionNamespace getVariable [_teamPriorityTypeVar, ""];
+
+	_drawIcons pushBack [
+		"\A3\ui_f\data\map\markers\military\circle_CA.paa",
+		[1, 1, 1, 1],
+		getPosASL _teamPriority,
+		40 * _mapIconScale,
+		40 * _mapIconScale,
+		0
+	];
+};
+
 // Draw sector areas
-if (!isNull _sectorTarget || BIS_WL_selection_showLinks) then {
+if (!isNull _sectorTarget || _showSectorLinks) then {
 	private _facesData = missionNamespace getVariable ["WL2_sectorFaces", []];
 
 	private _neutralRGBA = [0.2, 0.2, 0.2, 0.3];
@@ -350,7 +394,7 @@ if (!isNull _sectorTarget || BIS_WL_selection_showLinks) then {
 	private _shouldShowFace = {
 		params ["_sectors"];
 
-		if (BIS_WL_selection_showLinks) exitWith { true };
+		if (_showSectorLinks) exitWith { true };
 
 		private _intersections = _sectorsInLinksShown arrayIntersect _sectors;
 		private _showFace = count _intersections == count _sectors;
@@ -923,16 +967,37 @@ private _advancedMines = _mapData getOrDefault ["advancedMines", []];
 // Draw minefields
 private _minefields = _mapData getOrDefault ["minefields", []];
 {
-	private _position = getPosASL _x;
+	if (!alive _x) then {
+		continue;
+	};
 
-	_drawRectangles pushBack [
-		_position,
-		50,
-		10,
-		getDir _x,
-		[1, 1, 1, 1],
-		"#(rgb,1,1,1)color(1,0,0,0.2)"
-	];
+	private _position = getPosASL _x;
+	private _mineData = _x getVariable ["WL2_minefield", []];
+
+	if (count _mineData < 3) then {
+		continue;
+	};
+
+	private _isRectangle = _mineData # 2 == 1;
+	if (_isRectangle) then {
+		_drawRectangles pushBack [
+			_position,
+			_mineData # 0,
+			_mineData # 1,
+			getDir _x,
+			[1, 1, 1, 1],
+			"#(rgb,1,1,1)color(1,0,0,0.15)"
+		];
+	} else {
+		_drawEllipses pushBack [
+			_position,
+			_mineData # 0,
+			_mineData # 1,
+			getDir _x,
+			[1, 1, 1, 1],
+			"#(rgb,1,1,1)color(1,0,0,0.15)"
+		];
+	};
 } forEach _minefields;
 
 private _drawSectorMarkerThreshold = _mapData getOrDefault ["sectorMarkerThreshold", 0.4];

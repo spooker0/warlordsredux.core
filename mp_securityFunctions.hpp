@@ -25,7 +25,6 @@ class CfgRemoteExec {
 		class WL2_fnc_airRearmAction {allowedTargets = 0;};
 		class WL2_fnc_attachDetach {allowedTargets = 0;};
 		class WL2_fnc_broadcastAction {allowedTargets = 0;};
-		class WL2_fnc_broadcastRating {allowedTargets = 0;};
 		class WL2_fnc_catapultAction {allowedTargets = 0;};
 		class WL2_fnc_claimAction {allowedTargets = 1;};
 		class WL2_fnc_clearPlayerReports {allowedTargets = 0;};

@@ -5,8 +5,7 @@ private _isNumberImbalanced = {
     private _friendlyCount = playersNumber _currentSide;
     private _allPlayersCount = count allPlayers;
     private _enemyCount = _allPlayersCount - _friendlyCount;
-    systemChat str _enemyCount;
-    _friendlyCount - _enemyCount > 4
+    _friendlyCount - _enemyCount > 2
 };
 
 private _ratings = profileNamespace getVariable ["WL2_playerRatings", createHashMap];

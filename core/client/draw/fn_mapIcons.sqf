@@ -197,7 +197,8 @@
 		_mapData set ["airWrecks", _airWrecks];
 
 		private _minefields = (_sideVehicles + _targetsOnDatalink + _visibleEnemyUnits) select {
-			_x getVariable ["WL2_isMinefield", false];
+			private _mineData = _x getVariable ["WL2_minefield", []];
+			count _mineData > 0;
 		};
 		_mapData set ["minefields", _minefields];
 

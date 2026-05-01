@@ -19,6 +19,9 @@ while { !BIS_WL_missionEnd } do {
 		if (_currentOwner != independent || !_sectorIsTargeted) then {
 			{
 				private _asset = _x;
+				if (_asset isKindOf "Air") then {
+					continue;
+				};
 				if (!isNull _asset) then {
 					deleteVehicle _asset;
 				};

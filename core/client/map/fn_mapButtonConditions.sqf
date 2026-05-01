@@ -161,11 +161,13 @@ switch (_conditionName) do {
         };
     };
     case "fastTravelAI": {
-        if !(_target in (units player)) exitWith { "" };
         if (_target == player) exitWith { "" };
-        if (WL_ISDOWN(_target)) exitWith { "AI is down." };
-        private _position = getPosASL _target;
-        if (surfaceIsWater _position && _position # 2 < 5) exitWith { "AI is in water." };
+        if (vehicle player != player) exitWith { "" };
+        "ok";
+    };
+    case "fastTravelAIVehicle": {
+        if (_target == player) exitWith { "" };
+        if (vehicle player == player) exitWith { "" };
         "ok";
     };
     case "fastTravelStrongholdTarget": {

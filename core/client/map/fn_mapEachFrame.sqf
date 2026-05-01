@@ -13,9 +13,10 @@ WL_AssetActionTargets = _nearbyAssets;
 private _mapScale = ctrlMapScale WL_CONTROL_MAP;
 
 private _surrenderWarningActive = uiNamespace getVariable ["WL2_surrenderWarningActive", false];
+
 {
     private _marker = (_x getVariable "BIS_WL_markers") # 0;
-    private _currentMarkerSize = if (_x in BIS_WL_selection_availableSectors) then {
+    private _currentMarkerSize = if (_x getVariable ["WL2_sectorSelectionAvailable", false]) then {
         private _pulseFrequency = 1;
         private _pulseIconSize = 1.5;
         private _timer = (serverTime % _pulseFrequency);
@@ -66,15 +67,23 @@ if (inputMouse 0 == 0) exitWith {
 
 if (_firstFrameAfterClose) exitWith {};
 
-if (WL_SectorActionTarget in BIS_WL_selection_availableSectors) exitWith {};
+private _mapQueue = uiNamespace getVariable "WL2_mapSelectQueue";
+private _isSelectingTarget = if (count _mapQueue > 0) then {
+    private _mapQueueEntry = _mapQueue # (count _mapQueue - 1);
+    private _eligibilityCallback = _mapQueueEntry # 2;
+    private _arguments = _mapQueueEntry # 3;
+    [WL_SectorActionTarget, _arguments] call _eligibilityCallback;
+} else {
+    private _sectorClickSingletonScriptHandle = uiNamespace getVariable ["WL2_mapSectorIconSingleton", scriptNull];
+    !isNull _sectorClickSingletonScriptHandle
+};
+if (_isSelectingTarget) exitWith {};
 
 private _singletonScriptHandle = uiNamespace getVariable ["WL2_mapMouseActionSingleton", scriptNull];
 if (!isNull _singletonScriptHandle) exitWith {};
 
 private _singletonScriptHandle = [_map] spawn {
     params ["_map"];
-    if (count WL_MapBusy > 0) exitWith {};
-
     private _display = createDialog ["WL_MapButtonDisplay", true];
     uiNamespace setVariable ["WL2_mapButtonDisplay", _display];
 

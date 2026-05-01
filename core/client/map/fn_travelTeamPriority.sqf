@@ -31,14 +31,8 @@ if (_teamPriorityType == "fob") exitWith {
     private _canTravelFOB = ([_teamPriority, "fastTravelFOB"] call WL2_fnc_mapButtonConditions) == "ok";
     if (_canTravelFOB) then {
         if (_commit) then {
-            BIS_WL_targetSector = nil;
-
-            private _marker = createMarkerLocal ["WL2_fastTravelFOBMarker", getPosATL _teamPriority];
-            _marker setMarkerShapeLocal "ELLIPSE";
-            _marker setMarkerSizeLocal [WL_FOB_RANGE, WL_FOB_RANGE];
-            _marker setMarkerAlphaLocal 0;
-
-            [6, "WL2_fastTravelFOBMarker"] spawn WL2_fnc_executeFastTravel;
+            private _forwardBaseArea = [getPosASL _teamPriority, WL_FOB_RANGE, WL_FOB_RANGE, 0, false];
+            [6, _forwardBaseArea] spawn WL2_fnc_executeFastTravel;
         };
 
         true;
@@ -60,8 +54,8 @@ if (_teamPriorityType == "stronghold") exitWith {
             false;
         } else {
             if (_commit) then {
-                BIS_WL_targetSector = (_findSector # 0);
-                [5, ""] spawn WL2_fnc_executeFastTravel;
+                private _sector = (_findSector # 0);
+                [5, _sector] spawn WL2_fnc_executeFastTravel;
             };
         };
 
@@ -77,13 +71,11 @@ if (_teamPriorityType == "sector") exitWith {
         private _canTravelStronghold = ([_teamPriority, "fastTravelStrongholdTarget"] call WL2_fnc_mapButtonConditions) == "ok";
         if (_commit) then {
             if (_canTravelStronghold) then {
-                BIS_WL_targetSector = _teamPriority;
-                [5, ""] spawn WL2_fnc_executeFastTravel;
+                [5, _teamPriority] spawn WL2_fnc_executeFastTravel;
             } else {
                 private _asset = [_teamPriority, true] call WL2_fnc_getSectorFTAsset;
                 if (isNull _asset) then {
-                    BIS_WL_targetSector = _teamPriority;
-                    [0, ""] spawn WL2_fnc_executeFastTravel;
+                    [0, _teamPriority] spawn WL2_fnc_executeFastTravel;
                 } else {
                     [_asset] spawn WL2_fnc_executeFastTravelVehicle;
                 };
@@ -96,15 +88,7 @@ if (_teamPriorityType == "sector") exitWith {
             private _canAirAssault = ([_teamPriority, "airAssault"] call WL2_fnc_mapButtonConditions) == "ok";
             if (_canAirAssault) then {
                 if (_commit) then {
-                    BIS_WL_targetSector = _teamPriority;
-
-                    private _fastTravelConflictCall = 2 call WL2_fnc_fastTravelConflictMarker;
-                    private _marker = _fastTravelConflictCall # 0;
-                    [2, _marker] call WL2_fnc_executeFastTravel;
-                    deleteMarkerLocal _marker;
-
-                    private _markerText = _fastTravelConflictCall # 1;
-                    deleteMarkerLocal _markerText;
+                    [2, _teamPriority] call WL2_fnc_executeFastTravel;
                 };
 
                 true;

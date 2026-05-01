@@ -365,7 +365,6 @@ class CfgFunctions {
 			class getSideBase {};
 			class handleEnemyCapture {};
 			class handleSectorIcons {};
-			class handleSelectionState {};
 			class mapButtonClick {};
 			class mapButtonConditions {};
 			class mapEachFrame {};
@@ -384,7 +383,6 @@ class CfgFunctions {
 			class targetSelected {};
 			class travelTeamPriority {};
 			class uavMapButtons {};
-			class updateSelectionState {};
 		};
 		class ClientOrder {
 			file = "src\core\client\order";
@@ -392,7 +390,6 @@ class CfgFunctions {
 			class deployment {};
 			class executeFastTravel {};
 			class executeFastTravelVehicle {};
-			class fastTravelConflictMarker {};
 			class findStrongholdBuilding {};
 			class orderAircraft {};
 			class orderArsenal {};
@@ -400,11 +397,13 @@ class CfgFunctions {
 			class orderCruiseMissile {};
 			class orderFastTravel {};
 			class orderFundsTransfer {};
+			class orderMapSelection {};
 			class orderNaval {};
 			class orderStronghold {};
 			class orderSectorScan {};
 			class orderVehicle {};
 			class requestPurchase {};
+			class requestVote {};
 		};
 		class ClientPurchase {
 			file = "src\core\client\purchase";
@@ -495,7 +494,6 @@ class CfgFunctions {
 			file = "src\core\server";
 			class assetRelevanceCheck {};
 			class attachDetach {};
-			class broadcastRating {};
 			class calcImbalance {};
 			class calculateEndResults {};
 			class calculateRating {};

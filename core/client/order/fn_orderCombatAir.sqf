@@ -1,43 +1,46 @@
 #include "includes.inc"
-params ["_toContested"];
 
-"Sector" call WL2_fnc_announcer;
-[localize "STR_WL_selectSector"] call WL2_fnc_smoothText;
+private _conditions = {
+	params ["_sector"];
 
-"RequestMenu_close" call WL2_fnc_setupUI;
-if !(visibleMap) then {
-	processDiaryLink createDiaryLink ["Map", player, ""];
-	WL_CONTROL_MAP ctrlMapAnimAdd [0, 0.1, player];
-	ctrlMapAnimCommit WL_CONTROL_MAP;
-};
-BIS_WL_targetSector = objNull;
-private _selectionBefore = BIS_WL_currentSelection;
-BIS_WL_currentSelection = WL_ID_SELECTION_COMBAT_AIR;
-WL_MapBusy pushBack "orderCombatAir";
+	private _linkOwner = _sector getVariable ["WL2_linkedOwner", sideUnknown];
+	if (_linkOwner != BIS_WL_playerSide) exitWith {
+		false
+	};
 
-uiSleep WL_TIMEOUT_SHORT;
+	private _services = _sector getVariable ["WL2_services", []];
+	if !("H" in _services) exitWith {
+		false
+	};
 
-waitUntil {
-	uiSleep WL_TIMEOUT_MIN;
+	private _nextCombatAir = _sector getVariable ["WL2_nextCombatAir", -9999];
+	if (_nextCombatAir > serverTime) exitWith {
+		false
+	};
 
-	!isNull BIS_WL_targetSector ||
-	!visibleMap ||
-	WL_ISDOWN(player);
-};
+	private _combatAirActive = _sector getVariable ["WL2_combatAirActive", false];
+	if (_combatAirActive) exitWith {
+		false
+	};
 
-if (BIS_WL_currentSelection == WL_ID_SELECTION_COMBAT_AIR) then {
-	BIS_WL_currentSelection = _selectionBefore;
+	true
 };
 
-if (isNull BIS_WL_targetSector) exitWith {
-	"Canceled" call WL2_fnc_announcer;
+private _successCallback = {
+	params ["_sector"];
+	[player, "combatAir", [], _sector] remoteExec ["WL2_fnc_handleClientRequest", 2];
+};
+
+private _cancelCallback = {
 	[localize "STR_A3_WL_deploy_canceled"] call WL2_fnc_smoothText;
-
-	uiSleep 1;
-	WL_MapBusy = WL_MapBusy - ["orderCombatAir"];
 };
 
-[player, "combatAir", [], BIS_WL_targetSector] remoteExec ["WL2_fnc_handleClientRequest", 2];
-
-uiSleep 1;
-WL_MapBusy = WL_MapBusy - ["orderCombatAir"];
+[
+	"combatAir",
+	_conditions,
+	{},
+	_successCallback,
+	_cancelCallback,
+	[],
+	false
+] spawn WL2_fnc_orderMapSelection;

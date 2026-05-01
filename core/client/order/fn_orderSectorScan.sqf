@@ -1,43 +1,41 @@
 #include "includes.inc"
-params ["_toContested"];
+private _conditions = {
+	params ["_sector"];
 
-"Sector" call WL2_fnc_announcer;
-[localize "STR_A3_WL_popup_scan"] call WL2_fnc_smoothText;
+	private _sectorOwner = _sector getVariable ["BIS_WL_owner", sideUnknown];
+	if (_sector != WL_TARGET_FRIENDLY && _sectorOwner != BIS_WL_playerSide) exitWith {
+		false
+	};
 
-"RequestMenu_close" call WL2_fnc_setupUI;
-if !(visibleMap) then {
-	processDiaryLink createDiaryLink ["Map", player, ""];
-	WL_CONTROL_MAP ctrlMapAnimAdd [0, 0.1, player];
-	ctrlMapAnimCommit WL_CONTROL_MAP;
-};
-BIS_WL_targetSector = objNull;
-private _selectionBefore = BIS_WL_currentSelection;
-BIS_WL_currentSelection = WL_ID_SELECTION_SCAN;
-WL_MapBusy pushBack "orderSectorScan";
+	private _currentScannedSectors = missionNamespace getVariable ["WL2_scanningSectors", []];
+	if (_sector in _currentScannedSectors) exitWith {
+		false
+	};
 
-uiSleep WL_TIMEOUT_SHORT;
+	private _lastScannedVar = format ["WL2_lastScanned_%1", BIS_WL_playerSide];
+	private _lastScan = _sector getVariable [_lastScannedVar, -9999];
+	if (_lastScan + WL_COOLDOWN_SCAN > serverTime) exitWith {
+		false
+	};
 
-waitUntil {
-	uiSleep WL_TIMEOUT_MIN;
-
-	!isNull BIS_WL_targetSector ||
-	!visibleMap ||
-	WL_ISDOWN(player);
+	true
 };
 
-if (BIS_WL_currentSelection == WL_ID_SELECTION_SCAN) then {
-	BIS_WL_currentSelection = _selectionBefore;
+private _successCallback = {
+	params ["_sector"];
+	[player, "scan", [], _sector] remoteExec ["WL2_fnc_handleClientRequest", 2];
 };
 
-if (isNull BIS_WL_targetSector) exitWith {
-	"Canceled" call WL2_fnc_announcer;
+private _cancelCallback = {
 	[localize "STR_A3_WL_scan_canceled"] call WL2_fnc_smoothText;
-
-	uiSleep 1;
-	WL_MapBusy = WL_MapBusy - ["orderSectorScan"];
 };
 
-[player, "scan", [], BIS_WL_targetSector] remoteExec ["WL2_fnc_handleClientRequest", 2];
-
-uiSleep 1;
-WL_MapBusy = WL_MapBusy - ["orderSectorScan"];
+[
+	"scan",
+	_conditions,
+	{},
+	_successCallback,
+	_cancelCallback,
+	[],
+	false
+] spawn WL2_fnc_orderMapSelection;

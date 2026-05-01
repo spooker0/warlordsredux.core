@@ -121,6 +121,14 @@ while { !BIS_WL_missionEnd } do {
                 BIS_WL_targetVote = objNull;
                 private _currentOwner = WL_TARGET_FRIENDLY getVariable ["BIS_WL_owner", independent];
                 [WL_TARGET_FRIENDLY, _currentOwner] call WL2_fnc_sectorMarkerUpdate;
+
+                private _mapQueue = uiNamespace getVariable "WL2_mapSelectQueue";
+                {
+                    if (_x # 0 == "vote") then {
+                        _x set [1, true];
+                        _x set [3, objNull];
+                    };
+                } forEach _mapQueue;
             };
             // Started voting
             case 1: {
@@ -135,6 +143,7 @@ while { !BIS_WL_missionEnd } do {
                     "Voting" call WL2_fnc_announcer;
                     [localize "STR_A3_WL_popup_voting"] call WL2_fnc_smoothText;
                 };
+                call WL2_fnc_requestVote;
             };
             // Voted
             case 2: {};

@@ -10,6 +10,8 @@ if (getNumber (configFile >> "CfgVehicles" >> _spawnClass >> "isUav") == 1) then
     private _ownedUavs = _ownedVehicles select {
         private _isUav = unitIsUAV _x || getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "isUav") == 1;
         _isUav && alive _x
+    } select {
+        WL_UNIT(_x, "decoy", 0) == 0
     };
 
     private _uavLimit = WL_MAX_AUTOASSETS;

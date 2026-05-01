@@ -20,7 +20,8 @@ while { alive _asset } do {
     };
 
     private _vehiclesInRange = (_laserTarget nearEntities 50) select {
-        _x getVariable ["apsType", -1] > -1 &&
+        _x getVariable ["APS_apsType", 0] > 0
+    } select {
         [_x] call WL2_fnc_getAssetSide != _assetSide
     };
 

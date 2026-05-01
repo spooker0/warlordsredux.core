@@ -49,18 +49,22 @@ if (_action == "invited") exitWith {
         name _inviterPlayer
     };
 
-    playSoundUI ["a3\sounds_f\sfx\blip1.wss"];
-
     private _callbackConfirm = {
         params ["_inviter"];
+        private _queue = uiNamespace getVariable "WL2_timedPromptQueue";
+        {
+            if (_x # 0 == "squadInvite") then {
+                _x set [1, true];
+            };
+        } forEach _queue;
+
         ["add", [_inviter, getPlayerID player]] remoteExec ["SQD_fnc_server", 2];
     };
 
-    private _callbackCancel = {
-        playSoundUI ["AddItemFailed"];
-    };
+    private _callbackCancel = {};
 
     [
+        "squadInvite",
         format [localize "STR_WL_gotSquadInvite", _inviterName, _squad getOrDefault ["name", ""]],
         localize "STR_WL_accept", localize "STR_WL_decline",
         _callbackConfirm, _callbackCancel, [_inviter],

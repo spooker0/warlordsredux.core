@@ -103,8 +103,8 @@ while { !BIS_WL_missionEnd } do {
 	};
 	_repairControl ctrlSetStructuredText parseText _repairText;
 
-	private _apsType = cameraOn getVariable ["apsType", -1];
-	if (_apsType <= -1) then {
+	private _apsType = cameraOn getVariable ["APS_apsType", 0];
+	if (_apsType <= 0) then {
 		_apsTypeControl ctrlShow false;
 		_apsAmmoControl ctrlShow false;
 	} else {
@@ -122,10 +122,12 @@ while { !BIS_WL_missionEnd } do {
 			"#ff0000";
 		};
 		private _apsTypeName = switch (_apsType) do {
-			case 2: { "HEAVY" };
-			case 1: { "MEDIUM" };
-			case 0: { "LIGHT" };
-			default { "DAZZLER" };
+			case 5: { "HEAVY+" };
+			case 4: { "DEVICE" };
+			case 3: { "HEAVY" };
+			case 2: { "MEDIUM" };
+			case 1: { "LIGHT" };
+			default { "NONE" };
 		};
 		_apsTypeControl ctrlSetStructuredText parseText format ["<t shadow='2' size='1.1' color='%1'>APS: %2</t>", _apsActiveColor, _apsTypeName];
 		_apsTypeControl ctrlShow true;

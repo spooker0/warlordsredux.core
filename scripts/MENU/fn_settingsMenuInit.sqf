@@ -107,6 +107,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["category", "Performance"],
         ["slider", "Map icon refresh rate", [1, 100, 1, 4, "mapRefresh"]],
         ["slider", "Terrain details", [1, 4, 1, 3, "terrainDetails"]],
+        ["slider", "Incendiary strands", [5, 20, 1, 20, "incendiaryStrands"]],
         ["category", "Volume settings"],
         ["slider", "Announcer", [0, 1, 0.1, 1, "announcerVolume"]],
         ["slider", "APS warning", [0, 1, 0.1, 1, "apsVolume"]],

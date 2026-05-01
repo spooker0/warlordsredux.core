@@ -142,4 +142,8 @@ if (_playerFunds == -1) then {
 
 ["Database writes complete."] call _initLog;
 
+private _ratings = profileNamespace getVariable ["WL2_playerRatings", createHashMap];
+private _playerElo = _ratings getOrDefault [_uid, WL_RATING_STARTER];
+_warlord setVariable ["WL2_playerRating", _playerElo, true];
+
 _warlord setVariable ["WL2_playerSetupState", "Complete", _owner];

@@ -61,8 +61,8 @@ switch (_className) do {
         [player, "conscript"] remoteExec ["WL2_fnc_handleClientRequest", 2];
     };
     case "FTHome": {
-        BIS_WL_targetSector = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
-        [0, ""] spawn WL2_fnc_executeFastTravel;
+        private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
+        [0, _homeBase] spawn WL2_fnc_executeFastTravel;
     };
     case "FTPriority": {
         0 spawn {
@@ -223,36 +223,8 @@ switch (_className) do {
             uiNamespace setVariable ["WL2_canBuy", true];
         };
     };
-    case "AIGetIn": {
-        private _vehicle = vehicle player;
-        "RequestMenu_close" call WL2_fnc_setupUI;
-        if (isNull _vehicle) exitWith {};
-
-        private _aiToMove = (units group player) select { !isPlayer _x } select { alive _x } select { _x distance2D player < 150 } select { vehicle _x == _x };
-        if (count _aiToMove == 0) exitWith {
-            playSoundUI ["AddItemFailed"];
-            ["No eligible AI to move!"] call WL2_fnc_smoothText;
-        };
-
-        [_vehicle, _aiToMove] spawn {
-            params ["_vehicle", "_aiToMove"];
-            [format ["Moving %1 AI into vehicle when ready.", count _aiToMove]] call WL2_fnc_smoothText;
-
-            private _startWaitTime = serverTime;
-            waitUntil {
-                uiSleep 0.1;
-                !alive _vehicle || _vehicle turretLocal [0] || (serverTime - _startWaitTime > 30)
-            };
-
-            {
-                _x moveInGunner _vehicle;
-            } forEach _aiToMove;
-
-            playSoundUI ["AddItemOK"];
-        };
-    };
     case "RespawnBagFT": {
-        [4, ""] spawn WL2_fnc_executeFastTravel;
+        [4] spawn WL2_fnc_executeFastTravel;
         "RequestMenu_close" call WL2_fnc_setupUI;
     };
     case "WelcomeScreen": { 0 spawn WL2_fnc_welcome };

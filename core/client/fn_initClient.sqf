@@ -243,6 +243,8 @@ uiNamespace setVariable ["WL2_canBuy", true];
 uiNamespace setVariable ["WL2_chatHistory", []];
 uiNamespace setVariable ["WL2_modOverrideUid", ""];
 uiNamespace setVariable ["WL2_currentNotification", []];
+uiNamespace setVariable ["WL2_timedPromptQueue", []];
+uiNamespace setVariable ["WL2_mapSelectQueue", []];
 
 WL2_lastLoadout = getUnitLoadout player;
 [player] call WLC_fnc_onRespawn;
@@ -267,7 +269,6 @@ call WL2_fnc_pingFixInit;
 	};
 };
 
-0 spawn WL2_fnc_handleSelectionState;
 0 spawn WL2_fnc_handleEnemyCapture;
 0 spawn WL2_fnc_combatAirClient;
 0 spawn WL2_fnc_killHistory;

@@ -11,7 +11,10 @@ private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID play
 private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];
 _ownedVehicles = _ownedVehicles select { alive _x } select {
     WL_UNIT(_x, "obstacle", 0) == 0
+} select {
+    !(_x isKindOf "Man")
 };
+
 private _limitedVehicles = [];
 private _typeLimit = 0;
 

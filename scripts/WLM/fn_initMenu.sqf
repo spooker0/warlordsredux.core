@@ -428,7 +428,7 @@ private _nonHornWeapons = [];
 } forEach _assetTurrets;
 if (
     count _nonHornWeapons == 0 &&
-    _asset getVariable ["apsType", -1] != 3 &&
+    _asset getVariable ["APS_apsType", 0] != 4 &&
     _asset getVariable ["WL2_ecmCharges", -1] == -1 &&
     _asset getVariable ["WL2_smartMinesAP", -1] == -1 &&
     _asset getVariable ["WL2_smartMinesAT", -1] == -1 &&

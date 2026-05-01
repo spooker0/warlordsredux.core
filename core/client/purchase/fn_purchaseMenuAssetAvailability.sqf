@@ -165,11 +165,6 @@ if (_ret) then {
 				[WL2_fnc_checkCruiseMissileAvailable]
 			]
 		};
-		case "AIGetIn": {
-			[
-				[WL2_fnc_checkGroundVehicleDriver, [false]]
-			]
-		};
 		case "Conscription": {
 			[
 				[WL2_fnc_checkConscription]

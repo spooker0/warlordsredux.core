@@ -585,7 +585,7 @@ if (_action == "incendiary") exitWith {
 	} select {
 		side group _x != _side
 	} select {
-		private _radius = if (insideBuilding _x < 0.1) then { 20 } else { 40 };
+		private _radius = if (insideBuilding _x < 0.1) then { 80 } else { 160 };
 		(getPosASL _x) distance2D _firePosition < _radius
 	};
 
@@ -604,3 +604,40 @@ if (_action == "incendiary") exitWith {
 		};
 	} forEach _hitUnits;
 };
+
+// if (_action == "bomb") exitWith {
+// 	private _epicenter = _param1;
+// 	private _radius = _param2;
+// 	private _shotParents = _param3;
+
+// 	private _hitUnits = allUnits select {
+// 		WL_ISUP(_x)
+// 	} select {
+// 		side group _x != _side
+// 	} select {
+// 		_x distance2D _epicenter < _radius
+// 	};
+
+// 	{
+// 		private _damageParams = [_x, "", 1, _shotParents # 0, "82mm_Incendiary", -1, _sender, "", true, 2];
+// 		if (isPlayer _x) then {
+// 			_x setDamage [0.99, true, _shotParents # 0, _shotParents # 1];
+// 			_damageParams remoteExec ["WL2_fnc_handlePlayerDamage", _x];
+// 		} else {
+// 			if (side group _x == independent) then {
+// 				_x setDamage [1, true, _shotParents # 0, _shotParents # 1];
+// 			} else {
+// 				_x setDamage [0.99, true, _shotParents # 0, _shotParents # 1];
+// 				_damageParams remoteExec ["WL2_fnc_handleAIDamage", _x];
+// 			};
+// 		};
+// 	} forEach _hitUnits;
+
+// 	private _terrainObjects = nearestTerrainObjects [_epicenter, [], _radius, false, true];
+// 	{
+// 		if (!alive _x) then {
+// 			continue;
+// 		};
+// 		_x setDamage 1;
+// 	} forEach _terrainObjects;
+// };

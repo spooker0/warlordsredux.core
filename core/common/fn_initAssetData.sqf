@@ -66,6 +66,7 @@ private _menuButtonIconMap = createHashMapFromArray [
     ["ew", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
     ["fortify-stronghold", "A3\ui_f\data\map\mapcontrol\Ruin_CA.paa"],
     ["ft-ai", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
+    ["ft-ai-vic", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
     ["ft-asset", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
     ["ft-conflict", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],
     ["ft-fob", "A3\ui_f\data\map\markers\handdrawn\end_CA.paa"],

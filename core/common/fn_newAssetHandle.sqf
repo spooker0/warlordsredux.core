@@ -131,7 +131,7 @@ if (_asset isKindOf "Man") then {
 		};
 	};
 
-	if (_asset getVariable ["apsType", -1] > -1) then {
+	if (_asset getVariable ["APS_apsType", 0] > 0) then {
 		_asset setVariable ["WL2_apsActivated", true, true];
 	};
 
@@ -236,6 +236,7 @@ if (_asset isKindOf "Man") then {
 
 	private _mineClear = WL_ASSET_GET(_data, "mineClear", 0);
 	if (_mineClear > 0) then {
+		_asset setVariable ["WL2_mineClearer", true, true];
 		_asset setVariable ["WL2_mineClearCharges", _mineClear, true];
 		[_asset, _mineClear] remoteExec ["WL2_fnc_mineClearAction", 0, true];
 	};
@@ -245,8 +246,9 @@ if (_asset isKindOf "Man") then {
 		[_asset] spawn WL2_fnc_smartMine;
 	};
 
-	if (WL_ASSET_GET(_data, "dumbMine", 0) > 0) then {
-		_asset setVariable ["WL2_isMinefield", true, true];
+	private _mineData = WL_ASSET_GET(_data, "dumbMine", []);
+	if (count _mineData > 0) then {
+		_asset setVariable ["WL2_minefield", _mineData, true];
 	};
 
 	private _threatDetection = WL_ASSET_GET(_data, "threatDetection", 0);

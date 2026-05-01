@@ -41,13 +41,6 @@ if (_text == "!lowfps") exitWith {
     true;
 };
 
-if (_text == "!elo") exitWith {
-    if (_sentLocally) then {
-        [player] remoteExec ["WL2_fnc_broadcastRating", 2];
-    };
-    true;
-};
-
 if (_text == "!updateZeus") exitWith {
     if (_sentLocally && _isAdmin) then {
         [player, 'updateZeus'] remoteExec ['WL2_fnc_handleClientRequest', 2];

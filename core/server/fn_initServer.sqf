@@ -201,6 +201,7 @@ private _objectsToPreload = [
 	"Land_Dome_Small_F",
 	"Land_CraneRail_01_F",
 	"Land_TentHangar_V1_F",
+	"CargoNet_01_box_F",
 	"Land_BagBunker_Small_F",
 	"Land_BagBunker_01_large_green_F",
 	"Land_BagFence_Long_F",

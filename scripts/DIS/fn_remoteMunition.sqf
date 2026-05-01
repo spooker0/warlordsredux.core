@@ -88,6 +88,7 @@ private _callbackConfirm = {
 private _assetName = [_asset] call WL2_fnc_getAssetTypeName;
 
 [
+    "remoteMunition",
     format ["Control remote munition for %1 (Pilot: %2)?", _assetName, name driver _asset],
     "Control", "Don't Control",
     _callbackConfirm, _callbackCancel, _this,

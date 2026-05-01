@@ -180,6 +180,45 @@ if (_asset in units player) then {
         // return
         [_asset] call WL2_fnc_assetButtonFollow;
     }, false] call WL2_fnc_addTargetMapButton;
+
+    // Fast Travel AI Button
+    private _fastTravelAIExecute = {
+        params ["_asset"];
+        _asset setPosASL (getPosASL player);
+    };
+    [
+        _asset, _targetId,
+        "ft-ai",
+        "Fast travel AI to you",
+        _fastTravelAIExecute,
+        true,
+        "fastTravelAI",
+        [
+            0,
+            "FTAI",
+            "Fast Travel"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
+
+    // Fast Travel AI to Vehicle
+    private _fastTravelAIVehicleExecute = {
+        params ["_asset"];
+        _asset moveInAny (vehicle player);
+        playSoundUI ["AddItemOK"];
+    };
+    [
+        _asset, _targetId,
+        "ft-ai-vic",
+        "Fast travel AI into your vehicle",
+        _fastTravelAIVehicleExecute,
+        true,
+        "fastTravelAIVehicle",
+        [
+            0,
+            "FTAI",
+            "Fast Travel"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
 };
 
 private _isTent = typeof _asset in ["Land_TentSolar_01_bluewhite_F", "Land_TentDome_F", "Land_TentSolar_01_redwhite_F", "Land_TentA_F"];
@@ -189,7 +228,7 @@ if (_ownsVehicle && _isTent) then {
             ["Cannot fast travel."] call WL2_fnc_smoothText;
             playSoundUI ["AddItemFailed"];
         };
-        [4, ""] spawn WL2_fnc_executeFastTravel;
+        [4] spawn WL2_fnc_executeFastTravel;
     }, true, "", [0, "RespawnBagFT", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
 };
 
@@ -211,14 +250,8 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         params ["_asset"];
         private _dome = _asset getVariable ["WL2_forwardBaseDome", objNull];
         if (isNull _dome) then {
-            BIS_WL_targetSector = nil;
-
-            private _marker = createMarkerLocal ["WL2_fastTravelFOBMarker", getPosATL _asset];
-            _marker setMarkerShapeLocal "ELLIPSE";
-            _marker setMarkerSizeLocal [WL_FOB_RANGE, WL_FOB_RANGE];
-            _marker setMarkerAlphaLocal 0;
-
-            [6, "WL2_fastTravelFOBMarker"] spawn WL2_fnc_executeFastTravel;
+            private _forwardBaseArea = [getPosASL _asset, WL_FOB_RANGE, WL_FOB_RANGE, 0, false];
+            [6, _forwardBaseArea] spawn WL2_fnc_executeFastTravel;
         } else {
             [_dome] spawn WL2_fnc_executeFastTravelVehicle;
         };
@@ -240,11 +273,8 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     // Vehicle Paradrop Button
     private _vehicleParadropFOBExecute = {
         params ["_asset"];
-        private _marker = createMarkerLocal ["WL2_fastTravelFOBMarker", getPosATL _asset];
-        _marker setMarkerShapeLocal "ELLIPSE";
-        _marker setMarkerSizeLocal [200, 200];
-        _marker setMarkerAlphaLocal 0;
-        [7, "WL2_fastTravelFOBMarker"] spawn WL2_fnc_executeFastTravel;
+        private _forwardBaseArea = [getPosASL _asset, WL_FOB_RANGE * 2, WL_FOB_RANGE * 2, 0, false];
+        [7, _forwardBaseArea] spawn WL2_fnc_executeFastTravel;
     };
     [
         _asset, _targetId,
@@ -405,12 +435,8 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         params ["_asset"];
         ["Testing Sector Stronghold spawns. Force respawn to end test."] call WL2_fnc_smoothText;
         while { alive player } do {
-            private _marker = createMarkerLocal ["WL2_fastTravelFOBMarker", getPosATL _asset];
-            _marker setMarkerShapeLocal "ELLIPSE";
-            _marker setMarkerSizeLocal [WL_FOB_RANGE, WL_FOB_RANGE];
-            _marker setMarkerAlphaLocal 0;
-
-            [6, "WL2_fastTravelFOBMarker"] spawn WL2_fnc_executeFastTravel;
+            private _forwardBaseArea = [getPosASL _asset, WL_FOB_RANGE, WL_FOB_RANGE, 0, false];
+            [6, _forwardBaseArea] spawn WL2_fnc_executeFastTravel;
             uiSleep 3;
         };
     };
@@ -505,25 +531,6 @@ private _fastTravelSquadmateExecute = {
     ]
 ] call WL2_fnc_addTargetMapButton;
 
-// Fast Travel AI Button
-private _fastTravelAIExecute = {
-    params ["_asset"];
-    _asset setPosASL (getPosASL player);
-};
-[
-    _asset, _targetId,
-    "ft-ai",
-    "Fast travel AI to you",
-    _fastTravelAIExecute,
-    true,
-    "fastTravelAI",
-    [
-        0,
-        "FTAI",
-        "Fast Travel"
-    ]
-] call WL2_fnc_addTargetMapButton;
-
 private _findIsStronghold = (BIS_WL_sectorsArray # 2) select {
     (_x getVariable ["WL_stronghold", objNull]) == _asset
 };
@@ -537,8 +544,8 @@ if (count _findIsStronghold > 0) then {
         };
         if (count _findSector == 0) exitWith {};
 
-        BIS_WL_targetSector = (_findSector # 0);
-        [5, ""] spawn WL2_fnc_executeFastTravel;
+        private _sector = (_findSector # 0);
+        [5, _sector] spawn WL2_fnc_executeFastTravel;
     };
     [
         _asset, _targetId,
@@ -562,8 +569,8 @@ if (count _findIsStronghold > 0) then {
         };
         if (count _findSector == 0) exitWith {};
 
-        BIS_WL_targetSector = (_findSector # 0);
-        [8, ""] spawn WL2_fnc_executeFastTravel;
+        private _sector = (_findSector # 0);
+        [8, _sector] spawn WL2_fnc_executeFastTravel;
     };
     [
         _asset, _targetId,
@@ -703,10 +710,10 @@ if (count _findIsStronghold > 0) then {
         private _findSector = (BIS_WL_sectorsArray # 2) select {
             (_x getVariable ["WL_stronghold", objNull]) == _asset
         };
-        BIS_WL_targetSector = (_findSector # 0);
+        private _sector = (_findSector # 0);
         ["Testing Sector Stronghold spawns. Force respawn to end test."] call WL2_fnc_smoothText;
         while { alive player } do {
-            [5, ""] spawn WL2_fnc_executeFastTravel;
+            [5, _sector] spawn WL2_fnc_executeFastTravel;
             uiSleep 3;
         };
     };

@@ -1,13 +1,30 @@
 #include "includes.inc"
-params ["_modalText", "_confirmText", "_cancelText", "_callbackConfirm", "_callbackCancel", "_callbackParams", "_timeout", "_defaultTrue"];
+params ["_modalType", "_modalText", "_confirmText", "_cancelText", "_callbackConfirm", "_callbackCancel", "_callbackParams", "_timeout", "_defaultTrue"];
+
+private _queue = uiNamespace getVariable "WL2_timedPromptQueue";
+if (isNil "_queue") exitWith {};
 
 private _display = uiNamespace getVariable ["RscWLPromptDisplay", displayNull];
-if (!isNull _display) exitWith {
+
+private _queueEntry = [_modalType, false];
+_queue pushBack _queueEntry;
+
+waitUntil {
+    uiSleep 0.01;
+    (_queue # 0) isEqualRef _queueEntry && isNull (uiNamespace getVariable ["RscWLPromptDisplay", displayNull]);
+};
+
+if (_queueEntry # 1) exitWith {
+    _queue deleteAt 0;
     _callbackParams spawn _callbackCancel;
 };
 
+uiSleep 0.5;
+
 "TimedPrompt" cutRsc ["RscWLPromptDisplay", "PLAIN", -1, true, true];
 _display = uiNamespace getVariable ["RscWLPromptDisplay", displayNull];
+
+playSoundUI ["a3\missions_f_oldman\data\sound\phone_sms\chime\phone_sms_chime_07.wss", 1];
 
 private _titleControl = _display displayCtrl 41002;
 private _displayText = format [
@@ -45,3 +62,5 @@ if (_doAction) then {
 };
 
 "TimedPrompt" cutText ["", "PLAIN"];
+
+_queue deleteAt 0;

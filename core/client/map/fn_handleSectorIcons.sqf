@@ -8,7 +8,6 @@ if (count _nearbySectors == 0 && isNull WL_SectorActionTarget) exitWith {};
 if (count _nearbySectors == 0) exitWith {
     BIS_WL_highlightedSector = objNull;
     WL_SectorActionTarget = objNull;
-    call WL2_fnc_updateSelectionState;
 };
 
 private _sector = _nearbySectors # 0;
@@ -24,16 +23,6 @@ private _sectorHasOptions = false;
 } forEach _conditions;
 WL_SectorActionTargetActive = _sectorHasOptions;
 
-private _selectionActive = BIS_WL_currentSelection in [
-    WL_ID_SELECTION_ORDERING_AIRCRAFT,
-    WL_ID_SELECTION_FAST_TRAVEL,
-    WL_ID_SELECTION_FAST_TRAVEL_CONTESTED,
-    WL_ID_SELECTION_FAST_TRAVEL_VEHICLE,
-    WL_ID_SELECTION_FAST_TRAVEL_STRONGHOLD,
-    WL_ID_SELECTION_SCAN,
-    WL_ID_SELECTION_COMBAT_AIR
-];
-private _votingActive = WL_VotePhase != 0;
 private _services = _sector getVariable ["WL2_services", []];
 
 private _side = BIS_WL_playerSide;
@@ -201,15 +190,21 @@ _sector setVariable ["WL2_sectorInfo", _sectorInfo];
 private _isNewSelection = WL_SectorActionTarget != _sector;
 
 WL_SectorActionTarget = _sector;
-call WL2_fnc_updateSelectionState;
 
-if ((!_selectionActive && !_votingActive) || !(_sector in BIS_WL_selection_availableSectors)) exitWith {
+private _mapQueue = uiNamespace getVariable "WL2_mapSelectQueue";
+if (count _mapQueue == 0) exitWith {
     BIS_WL_highlightedSector = objNull;
 };
 
-BIS_WL_highlightedSector = _sector;
-if (_isNewSelection) then {
-    playSoundUI ["clickSoft", 1];
+private _lastEntry = _mapQueue # (count _mapQueue - 1);
+private _eligibilityCallback = _lastEntry # 2;
+private _arguments = _lastEntry # 3;
+
+if ([_sector, _arguments] call _eligibilityCallback) then {
+    BIS_WL_highlightedSector = _sector;
+    if (_isNewSelection) then {
+        playSoundUI ["clickSoft", 1];
+    };
 };
 
 if (inputMouse 0 == 0) exitWith {};
@@ -219,18 +214,9 @@ if (!isNull _singletonScriptHandle) exitWith {};
 
 private _singletonScriptHandle = [_sector] spawn {
     params ["_sector"];
-    private _orderSelectionActive = BIS_WL_currentSelection in [
-        WL_ID_SELECTION_ORDERING_AIRCRAFT,
-        WL_ID_SELECTION_FAST_TRAVEL,
-        WL_ID_SELECTION_FAST_TRAVEL_CONTESTED,
-        WL_ID_SELECTION_FAST_TRAVEL_VEHICLE,
-        WL_ID_SELECTION_FAST_TRAVEL_STRONGHOLD
-    ];
-    private _scanSelectionActive = BIS_WL_currentSelection == WL_ID_SELECTION_SCAN;
-    private _combatAirActive = BIS_WL_currentSelection == WL_ID_SELECTION_COMBAT_AIR;
-    private _votingActive = WL_VotePhase != 0;
 
-    if !(_orderSelectionActive || _scanSelectionActive || _combatAirActive || _votingActive) exitWith {
+    private _mapQueue = uiNamespace getVariable "WL2_mapSelectQueue";
+    if (count _mapQueue == 0) exitWith {
         BIS_WL_highlightedSector = objNull;
         waitUntil {
             uiSleep 0.001;
@@ -238,82 +224,18 @@ private _singletonScriptHandle = [_sector] spawn {
         };
     };
 
-    call WL2_fnc_updateSelectionState;
+    private _lastEntry = _mapQueue # (count _mapQueue - 1);
+    private _eligibilityCallback = _lastEntry # 2;
+    private _arguments = _lastEntry # 3;
 
-    private _availableSectors = BIS_WL_selection_availableSectors;
-
-    if !(_sector in _availableSectors) exitWith {
-        waitUntil {
-            uiSleep 0.001;
-            inputMouse 0 == 0;
-        };
+    if ([_sector, _arguments] call _eligibilityCallback) then {
+        _lastEntry set [1, true];
+        _lastEntry set [4, _sector];
     };
 
-    if (WL_VotePhase == 1) exitWith {
-        BIS_WL_targetVote = _sector;
-        BIS_WL_highlightedSector = _sector;
-        private _targetVoteVar = format ["BIS_WL_targetVote_%1", getPlayerID player];
-        missionNamespace setVariable [_targetVoteVar, _sector, 2];
-        playSound "AddItemOK";
-        waitUntil {
-            uiSleep 0.001;
-            inputMouse 0 == 0;
-        };
-    };
-
-    if (_orderSelectionActive) exitWith {
-        BIS_WL_targetSector = _sector;
-        playSound "AddItemOK";
-
-        waitUntil {
-            uiSleep 0.001;
-            inputMouse 0 == 0;
-        };
-    };
-
-    private _side = BIS_WL_playerSide;
-    private _lastScannedVar = format ["WL2_lastScanned_%1", _side];
-    private _lastScan = _sector getVariable [_lastScannedVar, -9999];
-
-    if (_scanSelectionActive) exitWith {
-        if (_lastScan < serverTime - WL_COOLDOWN_SCAN) then {
-            BIS_WL_targetSector = _sector;
-            playSound "AddItemOK";
-        } else {
-            playSound "AddItemFailed";
-        };
-
-        waitUntil {
-            uiSleep 0.001;
-            inputMouse 0 == 0;
-        };
-    };
-
-    if (_combatAirActive) exitWith {
-        if ((_sector getVariable ["WL2_nextCombatAir", -9999]) < serverTime) then {
-            BIS_WL_targetSector = _sector;
-            playSound "AddItemOK";
-        } else {
-            playSound "AddItemFailed";
-        };
-
-        waitUntil {
-            uiSleep 0.001;
-            inputMouse 0 == 0;
-        };
-    };
-
-    if (WL_VotePhase == 2) exitWith {
-        BIS_WL_targetVote = _sector;
-        BIS_WL_highlightedSector = _sector;
-        private _targetVoteVar = format ["BIS_WL_targetVote_%1", getPlayerID player];
-        missionNamespace setVariable [_targetVoteVar, _sector, 2];
-        playSound "AddItemOK";
-
-        waitUntil {
-            uiSleep 0.001;
-            inputMouse 0 == 0;
-        };
+    waitUntil {
+        uiSleep 0.001;
+        inputMouse 0 == 0;
     };
 };
 

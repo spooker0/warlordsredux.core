@@ -11,10 +11,7 @@ if !(visibleMap) then {
 
 uiNamespace setVariable ["WL2_waterDropCost", _cost];
 uiNamespace setVariable ["WL2_waterDropPos", []];
-
-private _selectionBefore = BIS_WL_currentSelection;
-BIS_WL_currentSelection = WL_ID_SELECTION_ORDERING_NAVAL;
-WL_MapBusy pushBack "orderNaval";
+uiNamespace setVariable ["WL2_isOrderingWater", true];
 
 private _mapClickEH = addMissionEventHandler ["MapSingleClick", {
 	params ["_units", "_pos", "_alt", "_shift"];
@@ -65,10 +62,6 @@ waitUntil {
 	count _waterDropPos > 0 || !visibleMap;
 };
 
-if (BIS_WL_currentSelection == WL_ID_SELECTION_ORDERING_NAVAL) then {
-	BIS_WL_currentSelection = _selectionBefore;
-};
-
 removeMissionEventHandler ["MapSingleClick", _mapClickEH];
 
 private _waterDropPos = uiNamespace getVariable ["WL2_waterDropPos", []];
@@ -77,7 +70,7 @@ if (count _waterDropPos == 0) exitWith {
 	[localize "STR_A3_WL_airdrop_canceled"] call WL2_fnc_smoothText;
 
 	uiSleep 1;
-	WL_MapBusy = WL_MapBusy - ["orderNaval"];
+	uiNamespace setVariable ["WL2_isOrderingWater", false];
 };
 
 playSound3D ["A3\Data_F_Warlords\sfx\flyby.wss", objNull, false, [_waterDropPos # 0, _waterDropPos # 1, 100]];
@@ -88,6 +81,4 @@ _waterDropPos set [2, 0];
 playSound "AddItemOK";
 
 [player, "orderAsset", "naval", _waterDropPos, _class, false] remoteExec ["WL2_fnc_handleClientRequest", 2];
-
-uiSleep 1;
-WL_MapBusy = WL_MapBusy - ["orderNaval"];
+uiNamespace setVariable ["WL2_isOrderingWater", false];

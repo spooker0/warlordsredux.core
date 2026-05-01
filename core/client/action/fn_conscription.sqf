@@ -7,16 +7,20 @@ if (WL_IsSpectator) exitWith {};
 
 uiSleep 1;
 
-playSoundUI ["a3\missions_f_oldman\data\sound\phone_sms\chime\phone_sms_chime_07.wss", 1];
-
 private _teamPriorityVar = format ["WL2_teamPriority_%1", _side];
 private _teamPriority = missionNamespace getVariable [_teamPriorityVar, objNull];
-if (WL_ISUP(player) && player distance2D _teamPriority < 50) exitWith {};
 if (WL_ISUP(player) && vehicle player != player) exitWith {};
 
 private _callText = format [localize "STR_WL_conscriptMessage", name _conscripter];
 
 private _callbackConfirm = {
+    private _queue = uiNamespace getVariable "WL2_timedPromptQueue";
+    {
+        if (_x # 0 == "conscription") then {
+            _x set [1, true];
+        };
+    } forEach _queue;
+
     if (WL_ISDOWN(player)) then {
         setPlayerRespawnTime 0.1;
         forceRespawn player;
@@ -34,11 +38,10 @@ private _callbackConfirm = {
     };
 };
 
-private _callbackCancel = {
-    playSoundUI ["AddItemFailed"];
-};
+private _callbackCancel = {};
 
 [
+    "conscription",
     _callText,
     localize "STR_WL_goButton", localize "STR_WL_refuseButton",
     _callbackConfirm, _callbackCancel, [],

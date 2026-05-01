@@ -26,7 +26,7 @@ function formatScore(value) {
     return (value / 1_000_000).toFixed(1) + 'M';
 }
 
-function renderScoreboard(players, firstRender) {
+function renderScoreboard(players, bluforRating, opforRating) {
     const makeCell = (value, className) => {
         const div = document.createElement('div');
         if (className) div.className = className;
@@ -134,8 +134,8 @@ function renderScoreboard(players, firstRender) {
     clearNode(bluFooterRow);
     clearNode(opfFooterRow);
 
-    renderFooter(bluFooterRow, 'BLUFOR', bluforTotals);
-    renderFooter(opfFooterRow, 'OPFOR', opforTotals);
+    renderFooter(bluFooterRow, `BLUFOR (${bluforRating})`, bluforTotals);
+    renderFooter(opfFooterRow, `OPFOR (${opforRating})`, opforTotals);
 }
 
 const STEP = 50;

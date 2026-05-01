@@ -1,6 +1,6 @@
 #include "includes.inc"
 params ["_asset"];
-if (_asset getVariable ["apsType", -1] <= -1) exitWith {};
+if (_asset getVariable ["APS_apsType", 0] <= 0) exitWith {};
 private _apsActive = _asset getVariable ["WL2_apsActivated", false];
 if (_apsActive) then {
     _asset setVariable ["WL2_apsActivated", false, true];

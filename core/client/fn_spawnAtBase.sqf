@@ -55,5 +55,5 @@ if (_isBaseVulnerable) then {
         [player] spawn WL2_fnc_parachuteSetup;
     };
 } else {
-    player setVehiclePosition [_homeBaseLocation, [], 0, "NONE"];
+    player setVehiclePosition [_homeBaseLocation, [], 5, "NONE"];
 };

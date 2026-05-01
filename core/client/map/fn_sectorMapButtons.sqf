@@ -33,8 +33,7 @@ if (_sectorFrontlineCheck) then {
 // Fast Travel Seized Button
 private _fastTravelSeizedExecute = {
     params ["_sector"];
-    BIS_WL_targetSector = _sector;
-    [0, ""] spawn WL2_fnc_executeFastTravel;
+    [0, _sector] spawn WL2_fnc_executeFastTravel;
 };
 [
     _sector, _targetId,
@@ -53,8 +52,8 @@ private _fastTravelSeizedExecute = {
 // Fast Travel Home Button
 private _fastTravelHomeExecute = {
     params ["_sector"];
-    BIS_WL_targetSector = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
-    [0, ""] spawn WL2_fnc_executeFastTravel;
+    private _sideBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
+    [0, _sideBase] spawn WL2_fnc_executeFastTravel;
 };
 [
     _sector, _targetId,
@@ -73,8 +72,7 @@ private _fastTravelHomeExecute = {
 // Fast Travel Stronghold
 private _fastTravelStrongholdExecute = {
     params ["_sector"];
-    BIS_WL_targetSector = _sector;
-    [5, ""] spawn WL2_fnc_executeFastTravel;
+    [5, _sector] spawn WL2_fnc_executeFastTravel;
 };
 [
     _sector, _targetId,
@@ -94,15 +92,7 @@ private _fastTravelStrongholdExecute = {
 // Fast Travel Conflict Button
 private _fastTravelConflictExecute = {
     params ["_sector"];
-    BIS_WL_targetSector = _sector;
-
-    private _fastTravelConflictCall = 1 call WL2_fnc_fastTravelConflictMarker;
-    private _marker = _fastTravelConflictCall # 0;
-    [1, _marker] call WL2_fnc_executeFastTravel;
-    deleteMarkerLocal _marker;
-
-    private _markerText = _fastTravelConflictCall # 1;
-    deleteMarkerLocal _markerText;
+    [1, _sector] call WL2_fnc_executeFastTravel;
 };
 [
     _sector, _targetId,
@@ -122,15 +112,7 @@ private _fastTravelConflictExecute = {
 // Air Assault Button
 private _airAssaultExecute = {
     params ["_sector"];
-    BIS_WL_targetSector = _sector;
-
-    private _fastTravelConflictCall = 2 call WL2_fnc_fastTravelConflictMarker;
-    private _marker = _fastTravelConflictCall # 0;
-    [2, _marker] call WL2_fnc_executeFastTravel;
-    deleteMarkerLocal _marker;
-
-    private _markerText = _fastTravelConflictCall # 1;
-    deleteMarkerLocal _markerText;
+    [2, _sector] call WL2_fnc_executeFastTravel;
 };
 [
     _sector, _targetId,
@@ -149,8 +131,7 @@ private _airAssaultExecute = {
 // Vehicle Paradrop Button
 private _vehicleParadropExecute = {
     params ["_sector"];
-    BIS_WL_targetSector = _sector;
-    [3, ""] call WL2_fnc_executeFastTravel;
+    [3, _sector] call WL2_fnc_executeFastTravel;
 };
 [
     _sector, _targetId,
@@ -169,7 +150,6 @@ private _vehicleParadropExecute = {
 // Scan Button
 private _scanExecute = {
     params ["_sector"];
-    BIS_WL_targetSector = _sector;
     [player, "scan", [], _sector] remoteExec ["WL2_fnc_handleClientRequest", 2];
 };
 [

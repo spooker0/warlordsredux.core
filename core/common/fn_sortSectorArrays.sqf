@@ -47,17 +47,9 @@ while { _lastLinkCount < count _linked } do {
 	private _sector = _x;
 	private _wasLinkOwner = _sector getVariable ["WL2_linkedOwner", sideUnknown];
 	if (_wasLinkOwner != _side) then {
-		_sector setVariable ["WL2_linkedOwner", _side, true];
+		_sector setVariable ["WL2_linkedOwner", _side];
 	};
 } forEach _linked;
-
-// private _available = _pool select {
-// 	_x getVariable ["BIS_WL_owner", sideUnknown] != _side
-// } select {
-// 	private _connections = _x getVariable ["WL2_connectedSectors", []];
-// 	private _connectedToLinks = _connections arrayIntersect _linked;
-// 	count _connectedToLinks > 0
-// };
 
 {
 	private _sector = _x;

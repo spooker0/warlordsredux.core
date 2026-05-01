@@ -178,13 +178,6 @@ private _strategyArr = [
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"Find and control a collaborator in the local population within 4km, that is not in the sector your team is attacking."
 	], [
-		"AIGetIn",
-		0,
-		[],
-		"AI get in",
-		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"Your AI within 50m radius will be forced into the vehicle you are driving."
-	], [
 		"RemoveUnits",
 		0,
 		[],
