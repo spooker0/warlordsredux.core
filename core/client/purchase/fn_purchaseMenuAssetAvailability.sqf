@@ -95,7 +95,6 @@ if (_ret) then {
 				[WL2_fnc_checkPlayerInVehicle]
 			]
 		};
-		case "FTConflict";
 		case "FTAirAssault": {
 			[
 				[WL2_fnc_checkIndependents],

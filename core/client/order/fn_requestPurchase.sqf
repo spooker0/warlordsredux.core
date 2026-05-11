@@ -20,7 +20,7 @@ private _upgradedForwardBases = _potentialBases select {
 };
 
 if (_isPlane && count _upgradedForwardBases == 0) then {
-	[_class, _cost, _requirements] spawn WL2_fnc_orderAircraft;
+	[_class, _cost] spawn WL2_fnc_orderAircraft;
 } else {
 	[_class, _cost, _offset] spawn WL2_fnc_orderVehicle;
 };

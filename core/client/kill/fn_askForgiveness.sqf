@@ -12,12 +12,13 @@ private _callbackConfirm = {};
 
 private _callbackCancel = {
 	params ["_killer", "_victim"];
-    [_killer, player, false, _victim] remoteExec ["WL2_fnc_forgiveTeamkill", 2];
+    [_killer, player, _victim] remoteExec ["WL2_fnc_forgiveTeamkill", 2];
 };
 
 [
     "teamkill",
     _forgiveText,
+    "\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa",
     "Forgive", "Don't forgive",
     _callbackConfirm, _callbackCancel, [_killer, _victim],
     20, false

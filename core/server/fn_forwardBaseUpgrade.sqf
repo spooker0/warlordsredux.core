@@ -20,15 +20,6 @@ if (_level == 3) then {
     private _railPosition = _backHangar modelToWorld [0, 26, 0];
     private _catapultRail = [_sender, _railPosition, "Land_CraneRail_01_F", getDir _forwardBase, false, false] call WL2_fnc_orderGround;
 
-    private _scoutPlaneType = if (_side == west) then {
-        "B_Scout_Falcon"
-    } else {
-        "O_Scout_Falcon"
-    };
-
-    private _planePosition = _forwardBase modelToWorld [0, -30, 0];
-    private _scoutPlane = [_sender, _planePosition, _scoutPlaneType, getDir _backHangar, false, false] call WL2_fnc_orderGround;
-
     private _assetChildren = _forwardBase getVariable ["WL2_children", []];
     _assetChildren pushBack _backHangar;
     _assetChildren pushBack _catapultRail;

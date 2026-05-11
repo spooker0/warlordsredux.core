@@ -7,10 +7,8 @@ params [
     ["_distanceBeforeNotch", WL_SAM_NOTCH_ACTIVE_DIST]
 ];
 
-private _detectors = vehicles select { alive _x }
-    select { count crew _x > 0 }
+private _detectors = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles) select { alive _x }
     select { [_x] call WL2_fnc_getAssetSide != [_unit] call WL2_fnc_getAssetSide }
-    select { ((getPosATL _x) # 2) > 50 }
     select {
         private _detectionRadius = _x getVariable ["DIS_missileDetector", 0];
         _detectionRadius > 0 && (_x distance2D _projectile) < _detectionRadius

@@ -732,34 +732,17 @@ private _scanners = if (_drawAll) then {
 
 	private _position = getPosASL _x;
 
-    private _scanRadius = _x getVariable ["WL_scanRadius", 100];
-	if (_scanRadius == 0) then { continue; };
-    private _assetActualType = WL_ASSET_TYPE(_x);
-	private _hasAirRadar = WL_ASSET_FIELD(_assetData, _assetActualType, "hasAirRadar", 0) > 0;
-	if (_hasAirRadar) then {
-		if (cameraOn == _x || _x in _assetTargets) then {
-			_drawSemiCircles pushBack [
-				60,
-				[1, 1, 1, 0.3],
-				_position,
-				_scanRadius,
-				getDirVisual _x,
-				true
-			];
-		};
-	} else {
-		private _isNotThreatDetector = WL_ASSET_FIELD(_assetData, _assetActualType, "threatDetection", 0) == 0;
-		if (_isNotThreatDetector) then {
-			_drawEllipses pushBack [
-				_position,
-				_scanRadius,
-				_scanRadius,
-				0,
-				[0, 1, 1, 1],
-				"#(rgb,1,1,1)color(0,1,1,0.15)"
-			];
-		};
-	};
+    private _scanRadius = _x getVariable ["WL_scanRadius", -1];
+	if (_scanRadius < 0) then { continue; };
+
+	_drawEllipses pushBack [
+		_position,
+		_scanRadius,
+		_scanRadius,
+		0,
+		[0, 1, 1, 1],
+		"#(rgb,1,1,1)color(0,1,1,0.15)"
+	];
 } forEach _scanners;
 
 // Combat air patrol areas
@@ -786,7 +769,10 @@ private _combatAirAreas = _mapData getOrDefault ["combatAirAreas", []];
 	};
 
 	private _startTime = _x getVariable ["WL2_combatAirStart", 0];
-	private _areaRadius = (serverTime - _startTime) * WL_COMBAT_AIR_PERSEC;
+	private _timeElapsed = serverTime - _startTime;
+	private _timeStepsElapsed = 5 * ceil (_timeElapsed / 5);
+	private _areaRadius = _timeStepsElapsed * WL_COMBAT_AIR_PERSEC;
+
 	_areaRadius = _areaRadius min WL_COMBAT_AIR_RADIUS;
 	_drawEllipses pushBack [
 		_targetPos,
@@ -884,6 +870,14 @@ private _airWrecks = _mapData getOrDefault ["airWrecks", []];
 	private _position = getPosASL _x;
 	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
 	private _assetTypeName = [_x] call WL2_fnc_getAssetTypeName;
+
+	private _deadTime = _x getVariable ["WL2_timeOfDeath", -1];
+	private _wreckTime = if (_deadTime >= 0) then {
+		serverTime - _deadTime
+	} else {
+		_x getEntityInfo 3
+	};
+
 	private _wreckTimer = [_x getEntityInfo 3, "MM:SS"] call BIS_fnc_secondsToString;
 	_drawIcons pushBack [
 		"\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa",

@@ -6,7 +6,21 @@ private _class = WL_ASSET(_orderedClass, "spawn", _orderedClass);
 
 private _owner = owner _sender;
 
-private _sector = (_pos nearObjects ["Logic", 10]) select { _x in BIS_WL_allSectors } select 0;
+private _findCurrentOwnedSector = BIS_WL_allSectors select {
+	_pos inArea (_x getVariable "objectAreaComplete")
+};
+private _sector = if (count _findCurrentOwnedSector > 0) then {
+	_findCurrentOwnedSector # 0;
+} else {
+	objNull;
+};
+
+if (isNull _sector) exitWith {
+	["Ordering aircraft failed. No sector found."] remoteExec ["WL2_fnc_smoothText", _owner];
+	_sender setVariable ["BIS_WL_isOrdering", false, [2, _owner]];
+	[_cost, getPlayerUID _sender, false, ""] call WL2_fnc_fundsDatabaseWrite;
+};
+
 private _spawnParams = [_sector] call WL2_fnc_getAirSectorSpawn;
 _spawnParams params ["_spawnPos", "_dir"];
 
@@ -16,7 +30,7 @@ if (count _spawnPos == 0) exitWith {
 	_sender setVariable ["BIS_WL_isOrdering", false, [2, _owner]];
 
 	// refund if nothing spawned
-	[_cost, getPlayerUID _sender] call WL2_fnc_fundsDatabaseWrite;
+	[_cost, getPlayerUID _sender, false, ""] call WL2_fnc_fundsDatabaseWrite;
 };
 
 private _isUav = getNumber (configFile >> "CfgVehicles" >> _class >> "isUav") == 1;

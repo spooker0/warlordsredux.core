@@ -82,21 +82,12 @@
 		private _vehicles = vehicles select { alive _x };
 		private _activeVehicles = +_vehicles;
 		private _scannerUnits = _activeVehicles select {
-			_x getVariable ["WL_scannerOn", false]
+			_x getVariable ["WL_scanRadius", -1] > 0
 		};
 		_mapData set ["scannersAll", _scannerUnits];
 
 		private _scannerUnitTeam = _scannerUnits select {
-			if (([_x] call WL2_fnc_getAssetSide) == _side) then {
-				true
-			} else {
-				if (_x distance cameraOn < 2000) then {
-					private _assetActualType = WL_ASSET_TYPE(_x);
-					WL_ASSET_FIELD(_assetData, _assetActualType, "hasScanner", 0) == 1
-				} else {
-					false
-				};
-			};
+			_x distance cameraOn < 2000 || ([_x] call WL2_fnc_getAssetSide) == _side
 		};
 		_mapData set ["scannersTeam", _scannerUnitTeam];
 

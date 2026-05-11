@@ -66,6 +66,7 @@ if (_action == "invited") exitWith {
     [
         "squadInvite",
         format [localize "STR_WL_gotSquadInvite", _inviterName, _squad getOrDefault ["name", ""]],
+        "\a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa",
         localize "STR_WL_accept", localize "STR_WL_decline",
         _callbackConfirm, _callbackCancel, [_inviter],
         15, false

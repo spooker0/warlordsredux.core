@@ -18,6 +18,14 @@
             _texture ctrlWebBrowserAction ["ExecJS", "hideSectorVote();"];
         };
 
+        if (WL_VotePhase != 0) then {
+            private _eligibleSectors = BIS_WL_sectorsArray # 1;
+            {
+                private _sector = _x;
+                _sector setVariable ["WL2_sectorSelectionAvailable", _sector in _eligibleSectors];
+            } forEach BIS_WL_allSectors;
+        };
+
         private _targetReset = missionNamespace getVariable [format ["WL_targetReset_%1", BIS_WL_playerSide], false];
         if (isNull WL_TARGET_FRIENDLY || _targetReset) then {
             private _voteEndVar = format ["WL2_voteEnd_%1", BIS_WL_playerSide];
@@ -122,13 +130,10 @@ while { !BIS_WL_missionEnd } do {
                 private _currentOwner = WL_TARGET_FRIENDLY getVariable ["BIS_WL_owner", independent];
                 [WL_TARGET_FRIENDLY, _currentOwner] call WL2_fnc_sectorMarkerUpdate;
 
-                private _mapQueue = uiNamespace getVariable "WL2_mapSelectQueue";
                 {
-                    if (_x # 0 == "vote") then {
-                        _x set [1, true];
-                        _x set [3, objNull];
-                    };
-                } forEach _mapQueue;
+                    private _sector = _x;
+                    _sector setVariable ["WL2_sectorSelectionAvailable", false];
+                } forEach BIS_WL_allSectors;
             };
             // Started voting
             case 1: {
@@ -143,7 +148,6 @@ while { !BIS_WL_missionEnd } do {
                     "Voting" call WL2_fnc_announcer;
                     [localize "STR_A3_WL_popup_voting"] call WL2_fnc_smoothText;
                 };
-                call WL2_fnc_requestVote;
             };
             // Voted
             case 2: {};

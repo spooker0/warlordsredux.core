@@ -4,7 +4,7 @@ params ["_teamkiller", "_forgiver", "_victim"];
 if (!isServer) exitWith {};
 
 private _teamkillerOwner = owner _teamkiller;
-if (_teamkillerOwner < 3) exitwith {};
+if (_teamkillerOwner < 3) exitWith {};
 
 private _teamkillerUid = getPlayerUID _teamkiller;
 private _itemCost = WL_UNIT(_victim, "cost", 100);
@@ -13,8 +13,8 @@ private _fundsDB = serverNamespace getVariable "fundsDatabase";
 private _teamkillerFunds = _fundsDB getOrDefault [_teamkillerUid, 0];
 
 private _compensation = round (_itemCost min _teamkillerFunds);
-[-_compensation, _teamkillerUid] call WL2_fnc_fundsDatabaseWrite;
-[round (_compensation * 0.5), getPlayerUID _forgiver] call WL2_fnc_fundsDatabaseWrite;
+[-_compensation, _teamkillerUid, false, ""] call WL2_fnc_fundsDatabaseWrite;
+[round (_compensation * 0.5), getPlayerUID _forgiver, false, "TK compensation"] call WL2_fnc_fundsDatabaseWrite;
 
 private _assetType = if (isPlayer [_victim]) then {
 	name _victim
@@ -32,7 +32,7 @@ private _friendlyFireMap = serverNamespace getVariable ["WL2_friendlyFireMap", c
 private _friendlyFireIncidents = _friendlyFireMap getOrDefault [_teamkillerUid, []];
 _friendlyFireIncidents pushBack serverTime;
 
-// keep only last 20 minutes
+// keep only last X minutes
 _friendlyFireIncidents = _friendlyFireIncidents select { _x >= (serverTime - WL_DURATION_FFTIMEOUT) };
 
 private _totalIncidents = count _friendlyFireIncidents;

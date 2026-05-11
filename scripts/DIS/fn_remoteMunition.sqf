@@ -90,6 +90,7 @@ private _assetName = [_asset] call WL2_fnc_getAssetTypeName;
 [
     "remoteMunition",
     format ["Control remote munition for %1 (Pilot: %2)?", _assetName, name driver _asset],
+    "\a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa",
     "Control", "Don't Control",
     _callbackConfirm, _callbackCancel, _this,
     15, false

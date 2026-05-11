@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_destroyerBase", "_mrls", "_controller", "_firstSpawn"];
+params ["_destroyerBase", "_mrls", "_controller", "_firstSpawn", "_destroyerType"];
 
 waitUntil {
     uiSleep 1;
@@ -122,34 +122,6 @@ private _staticProps = [
 
     _destroyerProps pushBack _staticProp;
 } forEach _staticProps;
-
-private _trolleyLocations = [
-    [3.5, 16, 8],
-    [-3.5, 16, 8]
-];
-{
-    private _trolley = createVehicleLocal ["Land_ToolTrolley_02_F", [0, 0, 0], [], 0, "CAN_COLLIDE"];
-    _trolley setDir (_destroyerDir + 180 * (_forEachIndex - 1));
-    _trolley setPosWorld (_destroyerBase modelToWorldWorld _x);
-    _trolley allowDamage false;
-    _trolley addAction [
-        "<t color='#00FF00'>Grab Traversal Tools</t>",
-        {
-            params ["_target", "_caller", "_actionId"];
-            call WL2_fnc_grapple;
-        },
-        [],
-        100,
-        false,
-        false,
-        "",
-        "cameraOn == player && player getVariable [""WL2_hasGrapple"", 0] <= 0",
-        5,
-        false
-    ];
-
-    _destroyerProps pushBack _trolley;
-} forEach _trolleyLocations;
 
 private _destroyerId = _destroyerBase getVariable ["WL2_destroyerId", 0];
 

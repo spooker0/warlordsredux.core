@@ -39,7 +39,7 @@ if (_reward > 0) then {
 
 	{
 		private _uid = getPlayerUID _x;
-		[_reward, _uid, false] call WL2_fnc_fundsDatabaseWrite;
+		[_reward, _uid, false, "Region captured"] call WL2_fnc_fundsDatabaseWrite;
 		[objNull, _reward, "Region captured", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _x];
 	} forEach _recipients;
 };

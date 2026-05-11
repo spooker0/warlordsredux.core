@@ -5,7 +5,7 @@ private _side = side group player;
 if (side group _conscripter != _side) exitWith {};
 if (WL_IsSpectator) exitWith {};
 
-uiSleep 1;
+uiSleep 0.1;
 
 private _teamPriorityVar = format ["WL2_teamPriority_%1", _side];
 private _teamPriority = missionNamespace getVariable [_teamPriorityVar, objNull];
@@ -24,11 +24,13 @@ private _callbackConfirm = {
     if (WL_ISDOWN(player)) then {
         setPlayerRespawnTime 0.1;
         forceRespawn player;
+
+        waitUntil {
+            uiSleep 0.1;
+            WL_ISUP(player);
+        };
     };
-    waitUntil {
-        uiSleep 0.1;
-        WL_ISUP(player);
-    };
+
     private _travelResult = [true] call WL2_fnc_travelTeamPriority;
     if (_travelResult) then {
         playSoundUI ["AddItemOk"];
@@ -43,6 +45,7 @@ private _callbackCancel = {};
 [
     "conscription",
     _callText,
+    "\a3\ui_f\data\igui\cfg\simpletasks\types\rifle_ca.paa",
     localize "STR_WL_goButton", localize "STR_WL_refuseButton",
     _callbackConfirm, _callbackCancel, [],
     10, true

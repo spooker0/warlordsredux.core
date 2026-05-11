@@ -1,7 +1,7 @@
 #include "includes.inc"
 if !(isServer) exitWith {};
 
-params ["_amount", "_uid", ["_countAsTeamEarning", true]];
+params ["_amount", "_uid", "_countAsTeamEarning", "_reason"];
 
 private _readyList = missionNamespace getVariable ["WL2_readyList", []];
 if !(_uid in _readyList) exitWith {};
@@ -19,10 +19,16 @@ if (_amount > 0 && _countAsTeamEarning) then {
     ["earnPoints", [_uid, _amount]] call SQD_fnc_server;
 };
 
+private _moneyHistory = serverNamespace getVariable "moneyHistory";
+private _playerData = _moneyHistory getOrDefault [_uid, []];
+private _entry = [_amount, _reason, serverTime];
+_playerData pushBack _entry;
+_moneyHistory set [_uid, _playerData];
+
 private _missionSpectators = missionNamespace getVariable ["WL2_spectators", []];
 {
-    private _targetUid = _x getVariable ["SPEC_CameraTargetUid", "123"];
-    if (_targetUid == _uid) then {
-        [_amount] remoteExec ["SPEC_fnc_spectatorRewardProxy", _x];
+    private _targetUid = _x getVariable ["SPEC_CameraTargetUid", ""];
+    if (_targetUid != "" && _targetUid == _uid) then {
+        [_amount, _reason] remoteExec ["SPEC_fnc_spectatorRewardProxy", _x];
     };
 } forEach _missionSpectators;

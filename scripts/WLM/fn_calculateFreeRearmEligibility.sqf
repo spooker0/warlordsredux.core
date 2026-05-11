@@ -79,6 +79,14 @@ if (_isAircraft) then {
             _eligibleFreeRearm = false;
         };
     };
+
+    private _integralWeaponParams = WL_ASSET(_assetActualType, "integralWeapon", []);
+    if (count _integralWeaponParams > 0) then {
+        private _ammoCount = _asset getVariable ["WL2_deployedWeaponAmmo", 0];
+        if (_ammoCount < _integralWeaponParams # 0) then {
+            _eligibleFreeRearm = false;
+        };
+    };
 };
 
 _eligibleFreeRearm;

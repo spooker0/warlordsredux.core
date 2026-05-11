@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_modalType", "_modalText", "_confirmText", "_cancelText", "_callbackConfirm", "_callbackCancel", "_callbackParams", "_timeout", "_defaultTrue"];
+params ["_modalType", "_modalText", "_modalImage", "_confirmText", "_cancelText", "_callbackConfirm", "_callbackCancel", "_callbackParams", "_timeout", "_defaultTrue"];
 
 private _queue = uiNamespace getVariable "WL2_timedPromptQueue";
 if (isNil "_queue") exitWith {};
@@ -19,7 +19,7 @@ if (_queueEntry # 1) exitWith {
     _callbackParams spawn _callbackCancel;
 };
 
-uiSleep 0.5;
+uiSleep 1;
 
 "TimedPrompt" cutRsc ["RscWLPromptDisplay", "PLAIN", -1, true, true];
 _display = uiNamespace getVariable ["RscWLPromptDisplay", displayNull];
@@ -38,6 +38,9 @@ _titleControl ctrlSetStructuredText parseText _displayText;
 private _progressControl = _display displayCtrl 41003;
 private _progressColor = if (_defaultTrue) then { [0.18, 1, 0.18, 1] } else { [1, 0.18, 0.18, 1] };
 _progressControl ctrlSetTextColor _progressColor;
+
+private _imageControl = _display displayCtrl 41004;
+_imageControl ctrlSetText _modalImage;
 
 private _startTime = serverTime;
 private _doAction = _defaultTrue;

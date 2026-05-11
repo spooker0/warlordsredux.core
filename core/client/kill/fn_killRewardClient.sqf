@@ -28,7 +28,12 @@ if (_customText != "") then {
 	};
 };
 
-private _displayIcon = switch (toUpper _displayText) do {
+private _iconText = if ("SPECTATE" in _displayText) then {
+	(toUpper _displayText) select [10]
+} else {
+	toUpper _displayText
+};
+private _displayIcon = switch (_iconText) do {
 	case "KILL";
 	case "PLAYER KILL": { "a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa" };
 	case "SECURED";
@@ -44,7 +49,6 @@ private _displayIcon = switch (toUpper _displayText) do {
 	case "PROJECTILE DESTROYED": { "A3\ui_f\data\map\markers\military\pickup_CA.paa" };
 	case "REGION CAPTURED": { "A3\ui_f\data\map\markers\handdrawn\flag_CA.paa" };
 	case "REVIVED TEAMMATE": { "a3\ui_f\data\igui\cfg\simpletasks\types\Heal_ca.paa" };
-	case "SPECTATE TARGET EARNED SCORE": { "a3\Ui_f\data\IGUI\Cfg\CommandBar\imageCommander_ca.paa" };
 	case "RECON";
 	case "REVEAL SECTOR";
 	case "SPOT ASSIST": { "a3\ui_f\data\gui\rsc\rscdisplayarsenal\binoculars_ca.paa" };
@@ -53,7 +57,7 @@ private _displayIcon = switch (toUpper _displayText) do {
 	case "BOOSTED SIGNAL": { "a3\modules_f_curator\data\portraitlightning_ca.paa" };
 	case "DRONE REBATE": { "A3\Air_F_Jets\UAV_05\Data\UI\uav_05_icon_ca.paa" };
 	default {
-		if ("KILL" in toUpper _displayText) then {
+		if ("KILL" in _iconText) then {
 			"a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa";
 		} else {
 			private _unitIcon = getText (configFile >> "CfgVehicles" >> _unitType >> "picture");

@@ -1,7 +1,13 @@
 #include "includes.inc"
-params ["_position", "_destroyerDir", "_destroyerName", "_destroyerId"];
+params ["_position", "_destroyerDir", "_destroyerName", "_destroyerId", "_destroyerType"];
 
-uiSleep WL_DESTROYER_START;
+private _initDelay = if (_destroyerType == 2) then {
+    0;
+} else {
+    WL_DESTROYER_START
+};
+
+uiSleep _initDelay;
 
 private _destroyerBase = createSimpleObject ["Land_Destroyer_01_base_F", _position];
 _destroyerBase setDir _destroyerDir;
@@ -28,9 +34,15 @@ _controller setDir (_controllerDir + _destroyerDir);
 _controller setPosWorld _controllerPos;
 _controller allowDamage false;
 _controller enableSimulationGlobal false;
-_controller setObjectTextureGlobal [1, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.2,""#000000"",""#ffffff"",""MISSILE\nBATTERY\nCONTROL"")"];
-_controller setObjectTextureGlobal [2, "\A3\Static_F_Destroyer\Ship_MRLS_01\Data\Ui\Ship_MRLS_01_picture_CA.paa"];
-_controller setObjectTextureGlobal [3, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""AMMO\n-"")"];
+
+if (_destroyerType == 2) then {
+    _controller = objNull;
+} else {
+    _controller setObjectTextureGlobal [1, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.2,""#000000"",""#ffffff"",""MISSILE\nBATTERY\nCONTROL"")"];
+    _controller setObjectTextureGlobal [2, "\A3\Static_F_Destroyer\Ship_MRLS_01\Data\Ui\Ship_MRLS_01_picture_CA.paa"];
+    _controller setObjectTextureGlobal [3, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""AMMO\n-"")"];
+};
+
 _destroyerBase setVariable ["WL2_destroyerController", _controller, true];
 
 private _mrls = objNull;
@@ -50,6 +62,7 @@ private _createMrls = {
     _mrls setVariable ["WL2_overrideRange", 30000, true];
     _mrls setVariable ["WL2_destroyerController", _controller, true];
     _mrls setVariable ["WL2_destroyerId", _destroyerId, true];
+	_mrls setVariable ["WL2_assetTypeShortName", "VLS", true];
     _mrls setVariable ["WL_spawnedAsset", true, true];
 
     private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
@@ -82,12 +95,16 @@ _destroyerMarker setMarkerTypeLocal "loc_boat";
 _destroyerMarker setMarkerTextLocal format ["%1 (DDG-%2)", _destroyerName, _hullNumber];
 _destroyerMarker setMarkerColor "ColorWhite";
 
-[_destroyerBase, objNull, _controller, true] remoteExec ["WL2_fnc_createDestroyerClient", 0, true];
+[_destroyerBase, objNull, _controller, true, _destroyerType] remoteExec ["WL2_fnc_createDestroyerClient", 0, true];
 
 private _nextReloadTime = serverTime + WL_DESTROYER_RELOAD;
 private _nextRespawnTime = serverTime;
 while { alive _destroyerBase } do {
     uiSleep 30;
+
+    if (_destroyerType == 2) then {
+        continue;
+    };
 
     if (alive _mrls) then {
         if (serverTime >= _nextReloadTime) then {

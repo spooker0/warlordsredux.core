@@ -1,4 +1,16 @@
 #include "includes.inc"
+
+private _allCatapultRails = allMissionObjects "Land_CraneRail_01_F";
+{
+    _x setVariable ["BIS_WL_ownerAssetSide", independent, true];
+} forEach _allCatapultRails;
+
+private _serverOwnedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
+_allCatapultRails append _serverOwnedVehicles;
+missionNamespace setVariable ["BIS_WL_ownedVehicles_server", _allCatapultRails];
+
+uiSleep 5;
+
 while { !BIS_WL_missionEnd } do {
     private _westOwnedVehicles = [];
     private _eastOwnedVehicles = [];

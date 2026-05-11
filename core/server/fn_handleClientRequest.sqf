@@ -22,15 +22,15 @@ private _broadcastActionToSide = {
 private _playerFunds = (serverNamespace getVariable "fundsDatabase") getOrDefault [_uid, 0];
 
 private _addFunds = {
-	params ["_amount", ["_accountUid", _uid], ["_countAsTeamEarning", true]];
-	[_amount, _accountUid, _countAsTeamEarning] call WL2_fnc_fundsDatabaseWrite;
+	params ["_amount", "_reason", ["_accountUid", _uid], ["_countAsTeamEarning", true]];
+	[_amount, _accountUid, _countAsTeamEarning, _reason] call WL2_fnc_fundsDatabaseWrite;
 };
 
 private _deductFunds = {
 	params ["_cost"];
 	private _hasFunds = _playerFunds >= _cost;
 	if (_hasFunds) then {
-		[-_cost, _uid] call WL2_fnc_fundsDatabaseWrite;
+		[-_cost, _uid, false, ""] call WL2_fnc_fundsDatabaseWrite;
 		true;
 	} else {
 		false;
@@ -154,26 +154,26 @@ if (_action == "resetVehicle") exitWith {
 
 if (_action == "revived") exitWith {
 	private _reward = _param1;
-	[_reward] call _addFunds;
-	[objNull, _reward, "Revived Teammate", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+	[_reward, "Revived teammate"] call _addFunds;
+	[objNull, _reward, "Revived teammate", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
 if (_action == "spot") exitWith {
 	private _reward = _param1;
-	[_reward] call _addFunds;
+	[_reward, "Recon"] call _addFunds;
 	[objNull, _reward, "Recon", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
 if (_action == "revealSector") exitWith {
 	private _reward = WL_REWARD_REVEALSECTOR;
-	[_reward] call _addFunds;
-	[objNull, _reward, "Reveal Sector", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+	[_reward, "Reveal sector"] call _addFunds;
+	[objNull, _reward, "Reveal sector", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
 if (_action == "demolished") exitWith {
 	private _steps = _param1;
 	private _reward = 20 * _steps;
-	[_reward] call _addFunds;
+	[_reward, "Demolition"] call _addFunds;
 	[objNull, _reward, "Demolition", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
@@ -215,8 +215,8 @@ if (_action == "immobilized") exitWith {
 	private _unitActualType = WL_ASSET_TYPE(_immobilizedUnit);
 	private _reward = round (0.2 * WL_ASSET(_unitActualType, "cost", 0) ^ 0.8);
 
-	[_reward] call _addFunds;
-	[objNull, _reward, "Vehicle Disabled", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+	[_reward, "Vehicle disabled"] call _addFunds;
+	[objNull, _reward, "Vehicle disabled", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
 if (_action == "scan") exitWith {
@@ -300,16 +300,17 @@ if (_action == "scan") exitWith {
 };
 
 if (_action == "combatAir") exitWith {
+	private _combatAirSide = _param1;
 	private _target = _param2;
 
 	private _targetName = _target getVariable ["WL2_name", "Forward Airbase"];
-	private _sideName = [_side] call WL2_fnc_sideToFaction;
+	private _sideName = [_combatAirSide] call WL2_fnc_sideToFaction;
 
 	private _friendlyMessage = format ["%1 has initiated combat air patrol over %2.", name _sender, _targetName];
-	[_side, _friendlyMessage] call _broadcastActionToSide;
+	[_combatAirSide, _friendlyMessage] call _broadcastActionToSide;
 
 	private _enemyMessage = format ["%1 (%2) has initiated combat air patrol over %3.", _sideName, name _sender, _targetName];
-	private _enemySide = switch (_side) do {
+	private _enemySide = switch (_combatAirSide) do {
 		case west : { east };
 		case east : { west };
 		default { civilian };
@@ -355,7 +356,7 @@ if (_action == "ftSupportPoints") exitWith {
 
 	private _eligible = _senderLastReward + 60 <= serverTime && _ftVehicleOwner != _uid;
 	if (_eligible) then {
-		[_reward, _ftVehicleOwner] call WL2_fnc_fundsDatabaseWrite;
+		[_reward, _ftVehicleOwner, true, "Spawn reward"] call WL2_fnc_fundsDatabaseWrite;
 
 		_rewardStack set [getPlayerUID _sender, serverTime];
 		_ftVehicle setVariable ["BIS_WL_rewardedStack", _rewardStack];
@@ -380,7 +381,7 @@ if (_action == "fundsTransfer") exitWith {
 	if (_sender getVariable ["WL2_afk", false]) exitWith {};
 	if !([_transferCost + _transferAmount] call _deductFunds) exitWith {};
 
-	[_transferAmount, getPlayerUID _recipient, false] call _addFunds;
+	[_transferAmount, "Funds transfer", getPlayerUID _recipient, false] call _addFunds;
 
 	private _sentMoney = format ["%1%2", WL_MONEY_SIGN, _transferAmount];
 	private _message = format [localize "STR_WL_donateMoneyInfo", name _sender, name _recipient, _sentMoney];
@@ -414,7 +415,7 @@ if (_action == "demine") exitWith {
 
 	private _reward = 10 * count _enemyMines;
 	if (count _targets > 0) then {
-		[_reward] call _addFunds;
+		[_reward, "Mine destroyed"] call _addFunds;
 		[objNull, _reward, "Mine destroyed", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 	};
 };
@@ -425,13 +426,13 @@ if (_action == "secure") exitWith {
 	_target setDamage 1;
 
 	private _reward = 50;
-	[_reward] call _addFunds;
+	[_reward, "Secured"] call _addFunds;
 	[objNull, _reward, "Secured", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
 if (_action == "droneRebate") exitWith {
 	private _reward = _param1;
-	[_reward] call _addFunds;
+	[_reward, "Drone rebate"] call _addFunds;
 	[objNull, _reward, "Drone rebate", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
@@ -498,7 +499,7 @@ if (_action == "boost") exitWith {
 
 			if (_friendlySignal < 950) then {
 				private _reward = 30 * _multiplier;
-				[_reward] call _addFunds;
+				[_reward, "Boosted signal"] call _addFunds;
 				[objNull, _reward, "Boosted signal", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 			};
 		};
@@ -535,14 +536,14 @@ if (_action == "boost2") exitWith {
 
 	if (_friendlySignal < 950) then {
 		private _reward = 200 * _multiplier;
-		[_reward] call _addFunds;
+		[_reward, "Boosted signal"] call _addFunds;
 		[objNull, _reward, "Boosted signal", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
 	};
 };
 
 #if WL_FREE_MONEY
 if (_action == "50K") exitWith {
-	[50000, _uid, false] call WL2_fnc_fundsDatabaseWrite;
+	[50000, _uid, false, "Bonus"] call WL2_fnc_fundsDatabaseWrite;
 };
 #endif
 
@@ -558,12 +559,12 @@ if (_action == "updateZeus") exitWith {
 
 if (_action == "sectorReward") exitWith {
 	private _reward = _param1;
-	[_reward] call _addFunds;
+	[_reward, "Sector reward"] call _addFunds;
 };
 
 if (_action == "secureAircraft") exitWith {
 	private _reward = _param1;
-	[_reward] call _addFunds;
+	[_reward, "Secured aircraft"] call _addFunds;
 };
 
 if (_action == "droneExplode") exitWith {

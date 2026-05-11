@@ -20,17 +20,39 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         params ["_texture"];
         while { !isNull _texture } do {
             private _objectMap = createHashMap;
-            private _players = (allUnits + allDeadMen) select { simulationEnabled _x };
+            private _players = (allUnits + allDeadMen) select { simulationEnabled _x } select { isPlayer _x };
 
             private _playerData = _players apply {
-                private _vehicle = vehicle _x;
-                private _vehicleName = if (_vehicle != _x) then {
-                    [_vehicle] call WL2_fnc_getAssetTypeName;
-                } else {
-                    "";
-                };
-                [name _x, [side group _x, false] call WL2_fnc_sideToFaction, getObjectID _x, _vehicleName, _x]
+                [name _x, [side group _x, false] call WL2_fnc_sideToFaction, getObjectID _x, "", _x]
             };
+
+            private _bluforVics = BIS_WL_westOwnedVehicles apply {
+                private _ownerUid = _x getVariable ["BIS_WL_ownerAsset", "123"];
+                private _owner = _ownerUid call BIS_fnc_getUnitByUid;
+                private _ownerName = if (isNull _owner) then { "???" } else { name _owner };
+                private _vicName = [_x] call WL2_fnc_getAssetTypeName;
+                [_ownerName, "BLUFOR", getObjectID _x, _vicName, _x]
+            };
+
+            private _opforVics = BIS_WL_eastOwnedVehicles apply {
+                private _ownerUid = _x getVariable ["BIS_WL_ownerAsset", "123"];
+                private _owner = _ownerUid call BIS_fnc_getUnitByUid;
+                private _ownerName = if (isNull _owner) then { "???" } else { name _owner };
+                private _vicName = [_x] call WL2_fnc_getAssetTypeName;
+                [_ownerName, "OPFOR", getObjectID _x, _vicName, _x]
+            };
+
+            private _guerVics = BIS_WL_guerOwnedVehicles apply {
+                private _ownerUid = _x getVariable ["BIS_WL_ownerAsset", "123"];
+                private _owner = _ownerUid call BIS_fnc_getUnitByUid;
+                private _ownerName = if (isNull _owner) then { "???" } else { name _owner };
+                private _vicName = [_x] call WL2_fnc_getAssetTypeName;
+                [_ownerName, "INDFOR", getObjectID _x, _vicName, _x]
+            };
+
+            _playerData append _bluforVics;
+            _playerData append _opforVics;
+            _playerData append _guerVics;
 
             private _munitions = (8 allObjects 2) select {
                 private _munition = _x;

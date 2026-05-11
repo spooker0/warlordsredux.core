@@ -2,6 +2,8 @@
 private _list = serverNamespace getVariable ["WL2_garbageCollector", createHashMap];
 private _assetData = WL_ASSET_DATA;
 
+private _markedForDeletion = [];
+
 private _shouldGarbageCollect = {
 	params ["_asset"];
 	if (!alive _asset) exitWith { true };
@@ -9,6 +11,9 @@ private _shouldGarbageCollect = {
 	if (_asset getEntityInfo 2) exitWith { true };
 	if (_asset getEntityInfo 11) exitWith { true };
 	if (_list getOrDefault [typeOf _asset, false]) exitWith { true };
+	if (typeOf _asset == "#dynamicsound") then {
+		_markedForDeletion pushBack _asset;
+	};
 	false;
 };
 
@@ -25,6 +30,10 @@ private _isPersistentAirWreck = {
 };
 
 while { !BIS_WL_missionEnd } do {
+	{
+		deleteVehicle _x;
+	} forEach _markedForDeletion;
+
 	private _collectables = (allMissionObjects "") select {
 		[_x] call _shouldGarbageCollect;
 	};

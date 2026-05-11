@@ -99,7 +99,7 @@ private _actionId = _asset addAction [
 
             deleteVehicle _projectile;
 
-            uiSleep 4.5;
+            uiSleep 1.5;
 
             if (_isFirstShot) then {
                 playSoundUI ["a3\dubbing_f_epa\a_m01\x20_detonate_casualties\a_m01_x20_detonate_casualties_med_0.ogg", 2];

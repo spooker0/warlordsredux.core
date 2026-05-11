@@ -31,6 +31,7 @@ class CfgRemoteExec {
 		class WL2_fnc_clearServerStats {allowedTargets = 2;};
 		class WL2_fnc_combatAirWarning {allowedTargets = 0;};
 		class WL2_fnc_conscription {allowedTargets = 0;};
+		class WL2_fnc_conscriptVehicle {allowedTargets = 0;};
 		class WL2_fnc_controlGunnerAction {allowedTargets = 0;};
 		class WL2_fnc_cruiseMissileWarning {allowedTargets = 0;};
 		class WL2_fnc_deleteTent {allowedTargets = 0;};
@@ -74,7 +75,7 @@ class CfgRemoteExec {
 		class WL2_fnc_scannerAction {allowedTargets = 0;};
 		class WL2_fnc_setupForwardBaseAction {allowedTargets = 0;};
 		class WL2_fnc_setupForwardBaseMp {allowedTargets = 0;};
-		class WL2_fnc_setupMiniMortarAction {allowedTargets = 0;};
+		class WL2_fnc_setupIntegralWeaponAction {allowedTargets = 0;};
 		class WL2_fnc_setupSimpleAsset {allowedTargets = 0;};
 		class WL2_fnc_slingAddAction {allowedTargets = 1;};
 		class WL2_fnc_slingloadInit {allowedTargets = 0;};
@@ -91,6 +92,7 @@ class CfgRemoteExec {
 		class WL2_fnc_vehicleLockAction {allowedTargets = 1;};
 		class WL2_fnc_vehicleLockUpdate {allowedTargets = 0;};
 		class WL2_fnc_warnIncomingMissile {allowedTargets = 0;};
+		class WL2_fnc_writeResult {allowedTargets = 0;};
 		class WLM_fnc_applyPylon {allowedTargets = 0;};
 		class WLM_fnc_applyVehicle {allowedTargets = 0;};
 		class WLM_fnc_changeHorn {allowedTargets = 0;};

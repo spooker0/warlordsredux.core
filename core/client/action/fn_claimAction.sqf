@@ -55,6 +55,7 @@ _asset addAction [
 
 				_asset setVariable ["BIS_WL_ownerAsset", getPlayerUID player, true];
 				_asset setVariable ["BIS_WL_ownerAssetSide", side group player, true];
+                _asset setVariable ["WL2_assetOwnerName", "", true];
 
 				private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
 				private _vehicles = missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], []];

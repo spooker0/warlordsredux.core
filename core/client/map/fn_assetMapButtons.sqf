@@ -412,7 +412,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
                 playSoundUI ["AddItemFailed"];
             };
 
-            [player, "combatAir", [], _asset] remoteExec ["WL2_fnc_handleClientRequest", 2];
+            [player, "combatAir", BIS_WL_playerSide, _asset] remoteExec ["WL2_fnc_handleClientRequest", 2];
         };
     };
     [

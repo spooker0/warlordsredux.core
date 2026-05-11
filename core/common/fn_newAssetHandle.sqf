@@ -74,20 +74,15 @@ if (_asset isKindOf "Man") then {
 		[_target, _vehicle, _missile] call WL2_fnc_warnIncomingMissile;
 	}];
 
-	if (WL_ASSET_GET(_data, "hasScanner", 0) > 0) then {
-		[_asset, false] remoteExec ["WL2_fnc_scannerAction", 0, true];
+	private _scanner = WL_ASSET_GET(_data, "scanner", 0);
+	if (_scanner > 0) then {
+		[_asset, _scanner] remoteExec ["WL2_fnc_scannerAction", 0, true];
 	};
 
 	private _reconOptics = WL_ASSET_GET(_data, "hasReconOptics", 0);
 	if (_reconOptics > 0) then {
 		[_asset, _playerUID, _reconOptics] remoteExec ["WL2_fnc_reconOpticsAction", 0, true];
 		_asset setVariable ["WL2_hasReconOptics", true, true];
-	};
-
-	private _hasAirRadar = WL_ASSET_GET(_data, "hasAirRadar", 0);
-	if (_hasAirRadar > 0) then {
-		_asset setVariable ["WL2_airRadarRange", _hasAirRadar, true];
-		[_asset, true] remoteExec ["WL2_fnc_scannerAction", 0, true];
 	};
 
 	if (WL_ASSET_GET(_data, "hasGunnerAction", 0) > 0) then {
@@ -224,14 +219,10 @@ if (_asset isKindOf "Man") then {
 		_asset setVariable ["DIS_advancedSamRange", 14000, true];
 	};
 
-	private _miniMortar = WL_ASSET_GET(_data, "miniMortar", []);
-	if (count _miniMortar > 0) then {
-		_asset setVariable ["WL2_mortarShellCountHE", _miniMortar # 0, true];
-		[_asset] remoteExec ["WL2_fnc_setupMiniMortarAction", 0, true];
-	};
-
-	if (WL_ASSET_GET(_data, "hasStabilize", 0) > 0) then {
-		[_asset] spawn WL2_fnc_stabilizeBoatAction;
+	private _integralWeapon = WL_ASSET_GET(_data, "integralWeapon", []);
+	if (count _integralWeapon > 0) then {
+		_asset setVariable ["WL2_deployedWeaponAmmo", _integralWeapon # 0, true];
+		[_asset] remoteExec ["WL2_fnc_setupIntegralWeaponAction", 0, true];
 	};
 
 	private _mineClear = WL_ASSET_GET(_data, "mineClear", 0);
@@ -255,7 +246,6 @@ if (_asset isKindOf "Man") then {
 	if (_threatDetection > 0) then {
 		_asset setVariable ["DIS_missileDetector", _threatDetection, true];
 		_asset setVariable ["WL2_mapCircleRadius", _threatDetection, true];
-		_asset setVariable ["WL_scannerOn", true, true];
 	};
 
 	private _hideMap = WL_ASSET_GET(_data, "hideMap", 0);
@@ -279,7 +269,7 @@ if (_asset isKindOf "Man") then {
 
 	if (_asset isKindOf "Air") then {
 		// [_asset] remoteExec ["WL2_fnc_airRearmAction", 0, true];
-		removeFromRemainsCollector [_asset];
+		[_asset] spawn WL2_fnc_airWreckHandler;
 	};
 
 	if (unitIsUAV _asset) then {
@@ -356,6 +346,14 @@ if (_asset isKindOf "Man") then {
 		_asset setVariable ["WLM_ammoCargo", 10000, true];
 	};
 
+	if (WL_ASSET_GET(_data, "hasParadropper", 0) > 0) then {
+		[_asset] spawn WL2_fnc_paradropperAction;
+	};
+
+	if (WL_ASSET_GET(_data, "hasLaserWeapon", 0) > 0) then {
+		[_asset] spawn WL2_fnc_laserWeapon;
+	};
+
 	private _rearmTime = WL_ASSET_GET(_data, "rearm", 600);
 	_asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
 
@@ -411,10 +409,6 @@ if (_asset isKindOf "Man") then {
 		_asset setTurretLimits [[0], -360, 360, 0, 30];
 	};
 
-	if (_assetActualType == "B_T_VTOL_01_armed_up_F") then {
-		_asset setTurretLimits [[0], 0, 0, 0, 0];
-	};
-
 	if (_assetActualType in ["B_MLRS_Guided", "O_MRLS_Guided"]) then {
 		[_asset] spawn {
 			params ["_asset"];
@@ -454,6 +448,12 @@ if (_asset isKindOf "Man") then {
 			};
 		} forEach _assetAppearanceDefaults;
 	};
+
+	private _assetTypeName = WL_ASSET_GET(_data, "name", getText (configFile >> "CfgVehicles" >> _assetActualType >> "displayName"));
+	_asset setVariable ["WL2_assetTypeName", _assetTypeName, true];
+
+	private _shortName = WL_ASSET_GET(_data, "nameShort", _assetTypeName);
+	_asset setVariable ["WL2_assetTypeShortName", _shortName, true];
 };
 
 [_asset] remoteExec ["WL2_fnc_removeAction", 0, true];

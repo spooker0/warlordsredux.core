@@ -67,17 +67,8 @@ if (inputMouse 0 == 0) exitWith {
 
 if (_firstFrameAfterClose) exitWith {};
 
-private _mapQueue = uiNamespace getVariable "WL2_mapSelectQueue";
-private _isSelectingTarget = if (count _mapQueue > 0) then {
-    private _mapQueueEntry = _mapQueue # (count _mapQueue - 1);
-    private _eligibilityCallback = _mapQueueEntry # 2;
-    private _arguments = _mapQueueEntry # 3;
-    [WL_SectorActionTarget, _arguments] call _eligibilityCallback;
-} else {
-    private _sectorClickSingletonScriptHandle = uiNamespace getVariable ["WL2_mapSectorIconSingleton", scriptNull];
-    !isNull _sectorClickSingletonScriptHandle
-};
-if (_isSelectingTarget) exitWith {};
+private _sectorClickSingletonScriptHandle = uiNamespace getVariable ["WL2_mapSectorIconSingleton", scriptNull];
+if (!isNull _sectorClickSingletonScriptHandle) exitWith {};
 
 private _singletonScriptHandle = uiNamespace getVariable ["WL2_mapMouseActionSingleton", scriptNull];
 if (!isNull _singletonScriptHandle) exitWith {};

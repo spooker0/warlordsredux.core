@@ -3,11 +3,16 @@ params ["_sector", "_requirements"];
 
 private _potentialBases = missionNamespace getVariable ["WL2_forwardBases", []];
 private _forwardBases = _potentialBases select {
-    player distance2D _x < WL_FOB_RANGE &&
     _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
+} select {
+    player distance2D _x < WL_FOB_RANGE
 };
 
 private _servicesInSector = _sector getVariable ["WL2_services", []];
+if ("A" in _requirements && !("A" in _servicesInSector)) exitWith {
+    [false, "Must be in a sector with a runway."];
+};
+
 if ("H" in _requirements && !("H" in _servicesInSector)) exitWith {
     if (count _forwardBases > 0 && !("NF" in _requirements)) then {
         [true, ""];

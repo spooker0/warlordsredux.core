@@ -195,13 +195,13 @@ function setEcmCharges(active, count, nextChargeTime) {
     }
 }
 
-function setIntegralMortar(active, shellCount) {
-    const mortarIndicatorEl = document.querySelector('.mortar-indicator');
+function setIntegralWeapon(active, ammoCount) {
+    const weaponIndicatorEl = document.querySelector('.mortar-indicator');
     if (active) {
-        mortarIndicatorEl.textContent = `INCENDIARY MORTAR: ${shellCount}`;
-        mortarIndicatorEl.style.color = shellCount > 0 ? "lime" : "black";
+        weaponIndicatorEl.textContent = `INTEGRAL AMMO: ${ammoCount}`;
+        weaponIndicatorEl.style.color = ammoCount > 0 ? "lime" : "black";
     } else {
-        mortarIndicatorEl.textContent = "";
+        weaponIndicatorEl.textContent = "";
     }
 }
 

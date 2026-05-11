@@ -61,14 +61,14 @@ private _squadmates = ["getSquadmates", [_playerId, false]] call SQD_fnc_query;
 private _squadReward = round (_killReward * 0.3 / (sqrt (count _squadmates) max 1));
 {
 	private _squadmateUid = getPlayerUID _x;
-	[_squadReward, _squadmateUid, false] call WL2_fnc_fundsDatabaseWrite;
+	[_squadReward, _squadmateUid, false, "Squad assist"] call WL2_fnc_fundsDatabaseWrite;
 
 	[_unit, _squadReward, "Squad assist", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _x];
 } forEach _squadmates;
 
 private _killerUid = getPlayerUID _responsibleLeader;
 _killReward = round _killReward;
-[_killReward, _killerUid] call WL2_fnc_fundsDatabaseWrite;
+[_killReward, _killerUid, true, "Kill"] call WL2_fnc_fundsDatabaseWrite;
 
 [_unit, _killReward, _customText, "#de0808", _assetActualType] remoteExec ["WL2_fnc_killRewardClient", _responsibleLeader];
 
@@ -80,7 +80,7 @@ private _crew = (crew _vehicle) select {
 };
 {
 	private _crewUid = getPlayerUID _x;
-	[_reward, _crewUid] call WL2_fnc_fundsDatabaseWrite;
+	[_reward, _crewUid, true, "Crew assist"] call WL2_fnc_fundsDatabaseWrite;
 
 	[_unit, _reward] remoteExec ["WL2_fnc_killRewardClient", _x];
 } forEach _crew;

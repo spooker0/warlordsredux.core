@@ -38,9 +38,9 @@ private _weaponsByTurret = createHashMap;
 _asset spawn APS_fnc_rearmAPS;
 _asset setVariable ['WL2_smokeCurtains', 2];
 
-if (_asset getVariable ["WL2_mortarShellCountHE", -1] != -1) then {
-    private _miniMortar = WL_UNIT(_asset, "miniMortar", []);
-    _asset setVariable ["WL2_mortarShellCountHE", _miniMortar # 0, true];
+if (_asset getVariable ["WL2_deployedWeaponAmmo", -1] != -1) then {
+    private _integralWeaponParams = WL_UNIT(_asset, "integralWeapon", []);
+    _asset setVariable ["WL2_deployedWeaponAmmo", _integralWeaponParams # 0, true];
 };
 
 private _assetActualType = WL_ASSET_TYPE(_asset);

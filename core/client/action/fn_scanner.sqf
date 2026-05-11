@@ -1,84 +1,36 @@
 #include "includes.inc"
-params ["_asset", "_actionId", "_isAirRadar", "_iteration", ["_radiusOverride", -1]];
-
-private _scannerOn = _asset getVariable ["WL_scannerOn", false];
-
-private _actionColor = if (_scannerOn) then {
-    "#4bff58";
-} else {
-    "#ff4b4b";
-};
-
-private _scannerTypeText = if (_isAirRadar) then {
-    "AESA RADAR";
-} else {
-    "SCANNER";
-};
-
-private _actionText = if (_scannerOn) then {
-    format ["%1: ON", _scannerTypeText];
-} else {
-    format ["%1: OFF", _scannerTypeText];
-};
-
-_asset setUserActionText [_actionId, format ["<t color = '%1'>%2 [%3]</t>", _actionColor, _actionText, actionKeysNames "ActiveSensorsToggle"]];
-
-if (!_scannerOn) exitWith {
-    _asset setVariable ["WL_scannedObjects", []];
-};
+params ["_asset", "_radius", "_iteration"];
 
 private _assetSide = [_asset] call WL2_fnc_getAssetSide;
 
 private _assetPos = _asset modelToWorldVisual [0, 0, 0];
 private _assetHeight = (_assetPos # 2) min (getPosASL _asset # 2);
-if (!_isAirRadar && _assetHeight > 2000) exitWith {
-    _asset setVariable ["WL_scannedObjects", []];
-    _asset setVariable ["WL_scanRadius", 0];
-};
-if (_isAirRadar && _assetHeight < 50) exitWith {
-    _asset setVariable ["WL_scannedObjects", []];
-    _asset setVariable ["WL_scanRadius", 0];
-};
-if (!_isAirRadar && surfaceIsWater _assetPos) exitWith {
+if (waterDamaged _asset) exitWith {
     _asset setVariable ["WL_scannedObjects", []];
     _asset setVariable ["WL_scanRadius", 0];
 };
 
-private _scanRadius = if (_isAirRadar) then {
-    _asset getVariable ["WL2_airRadarRange", 20000];
-} else {
-    ((_assetHeight * 2) min 1000) max 350;
-};
-if (_radiusOverride > 0) then {
-    _scanRadius = _radiusOverride;
-};
-_asset setVariable ["WL_scanRadius", _scanRadius];
+_asset setVariable ["WL_scanRadius", _radius];
 
 if (_assetSide != side group player) exitWith {};
 
-private _relevantVehicles = if (_isAirRadar) then {
-    vehicles select {
-        _x isKindOf "Air"
-    } select {
-        private _vehiclePos = _x modelToWorldVisual [0, 0, 0];
-        _vehiclePos # 2 > 50 &&
-        [_assetPos, getDir _asset, 60, _vehiclePos] call WL2_fnc_inAngleCheck;
-    };
-} else {
-    private _enemyUnits = switch (_assetSide) do {
-        case west: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
-        case east: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
-        default { [] };
-    };
-    _enemyUnits select {
-        private _vehiclePos = _x modelToWorldVisual [0, 0, 0];
-        (_x getVariable ["WL_spawnedAsset", false] || isPlayer _x)
-    };
+private _enemyUnits = switch (_assetSide) do {
+    case west: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
+    case east: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
+    default { [] };
+};
+if (isNil "_enemyUnits") then {
+    _enemyUnits = [];
+};
+
+private _relevantVehicles = _enemyUnits select {
+    private _vehiclePos = _x modelToWorldVisual [0, 0, 0];
+    (_x getVariable ["WL_spawnedAsset", false] || isPlayer _x)
 };
 
 private _vehiclesInRadius = _relevantVehicles select {
     private _vehiclePos = _x modelToWorldVisual [0, 0, 0];
-    _vehiclePos distance2D _assetPos < _scanRadius;
+    _vehiclePos distance2D _assetPos < _radius;
 } select {
     alive _x;
 } select {
@@ -93,7 +45,7 @@ private _scannedObjects = _vehiclesInRadius select {
     _assetSide reportRemoteTarget [_x, 10];
 } forEach _scannedObjects;
 
-private _scanArea = [_assetPos, _scanRadius, _scanRadius, 0, false];
+private _scanArea = [_assetPos, _radius, _radius, 0, false];
 private _minesInRadius = allMines inAreaArray _scanArea;
 {
     _assetSide revealMine _x;
@@ -108,17 +60,9 @@ private _minesInRadius = allMines inAreaArray _scanArea;
 });
 
 if (cameraOn == _asset) then {
-    if (_isAirRadar) then {
-        if (_iteration % 8 == 0) then {
-            playSoundUI ["radarTargetLost", 2, 1, true];
-        };
-        _scannedObjects = _scannedObjects select { _x isKindOf "Air" };
-    } else {
-        if (_iteration % 2 == 0) then {
-            playSoundUI ["radarTargetLost", 2, 1, true];
-        };
+    if (_iteration % 2 == 0) then {
+        playSoundUI ["radarTargetLost", 2, 1, true];
     };
-
     [_scannedObjects] call WL2_fnc_reconReward;
 };
 

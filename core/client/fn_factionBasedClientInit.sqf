@@ -3,11 +3,17 @@ params [["_unit", player]];
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _spawnWithUAVTerminal = _settingsMap getOrDefault ["spawnWithUAVTerminal", true];
+private _spawnWithRangefinder = _settingsMap getOrDefault ["spawnWithRangefinder", true];
 
 switch (side group _unit) do {
 	case west: {
-		_unit addMagazineGlobal "Laserbatteries";
-		_unit addWeaponGlobal "Laserdesignator";
+		if (_spawnWithRangefinder) then {
+			_unit addMagazineGlobal "Laserbatteries";
+			_unit addWeaponGlobal "Laserdesignator";
+		} else {
+			_unit removeWeaponGlobal "Laserdesignator";
+			_unit removeMagazineGlobal "Laserbatteries";
+		};
 		if (_spawnWithUAVTerminal) then {
 			_unit linkItem "B_UAVTerminal";
 		} else {
@@ -16,8 +22,13 @@ switch (side group _unit) do {
 		};
 	};
 	case east: {
-		_unit addMagazineGlobal "Laserbatteries";
-		_unit addWeaponGlobal "Laserdesignator_02";
+		if (_spawnWithRangefinder) then {
+			_unit addMagazineGlobal "Laserbatteries";
+			_unit addWeaponGlobal "Laserdesignator_02";
+		} else {
+			_unit removeWeaponGlobal "Laserdesignator_02";
+			_unit removeMagazineGlobal "Laserbatteries";
+		};
 		if (_spawnWithUAVTerminal) then {
 			_unit linkItem "O_UAVTerminal";
 		} else {

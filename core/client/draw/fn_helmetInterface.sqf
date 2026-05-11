@@ -326,17 +326,6 @@ addMissionEventHandler ["Draw3D", {
             };
         } forEach (listRemoteTargets _side);
 
-        private _scannerUnits = vehicles select {
-            alive _x &&
-            _x getVariable ["WL_scannerOn", false]
-        };
-        {
-            private _scannedObjects = _x getVariable ["WL_scannedObjects", []];
-            {
-                _targets pushBackUnique _x;
-            } forEach _scannedObjects;
-        } forEach _scannerUnits;
-
         if (cameraOn isKindOf "Air") then {
             private _staticAAWest = cameraOn nearEntities ["B_static_AA_F", 2500];
             private _staticAAEast = cameraOn nearEntities ["O_static_AA_F", 2500];
@@ -431,14 +420,7 @@ addMissionEventHandler ["Draw3D", {
                     "RobotoCondensedBold"
                 ];
             } else {
-                private _assetTypeName = [_target] call WL2_fnc_getAssetTypeName;
-
-                private _assetName = if (_targetSide == _side) then {
-                    private _ownerName = [_target] call WL2_fnc_getAssetOwnerName;
-                    format ["%1 (%2)", _assetTypeName, _ownerName];
-                } else {
-                    _assetTypeName;
-                };
+                private _assetName = toUpper ([_target] call WL2_fnc_getAssetTypeShortName);
 
                 private _altitude = getPosATL _target # 2;
                 if (_altitude > 1000) then {

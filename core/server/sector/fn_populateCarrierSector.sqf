@@ -42,6 +42,7 @@ for "_i" from 0 to 4 do {
             doStop _infantry;
             _infantry setUnitPos "MIDDLE";
             _infantry disableAI "PATH";
+            _infantry disableAI "SUPPRESSION";
             _infantryUnits pushBack _infantry;
         };
 
@@ -51,27 +52,35 @@ for "_i" from 0 to 4 do {
     _infantryGroup setBehaviour "COMBAT";
 };
 
-private _vehicleUnits = [];
-private _presetVehicles = _sector getVariable ["WL2_vehiclesToSpawn", []];
-{
-    private _vehicleInfo = _x;
-    _vehicleInfo params ["_type", "_pos", "_dir"];
-    private _vehicleArray = [_pos, _dir, _type, independent] call BIS_fnc_spawnVehicle;
-    _vehicleArray params ["_vehicle", "_crew", "_group"];
+private _spawnCarrierVehicle = {
+	params ["_vehicleType", "_spawnPos", "_direction"];
 
-    _vehicle setPosASL _pos;
+	private _vehicle = [objNull, _spawnPos, _vehicleType, _direction, false, false] call WL2_fnc_orderGround;
+	_vehicleUnits pushBack _vehicle;
 
-    _vehicleUnits pushBack _vehicle;
-
+    private _group = createVehicleCrew _vehicle;
+    private _crew = crew _vehicle;
     {
         _x call WL2_fnc_newAssetHandle;
         _vehicleUnits pushBack _x;
     } forEach _crew;
 
-    [_vehicle, driver _vehicle, typeof _vehicle] call WL2_fnc_processOrder;
+    [_group, 0] setWaypointPosition [_sector, 100];
+    _group setBehaviour "COMBAT";
+    _group deleteGroupWhenEmpty true;
+
     _vehicle allowCrewInImmobile [true, true];
+    [_vehicle, [1, 1, 1]] remoteExec ["setVehicleTIPars", 0];
 
     _vehicle setFuel 0;
+
+	_vehicle;
+};
+
+private _vehicleUnits = [];
+private _presetVehicles = _sector getVariable ["WL2_vehiclesToSpawn", []];
+{
+    _x call _spawnCarrierVehicle;
 } forEach _presetVehicles;
 
 private _allUnits = _vehicleUnits + _infantryUnits;

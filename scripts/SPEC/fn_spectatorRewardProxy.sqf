@@ -1,4 +1,4 @@
 #include "includes.inc"
-params ["_reward"];
+params ["_reward", "_reason"];
 
-[objNull, _reward, "Spectate Target Earned Score", "#de0808"] call WL2_fnc_killRewardClient;
+[objNull, _reward, format ["SPECTATE: %1", _reason], "#de0808"] call WL2_fnc_killRewardClient;

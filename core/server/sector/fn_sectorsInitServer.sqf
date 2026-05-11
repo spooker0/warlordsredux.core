@@ -97,8 +97,8 @@ waitUntil {!isNil "WL2_base1" && {!isNil "WL2_base2"}};
 private _fastestCapture = 0.2;
 private _slowestCapture = 0.5;
 #else
-private _fastestCapture = 40;
-private _slowestCapture = 100;
+private _fastestCapture = 60;
+private _slowestCapture = 150;
 #endif
 
 private _sectorGroup = createGroup [civilian, true];

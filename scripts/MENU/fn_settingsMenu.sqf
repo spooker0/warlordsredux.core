@@ -41,7 +41,7 @@ while { alive player } do {
         };
     };
     if (_isManualDrone) then {
-        if (cameraView == "INTERNAL") then {
+        if (!(unitIsUAV cameraOn) && cameraView == "INTERNAL") then {
             cameraOn switchCamera "External";
         };
     };

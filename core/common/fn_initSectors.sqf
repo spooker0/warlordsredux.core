@@ -27,7 +27,7 @@ private _destroyerId = 0;
     private _destroyer = getNumber (_sector >> "destroyer");
     private _carrier = getNumber (_sector >> "carrier");
 
-    if (_destroyer == 1) then {
+    if (_destroyer > 0) then {
         private _destroyerDir = random 360;
         private _actualArea = [_location, _area # 0, _area # 1, _destroyerDir, _area # 3];
         private _objectsInCarrier = (allMissionObjects "") inAreaArray _actualArea;
@@ -36,7 +36,7 @@ private _destroyerId = 0;
         } forEach _objectsInCarrier;
 
         _location set [2, 0];
-        [_location, 90 + _destroyerDir, _name, _destroyerId] spawn WL2_fnc_createDestroyer;
+        [_location, 90 + _destroyerDir, _name, _destroyerId, _destroyer] spawn WL2_fnc_createDestroyer;
         _destroyerId = _destroyerId + 1;
 
         continue;
@@ -59,6 +59,11 @@ private _destroyerId = 0;
 
     if (_carrier == 1) then {
         _logic setVariable ["WL2_isAircraftCarrier", true, true];
+    };
+
+    private _runways = getArray (_sector >> "runways");
+    if (count _runways > 0) then {
+        _logic setVariable ["BIS_WL_runwaySpawnPosArr", _runways, true];
     };
 
     _logic enableSimulationGlobal false;

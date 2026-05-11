@@ -2,6 +2,7 @@
 
 if (isServer) then {
 	serverNamespace setVariable ["fundsDatabase", createHashMap];
+	serverNamespace setVariable ["moneyHistory", createHashMap];
 	serverNamespace setVariable ["playerList", createHashMap];
 
 	serverNamespace setVariable ["WL2_garbageCollector",
@@ -10,6 +11,7 @@ if (isServer) then {
 			["Land_Cargo_Tower_V4_ruins_F", true],
 			["Land_MobileRadar_01_radar_ruins_F", true],
 			["Land_TentHangar_V1_ruins_F", true],
+			["Land_Radar_Small_ruins_F", true],
 			["B_Ejection_Seat_Plane_Fighter_01_F", true],
 			["O_Ejection_Seat_Plane_Fighter_02_F", true],
 			["I_Ejection_Seat_Plane_Fighter_03_F", true],

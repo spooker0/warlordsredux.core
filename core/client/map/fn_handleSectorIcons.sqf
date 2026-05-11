@@ -191,20 +191,18 @@ private _isNewSelection = WL_SectorActionTarget != _sector;
 
 WL_SectorActionTarget = _sector;
 
-private _mapQueue = uiNamespace getVariable "WL2_mapSelectQueue";
-if (count _mapQueue == 0) exitWith {
+private _votePhase = WL_VotePhase;
+if (_votePhase == 0) exitWith {
     BIS_WL_highlightedSector = objNull;
 };
 
-private _lastEntry = _mapQueue # (count _mapQueue - 1);
-private _eligibilityCallback = _lastEntry # 2;
-private _arguments = _lastEntry # 3;
+if !(_sector in BIS_WL_sectorsArray # 1) exitWith {
+    BIS_WL_highlightedSector = objNull;
+};
 
-if ([_sector, _arguments] call _eligibilityCallback) then {
-    BIS_WL_highlightedSector = _sector;
-    if (_isNewSelection) then {
-        playSoundUI ["clickSoft", 1];
-    };
+BIS_WL_highlightedSector = _sector;
+if (_isNewSelection) then {
+    playSoundUI ["clickSoft", 1];
 };
 
 if (inputMouse 0 == 0) exitWith {};
@@ -214,29 +212,20 @@ if (!isNull _singletonScriptHandle) exitWith {};
 
 private _singletonScriptHandle = [_sector] spawn {
     params ["_sector"];
+    if (isNull _sector) exitWith {};
+	if !(_sector in BIS_WL_sectorsArray # 1) exitWith {};
 
-    private _mapQueue = uiNamespace getVariable "WL2_mapSelectQueue";
-    if (count _mapQueue == 0) exitWith {
-        BIS_WL_highlightedSector = objNull;
-        waitUntil {
-            uiSleep 0.001;
-            inputMouse 0 == 0;
-        };
-    };
-
-    private _lastEntry = _mapQueue # (count _mapQueue - 1);
-    private _eligibilityCallback = _lastEntry # 2;
-    private _arguments = _lastEntry # 3;
-
-    if ([_sector, _arguments] call _eligibilityCallback) then {
-        _lastEntry set [1, true];
-        _lastEntry set [4, _sector];
-    };
+    BIS_WL_targetVote = _sector;
+    BIS_WL_highlightedSector = _sector;
+    private _targetVoteVar = format ["BIS_WL_targetVote_%1", getPlayerID player];
+    missionNamespace setVariable [_targetVoteVar, _sector, 2];
 
     waitUntil {
         uiSleep 0.001;
         inputMouse 0 == 0;
     };
+
+    playSoundUI ["AddItemOk", 1];
 };
 
 uiNamespace setVariable ["WL2_mapSectorIconSingleton", _singletonScriptHandle];

@@ -18,7 +18,7 @@ if (_sectorFrontlineCheck) then {
     [
         _sector, _targetId,
         "ft-asset",
-        "<t color='#00ff00'>Fast travel frontline</t>",
+        "<t color='#00ff00'>Fast travel (automatic)</t>",
         _fastTravelAssetExecute,
         true,
         "fastTravelFrontline",
@@ -88,27 +88,6 @@ private _fastTravelStrongholdExecute = {
     ]
 ] call WL2_fnc_addTargetMapButton;
 
-#if WL_FASTTRAVEL_CONFLICT
-// Fast Travel Conflict Button
-private _fastTravelConflictExecute = {
-    params ["_sector"];
-    [1, _sector] call WL2_fnc_executeFastTravel;
-};
-[
-    _sector, _targetId,
-    "ft-conflict",
-    "Fast travel contested",
-    _fastTravelConflictExecute,
-    true,
-    "fastTravelConflict",
-    [
-        WL_COST_FTCONTESTED,
-        "FTConflict",
-        "Fast Travel"
-    ]
-] call WL2_fnc_addTargetMapButton;
-#endif
-
 // Air Assault Button
 private _airAssaultExecute = {
     params ["_sector"];
@@ -147,6 +126,7 @@ private _vehicleParadropExecute = {
     ]
 ] call WL2_fnc_addTargetMapButton;
 
+#if WL_SECTOR_SCAN
 // Scan Button
 private _scanExecute = {
     params ["_sector"];
@@ -165,6 +145,7 @@ private _scanExecute = {
         "Fast Travel"
     ]
 ] call WL2_fnc_addTargetMapButton;
+#endif
 
 // Combat air patrol button
 private _combatAirExecute = {
@@ -181,7 +162,7 @@ private _combatAirExecute = {
             playSoundUI ["AddItemFailed"];
         };
 
-        [player, "combatAir", [], _sector] remoteExec ["WL2_fnc_handleClientRequest", 2];
+        [player, "combatAir", BIS_WL_playerSide, _sector] remoteExec ["WL2_fnc_handleClientRequest", 2];
     };
 };
 [

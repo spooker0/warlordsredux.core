@@ -75,7 +75,7 @@ addMissionEventHandler ["Draw3D", {
         [linearConversion [_minFreq, _maxFreq, _emMin, _powerAtMin, _powerAtMax, true], (_emMin + _emMax) / 2];
     };
 
-    private _display = uiNamespace getVariable ["RscSpectrumIndicator", objNull];
+    private _display = uiNamespace getVariable ["RscSpectrumIndicator", displayNull];
     if (isNull _display) then {
         "Spectrum" cutRsc ["RscSpectrumIndicator", "PLAIN", -1, false, true];
         _display = uiNamespace getVariable "RscSpectrumIndicator";
@@ -85,14 +85,20 @@ addMissionEventHandler ["Draw3D", {
     while { !BIS_WL_missionEnd } do {
         uiSleep 0.2;
 
-        WL_SpectrumInterface = currentWeapon player == "hgun_esd_01_F" &&
-            cameraOn == player &&
-            WL_ISUP(player);
-
-        if (!WL_SpectrumInterface) then {
+        if (WL_ISDOWN(player)) then {
             _indicator ctrlSetText "";
+            WL_SpectrumInterface = false;
             continue;
         };
+        if (cameraOn != player || currentWeapon player != "hgun_esd_01_F") then {
+            if !(cameraOn isKindOf "C_Plane_Civil_01_F") then {
+                _indicator ctrlSetText "";
+                WL_SpectrumInterface = false;
+                continue;
+            };
+        };
+
+        WL_SpectrumInterface = true;
 
         private _spectrumData = [100, 500, 1, 0.5] call _setSpectrum;
         _spectrumData params ["_lockDifficulty", "_frequency"];
@@ -124,7 +130,7 @@ addMissionEventHandler ["Draw3D", {
         } select {
             [_x] call WL2_fnc_isDrone;
         } select {
-            count lineIntersectsSurfaces [getPosASL _x, eyePos player, _x, player] == 0
+            !(terrainIntersectASL [getPosASL _x, player modelToWorldWorld [0, 0, 2]])
         };
 
         player setVariable ["WL_SpectrumUavs", _uavsInRange];
@@ -210,10 +216,9 @@ addMissionEventHandler ["Draw3D", {
                 missionNamespace setVariable ["#EM_Progress", _lockStatus / (4 * _lockDifficulty)];
 
                 if (_lockStatus > (4 * _lockDifficulty)) then {
-                    _lockedUav setVariable ["WL_lastHitter", player, 2];
-
                     // Effect
-                    if (getPosATL _lockedUav # 2 > 1) then {
+                    if (_lockedUav isKindOf "Air") then {
+                        _lockedUav setVariable ["WL_lastHitter", player, 2];
                         [_lockedUav, player] remoteExec ["WL2_fnc_uavJammed", 2];
                         playSoundUI ["a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", 1, 1, true];
                     };

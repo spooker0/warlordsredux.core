@@ -52,8 +52,6 @@ switch (_className) do {
     case "Arsenal": {
         [player, "orderArsenal"] remoteExec ["WL2_fnc_handleClientRequest", 2];
     };
-    case "Scan": { 0 spawn WL2_fnc_orderSectorScan };
-    case "CombatAir": { 0 spawn WL2_fnc_orderCombatAir };
     case "Conscription": {
         "RequestMenu_close" call WL2_fnc_setupUI;
         playSoundUI ["AddItemOk"];
@@ -75,18 +73,14 @@ switch (_className) do {
             };
         };
     };
-    case "FTSeized": { 0 spawn WL2_fnc_orderFastTravel };
-    case "FTConflict": { 1 spawn WL2_fnc_orderFastTravel };
-    case "FTAirAssault": { 2 spawn WL2_fnc_orderFastTravel };
-    case "FTParadropVehicle": { 3 spawn WL2_fnc_orderFastTravel };
+    case "FTAirAssault": {
+        [2, WL_TARGET_FRIENDLY] spawn WL2_fnc_executeFastTravel;
+    };
     case "FTSquadLeader": {
         ["ftSquadLeader"] spawn SQD_fnc_client;
     };
     case "BuyStronghold": {
         0 spawn WL2_fnc_orderStronghold;
-    };
-    case "StrongholdFT": {
-        5 spawn WL2_fnc_orderFastTravel;
     };
     case "BuyFOB": {
         switch (BIS_WL_playerSide) do {

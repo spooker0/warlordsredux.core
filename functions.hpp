@@ -215,12 +215,14 @@ class CfgFunctions {
 			class triggerPurchase {};
 			class updateLevelDisplay {};
 			class welcome {};
+			class writeResult {};
 		};
 		class ClientAction {
 			file = "src\core\client\action";
 			class actionLockCamera {};
 			class afkAction {};
 			class airRearmAction {};
+			class airWreckHandler {};
 			class arsenalSetup {};
 			class attachVehicle {};
 			class buyMenuAction {};
@@ -229,6 +231,7 @@ class CfgFunctions {
 			class claimAction {};
 			class claimEligibility {};
 			class conscription {};
+			class conscriptVehicle {};
 			class controlDroneActions {};
 			class controlGunnerAction {};
 			class controlGunnerEligibility {};
@@ -244,11 +247,13 @@ class CfgFunctions {
 			class hmdSettings {};
 			class hmdSettingsAction {};
 			class installAction {};
+			class laserWeapon {};
 			class lockActionEligibility {};
 			class lockActionUpdate {};
 			class mineClearAction {};
 			class parachuteAction {};
 			class parachuteSetup {};
+			class paradropperAction {};
 			class placeRespawnBag {};
 			class radarOperateAction {};
 			class radarOperateUpdate {};
@@ -281,12 +286,11 @@ class CfgFunctions {
 			class setupForwardBaseAction {};
 			class setupForwardBaseEligibility {};
 			class setupForwardBaseMp {};
+			class setupIntegralWeaponAction {};
 			class setupSimpleAsset {};
-			class setupMiniMortarAction {};
 			class slingAddAction {};
 			class smokeCurtainAction {};
 			class smokeCurtainParticles {};
-			class stabilizeBoatAction {};
 			class tireChangeEligibility {};
 			class turretVisualizerAction {};
 			class vehicleLockAction {};
@@ -339,7 +343,6 @@ class CfgFunctions {
 			class killHistory {};
 			class killNotify {};
 			class killRewardClient {};
-			class publishRewards {};
 			class punishmentClient {};
 			class punishMessage {};
 			class refreshKillfeed {};
@@ -393,17 +396,12 @@ class CfgFunctions {
 			class findStrongholdBuilding {};
 			class orderAircraft {};
 			class orderArsenal {};
-			class orderCombatAir {};
 			class orderCruiseMissile {};
-			class orderFastTravel {};
 			class orderFundsTransfer {};
-			class orderMapSelection {};
 			class orderNaval {};
 			class orderStronghold {};
-			class orderSectorScan {};
 			class orderVehicle {};
 			class requestPurchase {};
-			class requestVote {};
 		};
 		class ClientPurchase {
 			file = "src\core\client\purchase";
@@ -460,8 +458,9 @@ class CfgFunctions {
 			class getAirSectorSpawn {};
 			class getAngle {};
 			class getAssetSide {};
-			class getAssetOwnerName {};
-			class getAssetTypeName {};
+			class getAssetOwnerName { headerType = -1; };
+			class getAssetTypeName { headerType = -1; };
+			class getAssetTypeShortName { headerType = -1; };
 			class getMagazineName {};
 			class getMoneySign {};
 			class getVehicleWeapons {};
@@ -528,6 +527,7 @@ class CfgFunctions {
 			class missileDestroy {};
 			class onDisconnect {};
 			class processRunways {};
+			class publishRewards {};
 			class punishPlayer {};
 			class rebalance {};
 			class requestScoreboard {};

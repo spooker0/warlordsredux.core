@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_displayText", "_reward", "_customColor", "_iconUrl"];
 
-if (WL_IsSpectator && _displayText != "Spectate Target Earned Score") exitWith {};
+if (WL_IsSpectator && !("SPECTATE" in _displayText)) exitWith {};
 
 private _display = uiNamespace getVariable ["RscWLKillfeedMenu", displayNull];
 if (isNull _display) then {

@@ -7,7 +7,7 @@ _penetrator setVectorDirAndUp _dirAndUp;
 _penetrator enableSimulation false;
 
 private _nearDestroyables = (nearestObjects [_position, [], 100, true]) select {
-    private _distanceLimit = if (_x isKindOf "StaticShip") then { 100 } else { 15 };
+    private _distanceLimit = if (_x isKindOf "StaticShip") then { 100 } else { 20 };
     _x distance2D _position < _distanceLimit && _x getVariable ["WL2_canDemolish", false];
 } select {
     WL_UNIT(_x, "obstacle", 0) <= 1;

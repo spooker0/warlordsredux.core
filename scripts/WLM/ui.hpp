@@ -183,7 +183,7 @@ class WLM_PylonUI {
             w = 0.194;
             h = 0.055;
             sizeEx = 0.05;
-            text = $STR_appearance;
+            text = $STR_WL_appearance;
             colorText[] = {1, 1, 1, 1};
             font = "PuristaMedium";
             shadow = 0;

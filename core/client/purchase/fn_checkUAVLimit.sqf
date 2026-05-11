@@ -14,9 +14,8 @@ if (getNumber (configFile >> "CfgVehicles" >> _spawnClass >> "isUav") == 1) then
         WL_UNIT(_x, "decoy", 0) == 0
     };
 
-    private _uavLimit = WL_MAX_AUTOASSETS;
-    if (count _ownedUavs >= _uavLimit) then {
-        [false, format [localize "STR_A3_WL_tip_max_autonomous", _uavLimit]];
+    if (count _ownedUavs >= WL_MAX_AUTOASSETS) then {
+        [false, format [localize "STR_A3_WL_tip_max_autonomous", WL_MAX_AUTOASSETS]];
     } else {
         [true, ""];
     };

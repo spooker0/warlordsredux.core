@@ -18,7 +18,7 @@ if (!alive _targetVehicle) exitWith {
     playSoundUI ["AddItemFailed"];
 };
 
-private _assetPos = getPosASL _targetVehicle;
+private _assetPos = _targetVehicle modelToWorld [0, 0, 0];
 private _altitude = _assetPos # 2;
 if (_altitude < -1 && surfaceIsWater _assetPos) exitWith {
     ["Cannot fast travel to a submerged vehicle."] call WL2_fnc_smoothText;
@@ -46,21 +46,31 @@ private _unitsToMove = (units player) select {
 
 {
     private _unit = _x;
+    if (_altitude > 60) then {
+        private _destination = _targetVehicle modelToWorld [0, 0, -10];
+		_unit setPosASL _destination;
+
+		_unit setVelocityModelSpace [0, 30, 0];
+		[_unit] spawn WL2_fnc_parachuteSetup;
+        continue;
+    };
+
     if (_targetVehicle emptyPositions "cargo" >= 1) then {
         _unit moveInCargo _targetVehicle;
-    } else {
-        if (isNull _targetVehicle) then {
-            _targetVehicle = player;
-        };
+        continue;
+    };
 
-        private _buildingPositions = _targetVehicle buildingPos -1;
-        if (count _buildingPositions > 0) then {
-            private _destination = selectRandom _buildingPositions;
-            _unit setPosASL (AGLtoASL _destination);
-        } else {
-            private _destination = _targetVehicle modelToWorld [0, 0, 0];
-            _unit setVehiclePosition [_destination, [], 5, "CAN_COLLIDE"];
-        };
+    if (isNull _targetVehicle) then {
+        _targetVehicle = player;
+    };
+
+    private _buildingPositions = _targetVehicle buildingPos -1;
+    if (count _buildingPositions > 0) then {
+        private _destination = selectRandom _buildingPositions;
+        _unit setPosASL (AGLtoASL _destination);
+    } else {
+        private _destination = _targetVehicle modelToWorld [0, 0, 0];
+        _unit setVehiclePosition [_destination, [], 5, "CAN_COLLIDE"];
     };
 } forEach _unitsToMove;
 

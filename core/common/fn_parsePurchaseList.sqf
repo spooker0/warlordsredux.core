@@ -18,26 +18,12 @@ private _fastTravelArr = [
 		"\A3\EditorPreviews_F_Decade\Data\CfgVehicles\PortableFlagPole_01_F.jpg",
 		localize "STR_WL_ftHome"
 	], [
-		"FTSeized",
-		0,
-		[],
-		localize "STR_A3_WL_menu_fasttravel_seized",
-		"\A3\Data_F_Warlords\Data\preview_ft_owned.jpg",
-		localize "STR_A3_WL_menu_fasttravel_info"
-	], [
 		"FTAirAssault",
 		WL_COST_AIRASSAULT,
 		[],
 		localize "STR_WL_ftAirAssault",
 		"\A3\EditorPreviews_F\Data\CfgVehicles\VR_Area_01_circle_4_grey_F.jpg",
 		localize "STR_WL_ftAirAssaultInfo"
-	], [
-		"FTParadropVehicle",
-		WL_COST_PARADROP,
-		[],
-		localize "STR_WL_ftParadrop",
-		"\A3\EditorPreviews_F\Data\CfgVehicles\VR_Area_01_circle_4_grey_F.jpg",
-		localize "STR_WL_ftParadropInfo"
 	], [
 		"FTSquadLeader",
 		WL_COST_FTSL,
@@ -52,13 +38,6 @@ private _fastTravelArr = [
 		localize "STR_WL_ftTent",
 		"\A3\EditorPreviews_F\Data\CfgVehicles\Land_TentA_F.jpg",
 		localize "STR_WL_ftTentInfo"
-	], [
-		"StrongholdFT",
-		0,
-		[],
-		localize "STR_WL_ftStronghold",
-		"\A3\EditorPreviews_F\Data\CfgVehicles\Land_Cargo_Tower_V3_F.jpg",
-		localize "STR_WL_ftStrongholdInfo"
 	], [
 		"BuyFOB",
 		WL_COST_SUPPLIES,
@@ -76,17 +55,6 @@ private _fastTravelArr = [
 	]
 ];
 
-#if WL_FASTTRAVEL_CONFLICT
-_fastTravelArr pushBack [
-	"FTConflict",
-	WL_COST_FTCONTESTED,
-	[],
-	localize "STR_A3_WL_menu_fasttravel_conflict",
-	"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-	localize "STR_A3_WL_menu_fasttravel_info"
-];
-#endif
-
 private _ftCategoryIndex = WL_REQUISITION_CATEGORIES find "Fast Travel";
 if (_ftCategoryIndex != -1) then {
 	_purchaseable set [_ftCategoryIndex, _fastTravelArr];
@@ -94,20 +62,6 @@ if (_ftCategoryIndex != -1) then {
 
 private _strategyArr = [
 	[
-		"Scan",
-		WL_COST_SCAN,
-		[],
-		localize "STR_A3_WL_param4_title",
-		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
-		localize "STR_A3_WL_menu_scan_info"
-	], [
-		"CombatAir",
-		WL_COST_COMBATAIR,
-		[],
-		localize "STR_WL_combatAirPatrol",
-		"\a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa",
-		localize "STR_WL_combatAirPatrolInfo"
-	], [
 		"Conscription",
 		WL_COST_CONSCRIPT,
 		[],

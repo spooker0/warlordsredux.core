@@ -64,6 +64,7 @@ private _finalPot = BIS_WL_allSectors select {
 // diag_log format ["Iterations: %1, Final bases: %2", _iterations, _potBases apply { _x getVariable ["WL2_name", ""] }];
 
 private _secondBase = if (count _finalPot == 0) then {
+    diag_log format ["No valid second base found for %1", _firstBase getVariable ["WL2_name", ""]];
     // Fallback
     selectRandom (BIS_WL_allSectors select {
         [_x] call _canBeBase && _x != _firstBase;

@@ -339,6 +339,29 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
 };
 
 addMissionEventHandler ["Draw3D", {
+    // private _currentLaser = uiNamespace getVariable ["WL2_currentLaser", objNull];
+	// if (!isNull _currentLaser) then {
+    //     if (_currentLaser != cameraOn) exitWith {};
+
+    //     private _laserTarget = laserTarget _currentLaser;
+    //     if (isNull _laserTarget) exitWith {};
+
+    //     private _gunPos = _currentLaser selectionPosition "pos_gunner_view";
+    //     private _startPos = _currentLaser modelToWorldWorld (_gunPos vectorMultiply 1.1);
+    //     private _direction = vectorNormalized ((getPosASL _laserTarget) vectorDiff _startPos);
+
+    //     drawLaser [
+    //         _startPos,
+    //         _direction,
+    //         [1000, 0, 0],
+    //         [],
+    //         20,
+    //         2,
+    //         -1,
+    //         false
+    //     ];
+    // };
+
     private _drawIcons = uiNamespace getVariable ["WL2_damagedDrawIcons", []];
     private _playerIcons = uiNamespace getVariable ["WL2_drawPlayerIcons", []];
     {

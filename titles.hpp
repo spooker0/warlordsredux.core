@@ -522,6 +522,14 @@ class RscTitles {
 				colorFrame[] = {0, 0, 0, 0};
 				colorBar[] = {0.18, 1, 0.18, 1};
 			};
+			class RscWLPromptDisplay_Image: RscPicture {
+				idc = 41004;
+				x = 0.47;
+				y = safeZoneY + 0.17;
+				w = 0.06;
+				h = 0.08;
+				text = "\a3\ui_f\data\igui\cfg\simpletasks\types\rifle_ca.paa";
+			};
 		};
 	};
 

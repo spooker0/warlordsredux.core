@@ -22,7 +22,9 @@ private _catapultActionID = _asset addAction [
             _railsNearby = [_railsNearby, [], { cameraOn distance _x }, "ASCEND"] call BIS_fnc_sortBy;
             private _railCatapult = _railsNearby # 0;
             _asset setDir (getDir _railCatapult);
-            _asset setVehiclePosition [_railCatapult modelToWorld [0, -10, 0], [], 0, "CAN_COLLIDE"];
+
+            private _railPos = _railCatapult modelToWorld [0, -10, 0.1];
+            _asset setPosATL _railPos;
         };
 
         ["Launching in 5 seconds!"] call WL2_fnc_smoothText;

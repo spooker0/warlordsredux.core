@@ -17,7 +17,6 @@ if (_kills == 3) then {
 			private _uav = createVehicle ["C_UAV_06_F", _uavPosition, [], 0, "FLY"];
 			_uav attachTo [player];
 
-			_uav setVariable ["WL_scannerOn", true];
 			_uav setVariable ["BIS_WL_ownerAssetSide", BIS_WL_playerSide];
 			_uav allowDamage false;
 			player setVariable ["WL_hmdOverride", 2];
@@ -26,14 +25,13 @@ if (_kills == 3) then {
 			private _startTime = serverTime;
 			waitUntil {
 				uiSleep 0.2;
-				[_uav, -1, false, 1, 2000] call WL2_fnc_scanner;
+				[_uav, 2000, 1] call WL2_fnc_scanner;
 				hintSilent format ["UAV - Fuel: %1%%", round (100 * (_fuel - (serverTime - _startTime)) / _fuel)];
 				!alive player || serverTime - _startTime > _fuel
 			};
 			hintSilent "";
 
 			player setVariable ["WL_hmdOverride", -1];
-			_uav setVariable ["WL_scannerOn", false];
 			deleteVehicle _uav;
 		},
 		[],
@@ -59,7 +57,6 @@ if (_kills == 5) then {
 
 			private _uav = createVehicle ["C_UAV_06_F", getPosATL _missile, [], 0, "FLY"];
 			_uav attachTo [_missile, [0, 0, 100]];
-			_uav setVariable ["WL_scannerOn", true];
 			_uav setVariable ["BIS_WL_ownerAssetSide", BIS_WL_playerSide];
 			_uav allowDamage false;
 			player setVariable ["WL_hmdOverride", 2];
@@ -167,12 +164,11 @@ if (_kills == 5) then {
 
 			showHUD [true, true, true, true, true, true, true, true, true, true, true];
 
-			_uav setVariable ["WL_scannerOn", true];
 			private _startTime = serverTime;
 			private _fuel = 60;
 			waitUntil {
 				uiSleep 0.2;
-				[_uav, -1, false, 1, 8000] call WL2_fnc_scanner;
+				[_uav, 8000, 1] call WL2_fnc_scanner;
 				_fuelDisplay ctrlSetStructuredText parseText format ["<t align='center' size='2'>Fuel: %1%%</t>", round (100 * (_fuel - (serverTime - _startTime)) / _fuel)];
 				!alive _missile || serverTime - _startTime > _fuel
 			};
@@ -189,7 +185,6 @@ if (_kills == 5) then {
 			"reticle" cutText ["", "PLAIN"];
 
 			player setVariable ["WL_hmdOverride", -1];
-			_uav setVariable ["WL_scannerOn", false];
 			deleteVehicle _uav;
 
 			[] call MENU_fnc_updateViewDistance;
@@ -345,12 +340,11 @@ if (_kills == 7) then {
 			private _startTime = serverTime;
 			private _fuel = 60;
 
-			_chopper setVariable ["WL_scannerOn", true];
 			waitUntil {
 				uiSleep 0.2;
 				player setVariable ["WL_hmdOverride", 2];
 				_gunnerUnit selectWeapon ["autocannon_40mm_VTOL_01", "HE", "player"];
-				[_chopper, -1, false, 1, 4000] call WL2_fnc_scanner;
+				[_chopper, 4000, 1] call WL2_fnc_scanner;
 				_fuelDisplay ctrlSetStructuredText parseText format [
 					"<t align='center' size='2'>Fuel: %1%%<br/>Missiles: %2</t>",
 					round (100 * (_fuel - (serverTime - _startTime)) / _fuel),
