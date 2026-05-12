@@ -9,7 +9,7 @@ uiSleep 0.1;
 
 private _teamPriorityVar = format ["WL2_teamPriority_%1", _side];
 private _teamPriority = missionNamespace getVariable [_teamPriorityVar, objNull];
-if (WL_ISUP(player) && vehicle player != player) exitWith {};
+if (WL_ISUP(player) && cameraOn != player) exitWith {};
 
 private _callText = format [localize "STR_WL_conscriptMessage", name _conscripter];
 

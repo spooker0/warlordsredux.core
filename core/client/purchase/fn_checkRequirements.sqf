@@ -10,7 +10,15 @@ private _forwardBases = _potentialBases select {
 
 private _servicesInSector = _sector getVariable ["WL2_services", []];
 if ("A" in _requirements && !("A" in _servicesInSector)) exitWith {
-    [false, "Must be in a sector with a runway."];
+    private _forwardAirbases = _forwardBases select {
+        private _defenseLevel = _x getVariable ["WL2_forwardBaseDefenseLevel", 0];
+        _defenseLevel > 3
+    };
+    if (count _forwardAirbases > 0) then {
+        [true, ""];
+    } else {
+        [false, "Must be in a sector with a runway."];
+    };
 };
 
 if ("H" in _requirements && !("H" in _servicesInSector)) exitWith {

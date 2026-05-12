@@ -284,7 +284,6 @@ if (_asset isKindOf "Man") then {
 		private _assetGrp = group _asset;
 		private _assetTypeName = [_asset] call WL2_fnc_getAssetTypeName;
 		_assetGrp setVariable ["WL2_assetOwner", _owner, true];
-		_assetGrp setVariable ["WL2_assetTypeName", _assetTypeName, true];
 		[_asset] call WL2_fnc_uavConnectRefresh;
 
 		_asset setBehaviourStrong "COMBAT";
@@ -448,12 +447,6 @@ if (_asset isKindOf "Man") then {
 			};
 		} forEach _assetAppearanceDefaults;
 	};
-
-	private _assetTypeName = WL_ASSET_GET(_data, "name", getText (configFile >> "CfgVehicles" >> _assetActualType >> "displayName"));
-	_asset setVariable ["WL2_assetTypeName", _assetTypeName, true];
-
-	private _shortName = WL_ASSET_GET(_data, "nameShort", _assetTypeName);
-	_asset setVariable ["WL2_assetTypeShortName", _shortName, true];
 };
 
 [_asset] remoteExec ["WL2_fnc_removeAction", 0, true];

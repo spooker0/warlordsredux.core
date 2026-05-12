@@ -5,4 +5,10 @@ if (_cachedName != "") exitWith {
     _cachedName;
 };
 
-[_asset] call WL2_fnc_getAssetTypeName;
+private _assetActualType = _asset getVariable ["WL2_orderedClass", typeOf _asset];
+private _shortName = WL_ASSET(_assetActualType, "nameShort", "");
+if (_shortName == "") then {
+    _shortName = [_asset] call WL2_fnc_getAssetTypeName;
+};
+_asset setVariable ["WL2_assetTypeShortName", _shortName];
+_shortName
