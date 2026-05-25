@@ -6,9 +6,12 @@ if (_attach) then {
     private _load = _arguments # 1;
     private _offset = _arguments # 2;
 
-    private _assetIsAir = _asset isKindOf "Air";
-    if (_assetIsAir) then {
+    if (_asset isKindOf "VTOL_01_base_F") then {
         _offset = _offset vectorAdd [0, 3, -4.9];
+    };
+    if (_asset isKindOf "VTOL_02_base_F") then {
+        _offset = _offset vectorAdd [0, 0, -3.7];
+        // _offset = _offset vectorAdd [0, 1.8, -1.0];
     };
 
     _load attachTo [_asset, _offset];
@@ -17,6 +20,8 @@ if (_attach) then {
         _load setDir _loadableAngle;
         _load setPosWorld getPosWorld _load;
     };
+
+    private _assetIsAir = _asset isKindOf "Air";
     if (_load isKindOf "Air" && !_assetIsAir) then {
         _load setDir 45;
         _load setPosWorld getPosWorld _load;

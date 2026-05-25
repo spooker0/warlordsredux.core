@@ -36,18 +36,16 @@ _asset setVariable ["WL2_repairActionID", _actionID];
 
 private _allHitPoints = getAllHitPointsDamage _asset;
 if (count _allHitPoints == 0) exitWith {};
-private _validWheels = _allHitPoints select 0 select {
-    _x regexMatch "hit.*wheel" || _x == "hitengine";
-};
-private _validTracks = _allHitPoints select 0 select {
-    _x regexMatch "hit.*track" || _x == "hitengine";
-};
-private _validHitPoints = _validWheels + _validTracks;
 
+private _validHitPoints = _allHitPoints select 0 select {
+    _x regexMatch "hit.*wheel" ||
+    _x regexMatch "hit.*track" ||
+    _x in ["hitengine", "hitturret", "hitgun", "hitcomturret", "hitcomgun"];
+};
 if (count _validHitPoints == 0) exitWith {};
 
-private _repairWheels = _asset addAction [
-	"<t color='#4bff58'>Field Mobility Repairs</t>",
+_asset addAction [
+	"<t color='#4bff58'>Field Repairs</t>",
 	{
         _this spawn {
             params ["_asset", "_caller", "_actionId", "_arguments"];
@@ -116,7 +114,7 @@ private _repairWheels = _asset addAction [
 	true,
 	true,
 	"",
-	"cursorTarget == _target && [_target, _this] call WL2_fnc_tireChangeEligibility",
+	"cursorTarget == _target && [_target, _this] call WL2_fnc_fieldRepairEligibility",
 	WL_MAINTENANCE_RADIUS,
 	false
 ];

@@ -97,6 +97,10 @@ if (_asset isKindOf "Man") then {
 		_asset setVariable ["WL2_hasEWBoost", true, true];
 	};
 
+	if (WL_ASSET_GET(_data, "hasDroneHunter", 0) > 0) then {
+		_asset setVariable ["WL2_hasDroneHunter", true, true];
+	};
+
 	if !("ToolKit" in (itemCargo _asset)) then {
 		_asset addItemCargoGlobal ["ToolKit", 1];
 	};
@@ -345,7 +349,9 @@ if (_asset isKindOf "Man") then {
 		_asset setVariable ["WLM_ammoCargo", 10000, true];
 	};
 
-	if (WL_ASSET_GET(_data, "hasParadropper", 0) > 0) then {
+	private _paradrops = WL_ASSET_GET(_data, "paradrops", 0);
+	if (_paradrops > 0) then {
+		_asset setVariable ["WL2_paradrops", _paradrops, true];
 		[_asset] spawn WL2_fnc_paradropperAction;
 	};
 
@@ -446,6 +452,15 @@ if (_asset isKindOf "Man") then {
 				[_x, _y, _asset] call WLM_fnc_applyCustomization;
 			};
 		} forEach _assetAppearanceDefaults;
+	};
+
+	private _drone = WL_ASSET_GET(_data, "drone", 0);
+	private _category = WL_ASSET_GET(_data, "category", "");
+	if (_drone == 0 && _category == "Naval") then {
+		private _playerPosition = getPosASL player;
+		_playerPosition set [2, -1];
+		player setPosATL _playerPosition;
+		player moveInDriver _asset;
 	};
 };
 

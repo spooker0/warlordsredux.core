@@ -111,16 +111,26 @@ private _fortification = if (_revealed) then {
     ""
 };
 
+private _sectorOwner = _sector getVariable ["BIS_WL_owner", independent];
+
 private _sectorName = _sector getVariable ["WL2_name", "Sector"];
-private _sectorIncome = if !(_sectorName in WL_SPECIAL_SECTORS) then {
-    format ["Size: %1", _sector getVariable ["BIS_WL_value", 0]]
+private _sectorSize = if !(_sectorName in WL_SPECIAL_SECTORS) then {
+    private _size = _sector getVariable ["BIS_WL_value", 0];
+    private _isNotHome = !(_sector in  WL_BASES);
+    if (_revealed && _sectorOwner != independent && _isNotHome) then {
+        private _defenders = _sector getVariable ["WL2_defenders", 0];
+        private _maxDefenders = ((_size * WL_DEFENDER_MOD) max WL_DEFENDER_MIN) * WL_DEFENDER_MAXMOD;
+        format ["Size: %1 (Reinforcements: %2/%3)", _size, _defenders, _maxDefenders]
+    } else {
+        format ["Size: %1", _size]
+    };
 } else {
     ""
 };
 
 private _sectorInfo = [
     _sectorName,
-    _sectorIncome
+    _sectorSize
 ];
 
 private _captureDetails = _sector getVariable ["WL_captureDetails", []];
@@ -150,7 +160,7 @@ if (_revealed) then {
             } else {
                 "depleted"
             };
-            if (_sector getVariable ["BIS_WL_owner", independent] != independent) then {
+            if (_sectorOwner != independent) then {
                 "";
             } else {
                 [

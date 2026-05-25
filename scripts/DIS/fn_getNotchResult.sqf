@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_target", "_launcher", "_projectile", ["_distanceBeforeNotch", WL_SAM_NOTCH_ACTIVE_DIST]];
+params ["_target", "_launcher", "_projectile", "_distanceBeforeNotch"];
 
 private _targetVelocity = velocity _target;
 private _projectileRelativeVelocity = _projectile vectorWorldToModel _targetVelocity;

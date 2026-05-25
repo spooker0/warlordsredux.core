@@ -135,27 +135,15 @@ WL_LoadingState = 10;
 0 spawn WL2_fnc_repackMagazines;
 
 0 spawn {
-	_uid = getPlayerUID player;
-	_selectedCnt = count ((groupSelectedUnits player) select {
-		_x != player && {
-			(_x getVariable ["BIS_WL_ownerAsset", "123"]) == _uid
-		}
-	});
 	while { !BIS_WL_missionEnd } do {
-		waitUntil {
+		private _buyMenuDisplay = uiNamespace getVariable ["BIS_WL_purchaseMenuDisplay", displayNull];
+		if (isNull _buyMenuDisplay) then {
 			uiSleep 1;
-			count ((groupSelectedUnits player) select {
-				_x != player && {
-					(_x getVariable ["BIS_WL_ownerAsset", "123"]) == _uid
-				}
-			}) != _selectedCnt
+			continue;
 		};
-		_selectedCnt = count ((groupSelectedUnits player) select {
-			_x != player && {
-				(_x getVariable ["BIS_WL_ownerAsset", "123"]) == _uid
-			}
-		});
+
 		call WL2_fnc_purchaseMenuRefresh;
+		uiSleep 0.5;
 	};
 };
 
@@ -244,6 +232,7 @@ uiNamespace setVariable ["WL2_chatHistory", []];
 uiNamespace setVariable ["WL2_modOverrideUid", ""];
 uiNamespace setVariable ["WL2_currentNotification", []];
 uiNamespace setVariable ["WL2_timedPromptQueue", []];
+uiNamespace setVariable ["WL2_HMDSettingProfileIndex", 0];
 
 WL2_lastLoadout = getUnitLoadout player;
 [player] call WLC_fnc_onRespawn;

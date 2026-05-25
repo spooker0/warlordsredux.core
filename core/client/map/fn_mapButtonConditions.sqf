@@ -7,12 +7,20 @@ switch (_conditionName) do {
             (_x getVariable ["BIS_WL_owner", independent]) == BIS_WL_playerSide
         };
         if (_target in _eligibleSectors && ([BIS_WL_playerSide] call WL2_fnc_getSideBase) != _target) then {
-            "ok";
+            private _defenders = _target getVariable ["WL2_defenders", 0];
+            if (_defenders <= 0 && _target == WL_TARGET_ENEMY) then {
+                "Sector has run out of defenders. Resupply the sector to enable fast travel there.";
+            } else {
+                "ok";
+            };
         } else {
             "";
         };
     };
     case "fastTravelFrontline": {
+        private _sectorFrontlineCheck = [false, _target, "sector"] call WL2_fnc_travelTeamPriority;
+        if (!_sectorFrontlineCheck) exitWith { "" };
+
         private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
         if (_homeBase == _target) then {
             "";
@@ -31,7 +39,11 @@ switch (_conditionName) do {
     case "fastTravelConflict";
     case "airAssault": {
         if (_target == WL_TARGET_FRIENDLY) then {
-            "ok";
+            if (_target in WL_BASES) then {
+                "Can't fast travel to enemy home base.";
+            } else {
+                "ok";
+            };
         } else {
             "";
         };
@@ -40,10 +52,17 @@ switch (_conditionName) do {
         private _sectorAvailable = _target in (BIS_WL_sectorsArray # 2);
         if (!_sectorAvailable) exitWith { "" };
 
+        if (([BIS_WL_playerSide] call WL2_fnc_getSideBase) == _target) exitWith { "" };
+
         private _isCarrierSector = _target getVariable ["WL2_isAircraftCarrier", false];
         if (_isCarrierSector) exitWith { "Cannot paradrop onto aircraft carriers." };
 
-        "ok";
+        private _defenders = _target getVariable ["WL2_defenders", 0];
+        if (_defenders <= 0 && _target == WL_TARGET_ENEMY) then {
+            "Sector has run out of defenders. Resupply the sector to enable vehicle paradrop there.";
+        } else {
+            "ok";
+        };
     };
     case "vehicleParadropFOB": {
         if (!alive _target) exitWith { "Forward base has been destroyed." };
@@ -165,11 +184,6 @@ switch (_conditionName) do {
         if (vehicle player != player) exitWith { "" };
         "ok";
     };
-    case "fastTravelAIVehicle": {
-        if (_target == player) exitWith { "" };
-        if (vehicle player == player) exitWith { "" };
-        "ok";
-    };
     case "fastTravelStrongholdTarget": {
         private _findIsStronghold = (BIS_WL_sectorsArray # 2) select {
             !isNull (_x getVariable ["WL_stronghold", objNull]) && _x == _target
@@ -190,23 +204,6 @@ switch (_conditionName) do {
 
         private _hasIntruders = _target getVariable ["WL2_strongholdIntruders", false];
         if (_hasIntruders) exitWith { "Cannot remove stronghold with intruders present." };;
-
-        "ok";
-    };
-    case "fortifyStronghold": {
-        private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
-        if !(_target in _strongholds) exitWith { "" };
-
-        private _sector = _target getVariable ["WL_strongholdSector", objNull];
-
-        private _sectorIsVulnerable = count (_sector getVariable ["BIS_WL_previousOwners", []]) > 1;
-        if (!_sectorIsVulnerable) exitWith { "Sector is not vulnerable." };
-
-        private _sectorIsFortifying = _sector getVariable ["WL_fortificationTime", -1] > serverTime;
-        if (!_sectorIsFortifying) exitWith { "Sector is not vulnerable." };
-
-        private _sectorAlreadyFortified = _sector getVariable ["WL_strongholdFortified", false];
-        if (_sectorAlreadyFortified) exitWith { "Sector is already being fortified." };
 
         "ok";
     };
@@ -280,6 +277,17 @@ switch (_conditionName) do {
             format ["Combat air patrol is on cooldown for this airbase: %1", _timeRemaining]
         };
 
+        "ok";
+    };
+    case "orderParadropFOB": {
+        if (!alive _target) exitWith { "Forward base has been destroyed." };
+        if !(_target getVariable ["WL2_forwardBaseReady", false]) exitWith { "Forward base under construction." };
+        private _fobPlacer = _target getVariable ["WL2_forwardBasePlacer", ""];
+        if (_fobPlacer == "") exitWith { "ok" };
+        if (_fobPlacer != getPlayerUID player) exitWith {
+            private _fobPlacerPlayer = _fobPlacer call BIS_fnc_getUnitByUid;
+            format ["Only the owner can call for a paradrop. This forward base was placed by: %1", name _fobPlacerPlayer]
+        };
         "ok";
     };
     case "defendFOB": {

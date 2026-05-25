@@ -10,7 +10,7 @@ private _proxRange = _range * 2.5;
 private _objectsNearby = [];
 uiSleep 0.5;
 while { alive _projectile } do {
-	uiSleep 0.1;
+	uiSleep 0.01;
 
 	_objectsNearby = _projectile nearEntities ["Air", _proxRange];
 	_objectsNearby = _objectsNearby select {
@@ -39,12 +39,22 @@ if (!isNull _responsiblePlayer) then {
 };
 
 private _targetDetected = _objectsNearby # 0;
-private _targetPosition = getPosASL _targetDetected;
-private _detonationPoint = vectorLinearConversion [0, 1, 0.75, _projectilePosition, _targetPosition];
+private _baseDamage = getNumber (configfile >> "CfgAmmo" >> _projectileClass >> "indirectHit");
+private _damage = if (_baseDamage >= 125) then {
+	1
+} else {
+	private _projectileSpeed = vectorMagnitude (velocity _projectile);
+	linearConversion [100, 2000, _projectileSpeed, 0.1, 1, true];
+};
 
-private _finalDistance = _targetPosition distance _detonationPoint;
-[format ["SAM detonation %1M away from target.", round _finalDistance]] call WL2_fnc_smoothText;
+private _explosionPosition = _projectile modelToWorld [0, 0, 0];
+[_explosionPosition, [
+	["SecondaryExp", 0.5]
+]] remoteExec ["WL2_fnc_particleEffect", 0];
 
-// Burst Explosion
-_projectile setPosASL _detonationPoint;
-triggerAmmo _projectile;
+deleteVehicle _projectile;
+
+[format ["SAM detonation! Damage to target: %1%%", round (_damage * 100)]] call WL2_fnc_smoothText;
+
+// Explosion damage handler
+[player, "samHit", _unit, _targetDetected, _damage] remoteExec ["WL2_fnc_handleClientRequest", 2];

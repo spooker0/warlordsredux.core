@@ -12,7 +12,7 @@ private _unitsPool = [];
     private _class = _x;
     private _data = _y;
     private _unitSpawn = _data getOrDefault ["unitSpawn", 0];
-    if (_unitSpawn > 0) then {
+    if (_unitSpawn > 0 && _class != "Green_Infantry") then {
         _unitsPool pushBack _class;
     };
 } forEach _assetData;

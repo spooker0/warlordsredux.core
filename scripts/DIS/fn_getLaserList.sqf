@@ -2,7 +2,14 @@
 
 private _selectedLaserTarget = cameraOn getVariable ["WL2_selectedTargetLaser", objNull];
 
-private _laserTargetList = [["none", "NO TARGET", false]];
+private _currentMode = uiNamespace getVariable ["DIS_currentTargetingMode", "none"];
+private _isLasing = _currentMode == "lasing";
+private _laserTargetList = if (_isLasing) then {
+    []
+} else {
+    [["none", "NO TARGET", false]]
+};
+
 private _targetInList = false;
 
 private _side = BIS_WL_playerSide;
@@ -33,9 +40,9 @@ private _allLasedTargets = [];
     private _enemiesNear = _enemyUnits select {
         alive _x;
     } select {
-        (_x distance2D _lasePosition) < 150;
+        (_x distance2D _lasePosition) < 250;
     } select {
-        _x distance cameraOn < 10000;
+        _x distance cameraOn < 20000;
     } select {
         !(_x isKindOf "Man");
     } select {
@@ -54,14 +61,17 @@ private _allLasedTargets = [];
     };
 
     private _distance = cameraOn distance _lasedTarget;
-    private _name = format ["%1 [%2KM]", toUpper ([_lasedTarget] call WL2_fnc_getAssetTypeName), (_distance / 1000) toFixed 1];
+    private _assetName = toUpper ([_lasedTarget] call WL2_fnc_getAssetTypeShortName);
+    private _name = format ["%1 (%2 KM)", _assetName, (_distance / 1000) toFixed 1];
     _laserTargetList pushBack [netid _lasedTarget, _name, _isSelected];
 } forEach _allLasedTargets;
 
 if (!_targetInList) then {
     if (!alive _selectedLaserTarget) then {
-        private _autoOption = _laserTargetList # 0;
-        _autoOption set [2, true];
+        if (!_isLasing) then {
+            private _autoOption = _laserTargetList # 0;
+            _autoOption set [2, true];
+        };
     } else {
         _laserTargetList pushBack [netid _selectedLaserTarget, format ["SELECTED: %1", [_selectedLaserTarget] call WL2_fnc_getAssetTypeName], true];
     };

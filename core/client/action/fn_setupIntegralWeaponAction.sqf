@@ -99,9 +99,6 @@ _asset addAction [
                 if (focusOn != _unit) then {
                     break;
                 };
-                // if (!someAmmo _weapon) then {
-                //     break;
-                // };
             };
 
             _asset setVariable ["WL2_isWeaponDeployed", false, true];

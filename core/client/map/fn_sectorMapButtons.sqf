@@ -3,32 +3,29 @@ params ["_sector", "_targetId"];
 private _sectorName = _sector getVariable ["WL2_name", "Sector"];
 _sector setVariable ["WL2_mapButtonText", _sectorName];
 
-private _sectorFrontlineCheck = [false, _sector, "sector"] call WL2_fnc_travelTeamPriority;
-if (_sectorFrontlineCheck) then {
-    // Fast Travel Frontline Button
-    private _fastTravelAssetExecute = {
-        params ["_sector"];
-        private _lastCheck = [true, _sector, "sector"] call WL2_fnc_travelTeamPriority;
-        if (_lastCheck) then {
-            playSoundUI ["AddItemOk"];
-        } else {
-            playSoundUI ["AddItemFailed"];
-        };
+// Fast Travel Frontline Button
+private _fastTravelAssetExecute = {
+    params ["_sector"];
+    private _lastCheck = [true, _sector, "sector"] call WL2_fnc_travelTeamPriority;
+    if (_lastCheck) then {
+        playSoundUI ["AddItemOk"];
+    } else {
+        playSoundUI ["AddItemFailed"];
     };
-    [
-        _sector, _targetId,
-        "ft-asset",
-        "<t color='#00ff00'>Fast travel (automatic)</t>",
-        _fastTravelAssetExecute,
-        true,
-        "fastTravelFrontline",
-        [
-            0,
-            "FTSeized",
-            "Fast Travel"
-        ]
-    ] call WL2_fnc_addTargetMapButton;
 };
+[
+    _sector, _targetId,
+    "ft-asset",
+    "<t color='#00ff00'>Fast travel (automatic)</t>",
+    _fastTravelAssetExecute,
+    true,
+    "fastTravelFrontline",
+    [
+        0,
+        "FTSeized",
+        "Fast Travel"
+    ]
+] call WL2_fnc_addTargetMapButton;
 
 // Fast Travel Seized Button
 private _fastTravelSeizedExecute = {
@@ -65,25 +62,6 @@ private _fastTravelHomeExecute = {
     [
         0,
         "FTHome",
-        "Fast Travel"
-    ]
-] call WL2_fnc_addTargetMapButton;
-
-// Fast Travel Stronghold
-private _fastTravelStrongholdExecute = {
-    params ["_sector"];
-    [5, _sector] spawn WL2_fnc_executeFastTravel;
-};
-[
-    _sector, _targetId,
-    "ft-stronghold",
-    "Fast travel stronghold",
-    _fastTravelStrongholdExecute,
-    true,
-    "fastTravelStrongholdTarget",
-    [
-        0,
-        "StrongholdFT",
         "Fast Travel"
     ]
 ] call WL2_fnc_addTargetMapButton;
@@ -126,7 +104,6 @@ private _vehicleParadropExecute = {
     ]
 ] call WL2_fnc_addTargetMapButton;
 
-#if WL_SECTOR_SCAN
 // Scan Button
 private _scanExecute = {
     params ["_sector"];
@@ -145,7 +122,6 @@ private _scanExecute = {
         "Fast Travel"
     ]
 ] call WL2_fnc_addTargetMapButton;
-#endif
 
 // Combat air patrol button
 private _combatAirExecute = {

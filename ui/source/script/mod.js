@@ -446,6 +446,11 @@ seeRewardLogButton.addEventListener('click', () => {
     A3API.SendAlert(`["seeRewardLog", "${document.selectedPlayer}"]`);
 });
 
+const downloadScriptLogButton = document.getElementById('btn-script-log');
+downloadScriptLogButton.addEventListener('click', () => {
+    A3API.SendAlert(`["downloadScriptLog", "${document.selectedPlayer}"]`);
+});
+
 const deputizeButton = document.getElementById('btn-deputize');
 deputizeButton.addEventListener('click', () => {
     A3API.SendAlert(`["deputize", "${document.selectedPlayer}"]`);

@@ -14,11 +14,13 @@ _destroyerBase setDir _destroyerDir;
 
 _destroyerBase setVariable ["WL2_destroyerId", _destroyerId, true];
 
-_destroyerBase setVariable ["WL2_canDemolish", true, true];
-_destroyerBase setVariable ["WL_spawnedAsset", true, true];
-_destroyerBase setVariable ["WL2_demolitionMaxHealth", 25, true];
-_destroyerBase setVariable ["WL2_demolitionHealth", 25, true];
-_destroyerBase setVariable ["BIS_WL_ownerAsset", "", true];
+if (_destroyerType != 2) then {
+    _destroyerBase setVariable ["WL2_canDemolish", true, true];
+    _destroyerBase setVariable ["WL_spawnedAsset", true, true];
+    _destroyerBase setVariable ["WL2_demolitionMaxHealth", 25, true];
+    _destroyerBase setVariable ["WL2_demolitionHealth", 25, true];
+    _destroyerBase setVariable ["BIS_WL_ownerAsset", "", true];
+};
 
 private _hullNum1 = round (random 9);
 private _hullNum2 = round (random 9);
@@ -88,6 +90,10 @@ _outlineMarker setMarkerShapeLocal "RECTANGLE";
 _outlineMarker setMarkerSizeLocal [20, 100];
 _outlineMarker setMarkerDirLocal _destroyerDir;
 _outlineMarker setMarkerColor "ColorRed";
+
+private _destroyerOutlineMarkers = missionNamespace getVariable ["WL2_destroyerOutlineMarkers", []];
+_destroyerOutlineMarkers pushBack _outlineMarker;
+missionNamespace setVariable ["WL2_destroyerOutlineMarkers", _destroyerOutlineMarkers, true];
 
 private _destroyerMarker = createMarkerLocal [format ["marker_%1", _destroyerName], _controllerPos];
 _destroyerMarker setMarkerShapeLocal "ICON";

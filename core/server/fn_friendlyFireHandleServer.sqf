@@ -1,6 +1,9 @@
 #include "includes.inc"
 params ["_unit", "_responsibleLeader"];
 
+private _alreadyHandled = _unit getVariable ["WL2_alreadyHandled", false];
+if (_alreadyHandled) exitWith {};
+
 private _uid = _unit getVariable ["BIS_WL_ownerAsset", "123"];
 if (_uid == "123" || {_uid == (getPlayerUID _responsibleLeader)}) exitWith {};
 private _victim = _uid call BIS_fnc_getUnitByUid;

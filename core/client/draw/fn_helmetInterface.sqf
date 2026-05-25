@@ -582,6 +582,24 @@ addMissionEventHandler ["Draw3D", {
             };
         } forEach ["AA", "SEAD", "Laser"];
 
+        if (_currentTargetingMode == "laser") then {
+			private _lasedTargetList = [] call DIS_fnc_getLaserList;
+            {
+                _x params ["_netid", "_name", "_isSelected"];
+                private _target = objectFromNetId _netid;
+                if (alive _target) then {
+                    _targetVehicleIcons pushBack [
+                        "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\UnknownGround_ca.paa",
+                        [1, 0.5, 0.5, 1],
+                        _target,
+                        1,
+                        1,
+                        45
+                    ];
+                };
+            } forEach _lasedTargetList;
+        };
+
         private _gpsCords = _vehicle getVariable ["DIS_gpsCord", ""];
         if (_gpsCords != "" && _currentTargetingMode == "gps") then {
             private _gpsTargetData = [_vehicle] call DIS_fnc_calculateInRange;

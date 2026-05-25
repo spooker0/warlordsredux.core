@@ -3,7 +3,7 @@ player addAction [
     format ["<t color='#ff0000'>HMD Settings (%1)</t>", (actionKeysNames "binocular") regexReplace ["""", ""]],
     {
         params ["_target", "_caller", "_actionId", "_argument"];
-        private _display = uiNamespace getVariable ["RscWLHmdSettingMenu", displayNull];
+        private _display = uiNamespace getVariable ["RscWLHmdSettingDisplay", displayNull];
         if (isNull _display) then {
             0 spawn WL2_fnc_hmdSettings;
             ["HMDSettings", ["HMD SETTINGS", [

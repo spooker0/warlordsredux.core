@@ -171,7 +171,16 @@ private _setupActionId = [
 		private _inRangeTeamForwardBases = _teamForwardBases select {
 			_asset distance2D _x < WL_FOB_RANGE
 		};
-		if (count _inRangeTeamForwardBases > 0) then {
+		private _inRangeTeamFob = if (count _inRangeTeamForwardBases > 0) then {
+			true
+		} else {
+			private _sectorsInRange = (BIS_WL_sectorsArray # 0) select {
+				_asset inArea (_x getVariable "objectAreaComplete")
+			};
+			count _sectorsInRange > 0
+		};
+
+		if (_inRangeTeamFob) then {
 			private _setupMessage = [_asset, player, true] call WL2_fnc_setupForwardBaseEligibility;
 			_asset setVariable ["WL2_setupActionRestriction", _setupMessage];
 		} else {
@@ -187,7 +196,7 @@ private _setupActionId = [
 
 [
 	_asset,
-	"<t color='#00ff00'>Add Supplies to Base</t>",
+	"<t color='#00ff00'>Add Supplies</t>",
 	"\A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_loadDevice_ca.paa",
 	"\A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_loadDevice_ca.paa",
 	"([_target, _this, true] call WL2_fnc_setupForwardBaseEligibility) == ''",
@@ -219,20 +228,34 @@ private _setupActionId = [
 		params ["_target", "_caller"];
 		private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		_forwardBases = _forwardBases select {
-			_target distance2D _x < WL_FOB_RANGE &&
+			_target distance2D _x < WL_FOB_RANGE
+		} select {
 			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == side group player
 		};
-		if (count _forwardBases == 0) exitWith {
-			["No friendly forward base in range!"] call WL2_fnc_smoothText;
-			playSound "AddItemFailed";
+		if (count _forwardBases > 0) exitWith {
+			deleteVehicle _target;
+
+			private _forwardBase = _forwardBases # 0;
+			private _forwardBaseSupplies = _forwardBase getVariable ["WL2_forwardBaseSupplies", 0];
+			private _newSupplies = _forwardBaseSupplies + 20000;
+			_forwardBase setVariable ["WL2_forwardBaseSupplies", _newSupplies, true];
 		};
 
-		deleteVehicle _target;
+		private _sectorsInRange = (BIS_WL_sectorsArray # 0) select {
+			_target inArea (_x getVariable "objectAreaComplete")
+		};
+		if (count _sectorsInRange > 0) exitWith {
+			deleteVehicle _target;
 
-		private _forwardBase = _forwardBases # 0;
-		private _forwardBaseSupplies = _forwardBase getVariable ["WL2_forwardBaseSupplies", 0];
-		private _newSupplies = _forwardBaseSupplies + 20000;
-		_forwardBase setVariable ["WL2_forwardBaseSupplies", _newSupplies, true];
+			private _sector = _sectorsInRange # 0;
+			private _sectorValue = _sector getVariable ["BIS_WL_value", 0];
+			private _maxDefenders = ((_sectorValue * WL_DEFENDER_MOD) max WL_DEFENDER_MIN) * WL_DEFENDER_MAXMOD;
+			private _currentDefenders = _sector getVariable ["WL2_defenders", 0];
+			_sector setVariable ["WL2_defenders", (_currentDefenders + WL_DEFENDER_ADD) min _maxDefenders, true];
+		};
+
+		["No friendly forward base or sector in range!"] call WL2_fnc_smoothText;
+		playSoundUI ["AddItemFailed"];
 	},
 	{},
 	[],

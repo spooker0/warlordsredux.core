@@ -14,6 +14,12 @@ uiSleep 3;
 
 while { alive player } do {
     uiSleep 0.05;
+    if (count listVehicleSensors cameraOn == 0) then {
+        _newControl ctrlShow false;
+        uiSleep 2;
+        continue;
+    };
+
     private _target = cursorTarget;
     if (isNull _target) then {
         _newControl ctrlShow false;

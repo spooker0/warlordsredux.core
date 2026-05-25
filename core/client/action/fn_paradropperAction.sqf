@@ -7,11 +7,16 @@ private _actionConditions = {
 	if (vehicle _this != _target) exitWith { false };
 	if (!alive _target) exitWith { false };
 
+	private _paradrops = _target getVariable ["WL2_paradrops", 0];
+	if (_paradrops <= 0) exitWith { false };
+
     private _accessControl = [_target, _this, "full"] call WL2_fnc_accessControl;
 	if (!(_accessControl # 0)) exitWith { false };
 
-    private _altitude = (_target modelToWorld [0, 0, 0]) # 2;
-    if (_altitude < 100) exitWith { false };
+	private _position = _target modelToWorld [0, 0, 0];
+    private _altitude = _position # 2;
+    if (_altitude < 200) exitWith { false };
+	if (surfaceIsWater _position) exitWith { false };
 
     true;
 };
@@ -20,7 +25,14 @@ _asset addAction [
 	"<t color='#00FF00'>Call for Paradrop</t>",
 	{
 		params ["_target", "_caller", "_actionId", "_arguments"];
-        _target removeAction _actionId;
+		private _paradrops = _target getVariable ["WL2_paradrops", 0];
+		if (_paradrops <= 0) exitWith {
+			playSoundUI ["AddItemFailed"];
+			["No paradrops available!"] call WL2_fnc_smoothText;
+		};
+        _target setVariable ["WL2_paradrops", _paradrops - 1, true];
+
+		playSoundUI ["AddItemOk"];
 		[player, _target] remoteExec ["WL2_fnc_conscriptVehicle", BIS_WL_playerSide];
 	},
 	[],

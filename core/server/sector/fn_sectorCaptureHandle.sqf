@@ -19,7 +19,7 @@ while { !BIS_WL_missionEnd } do {
 
 		private _progressMovement = _actualTimeElapsed / _minCaptureTime;
 
-		private _sortedInfo = _sector call WL2_fnc_getCapValues;
+		private _sortedInfo = [_sector] call WL2_fnc_getCapValues;
 
 		private _previousCaptureDetails = _sector getVariable ["WL_captureDetails", []];
 		if (_previousCaptureDetails isNotEqualTo _sortedInfo) then {

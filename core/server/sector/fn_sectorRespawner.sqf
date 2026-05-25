@@ -5,7 +5,7 @@ private _unitsPool = [];
     private _class = _x;
     private _data = _y;
     private _unitSpawn = _data getOrDefault ["unitSpawn", 0];
-    if (_unitSpawn > 0) then {
+    if (_unitSpawn > 0 && _class != "Green_Infantry") then {
         _unitsPool pushBack _class;
     };
 } forEach WL_ASSET_DATA;
@@ -17,12 +17,13 @@ while { !BIS_WL_missionEnd } do {
 	{
         private _sector = _x;
 
-        private _sectorOwner = _sector getVariable ["BIS_WL_owner", sideUnknown];
+        private _sectorOwner = _sector getVariable ["BIS_WL_owner", independent];
         if (_sectorOwner != independent) then {
             continue;
         };
 
         private _sectorArea = _sector getVariable "objectAreaComplete";
+        private _isAircraftCarrier = _sector getVariable ["WL2_isAircraftCarrier", false];
 
         private _sectorPop = _sector getVariable ["WL2_sectorPop", 0];
         private _sectorValue = _sector getVariable ["BIS_WL_value", 50];
@@ -33,9 +34,8 @@ while { !BIS_WL_missionEnd } do {
         private _sectorDefenders = _sector getVariable ["WL2_sectorDefenders", []];
         _sectorDefenders = _sectorDefenders select { alive _x };
 
-        private _isAircraftCarrier = _sector getVariable ["WL2_isAircraftCarrier", false];
-
-        while { count _sectorDefenders < _garrisonSize } do {
+        private _sectorInfantryDefenders = _sectorDefenders select { _x isKindOf "Man" } select { vehicle _x == _x };
+        while { count _sectorInfantryDefenders < _garrisonSize } do {
             private _unitType = selectRandom _unitsPool;
 
             if (_sectorPop <= 0) then {
@@ -46,7 +46,7 @@ while { !BIS_WL_missionEnd } do {
             private _sectorDefenderGroups = [];
             {
                 _sectorDefenderGroups pushBackUnique (group _x);
-            } forEach _sectorDefenders;
+            } forEach _sectorInfantryDefenders;
 
             _sectorDefenderGroups = _sectorDefenderGroups select {
                 private _groupUnits = units _x select { alive _x };
@@ -99,6 +99,8 @@ while { !BIS_WL_missionEnd } do {
 
             _newUnit setVariable ["WL2_sectorDefender", _sector];
             doStop _newUnit;
+
+            _sectorInfantryDefenders pushBack _newUnit;
             _addedUnits pushBack _newUnit;
 
             _sectorDefenders pushBack _newUnit;

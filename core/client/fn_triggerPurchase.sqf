@@ -82,16 +82,6 @@ switch (_className) do {
     case "BuyStronghold": {
         0 spawn WL2_fnc_orderStronghold;
     };
-    case "BuyFOB": {
-        switch (BIS_WL_playerSide) do {
-            case west: {
-                [WL_FOBCRATE_WEST, WL_COST_SUPPLIES, "Fast Travel", [], [0, 5, 0]] call WL2_fnc_requestPurchase;
-            };
-            case east: {
-                [WL_FOBCRATE_EAST, WL_COST_SUPPLIES, "Fast Travel", [], [0, 5, 0]] call WL2_fnc_requestPurchase;
-            };
-        };
-    };
     case "FundsTransfer": {
         call WL2_fnc_orderFundsTransfer;
     };

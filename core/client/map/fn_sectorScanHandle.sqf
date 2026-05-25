@@ -10,7 +10,7 @@ private _sensors = listVehicleSensors _uav;
 } forEach _sensors;
 _uav setVehicleTIPars [1, 1, 1];
 
-uiSleep 10;
+uiSleep 20;
 
 private _side = BIS_WL_playerSide;
 

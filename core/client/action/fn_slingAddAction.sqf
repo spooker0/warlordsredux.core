@@ -44,6 +44,8 @@ private _slingActionId = _asset addAction [
 
 [_asset] spawn {
     params ["_asset"];
+    private _collisionLightOn = isCollisionLightOn _asset;
+
     while { alive _asset } do {
         private _assetLoadedItem = _asset getVariable ["WL2_loadedItem", objNull];
         private _hasLoad = !isNull _assetLoadedItem || !isNull (getSlingLoad _asset);
@@ -58,6 +60,23 @@ private _slingActionId = _asset addAction [
             {
                 moveOut _x;
             } forEach (crew _assetLoadedItem);
+        };
+
+        private _newCollisionLightOn = isCollisionLightOn _asset;
+        if (_collisionLightOn != _newCollisionLightOn) then {
+            _collisionLightOn = _newCollisionLightOn;
+            private _ropes = ropes _asset;
+            if (count _ropes != 0) then {
+                if (_collisionLightOn) then {
+                    {
+                        ropeUnwind [_x, 5, 8];
+                    } forEach _ropes;
+                } else {
+                    {
+                        ropeUnwind [_x, 5, 20];
+                    } forEach _ropes;
+                };
+            };
         };
 
         uiSleep 1;

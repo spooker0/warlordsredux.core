@@ -15,5 +15,5 @@ private _filteredTargets = _datalinkTargets select {
 };
 
 _filteredTargets apply {
-    [_x # 0, [_x # 0] call WL2_fnc_getAssetTypeName]
+    [_x # 0, [_x # 0] call WL2_fnc_getAssetTypeShortName]
 };

@@ -18,7 +18,7 @@ private _allSquadmates = ["getSquadmates", [getPlayerID player, true]] call SQD_
     };
 
     private _distance = cameraOn distance _squadmate;
-    private _name = format ["%1 [%2KM]", toUpper (name _squadmate), (_distance / 1000) toFixed 1];
+    private _name = format ["%1 (%2 KM)", toUpper (name _squadmate), (_distance / 1000) toFixed 1];
     _playerTargetList pushBack [netid _squadmate, _name, _isSelected];
 } forEach _allSquadmates;
 

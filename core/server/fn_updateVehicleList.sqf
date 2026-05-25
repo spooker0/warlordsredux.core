@@ -65,5 +65,5 @@ while { !BIS_WL_missionEnd } do {
         };
     } forEach BIS_WL_competingSides;
 
-    uiSleep 5;
+    uiSleep 1;
 };

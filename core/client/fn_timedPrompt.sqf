@@ -30,8 +30,8 @@ private _titleControl = _display displayCtrl 41002;
 private _displayText = format [
     "<t align='center' size='0.85'>%1</t><br/><br/><t align='left' color='#33ff33'>%2 (%3)</t><t align='right' color='#ff3333'>%4 (%5)</t>",
     _modalText,
-    _confirmText, (actionKeysNames ["LeanLeft", 1, "Combo"]) regexReplace ["""", ""],
-    _cancelText, (actionKeysNames ["LeanRight", 1, "Combo"]) regexReplace ["""", ""]
+    _confirmText, (actionKeysNames ["LeanLeft", 1, "Keyboard"]) regexReplace ["""", ""],
+    _cancelText, (actionKeysNames ["LeanRight", 1, "Keyboard"]) regexReplace ["""", ""]
 ];
 _titleControl ctrlSetStructuredText parseText _displayText;
 

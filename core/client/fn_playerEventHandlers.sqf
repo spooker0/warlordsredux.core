@@ -65,6 +65,42 @@ player addEventHandler ["InventoryOpened", {
     };
 }];
 
+(group player) addEventHandler ["CommandChanged", {
+	_this spawn {
+		params ["_group", "_newCommand"];
+		if (_newCommand != "GET IN") exitWith {};
+
+		uiSleep 1;
+
+		private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
+		private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
+		{
+			private _vehicle = _x;
+			private _assignedDriver = assignedDriver _vehicle;
+			if (!isPlayer _assignedDriver && !(_assignedDriver in _vehicle)) then {
+				_assignedDriver moveInDriver _vehicle;
+			};
+
+			private _assignedGunner = assignedGunner _vehicle;
+			if (!isPlayer _assignedGunner && !(_assignedGunner in _vehicle)) then {
+				_assignedGunner moveInGunner _vehicle;
+			};
+
+			private _assignedCommander = assignedCommander _vehicle;
+			if (!isPlayer _assignedCommander && !(_assignedCommander in _vehicle)) then {
+				_assignedCommander moveInCommander _vehicle;
+			};
+
+			private _assignedCargo = assignedCargo _vehicle;
+			{
+				if (!isPlayer _x && !(_x in _vehicle)) then {
+					_x moveInCargo _vehicle;
+				};
+			} forEach _assignedCargo;
+		} forEach _ownedVehicles;
+	};
+}];
+
 #if __GAME_BUILD__ > 153351
 (group player) addEventHandler ["LeaderChanged", {
 	params ["_group", "_newLeader"];

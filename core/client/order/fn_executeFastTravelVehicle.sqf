@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_targetVehicle"];
+params ["_targetVehicle", ["_forceParadrop", false]];
 
 "RequestMenu_close" call WL2_fnc_setupUI;
 
@@ -55,6 +55,17 @@ private _unitsToMove = (units player) select {
         continue;
     };
 
+    if (_forceParadrop) then {
+        private _destination = _targetVehicle modelToWorld [0, 0, 0];
+        _destination set [2, 500];
+        _unit setDir (getDir _targetVehicle);
+        _unit setPosASL _destination;
+
+        _unit setVelocityModelSpace [0, 30, 0];
+		[_unit] spawn WL2_fnc_parachuteSetup;
+        continue;
+    };
+
     if (_targetVehicle emptyPositions "cargo" >= 1) then {
         _unit moveInCargo _targetVehicle;
         continue;
@@ -70,11 +81,11 @@ private _unitsToMove = (units player) select {
         _unit setPosASL (AGLtoASL _destination);
     } else {
         private _destination = _targetVehicle modelToWorld [0, 0, 0];
-        _unit setVehiclePosition [_destination, [], 5, "CAN_COLLIDE"];
+        _unit setVehiclePosition [_destination, [], 12, "CAN_COLLIDE"];
     };
 } forEach _unitsToMove;
 
-[player, "ftSupportPoints", _targetVehicle, count _unitsToMove] remoteExec ["WL2_fnc_handleClientRequest", 2];
+[player, "ftSupportPoints", _targetVehicle, 100 * (count _unitsToMove)] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
 uiSleep 1;
 titleCut ["", "BLACK IN", 1];

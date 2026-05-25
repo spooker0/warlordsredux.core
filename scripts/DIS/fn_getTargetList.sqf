@@ -24,7 +24,7 @@ private _targetList = [["none", _defaultOption, false]];
     };
 
     private _distance = cameraOn distance _target;
-    _name = format ["%1 [%2KM]", toUpper _name, (_distance / 1000) toFixed 1];
+    _name = format ["%1 (%2 KM)", toUpper _name, (_distance / 1000) toFixed 1];
     _targetList pushBack [netid _target, _name, _isSelected];
 } forEach _targets;
 

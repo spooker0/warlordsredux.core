@@ -28,11 +28,10 @@
 #define WL_CRUISE_MISSILES 0
 #define WL_CAMOUFLAGE_ENABLED 0
 #define WL_CAP_DEBUG 0
-#define WL_SECTOR_SCAN 0
 
 // Live: set all to 1
 #define WL_STOP_TEAM_SWITCH 1
-#define WL_FOB_SQUAD_REQUIREMENT 1
+#define WL_FOB_REQUIREMENTS 1
 
 // Configuration
 #define WL_TIMEOUT_MIN 0.055
@@ -41,19 +40,18 @@
 #define WL_TIMEOUT_STANDARD 1
 #define WL_TIMEOUT_LONG 5
 
-#define WL_BASE_DANGER_SPAWN_RANGE 200
 #define WL_BASE_VALUE 50
 #define WL_BASE_MINDISTANCE 8
 
-#define WL_INCOME_M2 (12 / 1e6)
+#define WL_INCOME_M2 (10 / 1e6)
 #define WL_INCOME_CAPBONUS 8
 
 #define WL_SECTOR_GARRISON 1.3
 
+#define WL_ENEMIES_NEAR_RADIUS 125
 #define WL_FAST_TRAVEL_OFFSET 200
 
 #define WL_JAMMER_SPECTRUM_RANGE 5000
-#define WL_JAMMER_SPECTRUM_DETECT_RANGE 7000
 #define WL_JAMMER_SPECTRUM_DIFFICULTY 0.03
 #define WL_JAMMER_HARDLINE_RANGE 20
 
@@ -65,11 +63,17 @@
 #define WL_FOB_CAPMODIFIER 2
 #define WL_FOB_CAPTURE_RANGE 2000
 #define WL_FOB_REPAIR_COST 5000
-#define WL_FOB_UPGRADE_COST 20000
-#define WL_FORTIFICATION_TIME 2700
+#define WL_FOB_UPGRADE_COST 10000
+#define WL_FORTIFICATION_TIME 300
 #define WL_DEMOLITION_STEP_TIME 6
 #define WL_DEMOLITION_FOB_STEP_TIME 3
 #define WL_DEMOLITION_STRONGHOLD_STEP_TIME 7
+
+#define WL_DEFENDER_MIN 20
+#define WL_DEFENDER_MAXMOD 3
+#define WL_DEFENDER_MOD 5
+#define WL_DEFENDER_ADD 100
+#define WL_DEFENDER_INCOME 5
 
 #define WL_SURRENDER_TIME 3600
 
@@ -98,12 +102,13 @@
 #define WL_COST_STRONGHOLD 200
 #define WL_COST_FORTIFY 1000
 #define WL_COST_SUPPLIES 1000
+#define WL_COST_PARADROPCALL 2000
 
-#define WL_MAX_MONEY 50000
+#define WL_MAX_MONEY 75000
 #define WL_MAX_ASSETS 10
 #define WL_MAX_BUILDINGS 25
 #define WL_MAX_AUTOASSETS 4
-#define WL_MAX_MINES 30
+#define WL_MAX_MINES 100
 #define WL_MAX_EXPLOSIVES 5
 #define WL_MAX_ADVANCED_MINES 4
 
@@ -123,7 +128,7 @@
 #define WL_DURATION_SECTORVOTE 30
 #define WL_DURATION_AFKTIME 300
 #define WL_DURATION_MISSION 36000
-#define WL_DURATION_FFTIMEOUT 900
+#define WL_DURATION_FFTIMEOUT 600
 #define WL_DURATION_REVIVE 4
 #define WL_DURATION_SECURE 3
 #define WL_DURATION_CLAIM 3
@@ -132,7 +137,7 @@
 
 #define WL_COMBAT_AIR_RADIUS 7000
 #define WL_COMBAT_AIR_PERSEC 45
-#define WL_COMBAT_AIR_MINALT 1000
+#define WL_COMBAT_AIR_MINALT 500
 
 #define WL_REWARD_REVEALSECTOR 500
 
@@ -146,6 +151,9 @@
 #define WL_SMART_MINE_DISTANCES [500, 400, 300, 200, 100, 0]
 #define WL_SMART_MINE_ANGLES [15, 30, 45, 90, 360, 0]
 
+#define WL_HMD_DISTANCE_VALUES [0, 250, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000]
+#define WL_HMD_CATEGORIES ["INFANTRY", "INFANTRY NAME", "VEHICLE", "AIRCRAFT", "AIR DEFENSE", "MISSILE", "LASER"]
+
 #define WL_FOBCRATE_WEST "Land_Cargo20_blue_F"
 #define WL_FOBCRATE_EAST "Land_Cargo20_brick_red_F"
 #define WL_FOBCRATES [WL_FOBCRATE_WEST, WL_FOBCRATE_EAST]
@@ -158,7 +166,7 @@
 #define WL_TARGET_ENEMY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_enemySide], objNull])
 #define WL_CONTROL_MAP (uiNamespace getVariable ["BIS_WL_mapControl", controlNull])
 #define WL_SPECIAL_SECTORS (["Wait", "Surrender"])
-#define WL_DESTROYER_OUTLINES ["marker_USS Khe Sanh_outline", "marker_USS Liberty_outline"]
+#define WL_DESTROYER_OUTLINES (missionNamespace getVariable ["WL2_destroyerOutlineMarkers", []])
 #define WL_PLAYER_REQUISITION_LIST (missionNamespace getVariable format ["WL2_purchasable_%1", BIS_WL_playerSide])
 #define WL_REQUISITION_CATEGORIES ["Infantry", "Light Vehicles", "Heavy Vehicles", "Rotary Wing", "Fixed Wing", "Remote Control", "Air Defense", "Sector Defense", "Structures", "Naval", "Gear", "Fast Travel", "Strategy"]
 #define WL_BASES [WL2_base1, WL2_base2]

@@ -72,6 +72,14 @@ if (_isAircraft) then {
         };
     };
 
+    private _paradrops = _asset getVariable ["WL2_paradrops", -1];
+    if (_paradrops != -1) then {
+        private _paradropsConfig = WL_ASSET(_assetActualType, "paradrops", -1);
+        if (_paradropsConfig > _paradrops) then {
+            _eligibleFreeRearm = false;
+        };
+    };
+
     private _installable = _asset getVariable ["WL2_installable", ""];
     if (_installable == "") then {
         private _installableConfig = WL_ASSET(_assetActualType, "loaded", "");

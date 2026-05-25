@@ -131,6 +131,11 @@ _texture ctrlAddEventHandler ["JSDialog", {
             private _uid = _message select 1;
             [_uid] remoteExec ["WL2_fnc_publishRewards", 2];
         };
+        case "downloadScriptLog": {
+            private _uid = _message select 1;
+            private _selectedPlayer = [_uid] call BIS_fnc_getUnitByUID;
+            [player] remoteExec ["WL2_fnc_publishScriptLog", _selectedPlayer];
+        };
         case "deputize": {
             private _uid = _message select 1;
             missionNamespace setVariable ["WL2_tempSpectatorUID", _uid, true];

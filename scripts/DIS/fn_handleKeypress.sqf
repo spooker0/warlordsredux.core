@@ -1,9 +1,8 @@
 #include "includes.inc"
 params ["_key", "_targetListFunction", "_targetListParams", "_targetVariable"];
 
-private _display = uiNamespace getVariable ["RscWLTargetingMenu", displayNull];
+private _display = uiNamespace getVariable ["RscWLTargetingDisplay", displayNull];
 if (isNull _display) exitWith {};
-private _texture = _display displayCtrl 5502;
 
 private _delta = 0;
 if (_key in actionKeys "gunElevUp") then {

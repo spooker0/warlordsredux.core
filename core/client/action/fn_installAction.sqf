@@ -79,7 +79,7 @@ private _installActionId = player addAction [
                 _offset = [0, 8, 0];
             };
 
-            private _deploymentResult = [_deployClass, _installable, _offset, 30, true, true] call WL2_fnc_deployment;
+            private _deploymentResult = [_deployClass, _installable, _offset, 50, true, true] call WL2_fnc_deployment;
 
             if !(_deploymentResult # 0) exitWith {
                 playSound "AddItemFailed";

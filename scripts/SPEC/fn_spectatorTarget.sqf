@@ -22,6 +22,8 @@ while { WL_IsSpectator } do {
         createHashMap;
     };
 
+    private _isHoldingAlt = inputAction "lookAround" > 0;
+
     private _cameraPos = positionCameraToWorld [0, 0, 0];
 
     private _laserTargets = entities "LaserTarget";
@@ -96,19 +98,19 @@ while { WL_IsSpectator } do {
                 _assetName
             ];
         } else {
-            private _assetTypeName = [_target] call WL2_fnc_getAssetTypeName;
-            private _ownerPlayer = (_target getVariable ["BIS_WL_ownerAsset", "123"]) call BIS_fnc_getUnitByUID;
-            private _ownerName = if (isNull _ownerPlayer) then {
-                "";
-            } else {
-                [_ownerPlayer, true] call BIS_fnc_getName
-            };
-            private _assetName = if (_ownerName == "") then {
+            private _assetTypeName = toUpper ([_target] call WL2_fnc_getAssetTypeShortName);
+            private _assetName = if (!_isHoldingAlt) then {
                 _assetTypeName
             } else {
-                format ["%1 (%2)", _assetTypeName, _ownerName]
+                private _ownerPlayer = (_target getVariable ["BIS_WL_ownerAsset", "123"]) call BIS_fnc_getUnitByUID;
+                private _ownerName = if (isNull _ownerPlayer) then {
+                    [_target] call WL2_fnc_getAssetSide;
+                } else {
+                    [_ownerPlayer, true] call BIS_fnc_getName
+                };
+                format ["%1 (%2, %3%%)", _assetTypeName, _ownerName, round ((1 - (damage _target)) * 100)]
             };
-            _assetName = format ["%1 [%2 KM]", _assetName, (_distance / 1000) toFixed 1];
+            _assetName = format ["%1 %2", _assetName, (_distance / 1000) toFixed 1];
 
             private _assetActualType = WL_ASSET_TYPE(_target);
             private _assetCategory = WL_ASSET_FIELD(_assetData, _assetActualType, "category", "Other");
@@ -129,12 +131,12 @@ while { WL_IsSpectator } do {
                 };
             };
 
-            private _targetIcon = [_target] call SPEC_fnc_spectatorGetIcon;
+            private _targetIcon = "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\UnknownGround_ca.paa";
             private _targetIconInfo = getTextureInfo _targetIcon;
             private _targetIconRatio = _targetIconInfo # 0 / _targetIconInfo # 1;
 
-            private _iconSize = linearConversion [0, 5000, _distance, 0.6, 0.2];
-            private _iconTextSize = linearConversion [0, 5000, _distance, 0.03, 0.025];
+            private _iconSize = linearConversion [0, 2000, _distance, 0.9, 0.5, true];
+            private _iconTextSize = linearConversion [0, 5000, _distance, 0.035, 0.028];
 
             _vehicles pushBack [
                 _target,
@@ -154,6 +156,11 @@ while { WL_IsSpectator } do {
     };
 
     private _sectors = [];
+    private _sectorsToShow = if (_isHoldingAlt) then {
+        BIS_WL_allSectors
+    } else {
+        []
+    };
     {
         private _sector = _x;
         private _sectorArea = _sector getVariable "objectAreaComplete";
@@ -193,7 +200,7 @@ while { WL_IsSpectator } do {
             _sectorColor,
             _sectorName
         ];
-    } forEach BIS_WL_allSectors;
+    } forEach _sectorsToShow;
 
     uiNamespace setVariable ["WL2_spectatorDrawLasers", _laserTargets];
     uiNamespace setVariable ["WL2_spectatorDrawProjectiles", _projectiles];
@@ -201,5 +208,5 @@ while { WL_IsSpectator } do {
     uiNamespace setVariable ["WL2_spectatorDrawVehicles", _vehicles];
     uiNamespace setVariable ["WL2_spectatorDrawSectors", _sectors];
 
-    uiSleep 0.5;
+    uiSleep 0.1;
 };

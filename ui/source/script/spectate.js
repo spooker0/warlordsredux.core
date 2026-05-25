@@ -30,10 +30,10 @@ function updatePlayerList(players) {
     const nameById = new Map();
 
     data.forEach(player => {
-        const name = String(player[0] ?? '').trim();
+        const vehicle = String(player[0] ?? '').trim();
         const listTypeRaw = player[1];
         const objectId = String(player[2]);
-        const vehicle = player.length >= 4 ? String(player[3]).trim() : '';
+        const name = player.length >= 4 ? String(player[3]).trim() : '';
 
         const listType = normalizeType(listTypeRaw);
         const targetList = listMap.get(listType) || listMap.get('OTHER');
@@ -43,7 +43,7 @@ function updatePlayerList(players) {
         nameById.set(objectId, name);
         orderBuckets[listType].push({ objectId, name, vehicle });
 
-        const text = vehicle ? `${name}<br/>[${vehicle}]` : name;
+        const text = vehicle ? `${vehicle}<br/>[${name}]` : name;
 
         let el = findEntry(objectId);
         if (!el) {
@@ -59,6 +59,7 @@ function updatePlayerList(players) {
             targetList.appendChild(el);
 
             el.dataset.name = name;
+            el.dataset.vehicle = vehicle;
         } else {
             if (!targetList.contains(el)) {
                 targetList.appendChild(el);
@@ -68,6 +69,7 @@ function updatePlayerList(players) {
             }
 
             el.dataset.name = name;
+            el.dataset.vehicle = vehicle;
         }
     });
 
@@ -102,8 +104,9 @@ const spectateSearch = document.getElementById('spectate-search');
 const applyNameFilter = () => {
     const q = (spectateSearch ? spectateSearch.value : '').trim().toLowerCase();
     document.querySelectorAll('.player-entry').forEach(el => {
+        const v = (el.dataset.vehicle || '').toLowerCase();
         const n = (el.dataset.name || '').toLowerCase();
-        const match = !q || n.startsWith(q) || n.indexOf(q) !== -1;
+        const match = !q || v.startsWith(q) || v.indexOf(q) !== -1 || n.startsWith(q) || n.indexOf(q) !== -1;
         el.style.display = match ? '' : 'none';
     });
 };

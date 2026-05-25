@@ -39,13 +39,6 @@ private _fastTravelArr = [
 		"\A3\EditorPreviews_F\Data\CfgVehicles\Land_TentA_F.jpg",
 		localize "STR_WL_ftTentInfo"
 	], [
-		"BuyFOB",
-		WL_COST_SUPPLIES,
-		[],
-		localize "STR_WL_ftBuySupplies",
-		"\A3\EditorPreviews_F_Decade\Data\CfgVehicles\RuggedTerminal_01_communications_hub_F.jpg",
-		localize "STR_WL_ftBuySuppliesInfo"
-	], [
 		"BuyStronghold",
 		WL_COST_STRONGHOLD,
 		[],

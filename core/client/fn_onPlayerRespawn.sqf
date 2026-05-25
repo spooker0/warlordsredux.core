@@ -1,9 +1,18 @@
 #include "includes.inc"
 params ["_newUnit", "_oldUnit", "_respawn", "_respawnDelay"];
 
-private _keepTent = player getVariable ["WL2_keepTent", false];
-if (!_keepTent) then {
-	[true, _oldUnit] call WL2_fnc_deleteTent;
+private _oldPosition = getPosASL _oldUnit;
+private _oldOwnedSector = (BIS_WL_sectorsArray # 0) select {
+	_oldPosition inArea (_x getVariable "objectAreaComplete")
+};
+if (count _oldOwnedSector > 0) then {
+	private _oldSector = _oldOwnedSector # 0;
+	private _oldSectorPreviousOwners = _oldSector getVariable ["BIS_WL_previousOwners", []];
+	private _oldSectorVulnerable = count (_oldSectorPreviousOwners - [BIS_WL_playerSide]) > 0 || _oldSector == WL_TARGET_ENEMY;
+	if (_oldSectorVulnerable) then {
+		private _oldSectorDefenders = _oldSector getVariable ["WL2_defenders", 0];
+		_oldSector setVariable ["WL2_defenders", (_oldSectorDefenders - 1) max 0, true];
+	};
 };
 
 #if WL_WINTER_EVENT
@@ -62,6 +71,7 @@ missionNamespace setVariable [_ownedVehiclesVar, _ownedVehicles, [2, clientOwner
 player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 player setVariable ["WL_lastHitter", objNull, 2];
 player setVariable ["WL2_canAccessEW", true];
+player setVariable ["WL2_acceptConscriptionTime", -1];
 [] call WLC_fnc_onRespawn;
 
 0 spawn MENU_fnc_settingsMenu;

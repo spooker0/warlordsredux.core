@@ -294,10 +294,10 @@ class RscTitles {
 		class controls {
 			class RscSpectrumIndicatorText: RscStructuredText {
 				idc = 17001;
-				x = 0;
-				y = 0;
-				w = 0.5;
-				h = 0.5;
+				x = 0.3;
+				y = safeZoneY + safeZoneH - 0.15;
+				w = 0.4;
+				h = 0.15;
 				colorBackground[] = {0, 0, 0, 0};
 				colorText[] = {1, 1, 1, 1};
 				font = "PuristaLight";
@@ -607,22 +607,72 @@ class RscTitles {
 		};
 	};
 
-	class RscWLHmdSettingMenu {
+	class RscWLProgressDisplay {
 		idd = -1;
 		duration = 1000000000;
 		fadein = 0;
 		fadeout = 0;
-		name = "RscWLHmdSettingMenu";
-		onLoad = "uiNamespace setVariable ['RscWLHmdSettingMenu', _this select 0];";
+		name = "RscWLProgressDisplay";
+		onLoad = "uiNamespace setVariable ['RscWLProgressDisplay', _this select 0];";
 		class controls {
-			class RscWLHmdSettingMenu_Texture: RscText {
-				type = 106;
-				idc = 5502;
-				x = safeZoneX;
-				y = safeZoneY;
-				w = safeZoneW;
-				h = safeZoneH;
-				url = "file://src/ui/gen/hmd.html";
+			class RscWLProgressDisplay_Bar: RscProgress {
+				idc = 5000;
+				x = 0.08;
+				y = safeZoneY + safeZoneH - 0.25;
+				w = 0.84;
+				h = 0.055;
+				colorFrame[] = {1, 1, 1, 1};
+				colorBar[] = {0, 1, 0, 1};
+			};
+			class RscWLProgressDisplay_Timer: RscStructuredText {
+				idc = 5001;
+				x = 0.08;
+				y = safeZoneY + safeZoneH - 0.25;
+				w = 0.84;
+				h = 0.055;
+				text = "";
+				size = 0.045;
+			};
+			class RscWLProgressDisplay_Text: RscStructuredText {
+				idc = 5002;
+				style = ST_MULTI;
+				x = safeZoneX + 0.028;
+				y = 0.2;
+				w = 0.5;
+				h = 0.5;
+				text = "";
+				size = 0.032;
+				colorBackground[] = {0.2, 0.2, 0.2, 1};
+				class Attributes {
+					font = "EtelkaMonospaceProBold";
+					shadow = 0;
+				};
+			};
+		};
+	};
+
+	class RscWLHmdSettingDisplay {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		name = "RscWLHmdSettingDisplay";
+		onLoad = "uiNamespace setVariable ['RscWLHmdSettingDisplay', _this select 0];";
+		class controls {
+			class RscWLHmdSettingDisplay_Main: RscStructuredText {
+				idc = 7000;
+				style = ST_MULTI;
+				x = 0.3;
+				y = 0;
+				w = 0.4;
+				h = 1;
+				text = "";
+				size = 0.04;
+				class Attributes {
+					color = "#14cb00";
+					font = "EtelkaMonospaceProBold";
+					shadowColor = "#000000";
+				};
 			};
 		};
 	};
@@ -687,22 +737,72 @@ class RscTitles {
 		};
 	};
 
-	class RscWLTargetingMenu {
+	class RscWLTargetingDisplay {
 		idd = -1;
 		duration = 1000000000;
 		fadein = 0;
 		fadeout = 0;
-		name = "RscWLTargetingMenu";
-		onLoad = "uiNamespace setVariable ['RscWLTargetingMenu', _this select 0];";
+		name = "RscWLTargetingDisplay";
+		onLoad = "uiNamespace setVariable ['RscWLTargetingDisplay', _this select 0];";
 		class controls {
-			class RscWLTargetingMenu_Texture: RscText {
-				type = 106;
-				idc = 5502;
-				x = safeZoneX;
-				y = safeZoneY;
-				w = safeZoneW;
-				h = safeZoneH;
-				url = "file://src/ui/gen/target.html";
+			class RscWLTargetingDisplay_Main: RscStructuredText {
+				idc = 6000;
+				style = ST_MULTI;
+				x = 0;
+				y = 0;
+				w = 1;
+				h = 1;
+				text = "";
+				size = 0.032;
+				class Attributes {
+					color = "#14cb00";
+					font = "EtelkaMonospaceProBold";
+					shadowColor = "#000000";
+				};
+			};
+			class RscWLTargetingDisplay_Incoming: RscStructuredText {
+				idc = 6001;
+				style = ST_MULTI;
+				x = 0;
+				y = 0;
+				w = 0.4;
+				h = 1;
+				text = "";
+				size = 0.032;
+				class Attributes {
+					color = "#14cb00";
+					font = "EtelkaMonospaceProBold";
+					shadowColor = "#000000";
+				};
+			};
+			class RscWLTargetingDisplay_Status: RscStructuredText {
+				idc = 6002;
+				style = ST_MULTI;
+				x = 0;
+				y = safeZoneY + 0.25;
+				w = 1;
+				h = 1;
+				text = "";
+				size = 0.032;
+				class Attributes {
+					color = "#14cb00";
+					font = "EtelkaMonospaceProBold";
+					shadowColor = "#000000";
+				};
+			};
+			class RscWLTargetingDisplay_Weapon: RscText {
+				idc = 6003;
+				x = 0;
+				y = 0;
+				w = 1;
+				h = 1;
+				font = "RobotoCondensed";
+				style = ST_RIGHT;
+				shadow = 0;
+				text = "";
+				sizeEx = 0.032;
+				colorText[] = {1, 1, 1, 0.8};
+				colorBackground[] = {0.5, 0.5, 0.5, 1};
 			};
 		};
 	};

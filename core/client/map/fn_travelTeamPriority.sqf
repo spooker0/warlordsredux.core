@@ -69,19 +69,31 @@ if (_teamPriorityType == "sector") exitWith {
     private _sectorOwner = _teamPriority getVariable ["BIS_WL_owner", independent];
     if (_sectorOwner == _side) then {
         private _canTravelStronghold = ([_teamPriority, "fastTravelStrongholdTarget"] call WL2_fnc_mapButtonConditions) == "ok";
-        if (_commit) then {
-            if (_canTravelStronghold) then {
+        if (_canTravelStronghold) then {
+            if (_commit) then {
                 [5, _teamPriority] spawn WL2_fnc_executeFastTravel;
-            } else {
-                private _asset = [_teamPriority, true] call WL2_fnc_getSectorFTAsset;
-                if (isNull _asset) then {
-                    [0, _teamPriority] spawn WL2_fnc_executeFastTravel;
+            };
+            true;
+        } else {
+            private _asset = [_teamPriority, true] call WL2_fnc_getSectorFTAsset;
+            if (isNull _asset) then {
+                private _hasDefenders = _teamPriority getVariable ["WL2_defenders", 0] > 0;
+                private _sectorIsLinked = _teamPriority in (BIS_WL_sectorsArray # 2);
+                if (_hasDefenders && _sectorIsLinked) then {
+                    if (_commit) then {
+                        [0, _teamPriority] spawn WL2_fnc_executeFastTravel;
+                    };
+                    true;
                 } else {
+                    false;
+                };
+            } else {
+                if (_commit) then {
                     [_asset] spawn WL2_fnc_executeFastTravelVehicle;
                 };
+                true;
             };
         };
-        true;
     } else {
         private _asset = [_teamPriority, true] call WL2_fnc_getSectorFTAsset;
         if (isNull _asset) then {
@@ -90,7 +102,6 @@ if (_teamPriorityType == "sector") exitWith {
                 if (_commit) then {
                     [2, _teamPriority] call WL2_fnc_executeFastTravel;
                 };
-
                 true;
             } else {
                 false;

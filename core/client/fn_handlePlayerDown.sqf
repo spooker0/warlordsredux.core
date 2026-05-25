@@ -9,14 +9,12 @@ _unit setCaptive true;
 _unit setUnconscious true;
 _unit setVariable ["WL2_unconscious", true, true];
 
-// private _capAreaModifiers = missionNamespace getVariable ["WL2_capAreaModifiers", [0, 0, 0]];
-// private _sideIndex = if (side group _unit == west) then { 0 } else { 1 };
-// private _controlledMod = _capAreaModifiers # _sideIndex;
-// if (_controlledMod < 0.5) then {
-//     _unit setVariable ["WL2_respawnPenalty", true, true];
-// };
+private _capAreaModifiers = missionNamespace getVariable ["WL2_capAreaModifiers", [0, 0, 0]];
+private _sideIndex = if (side group _unit == west) then { 0 } else { 1 };
+private _controlledMod = _capAreaModifiers # _sideIndex;
+_controlledMod = ((_controlledMod min 1) max 0.5);
 
-_unit setVariable ["WL2_expirationTime", serverTime + WL_DURATION_RESPAWN, true];
+_unit setVariable ["WL2_expirationTime", serverTime + WL_DURATION_RESPAWN * _controlledMod, true];
 
 private _deadAnimations = [
     "Acts_StaticDeath_01",
@@ -28,8 +26,6 @@ private _deadAnimations = [
     "Acts_StaticDeath_09"
 ];
 private _deadAnimation = selectRandom _deadAnimations;
-
-player setVariable ["WL2_keepTent", false];
 
 private _startTime = serverTime;
 private _downTime = 0;
@@ -43,12 +39,9 @@ while { WL_ISDBNO(_unit) } do {
     };
 
     _downTime = serverTime - _startTime;
-    setPlayerRespawnTime ((WL_DURATION_RESPAWN - _downTime) max 1);
+    setPlayerRespawnTime ((WL_DURATION_RESPAWN * _controlledMod - _downTime) max 1);
 
-    private _expirationTime = _unit getVariable ["WL2_expirationTime", serverTime + WL_DURATION_RESPAWN];
-    if (_expirationTime - serverTime < 3) then {
-        player setVariable ["WL2_keepTent", true];
-    };
+    private _expirationTime = _unit getVariable ["WL2_expirationTime", serverTime + WL_DURATION_RESPAWN * _controlledMod];
     if (serverTime > _expirationTime) then {
         forceRespawn _unit;
         break;

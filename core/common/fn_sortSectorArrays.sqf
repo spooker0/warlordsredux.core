@@ -3,6 +3,9 @@ params ["_side", ["_fullRecalc", false]];
 
 private _base = objNull;
 private _pool = BIS_WL_allSectors;
+if (isNil "_pool") then {
+	_pool = [];
+};
 private _owned = _pool select {
 	(_x getVariable ["BIS_WL_owner", sideUnknown]) == _side
 };

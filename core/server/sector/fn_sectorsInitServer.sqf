@@ -10,7 +10,7 @@ private _baseData =
 
 #if WL_BASE_SELECTION_DEBUG
 private _baseProbabilityTable = [];
-private _minDistance = 10000;
+private _minDistance = 50000;
 private _minDistanceBase1 = objNull;
 private _minDistanceBase2 = objNull;
 for "_i" from 0 to 10000 do {
@@ -97,8 +97,8 @@ waitUntil {!isNil "WL2_base1" && {!isNil "WL2_base2"}};
 private _fastestCapture = 0.2;
 private _slowestCapture = 0.5;
 #else
-private _fastestCapture = 60;
-private _slowestCapture = 150;
+private _fastestCapture = 45;
+private _slowestCapture = 120;
 #endif
 
 private _sectorGroup = createGroup [civilian, true];
@@ -122,6 +122,7 @@ private _sectorGroup = createGroup [civilian, true];
 	private _sectorValue = round (_size / 13000);
 
 	_sector setVariable ["BIS_WL_value", _sectorValue, true];
+	_sector setVariable ["WL2_defenders", (_sectorValue * WL_DEFENDER_MOD) max WL_DEFENDER_MIN, true];
 
 	private _agent = _sectorGroup createUnit ["Logic", _sectorPos, [], 0, "CAN_COLLIDE"];
 	_agent enableSimulationGlobal false;

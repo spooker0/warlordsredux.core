@@ -15,37 +15,7 @@ private _deployActionId = _asset addAction [
                 _vehicle attachTo [_asset, [0, 0, -10]];
                 detach _vehicle;
                 [_asset, _vehicle, false] call WL2_fnc_attachVehicle;
-                _vehicle setPosASL (_vehicle modelToWorldWorld [0, 0, -10]);
-
-                private _parachuteClass = switch (BIS_WL_playerSide) do {
-                    case west: {
-                        "B_Parachute_02_F";
-                    };
-                    case east: {
-                        "O_Parachute_02_F";
-                    };
-                    case independent: {
-                        "I_Parachute_02_F";
-                    };
-                };
-
-                private _parachute = createVehicle [_parachuteClass, _vehicle, [], 0, "NONE"];
-                _parachute setPosASL (_vehicle modelToWorldWorld [0, 0, 0]);
-                _parachute setDir (getDir _vehicle);
-                _vehicle attachTo [_parachute, [0, 0, 0]];
-
-                waitUntil {
-                    uiSleep 0.2;
-                    _parachute setVelocity [0, 0, (velocity _parachute) # 2];
-                    _parachute setVectorUp [0, 0, 1];
-                    private _alt = (getPosVisual _vehicle) # 2;
-                    _alt < 5;
-                };
-                detach _vehicle;
-                deleteVehicle _parachute;
-
-                uiSleep 0.5;
-                _vehicle setVehiclePosition [_vehicle modelToWorld [0, 0, 0], [], 0, "NONE"];
+                [_asset, _vehicle] spawn WL2_fnc_executeParadrop;
             };
         };
 
@@ -77,7 +47,7 @@ private _deployActionId = _asset addAction [
                 private _offset = [0, _distanceToVehicle, 0];
 
                 private _deploymentAction = {
-                    private _deploymentResult = [_assetLoadedItemClass, _orderedClass, _offset, 30, true, false] call WL2_fnc_deployment;
+                    private _deploymentResult = [_assetLoadedItemClass, _orderedClass, _offset, 50, true, false] call WL2_fnc_deployment;
 
                     if !(_deploymentResult # 0) exitWith {
                         playSound "AddItemFailed";

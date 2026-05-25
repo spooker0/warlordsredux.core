@@ -27,7 +27,8 @@ if (_key in actionKeys "Gear") then {
         private _startTime = serverTime;
         WL_gearKeyPressed = true;
         waitUntil {
-            !WL_gearKeyPressed || serverTime - _startTime > 0.5
+            uiSleep 0.05;
+            !WL_gearKeyPressed || serverTime - _startTime > 0.4
         };
 
         if (WL_gearKeyPressed) exitWith {

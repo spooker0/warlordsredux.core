@@ -437,9 +437,9 @@ if (!isNull _sectorTarget || _showSectorLinks) then {
 
 		private _income = round (_area * WL_INCOME_M2);
 		private _incomeText = if (_showBonus || WL_IsSpectator) then {
-			format ["%1 (%2 km²)", _income, (_area / 1e6) toFixed 1]
+			format ["%1 km² (%2%3)", (_area / 1e6) toFixed 1, WL_MONEY_SIGN, _income]
 		} else {
-			format ["%1", _income]
+			format ["%1 km²", (_area / 1e6) toFixed 1]
 		};
 
 		_drawIcons pushBack [

@@ -7,6 +7,27 @@ if (true) exitWith {};
 
 private _sectorValue = _sector getVariable ["BIS_WL_value", 50];
 private _garrisonSize = _sectorValue * WL_SECTOR_GARRISON;
+private _objectArea = _sector getVariable "objectAreaComplete";
+
+private _stronghold = _sector getVariable ["WL_stronghold", objNull];
+private _reserveSize = 0;
+if (isNull _stronghold) then {
+	private _maxRadius = (abs (_objectArea # 1)) max (abs (_objectArea # 2));
+	private _findStrongholdBuildings = [getPosATL _sector, _maxRadius, true] call WL2_fnc_findStrongholdBuilding;
+
+	private _eligibleBuildings = _findStrongholdBuildings inAreaArray _objectArea;
+	_eligibleBuildings = [_eligibleBuildings, [_sector], {
+		private _cost = getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "cost");
+		private _distanceToSector = _x distance2D _input0;
+		_cost * 100 - _distanceToSector;
+	}, "DESCEND"] call BIS_fnc_sortBy;
+
+	if (count _eligibleBuildings > 0) then {
+		private _stronghold = _eligibleBuildings # 0;
+		[_stronghold, _sector] call WL2_fnc_establishStronghold;
+		_reserveSize = round (_garrisonSize * 4);
+	};
+};
 
 private _vehicleUnits = [];
 
@@ -50,10 +71,6 @@ if (count _presetVehicles == 0) then {
 	private _vehiclesPool = [];
 	{
 		private _class = _x;
-		if (_class == "Green_Infantry") then {
-			continue;
-		};
-
 		private _data = _y;
 		private _sides = _data getOrDefault ["side", []];
 		if !("guer" in _sides) then {
@@ -100,8 +117,6 @@ if (count _presetVehicles == 0) then {
 	} forEach _presetVehicles;
 };
 
-private _objectArea = _sector getVariable "objectAreaComplete";
-
 private _roads = _sector nearRoads 500;
 _roads = _roads inAreaArray _objectArea;
 if (count _roads > 0) then {
@@ -110,6 +125,7 @@ if (count _roads > 0) then {
 };
 
 private _numMinesToSpawn = floor (_sectorValue / 5);
+_numMinesToSpawn = _numMinesToSpawn min 2;
 private _mineLocations = [_sector] call WL2_fnc_findSpawnsInSector;
 for "_i" from 1 to _numMinesToSpawn do {
 	["AT_Minefield", selectRandom _mineLocations, random 360, true, false] call _spawnVehicle;
@@ -151,7 +167,7 @@ private _unitsPool = [];
     private _class = _x;
     private _data = _y;
     private _unitSpawn = _data getOrDefault ["unitSpawn", 0];
-    if (_unitSpawn > 0) then {
+    if (_unitSpawn > 0 && _class != "Green_Infantry") then {
         _unitsPool pushBack _class;
     };
 } forEach WL_ASSET_DATA;
@@ -202,25 +218,7 @@ while {_spawnedUnitCount < _garrisonSize} do {
 
 private _allUnits = _vehicleUnits + _infantryUnits;
 _sector setVariable ["WL2_sectorDefenders", _allUnits];
-_sector setVariable ["WL2_sectorPop", round (_garrisonSize * 2), true];
-
-private _stronghold = _sector getVariable ["WL_stronghold", objNull];
-if (isNull _stronghold) then {
-	private _maxRadius = (_objectArea # 1) max (_objectArea # 2);
-	private _findStrongholdBuildings = [getPosATL _sector, _maxRadius, true] call WL2_fnc_findStrongholdBuilding;
-
-	private _eligibleBuildings = _findStrongholdBuildings inAreaArray _objectArea;
-	_eligibleBuildings = [_eligibleBuildings, [_sector], {
-		private _cost = getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "cost");
-		private _distanceToSector = _x distance2D _input0;
-		_cost * 100 - _distanceToSector;
-	}, "DESCEND"] call BIS_fnc_sortBy;
-
-	if (count _eligibleBuildings > 0) then {
-		private _stronghold = _eligibleBuildings # 0;
-		[_stronghold, _sector] call WL2_fnc_establishStronghold;
-	};
-};
+_sector setVariable ["WL2_sectorPop", _reserveSize, true];
 
 private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
 _ownedVehicles append _allUnits;

@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_key"];
 
-private _display = uiNamespace getVariable ["RscWLTargetingMenu", displayNull];
+private _display = uiNamespace getVariable ["RscWLTargetingDisplay", displayNull];
 if (isNull _display) exitWith {};
 
 private _delta = 0;

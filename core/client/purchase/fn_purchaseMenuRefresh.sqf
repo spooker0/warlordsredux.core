@@ -3,6 +3,8 @@ _display = uiNamespace getVariable ["BIS_WL_purchaseMenuDisplay", displayNull];
 
 if (isNull _display) exitWith {};
 
+(findDisplay 602) closeDisplay 2;
+
 _purchase_category = _display displayCtrl 100;
 _purchase_items = _display displayCtrl 101;
 _purchase_pic = _display displayCtrl 102;

@@ -23,9 +23,14 @@ private _catapultActionID = _asset addAction [
             private _railCatapult = _railsNearby # 0;
             _asset setDir (getDir _railCatapult);
 
-            private _railPos = _railCatapult modelToWorld [0, -10, 0.1];
+            private _railPos = _railCatapult modelToWorld [0, -10, 1.5];
             _asset setPosATL _railPos;
+        } else {
+            private _catapultPos = getPosASL _asset;
+            _catapultPos set [2, _catapultPos # 2 + 0.8];
+            _asset setPosASL _catapultPos;
         };
+        _asset setVelocity [0, 0, 0];
 
         ["Launching in 5 seconds!"] call WL2_fnc_smoothText;
         playSoundUI ["AddItemOk"];
@@ -36,16 +41,21 @@ private _catapultActionID = _asset addAction [
         _caller actionNow ["flapsDown", _asset];
         _caller actionNow ["flapsDown", _asset];
 
-        [_asset, _useRail] spawn {
-            params ["_asset", "_useRail"];
-            uiSleep 5;
+        [_asset] spawn {
+            params ["_asset"];
+            private _startPosition = getPosASL _asset;
+            private _startTime = serverTime;
+            while { serverTime - _startTime < 5 } do {
+                _asset setPosASL _startPosition;
+                uiSleep 0.0001;
+            };
 
             private _assetConfig = configFile >> "CfgVehicles" >> typeOf _asset;
             private _stallSpeed = getNumber (_assetConfig >> "stallSpeed");
             private _maxGForce = getNumber (_assetConfig >> "maxGForce");
 
-            private _stallFactor = if (_useRail) then { 2 } else { 1.2 };
-            private _velocityFactor = if (_useRail) then { 20 } else { 8 };
+            private _stallFactor = 2;
+            private _velocityFactor = 20;
 
             private _velocityLaunch = 350 min (_stallSpeed * _stallFactor);
             private _velocityIncrease = 100 min (_maxGForce * _velocityFactor);
@@ -63,11 +73,7 @@ private _catapultActionID = _asset addAction [
             while { speed _asset < _velocityLaunch && serverTime - _timeStart < 10 } do {
                 _timeDelta = serverTime - _timeStart;
                 _velocity = _velocityIncrease * _timeDelta;
-                if (_useRail) then {
-                    _asset setVelocityModelSpace [0, _velocity, 0.5];
-                } else {
-                    _asset setVelocity [sin _direction * _velocity, cos _direction * _velocity, velocity _asset select 2];
-                };
+                _asset setVelocityModelSpace [0, _velocity, 0.5];
                 uiSleep _accelerationStep;
             };
         };

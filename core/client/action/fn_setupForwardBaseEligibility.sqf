@@ -22,20 +22,21 @@ private _teamForwardBases = _currentForwardBases select {
     _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
 };
 private _inRangeTeamForwardBases = _teamForwardBases select {
-    _caller distance2D _x < WL_FOB_RANGE
+    _target distance2D _x < WL_FOB_RANGE
 };
 private _inRangeTeamFob = if (count _inRangeTeamForwardBases > 0) then {
-    _inRangeTeamForwardBases # 0
+    true
 } else {
-    objNull
+    private _sectorsInRange = (BIS_WL_sectorsArray # 0) select {
+        _target inArea (_x getVariable "objectAreaComplete")
+    };
+    count _sectorsInRange > 0
 };
-if (!isNull _inRangeTeamFob && _inRangeTeamFob getVariable ["WL2_forwardBaseReady", false] && _addSupplies) exitWith {
-    "";
+
+if (_addSupplies && !_inRangeTeamFob) exitWith {
+    "No friendly forward base or sector in range.";
 };
-if (_addSupplies && isNull _inRangeTeamFob) exitWith {
-    "No friendly forward base in range.";
-};
-if (_addSupplies && !isNull _inRangeTeamFob) exitWith {
+if (_addSupplies && _inRangeTeamFob) exitWith {
     "";
 };
 
@@ -43,46 +44,97 @@ if (count _teamForwardBases >= 4) exitWith {
     "Forward base limit reached.";
 };
 
+#if WL_FOB_REQUIREMENTS
 private _isSquadLeader = ["isSquadLeader", [getPlayerID _caller]] call SQD_fnc_query;
 if (!_isSquadLeader) exitWith {
     "You need to be a squad leader to set up a forward base.";
 };
 
-private _squadMembersNeeded =
-#if WL_FOB_SQUAD_REQUIREMENT
-    3;
-#else
-    1;
-#endif
-private _isQualifyingSL = ["isSquadLeaderOfSize", [getPlayerID _caller, _squadMembersNeeded]] call SQD_fnc_query;
+private _isQualifyingSL = ["isSquadLeaderOfSize", [getPlayerID _caller, 3]] call SQD_fnc_query;
 if (!_isQualifyingSL) exitWith {
     "You need at least 3 squad members to set up a forward base.";
 };
+#endif
 
-private _calculateAxis = {
-    params ["_sector"];
-    private _sectorArea = _sector getVariable "WL2_objectArea";
-    private _axis = if (_sectorArea # 3) then {
-        private _axisA = _sectorArea # 0;
-        private _axisB = _sectorArea # 1;
-        sqrt ((_axisA ^ 2) + (_axisB ^ 2));
+private _sectorOverlap = {
+    params ["_sector", "_circle", "_radius"];
+
+    private _area = _sector getVariable "WL2_objectArea";
+    _area params ["_axisA", "_axisB", "_angle", "_rectangle"];
+    if (_axisA <= 0 || _axisB <= 0) exitWith { -1 };
+
+    private _sectorPos = getPosWorld _sector;
+    private _circlePos = getPosWorld _circle;
+
+    private _dx = (_circlePos # 0) - (_sectorPos # 0);
+    private _dy = (_circlePos # 1) - (_sectorPos # 1);
+
+    private _cos = cos _angle;
+    private _sin = sin _angle;
+
+    private _x = abs (_dx * _cos - _dy * _sin);
+    private _y = abs (_dx * _sin + _dy * _cos);
+
+    private _distance = if (_rectangle) then {
+        private _ox = (_x - _axisA) max 0;
+        private _oy = (_y - _axisB) max 0;
+
+        sqrt ((_ox ^ 2) + (_oy ^ 2))
     } else {
-        (_sectorArea # 0) max (_sectorArea # 1);
+        private _inside = ((_x / _axisA) ^ 2) + ((_y / _axisB) ^ 2) <= 1;
+        if (_inside) exitWith { 0 };
+
+        private _axisA2 = _axisA ^ 2;
+        private _axisB2 = _axisB ^ 2;
+
+        private _low = 0;
+        private _high = 1;
+
+        while {
+            (((_axisA * _x) / (_high + _axisA2)) ^ 2) + (((_axisB * _y) / (_high + _axisB2)) ^ 2) > 1
+        } do {
+            _high = _high * 2;
+        };
+
+        for "_i" from 0 to 24 do {
+            private _mid = (_low + _high) / 2;
+
+            if ((((_axisA * _x) / (_mid + _axisA2)) ^ 2) + (((_axisB * _y) / (_mid + _axisB2)) ^ 2) > 1) then {
+                _low = _mid;
+            } else {
+                _high = _mid;
+            };
+        };
+
+        private _closestX = (_axisA2 * _x) / (_high + _axisA2);
+        private _closestY = (_axisB2 * _y) / (_high + _axisB2);
+
+        sqrt (((_x - _closestX) ^ 2) + ((_y - _closestY) ^ 2))
     };
-    _axis;
+
+    _radius - _distance
 };
 
 private _overlappingSectors = BIS_WL_allSectors select {
-    private _axis = [_x] call _calculateAxis;
-    _x distance2D _caller < (_axis + WL_FOB_RANGE + 20)
-
+    _x distance2D _caller < 500
+} apply {
+    [_x, [_x, _caller, WL_FOB_RANGE + 5] call _sectorOverlap]
+} select {
+    _x # 1 >= 0
 };
+
 if (count _overlappingSectors > 0) exitWith {
     _overlappingSectors = _overlappingSectors apply {
-        private _axis = [_x] call _calculateAxis;
-        private _distanceToCircleEdge = (_x distance2D _caller) -_axis - 20;
-        format ["%1 (%2 M)", _x getVariable ["WL2_name", "Sector"], round (WL_FOB_RANGE - _distanceToCircleEdge)];
+        private _sector = _x # 0;
+        private _overlap = _x # 1;
+
+        format [
+            "%1 (%2 m)",
+            _sector getVariable ["WL2_name", "Sector"],
+            ceil _overlap
+        ];
     };
+
     format ["Forward base must be deployed completely outside of sectors: %1", _overlappingSectors joinString ", "];
 };
 

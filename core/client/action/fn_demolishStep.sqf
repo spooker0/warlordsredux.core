@@ -9,10 +9,6 @@ _targetObject setVariable ["WL_lastHitter", player, 2];
 _targetObject setVariable ["WL2_canRepairTime", serverTime + 60, true];
 
 private _assetSide = [_targetObject] call WL2_fnc_getAssetSide;
-if (_assetSide != BIS_WL_playerSide) then {
-    [player, "demolished", _steps] remoteExec ["WL2_fnc_handleClientRequest", 2];
-};
-
 if (_existingHealth <= 0) then {
     player setVariable ["WL2_demolishableTarget", objNull];
 
@@ -30,4 +26,8 @@ if (_existingHealth <= 0) then {
     };
 
     [_targetObject, player, _damageBuilding] remoteExec ["WL2_fnc_demolishComplete", 2];
+} else {
+    if (_assetSide != BIS_WL_playerSide) then {
+        [player, "demolished", _steps] remoteExec ["WL2_fnc_handleClientRequest", 2];
+    };
 };

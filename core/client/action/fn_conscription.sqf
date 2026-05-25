@@ -5,6 +5,9 @@ private _side = side group player;
 if (side group _conscripter != _side) exitWith {};
 if (WL_IsSpectator) exitWith {};
 
+private _modifyVehicleMenu = findDisplay 5300;
+if (!isNull _modifyVehicleMenu) exitWith {};
+
 uiSleep 0.1;
 
 private _teamPriorityVar = format ["WL2_teamPriority_%1", _side];
@@ -30,6 +33,8 @@ private _callbackConfirm = {
             WL_ISUP(player);
         };
     };
+
+    if (cameraOn != player) exitWith {};
 
     private _travelResult = [true] call WL2_fnc_travelTeamPriority;
     if (_travelResult) then {

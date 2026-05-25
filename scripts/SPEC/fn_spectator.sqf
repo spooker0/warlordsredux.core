@@ -19,19 +19,24 @@ WL_IsSpectator = true;
 
 // hide spectator on land
 player setPosASL [2304.97, 9243.11, 11.5];
-// player allowDamage false;
-// [player] remoteExec ["WL2_fnc_hideObjectOnAll", 2];
 
 private _missionSpectators = missionNamespace getVariable ["WL2_spectators", []];
 _missionSpectators pushBackUnique player;
 _missionSpectators = _missionSpectators select { !isNull _x };
 missionNamespace setVariable ["WL2_spectators", _missionSpectators, true];
 
+player setVariable ["WL2_alreadyHandled", true, true];
+
 setPlayerRespawnTime 10000000;
 forceRespawn player;
 [player] remoteExec ["WL2_fnc_hideObjectOnAll", 2];
 
 player removeAllEventHandlers "HandleDamage";
+
+{
+    private _sector = _x;
+    _sector setVariable ["WL2_sectorSelectionAvailable", false];
+} forEach BIS_WL_allSectors;
 
 0 spawn {
     while { WL_IsSpectator } do {
@@ -205,7 +210,7 @@ _mainDisplay displayAddEventHandler ["KeyUp", {
     };
 
     if (_key in actionKeys "binocular") exitWith {
-        private _display = uiNamespace getVariable ["RscWLHmdSettingMenu", displayNull];
+        private _display = uiNamespace getVariable ["RscWLHmdSettingDisplay", displayNull];
         if (isNull _display) then {
             0 spawn WL2_fnc_hmdSettings;
         } else {

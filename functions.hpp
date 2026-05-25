@@ -194,6 +194,7 @@ class CfgFunctions {
 			class pingSounds {};
 			class playerEventHandlers {};
 			class prompt {};
+			class publishScriptLog {};
 			class rebalanced {};
 			class repackMagazines {};
 			class reportTargets {};
@@ -235,12 +236,12 @@ class CfgFunctions {
 			class controlDroneActions {};
 			class controlGunnerAction {};
 			class controlGunnerEligibility {};
-			class deleteTent {};
 			class demolishAction {};
 			class demolishEligibility {};
 			class demolishStep {};
 			class deployableAddAction {};
 			class deployableEligibility {};
+			class fieldRepairEligibility {};
 			class getVehicleLockStatus {};
 			class grapple {};
 			class hmdSendData {};
@@ -291,7 +292,6 @@ class CfgFunctions {
 			class slingAddAction {};
 			class smokeCurtainAction {};
 			class smokeCurtainParticles {};
-			class tireChangeEligibility {};
 			class turretVisualizerAction {};
 			class vehicleLockAction {};
 			class vehicleLockUpdate {};
@@ -393,6 +393,7 @@ class CfgFunctions {
 			class deployment {};
 			class executeFastTravel {};
 			class executeFastTravelVehicle {};
+			class executeParadrop {};
 			class findStrongholdBuilding {};
 			class orderAircraft {};
 			class orderArsenal {};
@@ -529,6 +530,7 @@ class CfgFunctions {
 			class processRunways {};
 			class publishRewards {};
 			class punishPlayer {};
+			class ratingServer {};
 			class rebalance {};
 			class requestScoreboard {};
 			class runwayCollector {};

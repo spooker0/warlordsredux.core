@@ -4,7 +4,7 @@ params ["_stronghold", "_sector"];
 private _oldStronghold = _sector getVariable ["WL_stronghold", objNull];
 if (!isNull _oldStronghold) then {
     [_sector, true] call WL2_fnc_removeStronghold;
-    uiSleep 3;  // wait to finish remove stronghold
+    uiSleep 1;
 };
 
 _stronghold setVariable ["WL2_orderedClass", typeof _stronghold, true];
@@ -12,6 +12,11 @@ _stronghold setVariable ["BIS_WL_ownerAsset", "123", true];
 
 private _strongholdRadius = (boundingBoxReal _stronghold) # 2;
 _stronghold setVariable ["WL_strongholdRadius", _strongholdRadius, true];
+
+if (_oldStronghold != _stronghold) then {
+    _oldStronghold setVariable ["WL_strongholdSector", objNull, true];
+};
+
 _stronghold setVariable ["WL_strongholdSector", _sector, true];
 
 _sector setVariable ["WL_stronghold", _stronghold, true];

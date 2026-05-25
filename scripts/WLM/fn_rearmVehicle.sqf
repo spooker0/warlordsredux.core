@@ -57,6 +57,10 @@ if (_asset getVariable ["WL2_mineClearCharges", -1] != -1) then {
     _asset setVariable ["WL2_mineClearCharges", WL_ASSET(_assetActualType, "mineClear", 0), true];
 };
 
+if (_asset getVariable ["WL2_paradrops", -1] != -1) then {
+    _asset setVariable ["WL2_paradrops", WL_ASSET(_assetActualType, "paradrops", 0), true];
+};
+
 private _loadedItem = WL_ASSET(_assetActualType, "loaded", "");
 if (_loadedItem != "") then {
     _asset setVariable ["WL2_installable", _loadedItem, true];

@@ -5,63 +5,89 @@ private _ownerSide = _sector getVariable ["BIS_WL_owner", independent];
 private _modifiers = missionNamespace getVariable ["WL2_capAreaModifiers", [0, 0, 0]];
 
 private _sideArr = [west, east, independent];
-private _sideCaptureModifier = createHashMap;
-{
-	private _side = _x;
 
-	if (_side == independent) then {
-		if (_ownerSide == independent) then {
-			private _reserves = _sector getVariable ["WL2_sectorPop", 0];
-			if (_reserves > 0) then {
-				_sideCaptureModifier set [_side, 4];
+private _cacheTimers = missionNamespace getVariable ["WL2_capValuesCacheTimers", createHashMap];
+private _useCache = _cacheTimers getOrDefault [getObjectId _sector, 0] > serverTime;
+
+private _sideCaptureModifier = if (_useCache) then {
+	_cacheTimers set [getObjectId _sector, serverTime + 5];
+	missionNamespace setVariable ["WL2_capValuesCacheTimers", _cacheTimers];
+
+	missionNamespace getVariable ["WL2_sideCaptureModifierCache", createHashMap];
+} else {
+	private _capModifiers = createHashMap;
+	{
+		private _side = _x;
+
+		if (_side == independent) then {
+			if (_ownerSide == independent) then {
+				private _reserves = _sector getVariable ["WL2_sectorPop", 0];
+				if (_reserves > 0) then {
+					_capModifiers set [_side, 4];
+				} else {
+					_capModifiers set [_side, 2];
+				};
 			} else {
-				_sideCaptureModifier set [_side, 2];
+				_capModifiers set [_side, 0];
 			};
-		} else {
-			_sideCaptureModifier set [_side, 0];
+			continue;
 		};
-		continue;
-	};
 
-	private _sideLinkedSectors = BIS_WL_sectorsArrays # (BIS_WL_competingSides find _side) # 2;
-	private _neighboringSectors = synchronizedObjects _sector;
-	private _connectedNeighboringSectors = _neighboringSectors select {
-		typeof _x == "Logic" && _side == _x getVariable ["BIS_WL_owner", independent] && _x in _sideLinkedSectors;
-	};
-	private _hasConnection = count _connectedNeighboringSectors > 0;
-	if (!_hasConnection) then {
-		_sideCaptureModifier set [_side, 0];
-		continue;
-	};
+		private _sideLinkedSectors = BIS_WL_sectorsArrays # (BIS_WL_competingSides find _side) # 2;
+		private _neighboringSectors = synchronizedObjects _sector;
+		private _connectedNeighboringSectors = _neighboringSectors select {
+			typeof _x == "Logic" && _side == _x getVariable ["BIS_WL_owner", independent] && _x in _sideLinkedSectors;
+		};
+		private _hasConnection = count _connectedNeighboringSectors > 0;
+		if (!_hasConnection) then {
+			_capModifiers set [_side, 0];
+			continue;
+		};
 
-	private _previousOwners = _sector getVariable ["BIS_WL_previousOwners", []];
-	private _isPreviousOwner = _side in _previousOwners;
+		private _previousOwners = _sector getVariable ["BIS_WL_previousOwners", []];
+		private _isPreviousOwner = _side in _previousOwners;
 
-	private _sideCurrentTarget = missionNamespace getVariable (format ["BIS_WL_currentTarget_%1", _side]);
-	private _isCurrentTarget = _sideCurrentTarget == _sector;
-	if (!_isPreviousOwner && !_isCurrentTarget) then {
-		_sideCaptureModifier set [_side, 0];
-		continue;
-	};
+		private _sideCurrentTarget = missionNamespace getVariable (format ["BIS_WL_currentTarget_%1", _side]);
+		private _isCurrentTarget = _sideCurrentTarget == _sector;
+		if (!_isPreviousOwner && !_isCurrentTarget) then {
+			_capModifiers set [_side, 0];
+			continue;
+		};
 
-	private _connections = count _connectedNeighboringSectors;
+		private _connections = count _connectedNeighboringSectors;
 
-	private _currentForwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
-	private _teamForwardBases = _currentForwardBases select {
-		_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side
-	};
-	private _inRangeTeamForwardBases = _teamForwardBases select {
-		_sector distance2D _x < WL_FOB_CAPTURE_RANGE
-	} select {
-		_x getVariable ["WL2_forwardBaseReady", false]
-	};
-	_connections = _connections + (count _inRangeTeamForwardBases) * WL_FOB_CAPMODIFIER;
+		private _currentForwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
+		private _teamForwardBases = _currentForwardBases select {
+			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side
+		};
+		private _inRangeTeamForwardBases = _teamForwardBases select {
+			_sector distance2D _x < WL_FOB_CAPTURE_RANGE
+		} select {
+			_x getVariable ["WL2_forwardBaseReady", false]
+		};
+		_connections = _connections + (count _inRangeTeamForwardBases) * WL_FOB_CAPMODIFIER;
 
-	private _sideModifier = _modifiers # _forEachIndex;
-	_connections = _connections + _sideModifier;
+		private _homeBase = _side call WL2_fnc_getSideBase;
+		private _isConnectedToHomeBase = _homeBase in _connectedNeighboringSectors;
+		if (_isConnectedToHomeBase) then {
+			_connections = _connections + 1;
+		};
 
-	_sideCaptureModifier set [_side, _connections];
-} forEach _sideArr;
+		if (_ownerSide == _side) then {
+			private _sectorDefenders = _sector getVariable ["WL2_defenders", 0];
+			if (_sectorDefenders > 0) then {
+				_connections = _connections + 2;
+			};
+		};
+
+		private _sideModifier = _modifiers # _forEachIndex;
+		_connections = _connections + _sideModifier;
+
+		_capModifiers set [_side, _connections];
+	} forEach _sideArr;
+	missionNamespace setVariable ["WL2_sideCaptureModifierCache", _capModifiers];
+	_capModifiers;
+};
 
 private _relevantEntities = entities [["LandVehicle", "Man"], ["Logic"], true, true];
 private _sectorAO = _sector getVariable "objectAreaComplete";
@@ -78,22 +104,24 @@ private _allInArea = (_relevantEntities inAreaArray _sectorAO) select {
 // }, [_sector], 100];
 // systemChat format ["Time to execute: %1", _timeToExecute];
 
-private _eligibleEntitiesInArea = _allInArea select {
-	private _unit = _x;
-	// Tested:
-	// Underwater = negative Z
-	// Swimming on water surface = ~0
-	// Clipped under rocks = ~0, nothing to do about it
-	// Standing on top of rocks = ~0
-	// Standing on top of building/>1 floor = ~0
-	// Climbing ladder = altitude above ground
-	// Flying = altitude above ground
+private _isCarrierSector = _sector getVariable ["WL2_isAircraftCarrier", false];
 
-	private _isCarrierSector = _sector getVariable ["WL2_isAircraftCarrier", false];
-
-	if (_isCarrierSector) then {
+// Tested:
+// Underwater = negative Z
+// Swimming on water surface = ~0
+// Clipped under rocks = ~0, nothing to do about it
+// Standing on top of rocks = ~0
+// Standing on top of building/>1 floor = ~0
+// Climbing ladder = altitude above ground
+// Flying = altitude above ground
+private _eligibleEntitiesInArea = if (_isCarrierSector) then {
+	_allInArea select {
+		private _unit = _x;
 		getPosASL _unit # 2 > 10;
-	} else {
+	};
+} else {
+	_allInArea select {
+		private _unit = _x;
 		private _zAboveGeneric = (getPos _unit) # 2;
 		_zAboveGeneric > -2 && _zAboveGeneric < 50;
 	};

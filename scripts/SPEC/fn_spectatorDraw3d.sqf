@@ -27,10 +27,6 @@ private _sectors = uiNamespace getVariable ["WL2_spectatorDrawSectors", []];
     private _targetColor = _x # 1;
     private _assetName = _x # 2;
 
-    private _lastFiredTime = _target getVariable ["WL2_spectateLastFired", -1];
-    private _opacity = linearConversion [0, 0.5, serverTime - _lastFiredTime, 0, 1, true];
-    _targetColor set [3, _opacity];
-
     private _centerOfMass = _target selectionPosition "spine2";
     _centerOfMass set [2, _centerOfMass # 2 + 1];
 
@@ -57,10 +53,6 @@ private _sectors = uiNamespace getVariable ["WL2_spectatorDrawSectors", []];
     private _assetName = _x # 5;
     private _iconTextSize = _x # 6;
 
-    private _lastFiredTime = _target getVariable ["WL2_spectateLastFired", -1];
-    private _opacity = linearConversion [0, 0.5, serverTime - _lastFiredTime, 0, 0.6, true];
-    _targetColor set [3, _opacity];
-
     private _centerOfMass = getCenterOfMass _target;
     _centerOfMass set [2, _centerOfMass # 2 + 3];
 
@@ -70,7 +62,7 @@ private _sectors = uiNamespace getVariable ["WL2_spectatorDrawSectors", []];
         _target modelToWorldVisual _centerOfMass,
         _iconSize * _targetIconRatio,
         _iconSize,
-        0,
+        45,
         _assetName,
         true,
         _iconTextSize,

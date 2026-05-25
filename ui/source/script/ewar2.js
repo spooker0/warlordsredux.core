@@ -496,14 +496,14 @@ function getInstructionsForSignal(signalValue, isFriendly) {
         instructions.push('Signal strength degraded');
         instructions.push('Drone sensors impaired');
         instructions.push('Drones visible to enemy datalink');
-        instructions.push('Spectrum jammer non-functional');
+        instructions.push('Spectrum jammer max range: 500');
     } else if (signalValue >= 650) {
         instructions.push('Signal strength boosted');
         instructions.push('Spectrum jammer max range: 5000');
         instructions.push('10% drone rebate');
     } else {
         instructions.push('Signal strength nominal');
-        instructions.push('Spectrum jammer max range: 300');
+        instructions.push('Spectrum jammer max range: 1000');
     }
 
     return instructions;

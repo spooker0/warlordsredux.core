@@ -203,12 +203,19 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ];
     };
 
+    private _optionIteration = 1;
     private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
     {
         _x params ["_category", "_text", "_params"];
         if (_category == "category") then {
             continue;
         };
+
+        if (_category != "button") then {
+            _x set [1, format ["%1) %2", _optionIteration, _text]];
+            _optionIteration = _optionIteration + 1;
+        };
+
         if (_category == "slider") then {
             private _currentPosition = _settingsMap getOrDefault [_params # 4, _params # 3];
             _params set [3, _currentPosition];

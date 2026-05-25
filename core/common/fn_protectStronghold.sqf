@@ -8,7 +8,3 @@ if (_stronghold isKindOf "House" || _stronghold isKindOf "Building") then {
 };
 
 _stronghold setVariable ["WL2_canDemolish", _protect, true];
-
-if (!_protect) then {
-    _stronghold setVariable ["WL_strongholdSector", objNull, true];
-};

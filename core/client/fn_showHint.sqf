@@ -4,30 +4,25 @@ params ["_layer", ["_hintParams", []], ["_timeout", -1], ["_isAnimation", false]
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _showHint = _settingsMap getOrDefault [format["showHint%1", _layer], true];
 
-private _display = uiNamespace getVariable ["RscWLHintMenu", displayNull];
+private _display = uiNamespace getVariable ["RscWLProgressDisplay", displayNull];
 if (isNull _display) then {
-    "hintLayer" cutRsc ["RscWLHintMenu", "PLAIN", -1, true, true];
-    _display = uiNamespace getVariable "RscWLHintMenu";
+    "progress" cutRsc ["RscWLProgressDisplay", "PLAIN", -1, true, false];
+    _display = uiNamespace getVariable "RscWLProgressDisplay";
 };
-private _texture = _display displayCtrl 5502;
-// _texture ctrlWebBrowserAction ["OpenDevConsole"];
+private _bar = _display displayCtrl 5000;
+private _text = _display displayCtrl 5001;
+private _hintText = _display displayCtrl 5002;
 
 if (count _hintParams == 0) exitWith {
     uiNamespace setVariable [format ["WL2_cancelAnimation_%1", _layer], true];
-
-    private _scriptClear = format [
-        "clearHint(""%1"");",
-        _layer
-    ];
-    _texture ctrlWebBrowserAction ["ExecJS", _scriptClear];
+    _display closeDisplay 0;
 };
 
 uiNamespace setVariable [format ["WL2_cancelAnimation_%1", _layer], false];
 
 if (_showHint) then {
     private _hintTitle = _hintParams select 0;
-    _hintTitle = _texture ctrlWebBrowserAction ["ToBase64", _hintTitle];
-
+    private _hintKeys = _hintParams select 1;
     private _hintArray = [];
     {
         private _actionName = _x select 0;
@@ -38,33 +33,37 @@ if (_showHint) then {
         if (_actionKeyText == "") then {
             _actionKeyText = _actionKey;
         };
-        _hintArray pushBack [toUpper _actionName, _actionKeyText];
-    } forEach (_hintParams select 1);
+        _hintArray pushBack format ["<t align='left'>%1</t><t align='right' color='#00ff00'>[%2]</t>", toUpper _actionName, _actionKeyText];
+    } forEach _hintKeys;
 
-    private _hintText = toJSON _hintArray;
-    _hintText = _texture ctrlWebBrowserAction ["ToBase64", _hintText];
-
-    private _script = format [
-        "updateHint(""%1"", atobr(""%2""), atobr(""%3""));",
-        _layer,
+    _hintText ctrlSetStructuredText parseText format [
+        "<t size='2' align='center'>&#160;<t size='1.2'>%1</t>&#160;</t><br/>%2",
         _hintTitle,
-        _hintText
+        _hintArray joinString "<br/>"
     ];
-    _texture ctrlWebBrowserAction ["ExecJS", _script];
+    _hintText ctrlSetPositionH (0.1 + 0.032 * (count _hintKeys));
+    _hintText ctrlCommit 0;
+} else {
+    _hintText ctrlShow false;
 };
+
+_bar ctrlShow _isAnimation;
+_text ctrlShow _isAnimation;
 
 if (_timeout < 0) exitWith {};
 
 private _startTime = serverTime;
-while { serverTime - _startTime < _timeout && !isNull _texture } do {
+while { serverTime - _startTime < _timeout && !isNull _bar } do {
     private _cancelAnimation = uiNamespace getVariable [format ["WL2_cancelAnimation_%1", _layer], false];
     if (_cancelAnimation) then {
         break;
     };
     uiSleep 0.05;
     if (_isAnimation) then {
-        _texture ctrlWebBrowserAction ["ExecJS", format ["updateAnimationTimer(%1);", (serverTime - _startTime) / _timeout]];
+        private _percent = (serverTime - _startTime) / _timeout;
+        _bar progressSetPosition _percent;
+        _text ctrlSetStructuredText parseText format ["<t align='center'>%1%%</t>", round (_percent * 100)];
     };
 };
 
-_texture ctrlWebBrowserAction ["ExecJS", format ["clearHint(""%1"");", _layer]];
+_display closeDisplay 0;

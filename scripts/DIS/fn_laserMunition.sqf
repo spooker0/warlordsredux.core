@@ -24,7 +24,7 @@ private _lastTargetPos = getPosASL _target;
 private _laser = objNull;
 
 private _projectileSpeed = getNumber (configfile >> "CfgAmmo" >> typeof _projectile >> "maxSpeed");
-_projectileSpeed = _projectileSpeed max 500;
+_projectileSpeed = _projectileSpeed max 1000;
 
 private _enemySide = BIS_WL_enemySide;
 [[_unit], 120] remoteExec ["WL2_fnc_reportTargets", _enemySide];
@@ -53,7 +53,7 @@ while { alive _projectile } do {
             private _actualVectorUp = vectorLinearConversion [0, 1, 0.1, _currentVectorUp, _targetVectorDirAndUp # 1, true];
             _projectile setVectorDirAndUp [_actualVectorDir, _actualVectorUp];
 
-            _projectile setVelocityModelSpace [0, 500, 0];
+            _projectile setVelocityModelSpace [0, _projectileSpeed, 0];
 
             _terminal = true;
             deleteVehicle _laser;

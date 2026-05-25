@@ -22,10 +22,6 @@ private _clearButtons = [];
 while { _xPoint <= (1 - safeZoneX - INV_BUTTON_WIDTH * 2) } do {
     private _loadButton = _display ctrlCreate ["WLRscInventoryButton", -1, _loadoutGroup];
     _loadButton ctrlSetPosition [_xPoint, 0, INV_BUTTON_WIDTH, 0.12];
-
-    private _loadout = _loadouts # _loadoutNum;
-
-    private _text = [_loadout] call WL2_fnc_trimInventoryText;
     _loadButton ctrlSetFont "PuristaMedium";
     _loadButton ctrlSetFontHeight INV_BUTTON_FONT;
     _loadButton ctrlAddEventHandler ["ButtonClick", WL2_fnc_loadoutButtonClicked];
@@ -35,14 +31,14 @@ while { _xPoint <= (1 - safeZoneX - INV_BUTTON_WIDTH * 2) } do {
     _saveButton ctrlSetPosition [_xPoint, 0.13, INV_BUTTON_WIDTH, 0.04];
     _saveButton ctrlSetFont "PuristaMedium";
     _saveButton ctrlSetFontHeight INV_BUTTON_FONT;
-    _saveButton ctrlAddEventHandler ["ButtonClick", WL2_fnc_saveButtonClicked];
+    _saveButton ctrlAddEventHandler ["ButtonClick", { _this spawn WL2_fnc_saveButtonClicked; }];
     _saveButton ctrlCommit 0;
 
     private _clearButton = _display ctrlCreate ["WLRscInventoryCenterButton", -1, _loadoutGroup];
     _clearButton ctrlSetPosition [_xPoint, 0.18, INV_BUTTON_WIDTH, 0.04];
     _clearButton ctrlSetFont "PuristaMedium";
     _clearButton ctrlSetFontHeight INV_BUTTON_FONT;
-    _clearButton ctrlAddEventHandler ["ButtonClick", WL2_fnc_clearButtonClicked];
+    _clearButton ctrlAddEventHandler ["ButtonClick", { _this spawn WL2_fnc_clearButtonClicked; }];
     _clearButton ctrlCommit 0;
 
     _loadButton setVariable ["WL2_loadoutIndex", _loadoutNum];

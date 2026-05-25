@@ -61,7 +61,14 @@ if (_action == "invited") exitWith {
         ["add", [_inviter, getPlayerID player]] remoteExec ["SQD_fnc_server", 2];
     };
 
-    private _callbackCancel = {};
+    private _callbackCancel = {
+        private _queue = uiNamespace getVariable "WL2_timedPromptQueue";
+        {
+            if (_x # 0 == "squadInvite") then {
+                _x set [1, true];
+            };
+        } forEach _queue;
+    };
 
     [
         "squadInvite",

@@ -36,11 +36,12 @@ private _nearLoadable = _nearLoadableEntities select {
     if (alive _x) then {
         private _assetActualType = WL_ASSET_TYPE(_x);
         private _access = [_x, _caller, "full"] call WL2_fnc_accessControl;
-        private _loadable = WL_ASSET_FIELD(_assetData, _assetActualType, "loadable", []);
-        if (typeof _asset == "I_Heli_Transport_02_F") then {
+        private _isHeavyLift = WL_UNIT(_asset, "isHeavyLift", 0) > 0;
+        if (_isHeavyLift) then {
             private _cost = WL_ASSET_FIELD(_assetData, _assetActualType, "cost", -1);
-            _x != _asset && _access # 0 && _cost >= 0 && !(_x isKindOf "Man")
+            _x != _asset && _access # 0 && _cost >= 0 && !(_x isKindOf "Man") && !(_x isKindOf "Building")
         } else {
+            private _loadable = WL_ASSET_FIELD(_assetData, _assetActualType, "loadable", []);
             count _loadable > 0 && _access # 0;
         };
     } else {

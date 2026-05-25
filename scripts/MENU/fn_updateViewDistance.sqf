@@ -26,7 +26,9 @@ private _terrainGrid = switch (_terrainGridSetting) do {
 if (_cqbMode) then {
     _terrainGrid = 25;
 };
-setTerrainGrid _terrainGrid;
+if (getTerrainGrid != _terrainGrid) then {
+    setTerrainGrid _terrainGrid;
+};
 
 if (_objectViewDistance != _targetViewDistance) then {
     setObjectViewDistance [_targetViewDistance, getObjectViewDistance # 1];

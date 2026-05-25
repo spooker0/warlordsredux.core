@@ -35,7 +35,7 @@ private _sector = if (count _sectors > 0) then {
     };
 };
 
-private _enemiesNearPlayer = (allPlayers inAreaArray [player, 50, 50]) select {
+private _enemiesNearPlayer = (allPlayers inAreaArray [player, WL_ENEMIES_NEAR_RADIUS, WL_ENEMIES_NEAR_RADIUS]) select {
     _x isKindOf "Man"
 } select {
     BIS_WL_playerSide != side group _x

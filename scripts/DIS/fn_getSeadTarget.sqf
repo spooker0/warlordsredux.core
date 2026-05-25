@@ -7,19 +7,19 @@ private _advancedThreats = _asset getVariable ["WL2_advancedThreats", []];
     if (!alive _x) then {
         continue;
     };
-    private _name = format ["LOCKED: %1", [_x] call WL2_fnc_getAssetTypeName];
+    private _name = format ["LOCKED: %1", [_x] call WL2_fnc_getAssetTypeShortName];
     _seadTargets pushBack [_x, _name];
 } forEach _advancedThreats;
 
 private _extendedSamLauncher = _asset getVariable ["WL_incomingExtendedSam", objNull];
 if (alive _extendedSamLauncher) then {
-    private _name = format ["LOCKED: %1", [_extendedSamLauncher] call WL2_fnc_getAssetTypeName];
+    private _name = format ["LOCKED: %1", [_extendedSamLauncher] call WL2_fnc_getAssetTypeShortName];
     _seadTargets pushBack [_extendedSamLauncher, _name];
 };
 
 private _launcher = _asset getVariable ["WL_incomingLauncherLastKnown", objNull];
 if (alive _launcher) then {
-    private _name = format ["LAUNCH: %1", [_launcher] call WL2_fnc_getAssetTypeName];
+    private _name = format ["LAUNCH: %1", [_launcher] call WL2_fnc_getAssetTypeShortName];
     _seadTargets pushBack [_launcher, _name];
 };
 
@@ -27,7 +27,7 @@ if (alive _launcher) then {
     _x params ["_threat", "_type", "_sensors"];
     if (_type in ["locked", "marked"] && "radar" in _sensors) then {
         private _locker = vehicle _threat;
-        private _name = format ["LOCKING: %1", [_locker] call WL2_fnc_getAssetTypeName];
+        private _name = format ["LOCKING: %1", [_locker] call WL2_fnc_getAssetTypeShortName];
         _seadTargets pushBack [_locker, _name];
     };
 } forEach (getSensorThreats _asset);
@@ -38,7 +38,7 @@ if (alive _launcher) then {
         continue;
     };
     if ("passiveradar" in _detectionSource) then {
-        private _name = format ["EMITTER: %1", [_target] call WL2_fnc_getAssetTypeName];
+        private _name = format ["EMITTER: %1", [_target] call WL2_fnc_getAssetTypeShortName];
         _seadTargets pushBack [_target, _name];
     };
 } forEach (getSensorTargets _asset);
@@ -58,7 +58,7 @@ private _side = [_asset] call WL2_fnc_getAssetSide;
     };
     private _isDazzler = _target getVariable ["APS_apsType", 0] == 4;
     if (_isDazzler && _target getVariable ["WL2_apsActivated", false]) then {
-        private _name = format ["EMITTER: %1", [_target] call WL2_fnc_getAssetTypeName];
+        private _name = format ["EMITTER: %1", [_target] call WL2_fnc_getAssetTypeShortName];
         _seadTargets pushBack [_target, _name];
     };
 } forEach (listRemoteTargets _side);

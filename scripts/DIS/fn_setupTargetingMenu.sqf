@@ -1,12 +1,14 @@
 #include "includes.inc"
 
-private _display = uiNamespace getVariable ["RscWLTargetingMenu", displayNull];
+private _display = uiNamespace getVariable ["RscWLTargetingDisplay", displayNull];
 if (isNull _display) then {
-	"targetingMenu" cutRsc ["RscWLTargetingMenu", "PLAIN", -1, true, true];
-	_display = uiNamespace getVariable ["RscWLTargetingMenu", displayNull];
+	"targetingMenu" cutRsc ["RscWLTargetingDisplay", "PLAIN", -1, true, true];
+	_display = uiNamespace getVariable ["RscWLTargetingDisplay", displayNull];
 };
-private _texture = _display displayCtrl 5502;
-// _texture ctrlWebBrowserAction ["OpenDevConsole"];
+private _mainTextControl = _display displayCtrl 6000;
+private _incomingTextControl = _display displayCtrl 6001;
+private _statusTextControl = _display displayCtrl 6002;
+private _weaponTextControl = _display displayCtrl 6003;
 
 uiNamespace setVariable ["DIS_currentTargetingMode", "none"];
 uiNamespace setVariable ["WL2_usingVLS", false];
@@ -18,6 +20,10 @@ private _getCurrentMode = {
 		["none", "none"]
 	};
 
+	if (currentMagazine cameraon == "Laserbatteries") exitWith {
+		["lasing", "LASER DESIGNATOR"]
+	};
+
 	private _turret = cameraOn unitTurret focusOn;
 	if (count _turret == 0) exitWith {
 		["none", "none"]
@@ -26,6 +32,9 @@ private _getCurrentMode = {
 	private _ammoConfig = cameraOn getVariable ["WL2_currentAmmoConfig", createHashMap];
 	private _weaponName = cameraOn getVariable ["WL2_currentWeaponName", ""];
 	_weaponName = toUpper _weaponName;
+	if (_weaponName == "LASER MARKER") exitWith {
+		["lasing", _weaponName]
+	};
 	if (_ammoConfig getOrDefault ["gps", false]) exitWith {
 		["gps", _weaponName]
 	};
@@ -128,11 +137,10 @@ private _makeMunitionTextArray = {
 	_munitionTextArray;
 };
 
-[_texture] spawn {
-	params ["_texture"];
-	private _lastPositionScript = "";
-	while { !isNull _texture } do {
-		uiSleep 0.5;
+[_mainTextControl, _incomingTextControl, _weaponTextControl] spawn {
+	params ["_mainTextControl", "_incomingTextControl", "_weaponTextControl"];
+	private _lastSettings = [];
+	while { !isNull _mainTextControl } do {
 		private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 
 		private _allDisplays = uiNamespace getVariable ["IGUI_displays", []];
@@ -150,13 +158,7 @@ private _makeMunitionTextArray = {
 				_weaponInfoPosition # 2,
 				_weaponInfoPosition # 3
 			];
-
-			[
-				(_unitInfoPosition # 0 - safeZoneX) / safeZoneW * 100,
-				(_unitInfoPosition # 1 - safeZoneY) / safeZoneH * 100,
-				(_unitInfoPosition # 2) / safeZoneW * 100,
-				(_unitInfoPosition # 3) / safeZoneH * 100
-			];
+			_unitInfoPosition
 		} else {
 			[0, 0, 0, 0];
 		};
@@ -166,15 +168,52 @@ private _makeMunitionTextArray = {
 		private _fontSize = _settingsMap getOrDefault ["targetingMenuFontSize", 18];
 		private _incomingLeft = _settingsMap getOrDefault ["incomingIndicatorLeft", 5];
 		private _incomingTop = _settingsMap getOrDefault ["incomingIndicatorTop", 20];
-		private _setPositionScript = format ["setSettings(%1, %2, %3, %4, %5, %6);", _targetLeft, _targetTop, _incomingLeft, _incomingTop, _fontSize, _unitInfoPositionConverted];
 
-		if (_setPositionScript == _lastPositionScript) then {
+		private _currentSettings = [_targetLeft, _targetTop, _incomingLeft, _incomingTop, _fontSize, _unitInfoPositionConverted];
+		if (_lastSettings isEqualTo _currentSettings) then {
+			uiSleep 0.5;
 			continue;
 		};
 
-		_texture ctrlWebBrowserAction ["ExecJS", _setPositionScript];
-		_lastPositionScript = _setPositionScript;
+		_lastSettings = _currentSettings;
+
+		_mainTextControl ctrlSetPosition [
+			_targetLeft / 100 * safeZoneW + safeZoneX,
+			_targetTop / 100 * safeZoneH + safeZoneY,
+			1, 1
+		];
+		_mainTextControl ctrlSetFontHeight (_fontSize / 18 * 0.032);
+		_mainTextControl ctrlCommit 0;
+
+		_incomingTextControl ctrlSetPosition [
+			_incomingLeft / 100 * safeZoneW + safeZoneX,
+			_incomingTop / 100 * safeZoneH + safeZoneY,
+			0.4, 1
+		];
+		_incomingTextControl ctrlSetFontHeight (_fontSize / 18 * 0.032);
+		_incomingTextControl ctrlCommit 0;
+
+		_weaponTextControl ctrlSetPosition _unitInfoPositionConverted;
+		_weaponTextControl ctrlCommit 0;
 	};
+};
+
+private _makeTargetingText = {
+	params ["_currentModeTitle", "_targets", "_hasSelections"];
+	private _targetArray = [];
+	{
+		_x params ["_netId", "_targetTextEntry", "_isSelected"];
+		if (!_hasSelections) then {
+			_targetArray pushBack _targetTextEntry;
+			continue;
+		};
+		if (_isSelected) then {
+			_targetArray pushBack format ["|&gt;| %1", _targetTextEntry];
+		} else {
+			_targetArray pushBack format ["| | %1", _targetTextEntry];
+		};
+	} forEach _targets;
+	format ["%1<br/>%2", _currentModeTitle, _targetArray joinString "<br/>"];
 };
 
 private _lastCameraOn = cameraOn;
@@ -188,7 +227,7 @@ while { !BIS_WL_missionEnd } do {
 
 	uiNamespace setVariable ["DIS_currentTargetingMode", _currentMode];
 
-	private _script = "";
+	private _text = "";
 
 	if (cameraOn != _lastCameraOn) then {
 		_lastCameraOn = cameraOn;
@@ -209,27 +248,13 @@ while { !BIS_WL_missionEnd } do {
 		};
 	};
 
-	private _munitionList = cameraOn getVariable ["DIS_munitionList", []];
-	private _munitionsTextArray = [_munitionList] call _makeMunitionTextArray;
-
-	if (count _munitionsTextArray > 0) then {
-		private _munitionsText = toJSON _munitionsTextArray;
-		private _encodedMunitionsText = _texture ctrlWebBrowserAction ["ToBase64", _munitionsText];
-
-		private _munitionScript = format ["setMunitionList(atobr(""%1""));", _encodedMunitionsText];
-		_script = _script + _munitionScript;
-	} else {
-		_script = _script + "setMunitionList('[]');";
-	};
-
 	switch(_currentMode) do {
 		case "asam";
 		case "esam";
 		case "loal": {
 			private _targetList = [DIS_fnc_getSamTarget, "MANUAL LOCK", "WL2_selectedTargetAA"] call DIS_fnc_getTargetList;
-			private _targetsText = toJSON _targetList;
-			_targetsText = _texture ctrlWebBrowserAction ["ToBase64", _targetsText];
-			_script = _script + format ["setMode(""aa"", ""%1"");setAATargetData(atobr(""%2""));", _currentModeTitle, _targetsText];
+			private _targetText = [_currentModeTitle, _targetList, true] call _makeTargetingText;
+			_text = _text + _targetText;
 		};
 		case "gps": {
 			private _nextActionText = (actionKeysNames "gunElevDown") regexReplace ["""", ""];
@@ -239,40 +264,96 @@ while { !BIS_WL_missionEnd } do {
 			private _gpsCord = cameraOn getVariable ["DIS_gpsCord", ""];
 			private _inRangeCalculation = [cameraOn] call DIS_fnc_calculateInRange;
 
-			_script = _script + format [
-				"setMode(""gps"", ""%1"");setGPSData(""%2"", %3, %4, ""%5"", ""%6"", ""%7"", %8);",
-				_currentModeTitle,
-				_nextActionText,
-				_savedCords,
-				_gpsSelectionIndex,
-				_gpsCord,
-				(_inRangeCalculation # 2 / 1000) toFixed 1,
-				(_inRangeCalculation # 1 / 1000) toFixed 1,
-				_inRangeCalculation # 0
+			private _gridText = if (_gpsCord isEqualTo "") then {
+				"GRID 000 000";
+			} else {
+				while { count _gpsCord < 6 } do {
+					_gpsCord = "0" + _gpsCord;
+				};
+				private _easting = _gpsCord select [0, 3];
+				private _northing = _gpsCord select [3, 3];
+				format ["GRID %1 %2", _easting, _northing];
+			};
+
+			_inRangeCalculation params ["_inRange", "_effectiveRange", "_targetDistance"];
+
+			private _color = if (_inRange) then {
+				""
+			} else {
+				" color='#ff0000'"
+			};
+
+			private _gpsText = [
+				format ["<t size='2'>%1</t>", _gridText],
+				"",
+				format ["<t%1>TARGET DISTANCE: %2</t>", _color, (_targetDistance / 1000) toFixed 1],
+				format ["<t%1>EFFECTIVE RANGE: %2</t>", _color, (_effectiveRange / 1000) toFixed 1]
 			];
+
+			if (_inRange) then {
+				_gpsText pushBack "<t size='0.8'>READY TO FIRE</t>";
+			} else {
+				if (_targetDistance < 500) then {
+					_gpsText pushBack "<t color='#ff0000' size='0.8'>TOO CLOSE TO TARGET</t>";
+				} else {
+					_gpsText pushBack "<t color='#ff0000' size='0.8'>ALIGN HEADING AND GET CLOSER / HIGHER / FASTER</t>";
+				};
+			};
+
+			_gpsText pushBack "";
+			_gpsText pushBack "CONTROLS";
+
+			private _allOptions = [
+				format ["PRESS [%1] TO ENTER GRID", _nextActionText],
+				"ENTER CORDS WITH [0-9] KEYS"
+			];
+			_allOptions append _savedCords;
+			{
+				private _option = _x;
+				if (_forEachIndex >= 2) then {
+					_option = format ["SAVED GRID %1 %2", _option select [0, 3], _option select [3, 3]];
+				};
+				if (_forEachIndex == _gpsSelectionIndex) then {
+					_gpsText pushBack format ["|&gt;| %1", _option];
+				} else {
+					_gpsText pushBack format ["| | %1", _option];
+				};
+			} forEach _allOptions;
+
+			_text = _text + format ["%1<br/>%2", _currentModeTitle, _gpsText joinString "<br/>"];
 		};
 		case "laser": {
 			private _targetList = [] call DIS_fnc_getLaserList;
-			private _targetsText = toJSON _targetList;
-			_targetsText = _texture ctrlWebBrowserAction ["ToBase64", _targetsText];
-			_script = _script + format ["setMode(""laser"", ""%1"");setLaserTargetData(atobr(""%2""));", _currentModeTitle, _targetsText];
+			private _targetText = [_currentModeTitle, _targetList, true] call _makeTargetingText;
+			_text = _text + _targetText;
+		};
+		case "lasing": {
+			private _targetList = [] call DIS_fnc_getLaserList;
+			private _targetText = [_currentModeTitle, _targetList, false] call _makeTargetingText;
+			_text = _text + _targetText;
 		};
 		case "remote": {
 			private _targetList = [] call DIS_fnc_getSquadList;
-			private _targetsText = toJSON _targetList;
-			_targetsText = _texture ctrlWebBrowserAction ["ToBase64", _targetsText];
-			_script = _script + format ["setMode(""remote"", ""%1"");setRemoteTargetData(atobr(""%2""));", _currentModeTitle, _targetsText];
+			private _targetText = [_currentModeTitle, _targetList, true] call _makeTargetingText;
+			_text = _text + _targetText;
 		};
 		case "sead": {
 			private _targetList = [DIS_fnc_getSeadTarget, "TARGET: AUTO", "WL2_selectedTargetSEAD"] call DIS_fnc_getTargetList;
-			private _targetsText = toJSON _targetList;
-			_targetsText = _texture ctrlWebBrowserAction ["ToBase64", _targetsText];
-			_script = _script + format ["setMode(""sead"", ""%1"");setSEADTargetData(atobr(""%2""));", _currentModeTitle, _targetsText];
+			private _targetText = [_currentModeTitle, _targetList, true] call _makeTargetingText;
+			_text = _text + _targetText;
 		};
-		default {
-			_script = _script + format ["setMode(""none"", ""%1"");", _currentModeTitle];
-		};
+		default {};
 	};
+
+	private _munitionList = cameraOn getVariable ["DIS_munitionList", []];
+	private _munitionsTextArray = [_munitionList] call _makeMunitionTextArray;
+
+	if (count _munitionsTextArray > 0) then {
+		private _munitionsText = _munitionsTextArray joinString "<br/>";
+		_text = format ["%1<br/><br/><br/>%2", _text, _munitionsText];
+	};
+
+	_mainTextControl ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", _text];
 
 	private _disableIncomingMissileDisplay = _settingsMap getOrDefault ["disableIncomingMissileDisplay", false];
     if (WL_HelmetInterface != 0 && !_disableIncomingMissileDisplay) then {
@@ -291,41 +372,85 @@ while { !BIS_WL_missionEnd } do {
 			[_missileState, _distance, _missileApproaching, _missileType];
 		};
 
-		private _encodedMissilesText = _texture ctrlWebBrowserAction ["ToBase64", toJSON _missilesData];
+		_missilesData = [_missilesData, [], {
+			if (_x # 2) then {
+				_x # 1
+			} else {
+				_x # 1 + 10000
+			};
+		}, "ASCEND"] call BIS_fnc_sortBy;
 
 		private _countermeasures = count (("CMflare_Chaff_Ammo" allObjects 2) select {
 			(getShotParents _x) # 0 == cameraOn && _x distance cameraOn < 4000;
 		});
-		_script = _script + format ["setIncomingMissiles(atobr(""%1""), %2);", _encodedMissilesText, _countermeasures];
-    } else {
-		_script = _script + "setIncomingMissiles('[]', 0);";
+
+		private _incomingText = "";
+		if (_countermeasures > 0) then {
+			_incomingText = _incomingText + format ["CM %1<br/>", _countermeasures];
+		};
+
+		{
+			_x params ["_missileState", "_distance", "_missileApproaching", "_missileType"];
+			private _color = switch (true) do {
+				case (!_missileApproaching): {
+					"#000000";
+				};
+				case (_distance > 5000): {
+					"#ffffff";
+				};
+				case (_distance > 2500): {
+					"#ffff00";
+				};
+				default { "#ff0000" };
+			};
+			_incomingText = format [
+				"%1<br/><t color='%2'><t align='left'>%3</t><t align='center'>%4</t><t align='right'>%5</t></t>",
+				_incomingText,
+				_color,
+				_missileType,
+				_missileState,
+				(_distance / 1000) toFixed 1
+			];
+		} forEach _missilesData;
+
+		_incomingTextControl ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", _incomingText];
 	};
+
+	private _statusText = "";
 
 	private _reconOptics = cameraOn getVariable ["WL2_hasReconOptics", false];
 	if (_reconOptics) then {
 		private _isReady = cameraOn getVariable ["WL2_reconOpticsReady", false];
-		_script = _script + format ["setReconOptics(true, %1);", _isReady];
-	} else {
-		_script = _script + "setReconOptics(false, false);";
-	};
-
-	private _ecmCharges = cameraOn getVariable ["WL2_ecmCharges", -100];
-	if (_ecmCharges != -100) then {
-		private _nextChargeTime = cameraOn getVariable ["WL2_ecmNextChargeTime", 0];
-		_script = _script + format ["setEcmCharges(true, %1, %2);", _ecmCharges, _nextChargeTime];
-	} else {
-		_script = _script + "setEcmCharges(false, 0, 0);";
+		private _reconText = if (_isReady) then {
+			"RECON OPTICS READY<br/>"
+		} else {
+			"<t color='#000000'>RECON OPTICS WAIT</t><br/>"
+		};
+		_statusText = _statusText + _reconText;
 	};
 
 	private _weaponAmmoCount = cameraOn getVariable ["WL2_deployedWeaponAmmo", -100];
-	if (_weaponAmmoCount >= 0) then {
-		_script = _script + format ["setIntegralWeapon(true, %1);", _weaponAmmoCount];
+	if (_weaponAmmoCount == 0) then {
+		_statusText = _statusText + "<t color='#000000'>INTEGRAL AMMO: 0</t><br/>";
+	};
+	if (_weaponAmmoCount > 0) then {
+		_statusText = _statusText + format ["INTEGRAL AMMO: %1<br/>", _weaponAmmoCount];
+	};
+
+	if (_statusText != "") then {
+		_statusTextControl ctrlSetStructuredText parseText format ["<t shadow='2' align='center'>%1</t>", _statusText];
+		_statusTextControl ctrlShow true;
 	} else {
-		_script = _script + "setIntegralWeapon(false, 0);";
+		_statusTextControl ctrlSetText "";
+		_statusTextControl ctrlShow false;
 	};
 
 	private _weaponNameOverride = uiNamespace getVariable ["WL2_ammoOverrideName", ""];
-	_script = _script + format ["setWeaponName(""%1"");", _weaponNameOverride];
-
-	_texture ctrlWebBrowserAction ["ExecJS", _script];
+	if (_weaponNameOverride != "") then {
+		_weaponTextControl ctrlSetText _weaponNameOverride;
+		_weaponTextControl ctrlShow true;
+	} else {
+		_weaponTextControl ctrlSetText "";
+		_weaponTextControl ctrlShow false;
+	};
 };

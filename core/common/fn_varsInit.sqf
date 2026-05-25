@@ -14,6 +14,7 @@ switch (_locality) do {
 		BIS_WL_westOwnedVehicles = [];
 		BIS_WL_eastOwnedVehicles = [];
 		BIS_WL_guerOwnedVehicles = [];
+		WL2_destroyerOutlineMarkers = [];
 	};
 	case "client": {
 		BIS_WL_mapSizeIndex = BIS_WL_mapSize / 8192;

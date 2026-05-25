@@ -91,7 +91,7 @@ addMissionEventHandler ["Draw3D", {
             continue;
         };
         if (cameraOn != player || currentWeapon player != "hgun_esd_01_F") then {
-            if !(cameraOn isKindOf "C_Plane_Civil_01_F") then {
+            if !(cameraOn getVariable ["WL2_hasDroneHunter", false]) then {
                 _indicator ctrlSetText "";
                 WL_SpectrumInterface = false;
                 continue;
@@ -110,13 +110,15 @@ addMissionEventHandler ["Draw3D", {
             WL_JAMMER_SPECTRUM_RANGE * _lockDifficulty
         } else {
             if (_friendlySignal <= 350) then {
-                5
-            } else {
+                _lockDifficulty = 0.5;
                 500
+            } else {
+                _lockDifficulty = 0.5;
+                1000
             }
         };
         _indicator ctrlSetStructuredText parseText format [
-            "<t align='center' size='1.4' shadow='2'>Frequency: %1 MHz<br/>Max Range: %2 M</t>",
+            "<t align='center' size='0.9' shadow='2'>Frequency: %1 MHz<br/>Max Range: %2 M</t>",
             _frequency,
             round _lockRange
         ];
@@ -124,7 +126,7 @@ addMissionEventHandler ["Draw3D", {
         private _uavsInRange = vehicles select {
             alive _x
         } select {
-            _x distance2D player < WL_JAMMER_SPECTRUM_DETECT_RANGE
+            _x distance2D player < _lockRange * 2
         } select {
             [_x] call WL2_fnc_getAssetSide != BIS_WL_playerSide
         } select {
@@ -146,7 +148,7 @@ addMissionEventHandler ["Draw3D", {
             };
 
             private _targetPos = _x modelToWorldVisual [0, 0, 0];
-            private _distance = _x distance player;
+            private _distance = _x distance cameraOn;
 
             private _screenPos = worldToScreen _targetPos;
             private _viewConeDistance = if (count _screenPos == 2) then {
@@ -187,6 +189,8 @@ addMissionEventHandler ["Draw3D", {
             ];
         } forEach _uavsInRange;
 
+        _uavsInRange = [_uavsInRange, [_lockRange], { if (_x distance cameraOn < _input0) then { _x distance cameraOn } else { 100000 } }, "ASCEND"] call BIS_fnc_sortBy;
+
         private _findLockedUav = _uavsInRange findIf {
             private _viewConeDistance = _x getVariable ["WL_spectrumViewConeDistance", 1];
             _viewConeDistance < WL_JAMMER_SPECTRUM_DIFFICULTY
@@ -194,7 +198,7 @@ addMissionEventHandler ["Draw3D", {
 
         if (_findLockedUav != -1) then {
             private _lockedUav = _uavsInRange # _findLockedUav;
-            private _distance = _lockedUav distance player;
+            private _distance = _lockedUav distance cameraOn;
             private _jammable = _distance < _lockRange;
             (_spectrumIcons # _findLockedUav) set [0, if (_jammable) then {
                 "\A3\ui_f\data\IGUI\Cfg\Targeting\HitConfirm_ca.paa"
@@ -210,7 +214,7 @@ addMissionEventHandler ["Draw3D", {
             };
             (_spectrumIcons # _findLockedUav) set [6, _distanceText];
 
-            if (_jammable && inputAction "defaultAction" > 0) then {
+            if (_jammable) then {
                 _lockStatus = _lockStatus + 1;
                 missionNamespace setVariable ["#EM_Transmit", true];
                 missionNamespace setVariable ["#EM_Progress", _lockStatus / (4 * _lockDifficulty)];
@@ -237,7 +241,7 @@ addMissionEventHandler ["Draw3D", {
         };
 
         private _friendlyUavs = vehicles select {
-            _x distance2D player < WL_JAMMER_SPECTRUM_DETECT_RANGE
+            _x distance2D cameraOn < _lockRange * 2
         } select {
             [_x] call WL2_fnc_getAssetSide == BIS_WL_playerSide
         } select {
@@ -250,7 +254,7 @@ addMissionEventHandler ["Draw3D", {
                 case east: { [0.5, 0, 0, 0.9] };
             };
             private _targetPos = _x modelToWorldVisual [0, 0, 0];
-            private _distance = _targetPos distance player;
+            private _distance = _targetPos distance cameraOn;
             private _assetTypeName = [_x] call WL2_fnc_getAssetTypeName;
             private _distanceDisplay = format ["%1 KM", (round (_distance / 100)) / 10];
             private _targetDisplay = format ["%1 (%2)", _assetTypeName, _distanceDisplay];

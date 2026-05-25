@@ -18,6 +18,25 @@ if (!_inFriendlySector && _cost > 6000) exitWith {
     playSoundUI ["AddItemFailed"];
 };
 
+private _wreckSide = [_asset] call WL2_fnc_getAssetSide;
+if (_wreckSide != BIS_WL_playerSide && _cost > 6000) then {
+    private _enemyUnits = switch (_wreckSide) do {
+        case west: { BIS_WL_westOwnedVehicles };
+        case east: { BIS_WL_eastOwnedVehicles };
+        case independent: { BIS_WL_guerOwnedVehicles };
+        default { [] };
+    };
+    private _enemyAirUnits = _enemyUnits select { _x isKindOf "Air" } select {
+        private _position = _x modelToWorld [0, 0, 0];
+        _position # 2 > 50
+    };
+    [_enemyAirUnits, 20] remoteExec ["WL2_fnc_reportTargets", BIS_WL_playerSide];
+    private _enemiesSpotted = [_enemyAirUnits] call WL2_fnc_reconReward;
+    if (_enemiesSpotted) then {
+        playSoundUI ["a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", 1, 0.5, true];
+    };
+};
+
 _asset setVariable ["WL2_isSecured", true];
 
 deleteVehicle _asset;

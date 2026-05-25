@@ -199,26 +199,6 @@ if (_asset in units player) then {
             "Fast Travel"
         ]
     ] call WL2_fnc_addTargetMapButton;
-
-    // Fast Travel AI to Vehicle
-    private _fastTravelAIVehicleExecute = {
-        params ["_asset"];
-        _asset moveInAny (vehicle player);
-        playSoundUI ["AddItemOK"];
-    };
-    [
-        _asset, _targetId,
-        "ft-ai-vic",
-        "Fast travel AI into your vehicle",
-        _fastTravelAIVehicleExecute,
-        true,
-        "fastTravelAIVehicle",
-        [
-            0,
-            "FTAI",
-            "Fast Travel"
-        ]
-    ] call WL2_fnc_addTargetMapButton;
 };
 
 private _isTent = typeof _asset in ["Land_TentSolar_01_bluewhite_F", "Land_TentDome_F", "Land_TentSolar_01_redwhite_F", "Land_TentA_F"];
@@ -425,6 +405,39 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         [
             WL_COST_COMBATAIR,
             "CombatAir",
+            "Fast Travel"
+        ]
+    ] call WL2_fnc_addTargetMapButton;
+
+    // Call for paradrop button
+    private _paradropExecute = {
+        params ["_asset"];
+        [_asset] spawn {
+            params ["_asset"];
+            private _message = format [
+                "Are you sure you want to call in a paradrop? This will cost you %1%2.",
+                WL_MONEY_SIGN, WL_COST_PARADROPCALL
+            ];
+            private _result = [_message, "Paradrop", "OK", "Cancel"] call BIS_fnc_guiMessage;
+
+            if (!_result) exitWith {
+                playSoundUI ["AddItemFailed"];
+            };
+
+            [player, "callParadrop", BIS_WL_playerSide, _asset] remoteExec ["WL2_fnc_handleClientRequest", 2];
+            [player, _asset] remoteExec ["WL2_fnc_conscriptVehicle", BIS_WL_playerSide];
+        };
+    };
+    [
+        _asset, _targetId,
+        "order-paradrop",
+        "Order paradrop",
+        _paradropExecute,
+        true,
+        "orderParadropFOB",
+        [
+            WL_COST_PARADROPCALL,
+            "Paradrop",
             "Fast Travel"
         ]
     ] call WL2_fnc_addTargetMapButton;
@@ -637,63 +650,6 @@ if (count _findIsStronghold > 0) then {
         [
             WL_COST_STRONGHOLD / 2,
             "RepairStronghold",
-            "Strategy"
-        ]
-    ] call WL2_fnc_addTargetMapButton;
-
-    // Fortify Stronghold button
-    private _fortifyStrongholdExecute = {
-        params ["_asset"];
-        private _findSector = (BIS_WL_sectorsArray # 2) select {
-            (_x getVariable ["WL_stronghold", objNull]) == _asset
-        };
-        private _sector = (_findSector # 0);
-        private _fortificationTime = _sector getVariable ["WL_fortificationTime", -1];
-        if (_fortificationTime < serverTime) exitWith {};
-        private _fortificationTimeRemaining = _fortificationTime - serverTime;
-        _sector setVariable ["WL_fortificationTime", serverTime + _fortificationTimeRemaining / 15, true];
-
-    #if WL_QUICK_CAPTURE
-        _sector setVariable ["WL_fortificationTime", serverTime + 10, true];
-    #endif
-
-        _sector setVariable ["WL_strongholdFortified", true, true];
-
-        private _impactSounds = [
-            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_01.wss",
-            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_02.wss",
-            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_03.wss",
-            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_hard_04.wss",
-            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_soft_01.wss",
-            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_soft_02.wss",
-            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_soft_03.wss",
-            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_01.wss",
-            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_02.wss",
-            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_03.wss",
-            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_metal_04.wss",
-            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_01.wss",
-            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_02.wss",
-            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_03.wss",
-            "a3\sounds_f_enoch\assets\arsenal\ugv_02\probingweapon_01\ugv_lance_impact_plastic_04.wss"
-        ];
-
-        for "_i" from 1 to 10 do {
-            playSound3D [selectRandom _impactSounds, player, false, getPosASL player, 2, 1, 200, 0];
-            uiSleep 0.3;
-        };
-
-        [player, "fortifyStronghold"] remoteExec ["WL2_fnc_handleClientRequest", 2];
-    };
-    [
-        _asset, _targetId,
-        "fortify-stronghold",
-        "Fortify stronghold",
-        _fortifyStrongholdExecute,
-        true,
-        "fortifyStronghold",
-        [
-            WL_COST_FORTIFY,
-            "FortifyStronghold",
             "Strategy"
         ]
     ] call WL2_fnc_addTargetMapButton;

@@ -32,6 +32,23 @@ while { !BIS_WL_missionEnd } do {
 		_x setVariable ["WL2_forwardBaseSupplies", _supplies + 1000, true];
     } forEach _forwardBases;
 
+	{
+		private _sector = _x;
+		private _sectorOwner = _sector getVariable ["BIS_WL_owner", independent];
+		if (_sectorOwner == independent) then {
+			continue;
+		};
+		if (_sector in [BIS_WL_currentTarget_west, BIS_WL_currentTarget_east]) then {
+			continue;
+		};
+
+		private _sectorValue = _sector getVariable ["BIS_WL_value", 0];
+		private _defenders = _sector getVariable ["WL2_defenders", 0];
+		private _maxDefenders = ((_sectorValue * WL_DEFENDER_MOD) max WL_DEFENDER_MIN) * WL_DEFENDER_MAXMOD;
+		_defenders = _defenders + WL_DEFENDER_INCOME;
+		_sector setVariable ["WL2_defenders", _defenders min _maxDefenders, true];
+	} forEach BIS_WL_allSectors;
+
 	private _facesData = missionNamespace getVariable ["WL2_sectorFaces", []];
 	private _westArea = 0;
 	private _eastArea = 0;

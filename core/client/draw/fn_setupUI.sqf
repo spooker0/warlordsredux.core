@@ -11,6 +11,8 @@ if (_displayClass == "RequestMenu_open") then {
 
 	disableSerialization;
 
+	(findDisplay 602) closeDisplay 2;
+
 	WL_GEAR_BUY_MENU = true;
 
 	hintSilent "";

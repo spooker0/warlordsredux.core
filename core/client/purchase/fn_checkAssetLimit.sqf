@@ -13,6 +13,8 @@ _ownedVehicles = _ownedVehicles select { alive _x } select {
     WL_UNIT(_x, "obstacle", 0) == 0
 } select {
     !(_x isKindOf "Man")
+} select {
+    WL_UNIT(_x, "category", "Other") != "Special"
 };
 
 private _limitedVehicles = [];

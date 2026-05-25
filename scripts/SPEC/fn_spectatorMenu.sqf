@@ -22,32 +22,29 @@ _texture ctrlAddEventHandler ["PageLoaded", {
             private _objectMap = createHashMap;
             private _players = (allUnits + allDeadMen) select { simulationEnabled _x } select { isPlayer _x };
 
-            private _playerData = _players apply {
-                [name _x, [side group _x, false] call WL2_fnc_sideToFaction, getObjectID _x, "", _x]
-            };
+            private _playerData = [];
 
             private _bluforVics = BIS_WL_westOwnedVehicles apply {
+                private _vicName = [_x] call WL2_fnc_getAssetTypeName;
                 private _ownerUid = _x getVariable ["BIS_WL_ownerAsset", "123"];
                 private _owner = _ownerUid call BIS_fnc_getUnitByUid;
                 private _ownerName = if (isNull _owner) then { "???" } else { name _owner };
-                private _vicName = [_x] call WL2_fnc_getAssetTypeName;
-                [_ownerName, "BLUFOR", getObjectID _x, _vicName, _x]
+                [_vicName, "BLUFOR", getObjectID _x, _ownerName, _x]
             };
 
             private _opforVics = BIS_WL_eastOwnedVehicles apply {
+                private _vicName = [_x] call WL2_fnc_getAssetTypeName;
                 private _ownerUid = _x getVariable ["BIS_WL_ownerAsset", "123"];
                 private _owner = _ownerUid call BIS_fnc_getUnitByUid;
                 private _ownerName = if (isNull _owner) then { "???" } else { name _owner };
-                private _vicName = [_x] call WL2_fnc_getAssetTypeName;
-                [_ownerName, "OPFOR", getObjectID _x, _vicName, _x]
+                [_vicName, "OPFOR", getObjectID _x, _ownerName, _x]
             };
 
             private _guerVics = BIS_WL_guerOwnedVehicles apply {
+                private _vicName = [_x] call WL2_fnc_getAssetTypeName;
                 private _ownerUid = _x getVariable ["BIS_WL_ownerAsset", "123"];
                 private _owner = _ownerUid call BIS_fnc_getUnitByUid;
-                private _ownerName = if (isNull _owner) then { "???" } else { name _owner };
-                private _vicName = [_x] call WL2_fnc_getAssetTypeName;
-                [_ownerName, "INDFOR", getObjectID _x, _vicName, _x]
+                [_vicName, "INDFOR", getObjectID _x, "AI", _x]
             };
 
             _playerData append _bluforVics;
@@ -79,14 +76,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
 
                 [typeof _x, "MUNITION", getObjectID _x, _vehicleName, _x]
             };
-
-            private _sectors = BIS_WL_allSectors apply {
-                private _sectorName = _x getVariable ["WL2_name", "Sector"];
-                [_sectorName, "SECTOR", getObjectID _x, "", _x]
-            };
-
             _playerData append _munitions;
-            _playerData append _sectors;
 
             {
                 _objectMap set [_x select 2, _x select 4];

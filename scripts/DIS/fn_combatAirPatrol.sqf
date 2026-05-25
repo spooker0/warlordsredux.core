@@ -38,7 +38,7 @@ private _projectilePos = if (_distanceToTop < _distanceToBottom) then {
     };
 };
 
-private _projectile = createVehicle ["ammo_Missile_BIM9X", _projectilePos, [], 0, "NONE"];
+private _projectile = createVehicle ["ammo_Missile_AMRAAM_D", _projectilePos, [], 0, "NONE"];
 _projectile setVariable ["APS_ammoOverride", "ammo_Missile_CAP"];
 
 private _targetOwner = if (typeof _target == "RuggedTerminal_01_communications_hub_F") then {

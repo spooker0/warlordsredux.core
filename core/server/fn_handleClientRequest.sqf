@@ -51,6 +51,7 @@ private _actionCost = switch (_action) do {
 	case "designatePriority" : { WL_COST_DESIGNATEPRIORITY };
 	case "buyStronghold" : { WL_COST_STRONGHOLD };
 	case "fortifyStronghold" : { WL_COST_FORTIFY };
+	case "callParadrop" : { WL_COST_PARADROPCALL };
 	case "orderArsenal" : { WL_COST_ARSENAL };
 	case "fastTravelContested" : { WL_COST_FTCONTESTED };
 	case "fastTravelAirAssault" : { WL_COST_AIRASSAULT };
@@ -286,7 +287,7 @@ if (_action == "scan") exitWith {
 			alive _uav &&
 			fuel _uav > 0 &&
 			_uav distance2D _sector < 1000 &&
-			(_uav modelToWorld [0, 0, 0]) # 2 > 200
+			(_uav modelToWorld [0, 0, 0]) # 2 > 100
 		} do {
 			uiSleep 1;
 		};
@@ -333,8 +334,7 @@ if (_action == "combatAir") exitWith {
 
 if (_action == "ftSupportPoints") exitWith {
 	private _ftVehicle = _param1;
-	private _unitsToMove = _param2;
-	private _reward = 100;
+	private _reward = _param2;
 
 	private _targets = [
 		missionNamespace getVariable "BIS_WL_currentTarget_west",
@@ -346,7 +346,6 @@ if (_action == "ftSupportPoints") exitWith {
 	if ((_targets findIf {_sender inArea (_x getVariable "objectAreaComplete")}) != -1) then {
 		_reward = _reward * 2;
 	};
-	_reward = _reward * _unitsToMove;
 
 	private _ftVehicleOwner = _ftVehicle getVariable ["BIS_WL_ownerAsset", "123"];
 	private _rewardStack = _ftVehicle getVariable ["BIS_WL_rewardedStack", createHashMap];
@@ -422,7 +421,6 @@ if (_action == "demine") exitWith {
 
 if (_action == "secure") exitWith {
 	private _target = _param1;
-	[true, _target] remoteExec ["WL2_fnc_deleteTent", _target];
 	_target setDamage 1;
 
 	private _reward = 50;
@@ -642,3 +640,17 @@ if (_action == "incendiary") exitWith {
 // 		_x setDamage 1;
 // 	} forEach _terrainObjects;
 // };
+
+if (_action == "samHit") exitWith {
+	private _launcher = _param1;
+	private _target = _param2;
+	private _damage = _param3;
+
+	{
+		private _newCrewDamage = damage _x + _damage;
+		_x setDamage [_newCrewDamage, true, _launcher, _launcher];
+	} forEach (crew _target);
+
+	private _newDamage = damage _target + _damage;
+	_target setDamage [_newDamage, true, _launcher, _launcher];
+};

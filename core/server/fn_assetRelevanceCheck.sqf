@@ -1,7 +1,7 @@
 #include "includes.inc"
 
 while { !BIS_WL_missionEnd } do {
-	uiSleep 30;
+	uiSleep 10;
 
 	private _targetedSectors = [
 		missionNamespace getVariable ["BIS_WL_currentTarget_west", objNull],

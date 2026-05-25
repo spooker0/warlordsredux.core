@@ -6,13 +6,10 @@ private _findCurrentSector = (BIS_WL_sectorsArray # 0) select {
 };
 
 private _potentialBases = missionNamespace getVariable ["WL2_forwardBases", []];
-private _forwardBases = if (_cost != -1) then {
-    _potentialBases select {
-        player distance2D _x < WL_FOB_RANGE &&
-        _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
-    };
-} else {
-    [];
+private _forwardBases = _potentialBases select {
+    player distance2D _x < WL_FOB_RANGE
+} select {
+    _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
 };
 
 private _forwardBase = if (count _forwardBases > 0) then {

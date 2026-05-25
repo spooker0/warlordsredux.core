@@ -412,6 +412,7 @@ button:active {
 #btn-see-transfers,
 #btn-see-afk-log,
 #btn-reward-log,
+#btn-script-log,
 #btn-deputize {
     background: var(--btn-action-bg);
     border-color: var(--btn-action-border);
@@ -426,6 +427,7 @@ button:active {
 #btn-see-transfers:hover,
 #btn-see-afk-log:hover,
 #btn-reward-log:hover,
+#btn-script-log:hover,
 #btn-deputize:hover {
     background: var(--btn-action-bg-hover);
 }

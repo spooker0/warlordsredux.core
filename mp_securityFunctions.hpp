@@ -34,7 +34,6 @@ class CfgRemoteExec {
 		class WL2_fnc_conscriptVehicle {allowedTargets = 0;};
 		class WL2_fnc_controlGunnerAction {allowedTargets = 0;};
 		class WL2_fnc_cruiseMissileWarning {allowedTargets = 0;};
-		class WL2_fnc_deleteTent {allowedTargets = 0;};
 		class WL2_fnc_demolishAction {allowedTargets = 0;};
 		class WL2_fnc_demolishComplete {allowedTargets = 0;};
 		class WL2_fnc_deployableAddAction {allowedTargets = 1;};
@@ -57,8 +56,10 @@ class CfgRemoteExec {
 		class WL2_fnc_pingFix {allowedTargets = 1;};
 		class WL2_fnc_prepareStronghold {allowedTargets = 0;};
 		class WL2_fnc_protectStronghold {allowedTargets = 0;};
+		class WL2_fnc_publishScriptLog {allowedTargets = 0;};
 		class WL2_fnc_radarOperateAction {allowedTargets = 1;};
 		class WL2_fnc_radarRotateAction {allowedTargets = 1;};
+		class WL2_fnc_ratingServer {allowedTargets = 2;};
 		class WL2_fnc_rearmAction {allowedTargets = 1;};
 		class WL2_fnc_rebalance {allowedTargets = 2;};
 		class WL2_fnc_reconOpticsAction {allowedTargets = 0;};
@@ -118,7 +119,6 @@ class CfgRemoteExec {
 		class lock {allowedTargets = 0;};
 		class lockCameraTo {allowedTargets = 0;};
 		class lookAt {allowedTargets = 0;};
-		class moveInDriver {allowedTargets = 0;};
 		class removeWeaponGlobal {allowedTargets = 0;};
 		class selectLeader {allowedTargets = 0;};
 		class setAmmoCargo {allowedTargets = 0;};

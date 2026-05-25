@@ -1,15 +1,12 @@
 #include "includes.inc"
-private _display = uiNamespace getVariable ["RscWLHmdSettingMenu", displayNull];
+private _display = uiNamespace getVariable ["RscWLHmdSettingDisplay", displayNull];
 if !(isNull _display) then {
     "hmd" cutText ["", "PLAIN"];
 };
-"hmd" cutRsc ["RscWLHmdSettingMenu", "PLAIN", -1, true, true];
-_display = uiNamespace getVariable ["RscWLHmdSettingMenu", displayNull];
-private _texture = _display displayCtrl 5502;
-// _texture ctrlWebBrowserAction ["OpenDevConsole"];
+"hmd" cutRsc ["RscWLHmdSettingDisplay", "PLAIN", -1, true, true];
+_display = uiNamespace getVariable ["RscWLHmdSettingDisplay", displayNull];
 
 // init
-uiNamespace setVariable ["WL2_HMDSettingProfileIndex", 0];
 private _existingProfiles = profileNamespace getVariable ["WL2_HMDSettingProfiles", []];
 if (count _existingProfiles != 5) then {
     private _profile1 = createHashMapFromArray [
@@ -63,64 +60,65 @@ if (count _existingProfiles != 5) then {
     ]];
 };
 
-_texture ctrlAddEventHandler ["PageLoaded", {
-    params ["_texture"];
-    [_texture] call WL2_fnc_hmdSendData;
-}];
-
-_texture ctrlAddEventHandler ["JSDialog", {
-    params ["_control", "_isConfirmDialog", "_message"];
-
-    playSoundUI ["a3\sounds_f_mark\arsenal\sfx\bipods\bipod_generic_deploy.wss", 0.5];
-    if (_message == "exit") exitWith {
-        closeDialog 0;
-    };
-
-    _message = fromJSON _message;
-    if (count _message == 2) then {
-        private _setting = _message select 0;
-        private _value = _message select 1;
-
-        if (_setting == "PROFILE") then {
-            uiNamespace setVariable ["WL2_HMDSettingProfileIndex", _value];
-
-            [_control] call WL2_fnc_hmdSendData;
-        } else {
-            private _currentProfile = profileNamespace getVariable ["WL2_HMDSettingProfiles", []];
-            private _currentProfileIndex = uiNamespace getVariable ["WL2_HMDSettingProfileIndex", 0];
-            private _profileData = _currentProfile # _currentProfileIndex;
-            _profileData set [_setting, _value];
-        };
-    };
-
-    true;
-}];
+uiNamespace setVariable ["WL2_HMDSettingProfileSelectorIndex", 0];
+[_display] call WL2_fnc_hmdSendData;
 
 (findDisplay 46) displayAddEventHandler ["KeyDown", {
     params ["_control", "_key"];
-    private _display = uiNamespace getVariable ["RscWLHmdSettingMenu", displayNull];
+    private _display = uiNamespace getVariable ["RscWLHmdSettingDisplay", displayNull];
     if (isNull _display) exitWith {
         (findDisplay 46) displayRemoveEventHandler ["KeyDown", _thisEventHandler];
         false;
     };
 
-    private _texture = _display displayCtrl 5502;
+    // if (_key in actionKeys "binocular") exitWith {
+    //     "hmd" cutText ["", "PLAIN"];
+    //     true;
+    // };
+
+    private _selectorIndex = uiNamespace getVariable ["WL2_HMDSettingProfileSelectorIndex", 0];
+    private _currentProfile = profileNamespace getVariable ["WL2_HMDSettingProfiles", []];
+    private _currentProfileIndex = uiNamespace getVariable ["WL2_HMDSettingProfileIndex", 0];
+    private _profileData = _currentProfile # _currentProfileIndex;
+    private _currentProfileSelectorValue = WL_HMD_CATEGORIES # ((_selectorIndex - 1) max 0);
+
     private _interceptKey = false;
     if (_key in actionKeys "BuldLeft") then {
-        _texture ctrlWebBrowserAction ["ExecJS", "settingMinus();"];
+        if (_selectorIndex == 0) then {
+            _currentProfileIndex = (_currentProfileIndex - 1) max 0;
+            uiNamespace setVariable ["WL2_HMDSettingProfileIndex", _currentProfileIndex];
+        } else {
+            private _currentIndex = WL_HMD_DISTANCE_VALUES find (_profileData getOrDefault [_currentProfileSelectorValue, 500]);
+            _currentIndex = (_currentIndex - 1) max 0;
+            _profileData set [_currentProfileSelectorValue, WL_HMD_DISTANCE_VALUES # _currentIndex];
+        };
         _interceptKey = true;
     };
     if (_key in actionKeys "BuldRight") then {
-        _texture ctrlWebBrowserAction ["ExecJS", "settingPlus();"];
+        if (_selectorIndex == 0) then {
+            _currentProfileIndex = (_currentProfileIndex + 1) min 4;
+            uiNamespace setVariable ["WL2_HMDSettingProfileIndex", _currentProfileIndex];
+        } else {
+            private _currentIndex = WL_HMD_DISTANCE_VALUES find (_profileData getOrDefault [_currentProfileSelectorValue, 500]);
+            _currentIndex = (_currentIndex + 1) min (count WL_HMD_DISTANCE_VALUES - 1);
+            _profileData set [_currentProfileSelectorValue, WL_HMD_DISTANCE_VALUES # _currentIndex];
+        };
         _interceptKey = true;
     };
     if (_key in actionKeys "BuldBack") then {
-        _texture ctrlWebBrowserAction ["ExecJS", "currentSettingNext();"];
+        _selectorIndex = (_selectorIndex + 1) min 7;
+        uiNamespace setVariable ["WL2_HMDSettingProfileSelectorIndex", _selectorIndex];
         _interceptKey = true;
     };
     if (_key in actionKeys "BuldForward") then {
-        _texture ctrlWebBrowserAction ["ExecJS", "currentSettingPrev();"];
+        _selectorIndex = (_selectorIndex - 1) max 0;
+        uiNamespace setVariable ["WL2_HMDSettingProfileSelectorIndex", _selectorIndex];
         _interceptKey = true;
+    };
+
+    if (_interceptKey) then {
+        playSoundUI ["a3\sounds_f_mark\arsenal\sfx\bipods\bipod_generic_deploy.wss", 0.5];
+        [_display] call WL2_fnc_hmdSendData;
     };
 
     _interceptKey;

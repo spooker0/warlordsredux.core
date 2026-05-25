@@ -35,31 +35,14 @@ private _eastAverage = _eastRating / _eastCount;
 private _differenceWest = _westAverage - _eastAverage;
 private _expectedWinWest = 1 / (1 + (10 ^ (-_differenceWest / WL_RATING_ELOSCALE)));
 
-private _elapsedSeconds = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
-_elapsedSeconds = 0 max _elapsedSeconds;
-_elapsedSeconds = WL_DURATION_MISSION min _elapsedSeconds;
-
-private _rawTimeFactor = 1 - (_elapsedSeconds / WL_DURATION_MISSION);
-
-private _timeWindowSeconds = WL_DURATION_MISSION - WL_RATING_DURMIN;
-
-private _effectiveElapsedSeconds = _elapsedSeconds max WL_RATING_DURMIN;
-_effectiveElapsedSeconds = WL_DURATION_MISSION min _effectiveElapsedSeconds;
-private _graceTimeFactor = 1 - ((_effectiveElapsedSeconds - WL_RATING_DURMIN) / _timeWindowSeconds);
-
-private _westIsFavorite = _expectedWinWest >= 0.5;
-private _eastIsFavorite = !_westIsFavorite;
-
 private _actualScoreWest = 0.5;
 
 if (_gameWinner == west) then {
-    private _timeFactor = if (_westIsFavorite) then { _graceTimeFactor } else { _rawTimeFactor };
-    _actualScoreWest = 0.5 + 0.5 * _timeFactor;
+    _actualScoreWest = 1;
 };
 
 if (_gameWinner == east) then {
-    private _timeFactor = if (_eastIsFavorite) then { _graceTimeFactor } else { _rawTimeFactor };
-    _actualScoreWest = 0.5 - 0.5 * _timeFactor;
+    _actualScoreWest = 0;
 };
 
 private _deltaWest = WL_RATING_KFACTOR * (_actualScoreWest - _expectedWinWest);

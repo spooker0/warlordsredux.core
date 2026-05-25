@@ -141,9 +141,9 @@ private _originalPosition = getPosASL _unit;
 };
 
 // Friendly fire check.
-[_projectile] spawn {
-    params ["_projectile"];
-    private _playerSide = BIS_WL_playerSide;
+[_projectile, _unit] spawn {
+    params ["_projectile", "_unit"];
+    private _playerSide = if (isServer) then { side group _unit } else { BIS_WL_playerSide };
     uiSleep 1;
     while { alive _projectile } do {
         uiSleep 0.2;
@@ -175,6 +175,7 @@ while { alive _projectile } do {
     private _currentVector = velocityModelSpace _projectile;
     private _elapsedTime = serverTime - _lastLoopTime;
     private _currentSpeed = ((_currentVector # 1) + (_maxAcceleration * _elapsedTime)) min _maxSpeed;
+
     private _newVector = [
         0,
         _currentSpeed,
@@ -190,10 +191,9 @@ while { alive _projectile } do {
         continue;
     };
 
-    private _angularVector = angularVelocityModelSpace _projectile;
-
-    private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
-    _projectile setAngularVelocityModelSpace _newAngularVector;
+    // private _angularVector = angularVelocityModelSpace _projectile;
+    // private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
+    // _projectile setAngularVelocityModelSpace _newAngularVector;
 
     _lastLoopTime = serverTime;
     uiSleep 0.01;
