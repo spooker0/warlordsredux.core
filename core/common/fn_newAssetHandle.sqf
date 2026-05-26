@@ -74,6 +74,12 @@ if (_asset isKindOf "Man") then {
 		[_target, _vehicle, _missile] call WL2_fnc_warnIncomingMissile;
 	}];
 
+	private _airRadar = WL_ASSET_GET(_data, "airRadar", 0);
+	if (_airRadar > 0) then {
+		_asset setVariable ["WL2_airRadar", _airRadar, true];
+		[_asset, _airRadar] remoteExec ["WL2_fnc_airRadarAction", 0, true];
+	};
+
 	private _scanner = WL_ASSET_GET(_data, "scanner", 0);
 	if (_scanner > 0) then {
 		[_asset, _scanner] remoteExec ["WL2_fnc_scannerAction", 0, true];

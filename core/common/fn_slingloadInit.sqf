@@ -38,7 +38,7 @@ if (alive _assetToLoad) then {
     _dummyEnd enableRopeAttach true;
 
     private _cable = ropeCreate [_asset, "slingload0", _dummyEnd, [0, 0, 0], 20];
-    [true, [_dummyEnd, _assetToLoad, [0, 0, 0]]] remoteExec ["WL2_fnc_attachDetach", _assetToLoad];
+    [true, [_dummyEnd, _assetToLoad]] remoteExec ["WL2_fnc_attachDetach", _assetToLoad];
 
     _asset setVariable ["WL2_slingDummyEnd", _dummyEnd, true];
 };

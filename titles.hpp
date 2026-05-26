@@ -794,8 +794,8 @@ class RscTitles {
 				idc = 6003;
 				x = 0;
 				y = 0;
-				w = 1;
-				h = 1;
+				w = 0;
+				h = 0;
 				font = "RobotoCondensed";
 				style = ST_RIGHT;
 				shadow = 0;

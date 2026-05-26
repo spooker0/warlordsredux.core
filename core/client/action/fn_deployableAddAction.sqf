@@ -32,9 +32,8 @@ private _deployActionId = _asset addAction [
             private _nearLoadableEntities = _eligibilityQuery # 1;
             if (count _nearLoadableEntities > 0) then {
                 private _assetToLoad = _nearLoadableEntities select 0;
-                private _offset = _eligibilityQuery # 2;
 
-                [true, [_asset, _assetToLoad, _offset]] remoteExec ["WL2_fnc_attachDetach", _assetToLoad];
+                [true, [_asset, _assetToLoad]] remoteExec ["WL2_fnc_attachDetach", _assetToLoad];
                 playSoundUI ["a3\sounds_f\vehicles\armor\bobcat\bobcat_plow_up_01.wss", 0.2];
             };
         } else {

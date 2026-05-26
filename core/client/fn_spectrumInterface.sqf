@@ -91,7 +91,8 @@ addMissionEventHandler ["Draw3D", {
             continue;
         };
         if (cameraOn != player || currentWeapon player != "hgun_esd_01_F") then {
-            if !(cameraOn getVariable ["WL2_hasDroneHunter", false]) then {
+            private _hasDroneHunter = cameraOn getVariable ["WL2_hasDroneHunter", false];
+            if (!_hasDroneHunter || driver cameraOn != player) then {
                 _indicator ctrlSetText "";
                 WL_SpectrumInterface = false;
                 continue;

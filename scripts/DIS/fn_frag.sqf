@@ -39,8 +39,9 @@ if (!isNull _responsiblePlayer) then {
 };
 
 private _targetDetected = _objectsNearby # 0;
-private _baseDamage = getNumber (configfile >> "CfgAmmo" >> _projectileClass >> "indirectHit");
-private _damage = if (_baseDamage >= 125) then {
+private _baseDamage = getNumber (configfile >> "CfgAmmo" >> _projectileClass >> "hit");
+private _indirectDamage = getNumber (configfile >> "CfgAmmo" >> _projectileClass >> "indirectHit");
+private _damage = if (_baseDamage > 300 || _indirectDamage >= 125) then {
 	1
 } else {
 	private _projectileSpeed = vectorMagnitude (velocity _projectile);

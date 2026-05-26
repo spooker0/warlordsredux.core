@@ -6,7 +6,6 @@ private _assetSide = [_asset] call WL2_fnc_getAssetSide;
 private _assetPos = _asset modelToWorldVisual [0, 0, 0];
 private _assetHeight = (_assetPos # 2) min (getPosASL _asset # 2);
 if (waterDamaged _asset) exitWith {
-    _asset setVariable ["WL_scannedObjects", []];
     _asset setVariable ["WL_scanRadius", 0];
 };
 
@@ -65,5 +64,3 @@ if (cameraOn == _asset) then {
     };
     [_scannedObjects] call WL2_fnc_reconReward;
 };
-
-_asset setVariable ["WL_scannedObjects", _scannedObjects];

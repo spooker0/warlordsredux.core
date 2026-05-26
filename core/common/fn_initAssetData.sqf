@@ -9,6 +9,7 @@ if (isServer) then {
 		createHashMapFromArray [
 			["Steerable_Parachute_F", true],
 			["Land_Cargo_Tower_V4_ruins_F", true],
+			["Land_Cargo_HQ_V4_ruins_F", true],
 			["Land_MobileRadar_01_radar_ruins_F", true],
 			["Land_TentHangar_V1_ruins_F", true],
 			["Land_Radar_Small_ruins_F", true],

@@ -20,19 +20,4 @@ private _isObstacle = WL_ASSET(_assetActualType, "obstacle", 0) > 0;
 if (_isObstacle) exitWith { false };
 
 private _isDemolishable = WL_ASSET(_assetActualType, "demolishable", 0) > 0;
-if (!_isDemolishable) exitWith { true };
-
-private _currentSector = BIS_WL_allSectors select {
-    _target inArea (_x getVariable "objectAreaComplete")
-} select {
-    _x getVariable ["BIS_WL_owner", sideUnknown] == _callerSide
-};
-if (count _currentSector > 0) exitWith { true };
-
-private _potentialBases = missionNamespace getVariable ["WL2_forwardBases", []];
-private _forwardBases = _potentialBases select {
-    _target distance2D _x < WL_FOB_RANGE
-} select {
-    _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _callerSide
-};
-count _forwardBases > 0;
+!_isDemolishable

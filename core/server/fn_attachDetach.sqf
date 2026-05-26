@@ -4,7 +4,62 @@ params ["_attach", "_arguments"];
 if (_attach) then {
     private _asset = _arguments # 0;
     private _load = _arguments # 1;
-    private _offset = _arguments # 2;
+
+    private _loadRotate = WL_UNIT(_load, "loadRotate", 0);
+    private _centerOfMass = getCenterOfMass _load;
+    if (_centerOfMass # 2 < -1) then {
+        _loadRotate = 2;
+    };
+    if (_loadRotate == -1) then {
+        _loadRotate = 0;
+    };
+
+    private _assetIsAirWreck = _load isKindOf "Air" && !(_asset isKindOf "Air");
+    private _loadBoundingBox = if (_assetIsAirWreck) then {
+        boundingBoxReal [_load, "LandContact"];
+    } else {
+        boundingBoxReal [_load, "Geometry"];
+    };
+    _loadBoundingBox params ["_loadBoundingBoxMin", "_loadBoundingBoxMax", "_loadBoundingBoxRadius"];
+    _loadBoundingBoxMin params ["_loadBoundingBoxMinX", "_loadBoundingBoxMinY", "_loadBoundingBoxMinZ"];
+    _loadBoundingBoxMax params ["_loadBoundingBoxMaxX", "_loadBoundingBoxMaxY", "_loadBoundingBoxMaxZ"];
+
+    private _loadableAngle = 0;
+    if (_loadRotate == 1) then {
+        private _oldMinX = _loadBoundingBoxMinX;
+        private _oldMaxX = _loadBoundingBoxMaxX;
+        private _oldMinY = _loadBoundingBoxMinY;
+        private _oldMaxY = _loadBoundingBoxMaxY;
+
+        _loadBoundingBoxMinX = _oldMinY;
+        _loadBoundingBoxMaxX = _oldMaxY;
+
+        _loadBoundingBoxMinY = -_oldMaxX;
+        _loadBoundingBoxMaxY = -_oldMinX;
+
+        _loadableAngle = 90;
+    };
+
+    if (_loadRotate == 2) then {
+        private _oldMinX = _loadBoundingBoxMinX;
+        private _oldMaxX = _loadBoundingBoxMaxX;
+        private _oldMinY = _loadBoundingBoxMinY;
+        private _oldMaxY = _loadBoundingBoxMaxY;
+
+        _loadBoundingBoxMinX = -_oldMaxX;
+        _loadBoundingBoxMaxX = -_oldMinX;
+
+        _loadBoundingBoxMinY = -_oldMaxY;
+        _loadBoundingBoxMaxY = -_oldMinY;
+
+        _loadableAngle = 180;
+    };
+
+    private _offset = [
+        0, //(_loadBoundingBoxMinX + _loadBoundingBoxMaxX) / 2,
+        -_loadBoundingBoxMaxY + 1.1,
+        -_loadBoundingBoxMinZ - 0.8
+    ];
 
     if (_asset isKindOf "VTOL_01_base_F") then {
         _offset = _offset vectorAdd [0, 3, -4.9];
@@ -15,15 +70,9 @@ if (_attach) then {
     };
 
     _load attachTo [_asset, _offset];
-    private _loadableAngle = WL_UNIT(_load, "loadableAngle", 0);
-    if (_loadableAngle > 0) then {
-        _load setDir _loadableAngle;
-        _load setPosWorld getPosWorld _load;
-    };
 
-    private _assetIsAir = _asset isKindOf "Air";
-    if (_load isKindOf "Air" && !_assetIsAir) then {
-        _load setDir 45;
+    if (_loadRotate != 0) then {
+        _load setDir _loadableAngle;
         _load setPosWorld getPosWorld _load;
     };
 

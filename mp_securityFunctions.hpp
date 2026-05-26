@@ -22,6 +22,7 @@ class CfgRemoteExec {
 		class POLL_fnc_selectOption {allowedTargets = 0;};
 		class SQD_fnc_server {allowedTargets = 2;};
 		class WL2_fnc_addMissileToMag {allowedTargets = 0;};
+		class WL2_fnc_airRadarAction {allowedTargets = 0;};
 		class WL2_fnc_airRearmAction {allowedTargets = 0;};
 		class WL2_fnc_attachDetach {allowedTargets = 0;};
 		class WL2_fnc_broadcastAction {allowedTargets = 0;};

@@ -29,5 +29,12 @@ for "_i" from 1 to 10 do {
 if (_damageBuilding) then {
     _target setDamage [1, true, _caller, _caller];
     uiSleep 1;
+
+    private _children = _target getVariable ["WL2_children", []];
+    {
+        if (alive _x) then {
+            deleteVehicle _x;
+        };
+    } forEach _children;
     deleteVehicle _target;
 };

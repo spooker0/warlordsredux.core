@@ -77,6 +77,7 @@ call WL2_fnc_processRunways;
 0 spawn WL2_fnc_assetRelevanceCheck;
 0 spawn WL2_fnc_sectorRespawner;
 0 spawn WL2_fnc_wreckHandler;
+0 spawn WL2_fnc_factory;
 
 0 spawn {
 	if (random 1 > 0.1) exitWith {};
@@ -210,6 +211,7 @@ private _objectsToPreload = [
 	"Land_DragonsTeeth_01_4x2_new_F",
 	"Land_CzechHedgehog_01_new_F",
 	"Land_Cargo_Tower_V4_F",
+	"Land_Cargo_HQ_V4_F",
 	"Land_HBarrierTower_F",
 	"Land_MedicalTent_01_NATO_generic_open_F",
 	"Land_MedicalTent_01_CSAT_brownhex_generic_open_F"

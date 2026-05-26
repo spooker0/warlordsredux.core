@@ -842,6 +842,20 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 		};
 	};
 	_drawIconsSelectable pushBack _x;
+
+	if (cameraOn == _x || _x in _assetTargets) then {
+		private _airRadar = _x getVariable ["WL2_airRadar", -1];
+		if (_airRadar > 0) then {
+			_drawSemiCircles pushBack [
+				60,
+				[1, 1, 1, 0.3],
+				_position,
+				_airRadar,
+				getDirVisual _x,
+				true
+			];
+		};
+	};
 } forEach (_sideVehicles inAreaArray [_mapCenter, _mapBoundW, _mapBoundH, 0, true]);
 
 // Draw visible enemy units

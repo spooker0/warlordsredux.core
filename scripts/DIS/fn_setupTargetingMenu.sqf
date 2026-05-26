@@ -20,7 +20,7 @@ private _getCurrentMode = {
 		["none", "none"]
 	};
 
-	if (currentMagazine cameraon == "Laserbatteries") exitWith {
+	if (cameraOn == player && currentMagazine cameraOn == "Laserbatteries") exitWith {
 		["lasing", "LASER DESIGNATOR"]
 	};
 
@@ -414,6 +414,8 @@ while { !BIS_WL_missionEnd } do {
 		} forEach _missilesData;
 
 		_incomingTextControl ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", _incomingText];
+	} else {
+		_incomingTextControl ctrlSetText "";
 	};
 
 	private _statusText = "";

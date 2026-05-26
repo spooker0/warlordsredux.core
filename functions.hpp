@@ -222,6 +222,7 @@ class CfgFunctions {
 			file = "src\core\client\action";
 			class actionLockCamera {};
 			class afkAction {};
+			class airRadarAction {};
 			class airRearmAction {};
 			class airWreckHandler {};
 			class arsenalSetup {};
@@ -509,6 +510,7 @@ class CfgFunctions {
 			class detectNewPlayers {};
 			class dumbMineAnnouncer {};
 			class ewarGenerate {};
+			class factory {};
 			class forgiveTeamkill {};
 			class forwardBaseUpgrade {};
 			class friendlyFireHandleServer {};

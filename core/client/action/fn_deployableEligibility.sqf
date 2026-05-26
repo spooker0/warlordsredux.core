@@ -41,8 +41,8 @@ private _nearLoadable = _nearLoadableEntities select {
             private _cost = WL_ASSET_FIELD(_assetData, _assetActualType, "cost", -1);
             _x != _asset && _access # 0 && _cost >= 0 && !(_x isKindOf "Man") && !(_x isKindOf "Building")
         } else {
-            private _loadable = WL_ASSET_FIELD(_assetData, _assetActualType, "loadable", []);
-            count _loadable > 0 && _access # 0;
+            private _loadable = WL_ASSET_FIELD(_assetData, _assetActualType, "loadable", 0);
+            _loadable > 0 && _access # 0;
         };
     } else {
         !(_x isKindOf "Man");
@@ -56,15 +56,6 @@ private _sortedNearLoadable = if (_hasNearLoadable) then {
     }, "ASCEND"] call BIS_fnc_sortBy;
 } else {
     [];
-};
-
-private _offset = if (_hasNearLoadable) then {
-    private _loadable = _sortedNearLoadable # 0;
-    private _loadableType = WL_ASSET_TYPE(_loadable);
-    private _defaultArray = [0, 0, 1];
-    WL_ASSET_FIELD(_assetData, _loadableType, "loadable", _defaultArray);
-} else {
-    [0, 0, 1];
 };
 
 private _actionText = if (!isNull _loadedItem) then {
@@ -90,4 +81,4 @@ _asset setUserActionText [_actionId, _actionText, format ["<img size='3' image='
 // 0: eligible
 // 1: near loadables
 // 2: offset
-[_hasLoadedItem || _hasNearLoadable, _sortedNearLoadable, _offset];
+[_hasLoadedItem || _hasNearLoadable, _sortedNearLoadable];
