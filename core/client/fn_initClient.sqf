@@ -326,6 +326,8 @@ _texture ctrlAddEventHandler ["PageLoaded", {
 	[localize "STR_A3_WL_popup_init"] call WL2_fnc_smoothText;
 }];
 
+// 0 spawn WL2_fnc_surveillance;
+
 private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
 private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];
 _ownedVehicles pushBack player;
@@ -334,6 +336,12 @@ missionNamespace setVariable [_ownedVehiclesVar, _ownedVehicles, [2, clientOwner
 #if WL_WINTER_EVENT
 [true] spawn WL2_fnc_pingSounds;
 #endif
+
+private _commMenuClasses = "true" configClasses (missionConfigFile >> "CfgCommunicationMenu");
+{
+	private _name = configName _x;
+	[player, _name, nil, nil, ""] call BIS_fnc_addCommMenuItem;
+} forEach _commMenuClasses;
 
 private _showWelcomeMenu = _settingsMap getOrDefault ["showWelcomeMenu", true];
 if (_showWelcomeMenu) then {

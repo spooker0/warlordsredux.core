@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_pos", "_class", "_orderedClass", "_direction", "_exactPosition", "_sender"];
+params ["_pos", "_class", "_orderedClass", "_direction", "_exactPosition", "_sender", "_spawnInAir"];
 
 private _turrets = [_class, configNull] call BIS_fnc_getTurrets;
 private _autoTurrets = _turrets select {
@@ -13,7 +13,7 @@ private _crewCount = count _autoTurrets;
 // 	_crewCount = 0;
 // };
 
-_asset = [_class, _orderedClass, _pos, _direction, _exactPosition, false] call WL2_fnc_createVehicleCorrectly;
+_asset = [_class, _orderedClass, _pos, _direction, _exactPosition, _spawnInAir] call WL2_fnc_createVehicleCorrectly;
 
 private _side = if (isNull _sender) then {
 	independent;

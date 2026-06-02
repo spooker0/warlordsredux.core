@@ -12,9 +12,19 @@ private _mouseWheelUp = inputAction "prevAction";
 private _mouseWheelDown = inputAction "nextAction";
 if (_mouseWheelUp != 0) then {
     _freeCamSpeed = _freeCamSpeed + 1;
+    private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
+    if (!isNull _display) then {
+        private _texture = _display displayCtrl 5502;
+        _texture ctrlWebBrowserAction ["ExecJS", "scrollUp();"];
+    };
 };
 if (_mouseWheelDown != 0) then {
     _freeCamSpeed = _freeCamSpeed - 1;
+    private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
+    if (!isNull _display) then {
+        private _texture = _display displayCtrl 5502;
+        _texture ctrlWebBrowserAction ["ExecJS", "scrollDown();"];
+    };
 };
 _freeCamSpeed = _freeCamSpeed max 0 min (count _speedCurve - 1);
 uiNamespace setVariable ["SPEC_FreecamSpeed", _freeCamSpeed];

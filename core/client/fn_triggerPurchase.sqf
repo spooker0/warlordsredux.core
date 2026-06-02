@@ -52,6 +52,9 @@ switch (_className) do {
     case "Arsenal": {
         [player, "orderArsenal"] remoteExec ["WL2_fnc_handleClientRequest", 2];
     };
+    case "NearestCombatAir": {
+        0 spawn WL2_fnc_nearestCombatAir;
+    };
     case "Conscription": {
         "RequestMenu_close" call WL2_fnc_setupUI;
         playSoundUI ["AddItemOk"];
@@ -179,7 +182,7 @@ switch (_className) do {
             ["No eligible collaborators in range!"] call WL2_fnc_smoothText;
         };
 
-        missionNamespace setVariable ["WL2_collaboratorCooldown", serverTime + 600];
+        missionNamespace setVariable ["WL2_collaboratorCooldown", serverTime + 60];
         [player, "controlCollaborator"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
         private _selectedCollaborator = selectRandom _potentialCollaboratorsInRange;
@@ -260,12 +263,12 @@ switch (_className) do {
             private _spawns = [];
             {
                 private _sectorName = _x getVariable ["WL2_name", "Unknown"];
-                ["Finding spawns in sector: %1", _sectorName] call WL2_fnc_smoothText;
+                (format ["Finding spawns in sector: %1", _sectorName]) call WL2_fnc_smoothText;
                 private _spawnsForSector = [_x] call WL2_fnc_findSpawnsInSector;
                 _spawns append _spawnsForSector;
             } forEach BIS_WL_allSectors;
 
-            ["Found %1 spawns on map. Painting sector spawns. This can take a while...", count _spawns] call WL2_fnc_smoothText;
+            (format ["Found %1 spawns on map. Painting sector spawns. This can take a while...", count _spawns]) call WL2_fnc_smoothText;
 
             private _markers = [];
             {
@@ -277,7 +280,7 @@ switch (_className) do {
                 _markers pushBack _marker;
             } forEach _spawns;
 
-            ["%1 markers painted.", count _markers] call WL2_fnc_smoothText;
+            (format ["%1 markers painted.", count _markers]) call WL2_fnc_smoothText;
 
             openMap true;
         };
@@ -285,17 +288,17 @@ switch (_className) do {
     case "StressTestKillfeed": {
         0 spawn {
             private _testSupports = [
-                ["ATTACKING SECTOR", "#228b22"],
-                ["DEFENDING SECTOR", "#228b22"],
-                ["ACTIVE PROTECTION SYSTEM", "#de0808"],
-                ["PROJECTILE JAMMED", "#de0808"],
-                ["PROJECTILE DESTROYED", "#de0808"],
-                ["REGION CAPTURED", "#228b22"],
-                ["REVIVED TEAMMATE", "#228b22"],
-                ["RECON", "#228b22"],
-                ["SPOT ASSIST", "#228b22"],
-                ["SPAWN REWARD", "#228b22"],
-                ["SQUAD ASSIST", "#228b22"]
+                ["ATTACKING SECTOR", WL_COLOR_SUPPORT],
+                ["DEFENDING SECTOR", WL_COLOR_SUPPORT],
+                ["ACTIVE PROTECTION SYSTEM", WL_COLOR_KILL],
+                ["PROJECTILE JAMMED", WL_COLOR_KILL],
+                ["PROJECTILE DESTROYED", WL_COLOR_KILL],
+                ["REGION CAPTURED", WL_COLOR_SUPPORT],
+                ["REVIVED TEAMMATE", WL_COLOR_SUPPORT],
+                ["RECON", WL_COLOR_SUPPORT],
+                ["SPOT ASSIST", WL_COLOR_SUPPORT],
+                ["SPAWN REWARD", WL_COLOR_SUPPORT],
+                ["SQUAD ASSIST", WL_COLOR_SUPPORT]
             ];
             for "_i" from 1 to 20 do {
                 private _testSupport = selectRandom _testSupports;
@@ -307,9 +310,9 @@ switch (_className) do {
             {
                 private _asset = _x;
                 private _assetData = _y;
-                _asset = _assetData getOrDefault ["spawn", _asset];
+                // _asset = _assetData getOrDefault ["spawn", _asset];
                 private _reward = floor (random 400);
-                [objNull, _reward, "", "#de0808", _asset] call WL2_fnc_killRewardClient;
+                [objNull, _reward, "", WL_COLOR_KILL, _asset] call WL2_fnc_killRewardClient;
                 uiSleep (random 1);
             } forEach WL_ASSET_DATA;
         };

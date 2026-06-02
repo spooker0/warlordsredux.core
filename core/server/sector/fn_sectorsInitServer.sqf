@@ -2,7 +2,7 @@
 private _baseData =
 #if WL_OVERRIDE_BASES
 	BIS_WL_allSectors select {
-		_x getVariable ["WL2_name", ""] in ["Kavala", "Airbase"];
+		_x getVariable ["WL2_name", ""] in ["Kalithea", "Airbase"];
 	};
 #else
 	[] call WL2_fnc_calcHomeBases;

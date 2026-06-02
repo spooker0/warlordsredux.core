@@ -47,7 +47,7 @@ while { !BIS_WL_missionEnd } do {
 
         private _altOk = if (_isCarrierSector) then {
             private _heightASL = getPosASL player # 2;
-            _heightASL < 20 || _heightASL > 75;
+            _heightASL < 20 || _heightASL > 40;
         } else {
             getPosATL player # 2 > 50;
         };

@@ -59,6 +59,7 @@ if (!isNull _combatAirRequester) then {
     [_projectile, [objNull, _combatAirRequester]] remoteExec ["setShotParents", 2];
 };
 [_asset, objNull, _projectile] call WL2_fnc_warnIncomingMissile;
+[_projectile, _combatAirRequester] spawn DIS_fnc_frag;
 
 while { alive _projectile && alive _asset } do {
     _projectile setMissileTarget [_asset, true];
@@ -72,14 +73,6 @@ while { alive _projectile && alive _asset } do {
 
     private _projectileAGL = _projectile modelToWorld [0, 0, 0];
     if (_projectileAGL # 2 < WL_COMBAT_AIR_MINALT && _avoidable) then {
-        triggerAmmo _projectile;
-        break;
-    };
-
-    if (_asset distance _projectile < 100) then {
-        private _detonationPoint = getPosASL _asset;
-        _detonationPoint set [2, _detonationPoint # 2 + 22];
-        _projectile setPosASL _detonationPoint;
         triggerAmmo _projectile;
         break;
     };

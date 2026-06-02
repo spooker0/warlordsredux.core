@@ -213,6 +213,11 @@ if (_ret) then {
 				[WL2_fnc_checkEwar]
 			]
 		};
+		case "NearestCombatAir": {
+			[
+				[WL2_fnc_checkCombatAir]
+			]
+		};
 		default {
 			if (_category in ["Fast Travel", "Strategy"]) then {
 				[]

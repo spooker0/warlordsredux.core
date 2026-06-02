@@ -19,6 +19,7 @@ private _mapBoundH = _mapHeight * 0.5;
 
 private _drawAll = _drawMode == 1 || _drawMode == 2;
 private _draw = (ctrlMapScale _map) < 0.3 || _drawMode == 2;
+private _playerUid = getPlayerUID player;
 
 private _drawIcons = [];
 private _drawIconsAnimated = [];
@@ -701,6 +702,12 @@ private _rallyPoints = _mapData getOrDefault ["rallyPoints", []];
 // Draw scanned units
 private _scannedUnits = _mapData getOrDefault ["scannedUnits", []];
 {
+	private _hideMap = _x getVariable ["WL2_hideMap", 0];
+	private _scanText = if (_hideMap > 0) then {
+		""
+	} else {
+		[_x, _draw, false, _mapTextCache] call WL2_fnc_iconText;
+	};
 	private _position = getPosASL _x;
 	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
 	private _textSize = if (_x isKindOf "Man") then { 0.025 } else { 0.043 };
@@ -711,7 +718,7 @@ private _scannedUnits = _mapData getOrDefault ["scannedUnits", []];
 		_size * _mapIconScale,
 		_size * _mapIconScale,
 		[_x] call WL2_fnc_getDir,
-		[_x, _draw, false, _mapTextCache] call WL2_fnc_iconText,
+		_scanText,
 		1,
 		_textSize * _mapIconScale,
 		"PuristaBold",
@@ -773,7 +780,12 @@ private _combatAirAreas = _mapData getOrDefault ["combatAirAreas", []];
 	private _timeStepsElapsed = 5 * ceil (_timeElapsed / 5);
 	private _areaRadius = _timeStepsElapsed * WL_COMBAT_AIR_PERSEC;
 
-	_areaRadius = _areaRadius min WL_COMBAT_AIR_RADIUS;
+	private _combatAreaMax = if (_x in [WL2_base1, WL2_base2]) then {
+		WL_COMBAT_AIR_RADIUS_BASE
+	} else {
+		WL_COMBAT_AIR_RADIUS
+	};
+	_areaRadius = _areaRadius min _combatAreaMax;
 	_drawEllipses pushBack [
 		_targetPos,
 		_areaRadius,
@@ -835,10 +847,12 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 		continue;
 	};
 	if (_hideMap == 1) then {
-		private _access = [_x, player, "full"] call WL2_fnc_accessControl;
-		private _hasFullAccess = _access # 0;
-		if (!_hasFullAccess) then {
-			continue;
+		private _ownerUid = _x getVariable ["BIS_WL_ownerAsset", "123"];
+		if (_ownerUid != _playerUid) then {
+			private _access = _x getVariable ["WL2_accessControl", -1];
+			if (_access != 0) then {
+				continue;
+			};
 		};
 	};
 	_drawIconsSelectable pushBack _x;
@@ -932,7 +946,7 @@ private _advancedSams = _mapData getOrDefault ["advancedSams", []];
 
 private _advancedMines = _mapData getOrDefault ["advancedMines", []];
 {
-	private _ownsMine = (_x getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player;
+	private _ownsMine = (_x getVariable ["BIS_WL_ownerAsset", "123"]) == _playerUid;
 	if !(_ownsMine || _x in _assetTargets) then {
 		continue;
 	};

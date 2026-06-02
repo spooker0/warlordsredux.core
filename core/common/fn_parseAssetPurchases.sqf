@@ -105,6 +105,18 @@ private _infantryIndex = _categories find "Infantry";
 private _infantryArray = _purchaseable # _infantryIndex;
 _infantryArray insert [0, [_buildABear]];
 
+private _callCombatAir = [
+    "NearestCombatAir",
+    WL_COST_COMBATAIR,
+    [],
+    "Call Combat Air Patrol",
+    "a3\ui_f_jets\data\gui\cfg\hints\aircraftdamage_ca.paa",
+    "Call in combat air patrol on the nearest eligible sector or forward base."
+];
+private _airDefenseIndex = _categories find "Air Defense";
+private _airDefenseArray = _purchaseable # _airDefenseIndex;
+_airDefenseArray pushBack _callCombatAir;
+
 private _arsenal = [
     "Arsenal",
     WL_COST_ARSENAL,

@@ -7,12 +7,13 @@ switch (_conditionName) do {
             (_x getVariable ["BIS_WL_owner", independent]) == BIS_WL_playerSide
         };
         if (_target in _eligibleSectors && ([BIS_WL_playerSide] call WL2_fnc_getSideBase) != _target) then {
-            private _defenders = _target getVariable ["WL2_defenders", 0];
-            if (_defenders <= 0 && _target == WL_TARGET_ENEMY) then {
-                "Sector has run out of defenders. Resupply the sector to enable fast travel there.";
-            } else {
-                "ok";
-            };
+            "ok";
+            // private _defenders = _target getVariable ["WL2_defenders", 0];
+            // if (_defenders <= 0 && _target == WL_TARGET_ENEMY) then {
+            //     "Sector has run out of defenders. Resupply the sector to enable fast travel there.";
+            // } else {
+            //     "ok";
+            // };
         } else {
             "";
         };
@@ -59,7 +60,7 @@ switch (_conditionName) do {
 
         private _defenders = _target getVariable ["WL2_defenders", 0];
         if (_defenders <= 0 && _target == WL_TARGET_ENEMY) then {
-            "Sector has run out of defenders. Resupply the sector to enable vehicle paradrop there.";
+            "Sector has run out of reinforements. Resupply the sector to enable vehicle paradrop there.";
         } else {
             "ok";
         };
@@ -83,7 +84,12 @@ switch (_conditionName) do {
 
         if (_lastScan > _lastScanEligible) exitWith { "Sector scan is on cooldown." };
 
-        "ok";
+        private _defenders = _target getVariable ["WL2_defenders", 0];
+        if (_defenders <= 0 && _target == WL_TARGET_ENEMY) then {
+            "Sector has run out of reinforements. Resupply the sector to enable sector scan.";
+        } else {
+            "ok";
+        };
     };
     case "combatAirPatrol": {
         private _airfieldSectors = (BIS_WL_sectorsArray # 2) select {
@@ -91,6 +97,23 @@ switch (_conditionName) do {
             "H" in _services;
         };
         if !(_target in _airfieldSectors) exitWith { "" };
+
+        private _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
+        if (_combatAirActive) exitWith { "Combat air patrol is already active for this airbase." };
+
+        private _nextCombatAirTime = _target getVariable ["WL2_nextCombatAir", -9999];
+        if (_nextCombatAirTime > serverTime) exitWith { "Combat air patrol is on cooldown for this airbase." };
+
+        "ok";
+    };
+    case "combatAirPatrolHome": {
+        private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
+        if (_timeSinceStart < WL_COMBAT_AIR_HOME_TIME) exitWith {
+            format ["Combat air patrol for home base locked: %1", [WL_COMBAT_AIR_HOME_TIME - _timeSinceStart, "MM:SS"] call BIS_fnc_secondsToString]
+        };
+
+        private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
+        if !(_target in _homeBase) exitWith { "" };
 
         private _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
         if (_combatAirActive) exitWith { "Combat air patrol is already active for this airbase." };
@@ -255,7 +278,9 @@ switch (_conditionName) do {
         if (_supplies < WL_FOB_REPAIR_COST) exitWith { format ["Need %1 supplies to repair forward base.", WL_FOB_REPAIR_COST] };
 
         private _canRepairTime = _target getVariable ["WL2_canRepairTime", 0];
-        if (serverTime < _canRepairTime) exitWith { "Forward base damaged too recently for repairs." };
+        if (serverTime < _canRepairTime) exitWith {
+            format ["Forward base damaged too recently for repairs: %1", [_canRepairTime - serverTime, "MM:SS"] call BIS_fnc_secondsToString]
+        };
 
         "ok";
     };
@@ -321,7 +346,9 @@ switch (_conditionName) do {
         if (_hasIntruders) exitWith { "Cannot repair stronghold with intruders present." };
 
         private _canRepairTime = _target getVariable ["WL2_canRepairTime", 0];
-        if (serverTime < _canRepairTime) exitWith { "Stronghold damaged too recently for repairs." };
+        if (serverTime < _canRepairTime) exitWith {
+            format ["Stronghold damaged too recently for repairs: %1", [_canRepairTime - serverTime, "MM:SS"] call BIS_fnc_secondsToString]
+        };
 
         "ok";
     };

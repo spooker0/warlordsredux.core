@@ -31,6 +31,7 @@ class CfgRemoteExec {
 		class WL2_fnc_clearPlayerReports {allowedTargets = 0;};
 		class WL2_fnc_clearServerStats {allowedTargets = 2;};
 		class WL2_fnc_combatAirWarning {allowedTargets = 0;};
+		class WL2_fnc_commMenuListen {allowedTargets = 0;};
 		class WL2_fnc_conscription {allowedTargets = 0;};
 		class WL2_fnc_conscriptVehicle {allowedTargets = 0;};
 		class WL2_fnc_controlGunnerAction {allowedTargets = 0;};
@@ -48,6 +49,7 @@ class CfgRemoteExec {
 		class WL2_fnc_killNotify {allowedTargets = 0;};
 		class WL2_fnc_killRewardHandle {allowedTargets = 2;};
 		class WL2_fnc_lagMessageHandler {allowedTargets = 2;};
+		class WL2_fnc_manageServer {allowedTargets = 2;};
 		class WL2_fnc_mineClearAction {allowedTargets = 0;};
 		class WL2_fnc_missileDestroy {allowedTargets = 2;};
 		class WL2_fnc_mutePlayer {allowedTargets = 0;};
@@ -60,7 +62,6 @@ class CfgRemoteExec {
 		class WL2_fnc_publishScriptLog {allowedTargets = 0;};
 		class WL2_fnc_radarOperateAction {allowedTargets = 1;};
 		class WL2_fnc_radarRotateAction {allowedTargets = 1;};
-		class WL2_fnc_ratingServer {allowedTargets = 2;};
 		class WL2_fnc_rearmAction {allowedTargets = 1;};
 		class WL2_fnc_rebalance {allowedTargets = 2;};
 		class WL2_fnc_reconOpticsAction {allowedTargets = 0;};

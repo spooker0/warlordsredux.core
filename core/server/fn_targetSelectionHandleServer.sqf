@@ -38,8 +38,9 @@
 						_voteCount = round (_playerVotes * 0.2);
 					} else {
 						private _squadVotingPower = ["getSquadVotingPower", [getPlayerID _x]] call SQD_fnc_query;
-						_voteCount = _squadVotingPower + (_votesByPlayers getOrDefault [_voteName, [objNull, 0]] select 1);
+						_voteCount = _squadVotingPower;
 					};
+					_voteCount = _voteCount + (_votesByPlayers getOrDefault [_voteName, [objNull, 0]] select 1);
 					_votesByPlayers set [_voteName, [_vote, _voteCount]];
 				};
 			} forEach _votingPlayers;

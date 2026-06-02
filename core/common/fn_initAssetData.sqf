@@ -89,6 +89,7 @@ private _menuButtonIconMap = createHashMapFromArray [
     ["mark-sector", "A3\ui_f\data\map\markers\handdrawn\flag_CA.paa"],
     ["move", "A3\ui_f\data\map\markers\military\box_CA.paa"],
     ["order-cap", "a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa"],
+    ["order-cap-home", "a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa"],
     ["order-paradrop", "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa"],
     ["radar-operate", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
     ["radar-rotate", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
@@ -106,3 +107,25 @@ private _menuButtonIconMap = createHashMapFromArray [
     ["vehicle-paradrop", "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa"]
 ];
 uiNamespace setVariable ["WL2_mapMenuButtonIcons", _menuButtonIconMap];
+
+private _rewardDivision = createHashMapFromArray [
+	["RECON", 100],
+	["ACTIVE PROTECTION SYSTEM", 50],
+	["DAZZLER", 10],
+	["DEMOLITION", 20],
+	["MINE DESTROYED", 10]
+];
+uiNamespace setVariable ["WL2_killfeedRewardDivision", _rewardDivision];
+
+private _commMenuConfig = createHashMapFromArray [
+    ["Attack", localize "STR_WL_commAttack"],
+    ["FollowMe", localize "STR_WL_commFollowMe"],
+    ["CoverMe", localize "STR_WL_commCoverMe"],
+    ["GetAway", localize "STR_WL_commGetAway"],
+    ["Stop", localize "STR_WL_commStop"],
+    ["WaitForMe", localize "STR_WL_commWaitForMe"],
+    ["StatusBingo", localize "STR_WL_commStatusBingo"],
+    ["StatusDamaged", localize "STR_WL_commStatusDamaged"],
+    ["ProvideSupply", localize "STR_WL_commProvideSupply"]
+];
+uiNamespace setVariable ["WL2_commMenuConfig", _commMenuConfig];

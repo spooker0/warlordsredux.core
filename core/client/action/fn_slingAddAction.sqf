@@ -42,46 +42,41 @@ private _slingActionId = _asset addAction [
 	false
 ];
 
-[_asset] spawn {
-    params ["_asset"];
-    private _collisionLightOn = isCollisionLightOn _asset;
-
-    while { alive _asset } do {
-        private _assetLoadedItem = _asset getVariable ["WL2_loadedItem", objNull];
-        private _hasLoad = !isNull _assetLoadedItem || !isNull (getSlingLoad _asset);
-
-        if (_hasLoad) then {
-            if (isAutonomous _assetLoadedItem) then {
-				[_asset, false] remoteExec ["setAutonomous", 0];
-            };
-            if ((locked _assetLoadedItem) != 2) then {
-                _assetLoadedItem setVehicleLock "LOCKED";
-            };
-            {
-                moveOut _x;
-            } forEach (crew _assetLoadedItem);
-        };
-
-        private _newCollisionLightOn = isCollisionLightOn _asset;
-        if (_collisionLightOn != _newCollisionLightOn) then {
-            _collisionLightOn = _newCollisionLightOn;
+_asset addAction [
+	"<t color='#00FFFF'>Toggle Rope Length</t>",
+	{
+		_this spawn {
+            params ["_asset", "_caller"];
             private _ropes = ropes _asset;
-            if (count _ropes != 0) then {
-                if (_collisionLightOn) then {
-                    {
-                        ropeUnwind [_x, 5, 8];
-                    } forEach _ropes;
-                } else {
-                    {
-                        ropeUnwind [_x, 5, 20];
-                    } forEach _ropes;
-                };
+            if (count _ropes == 0) exitWith {};
+
+            private _assetLoadedItem = _asset getVariable ["WL2_loadedItem", objNull];
+            private _shortRope = _asset getVariable ["WL2_shortRope", false];
+            if (_shortRope) then {
+                detach _assetLoadedItem;
+                {
+                    ropeUnwind [_x, 5, 20];
+                } forEach _ropes;
+                _asset setVariable ["WL2_shortRope", false, true];
+            } else {
+                {
+                    ropeUnwind [_x, 5, 5];
+                } forEach _ropes;
+                uiSleep 3;
+                _assetLoadedItem attachTo [_asset, [0, 0, -6]];
+                _asset setVariable ["WL2_shortRope", true, true];
             };
         };
-
-        uiSleep 1;
-    };
-};
+	},
+	[],
+	5,
+	false,
+	false,
+	"",
+	"_target == cameraOn && count (ropes _target) > 0",
+	30,
+	false
+];
 
 _asset addEventHandler ["RopeBreak", {
 	params ["_asset", "_rope", "_loadedItem"];

@@ -6,18 +6,34 @@ private _uid = getPlayerUID _sender;
 private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
 if (!_isAdmin) exitWith {};
 
-if (_action == "get") exitWith {
+if (_action == "getRating") exitWith {
     private _ratings = profileNamespace getVariable ["WL2_playerRatings", createHashMap];
     _ratings
 };
 
-if (_action == "set") then {
+if (_action == "setRating") then {
     private _ratings = createHashMapFromArray _param1;
     profileNamespace setVariable ["WL2_playerRatings", _ratings];
     saveProfileNamespace;
 };
 
-if (_action == "clear") then {
+if (_action == "clearRating") then {
     profileNamespace setVariable ["WL2_playerRatings", createHashMap];
+    saveProfileNamespace;
+};
+
+if (_action == "getBanlist") exitWith {
+    private _banlist = profileNamespace getVariable ["WL2_banlist", []];
+    _banlist
+};
+
+if (_action == "setBanlist") then {
+    private _banlist = _param1;
+    profileNamespace setVariable ["WL2_banlist", _banlist];
+    saveProfileNamespace;
+};
+
+if (_action == "clearBanlist") then {
+    profileNamespace setVariable ["WL2_banlist", []];
     saveProfileNamespace;
 };

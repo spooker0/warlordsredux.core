@@ -64,10 +64,10 @@ while { !BIS_WL_missionEnd } do {
     _defendingValue = _defendingValue * 50;
 
     if (_attackingValue > 0) then {
-        [objNull, _attackingValue, "Attacking sector", "#228b22"] call WL2_fnc_killRewardClient;
+        [objNull, _attackingValue, "Attacking sector", WL_COLOR_SUPPORT] call WL2_fnc_killRewardClient;
     };
     if (_defendingValue > 0) then {
-        [objNull, _defendingValue, "Defending sector", "#228b22"] call WL2_fnc_killRewardClient;
+        [objNull, _defendingValue, "Defending sector", WL_COLOR_SUPPORT] call WL2_fnc_killRewardClient;
     };
     private _totalValue = _attackingValue + _defendingValue;
     if (_totalValue > 0) then {

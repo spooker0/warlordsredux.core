@@ -99,21 +99,23 @@ private _deployActionId = _asset addAction [
 
 [_asset] spawn {
     params ["_asset"];
-    while { alive _asset } do {
-        private _assetLoadedItem = _asset getVariable ["WL2_loadedItem", objNull];
-        private _hasLoad = !isNull _assetLoadedItem;
+    private _lightOn = false;
 
-        if (_hasLoad) then {
-            if (isAutonomous _assetLoadedItem) then {
-				[_asset, false] remoteExec ["setAutonomous", 0];
-            };
-            if ((locked _assetLoadedItem) != 2) then {
-                _assetLoadedItem setVehicleLock "LOCKED";
-            };
-            {
-                moveOut _x;
-            } forEach (crew _assetLoadedItem);
-        };
+    while { alive _asset } do {
         uiSleep 1;
+
+        if (driver _asset != player) then {
+            continue;
+        };
+
+        private _newLightOn = isLightOn _asset;
+        if (_lightOn != _newLightOn) then {
+            _lightOn = _newLightOn;
+            if (_newLightOn) then {
+                _asset animateDoor ["Door_1_source", 1];
+            } else {
+                _asset animateDoor ["Door_1_source", 0];
+            };
+        };
     };
 };

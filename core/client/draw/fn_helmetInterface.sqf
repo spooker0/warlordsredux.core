@@ -352,6 +352,8 @@ addMissionEventHandler ["Draw3D", {
             alive _x && _x getVariable ["WL_missileApproaching", false]
         };
 
+        private _myAltitude = (_vehicle modelToWorld [0, 0, 0]) # 2;
+
         private _infantryViewDistance = _settingProfileData getOrDefault ["INFANTRY", 500];
         private _infantryNameViewDistance = _settingProfileData getOrDefault ["INFANTRY NAME", 250];
         private _vehicleViewDistance = _settingProfileData getOrDefault ["VEHICLE", 5000];
@@ -522,6 +524,11 @@ addMissionEventHandler ["Draw3D", {
                 } else {
                     private _cameraDirection = (positionCameraToWorld [0, 0, 0]) getDir (positionCameraToWorld [0, 0, 100]);
                     [getPosATL _vehicle, _cameraDirection, 120, getPosATL _selectedTarget] call WL2_fnc_inAngleCheck;
+                };
+                if (_x == "Laser") then {
+                    if (_myAltitude < 50) then {
+                        _isInAngle = false;
+                    };
                 };
 
                 private _lockPercentage = _vehicle getVariable [format ["WL2_selectedLockPercent%1", _x], 0];

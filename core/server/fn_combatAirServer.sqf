@@ -33,7 +33,13 @@ while { !BIS_WL_missionEnd } do {
             private _timeElapsed = serverTime - _startTime;
             private _timeStepsElapsed = 5 * ceil (_timeElapsed / 5);
             private _areaRadius = _timeStepsElapsed * WL_COMBAT_AIR_PERSEC;
-            _areaRadius = _areaRadius min WL_COMBAT_AIR_RADIUS;
+
+            private _combatAreaMax = if (_x in [WL2_base1, WL2_base2]) then {
+                WL_COMBAT_AIR_RADIUS_BASE
+            } else {
+                WL_COMBAT_AIR_RADIUS
+            };
+            _areaRadius = _areaRadius min _combatAreaMax;
             _asset inArea [
                 getPosASL _x,
                 _areaRadius,

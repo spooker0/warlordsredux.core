@@ -83,7 +83,7 @@ private _setupActionId = [
 					_terminalClass,
 					_terminalClass,
 					[0, 5, 0],
-					20,
+					50,
 					true,
 					false
 				] call WL2_fnc_deployment;

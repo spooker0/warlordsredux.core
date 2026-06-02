@@ -58,6 +58,7 @@ private _actionCost = switch (_action) do {
 	case "fastTravelParadrop" : { WL_COST_PARADROP };
 	case "fastTravelSquadLeader" : { WL_COST_FTSL };
 	case "combatAir" : { WL_COST_COMBATAIR };
+	case "combatAirHome" : { WL_COST_COMBATAIR / 5 };
 	case "conscript" : { WL_COST_CONSCRIPT };
 	case "targetReset" : { WL_COST_TARGETRESET };
 	case "orderAI" : { WL_ASSET(_param1, "cost", 150) };
@@ -156,26 +157,26 @@ if (_action == "resetVehicle") exitWith {
 if (_action == "revived") exitWith {
 	private _reward = _param1;
 	[_reward, "Revived teammate"] call _addFunds;
-	[objNull, _reward, "Revived teammate", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+	[objNull, _reward, "Revived teammate", WL_COLOR_SUPPORT] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
 if (_action == "spot") exitWith {
 	private _reward = _param1;
 	[_reward, "Recon"] call _addFunds;
-	[objNull, _reward, "Recon", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+	[objNull, _reward, "Recon", WL_COLOR_SUPPORT] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
 if (_action == "revealSector") exitWith {
 	private _reward = WL_REWARD_REVEALSECTOR;
 	[_reward, "Reveal sector"] call _addFunds;
-	[objNull, _reward, "Reveal sector", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+	[objNull, _reward, "Reveal sector", WL_COLOR_SUPPORT] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
 if (_action == "demolished") exitWith {
 	private _steps = _param1;
 	private _reward = 20 * _steps;
 	[_reward, "Demolition"] call _addFunds;
-	[objNull, _reward, "Demolition", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+	[objNull, _reward, "Demolition", WL_COLOR_KILL] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
 if (_action == "orderArsenal") exitWith {
@@ -217,7 +218,7 @@ if (_action == "immobilized") exitWith {
 	private _reward = round (0.2 * WL_ASSET(_unitActualType, "cost", 0) ^ 0.8);
 
 	[_reward, "Vehicle disabled"] call _addFunds;
-	[objNull, _reward, "Vehicle disabled", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+	[objNull, _reward, "Vehicle disabled", WL_COLOR_KILL] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
 if (_action == "scan") exitWith {
@@ -300,36 +301,10 @@ if (_action == "scan") exitWith {
 	};
 };
 
-if (_action == "combatAir") exitWith {
+if (_action in ["combatAir", "combatAirHome"]) exitWith {
 	private _combatAirSide = _param1;
 	private _target = _param2;
-
-	private _targetName = _target getVariable ["WL2_name", "Forward Airbase"];
-	private _sideName = [_combatAirSide] call WL2_fnc_sideToFaction;
-
-	private _friendlyMessage = format ["%1 has initiated combat air patrol over %2.", name _sender, _targetName];
-	[_combatAirSide, _friendlyMessage] call _broadcastActionToSide;
-
-	private _enemyMessage = format ["%1 (%2) has initiated combat air patrol over %3.", _sideName, name _sender, _targetName];
-	private _enemySide = switch (_combatAirSide) do {
-		case west : { east };
-		case east : { west };
-		default { civilian };
-	};
-	[_enemySide, _enemyMessage] call _broadcastActionToSide;
-
-	[_targetName] remoteExec ["WL2_fnc_combatAirWarning", _enemySide];
-
-	_target setVariable ["WL2_combatAirActive", true, true];
-	_target setVariable ["WL2_combatAirStart", serverTime, true];
-	_target setVariable ["WL2_combatAirRequester", _uid, true];
-	_target setVariable ["WL2_nextCombatAir", serverTime + WL_DURATION_CAP + WL_COOLDOWN_CAP, true];
-
-	[_target] spawn {
-		params ["_target"];
-		uiSleep WL_DURATION_CAP;
-		_target setVariable ["WL2_combatAirActive", false, true];
-	};
+	[_combatAirSide, _target, name _sender, _uid] spawn WL2_fnc_combatAirServerHandle;
 };
 
 if (_action == "ftSupportPoints") exitWith {
@@ -360,7 +335,7 @@ if (_action == "ftSupportPoints") exitWith {
 		_rewardStack set [getPlayerUID _sender, serverTime];
 		_ftVehicle setVariable ["BIS_WL_rewardedStack", _rewardStack];
 
-		[objNull, _reward, "Spawn reward", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _ftOwnerPlayer];
+		[objNull, _reward, "Spawn reward", WL_COLOR_SUPPORT] remoteExec ["WL2_fnc_killRewardClient", _ftOwnerPlayer];
 	};
 };
 
@@ -415,7 +390,7 @@ if (_action == "demine") exitWith {
 	private _reward = 10 * count _enemyMines;
 	if (count _targets > 0) then {
 		[_reward, "Mine destroyed"] call _addFunds;
-		[objNull, _reward, "Mine destroyed", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+		[objNull, _reward, "Mine destroyed", WL_COLOR_KILL] remoteExec ["WL2_fnc_killRewardClient", _sender];
 	};
 };
 
@@ -425,13 +400,13 @@ if (_action == "secure") exitWith {
 
 	private _reward = 50;
 	[_reward, "Secured"] call _addFunds;
-	[objNull, _reward, "Secured", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+	[objNull, _reward, "Secured", WL_COLOR_KILL] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
 if (_action == "droneRebate") exitWith {
 	private _reward = _param1;
 	[_reward, "Drone rebate"] call _addFunds;
-	[objNull, _reward, "Drone rebate", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+	[objNull, _reward, "Drone rebate", WL_COLOR_SUPPORT] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
 if (_action == "boost") exitWith {
@@ -498,7 +473,7 @@ if (_action == "boost") exitWith {
 			if (_friendlySignal < 950) then {
 				private _reward = 30 * _multiplier;
 				[_reward, "Boosted signal"] call _addFunds;
-				[objNull, _reward, "Boosted signal", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+				[objNull, _reward, "Boosted signal", WL_COLOR_SUPPORT] remoteExec ["WL2_fnc_killRewardClient", _sender];
 			};
 		};
 	};
@@ -535,7 +510,7 @@ if (_action == "boost2") exitWith {
 	if (_friendlySignal < 950) then {
 		private _reward = 200 * _multiplier;
 		[_reward, "Boosted signal"] call _addFunds;
-		[objNull, _reward, "Boosted signal", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _sender];
+		[objNull, _reward, "Boosted signal", WL_COLOR_SUPPORT] remoteExec ["WL2_fnc_killRewardClient", _sender];
 	};
 };
 
@@ -645,6 +620,11 @@ if (_action == "samHit") exitWith {
 	private _launcher = _param1;
 	private _target = _param2;
 	private _damage = _param3;
+	private _projectilePosition = _param4;
+
+	private _explosion = createVehicle ["HelicopterExploSmall", _projectilePosition, [], 0, "NONE"];
+	_explosion setPosASL _projectilePosition;
+	triggerAmmo _explosion;
 
 	{
 		private _newCrewDamage = damage _x + _damage;
@@ -653,4 +633,23 @@ if (_action == "samHit") exitWith {
 
 	private _newDamage = damage _target + _damage;
 	_target setDamage [_newDamage, true, _launcher, _launcher];
+};
+
+if (_action == "deployDrone") exitWith {
+	private _spawnPos = _param1;
+	private _direction = _param2;
+	private _vehicleType = switch (_side) do {
+		case west : { "B_AR2_Deployed" };
+		case east : { "O_AR2_Deployed" };
+		default { "I_AR2_Deployed" };
+	};
+	[_sender, _spawnPos, _vehicleType, _direction, true, true] call WL2_fnc_orderGround;
+};
+
+if (_action == "deployMineLayer") exitWith {
+	private _spawnPos = _param1;
+	private _direction = _param2;
+	if !(surfaceIsWater _spawnPos) then {
+		[_sender, _spawnPos, "AT_DeployedMinefield", _direction, false, false] call WL2_fnc_orderGround;
+	};
 };

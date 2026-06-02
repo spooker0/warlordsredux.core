@@ -80,16 +80,13 @@ if (count _presetVehicles == 0) then {
 		private _vehicleSpawn = _data getOrDefault ["vehicleSpawn", 0];
 		if (_vehicleSpawn > 0) then {
 			private _cost = _data getOrDefault ["cost", 0];
-			if (_sectorValue <= 5 && _cost >= 3000) then {
+			if (_sectorValue <= 5 && _cost >= 8000) then {
 				continue;
 			};
-			if (_sectorValue <= 10 && _cost >= 8000) then {
+			if (_sectorValue >= 10 && _cost <= 3000) then {
 				continue;
 			};
-			if (_sectorValue >= 15 && _cost <= 3000) then {
-				continue;
-			};
-			if (_sectorValue >= 20 && _cost < 5000) then {
+			if (_sectorValue >= 15 && _cost < 5000) then {
 				continue;
 			};
 			_vehiclesPool pushBack _class;
@@ -117,18 +114,13 @@ if (count _presetVehicles == 0) then {
 	} forEach _presetVehicles;
 };
 
-private _roads = _sector nearRoads 500;
-_roads = _roads inAreaArray _objectArea;
-if (count _roads > 0) then {
-	private _randomRoad = selectRandom _roads;
-	["AT_Minefield", getPosATL _randomRoad, random 360, true, false] call _spawnVehicle;
-};
+private _mineTypes = ["AT_Minefield", "AT_MinefieldLarge", "AT_MinefieldCircular", "AT_MinefieldHex"];
 
 private _numMinesToSpawn = floor (_sectorValue / 5);
 _numMinesToSpawn = _numMinesToSpawn min 2;
 private _mineLocations = [_sector] call WL2_fnc_findSpawnsInSector;
 for "_i" from 1 to _numMinesToSpawn do {
-	["AT_Minefield", selectRandom _mineLocations, random 360, true, false] call _spawnVehicle;
+	[selectRandom _mineTypes, selectRandom _mineLocations, random 360, true, false] call _spawnVehicle;
 };
 
 private _services = _sector getVariable ["WL2_services", []];

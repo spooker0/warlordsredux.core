@@ -39,8 +39,6 @@ private _factoryTypes = getArray (_factoriesConfig >> "factoryTypes");
     _factory setVariable ["WL2_factorySector", _sector];
 
     private _factoryType = selectRandom _factoryTypes;
-    _factoryTypes = _factoryTypes select { _x isNotEqualTo _factoryType };
-
     _factory setVariable ["WL2_factoryType", _factoryType];
 
     private _computer = createVehicle ["Land_MultiScreenComputer_01_sand_F", [0, 0, 0], [], 0, "CAN_COLLIDE"];
@@ -63,6 +61,13 @@ private _factoryTypes = getArray (_factoriesConfig >> "factoryTypes");
     _computer setObjectTextureGlobal [3, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.15,""#000000"",""#ff0000"",""CAPTURE\nSECTOR"")"];
 
     _factory setVariable ["WL2_factoryComputer", _computer];
+
+    private _marker = format ["factory_%1", _forEachIndex];
+    createMarkerLocal [_marker, _computerPos];
+    _marker setMarkerTypeLocal "loc_use";
+    _marker setMarkerColorLocal "ColorWhite";
+    _marker setMarkerAlphaLocal 1;
+    _marker setMarkerSize [1, 1];   // broadcast global
 } forEach _factories;
 
 while { !BIS_WL_missionEnd } do {

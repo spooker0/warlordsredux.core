@@ -190,7 +190,7 @@ private _makeMunitionTextArray = {
 			_incomingTop / 100 * safeZoneH + safeZoneY,
 			0.4, 1
 		];
-		_incomingTextControl ctrlSetFontHeight (_fontSize / 18 * 0.032);
+		_incomingTextControl ctrlSetFontHeight (_fontSize / 18 * 0.028);
 		_incomingTextControl ctrlCommit 0;
 
 		_weaponTextControl ctrlSetPosition _unitInfoPositionConverted;
@@ -329,8 +329,49 @@ while { !BIS_WL_missionEnd } do {
 		};
 		case "lasing": {
 			private _targetList = [] call DIS_fnc_getLaserList;
-			private _targetText = [_currentModeTitle, _targetList, false] call _makeTargetingText;
-			_text = _text + _targetText;
+			private _lasedTargets = _targetList apply { objectFromNetId (_x # 0) };
+			_lasedTargets = _lasedTargets select { alive _x };
+
+			private _categories = _lasedTargets apply {
+				private _lasedTargetType = WL_ASSET_TYPE(_x);
+				WL_ASSET_FIELD(_assetData, _lasedTargetType, "category", "")
+			};
+			private _lasingText = _currentModeTitle;
+			{
+				private _category = _x;
+				_category = switch (_category) do {
+					case "Light Vehicles": {
+						"LIGHT";
+					};
+					case "Heavy Vehicles": {
+						"HEAVY";
+					};
+					case "Naval": {
+						"NAVAL";
+					};
+					case "Rotary Wing";
+					case "Fixed Wing": {
+						"AIR";
+					};
+					case "Air Defense": {
+						"AA";
+					};
+					case "Remote Control": {
+						"REMOTE";
+					};
+					case "Gear";
+					case "Sector Defense";
+					case "Structures": {
+						"STATIC";
+					};
+					default {
+						"???"
+					};
+				};
+				_lasingText = format ["%1<br/>%2", _lasingText, _category];
+			} forEach _categories;
+
+			_text = _text + _lasingText;
 		};
 		case "remote": {
 			private _targetList = [] call DIS_fnc_getSquadList;
@@ -369,7 +410,10 @@ while { !BIS_WL_missionEnd } do {
 			private _missileApproaching = (_relDir < 90 || _relDir > 270) && !(_missileState == "BLIND");
 			private _missileType = _missile getVariable ["WL2_missileNameOverride", _missileTypeData getOrDefault [typeof _missile, "MISSILE"]];
 
-			[_missileState, _distance, _missileApproaching, _missileType];
+			private _launchParams = _missile getVariable ["DIS_launchParams", [objNull, 0]];
+			private _notchResult = [cameraOn, _launchParams # 0, _missile, _launchParams # 1] call DIS_fnc_getNotchResult;
+
+			[_missileState, _distance, _missileApproaching, _missileType, _notchResult];
 		};
 
 		_missilesData = [_missilesData, [], {
@@ -390,7 +434,8 @@ while { !BIS_WL_missionEnd } do {
 		};
 
 		{
-			_x params ["_missileState", "_distance", "_missileApproaching", "_missileType"];
+			_x params ["_missileState", "_distance", "_missileApproaching", "_missileType", "_notchResult"];
+
 			private _color = switch (true) do {
 				case (!_missileApproaching): {
 					"#000000";
@@ -403,13 +448,19 @@ while { !BIS_WL_missionEnd } do {
 				};
 				default { "#ff0000" };
 			};
+
+			private _distanceText = (_distance / 1000) toFixed 1;
+			if (_missileState != "BLIND") then {
+				_distanceText = format ["%1 (%2%%)", _distanceText, (round (_notchResult * 25)) min 100];
+			};
+
 			_incomingText = format [
 				"%1<br/><t color='%2'><t align='left'>%3</t><t align='center'>%4</t><t align='right'>%5</t></t>",
 				_incomingText,
 				_color,
 				_missileType,
 				_missileState,
-				(_distance / 1000) toFixed 1
+				_distanceText
 			];
 		} forEach _missilesData;
 
@@ -437,6 +488,28 @@ while { !BIS_WL_missionEnd } do {
 	};
 	if (_weaponAmmoCount > 0) then {
 		_statusText = _statusText + format ["INTEGRAL AMMO: %1<br/>", _weaponAmmoCount];
+	};
+
+	private _hasECM = cameraOn getVariable ["WL2_hasECMSystem", false];
+	if (_hasECM) then {
+		private _ecmOn = cameraOn getVariable ["WL2_ecmActive", false];
+		private _ecmEffectiveTime = cameraOn getVariable ["WL2_ecmStartEffectTime", 0];
+		private _ecmStatusText = if (_ecmOn && fuel cameraOn > 0) then {
+			if (serverTime > _ecmEffectiveTime) then {
+				private _ecmPercent = (linearConversion [0, 500, speed cameraOn, 0, 1, true]) * 100;
+				private _ecmColor = if (_ecmPercent >= 85) then {
+					"#00ff00"
+				} else {
+					"#00ffff"
+				};
+				format ["<t color='%1'>ECM ACTIVE STRENGTH: %2%%</t><br/>", _ecmColor, round _ecmPercent]
+			} else {
+				"<t color='#ff0000'>ECM STARTING</t><br/>"
+			};
+		} else {
+			"<t color='#000000'>ECM OFF</t><br/>"
+		};
+		_statusText = _statusText + _ecmStatusText;
 	};
 
 	if (_statusText != "") then {

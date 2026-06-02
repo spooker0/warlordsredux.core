@@ -5,9 +5,13 @@ private _ropeLocations = [
     [35.9911, 180.624, 21.3177],
     [-32.1693, -98.2178, 20.4236],
     [-42.1925, 181.745, 21.385],
-    [27.6964, -120.231, 17.6292]
+    [27.6964, -120.231, 17.6292],
+    [-19.5, 100, 44.5],
+    [5, 189, 10.5],
+    [-16, 185, 24.5]
 ];
-private _ropeDirections = [-140, -234, -238, -60];
+private _ropeDirections = [-140, -234, -238, -60, -140, 180, 180];
+private _ropeMinLevel = [0, 0, 0, 0, 24, 0, 11];
 
 {
     private _ropeLocation = _x;
@@ -16,6 +20,11 @@ private _ropeDirections = [-140, -234, -238, -60];
     private _rope = createSimpleObject ["Land_Rope_F", _ropePosition, true];
     _rope setDir (getDir _carrier + _ropeDirections # _forEachIndex);
     _rope setPosASL _ropePosition;
+
+    private _ropeMinLevel = _ropeMinLevel # _forEachIndex;
+    if (_ropeMinLevel > 0) then {
+        _rope setVariable ["WL2_rappelRopeMinLevel", _ropeMinLevel, true];
+    };
 
     private _marker = format ["carrier%1_rappel%2", _carrierIndex, _forEachIndex];
     createMarkerLocal [_marker, _ropePosition];

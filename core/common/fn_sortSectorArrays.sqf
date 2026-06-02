@@ -54,6 +54,25 @@ while { _lastLinkCount < count _linked } do {
 	};
 } forEach _linked;
 
+private _facesData = missionNamespace getVariable ["WL2_sectorFaces", []];
+private _income = 50;
+{
+	_x params ["_sectorsInFace", "_area"];
+	private _ownsFace = true;
+	{
+		private _sector = _x;
+		private _sectorOwner = _sector getVariable ["WL2_linkedOwner", sideUnknown];
+		if (_sectorOwner != _side) then {
+			_ownsFace = false;
+			break;
+		};
+	} forEach _sectorsInFace;
+	if (_ownsFace) then {
+		_income = _income + _area * WL_INCOME_M2;
+	};
+} forEach _facesData;
+_income = round _income;
+
 {
 	private _sector = _x;
 	if (_sector getVariable ["BIS_WL_owner", sideUnknown] == _side) then {
@@ -75,28 +94,11 @@ while { _lastLinkCount < count _linked } do {
 	if (_sectorName == "Surrender") then {
 		private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
 		if (_timeSinceStart > WL_SURRENDER_TIME) then {
-			_available pushBack _sector;
+			if (_income <= WL_SURRENDER_INCOME) then {
+				_available pushBack _sector;
+			};
 		};
 	};
 } forEach _pool;
-
-private _facesData = missionNamespace getVariable ["WL2_sectorFaces", []];
-private _income = 50;
-{
-	_x params ["_sectorsInFace", "_area"];
-	private _ownsFace = true;
-	{
-		private _sector = _x;
-		private _sectorOwner = _sector getVariable ["WL2_linkedOwner", sideUnknown];
-		if (_sectorOwner != _side) then {
-			_ownsFace = false;
-			break;
-		};
-	} forEach _sectorsInFace;
-	if (_ownsFace) then {
-		_income = _income + _area * WL_INCOME_M2;
-	};
-} forEach _facesData;
-_income = round _income;
 
 [_owned, _available, _linked, _unlocked, _income, _services, _owned - _linked, (_unlocked - _owned) - _available];

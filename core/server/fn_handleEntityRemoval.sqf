@@ -10,6 +10,22 @@ private _alreadyHandled = _unit getVariable ["WL2_alreadyHandled", false];
 if (_alreadyHandled) exitWith {};
 _unit setVariable ["WL2_alreadyHandled", true];
 
+private _unitPosition = getPosASL _unit;
+private _ownedSector = BIS_WL_allSectors select {
+	_unitPosition inArea (_x getVariable "objectAreaComplete")
+};
+if (count _ownedSector > 0) then {
+	private _deathSector = _ownedSector # 0;
+    private _sectorOwner = _deathSector getVariable ["BIS_WL_owner", independent];
+    if (_sectorOwner == _unitSide) then {
+        private _sectorVulnerable = _deathSector in [BIS_WL_currentTarget_west, BIS_WL_currentTarget_east];
+        if (_sectorVulnerable) then {
+            private _sectorDefenders = _deathSector getVariable ["WL2_defenders", 0];
+            _deathSector setVariable ["WL2_defenders", (_sectorDefenders - 1) max 0, true];
+        };
+    };
+};
+
 private _children = _unit getVariable ["WL2_children", []];
 {
     if (alive _x) then {
@@ -111,6 +127,6 @@ if (!isNull _responsiblePlayer && { isPlayer [_responsiblePlayer] }) then {
 
         private _spotReward = round (_killReward / 4.0);
         [_spotReward, getPlayerUID _lastSpotted, true, "Spot assist"] call WL2_fnc_fundsDatabaseWrite;
-        [_unit, _spotReward, "Spot assist", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _lastSpotted];
+        [_unit, _spotReward, "Spot assist", WL_COLOR_SUPPORT] remoteExec ["WL2_fnc_killRewardClient", _lastSpotted];
     };
 };

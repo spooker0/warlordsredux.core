@@ -33,6 +33,7 @@ class CfgFunctions {
 			class calculateInRange {};
 			class combatAirPatrol {};
 			class controlMunition {};
+			class droneDeployer {};
 			class extendedSam {};
 			class frag {};
 			class getLaserList {};
@@ -48,6 +49,7 @@ class CfgFunctions {
 			class laserMunition {};
 			class loalAuto {};
 			class maneuver {};
+			class mineLayer {};
 			class missileCamera {};
 			class remoteMunition {};
 			class seekTerminal {};
@@ -166,6 +168,8 @@ class CfgFunctions {
 			class clientEH {};
 			class combatAirClient {};
 			class combatAirWarning {};
+			class commMenu {};
+			class commMenuListen {};
 			class createDestroyerClient {};
 			class earthquake {};
 			class ewar {};
@@ -211,6 +215,7 @@ class CfgFunctions {
 			class smartMine {};
 			class spectrumInterface {};
 			class surrenderWarning {};
+			class surveillance {};
 			class teammatesAvailability {};
 			class timedPrompt {};
 			class triggerPurchase {};
@@ -227,6 +232,7 @@ class CfgFunctions {
 			class airWreckHandler {};
 			class arsenalSetup {};
 			class attachVehicle {};
+			class autoSam {};
 			class buyMenuAction {};
 			class catapultAction {};
 			class catapultActionEligibility {};
@@ -242,6 +248,7 @@ class CfgFunctions {
 			class demolishStep {};
 			class deployableAddAction {};
 			class deployableEligibility {};
+			class ecmAction {};
 			class fieldRepairEligibility {};
 			class getVehicleLockStatus {};
 			class grapple {};
@@ -253,6 +260,7 @@ class CfgFunctions {
 			class lockActionEligibility {};
 			class lockActionUpdate {};
 			class mineClearAction {};
+			class nearestCombatAir {};
 			class parachuteAction {};
 			class parachuteSetup {};
 			class paradropperAction {};
@@ -414,6 +422,7 @@ class CfgFunctions {
 			class checkCarrierLimits {};
 			class checkCruiseMissileAvailable {};
 			class checkCollaborator {};
+			class checkCombatAir {};
 			class checkConscription {};
 			class checkDead {};
 			class checkEwar {};
@@ -527,12 +536,12 @@ class CfgFunctions {
 			class killRewardHandle {};
 			class lagMessageHandler {};
 			class laserTracker {};
+			class manageServer {};
 			class missileDestroy {};
 			class onDisconnect {};
 			class processRunways {};
 			class publishRewards {};
 			class punishPlayer {};
-			class ratingServer {};
 			class rebalance {};
 			class requestScoreboard {};
 			class runwayCollector {};
@@ -548,6 +557,7 @@ class CfgFunctions {
 		class ServerSector {
 			file = "src\core\server\sector";
 			class calcHomeBases {};
+			class combatAirServerHandle {};
 			class getCapValues {};
 			class populateSector {};
 			class populateCarrierSector {};

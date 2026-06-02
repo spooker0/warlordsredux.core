@@ -199,4 +199,14 @@ addMissionEventHandler ["ProjectileCreated", {
     if (_projectileIncendiary) then {
         [_projectile] spawn WL2_fnc_incendiary;
     };
+
+    private _projectileDroneDeployer = _projectileConfig getOrDefault ["deployDrone", false];
+    if (_projectileDroneDeployer) then {
+        [_projectile, _unit] spawn DIS_fnc_droneDeployer;
+    };
+
+    private _projectileMineLayer = _projectileConfig getOrDefault ["mineLayer", false];
+    if (_projectileMineLayer) then {
+        [_projectile, _unit] spawn DIS_fnc_mineLayer;
+    };
 }];

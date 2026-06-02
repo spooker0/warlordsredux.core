@@ -134,6 +134,24 @@ private _actionId = _asset addAction [
             private _obstaclesInArea = _allUnitsInArea select {
                 WL_UNIT(_x, "obstacle", 0) in [1, 2];
             };
+
+            private _allMinefields = _allUnits select {
+                _x distance2D _asset < _length * 2
+            } select {
+                private _mineData = _x getVariable ["WL2_minefield", []];
+                count _mineData > 0
+            };
+
+            _detonatePositions pushBack _assetPos;
+            {
+                private _mineData = _x getVariable ["WL2_minefield", []];
+                private _mineArea = [getPosASL _x, _mineData # 0, _mineData # 1, getDir _x, _mineData # 2 == 1];
+                private _overlappingPositions = _detonatePositions inAreaArray _mineArea;
+                if (count _overlappingPositions > 0) then {
+                    _obstaclesInArea pushBackUnique _x;
+                };
+            } forEach _allMinefields;
+
             {
                 [_x, player] remoteExec ["WL2_fnc_demolishComplete", 2];
             } forEach _obstaclesInArea;

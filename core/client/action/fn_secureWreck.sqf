@@ -44,7 +44,7 @@ deleteVehicle _asset;
 private _rewardAmount = round (_cost / 300) * 100;
 
 [player, "secureAircraft", _rewardAmount] remoteExec ["WL2_fnc_handleClientRequest", 2];
-[objNull, _rewardAmount, "Aircraft secured", "#228b22"] call WL2_fnc_killRewardClient;
+[objNull, _rewardAmount, "Aircraft secured", WL_COLOR_SUPPORT] call WL2_fnc_killRewardClient;
 
 playSoundUI ["AddItemOk"];
 playSound3D ["a3\sounds_f\vehicles\armor\bobcat\bobcat_plow_up_01.wss", _asset];

@@ -46,4 +46,13 @@ if (_distanceTraveledPercent < 1) then {
     };
 };
 
-_trackSpeedPercent + _tolerancePercent + _maxRangePercent + _distanceTraveledPercent;
+private _ecmPercent = 0;
+private _ecmOn = _target getVariable ["WL2_ecmActive", false];
+if (_ecmOn) then {
+    private _ecmStartEffectTime = _target getVariable ["WL2_ecmStartEffectTime", 0];
+    if (serverTime > _ecmStartEffectTime && fuel _target > 0) then {
+        _ecmPercent = linearConversion [0, 500, speed _target, 0, 1.2, true];
+    };
+};
+
+_trackSpeedPercent + _tolerancePercent + _maxRangePercent + _distanceTraveledPercent + _ecmPercent;

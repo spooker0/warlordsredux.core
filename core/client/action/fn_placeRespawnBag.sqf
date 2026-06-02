@@ -40,18 +40,7 @@ _freshTent enableWeaponDisassembly false;
 playSoundUI ["a3\ui_f\data\sound\cfgnotifications\communicationmenuitemadded.wss"];
 
 [_freshTent, player] remoteExec ["WL2_fnc_setupSimpleAsset", 0, true];
-
-private _isSquadLeader = ["isSquadLeader", [getPlayerID player]] call SQD_fnc_query;
-if (_isSquadLeader) then {
-    private _rallyPointClass = if (BIS_WL_playerSide == west) then {
-        "Land_MedicalTent_01_NATO_generic_open_F"
-    } else {
-        "Land_MedicalTent_01_CSAT_brownhex_generic_open_F"
-    };
-    _freshTent setVariable ["WL2_installable", _rallyPointClass, true];
-} else {
-    _freshTent setVariable ["WL2_installable", "Land_BagFence_Round_F", true];
-};
+_freshTent setVariable ["WL2_installable", "Land_BagFence_Round_F", true];
 
 private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
 private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];

@@ -56,18 +56,18 @@ if (_attach) then {
     };
 
     private _offset = [
-        0, //(_loadBoundingBoxMinX + _loadBoundingBoxMaxX) / 2,
+        _centerOfMass # 0,
         -_loadBoundingBoxMaxY + 1.1,
         -_loadBoundingBoxMinZ - 0.8
     ];
 
     if (_asset isKindOf "VTOL_01_base_F") then {
-        _offset = _offset vectorAdd [0, 3, -4.9];
+        _offset = _offset vectorAdd [0, 4.5, -4.9];
     };
-    if (_asset isKindOf "VTOL_02_base_F") then {
-        _offset = _offset vectorAdd [0, 0, -3.7];
-        // _offset = _offset vectorAdd [0, 1.8, -1.0];
-    };
+    // if (_asset isKindOf "VTOL_02_base_F") then {
+        // _offset = _offset vectorAdd [0, 0, -3.7];
+        // _offset = _offset vectorAdd [0, 1.8, -1.2];
+    // };
 
     _load attachTo [_asset, _offset];
 

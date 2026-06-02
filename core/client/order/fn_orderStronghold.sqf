@@ -47,7 +47,7 @@ private _message = format ["Are you sure you want to create a Sector Stronghold 
 if (_hasOldStronghold) then {
     _message = format ["%1<br/><br/><t color='#ff0000'>This will replace the current Sector Stronghold.</t>", _message];
 };
-private _result = [_message, "Create Sector Stronghold", "Create", "Cancel"] call BIS_fnc_guiMessage;
+private _result = ["Create Sector Stronghold", _message, "Create", "Cancel"] call WL2_fnc_prompt;
 removeMissionEventHandler ["draw3D", _drawIconId];
 if (!_result) exitWith {
     playSoundUI ["AddItemFailed"];

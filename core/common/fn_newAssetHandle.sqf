@@ -95,6 +95,12 @@ if (_asset isKindOf "Man") then {
 		[_asset] remoteExec ["WL2_fnc_controlGunnerAction", 0, true];
 	};
 
+	if (WL_ASSET_GET(_data, "hasECM", 0) > 0) then {
+		_asset setVariable ["WL2_ecmActive", false, true];
+		_asset setVariable ["WL2_hasECMSystem", true, true];
+		[_asset] remoteExec ["WL2_fnc_ecmAction", 0, true];
+	};
+
 	if (WL_ASSET_GET(_data, "hasHMD", 0) > 0) then {
 		_asset setVariable ["WL2_hasHMD", true, true];
 	};
@@ -107,11 +113,15 @@ if (_asset isKindOf "Man") then {
 		_asset setVariable ["WL2_hasDroneHunter", true, true];
 	};
 
+	if (WL_ASSET_GET(_data, "hasAutoSam", 0) > 0) then {
+		[_asset] spawn WL2_fnc_autoSam;
+	};
+
 	if !("ToolKit" in (itemCargo _asset)) then {
 		_asset addItemCargoGlobal ["ToolKit", 1];
 	};
 
-	if (_assetActualType in WL_FOBCRATES) then {
+	if (_assetActualType == "Land_Cargo20_yellow_F") then {
 		_asset setVariable ["WL2_mapCircleRadius", WL_FOB_CAPTURE_RANGE, true];
 		[_asset] remoteExec ["WL2_fnc_setupForwardBaseAction", 0, true];
 	};
@@ -368,9 +378,8 @@ if (_asset isKindOf "Man") then {
 	private _rearmTime = WL_ASSET_GET(_data, "rearm", 600);
 	_asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
 
-	private _crewPosition = (fullCrew [_asset, "", true]) select {!("cargo" in _x)};
-	private _radarSensor = (listVehicleSensors _asset) select {{"ActiveRadarSensorComponent" in _x} forEach _x};
-	private _hasRadar = count _radarSensor > 0 && (count _crewPosition > 1 || unitIsUAV _asset);
+	private _radarSensor = (listVehicleSensors _asset) select { _x # 0 == "ActiveRadarSensorComponent" };
+	private _hasRadar = count _radarSensor > 0 && unitIsUAV _asset;
 	if (_hasRadar) then {
 		_asset setVariable ["radarOperation", false, true];
 		_asset setVehicleRadar 2;
@@ -436,6 +445,18 @@ if (_asset isKindOf "Man") then {
 		_asset setVariable ["WL2_demolitionHealth", _demolishable, true];
 		_asset setVariable ["WL2_demolitionMaxHealth", _demolishable, true];
 		_asset setVariable ["WL2_canDemolish", true, true];
+	};
+
+	private _singleton = WL_ASSET_GET(_data, "singleton", 0) > 0;
+	if (_singleton) then {
+		private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", _playerUID];
+		private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
+		private _limitedOwnedVehicle = _ownedVehicles select {
+			WL_ASSET_TYPE(_x) == _assetActualType && _x != _asset
+		};
+		{
+			deleteVehicle _x;
+		} forEach _limitedOwnedVehicle;
 	};
 
 	if (WL_ASSET_GET(_data, "hasTurretVisualizer", 0) > 0) then {

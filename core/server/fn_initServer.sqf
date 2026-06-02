@@ -189,6 +189,13 @@ if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
 private _serverStats = profileNamespace getVariable ["WL_stats", createHashMap];
 missionNamespace setVariable ["WL_serverStats", _serverStats, true];
 
+private _banlist = profileNamespace getVariable ["WL2_banlist", []];
+private _punishmentMap = createHashMap;
+{
+	_punishmentMap set [_x, [1e30, "cheating"]];
+} forEach _banlist;
+missionNamespace setVariable ["WL2_punishmentMap", _punishmentMap, true];
+
 #if WL_EASTER_EGG
 private _systemTime = systemTimeUTC;
 if (_systemTime # 1 == 4 && _systemTime # 2 <= 2) then {
@@ -201,13 +208,10 @@ private _objectsToPreload = [
 	"Land_Dome_Small_WIP2_F",
 	"Land_Dome_Small_F",
 	"Land_CraneRail_01_F",
-	"Land_TentHangar_V1_F",
 	"CargoNet_01_box_F",
 	"Land_BagBunker_Small_F",
-	"Land_BagBunker_01_large_green_F",
 	"Land_BagFence_Long_F",
 	"Land_SandbagBarricade_01_hole_F",
-	"Land_New_WiredFence_10m_F",
 	"Land_DragonsTeeth_01_4x2_new_F",
 	"Land_CzechHedgehog_01_new_F",
 	"Land_Cargo_Tower_V4_F",

@@ -62,5 +62,6 @@ if (cameraOn == _asset) then {
     if (_iteration % 2 == 0) then {
         playSoundUI ["radarTargetLost", 2, 1, true];
     };
-    [_scannedObjects] call WL2_fnc_reconReward;
 };
+
+[_scannedObjects] call WL2_fnc_reconReward;

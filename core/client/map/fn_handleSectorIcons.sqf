@@ -78,9 +78,14 @@ private _nextCombatAir = _sector getVariable ["WL2_nextCombatAir", -9999];
 private _combatAirCD = (_nextCombatAir - serverTime) max 0;
 private _isCombatAirActive = _sector getVariable ["WL2_combatAirActive", false];
 
+private _cooldown = if (_sector in [WL2_base1, WL2_base2]) then {
+	WL_COOLDOWN_CAP / 5
+} else {
+	WL_COOLDOWN_CAP
+};
 private _combatAirText = if (_isCombatAirActive) then {
     [
-        format ["Combat air patrol active: %1", [_nextCombatAir - WL_COOLDOWN_CAP - serverTime, "MM:SS"] call BIS_fnc_secondsToString],
+        format ["Combat air patrol active: %1", [_nextCombatAir - _cooldown - serverTime, "MM:SS"] call BIS_fnc_secondsToString],
         [0, 1, 0, 1]
     ]
 } else {

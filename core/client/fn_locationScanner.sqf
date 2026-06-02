@@ -7,6 +7,7 @@ uiNamespace setVariable ["WL2_playerIconTextCache", createHashMap];
 uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
 
 0 spawn {
+    private _commMenuConfig = uiNamespace getVariable ["WL2_commMenuConfig", createHashMap];
     while { !BIS_WL_missionEnd } do {
         uiSleep 0.5;
 
@@ -259,9 +260,49 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
                 ];
             };
         } forEach _detectableUnits;
+
+        private _commIcons = [];
+        {
+            if (side group _x != BIS_WL_playerSide) then { continue; };
+            if (_x distance cameraOn > 500) then { continue; };
+
+            private _commMenuItem = _x getVariable ["WL2_commMenuItem", ["", 0]];
+            _commMenuItem params ["_commTextId", "_commTime"];
+            if (_commTextId == "") then { continue; };
+            if (_commTime < serverTime) then { continue; };
+
+            private _color = [_x, _playerIconColorCache] call WL2_fnc_iconColor;
+            private _commText = _commMenuConfig getOrDefault [_commTextId, ""];
+
+            if (damage _x > 0.1) then {
+                _commText = if (BIS_WL_playerSide == west) then {
+                    format ["***ING %1!", toUpper _commText];
+                } else {
+                    format ["%1 BLYAD!", toUpper _commText];
+                };
+            } else {
+                _commText = format ["%1!", toUpper _commText];
+            };
+
+            _commIcons pushBack [
+                "",
+                _color,
+                _x,
+                0,
+                0,
+                0,
+                _commText,
+                2,
+                0.08,
+                "RobotoCondensedBold",
+                "center"
+            ];
+        } forEach allPlayers;
+
         uiNamespace setVariable ["WL2_playerIconColorCache", _playerIconColorCache];
         uiNamespace setVariable ["WL2_playerIconTextCache", _playerIconTextCache];
         uiNamespace setVariable ["WL2_drawPlayerIcons", _playerIcons];
+        uiNamespace setVariable ["WL2_drawCommIcons", _commIcons];
 
         private _sectorIcons = [];
         {
@@ -380,6 +421,16 @@ addMissionEventHandler ["Draw3D", {
         drawIcon3D _icon;
     } forEach (_drawIcons + _playerIcons);
 
+    private _commIcons = uiNamespace getVariable ["WL2_drawCommIcons", []];
+    {
+        private _icon = +_x;
+        private _target = _icon select 2;
+        private _offset = (_target selectionPosition "head") vectorAdd [0, 0, 1];
+        private _position = _target modelToWorldVisual _offset;
+        _icon set [2, _position];
+        drawIcon3D _icon;
+    } forEach _commIcons;
+
     if (WL_IsSpectator) exitWith {};
 
     private _sectorIcons = uiNamespace getVariable ["WL2_drawSectorHudIcons", createHashMap];
@@ -465,6 +516,9 @@ while { !BIS_WL_missionEnd } do {
             _allScannedUnits append _scannedUnits;
             _scannedUnits = _scannedUnits select {
                 WL_ISUP(_x)
+            } select {
+                private _hideMap = _x getVariable ["WL2_hideMap", 0];
+                _hideMap == 0;
             };
 
             if (count _scannedUnits > 0) then {

@@ -38,6 +38,7 @@ _controller allowDamage false;
 _controller enableSimulationGlobal false;
 
 if (_destroyerType == 2) then {
+    deleteVehicle _controller;
     _controller = objNull;
 } else {
     _controller setObjectTextureGlobal [1, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.2,""#000000"",""#ffffff"",""MISSILE\nBATTERY\nCONTROL"")"];

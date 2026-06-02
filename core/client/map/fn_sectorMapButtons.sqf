@@ -132,13 +132,14 @@ private _combatAirExecute = {
             "Are you sure you want to call in combat air patrol? This will cost you %1%2 and put it on a %3 minute cooldown.",
             WL_MONEY_SIGN, WL_COST_COMBATAIR, round (WL_COOLDOWN_CAP / 60)
         ];
-        private _result = [_message, "Combat Air Patrol", "OK", "Cancel"] call BIS_fnc_guiMessage;
+        private _result = ["Combat Air Patrol", _message, "OK", "Cancel"] call WL2_fnc_prompt;
 
         if (!_result) exitWith {
             playSoundUI ["AddItemFailed"];
         };
 
         [player, "combatAir", BIS_WL_playerSide, _sector] remoteExec ["WL2_fnc_handleClientRequest", 2];
+        playSoundUI ["a3\dubbing_f_jets\showcase_jets\30_reinforcements\showcase_jets_30_reinforcements_tower_0.wss"];
     };
 };
 [
@@ -150,6 +151,39 @@ private _combatAirExecute = {
     "combatAirPatrol",
     [
         WL_COST_COMBATAIR,
+        "CombatAir",
+        "Fast Travel"
+    ]
+] call WL2_fnc_addTargetMapButton;
+
+// Combat air patrol home button
+private _combatAirHomeExecute = {
+    params ["_sector"];
+    [_sector] spawn {
+        params ["_sector"];
+        private _message = format [
+            "Are you sure you want to call in combat air patrol? This will cost you %1%2 and put it on a %3 minute cooldown. It will also reveal your home base to the enemy.",
+            WL_MONEY_SIGN, WL_COST_COMBATAIR / 5, round (WL_COOLDOWN_CAP / 5 / 60)
+        ];
+        private _result = ["Combat Air Patrol", _message, "OK", "Cancel"] call WL2_fnc_prompt;
+
+        if (!_result) exitWith {
+            playSoundUI ["AddItemFailed"];
+        };
+
+        [player, "combatAirHome", BIS_WL_playerSide, _sector] remoteExec ["WL2_fnc_handleClientRequest", 2];
+        playSoundUI ["a3\dubbing_f_jets\showcase_jets\30_reinforcements\showcase_jets_30_reinforcements_tower_0.wss"];
+    };
+};
+[
+    _sector, _targetId,
+    "order-cap-home",
+    "Order combat air patrol (home)",
+    _combatAirHomeExecute,
+    true,
+    "combatAirPatrolHome",
+    [
+        WL_COST_COMBATAIR / 5,
         "CombatAir",
         "Fast Travel"
     ]

@@ -18,12 +18,12 @@ if (_originatorSide == side group _shooter) then {
 
 if (isPlayer _shooter) then {
     [_reward, _shooterUid, true, "Projectile destroyed"] call WL2_fnc_fundsDatabaseWrite;
-    [objNull, _reward, "Projectile destroyed", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _shooter];
+    [objNull, _reward, "Projectile destroyed", WL_COLOR_KILL] remoteExec ["WL2_fnc_killRewardClient", _shooter];
 };
 
 if (isPlayer _originator) then {
     [_compensation, _originatorUid, true, "Projectile jammed"] call WL2_fnc_fundsDatabaseWrite;
-    [objNull, _compensation, "Projectile jammed", "#de0808"] remoteExec ["WL2_fnc_killRewardClient", _originator];
+    [objNull, _compensation, "Projectile jammed", WL_COLOR_KILL] remoteExec ["WL2_fnc_killRewardClient", _originator];
 };
 
 [[_shooter], 60] remoteExec ["WL2_fnc_reportTargets", _originatorSide];

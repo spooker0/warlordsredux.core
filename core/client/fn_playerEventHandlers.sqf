@@ -8,6 +8,12 @@ player addEventHandler ["GetInMan", {
 	params ["_unit", "_role", "_vehicle", "_turret"];
 	if (_vehicle isKindOf "Air" && typeof _vehicle != "Steerable_Parachute_F") then {
 		0 spawn WL2_fnc_betty;
+
+		private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+		private _defaultOffVtolAuto = _settingsMap getOrDefault ["defaultOffVtolAuto", false];
+		if (_defaultOffVtolAuto) then {
+			_unit action ["VTOLVectoring", _vehicle];
+		};
 	};
 }];
 
@@ -72,29 +78,42 @@ player addEventHandler ["InventoryOpened", {
 
 		uiSleep 1;
 
+		private _canMoveIn = {
+			params ["_vehicle", "_person"];
+			if (isPlayer _person) exitWith { false };
+			private _ownerId = _vehicle getVariable ["BIS_WL_ownerAsset", "123"];
+			if (_ownerId != getPlayerUID player) exitWith { false };
+			if (_person in _vehicle) exitWith { false };
+			true;
+		};
+
 		private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
 		private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
 		{
 			private _vehicle = _x;
 			private _assignedDriver = assignedDriver _vehicle;
-			if (!isPlayer _assignedDriver && !(_assignedDriver in _vehicle)) then {
+			if ([_vehicle, _assignedDriver] call _canMoveIn) then {
 				_assignedDriver moveInDriver _vehicle;
+				playSoundUI ["AddItemOK"];
 			};
 
 			private _assignedGunner = assignedGunner _vehicle;
-			if (!isPlayer _assignedGunner && !(_assignedGunner in _vehicle)) then {
+			if ([_vehicle, _assignedGunner] call _canMoveIn) then {
 				_assignedGunner moveInGunner _vehicle;
+				playSoundUI ["AddItemOK"];
 			};
 
 			private _assignedCommander = assignedCommander _vehicle;
-			if (!isPlayer _assignedCommander && !(_assignedCommander in _vehicle)) then {
+			if ([_vehicle, _assignedCommander] call _canMoveIn) then {
 				_assignedCommander moveInCommander _vehicle;
+				playSoundUI ["AddItemOK"];
 			};
 
 			private _assignedCargo = assignedCargo _vehicle;
 			{
-				if (!isPlayer _x && !(_x in _vehicle)) then {
+				if ([_vehicle, _x] call _canMoveIn) then {
 					_x moveInCargo _vehicle;
+					playSoundUI ["AddItemOK"];
 				};
 			} forEach _assignedCargo;
 		} forEach _ownedVehicles;

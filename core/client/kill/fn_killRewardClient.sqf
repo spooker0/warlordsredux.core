@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_unit", "_reward", ["_customText", ""], ["_customColor", "#de0808"], ["_unitTypeName", ""]];
+params ["_unit", "_reward", ["_customText", ""], ["_customColor", WL_COLOR_KILL], ["_unitTypeName", ""]];
 
 if (isDedicated) exitWith {};
 
@@ -23,7 +23,7 @@ if (_customText != "") then {
 	if (_unitType isKindOf "Man") then {
 		_displayText = "KILL";
 	} else {
-		_displayName = [_unit, _unitType] call WL2_fnc_getAssetTypeName;
+		_displayName = [_unit, _unitType] call WL2_fnc_getAssetTypeShortName;
 		_displayText = format ["DESTROYED %1", _displayName];
 	};
 };
@@ -70,13 +70,12 @@ private _displayIcon = switch (_iconText) do {
 	};
 };
 
-private _useNewKillfeed = _settingsMap getOrDefault ["useNewKillfeed", true];
-if (_useNewKillfeed) then {
-	[_displayText, _reward, _customColor, _displayIcon] call WL2_fnc_updateKillFeed;
-} else {
+private _addKillfeedToChat = _settingsMap getOrDefault ["addKillfeedToChat", false];
+if (_addKillfeedToChat) then {
 	systemChat format ["%1 (+%2)", toUpper _displayText, _reward];
 };
 
+[_displayText, _reward, _customColor, _displayIcon] call WL2_fnc_updateKillFeed;
 [_displayText, _unitType, _reward] call RWD_fnc_handleReward;
 
 if !(toUpper _displayText in ["SQUAD ASSIST", "SECTOR CAPTURED"]) then {
@@ -90,7 +89,7 @@ _rewardEntry set [1, _rewardEntry # 1 + _reward];
 _rewardHistory set [_displayText, _rewardEntry];
 uiNamespace setVariable ["WL2_rewardHistory", _rewardHistory];
 
-if (_customColor == "#de0808") then {
+if (_customColor == WL_COLOR_KILL) then {
 	private _hitmarkerVolume = _settingsMap getOrDefault ["hitmarkerVolume", 0.5];
 
 	private _useNewKillSound = _settingsMap getOrDefault ["useNewKillSound", true];

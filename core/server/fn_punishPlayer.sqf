@@ -8,12 +8,18 @@ if (remoteExecutedOwner != owner _sender) exitWith {};
 private _uid = getPlayerUID _sender;
 private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
 private _isModerator = _uid in (getArray (missionConfigFile >> "moderatorIDs"));
-if !(_isAdmin || _isModerator || _uid == _targetUid) exitWith {};
+// if !(_isAdmin || _isModerator || _uid == _targetUid) exitWith {};
 
 private _punishIncident = [serverTime + _time, _reason];
 private _punishmentMap = missionNamespace getVariable ["WL2_punishmentMap", createHashMap];
 _punishmentMap set [_targetUid, _punishIncident];
 missionNamespace setVariable ["WL2_punishmentMap", _punishmentMap, true];
+
+if (_time > 1e6) then {
+    private _banlist = profileNamespace getVariable ["WL2_banlist", []];
+    _banlist pushBackUnique _targetUid;
+    profileNamespace setVariable ["WL2_banlist", _banlist];
+};
 
 private _punishedPlayer = _targetUid call BIS_fnc_getUnitByUID;
 [_punishIncident] remoteExec ["WL2_fnc_punishmentClient", _punishedPlayer];

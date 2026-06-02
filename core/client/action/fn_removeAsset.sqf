@@ -1,11 +1,7 @@
 #include "includes.inc"
-params ["_asset", ["_skipChecks", false]];
+params ["_asset"];
 
 private _canRemoveAsset = {
-    if (_skipChecks) exitWith {
-        "ok";
-    };
-
     if (WL_ISDOWN(player)) exitWith {
         "You are incapacitated!";
     };
@@ -48,7 +44,7 @@ if (_isBulkRemoveActive) then {
 
     if (_result) then {
         {
-            [_x, true] spawn WL2_fnc_removeAsset;
+            deleteVehicle _x;
         } forEach _sameTypeVehicles;
 
         private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];
@@ -72,11 +68,7 @@ if (_isBulkRemoveActive) then {
 } else {
     private _displayName = [_asset] call WL2_fnc_getAssetTypeName;
 
-    private _result = if (_skipChecks) then {
-        true
-    } else {
-        ["Delete asset", format ["Are you sure you would like to delete: %1?", _displayName], "Yes", "Cancel"] call WL2_fnc_prompt;
-    };
+    private _result = ["Delete asset", format ["Are you sure you would like to delete: %1?", _displayName], "Yes", "Cancel"] call WL2_fnc_prompt;
 
     if (_result) then {
         private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
@@ -96,15 +88,13 @@ if (_isBulkRemoveActive) then {
 
         deleteVehicle _asset;
 
-        if (!_skipChecks) then {
-            private _texture = _asset getVariable ["WL2_vehicleManagerTexture", controlNull];
-            if (!isNull _texture) then {
-                [_texture] call WL2_fnc_sendVehicleData;
-            };
-
-            playSoundUI ["AddItemOK", 1];
-            [format [localize "STR_WL_assetDeleted", _displayName]] call WL2_fnc_smoothText;
+        private _texture = _asset getVariable ["WL2_vehicleManagerTexture", controlNull];
+        if (!isNull _texture) then {
+            [_texture] call WL2_fnc_sendVehicleData;
         };
+
+        playSoundUI ["AddItemOK", 1];
+        [format [localize "STR_WL_assetDeleted", _displayName]] call WL2_fnc_smoothText;
     } else {
         playSoundUI ["AddItemFailed", 1];
     };

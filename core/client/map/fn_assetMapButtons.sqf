@@ -386,13 +386,14 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
                 "Are you sure you want to call in combat air patrol? This will cost you %1%2 and put it on a %3 minute cooldown.",
                 WL_MONEY_SIGN, WL_COST_COMBATAIR, round (WL_COOLDOWN_CAP / 60)
             ];
-            private _result = [_message, "Combat Air Patrol", "OK", "Cancel"] call BIS_fnc_guiMessage;
+            private _result = ["Combat Air Patrol", _message, "OK", "Cancel"] call WL2_fnc_prompt;
 
             if (!_result) exitWith {
                 playSoundUI ["AddItemFailed"];
             };
 
             [player, "combatAir", BIS_WL_playerSide, _asset] remoteExec ["WL2_fnc_handleClientRequest", 2];
+            playSoundUI ["a3\dubbing_f_jets\showcase_jets\30_reinforcements\showcase_jets_30_reinforcements_tower_0.wss"];
         };
     };
     [
@@ -418,7 +419,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
                 "Are you sure you want to call in a paradrop? This will cost you %1%2.",
                 WL_MONEY_SIGN, WL_COST_PARADROPCALL
             ];
-            private _result = [_message, "Paradrop", "OK", "Cancel"] call BIS_fnc_guiMessage;
+            private _result = ["Paradrop", _message, "OK", "Cancel"] call WL2_fnc_prompt;
 
             if (!_result) exitWith {
                 playSoundUI ["AddItemFailed"];
@@ -610,7 +611,7 @@ if (count _findIsStronghold > 0) then {
 
         private _sectorName = _sector getVariable ["WL2_name", ""];
         private _message = format ["Are you sure you want to pay to remove the Sector Stronghold in %1?", _sectorName];
-        private _result = [_message, "Remove Sector Stronghold", "Remove", "Cancel"] call BIS_fnc_guiMessage;
+        private _result = ["Remove Sector Stronghold", _message, "Remove", "Cancel"] call WL2_fnc_prompt;
         if (!_result) exitWith {
             playSoundUI ["AddItemFailed"];
         };

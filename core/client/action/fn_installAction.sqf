@@ -105,18 +105,6 @@ private _installActionId = player addAction [
                 _installableTarget setVariable ["WL2_installable", "", true];
             };
 
-            private _singleton = WL_ASSET(_installable, "singleton", 0) > 0;
-            if (_singleton) then {
-                private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
-                private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
-                private _limitedOwnedVehicle = _ownedvehicles select {
-                    WL_ASSET_TYPE(_x) == _installable
-                };
-                {
-                    deleteVehicle _x;
-                } forEach _limitedOwnedVehicle;
-            };
-
             private _offset = _deploymentResult # 2;
 			[player, "orderAsset", "vehicle", _position, _installable, _direction, true, true] remoteExec ["WL2_fnc_handleClientRequest", 2];
 

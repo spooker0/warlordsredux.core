@@ -3,8 +3,7 @@ params [
     "_projectile",
     "_unit",
     ["_groundAvoidDistance", 5000],
-    ["_samMaxDistance", WL_SAM_MAX_DISTANCE],
-    ["_distanceBeforeNotch", WL_SAM_NOTCH_ACTIVE_DIST]
+    ["_samMaxDistance", WL_SAM_MAX_DISTANCE]
 ];
 
 private _detectors = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles) select { alive _x }
@@ -35,6 +34,7 @@ private _missileType = if ("IRSensorComponent" in _ammoSensors) then { 2 } else 
 _projectile setVariable ["WL2_missileType", format ["FOX-%1", _missileType]];
 
 private _originalTarget = missileTarget _projectile;
+private _distanceBeforeNotch = 1;
 
 private _ammoConfig = _unit getVariable ["WL2_currentAmmoConfig", createHashMap];
 if (_ammoConfig getOrDefault ["loal", false]) then {
@@ -75,10 +75,11 @@ if (_ammoConfig getOrDefault ["loal", false]) then {
     };
 };
 
-private _immunity = _ammoConfig getOrDefault ["immunity", 1500];
+private _immunity = _ammoConfig getOrDefault ["immunity", 100];
 _distanceBeforeNotch = _distanceBeforeNotch max _immunity;
 
 _projectile setVariable ["DIS_ultimateTarget", _originalTarget];
+_projectile setVariable ["DIS_launchParams", [_unit, _distanceBeforeNotch], true];
 
 private _originalPosition = getPosASL _unit;
 [_projectile, _originalTarget, _unit, _samMaxDistance, _distanceBeforeNotch] spawn {

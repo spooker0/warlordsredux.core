@@ -1,14 +1,14 @@
 #include "includes.inc"
 params ["_target", "_caller", ["_damageBuilding", true]];
 
-if !(isNull _caller) then {
+uiSleep 0.5;
+
+if (!isNull _target && !isNull _caller) then {
     [_target, _caller] call WL2_fnc_killRewardHandle;
     [_target, _caller] call WL2_fnc_friendlyFireHandleServer;
 };
 _target setVariable ["WL2_alreadyHandled", true];
 _target setVariable ["WL_lastHitter", _caller];
-
-uiSleep 0.5;
 
 for "_i" from 1 to 10 do {
     if (random 1 > 0.5) then {

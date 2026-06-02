@@ -1,6 +1,11 @@
 #include "includes.inc"
 params ["_sector", "_requirements"];
 
+private _defenders = _sector getVariable ["WL2_defenders", 0];
+if (_sector == WL_TARGET_ENEMY && _defenders <= 0) exitWith {
+    [false, "Sector has run out of reinforcements. Resupply the sector to enable vehicle purchases."];
+};
+
 private _potentialBases = missionNamespace getVariable ["WL2_forwardBases", []];
 private _forwardBases = _potentialBases select {
     _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide

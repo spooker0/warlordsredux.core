@@ -124,8 +124,12 @@ private _interceptAction = {
         };
         case "UserType": {
             switch (_text) do {
+                case (localize "STR_DN_OUT_O_DOOR");
                 case (localize "STR_DN_OUT_C_DOOR"): {
-                    if (_target getVariable ["WL2_doorsLocked", false]) then {
+                    private _doorLocked = _target getVariable ["WL2_doorsLocked", false];
+                    private _strongholdSector = _target getVariable ["WL_strongholdSector", objNull];
+                    private _strongholdSectorSide = _strongholdSector getVariable ["BIS_WL_owner", independent];
+                    if (_doorLocked || _strongholdSectorSide == BIS_WL_enemySide) then {
                         [format ["Door locked."]] call WL2_fnc_smoothText;
                         playSoundUI ["AddItemFailed"];
                         true;

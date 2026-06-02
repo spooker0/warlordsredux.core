@@ -38,6 +38,12 @@ if (_isAttaching) then {
     {
         ropeDestroy _x;
     } forEach _ropes;
+    detach _childAsset;
+
+    private _posAGL = _childAsset modelToWorld [0, 0, 0];
+    if (_posAGL # 2 < -1) then {
+        _childAsset setVehiclePosition [_posAGL, [], 0, "CAN_COLLIDE"];
+    };
 
     private _slingDummyEnd = _asset getVariable ["WL2_slingDummyEnd", objNull];
     if (!isNull _slingDummyEnd) then {

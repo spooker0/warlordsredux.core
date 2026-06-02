@@ -36,6 +36,9 @@ private _getVehicleType = {
 private _killerType = [_assetActualType] call _getVehicleType;
 private _killedType = [_unitType] call _getVehicleType;
 
+private _killfeedDivisionUnit = uiNamespace getVariable ["WL2_killfeedRewardDivision", createHashMap];
+private _killFeedDivision = _killfeedDivisionUnit getOrDefault [_rewardType, _reward];
+
 if (_killedType == "INFANTRY") then {
 	private _currentKills = _rewardStack getOrDefault ["KILLS", 0];
 	_rewardStack set ["KILLS", _currentKills + 1];
@@ -108,9 +111,9 @@ if (_rewardType == "DEFENDING SECTOR") then {
 };
 
 if (_rewardType == "ACTIVE PROTECTION SYSTEM") then {
-	private _rewardAmount = (floor (_reward / 50)) max 1;
+	private _rewardAmount = (floor (_reward / _killFeedDivision)) max 1;
 	private _currentAPS = _rewardStack getOrDefault ["ACTIVE PROTECTION SYSTEM", 0];
-	_rewardStack set ["ACTIVE PROTECTION SYSTEM", _currentAPS + 1];
+	_rewardStack set ["ACTIVE PROTECTION SYSTEM", _currentAPS + _rewardAmount];
 };
 
 if (_rewardType == "PROJECTILE JAMMED") then {
@@ -129,13 +132,13 @@ if (_rewardType == "SPOT ASSIST") then {
 };
 
 if (_rewardType == "RECON") then {
-	private _rewardAmount = (floor (_reward / 100)) max 1;
+	private _rewardAmount = (floor (_reward / _killFeedDivision)) max 1;
 	private _currentRecon = _rewardStack getOrDefault ["RECON", 0];
 	_rewardStack set ["RECON", _currentRecon + _rewardAmount];
 };
 
 if (_rewardType == "DEMOLITION") then {
-	private _rewardAmount = (floor (_reward / 20)) max 1;
+	private _rewardAmount = (floor (_reward / _killFeedDivision)) max 1;
 	private _currentDemolitions = _rewardStack getOrDefault ["DEMOLITIONS", 0];
 	_rewardStack set ["DEMOLITIONS", _currentDemolitions + _rewardAmount];
 };

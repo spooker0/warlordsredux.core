@@ -14,6 +14,11 @@ if (!_hasAccess) exitWith {
     false
 };
 
+private _posAGL = _target modelToWorld [0, 0, 0];
+if (_posAGL # 2 > 100) exitWith {
+    false
+};
+
 private _nearbyRepair = (_target nearEntities ["All", WL_MAINTENANCE_RADIUS]) select {
     alive _x
 } select {

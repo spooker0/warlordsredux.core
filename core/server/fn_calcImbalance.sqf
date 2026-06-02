@@ -10,7 +10,7 @@ private _isNumberImbalanced = {
 
 private _ratings = profileNamespace getVariable ["WL2_playerRatings", createHashMap];
 private _playerElo = _ratings getOrDefault [_uid, WL_RATING_STARTER];
-if (_playerElo <= WL_RATING_STARTER + 300) exitWith {
+if (_playerElo <= WL_RATING_STARTER + 500) exitWith {
     call _isNumberImbalanced;
 };
 

@@ -63,14 +63,14 @@ private _squadReward = round (_killReward * 0.3 / (sqrt (count _squadmates) max 
 	private _squadmateUid = getPlayerUID _x;
 	[_squadReward, _squadmateUid, false, "Squad assist"] call WL2_fnc_fundsDatabaseWrite;
 
-	[_unit, _squadReward, "Squad assist", "#228b22"] remoteExec ["WL2_fnc_killRewardClient", _x];
+	[_unit, _squadReward, "Squad assist", WL_COLOR_SUPPORT] remoteExec ["WL2_fnc_killRewardClient", _x];
 } forEach _squadmates;
 
 private _killerUid = getPlayerUID _responsibleLeader;
 _killReward = round _killReward;
 [_killReward, _killerUid, true, "Kill"] call WL2_fnc_fundsDatabaseWrite;
 
-[_unit, _killReward, _customText, "#de0808", _assetActualType] remoteExec ["WL2_fnc_killRewardClient", _responsibleLeader];
+[_unit, _killReward, _customText, WL_COLOR_KILL, _assetActualType] remoteExec ["WL2_fnc_killRewardClient", _responsibleLeader];
 
 // Vehicle crew reward
 private _reward = round (_killReward / 4);

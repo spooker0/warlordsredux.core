@@ -48,14 +48,8 @@ private _damage = if (_baseDamage > 300 || _indirectDamage >= 125) then {
 	linearConversion [100, 2000, _projectileSpeed, 0.1, 1, true];
 };
 
-private _explosionPosition = _projectile modelToWorld [0, 0, 0];
-[_explosionPosition, [
-	["SecondaryExp", 0.5]
-]] remoteExec ["WL2_fnc_particleEffect", 0];
-
 deleteVehicle _projectile;
 
-[format ["SAM detonation! Damage to target: %1%%", round (_damage * 100)]] call WL2_fnc_smoothText;
-
 // Explosion damage handler
-[player, "samHit", _unit, _targetDetected, _damage] remoteExec ["WL2_fnc_handleClientRequest", 2];
+[format ["SAM detonation! Damage to target: %1%%", round (_damage * 100)]] call WL2_fnc_smoothText;
+[player, "samHit", _unit, _targetDetected, _damage, _projectilePosition] remoteExec ["WL2_fnc_handleClientRequest", 2];

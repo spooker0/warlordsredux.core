@@ -71,3 +71,59 @@ class CfgDebriefingSections {
 		variable = "WL_endScreen2";
 	};
 };
+
+class CfgCommunicationMenu {
+	class WLMenu_Attack {
+		text = "$STR_WL_commAttack";
+		expression = "['Attack'] call WL2_fnc_commMenu";
+		enable = "1";
+	};
+
+	class WLMenu_FollowMe {
+		text = "$STR_WL_commFollowMe";
+		expression = "['FollowMe'] call WL2_fnc_commMenu";
+		enable = "1";
+	};
+
+	class WLMenu_CoverMe {
+		text = "$STR_WL_commCoverMe";
+		expression = "['CoverMe'] call WL2_fnc_commMenu";
+		enable = "1";
+	};
+
+	class WLMenu_GetAway {
+		text = "$STR_WL_commGetAway";
+		expression = "['GetAway'] call WL2_fnc_commMenu";
+		enable = "1";
+	};
+
+	class WLMenu_Stop {
+		text = "$STR_WL_commStop";
+		expression = "['Stop'] call WL2_fnc_commMenu";
+		enable = "1";
+	};
+
+	class WLMenu_WaitForMe {
+		text = "$STR_WL_commWaitForMe";
+		expression = "['WaitForMe'] call WL2_fnc_commMenu";
+		enable = "1";
+	};
+
+	class WLMenu_StatusBingo {
+		text = "$STR_WL_commStatusBingo";
+		expression = "['StatusBingo'] call WL2_fnc_commMenu";
+		enable = "1";
+	};
+
+	class WLMenu_StatusDamaged {
+		text = "$STR_WL_commStatusDamaged";
+		expression = "['StatusDamaged'] call WL2_fnc_commMenu";
+		enable = "1";
+	};
+
+	class WLMenu_ProvideSupply {
+		text = "$STR_WL_commProvideSupply";
+		expression = "['ProvideSupply'] call WL2_fnc_commMenu";
+		enable = "1";
+	};
+};

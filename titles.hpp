@@ -295,7 +295,7 @@ class RscTitles {
 			class RscSpectrumIndicatorText: RscStructuredText {
 				idc = 17001;
 				x = 0.3;
-				y = safeZoneY + safeZoneH - 0.15;
+				y = safeZoneY + 0.15;
 				w = 0.4;
 				h = 0.15;
 				colorBackground[] = {0, 0, 0, 0};
@@ -677,22 +677,100 @@ class RscTitles {
 		};
 	};
 
-	class RscWLKillfeedMenu {
+	class RscWLKillfeedDisplay {
 		idd = -1;
 		duration = 1000000000;
 		fadein = 0;
 		fadeout = 0;
-		name = "RscWLKillfeedMenu";
-		onLoad = "uiNamespace setVariable ['RscWLKillfeedMenu', _this select 0];";
+		name = "RscWLKillfeedDisplay";
+		onLoad = "uiNamespace setVariable ['RscWLKillfeedDisplay', _this select 0];";
 		class controls {
-			class RscWLKillfeedMenu_Texture: RscText {
-				type = 106;
-				idc = 5502;
-				x = safeZoneX;
-				y = safeZoneY;
-				w = safeZoneW;
-				h = safeZoneH;
-				url = "file://src/ui/gen/killfeed.html";
+			class RscWLKillfeedDisplay_Main: RscStructuredText {
+				idc = 8000;
+				style = ST_MULTI;
+				x = 0;
+				y = 0;
+				w = 1;
+				h = 1;
+				text = "";
+				size = 0.042;
+				class Attributes {
+					align = "center";
+					color = "#ffffff";
+					font = "RobotoCondensed";
+					shadowColor = "#000000";
+				};
+			};
+			class RscWLKillfeedDisplay_Numbers: RscStructuredText {
+				idc = 8001;
+				style = ST_MULTI;
+				x = 0;
+				y = 0;
+				w = 1;
+				h = 1;
+				text = "";
+				size = 0.042;
+				class Attributes {
+					align = "right";
+					color = "#ffffff";
+					font = "RobotoCondensed";
+					shadowColor = "#000000";
+				};
+			};
+			class RscWLKillfeedDisplay_Icons: RscStructuredText {
+				idc = 8002;
+				style = ST_MULTI;
+				x = 0;
+				y = 0;
+				w = 1;
+				h = 1;
+				text = "";
+				size = 0.05;
+				class Attributes {
+					align = "center";
+					shadowColor = "#000000";
+				};
+			};
+			class RscWLKillfeedDisplay_Total: RscStructuredText {
+				idc = 8003;
+				style = ST_MULTI;
+				x = 0;
+				y = 0;
+				w = 1;
+				h = 1;
+				text = "";
+				size = 0.045;
+				class Attributes {
+					align = "right";
+					color = "#ffffff";
+					font = "RobotoCondensed";
+					shadowColor = "#000000";
+				};
+			};
+
+			class RscWLKillfeedDisplay_BadgeFrame: RscText {
+				idc = 8004;
+				x = 0.2;
+				y = safeZoneY + 0.095;
+				w = 0.6;
+				h = 0.185;
+				colorBackground[] = {0, 0, 0, 0.5};
+			};
+			class RscWLKillfeedDisplay_BadgeText: RscStructuredText {
+				idc = 8005;
+				style = ST_MULTI;
+				x = 0.2;
+				y = safeZoneY + 0.1;
+				w = 0.6;
+				h = 0.18;
+				text = "";
+				size = 0.05;
+				class Attributes {
+					align = "center";
+					color = "#ffffff";
+					font = "RobotoCondensed";
+					shadowColor = "#000000";
+				};
 			};
 		};
 	};
@@ -768,7 +846,7 @@ class RscTitles {
 				w = 0.4;
 				h = 1;
 				text = "";
-				size = 0.032;
+				size = 0.028;
 				class Attributes {
 					color = "#14cb00";
 					font = "EtelkaMonospaceProBold";

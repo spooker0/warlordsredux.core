@@ -3,36 +3,27 @@ params ["_displayText", "_reward", "_customColor", "_iconUrl"];
 
 if (WL_IsSpectator && !("SPECTATE" in _displayText)) exitWith {};
 
-private _display = uiNamespace getVariable ["RscWLKillfeedMenu", displayNull];
-if (isNull _display) then {
-	"killfeed" cutRsc ["RscWLKillfeedMenu", "PLAIN", -1, true, true];
-	_display = uiNamespace getVariable "RscWLKillfeedMenu";
+_displayText = toUpper _displayText;
+
+private _rewards = [];
+
+private _killfeedDivisionUnit = uiNamespace getVariable ["WL2_killfeedRewardDivision", createHashMap];
+
+while { _reward > 0 } do {
+	private _killFeedDivision = _killfeedDivisionUnit getOrDefault [_displayText, _reward];
+	private _currentReward = _reward min _killFeedDivision;
+	_reward = _reward - _currentReward;
+	_rewards pushBack _currentReward;
 };
 
-private _times = 1;
-if (_displayText == "RECON") then {
-	_times = (floor (_reward / 100)) max 1;
-};
-if (_displayText == "ACTIVE PROTECTION SYSTEM") then {
-	_times = (floor (_reward / 50)) max 1;
-};
-if (_displayText == "DAZZLER") then {
-	_times = (floor (_reward / 10)) max 1;
-};
-if (_displayText == "DEMOLITION") then {
-	_times = (floor (_reward / 20)) max 1;
-};
-if (_displayText == "MINE DESTROYED") then {
-	_times = (floor (_reward / 10)) max 1;
-};
-private _texture = _display displayCtrl 5502;
+private _killfeedItems = uiNamespace getVariable ["WL2_killfeedItems", []];
+{
+	_killfeedItems pushBack [
+		_iconUrl,
+		toUpper _displayText,
+		_x,
+		_customColor
+	];
+} forEach _rewards;
 
-private _killFeedItems = [
-	toUpper _displayText,
-	floor (_reward / _times),
-	_customColor,
-	_iconUrl
-];
-private _killfeedText = _texture ctrlWebBrowserAction ["ToBase64", toJSON _killFeedItems];
-private _script = format ["addKillfeed(atobr(""%1""), %2)", _killfeedText, _times];
-_texture ctrlWebBrowserAction ["ExecJS", _script];
+uiNamespace setVariable ["WL2_killfeedLastInputTime", time];

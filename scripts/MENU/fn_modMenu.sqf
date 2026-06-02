@@ -47,7 +47,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
 
                 _reportData = if (_reportData isEqualType []) then {
                     private _reportTime = _reportData select 1;
-                    [_reportData select 0, [systemTimeUTC] call MENU_fnc_printSystemTime];
+                    [_reportData select 0, [_reportTime] call MENU_fnc_printSystemTime];
                 } else {
                     [_reportData, "?"];
                 };
