@@ -30,6 +30,7 @@ if (_action == "create") exitWith {
         ["leader", _leader],
         ["members", [_leader]],
         ["side", _side],
+        ["locked", false],
         ["channel", _customChannelId]
     ];
     _squadManager pushBack _newSquad;
@@ -168,6 +169,29 @@ if (_action == "rename") exitWith {
 
     _squad set ["name", _newName];
     call _propagateChanges;
+};
+
+if (_action == "lock") exitWith {
+    // Lock squad
+    private _playerId = _params select 0;
+    private _lockStatus = _params select 1;
+
+    private _squad = ["getSquadForPlayer", [_playerId]] call SQD_fnc_query;
+    if (count _squad == 0) exitWith {}; // player not in any squad
+
+    _squad set ["locked", _lockStatus];
+    call _propagateChanges;
+};
+
+if (_action == "disband") exitWith {
+    // Disband squad
+    private _squadLeaderId = _params select 0;
+
+    private _squad = ["getSquadForPlayer", [_squadLeaderId]] call SQD_fnc_query;
+    if (count _squad == 0) exitWith {}; // player not in any squad
+
+    _squad set ["members", []];
+    ["cleanUp"] call SQD_fnc_server;
 };
 
 if (_action == "earnPoints") exitWith {

@@ -89,3 +89,9 @@ private _unitsToMove = (units player) select {
 
 uiSleep 1;
 titleCut ["", "BLACK IN", 1];
+
+private _position = getPosASL player;
+private _playersToPlay = allPlayers select {
+	_x distance2D _position < 50
+};
+[_position] remoteExec ["WL2_fnc_playSoundArrival", _playersToPlay];

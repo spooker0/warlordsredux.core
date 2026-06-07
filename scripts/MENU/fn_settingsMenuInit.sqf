@@ -31,11 +31,8 @@ _texture ctrlAddEventHandler ["JSDialog", {
     if (_controlType == "button") then {
         closeDialog 0;
         switch (_id) do {
-            case "SQUADS": {
-                0 spawn SQD_fnc_menu;
-            };
-            case "VEHICLES": {
-                0 spawn WL2_fnc_vehicleManager;
+            case "SPAWN": {
+                0 spawn SQD_fnc_initSquadMenu;
             };
             case "BADGES": {
                 0 spawn RWD_fnc_badgeMenu;
@@ -71,8 +68,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
 _texture ctrlAddEventHandler ["PageLoaded", {
     params ["_texture"];
     private _settingsMenu = [
-        ["button", "SQUADS", "a3\3den\data\displays\display3den\panelright\modegroups_ca.paa"],
-        ["button", "VEHICLES", "a3\soft_f_beta\mrap_03\data\ui\mrap_03_hmg_ca.paa"],
+        ["button", "SPAWN", "a3\3den\data\displays\display3den\panelright\modegroups_ca.paa"],
         ["button", "BADGES", "a3\ui_f\data\gui\rsc\rscdisplayarsenal\insignia_ca.paa"],
         ["button", "REPORT", "A3\ui_f\data\map\markers\handdrawn\warning_CA.paa"],
         ["button", "POLL", "A3\ui_f\data\map\markers\handdrawn\unknown_CA.paa"],
@@ -171,10 +167,10 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["checkbox", "Spawn with rangefinder", ["spawnWithRangefinder", true]],
         ["checkbox", "AI follow default", ["aiFollowDefault", true]],
         ["checkbox", "Default VTOL auto mode off", ["defaultOffVtolAuto", false]],
+        ["checkbox", "Hide spawn menu PiP", ["hideSpawnMenuPiP", false]],
         ["category", "Hide scroll menus (requires respawn)"],
-        ["checkbox", "Hide: Squad menu", ["hideSquadMenu", false]],
+        ["checkbox", "Hide: Spawn menu", ["hideSpawnMenu", false]],
         ["checkbox", "Hide: Buy menu", ["hideBuyMenu", false]],
-        ["checkbox", "Hide: Vehicle manager", ["hideVehicleManager", false]],
         ["checkbox", "Hide: Help menu", ["hideHelpMenu", false]],
         ["checkbox", "Hide: Frontline action", ["hideFrontlineMenu", false]],
         ["category", "Control hints"],

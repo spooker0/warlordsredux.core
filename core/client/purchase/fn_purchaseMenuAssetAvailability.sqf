@@ -124,8 +124,7 @@ if (_ret) then {
 		case "FTSquad": {
 			[
 				[WL2_fnc_checkPlayerInVehicle],
-				[WL2_fnc_checkNearbyEnemies],
-				[WL2_fnc_checkFastTravelSquad]
+				[WL2_fnc_checkNearbyEnemies]
 			]
 		};
 		case "FundsTransfer": {

@@ -8,10 +8,13 @@ import RscEdit;
 import RscListBox;
 import RscMapControl;
 import RscPicture;
+import RscPictureKeepAspect;
 import RscProgress;
 import RscShortcutButton;
 import RscStructuredText;
 import RscText;
+import RscActiveText;
+import RscActivePictureKeepAspect;
 import ScrollBar;
 
 #include "core\includes.inc"
@@ -31,5 +34,6 @@ import ScrollBar;
 #include "scripts\MENU\ui.hpp"
 #include "scripts\PERF\ui.hpp"
 #include "scripts\POLL\ui.hpp"
+#include "scripts\SQD\ui.hpp"
 #include "scripts\WLC\ui.hpp"
 #include "scripts\WLM\ui.hpp"

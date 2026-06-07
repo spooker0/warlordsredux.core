@@ -39,6 +39,8 @@ player setVariable ["WL2_respawnBag", _freshTent];
 _freshTent enableWeaponDisassembly false;
 playSoundUI ["a3\ui_f\data\sound\cfgnotifications\communicationmenuitemadded.wss"];
 
+_freshTent addEventHandler ["HandleDamage", { 1 }];
+
 [_freshTent, player] remoteExec ["WL2_fnc_setupSimpleAsset", 0, true];
 _freshTent setVariable ["WL2_installable", "Land_BagFence_Round_F", true];
 

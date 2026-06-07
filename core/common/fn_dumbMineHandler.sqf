@@ -8,6 +8,8 @@ private _ownedVehicleVar = if (_isServer) then {
     format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
 };
 
+private _lastPlayedVO = 0;
+
 while { !BIS_WL_missionEnd } do {
     private _side = if (_isServer) then {
         independent
@@ -54,6 +56,7 @@ while { !BIS_WL_missionEnd } do {
         continue;
     };
 
+    private _playVO = false;
     {
         private _minefield = _x;
 
@@ -89,9 +92,16 @@ while { !BIS_WL_missionEnd } do {
             _mine setPosATL _vehiclePosition;
             triggerAmmo _mine;
 
+            _playVO = true;
+
             missionNamespace setVariable ["WL2_mineExplosion", true, 2];
         } forEach _vehiclesInThisMinefield;
     } forEach _enemyMines;
+
+    if (_playVO && serverTime - _lastPlayedVO > 10) then {
+        playSoundUI ["a3\dubbing_f_epb\b_in\x15_mines\b_in_x15_mines_jam_0.ogg", 5, 1, false, 0.31];
+        _lastPlayedVO = serverTime;
+    };
 
     uiSleep 0.3;
 };

@@ -81,40 +81,6 @@ addMissionEventHandler ["HandleChatMessage", {
 		};
 	}];
 
-	_display displayAddEventHandler ["KeyDown", {
-		params ["_display", "_key"];
-		if (WL_ISUP(player)) exitWith {};
-		if (_key in actionKeys "ActionContext" || _key in actionKeys "Action") then {
-			["Select"] call WL2_fnc_deadActions;
-			true;
-		};
-	}];
-
-	_display displayAddEventHandler ["KeyUp", {
-		params ["_display", "_key"];
-		if (WL_ISUP(player)) exitWith {};
-		if (_key in actionKeys "ActionContext" || _key in actionKeys "Action") then {
-			["Unselect"] call WL2_fnc_deadActions;
-			true;
-		};
-	}];
-
-	_display displayAddEventHandler ["MouseZChanged", {
-		params ["_displayOrControl", "_scroll"];
-		if (WL_ISUP(player)) exitWith {};
-		private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
-		if (!isNull _display) exitWith {};
-
-		if (_scroll < 0) then {
-			["Next"] call WL2_fnc_deadActions;
-			true;
-		};
-		if (_scroll > 0) then {
-			["Previous"] call WL2_fnc_deadActions;
-			true;
-		};
-	}];
-
 	// intentionally separate handler
 	_display displayAddEventHandler ["KeyDown", {
 		private _key = _this # 1;

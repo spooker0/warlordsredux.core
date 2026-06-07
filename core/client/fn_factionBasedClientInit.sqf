@@ -43,6 +43,7 @@ switch (side group _unit) do {
 };
 
 _unit linkItem "Integrated_NVG_TI_0_F";
+_unit unlinkItem "ItemWatch";
 _unit setUnitTrait ["loadCoef", 0.6];
 _unit setUnitTrait ["explosiveSpecialist", true];
 _unit setStamina 100;

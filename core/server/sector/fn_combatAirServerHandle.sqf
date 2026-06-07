@@ -16,10 +16,10 @@ private _broadcastActionToSide = {
 private _targetName = _target getVariable ["WL2_name", "Forward Airbase"];
 private _sideName = [_combatAirSide] call WL2_fnc_sideToFaction;
 
-private _friendlyMessage = format ["%1 has initiated combat air patrol over %2.", _senderName, _targetName];
+private _friendlyMessage = format ["%1 has established a no-fly zone over %2.", _senderName, _targetName];
 [_combatAirSide, _friendlyMessage] call _broadcastActionToSide;
 
-private _enemyMessage = format ["%1 (%2) has initiated combat air patrol over %3.", _sideName, _senderName, _targetName];
+private _enemyMessage = format ["%1 (%2) has established a no-fly zone over %3.", _sideName, _senderName, _targetName];
 private _enemySide = switch (_combatAirSide) do {
     case west : { east };
     case east : { west };

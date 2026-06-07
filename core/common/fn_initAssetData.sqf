@@ -63,6 +63,10 @@ missionNamespace setVariable ["WL2_assetData", _requisitionData];
 private _menuButtonIconMap = createHashMapFromArray [
     ["add-waypoint", "A3\ui_f\data\map\markers\military\box_CA.paa"],
     ["ai-follow", "A3\ui_f\data\map\markers\military\box_CA.paa"],
+    ["asset-rearm", "a3\ui_f\data\igui\cfg\simpletasks\types\rearm_ca.paa"],
+    ["asset-refuel", "a3\ui_f\data\igui\cfg\simpletasks\types\refuel_ca.paa"],
+    ["asset-repair", "a3\ui_f\data\igui\cfg\simpletasks\types\repair_ca.paa"],
+    ["auto-set", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
     ["control-driver", "a3\ui_f\data\IGUI\Cfg\CommandBar\imageDriver_ca.paa"],
     ["control-gunner", "a3\ui_f\data\IGUI\Cfg\CommandBar\imageGunner_ca.paa"],
     ["cycle-waypoint", "A3\ui_f\data\map\markers\military\box_CA.paa"],

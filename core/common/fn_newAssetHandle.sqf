@@ -447,16 +447,21 @@ if (_asset isKindOf "Man") then {
 		_asset setVariable ["WL2_canDemolish", true, true];
 	};
 
-	private _singleton = WL_ASSET_GET(_data, "singleton", 0) > 0;
-	if (_singleton) then {
+	private _singleton = WL_ASSET_GET(_data, "singleton", 0);
+	if (_singleton > 0) then {
 		private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", _playerUID];
 		private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
 		private _limitedOwnedVehicle = _ownedVehicles select {
 			WL_ASSET_TYPE(_x) == _assetActualType && _x != _asset
 		};
+
+		private _sortedLimitedVehicles = [_limitedOwnedVehicle, [], { _x getVariable ["WL2_singletonCreationTime", 0] }, "DESCEND"] call BIS_fnc_sortBy;
+		_sortedLimitedVehicles = _sortedLimitedVehicles select [_singleton - 1];
 		{
 			deleteVehicle _x;
-		} forEach _limitedOwnedVehicle;
+		} forEach _sortedLimitedVehicles;
+
+		_asset setVariable ["WL2_singletonCreationTime", serverTime, true];
 	};
 
 	if (WL_ASSET_GET(_data, "hasTurretVisualizer", 0) > 0) then {

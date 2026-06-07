@@ -144,13 +144,26 @@ class CfgFunctions {
 	class SQD {
 		class Default {
 			file = "src\scripts\SQD";
+			class actionSpawn {};
+			class actionVehicle {};
 			class client {};
+			class contextBadge {};
+			class contextInvite {};
+			class contextPlayer {};
+			class contextSquad {};
+			class contextVehicle {};
+			class executeSpawn {};
 			class initClient {};
 			class initServer {};
-			class menu {};
+			class initSquadMenu {};
 			class query {};
-			class sendData {};
+			class renderSquads {};
+			class renderSpawns {};
+			class renderStatus {};
+			class renderText {};
+			class renderVehicles {};
 			class server {};
+			class setSpawnCam {};
 		};
 	};
 	class WL2 {
@@ -197,6 +210,7 @@ class CfgFunctions {
 			class pingFixInit {};
 			class pingSounds {};
 			class playerEventHandlers {};
+			class playSoundArrival {};
 			class prompt {};
 			class publishScriptLog {};
 			class rebalanced {};
@@ -272,6 +286,7 @@ class CfgFunctions {
 			class rappelAction {};
 			class rappelActionEligibility {};
 			class rearmAction {};
+			class rearmActionEligibility {};
 			class rearmAPSEligibility {};
 			class rebase {};
 			class rebaseActionEligibility {};
@@ -292,7 +307,6 @@ class CfgFunctions {
 			class scannerAction {};
 			class secureWreck {};
 			class secureWreckAction {};
-			class sendVehicleData {};
 			class setupForwardBaseAction {};
 			class setupForwardBaseEligibility {};
 			class setupForwardBaseMp {};
@@ -304,8 +318,6 @@ class CfgFunctions {
 			class turretVisualizerAction {};
 			class vehicleLockAction {};
 			class vehicleLockUpdate {};
-			class vehicleManager {};
-			class vehicleManagerAction {};
 		};
 		class ClientDraw {
 			file = "src\core\client\draw";
@@ -347,7 +359,6 @@ class CfgFunctions {
 		class ClientKill {
 			file = "src\core\client\kill";
 			class askForgiveness {};
-			class deadActions {};
 			class deathInfo {};
 			class killHistory {};
 			class killNotify {};

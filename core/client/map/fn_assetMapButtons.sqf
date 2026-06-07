@@ -15,12 +15,59 @@ private _assetName = if (isPlayer _asset) then {
 _asset setVariable ["WL2_mapButtonText", _assetName];
 
 private _ownsVehicle = (_asset getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player;
-private _hasFullAccess = _asset getVariable ["WL2_accessControl", -1] == 0;
-if (!isPlayer _asset && (_ownsVehicle || _hasFullAccess)) then {
+private _hasFullAccess = _asset getVariable ["WL2_accessControl", -1] == 0 || _ownsVehicle;
+if (!isPlayer _asset && _hasFullAccess) then {
     [_asset, _targetId, "remove", "<t color='#ff0000'>Remove</t>", {
         params ["_asset"];
         [_asset] spawn WL2_fnc_removeAsset;
     }, true] call WL2_fnc_addTargetMapButton;
+};
+
+if (_hasFullAccess) then {
+    [_asset, _targetId, "asset-rearm", "Rearm", {
+        params ["_asset"];
+        private _rearmTime = WL_UNIT(_asset, "rearm", 600);
+        _asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
+
+        private _pylonConfig = configFile >> "CfgVehicles" >> typeOf _asset >> "Components" >> "TransportPylonsComponent";
+        private _isAircraft = !(isNull _pylonConfig);
+
+        if (_isAircraft) then {
+            private _attachments = _asset getVariable ["WLM_assetAttachments", [["default"]]];
+            if (count _attachments > 0 && (_attachments # 0 # 0 == "default")) then {
+                private _defaultAttachments = [];
+                {
+                    _defaultAttachments pushBack [_x # 3, _x # 2];
+                } forEach (getAllPylonsInfo _asset);
+                _asset setVariable ["WLM_assetAttachments", _defaultAttachments, true];
+                _attachments = _defaultAttachments;
+            };
+            [_asset, _attachments, true] remoteExec ["WLM_fnc_applyPylon", _asset];
+        } else {
+            [_asset] remoteExec ["WLM_fnc_rearmVehicle", _asset];
+        };
+
+        playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Rearm.wss", _asset, false, getPosASL _asset, 2, 1, 75];
+    }, true, "assetRearm"] call WL2_fnc_addTargetMapButton;
+
+    [_asset, _targetId, "asset-refuel", "Refuel", {
+        params ["_asset"];
+        playSound3D ["a3\sounds_f\sfx\ui\vehicles\vehicle_refuel.wss", _asset, false, getPosASL _asset, 2, 1, 75];
+        [_asset, 1] remoteExec ["setFuel", _asset];
+    }, true, "assetRefuel"] call WL2_fnc_addTargetMapButton;
+
+    [_asset, _targetId, "asset-repair", "Repair", {
+        params ["_asset"];
+        private _nextRepairTime = _asset getVariable ["WL2_nextRepair", 0];
+        if (_nextRepairTime <= serverTime) then {
+            [player, "repair", _nextRepairTime, 0, _asset] remoteExec ["WL2_fnc_handleClientRequest", 2];
+            playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Repair.wss", _asset, false, getPosASL _asset, 2, 1, 75];
+            [localize "STR_WL_assetRepaired"] call WL2_fnc_smoothText;
+            _asset setVariable ["WL2_nextRepair", serverTime + WL_COOLDOWN_REPAIR, true];
+        } else {
+            playSoundUI ["AddItemFailed"];
+        };
+    }, true, "assetRepair"] call WL2_fnc_addTargetMapButton;
 };
 
 if (side group player == independent && _asset isKindOf "Man" && !isPlayer _asset) then {
@@ -383,10 +430,10 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         [_asset] spawn {
             params ["_asset"];
             private _message = format [
-                "Are you sure you want to call in combat air patrol? This will cost you %1%2 and put it on a %3 minute cooldown.",
+                "Are you sure you want to establish a no-fly zone? This will cost you %1%2 and put it on a %3 minute cooldown.",
                 WL_MONEY_SIGN, WL_COST_COMBATAIR, round (WL_COOLDOWN_CAP / 60)
             ];
-            private _result = ["Combat Air Patrol", _message, "OK", "Cancel"] call WL2_fnc_prompt;
+            private _result = [localize "STR_WL_combatAirPatrol", _message, "OK", "Cancel"] call WL2_fnc_prompt;
 
             if (!_result) exitWith {
                 playSoundUI ["AddItemFailed"];
@@ -399,7 +446,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     [
         _asset, _targetId,
         "order-cap",
-        "Order combat air patrol",
+        localize "STR_WL_combatAirPatrol",
         _combatAirExecute,
         true,
         "combatAirPatrolFOB",
@@ -481,6 +528,9 @@ if (_operateAccess && _isUav) then {
                 switchCamera _asset;
                 player remoteControl (driver _asset);
 
+                private _squadMenu = uiNamespace getVariable ["SQD_Menu", displayNull];
+                _squadMenu closeDisplay 0;
+
                 private _eligibleDrones = missionNamespace getVariable ["WL2_eligibleDrones", []];
                 _eligibleDrones pushBackUnique _asset;
                 missionNamespace setVariable ["WL2_eligibleDrones", _eligibleDrones];
@@ -497,6 +547,9 @@ if (_operateAccess && _isUav) then {
                 switchCamera _asset;
                 player remoteControl (gunner _asset);
 
+                private _squadMenu = uiNamespace getVariable ["SQD_Menu", displayNull];
+                _squadMenu closeDisplay 0;
+
                 private _eligibleDrones = missionNamespace getVariable ["WL2_eligibleDrones", []];
                 _eligibleDrones pushBackUnique _asset;
                 missionNamespace setVariable ["WL2_eligibleDrones", _eligibleDrones];
@@ -504,37 +557,42 @@ if (_operateAccess && _isUav) then {
             };
         }, true] call WL2_fnc_addTargetMapButton;
     };
+
+    private _isAutoText = if (isAutonomous _asset) then {
+        "<t color='#00ff00'>AI Controller: On</t>";
+    } else {
+        "<t color='#ff0000'>AI Controller: Off</t>";
+    };
+
+    [_asset, _targetId, "auto-set", _isAutoText, {
+        params ["_asset"];
+        private _isAuto = isAutonomous _asset;
+        _isAuto = !_isAuto;
+        [_asset, _isAuto] remoteExec ["setAutonomous", 0];
+        if (_isAuto) then {
+            playSoundUI ["a3\sounds_f_bootcamp\sfx\vr\simulation_restart.wss"];
+        } else {
+            playSoundUI ["a3\sounds_f_bootcamp\sfx\vr\simulation_fatal.wss"];
+        };
+
+        // return
+        if (isAutonomous _asset) then {
+            "<t color='#ff0000'>AI Controller: Off</t>";
+        } else {
+            "<t color='#00ff00'>AI Controller: On</t>";
+        }
+    }, false] call WL2_fnc_addTargetMapButton;
 };
 
-// Fast Travel SL Button
-private _fastTravelSLExecute = {
-    params ["_asset"];
-    ["ftSquadLeader"] spawn SQD_fnc_client;
-};
-[
-    _asset, _targetId,
-    "ft-squad-leader",
-    "Fast travel squad leader",
-    _fastTravelSLExecute,
-    true,
-    "fastTravelSL",
-    [
-        WL_COST_FTSL,
-        "FTSquadLeader",
-        "Fast Travel"
-    ]
-] call WL2_fnc_addTargetMapButton;
-
-// Fast Travel Squad Button
+// // Fast Travel Squad Button
 private _fastTravelSquadmateExecute = {
     params ["_asset"];
-    private _playerId = getPlayerID _asset;
-    ["ftSquad", [_playerId]] spawn SQD_fnc_client;
+    [_asset] spawn WL2_fnc_executeFastTravelVehicle;
 };
 [
     _asset, _targetId,
     "ft-squad",
-    "Fast travel squad member",
+    "Fast travel",
     _fastTravelSquadmateExecute,
     true,
     "fastTravelSquad",

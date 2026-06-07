@@ -18,12 +18,14 @@ openMap [false, false];
 
 private _destination = [];
 private _strongholdHasSpot = false;
+private _travelingHome = false;
 
 switch (_fastTravelMode) do {
 	case 0: {
 		private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
 		if (_homeBase == _location && WL_TARGET_ENEMY != _homeBase) then {
 			_destination = _homeBase modelToWorld [0, 0, 0];
+			_travelingHome = true;
 		} else {
 			_destination = selectRandom ([_location] call WL2_fnc_findSpawnsInSector);
 		};
@@ -196,12 +198,6 @@ switch (_fastTravelMode) do {
 			{
 				_x setVehiclePosition [_destination, [], 3, "NONE"];
 			} forEach _tagAlong;
-
-			private _respawnBag = player getVariable ["WL2_respawnBag", objNull];
-			if (!isNull _respawnBag) then {
-				deleteVehicle _respawnBag;
-			};
-            player setVariable ["WL2_respawnBag", objNull];
         };
 	};
 	case 5: {
@@ -231,3 +227,11 @@ switch (_fastTravelMode) do {
 };
 
 titleCut ["", "BLACK IN", 1];
+
+if (!_travelingHome) then {
+	private _position = getPosASL player;
+	private _playersToPlay = allPlayers select {
+		_x distance2D _position < 50
+	};
+	[_position] remoteExec ["WL2_fnc_playSoundArrival", _playersToPlay];
+};

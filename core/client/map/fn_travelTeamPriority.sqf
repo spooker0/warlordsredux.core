@@ -75,7 +75,7 @@ if (_teamPriorityType == "sector") exitWith {
             };
             true;
         } else {
-            private _asset = [_teamPriority, true] call WL2_fnc_getSectorFTAsset;
+            private _asset = [_teamPriority] call WL2_fnc_getSectorFTAsset;
             if (isNull _asset) then {
                 private _hasDefenders = _teamPriority getVariable ["WL2_defenders", 0] > 0;
                 private _sectorIsLinked = _teamPriority in (BIS_WL_sectorsArray # 2);
@@ -95,7 +95,7 @@ if (_teamPriorityType == "sector") exitWith {
             };
         };
     } else {
-        private _asset = [_teamPriority, true] call WL2_fnc_getSectorFTAsset;
+        private _asset = [_teamPriority] call WL2_fnc_getSectorFTAsset;
         if (isNull _asset) then {
             private _canAirAssault = ([_teamPriority, "airAssault"] call WL2_fnc_mapButtonConditions) == "ok";
             if (_canAirAssault) then {

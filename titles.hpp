@@ -462,7 +462,7 @@ class RscTitles {
 				sizeEx = 0.08;
 				colorBackground[] = {0, 0, 0, 0};
 				colorText[] = {1, 1, 1, 1};
-				text = "ENEMY COMBAT AIR PATROL DETECTED!";
+				text = "ENEMY NO FLY ZONE DETECTED!";
 				lineSpacing = 0;
 			};
 			class RscWLExtendedSamWarningDisplay_Sector: RscText {

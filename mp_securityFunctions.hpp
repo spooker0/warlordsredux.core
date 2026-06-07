@@ -54,6 +54,7 @@ class CfgRemoteExec {
 		class WL2_fnc_missileDestroy {allowedTargets = 2;};
 		class WL2_fnc_mutePlayer {allowedTargets = 0;};
 		class WL2_fnc_particleEffect {allowedTargets = 0;};
+		class WL2_fnc_playSoundArrival {allowedTargets = 0;};
 		class WL2_fnc_publishRewards {allowedTargets = 0;};
 		class WL2_fnc_punishPlayer {allowedTargets = 2;};
 		class WL2_fnc_pingFix {allowedTargets = 1;};
@@ -132,6 +133,7 @@ class CfgRemoteExec {
 		class setMass {allowedTargets = 0;};
 		class setPylonLoadOut {allowedTargets = 0;};
 		class setAmmoOnPylon {allowedTargets = 0;};
+		class setCaptive {allowedTargets = 0;};
 		class setPhysicsCollisionFlag {allowedTargets = 0;};
 		class setPylonsPriority {allowedTargets = 0;};
 		class setRepairCargo {allowedTargets = 0;};

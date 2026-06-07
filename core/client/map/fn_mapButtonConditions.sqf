@@ -99,27 +99,27 @@ switch (_conditionName) do {
         if !(_target in _airfieldSectors) exitWith { "" };
 
         private _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
-        if (_combatAirActive) exitWith { "Combat air patrol is already active for this airbase." };
+        if (_combatAirActive) exitWith { "No-fly zone is already active for this airbase." };
 
         private _nextCombatAirTime = _target getVariable ["WL2_nextCombatAir", -9999];
-        if (_nextCombatAirTime > serverTime) exitWith { "Combat air patrol is on cooldown for this airbase." };
+        if (_nextCombatAirTime > serverTime) exitWith { "No-fly zone is on cooldown for this airbase." };
 
         "ok";
     };
     case "combatAirPatrolHome": {
         private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
         if (_timeSinceStart < WL_COMBAT_AIR_HOME_TIME) exitWith {
-            format ["Combat air patrol for home base locked: %1", [WL_COMBAT_AIR_HOME_TIME - _timeSinceStart, "MM:SS"] call BIS_fnc_secondsToString]
+            format ["No-fly zone for home base locked: %1", [WL_COMBAT_AIR_HOME_TIME - _timeSinceStart, "MM:SS"] call BIS_fnc_secondsToString]
         };
 
         private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
         if !(_target in _homeBase) exitWith { "" };
 
         private _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
-        if (_combatAirActive) exitWith { "Combat air patrol is already active for this airbase." };
+        if (_combatAirActive) exitWith { "No-fly zone is already active for this airbase." };
 
         private _nextCombatAirTime = _target getVariable ["WL2_nextCombatAir", -9999];
-        if (_nextCombatAirTime > serverTime) exitWith { "Combat air patrol is on cooldown for this airbase." };
+        if (_nextCombatAirTime > serverTime) exitWith { "No-fly zone is on cooldown for this airbase." };
 
         "ok";
     };
@@ -131,7 +131,7 @@ switch (_conditionName) do {
         if !(_target in _airfieldSectors) exitWith { "" };
 
         private _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
-        if (_combatAirActive) exitWith { "Combat air patrol is already active for this airbase." };
+        if (_combatAirActive) exitWith { "No-fly zone is already active for this airbase." };
 
         "ok";
     };
@@ -294,12 +294,12 @@ switch (_conditionName) do {
         if (!alive _target) exitWith { "Forward base has been destroyed." };
 
         private _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
-        if (_combatAirActive) exitWith { "Combat air patrol is already active for this airbase." };
+        if (_combatAirActive) exitWith { "No-fly zone is already active for this airbase." };
 
         private _nextCombatAirTime = _target getVariable ["WL2_nextCombatAir", -9999];
         if (_nextCombatAirTime > serverTime) exitWith {
             private _timeRemaining = [(_nextCombatAirTime - serverTime) max 0, "MM:SS"] call BIS_fnc_secondsToString;
-            format ["Combat air patrol is on cooldown for this airbase: %1", _timeRemaining]
+            format ["No-fly zone is on cooldown for this airbase: %1", _timeRemaining]
         };
 
         "ok";
@@ -362,6 +362,48 @@ switch (_conditionName) do {
         private _currentPriority = missionNamespace getVariable [_teamPriorityVar, objNull];
         if (_target == _currentPriority) exitWith {
             "This is already designated as your team's priority target.";
+        };
+
+        "ok";
+    };
+    case "assetRearm": {
+        if (!alive _target) exitWith { "" };
+
+        private _cooldown = (_target getVariable ["BIS_WL_nextRearm", 0]) - serverTime;
+        if (_cooldown > 0) exitWith {
+            format ["Vehicle rearm is on cooldown: %1", [_cooldown, "MM:SS"] call BIS_fnc_secondsToString]
+        };
+
+        private _nearbyVehicles = (_target nearEntities WL_MAINTENANCE_RADIUS) select { alive _x } select {
+            _x getVariable ["WLM_ammoCargo", 0] > 250
+        };
+        if (count _nearbyVehicles > 0) then {
+            "ok";
+        } else {
+            "No nearby vehicles available for rearm.";
+        };
+    };
+    case "assetRefuel": {
+        if (!alive _target) exitWith { "" };
+
+        private _canRefuel = [_target, player] call WL2_fnc_refuelActionEligibility;
+        if (!_canRefuel) exitWith {
+            "Vehicle must be stopped near fuel tank to be eligible for refuel."
+        };
+
+        "ok";
+    };
+    case "assetRepair": {
+        if (!alive _target) exitWith { "" };
+
+        private _nextRepairTime = _target getVariable ["WL2_nextRepair", 0];
+        if (serverTime < _nextRepairTime) exitWith {
+            format ["Vehicle repair is on cooldown: %1", [_nextRepairTime - serverTime, "MM:SS"] call BIS_fnc_secondsToString]
+        };
+
+        private _canRepair = [_target, player] call WL2_fnc_repairActionEligibility;
+        if (!_canRepair) exitWith {
+            "Vehicle must be near repair asset to be eligible for repair."
         };
 
         "ok";

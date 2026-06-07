@@ -109,9 +109,9 @@ private _callCombatAir = [
     "NearestCombatAir",
     WL_COST_COMBATAIR,
     [],
-    "Call Combat Air Patrol",
+    localize "STR_WL_combatAirPatrol",
     "a3\ui_f_jets\data\gui\cfg\hints\aircraftdamage_ca.paa",
-    "Call in combat air patrol on the nearest eligible sector or forward base."
+    localize "STR_WL_combatAirPatrolInfo"
 ];
 private _airDefenseIndex = _categories find "Air Defense";
 private _airDefenseArray = _purchaseable # _airDefenseIndex;

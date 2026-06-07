@@ -221,11 +221,10 @@ if !(isDedicated) then {
 	} forEach allCurators;
 #endif
 
-private _squadActionText = format ["<t color='#00FFFF'>%1</t>", localize "STR_WL_squads"];
-private _squadActionId = player addAction[_squadActionText, {
-	0 spawn SQD_fnc_menu
-}, [], -100, false, false, "", "", 0];
-player setUserActionText [_squadActionId, _squadActionText, "<img size='2' image='\a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa'/>"];
+player addAction [
+	format ["<t color='#00FFFF'>%1 (Key: %2)</t>", "Spawn Menu", (actionKeysNames ["watch", 1, "Keyboard"]) regexReplace ["""", ""]],
+	{ 0 spawn SQD_fnc_initSquadMenu; }, [], -100, false, false, "watch", "", 0
+];
 
 uiNamespace setVariable ["WL2_canBuy", true];
 uiNamespace setVariable ["WL2_chatHistory", []];
@@ -275,7 +274,6 @@ if (!isServer) then {
 0 spawn WL2_fnc_helmetInterface;
 0 spawn WL2_fnc_repairActionUpdate;
 0 spawn WL2_fnc_lockActionUpdate;
-call WL2_fnc_vehicleManagerAction;
 
 ["Player", true] call RWD_fnc_addBadge;
 player setVariable ["WL2_currentBadge", profileNamespace getVariable ["WL2_currentBadge", "Player"], true];

@@ -53,11 +53,6 @@ if (_isBulkRemoveActive) then {
         };
         missionNamespace setVariable [_ownedVehiclesVar, _ownedVehicles, true];
 
-        private _texture = _asset getVariable ["WL2_vehicleManagerTexture", controlNull];
-        if (!isNull _texture) then {
-            [_texture] call WL2_fnc_sendVehicleData;
-        };
-
         playSoundUI ["AddItemOK", 1];
         [format ["All %1 deleted!", _displayName]] call WL2_fnc_smoothText;
     } else {
@@ -87,11 +82,6 @@ if (_isBulkRemoveActive) then {
         };
 
         deleteVehicle _asset;
-
-        private _texture = _asset getVariable ["WL2_vehicleManagerTexture", controlNull];
-        if (!isNull _texture) then {
-            [_texture] call WL2_fnc_sendVehicleData;
-        };
 
         playSoundUI ["AddItemOK", 1];
         [format [localize "STR_WL_assetDeleted", _displayName]] call WL2_fnc_smoothText;

@@ -80,6 +80,29 @@ if (_action == "invited") exitWith {
     ] spawn WL2_fnc_timedPrompt;
 };
 
+if (_action == "join") exitWith {
+    private _squadLeader = _params select 0;
+    ["add", [_squadLeader, getPlayerID player]] remoteExec ["SQD_fnc_server", 2];
+};
+
+if (_action == "lock") exitWith {
+    private _squad = ["getSquadForPlayer", [getPlayerID player]] call SQD_fnc_query;
+    private _isLocked = _squad getOrDefault ["locked", false];
+    private _newLockStatus = !_isLocked;
+
+    if (_newLockStatus) then {
+        playSoundUI ["a3\sounds_f\structures\doors\genericdoors\slam1.wss"];
+    } else {
+        playSoundUI ["a3\sounds_f\structures\doors\genericdoors\knob1.wss"];
+    };
+
+    ["lock", [getPlayerID player, _newLockStatus]] remoteExec ["SQD_fnc_server", 2];
+};
+
+if (_action == "disband") exitWith {
+    ["disband", [getPlayerID player]] remoteExec ["SQD_fnc_server", 2];
+};
+
 if (_action == "newjoin") exitWith {
     private _joinerId = _params select 0;
     private _joiner = ["getPlayerForID", [_joinerId]] call SQD_fnc_query;

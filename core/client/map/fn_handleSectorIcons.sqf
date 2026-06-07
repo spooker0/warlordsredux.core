@@ -85,13 +85,13 @@ private _cooldown = if (_sector in [WL2_base1, WL2_base2]) then {
 };
 private _combatAirText = if (_isCombatAirActive) then {
     [
-        format ["Combat air patrol active: %1", [_nextCombatAir - _cooldown - serverTime, "MM:SS"] call BIS_fnc_secondsToString],
+        format ["No-fly zone active: %1", [_nextCombatAir - _cooldown - serverTime, "MM:SS"] call BIS_fnc_secondsToString],
         [0, 1, 0, 1]
     ]
 } else {
     if (_combatAirCD > 0) then {
         [
-            format ["%1: %2", "Combat air patrol timeout", [ceil _combatAirCD, "MM:SS"] call BIS_fnc_secondsToString],
+            format ["%1: %2", "No fly-zone timeout", [ceil _combatAirCD, "MM:SS"] call BIS_fnc_secondsToString],
             [1, 0, 0, 1]
         ];
     } else {

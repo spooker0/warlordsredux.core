@@ -40,11 +40,12 @@ if (side group player == independent) then {
 0 spawn WL2_fnc_installAction;
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-private _hideSquadMenu = _settingsMap getOrDefault ["hideSquadMenu", false];
-if (!_hideSquadMenu) then {
-	private _squadActionText = format ["<t color='#00FFFF'>%1</t>", localize "STR_WL_squads"];
-	private _squadActionId = player addAction[_squadActionText, { 0 spawn SQD_fnc_menu }, [], -100, false, false, "", "", 0];
-	player setUserActionText [_squadActionId, _squadActionText, "<img size='2' image='\a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa'/>"];
+private _hideSpawnMenu = _settingsMap getOrDefault ["hideSpawnMenu", false];
+if (!_hideSpawnMenu) then {
+	player addAction [
+		format ["<t color='#00FFFF'>%1 (Key: %2)</t>", "Spawn Menu", (actionKeysNames ["watch", 1, "Keyboard"]) regexReplace ["""", ""]],
+		{ 0 spawn SQD_fnc_initSquadMenu; }, [], -100, false, false, "watch", "", 0
+	];
 };
 
 private _playerSquad = ["getSquadForPlayer", [getPlayerID player]] call SQD_fnc_query;
@@ -82,7 +83,6 @@ player setVariable ["WL2_hasGrapple", 0];
 
 0 spawn WL2_fnc_controlDroneActions;
 call WL2_fnc_buyMenuAction;
-call WL2_fnc_vehicleManagerAction;
 call WL2_fnc_rappelAction;
 call WL2_fnc_demolishAction;
 call WL2_fnc_hmdSettingsAction;
@@ -95,6 +95,6 @@ call WL2_fnc_afkAction;
 
 BIS_WL_playerSide call WL2_fnc_parsePurchaseList;
 
-[false] call WL2_fnc_spawnAtBase;
+0 spawn SQD_fnc_executeSpawn;
 
 player setVariable ["WL2_unconscious", false, true];

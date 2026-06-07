@@ -49,10 +49,10 @@ private _cooldown = if (_closestTarget in [WL2_base1, WL2_base2]) then {
 	WL_COOLDOWN_CAP
 };
 private _message = format [
-    "Are you sure you want to call in combat air patrol on %1? This will cost you %2%3 and put it on a %4 minute cooldown.",
+    "Are you sure you want to establish a no-fly zone over %1? This will cost you %2%3 and put it on a %4 minute cooldown.",
     _closestTargetName, WL_MONEY_SIGN, _cost, round (_cooldown / 60)
 ];
-private _result = ["Combat Air Patrol", _message, "OK", "Cancel"] call WL2_fnc_prompt;
+private _result = [localize "STR_WL_combatAirPatrol", _message, "OK", "Cancel"] call WL2_fnc_prompt;
 if (!_result) exitWith {
     playSoundUI ["AddItemFailed"];
 };

@@ -33,14 +33,6 @@ if ([_class] call _isBuildable) then {
     _typeLimit = WL_MAX_ASSETS;
 };
 
-private _isSmartMine = WL_ASSET(_class, "smartMineAP", 0) > 0 || WL_ASSET(_class, "smartMineAT", 0) > 0;
-if (_isSmartMine) then {
-    _limitedVehicles = _ownedVehicles select {
-        _x getVariable ["WL2_isAdvancedMines", false];
-    };
-    _typeLimit = WL_MAX_ADVANCED_MINES;
-};
-
 if (count _limitedVehicles >= _typeLimit) exitWith {
     [false, localize "STR_WL_assetLimitReached"];
 };

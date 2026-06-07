@@ -128,11 +128,12 @@ private _combatAirExecute = {
     params ["_sector"];
     [_sector] spawn {
         params ["_sector"];
+        private _sectorName = _sector getVariable ["WL2_name", "Sector"];
         private _message = format [
-            "Are you sure you want to call in combat air patrol? This will cost you %1%2 and put it on a %3 minute cooldown.",
-            WL_MONEY_SIGN, WL_COST_COMBATAIR, round (WL_COOLDOWN_CAP / 60)
+            "Are you sure you want to establish a no-fly zone over %1? This will cost you %2%3 and put it on a %4 minute cooldown.",
+            _sectorName, WL_MONEY_SIGN, WL_COST_COMBATAIR, round (WL_COOLDOWN_CAP / 60)
         ];
-        private _result = ["Combat Air Patrol", _message, "OK", "Cancel"] call WL2_fnc_prompt;
+        private _result = [localize "STR_WL_combatAirPatrol", _message, "OK", "Cancel"] call WL2_fnc_prompt;
 
         if (!_result) exitWith {
             playSoundUI ["AddItemFailed"];
@@ -145,7 +146,7 @@ private _combatAirExecute = {
 [
     _sector, _targetId,
     "order-cap",
-    "Order combat air patrol",
+    localize "STR_WL_combatAirPatrol",
     _combatAirExecute,
     true,
     "combatAirPatrol",
@@ -162,10 +163,10 @@ private _combatAirHomeExecute = {
     [_sector] spawn {
         params ["_sector"];
         private _message = format [
-            "Are you sure you want to call in combat air patrol? This will cost you %1%2 and put it on a %3 minute cooldown. It will also reveal your home base to the enemy.",
+            "Are you sure you want to establish a no-fly zone over home base? This will cost you %1%2 and put it on a %3 minute cooldown. It will also reveal your home base to the enemy.",
             WL_MONEY_SIGN, WL_COST_COMBATAIR / 5, round (WL_COOLDOWN_CAP / 5 / 60)
         ];
-        private _result = ["Combat Air Patrol", _message, "OK", "Cancel"] call WL2_fnc_prompt;
+        private _result = [localize "STR_WL_combatAirPatrolHome", _message, "OK", "Cancel"] call WL2_fnc_prompt;
 
         if (!_result) exitWith {
             playSoundUI ["AddItemFailed"];
@@ -178,7 +179,7 @@ private _combatAirHomeExecute = {
 [
     _sector, _targetId,
     "order-cap-home",
-    "Order combat air patrol (home)",
+    localize "STR_WL_combatAirPatrolHome",
     _combatAirHomeExecute,
     true,
     "combatAirPatrolHome",
@@ -233,8 +234,8 @@ private _markSectorExecuteNext = {
     "markSector"
 ] call WL2_fnc_addTargetMapButton;
 
-private _sectorFtNonInfantryAsset = [_sector, false] call WL2_fnc_getSectorFTAsset;
-if (_sector in (BIS_WL_sectorsArray # 3) || (!isNull _sectorFtNonInfantryAsset)) then {
+private _sectorFtAsset = [_sector] call WL2_fnc_getSectorFTAsset;
+if (_sector in (BIS_WL_sectorsArray # 3) || (!isNull _sectorFtAsset)) then {
     [_sector, _targetId, "team-designate", "Designate team priority", {
         params ["_sector"];
         [_sector, "sector"] call WL2_fnc_designateTeamPriority;

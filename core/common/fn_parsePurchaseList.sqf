@@ -25,13 +25,6 @@ private _fastTravelArr = [
 		"\A3\EditorPreviews_F\Data\CfgVehicles\VR_Area_01_circle_4_grey_F.jpg",
 		localize "STR_WL_ftAirAssaultInfo"
 	], [
-		"FTSquadLeader",
-		WL_COST_FTSL,
-		[],
-		localize "STR_WL_ftSquadLeader",
-		"\A3\Data_F_Warlords\Data\preview_ft_conflict.jpg",
-		localize "STR_WL_ftSquadLeader"
-	], [
 		"RespawnBagFT",
 		0,
 		[],
@@ -152,6 +145,13 @@ private _strategyArr = [
 		"Electronic warfare",
 		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
 		"Start the electronic warfare interface."
+	], [
+		"Surrender",
+		0,
+		[],
+		"Surrender",
+		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
+		"Begin surrender vote. If enough people on your team vote for surrender, the game will end and the other team will win."
 	]
 ];
 

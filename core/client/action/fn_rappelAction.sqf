@@ -67,7 +67,7 @@ player addAction [
 			};
 			private _finalPosition = _rope modelToWorld _finalRelativePosition;
 			_finalPosition set [2, _finalPosition # 2 max _ropeMinLevel];
-			systemChat str _finalPosition;
+
 			player setVehiclePosition [_finalPosition, [], 0, "CAN_COLLIDE"];
 
             uiSleep 1;

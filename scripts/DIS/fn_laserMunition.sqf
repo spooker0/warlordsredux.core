@@ -46,12 +46,7 @@ while { alive _projectile } do {
             _projectile setMissileTarget [_laser, true];
         } else {
             private _targetVectorDirAndUp = [getPosASL _projectile, _targetPos] call BIS_fnc_findLookAt;
-            private _currentVectorDir = vectorDir _projectile;
-            private _currentVectorUp = vectorUp _projectile;
-
-            private _actualVectorDir = vectorLinearConversion [0, 1, 0.1, _currentVectorDir, _targetVectorDirAndUp # 0, true];
-            private _actualVectorUp = vectorLinearConversion [0, 1, 0.1, _currentVectorUp, _targetVectorDirAndUp # 1, true];
-            _projectile setVectorDirAndUp [_actualVectorDir, _actualVectorUp];
+            _projectile setVectorDirAndUp _targetVectorDirAndUp;
 
             _projectile setVelocityModelSpace [0, _projectileSpeed, 0];
 

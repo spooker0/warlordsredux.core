@@ -27,6 +27,6 @@ private _eligibleCombatAirTargets = (_ownedAirfieldSectors + _ownedAirFobs) sele
 };
 
 if (count _eligibleCombatAirTargets == 0) exitWith {
-    [false, "No helipad sectors or forward airbases ready for combat air patrol operations!"];
+    [false, "No helipad sectors or forward airbases ready for no-fly zone operations!"];
 };
 [true, ""];

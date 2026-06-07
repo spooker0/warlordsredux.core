@@ -79,9 +79,6 @@ switch (_className) do {
     case "FTAirAssault": {
         [2, WL_TARGET_FRIENDLY] spawn WL2_fnc_executeFastTravel;
     };
-    case "FTSquadLeader": {
-        ["ftSquadLeader"] spawn SQD_fnc_client;
-    };
     case "BuyStronghold": {
         0 spawn WL2_fnc_orderStronghold;
     };
@@ -216,6 +213,17 @@ switch (_className) do {
     };
     case "WelcomeScreen": { 0 spawn WL2_fnc_welcome };
     case "Ewar": { 0 spawn WL2_fnc_ewar2 };
+    case "Surrender": {
+        0 spawn {
+            private _message = "Are you sure you want to surrender? You will ruin the game for people who still want to play :(<br/>Additional votes needed: 1";
+            private _result = ["Surrender", _message, "OK", "Cancel"] call WL2_fnc_prompt;
+            if (_result) then {
+                [BIS_WL_enemySide, true, true] spawn WL2_fnc_missionEndHandle;
+            } else {
+                playSoundUI ["AddItemFailed"];
+            };
+        };
+    };
     case "StressTestSector": {
         0 spawn {
             private _direction = [vectorDir player, vectorUp player];

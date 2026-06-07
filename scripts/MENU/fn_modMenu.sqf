@@ -91,12 +91,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
             private _uid = _message select 1;
             [player, _uid] remoteExec ["WL2_fnc_rebalance", 2];
         };
-        case "accessVehicles": {
-            private _uid = _message select 1;
-            systemChat "Mod vehicle access granted.";
-            uiNamespace setVariable ["WL2_modOverrideUid", _uid];
-            0 spawn WL2_fnc_vehicleManager;
-        };
+        case "accessVehicles": {};
         case "gotoPlayer": {
             private _uid = _message select 1;
             private _selectedPlayer = [_uid] call BIS_fnc_getUnitByUID;

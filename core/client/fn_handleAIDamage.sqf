@@ -12,6 +12,13 @@ if (_projectile isKindOf "MineCore" || _projectile isKindOf "TimeBombCore") then
     };
 };
 
+if (_projectile == "") then {
+    private _handledInstigator = [_source, _instigator] call WL2_fnc_handleInstigator;
+    if (_handledInstigator != player && side group _handledInstigator == side group _unit) then {
+        _damage = _unit getHit _selection;
+    };
+};
+
 if (WL_ISUNCONSCIOUS(_unit)) exitWith {
     _damage min 0.99;
 };

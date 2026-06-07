@@ -622,10 +622,6 @@ if (_action == "samHit") exitWith {
 	private _damage = _param3;
 	private _projectilePosition = _param4;
 
-	private _explosion = createVehicle ["HelicopterExploSmall", _projectilePosition, [], 0, "NONE"];
-	_explosion setPosASL _projectilePosition;
-	triggerAmmo _explosion;
-
 	{
 		private _newCrewDamage = damage _x + _damage;
 		_x setDamage [_newCrewDamage, true, _launcher, _launcher];
@@ -633,6 +629,9 @@ if (_action == "samHit") exitWith {
 
 	private _newDamage = damage _target + _damage;
 	_target setDamage [_newDamage, true, _launcher, _launcher];
+
+	private _message = format ["SAM detonation in proximity! Damage sustained: %1%%", round (_damage * 100)];
+	[_message] remoteExec ["WL2_fnc_broadcastAction", _target];
 };
 
 if (_action == "deployDrone") exitWith {

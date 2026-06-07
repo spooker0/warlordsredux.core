@@ -4,6 +4,21 @@ params ["_action", "_params"];
 private _allPlayers = call BIS_fnc_listPlayers;
 private _squadManager = missionNamespace getVariable ["SQUAD_MANAGER", []];
 
+#if WL_SQUAD_DEBUG
+if (_action == "getPlayerForID") exitWith {
+    private _playerId = _params select 0;
+
+    private _playerIdToNumber = parseNumber _playerId;
+    private _unitsToConsider = allUnits select {
+        side group _x in [west, east, independent]
+    };
+    if (count _unitsToConsider <= _playerIdToNumber) then {
+        player;
+    } else {
+        _unitsToConsider # _playerIdToNumber;
+    };
+};
+#else
 if (_action == "getPlayerForID") exitWith {
     private _playerId = _params select 0;
 
@@ -16,6 +31,7 @@ if (_action == "getPlayerForID") exitWith {
         _player select 0;
     };
 };
+#endif
 
 if (_action == "getSquadForPlayer") exitWith {
     private _playerId = _params select 0;
@@ -140,6 +156,36 @@ if (_action == "getSquadVotingPower") exitWith {
 
     _votingPower;
 };
+
+#if WL_SQUAD_DEBUG
+if (_action == "getUnsquaddedPlayers") exitWith {
+    private _unitsToConsider = allUnits select {
+        side group _x in [west, east, independent]
+    };
+    _unitsToConsider
+};
+#else
+if (_action == "getUnsquaddedPlayers") exitWith {
+    // Get all players not in a squad
+    private _team = _params select 0;
+    private _allPlayers = (call BIS_fnc_listPlayers) select {
+        side group _x == _team
+    };
+
+    private _squaddedPlayers = createHashMap;
+    {
+        private _members = _x getOrDefault ["members", []];
+        {
+            _squaddedPlayers set [_x, true];
+        } forEach _members;
+    } forEach _squadManager;
+
+    private _unsquaddedPlayers = _allPlayers select {
+        !((getPlayerID _x) in _squaddedPlayers)
+    };
+    _unsquaddedPlayers;
+};
+#endif
 
 if (_action == "getCreatedFreeChannel") exitWith {
     private _foundChannel = 0;
