@@ -753,48 +753,50 @@ private _scanners = if (_drawAll) then {
 } forEach _scanners;
 
 // Combat air patrol areas
-private _combatAirAreas = _mapData getOrDefault ["combatAirAreas", []];
-{
-	private _targetPos = getPosASL _x;
-	private _targetOwner = if (typeof _x == "RuggedTerminal_01_communications_hub_F") then {
-		_x getVariable ["WL2_forwardBaseOwner", independent];
-	} else {
-		_x getVariable ["BIS_WL_owner", independent];
-	};
+if (cameraOn isKindOf "Air") then {
+	private _combatAirAreas = _mapData getOrDefault ["combatAirAreas", []];
+	{
+		private _targetPos = getPosASL _x;
+		private _targetOwner = if (typeof _x == "RuggedTerminal_01_communications_hub_F") then {
+			_x getVariable ["WL2_forwardBaseOwner", independent];
+		} else {
+			_x getVariable ["BIS_WL_owner", independent];
+		};
 
-	private _mapColor = switch (_targetOwner) do {
-		case west: { [0, 0.3, 0.6, 0.9] };
-		case east: { [0.5, 0, 0, 0.9] };
-		case independent: { [0, 0.6, 0, 0.9] };
-		default { [1, 1, 1, 0.15] };
-	};
-	private _mapTexture = switch (_targetOwner) do {
-		case west: { "#(rgb,1,1,1)color(0,0,1,0.15)" };
-		case east: { "#(rgb,1,1,1)color(1,0,0,0.15)" };
-		case independent: { "#(rgb,1,1,1)color(0,1,0,0.15)" };
-		default { "#(rgb,1,1,1)color(1,0,1,0.15)" };
-	};
+		private _mapColor = switch (_targetOwner) do {
+			case west: { [0, 0.3, 0.6, 0.9] };
+			case east: { [0.5, 0, 0, 0.9] };
+			case independent: { [0, 0.6, 0, 0.9] };
+			default { [1, 1, 1, 0.15] };
+		};
+		private _mapTexture = switch (_targetOwner) do {
+			case west: { "#(rgb,1,1,1)color(0,0,1,0.15)" };
+			case east: { "#(rgb,1,1,1)color(1,0,0,0.15)" };
+			case independent: { "#(rgb,1,1,1)color(0,1,0,0.15)" };
+			default { "#(rgb,1,1,1)color(1,0,1,0.15)" };
+		};
 
-	private _startTime = _x getVariable ["WL2_combatAirStart", 0];
-	private _timeElapsed = serverTime - _startTime;
-	private _timeStepsElapsed = 5 * ceil (_timeElapsed / 5);
-	private _areaRadius = _timeStepsElapsed * WL_COMBAT_AIR_PERSEC;
+		private _startTime = _x getVariable ["WL2_combatAirStart", 0];
+		private _timeElapsed = serverTime - _startTime;
+		private _timeStepsElapsed = 5 * ceil (_timeElapsed / 5);
+		private _areaRadius = _timeStepsElapsed * WL_COMBAT_AIR_PERSEC;
 
-	private _combatAreaMax = if (_x in [WL2_base1, WL2_base2]) then {
-		WL_COMBAT_AIR_RADIUS_BASE
-	} else {
-		WL_COMBAT_AIR_RADIUS
-	};
-	_areaRadius = _areaRadius min _combatAreaMax;
-	_drawEllipses pushBack [
-		_targetPos,
-		_areaRadius,
-		_areaRadius,
-		0,
-		_mapColor,
-		_mapTexture
-	];
-} forEach _combatAirAreas;
+		private _combatAreaMax = if (_x in [WL2_base1, WL2_base2]) then {
+			WL_COMBAT_AIR_RADIUS_BASE
+		} else {
+			WL_COMBAT_AIR_RADIUS
+		};
+		_areaRadius = _areaRadius min _combatAreaMax;
+		_drawEllipses pushBack [
+			_targetPos,
+			_areaRadius,
+			_areaRadius,
+			0,
+			_mapColor,
+			_mapTexture
+		];
+	} forEach _combatAirAreas;
+};
 
 // Draw squad lines
 private _allSquadmates = _mapData getOrDefault ["allSquadmates", []];

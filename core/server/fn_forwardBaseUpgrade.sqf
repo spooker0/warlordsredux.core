@@ -17,8 +17,10 @@ private _domeType = switch (_level) do {
     case 3 : { "Land_Dome_Big_F" };
     default { "Land_Dome_Small_F" };
 };
-private _newDome = [_domeType, _domeType, _position, _direction, false, false] call WL2_fnc_createVehicleCorrectly;
+private _newDome = [_domeType, _domeType, AGLtoASL _position, _direction, false, false] call WL2_fnc_createVehicleCorrectly;
 _newDome allowDamage false;
+_newDome setVehiclePosition [_position, [], 0, "CAN_COLLIDE"];
+
 _forwardBase setVariable ["WL2_forwardBaseDome", _newDome, true];
 
 private _assetChildren = _forwardBase getVariable ["WL2_children", []];
@@ -31,7 +33,8 @@ if (_level == 3) then {
         _fobDome
     };
     private _railPosition = _startObject modelToWorld [0, 60, 0];
-    private _catapultRail = [_sender, _railPosition, "Land_CraneRail_01_F", getDir _forwardBase, false, false] call WL2_fnc_orderGround;
+    private _catapultRail = [_sender, AGLtoASL _railPosition, "Land_CraneRail_01_F", getDir _forwardBase, false, false] call WL2_fnc_orderGround;
+    _catapultRail setVehiclePosition [_railPosition, [], 0, "CAN_COLLIDE"];
 
     _assetChildren pushBack _catapultRail;
 };
