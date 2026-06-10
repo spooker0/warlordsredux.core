@@ -49,6 +49,15 @@ switch (_conditionName) do {
             "";
         };
     };
+    case "paradrop": {
+        if (!alive _target) exitWith { "" };
+
+        private _position = _target modelToWorld [0, 0, 0];
+        private _altitude = _position # 2;
+        if (_altitude < 200) exitWith { "Target not high enough for paradrop." };
+
+        "ok";
+    };
     case "vehicleParadrop": {
         private _sectorAvailable = _target in (BIS_WL_sectorsArray # 2);
         if (!_sectorAvailable) exitWith { "" };
@@ -107,13 +116,13 @@ switch (_conditionName) do {
         "ok";
     };
     case "combatAirPatrolHome": {
+        private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
+        if !(_target in _homeBase) exitWith { "" };
+
         private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
         if (_timeSinceStart < WL_COMBAT_AIR_HOME_TIME) exitWith {
             format ["No-fly zone for home base locked: %1", [WL_COMBAT_AIR_HOME_TIME - _timeSinceStart, "MM:SS"] call BIS_fnc_secondsToString]
         };
-
-        private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
-        if !(_target in _homeBase) exitWith { "" };
 
         private _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
         if (_combatAirActive) exitWith { "No-fly zone is already active for this airbase." };
@@ -368,6 +377,7 @@ switch (_conditionName) do {
     };
     case "assetRearm": {
         if (!alive _target) exitWith { "" };
+        if (_target isKindOf "Man") exitWith { "" };
 
         private _cooldown = (_target getVariable ["BIS_WL_nextRearm", 0]) - serverTime;
         if (_cooldown > 0) exitWith {
@@ -385,6 +395,7 @@ switch (_conditionName) do {
     };
     case "assetRefuel": {
         if (!alive _target) exitWith { "" };
+        if (_target isKindOf "Man") exitWith { "" };
 
         private _canRefuel = [_target, player] call WL2_fnc_refuelActionEligibility;
         if (!_canRefuel) exitWith {
@@ -395,6 +406,7 @@ switch (_conditionName) do {
     };
     case "assetRepair": {
         if (!alive _target) exitWith { "" };
+        if (_target isKindOf "Man") exitWith { "" };
 
         private _nextRepairTime = _target getVariable ["WL2_nextRepair", 0];
         if (serverTime < _nextRepairTime) exitWith {

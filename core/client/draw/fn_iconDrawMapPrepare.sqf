@@ -856,21 +856,22 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 		};
 	};
 	_drawIconsSelectable pushBack _x;
-
-	if (cameraOn == _x || _x in _assetTargets) then {
-		private _airRadar = _x getVariable ["WL2_airRadar", -1];
-		if (_airRadar > 0) then {
-			_drawSemiCircles pushBack [
-				60,
-				[1, 1, 1, 0.3],
-				_position,
-				_airRadar,
-				getDirVisual _x,
-				true
-			];
-		};
-	};
 } forEach (_sideVehicles inAreaArray [_mapCenter, _mapBoundW, _mapBoundH, 0, true]);
+
+private _checkForAirRadar = _assetTargets + [cameraOn];
+{
+	private _airRadar = _x getVariable ["WL2_airRadar", -1];
+	if (_airRadar > 0) then {
+		_drawSemiCircles pushBack [
+			60,
+			[1, 1, 1, 0.3],
+			getPosASL _x,
+			_airRadar,
+			getDirVisual _x,
+			true
+		];
+	};
+} forEach _checkForAirRadar;
 
 // Draw visible enemy units
 private _visibleEnemyUnits = _mapData getOrDefault ["visibleEnemyUnits", []];
@@ -897,7 +898,7 @@ private _airWrecks = _mapData getOrDefault ["airWrecks", []];
 {
 	private _position = getPosASL _x;
 	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
-	private _assetTypeName = [_x] call WL2_fnc_getAssetTypeName;
+	private _assetTypeName = [_x] call WL2_fnc_getAssetTypeShortName;
 
 	private _deadTime = _x getVariable ["WL2_timeOfDeath", -1];
 	private _wreckTime = if (_deadTime >= 0) then {
@@ -914,7 +915,7 @@ private _airWrecks = _mapData getOrDefault ["airWrecks", []];
 		_size * _mapIconScale,
 		_size * _mapIconScale,
 		0,
-		format ["%1 (Wreck %2)", _assetTypeName, _wreckTimer],
+		format ["%1 WRECK (%2)", _assetTypeName, _wreckTimer],
 		1,
 		_iconTextSize * _mapIconScale,
 		"PuristaBold",

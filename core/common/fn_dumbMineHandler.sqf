@@ -26,6 +26,8 @@ while { !BIS_WL_missionEnd } do {
     private _enemyMines = _enemyUnits select {
         WL_ISUP(_x)
     } select {
+        isNull attachedTo _x;
+    } select {
         private _mineData = _x getVariable ["WL2_minefield", []];
         count _mineData > 0
     };

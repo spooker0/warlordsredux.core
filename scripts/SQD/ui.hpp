@@ -82,6 +82,16 @@ class SQD_Menu {
             size = 0.1;
             text = "";
         };
+        class SQD_Menu_StatusHelpButton: SQD_Menu_BarButton {
+            idc = SQD_STATUS_HELP_IDC;
+            x = safeZoneX + 0.8;
+            y = safeZoneY + 0.1;
+            w = 0.15;
+            h = 0.1;
+            colorBackground[] = {SQD_RGBA_BG};
+            size = 0.1;
+            text = "";
+        };
         class SQD_Menu_VehicleListText: RscStructuredText {
             idc = SQD_VEHICLE_LIST_TEXT_IDC;
             x = safeZoneX + 0.8;
@@ -127,12 +137,31 @@ class SQD_Menu {
             shadow = 0;
         };
         class SQD_Menu_SpawnScreen: RscPicture {
+            idc = SQD_SPAWN_SCREEN_IDC;
             x = safeZoneX + safeZoneW - 0.7;
             y = safeZoneY + 0.1;
             w = 0.6;
             h = 0.6;
             size = 0.1;
             text = "#(argb,512,512,1)r2t(spawnCam,1.333)";
+        };
+        class SQD_Menu_SpawnScreenButton: SQD_Menu_BarButton {
+            idc = SQD_SPAWN_SCREEN_BUTTON_IDC;
+            x = safeZoneX + safeZoneW - 0.7;
+            y = safeZoneY + 0.055;
+            w = 0.15;
+            h = 0.045;
+            size = 0.04;
+            text = "DISABLE FEED";
+        };
+        class SQD_Menu_SpawnScreenTI: SQD_Menu_BarButton {
+            idc = SQD_SPAWN_SCREEN_TI_BUTTON_IDC;
+            x = safeZoneX + safeZoneW - 0.55;
+            y = safeZoneY + 0.055;
+            w = 0.15;
+            h = 0.045;
+            size = 0.04;
+            text = "ENABLE TI";
         };
         class SQD_Menu_SpawnList: RscControlsGroup {
             idc = SQD_SPAWN_LIST_IDC;
@@ -346,6 +375,7 @@ class SQD_Menu_SpawnBar: RscControlsGroupNoScrollbars {
 class SQD_Menu_SpawnBar_Location: RscControlsGroupNoScrollbars {
     class controls {
         class SpawnBar_Location_Background: RscText {
+            idc = SQD_LOCATION_BG_IDC;
             x = 0;
             y = 0;
             w = 0.195;
@@ -353,6 +383,7 @@ class SQD_Menu_SpawnBar_Location: RscControlsGroupNoScrollbars {
             colorBackground[] = {SQD_RGBA_BG};
         };
         class SpawnBar_Location_Header: RscText {
+            idc = SQD_LOCATION_HEADER_IDC;
             x = 0;
             y = 0;
             w = 0.195;
@@ -385,6 +416,43 @@ class SQD_Menu_SpawnBar_Location: RscControlsGroupNoScrollbars {
             w = 0.195;
             h = 0.26;
             text = "";
+        };
+    };
+};
+
+class SQD_DeathInfo {
+    idd = SQD_DEATHINFO_IDD;
+    movingEnable = false;
+    class controls {
+        class SQD_DeathInfo_Status: RscStructuredText {
+            idc = SQD_DEATHINFO_STATUS_IDC;
+            x = 0.2;
+            y = 0.2;
+            w = 0.6;
+            h = 0.8;
+            size = 0.08;
+            text = "";
+
+            class Attributes {
+                font = "RobotoCondensed";
+                color = SQD_COLOR_TEXT;
+                align = "center";
+            };
+        };
+        class SQD_DeathInfo_Tips: RscStructuredText {
+            idc = SQD_DEATHINFO_TIPS_IDC;
+            x = 0;
+            y = 0;
+            w = 1;
+            h = 0.2;
+            size = 0.08;
+            text = "";
+
+            class Attributes {
+                font = "RobotoCondensed";
+                color = SQD_COLOR_TEXT;
+                align = "center";
+            };
         };
     };
 };

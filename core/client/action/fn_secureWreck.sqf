@@ -43,8 +43,14 @@ deleteVehicle _asset;
 
 private _rewardAmount = round (_cost / 300) * 100;
 
-[player, "secureAircraft", _rewardAmount] remoteExec ["WL2_fnc_handleClientRequest", 2];
-[objNull, _rewardAmount, "Aircraft secured", WL_COLOR_SUPPORT] call WL2_fnc_killRewardClient;
+private _isDrone = [_asset] call WL2_fnc_isDrone;
+if (_isDrone && _wreckSide != BIS_WL_playerSide) then {
+    [player, "secureDrone", _rewardAmount] remoteExec ["WL2_fnc_handleClientRequest", 2];
+    [objNull, _rewardAmount, "Drone secured", WL_COLOR_SUPPORT] call WL2_fnc_killRewardClient;
+} else {
+    [player, "secureAircraft", _rewardAmount] remoteExec ["WL2_fnc_handleClientRequest", 2];
+    [objNull, _rewardAmount, "Aircraft secured", WL_COLOR_SUPPORT] call WL2_fnc_killRewardClient;
+};
 
 playSoundUI ["AddItemOk"];
-playSound3D ["a3\sounds_f\vehicles\armor\bobcat\bobcat_plow_up_01.wss", _asset];
+playSound3D ["a3\sounds_f_decade\assets\props\linkterminal_01_node_main_f\link_terminal03_lid_01_open.wss", _asset];

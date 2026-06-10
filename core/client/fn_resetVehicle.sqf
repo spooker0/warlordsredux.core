@@ -19,7 +19,7 @@ private _class = typeOf _vehicle;
 private _orderedClass = WL_ASSET_TYPE(_vehicle);
 private _offset = player worldToModel (getPosATL _vehicle);
 
-private _deploymentResult = [_class, _orderedClass, _offset, 50, true, false] call WL2_fnc_deployment;
+private _deploymentResult = [_class, _orderedClass, _offset, 50, true] call WL2_fnc_deployment;
 
 if (_deploymentResult # 0) then {
     private _position =  _deploymentResult # 1;

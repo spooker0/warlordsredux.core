@@ -164,7 +164,7 @@ private _combatAirHomeExecute = {
         params ["_sector"];
         private _message = format [
             "Are you sure you want to establish a no-fly zone over home base? This will cost you %1%2 and put it on a %3 minute cooldown. It will also reveal your home base to the enemy.",
-            WL_MONEY_SIGN, WL_COST_COMBATAIR / 5, round (WL_COOLDOWN_CAP / 5 / 60)
+            WL_MONEY_SIGN, WL_COST_COMBATAIR / 5, round (WL_COOLDOWN_CAPHOME / 60)
         ];
         private _result = [localize "STR_WL_combatAirPatrolHome", _message, "OK", "Cancel"] call WL2_fnc_prompt;
 
@@ -234,7 +234,7 @@ private _markSectorExecuteNext = {
     "markSector"
 ] call WL2_fnc_addTargetMapButton;
 
-private _sectorFtAsset = [_sector] call WL2_fnc_getSectorFTAsset;
+private _sectorFtAsset = [_sector, []] call WL2_fnc_getSectorFTAsset;
 if (_sector in (BIS_WL_sectorsArray # 3) || (!isNull _sectorFtAsset)) then {
     [_sector, _targetId, "team-designate", "Designate team priority", {
         params ["_sector"];

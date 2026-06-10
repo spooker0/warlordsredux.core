@@ -18,7 +18,10 @@ private _myPreset = if (_isAircraft) then {
     } else  {
         private _variableName = format ["WLM_savedLoadout_%1", _assetActualType];
         private _savedLoadouts = profileNamespace getVariable [_variableName, []];
-        private _selectedLoadout = _savedLoadouts select (_lbCurSel - 1);
+
+        private _selectedLoadoutIndex = _lbCurSel - 1;
+        uiNamespace setVariable ["WLM_lastSelectedLoadoutIndex", _selectedLoadoutIndex];
+        private _selectedLoadout = _savedLoadouts select _selectedLoadoutIndex;
         _selectedLoadout # 1;
     };
 } else {
@@ -27,7 +30,10 @@ private _myPreset = if (_isAircraft) then {
     } else  {
         private _variableName = format ["WLM_savedLoadout_%1", _assetActualType];
         private _savedLoadouts = profileNamespace getVariable [_variableName, []];
-        private _selectedLoadout = _savedLoadouts select (_lbCurSel - 2);
+
+        private _selectedLoadoutIndex = _lbCurSel - 2;
+        uiNamespace setVariable ["WLM_lastSelectedLoadoutIndex", _selectedLoadoutIndex];
+        private _selectedLoadout = _savedLoadouts select _selectedLoadoutIndex;
         _selectedLoadout # 1;
     };
 };

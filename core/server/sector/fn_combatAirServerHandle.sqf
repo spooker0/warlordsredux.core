@@ -34,7 +34,7 @@ _target setVariable ["WL2_combatAirStart", serverTime, true];
 _target setVariable ["WL2_combatAirRequester", _uid, true];
 
 private _cooldown = if (_target in [WL2_base1, WL2_base2]) then {
-	WL_COOLDOWN_CAP / 5
+	WL_COOLDOWN_CAPHOME
 } else {
 	WL_COOLDOWN_CAP
 };

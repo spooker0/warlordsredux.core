@@ -20,6 +20,9 @@ addMissionEventHandler ["Draw3D", {
         };
 
         private _uavsInRange = player getVariable ["WL_SpectrumUavs", []];
+        _uavsInRange = _uavsInRange select {
+            _x isKindOf "Air";
+        };
         if (count _uavsInRange == 0) then {
             missionNamespace setVariable ["#EM_Values", []];
             uiSleep 1;
@@ -56,24 +59,8 @@ addMissionEventHandler ["Draw3D", {
     missionNamespace setVariable ["#EM_SMin", 0];
     missionNamespace setVariable ["#EM_SMax", 100];
 
-    private _setSpectrum = {
-        params ["_minFreq", "_maxFreq", "_powerAtMin", "_powerAtMax"];
-        private _emMin = missionNamespace getVariable ["#EM_SelMin", 0];
-        private _emMax = missionNamespace getVariable ["#EM_SelMax", 0];
-
-        missionNamespace setVariable ["#EM_FMin", _minFreq];
-        missionNamespace setVariable ["#EM_FMax", _maxFreq];
-
-        if (_emMin > _maxFreq || _emMax < _minFreq) then {
-            _emMin = _minFreq;
-            _emMax = _minFreq + 1;
-        };
-
-        missionNamespace setVariable ["#EM_SelMin", _emMin];
-        missionNamespace setVariable ["#EM_SelMax", _emMax];
-
-        [linearConversion [_minFreq, _maxFreq, _emMin, _powerAtMin, _powerAtMax, true], (_emMin + _emMax) / 2];
-    };
+    missionNamespace setVariable ["#EM_FMin", 0];
+    missionNamespace setVariable ["#EM_FMax", 500];
 
     private _display = uiNamespace getVariable ["RscSpectrumIndicator", displayNull];
     if (isNull _display) then {
@@ -101,33 +88,23 @@ addMissionEventHandler ["Draw3D", {
 
         WL_SpectrumInterface = true;
 
-        private _spectrumData = [100, 500, 1, 0.5] call _setSpectrum;
-        _spectrumData params ["_lockDifficulty", "_frequency"];
+        private _lockDifficulty = 0.5;
 
         private _friendlySignalVar = format ["WL2_ewarSignal_%1", BIS_WL_playerSide];
         private _friendlySignal = missionNamespace getVariable [_friendlySignalVar, 500];
 
-        private _lockRange = if (_friendlySignal >= 650) then {
-            WL_JAMMER_SPECTRUM_RANGE * _lockDifficulty
-        } else {
-            if (_friendlySignal <= 350) then {
-                _lockDifficulty = 0.5;
-                500
-            } else {
-                _lockDifficulty = 0.5;
-                1000
-            }
-        };
+        private _lockRange = linearConversion [0, 1000, _friendlySignal, 50, WL_JAMMER_SPECTRUM_RANGE];
+
         _indicator ctrlSetStructuredText parseText format [
-            "<t align='center' size='0.9' shadow='2'>Frequency: %1 MHz<br/>Max Range: %2 M</t>",
-            _frequency,
+            "<t align='center' size='0.9' shadow='2'>Strength: %1%%<br/>Max Range: %2 M</t>",
+            _friendlySignal / 10,
             round _lockRange
         ];
 
         private _uavsInRange = vehicles select {
             alive _x
         } select {
-            _x distance2D player < _lockRange * 2
+            _x distance2D player < _lockRange * 1.5
         } select {
             [_x] call WL2_fnc_getAssetSide != BIS_WL_playerSide
         } select {
@@ -200,7 +177,7 @@ addMissionEventHandler ["Draw3D", {
         if (_findLockedUav != -1) then {
             private _lockedUav = _uavsInRange # _findLockedUav;
             private _distance = _lockedUav distance cameraOn;
-            private _jammable = _distance < _lockRange;
+            private _jammable = _distance < _lockRange && _lockedUav isKindOf "Air";
             (_spectrumIcons # _findLockedUav) set [0, if (_jammable) then {
                 "\A3\ui_f\data\IGUI\Cfg\Targeting\HitConfirm_ca.paa"
             } else {

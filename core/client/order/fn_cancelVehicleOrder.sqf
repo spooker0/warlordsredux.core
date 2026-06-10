@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_originalPosition", "_limitDistance", "_ignoreSector", "_asset", "_allowAboveGround"];
+params ["_originalPosition", "_limitDistance", "_ignoreSector", "_asset"];
 
 if (vehicle player != player) exitWith {
     [true, "Player is in vehicle."];
@@ -92,14 +92,6 @@ if (_isInWaterSector && ((getPosASL _asset) # 2) < 5) exitWith {
 
 if (_isInWaterSector) exitWith {
     [false, ""];
-};
-
-if (_allowAboveGround) exitWith {
-    [false, ""];
-};
-
-if (((getPosATL _asset) # 2) > 1) exitWith {
-    [true, "Asset cannot be deployed too far above ground."];
 };
 
 if (surfaceIsWater (getPosATL _asset)) exitWith {

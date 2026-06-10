@@ -84,8 +84,7 @@ private _setupActionId = [
 					_terminalClass,
 					[0, 5, 0],
 					50,
-					true,
-					false
+					true
 				] call WL2_fnc_deployment;
 
 				if !(_deploymentResult # 0) exitWith {

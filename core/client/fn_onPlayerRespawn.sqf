@@ -39,14 +39,10 @@ if (side group player == independent) then {
 0 spawn WL2_fnc_reviveAction;
 0 spawn WL2_fnc_installAction;
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-private _hideSpawnMenu = _settingsMap getOrDefault ["hideSpawnMenu", false];
-if (!_hideSpawnMenu) then {
-	player addAction [
-		format ["<t color='#00FFFF'>%1 (Key: %2)</t>", "Spawn Menu", (actionKeysNames ["watch", 1, "Keyboard"]) regexReplace ["""", ""]],
-		{ 0 spawn SQD_fnc_initSquadMenu; }, [], -100, false, false, "watch", "", 0
-	];
-};
+player addAction [
+	format ["<t color='#00FFFF'>%1 (Key: %2)</t>", "Spawn Menu", (actionKeysNames ["watch", 1, "Keyboard"]) regexReplace ["""", ""]],
+	{ 0 spawn SQD_fnc_initSquadMenu; }, [], -100, false, true, "watch", "", 0, true
+];
 
 private _playerSquad = ["getSquadForPlayer", [getPlayerID player]] call SQD_fnc_query;
 if (count _playerSquad > 0) then {
@@ -56,6 +52,7 @@ if (count _playerSquad > 0) then {
     };
 };
 
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _showPlayerUids = _settingsMap getOrDefault ["showPlayerUids", false];
 uiNamespace setVariable ["WL2_showPlayerUids", _showPlayerUids];
 
@@ -64,7 +61,8 @@ if (isRemoteControlling player) then {
 	player remoteControl objNull;
 };
 
-private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
+private _playerUid = getPlayerUID player;
+private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", _playerUid];
 private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];
 _ownedVehicles pushBack player;
 missionNamespace setVariable [_ownedVehiclesVar, _ownedVehicles, [2, clientOwner]];
@@ -96,5 +94,20 @@ call WL2_fnc_afkAction;
 BIS_WL_playerSide call WL2_fnc_parsePurchaseList;
 
 0 spawn SQD_fnc_executeSpawn;
+
+private _ownedExplosiveVar = format ["WL2_ownedExplosives_%1", _playerUid];
+private _ownedMineVar = format ["WL2_ownedMines_%1", _playerUid];
+private _ownedExplosives = missionNamespace getVariable [_ownedExplosiveVar, []];
+private _ownedMines = missionNamespace getVariable [_ownedMineVar, []];
+{
+	if (alive _x) then {
+		player addOwnedMine _x;
+	};
+} forEach _ownedExplosives;
+{
+	if (alive _x) then {
+		player addOwnedMine _x;
+	};
+} forEach _ownedMines;
 
 player setVariable ["WL2_unconscious", false, true];

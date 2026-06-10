@@ -1,6 +1,9 @@
 #include "includes.inc"
 params ["_projectile", "_unit"];
 
+private _unitOwner = _unit getVariable ["BIS_WL_ownerAsset", "123"];
+if (_unitOwner == "123" || _unitOwner != getPlayerUID player) exitWith {};
+
 private _munitionList = _unit getVariable ["DIS_munitionList", []];
 _munitionList pushBack _projectile;
 _munitionList = _munitionList select { alive _x };

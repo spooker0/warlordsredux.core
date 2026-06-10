@@ -1,35 +1,26 @@
 #include "includes.inc"
-params ["_showWarning"];
+private _lastSelectedLoadoutIndex = uiNamespace getVariable ["WLM_lastSelectedLoadoutIndex", -1];
 
-if (_showWarning) exitWith {
-    private _confirmDialog = findDisplay WLM_DISPLAY createDisplay "WLM_Modal_Dialog";
-
-    private _titleControl = _confirmDialog displayCtrl WLM_MODAL_TITLE;
-    _titleControl ctrlSetText (localize "STR_WL_wipeSaveWarning");
-
-    private _textControl = _confirmDialog displayCtrl WLM_MODAL_TEXT;
-    _textControl ctrlSetText (localize "STR_WL_wipeSaveLoadouts");
-
-    private _confirmButtonControl = _confirmDialog displayCtrl WLM_MODAL_CONFIRM_BUTTON;
-    private _cancelButtonControl = _confirmDialog displayCtrl WLM_MODAL_EXIT_BUTTON;
-
-    _confirmButtonControl ctrlSetText (localize "STR_WL_wipe");
-    _confirmButtonControl ctrlSetTooltip (localize "STR_WL_wipeAllSaved");
-
-    _cancelButtonControl ctrlSetTooltip (localize "STR_WL_returnPreviousScreen");
-
-    _cancelButtonControl ctrlAddEventHandler ["ButtonClick", {
-        (findDisplay WLM_MODAL) closeDisplay 1;
-    }];
-    _confirmButtonControl ctrlAddEventHandler ["ButtonClick", {
-        (findDisplay WLM_MODAL) closeDisplay 1;
-        [false] call WLM_fnc_wipePylonSaves;
-    }];
+if (_lastSelectedLoadoutIndex == -1) exitWith {
+    ["Select a loadout first."] call WL2_fnc_smoothText;
+    playSoundUI ["AddItemFailed"];
 };
 
 private _asset = uiNamespace getVariable "WLM_asset";
+
 private _assetActualType = WL_ASSET_TYPE(_asset);
 private _variableName = format ["WLM_savedLoadout_%1", _assetActualType];
-profileNamespace setVariable [_variableName, []];
+private _savedLoadouts = profileNamespace getVariable [_variableName, []];
 
-call WLM_fnc_constructPresetMenu;
+private _selectedLoadout = _savedLoadouts select _lastSelectedLoadoutIndex;
+
+private _message = format [localize "STR_WL_wipeLoadoutWarning", _selectedLoadout # 0];
+private _results = [localize "STR_WL_wipeLoadout", _message, "Delete", "Cancel"] call WL2_fnc_prompt;
+
+if (_results) then {
+    uiNamespace setVariable ["WLM_lastSelectedLoadoutIndex", -1];
+    playSoundUI ["AddItemOK"];
+    _savedLoadouts deleteAt _lastSelectedLoadoutIndex;
+    profileNamespace setVariable [_variableName, _savedLoadouts];
+    call WLM_fnc_constructPresetMenu;
+};

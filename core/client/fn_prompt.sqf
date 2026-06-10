@@ -1,7 +1,8 @@
 #include "includes.inc"
 params ["_modalTitle", "_modalText", "_confirmText", "_cancelText", ["_confirmTooltip", ""], ["_cancelTooltip", ""]];
 
-private _confirmDialog = createDialog ["WL_Prompt_Dialog", true];
+// private _confirmDialog = createDialog ["WL_Prompt_Dialog", true];
+private _confirmDialog = (findDisplay 46) createDisplay "WL_Prompt_Dialog";
 
 private _titleControl = _confirmDialog displayCtrl 5702;
 _titleControl ctrlSetText _modalTitle;
@@ -10,15 +11,15 @@ private _textControl = _confirmDialog displayCtrl 5706;
 _textControl ctrlSetStructuredText parsetext _modalText;
 
 private _confirmButtonControl = _confirmDialog displayCtrl 5704;
-private _cancelButtonContrl = _confirmDialog displayCtrl 5705;
+private _cancelButtonControl = _confirmDialog displayCtrl 5705;
 
 _confirmButtonControl ctrlSetText _confirmText;
 _confirmButtonControl ctrlSetTooltip _confirmTooltip;
 
-_cancelButtonContrl ctrlSetText _cancelText;
-_cancelButtonContrl ctrlSetTooltip _cancelTooltip;
+_cancelButtonControl ctrlSetText _cancelText;
+_cancelButtonControl ctrlSetTooltip _cancelTooltip;
 
-_cancelButtonContrl ctrlAddEventHandler ["ButtonClick", {
+_cancelButtonControl ctrlAddEventHandler ["ButtonClick", {
     params ["_control"];
     private _parentDisplay = ctrlParent _control;
     _parentDisplay closeDisplay 1;
@@ -33,6 +34,7 @@ _confirmButtonControl ctrlAddEventHandler ["ButtonClick", {
 
 waitUntil {
     uiSleep 0.1;
+    ctrlSetFocus _confirmButtonControl;
     isNull _confirmDialog;
 };
 

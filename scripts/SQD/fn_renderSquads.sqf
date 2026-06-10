@@ -71,6 +71,12 @@ private _squads = missionNamespace getVariable ["SQUAD_MANAGER", []];
 
 private _badgeConfigs = call RWD_fnc_getBadgeConfigs;
 
+_squads = [_squads, [], {
+    private _squadLeader = _x getOrDefault ["leader", ""];
+    private _squadVotingPower = ["getSquadVotingPower", [_squadLeader]] call SQD_fnc_query;
+    _squadVotingPower
+}, "DESCEND"] call BIS_fnc_sortBy;
+
 private _squadsForMenu = [_squads, [_playerId], {
     private _members = _x getOrDefault ["members", []];
 
@@ -113,6 +119,7 @@ private _squadControls = _display getVariable ["SQD_squadControls", createHashMa
 _display setVariable ["SQD_squadControls", _squadControls];
 
 private _seenSquadKeys = createHashMap;
+private _playerContributions = missionNamespace getVariable ["WL_PlayerSquadContribution", createHashMap];
 
 {
     private _squad = _x;
@@ -208,6 +215,9 @@ private _seenSquadKeys = createHashMap;
 
     private _squadNameTextStructured = [toUpper _squadName, SQD_LAYOUT_LABEL_TEXT_SIZE, _squadNameColor, "left"] call SQD_fnc_renderText;
     _squadNameText ctrlSetStructuredText _squadNameTextStructured;
+
+    private _squadVotingPower = ["getSquadVotingPower", [_squadLeader]] call SQD_fnc_query;
+    _squadNameText ctrlSetTooltip format ["Vote Power: %1", _squadVotingPower];
 
     _squadNameText ctrlRemoveAllEventHandlers "ButtonClick";
 
@@ -332,6 +342,9 @@ private _seenSquadKeys = createHashMap;
 
         private _playerNameTextStructured = [name _player, SQD_LAYOUT_LABEL_TEXT_SIZE, _playerNameColor, "left"] call SQD_fnc_renderText;
         _playerNameText ctrlSetStructuredText _playerNameTextStructured;
+
+        private _playerScore = _playerContributions getOrDefault [getPlayerUID _player, 0];
+        _playerNameText ctrlSetTooltip format ["Score: %1", _playerScore];
 
         private _badgeIconCtrl = _playerSlot controlsGroupCtrl SQD_BADGE_ICON_IDC;
         _badgeIconCtrl ctrlSetText "";

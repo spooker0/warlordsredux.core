@@ -24,6 +24,6 @@ if (_remove) then {
 _badges set [_badgeName, _newBadgeNum min 50];
 profileNamespace setVariable ["WL2_badges", _badges];
 
-if (!_silent) then {
+if (!_silent && _currentBadges != _newBadgeNum) then {
     [_badgeName] call RWD_fnc_newBadge;
 };

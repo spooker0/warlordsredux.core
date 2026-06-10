@@ -37,9 +37,7 @@ _vehicleListButton ctrlAddEventHandler ["ButtonClick", {
 private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
 private _playerVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
 
-_playerVehicles = _playerVehicles
-    select { alive _x }
-    select { !(_x isKindOf "Man") };
+_playerVehicles = _playerVehicles select { alive _x } select { _x != player };
 
 private _vehicles = [_playerVehicles, [], { _x distance cameraOn }, "ASCEND"] call BIS_fnc_sortBy;
 
@@ -47,7 +45,11 @@ private _vehiclesForMenu = _vehicles apply {
     private _vehicle = _x;
     private _type = typeOf _vehicle;
 
-    private _displayName = [_vehicle] call WL2_fnc_getAssetTypeShortName;
+    private _displayName = if (_type isKindOf "Man") then {
+        format ["AI: %1", name _vehicle]
+    } else {
+        [_vehicle] call WL2_fnc_getAssetTypeShortName
+    };
 
     private _key = netId _vehicle;
     if (_key == "") then {
@@ -142,6 +144,9 @@ if (count _vehiclesForMenu > 0) then {
     if (_vehicleIcon in ["pictureThing", "pictureStaticObject"]) then {
         _vehicleIcon = "a3\ui_f\data\map\vehicleicons\iconcratesupp_ca.paa";
     };
+    if (_type isKindOf "Man") then {
+        _vehicleIcon = "a3\ui_f\data\gui\rsc\rscdisplaymain\profile_player_ca.paa";
+    };
 
     private _vehicleBadgeIcon = _vehicleCtrl controlsGroupCtrl SQD_VEHICLE_BADGE_ICON_IDC;
     _vehicleBadgeIcon ctrlSetText _vehicleIcon;
@@ -155,8 +160,15 @@ if (count _vehiclesForMenu > 0) then {
         format ["%1 M", _vehicleDistance toFixed 0]
     };
 
+    private _vehicleAps = _vehicle getVariable ["apsAmmo", 0];
+    private _vehicleMaxAps = [_vehicle] call APS_fnc_getMaxAmmo;
+    private _apsText = if (_vehicleMaxAps > 0) then {
+        format [" (APS: %1/%2)", _vehicleAps, _vehicleMaxAps]
+    } else {
+        ""
+    };
     private _vehicleNameText = [
-        format ["%1<t align='right'>%2</t>", toUpper _displayName, _distanceText],
+        format ["%1%2<t align='right'>%3</t>", toUpper _displayName, _apsText, _distanceText],
         SQD_LAYOUT_LABEL_TEXT_SIZE,
         SQD_COLOR_TEXT,
         "left"

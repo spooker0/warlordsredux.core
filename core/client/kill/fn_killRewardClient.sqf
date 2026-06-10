@@ -37,6 +37,7 @@ private _displayIcon = switch (_iconText) do {
 	case "KILL";
 	case "PLAYER KILL": { "a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa" };
 	case "SECURED";
+	case "DRONE SECURED";
 	case "AIRCRAFT SECURED": { "a3\ui_f\data\igui\cfg\holdactions\holdaction_secure_ca.paa" };
 	case "VEHICLE DISABLED": { "a3\ui_f\data\igui\cfg\vehicletoggles\wheelbreakiconon_ca.paa" };
 	case "DEMOLITION";
@@ -52,7 +53,8 @@ private _displayIcon = switch (_iconText) do {
 	case "RECON";
 	case "REVEAL SECTOR";
 	case "SPOT ASSIST": { "a3\ui_f\data\gui\rsc\rscdisplayarsenal\binoculars_ca.paa" };
-	case "SPAWN REWARD": { "a3\ui_f\data\igui\cfg\simpletasks\types\car_ca.paa" };
+	case "TRANSPORT": { "a3\ui_f\data\igui\cfg\simpletasks\types\car_ca.paa" };
+	case "RESUPPLY";
 	case "SQUAD ASSIST": { "a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa" };
 	case "BOOSTED SIGNAL": { "a3\modules_f_curator\data\portraitlightning_ca.paa" };
 	case "DRONE REBATE": { "A3\Air_F_Jets\UAV_05\Data\UI\uav_05_icon_ca.paa" };

@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_class", "_orderedClass", "_offset", "_range", "_ignoreSector", "_allowAboveGround"];
+params ["_class", "_orderedClass", "_offset", "_range", "_ignoreSector"];
 
 private _asset = createVehicleLocal [_class, player modelToWorld [0, 0, 1000], [], 0, "NONE"];
 _asset setPhysicsCollisionFlag false;
@@ -91,6 +91,8 @@ private _deployParams = ["DEPLOYMENT CONTROLS", [
     ["Lock position", "lockTarget"],
     ["Rotate left", "prevAction"],
     ["Rotate right", "nextAction"],
+    ["Shift Up", "LeanLeft"],
+    ["Shift Down", "LeanRight"],
     [localize "STR_ca_cancel", "navigateMenu"]
 ]];
 ["Deploy", _deployParams] spawn WL2_fnc_showHint;
@@ -98,18 +100,17 @@ private _deployParams = ["DEPLOYMENT CONTROLS", [
 private _originalPosition = getPosATL player;
 
 WL_DeploymentEnd = false;
-[_asset, _offset, _originalPosition, _range, _ignoreSector, _allowAboveGround] spawn {
-    params ["_asset", "_offset", "_originalPosition", "_range", "_ignoreSector", "_allowAboveGround"];
+[_asset, _originalPosition, _range, _ignoreSector] spawn {
+    params ["_asset", "_originalPosition", "_range", "_ignoreSector"];
 
     waitUntil {
         uiSleep 0.001;
         inputAction "BuldSelect" == 0 && inputAction "navigateMenu" == 0;
     };
 
-    _offset set [2, 0.2];
-
     WL_DeploymentLock = false;
     WL_DeploymentSuccess = false;
+    private _altitudeOffset = getPosWorld _asset # 2;
     private _directionOffset = 0;
     private _lastTime = serverTime;
 
@@ -130,6 +131,36 @@ WL_DeploymentEnd = false;
             if (inputAction "nextAction" > 0) then {
                 _directionOffset = _directionOffset + 15;
             };
+            _asset setDir _directionOffset;
+
+            if (inputAction "LeanLeft" > 0) then {
+                waitUntil {
+                    uiSleep 0.001;
+                    inputAction "LeanLeft" == 0;
+                };
+
+                detach _asset;
+                _altitudeOffset = _altitudeOffset + 0.5;
+                private _assetPos = getPosWorld _asset;
+                _assetPos set [2, _altitudeOffset];
+                _asset setDir _directionOffset;
+                _asset setPosWorld _assetPos;
+                _asset attachTo [player];
+            };
+            if (inputAction "LeanRight" > 0) then {
+                waitUntil {
+                    uiSleep 0.001;
+                    inputAction "LeanRight" == 0;
+                };
+
+                detach _asset;
+                _altitudeOffset = _altitudeOffset - 0.5;
+                private _assetPos = getPosWorld _asset;
+                _assetPos set [2, _altitudeOffset];
+                _asset setDir _directionOffset;
+                _asset setPosWorld _assetPos;
+                _asset attachTo [player];
+            };
         };
 
         if (inputAction "lockTarget" > 0) then {
@@ -143,19 +174,14 @@ WL_DeploymentEnd = false;
                 private _assetPos = _asset modelToWorld [0, 0, 0];
                 _asset setPosASL [_assetPos # 0, _assetPos # 1, 500];
                 private _playerPos = ASLtoAGL eyePos player;
-                _assetPos set [2, _playerPos # 2];
+                _assetPos set [2, _playerPos # 2 + _altitudeOffset];
                 _asset setVehiclePosition [_assetPos, [], 0, "CAN_COLLIDE"];
                 private _assetPosHeight = (getPosASL _asset) # 2;
                 _asset setPosASL [_assetPos # 0, _assetPos # 1, _assetPosHeight];
             } else {
                 _directionOffset = (direction _asset) - (direction player);
                 _asset attachTo [player];
-                _offset = player getRelPos _asset;
             };
-        };
-
-        if (!WL_DeploymentLock) then {
-            _asset setDir _directionOffset;
         };
 
         if (inputAction "BuldSelect" > 0) then {
@@ -169,7 +195,7 @@ WL_DeploymentEnd = false;
 
         if (serverTime - _lastTime > 0.1) then {
             _lastTime = serverTime;
-            private _cancel = [_originalPosition, _range, _ignoreSector, _asset, _allowAboveGround] call WL2_fnc_cancelVehicleOrder;
+            private _cancel = [_originalPosition, _range, _ignoreSector, _asset] call WL2_fnc_cancelVehicleOrder;
             if (_cancel # 0) then {
                 _asset setVariable ["WL2_vehicleOrderError", _cancel # 1];
             } else {
@@ -199,7 +225,7 @@ if (!WL_DeploymentLock) then {
 private _finalPosition = getPosWorldVisual _asset;
 private _finalDirection = [vectorDir _asset, vectorUp _asset];
 
-private _finalCancel = [_originalPosition, _range, _ignoreSector, _asset, _allowAboveGround] call WL2_fnc_cancelVehicleOrder;
+private _finalCancel = [_originalPosition, _range, _ignoreSector, _asset] call WL2_fnc_cancelVehicleOrder;
 private _canStillOrderVehicle = !(_finalCancel # 0);
 
 detach _asset;

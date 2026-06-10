@@ -29,6 +29,10 @@
 #define WL_CAMOUFLAGE_ENABLED 0
 #define WL_CAP_DEBUG 0
 #define WL_SQUAD_DEBUG 0
+#define WL_SUPPORT_DEBUG 0
+
+// Live: set to -1 for performance
+#define WL_HEADER_LEVEL -1
 
 // Live: set all to 1
 #define WL_STOP_TEAM_SWITCH 1
@@ -115,6 +119,7 @@
 
 #define WL_COOLDOWN_SCAN 480
 #define WL_COOLDOWN_CAP 1200
+#define WL_COOLDOWN_CAPHOME 120
 #define WL_COOLDOWN_FTSL 60
 #define WL_COOLDOWN_AIREFRESH 300
 #define WL_COOLDOWN_TARGETRESET 300

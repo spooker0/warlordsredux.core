@@ -12,7 +12,7 @@ _unit setVariable ["WL2_unconscious", true, true];
 private _capAreaModifiers = missionNamespace getVariable ["WL2_capAreaModifiers", [0, 0, 0]];
 private _sideIndex = if (side group _unit == west) then { 0 } else { 1 };
 private _controlledMod = _capAreaModifiers # _sideIndex;
-_controlledMod = ((_controlledMod min 1) max 0.5);
+_controlledMod = ((_controlledMod min 1) max 0.66);
 
 _unit setVariable ["WL2_expirationTime", serverTime + WL_DURATION_RESPAWN * _controlledMod, true];
 

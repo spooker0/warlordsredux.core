@@ -36,5 +36,9 @@ if (_damageBuilding) then {
             deleteVehicle _x;
         };
     } forEach _children;
-    deleteVehicle _target;
+
+    private _staticPropMap = missionNamespace getVariable ["WL2_staticPropMap", createHashMap];
+    if !(getObjectID _target in _staticPropMap) then {
+        deleteVehicle _target;
+    };
 };

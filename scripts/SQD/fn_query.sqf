@@ -142,6 +142,9 @@ if (_action == "getSquadVotingPower") exitWith {
     private _squad = ["getSquadForPlayer", [_playerId]] call SQD_fnc_query;
     if (count _squad == 0) exitWith {
         private _playerUid = _playerId getUserInfo 2;
+        if (isNil "_playerUid") then {
+            _playerUid = "none";
+        };
         private _points = WL_PlayerSquadContribution getOrDefault [_playerUid, 0];
         _points max 1;
     };
@@ -149,7 +152,12 @@ if (_action == "getSquadVotingPower") exitWith {
     private _squadMembers = _squad getOrDefault ["members", []];
     private _votingPower = 0;
     {
-        private _memberUid = _x getUserInfo 2;
+        private _member = ["getPlayerForID", [_x]] call SQD_fnc_query;
+        if (isNull _member) then {
+            continue;
+        };
+
+        private _memberUid = getPlayerUID _member;
         private _memberContribution = WL_PlayerSquadContribution getOrDefault [_memberUid, 0];
         _votingPower = _votingPower + (_memberContribution max 1);
     } forEach _squadMembers;

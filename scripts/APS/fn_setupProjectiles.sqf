@@ -185,6 +185,15 @@ addMissionEventHandler ["ProjectileCreated", {
         [_projectile, _unit] spawn DIS_fnc_maneuver;
     };
 
+    // private _projectileProx = _projectileConfig getOrDefault ["prox", false];
+    // if (_projectileProx) then {
+    //     private _speed = _projectileConfig getOrDefault ["speed", 0];
+    //     if (_speed > 0) then {
+    //         _projectile setVelocityModelSpace [0, _speed, 0];
+    //     };
+    //     [_projectile, _unit, 200, 0.3] spawn DIS_fnc_frag;
+    // };
+
     private _projectileSead = _projectileConfig getOrDefault ["sead", false];
     if (_projectileSead) then {
         [_projectile, _unit] spawn APS_fnc_sead;

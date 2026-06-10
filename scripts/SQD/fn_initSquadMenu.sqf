@@ -30,23 +30,71 @@ _display displayAddEventHandler ["Unload", {
 [_display] call SQD_fnc_renderStatus;
 [_display] call SQD_fnc_renderVehicles;
 
+private _spawnCamButton = _display displayCtrl SQD_SPAWN_SCREEN_BUTTON_IDC;
+private _camFeedState = missionNamespace getVariable ["SQD_menuCamFeedEnabled", true];
+if (_camFeedState) then {
+    _spawnCamButton ctrlSetText "DISABLE FEED";
+} else {
+    _spawnCamButton ctrlSetText "ENABLE FEED";
+};
+_spawnCamButton setVariable ["SQD_controlState", _camFeedState];
+_spawnCamButton ctrlAddEventHandler ["ButtonClick", {
+    params ["_control"];
+    private _controlState = _control getVariable ["SQD_controlState", false];
+    _controlState = !_controlState;
+    missionNamespace setVariable ["SQD_menuCamFeedEnabled", _controlState];
+    _control setVariable ["SQD_controlState", _controlState];
+    if (_controlState) then {
+        private _selectedSpawnTarget = missionNamespace getVariable ["SQD_selectedSpawnTarget", objNull];
+        private _selectedSpecialSpawnTarget = missionNamespace getVariable ["SQD_selectedSpecialSpawnTarget", [objNull, ""]];
+        [_selectedSpawnTarget, _selectedSpecialSpawnTarget] call SQD_fnc_setSpawnCam;
+
+        _control ctrlSetText "DISABLE FEED";
+    } else {
+        [objNull, [objNull, ""]] call SQD_fnc_setSpawnCam;
+
+        _control ctrlSetText "ENABLE FEED";
+    };
+
+    private _display = ctrlParent _control;
+    private _dummyButton = _display displayCtrl SQD_DUMMY_IDC;
+    ctrlSetFocus _dummyButton;
+}];
+
+private _spawnCamTIButton = _display displayCtrl SQD_SPAWN_SCREEN_TI_BUTTON_IDC;
+private _camTIState = missionNamespace getVariable ["SQD_menuCamTIEnabled", false];
+if (_camTIState) then {
+    _spawnCamTIButton ctrlSetText "DISABLE TI";
+} else {
+    _spawnCamTIButton ctrlSetText "ENABLE TI";
+};
+_spawnCamTIButton setVariable ["SQD_controlState", _camTIState];
+_spawnCamTIButton ctrlAddEventHandler ["ButtonClick", {
+    params ["_control"];
+    private _controlState = _control getVariable ["SQD_controlState", false];
+    _controlState = !_controlState;
+    missionNamespace setVariable ["SQD_menuCamTIEnabled", _controlState];
+    _control setVariable ["SQD_controlState", _controlState];
+    if (_controlState) then {
+        _control ctrlSetText "DISABLE TI";
+        "spawncam" setPiPEffect [2];
+    } else {
+        _control ctrlSetText "ENABLE TI";
+        "spawncam" setPiPEffect [0];
+    };
+
+    private _display = ctrlParent _control;
+    private _dummyButton = _display displayCtrl SQD_DUMMY_IDC;
+    ctrlSetFocus _dummyButton;
+}];
+
 private _selectedSpawnTarget = missionNamespace getVariable ["SQD_selectedSpawnTarget", objNull];
 private _selectedSpecialSpawnTarget = missionNamespace getVariable ["SQD_selectedSpecialSpawnTarget", [objNull, ""]];
 [_selectedSpawnTarget, _selectedSpecialSpawnTarget] call SQD_fnc_setSpawnCam;
 
-_display displayAddEventHandler ["KeyDown", {
-    params ["_display", "_key", "_shift", "_ctrl", "_alt"];
-    if (WL_ISUP(player)) exitWith {};
-    if (_key == 1) then {
-        true;
-    };
-}];
-
 _display setVariable ["SQD_startMenuTime", time];
 _display displayAddEventHandler ["KeyUp", {
     params ["_display", "_key", "_shift", "_ctrl", "_alt"];
-    if (WL_ISDOWN(player)) exitWith {};
-
     private _squadNameEdit = _display getVariable ["SQD_squadNameEdit", controlNull];
     if (!isNull _squadNameEdit) exitWith {};
 
@@ -129,6 +177,6 @@ _display displayAddEventHandler ["Unload", {
 
     private _spawnCamera = uiNamespace getVariable ["SQD_spawnCamera", objNull];
     if (!alive _spawnCamera) exitWith {};
-    _spawnCamera cameraEffect ["Terminate", "BACK TOP", "spawnCam"];
+    _spawnCamera cameraEffect ["Terminate", "BACK TOP", "spawncam"];
     camDestroy _spawnCamera;
 }];

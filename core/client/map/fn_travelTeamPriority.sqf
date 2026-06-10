@@ -32,7 +32,13 @@ if (_teamPriorityType == "fob") exitWith {
     if (_canTravelFOB) then {
         if (_commit) then {
             private _forwardBaseArea = [getPosASL _teamPriority, WL_FOB_RANGE, WL_FOB_RANGE, 0, false];
-            [6, _forwardBaseArea] spawn WL2_fnc_executeFastTravel;
+            private _ftAssets = [_teamPriority, _forwardBaseArea, true] call WL2_fnc_getSectorFTAsset;
+            if (count _ftAssets == 0) then {
+                [6, _forwardBaseArea] spawn WL2_fnc_executeFastTravel;
+            } else {
+                private _randomAsset = selectRandom _ftAssets;
+                [_randomAsset] spawn WL2_fnc_executeFastTravelVehicle;
+            };
         };
 
         true;
@@ -75,8 +81,8 @@ if (_teamPriorityType == "sector") exitWith {
             };
             true;
         } else {
-            private _asset = [_teamPriority] call WL2_fnc_getSectorFTAsset;
-            if (isNull _asset) then {
+            private _asset = [_teamPriority, [], true] call WL2_fnc_getSectorFTAsset;
+            if (count _asset == 0) then {
                 private _hasDefenders = _teamPriority getVariable ["WL2_defenders", 0] > 0;
                 private _sectorIsLinked = _teamPriority in (BIS_WL_sectorsArray # 2);
                 if (_hasDefenders && _sectorIsLinked) then {
@@ -89,14 +95,14 @@ if (_teamPriorityType == "sector") exitWith {
                 };
             } else {
                 if (_commit) then {
-                    [_asset] spawn WL2_fnc_executeFastTravelVehicle;
+                    [_asset # 0] spawn WL2_fnc_executeFastTravelVehicle;
                 };
                 true;
             };
         };
     } else {
-        private _asset = [_teamPriority] call WL2_fnc_getSectorFTAsset;
-        if (isNull _asset) then {
+        private _asset = [_teamPriority, [], true] call WL2_fnc_getSectorFTAsset;
+        if (count _asset == 0) then {
             private _canAirAssault = ([_teamPriority, "airAssault"] call WL2_fnc_mapButtonConditions) == "ok";
             if (_canAirAssault) then {
                 if (_commit) then {
@@ -108,7 +114,7 @@ if (_teamPriorityType == "sector") exitWith {
             };
         } else {
             if (_commit) then {
-                [_asset] spawn WL2_fnc_executeFastTravelVehicle;
+                [_asset # 0] spawn WL2_fnc_executeFastTravelVehicle;
             };
 
             true;

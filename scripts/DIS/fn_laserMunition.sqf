@@ -15,10 +15,6 @@ if (_lockPercent < 100) exitWith {};
 
 _projectile setVariable ["DIS_ultimateTarget", _target];
 
-if (_target isKindOf "Air") exitWith {
-    _projectile setMissileTarget [_target, true];
-};
-
 private _terminal = false;
 private _lastTargetPos = getPosASL _target;
 private _laser = objNull;
@@ -54,6 +50,10 @@ while { alive _projectile } do {
             deleteVehicle _laser;
 
             _projectile setMissileTarget [_target, true];
+
+            if (_target isKindOf "Air") then {
+                break;
+            };
         };
         _lastTargetPos = _targetPos;
     } else {

@@ -85,13 +85,13 @@ private _unitsToMove = (units player) select {
     };
 } forEach _unitsToMove;
 
-[player, "ftSupportPoints", _targetVehicle, 100 * (count _unitsToMove)] remoteExec ["WL2_fnc_handleClientRequest", 2];
+[player, "rewardTransport", _targetVehicle, _unitsToMove] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
 uiSleep 1;
 titleCut ["", "BLACK IN", 1];
 
 private _position = getPosASL player;
 private _playersToPlay = allPlayers select {
-	_x distance2D _position < 50
+	_x distance2D _position < WL_ENEMIES_NEAR_RADIUS
 };
 [_position] remoteExec ["WL2_fnc_playSoundArrival", _playersToPlay];

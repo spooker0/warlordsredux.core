@@ -26,6 +26,23 @@ _asset setUserActionText [
 	"<img size='1.5' image='a3\ui_f\data\igui\cfg\simpletasks\types\rearm_ca.paa'/>"
 ];
 
+_asset addAction [
+	"<t color='#ff0000'>Reset Vehicle</t>",
+	{
+		params ["_asset"];
+		["You can call Reset Vehicle in the Strategy menu at any time."] call WL2_fnc_smoothText;
+		0 spawn WL2_fnc_resetVehicle;
+	},
+	[],
+	100,
+	false,
+	false,
+	"",
+	"alive _target && cameraOn != _target && _target getEntityInfo 6",
+	20,
+	false
+];
+
 private _maxAmmo = [_asset] call APS_fnc_getMaxAmmo;
 if (_maxAmmo >= 6) then {
 	_asset addAction [

@@ -28,6 +28,13 @@ if (isServer) then {
 	];
 };
 
+private _staticProps = synchronizedObjects WL2_StaticProps;
+private _staticPropMap = createHashMap;
+{
+	_staticPropMap set [getObjectID _x, true];
+} forEach _staticProps;
+missionNamespace setVariable ["WL2_staticPropMap", _staticPropMap];
+
 private _requisitionData = createHashMap;
 private _requisitionPreset = missionConfigFile >> "CfgWLRequisitionPresets" >> "A3ReduxAll";
 {
@@ -95,6 +102,7 @@ private _menuButtonIconMap = createHashMapFromArray [
     ["order-cap", "a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa"],
     ["order-cap-home", "a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa"],
     ["order-paradrop", "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa"],
+    ["paradrop", "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa"],
     ["radar-operate", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
     ["radar-rotate", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
     ["remove", "a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca.paa"],

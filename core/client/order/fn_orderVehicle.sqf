@@ -22,7 +22,7 @@ if (_class isKindOf "Man") then {
 		_offset = [0, 8, 0];
 	};
 
-	private _deploymentResult = [_class, _orderedClass, _offset, 50, false, false] call WL2_fnc_deployment;
+	private _deploymentResult = [_class, _orderedClass, _offset, 50, false] call WL2_fnc_deployment;
 
 	if (_deploymentResult # 0) then {
 		private _pos = _deploymentResult # 1;

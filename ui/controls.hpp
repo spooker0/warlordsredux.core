@@ -134,6 +134,8 @@ class RscSpectatorDisplay {
 			y = safeZoneY;
 			w = safeZoneW;
 			h = safeZoneH;
+			ptsPerSquareSea = 0;
+			colorSea[] = {0, 0, 0, 0};
 		};
 	};
 };

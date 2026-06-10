@@ -46,7 +46,7 @@ private _deployActionId = _asset addAction [
                 private _offset = [0, _distanceToVehicle, 0];
 
                 private _deploymentAction = {
-                    private _deploymentResult = [_assetLoadedItemClass, _orderedClass, _offset, 50, true, false] call WL2_fnc_deployment;
+                    private _deploymentResult = [_assetLoadedItemClass, _orderedClass, _offset, 50, true] call WL2_fnc_deployment;
 
                     if !(_deploymentResult # 0) exitWith {
                         playSound "AddItemFailed";

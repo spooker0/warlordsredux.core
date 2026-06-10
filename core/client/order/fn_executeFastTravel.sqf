@@ -18,14 +18,14 @@ openMap [false, false];
 
 private _destination = [];
 private _strongholdHasSpot = false;
-private _travelingHome = false;
+private _playArrivalWarning = true;
 
 switch (_fastTravelMode) do {
 	case 0: {
 		private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
 		if (_homeBase == _location && WL_TARGET_ENEMY != _homeBase) then {
 			_destination = _homeBase modelToWorld [0, 0, 0];
-			_travelingHome = true;
+			_playArrivalWarning = false;
 		} else {
 			_destination = selectRandom ([_location] call WL2_fnc_findSpawnsInSector);
 		};
@@ -57,6 +57,8 @@ switch (_fastTravelMode) do {
 
 		_destination = [_position # 0, _position # 1, 250 + _distance * 0.75];
 		[player, "fastTravelAirAssault"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+
+		_playArrivalWarning = false;
 	};
 	case 3: {
 		private _safeSpot = selectRandom ([_location] call WL2_fnc_findSpawnsInSector);
@@ -65,7 +67,7 @@ switch (_fastTravelMode) do {
 	case 4: {
 		private _respawnBag = player getVariable ["WL2_respawnBag", objNull];
         if (!isNull _respawnBag) then {
-            _destination = _respawnBag modelToWorld [0, 0, 0];
+            _destination = _respawnBag modelToWorld [0, 2, 0];
         };
 	};
 	case 5: {
@@ -155,6 +157,8 @@ switch (_fastTravelMode) do {
 	};
 	case 3;
 	case 7: {
+		_playArrivalWarning = false;
+
 		private _vehicle = vehicle player;
 
 		private _parachuteClass = switch (BIS_WL_playerSide) do {
@@ -228,10 +232,10 @@ switch (_fastTravelMode) do {
 
 titleCut ["", "BLACK IN", 1];
 
-if (!_travelingHome) then {
+if (_playArrivalWarning) then {
 	private _position = getPosASL player;
 	private _playersToPlay = allPlayers select {
-		_x distance2D _position < 50
+		_x distance2D _position < WL_ENEMIES_NEAR_RADIUS
 	};
 	[_position] remoteExec ["WL2_fnc_playSoundArrival", _playersToPlay];
 };

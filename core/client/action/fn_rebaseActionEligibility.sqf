@@ -21,7 +21,9 @@ private _allUnits = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_W
 };
 
 private _enemyAir = _allUnits select {
-	_x isKindOf "Plane" && !(_x isKindOf "Plane_Civil_01_base_F")
+	_x isKindOf "Plane"
+} select {
+	WL_UNIT(_x, "cost", 0) > 10000;
 } select {
 	[_x] call WL2_fnc_getAssetSide != BIS_WL_playerSide
 } select {

@@ -8,7 +8,7 @@ if (!_isAdmin) exitWith {};
 
 if (_action == "getRating") exitWith {
     private _ratings = profileNamespace getVariable ["WL2_playerRatings", createHashMap];
-    _ratings
+    _sender setVariable ["WL2_response", _ratings, owner _sender];
 };
 
 if (_action == "setRating") then {
@@ -24,7 +24,7 @@ if (_action == "clearRating") then {
 
 if (_action == "getBanlist") exitWith {
     private _banlist = profileNamespace getVariable ["WL2_banlist", []];
-    _banlist
+    _sender setVariable ["WL2_response", _banlist, owner _sender];
 };
 
 if (_action == "setBanlist") then {

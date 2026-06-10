@@ -1,4 +1,10 @@
 #include "includes.inc"
+
+private _isBeingConscripted = missionNamespace getVariable ["WL2_isBeingConscripted", false];
+if (_isBeingConscripted) exitWith {
+    missionNamespace setVariable ["WL2_isBeingConscripted", false];
+};
+
 private _spawnTarget = missionNamespace getVariable ["SQD_selectedSpawnTarget", objNull];
 if (alive _spawnTarget) exitWith {
     [_spawnTarget] spawn WL2_fnc_executeFastTravelVehicle;

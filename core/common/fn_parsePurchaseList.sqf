@@ -93,12 +93,12 @@ private _strategyArr = [
 		"PruneMines",
 		0,
 		[],
-		"Clear personal mines",
+		"Clear personal explosives",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"Deletes all deployed mines."
+		"Deletes all deployed mines and explosives."
 	], [
 		"ResetVehicle",
-		10,
+		0,
 		[],
 		"Reset vehicle",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
@@ -138,13 +138,6 @@ private _strategyArr = [
 		localize "STR_WL_infoMenuInfo",
 		"src\img\wl_logo_ca.paa",
 		""
-	], [
-		"Ewar",
-		0,
-		[],
-		"Electronic warfare",
-		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
-		"Start the electronic warfare interface."
 	], [
 		"Surrender",
 		0,

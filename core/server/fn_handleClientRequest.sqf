@@ -46,7 +46,6 @@ private _actionCost = switch (_action) do {
 			WL_ASSET(_param3, "cost", 50001)
 		};
 	};
-	case "resetVehicle" : { 10 };
 	case "equip" : { _param1 max 0 };
 	case "designatePriority" : { WL_COST_DESIGNATEPRIORITY };
 	case "buyStronghold" : { WL_COST_STRONGHOLD };
@@ -145,13 +144,7 @@ if (_action == "resetVehicle") exitWith {
 	private _direction = _param3;
 
 	_asset setVectorDirAndUp _direction;
-
-	private _isDemolishable = WL_UNIT(_asset, "demolishable", 0) > 0;
-	if (_isDemolishable) then {
-		_asset setPosWorld _position;
-	} else {
-		_asset setVehiclePosition [_position, [], 0, "CAN_COLLIDE"];
-	};
+	_asset setPosWorld _position;
 };
 
 if (_action == "revived") exitWith {
@@ -307,36 +300,115 @@ if (_action in ["combatAir", "combatAirHome"]) exitWith {
 	[_combatAirSide, _target, name _sender, _uid] spawn WL2_fnc_combatAirServerHandle;
 };
 
-if (_action == "ftSupportPoints") exitWith {
+private _earnSupportPoints = {
+	params ["_asset", "_actionId", "_actionName", "_reward", "_timeout"];
+
+	private _assetOwnerUid = _asset getVariable ["BIS_WL_ownerAsset", "123"];
+	if (_assetOwnerUid == "123") exitWith {};
+
+#if WL_SUPPORT_DEBUG == 0
+	if (_assetOwnerUid == _uid) exitWith {};
+#endif
+
+	private _rewardStackVar = format ["WL2_rewardedStack_%1", _actionId];
+	private _rewardStack = _asset getVariable [_rewardStackVar, createHashMap];
+
+	private _giverLastReward = _rewardStack getOrDefault [_uid, -1000];
+	private _eligible = _giverLastReward + _timeout <= serverTime;
+
+#if WL_SUPPORT_DEBUG == 0
+	if (!_eligible) exitWith {};
+#endif
+
+	[_reward, _assetOwnerUid, true, _actionName] call WL2_fnc_fundsDatabaseWrite;
+	private _assetOwner = _assetOwnerUid call BIS_fnc_getUnitByUID;
+	[objNull, _reward, _actionName, WL_COLOR_SUPPORT] remoteExec ["WL2_fnc_killRewardClient", _assetOwner];
+
+	_rewardStack set [_uid, serverTime];
+	_asset setVariable [_rewardStackVar, _rewardStack];
+};
+
+if (_action == "rewardTransport") exitWith {
 	private _ftVehicle = _param1;
-	private _reward = _param2;
+	private _transportedUnits = _param2;
 
-	private _targets = [
-		missionNamespace getVariable "BIS_WL_currentTarget_west",
-		missionNamespace getVariable "BIS_WL_currentTarget_east"
-	] select {
-		!(isNull _x)
-	};
+	private _reward = 0;
+	{
+		if (_x isKindOf "Man") then {
+			if (isPlayer _x) then {
+				_reward = _reward + 200;
+			} else {
+				_reward = _reward + 100;
+			};
+		} else {
+			private _vehicleValue = WL_UNIT(_x, "cost", 0);
+			_reward = _reward + (_vehicleValue * 0.1);
+		};
+	} forEach _transportedUnits;
 
-	if ((_targets findIf {_sender inArea (_x getVariable "objectAreaComplete")}) != -1) then {
+	private _attackTargetVar = format ["BIS_WL_currentTarget_%1", _side];
+	private _attackTarget = missionNamespace getVariable [_attackTargetVar, objNull];
+	private _attackTargetArea = _attackTarget getVariable ["objectAreaComplete", ""];
+
+	if (_ftVehicle inArea _attackTargetArea) then {
 		_reward = _reward * 2;
 	};
 
-	private _ftVehicleOwner = _ftVehicle getVariable ["BIS_WL_ownerAsset", "123"];
-	private _rewardStack = _ftVehicle getVariable ["BIS_WL_rewardedStack", createHashMap];
-	private _ftOwnerPlayer = _ftVehicleOwner call BIS_fnc_getUnitByUID;
+	[_ftVehicle, "rewardTransport", "Transport", _reward, 60] call _earnSupportPoints;
+};
 
-	private _senderLastReward = _rewardStack getOrDefault [getPlayerUID _sender, -1000];
+if (_action == "rewardRearm") exitWith {
+	private _resuppliedVehicle = _param1;
 
-	private _eligible = _senderLastReward + 60 <= serverTime && _ftVehicleOwner != _uid;
-	if (_eligible) then {
-		[_reward, _ftVehicleOwner, true, "Spawn reward"] call WL2_fnc_fundsDatabaseWrite;
+	private _vehicleValue = WL_UNIT(_resuppliedVehicle, "cost", 0);
+	private _reward = _vehicleValue * 0.1;
+	_reward = _reward min 1000;
 
-		_rewardStack set [getPlayerUID _sender, serverTime];
-		_ftVehicle setVariable ["BIS_WL_rewardedStack", _rewardStack];
-
-		[objNull, _reward, "Spawn reward", WL_COLOR_SUPPORT] remoteExec ["WL2_fnc_killRewardClient", _ftOwnerPlayer];
+	private _sideVehicles = switch (_side) do {
+		case west: { BIS_WL_westOwnedVehicles };
+		case east: { BIS_WL_eastOwnedVehicles };
+		case independent: { BIS_WL_guerOwnedVehicles };
+		default { [] };
 	};
+
+	private _rearmSources = _sideVehicles select { alive _x } select {
+		_x getVariable ["WLM_ammoCargo", 0] > 250
+	} select {
+		_x distance2D _resuppliedVehicle < WL_MAINTENANCE_RADIUS
+	};
+	if (count _rearmSources == 0) exitWith {};
+
+	_rearmSources = [_rearmSources, [], { _x getVariable ["WLM_ammoCargo", 0] }, "DESCEND"] call BIS_fnc_sortBy;
+
+	private _rearmSource = _rearmSources # 0;
+	[_rearmSource, "rewardResupply", "Resupply", _reward, 120] call _earnSupportPoints;
+};
+
+if (_action == "rewardRepair") exitWith {
+	private _resuppliedVehicle = _param1;
+
+	private _vehicleValue = WL_UNIT(_resuppliedVehicle, "cost", 0);
+	private _reward = _vehicleValue * 0.1;
+	_reward = _reward min 1000;
+
+	private _sideVehicles = switch (_side) do {
+		case west: { BIS_WL_westOwnedVehicles };
+		case east: { BIS_WL_eastOwnedVehicles };
+		case independent: { BIS_WL_guerOwnedVehicles };
+		default { [] };
+	};
+
+	private _repairSources = _sideVehicles select { alive _x } select {
+		WL_UNIT(_x, "hasRepair", 0) > 0
+	} select {
+		_x distance2D _resuppliedVehicle < WL_MAINTENANCE_RADIUS
+	};
+	if (count _repairSources == 0) exitWith {};
+
+	_repairSources = [_repairSources, [_resuppliedVehicle], { _input0 distance2D _x }, "DESCEND"] call BIS_fnc_sortBy;
+
+	private _repairSource = _repairSources # 0;
+	[_repairSource, "rewardResupply", "Resupply", _reward, 120] call _earnSupportPoints;
 };
 
 if (_action == "targetReset") exitWith {
@@ -377,8 +449,15 @@ if (_action == "demine") exitWith {
 	private _asset = _param1;
 	private _targets = _param2;
 
+	private _apsConfig = APS_projectileConfig;
 	{
-		_x setDamage [1, true, _asset, _sender];
+		private _projectileConfig = _apsConfig getOrDefault [typeof _x, createHashMap];
+		private _projectileBunker = _projectileConfig getOrDefault ["bunker", 0];
+		if (_projectileBunker > 0) then {
+			deleteVehicle _x;
+		} else {
+			_x setDamage [1, true, _asset, _sender];
+		};
 	} forEach _targets;
 
 	private _enemyMines = _targets select {
@@ -388,7 +467,7 @@ if (_action == "demine") exitWith {
 	};
 
 	private _reward = 10 * count _enemyMines;
-	if (count _targets > 0) then {
+	if (_reward > 0) then {
 		[_reward, "Mine destroyed"] call _addFunds;
 		[objNull, _reward, "Mine destroyed", WL_COLOR_KILL] remoteExec ["WL2_fnc_killRewardClient", _sender];
 	};
@@ -540,13 +619,29 @@ if (_action == "secureAircraft") exitWith {
 	[_reward, "Secured aircraft"] call _addFunds;
 };
 
+if (_action == "secureDrone") exitWith {
+	private _reward = _param1;
+	[_reward, "Secured drone"] call _addFunds;
+
+	private _signalIncrement = _reward * 0.1;
+
+	private _friendlySignalVar = format ["WL2_ewarSignal_%1", _side];
+	private _friendlySignal = missionNamespace getVariable [_friendlySignalVar, 500];
+	_friendlySignal = (_friendlySignal + _signalIncrement) min 1000;
+	missionNamespace setVariable [_friendlySignalVar, _friendlySignal, true];
+
+	private _hostileSignalVar = format ["WL2_ewarSignal_%1", if (_side == west) then { east } else { west }];
+	private _hostileSignal = missionNamespace getVariable [_hostileSignalVar, 500];
+	_hostileSignal = (_hostileSignal - _signalIncrement) max 0;
+	missionNamespace setVariable [_hostileSignalVar, _hostileSignal, true];
+};
+
 if (_action == "droneExplode") exitWith {
 	private _drone = vehicle _param1;
 	private _expl = createVehicle ["HelicopterExploBig", getPos _drone, [], 0, "FLY"];
 	_expl setPosWorld (getPosWorld _drone);
 	_expl setShotParents [_drone, _sender];
 	triggerAmmo _expl;
-	deleteVehicle _drone;
 };
 
 if (_action == "incendiary") exitWith {
@@ -630,7 +725,7 @@ if (_action == "samHit") exitWith {
 	private _newDamage = damage _target + _damage;
 	_target setDamage [_newDamage, true, _launcher, _launcher];
 
-	private _message = format ["SAM detonation in proximity! Damage sustained: %1%%", round (_damage * 100)];
+	private _message = format ["Proximity detonation! Damage sustained: %1%%", round (_damage * 100)];
 	[_message] remoteExec ["WL2_fnc_broadcastAction", _target];
 };
 

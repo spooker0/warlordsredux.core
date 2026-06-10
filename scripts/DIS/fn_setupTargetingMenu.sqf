@@ -410,7 +410,7 @@ while { !BIS_WL_missionEnd } do {
 			private _missileApproaching = (_relDir < 90 || _relDir > 270) && !(_missileState == "BLIND");
 			private _missileType = _missile getVariable ["WL2_missileNameOverride", _missileTypeData getOrDefault [typeof _missile, "MISSILE"]];
 
-			private _launchParams = _missile getVariable ["DIS_launchParams", [objNull, 0]];
+			private _launchParams = _missile getVariable ["DIS_launchParams", [objNull, 1]];
 			private _notchResult = [cameraOn, _launchParams # 0, _missile, _launchParams # 1] call DIS_fnc_getNotchResult;
 
 			[_missileState, _distance, _missileApproaching, _missileType, _notchResult];

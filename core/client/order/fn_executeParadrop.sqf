@@ -20,14 +20,14 @@ if (_destination # 2 < 200) then {
 
 _playerVehicle setDir (getDir _paradropper);
 _playerVehicle setPosASL _destination;
-[player, "ftSupportPoints", _paradropper, 1000] remoteExec ["WL2_fnc_handleClientRequest", 2];
+[player, "rewardTransport", _paradropper, [_playerVehicle]] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
 waitUntil {
     uiSleep 0.01;
     _playerVehicle setVectorUp [0, 0, 1];
     _playerVehicle setVelocity [0, 0, -400];
     private _alt = (getPosVisual _playerVehicle) # 2;
-    _alt < 150;
+    _alt < 200;
 };
 
 private _parachute = createVehicle [_parachuteClass, _playerVehicle modelToWorld [0, 0, 20], [], 0, "NONE"];
@@ -37,12 +37,11 @@ _playerVehicle attachTo [_parachute, [0, 0, 0]];
 waitUntil {
     uiSleep 0.01;
     _parachute setVectorUp [0, 0, 1];
-    _parachute setVelocity [0, 0, -20];
+    _parachute setVelocity [0, 0, -25];
     private _alt = (getPosVisual _playerVehicle) # 2;
-    _alt < 5;
+    _alt < 15;
 };
 detach _playerVehicle;
 deleteVehicle _parachute;
 
-uiSleep 0.5;
 _playerVehicle setVehiclePosition [getPosATL _playerVehicle, [], 0, "NONE"];

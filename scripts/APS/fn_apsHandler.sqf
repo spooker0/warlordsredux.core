@@ -105,7 +105,9 @@ while { alive _projectile } do {
 
 	private _safeRadius = _radius max (sqrt _safeMaxDistSqr);
 
-	private _eligibleNearbyVehicles = (_projectile nearEntities [["LandVehicle"], _safeRadius]) select {
+	private _eligibleNearbyVehicles = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) select {
+		_x distance _projectile < _safeRadius
+	} select {
 		_x != _unit
     } select {  // active check
 		[_x] call APS_fnc_active;

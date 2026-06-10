@@ -73,10 +73,10 @@ private _sideCaptureModifier = if (_useCache) then {
 			_connections = _connections + 1;
 		};
 
-		if (_ownerSide == _side) then {
+		if (_ownerSide == _side && _sector != _homeBase) then {
 			private _sectorDefenders = _sector getVariable ["WL2_defenders", 0];
 			if (_sectorDefenders > 0) then {
-				_connections = _connections + 2;
+				_connections = _connections + 4;
 			};
 		};
 

@@ -121,7 +121,7 @@ if (_asset isKindOf "Man") then {
 		_asset addItemCargoGlobal ["ToolKit", 1];
 	};
 
-	if (_assetActualType == "Land_Cargo20_yellow_F") then {
+	if (_assetActualType == "Land_Cargo10_military_green_F") then {
 		_asset setVariable ["WL2_mapCircleRadius", WL_FOB_CAPTURE_RANGE, true];
 		[_asset] remoteExec ["WL2_fnc_setupForwardBaseAction", 0, true];
 	};
@@ -423,6 +423,10 @@ if (_asset isKindOf "Man") then {
 			params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
 			[_projectile, _unit, 12] spawn WL2_fnc_airburst;
 		}];
+	};
+
+	if (WL_ASSET_GET(_data, "disableDamage", 0) > 0) then {
+		_asset allowDamage false;
 	};
 
 	if (_assetActualType == "B_LSV_01_AT_TV_F") then {

@@ -29,6 +29,8 @@ if (_hasFullAccess) then {
         private _rearmTime = WL_UNIT(_asset, "rearm", 600);
         _asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
 
+        [player, "rewardRearm", _asset] remoteExec ["WL2_fnc_handleClientRequest", 2];
+
         private _pylonConfig = configFile >> "CfgVehicles" >> typeOf _asset >> "Components" >> "TransportPylonsComponent";
         private _isAircraft = !(isNull _pylonConfig);
 
@@ -64,6 +66,13 @@ if (_hasFullAccess) then {
             playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Repair.wss", _asset, false, getPosASL _asset, 2, 1, 75];
             [localize "STR_WL_assetRepaired"] call WL2_fnc_smoothText;
             _asset setVariable ["WL2_nextRepair", serverTime + WL_COOLDOWN_REPAIR, true];
+
+            private _maxHealth = _asset getVariable ["WL2_demolitionMaxHealth", 5];
+            _asset setVariable ["WL2_demolitionHealth", _maxHealth, true];
+
+            [player, "rewardRepair", _asset] remoteExec ["WL2_fnc_handleClientRequest", 2];
+
+            _asset setVariable ["WL2_immobilized", false, true];
         } else {
             playSoundUI ["AddItemFailed"];
         };
@@ -272,15 +281,24 @@ if (_canFastTravel) then {
     }, true, "designateTeamPriority", [50, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
 };
 
+private _canParadrop = WL_ASSET(_assetActualType, "paradrops", 0) > 0;
+if (_canParadrop) then {
+    [_asset, _targetId, "paradrop", "Paradrop", {
+        params ["_asset"];
+        [_asset, cameraOn] spawn WL2_fnc_executeParadrop;
+    }, true, "paradrop", [WL_COST_PARADROP, "FTParadropVehicle", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
+};
+
 if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     private _fastTravelFOBExecute = {
         params ["_asset"];
-        private _dome = _asset getVariable ["WL2_forwardBaseDome", objNull];
-        if (isNull _dome) then {
-            private _forwardBaseArea = [getPosASL _asset, WL_FOB_RANGE, WL_FOB_RANGE, 0, false];
+        private _forwardBaseArea = [getPosASL _asset, WL_FOB_RANGE, WL_FOB_RANGE, 0, false];
+        private _ftAssets = [_asset, _forwardBaseArea, true] call WL2_fnc_getSectorFTAsset;
+        if (count _ftAssets == 0) then {
             [6, _forwardBaseArea] spawn WL2_fnc_executeFastTravel;
         } else {
-            [_dome] spawn WL2_fnc_executeFastTravelVehicle;
+            private _randomAsset = selectRandom _ftAssets;
+            [_randomAsset] spawn WL2_fnc_executeFastTravelVehicle;
         };
     };
     [

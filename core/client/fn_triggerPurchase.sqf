@@ -126,6 +126,14 @@ switch (_className) do {
             };
         } forEach _allOwnedMines;
         missionNamespace setVariable [_ownedMineVar, [], true];
+
+        private _ownedExplosiveVar = format ["WL2_ownedExplosives_%1", getPlayerUID player];
+        private _allOwnedExplosives = missionNamespace getVariable [_ownedExplosiveVar, []];
+        {
+            if (alive _x) then {
+                deleteVehicle _x;
+            };
+        } forEach _allOwnedExplosives;
     };
     case "ResetVehicle": {
         "RequestMenu_close" call WL2_fnc_setupUI;
@@ -215,7 +223,7 @@ switch (_className) do {
     case "Ewar": { 0 spawn WL2_fnc_ewar2 };
     case "Surrender": {
         0 spawn {
-            private _message = "Are you sure you want to surrender? You will ruin the game for people who still want to play :(<br/>Additional votes needed: 1";
+            private _message = "Are you sure you want to surrender? You will ruin the game for people who still want to play :(<br/>Votes needed: 1";
             private _result = ["Surrender", _message, "OK", "Cancel"] call WL2_fnc_prompt;
             if (_result) then {
                 [BIS_WL_enemySide, true, true] spawn WL2_fnc_missionEndHandle;
@@ -305,7 +313,7 @@ switch (_className) do {
                 ["REVIVED TEAMMATE", WL_COLOR_SUPPORT],
                 ["RECON", WL_COLOR_SUPPORT],
                 ["SPOT ASSIST", WL_COLOR_SUPPORT],
-                ["SPAWN REWARD", WL_COLOR_SUPPORT],
+                ["TRANSPORT", WL_COLOR_SUPPORT],
                 ["SQUAD ASSIST", WL_COLOR_SUPPORT]
             ];
             for "_i" from 1 to 20 do {

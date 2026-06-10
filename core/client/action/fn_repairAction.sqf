@@ -18,6 +18,8 @@ private _actionID = _asset addAction [
             private _maxHealth = _asset getVariable ["WL2_demolitionMaxHealth", 5];
             _asset setVariable ["WL2_demolitionHealth", _maxHealth, true];
 
+            [player, "rewardRepair", _asset] remoteExec ["WL2_fnc_handleClientRequest", 2];
+
             _asset setVariable ["WL2_immobilized", false, true];
         } else {
             playSound "AddItemFailed";

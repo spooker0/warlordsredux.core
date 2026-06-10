@@ -22,7 +22,7 @@ private _generateSectorSpawns = {
     _alreadyShownSectors pushBack _sector;
 
     private _sectorName = _sector getVariable ["WL2_name", "SECTOR"];
-    private _sectorAssets = [_sector, true] call WL2_fnc_getSectorFTAsset;
+    private _sectorAssets = [_sector, [], true] call WL2_fnc_getSectorFTAsset;
 
     private _specialSpawnables = [];
 
@@ -157,13 +157,9 @@ if (isNull _selectedSpawnTarget && isNull (_selectedSpecialSpawnTarget # 0)) the
     if (isNull _spawnBar) then {
         _spawnBar = _display ctrlCreate ["SQD_Menu_SpawnBar", -1, _spawnListGroup];
 
-        private _spawnGridBorder = _display ctrlCreate ["RscText", -1, _spawnListGroup];
-        _spawnGridBorder ctrlSetBackgroundColor _gridBackgroundColor;
-        _spawnGridBorder ctrlCommit 0;
-
         _spawnEntry set ["bar", _spawnBar];
-        _spawnEntry set ["gridBorder", _spawnGridBorder];
         _spawnEntry set ["tiles", createHashMap];
+        _spawnEntry set ["tileBorders", createHashMap];
 
         _spawnControls set [_sectionKey, _spawnEntry];
     };
@@ -190,18 +186,18 @@ if (isNull _selectedSpawnTarget && isNull (_selectedSpecialSpawnTarget # 0)) the
     private _rowCount = ceil (_spawnableCount / _maxColumns);
 
     private _gridY = _spawnListY + SQD_LAYOUT_HEADER_H;
-    private _gridW = SQD_LAYOUT_GRID_BORDER + (_columnCount * _spawnTileStepX);
     private _gridH = SQD_LAYOUT_GRID_BORDER + (_rowCount * _spawnTileStepY);
 
-    private _spawnGridBorder = _spawnEntry getOrDefault ["gridBorder", controlNull];
-
-    if (!isNull _spawnGridBorder) then {
-        _spawnGridBorder ctrlSetPosition [0, _gridY, _gridW, _gridH];
-        _spawnGridBorder ctrlSetBackgroundColor _gridBackgroundColor;
-        _spawnGridBorder ctrlCommit 0;
+    // Compatibility cleanup for entries pooled by the previous version,
+    // which used one section-wide grid background instead of per-tile borders.
+    private _oldSpawnGridBorder = _spawnEntry getOrDefault ["gridBorder", controlNull];
+    if (!isNull _oldSpawnGridBorder) then {
+        ctrlDelete _oldSpawnGridBorder;
+        _spawnEntry deleteAt "gridBorder";
     };
 
     private _spawnTiles = _spawnEntry getOrDefault ["tiles", createHashMap];
+    private _spawnTileBorders = _spawnEntry getOrDefault ["tileBorders", createHashMap];
     private _seenSpawnTargets = createHashMap;
 
     private _tileItems = [];
@@ -310,16 +306,49 @@ if (isNull _selectedSpawnTarget && isNull (_selectedSpecialSpawnTarget # 0)) the
         private _column = _tileIndex % _maxColumns;
         private _row = floor (_tileIndex / _maxColumns);
 
+        private _tileX = SQD_LAYOUT_GRID_BORDER + (_spawnTileStepX * _column);
+        private _tileY = _gridY + SQD_LAYOUT_GRID_BORDER + (_spawnTileStepY * _row);
+
+        private _borderX = _tileX - SQD_LAYOUT_GRID_BORDER;
+        private _borderY = _tileY - (SQD_LAYOUT_GRID_BORDER * 2);
+        private _borderW = _spawnTileW + (SQD_LAYOUT_GRID_BORDER * 2);
+        private _borderH = _spawnTileH + (SQD_LAYOUT_GRID_BORDER * 3);
+
+        private _spawnTileBorder = _spawnTileBorders getOrDefault [_spawnTargetKey, controlNull];
         private _spawnTile = _spawnTiles getOrDefault [_spawnTargetKey, controlNull];
+
+        // Border must be created before the tile so it stays behind.
+        if (isNull _spawnTileBorder) then {
+            if (!isNull _spawnTile) then {
+                ctrlDelete _spawnTile;
+                _spawnTile = controlNull;
+                _spawnTiles deleteAt _spawnTargetKey;
+            };
+
+            _spawnTileBorder = _display ctrlCreate ["RscText", -1, _spawnListGroup];
+            _spawnTileBorder ctrlSetBackgroundColor _gridBackgroundColor;
+            _spawnTileBorder ctrlCommit 0;
+
+            _spawnTileBorders set [_spawnTargetKey, _spawnTileBorder];
+        };
 
         if (isNull _spawnTile) then {
             _spawnTile = _display ctrlCreate ["SQD_Menu_SpawnBar_Location", -1, _spawnListGroup];
             _spawnTiles set [_spawnTargetKey, _spawnTile];
         };
 
+        _spawnTileBorder ctrlSetPosition [
+            _borderX,
+            _borderY,
+            _borderW,
+            _borderH
+        ];
+        _spawnTileBorder ctrlSetBackgroundColor _gridBackgroundColor;
+        _spawnTileBorder ctrlCommit 0;
+
         _spawnTile ctrlSetPosition [
-            SQD_LAYOUT_GRID_BORDER + (_spawnTileStepX * _column),
-            _gridY + SQD_LAYOUT_GRID_BORDER + (_spawnTileStepY * _row),
+            _tileX,
+            _tileY,
             _spawnTileW,
             _spawnTileH
         ];
@@ -327,25 +356,38 @@ if (isNull _selectedSpawnTarget && isNull (_selectedSpecialSpawnTarget # 0)) the
 
         private _spawnLocationName = _spawnTile controlsGroupCtrl SQD_LOCATION_NAME_IDC;
         _spawnLocationName ctrlSetText _spawnName;
+        private _nameColor = if (_isSelected) then {
+            [0.5, 0.5, 0.5, 1]
+        } else {
+            [SQD_RGBA_TEXT]
+        };
+        _spawnLocationName ctrlSetTextColor _nameColor;
 
         private _spawnLocationIcon = _spawnTile controlsGroupCtrl SQD_LOCATION_ICON_IDC;
         _spawnLocationIcon ctrlSetText _spawnIcon;
 
-        private _textColor = if (_isSelected) then {
-            [0.2, 1, 0.2, 1]
+        private _spawnLocationBg = _spawnTile controlsGroupCtrl SQD_LOCATION_BG_IDC;
+        private _spawnLocationBgColor = if (_isSelected) then {
+            [SQD_RGBA_BG]
         } else {
-            [1, 1, 1, 1]
+            _gridBackgroundColor
         };
+        _spawnLocationBg ctrlSetBackgroundColor _spawnLocationBgColor;
 
-        _spawnLocationName ctrlSetTextColor _textColor;
-        _spawnLocationIcon ctrlSetTextColor _textColor;
+        private _spawnLocationHeader = _spawnTile controlsGroupCtrl SQD_LOCATION_HEADER_IDC;
+        private _headerColor = if (_isSelected) then {
+            [0.5, 1, 1, 1]
+        } else {
+            [SQD_RGBA_DARK]
+        };
+        _spawnLocationHeader ctrlSetBackgroundColor _headerColor;
 
         private _spawnButton = _spawnTile controlsGroupCtrl SQD_LOCATION_BUTTON_IDC;
         _spawnButton setVariable ["SQD_spawnTarget", _spawnTarget];
         _spawnButton setVariable ["SQD_specialSpawnTarget", _specialSpawnTarget];
 
-        _spawnButton ctrlRemoveAllEventHandlers "ButtonClick";
-        _spawnButton ctrlAddEventHandler ["ButtonClick", SQD_fnc_actionSpawn];
+        _spawnButton ctrlRemoveAllEventHandlers "ButtonDown";
+        _spawnButton ctrlAddEventHandler ["ButtonDown", SQD_fnc_actionSpawn];
     } forEach _tileItems;
 
     {
@@ -360,10 +402,33 @@ if (isNull _selectedSpawnTarget && isNull (_selectedSpecialSpawnTarget # 0)) the
             ctrlDelete _staleTile;
         };
 
+        private _staleTileBorder = _spawnTileBorders getOrDefault [_spawnTargetKey, controlNull];
+        if (!isNull _staleTileBorder) then {
+            ctrlDelete _staleTileBorder;
+        };
+
         _spawnTiles deleteAt _spawnTargetKey;
+        _spawnTileBorders deleteAt _spawnTargetKey;
     } forEach _spawnTiles;
 
+    // Defensive cleanup for orphaned borders.
+    {
+        private _spawnTargetKey = _x;
+        private _staleTileBorder = _y;
+
+        if (_spawnTargetKey in _seenSpawnTargets) then {
+            continue;
+        };
+
+        if (!isNull _staleTileBorder) then {
+            ctrlDelete _staleTileBorder;
+        };
+
+        _spawnTileBorders deleteAt _spawnTargetKey;
+    } forEach _spawnTileBorders;
+
     _spawnEntry set ["tiles", _spawnTiles];
+    _spawnEntry set ["tileBorders", _spawnTileBorders];
     _spawnControls set [_sectionKey, _spawnEntry];
 
     _spawnListY = _gridY + _gridH + SQD_LAYOUT_SECTION_GAP_Y;
@@ -391,6 +456,16 @@ if (isNull _selectedSpawnTarget && isNull (_selectedSpecialSpawnTarget # 0)) the
     if (!isNull _spawnGridBorder) then {
         ctrlDelete _spawnGridBorder;
     };
+
+    private _spawnTileBorders = _spawnEntry getOrDefault ["tileBorders", createHashMap];
+
+    {
+        private _spawnTileBorder = _y;
+
+        if (!isNull _spawnTileBorder) then {
+            ctrlDelete _spawnTileBorder;
+        };
+    } forEach _spawnTileBorders;
 
     private _spawnTiles = _spawnEntry getOrDefault ["tiles", createHashMap];
 

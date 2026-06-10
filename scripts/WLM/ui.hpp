@@ -152,8 +152,8 @@ class WLM_PylonUI {
 
         class WLM_WipeButton: RscButtonMRTM {
             idc = 5307;
-            text = $STR_WL_wipeAll;
-            tooltip = $STR_WL_wipeAllInfo;
+            text = $STR_WL_wipeLoadout;
+            tooltip = $STR_WL_wipeLoadoutInfo;
             sizeEx = 0.035;
             colorBackground[] = {1, 1, 1, 0.1};
             x = 0.8;

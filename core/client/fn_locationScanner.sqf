@@ -54,7 +54,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
         private _nearbyInstallable = _nearbyItems select {
             alive _x
         } select {
-            cameraOn distance _x < 10;
+            cameraOn distance2D _x < 10;
         } select {
             [getPosASL cameraOn, getDir cameraOn, 90, getPosASL _x] call WL2_fnc_inAngleCheck;
         } select {
@@ -278,7 +278,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
                 _commText = if (BIS_WL_playerSide == west) then {
                     format ["***ING %1!", toUpper _commText];
                 } else {
-                    format ["%1 BLYAD!", toUpper _commText];
+                    format ["%1 BLYAT!", toUpper _commText];
                 };
             } else {
                 _commText = format ["%1!", toUpper _commText];

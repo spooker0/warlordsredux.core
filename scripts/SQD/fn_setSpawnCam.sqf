@@ -1,17 +1,39 @@
 #include "includes.inc"
 params ["_spawnTarget", "_specialSpawnTarget"];
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-private _hideSpawnMenuPiP = _settingsMap getOrDefault ["hideSpawnMenuPiP", false];
-if (_hideSpawnMenuPiP) exitWith {};
+private _display = uiNamespace getVariable ["SQD_Menu", displayNull];
+private _spawnScreen = _display displayCtrl SQD_SPAWN_SCREEN_IDC;
+
+private _killFeed = {
+    _spawnScreen ctrlShow false;
+
+    private _spawnCamera = uiNamespace getVariable ["SQD_spawnCamera", objNull];
+    if (!alive _spawnCamera) exitWith {};
+    _spawnCamera cameraEffect ["Terminate", "BACK TOP", "spawncam"];
+    camDestroy _spawnCamera;
+};
+
+private _menuCamFeedEnabled = missionNamespace getVariable ["SQD_menuCamFeedEnabled", true];
+if (!_menuCamFeedEnabled) exitWith {
+    call _killFeed;
+};
+
+_spawnScreen ctrlShow true;
 
 private _spawnCamera = uiNamespace getVariable ["SQD_spawnCamera", objNull];
 if (!alive _spawnCamera) then {
     _spawnCamera = "camera" camCreate [0, 0, 0];
-    _spawnCamera cameraEffect ["Terminate", "BACK TOP", "spawnCam"];
-    _spawnCamera cameraEffect ["Internal", "BACK TOP", "spawnCam"];
+    _spawnCamera cameraEffect ["Terminate", "BACK TOP", "spawncam"];
+    _spawnCamera cameraEffect ["Internal", "BACK TOP", "spawncam"];
     _spawnCamera camCommit 0;
     uiNamespace setVariable ["SQD_spawnCamera", _spawnCamera];
+};
+
+private _camTIState = missionNamespace getVariable ["SQD_menuCamTIEnabled", false];
+if (_camTIState) then {
+    "spawncam" setPiPEffect [2];
+} else {
+    "spawncam" setPiPEffect [0];
 };
 
 private _targetObject = objNull;

@@ -44,7 +44,7 @@ private _cost = if (_closestTarget in [WL2_base1, WL2_base2]) then {
     WL_COST_COMBATAIR
 };
 private _cooldown = if (_closestTarget in [WL2_base1, WL2_base2]) then {
-	WL_COOLDOWN_CAP / 5
+	WL_COOLDOWN_CAPHOME
 } else {
 	WL_COOLDOWN_CAP
 };

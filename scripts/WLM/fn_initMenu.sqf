@@ -61,7 +61,7 @@ _saveButtonControl ctrlAddEventHandler ["ButtonClick", {
 
 private _wipeButtonControl = _display displayCtrl WLM_WIPE_BUTTON;
 _wipeButtonControl ctrlAddEventHandler ["ButtonClick", {
-    [true] call WLM_fnc_wipePylonSaves;
+    0 spawn WLM_fnc_wipePylonSaves;
 }];
 
 _applyButtonControl ctrlAddEventHandler ["ButtonClick", {

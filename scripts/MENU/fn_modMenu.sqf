@@ -129,7 +129,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
         case "downloadScriptLog": {
             private _uid = _message select 1;
             private _selectedPlayer = [_uid] call BIS_fnc_getUnitByUID;
-            [player] remoteExec ["WL2_fnc_publishScriptLog", _selectedPlayer];
+            [player, clientOwner] remoteExec ["WL2_fnc_publishSelfLog", _selectedPlayer];
         };
         case "deputize": {
             private _uid = _message select 1;

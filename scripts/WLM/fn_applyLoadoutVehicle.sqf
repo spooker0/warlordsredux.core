@@ -80,6 +80,8 @@ if (_eligibleFreeRearm) then {
     private _rearmTime = WL_UNIT(_asset, "rearm", 600);
     _asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
 
+    [player, "rewardRearm", _asset] remoteExec ["WL2_fnc_handleClientRequest", 2];
+
     playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Rearm.wss", _asset, false, getPosASL _asset, 2, 1, 75];
     [localize "STR_WL_assetRearmed"] call WL2_fnc_smoothText;
 } else {

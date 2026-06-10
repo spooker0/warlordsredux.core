@@ -38,52 +38,18 @@ if (!isNull _respawnCounter) then {
     _respawnCounter closeDisplay 1;
 };
 
-// private _killStatusText = _display displayCtrl SQD_KILL_STATUS_IDC;
-// if (WL_ISUP(player)) exitWith {
-//     _killStatusText ctrlShow false;
-// };
-
-// private _gameData = uiNamespace getVariable ["WL2_deathInfoData", []];
-// if (count _gameData >= 12) then {
-//     _gameData params [
-//         "_health",
-//         "_killerText",
-//         "_killerIcon",
-//         "_ratioYou",
-//         "_ratioThem",
-//         "_responsiblePlayerName",
-//         "_killerSide",
-//         "_badgeText",
-//         "_badgeLevel",
-//         "_badgeIcon",
-//         "_hitPoints",
-//         "_projectileHitArray"
-//     ];
-
-//     private _projectileHits = _projectileHitArray select [0, 5];
-//     private _offset = (5 - count _projectileHits) * 0.03;
-//     _projectileHits = _projectileHits apply {
-//         _x params ["_hitTime", "_hitText"];
-//         format ["<t color='%1'>%2 (%3 ms)</t>", SQD_COLOR_LOCKED, _hitText, _hitTime]
-//     };
-
-//     private _statusInfo = format [
-//         "<t size='0.45' align='center'>KILLED BY</t><br/><t size='0.35' align='center'>%2 [%3]<br/><t size='0.25'>YOU</t> %4 - %5 <t size='0.25'>THEM</t><br/><t size='0.32'>%6</t></t>",
-//         _statusName,
-//         _responsiblePlayerName,
-//         _killerText,
-//         _ratioYou,
-//         _ratioThem,
-//         _projectileHits joinString "<br/>"
-//     ];
-
-//     _killStatusText ctrlSetStructuredText parseText _statusInfo;
-//     _killStatusText ctrlSetPosition [
-//         safeZoneX + 0.8,
-//         safeZoneY + safeZoneH - 0.4 + _offset,
-//         safeZoneW - 0.1 - 0.1 - 0.8 - 0.6,
-//         0.3 - _offset
-//     ];
-//     _killStatusText ctrlCommit 0;
-//     _killStatusText ctrlShow true;
-// };
+private _statusHelpButton = _display displayCtrl SQD_STATUS_HELP_IDC;
+private _statusHelpButtonTextStructured = [
+    "HELP",
+    SQD_LAYOUT_LABEL_TEXT_SIZE * 0.75,
+    SQD_COLOR_TEXT,
+    "center"
+] call SQD_fnc_renderText;
+_statusHelpButton ctrlSetStructuredText _statusHelpButtonTextStructured;
+_statusHelpButton ctrlRemoveAllEventHandlers "ButtonClick";
+_statusHelpButton ctrlAddEventHandler ["ButtonClick", {
+    params ["_control", "_event", "_x", "_y", "_shift", "_ctrl", "_alt"];
+    private _display = ctrlParent _control;
+    _display closeDisplay 0;
+    0 spawn WL2_fnc_welcome;
+}];

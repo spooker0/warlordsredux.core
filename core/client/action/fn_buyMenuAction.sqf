@@ -17,21 +17,3 @@ if (!_hideBuyMenu) then {
 		false
 	];
 };
-
-private _hideHelpMenu = _settingsMap getOrDefault ["hideHelpMenu", false];
-if (!_hideHelpMenu) then {
-	player addAction [
-		"<t color='#FFFF00'>Help</t>",
-		{
-			0 spawn WL2_fnc_welcome;
-		},
-		[],
-		-201,
-		false,
-		false,
-		"",
-		"_this == _target",
-		30,
-		false
-	];
-};

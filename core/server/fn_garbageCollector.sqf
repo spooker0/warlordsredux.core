@@ -2,10 +2,12 @@
 private _list = serverNamespace getVariable ["WL2_garbageCollector", createHashMap];
 private _assetData = WL_ASSET_DATA;
 
+private _staticPropMap = missionNamespace getVariable ["WL2_staticPropMap", createHashMap];
 private _markedForDeletion = [];
 
 private _shouldGarbageCollect = {
 	params ["_asset"];
+	if (getObjectID _asset in _staticPropMap) exitWith { false };
 	if (!alive _asset) exitWith { true };
 	if (_asset getEntityInfo 12) exitWith { true };
 	if (_asset getEntityInfo 2) exitWith { true };

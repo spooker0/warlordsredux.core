@@ -101,8 +101,8 @@ WL_LoadingState = 8;
 0 spawn WL2_fnc_initHud;
 0 spawn {
 	while {!BIS_WL_missionEnd} do {
-		uiSleep 5;
 		call WL2_fnc_teammatesAvailability;
+		uiSleep 5;
 	};
 };
 
@@ -223,7 +223,7 @@ if !(isDedicated) then {
 
 player addAction [
 	format ["<t color='#00FFFF'>%1 (Key: %2)</t>", "Spawn Menu", (actionKeysNames ["watch", 1, "Keyboard"]) regexReplace ["""", ""]],
-	{ 0 spawn SQD_fnc_initSquadMenu; }, [], -100, false, false, "watch", "", 0
+	{ 0 spawn SQD_fnc_initSquadMenu; }, [], -100, false, true, "watch", "", 0, true
 ];
 
 uiNamespace setVariable ["WL2_canBuy", true];
@@ -345,5 +345,6 @@ private _showWelcomeMenu = _settingsMap getOrDefault ["showWelcomeMenu", true];
 if (_showWelcomeMenu) then {
 	0 spawn WL2_fnc_welcome;
 };
+0 spawn SQD_fnc_initSquadMenu;
 
 WL_LoadingState = 12;

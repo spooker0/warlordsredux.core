@@ -14,6 +14,11 @@ private _teamPriorityVar = format ["WL2_teamPriority_%1", _side];
 private _teamPriority = missionNamespace getVariable [_teamPriorityVar, objNull];
 if (WL_ISUP(player) && cameraOn != player) exitWith {};
 
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _dontConscriptInSector = _settingsMap getOrDefault ["dontConscriptInSector", false];
+private _sectorArea = _teamPriority getVariable ["objectAreaComplete", ""];
+if (player inArea _sectorArea && _dontConscriptInSector) exitWith {};
+
 private _callText = format [localize "STR_WL_conscriptMessage", name _conscripter];
 
 private _callbackConfirm = {
@@ -25,6 +30,7 @@ private _callbackConfirm = {
     } forEach _queue;
 
     if (WL_ISDOWN(player)) then {
+        missionNamespace setVariable ["WL2_isBeingConscripted", true];
         setPlayerRespawnTime 0.1;
         forceRespawn player;
 
@@ -32,6 +38,8 @@ private _callbackConfirm = {
             uiSleep 0.1;
             WL_ISUP(player);
         };
+
+        missionNamespace setVariable ["WL2_isBeingConscripted", false];
     };
 
     if (cameraOn != player) exitWith {};

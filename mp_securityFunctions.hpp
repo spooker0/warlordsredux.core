@@ -24,6 +24,7 @@ class CfgRemoteExec {
 		class WL2_fnc_addMissileToMag {allowedTargets = 0;};
 		class WL2_fnc_airRadarAction {allowedTargets = 0;};
 		class WL2_fnc_airRearmAction {allowedTargets = 0;};
+		class WL2_fnc_askForgiveness {allowedTargets = 0;};
 		class WL2_fnc_attachDetach {allowedTargets = 0;};
 		class WL2_fnc_broadcastAction {allowedTargets = 0;};
 		class WL2_fnc_catapultAction {allowedTargets = 0;};
@@ -41,6 +42,7 @@ class CfgRemoteExec {
 		class WL2_fnc_deployableAddAction {allowedTargets = 1;};
 		class WL2_fnc_destroyStronghold {allowedTargets = 0;};
 		class WL2_fnc_earthquake {allowedTargets = 0;};
+		class WL2_fnc_ecmAction {allowedTargets = 0;};
 		class WL2_fnc_forgiveTeamkill {allowedTargets = 2;};
 		class WL2_fnc_handleClientRequest {allowedTargets = 2;};
 		class WL2_fnc_handleDamage {allowedTargets = 0;};
@@ -60,7 +62,7 @@ class CfgRemoteExec {
 		class WL2_fnc_pingFix {allowedTargets = 1;};
 		class WL2_fnc_prepareStronghold {allowedTargets = 0;};
 		class WL2_fnc_protectStronghold {allowedTargets = 0;};
-		class WL2_fnc_publishScriptLog {allowedTargets = 0;};
+		class WL2_fnc_publishSelfLog {allowedTargets = 0;};
 		class WL2_fnc_radarOperateAction {allowedTargets = 1;};
 		class WL2_fnc_radarRotateAction {allowedTargets = 1;};
 		class WL2_fnc_rearmAction {allowedTargets = 1;};
