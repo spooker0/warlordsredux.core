@@ -64,4 +64,7 @@ if (cameraOn == _asset) then {
     };
 };
 
+private _assetOwner = _asset getVariable ["BIS_WL_ownerAsset", "123"];
+if (_assetOwner == "123" || _assetOwner != getPlayerUID player) exitWith {};
+
 [_scannedObjects] call WL2_fnc_reconReward;
