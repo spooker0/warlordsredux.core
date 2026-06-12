@@ -1,20 +1,6 @@
 #include "includes.inc"
 params ["_newUnit", "_oldUnit", "_respawn", "_respawnDelay"];
 
-private _oldPosition = getPosASL _oldUnit;
-private _oldOwnedSector = (BIS_WL_sectorsArray # 0) select {
-	_oldPosition inArea (_x getVariable "objectAreaComplete")
-};
-if (count _oldOwnedSector > 0) then {
-	private _oldSector = _oldOwnedSector # 0;
-	private _oldSectorPreviousOwners = _oldSector getVariable ["BIS_WL_previousOwners", []];
-	private _oldSectorVulnerable = count (_oldSectorPreviousOwners - [BIS_WL_playerSide]) > 0 || _oldSector == WL_TARGET_ENEMY;
-	if (_oldSectorVulnerable) then {
-		private _oldSectorDefenders = _oldSector getVariable ["WL2_defenders", 0];
-		_oldSector setVariable ["WL2_defenders", (_oldSectorDefenders - 1) max 0, true];
-	};
-};
-
 #if WL_WINTER_EVENT
 [false] spawn WL2_fnc_pingSounds;
 #endif
