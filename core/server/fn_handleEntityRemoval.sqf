@@ -10,18 +10,20 @@ private _alreadyHandled = _unit getVariable ["WL2_alreadyHandled", false];
 if (_alreadyHandled) exitWith {};
 _unit setVariable ["WL2_alreadyHandled", true];
 
-private _unitPosition = getPosASL _unit;
-private _ownedSector = BIS_WL_allSectors select {
-	_unitPosition inArea (_x getVariable "objectAreaComplete")
-};
-if (count _ownedSector > 0) then {
-	private _deathSector = _ownedSector # 0;
-    private _sectorOwner = _deathSector getVariable ["BIS_WL_owner", independent];
-    if (_sectorOwner == _unitSide) then {
-        private _sectorVulnerable = _deathSector in [BIS_WL_currentTarget_west, BIS_WL_currentTarget_east];
-        if (_sectorVulnerable) then {
-            private _sectorDefenders = _deathSector getVariable ["WL2_defenders", 0];
-            _deathSector setVariable ["WL2_defenders", (_sectorDefenders - 1) max 0, true];
+if (_unit isKindOf "Man") then {
+    private _unitPosition = getPosASL _unit;
+    private _ownedSector = BIS_WL_allSectors select {
+        _unitPosition inArea (_x getVariable "objectAreaComplete")
+    };
+    if (count _ownedSector > 0) then {
+        private _deathSector = _ownedSector # 0;
+        private _sectorOwner = _deathSector getVariable ["BIS_WL_owner", independent];
+        if (_sectorOwner == _unitSide) then {
+            private _sectorVulnerable = _deathSector in [BIS_WL_currentTarget_west, BIS_WL_currentTarget_east];
+            if (_sectorVulnerable) then {
+                private _sectorDefenders = _deathSector getVariable ["WL2_defenders", 0];
+                _deathSector setVariable ["WL2_defenders", (_sectorDefenders - 1) max 0, true];
+            };
         };
     };
 };
