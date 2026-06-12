@@ -65,9 +65,10 @@ private _factoryTypes = getArray (_factoriesConfig >> "factoryTypes");
     private _marker = format ["factory_%1", _forEachIndex];
     createMarkerLocal [_marker, _computerPos];
     _marker setMarkerTypeLocal "loc_use";
-    _marker setMarkerColorLocal "ColorWhite";
+    _marker setMarkerColorLocal "ColorBlack";
     _marker setMarkerAlphaLocal 1;
     _marker setMarkerSize [1, 1];   // broadcast global
+    _factory setVariable ["WL2_factoryMarker", _marker];
 } forEach _factories;
 
 while { !BIS_WL_missionEnd } do {
@@ -93,7 +94,7 @@ while { !BIS_WL_missionEnd } do {
         private _factoryType = _factory getVariable ["WL2_factoryType", ["", 0]];
         _factoryType params ["_className", "_productionTime"];
 
-        private _lastProduced = _factory getVariable ["WL2_lastProduced", 0];
+        private _lastProduced = _factory getVariable ["WL2_lastProduced", -1000];
         private _timeSinceProduced = serverTime - _lastProduced;
         if (_timeSinceProduced < _productionTime) then {
             private _spawnTime = ceil ((_productionTime - _timeSinceProduced) / 60);
@@ -101,11 +102,15 @@ while { !BIS_WL_missionEnd } do {
             if (_spawnTime != _cachedSpawnTime) then {
                 _factory setVariable ["WL2_cachedSpawnTime", _spawnTime];
                 _computer setObjectTextureGlobal [3, format ["#(rgb,512,512,3)text(1,1,""PuristaBold"",0.15,""#000000"",""#ff0000"",""PRODUCING\n%1 MIN"")", _spawnTime]];
+                private _marker = _factory getVariable ["WL2_factoryMarker", ""];
+                _marker setMarkerColor "ColorRed";
             };
         } else {
             _factory setVariable ["WL2_lastProduced", serverTime];
             _factory setVariable ["WL2_installable", _className, true];
             _computer setObjectTextureGlobal [3, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.2,""#000000"",""#00ff00"",""READY"")"];
+            private _marker = _factory getVariable ["WL2_factoryMarker", ""];
+            _marker setMarkerColor "ColorBlack";
         };
     } forEach _factories;
 

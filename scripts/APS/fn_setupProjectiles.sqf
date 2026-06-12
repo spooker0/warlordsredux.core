@@ -214,8 +214,8 @@ addMissionEventHandler ["ProjectileCreated", {
         [_projectile, _unit] spawn DIS_fnc_droneDeployer;
     };
 
-    private _projectileMineLayer = _projectileConfig getOrDefault ["mineLayer", false];
-    if (_projectileMineLayer) then {
-        [_projectile, _unit] spawn DIS_fnc_mineLayer;
+    private _projectileMineLayer = _projectileConfig getOrDefault ["mineLayer", ""];
+    if (_projectileMineLayer != "") then {
+        [_projectile, _unit, _projectileMineLayer] spawn DIS_fnc_mineLayer;
     };
 }];

@@ -434,7 +434,7 @@ class SQD_DeathInfo {
             text = "";
 
             class Attributes {
-                font = "RobotoCondensed";
+                font = "RobotoCondensedBold";
                 color = SQD_COLOR_TEXT;
                 align = "center";
             };
@@ -449,7 +449,7 @@ class SQD_DeathInfo {
             text = "";
 
             class Attributes {
-                font = "RobotoCondensed";
+                font = "RobotoCondensedBold";
                 color = SQD_COLOR_TEXT;
                 align = "center";
             };

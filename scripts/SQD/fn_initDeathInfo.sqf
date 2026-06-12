@@ -68,7 +68,7 @@ uiNamespace setVariable ["WL2_deathInfoData", []];
 
 private _tipsControl = _display displayCtrl SQD_DEATHINFO_TIPS_IDC;
 
-private _randomTipIndex = floor (random 28) + 1;
+private _randomTipIndex = floor (random 29) + 1;
 private _randomTipIndexStr = str _randomTipIndex;
 if (_randomTipIndex < 100) then {
     _randomTipIndexStr = "0" + _randomTipIndexStr;

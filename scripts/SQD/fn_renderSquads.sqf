@@ -68,6 +68,12 @@ private _teamTextColor = switch (_side) do {
 // Actual
 private _playerId = getPlayerID player;
 private _squads = missionNamespace getVariable ["SQUAD_MANAGER", []];
+_squads = _squads select {
+    _x getOrDefault ["side", west] == _side
+} select {
+    private _members = _x getOrDefault ["members", []];
+    count _members > 0
+};
 
 private _badgeConfigs = call RWD_fnc_getBadgeConfigs;
 

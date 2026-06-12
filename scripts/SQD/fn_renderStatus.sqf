@@ -15,12 +15,18 @@ if (WL_ISUP(player)) then {
         _statusName = "DOWNED";
         if (_respawnTimer > 0) then {
             _statusTime = _respawnTimer toFixed 1;
+            while { count _statusTime < 4 } do {
+                _statusTime = "0" + _statusTime;
+            };
         };
     } else {
         _statusName = "RESPAWNING";
         private _respawnTimer = playerRespawnTime;
         if (_respawnTimer > 0) then {
-            _statusTime = round _respawnTimer;
+            _statusTime = _respawnTimer toFixed 1;
+            while { count _statusTime < 4 } do {
+                _statusTime = "0" + _statusTime;
+            };
         };
     };
 };
@@ -31,6 +37,7 @@ private _statusTextStructured = parseText format [
     _statusTime
 ];
 _statusText ctrlSetStructuredText _statusTextStructured;
+_statusText ctrlEnable false;
 _statusText ctrlCommit 0;
 
 private _respawnCounter = uiNamespace getVariable ["RscRespawnCounter", displayNull];

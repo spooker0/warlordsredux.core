@@ -53,7 +53,8 @@ private _ownedSectorLinkColor = if (BIS_WL_playerSide == west) then {
 	[0.5, 0, 0, 1]
 };
 
-private _showSectorLinks = _drawMode != 0 || WL_VotePhase != 0;
+private _showDetailedMode = inputAction "lookAround" > 0;
+private _showSectorLinks = _drawMode != 0 || WL_VotePhase != 0 || _showDetailedMode;
 
 private _sectorsInLinksShown = [];
 if (_showSectorLinks) then {
@@ -706,7 +707,7 @@ private _scannedUnits = _mapData getOrDefault ["scannedUnits", []];
 	private _scanText = if (_hideMap > 0) then {
 		""
 	} else {
-		[_x, _draw, false, _mapTextCache] call WL2_fnc_iconText;
+		[_x, _draw, false, _mapTextCache, _showDetailedMode] call WL2_fnc_iconText;
 	};
 	private _position = getPosASL _x;
 	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
@@ -753,7 +754,7 @@ private _scanners = if (_drawAll) then {
 } forEach _scanners;
 
 // Combat air patrol areas
-if (cameraOn isKindOf "Air") then {
+if (cameraOn isKindOf "Air" || _showDetailedMode) then {
 	private _combatAirAreas = _mapData getOrDefault ["combatAirAreas", []];
 	{
 		private _targetPos = getPosASL _x;
@@ -800,7 +801,7 @@ if (cameraOn isKindOf "Air") then {
 
 // Draw squad lines
 private _allSquadmates = _mapData getOrDefault ["allSquadmates", []];
-if (count (_assetTargets arrayIntersect _allSquadmates) > 0) then {
+if (count (_assetTargets arrayIntersect _allSquadmates) > 0 || _showDetailedMode) then {
 	private _squadLeader = _allSquadmates select {
 		["isSquadLeader", [getPlayerID _x]] call SQD_fnc_query;
 	};
@@ -828,7 +829,7 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 	private _position = getPosASL _x;
 	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
 	private _hideMap = _x getVariable ["WL2_hideMap", 0];
-	if (_hideMap == 2) then {
+	if (_hideMap == 2 && !_showDetailedMode) then {
 		continue;
 	};
 	private _showName = _hideMap == 0 && _draw;
@@ -839,7 +840,7 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 		_size * _mapIconScale,
 		_size * _mapIconScale,
 		[_x] call WL2_fnc_getDir,
-		[_x, _showName, true, _mapTextCache] call WL2_fnc_iconText,
+		[_x, _showName, true, _mapTextCache, _showDetailedMode] call WL2_fnc_iconText,
 		1,
 		_iconTextSize * _mapIconScale,
 		"PuristaBold",
@@ -848,7 +849,7 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 	if (_x == player) then {
 		continue;
 	};
-	if (_hideMap == 1) then {
+	if (_hideMap == 1 && !_showDetailedMode) then {
 		private _ownerUid = _x getVariable ["BIS_WL_ownerAsset", "123"];
 		if (_ownerUid != _playerUid) then {
 			private _access = _x getVariable ["WL2_accessControl", -1];
@@ -887,7 +888,7 @@ private _visibleEnemyUnits = _mapData getOrDefault ["visibleEnemyUnits", []];
 		_size * _mapIconScale,
 		_size * _mapIconScale,
 		[_x] call WL2_fnc_getDir,
-		[_x, _draw, true, _mapTextCache] call WL2_fnc_iconText,
+		[_x, _draw, true, _mapTextCache, _showDetailedMode] call WL2_fnc_iconText,
 		1,
 		_iconTextSize * _mapIconScale,
 		"PuristaBold",

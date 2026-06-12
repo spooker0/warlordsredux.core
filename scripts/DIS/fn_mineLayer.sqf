@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_projectile", "_unit"];
+params ["_projectile", "_unit", "_mineLayerType"];
 
 private _munitionList = _unit getVariable ["DIS_munitionList", []];
 _munitionList pushBack _projectile;
@@ -13,10 +13,10 @@ waitUntil {
 };
 waitUntil {
     private _posAGL = _projectile modelToWorld [0, 0, 0];
-    (_posAGL # 2) < 100 || !alive _projectile
+    (_posAGL # 2) < 5 || !alive _projectile
 };
 
-if (!alive _projectile) exitWith {};
+if (isNull _projectile) exitWith {};
 
 private _projectilePosition = _projectile modelToWorld [0, 0, 0];
 private _projectileDirection = getDir _projectile;
@@ -25,4 +25,4 @@ deleteVehicle _projectile;
 
 uiSleep 1;
 
-[player, "deployMineLayer", _projectilePosition, _projectileDirection] remoteExec ["WL2_fnc_handleClientRequest", 2];
+[player, "deployMineLayer", _projectilePosition, _projectileDirection, _mineLayerType] remoteExec ["WL2_fnc_handleClientRequest", 2];

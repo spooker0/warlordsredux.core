@@ -80,8 +80,10 @@ private _sideCaptureModifier = if (_useCache) then {
 			};
 		};
 
-		private _sideModifier = _modifiers # _forEachIndex;
-		_connections = _connections + _sideModifier;
+		if (_ownerSide != independent) then {
+			private _sideModifier = _modifiers # _forEachIndex;
+			_connections = _connections + _sideModifier;
+		};
 
 		_capModifiers set [_side, _connections];
 	} forEach _sideArr;

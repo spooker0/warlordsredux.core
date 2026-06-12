@@ -726,7 +726,7 @@ if (_action == "samHit") exitWith {
 	_target setDamage [_newDamage, true, _launcher, _launcher];
 
 	private _message = format ["Proximity detonation! Damage sustained: %1%%", round (_damage * 100)];
-	[_message] remoteExec ["WL2_fnc_broadcastAction", _target];
+	[_message, true] remoteExec ["WL2_fnc_broadcastAction", _target];
 };
 
 if (_action == "deployDrone") exitWith {
@@ -743,7 +743,9 @@ if (_action == "deployDrone") exitWith {
 if (_action == "deployMineLayer") exitWith {
 	private _spawnPos = _param1;
 	private _direction = _param2;
+	private _minefieldType = _param3;
+
 	if !(surfaceIsWater _spawnPos) then {
-		[_sender, _spawnPos, "AT_DeployedMinefield", _direction, false, false] call WL2_fnc_orderGround;
+		[_sender, _spawnPos, _minefieldType, _direction, false, false] call WL2_fnc_orderGround;
 	};
 };

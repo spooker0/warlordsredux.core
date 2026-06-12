@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_asset", "_draw", "_showName", "_mapTextCache"];
+params ["_asset", "_draw", "_showName", "_mapTextCache", "_showDetailed"];
 
 if (!_draw) exitWith {""};
 
@@ -33,7 +33,11 @@ if (_asset isKindOf "Man") exitWith {
 	};
 };
 
-private _vehicleDisplayName = [_asset] call WL2_fnc_getAssetTypeName;
+private _vehicleDisplayName = if (_showDetailed) then {
+	[_asset] call WL2_fnc_getAssetTypeName;
+} else {
+	[_asset] call WL2_fnc_getAssetTypeShortName;
+};
 
 if (_showName) then {
 	private _crewCount = count crew _asset;

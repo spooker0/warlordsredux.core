@@ -14,6 +14,9 @@ while { !BIS_WL_missionEnd } do {
 		private _sectorIsTargeted = _sector in _targetedSectors;
 
 		private _sectorDefenders = _sector getVariable ["WL2_sectorDefenders", []];
+		_sectorDefenders = _sectorDefenders select {
+			_x getVariable ["BIS_WL_ownerAsset", "123"] == "123"
+		};
 
 		private _currentOwner = _sector getVariable ["BIS_WL_owner", sideUnknown];
 		if (_currentOwner != independent || !_sectorIsTargeted) then {
@@ -38,7 +41,8 @@ while { !BIS_WL_missionEnd } do {
 		} forEach _sectorDefenders;
 
 		_sectorDefenders = _sectorDefenders select {
-			alive _x && _x getVariable ["BIS_WL_ownerAsset", "123"] == "123"
+			alive _x
 		};
+		_sector setVariable ["WL2_sectorDefenders", _sectorDefenders];
 	} forEach BIS_WL_allSectors;
 };

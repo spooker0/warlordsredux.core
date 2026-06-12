@@ -224,7 +224,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
 
             private _color = [_x, _playerIconColorCache] call WL2_fnc_iconColor;
 
-            private _displayName = [_x, true, true, _playerIconTextCache] call WL2_fnc_iconText;
+            private _displayName = [_x, true, true, _playerIconTextCache, true] call WL2_fnc_iconText;
             private _boundingSize = ((boundingBoxReal _x) # 2) / 2;
 
             if (WL_ISUNCONSCIOUS(_x)) then {

@@ -21,7 +21,7 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
     private _projectileLaser = getNumber (_x >> "laser") == 1;
     private _projectileLoal = getNumber (_x >> "loal") == 1;
     private _projectileMine = getNumber (_x >> "mine") == 1;
-    private _projectileMineLayer = getNumber (_x >> "mineLayer") == 1;
+    private _projectileMineLayer = getText (_x >> "mineLayer");
     private _projectileProx = getNumber (_x >> "prox") == 1;
     private _projectileRemote = getNumber (_x >> "remote") == 1;
     private _projectileRunway = getNumber (_x >> "runway");

@@ -192,6 +192,7 @@ class CfgFunctions {
 			class exitToLobby { headerType = WL_HEADER_LEVEL; };
 			class factionBasedClientInit { headerType = WL_HEADER_LEVEL; };
 			class handleAIDamage { headerType = WL_HEADER_LEVEL; };
+			class handleAIDown { headerType = WL_HEADER_LEVEL; };
 			class handleBuyMenuKeypress { headerType = WL_HEADER_LEVEL; };
 			class handleChatMessages { headerType = WL_HEADER_LEVEL; };
 			class handleKeypress { headerType = WL_HEADER_LEVEL; };

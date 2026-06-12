@@ -132,9 +132,10 @@ private _seenSpawnSections = createHashMap;
 
 private _selectedSpawnTarget = missionNamespace getVariable ["SQD_selectedSpawnTarget", objNull];
 private _selectedSpecialSpawnTarget = missionNamespace getVariable ["SQD_selectedSpecialSpawnTarget", [objNull, ""]];
-if (isNull _selectedSpawnTarget && isNull (_selectedSpecialSpawnTarget # 0)) then {
+if (!alive _selectedSpawnTarget && !alive (_selectedSpecialSpawnTarget # 0)) then {
     _selectedSpecialSpawnTarget = [_homeBase, "home"];
     missionNamespace setVariable ["SQD_selectedSpecialSpawnTarget", _selectedSpecialSpawnTarget];
+    [_selectedSpawnTarget, _selectedSpecialSpawnTarget] call SQD_fnc_setSpawnCam;
 };
 
 {
