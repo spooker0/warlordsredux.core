@@ -543,6 +543,7 @@ class CfgFunctions {
 			class generateScoreboard { headerType = WL_HEADER_LEVEL; };
 			class handleClientRequest { headerType = WL_HEADER_LEVEL; };
 			class handleEntityRemoval { headerType = WL_HEADER_LEVEL; };
+			class handleSamHit { headerType = WL_HEADER_LEVEL; };
 			class hideObjectOnAll { headerType = WL_HEADER_LEVEL; };
 			class incomePayoff { headerType = WL_HEADER_LEVEL; };
 			class initServer { headerType = WL_HEADER_LEVEL; };
