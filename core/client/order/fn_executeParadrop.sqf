@@ -34,13 +34,15 @@ private _parachute = createVehicle [_parachuteClass, _playerVehicle modelToWorld
 _parachute setDir (getDir _paradropper);
 _playerVehicle attachTo [_parachute, [0, 0, 0]];
 
-waitUntil {
+while { (getPosVisual _playerVehicle) # 2 > 15 } do {
     uiSleep 0.01;
     _parachute setVectorUp [0, 0, 1];
-    _parachute setVelocity [0, 0, -25];
-    private _alt = (getPosVisual _playerVehicle) # 2;
-    _alt < 15;
+
+    private _forward = inputAction "MoveForward" - inputAction "MoveBack";
+    private _side = inputAction "TurnRight" - inputAction "TurnLeft";
+    _parachute setVelocityModelSpace [_side * 30, _forward * 30, -25];
 };
+
 detach _playerVehicle;
 deleteVehicle _parachute;
 

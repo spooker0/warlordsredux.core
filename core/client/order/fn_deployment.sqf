@@ -91,8 +91,6 @@ private _deployParams = ["DEPLOYMENT CONTROLS", [
     ["Lock position", "lockTarget"],
     ["Rotate left", "prevAction"],
     ["Rotate right", "nextAction"],
-    ["Shift Up", "LeanLeft"],
-    ["Shift Down", "LeanRight"],
     [localize "STR_ca_cancel", "navigateMenu"]
 ]];
 ["Deploy", _deployParams] spawn WL2_fnc_showHint;
@@ -110,7 +108,6 @@ WL_DeploymentEnd = false;
 
     WL_DeploymentLock = false;
     WL_DeploymentSuccess = false;
-    private _altitudeOffset = getPosWorld _asset # 2;
     private _directionOffset = 0;
     private _lastTime = serverTime;
 
@@ -132,35 +129,6 @@ WL_DeploymentEnd = false;
                 _directionOffset = _directionOffset + 15;
             };
             _asset setDir _directionOffset;
-
-            if (inputAction "LeanLeft" > 0) then {
-                waitUntil {
-                    uiSleep 0.001;
-                    inputAction "LeanLeft" == 0;
-                };
-
-                detach _asset;
-                _altitudeOffset = _altitudeOffset + 0.5;
-                private _assetPos = getPosWorld _asset;
-                _assetPos set [2, _altitudeOffset];
-                _asset setDir _directionOffset;
-                _asset setPosWorld _assetPos;
-                _asset attachTo [player];
-            };
-            if (inputAction "LeanRight" > 0) then {
-                waitUntil {
-                    uiSleep 0.001;
-                    inputAction "LeanRight" == 0;
-                };
-
-                detach _asset;
-                _altitudeOffset = _altitudeOffset - 0.5;
-                private _assetPos = getPosWorld _asset;
-                _assetPos set [2, _altitudeOffset];
-                _asset setDir _directionOffset;
-                _asset setPosWorld _assetPos;
-                _asset attachTo [player];
-            };
         };
 
         if (inputAction "lockTarget" > 0) then {
@@ -174,7 +142,7 @@ WL_DeploymentEnd = false;
                 private _assetPos = _asset modelToWorld [0, 0, 0];
                 _asset setPosASL [_assetPos # 0, _assetPos # 1, 500];
                 private _playerPos = ASLtoAGL eyePos player;
-                _assetPos set [2, _playerPos # 2 + _altitudeOffset];
+                _assetPos set [2, _playerPos # 2];
                 _asset setVehiclePosition [_assetPos, [], 0, "CAN_COLLIDE"];
                 private _assetPosHeight = (getPosASL _asset) # 2;
                 _asset setPosASL [_assetPos # 0, _assetPos # 1, _assetPosHeight];
