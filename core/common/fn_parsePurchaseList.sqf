@@ -145,6 +145,13 @@ private _strategyArr = [
 		"Surrender",
 		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
 		"Begin surrender vote. If enough people on your team vote for surrender, the game will end and the other team will win."
+	], [
+		"SeeChangelog",
+		0,
+		[],
+		"See Changelog",
+		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
+		"View the latest patch changelog."
 	]
 ];
 

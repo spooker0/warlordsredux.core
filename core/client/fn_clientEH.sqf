@@ -87,6 +87,65 @@ addMissionEventHandler ["HandleChatMessage", {
 		[_key] call WL2_fnc_handleBuyMenuKeypress;
 	}];
 
+#if WL_CUSTOM_GPS
+	_display displayAddEventHandler ["KeyDown", {
+		params ["_display", "_key", "_shift", "_ctrl", "_alt"];
+		private _isPressedIncreaseZoom = false;
+		{
+			_isPressedIncreaseZoom = _isPressedIncreaseZoom || [_x, _key, _shift, _ctrl, _alt] call WL2_fnc_isKeyPressed;
+		} forEach actionKeys ["timeInc"];
+		if (_isPressedIncreaseZoom) then {
+			private _minimapDisplay = uiNamespace getVariable ["RscWLMinimap", displayNull];
+			if (!isNull _minimapDisplay) then {
+				private _minimapControl = _minimapDisplay displayCtrl 1200;
+				private _currentZoom = _minimapControl getVariable ["WL2_minimapZoom", 0.02];
+				private _newZoom = _currentZoom * 0.5;
+				_minimapControl setVariable ["WL2_minimapZoom", _newZoom max 0.01];
+			};
+		};
+
+		private _isPressedDecreaseZoom = false;
+		{
+			_isPressedDecreaseZoom = _isPressedDecreaseZoom || [_x, _key, _shift, _ctrl, _alt] call WL2_fnc_isKeyPressed;
+		} forEach actionKeys ["timeDec"];
+		if (_isPressedDecreaseZoom) then {
+			private _minimapDisplay = uiNamespace getVariable ["RscWLMinimap", displayNull];
+			if (!isNull _minimapDisplay) then {
+				private _minimapControl = _minimapDisplay displayCtrl 1200;
+				private _currentZoom = _minimapControl getVariable ["WL2_minimapZoom", 0.02];
+				private _newZoom = _currentZoom * 2;
+				_minimapControl setVariable ["WL2_minimapZoom", _newZoom min 1];
+			};
+		};
+
+		private _isPressedMap = false;
+		{
+			_isPressedMap = _isPressedMap || [_x, _key, _shift, _ctrl, _alt] call WL2_fnc_isKeyPressed;
+		} forEach actionKeys ["MiniMapToggle"];
+
+		if (_isPressedMap) then {
+			private _minimapDisplay = uiNamespace getVariable ["RscWLMinimap", displayNull];
+			if (isNull _minimapDisplay) then {
+				"Minimap" cutRsc ["RscWLMinimap", "PLAIN", -1, true, true];
+				private _minimapDisplay = uiNamespace getVariable ["RscWLMinimap", displayNull];
+				private _minimapControl = _minimapDisplay displayCtrl 1200;
+				_minimapControl setVariable ["WL2_minimapZoom", 0.02];
+
+				addMissionEventHandler ["Draw2D", {
+					private _minimapDisplay = uiNamespace getVariable ["RscWLMinimap", displayNull];
+					private _minimapControl = _minimapDisplay displayCtrl 1200;
+					private _currentZoom = _minimapControl getVariable ["WL2_minimapZoom", 0.02];
+					_minimapControl ctrlMapAnimAdd [0, _currentZoom, cameraOn];
+					ctrlMapAnimCommit _minimapControl;
+				}];
+			} else {
+				_minimapDisplay closeDisplay 0;
+			};
+			true;
+		};
+	}];
+#endif
+
 	addUserActionEventHandler ["Eject", "Activate", {
 		if !(cameraOn isKindOf "Air") exitWith {};
 		private _altitude = (player modelToWorld [0, 0, 0]) # 2;

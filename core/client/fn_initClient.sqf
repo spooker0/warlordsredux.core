@@ -124,15 +124,13 @@ WL_LoadingState = 9;
 0 spawn {
 	waitUntil {
 		uiSleep 0.1;
-		!isNull (uiNamespace getVariable ["BIS_WL_mapControl", controlNull])
+		!isNull WL_CONTROL_MAP
 	};
-	(uiNamespace getVariable ["BIS_WL_mapControl", controlNull]) ctrlMapAnimAdd [0, 0.35, (BIS_WL_playerSide call WL2_fnc_getSideBase)];
-	ctrlMapAnimCommit (uiNamespace getVariable ["BIS_WL_mapControl", controlNull]);
+	WL_CONTROL_MAP ctrlMapAnimAdd [0, 0.35, (BIS_WL_playerSide call WL2_fnc_getSideBase)];
+	ctrlMapAnimCommit WL_CONTROL_MAP;
 };
 
 WL_LoadingState = 10;
-
-0 spawn WL2_fnc_repackMagazines;
 
 0 spawn {
 	while { !BIS_WL_missionEnd } do {
@@ -236,8 +234,6 @@ uiNamespace setVariable ["WL2_HMDSettingProfileIndex", 0];
 WL2_lastLoadout = getUnitLoadout player;
 [player] call WLC_fnc_onRespawn;
 
-0 spawn WL2_fnc_captureDisplay;
-
 call WL2_fnc_spectrumInterface;
 
 call SQD_fnc_initClient;
@@ -312,17 +308,6 @@ showScoretable 0;
 0 spawn WL2_fnc_ammoConfigChange;
 0 spawn DIS_fnc_setupTargetingMenu;
 0 spawn WL2_fnc_refreshKillfeed;
-
-private _display = uiNamespace getVariable ["RscWLHintMenu", displayNull];
-if (isNull _display) then {
-    "hintLayer" cutRsc ["RscWLHintMenu", "PLAIN", -1, true, true];
-    _display = uiNamespace getVariable "RscWLHintMenu";
-};
-private _texture = _display displayCtrl 5502;
-_texture ctrlAddEventHandler ["PageLoaded", {
-    params ["_texture"];
-	[localize "STR_A3_WL_popup_init"] call WL2_fnc_smoothText;
-}];
 
 // 0 spawn WL2_fnc_surveillance;
 

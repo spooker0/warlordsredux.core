@@ -169,3 +169,17 @@ class RscWLSidePickerMenu {
 		};
 	};
 };
+
+class RscWLSectorDisplay_SectorName: RscStructuredText {
+	font = "EtelkaMonospaceProBold";
+	colorText[] = {1, 1, 1, 1};
+	size = 0.022;
+	class Attributes {
+		font = "EtelkaMonospaceProBold";
+		shadow = 0;
+	};
+};
+
+class RscWLSectorDisplay_SectorBar: RscText {
+	text = "";
+};

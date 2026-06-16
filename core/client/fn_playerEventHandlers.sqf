@@ -8,11 +8,18 @@ player addEventHandler ["GetInMan", {
 	params ["_unit", "_role", "_vehicle", "_turret"];
 	if (_vehicle isKindOf "Air" && typeof _vehicle != "Steerable_Parachute_F") then {
 		0 spawn WL2_fnc_betty;
+	};
 
-		private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-		private _defaultOffVtolAuto = _settingsMap getOrDefault ["defaultOffVtolAuto", false];
-		if (_defaultOffVtolAuto) then {
-			_unit action ["VTOLVectoring", _vehicle];
+	if (_vehicle isKindOf "VTOL_Base_F") then {
+		[_unit, _vehicle] spawn {
+			params ["_unit", "_vehicle"];
+			uiSleep 2;
+			private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+			private _defaultOffVtolAuto = _settingsMap getOrDefault ["defaultOffVtolAuto", false];
+			if (_defaultOffVtolAuto) then {
+				_unit action ["VTOLVectoring", _vehicle];
+				playSoundUI ["AddItemOK"];
+			};
 		};
 	};
 }];

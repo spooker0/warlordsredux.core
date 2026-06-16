@@ -19,7 +19,6 @@ addMissionEventHandler ["Map", {
 		0 spawn {
 			uiSleep 1;
 			BIS_WL_highlightedSector = objNull;
-			BIS_WL_targetVote = objNull;
 			WL_SectorActionTarget = objNull;
 
 			private _mapButtonDisplay = uiNamespace getVariable ["WL2_mapButtonDisplay", displayNull];

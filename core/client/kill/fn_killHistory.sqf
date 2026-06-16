@@ -8,6 +8,10 @@ private _statsRecord = player createDiaryRecord ["Warlords Redux", "", taskNull,
 
 call GFE_fnc_credits;
 
+player createDiaryRecord ["Warlords Redux",
+    ["Change Notes", (loadfile "update.txt") regexReplace ["\n", "<br />"]]
+];
+
 while { !BIS_WL_missionEnd } do {
 	private _rewardHistory = uiNamespace getVariable ["WL2_rewardHistory", createHashMap];
 

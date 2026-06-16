@@ -64,6 +64,10 @@ if (_rearm) then {
     if (_ecmMaxCharges != -100) then {
         _asset setVariable ["WL2_ecmCharges", _ecmMaxCharges];
     };
+
+    if (_asset getVariable ["WL2_paradrops", -1] != -1) then {
+        _asset setVariable ["WL2_paradrops", WL_UNIT(_asset, "paradrops", 0), true];
+    };
 };
 
 {

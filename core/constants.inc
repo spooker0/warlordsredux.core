@@ -30,6 +30,7 @@
 #define WL_CAP_DEBUG 0
 #define WL_SQUAD_DEBUG 0
 #define WL_SUPPORT_DEBUG 0
+#define WL_CUSTOM_GPS 0
 
 // Live: set to -1 for performance
 #define WL_HEADER_LEVEL -1
@@ -39,7 +40,7 @@
 #define WL_FOB_REQUIREMENTS 1
 
 // Configuration
-#define WL_TIMEOUT_MIN 0.055
+#define WL_TIMEOUT_MIN 0.05
 #define WL_TIMEOUT_SHORT 0.25
 #define WL_TIMEOUT_MEDIUM 0.5
 #define WL_TIMEOUT_STANDARD 1

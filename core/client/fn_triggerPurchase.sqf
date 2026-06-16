@@ -232,6 +232,10 @@ switch (_className) do {
             };
         };
     };
+    case "SeeChangelog": {
+        openMap true;
+        player selectDiarySubject "Warlords Redux:Record2";
+    };
     case "StressTestSector": {
         0 spawn {
             private _direction = [vectorDir player, vectorUp player];

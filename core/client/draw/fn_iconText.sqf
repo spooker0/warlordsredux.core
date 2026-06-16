@@ -33,12 +33,11 @@ if (_asset isKindOf "Man") exitWith {
 	};
 };
 
-private _vehicleDisplayName = if (_showDetailed) then {
-	[_asset] call WL2_fnc_getAssetTypeName;
-} else {
+if (!_showDetailed) exitWith {
 	[_asset] call WL2_fnc_getAssetTypeShortName;
 };
 
+private _vehicleDisplayName = [_asset] call WL2_fnc_getAssetTypeName;
 if (_showName) then {
 	private _crewCount = count crew _asset;
 	if (!(unitIsUAV _asset) && _crewCount > 0) then {

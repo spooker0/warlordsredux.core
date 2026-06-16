@@ -44,7 +44,7 @@ class CfgRemoteExec {
 		class WL2_fnc_earthquake {allowedTargets = 0;};
 		class WL2_fnc_ecmAction {allowedTargets = 0;};
 		class WL2_fnc_forgiveTeamkill {allowedTargets = 2;};
-		class WL2_fnc_handleAIDown {allowedTargets = 2;};
+		class WL2_fnc_handleAIDown {allowedTargets = 0;};
 		class WL2_fnc_handleClientRequest {allowedTargets = 2;};
 		class WL2_fnc_handleDamage {allowedTargets = 0;};
 		class WL2_fnc_handleEntityRemoval {allowedTargets = 2;};
@@ -57,7 +57,7 @@ class CfgRemoteExec {
 		class WL2_fnc_missileDestroy {allowedTargets = 2;};
 		class WL2_fnc_mutePlayer {allowedTargets = 0;};
 		class WL2_fnc_particleEffect {allowedTargets = 0;};
-		class WL2_fnc_playSoundArrival {allowedTargets = 0;};
+		class WL2_fnc_playArrival {allowedTargets = 0;};
 		class WL2_fnc_publishRewards {allowedTargets = 0;};
 		class WL2_fnc_punishPlayer {allowedTargets = 2;};
 		class WL2_fnc_pingFix {allowedTargets = 1;};

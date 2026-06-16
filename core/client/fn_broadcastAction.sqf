@@ -1,5 +1,7 @@
 #include "includes.inc"
 params ["_message", ["_airHit", false]];
+if (isDedicated) exitWith {};
+
 [_message] call WL2_fnc_smoothText;
 
 if (_airHit) then {

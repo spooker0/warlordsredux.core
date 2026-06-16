@@ -180,3 +180,9 @@ _display displayAddEventHandler ["Unload", {
     _spawnCamera cameraEffect ["Terminate", "BACK TOP", "spawncam"];
     camDestroy _spawnCamera;
 }];
+
+while { !isNull _display } do {
+    uiSleep 0.2;
+};
+
+ppEffectDestroy _dynamicBlurHandle;

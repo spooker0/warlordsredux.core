@@ -2,11 +2,15 @@
 // Slow loop
 0 spawn {
 	while { !BIS_WL_missionEnd } do {
+		private _minimapDisplay = uiNamespace getVariable ["RscWLMinimap", displayNull];
+		private _minimapControl = _minimapDisplay displayCtrl 1200;
+
 		private _mainMap = (findDisplay 12) displayCtrl 51;
 		private _maps = [
 			_mainMap,
 			(findDisplay 160) displayCtrl 51,
-			(findDisplay -1) displayCtrl 500
+			(findDisplay -1) displayCtrl 500,
+			_minimapControl
 		];
 		{
 			private _gps = _x displayCtrl 101;
@@ -263,7 +267,8 @@
 
 		private _mainMap = (findDisplay 12) displayCtrl 51;
 		private _drawMode = if (WL_IsSpectator) then { 1 } else { 0 };
-		[WL_CONTROL_MAP, _drawMode] call WL2_fnc_iconDrawMapPrepare;
+		[_mainMap, _drawMode] call WL2_fnc_iconDrawMapPrepare;
+		uiNamespace setVariable ["BIS_WL_mapControl", _mainMap];
 
 		uiNamespace setVariable ["WL2_drawingMap", false];
 		uiSleep _refreshSleepTime;

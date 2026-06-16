@@ -47,7 +47,7 @@ private _sectorTarget = WL_SectorActionTarget;
 private _allLinks = missionNamespace getVariable ["WL2_linkSectorMarkers", createHashMap];
 private _mapSectorLineGrayscale = _settingsMap getOrDefault ["mapSectorLineGrayscale", 1];
 private _neutralLinkColor = [_mapSectorLineGrayscale, _mapSectorLineGrayscale, _mapSectorLineGrayscale, 1];
-private _ownedSectorLinkColor = if (BIS_WL_playerSide == west) then {
+private _ownedSectorLinkColor = if (_side == west) then {
 	[0, 0.3, 0.6, 1]
 } else {
 	[0.5, 0, 0, 1]
@@ -64,7 +64,7 @@ if (_showSectorLinks) then {
 		_y params ["_startPos", "_endPos", "_sector", "_link"];
 		private _sectorOwner = _sector getVariable ["BIS_WL_owner", sideUnknown];
 		private _linkOwner = _link getVariable ["BIS_WL_owner", sideUnknown];
-		private _linkColor = if (_sectorOwner == BIS_WL_playerSide && _linkOwner == BIS_WL_playerSide) then {
+		private _linkColor = if (_sectorOwner == _side && _linkOwner == _side) then {
 			_ownedSectorLinkColor;
 		} else {
 			_neutralLinkColor;
@@ -135,7 +135,7 @@ if (_showSectorLinks) then {
 
 			private _sectorOwner = _sector getVariable ["BIS_WL_owner", sideUnknown];
 			private _linkOwner = _link getVariable ["BIS_WL_owner", sideUnknown];
-			private _linkColor = if (_sectorOwner == BIS_WL_playerSide && _linkOwner == BIS_WL_playerSide) then {
+			private _linkColor = if (_sectorOwner == _side && _linkOwner == _side) then {
 				_ownedSectorLinkColor;
 			} else {
 				_neutralLinkColor;
@@ -155,7 +155,7 @@ if (_showSectorLinks) then {
 };
 
 // Draw sector capture modifiers
-private _areaControlData = _mapData getOrDefault ["areaControlData", []];
+private _areaControlData = _mapData getOrDefault ["areaControlData", ["", ""]];
 private _friendFlag = if (_side == west) then {
 	"\A3\ui_f\data\map\markers\flags\nato_ca.paa"
 } else {
@@ -218,7 +218,7 @@ if (uiNamespace getVariable ["WL2_isOrderingWater", false]) then {
 	if (_waterDropCost >= 1000) then {
 		private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		private _spawnLocations = _forwardBases select {
-			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
+			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side
 		};
 		_spawnLocations append (BIS_WL_sectorsArray # 0);
 
@@ -386,7 +386,7 @@ if (!isNull _sectorTarget || _showSectorLinks) then {
 	private _facesData = missionNamespace getVariable ["WL2_sectorFaces", []];
 
 	private _neutralRGBA = [0.2, 0.2, 0.2, 0.3];
-	private _sideColorRGBA = switch (BIS_WL_playerSide) do {
+	private _sideColorRGBA = switch (_side) do {
 		case west: { [0, 0.3, 0.6, 0.4] };
 		case east: { [0.5, 0, 0, 0.4] };
 		case independent: { _neutralRGBA };
@@ -422,7 +422,7 @@ if (!isNull _sectorTarget || _showSectorLinks) then {
 					break;
 				};
 			} else {
-				if (_sectorOwner != BIS_WL_playerSide) then {
+				if (_sectorOwner != _side) then {
 					_ownsFace = false;
 					break;
 				};
@@ -462,29 +462,40 @@ if (!isNull _sectorTarget || _showSectorLinks) then {
 			getPosASL _x;
 		};
 
-		private _colorToUse = if (_ownsFace) then {
-			if (WL_IsSpectator) then {
-				private _sectorOwnerSides = [];
-				{
-					private _owner = _x getVariable ["BIS_WL_owner", sideUnknown];
-					if (_owner == west || _owner == east) then {
-						_sectorOwnerSides pushBackUnique _owner;
-					};
-				} forEach _sectors;
-				if (count _sectorOwnerSides == 1) then {
-					if (_sectorOwnerSides # 0 == west) then {
-						[0, 0.3, 0.6, 0.4]
-					} else {
-						[0.5, 0, 0, 0.4]
-					};
-				} else {
-					_neutralRGBA
+		private _colorToUse = if (WL_IsSpectator) then {
+			// private _sectorDifficulty = 0;
+			// {
+			// 	private _value = _x getVariable ["BIS_WL_value", 0];
+			// 	_sectorDifficulty = _sectorDifficulty + _value;
+			// } forEach _sectors;
+			// private _efficiency = _area / (_sectorDifficulty max 1);
+
+			// private _minEfficiency = 7000;
+			// private _maxEfficiency = 700000;
+
+			// private _colorValue = linearConversion [ln _minEfficiency, ln _maxEfficiency, ln _efficiency, 1, 0];
+			// [_colorValue, _colorValue, _colorValue, 1]
+
+			private _sectorOwnerSides = [];
+			{
+				private _owner = _x getVariable ["BIS_WL_owner", independent];
+				_sectorOwnerSides pushBackUnique _owner;
+			} forEach _sectors;
+			if (count _sectorOwnerSides == 1) then {
+				switch (_sectorOwnerSides # 0) do {
+					case west: { [0, 0.3, 0.6, 0.4] };
+					case east: { [0.5, 0, 0, 0.4] };
+					default { _neutralRGBA };
 				};
 			} else {
-				_sideColorRGBA
+				_neutralRGBA
 			};
 		} else {
-			_neutralRGBA
+			if (_ownsFace) then {
+				_sideColorRGBA
+			} else {
+				_neutralRGBA
+			};
 		};
 		_drawPolygons pushBack [
 			_sectorDrawPoints,
@@ -1031,7 +1042,7 @@ private _drawSectorMarkerText = (ctrlMapScale _map) < _drawSectorMarkerThreshold
 
 private _sectorMarkers = _mapData getOrDefault ["teamSectorMarkers", []];
 {
-	private _marker = [_x, BIS_WL_playerSide] call WL2_fnc_drawSectorMarker;
+	private _marker = [_x, _side] call WL2_fnc_drawSectorMarker;
 	_drawIcons pushBack _marker;
 } forEach _sectorMarkers;
 

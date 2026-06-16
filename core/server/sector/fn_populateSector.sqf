@@ -27,6 +27,7 @@ if (isNull _stronghold) then {
 		[_stronghold, _sector] call WL2_fnc_establishStronghold;
 		_reserveSize = round (_garrisonSize * 4);
 	};
+	_sector setVariable ["WL2_sectorPop", _reserveSize, true];
 };
 
 private _vehicleUnits = [];
@@ -210,7 +211,6 @@ while {_spawnedUnitCount < _garrisonSize} do {
 
 private _allUnits = _vehicleUnits + _infantryUnits;
 _sector setVariable ["WL2_sectorDefenders", _allUnits];
-_sector setVariable ["WL2_sectorPop", _reserveSize, true];
 
 private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
 _ownedVehicles append _allUnits;

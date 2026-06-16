@@ -261,30 +261,6 @@ class RscTitles {
 		};
 	};
 
-	class RscJammingIndicator {
-		idd = -1;
-		movingEnable = 0;
-		duration = 1e+011;
-		name = "RscJammingIndicator";
-		onLoad = "uiNamespace setVariable ['RscJammingIndicator', _this select 0];";
-		class controls {
-			class RscJammingIndicatorText {
-				idc = 7001;
-				type = CT_STATIC;
-				style = ST_CENTER;
-				x = 1;
-				y = 0;
-				w = 0.35;
-				h = 0.1;
-				sizeEx = 0.04;
-				colorBackground[] = {0, 0, 0, 0};
-				colorText[] = {1, 1, 1, 1};
-				font = "PuristaMedium";
-				text = "";
-			};
-		};
-	};
-
 	class RscSpectrumIndicator {
 		idd = -1;
 		movingEnable = 0;
@@ -302,6 +278,126 @@ class RscTitles {
 				colorText[] = {1, 1, 1, 1};
 				font = "PuristaLight";
 				text = "";
+			};
+		};
+	};
+
+	class RscWLMinimap {
+		idd = -1;
+		movingEnable = 0;
+		duration = 1e+011;
+		name = "RscWLMinimap";
+		onLoad = "uiNamespace setVariable ['RscWLMinimap', _this select 0];";
+		class controls {
+			class RscBetterMinimap: RscMapControl {
+				idc = 1200;
+
+				x = safezoneX + 0.02;
+				y = safezoneY + safezoneH - 0.87;
+				w = 0.33;
+				h = 0.44;
+
+				showCountourInterval = 0;
+				moveOnEdges = 1;
+				maxSatelliteAlpha = 0;
+				alphaFadeStartScale = 10;
+				alphaFadeEndScale = 10;
+				ptsPerSquareTxt = 500;
+				ptsPerSquareFor = 15;
+				ptsPerSquareForEdge = 15;
+				ptsPerSquareRoad = 15;
+				ptsPerSquareObj = 15;
+				ptsPerSquareSea = 0;
+
+				colorBackground[] = {0.2, 0.2, 0.2, 0.5};
+				colorSea[] = {0, 0, 0, 0.4};
+				colorForest[] = {0.2, 0.2, 0.2, 0.7};
+				colorForestBorder[] = {0.2, 0.2, 0.2, 0.5};
+				colorRocks[] = {0.95, 0.95, 0.95, 0.1};
+				colorRocksBorder[] = {0.95, 0.95, 0.95, 0.5};
+				colorLevels[] = {0, 0, 0, 0};
+				colorMainCountlines[] = {0.2, 0.2, 0.2, 0.6};
+				colorCountlines[] = {0.2, 0.2, 0.2, 0.2};
+				colorMainCountlinesWater[] = {0.95, 0.95, 0.95, 0.7};
+				colorCountlinesWater[] = {0.95, 0.95, 0.95, 0.4};
+				colorPowerLines[] = {0.95, 0.95, 0.95, 0.5};
+				colorRailWay[] = {0.95, 0.95, 0.95, 1};
+				colorTracks[] = {0.95, 0.95, 0.95, 0.15};
+				colorTracksFill[] = {0.95, 0.95, 0.95, 0.3};
+				colorRoads[] = {0.95, 0.95, 0.95, 1};
+				colorRoadsFill[] = {0.95, 0.95, 0.95, 0.5};
+				colorMainRoads[] = {0.95, 0.95, 0.95, 1};
+				colorMainRoadsFill[] = {0.95, 0.95, 0.95, 0.7};
+				colorGrid[] = {0.95, 0.95, 0.95, 0.3};
+				colorGridMap[] = {0.95, 0.95, 0.95, 0.2};
+
+				class bush: Bush {
+					color[] = {0.2, 0.2, 0.2, 0.4};
+				};
+
+				class rock: Rock {
+					color[] = {0.2, 0.2, 0.2, 0.8};
+				};
+
+				class smalltree: SmallTree {
+					color[] = {0.2, 0.2, 0.2, 0.4};
+				};
+
+				class tree: Tree {
+					color[] = {0.2, 0.2, 0.2, 0.4};
+				};
+
+				class busstop: busstop {
+					color[] = {0.95, 0.95, 0.95, 1};
+				};
+
+				class fuelstation: fuelstation {
+					color[] = {0.95, 0.95, 0.95, 1};
+				};
+
+				class hospital: hospital {
+					color[] = {0.95, 0.95, 0.95, 1};
+				};
+
+				class church: church {
+					color[] = {0.95, 0.95, 0.95, 1};
+				};
+
+				class lighthouse: lighthouse {
+					color[] = {0.95, 0.95, 0.95, 1};
+				};
+
+				class power: power {
+					color[] = {0.95, 0.95, 0.95, 1};
+				};
+
+				class powersolar: powersolar {
+					color[] = {0.95, 0.95, 0.95, 1};
+				};
+
+				class powerwave: powerwave {
+					color[] = {0.95, 0.95, 0.95, 1};
+				};
+
+				class powerwind: powerwind {
+					color[] = {0.95, 0.95, 0.95, 1};
+				};
+
+				class quay: quay {
+					color[] = {0.95, 0.95, 0.95, 1};
+				};
+
+				class shipwreck: Shipwreck {
+					color[] = {0.95, 0.95, 0.95, 1};
+				};
+
+				class transmitter: transmitter {
+					color[] = {0.95, 0.95, 0.95, 1};
+				};
+
+				class watertower: watertower {
+					color[] = {0.95, 0.95, 0.95, 1};
+				};
 			};
 		};
 	};
@@ -567,42 +663,37 @@ class RscTitles {
 		};
 	};
 
-	class RscWLDeathInfoMenu {
+	class RscWLSectorDisplay {
 		idd = -1;
 		duration = 1000000000;
 		fadein = 0;
 		fadeout = 0;
-		name = "RscWLDeathInfoMenu";
-		onLoad = "uiNamespace setVariable ['RscWLDeathInfoMenu', _this select 0];";
-		class controls {
-			class RscWLDeathInfoMenu_Texture: RscText {
-				type = 106;
-				idc = 5502;
-				x = safeZoneX;
-				y = safeZoneY;
-				w = safeZoneW;
-				h = safeZoneH;
-				url = "file://src/ui/gen/deathinfo.html";
-			};
-		};
-	};
+		name = "RscWLSectorDisplay";
+		onLoad = "uiNamespace setVariable ['RscWLSectorDisplay', _this select 0];";
 
-	class RscWLHintMenu {
-		idd = -1;
-		duration = 1000000000;
-		fadein = 0;
-		fadeout = 0;
-		name = "RscWLHintMenu";
-		onLoad = "uiNamespace setVariable ['RscWLHintMenu', _this select 0];";
 		class controls {
-			class RscWLHintMenu_Texture: RscText {
-				type = 106;
-				idc = 5502;
-				x = safeZoneX;
-				y = safeZoneY;
-				w = safeZoneW;
-				h = safeZoneH;
-				url = "file://src/ui/gen/hint.html";
+			class RscWLSectorDisplay_Background: RscText {
+				idc = 4000;
+				text = "";
+				colorBackground[] = {0.2, 0.2, 0.2, 1};
+			};
+			class RscWLSectorDisplay_CaptureTitle: RscStructuredText {
+				idc = 4001;
+				text = "";
+				size = 0.032;
+				class Attributes {
+					font = "EtelkaMonospaceProBold";
+					shadow = 0;
+				};
+			};
+			class RscWLSectorDisplay_VoteTitle: RscStructuredText {
+				idc = 4002;
+				text = "";
+				size = 0.032;
+				class Attributes {
+					font = "EtelkaMonospaceProBold";
+					shadow = 0;
+				};
 			};
 		};
 	};

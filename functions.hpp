@@ -211,12 +211,11 @@ class CfgFunctions {
 			class pingFix { headerType = WL_HEADER_LEVEL; };
 			class pingFixInit { headerType = WL_HEADER_LEVEL; };
 			class pingSounds { headerType = WL_HEADER_LEVEL; };
+			class playArrival { headerType = WL_HEADER_LEVEL; };
 			class playerEventHandlers { headerType = WL_HEADER_LEVEL; };
-			class playSoundArrival { headerType = WL_HEADER_LEVEL; };
 			class prompt { headerType = WL_HEADER_LEVEL; };
 			class publishSelfLog { headerType = WL_HEADER_LEVEL; };
 			class rebalanced { headerType = WL_HEADER_LEVEL; };
-			class repackMagazines { headerType = WL_HEADER_LEVEL; };
 			class reportTargets { headerType = WL_HEADER_LEVEL; };
 			class resetVehicle { headerType = WL_HEADER_LEVEL; };
 			class restrictedArea { headerType = WL_HEADER_LEVEL; };
@@ -382,7 +381,6 @@ class CfgFunctions {
 			class assetButtonRadarRotate { headerType = WL_HEADER_LEVEL; };
 			class assetMapButtons { headerType = WL_HEADER_LEVEL; };
 			class assetMapControl { headerType = WL_HEADER_LEVEL; };
-			class captureDisplay { headerType = WL_HEADER_LEVEL; };
 			class createInfoMarkers { headerType = WL_HEADER_LEVEL; };
 			class designateTeamPriority { headerType = WL_HEADER_LEVEL; };
 			class detectUnits { headerType = WL_HEADER_LEVEL; };
@@ -393,6 +391,8 @@ class CfgFunctions {
 			class mapButtonClick { headerType = WL_HEADER_LEVEL; };
 			class mapButtonConditions { headerType = WL_HEADER_LEVEL; };
 			class mapEachFrame { headerType = WL_HEADER_LEVEL; };
+			class renderCaptureDisplay { headerType = WL_HEADER_LEVEL; };
+			class renderVoteDisplay { headerType = WL_HEADER_LEVEL; };
 			class replayMap { headerType = WL_HEADER_LEVEL; };
 			class replayMapClear { headerType = WL_HEADER_LEVEL; };
 			class sectorButtonMark { headerType = WL_HEADER_LEVEL; };

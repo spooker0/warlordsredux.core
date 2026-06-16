@@ -105,6 +105,8 @@ while { alive _projectile } do {
         } select {
             !(getText (configFile >> "CfgVehicles" >> typeOf _x >> "destrType") in ["DestructNo", "DestructTree"]);
         } select {
+            WL_UNIT(_x, "disableDamage", 0) == 0;
+        } select {
             !alive (_x getVariable ["DIS_targetedByGPSMunition", objNull]);
         };
 

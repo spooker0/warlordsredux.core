@@ -1,8 +1,6 @@
 #include "includes.inc"
 params ["_m"];
 
-uiNamespace setVariable ["BIS_WL_mapControl", _m];
-
 private _drawIcons = uiNamespace getVariable ["WL2_drawIcons", []];
 private _drawIconsAnimated = uiNamespace getVariable ["WL2_drawIconsAnimated", []];
 private _drawIconsFollowMouse = uiNamespace getVariable ["WL2_drawIconsFollowMouse", []];

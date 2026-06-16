@@ -17,15 +17,12 @@ private _targetPoints = 0;
         _targetScore = _targetScore * 1.5;
     };
     _targetPoints = _targetPoints + _targetScore;
+    _x setVariable ["WL_scannedByPlayer", serverTime];
 } forEach _newTargets;
 
 private _enemiesSpotted = _targetPoints > 0;
 if (_enemiesSpotted) then {
     [player, "spot", _targetPoints] remoteExec ["WL2_fnc_handleClientRequest", 2];
 };
-
-{
-    _x setVariable ["WL_scannedByPlayer", serverTime];
-} forEach _newTargets;
 
 _enemiesSpotted;
