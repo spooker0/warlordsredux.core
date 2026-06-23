@@ -126,7 +126,7 @@ class RscTextRight: RscText {
 };
 
 class RscSpectatorDisplay {
-	idd = -1;
+	idd = 11012;
 	class controls {
 		class RscSpectatorDisplay_Map: RscMapControl {
 			idc = 5503;

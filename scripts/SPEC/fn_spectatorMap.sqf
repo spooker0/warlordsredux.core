@@ -14,6 +14,18 @@ ctrlMapAnimCommit _mapControl;
 _mapControl ctrlAddEventHandler ["Draw", WL2_fnc_mapEachFrame];
 _mapControl ctrlAddEventHandler ["Draw", WL2_fnc_iconDrawMap];
 
+_mapControl ctrlAddEventHandler ["KeyDown", {
+    params ["_map", "_key", "_shift", "_ctrl", "_alt"];
+    if (_alt) then {
+        _map setVariable ["WL2_showDetailedMode", true];
+    };
+}];
+
+_mapControl ctrlAddEventHandler ["KeyUp", {
+    params ["_map", "_key", "_shift", "_ctrl", "_alt"];
+    _map setVariable ["WL2_showDetailedMode", false];
+}];
+
 _mapControl ctrlAddEventHandler ["Draw", {
     params ["_map"];
     private _start = uiNamespace getVariable ["SPEC_mouseClickStart", []];

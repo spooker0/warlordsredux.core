@@ -1,5 +1,5 @@
 #include "includes.inc"
-private _asset = cursorTarget;
+private _asset = cursorObject;
 if (isNull _asset || !(_asset isKindOf "Air")) exitWith {
     ["No aircraft wreck targeted."] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
@@ -11,15 +11,15 @@ if (_isSecured) exitWith {
     playSoundUI ["AddItemFailed"];
 };
 
-private _cost = WL_UNIT(_asset, "cost", 0);
+private _value = _asset getVariable ["WL2_wreckValue", 0];
 private _inFriendlySector = ([-2, []] call WL2_fnc_checkInFriendlySector) # 0;
-if (!_inFriendlySector && _cost > 6000) exitWith {
+if (!_inFriendlySector && _value > 2000) exitWith {
     ["You can secure this wreck by moving it to a friendly sector or forward base with a flatbed or via slingloading."] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
 private _wreckSide = [_asset] call WL2_fnc_getAssetSide;
-if (_wreckSide != BIS_WL_playerSide && _cost > 6000) then {
+if (_wreckSide != BIS_WL_playerSide && _value > 2000) then {
     private _enemyUnits = switch (_wreckSide) do {
         case west: { BIS_WL_westOwnedVehicles };
         case east: { BIS_WL_eastOwnedVehicles };
@@ -41,16 +41,8 @@ _asset setVariable ["WL2_isSecured", true];
 
 deleteVehicle _asset;
 
-private _rewardAmount = round (_cost / 300) * 100;
-
-private _isDrone = [_asset] call WL2_fnc_isDrone;
-if (_isDrone && _wreckSide != BIS_WL_playerSide) then {
-    [player, "secureDrone", _rewardAmount] remoteExec ["WL2_fnc_handleClientRequest", 2];
-    [objNull, _rewardAmount, "Drone secured", WL_COLOR_SUPPORT] call WL2_fnc_killRewardClient;
-} else {
-    [player, "secureAircraft", _rewardAmount] remoteExec ["WL2_fnc_handleClientRequest", 2];
-    [objNull, _rewardAmount, "Aircraft secured", WL_COLOR_SUPPORT] call WL2_fnc_killRewardClient;
-};
+[player, "secureAircraft", _value, _wreckSide != BIS_WL_playerSide] remoteExec ["WL2_fnc_handleClientRequest", 2];
+[objNull, _value, "Aircraft secured", WL_COLOR_SUPPORT] call WL2_fnc_killRewardClient;
 
 playSoundUI ["AddItemOk"];
 playSound3D ["a3\sounds_f_decade\assets\props\linkterminal_01_node_main_f\link_terminal03_lid_01_open.wss", _asset];

@@ -1,5 +1,7 @@
 #include "includes.inc"
 
+if (isDedicated) exitWith {};
+
 private _existingDisplay = findDisplay SQD_MENU_IDD;
 if (!isNull _existingDisplay) exitWith {};
 
@@ -149,7 +151,7 @@ _display displayAddEventHandler ["MouseButtonDown", {
 _display setVariable ["SQD_refreshConfig", [
     [SQD_fnc_renderStatus, 0.05, 0],
     [SQD_fnc_renderSquads, 0.05, 0],
-    [SQD_fnc_renderSpawns, 0.2, 0],
+    [SQD_fnc_renderSpawns, 1, 0],
     [SQD_fnc_renderVehicles, 0.2, 0]
 ]];
 private _efHandler = addMissionEventHandler ["EachFrame", {

@@ -78,55 +78,6 @@ player addEventHandler ["InventoryOpened", {
     };
 }];
 
-(group player) addEventHandler ["CommandChanged", {
-	_this spawn {
-		params ["_group", "_newCommand"];
-		if (_newCommand != "GET IN") exitWith {};
-
-		uiSleep 1;
-
-		private _canMoveIn = {
-			params ["_vehicle", "_person"];
-			if (isPlayer _person) exitWith { false };
-			private _ownerId = _vehicle getVariable ["BIS_WL_ownerAsset", "123"];
-			if (_ownerId != getPlayerUID player) exitWith { false };
-			if (_person in _vehicle) exitWith { false };
-			true;
-		};
-
-		private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
-		private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
-		{
-			private _vehicle = _x;
-			private _assignedDriver = assignedDriver _vehicle;
-			if ([_vehicle, _assignedDriver] call _canMoveIn) then {
-				_assignedDriver moveInDriver _vehicle;
-				playSoundUI ["AddItemOK"];
-			};
-
-			private _assignedGunner = assignedGunner _vehicle;
-			if ([_vehicle, _assignedGunner] call _canMoveIn) then {
-				_assignedGunner moveInGunner _vehicle;
-				playSoundUI ["AddItemOK"];
-			};
-
-			private _assignedCommander = assignedCommander _vehicle;
-			if ([_vehicle, _assignedCommander] call _canMoveIn) then {
-				_assignedCommander moveInCommander _vehicle;
-				playSoundUI ["AddItemOK"];
-			};
-
-			private _assignedCargo = assignedCargo _vehicle;
-			{
-				if ([_vehicle, _x] call _canMoveIn) then {
-					_x moveInCargo _vehicle;
-					playSoundUI ["AddItemOK"];
-				};
-			} forEach _assignedCargo;
-		} forEach _ownedVehicles;
-	};
-}];
-
 #if __GAME_BUILD__ > 153351
 (group player) addEventHandler ["LeaderChanged", {
 	params ["_group", "_newLeader"];

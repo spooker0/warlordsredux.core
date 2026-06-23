@@ -1,5 +1,6 @@
 #include "includes.inc"
 params ["_unit"];
+if (_unit getVariable ["WL2_unconscious", false]) exitWith {};
 
 moveOut _unit;
 _unit setCaptive true;

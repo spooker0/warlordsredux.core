@@ -42,27 +42,7 @@ if (_class isKindOf "Man") then {
 			player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 		} else {
 			playSound "assemble_target";
-			private _isExactPosition = false;
-
-			private _isDemolishable = WL_ASSET(_orderedClass, "demolishable", 0) > 0;
-			if (_isDemolishable) then {
-				_isExactPosition = true;
-			};
-
-			private _sectors = BIS_WL_allSectors select {
-				_pos inArea (_x getVariable "objectAreaComplete")
-			};
-			if (count _sectors > 0) then {
-				private _sector = _sectors # 0;
-				private _sectorStronghold = _sector getVariable ["WL_stronghold", objNull];
-				private _strongholdRadius = _sectorStronghold getVariable ["WL_strongholdRadius", 0];
-				private _assetInStronghold = _pos distance2D _sectorStronghold < _strongholdRadius;
-				if (_assetInStronghold) then {
-					_isExactPosition = true;
-				};
-			};
-
-			[player, "orderAsset", "vehicle", _pos, _orderedClass, _direction, _isExactPosition] remoteExec ["WL2_fnc_handleClientRequest", 2];
+			[player, "orderAsset", "vehicle", _pos, _orderedClass, _direction, true] remoteExec ["WL2_fnc_handleClientRequest", 2];
 		};
 	} else {
 		"Canceled" call WL2_fnc_announcer;

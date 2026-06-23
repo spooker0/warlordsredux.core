@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_sector", "_owner"];
+params ["_sector", "_side"];
 
 #if WL_EMPTY_SECTORS
 if (true) exitWith {};
@@ -33,37 +33,6 @@ if (isNull _stronghold) then {
 private _vehicleUnits = [];
 
 private _presetVehicles = _sector getVariable ["WL2_vehiclesToSpawn", []];
-
-private _spawnVehicle = {
-	params ["_vehicleType", "_spawnPos", "_direction", "_isStatic", "_isAircraft"];
-
-	private _vehicle = [objNull, _spawnPos, _vehicleType, _direction, _isAircraft, _isAircraft] call WL2_fnc_orderGround;
-	_vehicleUnits pushBack _vehicle;
-
-	if (!_isStatic) then {
-		private _group = createVehicleCrew _vehicle;
-		private _crew = crew _vehicle;
-		{
-			_x call WL2_fnc_newAssetHandle;
-			_vehicleUnits pushBack _x;
-		} forEach _crew;
-
-		[_group, 0] setWaypointPosition [_sector, 100];
-		_group setBehaviour "COMBAT";
-		_group deleteGroupWhenEmpty true;
-
-		private _wp = _group addWaypoint [_sector, 100];
-		_wp setWaypointType "SAD";
-
-		_wp = _group addWaypoint [_sector, 100];
-		_wp setWaypointType "CYCLE";
-
-		_vehicle allowCrewInImmobile [true, true];
-		[_vehicle, [1, 1, 1]] remoteExec ["setVehicleTIPars", 0];
-	};
-
-	_vehicle;
-};
 
 if (count _presetVehicles == 0) then {
 	private _numVehicleSpawn = 3;
@@ -104,14 +73,16 @@ if (count _presetVehicles == 0) then {
 		};
 
 		private _vehicleType = selectRandom _vehiclesPool;
-		[_vehicleType, _spawnPos, random 360, false, false] call _spawnVehicle;
+		[_vehicleType, _spawnPos, random 360, false, false, _vehicleUnits, _sector] call WL2_fnc_addGreenVehicle;
 	};
 } else {
 	{
 		private _data = +_x;
 		_data pushBack false;
 		_data pushBack false;
-		_data call _spawnVehicle;
+		_data pushBack _vehicleUnits;
+		_data pushBack _sector;
+		_data call WL2_fnc_addGreenVehicle;
 	} forEach _presetVehicles;
 };
 
@@ -121,7 +92,7 @@ private _numMinesToSpawn = floor (_sectorValue / 5);
 _numMinesToSpawn = _numMinesToSpawn min 2;
 private _mineLocations = [_sector] call WL2_fnc_findSpawnsInSector;
 for "_i" from 1 to _numMinesToSpawn do {
-	[selectRandom _mineTypes, selectRandom _mineLocations, random 360, true, false] call _spawnVehicle;
+	[selectRandom _mineTypes, selectRandom _mineLocations, random 360, true, false, _vehicleUnits, _sector] call WL2_fnc_addGreenVehicle;
 };
 
 private _services = _sector getVariable ["WL2_services", []];
@@ -144,7 +115,7 @@ if ("H" in _services && !_alreadySpawnedAircraft) then {
 		private _randomPos = _sector getPos [_randomDistance, _randomAngle];
 		_randomPos set [2, 1000];
 
-		private _aircraft = [selectRandom _aircraftPool, _randomPos, random 360, false, true] call _spawnVehicle;
+		private _aircraft = [selectRandom _aircraftPool, _randomPos, random 360, false, true, _vehicleUnits, _sector] call WL2_fnc_addGreenVehicle;
 		_aircraft setPosASL _randomPos;
 		_aircraft setVelocityModelSpace [0, 100, 0];
 		_aircraft flyInHeightASL [1000, 1000, 1000];
@@ -186,7 +157,7 @@ while {_spawnedUnitCount < _garrisonSize} do {
     _mrkr setMarkerSizeLocal [1.5, 1.5];
 	//***end diag code block***
 	*/
-	private _infantryGroup = createGroup [_owner, true];
+	private _infantryGroup = createGroup [independent, true];
 	_infantryGroups pushBack _infantryGroup;
 
 	private _grpSize = floor (5 + random 3);
@@ -222,3 +193,36 @@ private _allEntities = entities [[], ["Logic"], true];
 	_x addCuratorEditableObjects [_allEntities, true];
 } forEach allCurators;
 #endif
+
+private _vehicleDrivers = _vehicleUnits select {
+	alive _x
+} select {
+	_x isKindOf "Man"
+} select {
+	driver vehicle _x == _x
+};
+private _sortedDrivers = [_vehicleDrivers, [], { WL_UNIT((vehicle _x), "cost", 0) }, "DESCEND"] call BIS_fnc_sortBy;
+if (count _sortedDrivers > 0) then {
+	private _driver = _sortedDrivers # 0;
+
+	private _sectorCollaboratorVar = format ["WL2_sectorCollaborator_%1", _side];
+	private _nextSectorCollaborator = missionNamespace getVariable [_sectorCollaboratorVar, ""];
+	if (_nextSectorCollaborator != "") then {
+		private _collaboratorPlayer = [_nextSectorCollaborator] call BIS_fnc_getUnitByUid;
+		if (!isNull _collaboratorPlayer) then {
+			[_driver] remoteExec ["WL2_fnc_collaborate", _collaboratorPlayer];
+			missionNamespace setVariable [_sectorCollaboratorVar, "", true];
+
+			private _collaborateVehicle = vehicle _driver;
+			_collaborateVehicle setVariable ["BIS_WL_ownerAsset", _nextSectorCollaborator, true];
+			_collaborateVehicle setVariable ["BIS_WL_ownerAssetSide", side group _collaboratorPlayer, true];
+			_collaborateVehicle setVariable ["WL2_assetOwnerName", "", true];
+			_collaborateVehicle setVariable ["WL2_isCollaborator", true, true];
+
+			private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", _nextSectorCollaborator];
+			private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
+			_ownedVehicles pushBack _collaborateVehicle;
+			missionNamespace setVariable [_ownedVehicleVar, _ownedVehicles, true];
+		};
+	};
+};

@@ -192,10 +192,6 @@ while { alive _projectile } do {
         continue;
     };
 
-    // private _angularVector = angularVelocityModelSpace _projectile;
-    // private _newAngularVector = _angularVector vectorMultiply WL_SAM_ANGULAR_ACCELERATION;
-    // _projectile setAngularVelocityModelSpace _newAngularVector;
-
     _lastLoopTime = serverTime;
     uiSleep 0.01;
 };

@@ -4,12 +4,6 @@ private _ownedAirfieldSectors = (BIS_WL_sectorsArray # 2) select {
     "H" in _services;
 };
 
-private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
-if (_timeSinceStart > WL_COMBAT_AIR_HOME_TIME) then {
-    private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
-    _ownedAirfieldSectors pushBack _homeBase;
-};
-
 private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 private _ownedAirFobs = _forwardBases select {
     _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide

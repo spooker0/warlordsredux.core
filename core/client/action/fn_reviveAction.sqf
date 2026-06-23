@@ -120,6 +120,7 @@ player setVariable ["WL2_reviveActionId", _reviveActionId];
 
 player setCaptive false;
 player setVariable ["WL2_alreadyHandled", false, 2];
+player setVariable ["WL2_alreadyPunished", false, 2];
 player setVariable ["WL_unconsciousTime", 0];
 
 private _capAreaModifiers = missionNamespace getVariable ["WL2_capAreaModifiers", [0, 0, 0]];

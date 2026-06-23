@@ -83,9 +83,8 @@ if (_teamPriorityType == "sector") exitWith {
         } else {
             private _asset = [_teamPriority, [], true] call WL2_fnc_getSectorFTAsset;
             if (count _asset == 0) then {
-                private _hasDefenders = _teamPriority getVariable ["WL2_defenders", 0] > 0;
                 private _sectorIsLinked = _teamPriority in (BIS_WL_sectorsArray # 2);
-                if (_hasDefenders && _sectorIsLinked) then {
+                if (_sectorIsLinked) then {
                     if (_commit) then {
                         [0, _teamPriority] spawn WL2_fnc_executeFastTravel;
                     };

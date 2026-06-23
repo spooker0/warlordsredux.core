@@ -49,6 +49,7 @@ class CfgFunctions {
 			class laserMunition { headerType = WL_HEADER_LEVEL; };
 			class loalAuto { headerType = WL_HEADER_LEVEL; };
 			class maneuver { headerType = WL_HEADER_LEVEL; };
+			class manualSam { headerType = WL_HEADER_LEVEL; };
 			class mineLayer { headerType = WL_HEADER_LEVEL; };
 			class missileCamera { headerType = WL_HEADER_LEVEL; };
 			class remoteMunition { headerType = WL_HEADER_LEVEL; };
@@ -173,6 +174,7 @@ class CfgFunctions {
 			class addMissileToMag { headerType = WL_HEADER_LEVEL; };
 			class afk { headerType = WL_HEADER_LEVEL; };
 			class airburst { headerType = WL_HEADER_LEVEL; };
+			class aiVehicleCrewHandler { headerType = WL_HEADER_LEVEL; };
 			class ammoConfigChange { headerType = WL_HEADER_LEVEL; };
 			class ammoConfigDetection { headerType = WL_HEADER_LEVEL; };
 			class announcer { headerType = WL_HEADER_LEVEL; };
@@ -253,6 +255,8 @@ class CfgFunctions {
 			class catapultActionEligibility { headerType = WL_HEADER_LEVEL; };
 			class claimAction { headerType = WL_HEADER_LEVEL; };
 			class claimEligibility { headerType = WL_HEADER_LEVEL; };
+			class collaborate { headerType = WL_HEADER_LEVEL; };
+			class combatAirHome { headerType = WL_HEADER_LEVEL; };
 			class conscription { headerType = WL_HEADER_LEVEL; };
 			class conscriptVehicle { headerType = WL_HEADER_LEVEL; };
 			class controlDroneActions { headerType = WL_HEADER_LEVEL; };
@@ -436,6 +440,7 @@ class CfgFunctions {
 			class checkCruiseMissileAvailable { headerType = WL_HEADER_LEVEL; };
 			class checkCollaborator { headerType = WL_HEADER_LEVEL; };
 			class checkCombatAir { headerType = WL_HEADER_LEVEL; };
+			class checkCombatAirHome { headerType = WL_HEADER_LEVEL; };
 			class checkConscription { headerType = WL_HEADER_LEVEL; };
 			class checkDead { headerType = WL_HEADER_LEVEL; };
 			class checkEwar { headerType = WL_HEADER_LEVEL; };
@@ -570,6 +575,7 @@ class CfgFunctions {
 		};
 		class ServerSector {
 			file = "src\core\server\sector";
+			class addGreenVehicle { headerType = WL_HEADER_LEVEL; };
 			class calcHomeBases { headerType = WL_HEADER_LEVEL; };
 			class combatAirServerHandle { headerType = WL_HEADER_LEVEL; };
 			class getCapValues { headerType = WL_HEADER_LEVEL; };

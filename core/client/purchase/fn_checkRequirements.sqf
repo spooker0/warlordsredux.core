@@ -1,9 +1,8 @@
 #include "includes.inc"
 params ["_sector", "_requirements"];
 
-private _defenders = _sector getVariable ["WL2_defenders", 0];
-if (_sector == WL_TARGET_ENEMY && _defenders <= 0) exitWith {
-    [false, "Sector has run out of reinforcements. Resupply the sector to enable vehicle purchases."];
+if ("W" in _requirements) exitWith {
+    [true, ""];
 };
 
 private _potentialBases = missionNamespace getVariable ["WL2_forwardBases", []];
@@ -13,65 +12,40 @@ private _forwardBases = _potentialBases select {
     player distance2D _x < WL_FOB_RANGE
 };
 
+if ("NF" in _requirements && count _forwardBases > 0) exitWith {
+    [false, "Must not be in a forward base."];
+};
+
+if ("F" in _requirements && count _forwardBases == 0) exitWith {
+    [false, "Must be in a forward base."];
+};
+
+if (count _forwardBases > 0) then {
+    _sector = _forwardBases # 0;
+};
+
+private _defenders = _sector getVariable ["WL2_defenders", 0];
+private _sectorUnderAttack = _sector == WL_TARGET_ENEMY;
+
+if (_sectorUnderAttack && _defenders <= 0) exitWith {
+    [false, "Sector has run out of reinforcements. Resupply the sector to enable vehicle purchases."];
+};
+
 private _servicesInSector = _sector getVariable ["WL2_services", []];
 if ("A" in _requirements && !("A" in _servicesInSector)) exitWith {
-    private _forwardAirbases = _forwardBases select {
-        private _defenseLevel = _x getVariable ["WL2_forwardBaseDefenseLevel", 0];
-        _defenseLevel > 3
-    };
-    if (count _forwardAirbases > 0) then {
-        [true, ""];
-    } else {
-        [false, "Must be in a sector with a runway."];
-    };
+    [false, "Must be in a sector with a runway."];
 };
 
 if ("H" in _requirements && !("H" in _servicesInSector)) exitWith {
-    if (count _forwardBases > 0 && !("NF" in _requirements)) then {
-        [true, ""];
-    } else {
-        [false, "Must be in a sector with a helipad."];
-    };
+    [false, "Must be in a sector with a helipad."];
 };
 
-if ("F" in _requirements) exitWith {
-    if (count _forwardBases > 0) then {
-        [true, ""];
-    } else {
-        [false, "Must be in a forward base."];
-    };
+if ("FA" in _requirements && !("FA" in _servicesInSector)) exitWith {
+    [false, "Must be in a forward airbase."];
 };
 
-private _forwardAirBases = _forwardBases select {
-    private _defenseLevel = _x getVariable ["WL2_forwardBaseDefenseLevel", 0];
-    _defenseLevel >= 4
-};
-if ("FA" in _requirements) exitWith {
-    if (count _forwardAirBases > 0) then {
-        [true, ""];
-    } else {
-        [false, "Must be in a forward airbase."];
-    };
+if ("S" in _requirements && _sectorUnderAttack) exitWith {
+    [false, "Cannot spawn in a sector under attack."];
 };
 
-if ("S" in _requirements) exitWith {
-    private _sectorUnderAttack = _sector == WL_TARGET_ENEMY;
-    if (_sectorUnderAttack) then {
-        [false, "Cannot spawn in a sector under attack."];
-    } else {
-        [true, ""];
-    };
-};
-
-if ("W" in _requirements) exitWith {
-    [true, ""];
-};
-
-if ("NF" in _requirements) exitWith {
-    [true, ""];
-};
-
-private _servicesAvailable = BIS_WL_sectorsArray # 5;
-if (_requirements findIf {!(_x in _servicesAvailable)} >= 0) exitWith {
-    [false, localize "STR_A3_WL_airdrop_restr1"];
-};
+[true, ""];

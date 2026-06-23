@@ -145,6 +145,7 @@ WL_LoadingState = 10;
 	};
 };
 
+0 spawn WL2_fnc_aiVehicleCrewHandler;
 0 spawn WL2_fnc_selectedTargetsHandle;
 0 spawn WL2_fnc_sectorVoteClient;
 0 spawn WL2_fnc_assetMapControl;

@@ -13,25 +13,25 @@ private _maxVoteCount = if (_voteSectorCount > 0) then {
     0
 };
 
-private _panelX = safeZoneX + safeZoneW - 0.42;
+private _panelWidth = 0.3;
+private _panelX = safeZoneX + safeZoneW - _panelWidth - 0.02;
 private _panelY = 0;
-private _panelWidth = 0.4;
 
-private _paddingX = 0.02;
-private _paddingTop = 0.03;
-private _paddingBottom = 0.025;
+private _paddingX = 0.005;
+private _paddingTop = 0.02;
+private _paddingBottom = 0.01;
 
 private _titleHeight = 0.075;
 private _titleRowsGap = 0.0;
 
-private _rowHeight = 0.052;
 private _nameHeight = 0.022;
 private _barHeight = 0.004;
 private _barOffsetY = 0.026;
+private _rowHeight = _nameHeight + _barHeight + 0.02;
 private _barGapX = 0.01;
 
 private _voteSectionHeight = if (_showVote) then {
-    _titleHeight + _titleRowsGap + (_voteSectorCount * _rowHeight)
+    _paddingTop + _titleHeight + _titleRowsGap + (_voteSectorCount * _rowHeight) + _paddingBottom
 } else {
     0
 };
@@ -43,7 +43,7 @@ _backgroundControl ctrlSetPosition [
     _panelX,
     _panelY,
     _panelWidth,
-    _paddingTop + _totalContentHeight + _paddingBottom
+    _totalContentHeight
 ];
 
 _backgroundControl ctrlShow _shouldShowPanel;

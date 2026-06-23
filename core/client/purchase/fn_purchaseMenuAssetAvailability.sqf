@@ -168,7 +168,7 @@ if (_ret) then {
 				[WL2_fnc_checkConscription]
 			]
 		};
-		case "ControlCollaborator": {
+		case "SwitchToCollaborator": {
 			[
 				[WL2_fnc_checkCollaborator]
 			]
@@ -215,6 +215,11 @@ if (_ret) then {
 		case "NearestCombatAir": {
 			[
 				[WL2_fnc_checkCombatAir]
+			]
+		};
+		case "CombatAirHome": {
+			[
+				[WL2_fnc_checkCombatAirHome]
 			]
 		};
 		default {

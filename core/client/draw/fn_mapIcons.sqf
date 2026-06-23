@@ -265,8 +265,13 @@
 			continue;
 		};
 
-		private _mainMap = (findDisplay 12) displayCtrl 51;
+		private _mainMap = if (WL_IsSpectator) then {
+			(findDisplay 11012) displayCtrl 5503
+		} else {
+			(findDisplay 12) displayCtrl 51
+		};
 		private _drawMode = if (WL_IsSpectator) then { 1 } else { 0 };
+
 		[_mainMap, _drawMode] call WL2_fnc_iconDrawMapPrepare;
 		uiNamespace setVariable ["BIS_WL_mapControl", _mainMap];
 

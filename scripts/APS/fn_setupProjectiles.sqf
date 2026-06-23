@@ -185,6 +185,12 @@ addMissionEventHandler ["ProjectileCreated", {
         [_projectile, _unit] spawn DIS_fnc_maneuver;
     };
 
+    private _projectileManualSam = _projectileConfig getOrDefault ["manualSam", []];
+    if (_projectileManualSam isNotEqualTo []) then {
+        [_projectile, _unit] spawn DIS_fnc_frag;
+        [_projectile, _unit, _projectileManualSam] spawn DIS_fnc_manualSam;
+    };
+
     // private _projectileProx = _projectileConfig getOrDefault ["prox", false];
     // if (_projectileProx) then {
     //     private _speed = _projectileConfig getOrDefault ["speed", 0];

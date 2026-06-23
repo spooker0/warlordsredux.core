@@ -111,12 +111,12 @@ private _strategyArr = [
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"Wipes all user-defined markers from your own map locally. This includes your own."
 	], [
-		"ControlCollaborator",
-		2000,
+		"SwitchToCollaborator",
+		WL_COST_COLLABORATOR,
 		[],
 		"Control collaborator",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"Find and control a collaborator in the local population within 4km, that is not in the sector your team is attacking."
+		"Find and control a collaborator in the local population."
 	], [
 		"RemoveUnits",
 		0,

@@ -23,7 +23,8 @@ private _isPersistentAirWreck = {
 	params ["_asset"];
 	if !(_asset isKindOf "Air") exitWith { false };
 	if !(_asset getVariable ["WL_spawnedAsset", false]) exitWith { false };
-	if (_asset getEntityInfo 3 > WL_COOLDOWN_GC_LONG) exitWith { false };
+	private _deadTime = _asset getVariable ["WL2_timeOfDeath", 0];
+	if (serverTime - _deadTime > WL_COOLDOWN_GC_LONG) exitWith { false };
 	private _attachment = attachedTo _asset;
 	if (!isNull _attachment) exitWith { true };
 	if (_attachment isKindOf "I_TargetSoldier" && !(isNull ropeAttachedTo _attachment)) exitWith { true };

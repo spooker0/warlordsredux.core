@@ -55,6 +55,9 @@ switch (_className) do {
     case "NearestCombatAir": {
         0 spawn WL2_fnc_nearestCombatAir;
     };
+    case "CombatAirHome": {
+        0 spawn WL2_fnc_combatAirHome;
+    };
     case "Conscription": {
         "RequestMenu_close" call WL2_fnc_setupUI;
         playSoundUI ["AddItemOk"];
@@ -173,47 +176,18 @@ switch (_className) do {
             };
         } forEach allMapMarkers;
     };
-    case "ControlCollaborator": {
-        private _potentialCollaboratorsInRange = allUnits select {
-            side group _x == independent &&
-            _x getVariable ["BIS_WL_ownerAsset", "123"] == "123" &&
-            _x distance player < 4000 &&
-            vehicle _x == _x &&
-            _x distance WL_TARGET_FRIENDLY > 1000
+    case "SwitchToCollaborator": {
+        private _sectorCollaboratorVar = format ["WL2_sectorCollaborator_%1", BIS_WL_enemySide];
+        private _nextSectorCollaborator = missionNamespace getVariable [_sectorCollaboratorVar, ""];
+        if (_nextSectorCollaborator != "") exitWith {
+            ["Someone on your team has already applied to be collaborator for the next sector."] call WL2_fnc_smoothText;
         };
 
-        if (count _potentialCollaboratorsInRange == 0) exitWith {
-            playSoundUI ["AddItemFailed"];
-            ["No eligible collaborators in range!"] call WL2_fnc_smoothText;
-        };
+        missionNamespace setVariable [_sectorCollaboratorVar, getPlayerUID player, true];
+        ["You have applied to be the next sector collaborator."] call WL2_fnc_smoothText;
 
         missionNamespace setVariable ["WL2_collaboratorCooldown", serverTime + 60];
         [player, "controlCollaborator"] remoteExec ["WL2_fnc_handleClientRequest", 2];
-
-        private _selectedCollaborator = selectRandom _potentialCollaboratorsInRange;
-
-        _selectedCollaborator setVariable ["BIS_WL_ownerAsset", getPlayerUID player, true];
-        _selectedCollaborator setVariable ["BIS_WL_ownerAssetSide", side group player, true];
-
-        [_selectedCollaborator] call WL2_fnc_factionBasedClientInit;
-        [_selectedCollaborator] spawn WLC_fnc_onRespawn;
-
-        switchCamera _selectedCollaborator;
-        player remoteControl _selectedCollaborator;
-
-        uiNamespace setVariable ["WL2_canBuy", false];
-
-        [_selectedCollaborator] spawn {
-            params ["_collaborator"];
-            private _startTime = serverTime;
-            while { WL_ISUP(_collaborator) && WL_ISUP(player) } do {
-                uiSleep 1;
-            };
-
-            uiSleep 5;
-            player remoteControl objNull;
-            uiNamespace setVariable ["WL2_canBuy", true];
-        };
     };
     case "RespawnBagFT": {
         [4] spawn WL2_fnc_executeFastTravel;
@@ -226,6 +200,7 @@ switch (_className) do {
             private _message = "Are you sure you want to surrender? You will ruin the game for people who still want to play :(<br/>Votes needed: 1";
             private _result = ["Surrender", _message, "OK", "Cancel"] call WL2_fnc_prompt;
             if (_result) then {
+                [player, "surrender"] remoteExec ["WL2_fnc_handleClientRequest", 2];
                 [BIS_WL_enemySide, true, true] spawn WL2_fnc_missionEndHandle;
             } else {
                 playSoundUI ["AddItemFailed"];

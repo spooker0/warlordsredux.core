@@ -62,7 +62,7 @@ private _actionCost = switch (_action) do {
 	case "targetReset" : { WL_COST_TARGETRESET };
 	case "orderAI" : { WL_ASSET(_param1, "cost", 150) };
 	case "buildABear" : { 300 };
-	case "controlCollaborator" : { 2000 };
+	case "controlCollaborator" : { WL_COST_COLLABORATOR };
 	case "camouflage" : { 500 };
 	case "cruiseMissiles" : { 15000 };
 	case "repairFOB" : { 500 };
@@ -212,6 +212,11 @@ if (_action == "immobilized") exitWith {
 
 	[_reward, "Vehicle disabled"] call _addFunds;
 	[objNull, _reward, "Vehicle disabled", WL_COLOR_KILL] remoteExec ["WL2_fnc_killRewardClient", _sender];
+};
+
+if (_action == "surrender") exitWith {
+	private _surrenderMessage = format ["%1 has chosen to take the easy way out. :( Say bye-bye!", name _sender];
+	[_surrenderMessage] remoteExec ["WL2_fnc_broadcastAction", 0];
 };
 
 if (_action == "scan") exitWith {
@@ -617,23 +622,21 @@ if (_action == "sectorReward") exitWith {
 if (_action == "secureAircraft") exitWith {
 	private _reward = _param1;
 	[_reward, "Secured aircraft"] call _addFunds;
-};
 
-if (_action == "secureDrone") exitWith {
-	private _reward = _param1;
-	[_reward, "Secured drone"] call _addFunds;
+	private _boostsSignal = _param2;
+	if (_boostsSignal) then {
+		private _signalIncrement = _reward * 0.1;
 
-	private _signalIncrement = _reward * 0.1;
+		private _friendlySignalVar = format ["WL2_ewarSignal_%1", _side];
+		private _friendlySignal = missionNamespace getVariable [_friendlySignalVar, 500];
+		_friendlySignal = (_friendlySignal + _signalIncrement) min 1000;
+		missionNamespace setVariable [_friendlySignalVar, _friendlySignal, true];
 
-	private _friendlySignalVar = format ["WL2_ewarSignal_%1", _side];
-	private _friendlySignal = missionNamespace getVariable [_friendlySignalVar, 500];
-	_friendlySignal = (_friendlySignal + _signalIncrement) min 1000;
-	missionNamespace setVariable [_friendlySignalVar, _friendlySignal, true];
-
-	private _hostileSignalVar = format ["WL2_ewarSignal_%1", if (_side == west) then { east } else { west }];
-	private _hostileSignal = missionNamespace getVariable [_hostileSignalVar, 500];
-	_hostileSignal = (_hostileSignal - _signalIncrement) max 0;
-	missionNamespace setVariable [_hostileSignalVar, _hostileSignal, true];
+		private _hostileSignalVar = format ["WL2_ewarSignal_%1", if (_side == west) then { east } else { west }];
+		private _hostileSignal = missionNamespace getVariable [_hostileSignalVar, 500];
+		_hostileSignal = (_hostileSignal - _signalIncrement) max 0;
+		missionNamespace setVariable [_hostileSignalVar, _hostileSignal, true];
+	};
 };
 
 if (_action == "droneExplode") exitWith {

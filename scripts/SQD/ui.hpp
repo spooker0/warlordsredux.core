@@ -131,7 +131,7 @@ class SQD_Menu {
             w = 0.6;
             h = 0.6;
             colorBackground[] = {SQD_RGBA_BG};
-            text = "FEED DISABLED";
+            text = "FEED OFF";
             sizeEx = 0.15;
             style = ST_CENTER;
             shadow = 0;
@@ -416,43 +416,6 @@ class SQD_Menu_SpawnBar_Location: RscControlsGroupNoScrollbars {
             w = 0.195;
             h = 0.26;
             text = "";
-        };
-    };
-};
-
-class SQD_DeathInfo {
-    idd = SQD_DEATHINFO_IDD;
-    movingEnable = false;
-    class controls {
-        class SQD_DeathInfo_Status: RscStructuredText {
-            idc = SQD_DEATHINFO_STATUS_IDC;
-            x = 0.2;
-            y = 0.2;
-            w = 0.6;
-            h = 0.8;
-            size = 0.08;
-            text = "";
-
-            class Attributes {
-                font = "RobotoCondensedBold";
-                color = SQD_COLOR_TEXT;
-                align = "center";
-            };
-        };
-        class SQD_DeathInfo_Tips: RscStructuredText {
-            idc = SQD_DEATHINFO_TIPS_IDC;
-            x = 0;
-            y = 0;
-            w = 1;
-            h = 0.2;
-            size = 0.08;
-            text = "";
-
-            class Attributes {
-                font = "RobotoCondensedBold";
-                color = SQD_COLOR_TEXT;
-                align = "center";
-            };
         };
     };
 };

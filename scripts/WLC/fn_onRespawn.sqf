@@ -176,10 +176,29 @@ if (count _customizationLoadout > 0) then {
         [_sanityCheckResult] call WL2_fnc_smoothText;
     };
 } else {
-    if (BIS_WL_playerSide == west) then {
-        _unit setUnitLoadout "B_Soldier_TL_F";
+    private _loadoutConfigs = configProperties [missionConfigFile >> "WLDefaultLoadouts", "isClass _x", true];
+    private _loadouts = [];
+    private _sideString = str BIS_WL_playerSide;
+    {
+        private _loadoutConfig = _x;
+
+        private _loadoutSide = getText (_loadoutConfig >> "side");
+        if (_loadoutSide != _sideString) then {
+            continue;
+        };
+
+        private _loadout = getArray (_loadoutConfig >> "loadout");
+        _loadouts pushBack _loadout;
+    } forEach _loadoutConfigs;
+
+    if (count _loadouts == 0) then {
+        if (BIS_WL_playerSide == west) then {
+            _unit setUnitLoadout "B_Soldier_TL_F";
+        } else {
+            _unit setUnitLoadout "O_Soldier_TL_F";
+        };
     } else {
-        _unit setUnitLoadout "O_Soldier_TL_F";
+        _unit setUnitLoadout (selectRandom _loadouts);
     };
 };
 

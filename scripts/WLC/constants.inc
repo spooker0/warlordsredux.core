@@ -1,5 +1,3 @@
-#define WLC_DEBUG 0
-
 #define WLC_DISPLAY 12000
 
 #define WLC_DRAGGABLE 12001

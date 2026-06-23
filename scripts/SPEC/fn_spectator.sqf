@@ -293,11 +293,7 @@ _mainDisplay displayAddEventHandler ["KeyUp", {
                 camUseNVG true;
             };
             case 2: {
-                true setCamUseTI 2;
-                setTIParameter ["OutputRangeStart", 0];
-                setTIParameter ["OutputRangeWidth", 1];
-                setTIParameter ["FilmGrain", 0];
-                setTIParameter ["Blur", 0];
+                true setCamUseTI 0;
             };
         };
     };

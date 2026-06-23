@@ -17,6 +17,13 @@ if (_action == "setRating") then {
     saveProfileNamespace;
 };
 
+if (_action == "setRatingPlayer") then {
+    private _ratings = profileNamespace getVariable ["WL2_playerRatings", createHashMap];
+    _ratings set _param1;
+    profileNamespace setVariable ["WL2_playerRatings", _ratings];
+    saveProfileNamespace;
+};
+
 if (_action == "clearRating") then {
     profileNamespace setVariable ["WL2_playerRatings", createHashMap];
     saveProfileNamespace;

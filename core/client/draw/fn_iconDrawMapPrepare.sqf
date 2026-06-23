@@ -4,19 +4,6 @@ params [["_map", controlNull], ["_drawMode", 0]];
 
 if (isNull _map) exitWith {};
 
-private _controlPosition = ctrlPosition _map;
-private _mapX = _controlPosition # 0;
-private _mapY = _controlPosition # 1;
-private _mapW = _controlPosition # 2;
-private _mapH = _controlPosition # 3;
-private _bottomLeftCorner = _map ctrlMapScreenToWorld [_mapX, _mapY + _mapH];
-private _topRightCorner = _map ctrlMapScreenToWorld [_mapX + _mapW, _mapY];
-private _mapCenter = _map ctrlMapScreenToWorld [_mapX + _mapW / 2, _mapY + _mapH / 2];
-private _mapWidth = _topRightCorner # 0 - _bottomLeftCorner # 0;
-private _mapHeight = _topRightCorner # 1 - _bottomLeftCorner # 1;
-private _mapBoundW = _mapWidth * 0.5;
-private _mapBoundH = _mapHeight * 0.5;
-
 private _drawAll = _drawMode == 1 || _drawMode == 2;
 private _draw = (ctrlMapScale _map) < 0.3 || _drawMode == 2;
 private _playerUid = getPlayerUID player;
@@ -53,7 +40,7 @@ private _ownedSectorLinkColor = if (_side == west) then {
 	[0.5, 0, 0, 1]
 };
 
-private _showDetailedMode = inputAction "lookAround" > 0;
+private _showDetailedMode = inputAction "lookAround" > 0 || _map getVariable ["WL2_showDetailedMode", false];
 private _showSectorLinks = _drawMode != 0 || WL_VotePhase != 0 || _showDetailedMode;
 
 private _sectorsInLinksShown = [];
@@ -736,7 +723,7 @@ private _scannedUnits = _mapData getOrDefault ["scannedUnits", []];
 		"PuristaBold",
 		"right"
 	];
-} forEach (_scannedUnits inAreaArray [_mapCenter, _mapBoundW, _mapBoundH, 0, true]);
+} forEach _scannedUnits;
 
 // Draw scanner
 private _assetData = WL_ASSET_DATA;
@@ -765,8 +752,8 @@ private _scanners = if (_drawAll) then {
 } forEach _scanners;
 
 // Combat air patrol areas
-if (cameraOn isKindOf "Air" || _showDetailedMode) then {
-	private _combatAirAreas = _mapData getOrDefault ["combatAirAreas", []];
+private _combatAirAreas = _mapData getOrDefault ["combatAirAreas", []];
+if (cameraOn isKindOf "Air" || _showDetailedMode || _sectorTarget in _combatAirAreas) then {
 	{
 		private _targetPos = getPosASL _x;
 		private _targetOwner = if (typeof _x == "RuggedTerminal_01_communications_hub_F") then {
@@ -870,7 +857,7 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 		};
 	};
 	_drawIconsSelectable pushBack _x;
-} forEach (_sideVehicles inAreaArray [_mapCenter, _mapBoundW, _mapBoundH, 0, true]);
+} forEach _sideVehicles;
 
 private _checkForAirRadar = _assetTargets + [cameraOn];
 {
@@ -905,14 +892,14 @@ private _visibleEnemyUnits = _mapData getOrDefault ["visibleEnemyUnits", []];
 		"PuristaBold",
 		"right"
 	];
-} forEach (_visibleEnemyUnits inAreaArray [_mapCenter, _mapBoundW, _mapBoundH, 0, true]);
+} forEach _visibleEnemyUnits;
 
 // Draw plane wrecks
 private _airWrecks = _mapData getOrDefault ["airWrecks", []];
 {
 	private _position = getPosASL _x;
 	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
-	private _assetTypeName = [_x] call WL2_fnc_getAssetTypeShortName;
+	private _wreckValue = _x getVariable ["WL2_wreckValue", 0];
 
 	private _deadTime = _x getVariable ["WL2_timeOfDeath", -1];
 	private _wreckTime = if (_deadTime >= 0) then {
@@ -921,7 +908,7 @@ private _airWrecks = _mapData getOrDefault ["airWrecks", []];
 		_x getEntityInfo 3
 	};
 
-	private _wreckTimer = [_x getEntityInfo 3, "MM:SS"] call BIS_fnc_secondsToString;
+	private _wreckTimer = [_wreckTime, "MM:SS"] call BIS_fnc_secondsToString;
 	_drawIcons pushBack [
 		"\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa",
 		[0, 0, 0, 1],
@@ -929,13 +916,13 @@ private _airWrecks = _mapData getOrDefault ["airWrecks", []];
 		_size * _mapIconScale,
 		_size * _mapIconScale,
 		0,
-		format ["%1 WRECK (%2)", _assetTypeName, _wreckTimer],
+		format ["AIR WRECK VALUE %1%2 (%3)", WL_MONEY_SIGN, _wreckValue, _wreckTimer],
 		1,
 		_iconTextSize * _mapIconScale,
 		"PuristaBold",
 		"right"
 	];
-} forEach (_airWrecks inAreaArray [_mapCenter, _mapBoundW, _mapBoundH, 0, true]);
+} forEach _airWrecks;
 
 // Draw advanced SAMs
 private _advancedSams = _mapData getOrDefault ["advancedSams", []];

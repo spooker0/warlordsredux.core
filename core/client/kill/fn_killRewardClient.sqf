@@ -37,7 +37,6 @@ private _displayIcon = switch (_iconText) do {
 	case "KILL";
 	case "PLAYER KILL": { "a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa" };
 	case "SECURED";
-	case "DRONE SECURED";
 	case "AIRCRAFT SECURED": { "a3\ui_f\data\igui\cfg\holdactions\holdaction_secure_ca.paa" };
 	case "VEHICLE DISABLED": { "a3\ui_f\data\igui\cfg\vehicletoggles\wheelbreakiconon_ca.paa" };
 	case "DEMOLITION";

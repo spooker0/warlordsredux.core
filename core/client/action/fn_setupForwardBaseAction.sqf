@@ -143,6 +143,7 @@ private _setupActionId = [
 
 			_forwardBase setVariable ["WL2_forwardBasePlacer", getPlayerUID player, true];
 			_forwardBase setVariable ["WL2_forwardBaseSupplies", 2000, true];
+			_forwardBase setVariable ["WL2_services", ["H"], true];
 
 			playSound3D [
 				"a3\sounds_f_decade\assets\props\linkterminal_01_node_2_f\link_terminal02_antenna_open.wss",

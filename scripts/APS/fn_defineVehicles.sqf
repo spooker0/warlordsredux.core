@@ -20,6 +20,7 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
     private _projectileIncendiary = getNumber (_x >> "incendiary") == 1;
     private _projectileLaser = getNumber (_x >> "laser") == 1;
     private _projectileLoal = getNumber (_x >> "loal") == 1;
+    private _projectileManualSam = getArray (_x >> "manualSam");
     private _projectileMine = getNumber (_x >> "mine") == 1;
     private _projectileMineLayer = getText (_x >> "mineLayer");
     private _projectileProx = getNumber (_x >> "prox") == 1;
@@ -49,6 +50,7 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
             ["incendiary", _projectileIncendiary],
             ["laser", _projectileLaser],
             ["loal", _projectileLoal],
+            ["manualSam", _projectileManualSam],
             ["mine", _projectileMine],
             ["mineLayer", _projectileMineLayer],
             ["name", _ammo],

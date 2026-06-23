@@ -369,3 +369,38 @@ class arsenalConfig {
 		};
 	};
 };
+
+class WLDefaultLoadouts {
+	class WestDefault {
+		dlc[] = {};
+		loadout[] = {
+			{"arifle_MX_SW_F", "muzzle_snds_H", "", "optic_DMS", {"100Rnd_65x39_caseless_mag", 100}, {}, ""},
+			{"launch_RPG32_F", "", "", "", {"RPG32_F", 1}, {}, ""},
+			{},
+			{"U_B_CTRG_1", {{"FirstAidKit", 3}, {"Chemlight_blue", 5, 1}}},
+			{"V_PlateCarrierSpec_rgr", {{"100Rnd_65x39_caseless_mag", 2, 100}}},
+			{"B_AssaultPack_blk", {{"RPG32_F", 1, 1}, {"DemoCharge_Remote_Mag", 2, 1}}},
+			"H_HelmetSpecB_sand",
+			"",
+			{"Laserdesignator", "", "", "", {"Laserbatteries", 1}, {}, ""},
+			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
+		};
+		side = "WEST";
+	};
+	class EastDefault {
+		dlc[] = {};
+		loadout[] = {
+			{"arifle_Katiba_GL_F", "muzzle_snds_H", "", "optic_DMS", {"30Rnd_65x39_caseless_green_mag_Tracer", 30}, {"1Rnd_HE_Grenade_shell", 1}, ""},
+			{"launch_RPG32_F", "", "", "", {"RPG32_F", 1}, {}, ""},
+			{},
+			{"U_O_SpecopsUniform_ocamo", {{"FirstAidKit", 2}, {"Chemlight_red", 5, 1}}},
+			{"V_PlateCarrier2_blk", {{"FirstAidKit", 1}, {"1Rnd_HE_Grenade_shell", 3, 1}, {"30Rnd_65x39_caseless_green_mag_Tracer", 4, 30}}},
+			{"B_AssaultPack_cbr", {{"RPG32_F", 1, 1}, {"DemoCharge_Remote_Mag", 2, 1}}},
+			"H_HelmetLeaderO_ocamo",
+			"",
+			{"Laserdesignator_02", "", "", "", {"Laserbatteries", 1}, {}, ""},
+			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
+		};
+		side = "EAST";
+	};
+};

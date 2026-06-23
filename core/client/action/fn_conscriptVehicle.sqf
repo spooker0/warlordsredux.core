@@ -46,6 +46,9 @@ private _callbackConfirm = {
     if (_playerVehicle isKindOf "Air") then {
         _canDrop = false;
     };
+    if (typeof _playerVehicle == "B_Truck_01_flatbed_F") then {
+        _canDrop = false;
+    };
 
     if (!_canDrop) exitWith {
         playSoundUI ["AddItemFailed"];

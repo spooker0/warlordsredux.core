@@ -23,13 +23,11 @@ if (!isNull _previousRespawnBag) then {
 private _pos = _projectile modelToWorld [0, 0, 0];
 // _pos set [2, 0];
 
-private _tentMap = createHashMapFromArray [
-    ["Chemlight_blue", "Land_TentSolar_01_bluewhite_F"],
-    ["Chemlight_green", "Land_TentDome_F"],
-    ["Chemlight_red", "Land_TentSolar_01_redwhite_F"],
-    ["Chemlight_yellow", "Land_TentA_F"]
-];
-private _tentType = _tentMap getOrDefault [_projectileType, "Land_TentA_F"];
+private _tentType = switch (BIS_WL_playerSide) do {
+    case west: {"Land_TentSolar_01_bluewhite_F"};
+    case east: {"Land_TentSolar_01_redwhite_F"};
+    default {"Land_TentDome_F"};
+};
 
 private _freshTent = createVehicle [_tentType, _pos, [], 0, "NONE"];
 _freshTent setVehiclePosition [_pos, [], 0, "CAN_COLLIDE"];

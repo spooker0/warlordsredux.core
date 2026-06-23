@@ -19,7 +19,7 @@ if (!_isHomeBase) then {
 		if (_isCarrierSector) then {
 			[_sector] spawn WL2_fnc_populateCarrierSector;
 		} else {
-			[_sector, _owner] spawn WL2_fnc_populateSector;
+			[_sector, _side] spawn WL2_fnc_populateSector;
 		};
 	};
 };

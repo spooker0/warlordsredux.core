@@ -201,6 +201,13 @@ while { !BIS_WL_missionEnd } do {
 	private _captureProgress = _sector getVariable ["BIS_WL_captureProgress", 0];
 	private _sectorOwner = _sector getVariable ["BIS_WL_owner", independent];
 
+	private _sectorReinforcements = if (_sectorOwner == independent) then {
+		_sector getVariable ["WL2_sectorPop", 0];
+	} else {
+		_sector getVariable ["WL2_defenders", 0];
+	};
+	private _sectorNameDisplay = format ["%1 (%2)", _sectorName, _sectorReinforcements];
+
 	private _captureDetails = _sector getVariable ["WL_captureDetails", []];
 
 	private _sectorOwnerCap = 0;
@@ -238,7 +245,7 @@ while { !BIS_WL_missionEnd } do {
 				"<t shadow='2' size='1'><t align='left' color='%1'>%2</t><t align='center'>DEFENDING %3</t><t align='right' color='%4'>%5</t></t>",
 				[_sectorOwner] call _getTeamColorHex,
 				floor _sectorOwnerCap,
-				toUpper _sectorName,
+				toUpper _sectorNameDisplay,
 				[_capturingTeam] call _getTeamColorHex,
 				floor _capturingTeamCap
 			];
@@ -253,7 +260,7 @@ while { !BIS_WL_missionEnd } do {
 				"<t shadow='2' size='1'><t align='left' color='%1'>%2</t><t align='center'>ATTACKING %3</t><t align='right' color='%4'>%5</t></t>",
 				[_sectorOwner] call _getTeamColorHex,
 				floor _sectorOwnerCap,
-				toUpper _sectorName,
+				toUpper _sectorNameDisplay,
 				[_capturingTeam] call _getTeamColorHex,
 				floor _capturingTeamCap
 			];

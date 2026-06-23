@@ -21,19 +21,19 @@ if (_captureRowControlsVersion != 2) then {
 
 private _captureSectorCount = count _sectorCaptureList;
 
-private _panelX = safeZoneX + safeZoneW - 0.42;
+private _panelWidth = 0.3;
+private _panelX = safeZoneX + safeZoneW - _panelWidth - 0.02;
 private _panelY = 0;
-private _panelWidth = 0.4;
 
-private _paddingX = 0.02;
-private _paddingTop = 0.03;
+private _paddingX = 0.005;
+private _paddingTop = 0.02;
 
-private _titleHeight = 0.055;
+private _titleHeight = 0.045;
 
-private _rowHeight = 0.086;
 private _nameHeight = 0.024;
-private _barHeight = 0.03;
-private _barOffsetY = 0.032;
+private _barHeight = 0.025;
+private _rowHeight = _nameHeight + _barHeight + 0.02;
+private _barOffsetY = _nameHeight + 0.005;
 private _captureVoteGap = 0.05;
 
 private _barGapX = 0.01;
@@ -82,7 +82,7 @@ private _formatCap = {
     params ["_value"];
 
     if (_value isEqualType 0) then {
-        if (_value == round _value) then {
+        if (_value - round _value < 0.01) then {
             str round _value
         } else {
             _value toFixed 1
@@ -94,7 +94,7 @@ private _formatCap = {
 
 {
     _x params [
-        "_sectorName",
+        "_sectorNameDisplay",
         "_capturingTeamCap",
         "_defendingTeamCap",
         "_captureProgressPercent",
@@ -174,7 +174,7 @@ private _formatCap = {
 
     _sectorNameControl ctrlSetStructuredText parseText format [
         "<t align='center'>%1</t>",
-        toUpper _sectorName
+        toUpper _sectorNameDisplay
     ];
 
     _sectorNameControl ctrlSetPosition [
@@ -209,9 +209,9 @@ private _formatCap = {
     _attackerBarControl ctrlShow (_attackerBarWidth > 0);
     _attackerBarControl ctrlCommit 0;
 
-    _progressPercentControl ctrlSetFontHeight _barHeight;
+    _progressPercentControl ctrlSetFontHeight _barHeight * 1.05;
     _progressPercentControl ctrlSetStructuredText parseText format [
-        "<t align='center'>%1</t>",
+        "<t align='center' shadow='0'>%1</t>",
         _captureProgressDisplay
     ];
 
@@ -225,9 +225,9 @@ private _formatCap = {
     _progressPercentControl ctrlShow true;
     _progressPercentControl ctrlCommit 0;
 
-    _progressDirectionControl ctrlSetFontHeight _barHeight;
+    _progressDirectionControl ctrlSetFontHeight _barHeight * 1.3;
     _progressDirectionControl ctrlSetStructuredText parseText format [
-        "<t align='center'>%1</t>",
+        "<t align='center' shadow='0'>%1</t>",
         _captureProgressDirection
     ];
 
@@ -277,7 +277,7 @@ if (_captureSectorCount > 0) then {
         0
     };
 
-    _titleHeight + (_captureSectorCount * _rowHeight) + _bottomGap
+    _paddingTop + _titleHeight + (_captureSectorCount * _rowHeight) + _bottomGap
 } else {
     0
 };

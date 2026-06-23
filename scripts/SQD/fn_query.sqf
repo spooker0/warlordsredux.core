@@ -159,7 +159,13 @@ if (_action == "getSquadVotingPower") exitWith {
 
         private _memberUid = getPlayerUID _member;
         private _memberContribution = WL_PlayerSquadContribution getOrDefault [_memberUid, 0];
-        _votingPower = _votingPower + (_memberContribution max 1);
+
+        private _playerRating = _member getVariable ["WL2_playerRating", WL_RATING_STARTER];
+        private _ratingMultiplier = linearConversion [0, 10000, _playerRating, 0, 10, true];
+
+        private _playerVotePower = (_memberContribution max 1) * _ratingMultiplier;
+
+        _votingPower = _votingPower + _playerVotePower;
     } forEach _squadMembers;
 
     _votingPower;

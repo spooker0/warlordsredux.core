@@ -223,7 +223,7 @@ private _playerContributions = missionNamespace getVariable ["WL_PlayerSquadCont
     _squadNameText ctrlSetStructuredText _squadNameTextStructured;
 
     private _squadVotingPower = ["getSquadVotingPower", [_squadLeader]] call SQD_fnc_query;
-    _squadNameText ctrlSetTooltip format ["Vote Power: %1", _squadVotingPower];
+    _squadNameText ctrlSetTooltip format ["Vote Power: %1", round _squadVotingPower];
 
     _squadNameText ctrlRemoveAllEventHandlers "ButtonClick";
 

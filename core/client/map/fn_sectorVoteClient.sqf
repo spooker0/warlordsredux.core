@@ -16,7 +16,6 @@ private _voteTallyDisplayVariable = format ["BIS_WL_sectorVoteTallyDisplay_%1", 
 
 while { !BIS_WL_missionEnd } do {
     if !(_playerSide in BIS_WL_competingSides) exitWith {};
-    if (WL_IsSpectator) exitWith {};
 
     private _targetReset = missionNamespace getVariable [_targetResetVar, false];
 
@@ -81,16 +80,38 @@ while { !BIS_WL_missionEnd } do {
         } forEach BIS_WL_allSectors;
     };
 
-    private _sectorsBeingCaptured = BIS_WL_allSectors select {
-        _x getVariable ["BIS_WL_captureProgress", 0] > 0;
-    } select {
-        _playerSide in (_x getVariable ["BIS_WL_revealedBy", []]) || _playerSide == independent || WL_IsSpectator || WL_IsReplaying;
-    };
+    private _sectorsBeingCaptured = [];
+    private _showAllSectors = _playerSide == independent || WL_IsSpectator || WL_IsReplaying;
+
+    {
+        if (_x getVariable ["BIS_WL_captureProgress", 0] <= 0) then {
+            _x setVariable ["WL2_lastCaptureProgress", 0];
+            _x setVariable ["WL2_lastCaptureProgressDirection", ""];
+            continue;
+        };
+
+        private _revealedSides = _x getVariable ["BIS_WL_revealedBy", []];
+        if (_playerSide in _revealedSides) then {
+            _sectorsBeingCaptured pushBack _x;
+            continue;
+        };
+
+        if (_showAllSectors) then {
+            _sectorsBeingCaptured pushBack _x;
+        };
+    } forEach BIS_WL_allSectors;
 
     private _sectorCaptureList = _sectorsBeingCaptured apply {
         private _sector = _x;
 
         private _sectorName = _sector getVariable ["WL2_name", "Sector"];
+        private _sectorOwner = _sector getVariable ["BIS_WL_owner", independent];
+        private _sectorReinforcements = if (_sectorOwner == independent) then {
+            _sector getVariable ["WL2_sectorPop", 0];
+        } else {
+            _sector getVariable ["WL2_defenders", 0];
+        };
+        private _sectorNameDisplay = format ["%1 (%2)", _sectorName, _sectorReinforcements];
 
         private _captureProgress = _sector getVariable ["BIS_WL_captureProgress", 0];
         private _captureProgressPercent = round (_captureProgress * 1000) / 10;
@@ -158,7 +179,7 @@ while { !BIS_WL_missionEnd } do {
         };
 
         [
-            _sectorName,
+            _sectorNameDisplay,
             _capturingTeamCap,
             _defendingTeamCap,
             _captureProgressPercent,

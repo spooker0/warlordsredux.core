@@ -113,9 +113,18 @@ private _callCombatAir = [
     "a3\ui_f_jets\data\gui\cfg\hints\aircraftdamage_ca.paa",
     localize "STR_WL_combatAirPatrolInfo"
 ];
+private _callCombatAirHome = [
+    "CombatAirHome",
+    WL_COST_COMBATAIR / 5,
+    [],
+    localize "STR_WL_combatAirPatrolHome",
+    "a3\ui_f_jets\data\gui\cfg\hints\aircraftdamage_ca.paa",
+    "Establish a temporary no-fly zone to assist your team's air defense over your home base."
+];
 private _airDefenseIndex = _categories find "Air Defense";
 private _airDefenseArray = _purchaseable # _airDefenseIndex;
 _airDefenseArray pushBack _callCombatAir;
+_airDefenseArray pushBack _callCombatAirHome;
 
 private _arsenal = [
     "Arsenal",

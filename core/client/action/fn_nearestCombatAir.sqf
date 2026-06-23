@@ -7,12 +7,6 @@ private _ownedAirfieldSectors = (BIS_WL_sectorsArray # 2) select {
     "H" in _services;
 };
 
-private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
-if (_timeSinceStart > WL_COMBAT_AIR_HOME_TIME) then {
-    private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
-    _ownedAirfieldSectors pushBack _homeBase;
-};
-
 private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 private _ownedAirFobs = _forwardBases select {
     _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
@@ -38,16 +32,9 @@ _eligibleCombatAirTargets = [_eligibleCombatAirTargets, [], { cameraOn distance 
 private _closestTarget = _eligibleCombatAirTargets # 0;
 private _closestTargetName = _closestTarget getVariable ["WL2_name", "Forward Airbase"];
 
-private _cost = if (_closestTarget in [WL2_base1, WL2_base2]) then {
-    WL_COST_COMBATAIR / 5
-} else {
-    WL_COST_COMBATAIR
-};
-private _cooldown = if (_closestTarget in [WL2_base1, WL2_base2]) then {
-	WL_COOLDOWN_CAPHOME
-} else {
-	WL_COOLDOWN_CAP
-};
+private _cost = WL_COST_COMBATAIR;
+private _cooldown = WL_COOLDOWN_CAP;
+
 private _message = format [
     "Are you sure you want to establish a no-fly zone over %1? This will cost you %2%3 and put it on a %4 minute cooldown.",
     _closestTargetName, WL_MONEY_SIGN, _cost, round (_cooldown / 60)

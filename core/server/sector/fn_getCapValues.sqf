@@ -73,16 +73,21 @@ private _sideCaptureModifier = if (_useCache) then {
 			_connections = _connections + 1;
 		};
 
-		if (_ownerSide == _side && _sector != _homeBase) then {
-			private _sectorDefenders = _sector getVariable ["WL2_defenders", 0];
-			if (_sectorDefenders > 0) then {
-				_connections = _connections + 4;
-			};
-		};
-
 		if (_ownerSide != independent) then {
 			private _sideModifier = _modifiers # _forEachIndex;
 			_connections = _connections + _sideModifier;
+		};
+
+		if (_ownerSide == _side && _sector != _homeBase) then {
+			private _sectorDefenders = _sector getVariable ["WL2_defenders", 0];
+			if (_sectorDefenders > 0) then {
+				private _sectorValue = _sector getVariable ["BIS_WL_value", 0];
+				private _maxDefenders = ((_sectorValue * WL_DEFENDER_MOD) max WL_DEFENDER_MIN) * WL_DEFENDER_MAXMOD;
+				private _defenderModifier = linearConversion [1, _maxDefenders, _sectorDefenders, 0, 5, true];
+				_connections = _connections + _defenderModifier;
+			} else {
+				_connections = _connections * 0.5;
+			};
 		};
 
 		_capModifiers set [_side, _connections];

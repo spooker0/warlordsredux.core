@@ -334,6 +334,12 @@ switch (_conditionName) do {
         private _hasIntruders = _target getVariable ["WL2_forwardBaseIntruders", false];
         if (_hasIntruders) exitWith { "Cannot upgrade forward base with intruders present." };
 
+        private _fobPlacer = _target getVariable ["WL2_forwardBasePlacer", ""];
+        if (_fobPlacer != "" && _fobPlacer != getPlayerUID player) exitWith {
+            private _fobPlacerPlayer = _fobPlacer call BIS_fnc_getUnitByUid;
+            format ["This forward base was placed by: %1", name _fobPlacerPlayer]
+        };
+
         if (!alive _target) exitWith { "Forward base has been destroyed." };
 
         private _supplies = _target getVariable ["WL2_forwardBaseSupplies", -1];

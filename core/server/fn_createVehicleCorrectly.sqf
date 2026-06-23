@@ -1,6 +1,5 @@
 #include "includes.inc"
 params ["_class", "_orderedClass", "_pos", "_direction", "_exactPosition", "_spawnInAir"];
-_pos params ["_posX", "_posY", "_posZ"];
 if !(isServer) exitWith {};
 
 private _isObstacle = WL_ASSET(_orderedClass, "obstacle", 0) > 0;
@@ -10,7 +9,7 @@ private _asset = if (_isObstacle) then {
 	if (_spawnInAir) then {
 		createVehicle [_class, _pos, [], 0, "FLY"];
 	} else {
-		createVehicle [_class, [_posX, _posY, _posZ - 50], [], 0, "CAN_COLLIDE"];
+		createVehicle [_class, _pos, [], 0, "CAN_COLLIDE"];
 	};
 };
 
@@ -37,7 +36,7 @@ private _isInWaterSector = count (BIS_WL_allSectors select {
 if (_isInWaterSector) then {
 	_asset setVehiclePosition [_pos, [], 0, "CAN_COLLIDE"];
 } else {
-	_asset setVehiclePosition [[_posX, _posY, 0], [], 0, "CAN_COLLIDE"];
+	_asset setVehiclePosition [_pos, [], 0, "CAN_COLLIDE"];
 };
 
 if (_exactPosition) then {

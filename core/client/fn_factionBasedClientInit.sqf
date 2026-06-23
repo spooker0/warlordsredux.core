@@ -42,7 +42,12 @@ switch (side group _unit) do {
 	};
 };
 
-_unit linkItem "Integrated_NVG_TI_0_F";
+private _existingHeadgear = headgear _unit;
+private _existingHeagearSubitems = getArray (configfile >> "CfgWeapons" >> _existingHeadgear >> "subItems");
+if !("Integrated_NVG_TI_0_F" in _existingHeagearSubitems || "Integrated_NVG_TI_1_F" in _existingHeagearSubitems) then {
+	_unit linkItem "Integrated_NVG_TI_0_F";
+};
+
 _unit unlinkItem "ItemWatch";
 _unit setUnitTrait ["loadCoef", 0.6];
 _unit setUnitTrait ["explosiveSpecialist", true];

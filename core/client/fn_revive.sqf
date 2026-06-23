@@ -9,6 +9,7 @@ _unit setDamage 0;
 [_unit, ["AidlPpneMstpSnonWnonDnon_AI"]] remoteExec ["switchMove", 0];
 
 _unit setVariable ["WL2_alreadyHandled", false, 2];
+_unit setVariable ["WL2_alreadyPunished", false, 2];
 _unit setVariable ["WL_unconsciousTime", 0];
 [_unit, true] remoteExec ["setPhysicsCollisionFlag", 0];
 

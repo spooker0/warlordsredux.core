@@ -2,7 +2,7 @@
 params ["_launcher", "_target", "_damage", "_projectilePosition"];
 
 {
-    private _newCrewDamage = damage _x + _damage;
+    private _newCrewDamage = damage _x + 0.2;
     _x setDamage [_newCrewDamage, true, _launcher, _launcher];
 } forEach (crew _target);
 

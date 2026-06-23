@@ -698,6 +698,62 @@ class RscTitles {
 		};
 	};
 
+	class RscWLDeathDisplay {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		name = "RscWLDeathDisplay";
+		onLoad = "uiNamespace setVariable ['RscWLDeathDisplay', _this select 0];";
+		class controls {
+			class SQD_DeathInfo_Status: RscStructuredText {
+				idc = 11001;
+				x = 0.2;
+				y = 0.2;
+				w = 0.6;
+				h = 0.8;
+				size = 0.08;
+				text = "";
+
+				class Attributes {
+					font = "RobotoCondensedBold";
+					color = SQD_COLOR_TEXT;
+					align = "center";
+				};
+			};
+			class SQD_DeathInfo_Tips: RscStructuredText {
+				idc = 11002;
+				x = 0;
+				y = 0;
+				w = 1;
+				h = 0.2;
+				size = 0.08;
+				text = "";
+
+				class Attributes {
+					font = "RobotoCondensedBold";
+					color = SQD_COLOR_TEXT;
+					align = "center";
+				};
+			};
+			class SQD_DeathInfo_Timer: RscStructuredText {
+				idc = 11003;
+				x = 0;
+				y = safeZoneY + 0.1;
+				w = 1;
+				h = 0.2;
+				size = 0.15;
+				text = "";
+
+				class Attributes {
+					font = "RobotoCondensedBold";
+					color = SQD_COLOR_TEXT;
+					align = "center";
+				};
+			};
+		};
+	};
+
 	class RscWLProgressDisplay {
 		idd = -1;
 		duration = 1000000000;

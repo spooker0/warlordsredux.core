@@ -78,12 +78,12 @@ uiNamespace setVariable ["WL2_deathInfoData", [
     _projectileHitArray
 ]];
 
-private _deathInfoDisplay = call SQD_fnc_initDeathInfo;
+0 spawn SQD_fnc_initDeathInfo;
 
 private _endDeathInfoTime = serverTime + 10;
 waitUntil {
     uiSleep 0.1;
-    WL_ISUP(player) || WL_IsSpectator || BIS_WL_missionEnd || serverTime > _endDeathInfoTime || isNull _deathInfoDisplay;
+    WL_ISUP(player) || WL_IsSpectator || BIS_WL_missionEnd || serverTime > _endDeathInfoTime;
 };
 
 0 spawn SQD_fnc_initSquadMenu;

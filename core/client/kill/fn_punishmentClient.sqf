@@ -12,7 +12,7 @@ private _punishReason = _punishIncident # 1;
 
 if (_punishEndTime < serverTime) exitWith {};
 
-private _timeRemaining = [(_punishEndTime - serverTime) max 0, "MM:SS"] call BIS_fnc_secondsToString;
+private _timeRemaining = [(_punishEndTime - serverTime) max 0, "HH:MM:SS"] call BIS_fnc_secondsToString;
 
 [name player, _timeRemaining, _punishReason] remoteExec ["WL2_fnc_punishMessage", 0];
 

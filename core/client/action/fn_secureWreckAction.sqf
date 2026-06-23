@@ -11,7 +11,7 @@ private _actionId = player addAction [
 	false,
 	true,
 	"",
-	"!alive cursorTarget && cursorTarget isKindOf 'Air' && cameraOn distance cursorTarget < 50",
+	"!alive cursorObject && cursorObject isKindOf 'Air' && cameraOn distance cursorObject < 50",
 	30,
 	false
 ];
@@ -22,7 +22,7 @@ private _actionId = player addAction [
 	while { alive player } do {
         uiSleep 0.1;
 
-        private _asset = cursorTarget;
+        private _asset = cursorObject;
         if (alive _asset) then {
             player setUserActionText [_actionId, _originalText];
             continue;
@@ -32,8 +32,7 @@ private _actionId = player addAction [
             continue;
         };
 
-        private _cost = WL_UNIT(_asset, "cost", 0);
-        private _rewardAmount = round (_cost / 300) * 100;
+        private _rewardAmount = _asset getVariable ["WL2_wreckValue", 0];
         private _targetDisplayName = [_asset] call WL2_fnc_getAssetTypeName;
 
         player setUserActionText [_actionId, format ["<t color='#00FF00'>Secure Wreck for %1 (%2%3)</t>", _targetDisplayName, WL_MONEY_SIGN, _rewardAmount]];

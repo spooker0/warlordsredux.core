@@ -13,7 +13,7 @@ private _killFeed = {
     camDestroy _spawnCamera;
 };
 
-private _menuCamFeedEnabled = missionNamespace getVariable ["SQD_menuCamFeedEnabled", true];
+private _menuCamFeedEnabled = WL_ISDOWN(player) && missionNamespace getVariable ["SQD_menuCamFeedEnabled", true];
 if (!_menuCamFeedEnabled) exitWith {
     call _killFeed;
 };

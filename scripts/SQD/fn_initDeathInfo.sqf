@@ -1,10 +1,10 @@
 #include "includes.inc"
 
-private _existingDisplay = findDisplay SQD_DEATHINFO_IDD;
-if (!isNull _existingDisplay) exitWith { _existingDisplay };
-
-private _display = (findDisplay 46) createDisplay "SQD_DeathInfo";
-uiNamespace setVariable ["SQD_DeathInfo", _display];
+private _display = uiNamespace getVariable ["RscWLDeathDisplay", displayNull];
+if (isNull _display) then {
+    "deathInfo" cutRsc ["RscWLDeathDisplay", "PLAIN", -1, false, true];
+    _display = uiNamespace getVariable "RscWLDeathDisplay";
+};
 
 _display displayAddEventHandler ["KeyUp", {
     params ["_display", "_key", "_shift", "_ctrl", "_alt"];
@@ -17,7 +17,7 @@ _display displayAddEventHandler ["KeyUp", {
     };
 }];
 
-private _killStatusText = _display displayCtrl SQD_DEATHINFO_STATUS_IDC;
+private _killStatusText = _display displayCtrl 11001;
 
 private _gameData = uiNamespace getVariable ["WL2_deathInfoData", []];
 if (count _gameData >= 5) then {
@@ -66,7 +66,18 @@ if (count _gameData >= 5) then {
 
 uiNamespace setVariable ["WL2_deathInfoData", []];
 
-private _tipsControl = _display displayCtrl SQD_DEATHINFO_TIPS_IDC;
+private _deathTimerControl = _display displayCtrl 11003;
+private _expirationTime = player getVariable ["WL2_expirationTime", 0];
+private _respawnTimer = (_expirationTime - serverTime) max 0;
+if (_respawnTimer > 0) then {
+    _statusTime = _respawnTimer toFixed 1;
+    while { count _statusTime < 4 } do {
+        _statusTime = "0" + _statusTime;
+    };
+    _deathTimerControl ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", _statusTime];
+};
+
+private _tipsControl = _display displayCtrl 11002;
 
 private _randomTipIndex = floor (random 29) + 1;
 private _randomTipIndexStr = str _randomTipIndex;
@@ -79,4 +90,30 @@ if (_randomTipIndex < 10) then {
 private _tip = localize format ["STR_WL_deathTip_%1", _randomTipIndexStr];
 _tipsControl ctrlSetStructuredText parseText format ["<t size='0.6' shadow='2'>Tip: %1</t>", _tip];
 
-_display;
+while { !isNull _display } do {
+    uiSleep 0.05;
+    if (WL_ISUP(player) || WL_IsSpectator || BIS_WL_missionEnd) then {
+        _display closeDisplay 0;
+        break;
+    };
+
+    private _spawnDisplay = findDisplay SQD_MENU_IDD;
+
+    _killStatusText ctrlShow (isNull _spawnDisplay);
+    _tipsControl ctrlShow (isNull _spawnDisplay);
+
+    if (isNull _spawnDisplay) then {
+        private _expirationTime = player getVariable ["WL2_expirationTime", 0];
+        private _respawnTimer = (_expirationTime - serverTime) max 0;
+        if (_respawnTimer > 0) then {
+            _statusTime = _respawnTimer toFixed 1;
+            while { count _statusTime < 4 } do {
+                _statusTime = "0" + _statusTime;
+            };
+            _deathTimerControl ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", _statusTime];
+            _deathTimerControl ctrlShow true;
+        };
+    } else {
+        _deathTimerControl ctrlShow false;
+    };
+};

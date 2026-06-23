@@ -37,15 +37,26 @@ _asset addAction [
     false,
     false,
     "",
-    "",
+    "cameraOn == _target",
     50
 ];
 
+private _ignoredTargets = [];
+
 while { alive _asset } do {
-    uiSleep 1;
+    uiSleep 0.5;
 
     private _mode = _asset getVariable ["WL2_autoSamMode", 0];
     if (_mode == 0) then {
+        continue;
+    };
+
+    private _gunner = gunner _asset;
+    if (cameraOn == _asset) then {
+        {
+            _gunner ignoreTarget [_x, false];
+        } forEach _ignoredTargets;
+        _ignoredTargets = [];
         continue;
     };
 
@@ -88,5 +99,21 @@ while { alive _asset } do {
 
     if (!isAutonomous _asset) then {
         [_asset, true] remoteExec ["setAutonomous", 0];
+    };
+
+    private _autoAttackTarget = getAttackTarget _asset;
+
+    if (_autoAttackTarget in _airTargetsInRange) then {
+        if (_autoAttackTarget in _ignoredTargets) then {
+            _gunner ignoreTarget [_autoAttackTarget, false];
+            _ignoredTargets = _ignoredTargets select {
+                _x != _autoAttackTarget
+            };
+        };
+    } else {
+        if !(_autoAttackTarget in _ignoredTargets) then {
+            _gunner ignoreTarget [_autoAttackTarget, true];
+            _ignoredTargets pushBackUnique _autoAttackTarget;
+        };
     };
 };

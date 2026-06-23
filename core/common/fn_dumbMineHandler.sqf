@@ -51,6 +51,8 @@ while { !BIS_WL_missionEnd } do {
         abs (speed _x) > 1
     } select {
         !(_x getVariable ["WL2_mineClearer", false])
+    } select {
+        !(_x getVariable ["WL2_isCollaborator", false])
     };
 
     if (count _enemyMines == 0 || count _ownedVehiclesEligible == 0) then {
