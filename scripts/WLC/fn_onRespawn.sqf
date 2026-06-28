@@ -179,11 +179,24 @@ if (count _customizationLoadout > 0) then {
     private _loadoutConfigs = configProperties [missionConfigFile >> "WLDefaultLoadouts", "isClass _x", true];
     private _loadouts = [];
     private _sideString = str BIS_WL_playerSide;
+    private _ownedDlcs = getDLCs 1;
     {
         private _loadoutConfig = _x;
 
         private _loadoutSide = getText (_loadoutConfig >> "side");
         if (_loadoutSide != _sideString) then {
+            continue;
+        };
+
+        private _loadoutDlcs = getArray (_loadoutConfig >> "dlc");
+        private _hasAllDlcs = true;
+        {
+            if !(_x in _ownedDlcs) then {
+                _hasAllDlcs = false;
+                break;
+            };
+        } forEach _loadoutDlcs;
+        if (!_hasAllDlcs) then {
             continue;
         };
 

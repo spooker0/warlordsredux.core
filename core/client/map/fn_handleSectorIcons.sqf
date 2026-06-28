@@ -124,7 +124,7 @@ private _sectorSize = if !(_sectorName in WL_SPECIAL_SECTORS) then {
     private _isNotHome = !(_sector in  WL_BASES);
     if (_revealed && _sectorOwner != independent && _isNotHome) then {
         private _defenders = _sector getVariable ["WL2_defenders", 0];
-        private _maxDefenders = ((_size * WL_DEFENDER_MOD) max WL_DEFENDER_MIN) * WL_DEFENDER_MAXMOD;
+        private _maxDefenders = _sector getVariable ["WL2_maxDefenders", 0];
         format ["Size: %1 (Reinforcements: %2/%3)", _size, _defenders, _maxDefenders]
     } else {
         format ["Size: %1", _size]

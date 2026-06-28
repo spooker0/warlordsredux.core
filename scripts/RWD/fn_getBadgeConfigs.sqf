@@ -51,5 +51,13 @@ createHashMapFromArray [
 	["Player", ["a3\ui_f\data\gui\rsc\rscdisplaymain\profile_player_ca.paa", 1, "Default."]],
 	["Developer", ["a3\modules_f_beta\data\firingdrills\medal_gold_ca.paa", 3, "Be a developer."]],
 	["Moderator", ["a3\modules_f_beta\data\firingdrills\medal_gold_ca.paa", 3, "Be a moderator."]],
-	["Spectator", ["a3\modules_f_beta\data\firingdrills\medal_gold_ca.paa", 3, "Be a spectator."]]
+	["Spectator", ["a3\modules_f_beta\data\firingdrills\medal_gold_ca.paa", 3, "Be a spectator."]],
+
+	["Private", ["a3\ui_f\data\gui\cfg\ranks\private_pr.paa", 3, "Achieve 500 ELO."]],
+	["Corporal", ["a3\ui_f\data\gui\cfg\ranks\corporal_pr.paa", 3, "Achieve 1000 ELO."]],
+	["Sergeant", ["a3\ui_f\data\gui\cfg\ranks\sergeant_pr.paa", 3, "Achieve 1500 ELO."]],
+	["Lieutenant", ["a3\ui_f\data\gui\cfg\ranks\lieutenant_pr.paa", 3, "Achieve 2000 ELO."]],
+	["Captain", ["a3\ui_f\data\gui\cfg\ranks\captain_pr.paa", 3, "Achieve 2500 ELO."]],
+	["Major", ["a3\ui_f\data\gui\cfg\ranks\major_pr.paa", 3, "Achieve 3000 ELO."]],
+	["Colonel", ["a3\ui_f\data\gui\cfg\ranks\colonel_pr.paa", 3, "Achieve 3500 ELO."]]
 ];

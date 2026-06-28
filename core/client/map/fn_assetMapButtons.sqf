@@ -278,15 +278,16 @@ if (_canFastTravel) then {
     [_asset, _targetId, "team-designate", "Designate team priority", {
         params ["_asset"];
         [_asset, "asset"] call WL2_fnc_designateTeamPriority;
-    }, true, "designateTeamPriority", [50, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
+    }, true, "designateTeamPriority", [0, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
 };
 
 private _canParadrop = WL_ASSET(_assetActualType, "paradrops", 0) > 0;
 if (_canParadrop) then {
     [_asset, _targetId, "paradrop", "Paradrop", {
         params ["_asset"];
-        [_asset, cameraOn] spawn WL2_fnc_executeParadrop;
-    }, true, "paradrop", [WL_COST_PARADROP, "FTParadropVehicle", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
+        private _destination = _asset modelToWorldWorld [random 200 - 100, random 200 - 100, -30];
+        [_destination, getDir _asset, _asset, cameraOn] spawn WL2_fnc_executeParadrop;
+    }, true, "paradrop", [0, "FTParadropVehicle", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
 };
 
 if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
@@ -318,8 +319,8 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     // Vehicle Paradrop Button
     private _vehicleParadropFOBExecute = {
         params ["_asset"];
-        private _forwardBaseArea = [getPosASL _asset, WL_FOB_RANGE * 2, WL_FOB_RANGE * 2, 0, false];
-        [7, _forwardBaseArea] spawn WL2_fnc_executeFastTravel;
+        private _destination = _asset modelToWorldWorld [random 200 - 100, random 200 - 100, 500];
+        [_destination, getDir _asset, _asset, cameraOn] spawn WL2_fnc_executeParadrop;
     };
     [
         _asset, _targetId,
@@ -329,7 +330,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         true,
         "vehicleParadropFOB",
         [
-            WL_COST_PARADROP,
+            0,
             "FTParadropVehicle",
             "Fast Travel"
         ]
@@ -440,7 +441,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     [_asset, _targetId, "team-designate", "Designate team priority", {
         params ["_asset"];
         [_asset, "fob"] call WL2_fnc_designateTeamPriority;
-    }, true, "designateTeamPriority", [50, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
+    }, true, "designateTeamPriority", [0, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
 
     // Combat air patrol button
     private _combatAirExecute = {
@@ -734,7 +735,7 @@ if (count _findIsStronghold > 0) then {
     [_asset, _targetId, "team-designate", "Designate team priority", {
         params ["_asset"];
         [_asset, "stronghold"] call WL2_fnc_designateTeamPriority;
-    }, true, "designateTeamPriority", [50, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
+    }, true, "designateTeamPriority", [0, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
 
     #if WL_STRONGHOLD_DEBUG
     // Fast Travel Stronghold Test

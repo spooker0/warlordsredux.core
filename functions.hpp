@@ -7,7 +7,6 @@ class CfgFunctions {
 			class ciws { headerType = WL_HEADER_LEVEL; };
 			class cram { headerType = WL_HEADER_LEVEL; };
 			class defineVehicles { headerType = WL_HEADER_LEVEL; };
-			class deviceJammer { headerType = WL_HEADER_LEVEL; };
 			class friendlyWarning { headerType = WL_HEADER_LEVEL; };
 			class getDirection { headerType = WL_HEADER_LEVEL; };
 			class getMaxAmmo { headerType = WL_HEADER_LEVEL; };
@@ -223,10 +222,10 @@ class CfgFunctions {
 			class restrictedArea { headerType = WL_HEADER_LEVEL; };
 			class revive { headerType = WL_HEADER_LEVEL; };
 			class rewardCapture { headerType = WL_HEADER_LEVEL; };
+			class samHit { headerType = WL_HEADER_LEVEL; };
 			class setupCarrier { headerType = WL_HEADER_LEVEL; };
 			class showHint { headerType = WL_HEADER_LEVEL; };
 			class showRating { headerType = WL_HEADER_LEVEL; };
-			class sidePicker { headerType = WL_HEADER_LEVEL; };
 			class sideToFaction { headerType = WL_HEADER_LEVEL; };
 			class spawnAtBase { headerType = WL_HEADER_LEVEL; };
 			class smartMine { headerType = WL_HEADER_LEVEL; };
@@ -455,7 +454,6 @@ class CfgFunctions {
 			class checkIsOrdering { headerType = WL_HEADER_LEVEL; };
 			class checkNearbyEnemies { headerType = WL_HEADER_LEVEL; };
 			class checkNoStronghold { headerType = WL_HEADER_LEVEL; };
-			class checkParadropCooldown { headerType = WL_HEADER_LEVEL; };
 			class checkPlayerInVehicle { headerType = WL_HEADER_LEVEL; };
 			class checkRequirements { headerType = WL_HEADER_LEVEL; };
 			class checkResetVehicle { headerType = WL_HEADER_LEVEL; };
@@ -570,6 +568,7 @@ class CfgFunctions {
 			class setupNewPlayer { headerType = WL_HEADER_LEVEL; };
 			class targetSelectionHandleServer { headerType = WL_HEADER_LEVEL; };
 			class uavJammed { headerType = WL_HEADER_LEVEL; };
+			class warnSectorDefenders { headerType = WL_HEADER_LEVEL; };
 			class updateVehicleList { headerType = WL_HEADER_LEVEL; };
 			class wreckHandler { headerType = WL_HEADER_LEVEL; };
 		};

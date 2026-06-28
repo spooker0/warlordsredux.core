@@ -228,7 +228,6 @@ player addAction [
 uiNamespace setVariable ["WL2_canBuy", true];
 uiNamespace setVariable ["WL2_chatHistory", []];
 uiNamespace setVariable ["WL2_modOverrideUid", ""];
-uiNamespace setVariable ["WL2_currentNotification", []];
 uiNamespace setVariable ["WL2_timedPromptQueue", []];
 uiNamespace setVariable ["WL2_HMDSettingProfileIndex", 0];
 

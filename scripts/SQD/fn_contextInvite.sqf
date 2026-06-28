@@ -36,7 +36,8 @@ _contextMenu ctrlCommit 0;
     private _inviteButton = _display ctrlCreate ["SQD_Menu_ContextualButton", -1, _contextMenu];
     _inviteButton ctrlSetPosition [0, SQD_LAYOUT_CONTEXT_H * _forEachIndex, SQD_LAYOUT_CONTEXT_W, SQD_LAYOUT_CONTEXT_H];
 
-    _inviteButton ctrlSetText format ["INVITE %1", name _player];
+    private _nameDisplay = format ["%1 (%2)", name _player, _player getVariable ["WL2_playerRating", WL_RATING_STARTER]];
+    _inviteButton ctrlSetText format ["INVITE %1", _nameDisplay];
     _inviteButton ctrlCommit 0;
 
     _inviteButton setVariable ["SQD_member", getPlayerID _player];

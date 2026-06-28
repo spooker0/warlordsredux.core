@@ -5,6 +5,9 @@ private _side = side group player;
 if (side group _conscripter != _side) exitWith {};
 if (WL_IsSpectator) exitWith {};
 
+private _canBuy = uiNamespace getVariable ["WL2_canBuy", true];
+if (!_canBuy) exitWith {};
+
 private _modifyVehicleMenu = findDisplay 5300;
 if (!isNull _modifyVehicleMenu) exitWith {};
 
@@ -19,7 +22,7 @@ private _defaultSelection = true;
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _conscriptAcceptInSector = _settingsMap getOrDefault ["conscriptAcceptInSector", false];
 private _sectorArea = _teamPriority getVariable ["objectAreaComplete", ""];
-if (player inArea _sectorArea && !_conscriptAcceptInSector) then {
+if (WL_ISUP(player) && player inArea _sectorArea && !_conscriptAcceptInSector) then {
     _defaultSelection = false;
 };
 

@@ -14,7 +14,7 @@ if (_isSecured) exitWith {
 private _value = _asset getVariable ["WL2_wreckValue", 0];
 private _inFriendlySector = ([-2, []] call WL2_fnc_checkInFriendlySector) # 0;
 if (!_inFriendlySector && _value > 2000) exitWith {
-    ["You can secure this wreck by moving it to a friendly sector or forward base with a flatbed or via slingloading."] call WL2_fnc_smoothText;
+    ["This wreck is too valuable to be secured on site. You can secure it by moving it to a friendly sector or forward base with a flatbed or via helicopter slingloading."] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
@@ -45,4 +45,4 @@ deleteVehicle _asset;
 [objNull, _value, "Aircraft secured", WL_COLOR_SUPPORT] call WL2_fnc_killRewardClient;
 
 playSoundUI ["AddItemOk"];
-playSound3D ["a3\sounds_f_decade\assets\props\linkterminal_01_node_main_f\link_terminal03_lid_01_open.wss", _asset];
+playSound3D ["a3\sounds_f\sfx\ui\vehicles\vehicle_repair.wss", _asset];

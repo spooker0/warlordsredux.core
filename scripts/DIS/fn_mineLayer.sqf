@@ -5,7 +5,7 @@ private _munitionList = _unit getVariable ["DIS_munitionList", []];
 _munitionList pushBack _projectile;
 _munitionList = _munitionList select { alive _x };
 _unit setVariable ["DIS_munitionList", _munitionList];
-_projectile setVariable ["WL2_missileType", "Mine Layer", true];
+_projectile setVariable ["WL2_missileType", "Deployer", true];
 
 waitUntil {
     private _velocity = velocity _projectile;

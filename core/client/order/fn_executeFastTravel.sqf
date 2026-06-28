@@ -5,11 +5,11 @@ params ["_fastTravelMode", "_location"];
 // 0: Seized Sector
 // 1: Contested Sector
 // 2: Air Assault
-// 3: Vehicle Paradrop
+// 3: Vehicle Paradrop (disabled)
 // 4: Tent
 // 5: Stronghold
 // 6: Forward Base
-// 7: Vehicle Paradrop FOB
+// 7: Vehicle Paradrop FOB (disabled)
 // 8: Near Stronghold
 
 openMap [false, false];
@@ -60,10 +60,6 @@ switch (_fastTravelMode) do {
 
 		_playArrivalWarning = false;
 	};
-	case 3: {
-		private _safeSpot = selectRandom ([_location] call WL2_fnc_findSpawnsInSector);
-		_destination = [_safeSpot # 0, _safeSpot # 1, 50];
-	};
 	case 4: {
 		private _respawnBag = player getVariable ["WL2_respawnBag", objNull];
         if (!isNull _respawnBag) then {
@@ -80,8 +76,7 @@ switch (_fastTravelMode) do {
 			getPosATL _stronghold;
 		};
 	};
-	case 6;
-	case 7: {
+	case 6: {
 		_destination = selectRandom ([_location] call WL2_fnc_findSpawnsInArea);
 		_destination = [_destination # 0, _destination # 1, 50];
 	};
@@ -154,47 +149,6 @@ switch (_fastTravelMode) do {
 		player setDir _directionToSector;
 		player setVelocityModelSpace [0, 30, 0];
 		[player] spawn WL2_fnc_parachuteSetup;
-	};
-	case 3;
-	case 7: {
-		_playArrivalWarning = false;
-
-		private _vehicle = vehicle player;
-
-		private _parachuteClass = switch (BIS_WL_playerSide) do {
-			case west: {
-				"B_Parachute_02_F";
-			};
-			case east: {
-				"O_Parachute_02_F";
-			};
-			case independent: {
-				"I_Parachute_02_F";
-			};
-		};
-
-		_destination set [2, 150];
-		private _parachute = createVehicle [_parachuteClass, _destination, [], 0, "NONE"];
-		_parachute setDir _directionToSector;
-		_vehicle attachTo [_parachute, [0, 0, 0]];
-		[_vehicle, _parachute] spawn {
-			params ["_vehicle", "_parachute"];
-			waitUntil {
-				uiSleep 0.01;
-				_parachute setVelocity [0, 0, -10];
-				_parachute setVectorUp [0, 0, 1];
-				private _alt = (getPosVisual _vehicle) # 2;
-				_alt < 5;
-			};
-			detach _vehicle;
-			deleteVehicle _parachute;
-
-			uiSleep 0.5;
-			_vehicle setVehiclePosition [getPosATL _vehicle, [], 0, "NONE"];
-		};
-
-        _vehicle setVariable ["WL2_paradropNextUse", serverTime + WL_COOLDOWN_PARADROP, true];
-		[player, "fastTravelParadrop"] remoteExec ["WL2_fnc_handleClientRequest", 2];
 	};
 	case 4: {
         if (count _destination > 0) then {

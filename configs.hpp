@@ -370,8 +370,12 @@ class arsenalConfig {
 	};
 };
 
+#define DLC_APEX 395180
+#define DLC_MARK 332350
+#define DLC_TANKS 798390
+
 class WLDefaultLoadouts {
-	class WestDefault {
+	class WestLoadout1 {
 		dlc[] = {};
 		loadout[] = {
 			{"arifle_MX_SW_F", "muzzle_snds_H", "", "optic_DMS", {"100Rnd_65x39_caseless_mag", 100}, {}, ""},
@@ -385,9 +389,78 @@ class WLDefaultLoadouts {
 			{"Laserdesignator", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
 		};
+		name = "Spooker's Blufor Default";
 		side = "WEST";
 	};
-	class EastDefault {
+	class WestLoadout2 {
+		dlc[] = {};
+		loadout[] = {
+			{"arifle_MX_SW_F", "muzzle_snds_H", "acc_pointer_IR", "optic_Arco", {"100Rnd_65x39_caseless_mag", 100}, {}, ""},
+			{"launch_RPG32_F", "", "", "", {"RPG32_F", 1}, {}, ""},
+			{"hgun_P07_F", "", "", "", {"16Rnd_9x21_Mag", 16}, {}, ""},
+			{"U_B_CombatUniform_mcam_vest", {{"FirstAidKit", 1}, {"100Rnd_65x39_caseless_mag", 1, 100}, {"Chemlight_blue", 3, 1}}},
+			{"V_PlateCarrierH_CTRG", {{"16Rnd_9x21_Mag", 2, 16}, {"MiniGrenade", 1, 1}, {"Chemlight_green", 1, 1}, {"30Rnd_65x39_caseless_mag", 3, 30}}},
+			{"B_Carryall_mcamo", {{"FirstAidKit", 3}, {"RPG32_F", 3, 1}, {"Chemlight_blue", 4, 1}}},
+			"H_HelmetSpecB",
+			"",
+			{"Laserdesignator", "", "", "", {"Laserbatteries", 1}, {}, ""},
+			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
+		};
+		name = "Nazgul's Skill Issue 1";
+		side = "WEST";
+	};
+	class WestLoadout3 {
+		dlc[] = {DLC_MARK, DLC_TANKS};
+		loadout[] = {
+			{"arifle_MX_F", "muzzle_snds_H", "acc_pointer_IR", "optic_Arco", {"100Rnd_65x39_caseless_mag", 100}, {}, "bipod_01_F_snd"},
+			{"launch_MRAWS_sand_F", "", "", "", {"MRAWS_HEAT_F", 1}, {}, ""},
+			{"hgun_P07_F", "", "", "", {"16Rnd_9x21_Mag", 16}, {}, ""},
+			{"U_B_CombatUniform_mcam_vest", {{"FirstAidKit", 1}, {"Chemlight_green", 1, 1}}},
+			{"V_PlateCarrier2_blk", {{"FirstAidKit", 4}, {"100Rnd_65x39_caseless_mag_Tracer", 1, 100}, {"Chemlight_blue", 8, 1}}},
+			{"B_Carryall_mcamo", {{"MRAWS_HEAT_F", 3, 1}}},
+			"H_HelmetSpecB",
+			"",
+			{"Laserdesignator", "", "", "", {"Laserbatteries", 1}, {}, ""},
+			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
+		};
+		name = "Nazgul's Skill Issue 2";
+		side = "WEST";
+	};
+	class WestLoadout4 {
+		dlc[] = {DLC_TANKS};
+		loadout[] = {
+			{"arifle_MX_F", "muzzle_snds_H", "acc_pointer_IR", "optic_Arco", {"100Rnd_65x39_caseless_mag", 100}, {}, ""},
+			{"launch_O_Vorona_brown_F", "", "", "", {"Vorona_HEAT", 1}, {}, ""},
+			{"hgun_P07_F", "", "", "", {"16Rnd_9x21_Mag", 16}, {}, ""},
+			{"U_B_CombatUniform_mcam_vest", {{"FirstAidKit", 1}, {"Chemlight_green", 1, 1}}},
+			{"V_PlateCarrier2_blk", {{"FirstAidKit", 4}, {"100Rnd_65x39_caseless_mag_Tracer", 1, 100}, {"Chemlight_blue", 8, 1}, {"100Rnd_65x39_caseless_mag", 2, 100}}},
+			{},
+			"H_HelmetSpecB",
+			"",
+			{"Laserdesignator", "", "", "", {"Laserbatteries", 1}, {}, ""},
+			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
+		};
+		name = "Nazgul's Skill Issue 3";
+		side = "WEST";
+	};
+	class WestLoadout5 {
+		dlc[] = {};
+		loadout[] = {
+			{"SMG_03C_TR_hex", "muzzle_snds_570", "acc_pointer_IR", "optic_Holosight", {"50Rnd_570x28_SMG_03", 50}, {}, ""},
+			{"launch_I_Titan_short_F", "", "", "", {"Titan_AT", 1}, {}, ""},
+			{},
+			{"U_B_CombatUniform_mcam_vest", {{"FirstAidKit", 1}, {"Chemlight_green", 1, 1}}},
+			{"V_PlateCarrier1_blk", {{"FirstAidKit", 3}, {"50Rnd_570x28_SMG_03", 5, 50}, {"Chemlight_blue", 6, 1}}},
+			{"B_Carryall_mcamo", {{"FirstAidKit", 2}, {"Chemlight_blue", 2, 1}, {"50Rnd_570x28_SMG_03", 2, 50}, {"Titan_AT", 2, 1}}},
+			"H_HelmetSpecB",
+			"",
+			{"Laserdesignator", "", "", "", {"Laserbatteries", 1}, {}, ""},
+			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
+		};
+		name = "Nazgul's Skill Issue 4";
+		side = "WEST";
+	};
+	class EastLoadout1 {
 		dlc[] = {};
 		loadout[] = {
 			{"arifle_Katiba_GL_F", "muzzle_snds_H", "", "optic_DMS", {"30Rnd_65x39_caseless_green_mag_Tracer", 30}, {"1Rnd_HE_Grenade_shell", 1}, ""},
@@ -401,6 +474,75 @@ class WLDefaultLoadouts {
 			{"Laserdesignator_02", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
 		};
+		name = "Spooker's Opfor Default";
+		side = "EAST";
+	};
+	class EastLoadout2 {
+		dlc[] = {};
+		loadout[] = {
+			{"arifle_MX_SW_F", "muzzle_snds_H", "acc_pointer_IR", "optic_Arco", {"100Rnd_65x39_caseless_mag", 100}, {}, ""},
+			{"launch_RPG32_F", "", "", "", {"RPG32_F", 1}, {}, ""},
+			{"hgun_Rook40_F", "", "", "", {"16Rnd_9x21_Mag", 16}, {}, ""},
+			{"U_O_CombatUniform_ocamo", {{"FirstAidKit", 1}, {"Chemlight_red", 1, 1}}},
+			{"V_PlateCarrier2_blk", {{"Chemlight_red", 1, 1}, {"100Rnd_65x39_caseless_mag", 2, 100}}},
+			{"B_Kitbag_tan", {{"FirstAidKit", 2}, {"RPG32_F", 3, 1}, {"Chemlight_red", 4, 1}}},
+			"H_HelmetLeaderO_ocamo",
+			"",
+			{"Laserdesignator_02", "", "", "", {"Laserbatteries", 1}, {}, ""},
+			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
+		};
+		name = "Nazgul's Skill Issue 5";
+		side = "EAST";
+	};
+	class EastLoadout3 {
+		dlc[] = {DLC_TANKS};
+		loadout[] = {
+			{"arifle_MX_SW_F", "muzzle_snds_H", "acc_pointer_IR", "optic_Arco", {"100Rnd_65x39_caseless_mag", 100}, {}, ""},
+			{"launch_MRAWS_sand_F", "", "", "", {"MRAWS_HEAT_F", 1}, {}, ""},
+			{"hgun_Rook40_F", "", "", "", {"16Rnd_9x21_Mag", 16}, {}, ""},
+			{"U_O_CombatUniform_ocamo", {{"100Rnd_65x39_caseless_mag", 1, 100}}},
+			{"V_PlateCarrier1_blk", {{"100Rnd_65x39_caseless_mag", 2, 100}}},
+			{"B_Carryall_blk", {{"FirstAidKit", 3}, {"MRAWS_HEAT_F", 3, 1}, {"Chemlight_red", 3, 1}}},
+			"H_HelmetLeaderO_ocamo",
+			"",
+			{"Laserdesignator_02", "", "", "", {"Laserbatteries", 1}, {}, ""},
+			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
+		};
+		name = "Nazgul's Skill Issue 6";
+		side = "EAST";
+	};
+	class EastLoadout4 {
+		dlc[] = {DLC_MARK, DLC_TANKS, DLC_APEX};
+		loadout[] = {
+			{"arifle_AK12_F", "muzzle_snds_B_snd_F", "acc_pointer_IR", "optic_Arco_blk_F", {"75rnd_762x39_AK12_Mag_F", 75}, {}, "bipod_03_F_blk"},
+			{"launch_O_Vorona_brown_F", "", "", "", {"Vorona_HEAT", 1}, {}, ""},
+			{"hgun_Rook40_F", "", "", "", {"16Rnd_9x21_Mag", 16}, {}, ""},
+			{"U_O_V_Soldier_Viper_F", {{"FirstAidKit", 2}}},
+			{"V_PlateCarrier1_blk", {{"FirstAidKit", 2}, {"Chemlight_red", 6, 1}, {"75rnd_762x39_AK12_Mag_F", 3, 75}}},
+			{},
+			"H_HelmetO_ViperSP_ghex_F",
+			"",
+			{"Laserdesignator_02", "", "", "", {"Laserbatteries", 1}, {}, ""},
+			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", ""}
+		};
+		name = "Nazgul's Skill Issue 7";
+		side = "EAST";
+	};
+	class EastLoadout5 {
+		dlc[] = {DLC_MARK, DLC_TANKS};
+		loadout[] = {
+			{"arifle_AK12_F", "muzzle_snds_B_snd_F", "acc_pointer_IR", "optic_Arco_blk_F", {"75rnd_762x39_AK12_Mag_F", 75}, {}, ""},
+			{"launch_O_Vorona_brown_F", "", "", "", {"Vorona_HEAT", 1}, {}, ""},
+			{"hgun_Rook40_F", "", "", "", {"16Rnd_9x21_Mag", 16}, {}, ""},
+			{"U_O_V_Soldier_Viper_F", {{"FirstAidKit", 2}}},
+			{"V_PlateCarrier1_blk", {{"FirstAidKit", 2}, {"Chemlight_red", 6, 1}, {"75rnd_762x39_AK12_Mag_F", 3, 75}}},
+			{},
+			"H_HelmetO_ViperSP_ghex_F",
+			"",
+			{"Laserdesignator_02", "", "", "", {"Laserbatteries", 1}, {}, ""},
+			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", ""}
+		};
+		name = "Nazgul's Skill Issue 8";
 		side = "EAST";
 	};
 };

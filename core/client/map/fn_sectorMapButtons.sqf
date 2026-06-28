@@ -88,7 +88,9 @@ private _airAssaultExecute = {
 // Vehicle Paradrop Button
 private _vehicleParadropExecute = {
     params ["_sector"];
-    [3, _sector] call WL2_fnc_executeFastTravel;
+    private _safeSpot = selectRandom ([_sector] call WL2_fnc_findSpawnsInSector);
+    _safeSpot set [2, 500];
+    [_safeSpot, getDir cameraOn, objNull, cameraOn] spawn WL2_fnc_executeParadrop;
 };
 [
     _sector, _targetId,
@@ -98,7 +100,7 @@ private _vehicleParadropExecute = {
     true,
     "vehicleParadrop",
     [
-        WL_COST_PARADROP,
+        0,
         "FTParadropVehicle",
         "Fast Travel"
     ]
@@ -239,5 +241,5 @@ if (_sector in (BIS_WL_sectorsArray # 3) || (!isNull _sectorFtAsset)) then {
     [_sector, _targetId, "team-designate", "Designate team priority", {
         params ["_sector"];
         [_sector, "sector"] call WL2_fnc_designateTeamPriority;
-    }, true, "designateTeamPriority", [50, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
+    }, true, "designateTeamPriority", [0, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
 };

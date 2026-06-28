@@ -25,31 +25,48 @@ if (_owner == BIS_WL_playerSide || BIS_WL_playerSide in _previousOwners || _sect
 	_mrkrArea setMarkerBrushLocal "Solid";
 };
 
+private _sectorServices = _sector getVariable ["WL2_services", []];
 if (BIS_WL_playerSide in (_sector getVariable ["BIS_WL_revealedBy", []]) || BIS_WL_playerSide == independent || _canSeeAll) then {
 	if (_sector in WL_BASES) then {
-		_mrkrMain setMarkerSizeLocal [1.5, 1.5];
 	};
-	if (_sector in _specialStateArray) then {
-		_mrkrMain setMarkerColorLocal "ColorGrey";
-	} else {
-		_mrkrMain setMarkerColorLocal (["colorBLUFOR", "colorOPFOR", "colorIndependent"] select _ownerIndex);
-	};
-	_mrkrArea setMarkerColorLocal (["colorBLUFOR", "colorOPFOR", "colorIndependent"] select _ownerIndex);
 	if (_sector in WL_BASES) then {
-		_mrkrMain setMarkerTypeLocal (["b_hq", "o_hq", "n_hq"] select _ownerIndex);
+		_mrkrMain setMarkerTypeLocal (["flag_NATO", "flag_CSAT", "flag_Altis"] select _ownerIndex);
+		_mrkrMain setMarkerColorLocal "ColorWhite";
 	} else {
 		private _previousOwners = _sector getVariable ["BIS_WL_previousOwners", []];
-		private _vulnerable = count (_previousOwners - [_owner]) > 0 || _sector == WL_TARGET_ENEMY || _sector == WL_TARGET_FRIENDLY;
-		if (_vulnerable) then {
-			_mrkrMain setMarkerTypeLocal (["b_service", "o_service", "n_installation"] select _ownerIndex);
+		private _sectorIcon = if ("A" in _sectorServices) then {
+			["b_uav", "o_uav", "n_uav"] select _ownerIndex;
 		} else {
-			_mrkrMain setMarkerTypeLocal (["b_installation", "o_installation", "n_installation"] select _ownerIndex);
+			if ("H" in _sectorServices) then {
+				["b_air", "o_air", "n_air"] select _ownerIndex;
+			} else {
+				["b_installation", "o_installation", "n_installation"] select _ownerIndex;
+			};
+		};
+		_mrkrMain setMarkerTypeLocal _sectorIcon;
+
+		if (_sector in _specialStateArray) then {
+			_mrkrMain setMarkerColorLocal "ColorGrey";
+		} else {
+			_mrkrMain setMarkerColorLocal (["colorBLUFOR", "colorOPFOR", "colorIndependent"] select _ownerIndex);
 		};
 	};
+	_mrkrMain setMarkerShadowLocal false;
 } else {
 	_mrkrMain setMarkerColorLocal "ColorUnknown";
-	_mrkrMain setMarkerTypeLocal "u_installation";
-	_mrkrArea setMarkerColorLocal "ColorUnknown";
+	private _sectorIcon = if ("A" in _sectorServices) then {
+		"n_uav";
+	} else {
+		if ("H" in _sectorServices) then {
+			"n_air";
+		} else {
+			"n_unknown";
+		};
+	};
+	_mrkrMain setMarkerTypeLocal _sectorIcon;
+	_mrkrMain setMarkerShadowLocal false;
+
+	_mrkrArea setMarkerColorLocal "ColorGrey";
 };
 
 ["client", true] call WL2_fnc_updateSectorArrays;

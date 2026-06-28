@@ -8,21 +8,28 @@ private _deployActionId = _asset addAction [
 		_this params ["_asset", "_caller", "_deployActionId"];
         private _assetLoadedItem = _asset getVariable ["WL2_loadedItem", objNull];
 
-        if (!isNull _assetLoadedItem && _asset isKindOf "Air" && (_asset modelToWorld [0, 0, 0]) # 2 > 50) exitWith {
-            playSoundUI ["assemble_target"];
-            [_asset, _assetLoadedItem] spawn {
-                params ["_asset", "_vehicle"];
-                _vehicle attachTo [_asset, [0, 0, -10]];
-                detach _vehicle;
-                [_asset, _vehicle, false] call WL2_fnc_attachVehicle;
-                [_asset, _vehicle] spawn WL2_fnc_executeParadrop;
+        if (!isNull _assetLoadedItem && _asset isKindOf "Air") exitWith {
+            if ((_asset modelToWorld [0, 0, 0]) # 2 > 50) then {
+                playSoundUI ["assemble_target"];
+                [_asset, _assetLoadedItem] spawn {
+                    params ["_asset", "_vehicle"];
+                    _vehicle attachTo [_asset, [0, 0, -10]];
+                    detach _vehicle;
+                    [_asset, _vehicle, false] call WL2_fnc_attachVehicle;
+
+                    private _destination = _asset modelToWorldWorld [random 200 - 100, random 200 - 100, -30];
+                    [_destination, getDir _asset, objNull, _vehicle] spawn WL2_fnc_executeParadrop;
+                };
+            } else {
+                ["Too low to unload!"] call WL2_fnc_smoothText;
+                playSoundUI ["AddItemFailed"];
             };
         };
 
         private _speed = abs (speed _asset);
         if (_speed > 5) exitWith {
             ["Cannot load/unload deployable while moving!"] call WL2_fnc_smoothText;
-            playSound "AddItemFailed";
+            playSoundUI ["AddItemFailed"];
         };
 
         private _eligibilityQuery = [_asset, _caller, false, _deployActionId] call WL2_fnc_deployableEligibility;

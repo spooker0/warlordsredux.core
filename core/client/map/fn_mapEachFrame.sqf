@@ -33,14 +33,8 @@ private _surrenderWarningActive = uiNamespace getVariable ["WL2_surrenderWarning
         [1, 1];
     };
 
-    private _sectorName = _x getVariable ["WL2_name", "Sector"];
-    if (_sectorName == "Surrender") then {
-        if (_surrenderWarningActive) then {
-            _currentMarkerSize = [5, 5];
-            _marker setMarkerColorLocal "ColorRed";
-        } else {
-            _marker setMarkerColorLocal "ColorWhite";
-        };
+    if (_x in WL_BASES) then {
+        _currentMarkerSize = _currentMarkerSize vectorMultiply 1.3;
     };
 
     _marker setMarkerSizeLocal _currentMarkerSize;

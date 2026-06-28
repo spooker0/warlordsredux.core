@@ -239,15 +239,6 @@ class RscTitles {
 				text = "";
 				size = 0.045;
 			};
-			class RscWarlordsHUD_Notification: RscStructuredText {
-				idc = 2110;
-				x = 0;
-				y = safeZoneY + 0.1;
-				w = 1;
-				h = 0.3;
-				text = "";
-				size = 0.038;
-			};
 
 			class RscWarlordsHUD_TeamPriority: RscStructuredText {
 				idc = 2111;

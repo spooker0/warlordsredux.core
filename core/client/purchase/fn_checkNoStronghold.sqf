@@ -21,9 +21,10 @@ if (_isHomeBase) exitWith {
 };
 #endif
 
-private _isTargetedSector = _currentSector == WL_TARGET_ENEMY;
-if (_isTargetedSector) exitWith {
-    [false, "You cannot put a stronghold in the contested sector."];
+private _strongholdAllowTime = _currentSector getVariable ["WL2_strongholdAllowTime", 0];
+if (serverTime < _strongholdAllowTime) exitWith {
+    private _cooldownText = [_strongholdAllowTime - serverTime, "MM:SS"] call BIS_fnc_secondsToString;
+    [false, format ["This sector's stronghold is on cooldown: %1", _cooldownText]];
 };
 
 private _findStrongholdBuildings = [getPosATL player, 50, false] call WL2_fnc_findStrongholdBuilding;

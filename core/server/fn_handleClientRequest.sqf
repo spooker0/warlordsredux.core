@@ -47,14 +47,12 @@ private _actionCost = switch (_action) do {
 		};
 	};
 	case "equip" : { _param1 max 0 };
-	case "designatePriority" : { WL_COST_DESIGNATEPRIORITY };
 	case "buyStronghold" : { WL_COST_STRONGHOLD };
 	case "fortifyStronghold" : { WL_COST_FORTIFY };
 	case "callParadrop" : { WL_COST_PARADROPCALL };
 	case "orderArsenal" : { WL_COST_ARSENAL };
 	case "fastTravelContested" : { WL_COST_FTCONTESTED };
 	case "fastTravelAirAssault" : { WL_COST_AIRASSAULT };
-	case "fastTravelParadrop" : { WL_COST_PARADROP };
 	case "fastTravelSquadLeader" : { WL_COST_FTSL };
 	case "combatAir" : { WL_COST_COMBATAIR };
 	case "combatAirHome" : { WL_COST_COMBATAIR / 5 };
@@ -308,7 +306,7 @@ if (_action in ["combatAir", "combatAirHome"]) exitWith {
 private _earnSupportPoints = {
 	params ["_asset", "_actionId", "_actionName", "_reward", "_timeout"];
 
-	private _assetOwnerUid = _asset getVariable ["BIS_WL_ownerAsset", "123"];
+	private _assetOwnerUid = _asset getVariable ["BIS_WL_ownerAsset", _asset getVariable ["WL2_forwardBasePlacer", "123"]];
 	if (_assetOwnerUid == "123") exitWith {};
 
 #if WL_SUPPORT_DEBUG == 0

@@ -39,7 +39,7 @@ private _sectors = uiNamespace getVariable ["WL2_spectatorDrawSectors", []];
         45,
         _assetName,
         true,
-        0.02,
+        0.025,
         "RobotoCondensedBold"
     ];
 } forEach _infantry;

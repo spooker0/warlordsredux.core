@@ -11,6 +11,8 @@ while { !BIS_WL_missionEnd } do {
         WL_ISUP(_x)
     } select {
         _x != player
+    } select {
+        side group _x == side group player
     };
 
     {

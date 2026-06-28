@@ -45,7 +45,7 @@ private _allLinks = createHashMap;
 			default {
 				_mrkrMain setMarkerTypeLocal "u_installation";
 				_mrkrMain setMarkerColorLocal "ColorUnknown";
-				_mrkrArea setMarkerColorLocal "ColorUnknown";
+				_mrkrArea setMarkerColorLocal "ColorGrey";
 			};
 		};
 	};

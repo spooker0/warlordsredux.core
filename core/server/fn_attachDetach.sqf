@@ -64,9 +64,8 @@ if (_attach) then {
     if (_asset isKindOf "VTOL_01_base_F") then {
         _offset = _offset vectorAdd [0, 4.5, -4.9];
     };
-    // if (_asset isKindOf "VTOL_02_base_F") then {
-        // _offset = _offset vectorAdd [0, 0, -3.7];
-        // _offset = _offset vectorAdd [0, 1.8, -1.2];
+    // if (_asset isKindOf "B_APC_Tracked_01_base_F") then {
+    //     _offset = _offset vectorAdd [0, -5.5, 0];
     // };
 
     _load attachTo [_asset, _offset];

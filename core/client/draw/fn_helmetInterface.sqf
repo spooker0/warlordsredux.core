@@ -288,9 +288,11 @@ addMissionEventHandler ["Draw3D", {
                     false;
                 } else {
                     private _projectile = _x;
-                    private _projectileConfig = _apsProjectileConfig getOrDefault [typeOf _projectile, createHashMap];
+                    private _projectileType = _projectile getVariable ["APS_ammoOverride", typeOf _projectile];
+                    private _projectileConfig = _apsProjectileConfig getOrDefault [_projectileType, createHashMap];
                     private _projectileSAM = _projectileConfig getOrDefault ["sam", false];
-                    _projectileSAM && _projectile distance _vehicle < _missileViewDistance;
+                    private _projectileManualSAM = (_projectileConfig getOrDefault ["manualSam", []]) isNotEqualTo [];
+                    (_projectileSAM || _projectileManualSAM) && _projectile distance _vehicle < _missileViewDistance;
                 };
             };
 

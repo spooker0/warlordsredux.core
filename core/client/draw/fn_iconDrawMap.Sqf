@@ -29,10 +29,6 @@ private _drawPolygons = uiNamespace getVariable ["WL2_drawPolygons", []];
     };
 } forEach _drawPolygons;
 
-{
-	_m drawIcon _x;
-} forEach _drawIcons;
-
 private _angle = (serverTime * 75) % 360;
 {
 	_x set [5, _angle];
@@ -57,6 +53,10 @@ private _scale = ctrlMapScale _m;
 {
 	_m drawLine _x;
 } forEach _drawLines;
+
+{
+	_m drawIcon _x;
+} forEach _drawIcons;
 
 {
 	_m drawEllipse _x;

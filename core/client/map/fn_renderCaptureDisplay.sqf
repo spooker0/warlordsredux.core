@@ -21,47 +21,15 @@ if (_captureRowControlsVersion != 2) then {
 
 private _captureSectorCount = count _sectorCaptureList;
 
-private _panelWidth = 0.3;
-private _panelX = safeZoneX + safeZoneW - _panelWidth - 0.02;
-private _panelY = 0;
-
-private _paddingX = 0.005;
-private _paddingTop = 0.02;
-
-private _titleHeight = 0.045;
-
-private _nameHeight = 0.024;
-private _barHeight = 0.025;
-private _rowHeight = _nameHeight + _barHeight + 0.02;
-private _barOffsetY = _nameHeight + 0.005;
-private _captureVoteGap = 0.05;
-
-private _barGapX = 0.01;
-
-private _rowsX = _panelX + _paddingX;
-private _rowsY = _panelY + _paddingTop + _titleHeight;
-private _rowsWidth = _panelWidth - (_paddingX * 2);
-
-private _barX = _rowsX + _barGapX;
-private _barWidth = _rowsWidth - (_barGapX * 2);
-
-private _percentWidth = 0.1;
-private _directionWidth = 0.1;
-private _directionMargin = 0.006;
-
-private _percentX = _barX + ((_barWidth - _percentWidth) / 2);
-private _directionLeftX = _percentX - _directionMargin - _directionWidth;
-private _directionRightX = _percentX + _percentWidth + _directionMargin;
-
 private _shouldShowCapture = _captureSectorCount > 0;
 
 if (!isNull _captureTitleControl) then {
     _captureTitleControl ctrlSetStructuredText parseText "<t align='center'>CAPTURE PROGRESS</t>";
     _captureTitleControl ctrlSetPosition [
-        _panelX,
-        _panelY + _paddingTop,
-        _panelWidth,
-        _titleHeight
+        WL_PANEL_X,
+        WL_PANEL_PAD_TOP,
+        WL_PANEL_W,
+        WL_PANEL_CAP_TITLE
     ];
     _captureTitleControl ctrlShow _shouldShowCapture;
     _captureTitleControl ctrlCommit 0;
@@ -145,13 +113,13 @@ private _formatCap = {
         "_progressDirectionControl"
     ];
 
-    private _rowY = _rowsY + (_forEachIndex * _rowHeight);
+    private _rowY = WL_PANEL_CAP_ROW_Y + (_forEachIndex * WL_PANEL_CAP_ROW_H);
 
     private _attackerColor = [_capturingTeam] call _sideColor;
     private _defenderColor = [_defendingTeam] call _sideColor;
 
     private _progress = ((_captureProgressPercent / 100) max 0) min 1;
-    private _attackerBarWidth = _barWidth * _progress;
+    private _attackerBarWidth = WL_PANEL_CAP_BAR_W * _progress;
 
     private _attackerCapDisplay = [_capturingTeamCap] call _formatCap;
     private _defenderCapDisplay = [_defendingTeamCap] call _formatCap;
@@ -163,10 +131,10 @@ private _formatCap = {
     ];
 
     _capTextControl ctrlSetPosition [
-        _rowsX,
+        WL_PANEL_CAP_ROW_X,
         _rowY,
-        _rowsWidth,
-        _nameHeight
+        WL_PANEL_CAP_ROW_W,
+        WL_PANEL_CAP_NAME_H
     ];
 
     _capTextControl ctrlShow true;
@@ -178,10 +146,10 @@ private _formatCap = {
     ];
 
     _sectorNameControl ctrlSetPosition [
-        _rowsX,
+        WL_PANEL_CAP_ROW_X,
         _rowY,
-        _rowsWidth,
-        _nameHeight
+        WL_PANEL_CAP_ROW_W,
+        WL_PANEL_CAP_NAME_H
     ];
 
     _sectorNameControl ctrlShow true;
@@ -189,10 +157,10 @@ private _formatCap = {
 
     _defenderBarControl ctrlSetBackgroundColor _defenderColor;
     _defenderBarControl ctrlSetPosition [
-        _barX,
-        _rowY + _barOffsetY,
-        _barWidth,
-        _barHeight
+        WL_PANEL_CAP_BAR_X,
+        _rowY + WL_PANEL_CAP_BAR_OFFSET,
+        WL_PANEL_CAP_BAR_W,
+        WL_PANEL_CAP_BAR_H
     ];
 
     _defenderBarControl ctrlShow true;
@@ -200,48 +168,48 @@ private _formatCap = {
 
     _attackerBarControl ctrlSetBackgroundColor _attackerColor;
     _attackerBarControl ctrlSetPosition [
-        _barX,
-        _rowY + _barOffsetY,
+        WL_PANEL_CAP_BAR_X,
+        _rowY + WL_PANEL_CAP_BAR_OFFSET,
         _attackerBarWidth,
-        _barHeight
+        WL_PANEL_CAP_BAR_H
     ];
 
     _attackerBarControl ctrlShow (_attackerBarWidth > 0);
     _attackerBarControl ctrlCommit 0;
 
-    _progressPercentControl ctrlSetFontHeight _barHeight * 1.05;
+    _progressPercentControl ctrlSetFontHeight WL_PANEL_CAP_BAR_H;
     _progressPercentControl ctrlSetStructuredText parseText format [
         "<t align='center' shadow='0'>%1</t>",
         _captureProgressDisplay
     ];
 
     _progressPercentControl ctrlSetPosition [
-        _percentX,
-        _rowY + _barOffsetY,
-        _percentWidth,
-        _barHeight
+        WL_PANEL_CAP_PERCENT_X,
+        _rowY + WL_PANEL_CAP_BAR_OFFSET,
+        WL_PANEL_CAP_PERCENT_W,
+        WL_PANEL_CAP_BAR_H
     ];
 
     _progressPercentControl ctrlShow true;
     _progressPercentControl ctrlCommit 0;
 
-    _progressDirectionControl ctrlSetFontHeight _barHeight * 1.3;
+    _progressDirectionControl ctrlSetFontHeight WL_PANEL_CAP_BAR_H;
     _progressDirectionControl ctrlSetStructuredText parseText format [
         "<t align='center' shadow='0'>%1</t>",
         _captureProgressDirection
     ];
 
     private _directionX = switch (_captureProgressDirectionSide) do {
-        case "left": { _directionLeftX };
-        case "right": { _directionRightX };
-        default { _directionRightX };
+        case "left": { WL_PANEL_CAP_DIR_LEFT };
+        case "right": { WL_PANEL_CAP_DIR_RIGHT };
+        default { WL_PANEL_CAP_DIR_RIGHT };
     };
 
     _progressDirectionControl ctrlSetPosition [
         _directionX,
-        _rowY + _barOffsetY,
-        _directionWidth,
-        _barHeight
+        _rowY + WL_PANEL_CAP_BAR_OFFSET,
+        WL_PANEL_CAP_DIR_W,
+        WL_PANEL_CAP_BAR_H
     ];
 
     _progressDirectionControl ctrlShow (_captureProgressDirectionSide != "");
@@ -272,12 +240,12 @@ _display setVariable ["WL2_captureRowControls", _captureRowControls];
 
 if (_captureSectorCount > 0) then {
     private _bottomGap = if (_showVote) then {
-        _captureVoteGap
+        WL_PANEL_GAP
     } else {
         0
     };
 
-    _paddingTop + _titleHeight + (_captureSectorCount * _rowHeight) + _bottomGap
+    WL_PANEL_PAD_TOP + WL_PANEL_CAP_TITLE + (_captureSectorCount * WL_PANEL_CAP_ROW_H) + _bottomGap
 } else {
     0
 };

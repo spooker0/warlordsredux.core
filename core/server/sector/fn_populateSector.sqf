@@ -194,35 +194,22 @@ private _allEntities = entities [[], ["Logic"], true];
 } forEach allCurators;
 #endif
 
-private _vehicleDrivers = _vehicleUnits select {
-	alive _x
-} select {
-	_x isKindOf "Man"
-} select {
-	driver vehicle _x == _x
-};
-private _sortedDrivers = [_vehicleDrivers, [], { WL_UNIT((vehicle _x), "cost", 0) }, "DESCEND"] call BIS_fnc_sortBy;
-if (count _sortedDrivers > 0) then {
-	private _driver = _sortedDrivers # 0;
-
-	private _sectorCollaboratorVar = format ["WL2_sectorCollaborator_%1", _side];
-	private _nextSectorCollaborator = missionNamespace getVariable [_sectorCollaboratorVar, ""];
-	if (_nextSectorCollaborator != "") then {
+private _sectorCollaboratorVar = format ["WL2_sectorCollaborator_%1", _side];
+private _nextSectorCollaborator = missionNamespace getVariable [_sectorCollaboratorVar, ""];
+if (_nextSectorCollaborator != "") then {
+	private _vehicleDrivers = _vehicleUnits select {
+		alive _x
+	} select {
+		_x isKindOf "Man"
+	} select {
+		driver vehicle _x == _x
+	};
+	private _sortedDrivers = [_vehicleDrivers, [], { WL_UNIT((vehicle _x), "cost", 0) }, "DESCEND"] call BIS_fnc_sortBy;
+	if (count _sortedDrivers > 0) then {
 		private _collaboratorPlayer = [_nextSectorCollaborator] call BIS_fnc_getUnitByUid;
 		if (!isNull _collaboratorPlayer) then {
-			[_driver] remoteExec ["WL2_fnc_collaborate", _collaboratorPlayer];
-			missionNamespace setVariable [_sectorCollaboratorVar, "", true];
-
-			private _collaborateVehicle = vehicle _driver;
-			_collaborateVehicle setVariable ["BIS_WL_ownerAsset", _nextSectorCollaborator, true];
-			_collaborateVehicle setVariable ["BIS_WL_ownerAssetSide", side group _collaboratorPlayer, true];
-			_collaborateVehicle setVariable ["WL2_assetOwnerName", "", true];
-			_collaborateVehicle setVariable ["WL2_isCollaborator", true, true];
-
-			private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", _nextSectorCollaborator];
-			private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
-			_ownedVehicles pushBack _collaborateVehicle;
-			missionNamespace setVariable [_ownedVehicleVar, _ownedVehicles, true];
+			[_sortedDrivers] remoteExec ["WL2_fnc_collaborate", _collaboratorPlayer];
 		};
+		missionNamespace setVariable [_sectorCollaboratorVar, "", true];
 	};
 };

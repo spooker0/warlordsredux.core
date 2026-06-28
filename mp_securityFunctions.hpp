@@ -4,7 +4,6 @@ class CfgRemoteExec {
 		mode = 1;
 		jip = 1;
 
-		class APS_fnc_deviceJammer {allowedTargets = 0;};
 		class APS_fnc_friendlyWarning {allowedTargets = 0;};
 		class APS_fnc_lagProtectionServer {allowedTargets = 2;};
 		class APS_fnc_projectileStateUpdate {allowedTargets = 0;};
@@ -77,6 +76,7 @@ class CfgRemoteExec {
 		class WL2_fnc_requestScoreboard {allowedTargets = 2;};
 		class WL2_fnc_restockAction {allowedTargets = 0;};
 		class WL2_fnc_revive {allowedTargets = 0;};
+		class WL2_fnc_samHit {allowedTargets = 0;};
 		class WL2_fnc_sectorRevealHandle {allowedTargets = 0;};
 		class WL2_fnc_showRating {allowedTargets = 0;};
 		class WL2_fnc_scannerAction {allowedTargets = 0;};
@@ -105,7 +105,7 @@ class CfgRemoteExec {
 		class WLM_fnc_changeHorn {allowedTargets = 0;};
 		class WLM_fnc_moveSmokes {allowedTargets = 0;};
 		class WLM_fnc_rearmVehicle {allowedTargets = 0;};
-
+		class WL2_fnc_warnSectorDefenders {allowedTargets = 2;};
 		//Don't touch
 		class BIS_fnc_effectKilled {allowedTargets = 0; jip = 0;};
 		class BIS_fnc_effectKilledAirDestruction {allowedTargets = 0; jip = 0;};

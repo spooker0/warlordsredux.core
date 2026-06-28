@@ -136,7 +136,7 @@ while { WL_IsSpectator } do {
             private _targetIconRatio = _targetIconInfo # 0 / _targetIconInfo # 1;
 
             private _iconSize = linearConversion [0, 2000, _distance, 0.9, 0.5, true];
-            private _iconTextSize = linearConversion [0, 5000, _distance, 0.035, 0.028];
+            private _iconTextSize = linearConversion [0, 5000, _distance, 0.035, 0.030];
 
             _vehicles pushBack [
                 _target,

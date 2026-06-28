@@ -517,8 +517,7 @@ while { !BIS_WL_missionEnd } do {
             _scannedUnits = _scannedUnits select {
                 WL_ISUP(_x)
             } select {
-                private _hideMap = _x getVariable ["WL2_hideMap", 0];
-                _hideMap == 0;
+                _x isKindOf "Man"
             };
 
             if (count _scannedUnits > 0) then {

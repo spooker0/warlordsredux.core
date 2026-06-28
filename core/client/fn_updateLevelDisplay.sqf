@@ -27,6 +27,24 @@ if (_isSpectator) then {
 	["Spectator", false, true] call RWD_fnc_addBadge;
 };
 
+private _playerRating = player getVariable ["WL2_playerRating", WL_RATING_STARTER];
+{
+	_x params ["_rating", "_badgeName"];
+	if (_playerRating >= _rating) then {
+		[_badgeName, true] call RWD_fnc_addBadge;
+	} else {
+		[_badgeName, false, true] call RWD_fnc_addBadge;
+	};
+} forEach [
+	[500, "Private"],
+	[1000, "Corporal"],
+	[1500, "Sergeant"],
+	[2000, "Lieutenant"],
+	[2500, "Captain"],
+	[3000, "Major"],
+	[3500, "Colonel"]
+];
+
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _hideMyIdentity = _settingsMap getOrDefault ["hideMyIdentity", true];
 if ((_isAdmin || _isModerator) && _hideMyIdentity) then {

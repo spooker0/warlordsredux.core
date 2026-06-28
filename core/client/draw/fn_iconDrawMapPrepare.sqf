@@ -32,6 +32,7 @@ private _mapIconScale = _settingsMap getOrDefault ["mapIconScale", 1];
 // Draw sector links
 private _sectorTarget = WL_SectorActionTarget;
 private _allLinks = missionNamespace getVariable ["WL2_linkSectorMarkers", createHashMap];
+private _mapSectorModifierSize = _settingsMap getOrDefault ["mapSectorModifierSize", 1];
 private _mapSectorLineGrayscale = _settingsMap getOrDefault ["mapSectorLineGrayscale", 1];
 private _neutralLinkColor = [_mapSectorLineGrayscale, _mapSectorLineGrayscale, _mapSectorLineGrayscale, 1];
 private _ownedSectorLinkColor = if (_side == west) then {
@@ -65,37 +66,16 @@ if (_showSectorLinks) then {
 		];
 	} forEach _allLinks
 } else {
-	private _sectorLineSpeed = _settingsMap getOrDefault ["mapSectorLineSpeed", 0.25];
-	private _sectorLineMax = _settingsMap getOrDefault ["mapSectorLineMax", 1];
-	_sectorLineMax = _sectorLineMax - 1;
-
 	if (!isNull _sectorTarget) then {
 		private _links = [_sectorTarget];
-		private _lastDrawnLinks = uiNamespace getVariable ["WL2_mapLastDrawnLinks", false];
-		if (!_lastDrawnLinks) then {
-			uiNamespace setVariable ["WL2_firstDrawLinkTime", serverTime];
-			uiNamespace setVariable ["WL2_mapLastDrawnLinks", true];
-		};
+		private _linksToShow = 0;
 
-		private _firstDrawLinkTime = uiNamespace getVariable ["WL2_firstDrawLinkTime", serverTime];
-		private _timeSinceFirstDraw = serverTime - _firstDrawLinkTime;
-		uiNamespace setVariable ["WL2_mapShowBonus", _timeSinceFirstDraw >= _sectorLineSpeed * 2];
-
-		private _linksToShow = if (_sectorLineSpeed > 0) then {
-			_timeSinceFirstDraw / _sectorLineSpeed;
-		} else {
-			_sectorLineMax
-		};
-		_linksToShow = _linksToShow min _sectorLineMax;
-
-		for "_i" from 0 to _linksToShow do {
-			private _allConnections = [];
-			{
-				private _connections = _x getVariable ["WL2_connectedSectors", []];
-				_allConnections insert [-1, _connections, true];
-			} forEach _links;
-			_links insert [-1, _allConnections, true];
-		};
+		private _allConnections = [];
+		{
+			private _connections = _x getVariable ["WL2_connectedSectors", []];
+			_allConnections insert [-1, _connections, true];
+		} forEach _links;
+		_links insert [-1, _allConnections, true];
 
 		_sectorsInLinksShown = _links;
 
@@ -104,7 +84,6 @@ if (_showSectorLinks) then {
 			private _pairKey = _x;
 			private _linkData = _y;
 			_y params ["_startPos", "_endPos", "_sector", "_link"];
-
 			if !(_sector in _links) then {
 				continue;
 			};
@@ -114,10 +93,8 @@ if (_showSectorLinks) then {
 			if (_pairKey in _drawnLinks) then {
 				continue;
 			};
-			if (_linksToShow == 0) then {
-				if (_sector != _sectorTarget && _link != _sectorTarget) then {
-					continue;
-				};
+			if (_sector != _sectorTarget && _link != _sectorTarget) then {
+				continue;
 			};
 
 			private _sectorOwner = _sector getVariable ["BIS_WL_owner", sideUnknown];
@@ -136,8 +113,6 @@ if (_showSectorLinks) then {
 			];
 			_drawnLinks set [_pairKey, true];
 		} forEach _allLinks;
-	} else {
-		uiNamespace setVariable ["WL2_mapLastDrawnLinks", false];
 	};
 };
 
@@ -349,6 +324,41 @@ if (!isNull _sectorTarget) then {
 			];
 		};
 	} forEach _sectorInfo;
+
+	{
+		private _sectorOwner = _x getVariable ["BIS_WL_owner", independent];
+		if (_sectorOwner == independent) then {
+			continue;
+		};
+
+		private _sectorRevealed = _x getVariable ["BIS_WL_revealedBy", []];
+		if !(_side in _sectorRevealed) then {
+			continue;
+		};
+
+		private _sectorAddColor = if (_sectorOwner == west) then {
+			[0, 0.3, 0.6, 1]
+		} else {
+			[0.5, 0, 0, 1]
+		};
+		private _directionVector = _sectorTarget getRelDir (getPosASL _x);
+		private _addDrawPos = _sectorTarget getRelPos [200, _directionVector];
+
+		private _modifierText = if (_x in WL_BASES) then { "+2x" } else { "+1x" };
+		_drawIcons pushBack [
+			"#(rgb,1,1,1)color(1,1,1,1)",
+			_sectorAddColor,
+			_addDrawPos,
+			0,
+			0,
+			0,
+			_modifierText,
+			2,
+			0.075 * _mapSectorModifierSize,
+			"PuristaSemibold",
+			"center"
+		];
+	} forEach (_sectorTarget getVariable ["WL2_connectedSectors", []]);
 };
 
 // Draw team priority
@@ -627,6 +637,25 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 			_baseColor,
 			8
 		];
+
+		if (_sectorTarget != _x) then {
+			continue;
+		};
+
+		private _addDrawPos = vectorLinearConversion [0, 1, 0.2, _endPoint, _sectorPos];
+		_drawIcons pushBack [
+			"#(rgb,1,1,1)color(1,1,1,1)",
+			_baseColor,
+			_addDrawPos,
+			0,
+			0,
+			0,
+			format ["+%1x", WL_FOB_CAPMODIFIER],
+			2,
+			0.075 * _mapSectorModifierSize,
+			"PuristaSemibold",
+			"center"
+		];
 	} forEach _sectorsInRange;
 } forEach _forwardBases;
 
@@ -653,50 +682,52 @@ private _rallyPoints = _mapData getOrDefault ["rallyPoints", []];
 } forEach _rallyPoints;
 
 // Draw strongholds
-{
-	private _stronghold = _x;
+if (_draw) then {
+	{
+		private _stronghold = _x;
 
-	private _strongholdPos = getPosATL _stronghold;
-	private _intruders = _stronghold getVariable ["WL2_strongholdIntruders", false];
-	private _strongholdColor = if (_intruders) then {
-		[1, 0, 0, 1]
-	} else {
-		[1, 1, 1, 1]
-	};
+		private _strongholdPos = getPosATL _stronghold;
+		private _intruders = _stronghold getVariable ["WL2_strongholdIntruders", false];
+		private _strongholdColor = if (_intruders) then {
+			[1, 0, 0, 1]
+		} else {
+			[1, 1, 1, 1]
+		};
 
-	private _maxHealth = _stronghold getVariable ["WL2_demolitionMaxHealth", 5];
-	private _strongholdHealth = _stronghold getVariable ["WL2_demolitionHealth", _maxHealth];
-	_drawIcons pushBack [
-		"\A3\ui_f\data\map\mapcontrol\Ruin_CA.paa",
-		_strongholdColor,
-		_strongholdPos,
-		20 * _mapIconScale,
-		20 * _mapIconScale,
-		0,
-		if (_draw) then { format ["  STRONGHOLD (%1/%2)", _strongholdHealth, _maxHealth] } else {""},
-		1,
-		0.043,
-		"PuristaBold",
-		"right"
-	];
+		private _maxHealth = _stronghold getVariable ["WL2_demolitionMaxHealth", 5];
+		private _strongholdHealth = _stronghold getVariable ["WL2_demolitionHealth", _maxHealth];
+		_drawIcons pushBack [
+			"\A3\ui_f\data\map\mapcontrol\Ruin_CA.paa",
+			_strongholdColor,
+			_strongholdPos,
+			20 * _mapIconScale,
+			20 * _mapIconScale,
+			0,
+			format ["  STRONGHOLD (%1/%2)", _strongholdHealth, _maxHealth],
+			1,
+			0.043,
+			"PuristaBold",
+			"right"
+		];
 
-	private _strongholdRadius = _stronghold getVariable ["WL_strongholdRadius", 0];
+		private _strongholdRadius = _stronghold getVariable ["WL_strongholdRadius", 0];
 
-	_drawEllipses pushBack [
-		_strongholdPos,
-		_strongholdRadius,
-		_strongholdRadius,
-		0,
-		[1, 1, 1, 1],
-		"#(rgb,8,8,3)color(1,1,1,0.2)"
-	];
+		_drawEllipses pushBack [
+			_strongholdPos,
+			_strongholdRadius,
+			_strongholdRadius,
+			0,
+			[1, 1, 1, 1],
+			"#(rgb,8,8,3)color(1,1,1,0.2)"
+		];
 
-	private _strongholdSector = _stronghold getVariable ["WL_strongholdSector", objNull];
-	private _sectorOwner = _strongholdSector getVariable ["BIS_WL_owner", sideUnknown];
-	if (_sectorOwner == _side) then {
-		_drawIconsSelectable pushBack _stronghold;
-	};
-} forEach (_mapData getOrDefault ["strongholds", []]);
+		private _strongholdSector = _stronghold getVariable ["WL_strongholdSector", objNull];
+		private _sectorOwner = _strongholdSector getVariable ["BIS_WL_owner", sideUnknown];
+		if (_sectorOwner == _side) then {
+			_drawIconsSelectable pushBack _stronghold;
+		};
+	} forEach (_mapData getOrDefault ["strongholds", []]);
+};
 
 // Draw scanned units
 private _scannedUnits = _mapData getOrDefault ["scannedUnits", []];

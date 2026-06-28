@@ -13,25 +13,8 @@ private _maxVoteCount = if (_voteSectorCount > 0) then {
     0
 };
 
-private _panelWidth = 0.3;
-private _panelX = safeZoneX + safeZoneW - _panelWidth - 0.02;
-private _panelY = 0;
-
-private _paddingX = 0.005;
-private _paddingTop = 0.02;
-private _paddingBottom = 0.01;
-
-private _titleHeight = 0.075;
-private _titleRowsGap = 0.0;
-
-private _nameHeight = 0.022;
-private _barHeight = 0.004;
-private _barOffsetY = 0.026;
-private _rowHeight = _nameHeight + _barHeight + 0.02;
-private _barGapX = 0.01;
-
 private _voteSectionHeight = if (_showVote) then {
-    _paddingTop + _titleHeight + _titleRowsGap + (_voteSectorCount * _rowHeight) + _paddingBottom
+    WL_PANEL_PAD_TOP + WL_PANEL_VOTE_TITLE + (_voteSectorCount * WL_PANEL_VOTE_ROW_H) + WL_PANEL_PAD_BOTTOM
 } else {
     0
 };
@@ -40,30 +23,28 @@ private _totalContentHeight = _captureSectionHeight + _voteSectionHeight;
 private _shouldShowPanel = _totalContentHeight > 0;
 
 _backgroundControl ctrlSetPosition [
-    _panelX,
-    _panelY,
-    _panelWidth,
+    WL_PANEL_X,
+    0,
+    WL_PANEL_W,
     _totalContentHeight
 ];
 
 _backgroundControl ctrlShow _shouldShowPanel;
 _backgroundControl ctrlCommit 0;
 
-private _titleY = _panelY + _paddingTop + _captureSectionHeight;
+private _titleY = WL_PANEL_PAD_TOP + _captureSectionHeight;
 
 _titleControl ctrlSetPosition [
-    _panelX,
+    WL_PANEL_X,
     _titleY,
-    _panelWidth,
-    _titleHeight
+    WL_PANEL_W,
+    WL_PANEL_VOTE_TITLE
 ];
 
 _titleControl ctrlShow _showVote;
 _titleControl ctrlCommit 0;
 
-private _rowsX = _panelX + _paddingX;
-private _rowsY = _titleY + _titleHeight + _titleRowsGap;
-private _rowsWidth = _panelWidth - (_paddingX * 2);
+private _rowsY = _titleY + WL_PANEL_VOTE_TITLE;
 
 {
     _x params ["_sectorName", "_voteCount", "_color"];
@@ -80,11 +61,11 @@ private _rowsWidth = _panelWidth - (_paddingX * 2);
 
     _sectorRowControlPair params ["_sectorNameControl", "_sectorBarControl"];
 
-    private _rowY = _rowsY + (_forEachIndex * _rowHeight);
+    private _rowY = _rowsY + (_forEachIndex * WL_PANEL_VOTE_ROW_H);
     private _barWidth = 0;
 
     if (_maxVoteCount > 0) then {
-        _barWidth = ((_rowsWidth * (_voteCount / _maxVoteCount)) - (_barGapX * 2)) max 0;
+        _barWidth = ((WL_PANEL_VOTE_ROW_W * (_voteCount / _maxVoteCount)) - (WL_PANEL_VOTE_BAR_GAP * 2)) max 0;
     };
 
     private _voteCountDisplay = switch (true) do {
@@ -106,10 +87,10 @@ private _rowsWidth = _panelWidth - (_paddingX * 2);
     ];
 
     _sectorNameControl ctrlSetPosition [
-        _rowsX,
+        WL_PANEL_VOTE_ROW_X,
         _rowY,
-        _rowsWidth,
-        _nameHeight
+        WL_PANEL_VOTE_ROW_W,
+        WL_PANEL_VOTE_NAME_H
     ];
 
     _sectorNameControl ctrlShow _showVote;
@@ -118,10 +99,10 @@ private _rowsWidth = _panelWidth - (_paddingX * 2);
     _sectorBarControl ctrlSetBackgroundColor _color;
 
     _sectorBarControl ctrlSetPosition [
-        _rowsX + _barGapX,
-        _rowY + _barOffsetY,
+        WL_PANEL_VOTE_ROW_X + WL_PANEL_VOTE_BAR_GAP,
+        _rowY + WL_PANEL_VOTE_BAR_OFFSET,
         _barWidth,
-        _barHeight
+        WL_PANEL_VOTE_BAR_H
     ];
 
     _sectorBarControl ctrlShow _showVote;

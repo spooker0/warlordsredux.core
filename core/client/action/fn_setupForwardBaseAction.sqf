@@ -248,10 +248,12 @@ private _setupActionId = [
 			deleteVehicle _target;
 
 			private _sector = _sectorsInRange # 0;
-			private _sectorValue = _sector getVariable ["BIS_WL_value", 0];
-			private _maxDefenders = ((_sectorValue * WL_DEFENDER_MOD) max WL_DEFENDER_MIN) * WL_DEFENDER_MAXMOD;
 			private _currentDefenders = _sector getVariable ["WL2_defenders", 0];
+			private _maxDefenders = _sector getVariable ["WL2_maxDefenders", 0];
 			_sector setVariable ["WL2_defenders", (_currentDefenders + WL_DEFENDER_ADD) min _maxDefenders, true];
+			_sector setVariable ["WL2_strongholdAllowTime", 0, true];
+
+			[_sector, -1] remoteExec ["WL2_fnc_warnSectorDefenders", 2];
 		};
 
 		["No friendly forward base or sector in range!"] call WL2_fnc_smoothText;

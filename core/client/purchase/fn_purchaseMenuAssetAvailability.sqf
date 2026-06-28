@@ -110,8 +110,7 @@ if (_ret) then {
 				[WL2_fnc_checkIndependents],
 				[WL2_fnc_checkInFriendlySector, [_cost, []]],
 				[WL2_fnc_checkGroundVehicleDriver, [true]],
-				[WL2_fnc_checkNearbyEnemies],
-				[WL2_fnc_checkParadropCooldown]
+				[WL2_fnc_checkNearbyEnemies]
 			]
 		};
 		case "FTSquadLeader": {

@@ -22,7 +22,27 @@ if (_unit isKindOf "Man") then {
             private _sectorVulnerable = _deathSector in [BIS_WL_currentTarget_west, BIS_WL_currentTarget_east];
             if (_sectorVulnerable) then {
                 private _sectorDefenders = _deathSector getVariable ["WL2_defenders", 0];
-                _deathSector setVariable ["WL2_defenders", (_sectorDefenders - 1) max 0, true];
+                private _maxSectorDefenders = _deathSector getVariable ["WL2_maxDefenders", 0];
+                private _newSectorDefenders = (_sectorDefenders - 1) max 0;
+
+                private _ratioBefore = _sectorDefenders / _maxSectorDefenders;
+                private _ratioAfter = _newSectorDefenders / _maxSectorDefenders;
+                switch (true) do {
+                    case {_ratioBefore > 0.75 && _ratioAfter <= 0.75}: {
+                        [_deathSector, 75] call WL2_fnc_warnSectorDefenders;
+                    };
+                    case {_ratioBefore > 0.5 && _ratioAfter <= 0.5}: {
+                        [_deathSector, 50] call WL2_fnc_warnSectorDefenders;
+                    };
+                    case {_ratioBefore > 0.25 && _ratioAfter <= 0.25}: {
+                        [_deathSector, 25] call WL2_fnc_warnSectorDefenders;
+                    };
+                    case {_sectorDefenders > 0 && _newSectorDefenders <= 0}: {
+                        [_deathSector, 0] call WL2_fnc_warnSectorDefenders;
+                    };
+                    default {};
+                };
+                _deathSector setVariable ["WL2_defenders", _newSectorDefenders, true];
             };
         };
     };

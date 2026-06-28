@@ -42,9 +42,8 @@ while { !BIS_WL_missionEnd } do {
 			continue;
 		};
 
-		private _sectorValue = _sector getVariable ["BIS_WL_value", 0];
 		private _defenders = _sector getVariable ["WL2_defenders", 0];
-		private _maxDefenders = ((_sectorValue * WL_DEFENDER_MOD) max WL_DEFENDER_MIN) * WL_DEFENDER_MAXMOD;
+		private _maxDefenders = _sector getVariable ["WL2_maxDefenders", 0];
 		_defenders = _defenders + WL_DEFENDER_INCOME;
 		_sector setVariable ["WL2_defenders", _defenders min _maxDefenders, true];
 	} forEach BIS_WL_allSectors;

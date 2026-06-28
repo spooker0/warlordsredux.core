@@ -30,7 +30,7 @@ if (count _allHitPoints == 0) exitWith {};
 private _validHitPoints = _allHitPoints select 0 select {
     _x regexMatch "hit.*wheel" ||
     _x regexMatch "hit.*track" ||
-    _x in ["hitengine", "hitturret", "hitgun", "hitcomturret", "hitcomgun"];
+    _x in ["hitengine", "hitturret", "hitgun", "hitcomturret", "hitcomgun", "hithrotor", "hitvrotor"];
 };
 
 private _anyDamaged = false;

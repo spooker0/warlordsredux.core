@@ -32,6 +32,8 @@ if (_newHealth <= 0) then {
         if (_targetObject == _strongholdSectorCheck) then {
             [_strongholdSector] call WL2_fnc_removeStronghold;
 
+            _strongholdSector setVariable ["WL2_strongholdAllowTime", serverTime + 300, true];
+
             if (_assetSide != BIS_WL_playerSide) then {
                 _damageBuilding = (_assetSide != independent);
                 [player, _strongholdSector] remoteExec ["WL2_fnc_destroyStronghold", 2];

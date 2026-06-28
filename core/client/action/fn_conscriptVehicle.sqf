@@ -60,7 +60,8 @@ private _callbackConfirm = {
     if (_playerVehicle isKindOf "Man") then {
         [_paradropper, true] spawn WL2_fnc_executeFastTravelVehicle;
     } else {
-        [_paradropper, _playerVehicle] spawn WL2_fnc_executeParadrop;
+        private _destination = _paradropper modelToWorldWorld [random 200 - 100, random 200 - 100, -30];
+        [_destination, getDir _paradropper, _paradropper, _playerVehicle] spawn WL2_fnc_executeParadrop;
     };
 };
 

@@ -122,7 +122,10 @@ private _sectorGroup = createGroup [civilian, true];
 	private _sectorValue = round (_size / 13000);
 
 	_sector setVariable ["BIS_WL_value", _sectorValue, true];
-	_sector setVariable ["WL2_defenders", (_sectorValue * WL_DEFENDER_MOD) max WL_DEFENDER_MIN, true];
+
+	_sector setVariable ["WL2_defenders", 0, true];
+	private _maxDefenders = (_sectorValue * WL_DEFENDER_MOD) max WL_DEFENDER_MIN;
+	_sector setVariable ["WL2_maxDefenders", _maxDefenders, true];
 
 	private _agent = _sectorGroup createUnit ["Logic", _sectorPos, [], 0, "CAN_COLLIDE"];
 	_agent enableSimulationGlobal false;

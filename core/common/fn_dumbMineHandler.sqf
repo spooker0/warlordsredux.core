@@ -9,8 +9,13 @@ private _ownedVehicleVar = if (_isServer) then {
 };
 
 private _lastPlayedVO = 0;
+private _lastWarnTime = 0;
+
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 
 while { !BIS_WL_missionEnd } do {
+    uiSleep 0.3;
+
     private _side = if (_isServer) then {
         independent
     } else {
@@ -61,11 +66,35 @@ while { !BIS_WL_missionEnd } do {
     };
 
     private _playVO = false;
+
+    private _warningOn = cameraOn in _ownedVehiclesEligible;
+
+    private _warningPositions = [];
+    if (_warningOn) then {
+        private _warningVelocityBase = velocityModelSpace cameraOn;
+        private _mineWarnTime = _settingsMap getOrDefault ["mineWarnTime", 4];
+
+        for "_i" from 1 to _mineWarnTime do {
+            private _cameraVelocity = _warningVelocityBase vectorMultiply _i;
+            private _warningPosition = cameraOn modelToWorld _cameraVelocity;
+            _warningPositions pushBack _warningPosition;
+        };
+    };
+
+    private _shouldWarn = false;
     {
         private _minefield = _x;
 
         private _mineData = _minefield getVariable ["WL2_minefield", []];
         private _mineArea = [getPosASL _minefield, _mineData # 0, _mineData # 1, getDir _minefield, _mineData # 2 == 1];
+
+        if (_warningOn && !_shouldWarn) then {
+            private _warningPositionsInArea = _warningPositions inAreaArray _mineArea;
+            if (count _warningPositionsInArea > 0) then {
+                _shouldWarn = true;
+            };
+        };
+
         private _vehiclesInThisMinefield = _ownedVehiclesEligible inAreaArray _mineArea;
         if (count _vehiclesInThisMinefield == 0) then {
             continue;
@@ -102,10 +131,22 @@ while { !BIS_WL_missionEnd } do {
         } forEach _vehiclesInThisMinefield;
     } forEach _enemyMines;
 
+    if (_isServer) then {
+        continue;
+    };
+
     if (_playVO && serverTime - _lastPlayedVO > 10) then {
         playSoundUI ["a3\dubbing_f_epb\b_in\x15_mines\b_in_x15_mines_jam_0.ogg", 5, 1, false, 0.31];
         _lastPlayedVO = serverTime;
     };
 
-    uiSleep 0.3;
+    if (_shouldWarn) then {
+        private _mineWarnVolume = _settingsMap getOrDefault ["mineWarnVolume", 1.5];
+        playSoundUI ["a3\sounds_f\vehicles\air\heli_light_01\warning.wss", _mineWarnVolume];
+
+        if (serverTime - _lastWarnTime > 5) then {
+            ["Minefield warning! Check map!"] call WL2_fnc_smoothText;
+            _lastWarnTime = serverTime;
+        };
+    };
 };

@@ -67,6 +67,7 @@ private _factoryTypes = getArray (_factoriesConfig >> "factoryTypes");
     _marker setMarkerTypeLocal "loc_use";
     _marker setMarkerColorLocal "ColorBlack";
     _marker setMarkerAlphaLocal 1;
+    _marker setMarkerShadowLocal false;
     _marker setMarkerSize [1, 1];   // broadcast global
     _factory setVariable ["WL2_factoryMarker", _marker];
 } forEach _factories;

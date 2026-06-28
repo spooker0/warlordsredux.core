@@ -43,7 +43,7 @@ private _spawnParams = if (_closestLandableArea isKindOf "Logic") then {
     private _railsInBase = _railUnits inAreaArray [getPosASL _closestLandableArea, WL_FOB_RANGE, WL_FOB_RANGE, 0, false];
     private _sortedRails = [_railsInBase, [], { cameraOn distance _x }, "ASCEND"] call BIS_fnc_sortBy;
     private _railForSpawn = _sortedRails # 0;
-    [_railForSpawn modelToWorld [0, -10, 0], getDir _railForSpawn]
+    [_railForSpawn modelToWorld [0, -20, 0], getDir _railForSpawn]
 };
 
 _spawnParams params ["_spawnPos", "_dir"];

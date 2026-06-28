@@ -346,7 +346,10 @@ private _playerContributions = missionNamespace getVariable ["WL_PlayerSquadCont
             _teamTextColor
         };
 
-        private _playerNameTextStructured = [name _player, SQD_LAYOUT_LABEL_TEXT_SIZE, _playerNameColor, "left"] call SQD_fnc_renderText;
+        private _playerRating = _player getVariable ["WL2_playerRating", WL_RATING_STARTER];
+        private _playerNameDisplay = format ["%1 (%2)", name _player, _playerRating];
+
+        private _playerNameTextStructured = [_playerNameDisplay, SQD_LAYOUT_LABEL_TEXT_SIZE, _playerNameColor, "left"] call SQD_fnc_renderText;
         _playerNameText ctrlSetStructuredText _playerNameTextStructured;
 
         private _playerScore = _playerContributions getOrDefault [getPlayerUID _player, 0];

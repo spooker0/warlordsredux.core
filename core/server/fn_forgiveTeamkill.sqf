@@ -32,8 +32,8 @@ private _friendlyFireMap = serverNamespace getVariable ["WL2_friendlyFireMap", c
 private _friendlyFireIncidents = _friendlyFireMap getOrDefault [_teamkillerUid, []];
 _friendlyFireIncidents pushBack serverTime;
 
-// keep only last X minutes
-_friendlyFireIncidents = _friendlyFireIncidents select { _x >= (serverTime - WL_DURATION_FFTIMEOUT) };
+// keep only last hour
+_friendlyFireIncidents = _friendlyFireIncidents select { _x >= (serverTime - 3600) };
 
 private _totalIncidents = count _friendlyFireIncidents;
 if (_totalIncidents >= 3) then {
