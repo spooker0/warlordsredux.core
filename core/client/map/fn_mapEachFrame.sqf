@@ -1,36 +1,46 @@
 #include "includes.inc"
 params ["_map"];
-private _ctrlMap = ctrlParent _map;
+private _mapScale = ctrlMapScale _map;
 
-private _radius = ((ctrlMapScale _map) * 500) max 5;
-private _pos = _map ctrlMapScreenToWorld getMousePosition;
+private _radius = (_mapScale * 500) max 5;
+private _mousePosition = getMousePosition;
+private _pos = _map ctrlMapScreenToWorld _mousePosition;
 
 private _drawIconsSelectable = uiNamespace getVariable ["WL2_drawIconsSelectable", []];
 private _nearbyAssets = _drawIconsSelectable inAreaArray [_pos, _radius, _radius, 0, false];
-_nearbyAssets = [_nearbyAssets, [_pos], { _input0 distance2D _x }, "ASCEND"] call BIS_fnc_sortBy;
 WL_AssetActionTargets = _nearbyAssets;
 
-private _mapScale = ctrlMapScale WL_CONTROL_MAP;
+private _serverTime = serverTime % 1;
+private _targetVote = BIS_WL_targetVote;
 
-private _surrenderWarningActive = uiNamespace getVariable ["WL2_surrenderWarningActive", false];
+private _nearbyArea = [_pos, _radius, _radius, 0, false];
+private _nearbySectors = [];
 
+private _timedMarkerSize = -1;
 {
     private _marker = (_x getVariable "BIS_WL_markers") # 0;
     private _currentMarkerSize = if (_x getVariable ["WL2_sectorSelectionAvailable", false]) then {
-        private _pulseFrequency = 1;
-        private _pulseIconSize = 1.5;
-        private _timer = (serverTime % _pulseFrequency);
-        _timer = if (_timer <= (_pulseFrequency / 2)) then {_timer} else {_pulseFrequency - _timer};
-        private _markerSize = linearConversion [0, _pulseFrequency / 2, _timer, 1, _pulseIconSize];
-        private _markerSizeArr = [_markerSize, _markerSize];
-
-        if (_x == BIS_WL_targetVote) then {
-            _markerSizeArr vectorMultiply 1.5;
-        } else {
-            _markerSizeArr;
+        if (_timedMarkerSize == -1) then {
+            private _timer = if (_serverTime <= 0.5) then {
+                _serverTime
+            } else {
+                1 - _serverTime
+            };
+            private _markerSize = linearConversion [0, 0.5, _timer, 1, 1.5];
+            _timedMarkerSize = _markerSize;
         };
+
+        [_timedMarkerSize, _timedMarkerSize];
     } else {
-        [1, 1];
+        if (_mapScale > 0.4) then {
+            [0.75, 0.75];
+        } else {
+            [1, 1];
+        };
+    };
+
+    if (_x == _targetVote) then {
+        _currentMarkerSize = _currentMarkerSize vectorMultiply 1.5;
     };
 
     if (_x in WL_BASES) then {
@@ -38,9 +48,11 @@ private _surrenderWarningActive = uiNamespace getVariable ["WL2_surrenderWarning
     };
 
     _marker setMarkerSizeLocal _currentMarkerSize;
-} forEach BIS_WL_allSectors;
 
-private _nearbySectors = BIS_WL_allSectors inAreaArray [_pos, _radius, _radius, 0, false];
+    if (_x inArea _nearbyArea) then {
+        _nearbySectors pushBack _x;
+    };
+} forEach BIS_WL_allSectors;
 [_nearbySectors, _map] call WL2_fnc_handleSectorIcons;
 
 if (inputAction "BuldTurbo" > 0) exitWith {};
@@ -67,8 +79,8 @@ if (!isNull _sectorClickSingletonScriptHandle) exitWith {};
 private _singletonScriptHandle = uiNamespace getVariable ["WL2_mapMouseActionSingleton", scriptNull];
 if (!isNull _singletonScriptHandle) exitWith {};
 
-private _singletonScriptHandle = [_map] spawn {
-    params ["_map"];
+private _singletonScriptHandle = [_map, _mousePosition] spawn {
+    params ["_map", "_mousePosition"];
     private _display = createDialog ["WL_MapButtonDisplay", true];
     uiNamespace setVariable ["WL2_mapButtonDisplay", _display];
 
@@ -85,8 +97,10 @@ private _singletonScriptHandle = [_map] spawn {
 
     private _assetActionTargets = WL_AssetActionTargets;
     if (count _assetActionTargets > 0) then {
-        _assetActionTargets = [_assetActionTargets, [], {
-            if (_x isKindOf "RuggedTerminal_01_communications_hub_F") then { 0 } else { 1 }
+        _assetActionTargets = [_assetActionTargets, [_mousePosition], {
+            if (_x isKindOf "RuggedTerminal_01_communications_hub_F") then { 0 } else {
+                _input0 distance _x
+            }
         }, "ASCEND"] call BIS_fnc_sortBy;
 
         {
@@ -108,7 +122,7 @@ private _singletonScriptHandle = [_map] spawn {
 
     if (_hasButtons) then {
         playSoundUI ["clickSoft", 1];
-        [_display] spawn WL2_fnc_addMapButtonsDisplay;
+        [_display, _mousePosition] call WL2_fnc_addMapButtonsDisplay;
     } else {
         _display closeDisplay 0;
     };

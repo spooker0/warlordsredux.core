@@ -22,6 +22,9 @@ private _apsAmmoControl = _display displayCtrl 2107;
 private _captureProgressBar = _display displayCtrl 2108;
 private _captureText = _display displayCtrl 2109;
 
+private _subtitlesControl = _display displayCtrl 2110;
+_subtitlesControl ctrlShow false;
+
 private _teamPriorityControl = _display displayCtrl 2111;
 
 private _getTeamColorHex = {
@@ -120,7 +123,7 @@ while { !BIS_WL_missionEnd } do {
 			"#ff0000";
 		};
 		private _apsTypeName = switch (_apsType) do {
-			case 5: { "HEAVY+" };
+			case 5: { "ADV" };
 			case 4: { "DEVICE" };
 			case 3: { "HEAVY" };
 			case 2: { "MEDIUM" };
@@ -132,6 +135,32 @@ while { !BIS_WL_missionEnd } do {
 
 		_apsAmmoControl ctrlSetStructuredText parseText format ["<t shadow='2' size='1.1' color='%1'>AMMO: %2</t>", _apsAmmoColor, _apsAmmo max 0];
 		_apsAmmoControl ctrlShow true;
+
+		private _nextReloadTime = cameraOn getVariable ["APS_nextReloadTime", 0];
+		if (!_apsHasAmmo) then {
+			private _reloadStarted = cameraOn getVariable ["WL2_apsReloadStarted", false];
+			if (!_reloadStarted) then {
+				_nextReloadTime = serverTime + WL_COOLDOWN_APS_RELOAD;
+				cameraOn setVariable ["APS_nextReloadTime", _nextReloadTime, true];
+				cameraOn setVariable ["WL2_apsReloadStarted", true];
+			};
+		} else {
+			cameraOn setVariable ["WL2_apsReloadStarted", false];
+		};
+
+		if (_apsType >= 4 && (!_apsActive || !_apsHasAmmo)) then {
+			if (_nextReloadTime < serverTime) then {
+				private _maxAmmo = [cameraOn] call APS_fnc_getMaxAmmo;
+				private _newAmmo = (_apsAmmo + 1) min _maxAmmo;
+
+				if (_newAmmo > _apsAmmo) then {
+					cameraOn setVariable ["apsAmmo", _newAmmo, true];
+					cameraOn setVariable ["APS_nextReloadTime", serverTime + WL_COOLDOWN_APS_RELOAD, true];
+					["Reloading APS +1"] call WL2_fnc_smoothText;
+					playSoundUI ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Rearm.wss", 0.5];
+				};
+			};
+		};
 	};
 
 	private _teamPriorityVar = format ["WL2_teamPriority_%1", _side];
@@ -167,6 +196,14 @@ while { !BIS_WL_missionEnd } do {
 		"<t shadow='2' size='0.85' align='left'>TEAM PRIORITY: %1</t>",
 		toUpper _travelPriorityText
 	];
+
+	// _subtitlesControl
+	private _subtitleFade = _subtitlesControl getVariable ["WL2_subtitleFadeTime", -1];
+	if (_subtitleFade < time && _subtitleFade > 0) then {
+		_subtitlesControl ctrlSetFade 1;
+		_subtitlesControl ctrlCommit 0.5;
+		_subtitlesControl setVariable ["WL2_subtitleFadeTime", -1];
+	};
 
 	private _visitedSectorId = BIS_WL_allSectors findIf { player inArea (_x getVariable "objectAreaComplete") };
 	if (_visitedSectorId == -1) then {

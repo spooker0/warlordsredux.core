@@ -13,6 +13,12 @@ while { !BIS_WL_missionEnd } do {
         _pos inArea (_x getVariable "objectAreaComplete")
     };
 
+    if (count _findCurrentSector == 1) then {
+        player setVariable ["WL2_currentSector", _findCurrentSector # 0];
+    } else {
+        player setVariable ["WL2_currentSector", objNull];
+    };
+
     private _availableSectors = BIS_WL_sectorsArray # 3;
     private _currentSector = objNull;
     {

@@ -254,7 +254,7 @@ call WL2_fnc_pingFixInit;
 
 0 spawn WL2_fnc_handleEnemyCapture;
 0 spawn WL2_fnc_combatAirClient;
-0 spawn WL2_fnc_killHistory;
+0 spawn WL2_fnc_diaryItems;
 0 spawn {
 	uiSleep 5;
 	[] call MENU_fnc_updateViewDistance;
@@ -285,6 +285,7 @@ call WL2_fnc_hmdSettingsAction;
 
 0 spawn WL2_fnc_createInfoMarkers;
 0 spawn WL2_fnc_drawRadarName;
+0 spawn WL2_fnc_drawRegions;
 0 spawn WL2_fnc_locationScanner;
 0 spawn WL2_fnc_rewardCapture;
 0 spawn WL2_fnc_ewarResult;
@@ -331,5 +332,14 @@ if (_showWelcomeMenu) then {
 	0 spawn WL2_fnc_welcome;
 };
 0 spawn SQD_fnc_initSquadMenu;
+
+private _additionalSubs = _settingsMap getOrDefault ["additionalSubs", false];
+if !("additionalSubs" in _settingsMap) then {
+	0 spawn {
+		private _result = ["Subtitles", "Would you like to turn on additional subtitles for the hearing impaired? This can be turned on/off in settings.", "Yes", "No"] call WL2_fnc_prompt;
+		private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+		_settingsMap set ["additionalSubs", _result];
+	};
+};
 
 WL_LoadingState = 12;

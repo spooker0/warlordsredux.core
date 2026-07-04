@@ -20,7 +20,7 @@ private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashM
 private _apsVolume = _settingsMap getOrDefault ["apsVolume", 1];
 
 private _type = switch (_assetApsType) do {
-	case 5: { "Heavy+ APS" };
+	case 5: { "Advanced APS" };
 	case 4: { "Device" };
 	case 3: { "Heavy APS" };
 	case 2: { "Medium APS" };

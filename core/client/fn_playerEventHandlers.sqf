@@ -19,6 +19,7 @@ player addEventHandler ["GetInMan", {
 			if (_defaultOffVtolAuto) then {
 				_unit action ["VTOLVectoring", _vehicle];
 				playSoundUI ["AddItemOK"];
+				["(VTOL auto vectoring enabled.)", true] call WL2_fnc_smoothText;
 			};
 		};
 	};
@@ -77,18 +78,3 @@ player addEventHandler ["InventoryOpened", {
         false;
     };
 }];
-
-#if __GAME_BUILD__ > 153351
-(group player) addEventHandler ["LeaderChanged", {
-	params ["_group", "_newLeader"];
-	if (_newLeader != player) then {
-		{
-			_x disableAI "COMMAND";
-		} forEach (units _group);
-	} else {
-		{
-			_x enableAI "COMMAND";
-		} forEach (units _group);
-	};
-}];
-#endif

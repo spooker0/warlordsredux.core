@@ -51,6 +51,7 @@ class CfgRemoteExec {
 		class WL2_fnc_killNotify {allowedTargets = 0;};
 		class WL2_fnc_killRewardHandle {allowedTargets = 2;};
 		class WL2_fnc_lagMessageHandler {allowedTargets = 2;};
+		class WL2_fnc_makeSquadron {allowedTargets = 2;};
 		class WL2_fnc_manageServer {allowedTargets = 2;};
 		class WL2_fnc_mineClearAction {allowedTargets = 0;};
 		class WL2_fnc_missileDestroy {allowedTargets = 2;};

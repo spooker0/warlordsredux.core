@@ -23,184 +23,188 @@ private _sectorHasOptions = false;
 } forEach _conditions;
 WL_SectorActionTargetActive = _sectorHasOptions;
 
-private _services = _sector getVariable ["WL2_services", []];
+private _sectorInfoTime = _sector getVariable ["WL2_sectorInfoTime", -1];
+if (serverTime - _sectorInfoTime > 0.5) then {
+    private _services = _sector getVariable ["WL2_services", []];
 
-private _side = BIS_WL_playerSide;
+    private _side = BIS_WL_playerSide;
 
-private _getTeamColor = {
-    params ["_team"];
-    [
-        [0, 0.3, 0.6, 1],
-        [0.5, 0, 0, 1],
-        [0, 0.5, 0, 1]
-    ] # ([west, east, independent] find _team);
-};
-
-private _getTeamName = {
-    params ["_team"];
-    ["NATO", "CSAT", "INDP"] # ([west, east, independent] find _team);
-};
-
-private _percentage = _sector getVariable ["BIS_WL_captureProgress", 0];
-private _revealed = _side in (_sector getVariable ["BIS_WL_revealedBy", []]) || WL_IsSpectator;
-if (!_revealed) then {
-    _percentage = 0;
-};
-
-private _servicesText = [];
-if ("A" in _services) then {
-    _servicesText pushBack localize "STR_A3_WL_param32_title";
-};
-if ("H" in _services) then {
-    _servicesText pushBack localize "STR_A3_WL_module_service_helipad";
-};
-
-private _lastScannedVar = format ["WL2_lastScanned_%1", _side];
-private _lastScan = _sector getVariable [_lastScannedVar, -9999];
-private _scanCD = (_lastScan + WL_COOLDOWN_SCAN - serverTime) max 0;
-private _currentScannedSectors = missionNamespace getVariable ["WL2_scanningSectors", []];
-private _isScanning = _sector in _currentScannedSectors;
-
-private _scanCooldown = if (_isScanning) then {
-    ["Scan active", [0, 1, 0, 1]]
-} else {
-    if (_scanCD > 0) then {
+    private _getTeamColor = {
+        params ["_team"];
         [
-            format ["%1: %2", localize "STR_A3_WL_param_scan_timeout", [ceil _scanCD, "MM:SS"] call BIS_fnc_secondsToString],
-            [1, 0, 0, 1]
-        ];
-    } else {
-        ""
+            [0, 0.3, 0.6, 1],
+            [0.5, 0, 0, 1],
+            [0, 0.5, 0, 1]
+        ] # ([west, east, independent] find _team);
     };
-};
 
-private _nextCombatAir = _sector getVariable ["WL2_nextCombatAir", -9999];
-private _combatAirCD = (_nextCombatAir - serverTime) max 0;
-private _isCombatAirActive = _sector getVariable ["WL2_combatAirActive", false];
-
-private _cooldown = if (_sector in [WL2_base1, WL2_base2]) then {
-	WL_COOLDOWN_CAPHOME
-} else {
-	WL_COOLDOWN_CAP
-};
-private _combatAirText = if (_isCombatAirActive) then {
-    [
-        format ["No-fly zone active: %1", [_nextCombatAir - _cooldown - serverTime, "MM:SS"] call BIS_fnc_secondsToString],
-        [0, 1, 0, 1]
-    ]
-} else {
-    if (_combatAirCD > 0) then {
-        [
-            format ["%1: %2", "No fly-zone timeout", [ceil _combatAirCD, "MM:SS"] call BIS_fnc_secondsToString],
-            [1, 0, 0, 1]
-        ];
-    } else {
-        ""
+    private _getTeamName = {
+        params ["_team"];
+        ["NATO", "CSAT", "INDP"] # ([west, east, independent] find _team);
     };
-};
 
-private _fortification = if (_revealed) then {
-    private _previousOwners = _sector getVariable ["BIS_WL_previousOwners", []];
-    if (count _previousOwners > 1) then {
-        private _fortificationTime = _sector getVariable ["WL_fortificationTime", -1];
-        private _fortificationETA = ceil (_fortificationTime - serverTime);
-        _fortificationETA = _fortificationETA max 0;
+    private _percentage = _sector getVariable ["BIS_WL_captureProgress", 0];
+    private _revealed = _side in (_sector getVariable ["BIS_WL_revealedBy", []]) || WL_IsSpectator;
+    if (!_revealed) then {
+        _percentage = 0;
+    };
+
+    private _servicesText = [];
+    if ("A" in _services) then {
+        _servicesText pushBack localize "STR_A3_WL_param32_title";
+    };
+    if ("H" in _services) then {
+        _servicesText pushBack localize "STR_A3_WL_module_service_helipad";
+    };
+
+    private _lastScannedVar = format ["WL2_lastScanned_%1", _side];
+    private _lastScan = _sector getVariable [_lastScannedVar, -9999];
+    private _scanCD = (_lastScan + WL_COOLDOWN_SCAN - serverTime) max 0;
+    private _currentScannedSectors = missionNamespace getVariable ["WL2_scanningSectors", []];
+    private _isScanning = _sector in _currentScannedSectors;
+
+    private _scanCooldown = if (_isScanning) then {
+        ["Scan active", [0, 1, 0, 1]]
+    } else {
+        if (_scanCD > 0) then {
+            [
+                format ["%1: %2", localize "STR_A3_WL_param_scan_timeout", [ceil _scanCD, "MM:SS"] call BIS_fnc_secondsToString],
+                [1, 0, 0, 1]
+            ];
+        } else {
+            ""
+        };
+    };
+
+    private _nextCombatAir = _sector getVariable ["WL2_nextCombatAir", -9999];
+    private _combatAirCD = (_nextCombatAir - serverTime) max 0;
+    private _isCombatAirActive = _sector getVariable ["WL2_combatAirActive", false];
+
+    private _cooldown = if (_sector in [WL2_base1, WL2_base2]) then {
+        WL_COOLDOWN_CAPHOME
+    } else {
+        WL_COOLDOWN_CAP
+    };
+    private _combatAirText = if (_isCombatAirActive) then {
         [
-            format ["Fortifying %1", [_fortificationETA, "MM:SS"] call BIS_fnc_secondsToString],
-            [0.4, 0, 0.5, 1]
+            format ["No-fly zone active: %1", [_nextCombatAir - _cooldown - serverTime, "MM:SS"] call BIS_fnc_secondsToString],
+            [0, 1, 0, 1]
         ]
     } else {
-        ""
-    }
-} else {
-    ""
-};
-
-private _sectorOwner = _sector getVariable ["BIS_WL_owner", independent];
-
-private _sectorName = _sector getVariable ["WL2_name", "Sector"];
-private _sectorSize = if !(_sectorName in WL_SPECIAL_SECTORS) then {
-    private _size = _sector getVariable ["BIS_WL_value", 0];
-    private _isNotHome = !(_sector in  WL_BASES);
-    if (_revealed && _sectorOwner != independent && _isNotHome) then {
-        private _defenders = _sector getVariable ["WL2_defenders", 0];
-        private _maxDefenders = _sector getVariable ["WL2_maxDefenders", 0];
-        format ["Size: %1 (Reinforcements: %2/%3)", _size, _defenders, _maxDefenders]
-    } else {
-        format ["Size: %1", _size]
-    };
-} else {
-    ""
-};
-
-private _sectorInfo = [
-    _sectorName,
-    _sectorSize
-];
-
-private _captureDetails = _sector getVariable ["WL_captureDetails", []];
-private _showCaptureDetails = if (_revealed) then {
-    if (WL_TARGET_ENEMY == _sector) then {
-        true
-    } else {
-        private _captureDetailPlayerTeamValid = _captureDetails select {
-            _x # 0 == _side && _x # 1 >= 1
-        };
-        count _captureDetailPlayerTeamValid > 0
-    };
-} else {
-    false
-};
-if (_revealed) then {
-    private _captureDetailsArray = _captureDetails apply {
-        private _side = _x # 0;
-        private _sideName = [_side] call _getTeamName;
-        private _score = _x # 1;
-        private _multiplier = _x # 2;
-
-        if (_side == independent) then {
-            private _reserves = _sector getVariable ["WL2_sectorPop", 0];
-            private _reserveText = if (_reserves > 0) then {
-                _reserves
-            } else {
-                "depleted"
-            };
-            if (_sectorOwner != independent) then {
-                "";
-            } else {
-                [
-                    format ["%1 (%2x): %3 (Reserves: %4)", _sideName, _multiplier toFixed 1, _score toFixed 0, _reserveText],
-                    [independent] call _getTeamColor
-                ];
-            };
+        if (_combatAirCD > 0) then {
+            [
+                format ["%1: %2", "No fly-zone timeout", [ceil _combatAirCD, "MM:SS"] call BIS_fnc_secondsToString],
+                [1, 0, 0, 1]
+            ];
         } else {
-            if (_score < 1) then {
-                "";
-            } else {
-                [
-                    format ["%1 (%2x): %3", _sideName, _multiplier toFixed 1, _score toFixed 0],
-                    [_side] call _getTeamColor
-                ];
-            };
+            ""
         };
     };
-    _sectorInfo append _captureDetailsArray;
-};
 
-_sectorInfo append [
-    (_servicesText joinString ", "),
-    _scanCooldown,
-    _combatAirText,
-    _fortification
-];
-_sectorInfo = _sectorInfo select {
-    if (_x isEqualType "") then {
-        _x != ""
+    private _fortification = if (_revealed) then {
+        private _previousOwners = _sector getVariable ["BIS_WL_previousOwners", []];
+        if (count _previousOwners > 1) then {
+            private _fortificationTime = _sector getVariable ["WL_fortificationTime", -1];
+            private _fortificationETA = ceil (_fortificationTime - serverTime);
+            _fortificationETA = _fortificationETA max 0;
+            [
+                format ["Fortifying %1", [_fortificationETA, "MM:SS"] call BIS_fnc_secondsToString],
+                [0.4, 0, 0.5, 1]
+            ]
+        } else {
+            ""
+        }
     } else {
-        count _x > 0
+        ""
     };
+
+    private _sectorOwner = _sector getVariable ["BIS_WL_owner", independent];
+
+    private _sectorName = _sector getVariable ["WL2_name", "Sector"];
+    private _sectorSize = if !(_sectorName in WL_SPECIAL_SECTORS) then {
+        private _size = _sector getVariable ["BIS_WL_value", 0];
+        private _isNotHome = !(_sector in  WL_BASES);
+        if (_revealed && _sectorOwner != independent && _isNotHome) then {
+            private _defenders = _sector getVariable ["WL2_defenders", 0];
+            private _maxDefenders = _sector getVariable ["WL2_maxDefenders", 0];
+            format ["Size: %1 (Reinforcements: %2/%3)", _size, _defenders, _maxDefenders]
+        } else {
+            format ["Size: %1", _size]
+        };
+    } else {
+        ""
+    };
+
+    private _sectorInfo = [
+        _sectorName,
+        _sectorSize
+    ];
+
+    private _captureDetails = _sector getVariable ["WL_captureDetails", []];
+    private _showCaptureDetails = if (_revealed) then {
+        if (WL_TARGET_ENEMY == _sector) then {
+            true
+        } else {
+            private _captureDetailPlayerTeamValid = _captureDetails select {
+                _x # 0 == _side && _x # 1 >= 1
+            };
+            count _captureDetailPlayerTeamValid > 0
+        };
+    } else {
+        false
+    };
+    if (_revealed) then {
+        private _captureDetailsArray = _captureDetails apply {
+            private _side = _x # 0;
+            private _sideName = [_side] call _getTeamName;
+            private _score = _x # 1;
+            private _multiplier = _x # 2;
+
+            if (_side == independent) then {
+                private _reserves = _sector getVariable ["WL2_sectorPop", 0];
+                private _reserveText = if (_reserves > 0) then {
+                    _reserves
+                } else {
+                    "depleted"
+                };
+                if (_sectorOwner != independent) then {
+                    "";
+                } else {
+                    [
+                        format ["%1 (%2x): %3 (Reserves: %4)", _sideName, _multiplier toFixed 1, _score toFixed 0, _reserveText],
+                        [independent] call _getTeamColor
+                    ];
+                };
+            } else {
+                if (_score < 1) then {
+                    "";
+                } else {
+                    [
+                        format ["%1 (%2x): %3", _sideName, _multiplier toFixed 1, _score toFixed 0],
+                        [_side] call _getTeamColor
+                    ];
+                };
+            };
+        };
+        _sectorInfo append _captureDetailsArray;
+    };
+
+    _sectorInfo append [
+        (_servicesText joinString ", "),
+        _scanCooldown,
+        _combatAirText,
+        _fortification
+    ];
+    _sectorInfo = _sectorInfo select {
+        if (_x isEqualType "") then {
+            _x != ""
+        } else {
+            count _x > 0
+        };
+    };
+    _sector setVariable ["WL2_sectorInfo", _sectorInfo];
+    _sector setVariable ["WL2_sectorInfoTime", serverTime];
 };
-_sector setVariable ["WL2_sectorInfo", _sectorInfo];
 
 private _isNewSelection = WL_SectorActionTarget != _sector;
 

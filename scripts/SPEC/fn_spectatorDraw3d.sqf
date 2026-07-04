@@ -77,6 +77,14 @@ private _cameraPos = positionCameraToWorld [0, 0, 0];
     private _distance = _cameraPos distance _projectilePos;
     private _projectileSize = linearConversion [500, 5000, _distance, 0.8, 0.5, true];
 
+    private _notchDisplay = if (_x isKindOf "MissileBase") then {
+        private _launchParams = _x getVariable ["DIS_launchParams", [objNull, 1]];
+        private _notchResult = [missileTarget _x, _launchParams # 0, _x, _launchParams # 1] call DIS_fnc_getNotchResult;
+        format [" (%1%%)", (round (_notchResult * 25)) min 100];
+    } else {
+        "";
+    };
+
     drawIcon3D [
         "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missile_ca.paa",
         [1, 0, 0, 1],
@@ -84,7 +92,7 @@ private _cameraPos = positionCameraToWorld [0, 0, 0];
         _projectileSize,
         _projectileSize,
         0,
-        format ["%1 KM", (_distance / 1000) toFixed 1],
+        format ["%1%2", (_distance / 1000) toFixed 1, _notchDisplay],
         true,
         0.04 * _projectileSize,
         "RobotoCondensedBold",

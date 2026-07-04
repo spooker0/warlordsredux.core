@@ -14,8 +14,8 @@ if (!_hasAccess) exitWith {
     false
 };
 
-private _nearbyRefuel = (_target nearEntities ["All", WL_MAINTENANCE_RADIUS]) select {
-    alive _x
+private _nearbyRefuel = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) select { alive _x } select {
+    _x distance2D _target < WL_MAINTENANCE_RADIUS
 } select {
     WL_UNIT(_x, "hasRefuel", 0) > 0
 };

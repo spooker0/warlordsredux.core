@@ -96,7 +96,7 @@ private _interceptAction = {
         case "TakeVehicleControl": {
             private _bannedVehicles = ["C_Plane_Civil_01_F", "I_C_Plane_Civil_01_F"];
             if (typeof _target in _bannedVehicles) then {
-                [format ["You cannot take control of this vehicle."]] call WL2_fnc_smoothText;
+                ["You cannot take control of this vehicle."] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
                 true;
             } else {
@@ -130,7 +130,7 @@ private _interceptAction = {
                     private _strongholdSector = _target getVariable ["WL_strongholdSector", objNull];
                     private _strongholdSectorSide = _strongholdSector getVariable ["BIS_WL_owner", independent];
                     if (_doorLocked || _strongholdSectorSide == BIS_WL_enemySide) then {
-                        [format ["Door locked."]] call WL2_fnc_smoothText;
+                        ["Door locked."] call WL2_fnc_smoothText;
                         playSoundUI ["AddItemFailed"];
                         true;
                     } else {

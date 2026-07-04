@@ -14,4 +14,5 @@ private _message = switch (_mode) do {
 };
 
 private _revealedBy = _sector getVariable ["BIS_WL_revealedBy", []];
+if (_revealedBy isEqualTo []) exitWith {};
 [_message] remoteExec ["WL2_fnc_broadcastAction", _revealedBy];

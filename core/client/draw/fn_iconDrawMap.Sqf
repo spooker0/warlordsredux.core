@@ -36,11 +36,11 @@ private _angle = (serverTime * 75) % 360;
 } forEach _drawIconsAnimated;
 
 private _scale = ctrlMapScale _m;
+private _mousePosition = getMousePosition;
 {
 	private _icon = +_x;
-	private _mousePosition = getMousePosition;
-	_mousePosition = _mousePosition vectorAdd (_icon # 2);
-	private _mapPosition = _m ctrlMapScreenToWorld _mousePosition;
+	private _newMousePosition = _mousePosition vectorAdd (_icon # 2);
+	private _mapPosition = _m ctrlMapScreenToWorld _newMousePosition;
 	_icon set [2, _mapPosition];
 
 	private _textScale = _icon # 8;

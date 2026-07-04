@@ -20,6 +20,9 @@ private _teamTextColor = switch (_side) do {
     default { "#008000" };
 };
 
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _showPlayerLevel = _settingsMap getOrDefault ["showPlayerLevel", false];
+
 // Mock data for testing
 // private _squads = [
 //     createHashMapFromArray [
@@ -346,7 +349,12 @@ private _playerContributions = missionNamespace getVariable ["WL_PlayerSquadCont
             _teamTextColor
         };
 
-        private _playerRating = _player getVariable ["WL2_playerRating", WL_RATING_STARTER];
+        private _playerRating = if (_showPlayerLevel) then {
+            _player getVariable ["WL_playerLevelNumber", 0]
+        } else {
+            _player getVariable ["WL2_playerRating", WL_RATING_STARTER]
+        };
+
         private _playerNameDisplay = format ["%1 (%2)", name _player, _playerRating];
 
         private _playerNameTextStructured = [_playerNameDisplay, SQD_LAYOUT_LABEL_TEXT_SIZE, _playerNameColor, "left"] call SQD_fnc_renderText;

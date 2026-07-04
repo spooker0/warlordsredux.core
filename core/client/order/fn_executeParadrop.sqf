@@ -18,7 +18,7 @@ if (_position # 2 < 200) then {
 };
 
 _playerVehicle setDir _direction;
-_playerVehicle setPosASL _position;
+_playerVehicle setPosATL _position;
 
 if (!isNull _paradropper) then {
     [player, "rewardTransport", _paradropper, [_playerVehicle]] remoteExec ["WL2_fnc_handleClientRequest", 2];

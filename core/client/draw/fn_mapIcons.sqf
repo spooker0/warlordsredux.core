@@ -38,15 +38,6 @@
 
 		uiNamespace setVariable ["WL2_allMaps", _maps];
 
-		uiNamespace setVariable ["WL2_mapColorCache", createHashMap];
-		uiNamespace setVariable ["WL2_mapIconCache", createHashMap];
-		uiNamespace setVariable ["WL2_mapTextCache", createHashMap];
-		uiNamespace setVariable ["WL2_mapSizeCache", createHashMap];
-
-		// player icon cache
-		uiNamespace setVariable ["WL2_playerIconTextCache", createHashMap];
-		uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
-
 		uiSleep 3;
 	};
 };
@@ -57,6 +48,7 @@
 	private _assetData = WL_ASSET_DATA;
 	missionNamespace setVariable ["WL2_mapData", _mapData];
 	private _playerId = getPlayerID player;
+	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 
 	while { !BIS_WL_missionEnd } do {
 		private _isAfk = player getVariable ["WL2_afk", false];
@@ -82,18 +74,6 @@
 			BIS_WL_playerSide == _sectorOwner || _sector == WL_TARGET_FRIENDLY || WL_IsSpectator
 		};
 		_mapData set ["strongholds", _visibleStrongholds];
-
-		private _vehicles = vehicles select { alive _x };
-		private _activeVehicles = +_vehicles;
-		private _scannerUnits = _activeVehicles select {
-			_x getVariable ["WL_scanRadius", -1] > 0
-		};
-		_mapData set ["scannersAll", _scannerUnits];
-
-		private _scannerUnitTeam = _scannerUnits select {
-			_x distance cameraOn < 2000 || ([_x] call WL2_fnc_getAssetSide) == _side
-		};
-		_mapData set ["scannersTeam", _scannerUnitTeam];
 
 		private _allSquadmates = ["getSquadmates", [_playerId, true]] call SQD_fnc_query;
 		_allSquadmates = _allSquadmates apply { vehicle _x };
@@ -128,21 +108,10 @@
         } apply { _x # 0 };
 		_mapData set ["scannedUnits", _targetsOnDatalink];
 
-		private _advancedSams = _vehicles select {
-			[_x] call WL2_fnc_getAssetSide != _side
-		} select {
-			count (_x getVariable ["DIS_advancedSamDetectionLocation", []]) > 0
-		};
-		_mapData set ["advancedSams", _advancedSams];
-
 		private _advancedMines = _sideVehicles select {
 			_x getVariable ["WL2_smartMinesAP", 0] > 0 || _x getVariable ["WL2_smartMinesAT", 0] > 0
 		};
 		_mapData set ["advancedMines", _advancedMines];
-
-		private _rallyPoints = missionNamespace getVariable ["WL2_rallyPoints", []];
-		_rallyPoints = _rallyPoints select { alive _x };
-		_mapData set ["rallyPoints", _rallyPoints];
 
 		private _enemyUnits = switch (_side) do {
 			case west: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
@@ -157,6 +126,8 @@
 			private _assetActualType = WL_ASSET_TYPE(_x);
 			private _showToEnemies = WL_ASSET_FIELD(_assetData, _assetActualType, "showToEnemies", 0);
 			_showToEnemies > cameraOn distance2D _x
+		} select {
+			!(_x in _targetsOnDatalink)
 		};
 		_mapData set ["visibleEnemyUnits", _visibleEnemyUnits];
 
@@ -191,13 +162,42 @@
 		};
 		_mapData set ["airWrecks", _airWrecks];
 
-		private _minefields = (_sideVehicles + _targetsOnDatalink + _visibleEnemyUnits) select {
+		private _visibleUnits = _sideVehicles + _targetsOnDatalink + _visibleEnemyUnits;
+
+		private _minefields = _visibleUnits select {
 			private _mineData = _x getVariable ["WL2_minefield", []];
 			count _mineData > 0;
 		};
 		_mapData set ["minefields", _minefields];
 
-		private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+		private _scanners = _visibleUnits select {
+			_x getVariable ["WL_scanRadius", -1] > 0
+		};
+		_mapData set ["scanners", _scanners];
+
+		if (visibleMap) then {
+			private _mapColorCache = createHashMap;
+			private _mapIconCache = createHashMap;
+			private _mapSizeCache = createHashMap;
+			private _mapTextCache = createHashMap;
+			private _mapTextDetailedCache = createHashMap;
+			{
+				private _color = [_x, _mapColorCache] call WL2_fnc_iconColor;
+				private _iconType = [_x, _mapIconCache] call WL2_fnc_iconType;
+				private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
+
+				private _text = [_x, _mapTextCache, false] call WL2_fnc_iconText;
+				private _textDetailed = [_x, _mapTextDetailedCache, true] call WL2_fnc_iconText;
+
+				_x setVariable ["WL2_mapIconColor", _color];
+				_x setVariable ["WL2_mapIconType", _iconType];
+				_x setVariable ["WL2_mapIconSize", _size];
+
+				_x setVariable ["WL2_mapIconText", _text];
+				_x setVariable ["WL2_mapIconTextDetailed", _textDetailed];
+			} forEach _visibleUnits;
+		};
+
 		private _sectorMarkerThreshold = _settingsMap getOrDefault ["sectorMarkerTextThreshold", 0.4];
 		_sectorMarkerThreshold = linearConversion [0, 1, _sectorMarkerThreshold, -3, 0];
 		_sectorMarkerThreshold = 10 ^ _sectorMarkerThreshold;
@@ -242,6 +242,14 @@
 		];
 		_mapData set ["areaControlData", _areaControlData];
 
+		private _teamColor = switch (_side) do {
+			case west: { [0, 0.3, 0.6, 0.8] };
+			case east: { [0.5, 0, 0, 0.8] };
+			case independent: { [0, 0.6, 0, 0.8] };
+			default { [0.4, 0, 0.5, 0.8] };
+		};
+		_mapData set ["teamColor", _teamColor];
+
 		uiSleep 1;
 	};
 };
@@ -265,14 +273,15 @@
 			continue;
 		};
 
-		private _mainMap = if (WL_IsSpectator) then {
+		private _isSpectator = WL_IsSpectator;
+		private _mainMap = if (_isSpectator) then {
 			(findDisplay 11012) displayCtrl 5503
 		} else {
 			(findDisplay 12) displayCtrl 51
 		};
-		private _drawMode = if (WL_IsSpectator) then { 1 } else { 0 };
-
+		private _drawMode = if (_isSpectator) then { 1 } else { 0 };
 		[_mainMap, _drawMode] call WL2_fnc_iconDrawMapPrepare;
+
 		uiNamespace setVariable ["BIS_WL_mapControl", _mainMap];
 
 		uiNamespace setVariable ["WL2_drawingMap", false];

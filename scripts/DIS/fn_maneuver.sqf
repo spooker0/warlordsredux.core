@@ -15,7 +15,7 @@ private _detectors = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles) selec
 
 if (count _detectors > 0) then {
     private _detectorSide = [_detectors # 0] call WL2_fnc_getAssetSide;
-    [[_unit], 5] remoteExec ["WL2_fnc_reportTargets", _detectorSide];
+    [[_unit], 15] remoteExec ["WL2_fnc_reportTargets", _detectorSide];
 };
 
 private _munitionList = _unit getVariable ["DIS_munitionList", []];
@@ -87,6 +87,10 @@ private _originalPosition = getPosASL _unit;
     private _startTime = serverTime;
     private _isLOAL = getNumber (configfile >> "CfgAmmo" >> typeOf _projectile >> "autoSeekTarget") == 1;
 
+    private _missileTypeData = call DIS_fnc_getMissileType;
+    private _projectileType = _projectile getVariable ["APS_ammoOverride", typeof _projectile];
+    private _projectileTypeName = _missileTypeData getOrDefault [_projectileType, "MISSILE"];
+
     while { alive _projectile } do {
         uiSleep 0.1;
 
@@ -103,6 +107,9 @@ private _originalPosition = getPosASL _unit;
         private _notchResult = [_originalTarget, _unit, _projectile, _distanceBeforeNotch] call DIS_fnc_getNotchResult;
         if (_notchResult >= 4) then {
             _projectile setVariable ["DIS_notched", true];
+        } else {
+            private _trackPercent = 100 - (_notchResult * 25);
+            _projectile setVariable ["WL2_missileNameOverride", format ["%1 %2%%", _projectileTypeName, round _trackPercent]];
         };
 
         if (!isNull _originalTarget) then {

@@ -49,7 +49,7 @@ private _destroyerId = 0;
     private _services = getArray (_sector >> "services");
     _logic setVariable ["WL2_services", _services, true];
 
-    private _disableHome = (getNumber (_sector >> "disableHome") == 1) || "A" in _services || "H" in _services;
+    private _disableHome = (getNumber (_sector >> "disableHome") == 1) || "A" in _services;
     _logic setVariable ["WL2_canBeBase", !_disableHome];
 
     _logic setVariable ["WL2_objectArea", _area, true];

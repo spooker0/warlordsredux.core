@@ -45,8 +45,16 @@ private _catapultActionID = _asset addAction [
             params ["_asset"];
             private _startPosition = getPosASL _asset;
             private _startTime = serverTime;
+            private _vectorDir = vectorDir _asset;
+            private _vectorUp = vectorUp _asset;
             while { serverTime - _startTime < 5 } do {
-                _asset setPosASL _startPosition;
+                _asset setVelocityTransformation [
+                    _startPosition, _startPosition,
+                    [0, 0, 0], [0, 0, 0],
+                    _vectorDir, _vectorDir,
+                    _vectorUp, _vectorUp,
+                    0
+                ];
                 uiSleep 0.0001;
             };
 
@@ -60,7 +68,6 @@ private _catapultActionID = _asset addAction [
             private _velocityLaunch = 350 min (_stallSpeed * _stallFactor);
             private _velocityIncrease = 100 min (_maxGForce * _velocityFactor);
             private _accelerationStep = 0.0001;
-            private _direction = getDir _asset;
 
             _asset setAirplaneThrottle 1;
             _asset flyInHeight 500;
@@ -73,7 +80,7 @@ private _catapultActionID = _asset addAction [
             while { speed _asset < _velocityLaunch && serverTime - _timeStart < 10 } do {
                 _timeDelta = serverTime - _timeStart;
                 _velocity = _velocityIncrease * _timeDelta;
-                _asset setVelocityModelSpace [0, _velocity, 0.5];
+                _asset setVelocityModelSpace [0, _velocity, 1];
                 uiSleep _accelerationStep;
             };
         };

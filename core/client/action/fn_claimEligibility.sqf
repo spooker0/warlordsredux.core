@@ -9,8 +9,7 @@ if (count _crew > 0) exitWith { false };
 private _isOwner = getPlayerUID _caller == (_target getVariable ["BIS_WL_ownerAsset", "123"]);
 if (_isOwner) exitWith { false };
 
-private _callerSide = side group _caller;
-if (_callerSide == _target getVariable ["BIS_WL_ownerAssetSide", sideUnknown]) exitWith { false };
+if (BIS_WL_playerSide == _target getVariable ["BIS_WL_ownerAssetSide", sideUnknown]) exitWith { false };
 
 if (unitIsUAV _target) exitWith { false };
 

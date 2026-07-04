@@ -5,6 +5,8 @@ playSound "AddItemOK";
 
 private _stronghold = _sector getVariable ["WL_stronghold", objNull];
 _stronghold setVariable ["WL2_assetTypeName", "", true];
+_stronghold setVariable ["WL2_canDemolish", false, true];
+
 [_stronghold, false] remoteExec ["WL2_fnc_protectStronghold", 0, true];
 
 if (_replacing) exitWith {};

@@ -3,21 +3,24 @@ params ["_asset", "_radius"];
 if (isDedicated) exitWith {};
 
 private _iteration = 0;
+private _airChecks = _asset isKindOf "Air";
 while { alive _asset } do {
     uiSleep 4;
 
-    if (cameraOn != _asset) then {
-        continue;
+    private _assetPos = _asset modelToWorld [0, 0, 0];
+
+    if (_airChecks) then {
+        if (cameraOn != _asset) then {
+            continue;
+        };
+
+        private _altitude = _assetPos # 2;
+        if (_altitude < 100) then {
+            continue;
+        };
     };
 
     private _assetSide = [_asset] call WL2_fnc_getAssetSide;
-
-    private _assetPos = _asset modelToWorld [0, 0, 0];
-    private _altitude = _assetPos # 2;
-
-    if (_altitude < 100) then {
-        continue;
-    };
 
     private _enemyUnits = switch (_assetSide) do {
         case west: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
@@ -38,7 +41,9 @@ while { alive _asset } do {
         [_assetPos, getDir _asset, 60, _vehiclePos] call WL2_fnc_inAngleCheck;
     };
 
-    playSoundUI ["radarTargetLost", 2, 1, true];
+    if (_airChecks) then {
+        playSoundUI ["radarTargetLost", 2, 1, true];
+    };
 
     if (count _vehiclesInRadius > 0) then {
         [_vehiclesInRadius] call WL2_fnc_reconReward;

@@ -8,7 +8,7 @@ https://forums.bohemia.net/forums/topic/215844-gf-earplugs-script-mod/
 */
 
 player createDiaryRecord ["Warlords Redux",
-    ["GF Earplugs Script", "
+    ["Credit: GF Earplugs", "
     <br /><font size='30' color='#FF0000'>GF Earplugs Script
     <br />
     <br /><font size='25' color='#FCEF06'>Author : GEORGE FLOROS [GR]

@@ -1,0 +1,69 @@
+<font size="18">Help: Air defense</font>
+
+RADAR
+Cheap, powerful detection system. Can be turned on/off and designed to be operated by AI.
+<font color="#00ff00">Range:</font> dependent on aircraft, up to 16 km.
+<font color="#00ffff">Recommendation:</font> buy as many of these as you can and spread them out, and buy more when you lose them.
+
+RADOME
+Specialized detection system that spots enemy aircraft. Entirely passive. Used for finding high-altitude jets.
+Range: 25 km.
+<font color="#00ffff">Recommendation:</font> buy when radar is insufficient.
+
+TITAN AA
+Same missile as the handheld Titan AA launcher, except mounted.
+<font color="#00ff00">Guarantee track range:</font> none.
+<font color="#00ff00">Good against:</font> AI aircraft, player helicopters at very close range (taking off and landing).
+<font color="#ff0000">Bad against:</font> any active dodging and flaring.
+<font color="#00ffff">Recommendation:</font> use only when nothing else is affordable.
+
+NYX AA
+Cheap radar missile used for close-range ambush. Has an anti-air recon optic that does not reveal itself when used. Has weaker built-in radar.
+<font color="#00ff00">Guarantee track range:</font> 2 km.
+<font color="#00ff00">Good against:</font> close-range aircraft of all types.
+<font color="#ff0000">Bad against:</font> helicopters beyond visual range, fast jets further than 3 km.
+<font color="#00ffff">Recommendation:</font> use to kill independent jets, most player-operated helicopters in visual range, and frontline close-air support jets. Turn on radar only when enemy is already close enough to kill. Use recon optics to passively find targets when enemy aircraft has not yet been spotted.
+
+PRAETORIAN
+Gun-based CIWS.
+<font color="#00ff00">Good against:</font> drones and close helicopters, some ground vehicles.
+<font color="#ff0000">Bad against:</font> everything else.
+<font color="#00ffff">Recommendation:</font> use to kill drones and disable enemy ground vehicles.
+
+CHEETAH/TIGRIS
+Multi-purpose, mobile system with a beam-rider missile. Has all-aspect radar.
+<font color="#00ff00">Maximum range:</font> 6 km.
+<font color="#00ff00">Good against:</font> spotted enemy aircraft within range, light armor, infantry.
+<font color="#ff0000">Bad against:</font> high-flying aircraft.
+<font color="#00ffff">Recommendation:</font> use to protect friendly armor convoys. Do not rely on radar to find targets. Turn on radar only when enemy is close enough to kill. Best-in-class for clearing infantry in sector attack/defense.
+
+SPARTAN
+Short-range infrared missile designed to be operated by AI.
+<font color="#00ff00">Guarantee track range:</font> 3 km.
+<font color="#00ff00">Good against:</font> any aircraft within visual range.
+<font color="#ff0000">Bad against:</font> high-flying aircraft.
+<font color="#00ffff">Recommendation:</font> use to protect frontline against enemy close air support and to augment no-fly zones. Since most aircraft you can launch missiles at are already going to be in its guaranteed track range, you can rely on the default AI. Highly effective for farming passive income from careless pilots.
+
+CENTURION
+Medium-range radar missile. Can deploy decoy from it to confuse pilots.
+<font color="#00ff00">Guarantee track range:</font> 3.5 km.
+<font color="#00ff00">Good against:</font> any aircraft near visual range.
+<font color="#ff0000">Bad against:</font> high-flying aircraft.
+<font color="#00ffff">Recommendation:</font> use to maintain long-term air-defense after enemy frontline close-air support has been cleared. Ineffective with AI, should always configure auto-sam to limit engagement range. Not recommended when under heavy air attack. Never, ever turn on its built-in radar.
+
+DEFENDER/RHEA
+Longest range radar missile.
+<font color="#00ff00">Guarantee track range:</font> 3.8 km.
+<font color="#00ff00">Good against:</font> any aircraft near visual range.
+<font color="#ff0000">Bad against:</font> high-flying aircraft.
+<font color="#00ffff">Recommendation:</font> use to maintain long-term air-defense after enemy frontline close-air support has been cleared. Ineffective with AI, should always configure auto-sam to limit engagement range. Not recommended when under heavy air attack.
+
+NO-FLY ZONE
+Calls in a combat air patrol that launches air-to-air missiles at enemy aircraft inside the no-fly zone. The zone is based on a helipad sector and expands over time until it covers a large area. Enemy aircraft inside the area is immediately spotted on the map, and if they are above 1 km altitude, they will be quickly shot down.
+There is a team-wide cooldown on the sector, so make sure to alternate and rotate helipad sectors.
+<font color="#00ff00">Good against:</font> high-flying aircraft.
+<font color="#ff0000">Bad against:</font> low-flying aircraft.
+<font color="#00ffff">Recommendation:</font> call in before/during a sector push to protect armor, or use it to clear airspace when hostile aircraft are operating with impunity. Augment the zone with a close-range air defense asset, like a Spartan, to fully shut out all enemy aircraft.
+
+NO-FLY ZONE (HOME)
+Same as airfield no-fly zone except smaller area and with a faster cooldown. This reveals your home base to the enemy team, so use with caution.

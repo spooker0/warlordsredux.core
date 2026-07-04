@@ -4,7 +4,7 @@ params ["_locality"];
 switch (_locality) do {
 	case "common": {
 		BIS_WL_playerSide = side group player;
-		BIS_WL_sidesArray = [west, east, resistance];
+		BIS_WL_sidesArray = [west, east, independent];
 		BIS_WL_competingSides = [west, east];
 		BIS_WL_enemySide = (BIS_WL_competingSides - [BIS_WL_playerSide]) # 0;
 		BIS_WL_missionEnd = false;

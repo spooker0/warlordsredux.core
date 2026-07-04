@@ -1,11 +1,44 @@
 #include "includes.inc"
 params ["_orderedClass", "_cost", "_offset"];
 
-player setVariable ["BIS_WL_isOrdering", true, [2, clientOwner]];
-
 private _class = WL_ASSET(_orderedClass, "spawn", _orderedClass);
 
+private _camperWarningBypass = {
+	if (_cost < 5000) exitWith {
+		true;
+	};
+
+	private _findCurrentOwnedSector = (BIS_WL_sectorsArray # 0) select {
+		player inArea (_x getVariable "objectAreaComplete")
+	};
+
+	if (count _findCurrentOwnedSector == 0) exitWith {
+		true;
+	};
+
+	private _sector = _findCurrentOwnedSector # 0;
+	private _sectorMarker = _sector getVariable [format ["WL2_MapMarker_%1", BIS_WL_playerSide], "unknown"];
+	private _sectorIsCamped = _sectorMarker == "camped";
+
+	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+	private _campAirWarning = _settingsMap getOrDefault ["campAirWarning", true];
+	if (_sectorIsCamped && _campAirWarning) exitWith {
+		playSoundUI ["AddItemFailed", 1];
+		["Your team has marked this sector as camped! Enemies may be near. Remove the marker on the map or disable sector camper warning in settings to spawn vehicles here."] call WL2_fnc_smoothText;
+		false;
+	};
+
+	private _campResult = if (_sectorIsCamped) then {
+		playSoundUI ["AddItemFailed", 1];
+		["Camped sector", "Your team has marked this sector as camped! Enemies may be near. Are you sure you would like to spawn your vehicle here?", "Yes", "Cancel"] call WL2_fnc_prompt;
+	} else {
+		true;
+	};
+	_campResult
+};
+
 if (_class isKindOf "Man") then {
+	player setVariable ["BIS_WL_isOrdering", true, [2, clientOwner]];
 	_asset = (group player) createUnit [_class, getPosATL player, [], 2, "NONE"];
 	_asset setVehiclePosition [getPosATL player, [], 0, "CAN_COLLIDE"];
 	_asset setVariable ["BIS_WL_ownerAsset", getPlayerUID player, true];
@@ -22,9 +55,17 @@ if (_class isKindOf "Man") then {
 		_offset = [0, 8, 0];
 	};
 
-	private _deploymentResult = [_class, _orderedClass, _offset, 50, false] call WL2_fnc_deployment;
+	private _camperWarnDone = call _camperWarningBypass;
+
+	private _deploymentResult = if (_camperWarnDone) then {
+		[_class, _orderedClass, _offset, 50, false] call WL2_fnc_deployment;
+	} else {
+		[false];
+	};
 
 	if (_deploymentResult # 0) then {
+		player setVariable ["BIS_WL_isOrdering", true, [2, clientOwner]];
+
 		private _pos = _deploymentResult # 1;
 		private _direction = _deploymentResult # 3;
 
@@ -46,8 +87,6 @@ if (_class isKindOf "Man") then {
 		};
 	} else {
 		"Canceled" call WL2_fnc_announcer;
-		[localize "STR_A3_WL_deploy_canceled"] call WL2_fnc_smoothText;
-		player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 	};
 };
 

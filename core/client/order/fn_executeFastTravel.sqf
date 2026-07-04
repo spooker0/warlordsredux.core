@@ -190,6 +190,8 @@ if (_playArrivalWarning) then {
 	private _position = getPosASL player;
 	private _playersToPlay = allPlayers select {
 		_x distance2D _position < WL_ENEMIES_NEAR_RADIUS
+	} select {
+		side group _x != BIS_WL_playerSide
 	};
 	[_position] remoteExec ["WL2_fnc_playArrival", _playersToPlay];
 };

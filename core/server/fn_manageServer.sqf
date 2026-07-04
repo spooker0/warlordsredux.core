@@ -24,6 +24,22 @@ if (_action == "setRatingPlayer") then {
     saveProfileNamespace;
 };
 
+if (_action == "pruneRating") then {
+    private _ratings = profileNamespace getVariable ["WL2_playerRatings", createHashMap];
+    private _newRatingsMap = createHashMap;
+
+    {
+        private _uid = _x;
+        private _rating = _y;
+        if (_rating < 1500) then { continue; };
+        private _newRating = floor (_rating / 500) * 500;
+        _newRatingsMap set [_uid, _newRating];
+    } forEach _ratings;
+
+    profileNamespace setVariable ["WL2_playerRatings", _newRatingsMap];
+    saveProfileNamespace;
+};
+
 if (_action == "clearRating") then {
     profileNamespace setVariable ["WL2_playerRatings", createHashMap];
     saveProfileNamespace;

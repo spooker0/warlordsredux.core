@@ -110,7 +110,7 @@ private _sectorGroup = createGroup [civilian, true];
 
 	private _sectorPos = position _sector;
 	if ((_sector getVariable ["BIS_WL_owner", sideUnknown]) == sideUnknown) then {
-		_sector setVariable ["BIS_WL_owner", resistance, true];
+		_sector setVariable ["BIS_WL_owner", independent, true];
 		_sector setVariable ["BIS_WL_previousOwners", [], true];
 		[_sector] remoteExec ['WL2_fnc_sectorRevealHandle', [0, -2] select isDedicated];
 	};

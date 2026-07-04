@@ -26,4 +26,14 @@ if (!_isStatic) then {
     [_vehicle, [1, 1, 1]] remoteExec ["setVehicleTIPars", 0];
 };
 
+if (_isAircraft) then {
+    private _cmLaunchers = (weapons _vehicle) select {
+        _x isKindOf ["CMFlareLauncher", configFile >> "CfgWeapons"];
+    };
+    if (count _cmLaunchers > 0) then {
+        private _cmLauncher = _cmLaunchers # 0;
+        _vehicle setVariable ["DIS_cmLauncher", _cmLauncher];
+    };
+};
+
 _vehicle;

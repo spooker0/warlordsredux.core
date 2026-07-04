@@ -38,13 +38,25 @@ while { !BIS_WL_missionEnd } do {
 		if (_sectorOwner == independent) then {
 			continue;
 		};
-		if (_sector in [BIS_WL_currentTarget_west, BIS_WL_currentTarget_east]) then {
+
+		private _amountToGenerate = if (_sector in [BIS_WL_currentTarget_west, BIS_WL_currentTarget_east]) then {
+			private _sectorStronghold = _sector getVariable ["WL_stronghold", objNull];
+			if (isNull _sectorStronghold) then {
+				0
+			} else {
+				WL_DEFENDER_INCOME * 2
+			};
+		} else {
+			WL_DEFENDER_INCOME
+		};
+
+		if (_amountToGenerate <= 0) then {
 			continue;
 		};
 
 		private _defenders = _sector getVariable ["WL2_defenders", 0];
 		private _maxDefenders = _sector getVariable ["WL2_maxDefenders", 0];
-		_defenders = _defenders + WL_DEFENDER_INCOME;
+		_defenders = _defenders + _amountToGenerate;
 		_sector setVariable ["WL2_defenders", _defenders min _maxDefenders, true];
 	} forEach BIS_WL_allSectors;
 

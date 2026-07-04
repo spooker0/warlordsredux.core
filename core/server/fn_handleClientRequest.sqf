@@ -213,7 +213,7 @@ if (_action == "immobilized") exitWith {
 };
 
 if (_action == "surrender") exitWith {
-	private _surrenderMessage = format ["%1 has chosen to take the easy way out. :( Say bye-bye!", name _sender];
+	private _surrenderMessage = format ["%1 has chosen to surrender. :( Say bye-bye!", name _sender];
 	[_surrenderMessage] remoteExec ["WL2_fnc_broadcastAction", 0];
 };
 
@@ -718,7 +718,7 @@ if (_action == "samHit") exitWith {
 	private _damage = _param3;
 	private _projectilePosition = _param4;
 
-	[_launcher, _target, _damage, _projectilePosition] call WL2_fnc_handleSamHit;
+	[_launcher, _target, _damage, _projectilePosition, _uid] call WL2_fnc_handleSamHit;
 };
 
 if (_action == "deployDrone") exitWith {

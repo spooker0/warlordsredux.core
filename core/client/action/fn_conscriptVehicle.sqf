@@ -73,5 +73,5 @@ private _callbackCancel = {};
     "\A3\ui_f\data\map\markers\nato\c_plane.paa",
     localize "STR_WL_goButton", localize "STR_WL_refuseButton",
     _callbackConfirm, _callbackCancel, [_paradropper],
-    20, _playerVehicle == player
+    20, false
 ] spawn WL2_fnc_timedPrompt;

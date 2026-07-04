@@ -3,11 +3,11 @@
 uiNamespace setVariable ["WL2_damagedDrawIcons", []];
 uiNamespace setVariable ["WL2_drawPlayerIcons", []];
 uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
-uiNamespace setVariable ["WL2_playerIconTextCache", createHashMap];
-uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
 
 0 spawn {
     private _commMenuConfig = uiNamespace getVariable ["WL2_commMenuConfig", createHashMap];
+    private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+
     while { !BIS_WL_missionEnd } do {
         uiSleep 0.5;
 
@@ -190,8 +190,6 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
         uiNamespace setVariable ["WL2_damagedDrawIcons", _demolishIcons];
 
         private _cursorObject = cursorObject;
-        private _playerIconTextCache = uiNamespace getVariable ["WL2_playerIconTextCache", createHashMap];
-        private _playerIconColorCache = uiNamespace getVariable ["WL2_playerIconColorCache", createHashMap];
         private _viewDistance = (getObjectViewDistance # 0) min 1000;
         private _detectableUnits = allUnits;
         _detectableUnits pushBackUnique cursorTarget;
@@ -222,9 +220,9 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
                 if (_health <= 0) then { continue; };
             };
 
-            private _color = [_x, _playerIconColorCache] call WL2_fnc_iconColor;
+            private _color = _x getVariable ["WL2_mapIconColor", [1, 1, 1, 1]];
 
-            private _displayName = [_x, true, true, _playerIconTextCache, true] call WL2_fnc_iconText;
+            private _displayName = _x getVariable ["WL2_mapIconText", ""];
             private _boundingSize = ((boundingBoxReal _x) # 2) / 2;
 
             if (WL_ISUNCONSCIOUS(_x)) then {
@@ -271,7 +269,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
             if (_commTextId == "") then { continue; };
             if (_commTime < serverTime) then { continue; };
 
-            private _color = [_x, _playerIconColorCache] call WL2_fnc_iconColor;
+            private _color = _x getVariable ["WL2_mapIconColor", [1, 1, 1, 1]];
             private _commText = _commMenuConfig getOrDefault [_commTextId, ""];
 
             if (damage _x > 0.1) then {
@@ -299,8 +297,6 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
             ];
         } forEach allPlayers;
 
-        uiNamespace setVariable ["WL2_playerIconColorCache", _playerIconColorCache];
-        uiNamespace setVariable ["WL2_playerIconTextCache", _playerIconTextCache];
         uiNamespace setVariable ["WL2_drawPlayerIcons", _playerIcons];
         uiNamespace setVariable ["WL2_drawCommIcons", _commIcons];
 
@@ -330,7 +326,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
             _sectorIcons pushBack [
                 _mapMarkerPath,
                 _color,
-                _target,
+                _target modelToWorldVisual [0, 0, 50],
                 1,
                 1,
                 0,
@@ -361,7 +357,7 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
             _sectorIcons pushBack [
                 "",
                 _sectorTextColor,
-                _target,
+                _target modelToWorldVisual [0, 0, 50],
                 0,
                 0,
                 0,
@@ -375,6 +371,51 @@ uiNamespace setVariable ["WL2_playerIconColorCache", createHashMap];
                 -0.035
             ];
         } forEach [WL_TARGET_FRIENDLY, WL_TARGET_ENEMY];
+
+        private _showStrongholdInfo = _settingsMap getOrDefault ["showStrongholdInfo", true];
+        private _strongholdIconSize = _settingsMap getOrDefault ["strongholdIconSize", 1];
+        if (_showStrongholdInfo || _strongholdIconSize > 0) then {
+            private _playerCurrentSector = player getVariable ["WL2_currentSector", objNull];
+            if (!isNull _playerCurrentSector) then {
+                private _sectorStronghold = _playerCurrentSector getVariable ["WL_stronghold", objNull];
+                if (!isNull _sectorStronghold) then {
+                    private _currentSectorOwner = _playerCurrentSector getVariable ["BIS_WL_owner", independent];
+                    private _instructionText = if (_showStrongholdInfo) then {
+                        if (_currentSectorOwner == independent) then {
+                            "Destroy stronghold to stop enemy respawns!"
+                        } else {
+                            if (_currentSectorOwner == BIS_WL_playerSide) then {
+                                if (WL_TARGET_ENEMY == _playerCurrentSector) then {
+                                    "Defend your stronghold!"
+                                } else {
+                                    ""
+                                };
+                            } else {
+                                "Occupy stronghold to increase capture power!"
+                            };
+                        };
+                    } else {
+                        ""
+                    };
+
+                    _sectorIcons pushBack [
+                        "A3\ui_f\data\map\mapcontrol\Ruin_CA.paa",
+                        [1, 1, 1, 1],
+                        _sectorStronghold modelToWorldVisual [0, 0, 5],
+                        1.2 * _strongholdIconSize,
+                        1.2 * _strongholdIconSize,
+                        0,
+                        _instructionText,
+                        2,
+                        0.05,
+                        "RobotoCondensedBold",
+                        "center",
+                        true
+                    ];
+                };
+            };
+        };
+
         uiNamespace setVariable ["WL2_drawSectorHudIcons", _sectorIcons];
     };
 };
@@ -435,11 +476,7 @@ addMissionEventHandler ["Draw3D", {
 
     private _sectorIcons = uiNamespace getVariable ["WL2_drawSectorHudIcons", createHashMap];
     {
-        private _icon = +_x;
-        private _target = _icon select 2;
-        private _sectorPos = _target modelToWorldVisual [0, 0, 5];
-        _icon set [2, _sectorPos];
-        drawIcon3D _icon;
+        drawIcon3D _x;
     } forEach _sectorIcons;
 }];
 

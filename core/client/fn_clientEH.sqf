@@ -69,18 +69,6 @@ addMissionEventHandler ["HandleChatMessage", {
 		};
 	}];
 
-	_display displayAddEventHandler ["KeyUp", {
-		params ["_display", "_key", "_shift", "_ctrl", "_alt"];
-		private _isPressed = false;
-		{
-			_isPressed = _isPressed || [_x, _key, _shift, _ctrl, _alt] call WL2_fnc_isKeyPressed;
-		} forEach actionKeys ["cycleThrownItems"];
-
-		if (_isPressed) then {
-			[cameraOn] call APS_fnc_toggle;
-		};
-	}];
-
 	// intentionally separate handler
 	_display displayAddEventHandler ["KeyDown", {
 		private _key = _this # 1;
@@ -214,6 +202,11 @@ addMissionEventHandler ["MarkerCreated", {
 	if (_channelNumber == 0) exitWith {
 		deleteMarker _marker;
 	};
+
+	// if (_local) then {
+	// 	missionNamespace setVariable ["WL2_lastMarker", _marker];
+	// };
+
 	if (_markerText == "") exitWith {};
 
 	private _disallowList = getArray (missionConfigFile >> "adminFilter");

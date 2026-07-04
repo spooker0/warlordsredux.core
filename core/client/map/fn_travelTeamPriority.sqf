@@ -94,7 +94,7 @@ if (_teamPriorityType == "sector") exitWith {
                 };
             } else {
                 if (_commit) then {
-                    [_asset # 0] spawn WL2_fnc_executeFastTravelVehicle;
+                    [selectRandom _asset] spawn WL2_fnc_executeFastTravelVehicle;
                 };
                 true;
             };

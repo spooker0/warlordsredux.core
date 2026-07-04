@@ -1,23 +1,23 @@
 #include "includes.inc"
 {
 	createCenter _x;
-} forEach [west, east, resistance, civilian];
+} forEach [west, east, independent, civilian];
 
 west setFriend [east, 0];
-west setFriend [resistance, 0];
+west setFriend [independent, 0];
 west setFriend [civilian, 1];
 
 east setFriend [west, 0];
-east setFriend [resistance, 0];
+east setFriend [independent, 0];
 east setFriend [civilian, 1];
 
-resistance setFriend [west, 0];
-resistance setFriend [east, 0];
-resistance setFriend [civilian, 1];
+independent setFriend [west, 0];
+independent setFriend [east, 0];
+independent setFriend [civilian, 1];
 
 civilian setFriend [west, 1];
 civilian setFriend [east, 1];
-civilian setFriend [resistance, 1];
+civilian setFriend [independent, 1];
 
 #if WL_FACTION_THREE_ENABLED
 {
@@ -76,6 +76,7 @@ call WL2_fnc_processRunways;
 0 spawn WL2_fnc_laserTracker;
 0 spawn WL2_fnc_assetRelevanceCheck;
 0 spawn WL2_fnc_sectorRespawner;
+0 spawn WL2_fnc_aircraftFlares;
 0 spawn WL2_fnc_wreckHandler;
 0 spawn WL2_fnc_factory;
 

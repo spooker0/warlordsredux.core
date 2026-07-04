@@ -390,7 +390,9 @@ switch (_conditionName) do {
             format ["Vehicle rearm is on cooldown: %1", [_cooldown, "MM:SS"] call BIS_fnc_secondsToString]
         };
 
-        private _nearbyVehicles = (_target nearEntities WL_MAINTENANCE_RADIUS) select { alive _x } select {
+        private _nearbyVehicles = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) select { alive _x } select {
+            _x distance2D _target < WL_MAINTENANCE_RADIUS
+        } select {
             _x getVariable ["WLM_ammoCargo", 0] > 250
         };
         if (count _nearbyVehicles > 0) then {

@@ -186,6 +186,7 @@ class CfgFunctions {
 			class commMenu { headerType = WL_HEADER_LEVEL; };
 			class commMenuListen { headerType = WL_HEADER_LEVEL; };
 			class createDestroyerClient { headerType = WL_HEADER_LEVEL; };
+			class diaryItems { headerType = WL_HEADER_LEVEL; };
 			class earthquake { headerType = WL_HEADER_LEVEL; };
 			class ewar { headerType = WL_HEADER_LEVEL; };
 			class ewar2 { headerType = WL_HEADER_LEVEL; };
@@ -298,6 +299,7 @@ class CfgFunctions {
 			class reconReward { headerType = WL_HEADER_LEVEL; };
 			class refuelAction { headerType = WL_HEADER_LEVEL; };
 			class refuelActionEligibility { headerType = WL_HEADER_LEVEL; };
+			class reloadApsAction { headerType = WL_HEADER_LEVEL; };
 			class removeAction { headerType = WL_HEADER_LEVEL; };
 			class removeAsset { headerType = WL_HEADER_LEVEL; };
 			class removeStronghold { headerType = WL_HEADER_LEVEL; };
@@ -328,6 +330,7 @@ class CfgFunctions {
 			class cruiseMissileWarning { headerType = WL_HEADER_LEVEL; };
 			class drawAssetName { headerType = WL_HEADER_LEVEL; };
 			class drawRadarName { headerType = WL_HEADER_LEVEL; };
+			class drawRegions { headerType = WL_HEADER_LEVEL; };
 			class drawSectorMarker { headerType = WL_HEADER_LEVEL; };
 			class ecmJammer { headerType = WL_HEADER_LEVEL; };
 			class ewarResult { headerType = WL_HEADER_LEVEL; };
@@ -364,7 +367,6 @@ class CfgFunctions {
 			file = "src\core\client\kill";
 			class askForgiveness { headerType = WL_HEADER_LEVEL; };
 			class deathInfo { headerType = WL_HEADER_LEVEL; };
-			class killHistory { headerType = WL_HEADER_LEVEL; };
 			class killNotify { headerType = WL_HEADER_LEVEL; };
 			class killRewardClient { headerType = WL_HEADER_LEVEL; };
 			class punishmentClient { headerType = WL_HEADER_LEVEL; };
@@ -574,10 +576,12 @@ class CfgFunctions {
 		};
 		class ServerSector {
 			file = "src\core\server\sector";
+			class aircraftFlares { headerType = WL_HEADER_LEVEL; };
 			class addGreenVehicle { headerType = WL_HEADER_LEVEL; };
 			class calcHomeBases { headerType = WL_HEADER_LEVEL; };
 			class combatAirServerHandle { headerType = WL_HEADER_LEVEL; };
 			class getCapValues { headerType = WL_HEADER_LEVEL; };
+			class makeSquadron { headerType = WL_HEADER_LEVEL; };
 			class populateSector { headerType = WL_HEADER_LEVEL; };
 			class populateCarrierSector { headerType = WL_HEADER_LEVEL; };
 			class sectorCaptureHandle { headerType = WL_HEADER_LEVEL; };

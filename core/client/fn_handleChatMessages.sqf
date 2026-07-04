@@ -48,6 +48,13 @@ if (_text == "!updateZeus") exitWith {
     true;
 };
 
+if (_text == "!jets") exitWith {
+    if (_sentLocally) then {
+        0 spawn WL2_fnc_nearestCombatAir;
+    };
+    true;
+};
+
 private _isBattleyeMessage = false;
 if (_channel == 16 || _channel == 17) then {
     private _regexMatches = _text regexFind ["[\s]?.*[\d]+[\s]+([\w]{32,32})[\s]{1,1}(.*)$"];

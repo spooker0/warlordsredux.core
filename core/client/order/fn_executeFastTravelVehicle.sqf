@@ -48,7 +48,7 @@ private _unitsToMove = (units player) select {
     private _unit = _x;
     if (_altitude > 60) then {
         private _destination = _targetVehicle modelToWorld [0, 0, -10];
-		_unit setPosASL _destination;
+		_unit setPosATL _destination;
 
 		_unit setVelocityModelSpace [0, 30, 0];
 		[_unit] spawn WL2_fnc_parachuteSetup;
@@ -56,10 +56,10 @@ private _unitsToMove = (units player) select {
     };
 
     if (_forceParadrop) then {
-        private _destination = _targetVehicle modelToWorld [0, 0, 0];
+        private _destination = _targetVehicle modelToWorld [random 50 - 25, random 50 - 25, 0];
         _destination set [2, 500];
         _unit setDir (getDir _targetVehicle);
-        _unit setPosASL _destination;
+        _unit setPosATL _destination;
 
         _unit setVelocityModelSpace [0, 30, 0];
 		[_unit] spawn WL2_fnc_parachuteSetup;
@@ -93,5 +93,7 @@ titleCut ["", "BLACK IN", 1];
 private _position = getPosASL player;
 private _playersToPlay = allPlayers select {
 	_x distance2D _position < WL_ENEMIES_NEAR_RADIUS
+} select {
+    side group _x != BIS_WL_playerSide
 };
 [_position] remoteExec ["WL2_fnc_playArrival", _playersToPlay];

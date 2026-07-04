@@ -20,99 +20,26 @@ private _drawPolygons = [];
 
 private _mapData = missionNamespace getVariable ["WL2_mapData", createHashMap];
 private _side = _mapData getOrDefault ["side", sideUnknown];
-
-private _mapColorCache = uiNamespace getVariable ["WL2_mapColorCache", createHashMap];
-private _mapIconCache = uiNamespace getVariable ["WL2_mapIconCache", createHashMap];
-private _mapTextCache = uiNamespace getVariable ["WL2_mapTextCache", createHashMap];
-private _mapSizeCache = uiNamespace getVariable ["WL2_mapSizeCache", createHashMap];
+private _teamColor = _mapData getOrDefault ["teamColor", [0.4, 0, 0.5, 0.8]];
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _mapIconScale = _settingsMap getOrDefault ["mapIconScale", 1];
 
 // Draw sector links
 private _sectorTarget = WL_SectorActionTarget;
-private _allLinks = missionNamespace getVariable ["WL2_linkSectorMarkers", createHashMap];
 private _mapSectorModifierSize = _settingsMap getOrDefault ["mapSectorModifierSize", 1];
-private _mapSectorLineGrayscale = _settingsMap getOrDefault ["mapSectorLineGrayscale", 1];
-private _neutralLinkColor = [_mapSectorLineGrayscale, _mapSectorLineGrayscale, _mapSectorLineGrayscale, 1];
-private _ownedSectorLinkColor = if (_side == west) then {
-	[0, 0.3, 0.6, 1]
-} else {
-	[0.5, 0, 0, 1]
-};
 
 private _showDetailedMode = inputAction "lookAround" > 0 || _map getVariable ["WL2_showDetailedMode", false];
 private _showSectorLinks = _drawMode != 0 || WL_VotePhase != 0 || _showDetailedMode;
 
 private _sectorsInLinksShown = [];
 if (_showSectorLinks) then {
-	{
-		private _pairKey = _x;
-		private _linkData = _y;
-		_y params ["_startPos", "_endPos", "_sector", "_link"];
-		private _sectorOwner = _sector getVariable ["BIS_WL_owner", sideUnknown];
-		private _linkOwner = _link getVariable ["BIS_WL_owner", sideUnknown];
-		private _linkColor = if (_sectorOwner == _side && _linkOwner == _side) then {
-			_ownedSectorLinkColor;
-		} else {
-			_neutralLinkColor;
-		};
-
-		_drawLines pushBack [
-			_startPos,
-			_endPos,
-			_linkColor,
-			10
-		];
-	} forEach _allLinks
+	private _allRegionLines = uiNamespace getVariable ["WL2_drawRegionLines", []];
+	_drawLines append _allRegionLines;
 } else {
 	if (!isNull _sectorTarget) then {
-		private _links = [_sectorTarget];
-		private _linksToShow = 0;
-
-		private _allConnections = [];
-		{
-			private _connections = _x getVariable ["WL2_connectedSectors", []];
-			_allConnections insert [-1, _connections, true];
-		} forEach _links;
-		_links insert [-1, _allConnections, true];
-
-		_sectorsInLinksShown = _links;
-
-		private _drawnLinks = createHashMap;
-		{
-			private _pairKey = _x;
-			private _linkData = _y;
-			_y params ["_startPos", "_endPos", "_sector", "_link"];
-			if !(_sector in _links) then {
-				continue;
-			};
-			if !(_link in _links) then {
-				continue;
-			};
-			if (_pairKey in _drawnLinks) then {
-				continue;
-			};
-			if (_sector != _sectorTarget && _link != _sectorTarget) then {
-				continue;
-			};
-
-			private _sectorOwner = _sector getVariable ["BIS_WL_owner", sideUnknown];
-			private _linkOwner = _link getVariable ["BIS_WL_owner", sideUnknown];
-			private _linkColor = if (_sectorOwner == _side && _linkOwner == _side) then {
-				_ownedSectorLinkColor;
-			} else {
-				_neutralLinkColor;
-			};
-
-			_drawLines pushBack [
-				_startPos,
-				_endPos,
-				_linkColor,
-				10
-			];
-			_drawnLinks set [_pairKey, true];
-		} forEach _allLinks;
+		private _sectorLines = _sectorTarget getVariable ["WL2_drawSectorLines", []];
+		_drawLines append _sectorLines;
 	};
 };
 
@@ -212,11 +139,10 @@ if (uiNamespace getVariable ["WL2_isOrderingWater", false]) then {
 // Draw asset selector
 private _assetTargets = WL_AssetActionTargets;
 if (count _assetTargets > 0) then {
-	private _color = [objNull, _mapColorCache] call WL2_fnc_iconColor;
 	{
 		_drawIconsAnimated pushBack [
 			"A3\ui_f\data\map\groupicons\selector_selectedMission_ca.paa",
-			_color,
+			_teamColor,
 			getPosASL _x,
 			40,
 			40,
@@ -230,7 +156,7 @@ if (count _assetTargets > 0) then {
 				_mapCircleRadius,
 				_mapCircleRadius,
 				0,
-				_color,
+				_teamColor,
 				""
 			];
 		};
@@ -243,7 +169,7 @@ if (!isNull _sectorTarget) then {
 	if (isNull BIS_WL_highlightedSector && WL_SectorActionTargetActive) then {
 		_drawIcons pushBack [
 			"A3\ui_f\data\map\groupicons\selector_selectedMission_ca.paa",
-			[objNull, _mapColorCache] call WL2_fnc_iconColor,
+			_teamColor,
 			_sectorPos,
 			50,
 			50,
@@ -379,127 +305,26 @@ if (alive _teamPriority) then {
 };
 
 // Draw sector areas
-if (!isNull _sectorTarget || _showSectorLinks) then {
-	private _facesData = missionNamespace getVariable ["WL2_sectorFaces", []];
-
-	private _neutralRGBA = [0.2, 0.2, 0.2, 0.3];
-	private _sideColorRGBA = switch (_side) do {
-		case west: { [0, 0.3, 0.6, 0.4] };
-		case east: { [0.5, 0, 0, 0.4] };
-		case independent: { _neutralRGBA };
-		default { _neutralRGBA };
-	};
-
-	private _shouldShowFace = {
-		params ["_sectors"];
-
-		if (_showSectorLinks) exitWith { true };
-
-		private _intersections = _sectorsInLinksShown arrayIntersect _sectors;
-		private _showFace = count _intersections == count _sectors;
-
-		if (_showFace) exitWith { true };
-
-		_sectorTarget in _sectors;
-	};
-
+if (_showSectorLinks) then {
+	private _regionMap = uiNamespace getVariable ["WL2_drawRegionMap", createHashMap];
 	{
-		_x params ["_sectors", "_area"];
+		_y params ["_regionText", "_regionShape"];
 
-		if !([_sectors] call _shouldShowFace) then {
-			continue;
-		};
-
-		private _ownsFace = true;
+		_drawIcons pushBack _regionText;
+		_drawPolygons pushBack _regionShape;
+	} forEach _regionMap;
+} else {
+	if (!isNull _sectorTarget) then {
+		private _regionMap = uiNamespace getVariable ["WL2_drawRegionMap", createHashMap];
+		private _regionIds = _sectorTarget getVariable ["WL2_drawRegionIds", []];
 		{
-			private _sectorOwner = _x getVariable ["BIS_WL_owner", sideUnknown];
-			if (WL_IsSpectator) then {
-				if !(_sectorOwner in [west, east]) then {
-					_ownsFace = false;
-					break;
-				};
-			} else {
-				if (_sectorOwner != _side) then {
-					_ownsFace = false;
-					break;
-				};
-			};
-		} forEach _sectors;
+			private _regionData = _regionMap getOrDefault [_x, [[], []]];
+			_regionData params ["_regionText", "_regionShape"];
 
-		private _location = [0, 0, 0];
-		{
-			_location = _location vectorAdd (getPosASL _x);
-		} forEach _sectors;
-		_location = _location vectorMultiply (1 / count _sectors);
-
-		private _showBonus = uiNamespace getVariable ["WL2_mapShowBonus", false];
-
-		private _income = round (_area * WL_INCOME_M2);
-		private _incomeText = if (_showBonus || WL_IsSpectator) then {
-			format ["%1 km² (%2%3)", (_area / 1e6) toFixed 1, WL_MONEY_SIGN, _income]
-		} else {
-			format ["%1 km²", (_area / 1e6) toFixed 1]
-		};
-
-		_drawIcons pushBack [
-			"#(rgb,1,1,1)color(1,1,1,1)",
-			[1, 1, 1, 1],
-			_location,
-			0,
-			0,
-			0,
-			_incomeText,
-			1,
-			0.06 * _mapIconScale,
-			"PuristaSemibold",
-			"center"
-		];
-
-		private _sectorDrawPoints = _sectors apply {
-			getPosASL _x;
-		};
-
-		private _colorToUse = if (WL_IsSpectator) then {
-			// private _sectorDifficulty = 0;
-			// {
-			// 	private _value = _x getVariable ["BIS_WL_value", 0];
-			// 	_sectorDifficulty = _sectorDifficulty + _value;
-			// } forEach _sectors;
-			// private _efficiency = _area / (_sectorDifficulty max 1);
-
-			// private _minEfficiency = 7000;
-			// private _maxEfficiency = 700000;
-
-			// private _colorValue = linearConversion [ln _minEfficiency, ln _maxEfficiency, ln _efficiency, 1, 0];
-			// [_colorValue, _colorValue, _colorValue, 1]
-
-			private _sectorOwnerSides = [];
-			{
-				private _owner = _x getVariable ["BIS_WL_owner", independent];
-				_sectorOwnerSides pushBackUnique _owner;
-			} forEach _sectors;
-			if (count _sectorOwnerSides == 1) then {
-				switch (_sectorOwnerSides # 0) do {
-					case west: { [0, 0.3, 0.6, 0.4] };
-					case east: { [0.5, 0, 0, 0.4] };
-					default { _neutralRGBA };
-				};
-			} else {
-				_neutralRGBA
-			};
-		} else {
-			if (_ownsFace) then {
-				_sideColorRGBA
-			} else {
-				_neutralRGBA
-			};
-		};
-		_drawPolygons pushBack [
-			_sectorDrawPoints,
-			_colorToUse,
-			"#(rgb,1,1,1)color(1,1,1,1)"
-		];
-	} forEach _facesData;
+			_drawIcons pushBack _regionText;
+			_drawPolygons pushBack _regionShape;
+		} forEach _regionIds;
+	};
 };
 
 // Draw waypoints
@@ -659,28 +484,6 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 	} forEach _sectorsInRange;
 } forEach _forwardBases;
 
-private _rallyPoints = _mapData getOrDefault ["rallyPoints", []];
-{
-	private _rallyPointSide = [_x] call WL2_fnc_getAssetSide;
-	if (_rallyPointSide != _side && !_drawAll && cameraOn distance2D _x > 500) then {
-		continue;
-	};
-
-	private _boundingBox = boundingBoxReal _x;
-
-	private _xLength = (_boundingBox # 1 # 0) - (_boundingBox # 0 # 0);
-	private _yLength = (_boundingBox # 1 # 1) - (_boundingBox # 0 # 1);
-
-	_drawRectangles pushBack [
-		getPosASL _x,
-		_xLength / 2,
-		_yLength / 2,
-		getDir _x,
-		[1, 1, 1, 1],
-		"#(rgb,1,1,1)color(0,0,1,0.2)"
-	];
-} forEach _rallyPoints;
-
 // Draw strongholds
 if (_draw) then {
 	{
@@ -733,17 +536,21 @@ if (_draw) then {
 private _scannedUnits = _mapData getOrDefault ["scannedUnits", []];
 {
 	private _hideMap = _x getVariable ["WL2_hideMap", 0];
-	private _scanText = if (_hideMap > 0) then {
-		""
+	private _scanText = if (_hideMap == 0 && _draw) then {
+		if (_showDetailedMode) then {
+			_x getVariable ["WL2_mapIconTextDetailed", ""]
+		} else {
+			_x getVariable ["WL2_mapIconText", ""]
+		};
 	} else {
-		[_x, _draw, false, _mapTextCache, _showDetailedMode] call WL2_fnc_iconText;
+		""
 	};
 	private _position = getPosASL _x;
-	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
+	private _size = _x getVariable ["WL2_mapIconSize", 19];
 	private _textSize = if (_x isKindOf "Man") then { 0.025 } else { 0.043 };
 	_drawIcons pushBack [
-		[_x, _mapIconCache] call WL2_fnc_iconType,
-		[_x, _mapColorCache] call WL2_fnc_iconColor,
+		_x getVariable ["WL2_mapIconType", ""],
+		_x getVariable ["WL2_mapIconColor", [1, 1, 1, 1]],
 		_position,
 		_size * _mapIconScale,
 		_size * _mapIconScale,
@@ -759,11 +566,7 @@ private _scannedUnits = _mapData getOrDefault ["scannedUnits", []];
 // Draw scanner
 private _assetData = WL_ASSET_DATA;
 
-private _scanners = if (_drawAll) then {
-	_mapData getOrDefault ["scannersAll", []]
-} else {
-	_mapData getOrDefault ["scannersTeam", []]
-};
+private _scanners = _mapData getOrDefault ["scanners", []];
 {
 	if (isNull _x) then { continue; };
 
@@ -856,20 +659,28 @@ private _iconTextSize = _mapIconTextScale * 0.043;
 private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 {
 	private _position = getPosASL _x;
-	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
+	private _size = _x getVariable ["WL2_mapIconSize", 19];
 	private _hideMap = _x getVariable ["WL2_hideMap", 0];
 	if (_hideMap == 2 && !_showDetailedMode) then {
 		continue;
 	};
-	private _showName = _hideMap == 0 && _draw;
+	private _iconText = if (_hideMap == 0 && _draw) then {
+		if (_showDetailedMode) then {
+			_x getVariable ["WL2_mapIconTextDetailed", ""]
+		} else {
+			_x getVariable ["WL2_mapIconText", ""]
+		};
+	} else {
+		""
+	};
 	_drawIcons pushBack [
-		[_x, _mapIconCache] call WL2_fnc_iconType,
-		[_x, _mapColorCache] call WL2_fnc_iconColor,
+		_x getVariable ["WL2_mapIconType", ""],
+		_x getVariable ["WL2_mapIconColor", [1, 1, 1, 1]],
 		_position,
 		_size * _mapIconScale,
 		_size * _mapIconScale,
 		[_x] call WL2_fnc_getDir,
-		[_x, _showName, true, _mapTextCache, _showDetailedMode] call WL2_fnc_iconText,
+		_iconText,
 		1,
 		_iconTextSize * _mapIconScale,
 		"PuristaBold",
@@ -909,15 +720,24 @@ private _checkForAirRadar = _assetTargets + [cameraOn];
 private _visibleEnemyUnits = _mapData getOrDefault ["visibleEnemyUnits", []];
 {
 	private _position = getPosASL _x;
-	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
+	private _size = _x getVariable ["WL2_mapIconSize", 19];
+	private _iconText = if (_draw) then {
+		if (_showDetailedMode) then {
+			_x getVariable ["WL2_mapIconTextDetailed", ""]
+		} else {
+			_x getVariable ["WL2_mapIconText", ""]
+		};
+	} else {
+		""
+	};
 	_drawIcons pushBack [
-		[_x, _mapIconCache] call WL2_fnc_iconType,
-		[_x, _mapColorCache] call WL2_fnc_iconColor,
+		_x getVariable ["WL2_mapIconType", ""],
+		_x getVariable ["WL2_mapIconColor", [1, 1, 1, 1]],
 		_position,
 		_size * _mapIconScale,
 		_size * _mapIconScale,
 		[_x] call WL2_fnc_getDir,
-		[_x, _draw, true, _mapTextCache, _showDetailedMode] call WL2_fnc_iconText,
+		_iconText,
 		1,
 		_iconTextSize * _mapIconScale,
 		"PuristaBold",
@@ -929,7 +749,6 @@ private _visibleEnemyUnits = _mapData getOrDefault ["visibleEnemyUnits", []];
 private _airWrecks = _mapData getOrDefault ["airWrecks", []];
 {
 	private _position = getPosASL _x;
-	private _size = [_x, _mapSizeCache] call WL2_fnc_iconSize;
 	private _wreckValue = _x getVariable ["WL2_wreckValue", 0];
 
 	private _deadTime = _x getVariable ["WL2_timeOfDeath", -1];
@@ -944,8 +763,8 @@ private _airWrecks = _mapData getOrDefault ["airWrecks", []];
 		"\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa",
 		[0, 0, 0, 1],
 		_position,
-		_size * _mapIconScale,
-		_size * _mapIconScale,
+		23 * _mapIconScale,
+		23 * _mapIconScale,
 		0,
 		format ["AIR WRECK VALUE %1%2 (%3)", WL_MONEY_SIGN, _wreckValue, _wreckTimer],
 		1,
@@ -1193,8 +1012,3 @@ if (_drawMode == 2) then {
 	uiNamespace setVariable ["WL2_drawPolygons", _drawPolygons];
 	uiNamespace setVariable ["WL2_drawLines", _drawLines];
 };
-
-uiNamespace setVariable ["WL2_mapColorCache", _mapColorCache];
-uiNamespace setVariable ["WL2_mapIconCache", _mapIconCache];
-uiNamespace setVariable ["WL2_mapTextCache", _mapTextCache];
-uiNamespace setVariable ["WL2_mapSizeCache", _mapSizeCache];

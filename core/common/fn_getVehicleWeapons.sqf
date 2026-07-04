@@ -77,20 +77,7 @@ private _pylonConfig = _assetConfig >> "Components" >> "TransportPylonsComponent
 private _pylonsInfo = configProperties [_pylonConfig >> "pylons"];
 
 if (count _pylonsInfo != 0) then {
-    private _pylonNames = _pylonsInfo apply {
-        private _pylonAttachment = getText (_x >> "attachment");
-        if (_pylonAttachment == "") then {
-            "";
-        } else {
-            [_pylonAttachment] call WL2_fnc_getMagazineName;
-        };
-    };
-    private _pylonNamesFiltered = _pylonNames select {
-        _x != "";
-    };
-    private _pylonNameDisplay = _pylonNamesFiltered joinString ", ";
-    private _pylonDisplay = format ["<t color='#efbf04' shadow='0'>Pylon</t><br/><t color='#2255dd' shadow='0'>%1</t>", _pylonNameDisplay];
-    _allTurretWeapons pushBack _pylonDisplay;
+    _allTurretWeapons pushBack "<t color='#efbf04' shadow='0'>Has Dynamic Pylon System</t>";
 };
 
 if (count _allTurretWeapons == 0) then {

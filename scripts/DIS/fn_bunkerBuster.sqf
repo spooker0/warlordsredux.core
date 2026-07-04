@@ -48,6 +48,8 @@ waitUntil {
 _penetrator enableSimulation true;
 triggerAmmo _penetrator;
 
+if (_bunkerBusterSteps == 0) exitWith {};
+
 {
     [_x, _bunkerBusterSteps] call WL2_fnc_demolishStep;
 } forEach _nearDestroyables;

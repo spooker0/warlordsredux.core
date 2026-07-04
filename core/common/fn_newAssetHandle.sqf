@@ -77,7 +77,11 @@ if (_asset isKindOf "Man") then {
 	private _airRadar = WL_ASSET_GET(_data, "airRadar", 0);
 	if (_airRadar > 0) then {
 		_asset setVariable ["WL2_airRadar", _airRadar, true];
-		[_asset, _airRadar] remoteExec ["WL2_fnc_airRadarAction", 0, true];
+		if (_asset isKindOf "Air") then {
+			[_asset, _airRadar] remoteExec ["WL2_fnc_airRadarAction", 0, true];
+		} else {
+			[_asset, _airRadar] spawn WL2_fnc_airRadarAction;
+		};
 	};
 
 	private _scanner = WL_ASSET_GET(_data, "scanner", 0);
@@ -426,7 +430,11 @@ if (_asset isKindOf "Man") then {
 	};
 
 	if (WL_ASSET_GET(_data, "disableDamage", 0) > 0) then {
-		_asset allowDamage false;
+		if (_asset isKindOf "Building" || _asset isKindOf "House") then {
+			[_asset, true] remoteExec ["WL2_fnc_protectStronghold", _asset];
+		} else {
+			_asset allowDamage false;
+		};
 	};
 
 	if (_assetActualType == "B_LSV_01_AT_TV_F") then {

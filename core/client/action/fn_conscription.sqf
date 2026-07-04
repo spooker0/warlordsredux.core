@@ -17,16 +17,32 @@ private _teamPriorityVar = format ["WL2_teamPriority_%1", _side];
 private _teamPriority = missionNamespace getVariable [_teamPriorityVar, objNull];
 if (WL_ISUP(player) && cameraOn != player) exitWith {};
 
-private _defaultSelection = true;
+private _lastPriorityConscriptedTo = player getVariable ["WL2_lastPriorityConscriptedTo", objNull];
+private _defaultSelection = _lastPriorityConscriptedTo != _teamPriority;
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-private _conscriptAcceptInSector = _settingsMap getOrDefault ["conscriptAcceptInSector", false];
-private _sectorArea = _teamPriority getVariable ["objectAreaComplete", ""];
-if (WL_ISUP(player) && player inArea _sectorArea && !_conscriptAcceptInSector) then {
-    _defaultSelection = false;
+private _teamPriorityTypeVar = format ["WL2_teamPriorityType_%1", _side];
+private _teamPriorityType = missionNamespace getVariable [_teamPriorityTypeVar, ""];
+
+private _travelPriorityText = switch (_teamPriorityType) do {
+    case "asset": {
+        private _assetTypeName = [_teamPriority] call WL2_fnc_getAssetTypeName;
+        _assetTypeName
+    };
+    case "fob": {
+        "FORWARD BASE"
+    };
+    case "stronghold": {
+        "STRONGHOLD"
+    };
+    case "sector": {
+        private _sectorName = _teamPriority getVariable ["WL2_name", "UNKNOWN"];
+        _sectorName
+    };
+    default {
+        "???"
+    };
 };
-
-private _callText = format [localize "STR_WL_conscriptMessage", name _conscripter];
+private _callText = format [localize "STR_WL_conscriptMessage", name _conscripter, _travelPriorityText];
 
 private _callbackConfirm = {
     private _queue = uiNamespace getVariable "WL2_timedPromptQueue";
@@ -54,6 +70,10 @@ private _callbackConfirm = {
     private _travelResult = [true] call WL2_fnc_travelTeamPriority;
     if (_travelResult) then {
         playSoundUI ["AddItemOk"];
+
+        private _teamPriorityVar = format ["WL2_teamPriority_%1", BIS_WL_playerSide];
+        private _teamPriority = missionNamespace getVariable [_teamPriorityVar, objNull];
+        player setVariable ["WL2_lastPriorityConscriptedTo", _teamPriority];
     } else {
         playSoundUI ["AddItemFailed"];
         [localize "STR_WL_conscriptFailed"] call WL2_fnc_smoothText;

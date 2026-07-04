@@ -207,9 +207,13 @@ switch (_className) do {
             };
         };
     };
-    case "SeeChangelog": {
+    case "HelpAA": {
         openMap true;
         player selectDiarySubject "Warlords Redux:Record2";
+    };
+    case "SeeChangelog": {
+        openMap true;
+        player selectDiarySubject "Warlords Redux:Record1";
     };
     case "StressTestSector": {
         0 spawn {

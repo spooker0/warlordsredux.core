@@ -11,7 +11,7 @@ private _assetSide = [_asset] call WL2_fnc_getAssetSide;
 private _wrecksNearby = allDead select {
     _x getVariable ["WL2_timeOfDeath", 0] > 0
 } select {
-    _x distance2D _asset < 500
+    _x distance2D _asset < 1000
 } select {
     [_x] call WL2_fnc_getAssetSide == _assetSide
 };

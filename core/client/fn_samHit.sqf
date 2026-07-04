@@ -7,6 +7,8 @@ private _message = format ["Proximity detonation! Damage sustained: %1%%", round
 
 if (WL_ISUP(player) && cameraOn != _target && !(cameraOn in _target) && !(player in _target)) exitWith {};
 
+["(Missile hit sounds.)", true] call WL2_fnc_smoothText;
+
 private _sounds = [
     "a3\sounds_f\weapons\hits\glass_arm_1.wss",
     "a3\sounds_f\weapons\hits\glass_arm_2.wss",

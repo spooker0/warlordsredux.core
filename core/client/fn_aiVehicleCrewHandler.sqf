@@ -3,6 +3,10 @@
 while { !BIS_WL_missionEnd } do {
     uiSleep 1;
 
+    if (!WL_ISUP(player)) then {
+        continue;
+    };
+
     private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
     private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
     private _ownedSubordinates = _ownedVehicles select {

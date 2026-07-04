@@ -39,7 +39,7 @@ for "_i" from 0 to ((lbSize _purchase_items) - 1) do {
 
 	private _variant = WL_ASSET(_className, "variant", 0);
 	if !(_availability # 0) then {
-		private _color = if (_variant != 0) then {
+		private _color = if (_variant != 0 || "V" in _requirements) then {
 			[0.5, 0.42, 0.25, 1]
 		} else {
 			[0.5, 0.5, 0.5, 1]
@@ -48,7 +48,7 @@ for "_i" from 0 to ((lbSize _purchase_items) - 1) do {
 		_purchase_items lbSetColor [_i, _color];
 		_purchase_items lbSetTooltip [_i, format ["%1", parseText ((_availability # 1) joinString "\n")]];
 	} else {
-		private _color = if (_variant != 0) then {
+		private _color = if (_variant != 0 || "V" in _requirements) then {
 			[1, 0.85, 0.5, 1]
 		} else {
 			[1, 1, 1, 1]

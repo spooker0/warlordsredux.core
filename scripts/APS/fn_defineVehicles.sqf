@@ -28,6 +28,7 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
     private _projectileRunway = getNumber (_x >> "runway");
     private _projectileSam = getNumber (_x >> "sam") == 1;
     private _projectileSead = getNumber (_x >> "sead") == 1;
+    private _projectileShell = getText (_x >> "shell");
     private _projectileSpeedOverride = getNumber (_x >> "speed");
     private _projectileTerminal = getNumber (_x >> "terminal") == 1;
     private _projectileTv = getNumber (_x >> "tv") == 1;
@@ -59,6 +60,7 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
             ["runway", _projectileRunway],
             ["sam", _projectileSam],
             ["sead", _projectileSead],
+            ["shell", _projectileShell],
             ["speed", _projectileSpeedOverride],
             ["terminal", _projectileTerminal],
             ["tv", _projectileTv]

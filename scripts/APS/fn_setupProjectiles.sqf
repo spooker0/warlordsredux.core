@@ -205,23 +205,41 @@ addMissionEventHandler ["ProjectileCreated", {
         [_projectile, _unit] spawn APS_fnc_sead;
     };
 
-    private _projectileTerminal = _projectileConfig getOrDefault ["terminal", false];
-    if (_projectileTerminal) then {
-        [_projectile, _unit] spawn DIS_fnc_terminalGuidance;
-    };
+    // private _projectileTerminal = _projectileConfig getOrDefault ["terminal", false];
+    // if (_projectileTerminal) then {
+    //     [_projectile, _unit] spawn DIS_fnc_terminalGuidance;
+    // };
 
     private _projectileIncendiary = _projectileConfig getOrDefault ["incendiary", false];
     if (_projectileIncendiary) then {
         [_projectile] spawn WL2_fnc_incendiary;
     };
 
+    private _projectileMineLayer = _projectileConfig getOrDefault ["mineLayer", ""];
+    if (_projectileMineLayer != "") then {
+        [_projectile, _unit, _projectileMineLayer] spawn DIS_fnc_mineLayer;
+    };
+
+    // Shells and global munitions below this point
+    private _unitOwner = _unit getVariable ["BIS_WL_ownerAsset", "123"];
+    if (_unitOwner == "123" || _unitOwner != getPlayerUID player) exitWith {};
+
     private _projectileDroneDeployer = _projectileConfig getOrDefault ["deployDrone", false];
     if (_projectileDroneDeployer) then {
         [_projectile, _unit] spawn DIS_fnc_droneDeployer;
     };
 
-    private _projectileMineLayer = _projectileConfig getOrDefault ["mineLayer", ""];
-    if (_projectileMineLayer != "") then {
-        [_projectile, _unit, _projectileMineLayer] spawn DIS_fnc_mineLayer;
+    private _projectileShell = _projectileConfig getOrDefault ["shell", ""];
+    if (_projectileShell != "") then {
+        _projectile setVariable ["APS_subShell", _projectileShell];
+        _projectile addEventHandler ["Penetrated", {
+            params ["_projectile", "_hitObject", "_surfaceType", "_entryPoint", "_exitPoint", "_exitVector"];
+            if (isNull _hitObject) exitWith {};
+
+            private _subShell = _projectile getVariable ["APS_subShell", ""];
+            [_subShell, _entryPoint, [vectorDir _projectile, vectorUp _projectile], 0] spawn DIS_fnc_bunkerBuster;
+
+            _projectile removeEventHandler ["Penetrated", _thisEventHandler];
+        }];
     };
 }];

@@ -528,7 +528,7 @@ addMissionEventHandler ["Draw3D", {
                     [getPosATL _vehicle, _cameraDirection, 120, getPosATL _selectedTarget] call WL2_fnc_inAngleCheck;
                 };
                 if (_x == "Laser") then {
-                    if (_myAltitude < 50) then {
+                    if (_myAltitude < 100) then {
                         _isInAngle = false;
                     };
                 };
@@ -674,6 +674,7 @@ addMissionEventHandler ["Draw3D", {
 
             private _soundFile = format ["incMissile_%1", _angleReadout];
             playSoundUI [_soundFile, 5 * _threatVolume];
+            ["(Missile incoming warning.)", true] call WL2_fnc_smoothText;
 
             player setVariable ["WL_missileWarningPlayed", serverTime];
         };

@@ -10,7 +10,7 @@ private _specialStateArray = if (isNil "BIS_WL_sectorsArray") then { [] } else {
 	(BIS_WL_sectorsArray # 6) + (BIS_WL_sectorsArray # 7);
  };
 
-private _ownerIndex = [WEST, EAST, RESISTANCE] find _owner;
+private _ownerIndex = [west, east, independent] find _owner;
 private _area = _sector getVariable "WL2_objectArea";
 private _previousOwners = _sector getVariable "BIS_WL_previousOwners";
 private _mrkrMain = (_sector getVariable "BIS_WL_markers") # 0;

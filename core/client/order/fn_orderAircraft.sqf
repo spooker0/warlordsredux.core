@@ -21,12 +21,12 @@ private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashM
 private _campAirWarning = _settingsMap getOrDefault ["campAirWarning", true];
 if (_sectorIsCamped && _campAirWarning) exitWith {
 	playSoundUI ["AddItemFailed", 1];
-	["Your team has marked this airbase as camped. Remove the marker on the map or disable airbase camper warning in settings to spawn aircraft here."] call WL2_fnc_smoothText;
+	["Your team has marked this airbase as camped! Enemies may be near. Remove the marker on the map or disable airbase camper warning in settings to spawn aircraft here."] call WL2_fnc_smoothText;
 };
 
 private _campResult = if (_sectorIsCamped) then {
 	playSoundUI ["AddItemFailed", 1];
-	["Camped airbase", "Your team has marked this airbase as camped! Are you sure you would like to spawn your aircraft here?", "Yes", "Cancel"] call WL2_fnc_prompt;
+	["Camped airbase", "Your team has marked this airbase as camped! Enemies may be near. Are you sure you would like to spawn your aircraft here?", "Yes", "Cancel"] call WL2_fnc_prompt;
 } else {
 	true;
 };

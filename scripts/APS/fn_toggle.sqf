@@ -5,6 +5,7 @@ private _apsActive = _asset getVariable ["WL2_apsActivated", false];
 if (_apsActive) then {
     _asset setVariable ["WL2_apsActivated", false, true];
     playSoundUI ["a3\sounds_f_bootcamp\sfx\vr\simulation_fatal.wss"];
+    _asset setVariable ["APS_nextReloadTime", serverTime + WL_COOLDOWN_APS_RELOAD, true];
 } else {
     _asset setVariable ["WL2_apsActivated", true, true];
     playSoundUI ["a3\sounds_f_bootcamp\sfx\vr\simulation_restart.wss"];

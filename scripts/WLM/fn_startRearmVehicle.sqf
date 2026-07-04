@@ -17,7 +17,9 @@ if (_cooldown > 0) exitWith {
     playSoundUI ["AddItemFailed"];
 };
 
-private _nearbyVehicles = (_asset nearEntities WL_MAINTENANCE_RADIUS) select { alive _x };
+private _nearbyVehicles = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) select { alive _x } select {
+    _x distance2D _asset < WL_MAINTENANCE_RADIUS
+};
 if (count _nearbyVehicles == 0) exitWith {
     ["No rearm sources nearby."] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];

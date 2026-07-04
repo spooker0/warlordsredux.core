@@ -82,7 +82,9 @@ while { alive player } do {
                     _remoteControlTarget = gunner _drone;
                 };
 
-                player remoteControl _remoteControlTarget;
+                if (alive _remoteControlTarget) then {
+                    player remoteControl _remoteControlTarget;
+                };
             },
             ["WL2_controlDrone", _drone],
             1,

@@ -60,7 +60,7 @@ deleteVehicle _projectile;
 
 // Explosion damage handler
 if (isServer) then {
-	[_unit, _targetDetected, _damage, _projectilePosition] call WL2_fnc_handleSamHit;
+	[_unit, _targetDetected, _damage, _projectilePosition, getPlayerUID _responsiblePlayer] call WL2_fnc_handleSamHit;
 } else {
 	[format ["Proximity detonation! Damage to target: %1%%", round (_damage * 100)]] call WL2_fnc_smoothText;
 	[player, "samHit", _unit, _targetDetected, _damage, _projectilePosition] remoteExec ["WL2_fnc_handleClientRequest", 2];

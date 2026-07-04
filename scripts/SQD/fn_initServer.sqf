@@ -1,8 +1,6 @@
 #include "includes.inc"
 if (isNil "SQUAD_MANAGER") then {
     SQUAD_MANAGER = [];
-    // Structure:
-    // [Squad Name, Leader, [Members], Side]
 };
 missionNamespace setVariable ["SQUAD_MANAGER", SQUAD_MANAGER, true];
 

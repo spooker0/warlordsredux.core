@@ -19,8 +19,8 @@ if (_posAGL # 2 > 100) exitWith {
     false
 };
 
-private _nearbyRepair = (_target nearEntities ["All", WL_MAINTENANCE_RADIUS]) select {
-    alive _x
+private _nearbyRepair = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) select { alive _x } select {
+    _x distance2D _target < WL_MAINTENANCE_RADIUS
 } select {
     WL_UNIT(_x, "hasRepair", 0) > 0
 };

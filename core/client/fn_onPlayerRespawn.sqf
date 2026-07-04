@@ -10,6 +10,12 @@ if (leader _newGroup != _newUnit) then {
 	[_newGroup, _newUnit] remoteExec ["selectLeader", groupOwner _newGroup];
 };
 
+#if __GAME_BUILD__ > 153351
+{
+    _x enableAI "COMMAND";
+} forEach (units group player);
+#endif
+
 #if WL_FACTION_THREE_ENABLED
 if (side group player == independent) then {
 	"respawn_guerrila" setMarkerPosLocal ([independent] call WL2_fnc_getSideBase);
@@ -56,7 +62,8 @@ missionNamespace setVariable [_ownedVehiclesVar, _ownedVehicles, [2, clientOwner
 player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 player setVariable ["WL_lastHitter", objNull, 2];
 player setVariable ["WL2_canAccessEW", true];
-player setVariable ["WL2_acceptConscriptionTime", -1];
+player setVariable ["WL2_lastPriorityConscriptedTo", objNull];
+
 [] call WLC_fnc_onRespawn;
 
 0 spawn MENU_fnc_settingsMenu;

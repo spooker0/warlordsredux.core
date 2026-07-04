@@ -77,44 +77,55 @@ if (_hasFullAccess) then {
             playSoundUI ["AddItemFailed"];
         };
     }, true, "assetRepair"] call WL2_fnc_addTargetMapButton;
-};
 
-if (side group player == independent && _asset isKindOf "Man" && !isPlayer _asset) then {
-    [_asset, _targetId, "control", "Control", {
-        params ["_asset"];
+    // [_asset, _targetId, "asset-expand", "Mass Deploy", {
+    //     params ["_asset"];
 
-        private _assetIsNotMine = (_asset getVariable ["BIS_WL_ownerAsset", "123"]) != getPlayerUID player;
-        private _noMoreClaims = BIS_WL_matesAvailable <= 0;
-        if (!alive _asset || (_assetIsNotMine && _noMoreClaims)) then {
-            playSoundUI ["AddItemFailed"];
-            ["No available slots for this unit, or the unit is dead."] call WL2_fnc_smoothText;
-        } else {
-            private _maxSubordinates = missionNamespace getVariable [format ["BIS_WL_maxSubordinates_%1", BIS_WL_playerSide], 1];
-            private _refreshTimerVar = format ["WL2_manpowerRefreshTimers_%1", getPlayerUID player];
-            private _manpowerRefreshTimers = missionNamespace getVariable [_refreshTimerVar, []];
-            private _assetIndex = _manpowerRefreshTimers findIf {
-                _x # 1 == _asset
-            };
+    //     private _lastMarker = missionNamespace getVariable ["WL2_lastMarker", ""];
+    //     private _installable = _asset getVariable ["WL2_installable", ""];
 
-            // spawned unit
-            if (_assetIndex != -1) then {
-                _manpowerRefreshTimers set [_assetIndex, [_manpowerRefreshTimers # _assetIndex # 0, player]];
-            } else {
-                _asset setVariable ["BIS_WL_ownerAsset", getPlayerUID player, true];
-                _manpowerRefreshTimers pushBack [serverTime + WL_COOLDOWN_AIREFRESH, _asset];
-            };
-            missionNamespace setVariable [_refreshTimerVar, _manpowerRefreshTimers, true];
-            call WL2_fnc_teammatesAvailability;
+    //     private _placedPositions = [];
+    //     private _markerPolyline = markerPolyline _lastMarker;
 
-            private _playerGroup = group player;
-            [_asset] joinSilent _playerGroup;
+    //     private _boundingBox = 0 boundingBoxReal _asset;
+    //     private _spacing = (_boundingBox # 1 # 0) - (_boundingBox # 0 # 0);
+    //     _spacing = _spacing / 2;
 
-            selectPlayer _asset;
-            _playerGroup selectLeader player;
+    //     for "_i" from 0 to (count _markerPolyline - 3) step 2 do {
+    //         private _startX = _markerPolyline # _i;
+    //         private _startY = _markerPolyline # (_i + 1);
 
-            playSoundUI ["AddItemOK"];
-        };
-    }, true] call WL2_fnc_addTargetMapButton;
+    //         private _endX = _markerPolyline # (_i + 2);
+    //         private _endY = _markerPolyline # (_i + 3);
+
+    //         private _startPosition = [_startX, _startY, 0];
+    //         private _endPosition = [_endX, _endY, 0];
+
+    //         private _segmentDistance = _startPosition distance2D _endPosition;
+    //         private _steps = ceil (_segmentDistance / _spacing);
+
+    //         for "_j" from 0 to _steps do {
+    //             private _t = _j / _steps;
+
+    //             private _markerX = _startX + ((_endX - _startX) * _t);
+    //             private _markerY = _startY + ((_endY - _startY) * _t);
+
+    //             private _markerPosition = [_markerX, _markerY, 0];
+
+    //             private _placedPositionsNear = _placedPositions select {
+    //                 _x distance2D _markerPosition < _spacing
+    //             };
+
+    //             if (count _placedPositionsNear == 0) then {
+    //                 private _direction = _startPosition getDir _endPosition;
+    //                 [player, "orderAsset", "vehicle", _markerPosition, _installable, _direction - 90, true, true] remoteExec ["WL2_fnc_handleClientRequest", 2];
+    //                 _placedPositions pushBack _markerPosition;
+    //             };
+    //         };
+    //     };
+
+    //     playSoundUI ["assemble_target", 1];
+    // }, true, "assetExpand"] call WL2_fnc_addTargetMapButton;
 };
 
 private _accessControl = _asset getVariable ["WL2_accessControl", -1];
@@ -257,7 +268,7 @@ if (_asset in units player) then {
     ] call WL2_fnc_addTargetMapButton;
 };
 
-private _isTent = typeof _asset in ["Land_TentSolar_01_bluewhite_F", "Land_TentDome_F", "Land_TentSolar_01_redwhite_F", "Land_TentA_F"];
+private _isTent = typeof _asset in ["Land_TentSolar_01_bluewhite_F", "Land_TentDome_F", "Land_TentSolar_01_redwhite_F"];
 if (_ownsVehicle && _isTent) then {
     [_asset, _targetId, "ft-tent", "Fast travel tent", {
         if (WL_ISDOWN(player)) exitWith {

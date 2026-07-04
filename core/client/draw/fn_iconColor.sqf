@@ -24,7 +24,7 @@ if (isNull _unit) exitWith {
         case east: {
             [0.5, 0, 0, 0.8]
         };
-        case resistance: {
+        case independent: {
             [0, 0.6, 0, 0.8]
         };
         default {
@@ -89,7 +89,7 @@ private _color = switch (_unitSide) do {
     case east: {
         [0.5, 0, 0, 0.8]
     };
-    case resistance: {
+    case independent: {
         [0, 0.6, 0, 0.8]
     };
     default {

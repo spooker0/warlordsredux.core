@@ -26,49 +26,60 @@ private _basesToRemove = createHashMapFromArray [
     [hashValue _firstBase, _firstBase]
 ];
 
+private _lastViablePot = BIS_WL_allSectors select {
+    _x != _firstBase &&
+    [_x] call _canBeBase
+};
+
 private _iterations = 0;
 private _maxIterations = WL_BASE_MINDISTANCE;
 while { _iterations <= _maxIterations } do {
     private _nextBasesToRemove = createHashMap;
     {
         private _neighbors = _y getVariable ["WL2_connectedSectors", []];
+
         {
             private _neighbor = hashValue _x;
-            if  (_baseMap getOrDefault [_neighbor, false]) then {
+
+            if (_baseMap getOrDefault [_neighbor, false]) then {
                 _nextBasesToRemove set [_neighbor, _x];
             };
         } forEach _neighbors;
+
         _baseMap set [_x, false];
     } forEach _basesToRemove;
 
-    private _hasRemaining = false;
-    {
-        if (_y && {!(_x in _nextBasesToRemove)}) then {
-            _hasRemaining = true;
-            break;
-        };
-    } forEach _baseMap;
-    if (!_hasRemaining) then {
+    private _currentViablePot = BIS_WL_allSectors select {
+        _x != _firstBase &&
+        _baseMap getOrDefault [hashValue _x, false] &&
+        [_x] call _canBeBase
+    };
+
+    if (count _currentViablePot == 0) then {
         break;
     };
+    _lastViablePot = _currentViablePot;
 
     _basesToRemove = _nextBasesToRemove;
     _iterations = _iterations + 1;
 };
 
 private _finalPot = BIS_WL_allSectors select {
+    _x != _firstBase &&
     _baseMap getOrDefault [hashValue _x, false] &&
-    [_x] call _canBeBase;
+    [_x] call _canBeBase
 };
 
-// diag_log format ["Iterations: %1, Final bases: %2", _iterations, _potBases apply { _x getVariable ["WL2_name", ""] }];
-
 private _secondBase = if (count _finalPot == 0) then {
-    diag_log format ["No valid second base found for %1", _firstBase getVariable ["WL2_name", ""]];
-    // Fallback
-    selectRandom (BIS_WL_allSectors select {
-        [_x] call _canBeBase && _x != _firstBase;
-    })
+#if WL_BASE_SELECTION_DEBUG
+    diag_log format [
+        "No valid second base found for %1 at minimum distance %2. Falling back to last viable pot %3.",
+        _firstBase getVariable ["WL2_name", ""],
+        WL_BASE_MINDISTANCE,
+        _lastViablePot apply { _x getVariable ["WL2_name", ""] }
+    ];
+#endif
+    selectRandom _lastViablePot
 } else {
     selectRandom _finalPot
 };

@@ -43,60 +43,12 @@ _asset addAction [
 	false
 ];
 
-private _maxAmmo = [_asset] call APS_fnc_getMaxAmmo;
-if (_maxAmmo >= 6) then {
+private _assetApsType = WL_UNIT(_asset, "aps", 0);
+if (_assetApsType > 0) then {
 	_asset addAction [
 		"<t color='#4bff58'>Reload APS</t>",
 		{
-			_this spawn {
-				params ["_asset", "_caller", "_actionId", "_arguments"];
-				private _animation = "Acts_TerminalOpen";
-				[player, [_animation]] remoteExec ["switchMove", 0];
-
-				[[0, -3, 1]] call WL2_fnc_actionLockCamera;
-
-				["Animation", ["REPAIR", [
-					["Cancel", "Action"],
-					["", "ActionContext"],
-					["", "navigateMenu"]
-				]], WL_DURATION_REARMAPS, true] spawn WL2_fnc_showHint;
-
-				private _startCheckingUnhold = false;
-				private _timeToStop = serverTime + WL_DURATION_REARMAPS;
-				private _actionSuccess = false;
-				while { true } do {
-					if (WL_ISDOWN(player)) then {
-						break;
-					};
-
-					private _inputAction = inputAction "Action" + inputAction "ActionContext" + inputAction "navigateMenu";
-					if (_startCheckingUnhold && _inputAction > 0) then {
-						break;
-					};
-					if (_inputAction == 0) then {
-						_startCheckingUnhold = true;
-					};
-
-					if (_timeToStop <= serverTime) then {
-						_actionSuccess = true;
-						break;
-					};
-
-					uiSleep 0.001;
-				};
-
-				["Animation"] spawn WL2_fnc_showHint;
-
-				if (_actionSuccess) then {
-					_asset spawn APS_fnc_rearmAPS;
-					playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Rearm.wss", _asset, false, getPosASL _asset, 2, 1, 75];
-				} else {
-					playSoundUI ["AddItemFailed"];
-				};
-
-				cameraOn cameraEffect ["Terminate", "BACK"];
-				[player, [""]] remoteExec ["switchMove", 0];
-			};
+			_this spawn WL2_fnc_reloadApsAction;
 		},
 		[],
 		5,
@@ -104,6 +56,23 @@ if (_maxAmmo >= 6) then {
 		true,
 		"",
 		"cursorTarget == _target && [_target, _this] call WL2_fnc_rearmAPSEligibility",
+		WL_MAINTENANCE_RADIUS,
+		false
+	];
+
+	private _toggleApsText = format ["<t color='#ff0000'>Toggle APS (%1)</t>", (actionKeysNames "cycleThrownItems") regexReplace ["""", ""]];
+	_asset addAction [
+		_toggleApsText,
+		{
+			params ["_asset"];
+			[_asset] call APS_fnc_toggle;
+		},
+		[],
+		3,
+		false,
+		false,
+		"cycleThrownItems",
+		"_target == cameraOn",
 		WL_MAINTENANCE_RADIUS,
 		false
 	];

@@ -148,43 +148,27 @@ _display displayAddEventHandler ["MouseButtonDown", {
     };
 }];
 
-_display setVariable ["SQD_refreshConfig", [
+private _refreshConfig = [
     [SQD_fnc_renderStatus, 0.05, 0],
     [SQD_fnc_renderSquads, 0.05, 0],
     [SQD_fnc_renderSpawns, 1, 0],
     [SQD_fnc_renderVehicles, 0.2, 0]
-]];
-private _efHandler = addMissionEventHandler ["EachFrame", {
-    private _display = uiNamespace getVariable ["SQD_Menu", displayNull];
-    if (isNull _display) exitWith {};
+];
 
-    private _refreshConfig = _display getVariable ["SQD_refreshConfig", []];
+while { !isNull _display } do {
     {
         _x params ["_refreshFunction", "_interval", "_lastCall"];
-
         if (time > _lastCall + _interval) then {
             [_display] call _refreshFunction;
             _x set [2, time];
         };
     } forEach _refreshConfig;
-}];
-_display setVariable ["SQD_eachFrameHandler", _efHandler];
-
-_display displayAddEventHandler ["Unload", {
-    private _efHandler = _display getVariable ["SQD_eachFrameHandler", -1];
-    if (_efHandler != -1) then {
-        removeMissionEventHandler ["EachFrame", _efHandler];
-        _display setVariable ["SQD_eachFrameHandler", -1];
-    };
-
-    private _spawnCamera = uiNamespace getVariable ["SQD_spawnCamera", objNull];
-    if (!alive _spawnCamera) exitWith {};
-    _spawnCamera cameraEffect ["Terminate", "BACK TOP", "spawncam"];
-    camDestroy _spawnCamera;
-}];
-
-while { !isNull _display } do {
-    uiSleep 0.2;
+    uiSleep 0.01;
 };
 
 ppEffectDestroy _dynamicBlurHandle;
+private _spawnCamera = uiNamespace getVariable ["SQD_spawnCamera", objNull];
+if (alive _spawnCamera) then {
+    _spawnCamera cameraEffect ["Terminate", "BACK TOP", "spawncam"];
+    camDestroy _spawnCamera;
+};

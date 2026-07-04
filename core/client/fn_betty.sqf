@@ -46,6 +46,7 @@ while { _vehicle isKindOf "Air" && alive player && alive _vehicle && vehicle pla
 			if (asin (vectorDir _vehicle # 2) < -((_altitude * 40) / (1 max speed _vehicle))) then {
 				playSoundUI [_soundEffects # 0, _pullUpVolume];
 				_vehicle setVariable ["WL2_rwr1Played", serverTime];
+				["(Pull up warning.)", true] call WL2_fnc_smoothText;
 			};
 		};
 	};
@@ -55,6 +56,7 @@ while { _vehicle isKindOf "Air" && alive player && alive _vehicle && vehicle pla
 		if (_altitude < 100 && !_landingGear) then {
 			playSoundUI [_soundEffects # 1, _altitudeVolume];
 			_vehicle setVariable ["WL2_rwr2Played", serverTime];
+			["(Altitude warning.)", true] call WL2_fnc_smoothText;
 		};
 	};
 
@@ -63,6 +65,7 @@ while { _vehicle isKindOf "Air" && alive player && alive _vehicle && vehicle pla
 		if (fuel _vehicle < 0.2) then {
 			playSoundUI [_soundEffects # 2, _fuelVolume];
 			_vehicle setVariable ["WL2_rwr3Played", serverTime];
+			["(Fuel warning.)", true] call WL2_fnc_smoothText;
 		};
 	};
 
@@ -72,9 +75,11 @@ while { _vehicle isKindOf "Air" && alive player && alive _vehicle && vehicle pla
 		private _targetChangeVolume = _settingsMap getOrDefault ["rwr4", 0.3];
 		if (count _newSensorTargets > count _oldSensorTargets) then {
 			playSoundUI ["radarTargetNew", _targetChangeVolume];
+			["(New radar target boop.)", true] call WL2_fnc_smoothText;
 		};
 		if (count _newSensorTargets < count _oldSensorTargets) then {
 			playSoundUI ["radarTargetLost", _targetChangeVolume];
+			["(Lost radar target boop.)", true] call WL2_fnc_smoothText;
 		};
 		_vehicle setVariable ["WL2_storedTargets", _newSensorTargets];
 	};

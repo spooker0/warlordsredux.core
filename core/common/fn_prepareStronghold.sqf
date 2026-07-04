@@ -24,5 +24,6 @@ private _maxHealth = if (_sectorOwner == independent) then {
 };
 _stronghold setVariable ["WL2_demolitionMaxHealth", _maxHealth, true];
 _stronghold setVariable ["WL2_demolitionHealth", _maxHealth, true];
+_stronghold setVariable ["WL2_canDemolish", true, true];
 
 [_stronghold, true] remoteExec ["WL2_fnc_protectStronghold", 0, true];

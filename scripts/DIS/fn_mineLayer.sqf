@@ -11,17 +11,19 @@ waitUntil {
     private _velocity = velocity _projectile;
     (_velocity # 2) < -1 || !alive _projectile
 };
-waitUntil {
-    private _posAGL = _projectile modelToWorld [0, 0, 0];
-    (_posAGL # 2) < 5 || !alive _projectile
-};
-
-if (isNull _projectile) exitWith {};
 
 private _projectilePosition = _projectile modelToWorld [0, 0, 0];
 private _projectileDirection = getDir _projectile;
+waitUntil {
+    private _posAGL = _projectile modelToWorld [0, 0, 0];
+    _projectilePosition = _posAGL;
+    _projectileDirection = getDir _projectile;
+    (_posAGL # 2) < 5 || !alive _projectile
+};
 
-deleteVehicle _projectile;
+if (!isNull _projectile) then {
+    deleteVehicle _projectile;
+};
 
 uiSleep 1;
 

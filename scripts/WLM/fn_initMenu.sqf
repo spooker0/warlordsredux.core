@@ -473,8 +473,10 @@ _asset spawn {
     private _display = findDisplay WLM_DISPLAY;
     private _rearmButtonControl = _display displayCtrl WLM_REARM_BUTTON;
 	while {!isNull _display} do {
-		private _cooldown = (((_asset getVariable "BIS_WL_nextRearm") - serverTime) max 0);
-		private _nearbyVehicles = (_asset nearEntities WL_MAINTENANCE_RADIUS) select { alive _x };
+		private _cooldown = ((_asset getVariable "BIS_WL_nextRearm") - serverTime) max 0;
+		private _nearbyVehicles = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) select { alive _x } select {
+            _x distance2D _asset < WL_MAINTENANCE_RADIUS
+        };
 		private _rearmVehicleCargos = _nearbyVehicles apply { _x getVariable ["WLM_ammoCargo", 0] };
 		private _amount = selectMax _rearmVehicleCargos;
 

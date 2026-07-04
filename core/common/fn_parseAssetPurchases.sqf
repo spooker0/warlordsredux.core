@@ -121,10 +121,19 @@ private _callCombatAirHome = [
     "a3\ui_f_jets\data\gui\cfg\hints\aircraftdamage_ca.paa",
     "Establish a temporary no-fly zone to assist your team's air defense over your home base."
 ];
+private _helpAA = [
+    "HelpAA",
+    0,
+    ["V"],
+    "How does AA work?",
+    "a3\ui_f_jets\data\gui\cfg\hints\aircraftdamage_ca.paa",
+    "See AA help."
+];
 private _airDefenseIndex = _categories find "Air Defense";
 private _airDefenseArray = _purchaseable # _airDefenseIndex;
 _airDefenseArray pushBack _callCombatAir;
 _airDefenseArray pushBack _callCombatAirHome;
+_airDefenseArray insert [0, [_helpAA]];
 
 private _arsenal = [
     "Arsenal",

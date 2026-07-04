@@ -105,7 +105,6 @@ private _installActionId = player addAction [
                 _installableTarget setVariable ["WL2_installable", "", true];
             };
 
-            private _offset = _deploymentResult # 2;
 			[player, "orderAsset", "vehicle", _position, _installable, _direction, true, true] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
             playSoundUI ["assemble_target", 1];

@@ -3,16 +3,21 @@ params ["_projectile", "_unit", "_samParams"];
 
 _projectile setMissileTarget [objNull, true];
 
-private _detectors = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles) select { alive _x }
-    select { [_x] call WL2_fnc_getAssetSide != [_unit] call WL2_fnc_getAssetSide }
-    select {
-        private _detectionRadius = _x getVariable ["DIS_missileDetector", 0];
-        _detectionRadius > 0 && (_x distance2D _projectile) < _detectionRadius
-    };
+private _assetSide = [_unit] call WL2_fnc_getAssetSide;
+private _enemyUnits = switch (_assetSide) do {
+    case west: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
+    case east: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
+    default { [] };
+};
+
+private _detectors = _enemyUnits select {
+    private _detectionRadius = _x getVariable ["DIS_missileDetector", 0];
+    _detectionRadius > 0 && (_x distance2D _projectile) < _detectionRadius
+};
 
 if (count _detectors > 0) then {
     private _detectorSide = [_detectors # 0] call WL2_fnc_getAssetSide;
-    [[_unit], 5] remoteExec ["WL2_fnc_reportTargets", _detectorSide];
+    [[_unit], 15] remoteExec ["WL2_fnc_reportTargets", _detectorSide];
 };
 
 private _munitionList = _unit getVariable ["DIS_munitionList", []];
@@ -29,6 +34,13 @@ _projectile setVariable ["WL2_missileNameOverride", _projectileTypeName, true];
 
 _samParams params ["_speed", "_lead", "_maxRange"];
 
+private _enemiesCanWarn = _enemyUnits select {
+    _x isKindOf "Air";
+} select {
+    _x distance _unit < _maxRange
+};
+private _enemiesHaveWarned = [];
+
 uiSleep 0.1;
 
 while { alive _projectile } do {
@@ -43,6 +55,18 @@ while { alive _projectile } do {
         [format ["Missile out of range. Max range: %1M", _maxRange]] call WL2_fnc_smoothText;
         break;
     };
+
+    private _enemiesInWarnRange = _enemiesCanWarn select {
+        _x distance _projectile < 2000
+    };
+    {
+        if (_x in _enemiesHaveWarned) then {
+            continue;
+        };
+
+        [_x, _unit, _projectile] remoteExec ["WL2_fnc_warnIncomingMissile", _x];
+        _enemiesHaveWarned pushBack _x;
+    } forEach _enemiesInWarnRange;
 
     private _guideDirection = _unit weaponDirection (currentWeapon _unit);
     private _guideOrigin = AGLtoASL (positionCameraToWorld [0, 0, 0]);

@@ -89,6 +89,7 @@ class WLDummyButton: RscButtonMenu {
 };
 
 class WLRscButtonMenu: RscButtonMenu {
+	colorBackground[] = {0, 0, 0, 0};
 	soundClick[] = {"", 0, 1};
 };
 

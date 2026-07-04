@@ -48,6 +48,7 @@ _mapControl ctrlAddEventHandler ["MouseButtonDown", {
     if (_button != 0) exitWith {};
     // Start map drag
     uiNamespace setVariable ["SPEC_mouseClickStart", [_xPos, _yPos]];
+    uiNamespace setVariable ["SPEC_mouseClickTargets", WL_AssetActionTargets];
 }];
 
 _mapControl ctrlAddEventHandler ["MouseButtonUp", {
@@ -58,15 +59,26 @@ _mapControl ctrlAddEventHandler ["MouseButtonUp", {
     if (count _start == 0) exitWith {};
     uiNamespace setVariable ["SPEC_mouseClickStart", []];
 
+    private _posEnd = _map ctrlMapScreenToWorld [_xPos, _yPos];
+    _posEnd set [2, 0];
+
+    private _targets = uiNamespace getVariable ["SPEC_mouseClickTargets", []];
+    uiNamespace setVariable ["SPEC_mouseClickTargets", []];
+    if (count _targets > 0) exitWith {
+        private _sortedTargetByDistance = [
+            _targets,
+            [_posEnd], { _input0 distance _x }, "ASCEND"
+        ] call BIS_fnc_sortBy;
+
+        [_sortedTargetByDistance # 0] call SPEC_fnc_spectatorSelectTarget;
+    };
+
     // Reset to free cam in scripts
     uiNamespace setVariable ["SPEC_CameraTarget", objNull];
 
     if !(cameraOn isKindOf "Camera") exitWith {};
     private _posStart = _map ctrlMapScreenToWorld _start;
     _posStart set [2, (getPosATL cameraOn) # 2];
-
-    private _posEnd = _map ctrlMapScreenToWorld [_xPos, _yPos];
-    _posEnd set [2, 0];
 
     if (_posStart distance2D _posEnd > 10) then {
         private _targetVectorDirAndUp = [_posStart, _posEnd] call BIS_fnc_findLookAt;

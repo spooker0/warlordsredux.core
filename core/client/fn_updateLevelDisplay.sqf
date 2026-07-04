@@ -1,8 +1,9 @@
 #include "includes.inc"
 private _setLevel = {
-	params ["_levelDisplay"];
+	params ["_levelDisplay", "_levelNumber"];
 	if (player getVariable ["WL_playerLevel", "Recruit"] == _levelDisplay) exitWith {};
 	player setVariable ["WL_playerLevel", _levelDisplay, true];
+	player setVariable ["WL_playerLevelNumber", _levelNumber, true];
 };
 
 private _uid = getPlayerUID player;
@@ -67,4 +68,4 @@ if !(_currentBadge in _badgeConfigs) then {
 
 private _level = ["getLevel"] call WLC_fnc_getLevelInfo;
 private _playerLevel = format ["%1 | %2", _level, _currentBadge];
-[_playerLevel] call _setLevel;
+[_playerLevel, _level] call _setLevel;

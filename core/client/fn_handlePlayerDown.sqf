@@ -6,6 +6,12 @@ private _originalDeathPos = getPosWorld _unit;
 
 _unit setVelocity [0, 0, 0];
 
+#if __GAME_BUILD__ > 153351
+{
+    _x disableAI "COMMAND";
+} forEach (units group _unit);
+#endif
+
 _unit setCaptive true;
 _unit setUnconscious true;
 _unit setVariable ["WL2_unconscious", true, true];

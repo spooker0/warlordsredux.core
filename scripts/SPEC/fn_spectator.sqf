@@ -308,7 +308,7 @@ _mainDisplay displayAddEventHandler ["KeyUp", {
         } else {
             playSoundUI ["a3\sounds_f_bootcamp\sfx\vr\simulation_fatal.wss"];
             {
-                _x setPlayerVoNVolume 0.1;
+                _x setPlayerVoNVolume 0;
             } forEach allPlayers;
         };
         _vonMuted = !_vonMuted;

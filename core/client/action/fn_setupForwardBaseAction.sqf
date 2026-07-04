@@ -253,6 +253,14 @@ private _setupActionId = [
 			_sector setVariable ["WL2_defenders", (_currentDefenders + WL_DEFENDER_ADD) min _maxDefenders, true];
 			_sector setVariable ["WL2_strongholdAllowTime", 0, true];
 
+			private _sectorStronghold = _sector getVariable ["WL_stronghold", objNull];
+			if (!isNull _sectorStronghold) then {
+				private _strongholdMaxHealth = _sectorStronghold getVariable ["WL2_demolitionMaxHealth", 0];
+				_strongholdMaxHealth = (_strongholdMaxHealth + 8) min 24;
+				_sectorStronghold setVariable ["WL2_demolitionMaxHealth", _strongholdMaxHealth, true];
+				_sectorStronghold setVariable ["WL2_demolitionHealth", _strongholdMaxHealth, true];
+			};
+
 			[_sector, -1] remoteExec ["WL2_fnc_warnSectorDefenders", 2];
 		};
 

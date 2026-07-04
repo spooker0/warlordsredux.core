@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_display"];
+params ["_display", "_mousePosition"];
 
 private _menuButtonIconMap = uiNamespace getVariable ["WL2_mapMenuButtonIcons", createHashMap];
 private _allMenuButtons = uiNamespace getVariable ["WL2_mapButtons", []];
@@ -39,7 +39,7 @@ private _allButtonsData = [];
     _allButtonsData pushBack [_targetId, _mapButtonText, _buttonsData];
 } forEach _allMenuButtons;
 
-getMousePosition params ["_mouseX", "_mouseY"];
+_mousePosition params ["_mouseX", "_mouseY"];
 
 private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
 private _buttonScale = _settingsMap getOrDefault ["mapButtonScale", 1.0];
@@ -64,10 +64,10 @@ private _numpadData = [];
         _buttonWidth,
         _buttonHeight
     ];
-    _targetLabel ctrlSetStructuredText parseText format ["<t font='PuristaBold' align='center' color='#ffffff'>%1</t>", _targetText];
-    _targetLabel ctrlSetBackgroundColor [0.2, 0.2, 0.2, 1];
     _targetLabel ctrlSetFontHeight 0.035 * _buttonScale;
     _targetLabel ctrlCommit 0;
+    _targetLabel ctrlSetBackgroundColor [0.2, 0.2, 0.2, 1];
+    _targetLabel ctrlSetStructuredText parseText format ["<t font='PuristaBold' align='center' color='#ffffff'>%1</t>", _targetText];
     _yPos = _yPos + _buttonHeight;
 
     {
@@ -85,15 +85,15 @@ private _numpadData = [];
         } else {
             "";
         };
-        _button ctrlSetStructuredText parseText format ["     <t font='PuristaBold'>%1%2</t>", _buttonLabel, _costText];
         _button ctrlSetFontHeight 0.035 * _buttonScale;
+        _button ctrlCommit 0;
 
         if (_buttonEnabled) then {
             _button ctrlSetBackgroundColor [0, 0, 0, 1];
         } else {
             _button ctrlSetBackgroundColor [0.5, 0.5, 0.5, 1];
         };
-        _button ctrlCommit 0;
+        _button ctrlSetStructuredText parseText format ["     <t font='PuristaBold'>%1%2</t>", _buttonLabel, _costText];
 
         _button setVariable ["WL2_mapButtonTargetId", _targetId];
         _button setVariable ["WL2_mapButtonId", _buttonId];
@@ -117,8 +117,8 @@ private _numpadData = [];
             _iconWidth,
             _iconHeight
         ];
-        _icon ctrlSetText _buttonIcon;
         _icon ctrlCommit 0;
+        _icon ctrlSetText _buttonIcon;
 
         if (count _numpadData < 9) then {
             _numpadData pushBack [_targetId, _buttonId, _button];
