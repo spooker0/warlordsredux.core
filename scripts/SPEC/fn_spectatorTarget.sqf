@@ -22,7 +22,7 @@ while { WL_IsSpectator } do {
         createHashMap;
     };
 
-    private _isHoldingAlt = inputAction "lookAround" > 0;
+    private _isHoldingAlt = uiNamespace getVariable ["WL2_isHoldingAlt", false];
 
     private _cameraPos = positionCameraToWorld [0, 0, 0];
 

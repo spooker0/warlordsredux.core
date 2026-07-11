@@ -554,7 +554,7 @@ private _scannedUnits = _mapData getOrDefault ["scannedUnits", []];
 		_position,
 		_size * _mapIconScale,
 		_size * _mapIconScale,
-		[_x] call WL2_fnc_getDir,
+		getDirVisual _x,
 		_scanText,
 		1,
 		_textSize * _mapIconScale,
@@ -587,7 +587,8 @@ private _scanners = _mapData getOrDefault ["scanners", []];
 
 // Combat air patrol areas
 private _combatAirAreas = _mapData getOrDefault ["combatAirAreas", []];
-if (cameraOn isKindOf "Air" || _showDetailedMode || _sectorTarget in _combatAirAreas) then {
+private _assetTargetsInCombatAir = _assetTargets arrayIntersect _combatAirAreas;
+if (cameraOn isKindOf "Air" || _showDetailedMode || _sectorTarget in _combatAirAreas || count _assetTargetsInCombatAir > 0) then {
 	{
 		private _targetPos = getPosASL _x;
 		private _targetOwner = if (typeof _x == "RuggedTerminal_01_communications_hub_F") then {
@@ -597,16 +598,16 @@ if (cameraOn isKindOf "Air" || _showDetailedMode || _sectorTarget in _combatAirA
 		};
 
 		private _mapColor = switch (_targetOwner) do {
-			case west: { [0, 0.3, 0.6, 0.9] };
-			case east: { [0.5, 0, 0, 0.9] };
-			case independent: { [0, 0.6, 0, 0.9] };
-			default { [1, 1, 1, 0.15] };
+			case west: { [0, 0.3, 0.6, 0.1] };
+			case east: { [0.5, 0, 0, 0.1] };
+			case independent: { [0, 0.6, 0, 0.1] };
+			default { [1, 1, 1, 0.1] };
 		};
 		private _mapTexture = switch (_targetOwner) do {
-			case west: { "#(rgb,1,1,1)color(0,0,1,0.15)" };
-			case east: { "#(rgb,1,1,1)color(1,0,0,0.15)" };
-			case independent: { "#(rgb,1,1,1)color(0,1,0,0.15)" };
-			default { "#(rgb,1,1,1)color(1,0,1,0.15)" };
+			case west: { "#(rgb,1,1,1)color(0,0,1,1)" };
+			case east: { "#(rgb,1,1,1)color(1,0,0,1)" };
+			case independent: { "#(rgb,1,1,1)color(0,1,0,1)" };
+			default { "#(rgb,1,1,1)color(1,0,1,1)" };
 		};
 
 		private _startTime = _x getVariable ["WL2_combatAirStart", 0];
@@ -654,6 +655,7 @@ if (count (_assetTargets arrayIntersect _allSquadmates) > 0 || _showDetailedMode
 
 private _mapIconTextScale = _settingsMap getOrDefault ["mapIconTextScale", 1];
 private _iconTextSize = _mapIconTextScale * 0.043;
+private _mapIconTextSize = _iconTextSize * _mapIconScale;
 
 // Draw vehicles
 private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
@@ -673,16 +675,17 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 	} else {
 		""
 	};
+	private _direction = if (WL_ISUP(_x)) then { getDirVisual _x } else { 0 };
 	_drawIcons pushBack [
 		_x getVariable ["WL2_mapIconType", ""],
 		_x getVariable ["WL2_mapIconColor", [1, 1, 1, 1]],
 		_position,
 		_size * _mapIconScale,
 		_size * _mapIconScale,
-		[_x] call WL2_fnc_getDir,
+		getDirVisual _x,
 		_iconText,
 		1,
-		_iconTextSize * _mapIconScale,
+		_mapIconTextSize,
 		"PuristaBold",
 		"right"
 	];
@@ -736,10 +739,10 @@ private _visibleEnemyUnits = _mapData getOrDefault ["visibleEnemyUnits", []];
 		_position,
 		_size * _mapIconScale,
 		_size * _mapIconScale,
-		[_x] call WL2_fnc_getDir,
+		getDirVisual _x,
 		_iconText,
 		1,
-		_iconTextSize * _mapIconScale,
+		_mapIconTextSize,
 		"PuristaBold",
 		"right"
 	];
@@ -768,7 +771,7 @@ private _airWrecks = _mapData getOrDefault ["airWrecks", []];
 		0,
 		format ["AIR WRECK VALUE %1%2 (%3)", WL_MONEY_SIGN, _wreckValue, _wreckTimer],
 		1,
-		_iconTextSize * _mapIconScale,
+		_mapIconTextSize,
 		"PuristaBold",
 		"right"
 	];

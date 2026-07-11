@@ -55,6 +55,4 @@ private _otherSideAverage = _otherSideElo / _otherSidePlayersCount;
 
 if (_currentSideAverage <= _otherSideAverage) exitWith { false };
 
-if (_playerElo <= _currentSideAverage) exitWith { false };
-
 true;

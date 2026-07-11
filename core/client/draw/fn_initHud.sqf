@@ -172,8 +172,7 @@ while { !BIS_WL_missionEnd } do {
 	private _travelPriorityText = if (_travelResult) then {
 		switch (_teamPriorityType) do {
 			case "asset": {
-				private _assetTypeName = [_teamPriority] call WL2_fnc_getAssetTypeName;
-				_assetTypeName
+				[_teamPriority] call WL2_fnc_getAssetTypeName
 			};
 			case "fob": {
 				"FORWARD BASE"
@@ -182,15 +181,14 @@ while { !BIS_WL_missionEnd } do {
 				"STRONGHOLD"
 			};
 			case "sector": {
-				private _sectorName = _teamPriority getVariable ["WL2_name", "UNKNOWN"];
-				_sectorName
+				_teamPriority getVariable ["WL2_name", "UNKNOWN"]
 			};
 			default {
 				"NONE"
 			};
 		};
 	} else {
-		"NONE";
+		"NONE"
 	};
 	_teamPriorityControl ctrlSetStructuredText parseText format [
 		"<t shadow='2' size='0.85' align='left'>TEAM PRIORITY: %1</t>",

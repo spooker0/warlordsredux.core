@@ -153,7 +153,7 @@ private _actionId = _asset addAction [
             } forEach _allMinefields;
 
             {
-                [_x, player] remoteExec ["WL2_fnc_demolishComplete", 2];
+                [_x, 1] call WL2_fnc_demolishStep;
             } forEach _obstaclesInArea;
 
             uiSleep 1;

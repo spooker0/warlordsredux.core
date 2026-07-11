@@ -22,7 +22,7 @@ private _missileTypeMap = createHashMapFromArray [
     ["ammo_Missile_HARM", "HARM"],
     ["ammo_Missile_KH58", "KH58"],
     ["ammo_Missile_sosna", "SOSNA"],
-    ["ammo_Missile_sosnam", "SOSNA-M"],
+    ["ammo_Missile_tianlong", "TIANLONG"],
     ["ammo_Missile_starstreak", "STARSTREAK"],
     ["ammo_Missile_starstreak2", "STARSTREAK-II"]
 ];

@@ -193,7 +193,7 @@ missionNamespace setVariable ["WL_serverStats", _serverStats, true];
 private _banlist = profileNamespace getVariable ["WL2_banlist", []];
 private _punishmentMap = createHashMap;
 {
-	_punishmentMap set [_x, [1e30, "cheating"]];
+	_punishmentMap set [_x, [1e30, "kicked"]];
 } forEach _banlist;
 missionNamespace setVariable ["WL2_punishmentMap", _punishmentMap, true];
 

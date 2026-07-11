@@ -27,17 +27,18 @@ if (_unit isKindOf "Man") then {
 
                 private _ratioBefore = _sectorDefenders / _maxSectorDefenders;
                 private _ratioAfter = _newSectorDefenders / _maxSectorDefenders;
+
                 switch (true) do {
-                    case {_ratioBefore > 0.75 && _ratioAfter <= 0.75}: {
+                    case (_ratioBefore > 0.75 && _ratioAfter <= 0.75): {
                         [_deathSector, 75] call WL2_fnc_warnSectorDefenders;
                     };
-                    case {_ratioBefore > 0.5 && _ratioAfter <= 0.5}: {
+                    case (_ratioBefore > 0.5 && _ratioAfter <= 0.5): {
                         [_deathSector, 50] call WL2_fnc_warnSectorDefenders;
                     };
-                    case {_ratioBefore > 0.25 && _ratioAfter <= 0.25}: {
+                    case (_ratioBefore > 0.25 && _ratioAfter <= 0.25): {
                         [_deathSector, 25] call WL2_fnc_warnSectorDefenders;
                     };
-                    case {_sectorDefenders > 0 && _newSectorDefenders <= 0}: {
+                    case (_sectorDefenders > 0 && _newSectorDefenders <= 0): {
                         [_deathSector, 0] call WL2_fnc_warnSectorDefenders;
                     };
                     default {};

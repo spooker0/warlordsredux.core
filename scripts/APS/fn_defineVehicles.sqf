@@ -23,10 +23,9 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
     private _projectileManualSam = getArray (_x >> "manualSam");
     private _projectileMine = getNumber (_x >> "mine") == 1;
     private _projectileMineLayer = getText (_x >> "mineLayer");
-    private _projectileProx = getNumber (_x >> "prox") == 1;
     private _projectileRemote = getNumber (_x >> "remote") == 1;
     private _projectileRunway = getNumber (_x >> "runway");
-    private _projectileSam = getNumber (_x >> "sam") == 1;
+    private _projectileSam = getNumber (_x >> "sam");
     private _projectileSead = getNumber (_x >> "sead") == 1;
     private _projectileShell = getText (_x >> "shell");
     private _projectileSpeedOverride = getNumber (_x >> "speed");
@@ -55,7 +54,6 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
             ["mine", _projectileMine],
             ["mineLayer", _projectileMineLayer],
             ["name", _ammo],
-            ["prox", _projectileProx],
             ["remote", _projectileRemote],
             ["runway", _projectileRunway],
             ["sam", _projectileSam],

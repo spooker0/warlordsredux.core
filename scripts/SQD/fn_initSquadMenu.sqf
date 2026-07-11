@@ -32,6 +32,8 @@ _display displayAddEventHandler ["Unload", {
 [_display] call SQD_fnc_renderStatus;
 [_display] call SQD_fnc_renderVehicles;
 
+_display displayAddEventHandler ["KeyDown", WL2_fnc_timedPromptKeyHandler];
+
 private _spawnCamButton = _display displayCtrl SQD_SPAWN_SCREEN_BUTTON_IDC;
 private _camFeedState = missionNamespace getVariable ["SQD_menuCamFeedEnabled", true];
 if (_camFeedState) then {

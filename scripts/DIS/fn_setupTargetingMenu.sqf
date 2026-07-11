@@ -490,6 +490,36 @@ while { !BIS_WL_missionEnd } do {
 		_statusText = _statusText + format ["INTEGRAL AMMO: %1<br/>", _weaponAmmoCount];
 	};
 
+	if (currentWeapon cameraOn == "cannon_railgun_fake") then {
+		private _mfdValues = getUserMFDValue cameraOn;
+		if (count _mfdValues > 0) then {
+			private _chargeValue = round ((_mfdValues # 0) * 110);
+			if (_chargeValue <= 0) then {
+				_chargeValue = 0;
+			};
+			if (_chargeValue > 30) then {
+				private _alreadyReady = uiNamespace getVariable ["WL2_railgunReady", false];
+				if (!_alreadyReady) then {
+					playSoundUI ["a3\sounds_f\weapons\mines\electron_trigger_1.wss", 1, 0.5];
+					uiNamespace setVariable ["WL2_railgunReady", true];
+				};
+			} else {
+				uiNamespace setVariable ["WL2_railgunReady", false];
+			};
+
+			if (_chargeValue > 100) then {
+				private _alreadyCharged = uiNamespace getVariable ["WL2_railgunCharged", false];
+				if (!_alreadyCharged) then {
+					playSoundUI ["a3\sounds_f\weapons\mines\electron_trigger_1.wss", 2, 1];
+					uiNamespace setVariable ["WL2_railgunCharged", true];
+				};
+			} else {
+				uiNamespace setVariable ["WL2_railgunCharged", false];
+			};
+			_statusText = _statusText + format ["CHARGING: %1%%<br/>", _chargeValue];
+		};
+	};
+
 	private _hasECM = cameraOn getVariable ["WL2_hasECMSystem", false];
 	if (_hasECM) then {
 		private _ecmOn = cameraOn getVariable ["WL2_ecmActive", false];

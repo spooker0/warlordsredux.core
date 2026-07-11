@@ -235,6 +235,7 @@ class CfgFunctions {
 			class surveillance { headerType = WL_HEADER_LEVEL; };
 			class teammatesAvailability { headerType = WL_HEADER_LEVEL; };
 			class timedPrompt { headerType = WL_HEADER_LEVEL; };
+			class timedPromptKeyHandler { headerType = WL_HEADER_LEVEL; };
 			class triggerPurchase { headerType = WL_HEADER_LEVEL; };
 			class updateLevelDisplay { headerType = WL_HEADER_LEVEL; };
 			class welcome { headerType = WL_HEADER_LEVEL; };
@@ -334,7 +335,6 @@ class CfgFunctions {
 			class drawSectorMarker { headerType = WL_HEADER_LEVEL; };
 			class ecmJammer { headerType = WL_HEADER_LEVEL; };
 			class ewarResult { headerType = WL_HEADER_LEVEL; };
-			class getDir { headerType = WL_HEADER_LEVEL; };
 			class helmetInterface { headerType = WL_HEADER_LEVEL; };
 			class iconColor { headerType = WL_HEADER_LEVEL; };
 			class iconDrawMap { headerType = WL_HEADER_LEVEL; };

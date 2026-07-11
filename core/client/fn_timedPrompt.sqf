@@ -45,11 +45,14 @@ _imageControl ctrlSetText _modalImage;
 private _startTime = serverTime;
 private _doAction = _defaultTrue;
 while { serverTime < _startTime + _timeout } do {
-    if (inputAction "LeanLeft" > 0) then {
+    private _isLeftPressed = _display getVariable ["WL2_isLeftPressed", false];
+    if (_isLeftPressed) then {
         _doAction = true;
         break;
     };
-    if (inputAction "LeanRight" > 0) then {
+
+    private _isRightPressed = _display getVariable ["WL2_isRightPressed", false];
+    if (_isRightPressed) then {
         _doAction = false;
         break;
     };
@@ -58,6 +61,10 @@ while { serverTime < _startTime + _timeout } do {
     _progressControl progressSetPosition _timeFraction;
     uiSleep 0.001;
 };
+
+_display setVariable ["WL2_isLeftPressed", false];
+_display setVariable ["WL2_isRightPressed", false];
+
 if (_doAction) then {
     _callbackParams spawn _callbackConfirm;
 } else {

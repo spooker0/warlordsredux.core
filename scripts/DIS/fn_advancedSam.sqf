@@ -29,7 +29,7 @@ _projectile setVariable ["APS_missileState", "BOOST", true];
 
 private _target = _unit getVariable ["WL2_selectedTargetAA", objNull];
 if (isNull _target) exitWith {
-    [_projectile, _unit] spawn DIS_fnc_frag;
+    [_projectile, _unit, 1] spawn DIS_fnc_frag;
     [_projectile, _unit, 14000, 9300] spawn DIS_fnc_maneuver;
 };
 
@@ -77,5 +77,5 @@ while { alive _projectile && alive _target && serverTime < _startTime + 1 } do {
 _projectile setVariable ["WL2_missileStateOverride", "", true];
 _projectile setMissileTarget [_target, true];
 
-[_projectile, _unit] spawn DIS_fnc_frag;
+[_projectile, _unit, 1] spawn DIS_fnc_frag;
 [_projectile, _unit, 14000, 14000] spawn DIS_fnc_maneuver;

@@ -55,7 +55,8 @@ private _timedMarkerSize = -1;
 } forEach BIS_WL_allSectors;
 [_nearbySectors, _map] call WL2_fnc_handleSectorIcons;
 
-if (inputAction "BuldTurbo" > 0) exitWith {};
+if (inputAction "curatorGroupMod" > 0) exitWith {};
+if (inputAction "curatorRotateMod" > 0) exitWith {};
 
 private _mapButtonDisplay = uiNamespace getVariable ["WL2_mapButtonDisplay", displayNull];
 if (!isNull _mapButtonDisplay) exitWith {
@@ -76,62 +77,53 @@ if (_firstFrameAfterClose) exitWith {};
 private _sectorClickSingletonScriptHandle = uiNamespace getVariable ["WL2_mapSectorIconSingleton", scriptNull];
 if (!isNull _sectorClickSingletonScriptHandle) exitWith {};
 
-private _singletonScriptHandle = uiNamespace getVariable ["WL2_mapMouseActionSingleton", scriptNull];
-if (!isNull _singletonScriptHandle) exitWith {};
+private _existingDisplay = uiNamespace getVariable ["WL2_mapButtonDisplay", displayNull];
+if (!isNull _existingDisplay) exitWith {};
 
-private _singletonScriptHandle = [_map, _mousePosition] spawn {
-    params ["_map", "_mousePosition"];
-    private _display = createDialog ["WL_MapButtonDisplay", true];
-    uiNamespace setVariable ["WL2_mapButtonDisplay", _display];
+uiNamespace setVariable ["WL2_mapButtons", []];
 
-    _display setVariable ["WL2_allButtonsData", []];
+private _targetsClicked = [];
 
-    uiNamespace setVariable ["WL2_mapButtons", []];
-
-    private _targetsClicked = [];
-
-    if (!isNull WL_SectorActionTarget) then {
-        [WL_SectorActionTarget, count _targetsClicked] call WL2_fnc_sectorMapButtons;
-        _targetsClicked pushBack WL_SectorActionTarget;
-    };
-
-    private _assetActionTargets = WL_AssetActionTargets;
-    if (count _assetActionTargets > 0) then {
-        _assetActionTargets = [_assetActionTargets, [_mousePosition], {
-            if (_x isKindOf "RuggedTerminal_01_communications_hub_F") then { 0 } else {
-                _input0 distance _x
-            }
-        }, "ASCEND"] call BIS_fnc_sortBy;
-
-        {
-            [_x, count _targetsClicked] call WL2_fnc_assetMapButtons;
-            _targetsClicked pushBack _x;
-        } forEach _assetActionTargets;
-    };
-
-    uiNamespace setVariable ["WL2_assetTargetsSelected", _targetsClicked];
-
-    private _hasButtons = false;
-    private _allMenuButtons = uiNamespace getVariable ["WL2_mapButtons", []];
-    {
-        private _menuButtons = _x # 1;
-        if (count _menuButtons > 0) then {
-            _hasButtons = true;
-        };
-    } forEach _allMenuButtons;
-
-    if (_hasButtons) then {
-        playSoundUI ["clickSoft", 1];
-        [_display, _mousePosition] call WL2_fnc_addMapButtonsDisplay;
-    } else {
-        _display closeDisplay 0;
-    };
-
-    // exit singleton after mouse release
-    waitUntil {
-        uiSleep 0.001;
-        inputMouse 0 == 0
-    };
+if (!isNull WL_SectorActionTarget) then {
+    [WL_SectorActionTarget, count _targetsClicked] call WL2_fnc_sectorMapButtons;
+    _targetsClicked pushBack WL_SectorActionTarget;
 };
 
-uiNamespace setVariable ["WL2_mapMouseActionSingleton", _singletonScriptHandle];
+private _assetActionTargets = WL_AssetActionTargets;
+if (count _assetActionTargets > 0) then {
+    _assetActionTargets = [_assetActionTargets, [_mousePosition], {
+        if (_x isKindOf "RuggedTerminal_01_communications_hub_F") then { 0 } else {
+            _input0 distance _x
+        }
+    }, "ASCEND"] call BIS_fnc_sortBy;
+
+    {
+        [_x, count _targetsClicked] call WL2_fnc_assetMapButtons;
+        _targetsClicked pushBack _x;
+    } forEach _assetActionTargets;
+};
+
+uiNamespace setVariable ["WL2_assetTargetsSelected", _targetsClicked];
+
+private _hasButtons = false;
+private _allMenuButtons = uiNamespace getVariable ["WL2_mapButtons", []];
+{
+    private _menuButtons = _x # 1;
+    if (count _menuButtons > 0) then {
+        _hasButtons = true;
+    };
+} forEach _allMenuButtons;
+
+if (_hasButtons) then {
+    private _display = createDialog ["WL_MapButtonDisplay", true];
+    uiNamespace setVariable ["WL2_mapButtonDisplay", _display];
+    _display setVariable ["WL2_allButtonsData", []];
+
+    playSoundUI ["clickSoft", 1];
+    [_display, _mousePosition] call WL2_fnc_addMapButtonsDisplay;
+
+    private _insertMarkerDisplay = uiNamespace getVariable ["RscDisplayInsertMarker", displayNull];
+    if (!isNull _insertMarkerDisplay) then {
+        _insertMarkerDisplay closeDisplay 0;
+    };
+};

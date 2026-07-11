@@ -10,7 +10,8 @@ uiSleep 0.1;
 private _playerVehicle = vehicle player;
 if (WL_ISUP(player) && !(player in _playerVehicle)) exitWith {};
 if (_playerVehicle isKindOf "Air") exitWith {};
-if (typeof _playerVehicle == "B_Truck_01_flatbed_F") exitWith {};
+private _disableParadrop = WL_UNIT(_playerVehicle, "disableParadrop", 0);
+if (_disableParadrop > 0) exitWith {};
 
 if (!alive _paradropper) exitWith {};
 
@@ -46,7 +47,8 @@ private _callbackConfirm = {
     if (_playerVehicle isKindOf "Air") then {
         _canDrop = false;
     };
-    if (typeof _playerVehicle == "B_Truck_01_flatbed_F") then {
+    private _disableParadrop = WL_UNIT(_playerVehicle, "disableParadrop", 0);
+    if (_disableParadrop > 0) then {
         _canDrop = false;
     };
 

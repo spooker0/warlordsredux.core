@@ -18,15 +18,19 @@ private _teamPriority = missionNamespace getVariable [_teamPriorityVar, objNull]
 if (WL_ISUP(player) && cameraOn != player) exitWith {};
 
 private _lastPriorityConscriptedTo = player getVariable ["WL2_lastPriorityConscriptedTo", objNull];
-private _defaultSelection = _lastPriorityConscriptedTo != _teamPriority;
+private _sectorArea = _teamPriority getVariable ["objectAreaComplete", ""];
+private _defaultSelection = _lastPriorityConscriptedTo != _teamPriority && !(player inArea _sectorArea);
+
+private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _hideConscriptionNotices = _settingsMap getOrDefault ["hideConscriptionNotices", false];
+if (_hideConscriptionNotices && !_defaultSelection) exitWith {};
 
 private _teamPriorityTypeVar = format ["WL2_teamPriorityType_%1", _side];
 private _teamPriorityType = missionNamespace getVariable [_teamPriorityTypeVar, ""];
 
 private _travelPriorityText = switch (_teamPriorityType) do {
     case "asset": {
-        private _assetTypeName = [_teamPriority] call WL2_fnc_getAssetTypeName;
-        _assetTypeName
+        [_teamPriority] call WL2_fnc_getAssetTypeName
     };
     case "fob": {
         "FORWARD BASE"
@@ -35,8 +39,7 @@ private _travelPriorityText = switch (_teamPriorityType) do {
         "STRONGHOLD"
     };
     case "sector": {
-        private _sectorName = _teamPriority getVariable ["WL2_name", "UNKNOWN"];
-        _sectorName
+        _teamPriority getVariable ["WL2_name", "UNKNOWN"]
     };
     default {
         "???"

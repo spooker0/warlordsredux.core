@@ -20,6 +20,7 @@ private _domeType = switch (_level) do {
 };
 private _newDome = [_domeType, _domeType, _position, _direction, false, false] call WL2_fnc_createVehicleCorrectly;
 _newDome allowDamage false;
+_newDome setVariable ["WL2_doorsLocked", _side, true];
 _newDome setVehiclePosition [_position, [], 0, "CAN_COLLIDE"];
 
 _forwardBase setVariable ["WL2_forwardBaseDome", _newDome];

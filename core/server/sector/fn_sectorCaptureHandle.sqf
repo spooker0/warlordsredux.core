@@ -45,8 +45,8 @@ while { !BIS_WL_missionEnd } do {
 			_winner = _originalOwner;
 		};
 
-		private _scoreGap = _winningScore / ((_winningScore + _secondScore + 0.01) max 10);
-		private _movement = _progressMovement * _scoreGap;
+		private _scoreGap = _winningScore / (_secondScore max 1) / 10;
+		private _movement = _progressMovement * (_scoreGap min 1);
 
 		if (_winner == _capturingTeam) then {
 			if (_capturingTeam != _originalOwner) then {
@@ -54,7 +54,7 @@ while { !BIS_WL_missionEnd } do {
 			};
 		} else {
 			if (_captureProgress > 0) then {
-				_captureProgress = _captureProgress - _movement * 0.5;
+				_captureProgress = _captureProgress - _movement * 0.75;
 			} else {
 				if (_winner != independent) then {
 					_captureProgress = 0;
@@ -68,7 +68,6 @@ while { !BIS_WL_missionEnd } do {
 		};
 
 		if (_captureProgress >= 1) then {
-			_sector setVariable ["BIS_WL_owner", _capturingTeam, true];
 			_sector setVariable ["BIS_WL_capturingTeam", independent, true];
 			_sector setVariable ["BIS_WL_captureProgress", 0, true];
 			[_sector, _capturingTeam] call WL2_fnc_changeSectorOwnership;

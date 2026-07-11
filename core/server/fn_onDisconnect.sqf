@@ -24,7 +24,10 @@ if (!isNull _playerUnit) exitWith {};
 // Remove owned vehicles
 private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", _uid];
 private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];
-_ownedVehicles = _ownedVehicles select { alive _x };
+_ownedVehicles = _ownedVehicles select { alive _x } select {
+    private _ownerAssetId = _x getVariable ["BIS_WL_ownerAsset", "123"];
+    _ownerAssetId == _uid
+};
 {
     if (unitIsUAV _x) then {
         private _group = group effectiveCommander _x;

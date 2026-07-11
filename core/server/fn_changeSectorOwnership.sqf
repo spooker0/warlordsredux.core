@@ -1,11 +1,12 @@
 #include "includes.inc"
 params ["_sector", "_owner"];
 
+private _sectorPreviousOwner = _sector getVariable ["BIS_WL_owner", independent];
+
 _sector setVariable ["BIS_WL_owner", _owner, true];
 [_sector] remoteExec ["WL2_fnc_sectorOwnershipHandleClient", [0, -2] select isDedicated];
 
-private _previousOwners = _sector getVariable "BIS_WL_previousOwners";
-private _isNeutralSector = count _previousOwners == 0;
+private _previousOwners = _sector getVariable ["BIS_WL_previousOwners", []];
 _previousOwners pushBackUnique _owner;
 
 private _reward = 0;
@@ -46,20 +47,21 @@ if (_reward > 0) then {
 
 _sector setVariable ["BIS_WL_previousOwners", _previousOwners, true];
 _sector setVariable ["WL_fortificationTime", serverTime + WL_FORTIFICATION_TIME, true];
-_sector setVariable ["WL_strongholdFortified", false, true];
+
+private _sectorStronghold = _sector getVariable ["WL_stronghold", objNull];
+_sectorStronghold setVariable ["WL2_doorsLocked", _owner, true];
 
 if (_sector == (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", _owner])) then {
 	missionNamespace setVariable [format ["BIS_WL_currentTarget_%1", _owner], objNull, true];
 };
 
-["server", true] call WL2_fnc_updateSectorArrays;
-
-_side = [west, east];
-_side deleteAt (_side find _owner);
-private _enemySide = _side # 0;
-if (isNull (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", _enemySide]) && !_isNeutralSector) then {
-	missionNamespace setVariable [format ["BIS_WL_resetTargetSelection_server_%1", _enemySide], true];
+private _enemySide = if (_owner == west) then { east } else { west };
+if (_enemySide == _sectorPreviousOwner) then {
+	private _enemyResetVar = format ["WL_targetReset_%1", _enemySide];
+	missionNamespace setVariable [_enemyResetVar, true, true];
 };
+
+["server", true] call WL2_fnc_updateSectorArrays;
 
 waitUntil {
 	uiSleep 0.01;

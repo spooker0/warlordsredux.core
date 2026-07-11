@@ -70,11 +70,9 @@ missionNamespace setVariable ["WL2_assetData", _requisitionData];
 private _menuButtonIconMap = createHashMapFromArray [
     ["add-waypoint", "A3\ui_f\data\map\markers\military\box_CA.paa"],
     ["ai-follow", "A3\ui_f\data\map\markers\military\box_CA.paa"],
-    ["asset-rearm", "a3\ui_f\data\igui\cfg\simpletasks\types\rearm_ca.paa"],
-    ["asset-refuel", "a3\ui_f\data\igui\cfg\simpletasks\types\refuel_ca.paa"],
-    ["asset-repair", "a3\ui_f\data\igui\cfg\simpletasks\types\repair_ca.paa"],
     ["auto-set", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
-    ["control-driver", "a3\ui_f\data\IGUI\Cfg\CommandBar\imageDriver_ca.paa"],
+    ["bulk-deploy", "a3\ui_f\data\igui\cfg\actions\repair_ca.paa"],
+	["control-driver", "a3\ui_f\data\IGUI\Cfg\CommandBar\imageDriver_ca.paa"],
     ["control-gunner", "a3\ui_f\data\IGUI\Cfg\CommandBar\imageGunner_ca.paa"],
     ["cycle-waypoint", "A3\ui_f\data\map\markers\military\box_CA.paa"],
     ["ew", "a3\ui_f\data\igui\cfg\simpletasks\types\Radio_ca.paa"],
@@ -114,9 +112,13 @@ private _menuButtonIconMap = createHashMapFromArray [
     ["smart-mine-adjust", "a3\ui_f\data\map\vehicleicons\iconexplosiveuw_ca.paa"],
     ["target-altitude", "a3\ui_f\data\igui\cfg\simpletasks\types\Heli_ca.paa"],
     ["target-loiter-radius", "A3\ui_f\data\map\markers\military\circle_CA.paa"],
-	["team-designate", "a3\ui_f\data\igui\cfg\simpletasks\types\move_ca.paa"],
+	["team-conscript", "a3\ui_f\data\igui\cfg\simpletasks\types\move_ca.paa"],
+    ["team-designate", "a3\ui_f\data\igui\cfg\simpletasks\types\move_ca.paa"],
 	["upgrade-defend-fob", "a3\ui_f\data\igui\cfg\simpletasks\types\defend_ca.paa"],
-    ["vehicle-paradrop", "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa"]
+    ["vehicle-paradrop", "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa"],
+	["vehicle-rearm", "a3\ui_f\data\igui\cfg\simpletasks\types\rearm_ca.paa"],
+    ["vehicle-refuel", "a3\ui_f\data\igui\cfg\simpletasks\types\refuel_ca.paa"],
+    ["vehicle-repair", "a3\ui_f\data\igui\cfg\simpletasks\types\repair_ca.paa"]
 ];
 uiNamespace setVariable ["WL2_mapMenuButtonIcons", _menuButtonIconMap];
 

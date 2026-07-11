@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_launcher", "_target", "_damage", "_projectilePosition", "_launcherUid"];
+params ["_launcher", "_target", "_damage", "_launcherUid"];
 
 {
     private _newCrewDamage = damage _x + 0.2;

@@ -4,7 +4,6 @@
 
 	[_x, _forEachIndex] spawn {
 		params ["_side", "_sideIndex"];
-		private _votingResetVar = format ["BIS_WL_resetTargetSelection_server_%1", _side];
 		private _waitVar = format ["WL2_waitsInRow_%1", _side];
 		private _surrenderVotingVar = format ["WL2_surrenderVoting_%1", _side];
 		private _currentTargetVar = format ["BIS_WL_currentTarget_%1", _side];
@@ -77,7 +76,6 @@
 		};
 
 		while {!BIS_WL_missionEnd} do {
-			missionNamespace setVariable [_votingResetVar, false];
 			call _wipeVotes;
 
 			_calculation = call _calculateMostVotedSector;
@@ -101,24 +99,13 @@
 					private _playerVoteVar = format ["BIS_WL_targetVote_%1", getPlayerID _x];
 					!isNull (missionNamespace getVariable [_playerVoteVar, objNull])
 				};
-				private _votingReset = missionNamespace getVariable [_votingResetVar, false];
-
-				// Final condition
-				_votingReset || count _playersWithVote > 0
-			};
-
-			if (missionNamespace getVariable [_votingResetVar, false]) then {
-				continue;
+				count _playersWithVote > 0
 			};
 
 			private _votingEnd = serverTime + WL_DURATION_SECTORVOTE;
 			private _nextUpdate = serverTime;
 
 			while { serverTime < _votingEnd } do {
-				if (missionNamespace getVariable [_votingResetVar, false]) then {
-					break;
-				};
-
 				if (serverTime >= _nextUpdate) then {
 					private _calculation = call _calculateMostVotedSector;
 
@@ -142,88 +129,97 @@
 			};
 
 			// Finished voting
-			if !(missionNamespace getVariable [_votingResetVar, false]) then {
-				private _calculation = call _calculateMostVotedSector;
-				private _selectedSector = _calculation # 0;
+			private _calculation = call _calculateMostVotedSector;
+			private _selectedSector = _calculation # 0;
 
-				private _selectedSectorName = _selectedSector getVariable ["WL2_name", "Sector"];
-				switch (_selectedSectorName) do {
-					case "Wait": {
-						private _waitsInRow = missionNamespace getVariable [_waitVar, 0];
-						_waitsInRow = _waitsInRow + 1;
-						missionNamespace setVariable [_waitVar, _waitsInRow];
+			private _selectedSectorName = _selectedSector getVariable ["WL2_name", "Sector"];
+			switch (_selectedSectorName) do {
+				case "Wait": {
+					private _waitsInRow = missionNamespace getVariable [_waitVar, 0];
+					_waitsInRow = _waitsInRow + 1;
+					missionNamespace setVariable [_waitVar, _waitsInRow];
 
-						missionNamespace setVariable [_surrenderVotingVar, false];
-					};
-					case "Surrender": {
-						private _isSurrenderVoting = missionNamespace getVariable [_surrenderVotingVar, false];
-						if (!_isSurrenderVoting) then {
-							missionNamespace setVariable [_surrenderVotingVar, true];
-							[] remoteExec ["WL2_fnc_surrenderWarning", _side];
-						} else {
-							missionNamespace setVariable ["BIS_WL_missionEnd", true, true];
-							private _oppositeTeam = if (_side == west) then { east } else { west };
-							[_oppositeTeam] spawn WL2_fnc_calculateEndResults;
+					missionNamespace setVariable [_surrenderVotingVar, false];
+				};
+				case "Surrender": {
+					private _isSurrenderVoting = missionNamespace getVariable [_surrenderVotingVar, false];
+					if (!_isSurrenderVoting) then {
+						missionNamespace setVariable [_surrenderVotingVar, true];
+						[] remoteExec ["WL2_fnc_surrenderWarning", _side];
+					} else {
+						missionNamespace setVariable ["BIS_WL_missionEnd", true, true];
+						private _oppositeTeam = if (_side == west) then { east } else { west };
+						[_oppositeTeam] spawn WL2_fnc_calculateEndResults;
 
-							[_oppositeTeam, true, true] remoteExec ["WL2_fnc_missionEndHandle", 0];
-							[_oppositeTeam, true, false] spawn WL2_fnc_missionEndHandle;
-						};
-					};
-					default {
-						missionNamespace setVariable [_waitVar, 0];
-						missionNamespace setVariable [_surrenderVotingVar, false];
-						[_side, _selectedSector] call WL2_fnc_selectTarget;
-
-						missionNamespace setVariable [format ["BIS_WL_sectorVoteTallyDisplay_%1", _side], [], true];
-						missionNamespace setVariable [format ["WL_targetReset_%1", _side], false, true];
+						[_oppositeTeam, true, true] remoteExec ["WL2_fnc_missionEndHandle", 0];
+						[_oppositeTeam, true, false] spawn WL2_fnc_missionEndHandle;
 					};
 				};
+				default {
+					missionNamespace setVariable [_waitVar, 0];
+					missionNamespace setVariable [_surrenderVotingVar, false];
+					[_side, _selectedSector] call WL2_fnc_selectTarget;
 
-				private _teamPriorityVar = format ["WL2_teamPriority_%1", _side];
-				private _teamPriorityTypeVar = format ["WL2_teamPriorityType_%1", _side];
+					missionNamespace setVariable [format ["BIS_WL_sectorVoteTallyDisplay_%1", _side], [], true];
+					missionNamespace setVariable [format ["WL_targetReset_%1", _side], false, true];
+				};
+			};
 
-				private _teamPriority = missionNamespace getVariable [_teamPriorityVar, objNull];
-				private _teamPriorityType = missionNamespace getVariable [_teamPriorityTypeVar, ""];
+			private _teamPriorityVar = format ["WL2_teamPriority_%1", _side];
+			private _teamPriorityTypeVar = format ["WL2_teamPriorityType_%1", _side];
 
-				private _shouldAdvancePriority = switch (_teamPriorityType) do {
-					case "asset";
-					case "fob";
-					case "stronghold": {
-						if (alive _teamPriority) then {
-							if (isNull _previousTargetSelection) then {
-								true
-							} else {
-								private _previousTargetArea = _previousTargetSelection getVariable ["objectAreaComplete", []];
-								_teamPriority inArea _previousTargetArea
-							};
-						} else {
+			private _teamPriority = missionNamespace getVariable [_teamPriorityVar, objNull];
+			private _teamPriorityType = missionNamespace getVariable [_teamPriorityTypeVar, ""];
+
+			private _shouldAdvancePriority = switch (_teamPriorityType) do {
+				case "asset";
+				case "fob";
+				case "stronghold": {
+					if (alive _teamPriority) then {
+						if (isNull _previousTargetSelection) then {
 							true
+						} else {
+							private _previousTargetArea = _previousTargetSelection getVariable ["objectAreaComplete", []];
+							_teamPriority inArea _previousTargetArea
 						};
-					};
-					case "sector": {
-						_teamPriority == _previousTargetSelection
-					};
-					default {
+					} else {
 						true
 					};
 				};
-
-				if (_shouldAdvancePriority) then {
-					missionNamespace setVariable [_teamPriorityVar, _selectedSector, true];
-					missionNamespace setVariable [_teamPriorityTypeVar, "sector", true];
+				case "sector": {
+					_teamPriority == _previousTargetSelection
 				};
-
-				_previousTargetSelection = _selectedSector;
-
-				call _wipeVotes;
-
-				["server", true] call WL2_fnc_updateSectorArrays;
-
-				waitUntil {
-					uiSleep WL_TIMEOUT_STANDARD;
-					isNull (missionNamespace getVariable [_currentTargetVar, objNull]) ||
-					missionNamespace getVariable [format ["WL_targetReset_%1", _side], false];
+				default {
+					true
 				};
+			};
+
+			if (_shouldAdvancePriority) then {
+				missionNamespace setVariable [_teamPriorityVar, _selectedSector, true];
+				missionNamespace setVariable [_teamPriorityTypeVar, "sector", true];
+			};
+
+			if (_selectedSector != _previousTargetSelection) then {
+				private _selectedSectorSide = _selectedSector getVariable ["BIS_WL_owner", independent];
+				if (_selectedSectorSide in [west, east]) then {
+					private _selectedTeamPriorityVar = format ["WL2_teamPriority_%1", _selectedSectorSide];
+					private _selectedTeamPriorityTypeVar = format ["WL2_teamPriorityType_%1", _selectedSectorSide];
+
+					missionNamespace setVariable [_selectedTeamPriorityVar, _selectedSector, true];
+					missionNamespace setVariable [_selectedTeamPriorityTypeVar, "sector", true];
+				};
+			};
+
+			_previousTargetSelection = _selectedSector;
+
+			call _wipeVotes;
+
+			["server", true] call WL2_fnc_updateSectorArrays;
+
+			waitUntil {
+				uiSleep WL_TIMEOUT_STANDARD;
+				isNull (missionNamespace getVariable [_currentTargetVar, objNull]) ||
+				missionNamespace getVariable [format ["WL_targetReset_%1", _side], false];
 			};
 		};
 	};

@@ -55,6 +55,8 @@ addMissionEventHandler ["HandleChatMessage", {
 		};
 	}];
 
+	_display displayAddEventHandler ["KeyDown", WL2_fnc_timedPromptKeyHandler];
+
 	_display displayAddEventHandler ["KeyUp", {
 		params ["_display", "_key", "_shift", "_ctrl", "_alt"];
 		if (BIS_WL_missionEnd) exitWith {};
@@ -203,9 +205,9 @@ addMissionEventHandler ["MarkerCreated", {
 		deleteMarker _marker;
 	};
 
-	// if (_local) then {
-	// 	missionNamespace setVariable ["WL2_lastMarker", _marker];
-	// };
+	if (_local) then {
+		missionNamespace setVariable ["WL2_lastMarker", _marker];
+	};
 
 	if (_markerText == "") exitWith {};
 

@@ -233,7 +233,6 @@ switch (_className) do {
                     continue;
                 };
                 [player, "orderAsset", "vehicle", _pos, _orderedClass, _direction, false, true] remoteExec ["WL2_fnc_handleClientRequest", 2];
-                uiSleep 0.1;
             };
         };
     };
@@ -252,7 +251,6 @@ switch (_className) do {
                         continue;
                     };
                     [player, "orderAsset", "vehicle", _pos, _orderedClass, _direction, false, true] remoteExec ["WL2_fnc_handleClientRequest", 2];
-                    uiSleep 0.1;
                 };
             } forEach BIS_WL_allSectors;
         };

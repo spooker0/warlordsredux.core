@@ -389,7 +389,7 @@ class WLDefaultLoadouts {
 			{"Laserdesignator", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
 		};
-		name = "Spooker's Blufor Default";
+		name = "Blufor Default";
 		side = "WEST";
 	};
 	class WestLoadout2 {
@@ -474,7 +474,7 @@ class WLDefaultLoadouts {
 			{"Laserdesignator_02", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
 		};
-		name = "Spooker's Opfor Default";
+		name = "Opfor Default";
 		side = "EAST";
 	};
 	class EastLoadout2 {

@@ -290,9 +290,9 @@ addMissionEventHandler ["Draw3D", {
                     private _projectile = _x;
                     private _projectileType = _projectile getVariable ["APS_ammoOverride", typeOf _projectile];
                     private _projectileConfig = _apsProjectileConfig getOrDefault [_projectileType, createHashMap];
-                    private _projectileSAM = _projectileConfig getOrDefault ["sam", false];
+                    private _projectileSAM = _projectileConfig getOrDefault ["sam", 0];
                     private _projectileManualSAM = (_projectileConfig getOrDefault ["manualSam", []]) isNotEqualTo [];
-                    (_projectileSAM || _projectileManualSAM) && _projectile distance _vehicle < _missileViewDistance;
+                    (_projectileSAM > 0 || _projectileManualSAM) && _projectile distance _vehicle < _missileViewDistance;
                 };
             };
 
@@ -365,6 +365,8 @@ addMissionEventHandler ["Draw3D", {
         };
         private _airDefenseViewDistance = _settingProfileData getOrDefault ["AIR DEFENSE", 5000];
 
+        private _freelooking = inputAction "lookAround" > 0;
+
         private _hasApproachingMissiles = count _approachingMissiles > 0;
         {
             private _target = _x;
@@ -426,8 +428,11 @@ addMissionEventHandler ["Draw3D", {
             } else {
                 private _assetName = toUpper ([_target] call WL2_fnc_getAssetTypeShortName);
 
-                private _altitude = getPosATL _target # 2;
-                if (_altitude > 1000) then {
+                private _targetDistance = _target distance _vehicle;
+                _assetName = format ["%1 - %2", _assetName, (_targetDistance / 1000) toFixed 1];
+
+                if (_freelooking) then {
+                    private _altitude = getPosATL _target # 2;
                     _assetName = format ["%1 - ALT %2", _assetName, (_altitude / 1000) toFixed 1];
                 };
 
@@ -439,17 +444,17 @@ addMissionEventHandler ["Draw3D", {
                 if (_assetCategory == "Air Defense") then {
                     _targetIcon = "\A3\ui_f\data\map\markers\nato\b_antiair.paa";
                     _targetIconSize = 0.6;
-                    if (_target distance _vehicle > _airDefenseViewDistance) then {
+                    if (_targetDistance > _airDefenseViewDistance) then {
                         continue;
                     };
                 } else {
                     _targetIcon = "\A3\ui_f\data\IGUI\Cfg\Cursors\lock_target_ca.paa";
                     if (_target isKindOf "Air") then {
-                        if (_target distance _vehicle > _aircraftViewDistance) then {
+                        if (_targetDistance > _aircraftViewDistance) then {
                             continue;
                         };
                     } else {
-                        if (_target distance _vehicle > _vehicleViewDistance) then {
+                        if (_targetDistance > _vehicleViewDistance) then {
                             continue;
                         };
                     };

@@ -367,6 +367,14 @@ switch (_conditionName) do {
 
         "ok";
     };
+    case "conscriptTeam": {
+        private _isSquadLeader = ["isSquadLeader", [getPlayerID player]] call SQD_fnc_query;
+        if (!_isSquadLeader) exitWith {
+            "Must be squad leader to designate team priority for conscription.";
+        };
+
+        "ok";
+    };
     case "designateTeamPriority": {
         private _isSquadLeader = ["isSquadLeader", [getPlayerID player]] call SQD_fnc_query;
         if (!_isSquadLeader) exitWith {
@@ -424,6 +432,20 @@ switch (_conditionName) do {
         private _canRepair = [_target, player] call WL2_fnc_repairActionEligibility;
         if (!_canRepair) exitWith {
             "Vehicle must be near repair asset to be eligible for repair."
+        };
+
+        "ok";
+    };
+    case "bulkDeploy": {
+        if (!alive _target) exitWith { "" };
+        private _installable = _target getVariable ["WL2_installable", ""];
+        if (_installable == "") exitWith { "" };
+        if (WL_ASSET_TYPE(_target) != _installable) exitWith { "" };
+
+        private _lastMarker = missionNamespace getVariable ["WL2_lastMarker", ""];
+        private _markerPolyline = markerPolyline _lastMarker;
+        if (count _markerPolyline == 0) exitWith {
+            "No map marker found. Draw a line on the map to bulk deploy assets."
         };
 
         "ok";

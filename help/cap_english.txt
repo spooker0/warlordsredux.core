@@ -1,0 +1,34 @@
+<font size="18">Help: Capture Rules</font>
+
+Special Cases
+0x Disconnected sector
+4x Green sector with reserves
+2x Green sector without reserves
+
+Area modifier
+Up to +2.5x, applicable only for PvP sectors.
+
+Modifiers
++1x Sector connection
++2x Forward base connection
++1x Home base connection
+
+Reinforcement modifier
++0-5x, scaled based on percent of reinforcements remaining.
+If no reinforcements remain, halve all modifiers.
+
+Capture strength
++1 infantry/crew
++6 infantry if in stronghold (for a total of 7 points)
++0 air vehicles, UAVs
++1 transports
++2 light armed vehicles
++3 APCs
++4 heavy APCs, tanks
++5 tanks
++6 command tanks
++0.5 defense tiebreaker
+
+Requirement to capture
+* Not in water
+* Not above 50m altitude

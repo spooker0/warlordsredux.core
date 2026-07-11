@@ -177,7 +177,7 @@ if (count _customizationLoadout > 0) then {
     };
 } else {
     private _loadoutConfigs = configProperties [missionConfigFile >> "WLDefaultLoadouts", "isClass _x", true];
-    private _loadouts = [];
+    private _loadouts = createHashMap;
     private _sideString = str BIS_WL_playerSide;
     private _ownedDlcs = getDLCs 1;
     {
@@ -200,18 +200,19 @@ if (count _customizationLoadout > 0) then {
             continue;
         };
 
+        private _loadoutName = getText (_loadoutConfig >> "name");
         private _loadout = getArray (_loadoutConfig >> "loadout");
-        _loadouts pushBack _loadout;
+        _loadouts set [_loadoutName, _loadout];
     } forEach _loadoutConfigs;
 
+    private _defaultSideLoadout = if (BIS_WL_playerSide == west) then { "B_Soldier_TL_F" } else { "O_Soldier_TL_F" };
     if (count _loadouts == 0) then {
-        if (BIS_WL_playerSide == west) then {
-            _unit setUnitLoadout "B_Soldier_TL_F";
-        } else {
-            _unit setUnitLoadout "O_Soldier_TL_F";
-        };
+        _unit setUnitLoadout _defaultSideLoadout;
     } else {
-        _unit setUnitLoadout (selectRandom _loadouts);
+        private _randomLoadoutName = selectRandom (keys _loadouts);
+        _unit setUnitLoadout (_loadouts getOrDefault [_randomLoadoutName, _defaultSideLoadout]);
+        private _gearKeyDisplay = (actionKeysNames "gear") regexReplace ["""", ""];
+        [format ["Assigned random loadout: %1. Create and save your own loadouts by pressing the Gear key (%2).", _randomLoadoutName, _gearKeyDisplay]] call WL2_fnc_smoothText;
     };
 };
 

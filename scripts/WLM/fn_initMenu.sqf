@@ -19,6 +19,8 @@ uiNamespace setVariable ["WLM_assetIsAircraft", _isAircraft];
 
 disableSerialization;
 
+_display displayAddEventHandler ["KeyDown", WL2_fnc_timedPromptKeyHandler];
+
 private _rearmButtonControl = _display displayCtrl WLM_REARM_BUTTON;
 private _applyButtonControl = _display displayCtrl WLM_APPLY_BUTTON;
 _rearmButtonControl ctrlEnable false;

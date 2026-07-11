@@ -1,6 +1,14 @@
 #include "includes.inc"
 if (isDedicated) exitWith {};
 
+private _checkEligibility = {
+    private _cursorObject = getCursorObjectParams # 0;
+    if (alive _cursorObject) exitWith { false };
+    if !(_cursorObject isKindOf "Air") exitWith { false };
+    if (cameraOn distance _cursorObject > 50) exitWith { false };
+    true;
+};
+
 private _actionId = player addAction [
 	"<t color='#00FF00'>Secure Wreck</t>",
 	{
@@ -11,7 +19,7 @@ private _actionId = player addAction [
 	false,
 	true,
 	"",
-	"!alive cursorObject && cursorObject isKindOf 'Air' && cameraOn distance cursorObject < 50",
+	toString _checkEligibility,
 	30,
 	false
 ];
@@ -22,7 +30,7 @@ private _actionId = player addAction [
 	while { alive player } do {
         uiSleep 0.1;
 
-        private _asset = cursorObject;
+        private _asset = getCursorObjectParams # 0;
         if (alive _asset) then {
             player setUserActionText [_actionId, _originalText];
             continue;

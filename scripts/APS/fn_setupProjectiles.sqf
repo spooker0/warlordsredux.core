@@ -37,67 +37,16 @@ addMissionEventHandler ["ProjectileCreated", {
     if (_projectileMine && !isDedicated) then {
         private _isExplosive = _projectileConfig getOrDefault ["explosive", false];
         [_projectile, _isExplosive] spawn APS_fnc_limitMines;
+
+        if (_isExplosive) then {
+            _projectile addEventHandler ["HitExplosion", {
+                params ["_projectile", "_hitEntity", "_projectileOwner", "_hitSelections", "_instigator"];
+                private _hitEntityLock = _hitEntity getVariable ["WL2_doorsLocked", sideUnknown];
+                if (_hitEntityLock == sideUnknown) exitWith {};
+                _hitEntity setVariable ["WL2_doorsDamaged", serverTime + 30, true];
+            }];
+        };
     };
-
-    // if (_projectile isKindOf "APERSMineDispenser_Ammo") then {
-    //     player addAction [
-    //         "<t color='#FF0000'>Launch AT Mine Dispenser</t>",
-    //         {
-    //             params ["_target", "_caller", "_actionId", "_arguments"];
-    //             player removeAction _actionId;
-    //             private _projectile = _arguments # 0;
-    //             if (!alive _projectile) exitWith {};
-
-    //             private _projectilePos = _projectile modelToWorld [0, 0, 0];
-
-    //             [_projectilePos, [
-    //                 ["DeminingExplosiveCircleDust", 0.3],
-    //                 ["ATMineExplosionParticles", 0.1]
-    //             ]] remoteExec ["WL2_fnc_particleEffect", 0];
-
-    //             private _dispenseSounds = [
-    //                 "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_01.wss",
-    //                 "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_02.wss",
-    //                 "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_03.wss",
-    //                 "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_04.wss"
-    //             ];
-    //             playSound3D [selectRandom _dispenseSounds, objNull, false, _projectilePos];
-
-    //             private _mines = [];
-    //             for "_i" from 0 to 30 do {
-    //                 private _directionRange = 60;
-    //                 private _projectileDirection = getDir _projectile;
-    //                 private _randomDirection = _projectileDirection + ((random 2) - 1) * _directionRange;
-    //                 private _randomDistance = 100 * sqrt random 1;
-
-    //                 private _minePosition = _projectile getPos [_randomDistance, _randomDirection];
-    //                 private _mine = createMine ["ATMine", _minePosition, [], 3];
-
-    //                 _mines pushBack _mine;
-    //             };
-
-    //             deleteVehicle _projectile;
-
-    //             [_mines] spawn {
-    //                 params ["_mines"];
-    //                 uiSleep 1;
-    //                 {
-    //                     private _mine = _x;
-    //                     BIS_WL_playerSide revealMine _mine;
-    //                     [_mine, [player, player]] remoteExec ["setShotParents", 2];
-    //                 } forEach _mines;
-    //             };
-    //         },
-    //         [_projectile],
-    //         100,
-    //         false,
-    //         true,
-    //         "",
-    //         "",
-    //         5,
-    //         false
-    //     ];
-    // };
 
     private _projectileTV = _projectileConfig getOrDefault ["tv", false];
     if (_projectileTV) then {
@@ -179,26 +128,18 @@ addMissionEventHandler ["ProjectileCreated", {
         }];
     };
 
-    private _projectileSam = _projectileConfig getOrDefault ["sam", false];
-    if (_projectileSam) then {
-        [_projectile, _unit] spawn DIS_fnc_frag;
+    private _projectileSam = _projectileConfig getOrDefault ["sam", 0];
+    if (_projectileSam > 0) then {
+        [_projectile, _unit, _projectileSam] spawn DIS_fnc_frag;
         [_projectile, _unit] spawn DIS_fnc_maneuver;
     };
 
     private _projectileManualSam = _projectileConfig getOrDefault ["manualSam", []];
     if (_projectileManualSam isNotEqualTo []) then {
-        [_projectile, _unit] spawn DIS_fnc_frag;
+        _projectileManualSam params ["_manSamSpeed", "_manSamLead", "_manSamMaxRange", "_manSamProxRange", "_manSamDamage"];
+        [_projectile, _unit, _manSamDamage, _manSamProxRange] spawn DIS_fnc_frag;
         [_projectile, _unit, _projectileManualSam] spawn DIS_fnc_manualSam;
     };
-
-    // private _projectileProx = _projectileConfig getOrDefault ["prox", false];
-    // if (_projectileProx) then {
-    //     private _speed = _projectileConfig getOrDefault ["speed", 0];
-    //     if (_speed > 0) then {
-    //         _projectile setVelocityModelSpace [0, _speed, 0];
-    //     };
-    //     [_projectile, _unit, 200, 0.3] spawn DIS_fnc_frag;
-    // };
 
     private _projectileSead = _projectileConfig getOrDefault ["sead", false];
     if (_projectileSead) then {
@@ -232,14 +173,11 @@ addMissionEventHandler ["ProjectileCreated", {
     private _projectileShell = _projectileConfig getOrDefault ["shell", ""];
     if (_projectileShell != "") then {
         _projectile setVariable ["APS_subShell", _projectileShell];
-        _projectile addEventHandler ["Penetrated", {
-            params ["_projectile", "_hitObject", "_surfaceType", "_entryPoint", "_exitPoint", "_exitVector"];
-            if (isNull _hitObject) exitWith {};
-
+        _projectile addEventHandler ["HitPart", {
+            params ["_projectile", "_hitEntity", "_projectileOwner", "_hitPos"];
             private _subShell = _projectile getVariable ["APS_subShell", ""];
-            [_subShell, _entryPoint, [vectorDir _projectile, vectorUp _projectile], 0] spawn DIS_fnc_bunkerBuster;
-
-            _projectile removeEventHandler ["Penetrated", _thisEventHandler];
+            [_subShell, _hitPos, [vectorDir _projectile, vectorUp _projectile], 0] spawn DIS_fnc_bunkerBuster;
+            _projectile removeEventHandler ["HitPart", _thisEventHandler];
         }];
     };
 }];

@@ -7,7 +7,7 @@ Cheap, powerful detection system. Can be turned on/off and designed to be operat
 
 RADOME
 Specialized detection system that spots enemy aircraft. Entirely passive. Used for finding high-altitude jets.
-Range: 25 km.
+Range: 20 km.
 <font color="#00ffff">Recommendation:</font> buy when radar is insufficient.
 
 TITAN AA

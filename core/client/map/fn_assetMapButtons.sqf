@@ -24,7 +24,7 @@ if (!isPlayer _asset && _hasFullAccess) then {
 };
 
 if (_hasFullAccess) then {
-    [_asset, _targetId, "asset-rearm", "Rearm", {
+    [_asset, _targetId, "vehicle-rearm", "Rearm", {
         params ["_asset"];
         private _rearmTime = WL_UNIT(_asset, "rearm", 600);
         _asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
@@ -52,13 +52,13 @@ if (_hasFullAccess) then {
         playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Rearm.wss", _asset, false, getPosASL _asset, 2, 1, 75];
     }, true, "assetRearm"] call WL2_fnc_addTargetMapButton;
 
-    [_asset, _targetId, "asset-refuel", "Refuel", {
+    [_asset, _targetId, "vehicle-refuel", "Refuel", {
         params ["_asset"];
         playSound3D ["a3\sounds_f\sfx\ui\vehicles\vehicle_refuel.wss", _asset, false, getPosASL _asset, 2, 1, 75];
         [_asset, 1] remoteExec ["setFuel", _asset];
     }, true, "assetRefuel"] call WL2_fnc_addTargetMapButton;
 
-    [_asset, _targetId, "asset-repair", "Repair", {
+    [_asset, _targetId, "vehicle-repair", "Repair", {
         params ["_asset"];
         private _nextRepairTime = _asset getVariable ["WL2_nextRepair", 0];
         if (_nextRepairTime <= serverTime) then {
@@ -78,54 +78,98 @@ if (_hasFullAccess) then {
         };
     }, true, "assetRepair"] call WL2_fnc_addTargetMapButton;
 
-    // [_asset, _targetId, "asset-expand", "Mass Deploy", {
-    //     params ["_asset"];
+    [_asset, _targetId, "bulk-deploy", "Bulk deploy", {
+        params ["_asset"];
 
-    //     private _lastMarker = missionNamespace getVariable ["WL2_lastMarker", ""];
-    //     private _installable = _asset getVariable ["WL2_installable", ""];
+        private _lastMarker = missionNamespace getVariable ["WL2_lastMarker", ""];
+        private _markerPolyline = markerPolyline _lastMarker;
 
-    //     private _placedPositions = [];
-    //     private _markerPolyline = markerPolyline _lastMarker;
+        if (count _markerPolyline < 2) exitWith {
+            ["No marker found. Draw a line on the map before bulk deploying assets."] call WL2_fnc_smoothText;
+            playSoundUI ["AddItemFailed"];
+        };
 
-    //     private _boundingBox = 0 boundingBoxReal _asset;
-    //     private _spacing = (_boundingBox # 1 # 0) - (_boundingBox # 0 # 0);
-    //     _spacing = _spacing / 2;
+        private _firstPoint = [_markerPolyline # 0, _markerPolyline # 1, 0];
+        if (cameraOn distance2D _firstPoint > 200) exitWith {
+            ["You are too far from the marker start position. Move closer before bulk deploying assets."] call WL2_fnc_smoothText;
+            playSoundUI ["AddItemFailed"];
+        };
 
-    //     for "_i" from 0 to (count _markerPolyline - 3) step 2 do {
-    //         private _startX = _markerPolyline # _i;
-    //         private _startY = _markerPolyline # (_i + 1);
+        private _installable = _asset getVariable ["WL2_installable", ""];
+        if (WL_ASSET_TYPE(_asset) != _installable) exitWith {
+            ["Asset type mismatch."] call WL2_fnc_smoothText;
+            playSoundUI ["AddItemFailed"];
+        };
 
-    //         private _endX = _markerPolyline # (_i + 2);
-    //         private _endY = _markerPolyline # (_i + 3);
+        private _placedPositions = [];
+        private _placedDirections = [];
 
-    //         private _startPosition = [_startX, _startY, 0];
-    //         private _endPosition = [_endX, _endY, 0];
+        private _boundingBox = 0 boundingBoxReal _asset;
+        private _spacing = (_boundingBox # 1 # 0) - (_boundingBox # 0 # 0);
+        _spacing = _spacing / 2;
 
-    //         private _segmentDistance = _startPosition distance2D _endPosition;
-    //         private _steps = ceil (_segmentDistance / _spacing);
+        for "_i" from 0 to (count _markerPolyline - 3) step 2 do {
+            private _startX = _markerPolyline # _i;
+            private _startY = _markerPolyline # (_i + 1);
 
-    //         for "_j" from 0 to _steps do {
-    //             private _t = _j / _steps;
+            private _endX = _markerPolyline # (_i + 2);
+            private _endY = _markerPolyline # (_i + 3);
 
-    //             private _markerX = _startX + ((_endX - _startX) * _t);
-    //             private _markerY = _startY + ((_endY - _startY) * _t);
+            private _startPosition = [_startX, _startY, 0];
+            private _endPosition = [_endX, _endY, 0];
 
-    //             private _markerPosition = [_markerX, _markerY, 0];
+            private _segmentDistance = _startPosition distance2D _endPosition;
+            private _steps = ceil (_segmentDistance / _spacing);
+            _steps = _steps max 1;
 
-    //             private _placedPositionsNear = _placedPositions select {
-    //                 _x distance2D _markerPosition < _spacing
-    //             };
+            for "_j" from 0 to _steps do {
+                private _interval = _j / _steps;
 
-    //             if (count _placedPositionsNear == 0) then {
-    //                 private _direction = _startPosition getDir _endPosition;
-    //                 [player, "orderAsset", "vehicle", _markerPosition, _installable, _direction - 90, true, true] remoteExec ["WL2_fnc_handleClientRequest", 2];
-    //                 _placedPositions pushBack _markerPosition;
-    //             };
-    //         };
-    //     };
+                private _markerX = _startX + ((_endX - _startX) * _interval);
+                private _markerY = _startY + ((_endY - _startY) * _interval);
 
-    //     playSoundUI ["assemble_target", 1];
-    // }, true, "assetExpand"] call WL2_fnc_addTargetMapButton;
+                private _markerPosition = [_markerX, _markerY, 0];
+
+                private _placedPositionsNear = _placedPositions select {
+                    _x distance2D _markerPosition < _spacing
+                };
+
+                if (count _placedPositionsNear == 0) then {
+                    _placedPositions pushBack _markerPosition;
+
+                    private _direction = _startPosition getDir _endPosition;
+                    private _placedDirection = _direction - 90;
+                    _placedDirections pushBack _placedDirection;
+                };
+            };
+        };
+
+        private _bulkPositions = count _placedPositions;
+        if (_bulkPositions > 0) then {
+            if (_bulkPositions > 50) then {
+                [format ["Too many positions (%1x) found. Max: 50. Draw a shorter line on the map before bulk deploying assets.", _bulkPositions]] call WL2_fnc_smoothText;
+                playSoundUI ["AddItemFailed"];
+            } else {
+                private _installableType = [_asset] call WL2_fnc_getAssetTypeName;
+                private _costEstimate = _bulkPositions * 50;
+                private _result = [
+                    "Bulk deploy assets",
+                    format ["Would you like to bulk deploy %1x %2 along your last map-drawn line/marker? This will cost %3%4.", _bulkPositions, _installableType, WL_MONEY_SIGN, _costEstimate],
+                    "Yes", "No"
+                ] call WL2_fnc_prompt;
+
+                if (_result) then {
+                    [player, "bulkOrderAssets", _installable, _placedPositions, _placedDirections] remoteExec ["WL2_fnc_handleClientRequest", 2];
+                    playSoundUI ["assemble_target", 1];
+                    ["Bulk deploy completed. Tip: You can use Strategy > Bulk remove to clean up your assets."] call WL2_fnc_smoothText;
+                    deleteMarker _lastMarker;
+                };
+            };
+        } else {
+            ["No positions found. Draw a line on the map before bulk deploying assets."] call WL2_fnc_smoothText;
+            playSoundUI ["AddItemFailed"];
+        };
+    }, true, "bulkDeploy",  [2500, "BulkDeploy", "Strategy"]] call WL2_fnc_addTargetMapButton;
 };
 
 private _accessControl = _asset getVariable ["WL2_accessControl", -1];

@@ -136,6 +136,21 @@ if (_action == "orderAsset") exitWith {
 	};
 };
 
+if (_action == "bulkOrderAssets") exitWith {
+	private _orderType = _param1;
+	private _positions = _param2;
+	private _directions = _param3;
+
+	private _cost = count _positions * 50;
+	[_cost] call _deductFunds;
+
+	{
+		private _position = _x;
+		private _direction = _directions select _forEachIndex;
+		[_sender, _position, _orderType, _direction, true, false] spawn WL2_fnc_orderGround;
+	} forEach _positions;
+};
+
 if (_action == "resetVehicle") exitWith {
 	private _asset = _param1;
 	private _position = _param2;
@@ -213,7 +228,7 @@ if (_action == "immobilized") exitWith {
 };
 
 if (_action == "surrender") exitWith {
-	private _surrenderMessage = format ["%1 has chosen to surrender. :( Say bye-bye!", name _sender];
+	private _surrenderMessage = format ["%1 has chosen to surrender. :(", name _sender];
 	[_surrenderMessage] remoteExec ["WL2_fnc_broadcastAction", 0];
 };
 
@@ -273,6 +288,8 @@ if (_action == "scan") exitWith {
 	_uav setFuelConsumptionCoef 20;
 	_uav setVariable ["WL2_accessControl", 7, true];
 
+	[_uav] spawn WL2_fnc_airWreckHandler;
+
 	private _waypoint = _uavGroup addWaypoint [_sector, 0];
 	_waypoint setWaypointLoiterType "CIRCLE";
 
@@ -287,9 +304,6 @@ if (_action == "scan") exitWith {
 			(_uav modelToWorld [0, 0, 0]) # 2 > 100
 		} do {
 			uiSleep 1;
-		};
-		if (!isNull _uav) then {
-			deleteVehicle _uav;
 		};
 
 		private _lastScannedVar = format ["WL2_lastScanned_%1", _side];
@@ -716,9 +730,8 @@ if (_action == "samHit") exitWith {
 	private _launcher = _param1;
 	private _target = _param2;
 	private _damage = _param3;
-	private _projectilePosition = _param4;
 
-	[_launcher, _target, _damage, _projectilePosition, _uid] call WL2_fnc_handleSamHit;
+	[_launcher, _target, _damage, _uid] call WL2_fnc_handleSamHit;
 };
 
 if (_action == "deployDrone") exitWith {

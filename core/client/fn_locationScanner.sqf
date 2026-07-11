@@ -376,22 +376,28 @@ uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
         private _strongholdIconSize = _settingsMap getOrDefault ["strongholdIconSize", 1];
         if (_showStrongholdInfo || _strongholdIconSize > 0) then {
             private _playerCurrentSector = player getVariable ["WL2_currentSector", objNull];
-            if (!isNull _playerCurrentSector) then {
+            private _sectorRevealed = _playerCurrentSector getVariable ["BIS_WL_revealedBy", []];
+            if (_side in _sectorRevealed) then {
                 private _sectorStronghold = _playerCurrentSector getVariable ["WL_stronghold", objNull];
                 if (!isNull _sectorStronghold) then {
                     private _currentSectorOwner = _playerCurrentSector getVariable ["BIS_WL_owner", independent];
                     private _instructionText = if (_showStrongholdInfo) then {
                         if (_currentSectorOwner == independent) then {
-                            "Destroy stronghold to stop enemy respawns!"
+                            private _sectorPop = _playerCurrentSector getVariable ["WL2_sectorPop", 0];
+                            if (_sectorPop > 0) then {
+                                localize "STR_WL_strongholdDestroy"
+                            } else {
+                                ""
+                            };
                         } else {
                             if (_currentSectorOwner == BIS_WL_playerSide) then {
                                 if (WL_TARGET_ENEMY == _playerCurrentSector) then {
-                                    "Defend your stronghold!"
+                                    localize "STR_WL_strongholdDefend"
                                 } else {
                                     ""
                                 };
                             } else {
-                                "Occupy stronghold to increase capture power!"
+                                localize "STR_WL_strongholdOccupy"
                             };
                         };
                     } else {

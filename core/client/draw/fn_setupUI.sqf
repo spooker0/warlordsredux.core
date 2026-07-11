@@ -56,6 +56,8 @@ if (_displayClass == "RequestMenu_open") then {
 		};
 	}];
 
+	_myDisplay displayAddEventHandler ["KeyDown", WL2_fnc_timedPromptKeyHandler];
+
 	private _purchase_background = _myDisplay ctrlCreate ["RscText", -1];
 	private _purchase_title_assets = _myDisplay ctrlCreate ["RscStructuredText", -1];
 	private _purchase_title_details = _myDisplay ctrlCreate ["RscStructuredText", -1];

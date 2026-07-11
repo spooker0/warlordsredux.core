@@ -12,7 +12,10 @@ private _changeNotesText = format ["<font color='#CCCCCC' size='18'>Changes Note
 player setDiaryRecordText [["Warlords Redux", _changeNotes], ["Change Notes", _changeNotesText]];
 
 private _helpAA = player createDiaryRecord ["Warlords Redux","", taskNull, "", false];
-player setDiaryRecordText [["Warlords Redux", _helpAA], ["Help: Air defense", (loadfile localize "STR_WL_fileHelpAA") regexReplace ["\n", "<br />"]]];
+player setDiaryRecordText [["Warlords Redux", _helpAA], ["Help: Air Defense", (loadfile localize "STR_WL_fileHelpAA") regexReplace ["\n", "<br />"]]];
+
+private _helpCap = player createDiaryRecord ["Warlords Redux","", taskNull, "", false];
+player setDiaryRecordText [["Warlords Redux", _helpCap], ["Help: Capture Rules", (loadfile localize "STR_WL_fileHelpCapture") regexReplace ["\n", "<br />"]]];
 
 private _statsRecord = player createDiaryRecord ["Warlords Redux", "", taskNull, "", false];
 

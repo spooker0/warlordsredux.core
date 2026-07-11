@@ -83,7 +83,7 @@ private _sideCaptureModifier = if (_useCache) then {
 			if (_sectorDefenders > 0) then {
 				private _sectorValue = _sector getVariable ["BIS_WL_value", 0];
 				private _maxDefenders = _sector getVariable ["WL2_maxDefenders", 0];
-				private _defenderModifier = linearConversion [1, _maxDefenders, _sectorDefenders, 0, 4, true];
+				private _defenderModifier = linearConversion [1, _maxDefenders, _sectorDefenders, 0, 5, true];
 				_connections = _connections + _defenderModifier;
 			} else {
 				_connections = _connections * 0.5;

@@ -126,15 +126,18 @@ private _interceptAction = {
             switch (_text) do {
                 case (localize "STR_DN_OUT_O_DOOR");
                 case (localize "STR_DN_OUT_C_DOOR"): {
-                    private _doorLocked = _target getVariable ["WL2_doorsLocked", false];
-                    private _strongholdSector = _target getVariable ["WL_strongholdSector", objNull];
-                    private _strongholdSectorSide = _strongholdSector getVariable ["BIS_WL_owner", independent];
-                    if (_doorLocked || _strongholdSectorSide == BIS_WL_enemySide) then {
-                        ["Door locked."] call WL2_fnc_smoothText;
-                        playSoundUI ["AddItemFailed"];
-                        true;
-                    } else {
+                    private _doorLocked = _target getVariable ["WL2_doorsLocked", BIS_WL_playerSide];
+                    if (_doorLocked == BIS_WL_playerSide) then {
                         false;
+                    } else {
+                        private _doorsDamaged = _target getVariable ["WL2_doorsDamaged", 0];
+                        if (_doorsDamaged > serverTime) then {
+                            false;
+                        } else {
+                            ["Door locked. Open with explosives."] call WL2_fnc_smoothText;
+                            playSoundUI ["AddItemFailed"];
+                            true;
+                        };
                     };
                 };
                 case (localize "STR_A3_action_eject"): {

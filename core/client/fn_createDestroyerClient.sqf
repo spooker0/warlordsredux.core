@@ -80,7 +80,7 @@ private _hullNum3 = _destroyerHullNumbers select 2;
         _dummy animateSource ["Door_Hangar_2_3_open", 1];
     };
 
-    _dummy setVariable ["WL2_doorsLocked", true];
+    _dummy setVariable ["WL2_doorsLocked", independent];
 } foreach _destroyerParts;
 
 private _destroyerDir = getDir _destroyerBase;

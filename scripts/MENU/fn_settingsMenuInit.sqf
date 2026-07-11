@@ -171,6 +171,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["checkbox", "Airbase camper warning", ["campAirWarning", true]],
         ["checkbox", "Show stronghold instructions", ["showStrongholdInfo", true]],
         ["checkbox", "Show player level instead of ELO", ["showPlayerLevel", false]],
+        ["checkbox", "Hide non-mandatory conscription notices", ["hideConscriptionNotices", false]],
         ["checkbox", "Additional subtitles (hearing impaired)", ["additionalSubs", false]],
         ["category", "Hide scroll menus (requires respawn)"],
         ["checkbox", "Hide: Buy menu", ["hideBuyMenu", false]],
@@ -187,7 +188,8 @@ _texture ctrlAddEventHandler ["PageLoaded", {
         ["checkbox", "Show hint: LOAL", ["showHintLoal", true]],
         ["checkbox", "Show hint: Blackfish", ["showHintBlackfish", true]],
         ["checkbox", "Show hint: HMD Settings", ["showHintHMDSettings", true]],
-        ["checkbox", "Show hint: Animation", ["showHintAnimation", true]]
+        ["checkbox", "Show hint: Animation", ["showHintAnimation", true]],
+        ["checkbox", "Show hint: Paradrop", ["showHintParadrop", true]]
     ];
 
     if (_isAdmin || _isModerator) then {

@@ -17,8 +17,9 @@ if (!_isInDriverSeat) exitWith {
     [false, "You must be in the driver seat."];
 };
 
-if (typeof _vehicle == "B_Truck_01_flatbed_F") exitWith {
-    [false, "Flatbeds cannot be paradropped."];
+private _disableParadrop = WL_UNIT(_vehicle, "disableParadrop", 0);
+if (_disableParadrop > 0) exitWith {
+    [false, "This vehicle cannot be paradropped."];
 };
 
 [true, ""];

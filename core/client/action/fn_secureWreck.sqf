@@ -1,5 +1,6 @@
 #include "includes.inc"
-private _asset = cursorObject;
+private _asset = getCursorObjectParams # 0;
+
 if (isNull _asset || !(_asset isKindOf "Air")) exitWith {
     ["No aircraft wreck targeted."] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];

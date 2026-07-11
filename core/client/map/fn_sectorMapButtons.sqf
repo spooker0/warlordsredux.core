@@ -242,4 +242,11 @@ if (_sector in (BIS_WL_sectorsArray # 3) || (!isNull _sectorFtAsset)) then {
         params ["_sector"];
         [_sector, "sector"] call WL2_fnc_designateTeamPriority;
     }, true, "designateTeamPriority", [0, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
+
+    [_sector, _targetId, "team-conscript", "Conscript team to sector", {
+        params ["_sector"];
+        [_sector, "sector"] call WL2_fnc_designateTeamPriority;
+        [player] remoteExec ["WL2_fnc_conscription", BIS_WL_playerSide];
+        [player, "conscript"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+    }, true, "conscriptTeam", [WL_COST_CONSCRIPT, "", "Strategy"]] call WL2_fnc_addTargetMapButton;
 };

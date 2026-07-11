@@ -59,7 +59,7 @@ if (!isNull _combatAirRequester) then {
     [_projectile, [objNull, _combatAirRequester]] remoteExec ["setShotParents", 2];
 };
 [_asset, objNull, _projectile] call WL2_fnc_warnIncomingMissile;
-[_projectile, _combatAirRequester] spawn DIS_fnc_frag;
+[_projectile, _combatAirRequester, 1] spawn DIS_fnc_frag;
 
 while { alive _projectile && alive _asset } do {
     _projectile setMissileTarget [_asset, true];

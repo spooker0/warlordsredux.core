@@ -47,10 +47,9 @@ private _unitsToMove = (units player) select {
 {
     private _unit = _x;
     if (_altitude > 60) then {
-        private _destination = _targetVehicle modelToWorld [0, 0, -10];
+        private _destination = _targetVehicle modelToWorld [random 50 - 25, random 50 - 25, 0];
+        _destination set [2, _altitude max 60];
 		_unit setPosATL _destination;
-
-		_unit setVelocityModelSpace [0, 30, 0];
 		[_unit] spawn WL2_fnc_parachuteSetup;
         continue;
     };

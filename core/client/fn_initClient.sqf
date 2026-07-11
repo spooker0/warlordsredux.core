@@ -179,14 +179,12 @@ if !(isDedicated) then {
 	while { !BIS_WL_missionEnd } do {
 		private _vehicles = missionNamespace getVariable [_ownedVehicleVar, []];
 		private _newVehicles = _vehicles select {
-			alive _x
-		} select {
 			_x == player || _x getVariable ["BIS_WL_ownerAsset", "123"] == getPlayerUID player
 		};
 		if !(_vehicles isEqualTo _newVehicles) then {
 			missionNamespace setVariable [_ownedVehicleVar, _newVehicles, [2, clientOwner]];
 		};
-		uiSleep 10;
+		uiSleep 1;
 	};
 };
 

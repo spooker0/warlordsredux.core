@@ -38,7 +38,7 @@
 
 		uiNamespace setVariable ["WL2_allMaps", _maps];
 
-		uiSleep 3;
+		uiSleep 1;
 	};
 };
 
@@ -93,6 +93,8 @@
 		_sideVehicles = _sideVehicles select {
 			private _parent = objectParent _x;
 			isNull _parent || _parent isKindOf "Steerable_Parachute_F";
+		} select {
+			WL_ISUP(_x)
 		};
 		_mapData set ["sideVehicles", _sideVehicles];
 
@@ -175,7 +177,8 @@
 		};
 		_mapData set ["scanners", _scanners];
 
-		if (visibleMap) then {
+		private _isMapBeingDrawn = uiNamespace getVariable ["WL2_drawingMap", false];
+		if (_isMapBeingDrawn) then {
 			private _mapColorCache = createHashMap;
 			private _mapIconCache = createHashMap;
 			private _mapSizeCache = createHashMap;

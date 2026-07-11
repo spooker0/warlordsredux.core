@@ -57,7 +57,7 @@ class SQD_Menu {
             w = 0.2;
             h = 0.1;
             size = 0.1;
-            text = "CREATE SQUAD";
+            text = "";
         };
         class SQD_Menu_SquadList: RscControlsGroup {
             idc = SQD_SQUAD_LIST_IDC;

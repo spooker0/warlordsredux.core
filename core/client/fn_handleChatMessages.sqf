@@ -48,9 +48,25 @@ if (_text == "!updateZeus") exitWith {
     true;
 };
 
-if (_text == "!jets") exitWith {
+if (_text == "!nfz") exitWith {
     if (_sentLocally) then {
         0 spawn WL2_fnc_nearestCombatAir;
+    };
+    true;
+};
+
+if (_text == "!aa") exitWith {
+    if (_sentLocally) then {
+        openMap true;
+        player selectDiarySubject "Warlords Redux:Record2";
+    };
+    true;
+};
+
+if (_text == "!capture") exitWith {
+    if (_sentLocally) then {
+        openMap true;
+        player selectDiarySubject "Warlords Redux:Record3";
     };
     true;
 };

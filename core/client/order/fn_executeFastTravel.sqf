@@ -48,7 +48,7 @@ switch (_fastTravelMode) do {
 		private _size = if (_area # 3) then {
 			sqrt (((_area # 0) ^ 2) + ((_area # 1) ^ 2));
 		} else {
-			(_area # 0) max (_area # 1);
+			abs ((_area # 0) max (_area # 1));
 		};
 
 		private _distance = _size + WL_FAST_TRAVEL_OFFSET;
