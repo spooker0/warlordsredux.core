@@ -194,7 +194,6 @@ switch (_className) do {
         "RequestMenu_close" call WL2_fnc_setupUI;
     };
     case "WelcomeScreen": { 0 spawn WL2_fnc_welcome };
-    case "Ewar": { 0 spawn WL2_fnc_ewar2 };
     case "Surrender": {
         0 spawn {
             private _message = "Are you sure you want to surrender? You will ruin the game for people who still want to play :(<br/>Votes needed: 1";
@@ -368,7 +367,7 @@ switch (_className) do {
             player setVariable ["BIS_WL_ownerAsset", getPlayerUID player, true];
             player setVariable ["BIS_WL_ownerAssetSide", independent, true];
 
-            ["client", true] call WL2_fnc_updateSectorArrays;
+            call WL2_fnc_updateSectorsData;
             {
                 [_x, _x getVariable "BIS_WL_owner", []] call WL2_fnc_sectorMarkerUpdate;
             } forEach BIS_WL_allSectors;

@@ -7,8 +7,5 @@ if (_side == independent) exitWith {
 
 if (!isServer) exitWith { 0 };
 
-if (isNil "BIS_WL_sectorsArrays") then {
-	50;
-} else {
-	(BIS_WL_sectorsArrays # (BIS_WL_competingSides find _side)) # 4;
-};
+private _teamSectorsData = WL_SECTORS_DATA(_side);
+_teamSectorsData getOrDefault ["income", 0];

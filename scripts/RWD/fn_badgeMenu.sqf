@@ -24,7 +24,7 @@ _texture ctrlAddEventHandler ["PageLoaded", {
     params ["_texture"];
 
     private _badgeConfigs = call RWD_fnc_getBadgeConfigs;
-    private _badges = profileNamespace getVariable ["WL2_badges", createHashMap];
+    private _badges = missionProfileNamespace getVariable ["WL2_badges", createHashMap];
 
     private _badgeArray = [];
     {

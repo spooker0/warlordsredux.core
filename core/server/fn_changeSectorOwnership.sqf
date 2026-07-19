@@ -6,8 +6,8 @@ private _sectorPreviousOwner = _sector getVariable ["BIS_WL_owner", independent]
 _sector setVariable ["BIS_WL_owner", _owner, true];
 [_sector] remoteExec ["WL2_fnc_sectorOwnershipHandleClient", [0, -2] select isDedicated];
 
-private _previousOwners = _sector getVariable ["BIS_WL_previousOwners", []];
-_previousOwners pushBackUnique _owner;
+private _capturableBySides = _sector getVariable ["WL2_capturableBySides", []];
+_capturableBySides pushBackUnique _owner;
 
 private _reward = 0;
 private _facesData = missionNamespace getVariable ["WL2_sectorFaces", []];
@@ -45,7 +45,7 @@ if (_reward > 0) then {
 	} forEach _recipients;
 };
 
-_sector setVariable ["BIS_WL_previousOwners", _previousOwners, true];
+_sector setVariable ["WL2_capturableBySides", _capturableBySides, true];
 _sector setVariable ["WL_fortificationTime", serverTime + WL_FORTIFICATION_TIME, true];
 
 private _sectorStronghold = _sector getVariable ["WL_stronghold", objNull];
@@ -55,13 +55,20 @@ if (_sector == (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", 
 	missionNamespace setVariable [format ["BIS_WL_currentTarget_%1", _owner], objNull, true];
 };
 
+call WL2_fnc_updateSectorsData;
+
 private _enemySide = if (_owner == west) then { east } else { west };
 if (_enemySide == _sectorPreviousOwner) then {
-	private _enemyResetVar = format ["WL_targetReset_%1", _enemySide];
-	missionNamespace setVariable [_enemyResetVar, true, true];
-};
+	private _enemyTarget = missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", _enemySide], objNull];
 
-["server", true] call WL2_fnc_updateSectorArrays;
+	private _enemySectorsData = WL_SECTORS_DATA(_enemySide);
+	private _enemyVoteableSectors = _enemySectorsData getOrDefault ["voteable", []];
+
+	if !(_enemyTarget in _enemyVoteableSectors) then {
+		private _enemyResetVar = format ["WL_targetReset_%1", _enemySide];
+		missionNamespace setVariable [_enemyResetVar, true, true];
+	};
+};
 
 waitUntil {
 	uiSleep 0.01;

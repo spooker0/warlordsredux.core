@@ -14,7 +14,7 @@ private _isProjectileVisible = {
 };
 
 while { WL_IsSpectator } do {
-    private _hmdSettingProfiles = profileNamespace getVariable ["WL2_HMDSettingProfiles", []];
+    private _hmdSettingProfiles = missionProfileNamespace getVariable ["WL2_HMDSettingProfiles", []];
     private _currentProfileIndex = uiNamespace getVariable ["WL2_HMDSettingProfileIndex", 0];
     private _settingProfileData = if (_currentProfileIndex < count _hmdSettingProfiles) then {
         _hmdSettingProfiles # _currentProfileIndex;
@@ -42,10 +42,15 @@ while { WL_IsSpectator } do {
         [_x, _playerName];
     };
 
-    private _allVehicles = (vehicles + allUnits) select {
-        WL_ISUP(_x) &&
-        simulationEnabled _x &&
-        !(_x isKindOf "LaserTarget");
+    private _allVehicles = BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles;
+    private _otherVehicles = (vehicles + allUnits) select {
+        !(_x isKindOf "LaserTarget")
+    };
+    _allVehicles insert [-1, _otherVehicles, true];
+    _allVehicles = _allVehicles select {
+        WL_ISUP(_x)
+    } select {
+        simulationEnabled _x
     };
 
     private _infantryViewDistance = _settingProfileData getOrDefault ["INFANTRY", 500];

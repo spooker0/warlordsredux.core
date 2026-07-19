@@ -1,7 +1,7 @@
 #include "includes.inc"
 if (isDedicated) exitWith {};
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 
 private _display = uiNamespace getVariable ["RscWLKillfeedDisplay", displayNull];
 if (isNull _display) then {
@@ -20,7 +20,7 @@ private _badgeTextControl = _display displayCtrl 8005;
 	params ["_textControl", "_numbersControl", "_iconsControl", "_totalControl"];
 	private _lastSettings = [];
 	while { !isNull _textControl } do {
-		private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+		private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 
         private _killfeedLeft = _settingsMap getOrDefault ["killfeedLeft", 50];
         private _killfeedTop = _settingsMap getOrDefault ["killfeedTop", 95];

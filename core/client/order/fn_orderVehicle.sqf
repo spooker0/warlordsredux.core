@@ -8,7 +8,12 @@ private _camperWarningBypass = {
 		true;
 	};
 
-	private _findCurrentOwnedSector = (BIS_WL_sectorsArray # 0) select {
+	private _side = BIS_WL_playerSide;
+
+	private _teamSectorsData = WL_SECTORS_DATA(_side);
+	private _ownedSectors = _teamSectorsData getOrDefault ["owned", []];
+
+	private _findCurrentOwnedSector = _ownedSectors select {
 		player inArea (_x getVariable "objectAreaComplete")
 	};
 
@@ -17,16 +22,8 @@ private _camperWarningBypass = {
 	};
 
 	private _sector = _findCurrentOwnedSector # 0;
-	private _sectorMarker = _sector getVariable [format ["WL2_MapMarker_%1", BIS_WL_playerSide], "unknown"];
+	private _sectorMarker = _sector getVariable [format ["WL2_MapMarker_%1", _side], "unknown"];
 	private _sectorIsCamped = _sectorMarker == "camped";
-
-	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-	private _campAirWarning = _settingsMap getOrDefault ["campAirWarning", true];
-	if (_sectorIsCamped && _campAirWarning) exitWith {
-		playSoundUI ["AddItemFailed", 1];
-		["Your team has marked this sector as camped! Enemies may be near. Remove the marker on the map or disable sector camper warning in settings to spawn vehicles here."] call WL2_fnc_smoothText;
-		false;
-	};
 
 	private _campResult = if (_sectorIsCamped) then {
 		playSoundUI ["AddItemFailed", 1];

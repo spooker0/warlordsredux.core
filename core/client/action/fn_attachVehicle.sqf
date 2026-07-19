@@ -18,6 +18,7 @@ if (_isAttaching) then {
 
     [_childAsset, false] remoteExec ["setAutonomous", 0];
     [_childAsset, true] remoteExec ["lock", _childAsset];
+    [_childAsset, false] remoteExec ["setPhysicsCollisionFlag", 0];
 
     private _side = _asset call WL2_fnc_getAssetSide;
 
@@ -53,6 +54,7 @@ if (_isAttaching) then {
 
     private _wasAutonomous = _childAsset getVariable ["WL2_autonomousBeforeLoad", false];
     [_childAsset, _wasAutonomous] remoteExec ["setAutonomous", 0];
+    [_childAsset, true] remoteExec ["setPhysicsCollisionFlag", 0];
 
     _childAsset setVariable ["WL2_transporting", false, true];
     [_childAsset] call WL2_fnc_uavConnectRefresh;

@@ -5,7 +5,7 @@ private _isModerator = _uid in (getArray (missionConfigFile >> "moderatorIDs"));
 
 private _checkDirty = {
     params ["_varName"];
-    private _storedVar = profileNamespace getVariable [_varName, createHashMap];
+    private _storedVar = missionProfileNamespace getVariable [_varName, createHashMap];
     private _currentVar = player getVariable [_varName, createHashMap];
 
     private _currentCount = count _currentVar;
@@ -29,17 +29,33 @@ private _checkDirty = {
     };
 };
 
+// Backwards compatibility moves
+{
+    private _storedVar = profileNamespace getVariable _x;
+    if !(isNil "_storedVar") then {
+        missionProfileNamespace setVariable [_x, +_storedVar];
+        profileNamespace setVariable [_x, nil];
+    };
+} forEach ["WL2_playerAliases", "WL2_playerReports", "WL2_playerTransfers", "WL2_afkLog"];
+
 while { !BIS_WL_missionEnd } do {
     if (_isAdmin || _isModerator) then {
         private _allPlayers = call BIS_fnc_listPlayers;
-        private _playerAliases = profileNamespace getVariable ["WL2_playerAliases", createHashMap];
+        private _playerAliases = missionProfileNamespace getVariable ["WL2_playerAliases", createHashMap];
         {
             private _uid = getPlayerUID _x;
+            if (_uid == "") then {
+                continue;
+            };
+            private _playerName = [_x] call BIS_fnc_getName;
+            if (_playerName == "") then {
+                continue;
+            };
             private _existingAliases = _playerAliases getOrDefault [_uid, []];
-            _existingAliases pushBackUnique ([_x] call BIS_fnc_getName);
+            _existingAliases pushBackUnique _playerName;
             _playerAliases set [_uid, _existingAliases];
         } forEach _allPlayers;
-        profileNamespace setVariable ["WL2_playerAliases", _playerAliases];
+        missionProfileNamespace setVariable ["WL2_playerAliases", _playerAliases];
     };
 
     ["WL2_playerReports"] call _checkDirty;

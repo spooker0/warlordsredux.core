@@ -9,9 +9,13 @@ private _mainTextControl = _display displayCtrl 6000;
 private _incomingTextControl = _display displayCtrl 6001;
 private _statusTextControl = _display displayCtrl 6002;
 private _weaponTextControl = _display displayCtrl 6003;
+private _centeredTextControl = _display displayCtrl 6004;
 
 uiNamespace setVariable ["DIS_currentTargetingMode", "none"];
 uiNamespace setVariable ["WL2_usingVLS", false];
+uiNamespace setVariable ["WL2_lastPlayedEcmSound", 0];
+uiNamespace setVariable ["WL2_railgunReady", false];
+uiNamespace setVariable ["WL2_railgunCharged", false];
 
 private _assetData = WL_ASSET_DATA;
 
@@ -141,7 +145,7 @@ private _makeMunitionTextArray = {
 	params ["_mainTextControl", "_incomingTextControl", "_weaponTextControl"];
 	private _lastSettings = [];
 	while { !isNull _mainTextControl } do {
-		private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+		private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 
 		private _allDisplays = uiNamespace getVariable ["IGUI_displays", []];
 		private _unitInfo = _allDisplays select { ctrlIDD _x == 300 } select { !isNull (_x displayCtrl 118) };
@@ -219,7 +223,7 @@ private _makeTargetingText = {
 private _lastCameraOn = cameraOn;
 while { !BIS_WL_missionEnd } do {
 	uiSleep 0.05;
-	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+	private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 
 	private _currentModeData = call _getCurrentMode;
 	private _currentMode = _currentModeData # 0;
@@ -490,14 +494,74 @@ while { !BIS_WL_missionEnd } do {
 		_statusText = _statusText + format ["INTEGRAL AMMO: %1<br/>", _weaponAmmoCount];
 	};
 
+	private _hasECM = cameraOn getVariable ["WL2_hasECMSystem", false];
+	if (_hasECM) then {
+		private _ecmOn = cameraOn getVariable ["WL2_ecmActive", false];
+		private _ecmEffectiveTime = cameraOn getVariable ["WL2_ecmStartEffectTime", 0];
+		private _ecmStatusText = if (_ecmOn && fuel cameraOn > 0) then {
+			if (serverTime > _ecmEffectiveTime) then {
+				private _ecmPercent = (linearConversion [0, 500, speed cameraOn, 0, 1, true]) * 100;
+				private _ecmColor = if (_ecmPercent >= 85) then {
+					"#00ff00"
+				} else {
+					"#00ffff"
+				};
+
+				private _lastPlayedEcmSound = uiNamespace getVariable ["WL2_lastPlayedEcmSound", 0];
+				if (time - _lastPlayedEcmSound > 0.75) then {
+					playSoundUI ["a3\sounds_f\arsenal\weapons\launchers\titan\locking_titan.wss", 1, _ecmPercent / 100 + 0.5];
+					uiNamespace setVariable ["WL2_lastPlayedEcmSound", time];
+				};
+				format ["<t color='%1'>ECM ACTIVE STRENGTH: %2%%</t><br/>", _ecmColor, round _ecmPercent]
+			} else {
+				"<t color='#ff0000'>ECM STARTING</t><br/>"
+			};
+		} else {
+			"<t color='#000000'>ECM OFF</t><br/>"
+		};
+		_statusText = _statusText + _ecmStatusText;
+	};
+
+	private _centeredText = "";
 	if (currentWeapon cameraOn == "cannon_railgun_fake") then {
+		private _barrelIntegrity = 1 - (cameraOn getHitPointDamage "HitGun");
+		_barrelIntegrity = round (_barrelIntegrity * 100);
+		private _barrelIntegrityColor = if (_barrelIntegrity > 75) then {
+			"#00ff00"
+		} else {
+			if (_barrelIntegrity > 50) then {
+				"#ffff00"
+			} else {
+				if (_barrelIntegrity > 10) then {
+					"#ff0000"
+				} else {
+					"#000000"
+				};
+			};
+		};
+		_statusText = _statusText + format ["<t color='%1'>BARREL INTEGRITY: %2%%</t><br/>", _barrelIntegrityColor, _barrelIntegrity];
+		if (_barrelIntegrity <= 50) then {
+			if (_barrelIntegrity <= 10) then {
+				_statusText = _statusText + "<t color='#000000'>FIELD REPAIR REQUIRED</t><br/>";
+			} else {
+				_statusText = _statusText + "<t color='#ff0000'>RECOMMEND FIELD REPAIR</t><br/>";
+			};
+		};
+
 		private _mfdValues = getUserMFDValue cameraOn;
 		if (count _mfdValues > 0) then {
-			private _chargeValue = round ((_mfdValues # 0) * 110);
-			if (_chargeValue <= 0) then {
+			private _chargeValue = (ceil ((_mfdValues # 0) * 100)) min 120;
+			if (_chargeValue <= 1) then {
 				_chargeValue = 0;
+				private _reloadingTime = cameraOn weaponReloadingTime [gunner cameraOn, "cannon_railgun_fake"];
+				if (_reloadingTime > 0) then {
+					_centeredText = "POWER CYCLE";
+				} else {
+					_centeredText = "READY";
+				};
 			};
-			if (_chargeValue > 30) then {
+
+			if (_chargeValue > 40) then {
 				private _alreadyReady = uiNamespace getVariable ["WL2_railgunReady", false];
 				if (!_alreadyReady) then {
 					playSoundUI ["a3\sounds_f\weapons\mines\electron_trigger_1.wss", 1, 0.5];
@@ -516,30 +580,28 @@ while { !BIS_WL_missionEnd } do {
 			} else {
 				uiNamespace setVariable ["WL2_railgunCharged", false];
 			};
-			_statusText = _statusText + format ["CHARGING: %1%%<br/>", _chargeValue];
-		};
-	};
-
-	private _hasECM = cameraOn getVariable ["WL2_hasECMSystem", false];
-	if (_hasECM) then {
-		private _ecmOn = cameraOn getVariable ["WL2_ecmActive", false];
-		private _ecmEffectiveTime = cameraOn getVariable ["WL2_ecmStartEffectTime", 0];
-		private _ecmStatusText = if (_ecmOn && fuel cameraOn > 0) then {
-			if (serverTime > _ecmEffectiveTime) then {
-				private _ecmPercent = (linearConversion [0, 500, speed cameraOn, 0, 1, true]) * 100;
-				private _ecmColor = if (_ecmPercent >= 85) then {
-					"#00ff00"
+			if (_centeredText == "") then {
+				private _chargeColor = if (_chargeValue <= 40) then {
+					"#ff0000"
 				} else {
-					"#00ffff"
+					if (_chargeValue <= 100) then {
+						"#ffff00"
+					} else {
+						if (_chargeValue <= 115) then {
+							"#00ff00"
+						} else {
+							"#000000"
+						}
+					};
 				};
-				format ["<t color='%1'>ECM ACTIVE STRENGTH: %2%%</t><br/>", _ecmColor, round _ecmPercent]
-			} else {
-				"<t color='#ff0000'>ECM STARTING</t><br/>"
+				private _chargeText = if (_chargeValue <= 115) then {
+					"CHARGING"
+				} else {
+					"OVERHEAT"
+				};
+				_centeredText = format ["<t color='%1'>%2 %3%%</t>", _chargeColor, _chargeText, _chargeValue];
 			};
-		} else {
-			"<t color='#000000'>ECM OFF</t><br/>"
 		};
-		_statusText = _statusText + _ecmStatusText;
 	};
 
 	if (_statusText != "") then {
@@ -557,5 +619,13 @@ while { !BIS_WL_missionEnd } do {
 	} else {
 		_weaponTextControl ctrlSetText "";
 		_weaponTextControl ctrlShow false;
+	};
+
+	if (_centeredText != "") then {
+		_centeredTextControl ctrlSetStructuredText parseText format ["<t shadow='2' align='center'>%1</t>", _centeredText];
+		_centeredTextControl ctrlShow true;
+	} else {
+		_centeredTextControl ctrlSetText "";
+		_centeredTextControl ctrlShow false;
 	};
 };

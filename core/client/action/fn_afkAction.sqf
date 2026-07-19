@@ -7,9 +7,9 @@ player addAction [
         player setVariable ["WL2_afk", false, [clientOwner, 2]];
         hintSilent "";
 
-        private _afkLog = profileNamespace getVariable ["WL2_afkLog", createHashMap];
+        private _afkLog = missionProfileNamespace getVariable ["WL2_afkLog", createHashMap];
         _afkLog set [[systemTimeUTC] call MENU_fnc_printSystemTime, (estimatedEndServerTime - serverTime) / 60];
-        profileNamespace setVariable ["WL2_afkLog", _afkLog];
+        missionProfileNamespace setVariable ["WL2_afkLog", _afkLog];
 
         player removeAction _actionId;
         call WL2_fnc_afkAction;

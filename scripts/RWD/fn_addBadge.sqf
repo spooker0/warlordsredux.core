@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_badgeName", ["_unique", false], ["_remove", false]];
 if (isDedicated) exitWith {};
-private _badges = profileNamespace getVariable ["WL2_badges", createHashMap];
+private _badges = missionProfileNamespace getVariable ["WL2_badges", createHashMap];
 
 private _silent = false;
 private _currentBadges = _badges getOrDefault [_badgeName, 0];
@@ -17,12 +17,12 @@ if (_remove) then {
     _silent = true;
     private _currentBadge = player getVariable ["WL2_currentBadge", ""];
     if (_currentBadge == _badgeName) then {
-        profileNamespace setVariable ["WL2_currentBadge", "Player"];
+        missionProfileNamespace setVariable ["WL2_currentBadge", "Player"];
         player setVariable ["WL2_currentBadge", "Player", true];
     };
 };
 _badges set [_badgeName, _newBadgeNum min 50];
-profileNamespace setVariable ["WL2_badges", _badges];
+missionProfileNamespace setVariable ["WL2_badges", _badges];
 
 if (!_silent && _currentBadges != _newBadgeNum) then {
     [_badgeName] call RWD_fnc_newBadge;

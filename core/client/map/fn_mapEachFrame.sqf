@@ -55,6 +55,27 @@ private _timedMarkerSize = -1;
 } forEach BIS_WL_allSectors;
 [_nearbySectors, _map] call WL2_fnc_handleSectorIcons;
 
+private _layerButtonPressed = uiNamespace getVariable ["WL2_mapLayerButtonPressed", false];
+if (!_layerButtonPressed) then {
+    if (inputAction "nightVision" > 0) then {
+        uiNamespace setVariable ["WL2_mapLayerButtonPressed", true];
+        private _mapMode = uiNamespace getVariable ["WL2_mapMode", 0];
+        private _mapModeNames = [
+            "Regular",
+            "Air/Air Defense"
+        ];
+        _mapMode = (_mapMode + 1) % (count _mapModeNames);
+        uiNamespace setVariable ["WL2_mapMode", _mapMode];
+
+        private _mapModeName = _mapModeNames select _mapMode;
+        [format ["Map mode: %1", _mapModeName]] call WL2_fnc_smoothText;
+    };
+} else {
+    if (inputAction "nightVision" == 0) then {
+        uiNamespace setVariable ["WL2_mapLayerButtonPressed", false];
+    };
+};
+
 if (inputAction "curatorGroupMod" > 0) exitWith {};
 if (inputAction "curatorRotateMod" > 0) exitWith {};
 

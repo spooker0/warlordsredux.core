@@ -31,11 +31,15 @@ private _mapClickEH = addMissionEventHandler ["MapSingleClick", {
 			true;
 		};
 
+		private _side = BIS_WL_playerSide;
+
 		private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		private _spawnLocations = _forwardBases select {
-			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
+			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side
 		};
-		_spawnLocations append (BIS_WL_sectorsArray # 0);
+		private _teamSectorsData = WL_SECTORS_DATA(_side);
+		private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+		_spawnLocations append _linkedSectors;
 
 		private _sectorsInRange = _spawnLocations select {
 			_pos distance2D _x < 1500;

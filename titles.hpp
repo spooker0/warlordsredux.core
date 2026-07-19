@@ -519,6 +519,21 @@ class RscTitles {
 				shadow = 0;
 				lineSpacing = 1;
 			};
+			class RscWLZoneRestrictionDisplay_RTBText: RscText {
+				idc = 9001;
+				type = CT_STATIC;
+				style = ST_CENTER;
+				x = safeZoneX;
+				y = 0.25;
+				w = safeZoneW;
+				h = 0.5;
+				font = "EtelkaNarrowMediumPro";
+				sizeEx = 0.07;
+				colorBackground[] = {0, 0, 0, 0};
+				colorText[] = {1, 1, 1, 1};
+				text = "";
+				lineSpacing = 0;
+			};
 		};
 	};
 
@@ -1029,6 +1044,22 @@ class RscTitles {
 				sizeEx = 0.032;
 				colorText[] = {1, 1, 1, 0.8};
 				colorBackground[] = {0.5, 0.5, 0.5, 1};
+			};
+			class RscWLTargetingDisplay_Center: RscStructuredText {
+				idc = 6004;
+				style = ST_MULTI;
+				x = 0.55;
+				y = 0.5 - (0.04 / 2);
+				w = 0.25;
+				h = 0.04;
+				text = "";
+				size = 0.04;
+				colorBackground[] = {0.8, 0.8, 0.8, 0.95};
+				class Attributes {
+					color = "#ffffff";
+					font = "EtelkaMonospaceProBold";
+					shadowColor = "#000000";
+				};
 			};
 		};
 	};

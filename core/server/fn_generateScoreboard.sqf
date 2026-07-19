@@ -1,13 +1,19 @@
 #include "includes.inc"
 private _ratings = profileNamespace getVariable ["WL2_playerRatings", createHashMap];
 
+private _lastTotalPointsMap = createHashMap;
 while { !BIS_WL_missionEnd } do {
     uiSleep 10;
 
     private _scoreboardData = missionNamespace getVariable ["WL2_scoreboardData", createHashMap];
     private _scoreboardResults = [];
 
-    private _playerContribution = missionNamespace getVariable ["WL_PlayerSquadContribution", createHashMap];
+    private _totalPointsMap = missionNamespace getVariable ["WL2_totalPointsEarned", createHashMap];
+    if (_totalPointsMap isNotEqualTo _lastTotalPointsMap) then {
+        missionNamespace setVariable ["WL2_totalPointsEarned", _totalPointsMap, true];
+        _lastTotalPointsMap = +_totalPointsMap;
+    };
+
     {
         private _playerUid = _x;
         private _entry = _y;
@@ -30,7 +36,7 @@ while { !BIS_WL_missionEnd } do {
             _entry set ["side", [_playerSide, false] call WL2_fnc_sideToFaction];
         };
 
-        _entry set ["points", _playerContribution getOrDefault [_playerUid, 0]];
+        _entry set ["points", _totalPointsMap getOrDefault [_playerUid, 0]];
 
         _scoreboardResults pushBack _entry;
     } forEach _scoreboardData;

@@ -47,12 +47,6 @@ class CfgSounds {
         titles[] = {};
     };
 
-    class sensorRita {
-        name="sensorWarning rita";
-        sound[]={"src\sounds\sensorWarning.ogg", 1, 1};
-        titles[] = {};
-    };
-
     class fuelRita {
         name="fuel low rita";
         sound[]={"src\sounds\BingoFuel.ogg", 1, 1};
@@ -80,30 +74,6 @@ class CfgSounds {
     class incMissile_270 {
         name="incomming 270";
         sound[]={"src\sounds\critical_missile09.ogg", 1, 1};
-        titles[] = {};
-    };
-
-    class incMissileRuss_0 {
-        name="incomming 0";
-        sound[]={"src\sounds\critical_missileRuss12.ogg", 1, 1};
-        titles[] = {};
-    };
-
-    class incMissileRuss_90 {
-        name="incomming 90";
-        sound[]={"src\sounds\critical_missileRuss03.ogg", 1, 1};
-        titles[] = {};
-    };
-
-    class incMissileRuss_180 {
-        name="incomming 180";
-        sound[]={"src\sounds\critical_missileRuss06.ogg", 1, 1};
-        titles[] = {};
-    };
-
-    class incMissileRuss_270 {
-        name="incomming 270";
-        sound[]={"src\sounds\critical_missileRuss09.ogg", 1, 1};
         titles[] = {};
     };
 

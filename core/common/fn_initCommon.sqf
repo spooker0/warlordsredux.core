@@ -21,7 +21,8 @@ if !(isDedicated) then {
 };
 
 WL_Server_LoadingState = 1;
-"common" call WL2_fnc_varsInit;
+
+call WL2_fnc_varsInit;
 
 WL_Server_LoadingState = 2;
 if (hasInterface) then {
@@ -35,46 +36,23 @@ WL_Server_LoadingState = 4;
 if (isServer) then {
 	call WL2_fnc_initSectors;
 } else {
-	private _sectorsReady = false;
-	while { !_sectorsReady } do {
-		uiSleep 0.1;
-		private _expectedSectors = missionNamespace getVariable "WL2_sectorsInitializationComplete";
-		if (isNil "_expectedSectors") then {
-			continue;
-		};
-		_expectedSectors = _expectedSectors apply { _x getVariable ["WL2_name", ""] };
-		private _foundSectors = (entities "Logic") select {
+	private _totalSectorCount = missionNamespace getVariable ["WL2_totalSectors", -1];
+	waitUntil {
+		uiSleep 0.01;
+		private _validSectors = BIS_WL_allSectors select {
+			!isNull _x
+		} select {
 			private _name = _x getVariable ["WL2_name", ""];
+			_name != ""
+		} select {
 			private _objArea = _x getVariable ["WL2_objectArea", []];
-			_name != "" && (count _objArea >= 4)
-		} apply { _x getVariable ["WL2_name", ""] };
-		private _foundAllSectors = true;
-		{
-			if !(_x in _foundSectors) then {
-				_foundAllSectors = false;
-			};
-		} forEach _expectedSectors;
-		if (_foundAllSectors) then {
-			_sectorsReady = true;
+			count _objArea >= 4
 		};
+		count _validSectors == _totalSectorCount;
 	};
 };
 
 WL_Server_LoadingState = 5;
-BIS_WL_allSectors = (entities "Logic") select { _x getVariable ["WL2_name", ""] != "" };
-
-{
-	private _sector = _x;
-	private _sectorArea = _sector getVariable "WL2_objectArea";
-	private _connections = _sector getVariable ["WL2_connectedSectors", []];
-	{
-		if (typeof _x == "Logic") then {
-			_connections pushBackUnique _x;
-		};
-	} forEach (synchronizedObjects _sector);
-	_sector setVariable ["WL2_connectedSectors", _connections];
-	_sector setVariable ["objectAreaComplete", [position _sector] + _sectorArea];
-} forEach BIS_WL_allSectors;
 
 WL_Server_LoadingState = 6;
 private _catapultTriggers = allMissionObjects "EmptyDetector" select {
@@ -112,22 +90,15 @@ if (isServer) then {
 		];
 
 		{
-			if (isNil {_x getVariable "BIS_WL_originalOwner"}) then {
-				_initComplete = false;
-				diag_log format ["Missing BIS_WL_originalOwner on %1", _x];
-			};
-		} forEach [WL2_base1, WL2_base2];
-
-		{
 			private _sector = _x;
 			private _sectorName = _sector getVariable ["WL2_name", "Sector"];
 			if (isNil {_sector getVariable "BIS_WL_owner"}) then {
 				_initComplete = false;
 				diag_log format ["Missing BIS_WL_owner on sector %1", _sectorName];
 			};
-			if (isNil {_sector getVariable "BIS_WL_previousOwners"}) then {
+			if (isNil {_sector getVariable "WL2_capturableBySides"}) then {
 				_initComplete = false;
-				diag_log format ["Missing BIS_WL_previousOwners on sector %1", _sectorName];
+				diag_log format ["Missing WL2_capturableBySides on sector %1", _sectorName];
 			};
 		} forEach BIS_WL_allSectors;
 

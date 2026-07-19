@@ -2,6 +2,9 @@
 params ["_asset"];
 
 if (isDedicated) exitWith {};
+private _fuelCapacity = getNumber (configFile >> "CfgVehicles" >> typeOf _asset >> "fuelCapacity");
+if (_fuelCapacity <= 0) exitWith {};
+
 private _assetTypeName = [_asset] call WL2_fnc_getAssetTypeName;
 
 private _actionID = _asset addAction [

@@ -1,5 +1,6 @@
 #include "includes.inc"
 params ["_projectile", "_unit", "_samParams"];
+_samParams params ["_speed", "_lead", "_maxRange"];
 
 _projectile setMissileTarget [objNull, true];
 
@@ -8,16 +9,6 @@ private _enemyUnits = switch (_assetSide) do {
     case west: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
     case east: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
     default { [] };
-};
-
-private _detectors = _enemyUnits select {
-    private _detectionRadius = _x getVariable ["DIS_missileDetector", 0];
-    _detectionRadius > 0 && (_x distance2D _projectile) < _detectionRadius
-};
-
-if (count _detectors > 0) then {
-    private _detectorSide = [_detectors # 0] call WL2_fnc_getAssetSide;
-    [[_unit], 15] remoteExec ["WL2_fnc_reportTargets", _detectorSide];
 };
 
 private _munitionList = _unit getVariable ["DIS_munitionList", []];
@@ -31,8 +22,6 @@ private _missileTypeData = call DIS_fnc_getMissileType;
 private _projectileType = _projectile getVariable ["APS_ammoOverride", typeof _projectile];
 private _projectileTypeName = _missileTypeData getOrDefault [_projectileType, "BEAM RIDER"];
 _projectile setVariable ["WL2_missileNameOverride", _projectileTypeName, true];
-
-_samParams params ["_speed", "_lead", "_maxRange"];
 
 private _enemiesCanWarn = _enemyUnits select {
     _x isKindOf "Air";

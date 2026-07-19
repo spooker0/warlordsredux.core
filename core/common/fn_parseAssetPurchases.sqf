@@ -108,7 +108,7 @@ _infantryArray insert [0, [_buildABear]];
 private _callCombatAir = [
     "NearestCombatAir",
     WL_COST_COMBATAIR,
-    [],
+    ["V"],
     localize "STR_WL_combatAirPatrol",
     "a3\ui_f_jets\data\gui\cfg\hints\aircraftdamage_ca.paa",
     localize "STR_WL_combatAirPatrolInfo"
@@ -116,7 +116,7 @@ private _callCombatAir = [
 private _callCombatAirHome = [
     "CombatAirHome",
     WL_COST_COMBATAIR / 5,
-    [],
+    ["V"],
     localize "STR_WL_combatAirPatrolHome",
     "a3\ui_f_jets\data\gui\cfg\hints\aircraftdamage_ca.paa",
     "Establish a temporary no-fly zone to assist your team's air defense over your home base."

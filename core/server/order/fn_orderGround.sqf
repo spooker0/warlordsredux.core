@@ -13,7 +13,7 @@ private _asset = if (_isUav) then {
 };
 
 waitUntil {
-	uiSleep 0.1;
+	uiSleep 0.05;
 	!isNull _asset
 };
 

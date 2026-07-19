@@ -8,8 +8,11 @@ private _loadoutIndex = _control getVariable ["WL2_loadoutIndex", -1];
 private _page = uiNamespace getVariable ["WL2_inventoryPage", 0];
 private _index = _page * 10 + _loadoutIndex;
 
-private _loadoutIndexVar = format ["WLC_loadoutIndex_%1", BIS_WL_playerSide];
-profileNamespace setVariable [_loadoutIndexVar, _index];
+private _savedLoadouts = missionProfileNamespace getVariable ["WL2_savedLoadouts", createHashMap];
+private _savedLoadoutsSide = _savedLoadouts getOrDefault [toLower str BIS_WL_playerSide, createHashMap];
+_savedLoadoutsSide set ["index", _index];
+_savedLoadouts set [toLower str BIS_WL_playerSide, _savedLoadoutsSide];
+missionProfileNamespace setVariable ["WL2_savedLoadouts", _savedLoadouts];
 
 call WL2_fnc_pageChanged;
 

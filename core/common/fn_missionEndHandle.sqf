@@ -12,13 +12,13 @@ if (_isClient) then {
 	private _drawRectangles = missionNamespace getVariable ["WL2_drawRectangles", []];
 	private _drawPolygons = missionNamespace getVariable ["WL2_drawPolygons", []];
 	private _drawSectorIcons = missionNamespace getVariable ["WL2_drawSectorIcons", []];
-	profileNamespace setVariable ["WL2_drawIcons", toJSON _drawIcons];
-	profileNamespace setVariable ["WL2_drawEllipses", toJSON _drawEllipses];
-	profileNamespace setVariable ["WL2_drawSemiCircles", toJSON _drawSemiCircles];
-	profileNamespace setVariable ["WL2_drawRectangles", toJSON _drawRectangles];
-	profileNamespace setVariable ["WL2_drawPolygons", toJSON _drawPolygons];
-	profileNamespace setVariable ["WL2_drawSectorIcons", toJSON _drawSectorIcons];
-	saveProfileNamespace;
+	missionProfileNamespace setVariable ["WL2_drawIcons", toJSON _drawIcons];
+	missionProfileNamespace setVariable ["WL2_drawEllipses", toJSON _drawEllipses];
+	missionProfileNamespace setVariable ["WL2_drawSemiCircles", toJSON _drawSemiCircles];
+	missionProfileNamespace setVariable ["WL2_drawRectangles", toJSON _drawRectangles];
+	missionProfileNamespace setVariable ["WL2_drawPolygons", toJSON _drawPolygons];
+	missionProfileNamespace setVariable ["WL2_drawSectorIcons", toJSON _drawSectorIcons];
+	saveMissionProfileNamespace;
 
 	openMap false;
 
@@ -42,7 +42,7 @@ if (_isClient) then {
 
 	private _base1 = missionNamespace getVariable ["WL2_base1", objNull];
 	private _base2 = missionNamespace getVariable ["WL2_base2", objNull];
-	private _base = if (_base1 getVariable ["BIS_WL_originalOwner", independent] != _gameWinner) then {
+	private _base = if (west != _gameWinner) then {
 		_base1
 	} else {
 		_base2

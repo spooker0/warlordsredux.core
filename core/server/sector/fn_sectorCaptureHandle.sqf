@@ -45,7 +45,7 @@ while { !BIS_WL_missionEnd } do {
 			_winner = _originalOwner;
 		};
 
-		private _scoreGap = _winningScore / (_secondScore max 1) / 10;
+		private _scoreGap = _winningScore / (_secondScore max 1) / 5;
 		private _movement = _progressMovement * (_scoreGap min 1);
 
 		if (_winner == _capturingTeam) then {
@@ -82,16 +82,16 @@ while { !BIS_WL_missionEnd } do {
 			};
 		};
 
-		private _previousOwners = _sector getVariable ["BIS_WL_previousOwners", []];
-		if (count _previousOwners > 1) then {
+		private _capturableBySides = _sector getVariable ["WL2_capturableBySides", []];
+		if (count _capturableBySides > 1) then {
 			private _fortificationTime = _sector getVariable ["WL_fortificationTime", -1];
 			if (_fortificationTime > 0 && serverTime > _fortificationTime) then {
 				_sector setVariable ["WL_fortificationTime", -1, true];
 
 				private _currentOwner = _sector getVariable ["BIS_WL_owner", independent];
-				_sector setVariable ["BIS_WL_previousOwners", [_currentOwner], true];
+				_sector setVariable ["WL2_capturableBySides", [_currentOwner], true];
 				[_sector, _currentOwner] remoteExec ["WL2_fnc_sectorMarkerUpdate", 0];
-				["server", true] call WL2_fnc_updateSectorArrays;
+				call WL2_fnc_updateSectorsData;
 			};
 		};
 	} forEach _sectorsInPlay;

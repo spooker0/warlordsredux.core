@@ -71,6 +71,22 @@ if (_text == "!capture") exitWith {
     true;
 };
 
+if (_text in ["!help", "!info"]) exitWith {
+    if (_sentLocally) then {
+        openMap true;
+        player selectDiarySubject "Warlords Redux";
+    };
+    true;
+};
+
+if (_text select [0, 2] == "!s") exitWith {
+    if (_sentLocally) then {
+        private _settingQuery = _text select [2];
+        [format ["#%1", _settingQuery]] spawn MENU_fnc_settingsMenuInit;
+    };
+    true;
+};
+
 private _isBattleyeMessage = false;
 if (_channel == 16 || _channel == 17) then {
     private _regexMatches = _text regexFind ["[\s]?.*[\d]+[\s]+([\w]{32,32})[\s]{1,1}(.*)$"];
@@ -132,7 +148,7 @@ if (_channel == 2) exitWith {
     private _newFrom = format ["%1 [%2]", _name, _playerSquadName];
 
     if ("@TEAM" in (toUpper _filteredText)) then {
-        private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+        private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
         private _volume = _settingsMap getOrDefault ["squadChatNotificationVolume", 1];
         playSoundUI ["a3\missions_f_oldman\data\sound\phone_sms\chime\phone_sms_chime_05.wss", _volume];
     };
@@ -144,7 +160,7 @@ if (_channel > 5 && _channel < 16 && _filteredText != "") then {
     private _isPlayerSquadLeader = ["isSquadLeader", [getPlayerID player]] call SQD_fnc_query;
     private _isDirectNotification = (_isPlayerSquadLeader && "@SL" in (toUpper _filteredText)) || "@SQUAD" in (toUpper _filteredText);
 
-    private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+    private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
     private _volume = if (_isDirectNotification) then {
         _settingsMap getOrDefault ["squadImportantNotificationVolume", 1];
     } else {

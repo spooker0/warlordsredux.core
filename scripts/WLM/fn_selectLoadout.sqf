@@ -16,8 +16,8 @@ private _myPreset = if (_isAircraft) then {
     if (_loadoutName != "") then {
         getArray (_pylonConfig >> "Presets" >> _loadoutName >> "attachment") apply { [_x, []] };
     } else  {
-        private _variableName = format ["WLM_savedLoadout_%1", _assetActualType];
-        private _savedLoadouts = profileNamespace getVariable [_variableName, []];
+        private _vehicleLoadouts = missionProfileNamespace getVariable ["WL2_vehicleLoadouts", createHashMap];
+        private _savedLoadouts = _vehicleLoadouts getOrDefault [_assetActualType, []];
 
         private _selectedLoadoutIndex = _lbCurSel - 1;
         uiNamespace setVariable ["WLM_lastSelectedLoadoutIndex", _selectedLoadoutIndex];
@@ -28,8 +28,8 @@ private _myPreset = if (_isAircraft) then {
     if (_loadoutName == "Reset") then {
         [];
     } else  {
-        private _variableName = format ["WLM_savedLoadout_%1", _assetActualType];
-        private _savedLoadouts = profileNamespace getVariable [_variableName, []];
+        private _vehicleLoadouts = missionProfileNamespace getVariable ["WL2_vehicleLoadouts", createHashMap];
+        private _savedLoadouts = _vehicleLoadouts getOrDefault [_assetActualType, []];
 
         private _selectedLoadoutIndex = _lbCurSel - 2;
         uiNamespace setVariable ["WLM_lastSelectedLoadoutIndex", _selectedLoadoutIndex];

@@ -19,6 +19,21 @@ private _rotateUp = inputAction "BuldMoveForward" - inputAction "BuldMoveBack";
 private _zoomIn = inputAction "prevAction";
 private _zoomOut = inputAction "nextAction";
 
+if (_zoomIn != 0) then {
+    private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
+    if (!isNull _display) then {
+        private _texture = _display displayCtrl 5502;
+        _texture ctrlWebBrowserAction ["ExecJS", "scrollUp();"];
+    };
+};
+if (_zoomOut != 0) then {
+    private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
+    if (!isNull _display) then {
+        private _texture = _display displayCtrl 5502;
+        _texture ctrlWebBrowserAction ["ExecJS", "scrollDown();"];
+    };
+};
+
 private _radius = uiNamespace getVariable ["SPEC_3PRadius", 5];
 private _yaw = uiNamespace getVariable ["SPEC_3PYaw", 0];
 private _pitch = uiNamespace getVariable ["SPEC_3PPitch", 15];
@@ -27,8 +42,15 @@ _yaw = _yaw - _rotateLeft * _deltaTime * _rotateSpeed;
 _pitch = (_pitch - _rotateUp * _deltaTime * _rotateSpeed) min 89 max -89;
 
 private _zoomDelta = _zoomOut - _zoomIn;
-private _targetIsLogic = _currentTarget isKindOf "Logic";
-private _maxRadius = if (_targetIsLogic) then { 500 } else { 50 };
+private _targetIsLogic = _currentTarget getVariable ["WL2_name", ""] != "";
+private _maxRadius = if (_targetIsLogic) then { 250 } else { 50 };
+
+private _resetRadius = uiNamespace getVariable ["SPEC_resetRadius", false];
+if (_resetRadius) then {
+    _radius = _maxRadius;
+    uiNamespace setVariable ["SPEC_resetRadius", false];
+};
+
 if (_radius >= 10) then {
     _zoomDelta = _zoomDelta * 5;
 };

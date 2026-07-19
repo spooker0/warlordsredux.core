@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_layer", ["_hintParams", []], ["_timeout", -1], ["_isAnimation", false]];
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 private _showHint = _settingsMap getOrDefault [format["showHint%1", _layer], true];
 
 private _display = uiNamespace getVariable ["RscWLProgressDisplay", displayNull];

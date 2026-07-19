@@ -4,7 +4,7 @@ params ["_firstSpawn"];
 private _side = BIS_WL_playerSide;
 private _homeBase = [_side] call WL2_fnc_getSideBase;
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 private _hideFrontlineMenu = _settingsMap getOrDefault ["hideFrontlineMenu", false];
 if (!_hideFrontlineMenu) then  {
     private _frontlineActionId = player addAction [

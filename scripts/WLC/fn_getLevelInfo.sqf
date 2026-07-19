@@ -30,7 +30,7 @@ if (isNil "WLC_ScoreTable") then {
 
 switch (_op) do {
     case "getScore": {
-        _ret = profileNamespace getVariable ["WLC_Score", 0];
+        _ret = missionProfileNamespace getVariable ["WLC_Score", 0];
     };
     case "getLevel": {
         private _score = ["getScore"] call WLC_fnc_getLevelInfo;

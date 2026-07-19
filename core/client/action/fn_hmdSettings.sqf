@@ -7,7 +7,7 @@ if !(isNull _display) then {
 _display = uiNamespace getVariable ["RscWLHmdSettingDisplay", displayNull];
 
 // init
-private _existingProfiles = profileNamespace getVariable ["WL2_HMDSettingProfiles", []];
+private _existingProfiles = missionProfileNamespace getVariable ["WL2_HMDSettingProfiles", []];
 if (count _existingProfiles != 5) then {
     private _profile1 = createHashMapFromArray [
         ["INFANTRY", 500],
@@ -55,7 +55,7 @@ if (count _existingProfiles != 5) then {
         ["LASER", 0]
     ];
 
-    profileNamespace setVariable ["WL2_HMDSettingProfiles", [
+    missionProfileNamespace setVariable ["WL2_HMDSettingProfiles", [
         _profile1, _profile2, _profile3, _profile4, _profile5
     ]];
 };
@@ -71,13 +71,8 @@ uiNamespace setVariable ["WL2_HMDSettingProfileSelectorIndex", 0];
         false;
     };
 
-    // if (_key in actionKeys "binocular") exitWith {
-    //     "hmd" cutText ["", "PLAIN"];
-    //     true;
-    // };
-
     private _selectorIndex = uiNamespace getVariable ["WL2_HMDSettingProfileSelectorIndex", 0];
-    private _currentProfile = profileNamespace getVariable ["WL2_HMDSettingProfiles", []];
+    private _currentProfile = missionProfileNamespace getVariable ["WL2_HMDSettingProfiles", []];
     private _currentProfileIndex = uiNamespace getVariable ["WL2_HMDSettingProfileIndex", 0];
     private _profileData = _currentProfile # _currentProfileIndex;
     private _currentProfileSelectorValue = WL_HMD_CATEGORIES # ((_selectorIndex - 1) max 0);

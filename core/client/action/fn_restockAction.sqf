@@ -19,7 +19,6 @@ if (isDedicated) exitWith {};
         params ["_asset", "_caller", "_actionId"];
         WL2_lastLoadout = getUnitLoadout player;
         [_caller] call WLC_fnc_onRespawn;
-        [] call WL2_fnc_factionBasedClientInit;
     },
     {},
     [],

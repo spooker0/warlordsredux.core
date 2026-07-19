@@ -60,8 +60,8 @@ while { !BIS_WL_missionEnd } do {
 		call WL2_fnc_purchaseMenuRefresh;
 	};
 
-	private _sectorsArray = missionNamespace getVariable ["BIS_WL_sectorsArray", []];
-	private _income = if (count _sectorsArray > 4) then { _sectorsArray # 4 } else { 0 };
+	private _teamSectorsData = WL_SECTORS_DATA(_side);
+	private _income = _teamSectorsData getOrDefault ["income", 0];
 	_moneyControl ctrlSetStructuredText parseText format [
 		"<t shadow='2' size ='1.1' align='middle'>%1%2</t>    <t shadow='2' size ='0.9' align='middle'>+%3</t>",
 		WL_MONEY_SIGN,
@@ -266,7 +266,8 @@ while { !BIS_WL_missionEnd } do {
 			];
 		};
 	} else {
-		if (_sector in (BIS_WL_sectorsArray # 3)) then {
+		private _unlockedSectors = _teamSectorsData getOrDefault ["unlocked", []];
+		if (_sector in _unlockedSectors) then {
 			_captureProgressBar ctrlShow true;
 			_captureProgressBar progressSetPosition _captureProgress;
 			_captureProgressBar ctrlSetTextColor ([_capturingTeam] call _getTeamColorRGB);

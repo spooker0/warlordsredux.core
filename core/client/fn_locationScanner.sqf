@@ -6,7 +6,7 @@ uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
 
 0 spawn {
     private _commMenuConfig = uiNamespace getVariable ["WL2_commMenuConfig", createHashMap];
-    private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+    private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 
     while { !BIS_WL_missionEnd } do {
         uiSleep 0.5;
@@ -339,7 +339,7 @@ uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
 
             private _distance = cameraOn distance _target;
             private _distanceText = if (_distance >= 1000) then {
-                format ["(%1 %2)", (_distance / 1000) toFixed 1, toUpper BIS_WL_localized_km]
+                format ["(%1 KM)", (_distance / 1000) toFixed 1]
             } else {
                 ""
             };

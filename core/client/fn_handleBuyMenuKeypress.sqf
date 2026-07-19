@@ -35,8 +35,8 @@ if (_key in actionKeys "Gear" && !WL_gearKeyPressed) exitWith {
 private _zeusKey = actionKeys "curatorInterface";
 private _adminKeyPressed = _key in _zeusKey;
 private _isAdmin = (getPlayerUID player) in (getArray (missionConfigFile >> "adminIDs"));
-if (_adminKeyPressed && !_isAdmin) exitWith {
-    true;
+if (_adminKeyPressed) exitWith {
+    !_isAdmin;
 };
 
 private _display = uiNamespace getVariable ["BIS_WL_purchaseMenuDisplay", displayNull];

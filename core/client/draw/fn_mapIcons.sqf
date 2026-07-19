@@ -48,7 +48,7 @@
 	private _assetData = WL_ASSET_DATA;
 	missionNamespace setVariable ["WL2_mapData", _mapData];
 	private _playerId = getPlayerID player;
-	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+	private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 
 	while { !BIS_WL_missionEnd } do {
 		private _isAfk = player getVariable ["WL2_afk", false];
@@ -259,14 +259,14 @@
 
 // Fast loop
 0 spawn {
-	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+	private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 	while { !BIS_WL_missionEnd } do {
 		if (WL_IsReplaying) then {
 			uiSleep 5;
 			continue;
 		};
 
-		private _refreshRate = _settingsMap getOrDefault ["mapRefresh", 4];
+		private _refreshRate = _settingsMap getOrDefault ["mapRefresh", 10];
 		_refreshRate = _refreshRate max 1;
 		private _refreshSleepTime = 1 / _refreshRate;
 

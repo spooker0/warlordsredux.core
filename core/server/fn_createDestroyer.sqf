@@ -7,6 +7,8 @@ private _initDelay = if (_destroyerType == 2) then {
     WL_DESTROYER_START
 };
 
+if (_initDelay > WL_DURATION_MISSION) exitWith {};
+
 uiSleep _initDelay;
 
 private _destroyerBase = createSimpleObject ["Land_Destroyer_01_base_F", _position];
@@ -92,7 +94,7 @@ _outlineMarker setMarkerSizeLocal [20, 100];
 _outlineMarker setMarkerDirLocal _destroyerDir;
 _outlineMarker setMarkerColor "ColorRed";
 
-private _destroyerOutlineMarkers = missionNamespace getVariable ["WL2_destroyerOutlineMarkers", []];
+private _destroyerOutlineMarkers = WL_DESTROYER_OUTLINES;
 _destroyerOutlineMarkers pushBack _outlineMarker;
 missionNamespace setVariable ["WL2_destroyerOutlineMarkers", _destroyerOutlineMarkers, true];
 

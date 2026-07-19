@@ -33,10 +33,12 @@ private _sideCaptureModifier = if (_useCache) then {
 			continue;
 		};
 
-		private _sideLinkedSectors = BIS_WL_sectorsArrays # (BIS_WL_competingSides find _side) # 2;
-		private _neighboringSectors = synchronizedObjects _sector;
+		private _teamSectorsData = WL_SECTORS_DATA(_side);
+		private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+
+		private _neighboringSectors = _sector getVariable ["WL2_connectedSectors", []];
 		private _connectedNeighboringSectors = _neighboringSectors select {
-			typeof _x == "Logic" && _side == _x getVariable ["BIS_WL_owner", independent] && _x in _sideLinkedSectors;
+			_side == _x getVariable ["BIS_WL_owner", independent] && _x in _linkedSectors;
 		};
 		private _hasConnection = count _connectedNeighboringSectors > 0;
 		if (!_hasConnection) then {
@@ -44,12 +46,12 @@ private _sideCaptureModifier = if (_useCache) then {
 			continue;
 		};
 
-		private _previousOwners = _sector getVariable ["BIS_WL_previousOwners", []];
-		private _isPreviousOwner = _side in _previousOwners;
+		private _capturableBySides = _sector getVariable ["WL2_capturableBySides", []];
+		private _isCapturableBySide = _side in _capturableBySides;
 
 		private _sideCurrentTarget = missionNamespace getVariable (format ["BIS_WL_currentTarget_%1", _side]);
 		private _isCurrentTarget = _sideCurrentTarget == _sector;
-		if (!_isPreviousOwner && !_isCurrentTarget) then {
+		if (!_isCapturableBySide && !_isCurrentTarget) then {
 			_capModifiers set [_side, 0];
 			continue;
 		};

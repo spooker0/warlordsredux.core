@@ -2,20 +2,27 @@
 
 "RequestMenu_close" call WL2_fnc_setupUI;
 
-private _ownedAirfieldSectors = (BIS_WL_sectorsArray # 2) select {
+private _side = BIS_WL_playerSide;
+
+private _teamSectorsData = WL_SECTORS_DATA(_side);
+private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+private _ownedAirfieldSectors = _linkedSectors select {
     private _services = _x getVariable ["WL2_services", []];
     "H" in _services;
 };
 
 private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 private _ownedAirFobs = _forwardBases select {
-    _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
+    _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side
 } select {
     private _defenseLevel = _x getVariable ["WL2_forwardBaseDefenseLevel", 0];
     _defenseLevel >= 4
 };
 
 private _eligibleCombatAirTargets = (_ownedAirfieldSectors + _ownedAirFobs) select {
+    private _homeBase = [_side] call WL2_fnc_getSideBase;
+    _x != _homeBase
+} select {
     private _combatAirActive = _x getVariable ["WL2_combatAirActive", false];
     !_combatAirActive
 } select {
@@ -25,7 +32,7 @@ private _eligibleCombatAirTargets = (_ownedAirfieldSectors + _ownedAirFobs) sele
 
 if (count _eligibleCombatAirTargets == 0) exitWith {
     playSoundUI ["AddItemFailed"];
-    ["No eligible targets for combat air support!"] call WL2_fnc_smoothText;
+    ["No eligible sectors or forward bases for no-fly zone!"] call WL2_fnc_smoothText;
 };
 
 _eligibleCombatAirTargets = [_eligibleCombatAirTargets, [], { cameraOn distance _x }, "ASCEND"] call BIS_fnc_sortBy;
@@ -44,5 +51,5 @@ if (!_result) exitWith {
     playSoundUI ["AddItemFailed"];
 };
 
-[player, "combatAir", BIS_WL_playerSide, _closestTarget] remoteExec ["WL2_fnc_handleClientRequest", 2];
+[player, "combatAir", _side, _closestTarget] remoteExec ["WL2_fnc_handleClientRequest", 2];
 playSoundUI ["a3\dubbing_f_jets\showcase_jets\30_reinforcements\showcase_jets_30_reinforcements_tower_0.wss"];

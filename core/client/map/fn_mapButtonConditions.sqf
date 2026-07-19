@@ -1,19 +1,14 @@
 #include "includes.inc"
 params ["_target", "_conditionName"];
 
+private _side = BIS_WL_playerSide;
 switch (_conditionName) do {
     case "fastTravelSeized": {
-        private _eligibleSectors = (BIS_WL_sectorsArray # 2) select {
-            (_x getVariable ["BIS_WL_owner", independent]) == BIS_WL_playerSide
-        };
-        if (_target in _eligibleSectors && ([BIS_WL_playerSide] call WL2_fnc_getSideBase) != _target) then {
+        private _teamSectorsData = WL_SECTORS_DATA(_side);
+        private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+        private _base = _teamSectorsData getOrDefault ["base", objNull];
+        if (_target in _linkedSectors && _base != _target) then {
             "ok";
-            // private _defenders = _target getVariable ["WL2_defenders", 0];
-            // if (_defenders <= 0 && _target == WL_TARGET_ENEMY) then {
-            //     "Sector has run out of defenders. Resupply the sector to enable fast travel there.";
-            // } else {
-            //     "ok";
-            // };
         } else {
             "";
         };
@@ -22,7 +17,7 @@ switch (_conditionName) do {
         private _sectorFrontlineCheck = [false, _target, "sector"] call WL2_fnc_travelTeamPriority;
         if (!_sectorFrontlineCheck) exitWith { "" };
 
-        private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
+        private _homeBase = [_side] call WL2_fnc_getSideBase;
         if (_homeBase == _target) then {
             "";
         } else {
@@ -30,7 +25,7 @@ switch (_conditionName) do {
         };
     };
     case "fastTravelHome": {
-        private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
+        private _homeBase = [_side] call WL2_fnc_getSideBase;
         if (_homeBase == _target) then {
             "ok";
         } else {
@@ -59,10 +54,12 @@ switch (_conditionName) do {
         "ok";
     };
     case "vehicleParadrop": {
-        private _sectorAvailable = _target in (BIS_WL_sectorsArray # 2);
-        if (!_sectorAvailable) exitWith { "" };
+        private _teamSectorsData = WL_SECTORS_DATA(_side);
+        private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+        if !(_target in _linkedSectors) exitWith { "" };
 
-        if (([BIS_WL_playerSide] call WL2_fnc_getSideBase) == _target) exitWith { "" };
+        private _base = _teamSectorsData getOrDefault ["base", objNull];
+        if (_base == _target) exitWith { "" };
 
         private _isCarrierSector = _target getVariable ["WL2_isAircraftCarrier", false];
         if (_isCarrierSector) exitWith { "Cannot paradrop onto aircraft carriers." };
@@ -76,19 +73,21 @@ switch (_conditionName) do {
     };
     case "vehicleParadropFOB": {
         if (!alive _target) exitWith { "Forward base has been destroyed." };
-        if (_target getVariable ["WL2_forwardBaseOwner", sideUnknown] != BIS_WL_playerSide) exitWith { "" };
+        if (_target getVariable ["WL2_forwardBaseOwner", sideUnknown] != _side) exitWith { "" };
         if !(_target getVariable ["WL2_forwardBaseReady", false]) exitWith { "Forward base under construction." };
         "ok";
     };
     case "scan": {
-        private _allScannableSectors = BIS_WL_sectorsArray # 3;
-        if !(_target in _allScannableSectors) exitWith { "" };
+        private _teamSectorsData = WL_SECTORS_DATA(_side);
+        private _unlockedSectors = _teamSectorsData getOrDefault ["unlocked", []];
+
+        if !(_target in _unlockedSectors) exitWith { "" };
 
         private _scanningSectors = missionNamespace getVariable ["WL2_scanningSectors", []];
         if (_target in _scanningSectors) exitWith { "Sector is already being scanned."};
 
         private _lastScanEligible = serverTime - WL_COOLDOWN_SCAN;
-        private _lastScannedVar = format ["WL2_lastScanned_%1", BIS_WL_playerSide];
+        private _lastScannedVar = format ["WL2_lastScanned_%1", _side];
         private _lastScan = _target getVariable [_lastScannedVar, -9999];
 
         if (_lastScan > _lastScanEligible) exitWith { "Sector scan is on cooldown." };
@@ -101,7 +100,12 @@ switch (_conditionName) do {
         };
     };
     case "combatAirPatrol": {
-        private _airfieldSectors = (BIS_WL_sectorsArray # 2) select {
+        private _teamSectorsData = WL_SECTORS_DATA(_side);
+        private _base = _teamSectorsData getOrDefault ["base", objNull];
+        if (_target == _base) exitWith { "" };
+
+        private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+        private _airfieldSectors = _linkedSectors select {
             private _services = _x getVariable ["WL2_services", []];
             "H" in _services;
         };
@@ -116,8 +120,8 @@ switch (_conditionName) do {
         "ok";
     };
     case "combatAirPatrolHome": {
-        private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
-        if !(_target in _homeBase) exitWith { "" };
+        private _homeBase = [_side] call WL2_fnc_getSideBase;
+        if (_target != _homeBase) exitWith { "" };
 
         private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
         if (_timeSinceStart < WL_COMBAT_AIR_HOME_TIME) exitWith {
@@ -133,7 +137,9 @@ switch (_conditionName) do {
         "ok";
     };
     case "combatAirPatrolDebug": {
-        private _airfieldSectors = (BIS_WL_sectorsArray # 2) select {
+        private _teamSectorsData = WL_SECTORS_DATA(_side);
+        private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+        private _airfieldSectors = _linkedSectors select {
             private _services = _x getVariable ["WL2_services", []];
             "H" in _services;
         };
@@ -217,8 +223,12 @@ switch (_conditionName) do {
         "ok";
     };
     case "fastTravelStrongholdTarget": {
-        private _findIsStronghold = (BIS_WL_sectorsArray # 2) select {
-            !isNull (_x getVariable ["WL_stronghold", objNull]) && _x == _target
+        private _teamSectorsData = WL_SECTORS_DATA(_side);
+        private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+        private _findIsStronghold = _linkedSectors select {
+            !isNull (_x getVariable ["WL_stronghold", objNull])
+        } select {
+            _x == _target
         };
         if (count _findIsStronghold > 0) then {
             "ok";
@@ -241,7 +251,7 @@ switch (_conditionName) do {
     };
     case "fastTravelFOB": {
         if (!alive _target) exitWith { "Forward base has been destroyed." };
-        if (_target getVariable ["WL2_forwardBaseOwner", sideUnknown] != BIS_WL_playerSide) exitWith { "" };
+        if (_target getVariable ["WL2_forwardBaseOwner", sideUnknown] != _side) exitWith { "" };
         if !(_target getVariable ["WL2_forwardBaseReady", false]) exitWith { "Forward base under construction." };
         "ok";
     };
@@ -272,7 +282,7 @@ switch (_conditionName) do {
     };
     case "repairFOB": {
         private _fobOwner = _target getVariable ["WL2_forwardBaseOwner", sideUnknown];
-        if (_fobOwner != BIS_WL_playerSide) exitWith { "" };
+        if (_fobOwner != _side) exitWith { "" };
 
         if (!alive _target) exitWith { "Forward base has been destroyed." };
 
@@ -295,7 +305,7 @@ switch (_conditionName) do {
     };
     case "combatAirPatrolFOB": {
         private _fobOwner = _target getVariable ["WL2_forwardBaseOwner", sideUnknown];
-        if (_fobOwner != BIS_WL_playerSide) exitWith { "" };
+        if (_fobOwner != _side) exitWith { "" };
 
         private _defenseLevel = _target getVariable ["WL2_forwardBaseDefenseLevel", 0];
         if (_defenseLevel < 4) exitWith { "" };
@@ -326,7 +336,7 @@ switch (_conditionName) do {
     };
     case "defendFOB": {
         private _fobOwner = _target getVariable ["WL2_forwardBaseOwner", sideUnknown];
-        if (_fobOwner != BIS_WL_playerSide) exitWith { "" };
+        if (_fobOwner != _side) exitWith { "" };
 
         private _defenseLevel = _target getVariable ["WL2_forwardBaseDefenseLevel", 0];
         if (_defenseLevel >= 4) exitWith { "" };
@@ -381,7 +391,7 @@ switch (_conditionName) do {
             "Must be squad leader to designate team priority.";
         };
 
-        private _teamPriorityVar = format ["WL2_teamPriority_%1", BIS_WL_playerSide];
+        private _teamPriorityVar = format ["WL2_teamPriority_%1", _side];
         private _currentPriority = missionNamespace getVariable [_teamPriorityVar, objNull];
         if (_target == _currentPriority) exitWith {
             "This is already designated as your team's priority target.";
@@ -411,7 +421,9 @@ switch (_conditionName) do {
     };
     case "assetRefuel": {
         if (!alive _target) exitWith { "" };
-        if (_target isKindOf "Man") exitWith { "" };
+
+        private _fuelCapacity = getNumber (configFile >> "CfgVehicles" >> typeOf _target >> "fuelCapacity");
+        if (_fuelCapacity <= 0) exitWith { "" };
 
         private _canRefuel = [_target, player] call WL2_fnc_refuelActionEligibility;
         if (!_canRefuel) exitWith {
@@ -431,13 +443,17 @@ switch (_conditionName) do {
 
         private _canRepair = [_target, player] call WL2_fnc_repairActionEligibility;
         if (!_canRepair) exitWith {
-            "Vehicle must be near repair asset to be eligible for repair."
+            "Vehicle must be near repair asset."
         };
 
         "ok";
     };
     case "bulkDeploy": {
         if (!alive _target) exitWith { "" };
+        if (cameraOn distance2D _target > 100) exitWith {
+            "You are too far from this obstacle to use it for bulk deployment.";
+        };
+
         private _installable = _target getVariable ["WL2_installable", ""];
         if (_installable == "") exitWith { "" };
         if (WL_ASSET_TYPE(_target) != _installable) exitWith { "" };
@@ -446,6 +462,69 @@ switch (_conditionName) do {
         private _markerPolyline = markerPolyline _lastMarker;
         if (count _markerPolyline == 0) exitWith {
             "No map marker found. Draw a line on the map to bulk deploy assets."
+        };
+
+        private _firstPoint = [_markerPolyline # 0, _markerPolyline # 1, 0];
+        if (cameraOn distance2D _firstPoint > 200) exitWith {
+            "You are too far from the marker start position. Move closer before bulk deploying assets.";
+        };
+
+        "ok";
+    };
+    case "rtb": {
+        if (!alive _target) exitWith { "" };
+        if (typeof _target != "Land_CraneRail_01_F") exitWith { "" };
+        call WL2_fnc_rebaseActionEligibility;
+    };
+    case "rtbSector": {
+        private _targetServices = _target getVariable ["WL2_services", []];
+        if !("A" in _targetServices) exitWith { "" };
+        call WL2_fnc_rebaseActionEligibility;
+    };
+    case "repairStructures": {
+        private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
+        private _playerVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
+
+        private _sectorArea = _target getVariable ["objectAreaComplete", objNull];
+        private _structuresInSector = (_playerVehicles inAreaArray _sectorArea) select {
+            alive _x
+        } select {
+            private _maxDemolitionHealth = _x getVariable ["WL2_demolitionMaxHealth", 0];
+            private _currentDemolitionHealth = _x getVariable ["WL2_demolitionHealth", 0];
+            _maxDemolitionHealth > 0 && _currentDemolitionHealth < _maxDemolitionHealth;
+        };
+        if (count _structuresInSector == 0) exitWith { "" };
+
+        _structuresInSector = _structuresInSector select {
+            private _canRepairTime = _x getVariable ["WL2_canRepairTime", 0];
+            _canRepairTime < serverTime;
+        };
+        if (count _structuresInSector == 0) exitWith {
+            "No demolishable structures ready for repair."
+        };
+
+        "ok";
+    };
+    case "repairStructuresFob": {
+        private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
+        private _playerVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
+
+        private _forwardBaseArea = [getPosASL _target, WL_FOB_RANGE, WL_FOB_RANGE, 0, false];
+        private _structuresInFob = (_playerVehicles inAreaArray _forwardBaseArea) select {
+            alive _x
+        } select {
+            private _maxDemolitionHealth = _x getVariable ["WL2_demolitionMaxHealth", 0];
+            private _currentDemolitionHealth = _x getVariable ["WL2_demolitionHealth", 0];
+            _maxDemolitionHealth > 0 && _currentDemolitionHealth < _maxDemolitionHealth;
+        };
+        if (count _structuresInFob == 0) exitWith { "" };
+
+        _structuresInFob = _structuresInFob select {
+            private _canRepairTime = _x getVariable ["WL2_canRepairTime", 0];
+            _canRepairTime < serverTime;
+        };
+        if (count _structuresInFob == 0) exitWith {
+            "No demolishable structures ready for repair."
         };
 
         "ok";

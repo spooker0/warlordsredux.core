@@ -98,7 +98,7 @@ private _demolishActionId = player addAction [
             if (_demolishSuccess) then {
                 [_demolishableTarget, 1] call WL2_fnc_demolishStep;
             } else {
-                private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+                private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
                 private _hitmarkerVolume = _settingsMap getOrDefault ["hitmarkerVolume", 0.5];
                 playSoundUI ["AddItemFailed", _hitmarkerVolume * 2];
             };

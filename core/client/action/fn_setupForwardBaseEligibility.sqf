@@ -12,14 +12,15 @@ if (!isNull attachedTo _target || !isNull ropeAttachedTo _target) exitWith {
 if ((getPosASL _target) # 2 < -10) exitWith {
     "Cannot be used underwater.";
 };
-
 if (!_finalCheck && _target getVariable ["WL2_deploying", false]) exitWith {
     "Deploying.";
 };
 
+private _side = BIS_WL_playerSide;
+
 private _currentForwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 private _teamForwardBases = _currentForwardBases select {
-    _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
+    _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side
 };
 private _inRangeTeamForwardBases = _teamForwardBases select {
     _target distance2D _x < WL_FOB_RANGE
@@ -27,7 +28,9 @@ private _inRangeTeamForwardBases = _teamForwardBases select {
 private _inRangeTeamFob = if (count _inRangeTeamForwardBases > 0) then {
     true
 } else {
-    private _sectorsInRange = (BIS_WL_sectorsArray # 0) select {
+    private _teamSectorsData = WL_SECTORS_DATA(_side);
+    private _ownedSectors = _teamSectorsData getOrDefault ["owned", []];
+    private _sectorsInRange = _ownedSectors select {
         _target inArea (_x getVariable "objectAreaComplete")
     };
     count _sectorsInRange > 0

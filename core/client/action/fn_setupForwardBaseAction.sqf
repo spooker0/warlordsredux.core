@@ -163,10 +163,12 @@ private _setupActionId = [
 [_setupActionId, _asset, _drawRestrictionId] spawn {
 	params ["_setupActionId", "_asset", "_drawRestrictionId"];
 
+	private _side = BIS_WL_playerSide;
+
     while { alive _asset } do {
 		private _currentForwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		private _teamForwardBases = _currentForwardBases select {
-			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == side group player
+			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side
 		};
 		private _inRangeTeamForwardBases = _teamForwardBases select {
 			_asset distance2D _x < WL_FOB_RANGE
@@ -174,7 +176,9 @@ private _setupActionId = [
 		private _inRangeTeamFob = if (count _inRangeTeamForwardBases > 0) then {
 			true
 		} else {
-			private _sectorsInRange = (BIS_WL_sectorsArray # 0) select {
+			private _teamSectorsData = WL_SECTORS_DATA(_side);
+			private _ownedSectors = _teamSectorsData getOrDefault ["owned", []];
+			private _sectorsInRange = _ownedSectors select {
 				_asset inArea (_x getVariable "objectAreaComplete")
 			};
 			count _sectorsInRange > 0
@@ -226,11 +230,12 @@ private _setupActionId = [
 	},
 	{
 		params ["_target", "_caller"];
+		private _side = BIS_WL_playerSide;
 		private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		_forwardBases = _forwardBases select {
 			_target distance2D _x < WL_FOB_RANGE
 		} select {
-			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == side group player
+			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side
 		};
 		if (count _forwardBases > 0) exitWith {
 			deleteVehicle _target;
@@ -241,7 +246,9 @@ private _setupActionId = [
 			_forwardBase setVariable ["WL2_forwardBaseSupplies", _newSupplies, true];
 		};
 
-		private _sectorsInRange = (BIS_WL_sectorsArray # 0) select {
+		private _teamSectorsData = WL_SECTORS_DATA(_side);
+		private _ownedSectors = _teamSectorsData getOrDefault ["owned", []];
+		private _sectorsInRange = _ownedSectors select {
 			_target inArea (_x getVariable "objectAreaComplete")
 		};
 		if (count _sectorsInRange > 0) exitWith {

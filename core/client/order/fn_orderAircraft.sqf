@@ -1,7 +1,10 @@
 #include "includes.inc"
 params ["_orderedClass", "_cost"];
 
-private _findCurrentOwnedSector = (BIS_WL_sectorsArray # 0) select {
+private _teamSectorsData = WL_SECTORS_DATA(BIS_WL_playerSide);
+private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+
+private _findCurrentOwnedSector = _linkedSectors select {
 	player inArea (_x getVariable "objectAreaComplete")
 } select {
 	private _services = _x getVariable ["WL2_services", []];
@@ -17,9 +20,9 @@ private _sector = _findCurrentOwnedSector # 0;
 private _sectorMarker = _sector getVariable [format ["WL2_MapMarker_%1", BIS_WL_playerSide], "unknown"];
 private _sectorIsCamped = _sectorMarker == "camped";
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-private _campAirWarning = _settingsMap getOrDefault ["campAirWarning", true];
-if (_sectorIsCamped && _campAirWarning) exitWith {
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
+private _camperWarning = _settingsMap getOrDefault ["camperWarning", true];
+if (_sectorIsCamped && _camperWarning) exitWith {
 	playSoundUI ["AddItemFailed", 1];
 	["Your team has marked this airbase as camped! Enemies may be near. Remove the marker on the map or disable airbase camper warning in settings to spawn aircraft here."] call WL2_fnc_smoothText;
 };

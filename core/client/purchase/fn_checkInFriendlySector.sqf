@@ -1,7 +1,10 @@
 #include "includes.inc"
 params [["_cost", 0], ["_requirements", []]];
 
-private _findCurrentSector = (BIS_WL_sectorsArray # 0) select {
+private _teamSectorsData = WL_SECTORS_DATA(BIS_WL_playerSide);
+private _ownedSectors = _teamSectorsData getOrDefault ["owned", []];
+
+private _findCurrentSector = _ownedSectors select {
     player inArea (_x getVariable "objectAreaComplete")
 };
 

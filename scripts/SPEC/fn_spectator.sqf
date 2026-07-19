@@ -98,10 +98,6 @@ private _mainDisplay = findDisplay 46;
 _mainDisplay displayAddEventHandler ["KeyDown", {
     params ["_displayOrControl", "_key", "_shift", "_ctrl", "_alt"];
 
-    if (_alt) then {
-        uiNamespace setVariable ["WL2_isHoldingAlt", true];
-    };
-
     if (_key in actionKeys "cameraMoveRight") exitWith {
         uiNamespace setVariable ["SPEC_CameraMoveRight", 1];
     };
@@ -195,7 +191,8 @@ _mainDisplay displayAddEventHandler ["KeyUp", {
     params ["_displayOrControl", "_key", "_shift", "_ctrl", "_alt"];
 
     if (_alt) then {
-        uiNamespace setVariable ["WL2_isHoldingAlt", false];
+        private _existingValue = uiNamespace getVariable ["WL2_isHoldingAlt", false];
+        uiNamespace setVariable ["WL2_isHoldingAlt", !_existingValue];
     };
 
     if (_key in actionKeys "cameraMoveRight") exitWith {
@@ -334,7 +331,7 @@ _mainDisplay displayAddEventHandler ["KeyUp", {
     };
 
     if (_key in actionKeys "compass") exitWith {
-        call MENU_fnc_settingsMenuInit;
+        [] spawn MENU_fnc_settingsMenuInit;
     };
 }];
 

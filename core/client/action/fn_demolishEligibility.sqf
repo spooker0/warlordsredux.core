@@ -19,7 +19,7 @@ private _demolishTarget = _demolishableItems # 0;
 
 private _strongholdSector = _demolishTarget getVariable ["WL_strongholdSector", objNull];
 if (isNull _strongholdSector) exitWith {
-    private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+    private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
     private _enableAlliedDemolition = _settingsMap getOrDefault ["enableAlliedDemolition", false];
     if (_enableAlliedDemolition) then {
         _demolishTarget

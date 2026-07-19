@@ -138,14 +138,14 @@ if (_action == "getSquadVotingPower") exitWith {
     // Get squad voting power of squad leader
     private _playerId = _params select 0;
 
-    WL_PlayerSquadContribution = missionNamespace getVariable ["WL_PlayerSquadContribution", createHashMap];
+    private _totalPointsMap = missionNamespace getVariable ["WL2_totalPointsEarned", createHashMap];
     private _squad = ["getSquadForPlayer", [_playerId]] call SQD_fnc_query;
     if (count _squad == 0) exitWith {
         private _playerUid = _playerId getUserInfo 2;
         if (isNil "_playerUid") then {
             _playerUid = "none";
         };
-        private _points = WL_PlayerSquadContribution getOrDefault [_playerUid, 0];
+        private _points = _totalPointsMap getOrDefault [_playerUid, 0];
         _points max 1;
     };
 
@@ -158,7 +158,7 @@ if (_action == "getSquadVotingPower") exitWith {
         };
 
         private _memberUid = getPlayerUID _member;
-        private _memberContribution = WL_PlayerSquadContribution getOrDefault [_memberUid, 0];
+        private _memberContribution = _totalPointsMap getOrDefault [_memberUid, 0];
 
         private _playerRating = _member getVariable ["WL2_playerRating", WL_RATING_STARTER];
         private _ratingMultiplier = linearConversion [0, 10000, _playerRating, 0, 10, true];

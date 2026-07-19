@@ -186,7 +186,7 @@ private _ecmDraw = addMissionEventHandler ["Draw3D", {
 
 private _nextChargeTime = serverTime + _ecmRechargeTime;
 private _lastCharges = _charges;
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 private _apsVolume = _settingsMap getOrDefault ["apsVolume", 1];
 while { alive _asset && cameraOn == _asset } do {
     uiSleep 0.25;

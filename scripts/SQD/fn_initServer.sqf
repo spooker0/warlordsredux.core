@@ -3,6 +3,7 @@ if (isNil "SQUAD_MANAGER") then {
     SQUAD_MANAGER = [];
 };
 missionNamespace setVariable ["SQUAD_MANAGER", SQUAD_MANAGER, true];
+missionNamespace setVariable ["WL2_totalPointsEarned", createHashMap];
 
 addMissionEventHandler ["HandleDisconnect", {
 	params ["_unit", "_id", "_uid", "_name"];

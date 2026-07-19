@@ -7,11 +7,11 @@ private _overrideMap = createHashMap;
 private _turretOverridesForVehicle = WL_ASSET(_vehicle, "turretOverrides", []);
 {
 	private _turretOverride = _x;
-	private _turret = getArray (_turretOverride >> "turret");
-	private _removeMagazines = getArray (_turretOverride >> "removeMagazines");
-	private _removeWeapons = getArray (_turretOverride >> "removeWeapons");
-	private _addMagazines = getArray (_turretOverride >> "addMagazines");
-	private _addWeapons = getArray (_turretOverride >> "addWeapons");
+    private _turret = _x getOrDefault ["turret", []];
+    private _removeMagazines = _x getOrDefault ["removeMagazines", []];
+    private _removeWeapons = _x getOrDefault ["removeWeapons", []];
+    private _addMagazines = _x getOrDefault ["addMagazines", []];
+    private _addWeapons = _x getOrDefault ["addWeapons", []];
 
     _overrideMap set [_turret, [_removeMagazines, _removeWeapons, _addMagazines, _addWeapons]];
 } forEach _turretOverridesForVehicle;

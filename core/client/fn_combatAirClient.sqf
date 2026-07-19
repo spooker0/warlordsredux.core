@@ -1,9 +1,11 @@
 #include "includes.inc"
 
 private _lastNotifyTime = 0;
+private _side = BIS_WL_playerSide;
+private _enemySide = BIS_WL_enemySide;
+
 while { !BIS_WL_missionEnd } do {
     uiSleep 0.5;
-    private _side = BIS_WL_playerSide;
     private _asset = cameraOn;
 
     if (WL_ISDOWN(_asset)) exitWith {
@@ -60,7 +62,7 @@ while { !BIS_WL_missionEnd } do {
     };
 
     if (serverTime - _lastNotifyTime > 30) then {
-        [[_asset], 30] remoteExec ["WL2_fnc_reportTargets", _side];
+        [[_asset], 45] remoteExec ["WL2_fnc_reportTargets", _enemySide];
         _lastNotifyTime = serverTime;
     };
 

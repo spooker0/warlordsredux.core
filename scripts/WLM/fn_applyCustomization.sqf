@@ -14,7 +14,7 @@ private _assetConfig = configFile >> "CfgVehicles" >> typeOf _asset;
 
 private _assetActualType = WL_ASSET_TYPE(_asset);
 
-private _appearanceDefaults = profileNamespace getVariable ["WLM_appearanceDefaults", createHashmap];
+private _appearanceDefaults = missionProfileNamespace getVariable ["WL2_appearanceDefaults", createHashmap];
 private _assetAppearanceDefaults = _appearanceDefaults getOrDefault [_assetActualType, createHashmap];
 
 private _finalizeCustomization = {
@@ -82,4 +82,4 @@ if (["setHornTo", _customization] call BIS_fnc_inString) then {
 };
 
 _appearanceDefaults set [_assetActualType, _assetAppearanceDefaults];
-profileNamespace setVariable ["WLM_appearanceDefaults", _appearanceDefaults];
+missionProfileNamespace setVariable ["WL2_appearanceDefaults", _appearanceDefaults];

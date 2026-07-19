@@ -46,8 +46,8 @@ private _playerRating = player getVariable ["WL2_playerRating", WL_RATING_STARTE
 	[3500, "Colonel"]
 ];
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-private _hideMyIdentity = _settingsMap getOrDefault ["hideMyIdentity", true];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
+private _hideMyIdentity = _settingsMap getOrDefault ["hideMyIdentity", false];
 if ((_isAdmin || _isModerator) && _hideMyIdentity) then {
 	private _identityId = format ["76561%1", (random 1 toFixed 12) select [2]];
 	private _hiddenIdentity = player getVariable ["WL2_hideIdentity", ""];
@@ -63,7 +63,7 @@ private _currentBadge = player getVariable ["WL2_currentBadge", ""];
 private _badgeConfigs = call RWD_fnc_getBadgeConfigs;
 if !(_currentBadge in _badgeConfigs) then {
 	_currentBadge = "Player";
-	profileNamespace setVariable ["WL2_currentBadge", _currentBadge];
+	missionProfileNamespace setVariable ["WL2_currentBadge", _currentBadge];
 };
 
 private _level = ["getLevel"] call WLC_fnc_getLevelInfo;

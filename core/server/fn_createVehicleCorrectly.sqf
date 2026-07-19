@@ -61,6 +61,11 @@ if (_isObstacle) then {
 	};
 };
 
+private _hideTurret = WL_ASSET(_orderedClass, "hideTurret", 0);
+if (_hideTurret != 0) then {
+	_asset animateSource ["HideTurret", 1, true];
+};
+
 _asset setDamage 0;
 _asset lock true;
 _asset enableWeaponDisassembly false;

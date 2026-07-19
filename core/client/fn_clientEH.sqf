@@ -227,3 +227,11 @@ addMissionEventHandler ["EachFrame", {
     if (!isNull _controlGroup) exitWith {};
 	call WL2_fnc_initInventory;
 }];
+
+addMissionEventHandler ["EachFrame", {
+	if (currentWeapon cameraOn != "cannon_railgun_fake") exitWith {};
+
+	private _thermals = getVehicleTIPars cameraOn;
+	_thermals set [2, 0];
+	cameraOn setVehicleTIPars _thermals;
+}];

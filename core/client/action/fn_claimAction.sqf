@@ -62,7 +62,7 @@ _asset addAction [
 				_vehicles pushBack _asset;
 				missionNamespace setVariable [_ownedVehicleVar, _vehicles, true];
 			} else {
-                private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+                private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
                 private _hitmarkerVolume = _settingsMap getOrDefault ["hitmarkerVolume", 0.5];
                 playSoundUI ["AddItemFailed", _hitmarkerVolume * 2];
             };

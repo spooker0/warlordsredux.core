@@ -89,12 +89,6 @@ if (_hasFullAccess) then {
             playSoundUI ["AddItemFailed"];
         };
 
-        private _firstPoint = [_markerPolyline # 0, _markerPolyline # 1, 0];
-        if (cameraOn distance2D _firstPoint > 200) exitWith {
-            ["You are too far from the marker start position. Move closer before bulk deploying assets."] call WL2_fnc_smoothText;
-            playSoundUI ["AddItemFailed"];
-        };
-
         private _installable = _asset getVariable ["WL2_installable", ""];
         if (WL_ASSET_TYPE(_asset) != _installable) exitWith {
             ["Asset type mismatch."] call WL2_fnc_smoothText;
@@ -564,6 +558,44 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         ]
     ] call WL2_fnc_addTargetMapButton;
 
+    // Repair structures button
+    // private _repairStructuresExecute = {
+    //     params ["_asset"];
+    //     [player, "repairStructures"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+
+    //     private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
+    //     private _playerVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
+
+    //     private _forwardBaseArea = [getPosASL _asset, WL_FOB_RANGE, WL_FOB_RANGE, 0, false];
+    //     private _structuresInFob = (_playerVehicles inAreaArray _forwardBaseArea) select {
+    //         alive _x
+    //     } select {
+    //         private _maxDemolitionHealth = _x getVariable ["WL2_demolitionMaxHealth", 0];
+    //         private _currentDemolitionHealth = _x getVariable ["WL2_demolitionHealth", 0];
+    //         _maxDemolitionHealth > 0 && _currentDemolitionHealth < _maxDemolitionHealth;
+    //     } select {
+    //         private _canRepairTime = _x getVariable ["WL2_canRepairTime", 0];
+    //         _canRepairTime < serverTime;
+    //     };
+
+    //     {
+    //         private _maxDemolitionHealth = _x getVariable ["WL2_demolitionMaxHealth", 5];
+    //         private _currentDemolitionHealth = _x getVariable ["WL2_demolitionHealth", _maxDemolitionHealth];
+    //         _x setVariable ["WL2_demolitionHealth", _maxDemolitionHealth, true];
+    //     } forEach _structuresInFob;
+
+    //     playSoundUI ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Repair.wss"];
+    // };
+    // [
+    //     _asset, _targetId,
+    //     "repair-structures",
+    //     "Repair structures",
+    //     _repairStructuresExecute,
+    //     true,
+    //     "repairStructuresFob",
+    //     [WL_COST_REPAIRALL, "Repair", "Strategy"]
+    // ] call WL2_fnc_addTargetMapButton;
+
 #if WL_STRONGHOLD_DEBUG
     // Fast Travel FOB Test
     private _fastTravelFOBTestExecute = {
@@ -677,7 +709,24 @@ private _fastTravelSquadmateExecute = {
     ]
 ] call WL2_fnc_addTargetMapButton;
 
-private _findIsStronghold = (BIS_WL_sectorsArray # 2) select {
+// // Return to base button
+private _rtbExecute = {
+    params ["_asset"];
+    [cameraOn, _asset] spawn WL2_fnc_rebase;
+};
+[
+    _asset, _targetId,
+    "rtb",
+    "Return to base",
+    _rtbExecute,
+    true,
+    "rtb",
+    [WL_COST_JETRTB, "RTB", "Strategy"]
+] call WL2_fnc_addTargetMapButton;
+
+private _teamSectorsData = WL_SECTORS_DATA(BIS_WL_playerSide);
+private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+private _findIsStronghold = _linkedSectors select {
     (_x getVariable ["WL_stronghold", objNull]) == _asset
 };
 
@@ -685,7 +734,9 @@ if (count _findIsStronghold > 0) then {
     // Fast Travel Stronghold Button
     private _fastTravelStrongholdExecute = {
         params ["_asset"];
-        private _findSector = (BIS_WL_sectorsArray # 2) select {
+        private _teamSectorsData = WL_SECTORS_DATA(BIS_WL_playerSide);
+        private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+        private _findSector = _linkedSectors select {
             (_x getVariable ["WL_stronghold", objNull]) == _asset
         };
         if (count _findSector == 0) exitWith {};
@@ -710,7 +761,9 @@ if (count _findIsStronghold > 0) then {
     // Fast Travel Near Stronghold Button
     private _fastTravelNearStrongholdExecute = {
         params ["_asset"];
-        private _findSector = (BIS_WL_sectorsArray # 2) select {
+        private _teamSectorsData = WL_SECTORS_DATA(BIS_WL_playerSide);
+        private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+        private _findSector = _linkedSectors select {
             (_x getVariable ["WL_stronghold", objNull]) == _asset
         };
         if (count _findSector == 0) exitWith {};
@@ -735,7 +788,9 @@ if (count _findIsStronghold > 0) then {
     // Remove Stronghold button
     private _removeStrongholdExecute = {
         params ["_asset"];
-        private _findSector = (BIS_WL_sectorsArray # 2) select {
+        private _teamSectorsData = WL_SECTORS_DATA(BIS_WL_playerSide);
+        private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+        private _findSector = _linkedSectors select {
             (_x getVariable ["WL_stronghold", objNull]) == _asset
         };
         if (count _findSector == 0) exitWith {};
@@ -796,7 +851,9 @@ if (count _findIsStronghold > 0) then {
     // Fast Travel Stronghold Test
     private _fastTravelStrongholdTestExecute = {
         params ["_asset"];
-        private _findSector = (BIS_WL_sectorsArray # 2) select {
+        private _teamSectorsData = WL_SECTORS_DATA(BIS_WL_playerSide);
+        private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+        private _findSector = _linkedSectors select {
             (_x getVariable ["WL_stronghold", objNull]) == _asset
         };
         private _sector = (_findSector # 0);

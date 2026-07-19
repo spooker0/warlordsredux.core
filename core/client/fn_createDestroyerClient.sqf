@@ -59,6 +59,7 @@ private _hullNum3 = _destroyerHullNumbers select 2;
     _destroyerPartsArray pushBack _dummy;
 
     _dummy allowDamage false;
+    _dummy enableSimulation false;
 
     if (_dummyClassName == "Land_Destroyer_01_hull_01_F") then {
         _dummy setObjectTexture [0, format ["\A3\Boat_F_Destroyer\Destroyer_01\Data\Destroyer_01_N_0%1_co.paa", _hullNum1]];

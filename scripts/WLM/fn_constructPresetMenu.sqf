@@ -19,8 +19,8 @@ if (!_isAircraft) then {
 };
 
 private _assetActualType = WL_ASSET_TYPE(_asset);
-private _variableName = format ["WLM_savedLoadout_%1", _assetActualType];
-private _savedLoadouts = profileNamespace getVariable [_variableName, []];
+private _vehicleLoadouts = missionProfileNamespace getVariable ["WL2_vehicleLoadouts", createHashMap];
+private _savedLoadouts = _vehicleLoadouts getOrDefault [_assetActualType, []];
 
 {
     private _loadoutName = _x # 0;

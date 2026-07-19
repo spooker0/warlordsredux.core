@@ -19,8 +19,9 @@ private _loadButtons = uiNamespace getVariable ["WL2_inventoryLoadButtons", []];
 private _saveButtons = uiNamespace getVariable ["WL2_inventorySaveButtons", []];
 private _clearButtons = uiNamespace getVariable ["WL2_inventoryClearButtons", []];
 
-private _loadoutVar = format ["WLC_loadoutIndex_%1", BIS_WL_playerSide];
-private _currentLoadoutIndex = profileNamespace getVariable [_loadoutVar, 0];
+private _savedLoadouts = missionProfileNamespace getVariable ["WL2_savedLoadouts", createHashMap];
+private _savedLoadoutsSide = _savedLoadouts getOrDefault [toLower str BIS_WL_playerSide, createHashMap];
+private _currentLoadoutIndex = _savedLoadoutsSide getOrDefault ["index", 0];
 private _totalButtons = count _loadButtons;
 
 private _loadouts = call WL2_fnc_getLoadouts;

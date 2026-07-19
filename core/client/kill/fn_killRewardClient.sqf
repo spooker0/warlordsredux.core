@@ -5,7 +5,7 @@ if (isDedicated) exitWith {};
 
 disableSerialization;
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 
 private _displayText = "";
 private _displayName = "";
@@ -83,13 +83,6 @@ if (_addKillfeedToChat) then {
 if !(toUpper _displayText in ["SQUAD ASSIST", "SECTOR CAPTURED"]) then {
 	missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_DURATION_AFKTIME];
 };
-
-private _rewardHistory = uiNamespace getVariable ["WL2_rewardHistory", createHashMap];
-private _rewardEntry = _rewardHistory getOrDefault [_displayText, [0, 0]];
-_rewardEntry set [0, _rewardEntry # 0 + 1];
-_rewardEntry set [1, _rewardEntry # 1 + _reward];
-_rewardHistory set [_displayText, _rewardEntry];
-uiNamespace setVariable ["WL2_rewardHistory", _rewardHistory];
 
 if (_customColor == WL_COLOR_KILL) then {
 	private _hitmarkerVolume = _settingsMap getOrDefault ["hitmarkerVolume", 0.5];

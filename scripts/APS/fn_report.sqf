@@ -16,7 +16,7 @@ private _existingProjectiles = uiNamespace getVariable ["WL2_damagedProjectiles"
 _existingProjectiles set [diag_tickTime, _projectile];
 uiNamespace setVariable ["WL2_damagedProjectiles", _existingProjectiles];
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 private _apsVolume = _settingsMap getOrDefault ["apsVolume", 1];
 
 private _type = switch (_assetApsType) do {
@@ -34,6 +34,13 @@ private _text = format["%1 Charges: %2/%3", _type, _apsAmmo, _vehicle call APS_f
 
 if (_apsAmmo == 0 && _indicator) then {
 	playSoundUI ["a3\sounds_f\vehicles\air\noises\heli_alarm_rotor_low.wss", _apsVolume, 0.5];
+
+	private _message = if (_assetApsType > 3) then {
+		"APS out of charges! You can quick reload APS charges by toggling it off."
+	} else {
+		"APS out of charges! You can reload APS charges from outside the vehicle."
+	};
+	[_message] call WL2_fnc_smoothText;
 };
 
 private _apsDisplay = uiNamespace getVariable ["RscWLAPSDisplay", objNull];

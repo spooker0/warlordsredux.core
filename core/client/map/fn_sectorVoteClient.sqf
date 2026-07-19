@@ -2,7 +2,7 @@
 
 private _playerId = getPlayerID player;
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 
 private _lastTargetFriendly = objNull;
 private _lastTargetEnemy = objNull;
@@ -32,7 +32,7 @@ while { !BIS_WL_missionEnd } do {
     if (WL_VotePhase != _newPhase) then {
         WL_VotePhase = _newPhase;
 
-        ["client"] call WL2_fnc_updateSectorArrays;
+        call WL2_fnc_updateSectorsData;
 
         switch (WL_VotePhase) do {
             // Stopped voting
@@ -55,9 +55,9 @@ while { !BIS_WL_missionEnd } do {
                 if (_targetReset) then {
                     "Reset" call WL2_fnc_announcer;
 
-                    private _enemySectorPreviousOwners = WL_TARGET_ENEMY getVariable ["BIS_WL_previousOwners", []];
+                    private _enemySectorCapturableSides = WL_TARGET_ENEMY getVariable ["WL2_capturableBySides", []];
 
-                    if !(_playerSide in _enemySectorPreviousOwners) then {
+                    if !(_playerSide in _enemySectorCapturableSides) then {
                         "BIS_WL_targetEnemy" setMarkerAlphaLocal 0;
                     };
                 } else {
@@ -72,11 +72,12 @@ while { !BIS_WL_missionEnd } do {
     };
 
     if (WL_VotePhase != 0) then {
-        private _eligibleSectors = BIS_WL_sectorsArray # 1;
+        private _teamSectorsData = WL_SECTORS_DATA(_playerSide);
+		private _voteable = _teamSectorsData getOrDefault ["voteable", []];
 
         {
             private _sector = _x;
-            _sector setVariable ["WL2_sectorSelectionAvailable", _sector in _eligibleSectors];
+            _sector setVariable ["WL2_sectorSelectionAvailable", _sector in _voteable];
         } forEach BIS_WL_allSectors;
     };
 
@@ -275,7 +276,7 @@ while { !BIS_WL_missionEnd } do {
     };
 
     if (_lastTargetFriendly isNotEqualTo WL_TARGET_FRIENDLY || _targetReset isNotEqualTo _lastTargetReset) then {
-        ["client"] call WL2_fnc_updateSectorArrays;
+        call WL2_fnc_updateSectorsData;
 
         if (!isNull WL_TARGET_FRIENDLY && !_targetReset) then {
             if (count _sectorCaptureList == 0) then {

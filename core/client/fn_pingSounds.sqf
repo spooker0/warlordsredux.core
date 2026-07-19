@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_firstTime"];
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 private _eventMusicVolume = _settingsMap getOrDefault ["eventMusicVolume", 1];
 if (_eventMusicVolume <= 0) exitWith {};
 

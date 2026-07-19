@@ -64,8 +64,6 @@ class CfgRemoteExec {
 		class WL2_fnc_prepareStronghold {allowedTargets = 0;};
 		class WL2_fnc_protectStronghold {allowedTargets = 0;};
 		class WL2_fnc_publishSelfLog {allowedTargets = 0;};
-		class WL2_fnc_radarOperateAction {allowedTargets = 1;};
-		class WL2_fnc_radarRotateAction {allowedTargets = 1;};
 		class WL2_fnc_rearmAction {allowedTargets = 1;};
 		class WL2_fnc_rebalance {allowedTargets = 2;};
 		class WL2_fnc_reconOpticsAction {allowedTargets = 0;};
@@ -85,6 +83,7 @@ class CfgRemoteExec {
 		class WL2_fnc_setupForwardBaseMp {allowedTargets = 0;};
 		class WL2_fnc_setupIntegralWeaponAction {allowedTargets = 0;};
 		class WL2_fnc_setupSimpleAsset {allowedTargets = 0;};
+		class WL2_fnc_shootRailgunEvent {allowedTargets = 0;};
 		class WL2_fnc_slingAddAction {allowedTargets = 1;};
 		class WL2_fnc_slingloadInit {allowedTargets = 0;};
 		class WL2_fnc_surrenderWarning {allowedTargets = 0;};

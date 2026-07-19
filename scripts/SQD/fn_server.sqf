@@ -123,8 +123,8 @@ if (_action == "remove") exitWith {
 
         if (_playerId == (_squad getOrDefault ["leader", ""])) then {
             if (count _members > 0) then {
-                private _playerContribution = missionNamespace getVariable ["WL_PlayerSquadContribution", createHashMap];
-                private _sortedMembers = [_members, [_playerContribution], {
+                private _totalPointsMap = missionNamespace getVariable ["WL2_totalPointsEarned", createHashMap];
+                private _sortedMembers = [_members, [_totalPointsMap], {
                     private _playerUid = _x getUserInfo 2;
                     _input0 getOrDefault [_playerUid, 0];
                 }, "DESCEND"] call BIS_fnc_sortBy;
@@ -196,16 +196,13 @@ if (_action == "disband") exitWith {
 
 if (_action == "earnPoints") exitWith {
     // Earn squad contribution points
-    private _playerId = _params select 0;
+    private _playerUid = _params select 0;
     private _points = _params select 1;
 
-    WL_PlayerSquadContribution = missionNamespace getVariable ["WL_PlayerSquadContribution", createHashMap];
-
-    _oldPoints = WL_PlayerSquadContribution getOrDefault [_playerId, 0];
-    _points = _points + _oldPoints;
-    WL_PlayerSquadContribution set [_playerId, _points];
-
-    missionNamespace setVariable ["WL_PlayerSquadContribution", WL_PlayerSquadContribution, true];
+    private _totalPointsMap = missionNamespace getVariable ["WL2_totalPointsEarned", createHashMap];
+    private _oldTotalPoints = _totalPointsMap getOrDefault [_playerUid, 0];
+    private _newTotalPoints = _oldTotalPoints + _points;
+    _totalPointsMap set [_playerUid, _newTotalPoints];
 };
 
 if (_action == "cleanUp") exitWith {

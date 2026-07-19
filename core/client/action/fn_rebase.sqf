@@ -1,49 +1,19 @@
 #include "includes.inc"
-params ["_asset"];
+params ["_asset", "_targetRTB"];
 
-private _airfieldSectors = (BIS_WL_sectorsArray # 2) select {
-    private _services = _x getVariable ["WL2_services", []];
-    "A" in _services;
-};
-
-private _allUnits = BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles;
-private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
-private _railUnits = _allUnits select {
-    typeof _x == "Land_CraneRail_01_F"
-};
-private _forwardBasesWithRail = _forwardBases select {
-    private _railsInBase = _railUnits inAreaArray [getPosASL _x, WL_FOB_RANGE, WL_FOB_RANGE, 0, false];
-    count _railsInBase > 0
-}  select {
-	_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
-};
-
-private _landableAreas = _airfieldSectors + _forwardBasesWithRail;
-
-if (count _landableAreas == 0) exitWith {
-    ["No friendly airfields available!"] call WL2_fnc_smoothText;
-    playSoundUI ["AddItemFailed"];
-};
-
-private _landableAreasByDistance = [_landableAreas, [], { cameraOn distance _x }, "ASCEND"] call BIS_fnc_sortBy;
-private _closestLandableArea = _landableAreasByDistance # 0;
-
-private _sectorName = _closestLandableArea getVariable ["WL2_name", "Forward Base"];
+private _sectorName = _targetRTB getVariable ["WL2_name", "Catapult"];
 
 private _message = format ["Are you sure you want to return to %1 for %2%3?<br/>Make sure your landing gear is functional!", _sectorName, WL_MONEY_SIGN, WL_COST_JETRTB];
-private _result = ["Return to Nearest Airbase", _message, "Rebase", "Cancel"] call WL2_fnc_prompt;
+private _result = ["Return to Base", _message, "Rebase", "Cancel"] call WL2_fnc_prompt;
 
 if (!_result) exitWith {
     playSoundUI ["AddItemFailed"];
 };
 
-private _spawnParams = if (_closestLandableArea isKindOf "Logic") then {
-    [_closestLandableArea] call WL2_fnc_getAirSectorSpawn;
+private _spawnParams = if (_sectorName == "Catapult") then {
+    [_targetRTB modelToWorld [0, -20, 0], getDir _targetRTB]
 } else {
-    private _railsInBase = _railUnits inAreaArray [getPosASL _closestLandableArea, WL_FOB_RANGE, WL_FOB_RANGE, 0, false];
-    private _sortedRails = [_railsInBase, [], { cameraOn distance _x }, "ASCEND"] call BIS_fnc_sortBy;
-    private _railForSpawn = _sortedRails # 0;
-    [_railForSpawn modelToWorld [0, -20, 0], getDir _railForSpawn]
+    [_targetRTB] call WL2_fnc_getAirSectorSpawn;
 };
 
 _spawnParams params ["_spawnPos", "_dir"];

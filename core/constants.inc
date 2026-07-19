@@ -1,6 +1,3 @@
-// Live: update to latest version
-#define WL_VERSION "2.8"
-
 // Live: set all to 0
 #define WL_FREE_MONEY 0
 #define WL_TEST_SERVER 0
@@ -60,6 +57,7 @@
 #define WL_JAMMER_SPECTRUM_RANGE 5000
 #define WL_JAMMER_SPECTRUM_DIFFICULTY 0.03
 #define WL_JAMMER_HARDLINE_RANGE 20
+#define WL_JAMMER_BOOST_FACTOR 0.025
 
 #define WL_AR_GLASSES_TOGGLE 0
 
@@ -108,6 +106,7 @@
 #define WL_COST_FORTIFY 1000
 #define WL_COST_SUPPLIES 1000
 #define WL_COST_PARADROPCALL 2000
+#define WL_COST_REPAIRALL 2000
 
 #define WL_MAX_MONEY 100000
 #define WL_MAX_ASSETS 10
@@ -128,7 +127,7 @@
 #define WL_COOLDOWN_PARADROP 300
 #define WL_COOLDOWN_PARADROP_DMG 30
 #define WL_COOLDOWN_JETRTB_DMG 120
-#define WL_COOLDOWN_APS_RELOAD 8
+#define WL_COOLDOWN_APS_RELOAD 5
 
 #define WL_DURATION_RESPAWN 30
 #define WL_DURATION_SECTORVOTE 30
@@ -144,8 +143,8 @@
 #define WL_COMBAT_AIR_RADIUS 7000
 #define WL_COMBAT_AIR_RADIUS_BASE 3500
 #define WL_COMBAT_AIR_PERSEC 60
-#define WL_COMBAT_AIR_MINALT 1500
-#define WL_COMBAT_AIR_HOME_TIME 3600
+#define WL_COMBAT_AIR_MINALT 1000
+#define WL_COMBAT_AIR_HOME_TIME 1800
 
 #define WL_REWARD_REVEALSECTOR 500
 
@@ -168,6 +167,7 @@
 #define WL_COLOR_KILL "#ff281b"
 #define WL_COLOR_SUPPORT "#5db95d"
 
+#define WL_SECTORS_DATA(side) ((missionNamespace getVariable ["WL2_sectorsData", createHashMap]) getOrDefault [toLower str side, createHashMap])
 #define WL_TARGET_FRIENDLY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_playerSide], objNull])
 #define WL_TARGET_ENEMY (missionNamespace getVariable [format ["BIS_WL_currentTarget_%1", BIS_WL_enemySide], objNull])
 #define WL_CONTROL_MAP (uiNamespace getVariable ["BIS_WL_mapControl", controlNull])

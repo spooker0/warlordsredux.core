@@ -6,7 +6,10 @@ if (_lockState != "NONE") exitWith {
 };
 
 // Find launching carrier
-private _carrierSectors = (BIS_WL_sectorsArray # 0) select {
+private _teamSectorsData = WL_SECTORS_DATA(BIS_WL_playerSide);
+private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+
+private _carrierSectors = _linkedSectors select {
     _x getVariable ["WL2_isAircraftCarrier", false]
 };
 if (count _carrierSectors == 0) exitWith {

@@ -39,10 +39,15 @@ addMissionEventHandler ["ProjectileCreated", {
         [_projectile, _isExplosive] spawn APS_fnc_limitMines;
 
         if (_isExplosive) then {
+            _projectile setVariable ["WL2_canDemolish", true, true];
+            _projectile setVariable ["WL2_demolitionMaxHealth", 1, true];
+            _projectile setVariable ["WL2_demolitionHealth", 1, true];
+
             _projectile addEventHandler ["HitExplosion", {
                 params ["_projectile", "_hitEntity", "_projectileOwner", "_hitSelections", "_instigator"];
                 private _hitEntityLock = _hitEntity getVariable ["WL2_doorsLocked", sideUnknown];
                 if (_hitEntityLock == sideUnknown) exitWith {};
+                if (!simulationEnabled _hitEntity) exitWith {};
                 _hitEntity setVariable ["WL2_doorsDamaged", serverTime + 30, true];
             }];
         };
@@ -176,7 +181,7 @@ addMissionEventHandler ["ProjectileCreated", {
         _projectile addEventHandler ["HitPart", {
             params ["_projectile", "_hitEntity", "_projectileOwner", "_hitPos"];
             private _subShell = _projectile getVariable ["APS_subShell", ""];
-            [_subShell, _hitPos, [vectorDir _projectile, vectorUp _projectile], 0] spawn DIS_fnc_bunkerBuster;
+            [_subShell, _hitPos, [vectorDir _projectile, vectorUp _projectile], 0, true] spawn DIS_fnc_bunkerBuster;
             _projectile removeEventHandler ["HitPart", _thisEventHandler];
         }];
     };

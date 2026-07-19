@@ -186,7 +186,7 @@ addMissionEventHandler ["Draw3D", {
     private _assetData = WL_ASSET_DATA;
     private _missileTypeData = call DIS_fnc_getMissileType;
     private _apsProjectileConfig = APS_projectileConfig;
-    private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+    private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 
     private _lastLoopTime = serverTime;
     while { !BIS_WL_missionEnd } do {
@@ -206,7 +206,7 @@ addMissionEventHandler ["Draw3D", {
             continue;
         };
 
-        private _hmdSettingProfiles = profileNamespace getVariable ["WL2_HMDSettingProfiles", []];
+        private _hmdSettingProfiles = missionProfileNamespace getVariable ["WL2_HMDSettingProfiles", []];
         private _currentProfileIndex = uiNamespace getVariable ["WL2_HMDSettingProfileIndex", 0];
         private _settingProfileData = if (_currentProfileIndex < count _hmdSettingProfiles) then {
             _hmdSettingProfiles # _currentProfileIndex;
@@ -650,9 +650,6 @@ addMissionEventHandler ["Draw3D", {
             ];
         };
 
-        uiNamespace setVariable ["WL_HelmetInterfaceTargetInfantryIcons", _targetInfantryIcons];
-        uiNamespace setVariable ["WL_HelmetInterfaceTargetVehicleIcons", _targetVehicleIcons];
-
         private _incomingMissiles = _vehicle getVariable ["WL_incomingMissiles", []];
         private _warningPlayed = player getVariable ["WL_missileWarningPlayed", -100];
         private _lockedMissiles = _incomingMissiles select {
@@ -683,6 +680,35 @@ addMissionEventHandler ["Draw3D", {
 
             player setVariable ["WL_missileWarningPlayed", serverTime];
         };
+
+        // private _missileData = uiNamespace getVariable ["WL_missileData", []];
+        // if (count _missileData > 0) then {
+        //     private _topMissileData = _missileData # 0;
+        //     private _topProjectile = _topMissileData # 5;
+
+        //     private _relDir = cameraOn getRelDir _topProjectile;
+        //     private _adjustedDir = getDir cameraOn + _relDir + 90;
+        //     private _notchVector = cameraOn getPos [10000, _adjustedDir];
+        //     _notchVector set [2, getPosASL cameraOn # 2];
+
+        //     _targetVehicleIcons pushBack [
+        //         "A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missile_ca.paa",
+        //         [1, 1, 1, 1],
+        //         _notchVector,
+        //         1.75,
+        //         1.75,
+        //         0,
+        //         "NOTCH VECTOR",
+        //         true,
+        //         0.035,
+        //         "RobotoCondensedBold",
+        //         "center",
+        //         true
+        //     ];
+        // };
+
+        uiNamespace setVariable ["WL_HelmetInterfaceTargetInfantryIcons", _targetInfantryIcons];
+        uiNamespace setVariable ["WL_HelmetInterfaceTargetVehicleIcons", _targetVehicleIcons];
     };
 };
 

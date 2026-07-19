@@ -72,9 +72,9 @@ _texture ctrlAddEventHandler ["JSDialog", {
             private _displayString = _message select 4;
             _displayString = _texture ctrlWebBrowserAction ["FromBase64", _displayString];
 
-            private _existingInfoDisplay = profileNamespace getVariable ["WL2_infoDisplay", ""];
+            private _existingInfoDisplay = missionProfileNamespace getVariable ["WL2_infoDisplay", ""];
             private _banText = format ["%1%2", _existingInfoDisplay, _displayString];
-            profileNamespace setVariable ["WL2_infoDisplay", _banText];
+            missionProfileNamespace setVariable ["WL2_infoDisplay", _banText];
 
             _duration = _duration * 60;
             [player, _uid, _reason, _duration] remoteExec ["WL2_fnc_punishPlayer", 2];
@@ -83,9 +83,9 @@ _texture ctrlAddEventHandler ["JSDialog", {
             private _receiptText = _message select 1;
             _receiptText = _texture ctrlWebBrowserAction ["FromBase64", _receiptText];
 
-            private _existingInfoDisplay = profileNamespace getVariable ["WL2_infoDisplay", ""];
+            private _existingInfoDisplay = missionProfileNamespace getVariable ["WL2_infoDisplay", ""];
             private _banText = format ["%1%2", _existingInfoDisplay, _receiptText];
-            profileNamespace setVariable ["WL2_infoDisplay", _banText];
+            missionProfileNamespace setVariable ["WL2_infoDisplay", _banText];
         };
         case "rebalance": {
             private _uid = _message select 1;
@@ -142,7 +142,7 @@ _texture ctrlAddEventHandler ["JSDialog", {
             [] remoteExec ["WL2_fnc_clearPlayerReports", _selectedPlayer];
         };
         case "modReceipts": {
-            profileNamespace setVariable ["WL2_infoDisplay", ""];
+            missionProfileNamespace setVariable ["WL2_infoDisplay", ""];
         };
         case "clearTimeout": {
             private _uid = _message select 1;

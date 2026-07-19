@@ -8,8 +8,8 @@ private _parachuteActionId = _unit addAction [
     100
 ];
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
-private _parachuteAutoDeployHeight = _settingsMap getOrDefault ["parachuteAutoDeployHeight", 100];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
+private _parachuteAutoDeployHeight = _settingsMap getOrDefault ["parachuteAutoDeployHeight", 50];
 waitUntil {
     uiSleep 0.01;
     private _altitude = (_unit modelToWorld [0, 0, 0]) # 2;

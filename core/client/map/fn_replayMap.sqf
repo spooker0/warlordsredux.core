@@ -1,12 +1,12 @@
 #include "includes.inc"
 WL_IsReplaying = true;
 
-private _profileDrawIcons = profileNamespace getVariable ["WL2_drawIcons", ""];
-private _profileDrawEllipses = profileNamespace getVariable ["WL2_drawEllipses", ""];
-private _profileDrawSemiCircles = profileNamespace getVariable ["WL2_drawSemiCircles", ""];
-private _profileDrawRectangles = profileNamespace getVariable ["WL2_drawRectangles", ""];
-private _profileDrawPolygons = profileNamespace getVariable ["WL2_drawPolygons", ""];
-private _profileDrawSectorIcons = profileNamespace getVariable ["WL2_drawSectorIcons", ""];
+private _profileDrawIcons = missionProfileNamespace getVariable ["WL2_drawIcons", ""];
+private _profileDrawEllipses = missionProfileNamespace getVariable ["WL2_drawEllipses", ""];
+private _profileDrawSemiCircles = missionProfileNamespace getVariable ["WL2_drawSemiCircles", ""];
+private _profileDrawRectangles = missionProfileNamespace getVariable ["WL2_drawRectangles", ""];
+private _profileDrawPolygons = missionProfileNamespace getVariable ["WL2_drawPolygons", ""];
+private _profileDrawSectorIcons = missionProfileNamespace getVariable ["WL2_drawSectorIcons", ""];
 _profileDrawIcons = fromJSON _profileDrawIcons;
 _profileDrawEllipses = fromJSON _profileDrawEllipses;
 _profileDrawSemiCircles = fromJSON _profileDrawSemiCircles;

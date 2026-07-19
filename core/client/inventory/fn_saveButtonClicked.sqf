@@ -23,7 +23,12 @@ if (!_result) exitWith {
 };
 
 private _currentLoadout = getUnitLoadout player;
-profileNamespace setVariable [format ["WLC_savedLoadout_%1_%2", BIS_WL_playerSide, _index], _currentLoadout];
+
+private _savedLoadouts = missionProfileNamespace getVariable ["WL2_savedLoadouts", createHashMap];
+private _savedLoadoutsSide = _savedLoadouts getOrDefault [toLower str BIS_WL_playerSide, createHashMap];
+_savedLoadoutsSide set [_index, _currentLoadout];
+_savedLoadouts set [toLower str BIS_WL_playerSide, _savedLoadoutsSide];
+missionProfileNamespace setVariable ["WL2_savedLoadouts", _savedLoadouts];
 
 call WL2_fnc_pageChanged;
 

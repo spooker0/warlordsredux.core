@@ -22,14 +22,16 @@ private _mapData = missionNamespace getVariable ["WL2_mapData", createHashMap];
 private _side = _mapData getOrDefault ["side", sideUnknown];
 private _teamColor = _mapData getOrDefault ["teamColor", [0.4, 0, 0.5, 0.8]];
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 private _mapIconScale = _settingsMap getOrDefault ["mapIconScale", 1];
 
 // Draw sector links
 private _sectorTarget = WL_SectorActionTarget;
 private _mapSectorModifierSize = _settingsMap getOrDefault ["mapSectorModifierSize", 1];
 
+private _mapMode = uiNamespace getVariable ["WL2_mapMode", 0];
 private _showDetailedMode = inputAction "lookAround" > 0 || _map getVariable ["WL2_showDetailedMode", false];
+private _showAirMode = _mapMode == 1;
 private _showSectorLinks = _drawMode != 0 || WL_VotePhase != 0 || _showDetailedMode;
 
 private _sectorsInLinksShown = [];
@@ -109,7 +111,9 @@ if (uiNamespace getVariable ["WL2_isOrderingWater", false]) then {
 		private _spawnLocations = _forwardBases select {
 			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side
 		};
-		_spawnLocations append (BIS_WL_sectorsArray # 0);
+		private _teamSectorsData = WL_SECTORS_DATA(_side);
+		private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+		_spawnLocations append _linkedSectors;
 
 		private _ownedSectorsInRange = _spawnLocations select {
 			_mouseWorldPosition distance _x < 1500;
@@ -136,32 +140,7 @@ if (uiNamespace getVariable ["WL2_isOrderingWater", false]) then {
 	];
 };
 
-// Draw asset selector
 private _assetTargets = WL_AssetActionTargets;
-if (count _assetTargets > 0) then {
-	{
-		_drawIconsAnimated pushBack [
-			"A3\ui_f\data\map\groupicons\selector_selectedMission_ca.paa",
-			_teamColor,
-			getPosASL _x,
-			40,
-			40,
-			0
-		];
-
-		private _mapCircleRadius = _x getVariable ["WL2_mapCircleRadius", 0];
-		if (_mapCircleRadius > 0) then {
-			_drawEllipses pushBack [
-				getPosASL _x,
-				_mapCircleRadius,
-				_mapCircleRadius,
-				0,
-				_teamColor,
-				""
-			];
-		};
-	} forEach _assetTargets;
-};
 
 // Draw sector selector
 if (!isNull _sectorTarget) then {
@@ -535,6 +514,11 @@ if (_draw) then {
 // Draw scanned units
 private _scannedUnits = _mapData getOrDefault ["scannedUnits", []];
 {
+	if (_showAirMode) then {
+		if !(_x isKindOf "Air" || WL_UNIT(_x, "category", "Other") == "Air Defense") then {
+			continue;
+		};
+	};
 	private _hideMap = _x getVariable ["WL2_hideMap", 0];
 	private _scanText = if (_hideMap == 0 && _draw) then {
 		if (_showDetailedMode) then {
@@ -588,7 +572,7 @@ private _scanners = _mapData getOrDefault ["scanners", []];
 // Combat air patrol areas
 private _combatAirAreas = _mapData getOrDefault ["combatAirAreas", []];
 private _assetTargetsInCombatAir = _assetTargets arrayIntersect _combatAirAreas;
-if (cameraOn isKindOf "Air" || _showDetailedMode || _sectorTarget in _combatAirAreas || count _assetTargetsInCombatAir > 0) then {
+if (cameraOn isKindOf "Air" || _showAirMode || _sectorTarget in _combatAirAreas || count _assetTargetsInCombatAir > 0) then {
 	{
 		private _targetPos = getPosASL _x;
 		private _targetOwner = if (typeof _x == "RuggedTerminal_01_communications_hub_F") then {
@@ -660,6 +644,11 @@ private _mapIconTextSize = _iconTextSize * _mapIconScale;
 // Draw vehicles
 private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 {
+	if (_showAirMode) then {
+		if !(_x isKindOf "Air" || WL_UNIT(_x, "category", "Other") == "Air Defense") then {
+			continue;
+		};
+	};
 	private _position = getPosASL _x;
 	private _size = _x getVariable ["WL2_mapIconSize", 19];
 	private _hideMap = _x getVariable ["WL2_hideMap", 0];
@@ -704,13 +693,17 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 	_drawIconsSelectable pushBack _x;
 } forEach _sideVehicles;
 
-private _checkForAirRadar = _assetTargets + [cameraOn];
+private _checkForAirRadar = if (_showAirMode) then {
+	_sideVehicles
+} else {
+	_assetTargets + [cameraOn];
+};
 {
 	private _airRadar = _x getVariable ["WL2_airRadar", -1];
 	if (_airRadar > 0) then {
 		_drawSemiCircles pushBack [
 			60,
-			[1, 1, 1, 0.3],
+			[1, 1, 1, 0.5],
 			getPosASL _x,
 			_airRadar,
 			getDirVisual _x,
@@ -719,34 +712,75 @@ private _checkForAirRadar = _assetTargets + [cameraOn];
 	};
 } forEach _checkForAirRadar;
 
-// Draw visible enemy units
-private _visibleEnemyUnits = _mapData getOrDefault ["visibleEnemyUnits", []];
+// Draw asset selector
+private _drawCirclesFor = if (_showAirMode) then {
+	_sideVehicles;
+} else {
+	_assetTargets
+};
 {
-	private _position = getPosASL _x;
-	private _size = _x getVariable ["WL2_mapIconSize", 19];
-	private _iconText = if (_draw) then {
-		if (_showDetailedMode) then {
-			_x getVariable ["WL2_mapIconTextDetailed", ""]
-		} else {
-			_x getVariable ["WL2_mapIconText", ""]
+	if (_showAirMode) then {
+		if (_x isKindOf "Land_Cargo10_military_green_F") then {
+			continue;
 		};
-	} else {
-		""
+		if (_x isKindOf "RuggedTerminal_01_communications_hub_F") then {
+			continue;
+		};
 	};
-	_drawIcons pushBack [
-		_x getVariable ["WL2_mapIconType", ""],
-		_x getVariable ["WL2_mapIconColor", [1, 1, 1, 1]],
-		_position,
-		_size * _mapIconScale,
-		_size * _mapIconScale,
-		getDirVisual _x,
-		_iconText,
-		1,
-		_mapIconTextSize,
-		"PuristaBold",
-		"right"
-	];
-} forEach _visibleEnemyUnits;
+	if (_x in _assetTargets) then {
+		_drawIconsAnimated pushBack [
+			"A3\ui_f\data\map\groupicons\selector_selectedMission_ca.paa",
+			_teamColor,
+			getPosASL _x,
+			40,
+			40,
+			0
+		];
+	};
+
+	private _mapCircleRadius = _x getVariable ["WL2_mapCircleRadius", 0];
+	if (_mapCircleRadius > 0) then {
+		_drawEllipses pushBack [
+			getPosASL _x,
+			_mapCircleRadius,
+			_mapCircleRadius,
+			0,
+			_teamColor,
+			""
+		];
+	};
+} forEach _drawCirclesFor;
+
+// Draw visible enemy units
+if (!_showAirMode) then {
+	private _visibleEnemyUnits = _mapData getOrDefault ["visibleEnemyUnits", []];
+	{
+		private _position = getPosASL _x;
+		private _size = _x getVariable ["WL2_mapIconSize", 19];
+		private _iconText = if (_draw) then {
+			if (_showDetailedMode) then {
+				_x getVariable ["WL2_mapIconTextDetailed", ""]
+			} else {
+				_x getVariable ["WL2_mapIconText", ""]
+			};
+		} else {
+			""
+		};
+		_drawIcons pushBack [
+			_x getVariable ["WL2_mapIconType", ""],
+			_x getVariable ["WL2_mapIconColor", [1, 1, 1, 1]],
+			_position,
+			_size * _mapIconScale,
+			_size * _mapIconScale,
+			getDirVisual _x,
+			_iconText,
+			1,
+			_mapIconTextSize,
+			"PuristaBold",
+			"right"
+		];
+	} forEach _visibleEnemyUnits;
+};
 
 // Draw plane wrecks
 private _airWrecks = _mapData getOrDefault ["airWrecks", []];
@@ -769,7 +803,7 @@ private _airWrecks = _mapData getOrDefault ["airWrecks", []];
 		23 * _mapIconScale,
 		23 * _mapIconScale,
 		0,
-		format ["AIR WRECK VALUE %1%2 (%3)", WL_MONEY_SIGN, _wreckValue, _wreckTimer],
+		format ["WRECK (%1%2, %3)", WL_MONEY_SIGN, _wreckValue, _wreckTimer],
 		1,
 		_mapIconTextSize,
 		"PuristaBold",
@@ -842,40 +876,42 @@ private _advancedMines = _mapData getOrDefault ["advancedMines", []];
 } forEach _advancedMines;
 
 // Draw minefields
-private _minefields = _mapData getOrDefault ["minefields", []];
-{
-	if (!alive _x) then {
-		continue;
-	};
+if (!_showAirMode) then {
+	private _minefields = _mapData getOrDefault ["minefields", []];
+	{
+		if (!alive _x) then {
+			continue;
+		};
 
-	private _position = getPosASL _x;
-	private _mineData = _x getVariable ["WL2_minefield", []];
+		private _position = getPosASL _x;
+		private _mineData = _x getVariable ["WL2_minefield", []];
 
-	if (count _mineData < 3) then {
-		continue;
-	};
+		if (count _mineData < 3) then {
+			continue;
+		};
 
-	private _isRectangle = _mineData # 2 == 1;
-	if (_isRectangle) then {
-		_drawRectangles pushBack [
-			_position,
-			_mineData # 0,
-			_mineData # 1,
-			getDir _x,
-			[1, 1, 1, 1],
-			"#(rgb,1,1,1)color(1,0,0,0.15)"
-		];
-	} else {
-		_drawEllipses pushBack [
-			_position,
-			_mineData # 0,
-			_mineData # 1,
-			getDir _x,
-			[1, 1, 1, 1],
-			"#(rgb,1,1,1)color(1,0,0,0.15)"
-		];
-	};
-} forEach _minefields;
+		private _isRectangle = _mineData # 2 == 1;
+		if (_isRectangle) then {
+			_drawRectangles pushBack [
+				_position,
+				_mineData # 0,
+				_mineData # 1,
+				getDir _x,
+				[1, 1, 1, 1],
+				"#(rgb,1,1,1)color(1,0,0,0.15)"
+			];
+		} else {
+			_drawEllipses pushBack [
+				_position,
+				_mineData # 0,
+				_mineData # 1,
+				getDir _x,
+				[1, 1, 1, 1],
+				"#(rgb,1,1,1)color(1,0,0,0.15)"
+			];
+		};
+	} forEach _minefields;
+};
 
 private _drawSectorMarkerThreshold = _mapData getOrDefault ["sectorMarkerThreshold", 0.4];
 private _drawSectorMarkerText = (ctrlMapScale _map) < _drawSectorMarkerThreshold;

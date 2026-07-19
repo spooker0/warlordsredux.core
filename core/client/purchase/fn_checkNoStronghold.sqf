@@ -1,5 +1,9 @@
 #include "includes.inc"
-private _findCurrentSector = (BIS_WL_sectorsArray # 0) select {
+
+private _teamSectorsData = WL_SECTORS_DATA(BIS_WL_playerSide);
+private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+
+private _findCurrentSector = _linkedSectors select {
     player inArea (_x getVariable "objectAreaComplete")
 };
 

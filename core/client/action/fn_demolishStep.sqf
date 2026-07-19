@@ -16,7 +16,7 @@ _targetObject setVariable ["WL2_canRepairTime", serverTime + 60, true];
 
 private _assetSide = [_targetObject] call WL2_fnc_getAssetSide;
 
-if (_assetSide != BIS_WL_playerSide) then {
+if (_assetSide != BIS_WL_playerSide && alive _targetObject && !(_targetObject isKindOf "PipeBombCore")) then {
     [player, "demolished", _appliedSteps] remoteExec ["WL2_fnc_handleClientRequest", 2];
 };
 

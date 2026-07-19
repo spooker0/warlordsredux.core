@@ -19,8 +19,11 @@ if (!_result) exitWith {
     ctrlSetFocus _dummyButton;
 };
 
-private _loadoutVar = format ["WLC_savedLoadout_%1_%2", BIS_WL_playerSide, _index];
-profileNamespace setVariable [_loadoutVar, []];
+private _savedLoadouts = missionProfileNamespace getVariable ["WL2_savedLoadouts", createHashMap];
+private _savedLoadoutsSide = _savedLoadouts getOrDefault [toLower str BIS_WL_playerSide, createHashMap];
+_savedLoadoutsSide deleteAt _index;
+_savedLoadouts set [toLower str BIS_WL_playerSide, _savedLoadoutsSide];
+missionProfileNamespace setVariable ["WL2_savedLoadouts", _savedLoadouts];
 
 call WL2_fnc_pageChanged;
 

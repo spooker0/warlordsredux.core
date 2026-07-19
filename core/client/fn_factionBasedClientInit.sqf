@@ -1,7 +1,7 @@
 #include "includes.inc"
 params [["_unit", player]];
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 private _spawnWithUAVTerminal = _settingsMap getOrDefault ["spawnWithUAVTerminal", true];
 private _spawnWithRangefinder = _settingsMap getOrDefault ["spawnWithRangefinder", true];
 

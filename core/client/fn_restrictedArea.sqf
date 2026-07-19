@@ -19,10 +19,11 @@ while { !BIS_WL_missionEnd } do {
         player setVariable ["WL2_currentSector", objNull];
     };
 
-    private _availableSectors = BIS_WL_sectorsArray # 3;
+    private _teamSectorsData = WL_SECTORS_DATA(_side);
+    private _unlockedSectors = _teamSectorsData getOrDefault ["unlocked", []];
     private _currentSector = objNull;
     {
-        if (_x in _availableSectors) then {
+        if (_x in _unlockedSectors) then {
             private _revealedBy = _x getVariable ["BIS_WL_revealedBy", []];
             if !(_side in _revealedBy) then {
                 _revealedBy pushBackUnique _side;
@@ -83,6 +84,19 @@ while { !BIS_WL_missionEnd } do {
     private _restrictTimer = _restrictDisplay displayCtrl 9000;
     private _timeRemaining = (player getVariable "WL_zoneRestrictKillTime") - serverTime;
     _restrictTimer ctrlSetText format ["%1", round _timeRemaining];
+
+    private _rtbTextControl = _restrictDisplay displayCtrl 9001;
+    if (cameraOn isKindOf "Plane") then {
+        private _eligible = call WL2_fnc_rebaseActionEligibility;
+        if (_eligible == "ok") then {
+            _rtbTextControl ctrlSetText "YOU CAN RETURN TO BASE BY CLICKING ON A FRIENDLY AIRFIELD OR CATAPULT ON THE MAP.";
+        } else {
+            _rtbTextControl ctrlSetText "";
+        };
+
+    } else {
+        _rtbTextControl ctrlSetText "";
+    };
 
     if (_timeRemaining < 0) then {
         (vehicle player) setDamage 1;

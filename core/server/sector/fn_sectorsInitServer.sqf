@@ -71,19 +71,19 @@ missionNamespace setVariable ["WL2_base2", _secondBase, true];
 waitUntil {!isNil "WL2_base1" && {!isNil "WL2_base2"}};
 
 {
-	_side = [west, east] # _forEachIndex;
-	_base = _x;
+	private _side = [west, east] # _forEachIndex;
+	private _base = _x;
 	_base setVariable ["BIS_WL_owner", _side, true];
-	_base setVariable ["BIS_WL_originalOwner", _side, true];
-	_base setVariable ["BIS_WL_previousOwners", [_side], true];
+	_base setVariable ["WL2_capturableBySides", [_side], true];
 	_base setVariable ["BIS_WL_revealedBy", [_side], true];
-	_pos = (position _x) findEmptyPosition [0, 20, "FlagPole_F"];
-	_posFinal = if (count _pos == 0) then {
+
+	private _pos = (position _x) findEmptyPosition [0, 20, "FlagPole_F"];
+	private _posFinal = if (count _pos == 0) then {
 		position _x
 	} else {
 		_pos
 	};
-	private _flag = createVehicle ["FlagPole_F", _posFinal, [], 0,"CAN_COLLIDE"];
+	private _flag = createVehicle ["FlagPole_F", _posFinal, [], 0, "CAN_COLLIDE"];
 	if (_side == west) then {
 		_flag setFlagTexture "\A3\Data_F\Flags\flag_NATO_CO.paa";
 	} else {
@@ -97,11 +97,10 @@ waitUntil {!isNil "WL2_base1" && {!isNil "WL2_base2"}};
 private _fastestCapture = 0.2;
 private _slowestCapture = 0.5;
 #else
-private _fastestCapture = 45;
-private _slowestCapture = 120;
+private _fastestCapture = 90;
+private _slowestCapture = 180;
 #endif
 
-private _sectorGroup = createGroup [civilian, true];
 {
 	private _sector = _x;
 	if (isNull _sector) then {
@@ -111,7 +110,7 @@ private _sectorGroup = createGroup [civilian, true];
 	private _sectorPos = position _sector;
 	if ((_sector getVariable ["BIS_WL_owner", sideUnknown]) == sideUnknown) then {
 		_sector setVariable ["BIS_WL_owner", independent, true];
-		_sector setVariable ["BIS_WL_previousOwners", [], true];
+		_sector setVariable ["WL2_capturableBySides", [], true];
 		[_sector] remoteExec ['WL2_fnc_sectorRevealHandle', [0, -2] select isDedicated];
 	};
 
@@ -126,9 +125,6 @@ private _sectorGroup = createGroup [civilian, true];
 	_sector setVariable ["WL2_defenders", 0, true];
 	private _maxDefenders = (_sectorValue * WL_DEFENDER_MOD) max WL_DEFENDER_MIN;
 	_sector setVariable ["WL2_maxDefenders", _maxDefenders, true];
-
-	private _agent = _sectorGroup createUnit ["Logic", _sectorPos, [], 0, "CAN_COLLIDE"];
-	_agent enableSimulationGlobal false;
 
 	private _minCaptureTime = linearConversion [1, 30, _sectorValue, _fastestCapture, _slowestCapture, true];
 	_sector setVariable ["WL2_minCapture", _minCaptureTime];
@@ -376,10 +372,6 @@ private _facesData = [];
 	// if (surfaceIsWater _faceCenter && _area > 7e6) then {
 	// 	_area = _area * 0.6;
 	// };
-
-	private _sectorNames = _sectorsInFace apply {
-		_x getVariable ["WL2_name", ""]
-	};
 
 	_facesData pushBack [_sectorsInFace, _area];
 } forEach _faces;

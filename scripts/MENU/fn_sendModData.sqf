@@ -1,6 +1,6 @@
 #include "includes.inc"
 params ["_texture"];
-private _playerAliases = profileNamespace getVariable ["WL2_playerAliases", createHashMap];
+private _playerAliases = missionProfileNamespace getVariable ["WL2_playerAliases", createHashMap];
 
 private _allPlayers = call BIS_fnc_listPlayers;
 _allPlayers = [_allPlayers, [], { [_x] call BIS_fnc_getName }, "ASCEND"] call BIS_fnc_sortBy;
@@ -62,7 +62,7 @@ private _punishData = [];
 private _timeoutJson = toJSON _punishData;
 _timeoutJson = _texture ctrlWebBrowserAction ["ToBase64", _timeoutJson];
 
-private _modReceipts = profileNamespace getVariable ["WL2_infoDisplay", ""];
+private _modReceipts = missionProfileNamespace getVariable ["WL2_infoDisplay", ""];
 _modReceipts = _texture ctrlWebBrowserAction ["ToBase64", _modReceipts];
 
 private _playerUid = getPlayerUID player;

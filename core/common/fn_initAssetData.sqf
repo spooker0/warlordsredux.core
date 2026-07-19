@@ -36,7 +36,7 @@ private _staticPropMap = createHashMap;
 missionNamespace setVariable ["WL2_staticPropMap", _staticPropMap];
 
 private _requisitionData = createHashMap;
-private _requisitionPreset = missionConfigFile >> "CfgWLRequisitionPresets" >> "A3ReduxAll";
+private _requisitionPreset = missionConfigFile >> "CfgWLRequisitionPresets";
 {
 	private _classConfig = _x;
 	private _className = configName _classConfig;
@@ -60,7 +60,34 @@ private _requisitionPreset = missionConfigFile >> "CfgWLRequisitionPresets" >> "
 	} forEach configProperties [_classConfig];
 
 	private _turretOverrides = configProperties [_classConfig, "isClass _x", true];
-	_classMap set ["turretOverrides", _turretOverrides];
+	private _turretOverridesMap = [];
+	{
+		private _turretOverride = _x;
+		private _turretOverrideName = configName _turretOverride;
+		private _turretOverrideMap = createHashMap;
+
+		{
+			private _entry = _x;
+			private _key = configName _entry;
+			if (isText _entry) then {
+				_turretOverrideMap set [_key, getText _entry];
+				continue;
+			};
+			if (isNumber _entry) then {
+				_turretOverrideMap set [_key, getNumber _entry];
+				continue;
+			};
+			if (isArray _entry) then {
+				_turretOverrideMap set [_key, getArray _entry];
+				continue;
+			};
+		} forEach configProperties [_turretOverride];
+
+		_turretOverridesMap pushBack _turretOverrideMap;
+	} forEach _turretOverrides;
+	if (count _turretOverridesMap > 0) then {
+		_classMap set ["turretOverrides", _turretOverridesMap];
+	};
 
 	_requisitionData set [_className, _classMap];
 } forEach configProperties [_requisitionPreset];
@@ -108,6 +135,8 @@ private _menuButtonIconMap = createHashMapFromArray [
     ["remove-stronghold", "a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca.paa"],
     ["repair-fob", "a3\ui_f\data\igui\cfg\actions\repair_ca.paa"],
     ["repair-stronghold", "a3\ui_f\data\igui\cfg\actions\repair_ca.paa"],
+    ["repair-structures", "a3\ui_f\data\igui\cfg\actions\repair_ca.paa"],
+    ["rtb", "a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa"],
     ["sector-scan", "a3\drones_f\air_f_gamma\uav_02\data\ui\map_uav_02_ca.paa"],
     ["smart-mine-adjust", "a3\ui_f\data\map\vehicleicons\iconexplosiveuw_ca.paa"],
     ["target-altitude", "a3\ui_f\data\igui\cfg\simpletasks\types\Heli_ca.paa"],

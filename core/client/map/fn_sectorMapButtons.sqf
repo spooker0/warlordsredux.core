@@ -237,7 +237,9 @@ private _markSectorExecuteNext = {
 ] call WL2_fnc_addTargetMapButton;
 
 private _sectorFtAsset = [_sector, []] call WL2_fnc_getSectorFTAsset;
-if (_sector in (BIS_WL_sectorsArray # 3) || (!isNull _sectorFtAsset)) then {
+private _teamSectorsData = WL_SECTORS_DATA(BIS_WL_playerSide);
+private _unlockedSectors = _teamSectorsData getOrDefault ["unlocked", []];
+if (_sector in _unlockedSectors || (!isNull _sectorFtAsset)) then {
     [_sector, _targetId, "team-designate", "Designate team priority", {
         params ["_sector"];
         [_sector, "sector"] call WL2_fnc_designateTeamPriority;
@@ -250,3 +252,56 @@ if (_sector in (BIS_WL_sectorsArray # 3) || (!isNull _sectorFtAsset)) then {
         [player, "conscript"] remoteExec ["WL2_fnc_handleClientRequest", 2];
     }, true, "conscriptTeam", [WL_COST_CONSCRIPT, "", "Strategy"]] call WL2_fnc_addTargetMapButton;
 };
+
+// Return to base button
+private _rtbExecute = {
+    params ["_sector"];
+    [cameraOn, _sector] spawn WL2_fnc_rebase;
+};
+[
+    _sector, _targetId,
+    "rtb",
+    "Return to base",
+    _rtbExecute,
+    true,
+    "rtbSector",
+    [WL_COST_JETRTB, "RTB", "Strategy"]
+] call WL2_fnc_addTargetMapButton;
+
+// Repair structures button
+// private _repairStructuresExecute = {
+//     params ["_sector"];
+//     [player, "repairStructures"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+
+//     private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
+//     private _playerVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
+
+//     private _sectorArea = _sector getVariable ["objectAreaComplete", objNull];
+//     private _structuresInSector = (_playerVehicles inAreaArray _sectorArea) select {
+//         alive _x
+//     } select {
+//         private _maxDemolitionHealth = _x getVariable ["WL2_demolitionMaxHealth", 0];
+//         private _currentDemolitionHealth = _x getVariable ["WL2_demolitionHealth", 0];
+//         _maxDemolitionHealth > 0 && _currentDemolitionHealth < _maxDemolitionHealth;
+//     } select {
+//         private _canRepairTime = _x getVariable ["WL2_canRepairTime", 0];
+//         _canRepairTime < serverTime;
+//     };
+
+//     {
+//         private _maxDemolitionHealth = _x getVariable ["WL2_demolitionMaxHealth", 5];
+//         private _currentDemolitionHealth = _x getVariable ["WL2_demolitionHealth", _maxDemolitionHealth];
+//         _x setVariable ["WL2_demolitionHealth", _maxDemolitionHealth, true];
+//     } forEach _structuresInSector;
+
+//     playSoundUI ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Repair.wss"];
+// };
+// [
+//     _sector, _targetId,
+//     "repair-structures",
+//     "Repair structures",
+//     _repairStructuresExecute,
+//     true,
+//     "repairStructures",
+//     [WL_COST_REPAIRALL, "Repair", "Strategy"]
+// ] call WL2_fnc_addTargetMapButton;

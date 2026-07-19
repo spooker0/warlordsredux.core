@@ -3,7 +3,7 @@ params ["_text", ["_isAdditionalSub", false]];
 
 if (_text == "") exitWith {};
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 private _additionalSubs = _settingsMap getOrDefault ["additionalSubs", false];
 if (_isAdditionalSub && !_additionalSubs) exitWith {};
 

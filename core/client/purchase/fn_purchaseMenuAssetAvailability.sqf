@@ -72,7 +72,10 @@ private _allConditions = [
 private _resultAllConditions = [_allConditions] call _checkConditions;
 _failures append _resultAllConditions;
 
-private _findCurrentOwnedSector = (BIS_WL_sectorsArray # 0) select {
+private _teamSectorsData = WL_SECTORS_DATA(BIS_WL_playerSide);
+private _ownedSectors = _teamSectorsData getOrDefault ["owned", []];
+
+private _findCurrentOwnedSector = _ownedSectors select {
 	player inArea (_x getVariable "objectAreaComplete")
 };
 private _sector = if (count _findCurrentOwnedSector > 0) then {
@@ -190,8 +193,7 @@ if (_ret) then {
 		case "StrongholdFTNear": {
 			[
 				[WL2_fnc_checkPlayerInVehicle],
-				[WL2_fnc_checkNearbyEnemies],
-				[WL2_fnc_checkStrongholdFT]
+				[WL2_fnc_checkNearbyEnemies]
 			]
 		};
 		case "ResetVehicle": {
@@ -206,11 +208,6 @@ if (_ret) then {
 				[WL2_fnc_checkGreenSwitch]
 			]
 		};
-		case "Ewar": {
-			[
-				[WL2_fnc_checkEwar]
-			]
-		};
 		case "NearestCombatAir": {
 			[
 				[WL2_fnc_checkCombatAir]
@@ -221,6 +218,7 @@ if (_ret) then {
 				[WL2_fnc_checkCombatAirHome]
 			]
 		};
+		case "HelpAA": {[]};
 		default {
 			if (_category in ["Fast Travel", "Strategy"]) then {
 				[]

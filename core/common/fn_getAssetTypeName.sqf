@@ -11,6 +11,12 @@ private _assetActualType = if (_assetType == "") then {
     _assetType
 };
 
-private _name = WL_ASSET(_assetActualType, "name", getText (configFile >> "CfgVehicles" >> _assetActualType >> "displayName"));
-_asset setVariable ["WL2_assetTypeName", _name];
+private _name = WL_ASSET(_assetActualType, "name", "");
+if (_name != "") then {
+    // cache only if the name was defined
+    _asset setVariable ["WL2_assetTypeName", _name];
+} else {
+    _name = getText (configFile >> "CfgVehicles" >> _assetActualType >> "displayName");
+};
+
 _name

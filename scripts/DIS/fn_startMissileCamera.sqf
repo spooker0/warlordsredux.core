@@ -3,7 +3,7 @@ params ["_projectile", "_unit"];
 
 if (isDedicated) exitWith {};
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 private _disableCamera = _settingsMap getOrDefault ["disableMissileCameras", false];
 private _isDisconnected = cameraOn != _unit;
 private _pipDisabled = (getVideoOptions getOrDefault ["pipQualityName", "None"]) == "Disabled";

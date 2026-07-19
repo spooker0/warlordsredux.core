@@ -90,13 +90,12 @@ private _pylonInfo = getAllPylonsInfo _asset;
 
 {
 	private _turretOverride = _x;
-	private _turret = getArray (_turretOverride >> "turret");
-	private _removeMagazines = getArray (_turretOverride >> "removeMagazines");
-	private _removeWeapons = getArray (_turretOverride >> "removeWeapons");
-	private _addMagazines = getArray (_turretOverride >> "addMagazines");
-	private _addWeapons = getArray (_turretOverride >> "addWeapons");
-	private _reloadOverride = getNumber (_turretOverride >> "reloadOverride");
-	private _hideTurret = getNumber (_turretOverride >> "hideTurret");
+	private _turret = _x getOrDefault ["turret", []];
+	private _removeMagazines = _x getOrDefault ["removeMagazines", []];
+	private _removeWeapons = _x getOrDefault ["removeWeapons", []];
+	private _addMagazines = _x getOrDefault ["addMagazines", []];
+	private _addWeapons = _x getOrDefault ["addWeapons", []];
+	private _reloadOverride = _x getOrDefault ["reloadOverride", 0];
 
 	{
 		_asset removeMagazinesTurret [_x, _turret];
@@ -168,10 +167,6 @@ private _pylonInfo = getAllPylonsInfo _asset;
 				[_unit, _weapon, _turret, _reloadTime] remoteExec ["WL2_fnc_reloadOverride", _gunner];
 			};
 		}];
-	};
-
-	if (_hideTurret != 0) then {
-		_asset animateSource ["HideTurret", 1, true];
 	};
 } forEach _turretOverridesForVehicle;
 

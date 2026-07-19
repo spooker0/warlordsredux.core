@@ -2,9 +2,6 @@
 private _sectorConfig = missionConfigFile >> "CfgWarlordSectors";
 private _sectors = "true" configClasses _sectorConfig;
 
-private _logicCenter = createCenter sideLogic;
-private _logicGroup = createGroup _logicCenter;
-
 private _createdSectors = createHashMap;
 private _initializedSectors = [];
 private _destroyerId = 0;
@@ -42,8 +39,7 @@ private _destroyerId = 0;
         continue;
     };
 
-    private _logic = _logicGroup createUnit ["Logic", _location, [], 0, "NONE"];
-
+    private _logic = createSimpleObject ["core\empty\empty.p3d", AGLtoASL _location];
     _logic setVariable ["WL2_name", _name, true];
 
     private _services = getArray (_sector >> "services");
@@ -53,6 +49,7 @@ private _destroyerId = 0;
     _logic setVariable ["WL2_canBeBase", !_disableHome];
 
     _logic setVariable ["WL2_objectArea", _area, true];
+    _logic setVariable ["objectAreaComplete", [_location] + _area, true];
 
     private _vehicles = getArray (_sector >> "vehicles");
     _logic setVariable ["WL2_vehiclesToSpawn", _vehicles];
@@ -103,4 +100,5 @@ private _connections = getArray (_sectorConfig >> "connections");
     _x setVariable ["WL2_connectedSectors", _sectorConnections, true];
 } forEach _initializedSectors;
 
-missionNamespace setVariable ["WL2_sectorsInitializationComplete", _initializedSectors, true];
+missionNamespace setVariable ["BIS_WL_allSectors", _initializedSectors, true];
+missionNamespace setVariable ["WL2_totalSectors", count _initializedSectors, true];

@@ -109,9 +109,10 @@ _purchase_transfer_units lbSetCurSel 0;
 		private _set = _purchase_transfer_units lbText lbCurSel (_this # 0);
 		lbClear _purchase_transfer_units;
 
+		private _fundsClient = missionNamespace getVariable ["fundsDatabaseClients", createHashMap];
 		{
 			private _index = _purchase_transfer_units lbAdd (name _x);
-			private _playerFunds = (missionNamespace getVariable "fundsDatabaseClients") get (getPlayerUID _x);
+			private _playerFunds = _fundsClient getOrDefault [getPlayerUID _x, 0];
 			_purchase_transfer_units lbSetTooltip [_index, format ["~%1%2", _moneySign, _playerFunds]];
 		} forEach (allPlayers select { isPlayer _x && side group _x == BIS_WL_playerSide && _x != player });
 

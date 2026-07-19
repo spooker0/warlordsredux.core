@@ -44,7 +44,7 @@ if (count _playerSquad > 0) then {
     };
 };
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 private _showPlayerUids = _settingsMap getOrDefault ["showPlayerUids", false];
 uiNamespace setVariable ["WL2_showPlayerUids", _showPlayerUids];
 
@@ -78,7 +78,6 @@ call WL2_fnc_rappelAction;
 call WL2_fnc_demolishAction;
 call WL2_fnc_hmdSettingsAction;
 
-0 spawn WL2_fnc_drawRadarName;
 0 spawn WL2_fnc_interceptAction;	// just in case it's overridden
 0 spawn WL2_fnc_secureWreckAction;
 

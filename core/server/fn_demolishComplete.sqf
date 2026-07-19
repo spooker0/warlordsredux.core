@@ -3,7 +3,9 @@ params ["_target", "_caller", ["_damageBuilding", true]];
 
 uiSleep 0.5;
 
-if (!isNull _target && !isNull _caller) then {
+private _isExplosive = _target isKindOf "PipeBombCore";
+
+if (!isNull _target && !isNull _caller && !_isExplosive) then {
     [_target, _caller] call WL2_fnc_killRewardHandle;
     [_target, _caller] call WL2_fnc_friendlyFireHandleServer;
 };
@@ -27,7 +29,10 @@ for "_i" from 1 to 10 do {
 };
 
 if (_damageBuilding) then {
-    _target setDamage [1, true, _caller, _caller];
+    if (!_isExplosive) then {
+        _target setDamage [1, true, _caller, _caller];
+    };
+
     uiSleep 1;
 
     private _children = _target getVariable ["WL2_children", []];

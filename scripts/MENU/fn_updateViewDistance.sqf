@@ -1,7 +1,7 @@
 #include "includes.inc"
 if (isDedicated) exitWith {};
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 
 private _objectViewDistance = getObjectViewDistance # 0;
 private _targetViewDistance = _settingsMap getOrDefault ["objectViewDistance", 4000];

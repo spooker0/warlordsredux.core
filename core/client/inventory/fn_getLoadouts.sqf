@@ -1,9 +1,11 @@
 #include "includes.inc"
 
+private _savedLoadouts = missionProfileNamespace getVariable ["WL2_savedLoadouts", createHashMap];
+private _savedLoadoutsSide = _savedLoadouts getOrDefault [toLower str BIS_WL_playerSide, createHashMap];
+
 private _loadoutNames = [];
 for "_i" from 0 to INV_MAX_SLOTS - 1 do {
-    private _loadoutVar = format ["WLC_savedLoadout_%1_%2", BIS_WL_playerSide, _i];
-    private _loadoutData = profileNamespace getVariable [_loadoutVar, []];
+    private _loadoutData = _savedLoadoutsSide getOrDefault [_i, []];
 
     private _loadoutName = [];
 

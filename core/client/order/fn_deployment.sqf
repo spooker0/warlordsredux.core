@@ -24,9 +24,6 @@ _asset setAmmoCargo 0;
 _asset setVariable ["WL2_accessControl", 7];
 _asset setVariable ["WLM_ammoCargo", 0];
 
-private _appearanceDefaults = profileNamespace getVariable ["WLM_appearanceDefaults", createHashmap];
-private _assetAppearanceDefaults = _appearanceDefaults getOrDefault [_orderedClass, createHashmap];
-
 uiNamespace setVariable ["WL2_vehicleOrderAsset", _asset];
 private _drawRestrictionId = addMissionEventHandler ["Draw3D", {
 	private _asset = uiNamespace getVariable ["WL2_vehicleOrderAsset", objNull];
@@ -53,6 +50,9 @@ private _drawRestrictionId = addMissionEventHandler ["Draw3D", {
     ];
 }];
 
+private _appearanceDefaults = missionProfileNamespace getVariable ["WL2_appearanceDefaults", createHashmap];
+private _assetAppearanceDefaults = _appearanceDefaults getOrDefault [_orderedClass, createHashmap];
+
 private _camo = _assetAppearanceDefaults getOrDefault ["camo", createHashmap];
 if (count _camo == 0) then {
     private _assetTextures = WL_ASSET(_orderedClass, "textures", []);
@@ -63,7 +63,7 @@ if (count _camo == 0) then {
 
 {
     if (_x == "camo") then {
-        [_asset, _y] call WLM_fnc_applyTexture;
+        [_asset, _y, false] call WLM_fnc_applyTexture;
     } else {
         private _skipped = ["smoke", "horn"];
         if !(_x in _skipped) then {
@@ -72,19 +72,15 @@ if (count _camo == 0) then {
     };
 } forEach _assetAppearanceDefaults;
 
-private _turretOverridesForVehicle = WL_ASSET(_orderedClass, "turretOverrides", []);
-{
-	private _turretOverride = _x;
-	private _hideTurret = getNumber (_turretOverride >> "hideTurret");
-	if (_hideTurret != 0) then {
-		[_asset] spawn {
-            params ["_asset"];
-            _asset animateSource ["HideTurret", 1, true];
-            uiSleep 0.5;
-            _asset animateSource ["HideTurret", 1, true];
-        };
-	};
-} forEach _turretOverridesForVehicle;
+private _hideTurret = WL_ASSET(_orderedClass, "hideTurret", 0);
+if (_hideTurret != 0) then {
+    [_asset] spawn {
+        params ["_asset"];
+        _asset animateSource ["HideTurret", 1, true];
+        uiSleep 0.5;
+        _asset animateSource ["HideTurret", 1, true];
+    };
+};
 
 private _deployParams = ["DEPLOYMENT CONTROLS", [
     [localize "STR_A3_assemble", "BuldSelect"],

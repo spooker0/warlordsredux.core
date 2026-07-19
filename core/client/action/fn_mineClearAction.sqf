@@ -132,7 +132,7 @@ private _actionId = _asset addAction [
             [player, "demine", _asset, _minesInArea] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
             private _obstaclesInArea = _allUnitsInArea select {
-                WL_UNIT(_x, "obstacle", 0) in [1, 2];
+                WL_UNIT(_x, "obstacle", 0) == 2;
             };
 
             private _allMinefields = _allUnits select {

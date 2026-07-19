@@ -70,7 +70,7 @@ private _reviveActionId = player addAction [
 
             ["Animation"] spawn WL2_fnc_showHint;
 
-            private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+            private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
             private _hitmarkerVolume = _settingsMap getOrDefault ["hitmarkerVolume", 0.5];
             if (_actionSuccess) then {
                 if (!isNull _reviveTarget) then {

@@ -23,7 +23,10 @@ private _ecmActionId = _asset addAction [
         } else {
             _asset setVariable ["WL2_ecmActive", true, true];
             _asset setVariable ["WL2_ecmStartEffectTime", serverTime + 5, true];
-            _asset setFuelConsumptionCoef 50;
+
+            private _fuelConsumption = 500000 / (getMass _asset);
+            _fuelConsumption = (_fuelConsumption max 10) min 30;
+            _asset setFuelConsumptionCoef _fuelConsumption;
         };
 	},
 	[],

@@ -3,7 +3,8 @@ private _playerSide = side group player;
 
 while { !BIS_WL_missionEnd } do {
 	uiSleep 1;
-	private _ownedSectors = BIS_WL_sectorsArray select 0;
+	private _teamSectorsData = WL_SECTORS_DATA(_playerSide);
+	private _ownedSectors = _teamSectorsData getOrDefault ["owned", []];
 	{
 		private _sector = _x;
 		private _captureProgress = _sector getVariable ["BIS_WL_captureProgress", 0];

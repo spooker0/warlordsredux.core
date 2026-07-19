@@ -1,5 +1,8 @@
 #include "includes.inc"
-private _ownedAirfieldSectors = (BIS_WL_sectorsArray # 2) select {
+private _teamSectorsData = WL_SECTORS_DATA(BIS_WL_playerSide);
+private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+
+private _ownedAirfieldSectors = _linkedSectors select {
     private _services = _x getVariable ["WL2_services", []];
     "H" in _services;
 };
@@ -13,6 +16,9 @@ private _ownedAirFobs = _forwardBases select {
 };
 
 private _eligibleCombatAirTargets = (_ownedAirfieldSectors + _ownedAirFobs) select {
+    private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
+    _x != _homeBase
+} select {
     private _combatAirActive = _x getVariable ["WL2_combatAirActive", false];
     !_combatAirActive
 } select {

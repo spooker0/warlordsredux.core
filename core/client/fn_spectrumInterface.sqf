@@ -97,7 +97,7 @@ addMissionEventHandler ["Draw3D", {
 
         _indicator ctrlSetStructuredText parseText format [
             "<t align='center' size='0.9' shadow='2'>Strength: %1%%<br/>Max Range: %2 M</t>",
-            _friendlySignal / 10,
+            round (_friendlySignal / 10),
             round _lockRange
         ];
 

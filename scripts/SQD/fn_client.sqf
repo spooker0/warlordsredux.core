@@ -6,7 +6,7 @@ private _allPlayers = call BIS_fnc_listPlayers;
 private _squadManager = missionNamespace getVariable ["SQUAD_MANAGER", []];
 
 if (_action == "create") exitWith {
-    private _squadName = profileNamespace getVariable ["SQD_nameDefault", format ["%1 SQUAD", toUpper (name player)]];
+    private _squadName = missionProfileNamespace getVariable ["SQD_nameDefault", format ["%1 SQUAD", toUpper (name player)]];
     private _leader = getPlayerID player;
     private _side = BIS_WL_playerSide;
 
@@ -107,7 +107,11 @@ if (_action == "newjoin") exitWith {
     private _joinerId = _params select 0;
     private _joiner = ["getPlayerForID", [_joinerId]] call SQD_fnc_query;
 
-    playSoundUI ["a3\animals_f_beta\sheep\data\sound\sheep3.wss"];
+    private _lastPlayedSound = uiNamespace getVariable ["WL2_lastSquadJoinSound", 0];
+    if (serverTime - _lastPlayedSound > 10) then {
+        uiNamespace setVariable ["WL2_lastSquadJoinSound", serverTime];
+        playSoundUI ["a3\animals_f_beta\sheep\data\sound\sheep3.wss"];
+    };
 
     if (isNull _joiner) exitWith {};
     if (_joiner == player) then {
@@ -210,7 +214,7 @@ if (_action == "renamed") exitWith {
         _newName = format ["%1 SQUAD", toUpper (name player)];
     };
 
-    profileNamespace setVariable ["SQD_nameDefault", _newName];
+    missionProfileNamespace setVariable ["SQD_nameDefault", _newName];
 
     ["rename", [getPlayerID player, _newName]] remoteExec ["SQD_fnc_server", 2];
 };

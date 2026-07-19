@@ -406,7 +406,7 @@ class WLDefaultLoadouts {
 			{"Laserdesignator", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
 		};
-		name = "Nazgul's Skill Issue 1";
+		name = "Nazgul's Blufor Rifleman";
 		side = "WEST";
 	};
 	class WestLoadout3 {
@@ -423,7 +423,7 @@ class WLDefaultLoadouts {
 			{"Laserdesignator", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
 		};
-		name = "Nazgul's Skill Issue 2";
+		name = "Nazgul's Blufor Light Anti-Tank";
 		side = "WEST";
 	};
 	class WestLoadout4 {
@@ -440,7 +440,7 @@ class WLDefaultLoadouts {
 			{"Laserdesignator", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
 		};
-		name = "Nazgul's Skill Issue 3";
+		name = "Nazgul's Blufor Heavy Anti-Tank";
 		side = "WEST";
 	};
 	class WestLoadout5 {
@@ -457,7 +457,7 @@ class WLDefaultLoadouts {
 			{"Laserdesignator", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
 		};
-		name = "Nazgul's Skill Issue 4";
+		name = "Nazgul's Blufor SMG";
 		side = "WEST";
 	};
 	class EastLoadout1 {
@@ -491,7 +491,7 @@ class WLDefaultLoadouts {
 			{"Laserdesignator_02", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
 		};
-		name = "Nazgul's Skill Issue 5";
+		name = "Nazgul's Opfor Rifleman";
 		side = "EAST";
 	};
 	class EastLoadout3 {
@@ -508,7 +508,7 @@ class WLDefaultLoadouts {
 			{"Laserdesignator_02", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
 		};
-		name = "Nazgul's Skill Issue 6";
+		name = "Nazgul's Opfor Light Anti-Tank";
 		side = "EAST";
 	};
 	class EastLoadout4 {
@@ -525,11 +525,11 @@ class WLDefaultLoadouts {
 			{"Laserdesignator_02", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", ""}
 		};
-		name = "Nazgul's Skill Issue 7";
+		name = "Nazgul's Opfor Max Firepower";
 		side = "EAST";
 	};
 	class EastLoadout5 {
-		dlc[] = {DLC_MARK, DLC_TANKS};
+		dlc[] = {DLC_TANKS, DLC_APEX};
 		loadout[] = {
 			{"arifle_AK12_F", "muzzle_snds_B_snd_F", "acc_pointer_IR", "optic_Arco_blk_F", {"75rnd_762x39_AK12_Mag_F", 75}, {}, ""},
 			{"launch_O_Vorona_brown_F", "", "", "", {"Vorona_HEAT", 1}, {}, ""},
@@ -542,7 +542,47 @@ class WLDefaultLoadouts {
 			{"Laserdesignator_02", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", ""}
 		};
-		name = "Nazgul's Skill Issue 8";
+		name = "Nazgul's Opfor Heavy Anti-Tank";
 		side = "EAST";
+	};
+};
+
+class CfgWorlds {
+	class Altis {
+		author = "$STR_A3_Bohemia_Interactive";
+		description = "$STR_A3_MAP_ALTIS";
+		pictureMap = "A3\map_Altis\data\pictureMap_ca.paa";
+		pictureShot = "A3\map_Altis\data\ui_Altis_ca.paa";
+		loadingTexts[] = {
+			"$STR_WL_deathTip_001",
+			"$STR_WL_deathTip_002",
+			"$STR_WL_deathTip_003",
+			"$STR_WL_deathTip_004",
+			"$STR_WL_deathTip_005",
+			"$STR_WL_deathTip_006",
+			"$STR_WL_deathTip_007",
+			"$STR_WL_deathTip_008",
+			"$STR_WL_deathTip_009",
+			"$STR_WL_deathTip_010",
+			"$STR_WL_deathTip_011",
+			"$STR_WL_deathTip_012",
+			"$STR_WL_deathTip_013",
+			"$STR_WL_deathTip_014",
+			"$STR_WL_deathTip_015",
+			"$STR_WL_deathTip_016",
+			"$STR_WL_deathTip_017",
+			"$STR_WL_deathTip_018",
+			"$STR_WL_deathTip_019",
+			"$STR_WL_deathTip_020",
+			"$STR_WL_deathTip_021",
+			"$STR_WL_deathTip_022",
+			"$STR_WL_deathTip_023",
+			"$STR_WL_deathTip_024",
+			"$STR_WL_deathTip_025",
+			"$STR_WL_deathTip_026",
+			"$STR_WL_deathTip_027",
+			"$STR_WL_deathTip_028",
+			"$STR_WL_deathTip_029"
+		};
 	};
 };

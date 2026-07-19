@@ -2,7 +2,8 @@
 
 private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
 if (_timeSinceStart < WL_COMBAT_AIR_HOME_TIME) exitWith {
-    [false, "Combat air support is not available yet."]
+    private _timeRemaining = [WL_COMBAT_AIR_HOME_TIME - _timeSinceStart, "MM:SS"] call BIS_fnc_secondsToString;
+    [false, format ["No-fly zone is not available for home base yet. Available in: %1", _timeRemaining]];
 };
 
 private _sector = [BIS_WL_playerSide] call WL2_fnc_getSideBase;

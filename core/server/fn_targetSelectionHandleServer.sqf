@@ -19,28 +19,18 @@
 				private _isRegularSquadMember = ["isRegularSquadMember", [getPlayerID _x]] call SQD_fnc_query;
 				!_isRegularSquadMember
 			};
+
+			private _teamSectorsData = WL_SECTORS_DATA(_side);
+			private _voteableSectors = _teamSectorsData getOrDefault ["voteable", []];
 			{
 				private _player = _x;
 				private _variableName = format ["BIS_WL_targetVote_%1", getPlayerID _player];
 				private _vote = missionNamespace getVariable [_variableName, objNull];
 				private _voteName = format ["%1", _vote];
-				private _availableSectors = if (isNil "BIS_WL_sectorsArrays") then {
-					[];
-				} else {
-					(BIS_WL_sectorsArrays # _sideIndex) # 1;
-				};
-				if (!(isNull _vote) && (_vote in _availableSectors)) then {
-					private _voteCount = 0;
-					if (_vote getVariable ["WL2_name", "Sector"] == "Surrender") then {
-						private _squadContribution = missionNamespace getVariable ["WL_PlayerSquadContribution", createHashMap];
-						private _playerVotes = _squadContribution getOrDefault [getPlayerUID _player, 0];
-						_voteCount = round (_playerVotes * 0.2);
-					} else {
-						private _squadVotingPower = ["getSquadVotingPower", [getPlayerID _x]] call SQD_fnc_query;
-						_voteCount = _squadVotingPower;
-					};
-					_voteCount = _voteCount + (_votesByPlayers getOrDefault [_voteName, [objNull, 0]] select 1);
-					_votesByPlayers set [_voteName, [_vote, _voteCount]];
+				if (!(isNull _vote) && (_vote in _voteableSectors)) then {
+					private _squadVotingPower = ["getSquadVotingPower", [getPlayerID _x]] call SQD_fnc_query;
+					private _existingVoteCount = _votesByPlayers getOrDefault [_voteName, [objNull, 0]] select 1;
+					_votesByPlayers set [_voteName, [_vote, _existingVoteCount + _squadVotingPower]];
 				};
 			} forEach _votingPlayers;
 
@@ -75,7 +65,7 @@
 			} forEach _players;
 		};
 
-		while {!BIS_WL_missionEnd} do {
+		while { !BIS_WL_missionEnd } do {
 			call _wipeVotes;
 
 			_calculation = call _calculateMostVotedSector;
@@ -214,7 +204,7 @@
 
 			call _wipeVotes;
 
-			["server", true] call WL2_fnc_updateSectorArrays;
+			call WL2_fnc_updateSectorsData;
 
 			waitUntil {
 				uiSleep WL_TIMEOUT_STANDARD;

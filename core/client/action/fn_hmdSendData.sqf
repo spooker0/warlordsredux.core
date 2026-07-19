@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_display"];
 
-private _currentProfile = profileNamespace getVariable ["WL2_HMDSettingProfiles", []];
+private _currentProfile = missionProfileNamespace getVariable ["WL2_HMDSettingProfiles", []];
 private _currentProfileIndex = uiNamespace getVariable ["WL2_HMDSettingProfileIndex", 0];
 private _profileData = _currentProfile # _currentProfileIndex;
 

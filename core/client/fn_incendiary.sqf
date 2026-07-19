@@ -49,7 +49,7 @@ private _fires = [];
 private _coneHalfAngle = 18;
 private _burstBiasUp = -0.01;
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 private _strandsCount = _settingsMap getOrDefault ["incendiaryStrands", 20];
 
 for "_i" from 1 to _strandsCount do {

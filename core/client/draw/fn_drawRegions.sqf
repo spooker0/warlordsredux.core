@@ -128,7 +128,7 @@ while { !BIS_WL_missionEnd } do {
     } forEach _facesData;
     uiNamespace setVariable ["WL2_drawRegionMap", _regionMap];
 
-    private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+    private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
     private _mapSectorLineGrayscale = _settingsMap getOrDefault ["mapSectorLineGrayscale", 1];
 
     private _allLinks = missionNamespace getVariable ["WL2_linkSectorMarkers", createHashMap];

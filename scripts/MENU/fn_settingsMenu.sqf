@@ -2,11 +2,13 @@
 private _settingsText = "<t color='#FF0000'>Settings</t>";
 private _settingActionID = player addAction [
     _settingsText,
-    MENU_fnc_settingsMenuInit,
+    {
+        [] spawn MENU_fnc_settingsMenuInit;
+    },
     [],
     -99,
     false,
-    false,
+    true,
     "",
     "",
     0
@@ -16,7 +18,7 @@ player setUserActionText [_settingActionID, _settingsText, "<img size='3' image=
 private _previousFocus = focusOn;
 private _previousCamera = cameraOn;
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 while { alive player } do {
     private _currentFocus = focusOn;
     private _currentCamera = cameraOn;

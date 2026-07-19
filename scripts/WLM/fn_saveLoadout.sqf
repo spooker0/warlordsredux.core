@@ -33,8 +33,9 @@ private _saveData = if (_isAircraft) then {
 };
 
 private _assetActualType = WL_ASSET_TYPE(_asset);
-private _variableName = format ["WLM_savedLoadout_%1", _assetActualType];
-private _loadoutSave = profileNamespace getVariable [_variableName, []];
+
+private _vehicleLoadouts = missionProfileNamespace getVariable ["WL2_vehicleLoadouts", createHashMap];
+private _savedLoadouts = _vehicleLoadouts getOrDefault [_assetActualType, []];
 
 if (_loadoutName == "") exitWith {
     private _confirmDialog = _display createDisplay "WLM_Modal_Dialog";
@@ -46,7 +47,7 @@ if (_loadoutName == "") exitWith {
     _confirmTextControl ctrlSetText (localize "STR_WL_enterLoadoutName");
 
     private _loadoutInputControl = (findDisplay WLM_MODAL) displayCtrl WLM_MODAL_INPUT;
-    private _defaultLoadoutName = format [localize "STR_WL_loadoutName", count _loadoutSave + 1];
+    private _defaultLoadoutName = format [localize "STR_WL_loadoutName", count _savedLoadouts + 1];
     _loadoutInputControl ctrlSetText _defaultLoadoutName;
 
     _loadoutInputControl ctrlShow true;
@@ -71,7 +72,8 @@ if (_loadoutName == "") exitWith {
     }];
 };
 
-_loadoutSave pushBack [_loadoutName, _saveData];
-profileNamespace setVariable [_variableName, _loadoutSave];
+_savedLoadouts pushBack [_loadoutName, _saveData];
+_vehicleLoadouts set [_assetActualType, _savedLoadouts];
+missionProfileNamespace setVariable ["WL2_vehicleLoadouts", _vehicleLoadouts];
 
 call WLM_fnc_constructPresetMenu;

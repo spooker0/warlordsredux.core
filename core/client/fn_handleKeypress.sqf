@@ -4,8 +4,8 @@ params ["_displayorcontrol", "_key", "_shift", "_ctrl", "_alt"];
 private _zeusKey = actionKeys "curatorInterface";
 private _adminKeyPressed = _key in _zeusKey;
 private _isAdmin = (getPlayerUID player) in (getArray (missionConfigFile >> "adminIDs"));
-if (_adminKeyPressed && !_isAdmin) exitWith {
-    true;
+if (_adminKeyPressed) exitWith {
+    !_isAdmin;
 };
 
 private _canBuy = uiNamespace getVariable ["WL2_canBuy", true];

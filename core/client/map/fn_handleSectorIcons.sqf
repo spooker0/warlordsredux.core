@@ -23,11 +23,11 @@ private _sectorHasOptions = false;
 } forEach _conditions;
 WL_SectorActionTargetActive = _sectorHasOptions;
 
+private _side = BIS_WL_playerSide;
+
 private _sectorInfoTime = _sector getVariable ["WL2_sectorInfoTime", -1];
 if (serverTime - _sectorInfoTime > 0.5) then {
     private _services = _sector getVariable ["WL2_services", []];
-
-    private _side = BIS_WL_playerSide;
 
     private _getTeamColor = {
         params ["_team"];
@@ -102,8 +102,8 @@ if (serverTime - _sectorInfoTime > 0.5) then {
     };
 
     private _fortification = if (_revealed) then {
-        private _previousOwners = _sector getVariable ["BIS_WL_previousOwners", []];
-        if (count _previousOwners > 1) then {
+        private _capturableBySides = _sector getVariable ["WL2_capturableBySides", []];
+        if (count _capturableBySides > 1) then {
             private _fortificationTime = _sector getVariable ["WL_fortificationTime", -1];
             private _fortificationETA = ceil (_fortificationTime - serverTime);
             _fortificationETA = _fortificationETA max 0;
@@ -215,7 +215,10 @@ if (_votePhase == 0) exitWith {
     BIS_WL_highlightedSector = objNull;
 };
 
-if !(_sector in BIS_WL_sectorsArray # 1) exitWith {
+private _teamSectorsData = WL_SECTORS_DATA(_side);
+private _voteableSectors = _teamSectorsData getOrDefault ["voteable", []];
+
+if !(_sector in _voteableSectors) exitWith {
     BIS_WL_highlightedSector = objNull;
 };
 
@@ -232,7 +235,11 @@ if (!isNull _singletonScriptHandle) exitWith {};
 private _singletonScriptHandle = [_sector] spawn {
     params ["_sector"];
     if (isNull _sector) exitWith {};
-	if !(_sector in BIS_WL_sectorsArray # 1) exitWith {};
+
+    private _teamSectorsData = WL_SECTORS_DATA(BIS_WL_playerSide);
+    private _voteableSectors = _teamSectorsData getOrDefault ["voteable", []];
+
+	if !(_sector in _voteableSectors) exitWith {};
 
     BIS_WL_targetVote = _sector;
     BIS_WL_highlightedSector = _sector;

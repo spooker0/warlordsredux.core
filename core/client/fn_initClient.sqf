@@ -54,8 +54,7 @@ if (_setupState == "Imbalance") exitWith {
 WL_LoadingState = 2;
 
 private _uid = getPlayerUID player;
-
-"client" call WL2_fnc_varsInit;
+call WL2_fnc_varsInit;
 
 WL_LoadingState = 3;
 
@@ -75,18 +74,62 @@ uiNamespace setVariable ["BIS_WL_purchaseMenuLastSelection", [0, 0, 0]];
 uiNamespace setVariable ["activeControls", []];
 uiNamespace setVariable ["control", 10000];
 
-private _settingsMap = profileNamespace getVariable "WL2_settings";
+private _settingsMap = missionProfileNamespace getVariable "WL2_settings";
 if (isNil "_settingsMap") then {
-    profileNamespace setVariable ["WL2_settings", createHashMap];
-	_settingsMap = profileNamespace getVariable "WL2_settings";
+	private _oldSettingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+    missionProfileNamespace setVariable ["WL2_settings", +_oldSettingsMap];
+	profileNamespace setVariable ["WL2_settings", nil];
+	_settingsMap = missionProfileNamespace getVariable "WL2_settings";
 };
+
+private _savedLoadouts = missionProfileNamespace getVariable ["WL2_savedLoadouts", createHashMap];
+private _savedLoadoutsWest = _savedLoadouts getOrDefault ["west", createHashMap];
+private _savedLoadoutsEast = _savedLoadouts getOrDefault ["east", createHashMap];
+
+for "_i" from 0 to 29 do {
+	private _loadoutVarWest = format ["WLC_savedLoadout_west_%1", _i];
+	private _loadoutVarEast = format ["WLC_savedLoadout_east_%1", _i];
+
+	private _savedLoadoutWest = profileNamespace getVariable _loadoutVarWest;
+	private _savedLoadoutEast = profileNamespace getVariable _loadoutVarEast;
+
+	if (!isNil "_savedLoadoutWest") then {
+		_savedLoadoutsWest set [_i, _savedLoadoutWest];
+		_savedLoadouts set ["west", _savedLoadoutsWest];
+		missionProfileNamespace setVariable ["WL2_savedLoadouts", _savedLoadouts];
+		profileNamespace setVariable [_loadoutVarWest, nil];
+	};
+
+	if (!isNil "_savedLoadoutEast") then {
+		_savedLoadoutsEast set [_i, _savedLoadoutEast];
+		_savedLoadouts set ["east", _savedLoadoutsEast];
+		missionProfileNamespace setVariable ["WL2_savedLoadouts", _savedLoadouts];
+		profileNamespace setVariable [_loadoutVarEast, nil];
+	};
+};
+
+private _badges = missionProfileNamespace getVariable "WL2_badges";
+if (isNil "_badges") then {
+	private _oldBadges = profileNamespace getVariable ["WL2_badges", createHashMap];
+	missionProfileNamespace setVariable ["WL2_badges", +_oldBadges];
+	profileNamespace setVariable ["WL2_badges", nil];
+};
+
+private _levelScore = missionProfileNamespace getVariable "WLC_Score";
+if (isNil "_levelScore") then {
+	private _oldLevelScore = profileNamespace getVariable ["WLC_Score", 0];
+	missionProfileNamespace setVariable ["WLC_Score", _oldLevelScore];
+	profileNamespace setVariable ["WLC_Score", nil];
+};
+
+saveMissionProfileNamespace;
 
 WL_LoadingState = 5;
 
 call WL2_fnc_sectorsInitClient;
 WL_LoadingState = 6;
 
-["client", true] call WL2_fnc_updateSectorArrays;
+call WL2_fnc_updateSectorsData;
 WL_LoadingState = 7;
 
 {
@@ -162,7 +205,7 @@ if !(isDedicated) then {
 
 0 spawn {
 	WL_ORIGINAL_SPEAKER = speaker player;
-	private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+	private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 	while { !BIS_WL_missionEnd } do {
 		uiSleep 5;
 		private _noVoice = _settingsMap getOrDefault ["noVoiceSpeaker", false];
@@ -180,6 +223,9 @@ if !(isDedicated) then {
 		private _vehicles = missionNamespace getVariable [_ownedVehicleVar, []];
 		private _newVehicles = _vehicles select {
 			_x == player || _x getVariable ["BIS_WL_ownerAsset", "123"] == getPlayerUID player
+		};
+		if !(player in _newVehicles) then {
+			_newVehicles pushBack player;
 		};
 		if !(_vehicles isEqualTo _newVehicles) then {
 			missionNamespace setVariable [_ownedVehicleVar, _newVehicles, [2, clientOwner]];
@@ -270,7 +316,7 @@ if (!isServer) then {
 0 spawn WL2_fnc_lockActionUpdate;
 
 ["Player", true] call RWD_fnc_addBadge;
-player setVariable ["WL2_currentBadge", profileNamespace getVariable ["WL2_currentBadge", "Player"], true];
+player setVariable ["WL2_currentBadge", missionProfileNamespace getVariable ["WL2_currentBadge", "Player"], true];
 0 spawn WL2_fnc_updateLevelDisplay;
 
 0 spawn WL2_fnc_restrictedArea;
@@ -282,7 +328,6 @@ call WL2_fnc_rappelAction;
 call WL2_fnc_hmdSettingsAction;
 
 0 spawn WL2_fnc_createInfoMarkers;
-0 spawn WL2_fnc_drawRadarName;
 0 spawn WL2_fnc_drawRegions;
 0 spawn WL2_fnc_locationScanner;
 0 spawn WL2_fnc_rewardCapture;
@@ -335,7 +380,7 @@ private _additionalSubs = _settingsMap getOrDefault ["additionalSubs", false];
 if !("additionalSubs" in _settingsMap) then {
 	0 spawn {
 		private _result = ["Subtitles", "Would you like to turn on additional subtitles for the hearing impaired? This can be turned on/off in settings.", "Yes", "No"] call WL2_fnc_prompt;
-		private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+		private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 		_settingsMap set ["additionalSubs", _result];
 	};
 };

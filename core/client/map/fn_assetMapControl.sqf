@@ -4,6 +4,7 @@ addMissionEventHandler ["Map", {
 	if (WL_IsReplaying) exitWith {};
 
 	if (!_mapIsOpened) then {
+		["Map"] spawn WL2_fnc_showHint;
 		0 spawn {
 			uiSleep 1;
 			BIS_WL_highlightedSector = objNull;
@@ -19,5 +20,12 @@ addMissionEventHandler ["Map", {
 				[[], _x] call WL2_fnc_handleSectorIcons;
 			} forEach _allMaps;
 		};
+	} else {
+		private _mapLayerParams = ["MAP LAYERS", [
+			["Detailed info", "lookAround"],
+			["Map layer", "nightVision"]
+		]];
+		["Map", _mapLayerParams] spawn WL2_fnc_showHint;
+		uiNamespace setVariable ["WL2_mapMode", 0];
 	};
 }];

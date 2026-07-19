@@ -19,6 +19,18 @@ _mapControl ctrlAddEventHandler ["KeyDown", {
     if (_alt) then {
         _map setVariable ["WL2_showDetailedMode", true];
     };
+    if (_key in actionKeys "nightVision") then {
+        private _mapMode = uiNamespace getVariable ["WL2_mapMode", 0];
+        private _mapModeNames = [
+            "Regular",
+            "Air/Air Defense"
+        ];
+        _mapMode = (_mapMode + 1) % (count _mapModeNames);
+        uiNamespace setVariable ["WL2_mapMode", _mapMode];
+
+        private _mapModeName = _mapModeNames select _mapMode;
+        [format ["Map mode: %1", _mapModeName]] call WL2_fnc_smoothText;
+    };
 }];
 
 _mapControl ctrlAddEventHandler ["KeyUp", {
@@ -48,7 +60,10 @@ _mapControl ctrlAddEventHandler ["MouseButtonDown", {
     if (_button != 0) exitWith {};
     // Start map drag
     uiNamespace setVariable ["SPEC_mouseClickStart", [_xPos, _yPos]];
-    uiNamespace setVariable ["SPEC_mouseClickTargets", WL_AssetActionTargets];
+
+    private _targets = WL_AssetActionTargets + [WL_SectorActionTarget];
+    _targets = _targets select { !isNull _x };
+    uiNamespace setVariable ["SPEC_mouseClickTargets", _targets];
 }];
 
 _mapControl ctrlAddEventHandler ["MouseButtonUp", {
@@ -70,6 +85,7 @@ _mapControl ctrlAddEventHandler ["MouseButtonUp", {
             [_posEnd], { _input0 distance _x }, "ASCEND"
         ] call BIS_fnc_sortBy;
 
+        uiNamespace setVariable ["SPEC_resetRadius", true];
         [_sortedTargetByDistance # 0] call SPEC_fnc_spectatorSelectTarget;
     };
 

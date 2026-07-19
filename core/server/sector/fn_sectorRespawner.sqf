@@ -26,6 +26,12 @@ while { !BIS_WL_missionEnd } do {
         private _isAircraftCarrier = _sector getVariable ["WL2_isAircraftCarrier", false];
 
         private _sectorPop = _sector getVariable ["WL2_sectorPop", 0];
+        if (_sectorPop <= 0) then {
+            continue;
+        };
+
+        private _newSectorPop = _sectorPop;
+
         private _sectorValue = _sector getVariable ["BIS_WL_value", 50];
         private _garrisonSize = _sectorValue * WL_SECTOR_GARRISON;
 
@@ -38,10 +44,10 @@ while { !BIS_WL_missionEnd } do {
         while { count _sectorInfantryDefenders < _garrisonSize } do {
             private _unitType = selectRandom _unitsPool;
 
-            if (_sectorPop <= 0) then {
+            if (_newSectorPop <= 0) then {
                 break;
             };
-            _sectorPop = _sectorPop - 1;
+            _newSectorPop = _newSectorPop - 1;
 
             private _sectorDefenderGroups = [];
             {
@@ -109,7 +115,9 @@ while { !BIS_WL_missionEnd } do {
             _sector setVariable ["WL2_sectorDefenders", _sectorDefenders];
         };
 
-        _sector setVariable ["WL2_sectorPop", _sectorPop, true];
+        if (_newSectorPop != _sectorPop) then {
+            _sector setVariable ["WL2_sectorPop", _newSectorPop, true];
+        };
 	} forEach BIS_WL_allSectors;
 
     private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];

@@ -20,7 +20,8 @@ if (!_inFriendlySector && _value > 2000) exitWith {
 };
 
 private _wreckSide = [_asset] call WL2_fnc_getAssetSide;
-if (_wreckSide != BIS_WL_playerSide && _value > 2000) then {
+private _boostsSignal = _wreckSide != BIS_WL_playerSide;
+if (_boostsSignal && _value > 2000) then {
     private _enemyUnits = switch (_wreckSide) do {
         case west: { BIS_WL_westOwnedVehicles };
         case east: { BIS_WL_eastOwnedVehicles };
@@ -42,7 +43,12 @@ _asset setVariable ["WL2_isSecured", true];
 
 deleteVehicle _asset;
 
-[player, "secureAircraft", _value, _wreckSide != BIS_WL_playerSide] remoteExec ["WL2_fnc_handleClientRequest", 2];
+if (_boostsSignal) then {
+    private _boostMessage = format ["Electronic warfare signal boosted (%1%%).", (_value * WL_JAMMER_BOOST_FACTOR / 10) toFixed 1];
+    [_boostMessage] call WL2_fnc_smoothText;
+};
+
+[player, "secureAircraft", _value, _boostsSignal] remoteExec ["WL2_fnc_handleClientRequest", 2];
 [objNull, _value, "Aircraft secured", WL_COLOR_SUPPORT] call WL2_fnc_killRewardClient;
 
 playSoundUI ["AddItemOk"];

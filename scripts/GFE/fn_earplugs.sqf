@@ -17,7 +17,7 @@ private _display = findDisplay _displayNumber;
 _display displayAddEventHandler ["KeyDown", {
 	params ["_displayorcontrol", "_key", "_shift", "_ctrl", "_alt"];
 	if (_key in actionKeys "BuldSwitchCamera") then {
-		private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+		private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 		private _earplugVolume = _settingsMap getOrDefault ["earplugVolume", 0.1];
 
 		if (soundVolume == 1) then {

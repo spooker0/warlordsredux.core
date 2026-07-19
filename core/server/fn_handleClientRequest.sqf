@@ -65,6 +65,7 @@ private _actionCost = switch (_action) do {
 	case "cruiseMissiles" : { 15000 };
 	case "repairFOB" : { 500 };
 	case "repairStronghold" : { WL_COST_STRONGHOLD / 2 };
+	case "repairStructures" : { WL_COST_REPAIRALL };
 	case "jetRTB" : { WL_COST_JETRTB };
 	default { 0 };
 };
@@ -148,6 +149,8 @@ if (_action == "bulkOrderAssets") exitWith {
 		private _position = _x;
 		private _direction = _directions select _forEachIndex;
 		[_sender, _position, _orderType, _direction, true, false] spawn WL2_fnc_orderGround;
+
+		uiSleep 1;
 	} forEach _positions;
 };
 
@@ -430,7 +433,7 @@ if (_action == "rewardRepair") exitWith {
 
 if (_action == "targetReset") exitWith {
 	missionNamespace setVariable [format ["WL_targetReset_%1", _side], true, true];
-	["server", true] call WL2_fnc_updateSectorArrays;
+	call WL2_fnc_updateSectorsData;
 
 	private _message = format ["%1 has initiated a vote to reset the target sector.", name _sender];
 	[_side, _message] call _broadcastActionToSide;
@@ -505,117 +508,13 @@ if (_action == "droneRebate") exitWith {
 	[objNull, _reward, "Drone rebate", WL_COLOR_SUPPORT] remoteExec ["WL2_fnc_killRewardClient", _sender];
 };
 
-if (_action == "boost") exitWith {
-	private _senderVehicle = vehicle _sender;
-	private _multiplier = if (_senderVehicle getVariable ["WL2_hasEWBoost", false]) then { 2 } else { 1 };
-
-	private _message = _param1;
-
-	private _allPlayers = call BIS_fnc_listPlayers;
-	private _friendlyPlayers = [];
-	private _hostilePlayers = [];
-	{
-		if (_x == _sender) then {
-			continue;
-		};
-
-		private _isUsingEW = _x getVariable ["WL2_isUsingEW", false];
-		private _ewPlayerOwner = owner _x;
-
-		if (_ewPlayerOwner <= 2) then {
-			continue;
-		};
-
-		if (side group _x == _side) then {
-			_friendlyPlayers pushBack _ewPlayerOwner;
-		} else {
-			_hostilePlayers pushBack _ewPlayerOwner;
-		};
-	} forEach _allPlayers;
-
-	if (count _friendlyPlayers > 0) then {
-		[_message, true] remoteExec ["WL2_fnc_ewarMessage", _friendlyPlayers];
-	};
-	if (count _hostilePlayers > 0) then {
-		[_message, false] remoteExec ["WL2_fnc_ewarMessage", _hostilePlayers];
-	};
-
-	private _split = _message splitString ",";
-	private _signalIncrement = 5 * _multiplier;
-	if (count _split == 2) then {
-		private _cellSolution = _split select 0;
-		private _cellIndex = parseNumber (_split select 1);
-		private _puzzleVar = format ["WL2_ewarCurrentPuzzle_%1", _side];
-		private _puzzle = missionNamespace getVariable [_puzzleVar, ""];
-
-		private _solution = missionNamespace getVariable ["WL2_ewarCurrentSolution", ""];
-
-		private _sanityCheck = _cellSolution == (_solution select [_cellIndex, 1]);
-		if (_sanityCheck) then {
-			private _puzzleArray = _puzzle splitString "";
-			_puzzleArray set [_cellIndex, _cellSolution];
-			missionNamespace setVariable [_puzzleVar, _puzzleArray joinString "", true];
-
-			private _friendlySignalVar = format ["WL2_ewarSignal_%1", _side];
-			private _friendlySignal = missionNamespace getVariable [_friendlySignalVar, 500];
-			_friendlySignal = (_friendlySignal + _signalIncrement) min 1000;
-			missionNamespace setVariable [_friendlySignalVar, _friendlySignal, true];
-
-			private _hostileSignalVar = format ["WL2_ewarSignal_%1", if (_side == west) then { east } else { west }];
-			private _hostileSignal = missionNamespace getVariable [_hostileSignalVar, 500];
-			_hostileSignal = (_hostileSignal - _signalIncrement) max 0;
-			missionNamespace setVariable [_hostileSignalVar, _hostileSignal, true];
-
-			if (_friendlySignal < 950) then {
-				private _reward = 30 * _multiplier;
-				[_reward, "Boosted signal"] call _addFunds;
-				[objNull, _reward, "Boosted signal", WL_COLOR_SUPPORT] remoteExec ["WL2_fnc_killRewardClient", _sender];
-			};
-		};
-	};
-
-	private _currentPuzzleWest = missionNamespace getVariable ["WL2_ewarCurrentPuzzle_west", ""];
-    private _currentPuzzleEast = missionNamespace getVariable ["WL2_ewarCurrentPuzzle_east", ""];
-    private _currentSolution = missionNamespace getVariable ["WL2_ewarCurrentSolution", ""];
-
-    if (_currentPuzzleWest == _currentSolution || _currentPuzzleEast == _currentSolution) then {
-		call WL2_fnc_ewarGenerate;
-		private _allRelevantPlayers = _friendlyPlayers + _hostilePlayers + [owner _sender];
-		if (count _allRelevantPlayers > 0) then {
-			["reset", true] remoteExec ["WL2_fnc_ewarMessage", _allRelevantPlayers];
-		};
-    };
-};
-
-if (_action == "boost2") exitWith {
-	private _senderVehicle = vehicle _sender;
-	private _multiplier = if (_senderVehicle getVariable ["WL2_hasEWBoost", false]) then { 2 } else { 1 };
-
-	private _signalIncrement = 30 * _multiplier;
-
-	private _friendlySignalVar = format ["WL2_ewarSignal_%1", _side];
-	private _friendlySignal = missionNamespace getVariable [_friendlySignalVar, 500];
-	_friendlySignal = (_friendlySignal + _signalIncrement) min 1000;
-	missionNamespace setVariable [_friendlySignalVar, _friendlySignal, true];
-
-	private _hostileSignalVar = format ["WL2_ewarSignal_%1", if (_side == west) then { east } else { west }];
-	private _hostileSignal = missionNamespace getVariable [_hostileSignalVar, 500];
-	_hostileSignal = (_hostileSignal - _signalIncrement) max 0;
-	missionNamespace setVariable [_hostileSignalVar, _hostileSignal, true];
-
-	if (_friendlySignal < 950) then {
-		private _reward = 200 * _multiplier;
-		[_reward, "Boosted signal"] call _addFunds;
-		[objNull, _reward, "Boosted signal", WL_COLOR_SUPPORT] remoteExec ["WL2_fnc_killRewardClient", _sender];
-	};
-};
-
 #if WL_FREE_MONEY
 if (_action == "50K") exitWith {
 	[50000, _uid, false, "Bonus"] call WL2_fnc_fundsDatabaseWrite;
 };
 #endif
 
+#if WL_ZEUS_ENABLED
 if (_action == "updateZeus") exitWith {
 	if (getPlayerUID _sender in (getArray (missionConfigFile >> "adminIDs"))) then {
 		private _allEntities = entities [[], ["Logic"], true];
@@ -625,6 +524,7 @@ if (_action == "updateZeus") exitWith {
 		} forEach allCurators;
 	};
 };
+#endif
 
 if (_action == "sectorReward") exitWith {
 	private _reward = _param1;
@@ -637,7 +537,7 @@ if (_action == "secureAircraft") exitWith {
 
 	private _boostsSignal = _param2;
 	if (_boostsSignal) then {
-		private _signalIncrement = _reward * 0.1;
+		private _signalIncrement = _reward * WL_JAMMER_BOOST_FACTOR;
 
 		private _friendlySignalVar = format ["WL2_ewarSignal_%1", _side];
 		private _friendlySignal = missionNamespace getVariable [_friendlySignalVar, 500];

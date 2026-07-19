@@ -1,6 +1,6 @@
 #include "includes.inc"
 params ["_texture"];
-private _playerAliases = profileNamespace getVariable ["WL2_playerAliases", createHashMap];
+private _playerAliases = missionProfileNamespace getVariable ["WL2_playerAliases", createHashMap];
 
 private _allPlayers = call BIS_fnc_listPlayers;
 _allPlayers = [_allPlayers, [], { [_x] call BIS_fnc_getName }, "ASCEND"] call BIS_fnc_sortBy;

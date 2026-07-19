@@ -75,7 +75,7 @@ private _targetDrawer = addMissionEventHandler ["Draw3D", {
 
     private  _opticsMode = missionNamespace getVariable ["DIS_missileCameraOpticsMode", 0];
 
-    private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+    private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
     private _missileCameraLeft = _settingsMap getOrDefault ["missileCameraLeft", 0];
     private _missileCameraTop = _settingsMap getOrDefault ["missileCameraTop", 100];
 

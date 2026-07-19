@@ -79,15 +79,8 @@ if (_respawnTimer > 0) then {
 
 private _tipsControl = _display displayCtrl 11002;
 
-private _randomTipIndex = floor (random 29) + 1;
-private _randomTipIndexStr = str _randomTipIndex;
-if (_randomTipIndex < 100) then {
-    _randomTipIndexStr = "0" + _randomTipIndexStr;
-};
-if (_randomTipIndex < 10) then {
-    _randomTipIndexStr = "0" + _randomTipIndexStr;
-};
-private _tip = localize format ["STR_WL_deathTip_%1", _randomTipIndexStr];
+private _allTips = getArray (missionConfigFile >> "CfgWorlds" >> "Altis" >> "loadingTexts");
+private _tip = selectRandom _allTips;
 _tipsControl ctrlSetStructuredText parseText format ["<t size='0.6' shadow='2'>Tip: %1</t>", _tip];
 
 while { !isNull _display } do {

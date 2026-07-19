@@ -30,7 +30,7 @@ if (isPlayer _owner) then {
 	missionNamespace setVariable [_ownedVehicleVar, _ownedVehicles, true];
 };
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 if (_asset isKindOf "Man") then {
 	if (isPlayer _owner) then {
 		private _refreshTimerVar = format ["WL2_manpowerRefreshTimers_%1", getPlayerUID player];
@@ -165,7 +165,7 @@ if (_asset isKindOf "Man") then {
 
 	if (WL_ASSET_GET(_data, "isRadar", 0) > 0) then {
 		_asset setVariable ["radarRotation", false, true];
-		[_asset] remoteExec ["WL2_fnc_radarRotateAction", 0, true];
+		[_asset] spawn WL2_fnc_radarRotateAction;
 
 		[_asset] spawn {
 			params ["_asset"];
@@ -281,11 +281,12 @@ if (_asset isKindOf "Man") then {
 	};
 
 	if (_hideMap != 1) then {
+		// Attach event handler to the moving vehicle, not the obstacle
 		_asset addEventHandler ["EpeContactStart", {
 			params ["_object1", "_object2", "_selection1", "_selection2", "_force", "_reactForce", "_worldPos"];
 			private _fragility = _object2 getVariable ["WL2_fragility", 0];
 			if (_fragility == 0) exitWith {};
-			if (_fragility < vectorMagnitude _reactForce) then {
+			if (getMass _object1 > _fragility) then {
 				[_object2, player] remoteExec ["WL2_fnc_demolishComplete", 2];
 			};
 		}];
@@ -325,7 +326,7 @@ if (_asset isKindOf "Man") then {
 	[_asset] remoteExec ["WL2_fnc_vehicleLockAction", 0, true];
 
 	if (_asset isKindOf "Plane") then {
-		[_asset] remoteExec ["WL2_fnc_catapultAction", 0];
+		[_asset] remoteExec ["WL2_fnc_catapultAction", 0, true];
 		_asset setVariable ["bis_ejected", true, true];
 	};
 
@@ -356,13 +357,13 @@ if (_asset isKindOf "Man") then {
 	};
 
 	if (getNumber (configFile >> "CfgVehicles" >> typeOf _asset >> "transportAmmo") > 0) then {
-		[_asset, 0] remoteExec ["setAmmoCargo", 0];
+		[_asset, 0] remoteExec ["setAmmoCargo", _asset];
 	};
 	if (getNumber (configFile >> "CfgVehicles" >> typeOf _asset >> "transportRepair") > 0) then {
-		[_asset, 0] remoteExec ["setRepairCargo", 0];
+		[_asset, 0] remoteExec ["setRepairCargo", _asset];
 	};
 	if (getNumber (configFile >> "CfgVehicles" >> typeOf _asset >> "transportFuel") > 0) then {
-		[_asset, 0] remoteExec ["setFuelCargo", 0];
+		[_asset, 0] remoteExec ["setFuelCargo", _asset];
 	};
 
 	if (WL_ASSET_GET(_data, "hasRearm", 0) > 0) then {
@@ -387,7 +388,7 @@ if (_asset isKindOf "Man") then {
 	if (_hasRadar) then {
 		_asset setVariable ["radarOperation", false, true];
 		_asset setVehicleRadar 2;
-		[_asset] remoteExec ["WL2_fnc_radarOperateAction", 0, true];
+		[_asset] spawn WL2_fnc_radarOperateAction;
 
 		_asset spawn {
 			params ["_asset"];
@@ -431,7 +432,7 @@ if (_asset isKindOf "Man") then {
 
 	if (WL_ASSET_GET(_data, "disableDamage", 0) > 0) then {
 		if (_asset isKindOf "Building" || _asset isKindOf "House") then {
-			[_asset, true] remoteExec ["WL2_fnc_protectStronghold", _asset];
+			[_asset, true] remoteExec ["WL2_fnc_protectStronghold", 0, true];
 		} else {
 			_asset allowDamage false;
 		};
@@ -487,7 +488,7 @@ if (_asset isKindOf "Man") then {
 	_asset allowCrewInImmobile [true, true];
 
 	if (isPlayer _owner) then {
-		private _appearanceDefaults = profileNamespace getVariable ["WLM_appearanceDefaults", createHashmap];
+		private _appearanceDefaults = missionProfileNamespace getVariable ["WL2_appearanceDefaults", createHashmap];
 		private _assetAppearanceDefaults = _appearanceDefaults getOrDefault [_assetActualType, createHashmap];
 		{
 			if (_x == "camo") then {
@@ -496,6 +497,11 @@ if (_asset isKindOf "Man") then {
 				[_x, _y, _asset] call WLM_fnc_applyCustomization;
 			};
 		} forEach _assetAppearanceDefaults;
+	};
+
+	private _hasRailgun = WL_ASSET_GET(_data, "hasRailgun", 0);
+	if (_hasRailgun > 0) then {
+		[_asset] remoteExec ["WL2_fnc_shootRailgunEvent", 0, true];
 	};
 
 	private _drone = WL_ASSET_GET(_data, "drone", 0);

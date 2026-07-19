@@ -3,7 +3,7 @@
 private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
 if (_timeSinceStart < WL_COMBAT_AIR_HOME_TIME) exitWith {
     playSoundUI ["AddItemFailed"];
-    ["Combat air support is not available yet."] call WL2_fnc_smoothText;
+    ["No-fly zone is not available for home base yet."] call WL2_fnc_smoothText;
 };
 
 private _sector = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
@@ -31,5 +31,5 @@ if (!_result) exitWith {
     playSoundUI ["AddItemFailed"];
 };
 
-[player, "combatAir", BIS_WL_playerSide, _sector] remoteExec ["WL2_fnc_handleClientRequest", 2];
+[player, "combatAirHome", BIS_WL_playerSide, _sector] remoteExec ["WL2_fnc_handleClientRequest", 2];
 playSoundUI ["a3\dubbing_f_jets\showcase_jets\30_reinforcements\showcase_jets_30_reinforcements_tower_0.wss"];

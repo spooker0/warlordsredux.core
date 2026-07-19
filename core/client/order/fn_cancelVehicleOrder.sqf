@@ -11,13 +11,17 @@ if ((_originalPosition distance2D _asset) > _limitDistance) exitWith {
     [true, "Asset moved too far from original position."];
 };
 
-private _sectors = (BIS_WL_sectorsArray # 0) select {
+private _side = BIS_WL_playerSide;
+
+private _teamSectorsData = WL_SECTORS_DATA(_side);
+private _ownedSectors = _teamSectorsData getOrDefault ["owned", []];
+private _sectors = _ownedSectors select {
     _asset inArea (_x getVariable "objectAreaComplete")
 };
 private _potentialBases = missionNamespace getVariable ["WL2_forwardBases", []];
 private _forwardBases = _potentialBases select {
     _asset distance2D _x < WL_FOB_RANGE &&
-    _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == BIS_WL_playerSide
+    _x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side
 };
 private _inRange = count _forwardBases > 0 || count _sectors > 0;
 
@@ -50,7 +54,7 @@ private _enemiesNearPlayer = (allPlayers inAreaArray [player, WL_ENEMIES_NEAR_RA
     !(surfaceIsWater _position) || (_position # 2 > 20 && _position # 2 < 30)
 };
 
-private _homeBase = BIS_WL_playerSide call WL2_fnc_getSideBase;
+private _homeBase = _teamSectorsData getOrDefault ["base", objNull];
 private _isInHomeBase = _sector == _homeBase;
 private _nearbyEnemies = if (_isInHomeBase || _ignoreSector) then {
     false

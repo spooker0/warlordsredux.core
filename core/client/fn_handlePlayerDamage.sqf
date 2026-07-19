@@ -15,16 +15,17 @@ if (_hitPoint == "incapacitated") then {
     _damage = 0.8 min _damage;
 };
 
+private _unitSide = side group _unit;
 if (_projectile isKindOf "MineCore" || _projectile isKindOf "TimeBombCore") then {
     private _handledInstigator = [_source, _instigator] call WL2_fnc_handleInstigator;
-    if (side group _handledInstigator == side group _unit) then {
+    if (side group _handledInstigator == _unitSide) then {
         _damage = _unit getHit _selection;
     };
 };
 
 if (_projectile == "") then {
     private _handledInstigator = [_source, _instigator] call WL2_fnc_handleInstigator;
-    if (_handledInstigator != player && side group _handledInstigator == side group _unit) then {
+    if (_handledInstigator != player && side group _handledInstigator == _unitSide) then {
         _damage = _unit getHit _selection;
     };
 };
@@ -33,21 +34,12 @@ if (WL_ISUNCONSCIOUS(_unit)) exitWith {
     _damage min 0.99;
 };
 
-private _homeBase = [WL2_base1, WL2_base2] select {
-    (_x getVariable ["BIS_WL_owner", independent]) == (side group _unit)
-};
-if (count _homeBase == 0) exitWith {    // should not happen, will kill without downing
-    _damage;
-};
-_homeBase = _homeBase # 0;
-
+private _homeBase = [_unitSide] call WL2_fnc_getSideBase;
 private _enemyTargetVar = format ["BIS_WL_currentTarget_%1", BIS_WL_enemySide];
 private _enemyTarget = missionNamespace getVariable [_enemyTargetVar, objNull];
-private _homeArea = _homeBase getVariable "objectAreaComplete";
-private _inHomeBase = !isNil "_homeArea" && { _unit inArea _homeArea };
-if (_homeBase != _enemyTarget && _inHomeBase) exitWith {
-    0;
-};
+private _homeArea = _homeBase getVariable ["objectAreaComplete", objNull];
+private _inHomeBase = _unit inArea _homeArea;
+if (_homeBase != _enemyTarget && _inHomeBase) exitWith { 0 };
 
 private _isImpactDamage = (isNull _source && _projectile == "") || _projectile isKindOf "FuelExplosion";
 private _playerVehicle = vehicle _unit;

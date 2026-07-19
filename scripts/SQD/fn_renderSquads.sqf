@@ -20,7 +20,7 @@ private _teamTextColor = switch (_side) do {
     default { "#008000" };
 };
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 private _showPlayerLevel = _settingsMap getOrDefault ["showPlayerLevel", false];
 
 // Mock data for testing
@@ -128,7 +128,7 @@ private _squadControls = _display getVariable ["SQD_squadControls", createHashMa
 _display setVariable ["SQD_squadControls", _squadControls];
 
 private _seenSquadKeys = createHashMap;
-private _playerContributions = missionNamespace getVariable ["WL_PlayerSquadContribution", createHashMap];
+private _totalPointsMap = missionNamespace getVariable ["WL2_totalPointsEarned", createHashMap];
 
 {
     private _squad = _x;
@@ -360,7 +360,7 @@ private _playerContributions = missionNamespace getVariable ["WL_PlayerSquadCont
         private _playerNameTextStructured = [_playerNameDisplay, SQD_LAYOUT_LABEL_TEXT_SIZE, _playerNameColor, "left"] call SQD_fnc_renderText;
         _playerNameText ctrlSetStructuredText _playerNameTextStructured;
 
-        private _playerScore = _playerContributions getOrDefault [getPlayerUID _player, 0];
+        private _playerScore = _totalPointsMap getOrDefault [getPlayerUID _player, 0];
         _playerNameText ctrlSetTooltip format ["Score: %1", _playerScore];
 
         private _badgeIconCtrl = _playerSlot controlsGroupCtrl SQD_BADGE_ICON_IDC;

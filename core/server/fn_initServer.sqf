@@ -62,7 +62,7 @@ if !(isDedicated) then {
 	} forEach BIS_WL_sidesArray;
 };
 0 spawn WL2_fnc_detectNewPlayers;
-["server", true] call WL2_fnc_updateSectorArrays;
+call WL2_fnc_updateSectorsData;
 0 spawn WL2_fnc_targetSelectionHandleServer;
 0 spawn WL2_fnc_incomePayoff;
 0 spawn WL2_fnc_garbageCollector;
@@ -174,18 +174,18 @@ call WL2_fnc_processRunways;
 } forEach (allMissionObjects "ModuleCurator_F");
 #endif
 
-if !(["(EU) #11", serverName] call BIS_fnc_inString) then {
-	0 spawn {
-		while {!BIS_WL_missionEnd} do {
-			private _allEntities = entities [[], ["Logic"], true];
-			private _allNonLocalEntities = _allEntities select { owner _x != 0 };
-			{
-				_x addCuratorEditableObjects [_allNonLocalEntities, true];
-			} forEach allCurators;
-			uiSleep 30;
-		};
+#if WL_ZEUS_ENABLED
+0 spawn {
+	while {!BIS_WL_missionEnd} do {
+		private _allEntities = entities [[], ["Logic"], true];
+		private _allNonLocalEntities = _allEntities select { owner _x != 0 };
+		{
+			_x addCuratorEditableObjects [_allNonLocalEntities, true];
+		} forEach allCurators;
+		uiSleep 30;
 	};
 };
+#endif
 
 private _serverStats = profileNamespace getVariable ["WL_stats", createHashMap];
 missionNamespace setVariable ["WL_serverStats", _serverStats, true];

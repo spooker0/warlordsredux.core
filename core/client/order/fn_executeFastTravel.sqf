@@ -63,7 +63,7 @@ switch (_fastTravelMode) do {
 	case 4: {
 		private _respawnBag = player getVariable ["WL2_respawnBag", objNull];
         if (!isNull _respawnBag) then {
-            _destination = _respawnBag modelToWorld [0, 2, 0];
+            _destination = _respawnBag modelToWorld [0, 0, 0];
         };
 	};
 	case 5: {

@@ -162,8 +162,10 @@ private _sanityChecks = {
     "";
 };
 
-private _loadoutIndex = profileNamespace getVariable [format ["WLC_loadoutIndex_%1", BIS_WL_playerSide], 0];
-private _customizationLoadout = profileNamespace getVariable [format ["WLC_savedLoadout_%1_%2", BIS_WL_playerSide, _loadoutIndex], []];
+private _savedLoadouts = missionProfileNamespace getVariable ["WL2_savedLoadouts", createHashMap];
+private _savedLoadoutsSide = _savedLoadouts getOrDefault [toLower str BIS_WL_playerSide, createHashMap];
+private _loadoutIndex = _savedLoadoutsSide getOrDefault ["index", 0];
+private _customizationLoadout = _savedLoadoutsSide getOrDefault [_loadoutIndex, []];
 if (count _customizationLoadout > 0) then {
     [_customizationLoadout] call _loadoutSanitize;
     private _lastLoadout = WL2_lastLoadout;
@@ -205,15 +207,19 @@ if (count _customizationLoadout > 0) then {
         _loadouts set [_loadoutName, _loadout];
     } forEach _loadoutConfigs;
 
-    private _defaultSideLoadout = if (BIS_WL_playerSide == west) then { "B_Soldier_TL_F" } else { "O_Soldier_TL_F" };
-    if (count _loadouts == 0) then {
-        _unit setUnitLoadout _defaultSideLoadout;
+    private _defaultSideLoadout = if (BIS_WL_playerSide == west) then {
+        getArray (missionConfigFile >> "WLDefaultLoadouts" >> "WestLoadout1" >> "loadout")
     } else {
-        private _randomLoadoutName = selectRandom (keys _loadouts);
-        _unit setUnitLoadout (_loadouts getOrDefault [_randomLoadoutName, _defaultSideLoadout]);
-        private _gearKeyDisplay = (actionKeysNames "gear") regexReplace ["""", ""];
-        [format ["Assigned random loadout: %1. Create and save your own loadouts by pressing the Gear key (%2).", _randomLoadoutName, _gearKeyDisplay]] call WL2_fnc_smoothText;
+        getArray (missionConfigFile >> "WLDefaultLoadouts" >> "EastLoadout1" >> "loadout")
     };
+    if (count _loadouts == 0) then {
+        _loadouts set ["Default", _defaultSideLoadout];
+    };
+
+    private _randomLoadoutName = selectRandom (keys _loadouts);
+    _unit setUnitLoadout (_loadouts getOrDefault [_randomLoadoutName, _defaultSideLoadout]);
+    private _gearKeyDisplay = (actionKeysNames "gear") regexReplace ["""", ""];
+    [format ["Assigned preset loadout: %1. Create and save your own loadouts by pressing the Gear key (%2).", _randomLoadoutName, _gearKeyDisplay]] call WL2_fnc_smoothText;
 };
 
 _unit enableStamina false;

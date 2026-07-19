@@ -95,7 +95,11 @@ class CfgFunctions {
 			class sendReportData { headerType = WL_HEADER_LEVEL; };
 			class setReturnValue { headerType = WL_HEADER_LEVEL; };
 			class settingsMenu { headerType = WL_HEADER_LEVEL; };
+			class settingsMenuButton { headerType = WL_HEADER_LEVEL; };
+			class settingsMenuCheckboxChanged { headerType = WL_HEADER_LEVEL; };
 			class settingsMenuInit { headerType = WL_HEADER_LEVEL; };
+			class settingsMenuSliderChanged { headerType = WL_HEADER_LEVEL; };
+			class settingsMenuSearch { headerType = WL_HEADER_LEVEL; };
 			class updateViewDistance { headerType = WL_HEADER_LEVEL; };
 		};
 	};
@@ -188,9 +192,6 @@ class CfgFunctions {
 			class createDestroyerClient { headerType = WL_HEADER_LEVEL; };
 			class diaryItems { headerType = WL_HEADER_LEVEL; };
 			class earthquake { headerType = WL_HEADER_LEVEL; };
-			class ewar { headerType = WL_HEADER_LEVEL; };
-			class ewar2 { headerType = WL_HEADER_LEVEL; };
-			class ewarMessage { headerType = WL_HEADER_LEVEL; };
 			class exitToLobby { headerType = WL_HEADER_LEVEL; };
 			class factionBasedClientInit { headerType = WL_HEADER_LEVEL; };
 			class handleAIDamage { headerType = WL_HEADER_LEVEL; };
@@ -319,6 +320,7 @@ class CfgFunctions {
 			class setupForwardBaseMp { headerType = WL_HEADER_LEVEL; };
 			class setupIntegralWeaponAction { headerType = WL_HEADER_LEVEL; };
 			class setupSimpleAsset { headerType = WL_HEADER_LEVEL; };
+			class shootRailgunEvent { headerType = WL_HEADER_LEVEL; };
 			class slingAddAction { headerType = WL_HEADER_LEVEL; };
 			class smokeCurtainAction { headerType = WL_HEADER_LEVEL; };
 			class smokeCurtainParticles { headerType = WL_HEADER_LEVEL; };
@@ -330,7 +332,6 @@ class CfgFunctions {
 			file = "src\core\client\draw";
 			class cruiseMissileWarning { headerType = WL_HEADER_LEVEL; };
 			class drawAssetName { headerType = WL_HEADER_LEVEL; };
-			class drawRadarName { headerType = WL_HEADER_LEVEL; };
 			class drawRegions { headerType = WL_HEADER_LEVEL; };
 			class drawSectorMarker { headerType = WL_HEADER_LEVEL; };
 			class ecmJammer { headerType = WL_HEADER_LEVEL; };
@@ -444,7 +445,6 @@ class CfgFunctions {
 			class checkCombatAirHome { headerType = WL_HEADER_LEVEL; };
 			class checkConscription { headerType = WL_HEADER_LEVEL; };
 			class checkDead { headerType = WL_HEADER_LEVEL; };
-			class checkEwar { headerType = WL_HEADER_LEVEL; };
 			class checkFastTravelSL { headerType = WL_HEADER_LEVEL; };
 			class checkFastTravelSquad { headerType = WL_HEADER_LEVEL; };
 			class checkFunds { headerType = WL_HEADER_LEVEL; };
@@ -459,7 +459,6 @@ class CfgFunctions {
 			class checkPlayerInVehicle { headerType = WL_HEADER_LEVEL; };
 			class checkRequirements { headerType = WL_HEADER_LEVEL; };
 			class checkResetVehicle { headerType = WL_HEADER_LEVEL; };
-			class checkStrongholdFT { headerType = WL_HEADER_LEVEL; };
 			class checkSelectedUnits { headerType = WL_HEADER_LEVEL; };
 			class checkTargetEnemyBase { headerType = WL_HEADER_LEVEL; };
 			class checkTargetReset { headerType = WL_HEADER_LEVEL; };
@@ -512,9 +511,8 @@ class CfgFunctions {
 			class reloadOverride { headerType = WL_HEADER_LEVEL; };
 			class scriptCollector { headerType = WL_HEADER_LEVEL; };
 			class slingloadInit { headerType = WL_HEADER_LEVEL; };
-			class sortSectorArrays { headerType = WL_HEADER_LEVEL; };
 			class uavConnectRefresh { headerType = WL_HEADER_LEVEL; };
-			class updateSectorArrays { headerType = WL_HEADER_LEVEL; };
+			class updateSectorsData { headerType = WL_HEADER_LEVEL; };
 			class varsInit { headerType = WL_HEADER_LEVEL; };
 			class warnIncomingMissile { headerType = WL_HEADER_LEVEL; };
 		};
@@ -536,7 +534,6 @@ class CfgFunctions {
 			class destroyStronghold { headerType = WL_HEADER_LEVEL; };
 			class detectNewPlayers { headerType = WL_HEADER_LEVEL; };
 			class dumbMineAnnouncer { headerType = WL_HEADER_LEVEL; };
-			class ewarGenerate { headerType = WL_HEADER_LEVEL; };
 			class factory { headerType = WL_HEADER_LEVEL; };
 			class forgiveTeamkill { headerType = WL_HEADER_LEVEL; };
 			class forwardBaseUpgrade { headerType = WL_HEADER_LEVEL; };

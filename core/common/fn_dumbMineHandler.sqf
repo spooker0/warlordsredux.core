@@ -11,7 +11,7 @@ private _ownedVehicleVar = if (_isServer) then {
 private _lastPlayedVO = 0;
 private _lastWarnTime = 0;
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 
 while { !BIS_WL_missionEnd } do {
     uiSleep 0.3;

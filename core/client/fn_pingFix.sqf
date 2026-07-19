@@ -5,7 +5,7 @@ if (!_senderIsRemoteControlling && focusOn == player) exitWith {};
 
 uiNamespace setVariable ["WL2_pingPosition", _position];
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 private _dronePingVolume = _settingsMap getOrDefault ["dronePingVolume", 1];
 if (_dronePingVolume > 0) then {
     playSoundUI ["TacticalPing4", _dronePingVolume];

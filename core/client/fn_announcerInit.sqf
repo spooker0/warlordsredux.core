@@ -1,7 +1,7 @@
 #include "includes.inc"
 WL2_announcerQueue = [];
 "Initialized" call WL2_fnc_announcer;
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 
 while { true } do {
     if (count WL2_announcerQueue == 0) then {

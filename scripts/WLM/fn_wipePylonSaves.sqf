@@ -9,10 +9,13 @@ if (_lastSelectedLoadoutIndex == -1) exitWith {
 private _asset = uiNamespace getVariable "WLM_asset";
 
 private _assetActualType = WL_ASSET_TYPE(_asset);
-private _variableName = format ["WLM_savedLoadout_%1", _assetActualType];
-private _savedLoadouts = profileNamespace getVariable [_variableName, []];
+private _vehicleLoadouts = missionProfileNamespace getVariable ["WL2_vehicleLoadouts", createHashMap];
+private _savedLoadouts = _vehicleLoadouts getOrDefault [_assetActualType, []];
 
 private _selectedLoadout = _savedLoadouts select _lastSelectedLoadoutIndex;
+
+private _display = findDisplay WLM_DISPLAY;
+_display closeDisplay 0;
 
 private _message = format [localize "STR_WL_wipeLoadoutWarning", _selectedLoadout # 0];
 private _results = [localize "STR_WL_wipeLoadout", _message, "Delete", "Cancel"] call WL2_fnc_prompt;
@@ -21,6 +24,6 @@ if (_results) then {
     uiNamespace setVariable ["WLM_lastSelectedLoadoutIndex", -1];
     playSoundUI ["AddItemOK"];
     _savedLoadouts deleteAt _lastSelectedLoadoutIndex;
-    profileNamespace setVariable [_variableName, _savedLoadouts];
-    call WLM_fnc_constructPresetMenu;
+    _vehicleLoadouts set [_assetActualType, _savedLoadouts];
+    missionProfileNamespace setVariable ["WL2_vehicleLoadouts", _vehicleLoadouts];
 };

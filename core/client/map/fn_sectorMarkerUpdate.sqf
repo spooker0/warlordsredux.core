@@ -6,34 +6,28 @@ if (isNull _sector) exitWith {};
 
 if (_sector getVariable ["WL2_name", "Sector"] in WL_SPECIAL_SECTORS) exitWith {};
 
-private _specialStateArray = if (isNil "BIS_WL_sectorsArray") then { [] } else {
-	(BIS_WL_sectorsArray # 6) + (BIS_WL_sectorsArray # 7);
- };
-
 private _ownerIndex = [west, east, independent] find _owner;
-private _area = _sector getVariable "WL2_objectArea";
-private _previousOwners = _sector getVariable "BIS_WL_previousOwners";
-private _mrkrMain = (_sector getVariable "BIS_WL_markers") # 0;
-private _mrkrArea = (_sector getVariable "BIS_WL_markers") # 1;
+private _capturableBySides = _sector getVariable ["WL2_capturableBySides", []];
+private _sectorMarkers = _sector getVariable ["BIS_WL_markers", ["", ""]];
+_sectorMarkers params [["_mrkrMain", ""], ["_mrkrArea", ""]];
 
-if (isNil "_mrkrArea") exitWith {};
+if (_mrkrArea == "") exitWith {};
+if (_mrkrMain == "") exitWith {};
 
 private _canSeeAll = WL_IsSpectator || WL_IsReplaying;
-if (_owner == BIS_WL_playerSide || BIS_WL_playerSide in _previousOwners || _sector == WL_TARGET_FRIENDLY || _canSeeAll) then {
+private _side = BIS_WL_playerSide;
+if (_owner == _side || _side in _capturableBySides || _sector == WL_TARGET_FRIENDLY || _canSeeAll) then {
 	_mrkrArea setMarkerBrushLocal "Border";
 } else {
 	_mrkrArea setMarkerBrushLocal "Solid";
 };
 
 private _sectorServices = _sector getVariable ["WL2_services", []];
-if (BIS_WL_playerSide in (_sector getVariable ["BIS_WL_revealedBy", []]) || BIS_WL_playerSide == independent || _canSeeAll) then {
-	if (_sector in WL_BASES) then {
-	};
+if (_side in (_sector getVariable ["BIS_WL_revealedBy", []]) || _side == independent || _canSeeAll) then {
 	if (_sector in WL_BASES) then {
 		_mrkrMain setMarkerTypeLocal (["flag_NATO", "flag_CSAT", "flag_Altis"] select _ownerIndex);
 		_mrkrMain setMarkerColorLocal "ColorWhite";
 	} else {
-		private _previousOwners = _sector getVariable ["BIS_WL_previousOwners", []];
 		private _sectorIcon = if ("A" in _sectorServices) then {
 			["b_uav", "o_uav", "n_uav"] select _ownerIndex;
 		} else {
@@ -45,7 +39,9 @@ if (BIS_WL_playerSide in (_sector getVariable ["BIS_WL_revealedBy", []]) || BIS_
 		};
 		_mrkrMain setMarkerTypeLocal _sectorIcon;
 
-		if (_sector in _specialStateArray) then {
+		private _teamSectorsData = WL_SECTORS_DATA(_side);
+		private _unavailable = _teamSectorsData getOrDefault ["unavailable", []];
+		if (_sector in _unavailable) then {
 			_mrkrMain setMarkerColorLocal "ColorGrey";
 		} else {
 			_mrkrMain setMarkerColorLocal (["colorBLUFOR", "colorOPFOR", "colorIndependent"] select _ownerIndex);
@@ -69,4 +65,4 @@ if (BIS_WL_playerSide in (_sector getVariable ["BIS_WL_revealedBy", []]) || BIS_
 	_mrkrArea setMarkerColorLocal "ColorGrey";
 };
 
-["client", true] call WL2_fnc_updateSectorArrays;
+call WL2_fnc_updateSectorsData;

@@ -48,23 +48,17 @@ if (_teamPriorityType == "fob") exitWith {
 };
 
 if (_teamPriorityType == "stronghold") exitWith {
-    private _findIsStronghold = (BIS_WL_sectorsArray # 2) select {
+    private _teamSectorsData = WL_SECTORS_DATA(_side);
+    private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+    private _findSector = _linkedSectors select {
         (_x getVariable ["WL_stronghold", objNull]) == _teamPriority
     };
 
-    if (count _findIsStronghold > 0) then {
-        private _findSector = (BIS_WL_sectorsArray # 2) select {
-            (_x getVariable ["WL_stronghold", objNull]) == _teamPriority
+    if (count _findSector > 0) then {
+        if (_commit) then {
+            private _sector = (_findSector # 0);
+            [5, _sector] spawn WL2_fnc_executeFastTravel;
         };
-        if (count _findSector == 0) then {
-            false;
-        } else {
-            if (_commit) then {
-                private _sector = (_findSector # 0);
-                [5, _sector] spawn WL2_fnc_executeFastTravel;
-            };
-        };
-
         true;
     } else {
         false;
@@ -83,7 +77,9 @@ if (_teamPriorityType == "sector") exitWith {
         } else {
             private _asset = [_teamPriority, [], true] call WL2_fnc_getSectorFTAsset;
             if (count _asset == 0) then {
-                private _sectorIsLinked = _teamPriority in (BIS_WL_sectorsArray # 2);
+                private _teamSectorsData = WL_SECTORS_DATA(_side);
+                private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
+                private _sectorIsLinked = _teamPriority in _linkedSectors;
                 if (_sectorIsLinked) then {
                     if (_commit) then {
                         [0, _teamPriority] spawn WL2_fnc_executeFastTravel;

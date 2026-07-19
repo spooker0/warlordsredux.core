@@ -41,7 +41,7 @@ private _allButtonsData = [];
 
 _mousePosition params ["_mouseX", "_mouseY"];
 
-private _settingsMap = profileNamespace getVariable ["WL2_settings", createHashMap];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 private _buttonScale = _settingsMap getOrDefault ["mapButtonScale", 1.0];
 
 private _xPos = _mouseX;

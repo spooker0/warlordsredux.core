@@ -15,6 +15,7 @@ import RscStructuredText;
 import RscText;
 import RscActiveText;
 import RscActivePictureKeepAspect;
+import RscXSliderH;
 import ScrollBar;
 
 #include "core\includes.inc"
