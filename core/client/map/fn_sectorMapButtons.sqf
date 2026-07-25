@@ -16,7 +16,7 @@ private _fastTravelAssetExecute = {
 [
     _sector, _targetId,
     "ft-asset",
-    "<t color='#00ff00'>Fast travel (automatic)</t>",
+    format ["<t color='#00ff00'>%1</t>", localize "STR_WL_fastTravel"],
     _fastTravelAssetExecute,
     true,
     "fastTravelFrontline",
@@ -35,7 +35,7 @@ private _fastTravelSeizedExecute = {
 [
     _sector, _targetId,
     "ft-regular",
-    "Fast travel",
+    localize "STR_WL_fastTravelRandom",
     _fastTravelSeizedExecute,
     true,
     "fastTravelSeized",
@@ -55,7 +55,7 @@ private _fastTravelHomeExecute = {
 [
     _sector, _targetId,
     "ft-home",
-    "Fast travel home",
+    localize "STR_WL_fastTravelHome",
     _fastTravelHomeExecute,
     true,
     "fastTravelHome",
@@ -74,7 +74,7 @@ private _airAssaultExecute = {
 [
     _sector, _targetId,
     "ft-parachute",
-    "Fast travel air assault",
+    localize "STR_WL_fastTravelAirAssault",
     _airAssaultExecute,
     true,
     "airAssault",
@@ -95,7 +95,7 @@ private _vehicleParadropExecute = {
 [
     _sector, _targetId,
     "vehicle-paradrop",
-    "Vehicle paradrop",
+    localize "STR_WL_vehicleParadrop",
     _vehicleParadropExecute,
     true,
     "vehicleParadrop",
@@ -114,7 +114,7 @@ private _scanExecute = {
 [
     _sector, _targetId,
     "sector-scan",
-    "Sector scan",
+    localize "STR_WL_sectorScan",
     _scanExecute,
     true,
     "scan",
@@ -240,12 +240,12 @@ private _sectorFtAsset = [_sector, []] call WL2_fnc_getSectorFTAsset;
 private _teamSectorsData = WL_SECTORS_DATA(BIS_WL_playerSide);
 private _unlockedSectors = _teamSectorsData getOrDefault ["unlocked", []];
 if (_sector in _unlockedSectors || (!isNull _sectorFtAsset)) then {
-    [_sector, _targetId, "team-designate", "Designate team priority", {
+    [_sector, _targetId, "team-designate", localize "STR_WL_designateTeamPriority", {
         params ["_sector"];
         [_sector, "sector"] call WL2_fnc_designateTeamPriority;
     }, true, "designateTeamPriority", [0, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
 
-    [_sector, _targetId, "team-conscript", "Conscript team to sector", {
+    [_sector, _targetId, "team-conscript", localize "STR_WL_conscriptTeamToSector", {
         params ["_sector"];
         [_sector, "sector"] call WL2_fnc_designateTeamPriority;
         [player] remoteExec ["WL2_fnc_conscription", BIS_WL_playerSide];
@@ -261,7 +261,7 @@ private _rtbExecute = {
 [
     _sector, _targetId,
     "rtb",
-    "Return to base",
+    localize "STR_WL_returnToBase",
     _rtbExecute,
     true,
     "rtbSector",

@@ -125,38 +125,6 @@ if (!_defaultIncluded) then {
     _customTexturesList pushBack [localize "STR_WL_default", _defaultTextures, localize "STR_WL_default"];
 };
 
-/* Disabled as it doesn't fit into Warlords
-// Image textures
-_customTexturesList pushBack [format ["--- %1 ---", localize "STR_WL_custom"], "", ""];
-
-private _pushCustomTexture = {
-    params ["_textureName", "_customTexturesList"];
-    private _texturePath = format ["img\camo\%1\%2.paa", (toLower format ["%1", _side]), toLower _textureName];
-    if !(fileExists _texturePath) exitWith {};
-    _customTexturesList pushBack [_textureName, _texturePath, localize "STR_WL_custom"];
-};
-
-private _dir = "img\camo\" + (toLower format ["%1", _side]) + "\";
-{
-    private _textureName = _x;
-    [_textureName, _customTexturesList] call _pushCustomTexture;
-} forEach ["Arctic", "Desert", "Urban", "Woodland"];
-
-
-// Color textures
-_customTexturesList pushBack [localize "STR_WL_solidColors", "", ""];
-if (_side == west) then {
-    _customTexturesList pushBack ["Stealth Black", "#(rgb,8,8,3)color(0.23,0.23,0.24,0.05)", "Solid Color"];
-    _customTexturesList pushBack ["NATO Blue", "#(rgb,8,8,3)color(0.01,0.24,0.76,0.05)", "Solid Color"];
-    _customTexturesList pushBack ["Tactical Tan", "#(rgb,8,8,3)color(0.40,0.34,0.27,0.4)", "Solid Color"];
-};
-if (_side == east) then {
-    _customTexturesList pushBack ["Cockpit Turquoise", "#(rgb,8,8,3)color(0,0.44,0.56,0.1)", "Solid Color"];
-    _customTexturesList pushBack ["CSAT Red", "#(rgb,8,8,3)color(0.49,0.26,0.26,0.05)", "Solid Color"];
-    _customTexturesList pushBack ["Tropical Green", "#(rgb,8,8,3)color(0,0.84,0.16,0.03)", "Solid Color"];
-};
-*/
-
 private _ignoreTextureSlots = ["aiming_dot", "CamoNet", "CamoSlat", "insignia", "number_01", "number_02", "number_03"];
 
 private _defaultTextureSelection = 0;

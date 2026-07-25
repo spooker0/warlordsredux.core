@@ -5,7 +5,7 @@ if (isDedicated) exitWith {};
 
 [
     _asset,
-    "<t color='#4bff58'>Restock to customization</t>",
+    format ["<t color='#4bff58'>%1</t>", localize "STR_WL_rearmLoadout"],
     "\A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_loadDevice_ca.paa",
     "\A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_loadDevice_ca.paa",
     "true",

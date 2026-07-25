@@ -12,7 +12,7 @@ private _demolishActionId = player addAction [
 
             private _isStronghold = !isNull (_demolishableTarget getVariable ["WL_strongholdSector", objNull]);
             private _displayText = if (_isStronghold) then {
-                "Stronghold"
+                localize "STR_WL_stronghold"
             } else {
                 [_demolishableTarget] call WL2_fnc_getAssetTypeName
             };

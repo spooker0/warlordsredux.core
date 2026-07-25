@@ -13,7 +13,7 @@ private _sectorName = _asset getVariable ["WL2_name", "Not Sector"];
 private _assetName = if (_sectorName == "Not Sector") then {
     private _isStronghold = !isNull (_asset getVariable ["WL_strongholdSector", objNull]);
     if (_isStronghold) then {
-        "Stronghold";
+        localize "STR_WL_stronghold";
     } else {
         [_asset] call WL2_fnc_getAssetTypeName;
     };

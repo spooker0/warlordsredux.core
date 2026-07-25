@@ -36,7 +36,7 @@ private _travelPriorityText = switch (_teamPriorityType) do {
         "Forward Base"
     };
     case "stronghold": {
-        "Stronghold"
+        localize "STR_WL_stronghold"
     };
     case "sector": {
         _teamPriority getVariable ["WL2_name", "Unknown"]

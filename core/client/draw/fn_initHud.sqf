@@ -149,20 +149,20 @@ while { !BIS_WL_missionEnd } do {
 				[_teamPriority] call WL2_fnc_getAssetTypeName
 			};
 			case "fob": {
-				"FORWARD BASE"
+				localize "STR_WL_forwardBase"
 			};
 			case "stronghold": {
-				"STRONGHOLD"
+				localize "STR_WL_stronghold"
 			};
 			case "sector": {
 				_teamPriority getVariable ["WL2_name", "UNKNOWN"]
 			};
 			default {
-				"NONE"
+				localize "STR_WL_none"
 			};
 		};
 	} else {
-		"NONE"
+		localize "STR_WL_none"
 	};
 	_teamPriorityControl ctrlSetStructuredText parseText format [
 		"<t shadow='2' size='1.1' align='left'><img image='a3\ui_f\data\igui\rsccustominfo\sensors\targets\enemygroundremote_ca.paa' /> %1</t>",

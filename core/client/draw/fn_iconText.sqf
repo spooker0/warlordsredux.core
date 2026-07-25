@@ -1,8 +1,5 @@
 #include "includes.inc"
 params ["_asset", "_mapTextCache", "_showDetailed"];
-
-if (!isNull (_asset getVariable ["WL_strongholdSector", objNull])) exitWith { "Stronghold" };
-
 _asset = vehicle _asset;
 
 if (_asset isKindOf "Man") exitWith {

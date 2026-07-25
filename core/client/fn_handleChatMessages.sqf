@@ -58,7 +58,7 @@ if (_text == "!nfz") exitWith {
 if (_text == "!aa") exitWith {
     if (_sentLocally) then {
         openMap true;
-        player selectDiarySubject "Warlords Redux:Record2";
+        player selectDiarySubject format ["%1:Record2", localize "STR_WL_missionName"];
     };
     true;
 };
@@ -66,7 +66,7 @@ if (_text == "!aa") exitWith {
 if (_text == "!capture") exitWith {
     if (_sentLocally) then {
         openMap true;
-        player selectDiarySubject "Warlords Redux:Record3";
+        player selectDiarySubject format ["%1:Record3", localize "STR_WL_missionName"];
     };
     true;
 };
@@ -74,7 +74,7 @@ if (_text == "!capture") exitWith {
 if (_text in ["!help", "!info"]) exitWith {
     if (_sentLocally) then {
         openMap true;
-        player selectDiarySubject "Warlords Redux";
+        player selectDiarySubject (localize "STR_WL_missionName");
     };
     true;
 };

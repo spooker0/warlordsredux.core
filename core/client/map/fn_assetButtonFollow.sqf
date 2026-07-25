@@ -13,5 +13,5 @@ private _followText = if (_followState) then {
     "No"
 };
 
-private _buttonText = format ["<t color='%1'>Fast travel with me: %2</t>", _followColor, _followText];
+private _buttonText = format ["<t color='%1'>%2: %3</t>", _followColor, localize "STR_WL_fastTravelWithMe", _followText];
 _buttonText;

@@ -66,7 +66,7 @@ if (_travelPriorityResult) then {
             _spawns pushBack [localize "STR_WL_spawnPriority", localize "STR_WL_spawnFob", [_teamPriority], []];
         };
         case "stronghold": {
-            _spawns pushBack [localize "STR_WL_spawnPriority", localize "STR_WL_spawnStronghold", [_teamPriority], []];
+            _spawns pushBack [localize "STR_WL_spawnPriority", toUpper localize "STR_WL_stronghold", [_teamPriority], []];
         };
         case "sector": {
             private _sectorSpawns = [_teamPriority] call _generateSectorSpawns;
@@ -83,12 +83,12 @@ if (_travelPriorityResult) then {
 
 if !(WL_TARGET_FRIENDLY in _alreadyShownSectors) then {
     private _sectorSpawns = [WL_TARGET_FRIENDLY] call _generateSectorSpawns;
-    _spawns pushBack [localize "STR_WL_spawnAttack", _sectorSpawns # 0, _sectorSpawns # 1, _sectorSpawns # 2];
+    _spawns pushBack [localize "STR_WL_attack", _sectorSpawns # 0, _sectorSpawns # 1, _sectorSpawns # 2];
 };
 
 if !(WL_TARGET_ENEMY in _alreadyShownSectors) then {
     private _sectorSpawns = [WL_TARGET_ENEMY] call _generateSectorSpawns;
-    _spawns pushBack [localize "STR_WL_spawnDefend", _sectorSpawns # 0, _sectorSpawns # 1, _sectorSpawns # 2];
+    _spawns pushBack [localize "STR_WL_defend", _sectorSpawns # 0, _sectorSpawns # 1, _sectorSpawns # 2];
 };
 
 private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
@@ -99,7 +99,7 @@ private _forwardBaseSpawns = _friendlyFOBs apply {
     [_x, "fob"]
 };
 if (count _forwardBaseSpawns > 0) then {
-    _spawns pushBack [localize "STR_WL_spawnFob", localize "STR_WL_spawnForwardBases", [], _forwardBaseSpawns];
+    _spawns pushBack [localize "STR_WL_spawnFob", localize "STR_WL_forwardBase", [], _forwardBaseSpawns];
 };
 
 private _squadmates = ["getSquadmates", [getPlayerID player, false]] call SQD_fnc_query;
@@ -222,7 +222,7 @@ if (!alive _selectedSpawnTarget && !alive (_selectedSpecialSpawnTarget # 0)) the
                 [localize "STR_WL_spawnRandom", "a3\ui_f\data\map\markers\military\unknown_ca.paa"]
             };
             case "stronghold": {
-                [localize "STR_WL_spawnStronghold", "A3\ui_f\data\map\mapcontrol\Ruin_CA.paa"]
+                [toUpper localize "STR_WL_stronghold", "A3\ui_f\data\map\mapcontrol\Ruin_CA.paa"]
             };
             case "fob": {
                 private _nearbySectors = BIS_WL_allSectors select {

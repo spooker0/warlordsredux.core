@@ -86,35 +86,28 @@ private _strategyArr = [
 		"ClearVehicles",
 		0,
 		[],
-		"Kick players from all vehicles",
+		localize "STR_WL_kickPlayers",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"This doesn't include you or your AI."
 	], [
 		"PruneMines",
 		0,
 		[],
-		"Clear personal explosives",
+		localize "STR_WL_clearPersonalExplosives",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"Deletes all deployed mines and explosives."
 	], [
 		"ResetVehicle",
 		0,
 		[],
-		"Reset vehicle",
+		localize "STR_WL_resetVehicle",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"Reset vehicle. Must be within 15m and looking at the vehicle."
-	], [
-		"WipeMap",
-		0,
-		[],
-		"Wipe map",
-		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"Wipes all user-defined markers from your own map locally. This includes your own."
 	], [
 		"SwitchToCollaborator",
 		WL_COST_COLLABORATOR,
 		[],
-		"Control collaborator",
+		localize "STR_WL_controlCollaborator",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"Find and control a collaborator in the local population."
 	], [
@@ -128,7 +121,7 @@ private _strategyArr = [
 		"BulkRemove",
 		0,
 		[],
-		"Bulk remove",
+		localize "STR_WL_bulkRemove",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
 		"Once activated, you will have 30 seconds in which any asset you remove will not prompt you for confirmation."
 	], [
@@ -142,14 +135,14 @@ private _strategyArr = [
 		"Surrender",
 		0,
 		[],
-		"Surrender",
+		localize "STR_WL_surrender",
 		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
 		"Begin surrender vote. If enough people on your team vote for surrender, the game will end and the other team will win."
 	], [
 		"SeeChangelog",
 		0,
 		[],
-		"See Changelog",
+		localize "STR_WL_seeChangelog",
 		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
 		"View the latest patch changelog."
 	]

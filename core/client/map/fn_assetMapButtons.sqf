@@ -17,14 +17,14 @@ _asset setVariable ["WL2_mapButtonText", _assetName];
 private _ownsVehicle = (_asset getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player;
 private _hasFullAccess = _asset getVariable ["WL2_accessControl", -1] == 0 || _ownsVehicle;
 if (!isPlayer _asset && _hasFullAccess) then {
-    [_asset, _targetId, "remove", "<t color='#ff0000'>Remove</t>", {
+    [_asset, _targetId, "remove", format ["<t color='#ff0000'>%1</t>", localize "STR_WL_remove"], {
         params ["_asset"];
         [_asset] spawn WL2_fnc_removeAsset;
     }, true] call WL2_fnc_addTargetMapButton;
 };
 
 if (_hasFullAccess) then {
-    [_asset, _targetId, "vehicle-rearm", "Rearm", {
+    [_asset, _targetId, "vehicle-rearm", localize "STR_WL_rearm", {
         params ["_asset"];
         private _rearmTime = WL_UNIT(_asset, "rearm", 600);
         _asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
@@ -52,13 +52,13 @@ if (_hasFullAccess) then {
         playSound3D ["A3\Sounds_F\sfx\UI\vehicles\Vehicle_Rearm.wss", _asset, false, getPosASL _asset, 2, 1, 75];
     }, true, "assetRearm"] call WL2_fnc_addTargetMapButton;
 
-    [_asset, _targetId, "vehicle-refuel", "Refuel", {
+    [_asset, _targetId, "vehicle-refuel", localize "STR_WL_refuel", {
         params ["_asset"];
         playSound3D ["a3\sounds_f\sfx\ui\vehicles\vehicle_refuel.wss", _asset, false, getPosASL _asset, 2, 1, 75];
         [_asset, 1] remoteExec ["setFuel", _asset];
     }, true, "assetRefuel"] call WL2_fnc_addTargetMapButton;
 
-    [_asset, _targetId, "vehicle-repair", "Repair", {
+    [_asset, _targetId, "vehicle-repair", localize "STR_WL_repair", {
         params ["_asset"];
         private _nextRepairTime = _asset getVariable ["WL2_nextRepair", 0];
         if (_nextRepairTime <= serverTime) then {
@@ -78,7 +78,7 @@ if (_hasFullAccess) then {
         };
     }, true, "assetRepair"] call WL2_fnc_addTargetMapButton;
 
-    [_asset, _targetId, "bulk-deploy", "Bulk deploy", {
+    [_asset, _targetId, "bulk-deploy", localize "STR_WL_bulkDeploy", {
         params ["_asset"];
 
         private _lastMarker = missionNamespace getVariable ["WL2_lastMarker", ""];
@@ -199,7 +199,7 @@ private _hasCrew = count ((crew _asset) select {
 }) > 0;
 private _isNotFlying = (getPosATL _asset # 2) < 10;
 if (_hasCrew && _isNotFlying && !(_asset isKindOf "Man") && _ownsVehicle) then {
-    [_asset, _targetId, "kick", "Kick", {
+    [_asset, _targetId, "kick", localize "STR_WL_kick", {
         params ["_asset"];
         if ((getPosATL _asset # 2) < 10) then {
             private _unwantedPassengers = (crew _asset) select {
@@ -294,7 +294,7 @@ if (_asset in units player) then {
     [
         _asset, _targetId,
         "ft-ai",
-        "Fast travel AI to you",
+        localize "STR_WL_fastTravelAiToMe",
         _fastTravelAIExecute,
         true,
         "fastTravelAI",
@@ -308,7 +308,7 @@ if (_asset in units player) then {
 
 private _isTent = typeof _asset in ["Land_TentSolar_01_bluewhite_F", "Land_TentDome_F", "Land_TentSolar_01_redwhite_F"];
 if (_ownsVehicle && _isTent) then {
-    [_asset, _targetId, "ft-tent", "Fast travel tent", {
+    [_asset, _targetId, "ft-tent", localize "STR_WL_fastTravelTent", {
         if (WL_ISDOWN(player)) exitWith {
             ["Cannot fast travel."] call WL2_fnc_smoothText;
             playSoundUI ["AddItemFailed"];
@@ -319,7 +319,7 @@ if (_ownsVehicle && _isTent) then {
 
 private _canFastTravel = WL_ASSET(_assetActualType, "hasFastTravel", 0) > 0;
 if (_canFastTravel) then {
-    [_asset, _targetId, "ft-asset", "Fast travel", {
+    [_asset, _targetId, "ft-asset", localize "STR_WL_fastTravel", {
         params ["_asset"];
         [_asset] spawn WL2_fnc_executeFastTravelVehicle;
     }, true, "", [0, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
@@ -332,7 +332,7 @@ if (_canFastTravel) then {
 
 private _canParadrop = WL_ASSET(_assetActualType, "paradrops", 0) > 0;
 if (_canParadrop) then {
-    [_asset, _targetId, "paradrop", "Paradrop", {
+    [_asset, _targetId, "paradrop", localize "STR_WL_vehicleParadrop", {
         params ["_asset"];
         private _destination = _asset modelToWorldWorld [random 200 - 100, random 200 - 100, -30];
         [_destination, getDir _asset, _asset, cameraOn] spawn WL2_fnc_executeParadrop;
@@ -354,7 +354,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     [
         _asset, _targetId,
         "ft-fob",
-        "Fast travel forward base",
+        localize "STR_WL_fastTravelForwardBase",
         _fastTravelFOBExecute,
         true,
         "fastTravelFOB",
@@ -374,7 +374,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     [
         _asset, _targetId,
         "vehicle-paradrop",
-        "Vehicle paradrop",
+        localize "STR_WL_vehicleParadrop",
         _vehicleParadropFOBExecute,
         true,
         "vehicleParadropFOB",
@@ -626,7 +626,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
 private _isUav = [_asset] call WL2_fnc_isDrone;
 if (_operateAccess && _isUav) then {
     if (alive driver _asset) then {
-        [_asset, _targetId, "control-driver", "Control driver", {
+        [_asset, _targetId, "control-driver", localize "STR_WL_controlDriver", {
             params ["_asset"];
             private _access = [_asset, player, "driver"] call WL2_fnc_accessControl;
             if (_access # 0) then {
@@ -645,7 +645,7 @@ if (_operateAccess && _isUav) then {
         }, true] call WL2_fnc_addTargetMapButton;
     };
     if (alive gunner _asset) then {
-        [_asset, _targetId, "control-gunner", "Control gunner", {
+        [_asset, _targetId, "control-gunner", localize "STR_WL_controlGunner", {
             params ["_asset"];
             private _access = [_asset, player, "driver"] call WL2_fnc_accessControl;
             if (_access # 0) then {
@@ -717,7 +717,7 @@ private _rtbExecute = {
 [
     _asset, _targetId,
     "rtb",
-    "Return to base",
+    localize "STR_WL_returnToBase",
     _rtbExecute,
     true,
     "rtb",
@@ -747,7 +747,7 @@ if (count _findIsStronghold > 0) then {
     [
         _asset, _targetId,
         "ft-stronghold",
-        "Fast travel stronghold",
+        localize "STR_WL_fastTravelStronghold",
         _fastTravelStrongholdExecute,
         true,
         "",
@@ -774,7 +774,7 @@ if (count _findIsStronghold > 0) then {
     [
         _asset, _targetId,
         "ft-stronghold-near",
-        "Fast travel near stronghold",
+        localize "STR_WL_fastTravelNearStronghold",
         _fastTravelNearStrongholdExecute,
         true,
         "",

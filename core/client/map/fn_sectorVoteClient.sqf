@@ -219,14 +219,15 @@ while { !BIS_WL_missionEnd } do {
                 };
 
                 private _etaDisplay = if (_eta >= 0) then {
-                    format ["TIME LEFT: %1", _eta toFixed 1]
+                    format ["%1: %2", localize "STR_WL_timeLeft", _eta toFixed 1]
                 } else {
-                    "WAITING..."
+                    localize "STR_WL_waiting"
                 };
 
                 if (!isNull _titleControl) then {
                     _titleControl ctrlSetStructuredText parseText format [
-                        "<t align='center'>VOTE IN PROGRESS</t><br/><t align='center' size='0.8'>%1</t>",
+                        "<t align='center'>%1</t><br/><t align='center' size='0.8'>%2</t>",
+                        localize "STR_WL_voteInProgress",
                         _etaDisplay
                     ];
                 };
@@ -299,7 +300,7 @@ while { !BIS_WL_missionEnd } do {
             private _enemySectorKnowers = _lastTargetEnemy getVariable ["BIS_WL_revealedBy", []];
 
             if (_playerSide in _enemySectorKnowers) then {
-                ["Enemy target sector changed."] call WL2_fnc_smoothText;
+                [localize "STR_WL_enemyTargetSectorChanged"] call WL2_fnc_smoothText;
             };
         };
     };

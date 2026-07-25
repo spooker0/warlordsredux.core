@@ -226,7 +226,7 @@ private _totalPointsMap = missionNamespace getVariable ["WL2_totalPointsEarned",
     _squadNameText ctrlSetStructuredText _squadNameTextStructured;
 
     private _squadVotingPower = ["getSquadVotingPower", [_squadLeader]] call SQD_fnc_query;
-    _squadNameText ctrlSetTooltip format [localize "STR_WL_spawnVotePower", round _squadVotingPower];
+    _squadNameText ctrlSetTooltip format [localize "STR_WL_votePower", round _squadVotingPower];
 
     _squadNameText ctrlRemoveAllEventHandlers "ButtonClick";
 
@@ -361,7 +361,7 @@ private _totalPointsMap = missionNamespace getVariable ["WL2_totalPointsEarned",
         _playerNameText ctrlSetStructuredText _playerNameTextStructured;
 
         private _playerScore = _totalPointsMap getOrDefault [getPlayerUID _player, 0];
-        _playerNameText ctrlSetTooltip format ["Score: %1", _playerScore];
+        _playerNameText ctrlSetTooltip format [localize "STR_WL_scoreLabel", _playerScore];
 
         private _badgeIconCtrl = _playerSlot controlsGroupCtrl SQD_BADGE_ICON_IDC;
         _badgeIconCtrl ctrlSetText "";

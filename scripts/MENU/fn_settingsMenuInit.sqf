@@ -36,12 +36,12 @@ _closeControl ctrlAddEventHandler ["ButtonClick", {
 }];
 
 private _settingsMenu = [
-    ["button", "SPAWN", "a3\3den\data\displays\display3den\panelright\modegroups_ca.paa"],
-    ["button", "BADGES", "a3\ui_f\data\gui\rsc\rscdisplayarsenal\insignia_ca.paa"],
-    ["button", "REPORT", "A3\ui_f\data\map\markers\handdrawn\warning_CA.paa"],
-    ["button", "POLL", "A3\ui_f\data\map\markers\handdrawn\unknown_CA.paa"],
-    ["button", "PERF", "a3\ui_f\data\gui\rsccommon\rscdebugconsole\performance_ca.paa"],
-    ["button", "RESET ALL", "a3\modules_f_curator\data\portraitrespawntickets_ca.paa"]
+    ["button", localize "STR_WL_spawn", "a3\3den\data\displays\display3den\panelright\modegroups_ca.paa", "spawn"],
+    ["button", localize "STR_WL_badges", "a3\ui_f\data\gui\rsc\rscdisplayarsenal\insignia_ca.paa", "badges"],
+    ["button", localize "STR_WL_report", "A3\ui_f\data\map\markers\handdrawn\warning_CA.paa", "report"],
+    ["button", localize "STR_WL_poll", "A3\ui_f\data\map\markers\handdrawn\unknown_CA.paa", "poll"],
+    ["button", localize "STR_WL_performance", "a3\ui_f\data\gui\rsccommon\rscdebugconsole\performance_ca.paa", "performance"],
+    ["button", localize "STR_WL_resetAll", "a3\modules_f_curator\data\portraitrespawntickets_ca.paa", "resetAll"]
 ];
 
 private _playerUid = getPlayerUID player;
@@ -52,123 +52,123 @@ private _isTempSpectator = _playerUid == missionNamespace getVariable ["WL2_temp
 _isSpectator = _isSpectator || _isTempSpectator;
 
 if (_isAdmin) then {
-    _settingsMenu pushBack ["button", "DEBUG", "a3\ui_f\data\igui\cfg\simpletasks\types\box_ca.paa"];
+    _settingsMenu pushBack ["button", "DEBUG", "a3\ui_f\data\igui\cfg\simpletasks\types\box_ca.paa", "debug"];
 };
 
 if (_isAdmin || _isSpectator) then {
-    _settingsMenu pushBack ["button", "SPECTATE", "a3\3den\data\cfgwaypoints\seekanddestroy_ca.paa"];
+    _settingsMenu pushBack ["button", "SPECTATE", "a3\3den\data\cfgwaypoints\seekanddestroy_ca.paa", "spectate"];
 };
 
 if (_isAdmin || _isModerator) then {
-    _settingsMenu pushBack ["button", "MODERATE", "a3\ui_f_oldman\data\igui\cfg\holdactions\destroy_ca.paa"];
+    _settingsMenu pushBack ["button", "MODERATE", "a3\ui_f_oldman\data\igui\cfg\holdactions\destroy_ca.paa", "moderate"];
 };
 
 _settingsMenu append [
-    ["category", "View distance"],
-    ["slider", "Infantry", [200, 4000, 50, 2000, "infantryViewDistance"]],
-    ["slider", "Ground vehicle", [200, 4000, 50, 4000, "groundViewDistance"]],
-    ["slider", "Air vehicle", [200, 4000, 50, 4000, "airViewDistance"]],
-    ["slider", "Drone", [200, 4000, 50, 4000, "droneViewDistance"]],
-    ["slider", "Object distance", [200, 4000, 50, 4000, "objectViewDistance"]],
-    ["slider", "CQB mode (DELETE key)", [200, 2000, 50, 200, "cqbViewDistance"]],
+    ["category", localize "STR_WL_viewDistance"],
+    ["slider", localize "STR_WL_infantry", [200, 4000, 50, 2000, "infantryViewDistance"]],
+    ["slider", localize "STR_WL_groundVehicle", [200, 4000, 50, 4000, "groundViewDistance"]],
+    ["slider", localize "STR_WL_airVehicle", [200, 4000, 50, 4000, "airViewDistance"]],
+    ["slider", localize "STR_WL_drone", [200, 4000, 50, 4000, "droneViewDistance"]],
+    ["slider", localize "STR_WL_objectDistance", [200, 4000, 50, 4000, "objectViewDistance"]],
+    ["slider", localize "STR_WL_cqbModeDeleteKey", [200, 2000, 50, 200, "cqbViewDistance"]],
 
-    ["category", "Performance"],
-    ["slider", "Map icon refresh rate", [1, 100, 1, 4, "mapRefresh"]],
-    ["slider", "Terrain details", [1, 4, 1, 3, "terrainDetails"]],
-    ["slider", "Incendiary strands", [5, 20, 1, 20, "incendiaryStrands"]],
+    ["category", localize "STR_WL_performance"],
+    ["slider", localize "STR_WL_mapIconRefreshRate", [1, 100, 1, 4, "mapRefresh"]],
+    ["slider", localize "STR_WL_terrainDetails", [1, 4, 1, 3, "terrainDetails"]],
+    ["slider", localize "STR_WL_incendiaryStrands", [5, 20, 1, 20, "incendiaryStrands"]],
 
-    ["category", "Volume settings"],
-    ["slider", "Announcer", [0, 1, 0.1, 1, "announcerVolume"]],
-    ["slider", "APS warning", [0, 1, 0.1, 1, "apsVolume"]],
-    ["slider", "Earplugs", [0, 0.5, 0.05, 0.1, "earplugVolume"]],
-    ["slider", "Hitmarker", [0, 1, 0.1, 0.5, "hitmarkerVolume"]],
-    ["slider", "Level up music", [0, 1, 0.1, 0.8, "levelUpMusic"]],
-    ["slider", "Spawn nearby (birds)", [0.1, 1, 0.1, 1, "spawnNearbyVolume"]],
-    ["slider", "Squad chat notification", [0, 5, 0.1, 1, "squadChatNotificationVolume"]],
-    ["slider", "Squad important notification", [1, 5, 0.1, 3, "squadImportantNotificationVolume"]],
-    ["slider", "Nearby comm notification", [1, 5, 0.1, 5, "nearbyNotificationVolume"]],
-    ["slider", "Vote countdown", [0, 1, 0.1, 1, "voteVolume"]],
-    ["slider", "Drone ping", [0, 1, 0.1, 1, "dronePingVolume"]],
-    ["slider", "Cockpit: Pull up", [0, 1, 0.1, 0.3, "rwr1"]],
-    ["slider", "Cockpit: Altitude", [0, 1, 0.1, 0.3, "rwr2"]],
-    ["slider", "Cockpit: Fuel", [0, 1, 0.1, 0.3, "rwr3"]],
-    ["slider", "Cockpit: Targeting", [0, 1, 0.1, 1, "rwr4"]],
-    ["slider", "Cockpit: Threats", [0, 1, 0.1, 1, "rwr5"]],
-    ["slider", "Target lock", [0, 1, 0.1, 1, "loalLockVolume"]],
-    ["slider", "Mine warning volume", [0, 5, 0.1, 1.5, "mineWarnVolume"]],
-    ["slider", "Killfeed: Notification", [0, 1, 0.1, 1, "killfeedNotification"]],
-    ["slider", "Killfeed: Celebration", [0, 1, 0.1, 1, "killfeedCelebration"]],
-    ["slider", "Event music", [0, 1, 0.1, 1, "eventMusicVolume"]],
+    ["category", localize "STR_WL_volumeSettings"],
+    ["slider", localize "STR_WL_announcer", [0, 1, 0.1, 1, "announcerVolume"]],
+    ["slider", localize "STR_WL_apsWarning", [0, 1, 0.1, 1, "apsVolume"]],
+    ["slider", localize "STR_WL_earplugs", [0, 0.5, 0.05, 0.1, "earplugVolume"]],
+    ["slider", localize "STR_WL_hitmarker", [0, 1, 0.1, 0.5, "hitmarkerVolume"]],
+    ["slider", localize "STR_WL_levelUpMusic", [0, 1, 0.1, 0.8, "levelUpMusic"]],
+    ["slider", localize "STR_WL_spawnNearbyBirds", [0.1, 1, 0.1, 1, "spawnNearbyVolume"]],
+    ["slider", localize "STR_WL_squadChatNotification", [0, 5, 0.1, 1, "squadChatNotificationVolume"]],
+    ["slider", localize "STR_WL_squadImportantNotification", [1, 5, 0.1, 3, "squadImportantNotificationVolume"]],
+    ["slider", localize "STR_WL_nearbyCommNotification", [1, 5, 0.1, 5, "nearbyNotificationVolume"]],
+    ["slider", localize "STR_WL_voteCountdown", [0, 1, 0.1, 1, "voteVolume"]],
+    ["slider", localize "STR_WL_dronePing", [0, 1, 0.1, 1, "dronePingVolume"]],
+    ["slider", localize "STR_WL_cockpitPullUp", [0, 1, 0.1, 0.3, "rwr1"]],
+    ["slider", localize "STR_WL_cockpitAltitude", [0, 1, 0.1, 0.3, "rwr2"]],
+    ["slider", localize "STR_WL_cockpitFuel", [0, 1, 0.1, 0.3, "rwr3"]],
+    ["slider", localize "STR_WL_cockpitTargeting", [0, 1, 0.1, 1, "rwr4"]],
+    ["slider", localize "STR_WL_cockpitThreats", [0, 1, 0.1, 1, "rwr5"]],
+    ["slider", localize "STR_WL_targetLock", [0, 1, 0.1, 1, "loalLockVolume"]],
+    ["slider", localize "STR_WL_mineWarningVolume", [0, 5, 0.1, 1.5, "mineWarnVolume"]],
+    ["slider", localize "STR_WL_killfeedNotification", [0, 1, 0.1, 1, "killfeedNotification"]],
+    ["slider", localize "STR_WL_killfeedCelebration", [0, 1, 0.1, 1, "killfeedCelebration"]],
+    ["slider", localize "STR_WL_eventMusic", [0, 1, 0.1, 1, "eventMusicVolume"]],
 
-    ["category", "Adjustable settings"],
-    ["slider", "Mine warning time", [0, 10, 1, 4, "mineWarnTime"]],
-    ["slider", "Stronghold icon size", [0, 1, 0.1, 1, "strongholdIconSize"]],
-    ["slider", "Parachute auto deploy height", [0, 500, 5, 50, "parachuteAutoDeployHeight"]],
-    ["slider", "Map marker scale threshold", [0, 1, 0.05, 0.4, "sectorMarkerTextThreshold"]],
-    ["slider", "Map icon scale", [0.5, 2, 0.05, 1.0, "mapIconScale"]],
-    ["slider", "Map icon text scale", [0.5, 2, 0.05, 1.0, "mapIconTextScale"]],
-    ["slider", "Missile camera position (left %)", [0, 100, 1, 0, "missileCameraLeft"]],
-    ["slider", "Missile camera position (top %)", [0, 100, 1, 100, "missileCameraTop"]],
-    ["slider", "Killfeed total timeout (s)", [0, 20, 0.5, 3, "killfeedTotalTimeout"]],
-    ["slider", "Killfeed timeout (s)", [3, 20, 0.5, 10, "killfeedTimeout"]],
-    ["slider", "Killfeed badge show time (s)", [1, 10, 0.5, 5, "ribbonMinShowTime"]],
-    ["slider", "Killfeed position (left %)", [0, 100, 1, 50, "killfeedLeft"]],
-    ["slider", "Killfeed position (top %)", [0, 100, 1, 95, "killfeedTop"]],
-    ["slider", "Targeting menu position (left %)", [0, 100, 1, 65, "targetingMenuLeft"]],
-    ["slider", "Targeting menu position (top %)", [0, 100, 1, 30, "targetingMenuTop"]],
-    ["slider", "Targeting menu font size", [10, 30, 1, 18, "targetingMenuFontSize"]],
-    ["slider", "Capture interface font size", [8, 20, 1, 10, "captureInterfaceFontSize"]],
-    ["slider", "Incoming indicator position (left %)", [0, 100, 1, 5, "incomingIndicatorLeft"]],
-    ["slider", "Incoming indicator position (top %)", [0, 100, 1, 20, "incomingIndicatorTop"]],
-    ["slider", "Map button scale", [0.75, 1.5, 0.05, 1, "mapButtonScale"]],
-    ["slider", "Map sector line color (grayscale)", [0, 1, 0.05, 1, "mapSectorLineGrayscale"]],
-    ["slider", "Map sector line reveal time", [0, 1, 0.05, 0.25, "mapSectorLineSpeed"]],
-    ["slider", "Map sector modifier size", [0, 2, 0.05, 1, "mapSectorModifierSize"]],
+    ["category", localize "STR_WL_adjustableSettings"],
+    ["slider", localize "STR_WL_mineWarningTime", [0, 10, 1, 4, "mineWarnTime"]],
+    ["slider", localize "STR_WL_strongholdIconSize", [0, 1, 0.1, 1, "strongholdIconSize"]],
+    ["slider", localize "STR_WL_parachuteAutoDeployHeight", [0, 500, 5, 50, "parachuteAutoDeployHeight"]],
+    ["slider", localize "STR_WL_mapMarkerScaleThreshold", [0, 1, 0.05, 0.4, "sectorMarkerTextThreshold"]],
+    ["slider", localize "STR_WL_mapIconScale", [0.5, 2, 0.05, 1.0, "mapIconScale"]],
+    ["slider", localize "STR_WL_mapIconTextScale", [0.5, 2, 0.05, 1.0, "mapIconTextScale"]],
+    ["slider", localize "STR_WL_missileCameraPositionLeft", [0, 100, 1, 0, "missileCameraLeft"]],
+    ["slider", localize "STR_WL_missileCameraPositionTop", [0, 100, 1, 100, "missileCameraTop"]],
+    ["slider", localize "STR_WL_killfeedTotalTimeout", [0, 20, 0.5, 3, "killfeedTotalTimeout"]],
+    ["slider", localize "STR_WL_killfeedTimeout", [3, 20, 0.5, 10, "killfeedTimeout"]],
+    ["slider", localize "STR_WL_killfeedBadgeShowTime", [1, 10, 0.5, 5, "ribbonMinShowTime"]],
+    ["slider", localize "STR_WL_killfeedPositionLeft", [0, 100, 1, 50, "killfeedLeft"]],
+    ["slider", localize "STR_WL_killfeedPositionTop", [0, 100, 1, 95, "killfeedTop"]],
+    ["slider", localize "STR_WL_targetingMenuPositionLeft", [0, 100, 1, 65, "targetingMenuLeft"]],
+    ["slider", localize "STR_WL_targetingMenuPositionTop", [0, 100, 1, 30, "targetingMenuTop"]],
+    ["slider", localize "STR_WL_targetingMenuFontSize", [10, 30, 1, 18, "targetingMenuFontSize"]],
+    ["slider", localize "STR_WL_captureInterfaceFontSize", [8, 20, 1, 10, "captureInterfaceFontSize"]],
+    ["slider", localize "STR_WL_incomingIndicatorPositionLeft", [0, 100, 1, 5, "incomingIndicatorLeft"]],
+    ["slider", localize "STR_WL_incomingIndicatorPositionTop", [0, 100, 1, 20, "incomingIndicatorTop"]],
+    ["slider", localize "STR_WL_mapButtonScale", [0.75, 1.5, 0.05, 1, "mapButtonScale"]],
+    ["slider", localize "STR_WL_mapSectorLineGrayscale", [0, 1, 0.05, 1, "mapSectorLineGrayscale"]],
+    ["slider", localize "STR_WL_mapSectorLineRevealTime", [0, 1, 0.05, 0.25, "mapSectorLineSpeed"]],
+    ["slider", localize "STR_WL_mapSectorModifierSize", [0, 2, 0.05, 1, "mapSectorModifierSize"]],
 
-    ["category", "General settings"],
-    ["checkbox", "Disable 3rd person view (2x reward)", ["3rdPersonDisabled", false]],
-    ["checkbox", "Autonomous mode off by default", ["enableAuto", false]],
-    ["checkbox", "Disable missile cameras", ["disableMissileCameras", false]],
-    ["checkbox", "No voice speaker", ["noVoiceSpeaker", false]],
-    ["checkbox", "Disable incoming missile indicator", ["disableIncomingMissileDisplay", false]],
-    ["checkbox", "Delete quad bike/water scooter on exit", ["deleteSmallTransports", true]],
-    ["checkbox", "Add killfeed to chat", ["addKillfeedToChat", false]],
-    ["checkbox", "Use new kill sound", ["useNewKillSound", true]],
-    ["checkbox", "Enable allied demolition (punishable)", ["enableAlliedDemolition", false]],
-    ["checkbox", "Show welcome menu", ["showWelcomeMenu", true]],
-    ["checkbox", "Spawn with UAV Terminal", ["spawnWithUAVTerminal", true]],
-    ["checkbox", "Spawn with rangefinder", ["spawnWithRangefinder", true]],
-    ["checkbox", "AI follow default", ["aiFollowDefault", true]],
-    ["checkbox", "AI vehicle TP", ["aiVehicleTp", true]],
-    ["checkbox", "Default VTOL auto mode off", ["defaultOffVtolAuto", false]],
-    ["checkbox", "Camper warning / protection", ["camperWarning", true]],
-    ["checkbox", "Show stronghold instructions", ["showStrongholdInfo", true]],
-    ["checkbox", "Show player level instead of ELO", ["showPlayerLevel", false]],
-    ["checkbox", "Hide non-mandatory conscription notices", ["hideConscriptionNotices", false]],
-    ["checkbox", "Railgun second click to fire", ["railgunSecondClick", true]],
-    ["checkbox", "Additional subtitles (hearing impaired)", ["additionalSubs", false]],
-    ["checkbox", "Map always show detailed text", ["alwaysShowDetailedText", false]],
-    ["checkbox", "Spawn vehicle ownership transfer", ["spawnVehicleOwnershipTransfer", true]],
+    ["category", localize "STR_WL_generalSettings"],
+    ["checkbox", localize "STR_WL_disableThirdPersonView", ["3rdPersonDisabled", false]],
+    ["checkbox", localize "STR_WL_autonomousModeOffByDefault", ["enableAuto", false]],
+    ["checkbox", localize "STR_WL_disableMissileCameras", ["disableMissileCameras", false]],
+    ["checkbox", localize "STR_WL_noVoiceSpeaker", ["noVoiceSpeaker", false]],
+    ["checkbox", localize "STR_WL_disableIncomingMissileIndicator", ["disableIncomingMissileDisplay", false]],
+    ["checkbox", localize "STR_WL_deleteSmallTransportsOnExit", ["deleteSmallTransports", true]],
+    ["checkbox", localize "STR_WL_addKillfeedToChat", ["addKillfeedToChat", false]],
+    ["checkbox", localize "STR_WL_useNewKillSound", ["useNewKillSound", true]],
+    ["checkbox", localize "STR_WL_enableAlliedDemolition", ["enableAlliedDemolition", false]],
+    ["checkbox", localize "STR_WL_showWelcomeMenu", ["showWelcomeMenu", true]],
+    ["checkbox", localize "STR_WL_spawnWithUavTerminal", ["spawnWithUAVTerminal", true]],
+    ["checkbox", localize "STR_WL_spawnWithRangefinder", ["spawnWithRangefinder", true]],
+    ["checkbox", localize "STR_WL_aiFollowDefault", ["aiFollowDefault", true]],
+    ["checkbox", localize "STR_WL_aiVehicleTp", ["aiVehicleTp", true]],
+    ["checkbox", localize "STR_WL_defaultVtolAutoModeOff", ["defaultOffVtolAuto", false]],
+    ["checkbox", localize "STR_WL_camperWarningProtection", ["camperWarning", true]],
+    ["checkbox", localize "STR_WL_showStrongholdInstructions", ["showStrongholdInfo", true]],
+    ["checkbox", localize "STR_WL_showPlayerLevelInsteadOfElo", ["showPlayerLevel", false]],
+    ["checkbox", localize "STR_WL_hideNonMandatoryConscriptionNotices", ["hideConscriptionNotices", false]],
+    ["checkbox", localize "STR_WL_railgunSecondClickToFire", ["railgunSecondClick", true]],
+    ["checkbox", localize "STR_WL_additionalSubtitles", ["additionalSubs", false]],
+    ["checkbox", localize "STR_WL_mapAlwaysShowDetailedText", ["alwaysShowDetailedText", false]],
+    ["checkbox", localize "STR_WL_spawnVehicleOwnershipTransfer", ["spawnVehicleOwnershipTransfer", true]],
 
-    ["category", "Hide scroll menus (requires respawn)"],
-    ["checkbox", "Hide: Buy menu", ["hideBuyMenu", false]],
-    ["checkbox", "Hide: Frontline action", ["hideFrontlineMenu", false]],
+    ["category", localize "STR_WL_hideScrollMenus"],
+    ["checkbox", localize "STR_WL_hideBuyMenu", ["hideBuyMenu", false]],
+    ["checkbox", localize "STR_WL_hideFrontlineAction", ["hideFrontlineMenu", false]],
 
-    ["category", "Control hints"],
-    ["checkbox", "Show hint: Deployment", ["showHintDeploy", true]],
-    ["checkbox", "Show hint: Recon Optics", ["showHintRecon", true]],
-    ["checkbox", "Show hint: GPS Munitions", ["showHintGPS", true]],
-    ["checkbox", "Show hint: SEAD Munitions", ["showHintSEAD", true]],
-    ["checkbox", "Show hint: TV Munitions", ["showHintTV", true]],
-    ["checkbox", "Show hint: Remote Munitions", ["showHintRemote", true]],
-    ["checkbox", "Show hint: Advanced SAMs", ["showHintAdvancedSam", true]],
-    ["checkbox", "Show hint: Laser", ["showHintLaser", true]],
-    ["checkbox", "Show hint: LOAL", ["showHintLoal", true]],
-    ["checkbox", "Show hint: Blackfish", ["showHintBlackfish", true]],
-    ["checkbox", "Show hint: HMD Settings", ["showHintHMDSettings", true]],
-    ["checkbox", "Show hint: Animation", ["showHintAnimation", true]],
-    ["checkbox", "Show hint: Paradrop", ["showHintParadrop", true]],
-    ["checkbox", "Show hint: Map Layers", ["showHintMap", true]]
+    ["category", localize "STR_WL_controlHints"],
+    ["checkbox", localize "STR_WL_showHintDeployment", ["showHintDeploy", true]],
+    ["checkbox", localize "STR_WL_showHintReconOptics", ["showHintRecon", true]],
+    ["checkbox", localize "STR_WL_showHintGpsMunitions", ["showHintGPS", true]],
+    ["checkbox", localize "STR_WL_showHintSeadMunitions", ["showHintSEAD", true]],
+    ["checkbox", localize "STR_WL_showHintTvMunitions", ["showHintTV", true]],
+    ["checkbox", localize "STR_WL_showHintRemoteMunitions", ["showHintRemote", true]],
+    ["checkbox", localize "STR_WL_showHintAdvancedSams", ["showHintAdvancedSam", true]],
+    ["checkbox", localize "STR_WL_showHintLaser", ["showHintLaser", true]],
+    ["checkbox", localize "STR_WL_showHintLoal", ["showHintLoal", true]],
+    ["checkbox", localize "STR_WL_showHintBlackfish", ["showHintBlackfish", true]],
+    ["checkbox", localize "STR_WL_showHintHmdSettings", ["showHintHMDSettings", true]],
+    ["checkbox", localize "STR_WL_showHintAnimation", ["showHintAnimation", true]],
+    ["checkbox", localize "STR_WL_showHintParadrop", ["showHintParadrop", true]],
+    ["checkbox", localize "STR_WL_showHintMapLayers", ["showHintMap", true]]
 ];
 
 if (_isAdmin || _isModerator) then {
@@ -190,7 +190,7 @@ _buttonsGroup ctrlSetPosition [SETTINGS_INNER_X, SETTINGS_BUTTONS_Y, SETTINGS_IN
 _buttonsGroup ctrlCommit 0;
 
 {
-    _x params ["", "_actionId", "_icon"];
+    _x params ["", "_actionText", "_icon", "_actionId"];
 
     private _column = _forEachIndex % SETTINGS_BUTTON_COLUMNS;
     private _row = floor (_forEachIndex / SETTINGS_BUTTON_COLUMNS);
@@ -206,7 +206,7 @@ _buttonsGroup ctrlCommit 0;
 
     private _buttonControl = _buttonGroup controlsGroupCtrl SETTINGS_BUTTON_CONTROL_ID;
     private _iconControl = _buttonGroup controlsGroupCtrl SETTINGS_BUTTON_ICON_ID;
-    _buttonControl ctrlSetText _actionId;
+    _buttonControl ctrlSetText _actionText;
     _iconControl ctrlSetText _icon;
 
     _buttonControl setVariable ["WL2_actionId", _actionId];
@@ -271,7 +271,7 @@ private _optionNumber = 1;
             _sliderControl setVariable ["WL2_default", _default];
 
             if (_value != _default) then {
-                _labelText = format ["<t color='#cc6666'>%1* [Default: %2]</t>", _labelText, _default];
+                _labelText = format ["<t color='#cc6666'>%1* [%2: %3]</t>", _labelText, localize "STR_WL_default", _default];
             };
             _labelControl ctrlSetStructuredText parseText format ["%1", _labelText];
 

@@ -6,13 +6,13 @@ private _statusName = "";
 private _statusColor = "#ffffff";
 private _statusTime = "";
 if (WL_ISUP(player)) then {
-    _statusName = "ALIVE";
+    _statusName = localize "STR_WL_alive";
 } else {
     _statusColor = "#ff0000";
     if (alive player) then {
         private _expirationTime = player getVariable ["WL2_expirationTime", 0];
         private _respawnTimer = (_expirationTime - serverTime) max 0;
-        _statusName = "DOWNED";
+        _statusName = localize "STR_WL_downed";
         if (_respawnTimer > 0) then {
             _statusTime = _respawnTimer toFixed 1;
             while { count _statusTime < 4 } do {
@@ -20,7 +20,7 @@ if (WL_ISUP(player)) then {
             };
         };
     } else {
-        _statusName = "RESPAWNING";
+        _statusName = localize "STR_WL_respawning";
         private _respawnTimer = playerRespawnTime;
         if (_respawnTimer > 0) then {
             _statusTime = _respawnTimer toFixed 1;

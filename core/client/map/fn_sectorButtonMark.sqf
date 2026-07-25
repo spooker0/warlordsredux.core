@@ -7,7 +7,6 @@ private _mapMarkedTimeVar = format ["WL2_MapMarkedTime_%1", _side];
 
 private _currentMarker = _sector getVariable [_mapMarkerVar, "unknown"];
 
-// , "attack", "attack2",
 private _allMarkers = ["unknown", "enemy", "enemyhome", "green", "camped"];
 private _currentIndex = _allMarkers find _currentMarker;
 private _nextMarker = if (_isNext) then {

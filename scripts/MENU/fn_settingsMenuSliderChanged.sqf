@@ -23,7 +23,7 @@ private _labelText = _labelControl getVariable ["WL2_labelText", ""];
 private _defaultValue = _control getVariable ["WL2_default", 0];
 
 private _newLabelText = if (_value != _defaultValue) then {
-    format ["<t color='#cc6666'>%1* [Default: %2]</t>", _labelText, _defaultValue];
+    format ["<t color='#cc6666'>%1* [%2: %3]</t>", _labelText, localize "STR_WL_default", _defaultValue];
 } else {
     _labelText;
 };

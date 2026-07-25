@@ -2,10 +2,8 @@
 params ["_unit"];
 
 private _parachuteActionId = _unit addAction [
-    "<t color='#00ff00'>Open Parachute</t>",
-    WL2_fnc_parachuteAction,
-    [],
-    100
+    format ["<t color='#00ff00'>%1</t>", localize "STR_WL_openParachute"],
+    WL2_fnc_parachuteAction, [], 100
 ];
 
 private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];

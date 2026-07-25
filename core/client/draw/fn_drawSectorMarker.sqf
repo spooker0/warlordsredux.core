@@ -6,7 +6,7 @@ private _marker = _sectorMarkerPair # 1;
 private _sectorMarker = _marker # 1;
 
 private _sectorIcon = switch (_sectorMarker) do {
-    case "Enemy": {
+    case "enemy": {
         private _sectorServices = _sector getVariable ["WL2_services", []];
         if ("A" in _sectorServices) then {
             "\a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa"
@@ -18,28 +18,24 @@ private _sectorIcon = switch (_sectorMarker) do {
             };
         };
     };
-    case "Independent": { "\A3\ui_f\data\map\markers\handdrawn\flag_CA.paa" };
-    case "Enemy base": { "\A3\ui_f_orange\data\cfgmarkers\redcrystal_ca.paa" };
-    case "Attack";
-    case "Attack 2": { "\a3\ui_f\data\igui\cfg\simpletasks\types\attack_ca.paa" };
-    case "Camped": { "\A3\ui_f\data\map\markers\handdrawn\warning_CA.paa" };
+    case "green": { "\A3\ui_f\data\map\markers\handdrawn\flag_CA.paa" };
+    case "enemyhome": { "\A3\ui_f_orange\data\cfgmarkers\redcrystal_ca.paa" };
+    case "camped": { "\A3\ui_f\data\map\markers\handdrawn\warning_CA.paa" };
     default { "" };
 };
 
 private _sectorColorRGB = switch (_sectorMarker) do {
-    case "Enemy";
-    case "Enemy base": {
+    case "enemy";
+    case "enemyhome": {
         if (_drawSide == west) then {
             [0.5, 0, 0, 1]
         } else {
             [0, 0.3, 0.6, 1]
         }
     };
-    case "Independent": { [0, 0.5, 0, 1] };
-    case "Attack": { [1, 1, 1, 1] };
-    case "Attack 2": { [0.1, 0.1, 0.1, 1] };
-    case "Camped": { [1, 0, 0, 1] };
-    default { [1, 1, 1] };
+    case "green": { [0, 0.5, 0, 1] };
+    case "camped": { [1, 0, 0, 1] };
+    default { [1, 1, 1, 1] };
 };
 
 private _sectorPosition = getPosASL _sector;

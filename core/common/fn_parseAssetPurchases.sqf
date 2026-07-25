@@ -96,10 +96,10 @@ private _purchaseable = [];
 private _buildABear = [
     "BuildABear",
     300,
-    [],
-    "Customized Unit",
+    ["V"],
+    localize "STR_WL_customizedUnit",
     "\A3\Data_F_Warlords\Data\preview_loadout.jpg",
-    "Buy infantry with your customized loadout."
+    localize "STR_WL_customizedUnitInfo"
 ];
 private _infantryIndex = _categories find "Infantry";
 private _infantryArray = _purchaseable # _infantryIndex;
@@ -119,15 +119,15 @@ private _callCombatAirHome = [
     ["V"],
     localize "STR_WL_combatAirPatrolHome",
     "a3\ui_f_jets\data\gui\cfg\hints\aircraftdamage_ca.paa",
-    "Establish a temporary no-fly zone to assist your team's air defense over your home base."
+    localize "STR_WL_noFlyHomeInfo"
 ];
 private _helpAA = [
     "HelpAA",
     0,
     ["V"],
-    "How does AA work?",
+    localize "STR_WL_aaInstructions",
     "a3\ui_f_jets\data\gui\cfg\hints\aircraftdamage_ca.paa",
-    "See AA help."
+    localize "STR_WL_aaInstructions"
 ];
 private _airDefenseIndex = _categories find "Air Defense";
 private _airDefenseArray = _purchaseable # _airDefenseIndex;

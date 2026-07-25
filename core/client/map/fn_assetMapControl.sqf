@@ -23,7 +23,7 @@ addMissionEventHandler ["Map", {
 	} else {
 		private _mapLayerParams = ["MAP LAYERS", [
 			["Detailed info", "lookAround"],
-			["Map layer", "nightVision"]
+			[localize "STR_WL_mapMode", "nightVision"]
 		]];
 		["Map", _mapLayerParams] spawn WL2_fnc_showHint;
 		uiNamespace setVariable ["WL2_mapMode", 0];

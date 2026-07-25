@@ -96,13 +96,13 @@ addMissionEventHandler ["Draw3D", {
         private _lockRange = linearConversion [0, 1000, _friendlySignal, 50, WL_JAMMER_SPECTRUM_RANGE];
 
         private _hasSpectrumJammedBefore = uiNamespace getVariable ["WL2_hasSpectrumJammedBefore", false];
-        private _instructionText = if (_hasSpectrumJammedBefore) then { "" } else {
-            "<br/>Look at flying drones to jam them."
-        };
+        private _instructionText = if (_hasSpectrumJammedBefore) then { "" } else { localize "STR_WL_jamDrones" };
 
         _indicator ctrlSetStructuredText parseText format [
-            "<t align='center' size='0.9' shadow='2'>Strength: %1%%<br/>Max Range: %2 M%3</t>",
+            "<t align='center' size='0.9' shadow='2'>%1: %2%%<br/>%3: %4 M<br/>%5</t>",
+            localize "STR_WL_strength",
             round (_friendlySignal / 10),
+            localize "STR_WL_maxRange",
             round _lockRange,
             _instructionText
         ];

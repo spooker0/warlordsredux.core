@@ -32,17 +32,19 @@ uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
             private _reviveActionId = player getVariable ["WL2_reviveActionId", -1];
             if (side group _reviveTarget == _side) then {
                 private _displayText = name _reviveTarget;
-                private _reviveText = format ["<t color='#00ff00'>Revive %1</t>", _displayText];
+                private _reviveText = format ["<t color='#00ff00'>%1 %2</t>", localize "STR_WL_revive", _displayText];
                 private _reviveImage = format [
-                    "<img size='3' color='#00ff00' image='a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa'/> <t size='1.5' color='#00ff00'>Revive %1</t>",
+                    "<img size='3' color='#00ff00' image='a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa'/> <t size='1.5' color='#00ff00'>%1 %2</t>",
+                    localize "STR_WL_revive",
                     _displayText
                 ];
                 player setUserActionText [_reviveActionId, _reviveText, _reviveImage];
             } else {
                 private _displayText = name _reviveTarget;
-                private _secureText = format ["<t color='#ff0000'>Secure %1</t>", _displayText];
+                private _secureText = format ["<t color='#ff0000'>%1 %2</t>", localize "STR_WL_secure", _displayText];
                 private _secureImage = format [
-                    "<img size='3' color='#ff0000' image='a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa'/> <t size='1.5' color='#ff0000'>Secure %1</t>",
+                    "<img size='3' color='#ff0000' image='a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa'/> <t size='1.5' color='#ff0000'>%1 %2</t>",
+                    localize "STR_WL_secure",
                     _displayText
                 ];
                 player setUserActionText [_reviveActionId, _secureText, _secureImage];
@@ -82,13 +84,13 @@ uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
 
             private _isConversion = WL_ASSET(_installable, "conversion", 0) != 0;
             private _installText = if (_isConversion) then {
-                format ["<t color='#ADD8E6'>Convert to %1</t>", _displayText]
+                format ["<t color='#ADD8E6'>%1 %2</t>", localize "STR_WL_convertTo", _displayText]
             } else {
                 private _decoy = WL_ASSET(_installable, "decoy", 0);
                 if (_decoy == 0) then {
-                    format ["<t color='#ADD8E6'>Deploy %1</t>", _displayText]
+                    format ["<t color='#ADD8E6'>%1 %2</t>", localize "STR_WL_deploy", _displayText]
                 } else {
-                    format ["<t color='#ADD8E6'>Deploy Decoy (%1)</t>", _displayText]
+                    format ["<t color='#ADD8E6'>%1 (%2)</t>", localize "STR_WL_deployDecoy", _displayText]
                 };
             };
 
@@ -127,13 +129,14 @@ uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
             private _isStronghold = !isNull (_currentTarget getVariable ["WL_strongholdSector", objNull]);
             private _demolishActionId = player getVariable ["WL2_demolishActionId", -1];
             private _displayText = if (_isStronghold) then {
-                "Stronghold"
+                localize "STR_WL_stronghold"
             } else {
                 [_currentTarget] call WL2_fnc_getAssetTypeName
             };
-            private _demolishText = format ["<t color='#ff0000'>Demolish %1</t>", _displayText];
+            private _demolishText = format ["<t color='#ff0000'>%1 %2</t>", localize "STR_WL_demolish", _displayText];
             private _demolishImage = format [
-                "<img size='3' color='#ff0000' image='a3\ui_f_oldman\data\igui\cfg\holdactions\destroy_ca.paa'/> <t size='1.5' color='#ff0000'>Demolish %1</t>",
+                "<img size='3' color='#ff0000' image='a3\ui_f_oldman\data\igui\cfg\holdactions\destroy_ca.paa'/> <t size='1.5' color='#ff0000'>%1 %2</t>",
+                localize "STR_WL_demolish",
                 _displayText
             ];
             player setUserActionText [_demolishActionId, _demolishText, _demolishImage];
@@ -322,9 +325,9 @@ uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
                 ""
             };
             private _displayText = if (_owner == BIS_WL_playerSide) then {
-                format ["DEFEND %1", _distanceText]
+                format ["%1 %2", localize "STR_WL_defend", _distanceText]
             } else {
-                format ["ATTACK %1", _distanceText]
+                format ["%1 %2", localize "STR_WL_attack", _distanceText]
             };
             private _sectorTextColor = if (_owner == BIS_WL_playerSide) then {
                 [0, 1, 0, 1]

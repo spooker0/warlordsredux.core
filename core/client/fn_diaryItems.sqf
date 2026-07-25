@@ -2,19 +2,21 @@
 
 if (isDedicated) exitWith {};
 
-player createDiarySubject ["Warlords Redux", "Warlords Redux"];
+private _missionName = localize "STR_WL_missionName";
+
+player createDiarySubject [_missionName, _missionName];
 
 call GFE_fnc_credits;
 
-private _changeNotes = player createDiaryRecord ["Warlords Redux", "", taskNull, "", false];
+private _changeNotes = player createDiaryRecord [_missionName, "", taskNull, "", false];
 private _changeNotesText = format ["<font color='#CCCCCC' size='18'>Changes Notes</font><br/><br/>%1", (loadfile "update.txt") regexReplace ["\n", "<br />"]];
-player setDiaryRecordText [["Warlords Redux", _changeNotes], ["Change Notes", _changeNotesText]];
+player setDiaryRecordText [[_missionName, _changeNotes], ["Change Notes", _changeNotesText]];
 
-private _helpAA = player createDiaryRecord ["Warlords Redux", "", taskNull, "", false];
-player setDiaryRecordText [["Warlords Redux", _helpAA], ["Help: Air Defense", (loadfile localize "STR_WL_fileHelpAA") regexReplace ["\n", "<br />"]]];
+private _helpAA = player createDiaryRecord [_missionName, "", taskNull, "", false];
+player setDiaryRecordText [[_missionName, _helpAA], ["Help: Air Defense", (loadfile localize "STR_WL_fileHelpAA") regexReplace ["\n", "<br />"]]];
 
-private _helpCap = player createDiaryRecord ["Warlords Redux", "", taskNull, "", false];
-player setDiaryRecordText [["Warlords Redux", _helpCap], ["Help: Capture Rules", (loadfile localize "STR_WL_fileHelpCapture") regexReplace ["\n", "<br />"]]];
+private _helpCap = player createDiaryRecord [_missionName, "", taskNull, "", false];
+player setDiaryRecordText [[_missionName, _helpCap], ["Help: Capture Rules", (loadfile localize "STR_WL_fileHelpCapture") regexReplace ["\n", "<br />"]]];
 
 private _infoAssetKeys = createHashMapFromArray [
     ["airRadar", "AESA Radar Range"],
@@ -181,6 +183,6 @@ private _infoPages = [];
 _infoPages = [_infoPages, [], { _x # 0 }, "DESCEND"] call BIS_fnc_sortBy;
 
 {
-    private _infoDiaryRecord = player createDiaryRecord ["Warlords Redux", "", taskNull, "", false];
-    player setDiaryRecordText [["Warlords Redux", _infoDiaryRecord], _x];
+    private _infoDiaryRecord = player createDiaryRecord [_missionName, "", taskNull, "", false];
+    player setDiaryRecordText [[_missionName, _infoDiaryRecord], _x];
 } forEach _infoPages;

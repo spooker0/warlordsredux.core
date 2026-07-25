@@ -169,13 +169,6 @@ switch (_className) do {
             ["Bulk remove deactivated."] call WL2_fnc_smoothText;
         };
     };
-    case "WipeMap": {
-        {
-            if ("_USER_DEFINED #" in _x) then {
-                deleteMarkerLocal _x;
-            };
-        } forEach allMapMarkers;
-    };
     case "SwitchToCollaborator": {
         private _sectorCollaboratorVar = format ["WL2_sectorCollaborator_%1", BIS_WL_enemySide];
         private _nextSectorCollaborator = missionNamespace getVariable [_sectorCollaboratorVar, ""];
@@ -208,11 +201,11 @@ switch (_className) do {
     };
     case "HelpAA": {
         openMap true;
-        player selectDiarySubject "Warlords Redux:Record2";
+        player selectDiarySubject format ["%1:Record2", localize "STR_WL_missionName"];
     };
     case "SeeChangelog": {
         openMap true;
-        player selectDiarySubject "Warlords Redux:Record1";
+        player selectDiarySubject format ["%1:Record1", localize "STR_WL_missionName"];
     };
     case "StressTestSector": {
         0 spawn {

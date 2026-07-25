@@ -14,31 +14,31 @@ if (!isNull _display) then {
 };
 
 switch (_actionId) do {
-    case "SPAWN": {
+    case "spawn": {
         0 spawn SQD_fnc_initSquadMenu;
     };
-    case "BADGES": {
+    case "badges": {
         0 spawn RWD_fnc_badgeMenuInit;
     };
-    case "REPORT": {
+    case "report": {
         0 spawn MENU_fnc_reportMenu;
     };
-    case "POLL": {
+    case "poll": {
         0 spawn POLL_fnc_pollMenu;
     };
-    case "PERF": {
+    case "performance": {
         0 spawn PERF_fnc_perfMenuInit;
     };
-    case "RESET ALL": {
+    case "resetAll": {
         0 spawn MENU_fnc_resetDefault;
     };
-    case "DEBUG": {
+    case "debug": {
         [""] spawn MENU_fnc_debugMenu;
     };
-    case "SPECTATE": {
+    case "spectate": {
         0 spawn SPEC_fnc_spectator;
     };
-    case "MODERATE": {
+    case "moderate": {
         0 spawn MENU_fnc_modMenu;
     };
     default {};

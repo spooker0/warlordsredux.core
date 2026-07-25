@@ -5,8 +5,9 @@ ________________	GF Earplugs Script - Mod	________________
 https://forums.bohemia.net/forums/topic/215844-gf-earplugs-script-mod/
 */
 
-private _creditsRecord = player createDiaryRecord ["Warlords Redux", "", taskNull, "", false];
-player setDiaryRecordText [["Warlords Redux", _creditsRecord], ["Credits", "
+private _missionName = localize "STR_WL_missionName";
+private _creditsRecord = player createDiaryRecord [_missionName, "", taskNull, "", false];
+player setDiaryRecordText [[_missionName, _creditsRecord], ["Credits", "
     <font size='20'>Credits</font><br/>
     <font size='18' color='#ff0000'>External Assets</font><br/>
     GF Earplugs: George Floros's earplug script.<br/>

@@ -432,6 +432,7 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 
 // Draw strongholds
 if (_draw) then {
+	private _strongholdText = toUpper localize "STR_WL_stronghold";
 	{
 		private _stronghold = _x;
 
@@ -452,7 +453,7 @@ if (_draw) then {
 			20 * _mapIconScale,
 			20 * _mapIconScale,
 			0,
-			format ["  STRONGHOLD (%1/%2)", _strongholdHealth, _maxHealth],
+			format ["  %1 (%2/%3)", _strongholdText, _strongholdHealth, _maxHealth],
 			1,
 			0.043,
 			"PuristaBold",

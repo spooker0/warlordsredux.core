@@ -124,13 +124,14 @@ if (serverTime - _sectorInfoTime > 0.5) then {
     private _sectorSize = if !(_sectorName in WL_SPECIAL_SECTORS) then {
         private _size = _sector getVariable ["BIS_WL_value", 0];
         private _isNotHome = !(_sector in  WL_BASES);
+
+        private _sizeText = format [localize "STR_WL_sectorSize", _size];
         if (_revealed && _sectorOwner != independent && _isNotHome) then {
             private _defenders = _sector getVariable ["WL2_defenders", 0];
             private _maxDefenders = _sector getVariable ["WL2_maxDefenders", 0];
-            format ["Size: %1 (Reinforcements: %2/%3)", _size, _defenders, _maxDefenders]
-        } else {
-            format ["Size: %1", _size]
+            _sizeText = format [localize "STR_WL_sectorReinforcements", _sizeText, _defenders, _maxDefenders];
         };
+        _sizeText;
     } else {
         ""
     };
