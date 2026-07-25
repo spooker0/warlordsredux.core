@@ -42,6 +42,7 @@ _asset addEventHandler ["Fired", {
         private _fullChargeTime = 8;
         private _timeChargeStart = time;
         private _timeChargeEnd = _timeChargeStart + _fullChargeTime;
+        private _chargeEndedManually = false;
         while { alive _asset } do {
             if (!alive _gunner) then {
                 break;
@@ -53,15 +54,18 @@ _asset addEventHandler ["Fired", {
             if (isPlayer _gunner) then {
                 if (_railgunSecondClick) then {
                     if (inputAction "defaultAction" != 0) then {
+                        _chargeEndedManually = true;
                         break;
                     };
                 } else {
                     if (inputAction "defaultAction" == 0) then {
+                        _chargeEndedManually = true;
                         break;
                     };
                 }
             } else {
                 if (_chargeVelocity > 1.0) then {
+                    _chargeEndedManually = true;
                     break;
                 };
             };
@@ -84,6 +88,9 @@ _asset addEventHandler ["Fired", {
             uiSleep 0.001;
         };
         stopSound _chargingSound;
+        if (!alive _asset) exitWith {};
+
+        playSoundUI ["a3\sounds_f_decade\assets\arsenal\railgun_01\railgun_01_charge_stop.wss"];
         [_asset, "CustomSoundController1", 0, 0.01] call BIS_fnc_setCustomSoundController;
 
         _chargeVelocity = linearConversion [_timeChargeStart, _timeChargeEnd, time, 0, 1.2, true];
@@ -97,26 +104,20 @@ _asset addEventHandler ["Fired", {
 
             uiSleep 0.5;
 
-            _asset setWeaponReloadingTime [gunner _asset, "cannon_railgun_fake", 0];
-            _asset setUserMFDValue [0, 0];
-            _asset setUserMFDValue [1, 0];
-            _asset setVariable ["WL2_railgunFiring", false];
+            if (alive _asset) then {
+                _asset setWeaponReloadingTime [gunner _asset, "cannon_railgun_fake", 0];
+                _asset setUserMFDValue [0, 0];
+                _asset setUserMFDValue [1, 0];
+                _asset setVariable ["WL2_railgunFiring", false];
+            };
         };
 
-        private _fakeGunner = objNull;
-        if (isNull gunner _asset) then {
-            _fakeGunner = createAgent ["VirtualMan_F", [0, 0, 10000], [], 0, "CAN_COLLIDE"];
-            _fakeGunner moveInGunner _asset;
-        };
         _asset setVariable ["BIS_MuzzleCoef", _chargeVelocity];
-
-        [_asset, "cannon_railgun"] call BIS_fnc_fire;
-
-        if (!isNull _fakeGunner) then {
-            deleteVehicle _fakeGunner;
-        };
+        (gunner _asset) forceWeaponFire ["cannon_railgun", "player"];
 
         uiSleep 0.001;
+        if (!alive _asset) exitWith {};
+
         _asset selectWeapon "cannon_railgun_fake";
 
         private _ammoAmount = _asset magazineTurretAmmo ["RailGun_01_DummyMagazine", [0]];
@@ -136,6 +137,8 @@ _asset addEventHandler ["Fired", {
         _asset setHitPointDamage ["HitGun", _currentDamage + _damage];
 
         uiSleep (_chargeVelocity * 2);
+
+        if (!alive _asset) exitWith {};
 
         _asset setWeaponReloadingTime [gunner _asset, "cannon_railgun_fake", 0];
         _asset setUserMFDValue [0, 0];

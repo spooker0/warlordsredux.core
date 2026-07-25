@@ -27,7 +27,7 @@ private _mapClickEH = addMissionEventHandler ["MapSingleClick", {
 			["Boat must be placed within 300 meters from your current position."] call WL2_fnc_smoothText;
 			false;
 		};
-		if (_cost < 1000) exitWith {
+		if (_cost < 500) exitWith {
 			true;
 		};
 
@@ -42,7 +42,7 @@ private _mapClickEH = addMissionEventHandler ["MapSingleClick", {
 		_spawnLocations append _linkedSectors;
 
 		private _sectorsInRange = _spawnLocations select {
-			_pos distance2D _x < 1500;
+			_pos distance2D _x < 500;
 		};
 		private _invalidPlacement = count _sectorsInRange == 0;
 		if (_invalidPlacement) then {

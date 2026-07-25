@@ -1,13 +1,16 @@
 #include "includes.inc"
 
+if (isServer) then {
+	missionNamespace setVariable ["BIS_WL_westOwnedVehicles", [], true];
+	missionNamespace setVariable ["BIS_WL_eastOwnedVehicles", [], true];
+	missionNamespace setVariable ["BIS_WL_guerOwnedVehicles", [], true];
+};
+
 BIS_WL_playerSide = side group player;
 BIS_WL_sidesArray = [west, east, independent];
 BIS_WL_competingSides = [west, east];
 BIS_WL_enemySide = (BIS_WL_competingSides - [BIS_WL_playerSide]) # 0;
 BIS_WL_missionEnd = false;
-BIS_WL_westOwnedVehicles = [];
-BIS_WL_eastOwnedVehicles = [];
-BIS_WL_guerOwnedVehicles = [];
 BIS_WL_colorMarkerFriendly = ["colorBLUFOR", "colorOPFOR", "colorIndependent"] # (BIS_WL_sidesArray find BIS_WL_playerSide);
 BIS_WL_colorMarkerEnemy = ["colorBLUFOR", "colorOPFOR", "colorIndependent"] # (BIS_WL_sidesArray find BIS_WL_enemySide);
 BIS_WL_targetVote = objNull;

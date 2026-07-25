@@ -39,15 +39,15 @@ while { !BIS_WL_missionEnd } do {
 			continue;
 		};
 
-		private _amountToGenerate = if (_sector in [BIS_WL_currentTarget_west, BIS_WL_currentTarget_east]) then {
-			private _sectorStronghold = _sector getVariable ["WL_stronghold", objNull];
-			if (isNull _sectorStronghold) then {
-				0
-			} else {
-				WL_DEFENDER_INCOME * 2
-			};
-		} else {
-			WL_DEFENDER_INCOME
+		private _amountToGenerate = 0;
+		if !(_sector in [BIS_WL_currentTarget_west, BIS_WL_currentTarget_east]) then {
+			_amountToGenerate = _amountToGenerate + WL_DEFENDER_INCOME;
+		};
+
+		private _sectorStronghold = _sector getVariable ["WL_stronghold", objNull];
+		if (!isNull _sectorStronghold) then {
+			private _strongholdHealth = _sectorStronghold getVariable ["WL2_demolitionHealth", 0];
+			_amountToGenerate = _amountToGenerate + linearConversion [0, 24, _strongholdHealth, 0, WL_DEFENDER_INCOME * 3, true];
 		};
 
 		if (_amountToGenerate <= 0) then {

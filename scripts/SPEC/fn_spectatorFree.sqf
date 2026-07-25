@@ -5,7 +5,7 @@ private _moveLeft = (uiNamespace getVariable ["SPEC_CameraMoveRight", 0]) - (uiN
 private _moveForward = (uiNamespace getVariable ["SPEC_CameraMoveForward", 0]) - (uiNamespace getVariable ["SPEC_CameraMoveBackward", 0]);
 private _moveUp = (uiNamespace getVariable ["SPEC_CameraMoveUp", 0]) - (uiNamespace getVariable ["SPEC_CameraMoveDown", 0]);
 
-private _speedCurve = [10, 20, 30, 40, 50, 100, 200, 500, 1000, 2000, 3000];
+private _speedCurve = [5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560, 5120];
 
 private _freeCamSpeed = uiNamespace getVariable ["SPEC_FreecamSpeed", 2];
 private _mouseWheelUp = inputAction "prevAction";
@@ -32,9 +32,9 @@ uiNamespace setVariable ["SPEC_FreecamSpeed", _freeCamSpeed];
 private _speed = _speedCurve select _freeCamSpeed;
 
 if (_mouseWheelUp != 0 || _mouseWheelDown != 0) then {
-    private _display = uiNamespace getVariable ["RscWLSpectatorMenu", displayNull];
-    private _texture = _display displayCtrl 5502;
-    _texture ctrlWebBrowserAction ["ExecJS", format ["updateSpeedLevel(%1);", _freeCamSpeed]];
+    private _spectatorInfo = uiNamespace getVariable ["RscWLSpectatorInfo", displayNull];
+    private _spectatorSpeed = _spectatorInfo displayCtrl 105;
+    _spectatorSpeed ctrlSetStructuredText parseText format ["<t shadow='2'>Speed: %1 m/s</t>", _speed];
 };
 
 private _newPosition = _camera modelToWorld [

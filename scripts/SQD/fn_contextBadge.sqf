@@ -29,7 +29,7 @@ _changeBadgeButton ctrlAddEventHandler ["ButtonClick", {
     params ["_button"];
     private _display = ctrlParent _button;
     _display closeDisplay 0;
-    0 spawn RWD_fnc_badgeMenu;
+    0 spawn RWD_fnc_badgeMenuInit;
 }];
 
 private _dummyButton = _display displayCtrl SQD_DUMMY_IDC;

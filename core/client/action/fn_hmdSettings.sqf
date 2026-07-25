@@ -15,7 +15,7 @@ if (count _existingProfiles != 5) then {
         ["VEHICLE", 5000],
         ["AIRCRAFT", 10000],
         ["AIR DEFENSE", 5000],
-        ["MISSILE", 5000],
+        ["MISSILE", 15000],
         ["LASER", 5000]
     ];
     private _profile2 = createHashMapFromArray [

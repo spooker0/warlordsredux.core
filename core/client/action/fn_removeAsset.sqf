@@ -45,6 +45,7 @@ if (_isBulkRemoveActive) then {
     if (_result) then {
         {
             deleteVehicle _x;
+            uiSleep 0.5;
         } forEach _sameTypeVehicles;
 
         private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];

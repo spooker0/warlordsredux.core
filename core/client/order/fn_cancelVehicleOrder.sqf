@@ -98,7 +98,7 @@ if (_isInWaterSector) exitWith {
     [false, ""];
 };
 
-if (surfaceIsWater (getPosATL _asset)) exitWith {
+if (surfaceIsWater (getPosATL _asset) && !(_asset isKindOf "Boat_F")) exitWith {
     [true, "Asset cannot be deployed on water."];
 };
 

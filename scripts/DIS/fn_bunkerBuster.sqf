@@ -11,6 +11,8 @@ private _nearDestroyables = (nearestObjects [_position, [], 100, true]) select {
     _x distance2D _position < _distanceLimit && _x getVariable ["WL2_canDemolish", false];
 } select {
     WL_UNIT(_x, "obstacle", 0) <= 1;
+} select {
+    !(_x isKindOf "TimeBombCore")
 };
 
 if (_ignoreHeight) then {

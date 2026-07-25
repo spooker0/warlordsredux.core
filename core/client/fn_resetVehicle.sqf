@@ -17,7 +17,10 @@ private _vehicle = _vehicles # 0;
 
 private _class = typeOf _vehicle;
 private _orderedClass = WL_ASSET_TYPE(_vehicle);
-private _offset = player worldToModel (getPosATL _vehicle);
+private _offset = WL_UNIT(_vehicle, "offset", []);
+if (count _offset < 3) then {
+    _offset = [0, 8, 0];
+};
 
 private _deploymentResult = [_class, _orderedClass, _offset, 50, true] call WL2_fnc_deployment;
 

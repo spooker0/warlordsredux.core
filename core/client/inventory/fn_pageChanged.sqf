@@ -48,7 +48,7 @@ private _loadouts = call WL2_fnc_getLoadouts;
 {
     private _index = _forEachIndex + _currentPage * _totalButtons;
     if (_index < INV_MAX_SLOTS) then {
-        _x ctrlSetStructuredText parseText format ["<t align='center'>Save Slot %1</t>", _index + 1];
+        _x ctrlSetStructuredText parseText format ["<t align='center'>%1 %2</t>", localize "STR_WL_saveSlot",  _index + 1];
         _x ctrlShow true;
     } else {
         _x ctrlSetStructuredText parseText "";
@@ -59,7 +59,7 @@ private _loadouts = call WL2_fnc_getLoadouts;
 {
     private _index = _forEachIndex + _currentPage * _totalButtons;
     if (_index < INV_MAX_SLOTS) then {
-        _x ctrlSetStructuredText parseText format ["<t align='center'>Clear Slot %1</t>", _index + 1];
+        _x ctrlSetStructuredText parseText format ["<t align='center'>%1 %2</t>", localize "STR_WL_clearSlot", _index + 1];
         _x ctrlShow true;
     } else {
         _x ctrlSetStructuredText parseText "";

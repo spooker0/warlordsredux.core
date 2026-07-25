@@ -87,34 +87,6 @@ if (_text select [0, 2] == "!s") exitWith {
     true;
 };
 
-private _isBattleyeMessage = false;
-if (_channel == 16 || _channel == 17) then {
-    private _regexMatches = _text regexFind ["[\s]?.*[\d]+[\s]+([\w]{32,32})[\s]{1,1}(.*)$"];
-    if (count _regexMatches > 0 && {count (_regexMatches # 0) >= 3}) exitWith {
-        private _beId = _regexMatches # 0 # 1 # 0;
-        private _beName = _regexMatches # 0 # 2 # 0;
-        private _guidMap = uiNamespace getVariable ["WL2_guidMap", createHashMap];
-        _guidMap set [_beName, _beId];
-        uiNamespace setVariable ["WL2_guidMap", _guidMap];
-        _isBattleyeMessage = true;
-    };
-    if (_text == "BattlEye Client: Players on server:") exitWith {
-        _isBattleyeMessage = true;
-    };
-    if (_text == "  [#] [Ping] [GUID] [Name]") exitWith {
-        _isBattleyeMessage = true;
-    };
-    if (_text == "  ------------------------------") exitWith {
-        _isBattleyeMessage = true;
-    };
-    if (_text regexMatch ".*\([\d]+ players in total\)") exitWith {
-        _isBattleyeMessage = true;
-    };
-};
-if (_isBattleyeMessage) exitWith {
-    true;
-};
-
 private _killMessage = _chatMessageType == 2;
 if (_killMessage) exitWith {
     true;

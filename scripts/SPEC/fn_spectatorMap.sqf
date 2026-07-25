@@ -11,6 +11,8 @@ private _mapControl = _spectatorDisplay displayCtrl 5503;
 _mapControl ctrlMapAnimAdd [0, 0.2, getPosASL cameraOn];
 ctrlMapAnimCommit _mapControl;
 
+uiNamespace setVariable ["WL2_mapMode", 0];
+
 _mapControl ctrlAddEventHandler ["Draw", WL2_fnc_mapEachFrame];
 _mapControl ctrlAddEventHandler ["Draw", WL2_fnc_iconDrawMap];
 
@@ -21,15 +23,8 @@ _mapControl ctrlAddEventHandler ["KeyDown", {
     };
     if (_key in actionKeys "nightVision") then {
         private _mapMode = uiNamespace getVariable ["WL2_mapMode", 0];
-        private _mapModeNames = [
-            "Regular",
-            "Air/Air Defense"
-        ];
-        _mapMode = (_mapMode + 1) % (count _mapModeNames);
+        _mapMode = (_mapMode + 1) % 3;
         uiNamespace setVariable ["WL2_mapMode", _mapMode];
-
-        private _mapModeName = _mapModeNames select _mapMode;
-        [format ["Map mode: %1", _mapModeName]] call WL2_fnc_smoothText;
     };
 }];
 

@@ -18,7 +18,7 @@ switch (_actionId) do {
         0 spawn SQD_fnc_initSquadMenu;
     };
     case "BADGES": {
-        0 spawn RWD_fnc_badgeMenu;
+        0 spawn RWD_fnc_badgeMenuInit;
     };
     case "REPORT": {
         0 spawn MENU_fnc_reportMenu;

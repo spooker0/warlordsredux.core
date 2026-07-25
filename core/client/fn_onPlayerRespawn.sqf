@@ -31,10 +31,12 @@ if (side group player == independent) then {
 0 spawn WL2_fnc_reviveAction;
 0 spawn WL2_fnc_installAction;
 
-player addAction [
-	format ["<t color='#00FFFF'>%1 (Key: %2)</t>", "Spawn Menu", (actionKeysNames ["watch", 1, "Keyboard"]) regexReplace ["""", ""]],
-	{ 0 spawn SQD_fnc_initSquadMenu; }, [], -100, false, true, "watch", "", 0, true
+private _spawnMenuText = format [
+	"<t color='#00FFFF'>%1 (Key: %2)</t>",
+	localize "STR_WL_spawnMenu",
+	(actionKeysNames ["watch", 1, "Keyboard"]) regexReplace ["""", ""]
 ];
+player addAction [_spawnMenuText, { 0 spawn SQD_fnc_initSquadMenu; }, [], -100, false, true, "watch", "", 0, true];
 
 private _playerSquad = ["getSquadForPlayer", [getPlayerID player]] call SQD_fnc_query;
 if (count _playerSquad > 0) then {

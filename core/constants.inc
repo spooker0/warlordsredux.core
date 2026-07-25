@@ -73,9 +73,9 @@
 #define WL_DEMOLITION_FOB_STEP_TIME 3
 #define WL_DEMOLITION_STRONGHOLD_STEP_TIME 7
 
-#define WL_DEFENDER_MIN 20
-#define WL_DEFENDER_MOD 4
-#define WL_DEFENDER_ADD 100
+#define WL_DEFENDER_MIN 25
+#define WL_DEFENDER_MOD 5
+#define WL_DEFENDER_ADD 200
 #define WL_DEFENDER_INCOME 3
 
 #define WL_SURRENDER_TIME 36000
@@ -186,3 +186,4 @@
 #define WL_ISDBNO(unit) (alive (unit) && WL_ISUNCONSCIOUS(unit))
 #define WL_ISUP(unit) (alive (unit) && !WL_ISUNCONSCIOUS(unit))
 #define WL_ISDOWN(unit) !(WL_ISUP(unit))
+#define WL_KILL_REWARD(type) (WL_ASSET(type, "reward", (round (0.5 * WL_ASSET(type, "cost", 0) ^ 0.8))))

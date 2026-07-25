@@ -51,6 +51,14 @@ if (_immobile > 0) then {
 	_asset setFuelConsumptionCoef 1000;
 };
 
+private _transferVehicleOwner = _sender getVariable ["WL2_transferVehicleOwner", true];
+if (_transferVehicleOwner) then {
+	private _crewCount = count crew _asset;
+	if (_crewCount == 0) then {
+		_asset setOwner _owner;
+	};
+};
+
 private _isAircraft = _asset isKindOf "Air";
 private _variant = WL_ASSET(_orderedClass, "variant", 0);
 if (!_isAircraft && _variant > 0) then {

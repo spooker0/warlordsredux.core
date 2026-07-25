@@ -4,6 +4,7 @@ class CfgFunctions {
 			file = "src\scripts\APS";
 			class active { headerType = WL_HEADER_LEVEL; };
 			class apsHandler { headerType = WL_HEADER_LEVEL; };
+			class apsReloader { headerType = WL_HEADER_LEVEL; };
 			class ciws { headerType = WL_HEADER_LEVEL; };
 			class cram { headerType = WL_HEADER_LEVEL; };
 			class defineVehicles { headerType = WL_HEADER_LEVEL; };
@@ -123,7 +124,8 @@ class CfgFunctions {
 			file = "src\scripts\RWD";
 			class addBadge { headerType = WL_HEADER_LEVEL; };
 			class applyBadge { headerType = WL_HEADER_LEVEL; };
-			class badgeMenu { headerType = WL_HEADER_LEVEL; };
+			class badgeMenuInit { headerType = WL_HEADER_LEVEL; };
+			class badgeMenuSelect { headerType = WL_HEADER_LEVEL; };
 			class getBadgeConfigs { headerType = WL_HEADER_LEVEL; };
 			class handleBadge { headerType = WL_HEADER_LEVEL; };
 			class handleReward { headerType = WL_HEADER_LEVEL; };
@@ -135,14 +137,18 @@ class CfgFunctions {
 			file = "src\scripts\SPEC";
 			class spectator { headerType = WL_HEADER_LEVEL; };
 			class spectator3P { headerType = WL_HEADER_LEVEL; };
+			class spectatorDraw3d { headerType = WL_HEADER_LEVEL; };
 			class spectatorFree { headerType = WL_HEADER_LEVEL; };
+			class spectatorGetIcon { headerType = WL_HEADER_LEVEL; };
 			class spectatorMap { headerType = WL_HEADER_LEVEL; };
-			class spectatorMenu { headerType = WL_HEADER_LEVEL; };
 			class spectatorRewardProxy { headerType = WL_HEADER_LEVEL; };
 			class spectatorSelectTarget { headerType = WL_HEADER_LEVEL; };
-			class spectatorDraw3d { headerType = WL_HEADER_LEVEL; };
-			class spectatorGetIcon { headerType = WL_HEADER_LEVEL; };
 			class spectatorTarget { headerType = WL_HEADER_LEVEL; };
+			class spectatorTargetMenu { headerType = WL_HEADER_LEVEL; };
+			class spectatorTargetMenuRefresh { headerType = WL_HEADER_LEVEL; };
+			class spectatorTargetMenuRebuild { headerType = WL_HEADER_LEVEL; };
+			class spectatorTargetMenuSearch { headerType = WL_HEADER_LEVEL; };
+			class spectatorTargetMenuSelect { headerType = WL_HEADER_LEVEL; };
 		};
 	};
 	class SQD {
@@ -277,6 +283,7 @@ class CfgFunctions {
 			class hmdSettings { headerType = WL_HEADER_LEVEL; };
 			class hmdSettingsAction { headerType = WL_HEADER_LEVEL; };
 			class installAction { headerType = WL_HEADER_LEVEL; };
+			class integralWeaponAction { headerType = WL_HEADER_LEVEL; };
 			class laserWeapon { headerType = WL_HEADER_LEVEL; };
 			class lockActionEligibility { headerType = WL_HEADER_LEVEL; };
 			class lockActionUpdate { headerType = WL_HEADER_LEVEL; };
@@ -533,7 +540,6 @@ class CfgFunctions {
 			class demolishComplete { headerType = WL_HEADER_LEVEL; };
 			class destroyStronghold { headerType = WL_HEADER_LEVEL; };
 			class detectNewPlayers { headerType = WL_HEADER_LEVEL; };
-			class dumbMineAnnouncer { headerType = WL_HEADER_LEVEL; };
 			class factory { headerType = WL_HEADER_LEVEL; };
 			class forgiveTeamkill { headerType = WL_HEADER_LEVEL; };
 			class forwardBaseUpgrade { headerType = WL_HEADER_LEVEL; };

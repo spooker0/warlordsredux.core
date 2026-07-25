@@ -12,6 +12,12 @@ private _texture = _display displayCtrl 5502;
 
 uiNamespace setVariable ["WL2_turretRefPoint", [0, 0, 0]];
 
+// private _line = (findDisplay 46) ctrlCreate ["RscLine", -1];
+// _line ctrlSetBackgroundColor [0, 0, 0, 0];
+// _line ctrlSetTextColor [0, 1, 0, 1];
+// _line ctrlCommit 0;
+// uiNamespace setVariable ["WL2_turretLine", _line];
+
 private _draw3dHandler = addMissionEventHandler ["Draw3D", {
     private _display = uiNamespace getVariable ["RscWLTurretMenu", displayNull];
     private _texture = _display displayCtrl 5502;
@@ -56,6 +62,29 @@ private _draw3dHandler = addMissionEventHandler ["Draw3D", {
         private _weaponScreenPoint = _turretData # 1;
         _screenPoints append _turretLimits;
         _weaponScreenPoints pushBack _weaponScreenPoint;
+
+        // private _turretLimitPointsScreen = _turretData # 2;
+        // if (count _turretLimitPointsScreen >= 2) then {
+        //     private _point1 = _turretLimitPointsScreen # 0;
+        //     private _point2 = _turretLimitPointsScreen # 1;
+
+        //     private _isLeftPointPoint1 = (_point1 # 0) < (_point2 # 0);
+        //     private _position = [];
+        //     if (_isLeftPointPoint1) then {
+        //         private _leftPoint = _point1;
+        //         private _rightPointRelative = _point2 vectorDiff _point1;
+        //         _position = [_leftPoint # 0, _leftPoint # 1, _rightPointRelative # 0, _rightPointRelative # 1];
+        //     } else {
+        //         private _leftPoint = _point2;
+        //         private _rightPointRelative = _point1 vectorDiff _point2;
+        //         _position = [_leftPoint # 0, _leftPoint # 1, _rightPointRelative # 0, _rightPointRelative # 1];
+        //     };
+        //     systemChat format ["Position: %1", _turretLimitPointsScreen];
+
+        //     private _line = uiNamespace getVariable ["WL2_turretLine", controlNull];
+        //     _line ctrlSetPosition _position;
+        //     _line ctrlCommit 0;
+        // };
     } forEach _occupiedTurrets;
 
     private _weaponScreenPointsText = _texture ctrlWebBrowserAction ["ToBase64", toJSON _weaponScreenPoints];

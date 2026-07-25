@@ -163,30 +163,6 @@ uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
             ];
         } forEach _nearbyDamagedItems;
 
-        private _nearSaboteurs = allPlayers select {
-            _x distance2D player < 100
-        };
-        {
-            private _sabotageTarget = _x getVariable ["WL2_sabotageTarget", [0, ""]];
-            if (_sabotageTarget # 0 < serverTime) then { continue; };
-            _demolishIcons pushBack [
-                "a3\ui_f_oldman\data\igui\cfg\holdactions\destroy_ca.paa",
-                [1, 0, 0, 1],
-                [_x, 0.5],
-                1,
-                1,
-                0,
-                format ["%1", _sabotageTarget # 1],
-                true,
-                0.035,
-                "RobotoCondensedBold",
-                "center",
-                true,
-                0,
-                -0.05
-            ];
-        } forEach _nearSaboteurs;
-
         uiNamespace setVariable ["WL2_damagedDrawIcons", _demolishIcons];
 
         private _cursorObject = cursorObject;
@@ -220,15 +196,16 @@ uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
                 if (_health <= 0) then { continue; };
             };
 
-            private _color = _x getVariable ["WL2_mapIconColor", [1, 1, 1, 1]];
-
             private _displayName = _x getVariable ["WL2_mapIconText", ""];
             private _boundingSize = ((boundingBoxReal _x) # 2) / 2;
 
             if (WL_ISUNCONSCIOUS(_x)) then {
+                private _expirationTime = _x getVariable ["WL2_expirationTime", 0];
+                private _timeLife = ((_expirationTime - serverTime) / 30) min 1;
+
                 _playerIcons pushBack [
                     "a3\ui_f\data\igui\cfg\revive\overlayIcons\u100_ca.paa",
-                    _color,
+                    [1, _timeLife, _timeLife, 1],
                     [_x, _boundingSize],
                     1.2,
                     1.2,
@@ -243,6 +220,7 @@ uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
                     -0.05
                 ];
             } else {
+                private _color = _x getVariable ["WL2_mapIconColor", [1, 1, 1, 1]];
                 _playerIcons pushBack [
                     "",
                     _color,

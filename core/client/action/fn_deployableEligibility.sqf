@@ -39,7 +39,8 @@ private _nearLoadable = _nearLoadableEntities select {
         private _isHeavyLift = WL_UNIT(_asset, "isHeavyLift", 0) > 0;
         if (_isHeavyLift) then {
             private _cost = WL_ASSET_FIELD(_assetData, _assetActualType, "cost", -1);
-            _x != _asset && _access # 0 && _cost >= 0 && !(_x isKindOf "Man") && !(_x isKindOf "Building")
+            private _disableParadrop = WL_ASSET_FIELD(_assetData, _assetActualType, "disableParadrop", 0);
+            _x != _asset && _access # 0 && _cost >= 0 && !(_x isKindOf "Man") && !(_x isKindOf "Building") && _disableParadrop == 0;
         } else {
             private _loadable = WL_ASSET_FIELD(_assetData, _assetActualType, "loadable", 0);
             _loadable > 0 && _access # 0;

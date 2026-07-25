@@ -126,8 +126,6 @@ while { !BIS_WL_missionEnd } do {
             triggerAmmo _mine;
 
             _playVO = true;
-
-            missionNamespace setVariable ["WL2_mineExplosion", true, 2];
         } forEach _vehiclesInThisMinefield;
     } forEach _enemyMines;
 
@@ -137,6 +135,7 @@ while { !BIS_WL_missionEnd } do {
 
     if (_playVO && serverTime - _lastPlayedVO > 10) then {
         playSoundUI ["a3\dubbing_f_epb\b_in\x15_mines\b_in_x15_mines_jam_0.ogg", 5, 1, false, 0.31];
+        ["You've hit an AT minefield! Do NOT attempt to keep driving before clearing the minefield."] call WL2_fnc_smoothText;
         _lastPlayedVO = serverTime;
     };
 

@@ -190,7 +190,8 @@ if (_ret) then {
 			]
 		};
 		case "StrongholdFT";
-		case "StrongholdFTNear": {
+		case "StrongholdFTNear";
+		case "BulkDeploy": {
 			[
 				[WL2_fnc_checkPlayerInVehicle],
 				[WL2_fnc_checkNearbyEnemies]

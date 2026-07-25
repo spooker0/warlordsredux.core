@@ -5,14 +5,8 @@ private _asset = createVehicleLocal [_class, player modelToWorld [0, 0, 1000], [
 _asset setPhysicsCollisionFlag false;
 _asset enableSimulation false;
 
-private _assetPos = player modelToWorld _offset;
-_asset setPosASL [_assetPos # 0, _assetPos # 1, 500];
-private _playerPos = ASLtoAGL eyePos player;
-_assetPos set [2, _playerPos # 2];
-_asset setVehiclePosition [_assetPos, [], 0, "CAN_COLLIDE"];
-private _assetPosHeight = (getPosASL _asset) # 2;
-_asset setPosASL [_assetPos # 0, _assetPos # 1, _assetPosHeight];
-_asset attachTo [player];
+private _playerOffset = _offset vectorDiff (getModelInfo _asset # 3);
+_asset attachTo [player, _playerOffset];
 
 _asset allowDamage false;
 _asset lock 2;
@@ -29,13 +23,34 @@ private _drawRestrictionId = addMissionEventHandler ["Draw3D", {
 	private _asset = uiNamespace getVariable ["WL2_vehicleOrderAsset", objNull];
 	if (!alive _asset) exitWith {};
 	if (cameraOn distance _asset > 50) exitWith {};
+
+    private _assetPosition = _asset modelToWorld [0, 0, 0];
+    _assetPosition set [2, 1];
+    drawIcon3D [
+        "",
+        [0, 1, 0, 1],
+        _assetPosition,
+        1.0,
+		1.0,
+        0,
+        format ["DIRECTION %1", (getDir _asset) toFixed 1],
+        true,
+        0.045,
+        "TahomaB",
+        "center",
+        false,
+		0,
+		0.01
+    ];
+
 	private _restriction = _asset getVariable ["WL2_vehicleOrderError", ""];
 	if (_restriction == "") exitWith {};
 
+    _assetPosition set [2, 1.5];
 	drawIcon3D [
         "\a3\ui_f\data\IGUI\Cfg\Actions\Obsolete\ui_action_cancel_ca.paa",
         [1, 0.2, 0.2, 1],
-        _asset modelToWorld [0, 0, 0],
+        _assetPosition,
         1.0,
 		1.0,
         0,

@@ -10,8 +10,9 @@ private _infoMarkers = [
 	["https://discord.gg/grmzsZE4ua", "mil_box_noShadow", "ColorRed"],
 	[],
 	["   " + localize "STR_WL_mapInfoText3", "loc_talk", "ColorGreen"],
-	[format [localize "STR_WL_mapInfoText4", _menuKey], "mil_box_noShadow", "ColorYellow"],
-	[format [localize "STR_WL_mapInfoText5", _menuKey], "mil_box_noShadow", "ColorYellow"],
+	[localize "STR_WL_mapInfoText4", "mil_box_noShadow", "ColorYellow"],
+	[localize "STR_WL_mapInfoText5", "mil_box_noShadow", "ColorYellow"],
+	[format [localize "STR_WL_mapInfoText12", _menuKey], "mil_box_noShadow", "ColorYellow"],
 	[format [localize "STR_WL_mapInfoText6", _pingKey], "mil_box_noShadow", "ColorYellow"],
 	[format [localize "STR_WL_mapInfoText7", _pttKey, _chatKey], "mil_box_noShadow", "ColorYellow"],
 	[],
@@ -33,3 +34,5 @@ private _infoMarkers = [
 	_marker setMarkerTypeLocal (_x # 1);
 	_marker setMarkerColorLocal (_x # 2);
 } forEach _infoMarkers;
+
+uiNamespace setVariable ["WL2_infoMarkers", _infoMarkers];

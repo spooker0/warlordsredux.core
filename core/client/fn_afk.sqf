@@ -18,7 +18,7 @@ while { !BIS_WL_missionEnd } do {
         _isAfk = false;
     };
 	if (_isAfk) then {
-		hintSilent "You are too inactive to earn passive income. Mark yourself not afk in the scroll action menu.";
+		hintSilent localize "STR_WL_afkMessage";
 	};
 
     private _wasAfk = player getVariable ["WL2_afk", false];

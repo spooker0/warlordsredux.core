@@ -58,20 +58,6 @@ _camera switchCamera "INTERNAL";
 uiNamespace setVariable ["SPEC_Camera", _camera];
 uiNamespace setVariable ["SPEC_NightVisionMode", 0];
 
-private _display = uiNamespace getVariable ["RscWLSpectatorMenu", displayNull];
-if (isNull _display) then {
-	"spectator" cutRsc ["RscWLSpectatorMenu", "PLAIN", -1, true, true];
-	_display = uiNamespace getVariable ["RscWLSpectatorMenu", displayNull];
-};
-private _texture = _display displayCtrl 5502;
-// _texture ctrlWebBrowserAction ["OpenDevConsole"];
-
-_texture ctrlAddEventHandler ["PageLoaded", {
-    params ["_texture"];
-    private _freeCamSpeed = uiNamespace getVariable ["SPEC_FreecamSpeed", 2];
-    _texture ctrlWebBrowserAction ["ExecJS", format ["updateSpeedLevel(%1);", _freeCamSpeed]];
-}];
-
 addMissionEventHandler ["EachFrame", {
     private _camera = uiNamespace getVariable ["SPEC_Camera", objNull];
     if (isNull _camera) exitWith {};
@@ -86,6 +72,9 @@ addMissionEventHandler ["EachFrame", {
     private _deltaTime = (serverTime - _lastFrameTime) min 1;
 
     if (isNull _currentTarget) then {
+        if (cameraOn != _camera) then {
+            _camera switchCamera "Internal";
+        };
         [_camera, _deltaTime] call SPEC_fnc_spectatorFree;
     } else {
         [_camera, _deltaTime, _currentTarget] call SPEC_fnc_spectator3P;
@@ -142,18 +131,23 @@ _mainDisplay displayAddEventHandler ["KeyDown", {
 
     if (_key in actionKeys "personView") exitWith {
         private _targetCamMode = uiNamespace getVariable ["SPEC_TargetCameraMode", 0];
-        _targetCamMode = (_targetCamMode + 1) mod 4;
+        private _currentTarget = uiNamespace getVariable ["SPEC_CameraTarget", objNull];
+        _targetCamMode = if (isNull _currentTarget) then { 0 } else {
+            (_targetCamMode + 1) mod 4;
+        };
+
         uiNamespace setVariable ["SPEC_TargetCameraMode", _targetCamMode];
 
-        private _display = uiNamespace getVariable ["RscWLSpectatorMenu", displayNull];
-        private _texture = _display displayCtrl 5502;
-        _texture ctrlWebBrowserAction ["ExecJS", format ["updateTargetMode(%1);", _targetCamMode]];
-
+        private _spectatorInfo = uiNamespace getVariable ["RscWLSpectatorInfo", displayNull];
+        private _spectatorMode = _spectatorInfo displayCtrl 104;
+        private _modes = ["Bird Eye", "First Person", "Third Person", "Gunner"];
+        private _modeText = _modes select _targetCamMode;
+        _spectatorMode ctrlSetStructuredText parseText format ["<t shadow='2'>Mode: %1</t>", _modeText];
         true;
     };
 
     if (_key in actionKeys "nextWeapon") exitWith {
-        0 spawn SPEC_fnc_spectatorMenu;
+        0 spawn SPEC_fnc_spectatorTargetMenu;
     };
 
     if (_key in actionKeys "lockTarget") exitWith {
@@ -285,6 +279,8 @@ _mainDisplay displayAddEventHandler ["KeyUp", {
     };
 
     if (_key in actionKeys "nightVision") exitWith {
+        private _drawingMap = uiNamespace getVariable ["WL2_drawingMap", false];
+        if (_drawingMap) exitWith {};
         private _currentVisionMode = uiNamespace getVariable ["SPEC_NightVisionMode", 0];
         _currentVisionMode = (_currentVisionMode + 1) mod 3;
         uiNamespace setVariable ["SPEC_NightVisionMode", _currentVisionMode];
@@ -321,13 +317,8 @@ _mainDisplay displayAddEventHandler ["KeyUp", {
     };
 
     if (_key in actionKeys "SelectGroupUnit1") exitWith {
-        private _display = uiNamespace getVariable ["RscWLSpectatorMenu", displayNull];
-        private _texture = _display displayCtrl 5502;
-        if (ctrlShown _texture) then {
-            _texture ctrlShow false;
-        } else {
-            _texture ctrlShow true;
-        };
+        private _hideInterface = uiNamespace getVariable ["SPEC_HideInterface", false];
+        uiNamespace setVariable ["SPEC_HideInterface", !_hideInterface];
     };
 
     if (_key in actionKeys "compass") exitWith {
@@ -359,11 +350,28 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
 };
 
 0 spawn {
+    private _spectatorInfo = uiNamespace getVariable ["RscWLSpectatorInfo", displayNull];
+    if (isNull _spectatorInfo) then {
+        "SpectatorInfo" cutRsc ["RscWLSpectatorInfo", "PLAIN", -1, true, true];
+        _spectatorInfo = uiNamespace getVariable ["RscWLSpectatorInfo", displayNull];
+    };
+    private _spectatorInfoText = _spectatorInfo displayCtrl 101;
+    private _spectatorControlsInfo = _spectatorInfo displayCtrl 102;
+    private _spectatorTarget = _spectatorInfo displayCtrl 103;
+    private _spectatorMode = _spectatorInfo displayCtrl 104;
+    private _spectatorSpeed = _spectatorInfo displayCtrl 105;
+    private _spectatorZoom = _spectatorInfo displayCtrl 106;
+    private _spectatorTime = _spectatorInfo displayCtrl 107;
+
+    _spectatorTarget ctrlSetStructuredText parseText "<t shadow='2'>Target: Free Camera</t>";
+    _spectatorMode ctrlSetStructuredText parseText "<t shadow='2'>Mode: Bird Eye</t>";
+    _spectatorSpeed ctrlSetStructuredText parseText "<t shadow='2'>Speed: 5 m/s</t>";
+    _spectatorZoom ctrlSetStructuredText parseText "<t shadow='2'>Orbit: 1 m</t>";
+    _spectatorTime ctrlSetStructuredText parseText "<t shadow='2'>Time: 00:00:00</t>";
+
     while { WL_IsSpectator } do {
         uiSleep 0.2;
         private _target = uiNamespace getVariable ["SPEC_CameraTarget", objNull];
-        private _display = uiNamespace getVariable ["RscWLSpectatorMenu", displayNull];
-        private _texture = _display displayCtrl 5502;
 
         private _showControlsInfo = uiNamespace getVariable ["SPEC_ShowControlsInfo", true];
         if (_showControlsInfo) then {
@@ -402,7 +410,6 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
             _spectatorParams append _commonControls;
 
             private _controlNamesText = "";
-            private _controlKeysText = "";
             {
                 private _actionName = _x select 0;
                 private _actionKey = _x select 1;
@@ -412,22 +419,31 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
                 if (_actionKeyText == "") then {
                     _actionKeyText = _actionKey;
                 };
-                _controlNamesText = format ["%1%2<br/>", _controlNamesText, _actionName];
-                _controlKeysText = format ["%1[%2]<br/>", _controlKeysText, _actionKeyText];
+                private _lineText = format ["<t align='left'>%1</t><t align='right'>%2</t><br/>", _actionName, _actionKeyText];
+                _controlNamesText = _controlNamesText + _lineText;
             } forEach _spectatorParams;
-
-            private _timeRemaining = [(estimatedEndServerTime - serverTime) max 0, "HH:MM:SS"] call BIS_fnc_secondsToString;
-            _controlNamesText = format ["Time Remaining:<br/>%1", _controlNamesText];
-            _controlKeysText = format ["%1<br/>%2", _timeRemaining, _controlKeysText];
-
-            _texture ctrlWebBrowserAction ["ExecJS", format ["setControlsInfo(['%1', '%2']);", _controlNamesText, _controlKeysText]];
+            _spectatorControlsInfo ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", _controlNamesText];
         } else {
-            _texture ctrlWebBrowserAction ["ExecJS", "setControlsInfo(['','']);"];
+            _spectatorControlsInfo ctrlSetStructuredText parseText "";
         };
 
+        private _timeRemaining = [(estimatedEndServerTime - serverTime) max 0, "HH:MM:SS"] call BIS_fnc_secondsToString;
+        _spectatorTime ctrlSetStructuredText parseText format ["<t shadow='2'>Time: %1</t>", _timeRemaining];
+
         private _showTargetInfo = uiNamespace getVariable ["SPEC_ShowTargetInfo", true];
-        if (isNull _target || !_showTargetInfo) then {
-            _texture ctrlWebBrowserAction ["ExecJS", "setTargetInfo(``);"];
+        if (!_showTargetInfo) then {
+            _spectatorInfoText ctrlSetStructuredText parseText "";
+
+            _spectatorTarget ctrlShow false;
+            _spectatorMode ctrlShow false;
+            _spectatorSpeed ctrlShow false;
+            _spectatorZoom ctrlShow false;
+            _spectatorTime ctrlShow false;
+            continue;
+        };
+
+        if (isNull _target) then {
+            _spectatorInfoText ctrlSetStructuredText parseText "";
             continue;
         };
 
@@ -437,7 +453,7 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
         private _playerOwner = if (_playerOwnerUid != "123") then {
             private _ownerPlayer = [_playerOwnerUid] call BIS_fnc_getUnitByUid;
             if (!isNull _ownerPlayer) then {
-                format ["Owner: %1<br/>", name _ownerPlayer];
+                format ["Owner: %1", name _ownerPlayer];
             } else {
                 "";
             };
@@ -447,16 +463,16 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
 
         private _targetVehicle = vehicle _target;
 
-        private _targetPosition = getPosASL _targetVehicle;
+        private _targetPosition = _targetVehicle modelToWorld [0, 0, 0];
         private _currentWeapon = currentWeapon _targetVehicle;
         private _currentWeaponType = getText (configfile >> "CfgWeapons" >> _currentWeapon >> "displayName");
         if (_currentWeaponType != "") then {
-            _currentWeaponType = format ["Weapon: %1<br/>", _currentWeaponType];
+            _currentWeaponType = format ["Weapon: %1", _currentWeaponType];
         };
         private _currentMagazine = currentMagazine _targetVehicle;
         private _currentMagazineType = [_currentMagazine] call WL2_fnc_getMagazineName;
         if (_currentMagazineType != "") then {
-            _currentMagazineType = format ["Magazine: %1<br/>", _currentMagazineType];
+            _currentMagazineType = format ["Magazine: %1", _currentMagazineType];
         };
 
 		private _rearmCooldown = _targetVehicle getVariable ["BIS_WL_nextRearm", -9999];
@@ -466,9 +482,9 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
         } else {
             _rearmCooldown = (_rearmCooldown - serverTime) max 0;
             if (_rearmCooldown > 0) then {
-                format ["Rearm: %1<br/>", [_rearmCooldown, "MM:SS"] call BIS_fnc_secondsToString];
+                format ["Rearm: %1", [_rearmCooldown, "MM:SS"] call BIS_fnc_secondsToString];
             } else {
-                "Rearm: Ready<br/>";
+                "Rearm: Ready";
             };
         };
 
@@ -478,27 +494,34 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
         } else {
             _repairCooldown = (_repairCooldown - serverTime) max 0;
             if (_repairCooldown > 0) then {
-                format ["Repair: %1<br/>", [_repairCooldown, "MM:SS"] call BIS_fnc_secondsToString];
+                format ["Repair: %1", [_repairCooldown, "MM:SS"] call BIS_fnc_secondsToString];
             } else {
-                "Repair: Ready<br/>";
+                "Repair: Ready";
             };
         };
 
         private _apsAmmo = _targetVehicle getVariable ["apsAmmo", -1];
         private _apsInfo = if (_apsAmmo >= 0) then {
-            format ["APS: %1<br/>", _apsAmmo];
+            format ["APS: %1", _apsAmmo];
         } else {
             "";
         };
 
-        private _targetInfo = format [
-            "%1<br/>Position: [%2, %3]<br/>Altitude (ASL): %4 M<br/>Health: %5%%<br/>Speed: %6 KPH<br/>%7%8%9%10%11%12",
+        private _maxDemolitionHealth = _targetVehicle getVariable ["WL2_demolitionMaxHealth", 0];
+        private _demoHealth = if (_maxDemolitionHealth > 0) then {
+            private _currentDemolitionHealth = _targetVehicle getVariable ["WL2_demolitionHealth", 0];
+            format ["Demolition: %1/%2", _currentDemolitionHealth, _maxDemolitionHealth];
+        } else {
+            "";
+        };
+
+        private _targetInfo = [
             _typeName,
-            (_targetPosition # 0 / 100) toFixed 2,
-            (_targetPosition # 1 / 100) toFixed 2,
-            round (_targetPosition # 2),
-            ((1 - damage _target) * 100) toFixed 1, // keep damage for target
-            (speed _targetVehicle) toFixed 1,
+            format ["Position: [%1, %2]", (_targetPosition # 0 / 100) toFixed 2, (_targetPosition # 1 / 100) toFixed 2],
+            format ["Altitude (AGL): %1 M", round (_targetPosition # 2)],
+            format ["Health: %1%%", ((1 - damage _target) * 100) toFixed 1],
+            _demoHealth,
+            format ["Speed: %1 KPH", (speed _targetVehicle) toFixed 1],
             _currentWeaponType,
             _currentMagazineType,
             _rearmTimer,
@@ -506,14 +529,38 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
             _apsInfo,
             _playerOwner
         ];
-        private _targetInfoArray = toArray _targetInfo;
-        {
-            if (_x == 160) then {
-                _targetInfoArray set [_forEachIndex, 32];
-            };
-        } forEach _targetInfoArray;
-        _targetInfo = toString _targetInfoArray;
 
-        _texture ctrlWebBrowserAction ["ExecJS", format ["setTargetInfo('%1');", _targetInfo]];
+        private _captureDetails = _targetVehicle getVariable ["WL_captureDetails", []];
+        if (count _captureDetails > 0) then {
+            private _sectorOwner = _targetVehicle getVariable ["BIS_WL_owner", independent];
+
+            private _captureDetailsArray = _captureDetails apply {
+                _x params ["_side", "_score", "_multiplier"];
+                if (_side == independent) then {
+                    private _reserves = _targetVehicle getVariable ["WL2_sectorPop", 0];
+                    private _reserveText = if (_reserves > 0) then { _reserves } else { "depleted" };
+                    if (_sectorOwner != independent) then { "" } else {
+                        format ["%1 (%2x): %3 (Reserves: %4)", _side, _multiplier toFixed 1, _score toFixed 0, _reserveText]
+                    };
+                } else {
+                    if (_score < 1) then { "" } else {
+                        format ["%1 (%2x): %3", _side, _multiplier toFixed 1, _score toFixed 0],
+                    };
+                };
+            };
+            _targetInfo append _captureDetailsArray;
+        };
+
+        _targetInfo = _targetInfo select {
+            _x != "";
+        };
+        _targetInfo = format ["<t shadow='2'>%1</t>", _targetInfo joinString "<br/>"];
+        _spectatorInfoText ctrlSetStructuredText parseText _targetInfo;
+
+        _spectatorTarget ctrlShow true;
+        _spectatorMode ctrlShow true;
+        _spectatorSpeed ctrlShow true;
+        _spectatorZoom ctrlShow true;
+        _spectatorTime ctrlShow true;
     };
 };

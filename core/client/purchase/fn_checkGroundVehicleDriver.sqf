@@ -22,4 +22,9 @@ if (_disableParadrop > 0) exitWith {
     [false, "This vehicle cannot be paradropped."];
 };
 
+private _isWeaponDeployed = _vehicle getVariable ["WL2_isWeaponDeployed", false];
+if (_isWeaponDeployed) exitWith {
+    [false, "This vehicle's weapon is currently deployed."];
+};
+
 [true, ""];

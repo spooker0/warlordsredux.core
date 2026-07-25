@@ -1,4 +1,7 @@
 #include "includes.inc"
+private _hideInterface = uiNamespace getVariable ["SPEC_HideInterface", false];
+if (_hideInterface) exitWith {};
+
 private _laserTargets = uiNamespace getVariable ["WL2_spectatorDrawLasers", []];
 private _infantry = uiNamespace getVariable ["WL2_spectatorDrawInfantry", []];
 private _vehicles = uiNamespace getVariable ["WL2_spectatorDrawVehicles", []];

@@ -47,7 +47,7 @@ if (!isNull _respawnCounter) then {
 
 private _statusHelpButton = _display displayCtrl SQD_STATUS_HELP_IDC;
 private _statusHelpButtonTextStructured = [
-    "HELP",
+    localize "STR_WL_spawnHelp",
     SQD_LAYOUT_LABEL_TEXT_SIZE * 0.75,
     SQD_COLOR_TEXT,
     "center"

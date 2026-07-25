@@ -23,12 +23,14 @@ waitUntil {
 	}
 };
 
-private _text = toLower (name player);
-private _list = getArray (missionConfigFile >> "adminFilter");
-if ((_list findIf {
-	[_x, _text] call BIS_fnc_inString
-}) != -1) exitWith {
-	[localize "STR_WL_badNameInfo", localize "STR_WL_badNameInfo"] call WL2_fnc_exitToLobby;
+private _disallowList = getArray (missionConfigFile >> "adminFilter");
+private _playerName = toLower (name player);
+private _filteredText = _playerName;
+{
+    _filteredText = _filteredText regexReplace [_x, "\*\*\*"];
+} forEach _disallowList;
+if (_playerName != _filteredText) exitWith {
+	[localize "STR_WL_badNameInfo", format ["Name: %1", _filteredText]] call WL2_fnc_exitToLobby;
 };
 
 WL_LoadingState = 1;
@@ -71,8 +73,6 @@ enableEnvironment [false, true];
 WL_LoadingState = 4;
 
 uiNamespace setVariable ["BIS_WL_purchaseMenuLastSelection", [0, 0, 0]];
-uiNamespace setVariable ["activeControls", []];
-uiNamespace setVariable ["control", 10000];
 
 private _settingsMap = missionProfileNamespace getVariable "WL2_settings";
 if (isNil "_settingsMap") then {
@@ -149,9 +149,10 @@ WL_LoadingState = 8;
 	};
 };
 
-_mrkrTargetEnemy = createMarkerLocal ["BIS_WL_targetEnemy", position (BIS_WL_enemySide call WL2_fnc_getSideBase)];
+private _mrkrTargetEnemy = createMarkerLocal ["BIS_WL_targetEnemy", getPosASL (BIS_WL_enemySide call WL2_fnc_getSideBase)];
 _mrkrTargetEnemy setMarkerColorLocal BIS_WL_colorMarkerEnemy;
-_mrkrTargetFriendly = createMarkerLocal ["BIS_WL_targetFriendly", position (BIS_WL_playerSide call WL2_fnc_getSideBase)];
+
+private _mrkrTargetFriendly = createMarkerLocal ["BIS_WL_targetFriendly", getPosASL (BIS_WL_playerSide call WL2_fnc_getSideBase)];
 _mrkrTargetFriendly setMarkerColorLocal BIS_WL_colorMarkerFriendly;
 
 {
@@ -193,6 +194,7 @@ WL_LoadingState = 10;
 0 spawn WL2_fnc_sectorVoteClient;
 0 spawn WL2_fnc_assetMapControl;
 0 spawn WL2_fnc_mapIcons;
+0 spawn APS_fnc_apsReloader;
 
 [46] spawn GFE_fnc_earplugs;
 WL_LoadingState = 11;
@@ -204,7 +206,7 @@ if !(isDedicated) then {
 };
 
 0 spawn {
-	WL_ORIGINAL_SPEAKER = speaker player;
+	private _originalSpeaker = speaker player;
 	private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 	while { !BIS_WL_missionEnd } do {
 		uiSleep 5;
@@ -212,7 +214,7 @@ if !(isDedicated) then {
 		if (_noVoice) then {
 			player setSpeaker "NoVoice";
 		} else {
-			player setSpeaker WL_ORIGINAL_SPEAKER;
+			player setSpeaker _originalSpeaker;
 		};
 	};
 };
@@ -264,14 +266,15 @@ if !(isDedicated) then {
 	} forEach allCurators;
 #endif
 
-player addAction [
-	format ["<t color='#00FFFF'>%1 (Key: %2)</t>", "Spawn Menu", (actionKeysNames ["watch", 1, "Keyboard"]) regexReplace ["""", ""]],
-	{ 0 spawn SQD_fnc_initSquadMenu; }, [], -100, false, true, "watch", "", 0, true
+private _spawnMenuText = format [
+	"<t color='#00FFFF'>%1 (Key: %2)</t>",
+	localize "STR_WL_spawnMenu",
+	(actionKeysNames ["watch", 1, "Keyboard"]) regexReplace ["""", ""]
 ];
+player addAction [_spawnMenuText, { 0 spawn SQD_fnc_initSquadMenu; }, [], -100, false, true, "watch", "", 0, true];
 
 uiNamespace setVariable ["WL2_canBuy", true];
 uiNamespace setVariable ["WL2_chatHistory", []];
-uiNamespace setVariable ["WL2_modOverrideUid", ""];
 uiNamespace setVariable ["WL2_timedPromptQueue", []];
 uiNamespace setVariable ["WL2_HMDSettingProfileIndex", 0];
 
@@ -354,11 +357,6 @@ showScoretable 0;
 0 spawn WL2_fnc_refreshKillfeed;
 
 // 0 spawn WL2_fnc_surveillance;
-
-private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
-private _ownedVehicles = missionNamespace getVariable [_ownedVehiclesVar, []];
-_ownedVehicles pushBack player;
-missionNamespace setVariable [_ownedVehiclesVar, _ownedVehicles, [2, clientOwner]];
 
 #if WL_WINTER_EVENT
 [true] spawn WL2_fnc_pingSounds;

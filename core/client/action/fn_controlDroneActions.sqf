@@ -70,8 +70,6 @@ while { alive player } do {
                 private _accessControl = [_drone, _caller, "driver"] call WL2_fnc_accessControl;
                 if !(_accessControl # 0) exitWith { false };
 
-                switchCamera _drone;
-
                 private _remoteControlTarget = _drone;
 
                 private _lastSeatUsed = _drone getVariable ["WL2_lastSeatUsed", "Any"];
@@ -82,7 +80,8 @@ while { alive player } do {
                     _remoteControlTarget = gunner _drone;
                 };
 
-                if (alive _remoteControlTarget) then {
+                if (alive _remoteControlTarget && count crew _drone > 0) then {
+                    switchCamera _drone;
                     player remoteControl _remoteControlTarget;
                 };
             },

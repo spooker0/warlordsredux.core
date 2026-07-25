@@ -53,10 +53,13 @@ _asset addAction [
             private _assetLoadedItem = _asset getVariable ["WL2_loadedItem", objNull];
             private _shortRope = _asset getVariable ["WL2_shortRope", false];
             if (_shortRope) then {
-                detach _assetLoadedItem;
                 {
                     ropeUnwind [_x, 5, 20];
                 } forEach _ropes;
+                uiSleep 3;
+                _assetLoadedItem setVelocity [0, 0, -5];
+                _assetLoadedItem attachTo [_asset, [0, 0, -20]];
+                detach _assetLoadedItem;
                 _asset setVariable ["WL2_shortRope", false, true];
             } else {
                 {
@@ -85,5 +88,9 @@ _asset addEventHandler ["RopeBreak", {
     private _attachedTo = ropesAttachedTo _loadedItem;
     if (count _attachedTo == 0 && _hasLoad) then {
         [_asset, _loadedItem, false] call WL2_fnc_attachVehicle;
+        private _shortRope = _asset getVariable ["WL2_shortRope", false];
+        if (_shortRope) then {
+            _asset setVariable ["WL2_shortRope", false, true];
+        };
     };
 }];

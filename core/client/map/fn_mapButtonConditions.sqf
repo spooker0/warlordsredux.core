@@ -450,13 +450,14 @@ switch (_conditionName) do {
     };
     case "bulkDeploy": {
         if (!alive _target) exitWith { "" };
-        if (cameraOn distance2D _target > 100) exitWith {
-            "You are too far from this obstacle to use it for bulk deployment.";
-        };
 
         private _installable = _target getVariable ["WL2_installable", ""];
         if (_installable == "") exitWith { "" };
         if (WL_ASSET_TYPE(_target) != _installable) exitWith { "" };
+
+        if (cameraOn distance2D _target > 100) exitWith {
+            "You are too far from this obstacle to use it for bulk deployment.";
+        };
 
         private _lastMarker = missionNamespace getVariable ["WL2_lastMarker", ""];
         private _markerPolyline = markerPolyline _lastMarker;

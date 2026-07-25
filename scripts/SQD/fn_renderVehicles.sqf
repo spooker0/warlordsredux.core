@@ -6,7 +6,7 @@ if (!isNull _squadNameEdit) exitWith {};
 
 private _vehicleListTextControl = _display displayCtrl SQD_VEHICLE_LIST_TEXT_IDC;
 private _vehicleListTextStructured = [
-    "ASSET LIST",
+    localize "STR_WL_spawnAssetList",
     SQD_LAYOUT_LABEL_TEXT_SIZE,
     SQD_COLOR_TEXT,
     "left"
@@ -15,7 +15,7 @@ _vehicleListTextControl ctrlSetStructuredText _vehicleListTextStructured;
 
 private _vehicleListButton = _display displayCtrl SQD_VEHICLE_LIST_BUTTON_IDC;
 private _vehicleListButtonTextStructured = [
-    "BUY ASSETS",
+    localize "STR_WL_spawnBuyAssets",
     SQD_LAYOUT_LABEL_TEXT_SIZE * 0.75,
     SQD_COLOR_TEXT,
     "center"

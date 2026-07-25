@@ -1,44 +1,29 @@
 #include "includes.inc"
-//________________	Author : GEORGE FLOROS [GR]	___________	29.03.19	___________
-
-
 /*
+________________	Author : GEORGE FLOROS [GR]	___________	29.03.19
 ________________	GF Earplugs Script - Mod	________________
 https://forums.bohemia.net/forums/topic/215844-gf-earplugs-script-mod/
 */
 
-player createDiaryRecord ["Warlords Redux",
-    ["Credit: GF Earplugs", "
-    <br /><font size='30' color='#FF0000'>GF Earplugs Script
-    <br />
-    <br /><font size='25' color='#FCEF06'>Author : GEORGE FLOROS [GR]
-    <br />
-    <br />
-    <br /><font size='15' color='#FF0000'>V e r s i o n    2 . 2
-    <br />
-    <br /><font size='17' color='#0059B0'>GF Earplugs Script
-    <br />
-    <br />
-    <br /><font size='15' color='#A1D2FA'>GF Earplugs Script , mute or lower sound , with a key interaction , configurable key bindings.
-    <br />Use your Earplugs with Insert key
-    <br />
-    <br />You are free to do anything but
-    <br />i would like to give me Credits for this!
-    <br />
-    <br />Simple and easy to use and adapt .
-    <br />
-    <br />
-    <br />Thanks to All script contributors .
-    <br />Thanks to everyone who tries to do the best for this game!
-    <br />Thanks to Armaholic Community and Forums .
-    <br />Thanks to BIS for such a great platform.
-    <br />Thanks to BIS Community and BIS Community Forums
-    <br />
-    <br />
-    <br />Available at :
-    <br />Armaholic and Bohemia Interactive Forums
-    <br />
-    <br />
-    <br /><font size='20' color='#FF0000'>Have Fun !
+private _creditsRecord = player createDiaryRecord ["Warlords Redux", "", taskNull, "", false];
+player setDiaryRecordText [["Warlords Redux", _creditsRecord], ["Credits", "
+    <font size='20'>Credits</font><br/>
+    <font size='18' color='#ff0000'>External Assets</font><br/>
+    GF Earplugs: George Floros's earplug script.<br/>
+    A3 Aegis Mod: Texture for the Blufor Kuma (heavily compressed).<br/>
+    <br/>
+    <font size='18' color='#ff0000'>Developers</font><br/>
+    Special Thanks to: Dwarden (Bohemia Interactive)<br/>
+    GamerDad<br/>
+    Witch Doctor<br/>
+    JWalker08<br/>
+    Weasley Wells<br/>
+    Rook<br/>
+    MONGCHAW<br/>
+    MrThomasM<br/>
+    TenPenny<br/>
+    Coffee Maker<br/>
+    Korbelz<br/>
+    Bo<br/>
     "
 ]];

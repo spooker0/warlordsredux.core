@@ -268,7 +268,7 @@ private _setupActionId = [
 				_sectorStronghold setVariable ["WL2_demolitionHealth", _strongholdMaxHealth, true];
 			};
 
-			[_sector, -1] remoteExec ["WL2_fnc_warnSectorDefenders", 2];
+			[_sector, -1, name player] remoteExec ["WL2_fnc_warnSectorDefenders", 2];
 		};
 
 		["No friendly forward base or sector in range!"] call WL2_fnc_smoothText;

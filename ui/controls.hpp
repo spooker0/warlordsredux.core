@@ -74,6 +74,38 @@ class WL_Prompt_Dialog {
 	};
 };
 
+class WL_WelcomeDisplay {
+	idd = -1;
+	class controls {
+		class WL_WelcomeDisplay_Background: RscText {
+			idc = -1;
+			x = 0;
+			y = 0;
+			w = 1;
+			h = 1;
+			colorBackground[] = {0.09, 0.09, 0.095, 1};
+		};
+		class WL_WelcomeDisplay_Text: RscStructuredText {
+			idc = 100;
+            text = "";
+            x = 0.1;
+            y = 0.1;
+            w = 0.8;
+            h = 0.8;
+            size = 0.04;
+		};
+		class WL_WelcomeDisplay_ExitButton: RscButton {
+			idc = 101;
+			text = "A3\ui_f\data\map\groupicons\waypoint.paa";
+            style = ST_CENTER + ST_PICTURE;
+			x = 0.95;
+			y = 0;
+			w = 0.05;
+			h = 0.05 * 4 / 3;
+		};
+	};
+};
+
 class WL_MapButtonDisplay {
 	idd = -1;
 	movingEnable = false;

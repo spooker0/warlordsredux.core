@@ -37,9 +37,9 @@ _display displayAddEventHandler ["KeyDown", WL2_fnc_timedPromptKeyHandler];
 private _spawnCamButton = _display displayCtrl SQD_SPAWN_SCREEN_BUTTON_IDC;
 private _camFeedState = missionNamespace getVariable ["SQD_menuCamFeedEnabled", true];
 if (_camFeedState) then {
-    _spawnCamButton ctrlSetText "DISABLE FEED";
+    _spawnCamButton ctrlSetText localize "STR_WL_spawnDisableFeed";
 } else {
-    _spawnCamButton ctrlSetText "ENABLE FEED";
+    _spawnCamButton ctrlSetText localize "STR_WL_spawnEnableFeed";
 };
 _spawnCamButton setVariable ["SQD_controlState", _camFeedState];
 _spawnCamButton ctrlAddEventHandler ["ButtonClick", {
@@ -53,11 +53,11 @@ _spawnCamButton ctrlAddEventHandler ["ButtonClick", {
         private _selectedSpecialSpawnTarget = missionNamespace getVariable ["SQD_selectedSpecialSpawnTarget", [objNull, ""]];
         [_selectedSpawnTarget, _selectedSpecialSpawnTarget] call SQD_fnc_setSpawnCam;
 
-        _control ctrlSetText "DISABLE FEED";
+        _control ctrlSetText localize "STR_WL_spawnDisableFeed";
     } else {
         [objNull, [objNull, ""]] call SQD_fnc_setSpawnCam;
 
-        _control ctrlSetText "ENABLE FEED";
+        _control ctrlSetText localize "STR_WL_spawnEnableFeed";
     };
 
     private _display = ctrlParent _control;
@@ -68,9 +68,9 @@ _spawnCamButton ctrlAddEventHandler ["ButtonClick", {
 private _spawnCamTIButton = _display displayCtrl SQD_SPAWN_SCREEN_TI_BUTTON_IDC;
 private _camTIState = missionNamespace getVariable ["SQD_menuCamTIEnabled", false];
 if (_camTIState) then {
-    _spawnCamTIButton ctrlSetText "DISABLE TI";
+    _spawnCamTIButton ctrlSetText localize "STR_WL_spawnDisableTI";
 } else {
-    _spawnCamTIButton ctrlSetText "ENABLE TI";
+    _spawnCamTIButton ctrlSetText localize "STR_WL_spawnEnableTI";
 };
 _spawnCamTIButton setVariable ["SQD_controlState", _camTIState];
 _spawnCamTIButton ctrlAddEventHandler ["ButtonClick", {
@@ -80,10 +80,10 @@ _spawnCamTIButton ctrlAddEventHandler ["ButtonClick", {
     missionNamespace setVariable ["SQD_menuCamTIEnabled", _controlState];
     _control setVariable ["SQD_controlState", _controlState];
     if (_controlState) then {
-        _control ctrlSetText "DISABLE TI";
+        _control ctrlSetText localize "STR_WL_spawnDisableTI";
         "spawncam" setPiPEffect [2];
     } else {
-        _control ctrlSetText "ENABLE TI";
+        _control ctrlSetText localize "STR_WL_spawnEnableTI";
         "spawncam" setPiPEffect [0];
     };
 

@@ -19,7 +19,6 @@ private _dynamicBlurHandle = ppEffectCreate ["DynamicBlur", 600];
 _dynamicBlurHandle ppEffectEnable true;
 _dynamicBlurHandle ppEffectAdjust [3];
 _dynamicBlurHandle ppEffectCommit 0;
-
 _display setVariable ["WL2_dynamicBlurHandle", _dynamicBlurHandle];
 
 _display displayAddEventHandler ["Unload", {
@@ -74,7 +73,7 @@ _settingsMenu append [
     ["slider", "CQB mode (DELETE key)", [200, 2000, 50, 200, "cqbViewDistance"]],
 
     ["category", "Performance"],
-    ["slider", "Map icon refresh rate", [1, 100, 1, 10, "mapRefresh"]],
+    ["slider", "Map icon refresh rate", [1, 100, 1, 4, "mapRefresh"]],
     ["slider", "Terrain details", [1, 4, 1, 3, "terrainDetails"]],
     ["slider", "Incendiary strands", [5, 20, 1, 20, "incendiaryStrands"]],
 
@@ -140,6 +139,7 @@ _settingsMenu append [
     ["checkbox", "Spawn with UAV Terminal", ["spawnWithUAVTerminal", true]],
     ["checkbox", "Spawn with rangefinder", ["spawnWithRangefinder", true]],
     ["checkbox", "AI follow default", ["aiFollowDefault", true]],
+    ["checkbox", "AI vehicle TP", ["aiVehicleTp", true]],
     ["checkbox", "Default VTOL auto mode off", ["defaultOffVtolAuto", false]],
     ["checkbox", "Camper warning / protection", ["camperWarning", true]],
     ["checkbox", "Show stronghold instructions", ["showStrongholdInfo", true]],
@@ -147,6 +147,8 @@ _settingsMenu append [
     ["checkbox", "Hide non-mandatory conscription notices", ["hideConscriptionNotices", false]],
     ["checkbox", "Railgun second click to fire", ["railgunSecondClick", true]],
     ["checkbox", "Additional subtitles (hearing impaired)", ["additionalSubs", false]],
+    ["checkbox", "Map always show detailed text", ["alwaysShowDetailedText", false]],
+    ["checkbox", "Spawn vehicle ownership transfer", ["spawnVehicleOwnershipTransfer", true]],
 
     ["category", "Hide scroll menus (requires respawn)"],
     ["checkbox", "Hide: Buy menu", ["hideBuyMenu", false]],

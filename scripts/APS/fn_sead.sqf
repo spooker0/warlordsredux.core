@@ -20,10 +20,8 @@ if (!isNull (missileTarget _projectile) || !alive _target || _lockPercent < 100)
     _projectile setVariable ["APS_ammoConsumptionOverride", 1];
 };
 
-private _isInAngle = [getPosATL _projectile, getDir _projectile, 120, getPosATL _target] call WL2_fnc_inAngleCheck;
-
 private _projectileOverride = _projectile getVariable ["APS_ammoOverride", typeof _projectile];
-if (!alive _target || !_isInAngle) exitWith {
+if (!alive _target) exitWith {
     if (_projectileOverride != typeof _projectile) then {
         _projectile setVariable ["APS_ammoConsumptionOverride", 1];
     };

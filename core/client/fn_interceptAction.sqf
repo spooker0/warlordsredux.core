@@ -135,7 +135,7 @@ private _interceptAction = {
                             false;
                         } else {
                             private _message = if (simulationEnabled _target) then {
-                                "Door locked. Open with explosives."
+                                "Door locked. Open with explosive charges."
                             } else {
                                 "Door locked."
                             };

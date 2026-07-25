@@ -1,43 +1,36 @@
 #include "includes.inc"
 
+private _cleanUp = {
+	params ["_asset"];
+	if (_asset isKindOf "Air") exitWith { false };
+
+	private _assetOwner = _asset getVariable ["BIS_WL_ownerAsset", "123"];
+	if (_assetOwner != "123") exitWith { false };
+
+	private _sector = _asset getVariable ["WL2_sectorDefender", objNull];
+	if (isNull _sector) exitWith { false };
+	if (_sector getVariable ["WL2_name", ""] == "") exitWith { false };
+
+	private _sectorIsTargeted = _sector in _targetedSectors;
+	if (!_sectorIsTargeted) exitWith { true };
+
+	private _sectorOwner = _sector getVariable ["BIS_WL_owner", independent];
+	_sectorOwner != independent
+};
+
 while { !BIS_WL_missionEnd } do {
 	uiSleep 10;
 
 	private _targetedSectors = [
 		missionNamespace getVariable ["BIS_WL_currentTarget_west", objNull],
 		missionNamespace getVariable ["BIS_WL_currentTarget_east", objNull]
-	] select {!isNull _x};
+	] select { !isNull _x };
 
 	{
-		private _sector = _x;
+		private _cleanUp = [_x] call _cleanUp;
 
-		private _sectorIsTargeted = _sector in _targetedSectors;
-
-		private _sectorDefenders = _sector getVariable ["WL2_sectorDefenders", []];
-		_sectorDefenders = _sectorDefenders select {
-			_x getVariable ["BIS_WL_ownerAsset", "123"] == "123"
-		} select { !isNull _x };
-
-		private _currentOwner = _sector getVariable ["BIS_WL_owner", sideUnknown];
-		if (_currentOwner != independent || !_sectorIsTargeted) then {
-			{
-				private _asset = _x;
-				if (_asset isKindOf "Air") then {
-					continue;
-				};
-				if (!isNull _asset) then {
-					deleteVehicle _asset;
-				};
-			} forEach _sectorDefenders;
+		if (_cleanUp) then {
+			deleteVehicle _x;
 		};
-
-		{
-			if (_x isKindOf "Man" && vehicle _x == _x) then {
-				if (isTouchingGround _x) then {
-					continue;
-				};
-				deleteVehicle _x;
-			};
-		} forEach _sectorDefenders;
-	} forEach BIS_WL_allSectors;
+	} forEach BIS_WL_ownedVehicles_server;
 };

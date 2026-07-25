@@ -48,7 +48,7 @@ class SQD_Menu {
             w = 0.6;
             h = 0.1;
             colorBackground[] = {SQD_RGBA_DARK};
-            text = " UNASSIGNED PLAYERS: 0";
+            text = "$STR_WL_spawnUnassignedPlayer";
         };
         class SQD_Menu_CreateSquad_Button: SQD_Menu_BarButton {
             idc = SQD_CREATE_SQUAD_IDC;
@@ -131,7 +131,7 @@ class SQD_Menu {
             w = 0.6;
             h = 0.6;
             colorBackground[] = {SQD_RGBA_BG};
-            text = "FEED OFF";
+            text = "$STR_WL_spawnFeedOff";
             sizeEx = 0.15;
             style = ST_CENTER;
             shadow = 0;
@@ -152,7 +152,7 @@ class SQD_Menu {
             w = 0.15;
             h = 0.045;
             size = 0.04;
-            text = "DISABLE FEED";
+            text = "$STR_WL_spawnDisableFeed";
         };
         class SQD_Menu_SpawnScreenTI: SQD_Menu_BarButton {
             idc = SQD_SPAWN_SCREEN_TI_BUTTON_IDC;
@@ -161,7 +161,7 @@ class SQD_Menu {
             w = 0.15;
             h = 0.045;
             size = 0.04;
-            text = "ENABLE TI";
+            text = "$STR_WL_spawnEnableTI";
         };
         class SQD_Menu_SpawnList: RscControlsGroup {
             idc = SQD_SPAWN_LIST_IDC;
@@ -244,7 +244,7 @@ class SQD_Menu_SquadBar: RscControlsGroupNoScrollbars {
             h = 0.1;
             sizeEx = 0.04;
             style = ST_CENTER;
-            text = "LOCKED";
+            text = "$STR_WL_spawnLocked";
         };
     };
 };

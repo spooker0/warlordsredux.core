@@ -24,13 +24,13 @@ if (_isFirst && typeof cameraOn == "B_T_VTOL_01_armed_F") exitWith {
     private _referencePoint = uiNamespace getVariable ["WL2_turretRefPoint", [0, 0, 0]];
     if (_referencePoint isEqualTo [0, 0, 0]) exitWith {
         []
-    }; 
+    };
 
     private _directionToRef = vectorNormalized (cameraOn worldToModel _referencePoint);
 
     private _refTurn = (-(_directionToRef # 0)) atan2 (_directionToRef # 1);
     private _refElev = (_directionToRef # 2) atan2 (sqrt((_directionToRef # 0) * (_directionToRef # 0) + (_directionToRef # 1) * (_directionToRef # 1)));
-    
+
     private _desiredGunAzimuth = 90;
     private _desiredGunElevation = -7.5;
 
@@ -73,11 +73,6 @@ private _edgeSweepElev = {
 
 private _turretLimits = cameraOn getTurretLimits _turret;
 _turretLimits params ["_minTurn", "_maxTurn", "_minElev", "_maxElev"];
-
-private _topLeftPoint     = [_maxTurn, _maxElev] call _pointFromAngles;
-private _topRightPoint    = [_minTurn, _maxElev] call _pointFromAngles;
-private _bottomRightPoint = [_minTurn, _minElev] call _pointFromAngles;
-private _bottomLeftPoint  = [_maxTurn, _minElev] call _pointFromAngles;
 
 private _samplesTurnEdge  = 20;  // top/bottom (TURN sweep)
 private _samplesElevEdge  = 2;   // left/right (ELEV sweep)

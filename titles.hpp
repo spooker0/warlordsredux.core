@@ -147,9 +147,9 @@ class RscTitles {
 		class controls {
 			class RscWarlordsHUD_Timer: RscStructuredText {
 				idc = 2100;
-				x = safeZoneW + safeZoneX - 0.21;
-				y = safeZoneH + safeZoneY - 0.13;
-				w = 0.23;
+				x = safeZoneX + 0.03;
+				y = safeZoneH + safeZoneY - 0.08;
+				w = 0.5;
 				h = 0.05;
 				text = "";
 				size = 0.045;
@@ -252,8 +252,8 @@ class RscTitles {
 
 			class RscWarlordsHUD_TeamPriority: RscStructuredText {
 				idc = 2111;
-				x = safeZoneX + 0.028;
-				y = safeZoneH + safeZoneY - 0.2;
+				x = safeZoneW + safeZoneX - 0.45;
+				y = safeZoneH + safeZoneY - 0.13;
 				w = 0.5;
 				h = 0.05;
 				text = "";
@@ -958,22 +958,111 @@ class RscTitles {
 		};
 	};
 
-	class RscWLSpectatorMenu {
+	class RscWLSpectatorInfo {
 		idd = -1;
 		duration = 1000000000;
 		fadein = 0;
 		fadeout = 0;
-		name = "RscWLSpectatorMenu";
-		onLoad = "uiNamespace setVariable ['RscWLSpectatorMenu', _this select 0];";
+		name = "RscWLSpectatorInfo";
+		onLoad = "uiNamespace setVariable ['RscWLSpectatorInfo', _this select 0];";
 		class controls {
-			class RscWLSpectatorMenu_Texture: RscText {
-				type = 106;
-				idc = 5502;
-				x = safeZoneX;
-				y = safeZoneY;
-				w = safeZoneW;
-				h = safeZoneH;
-				url = "file://src/ui/gen/spectator.html";
+			class SpectatorInfoText: RscStructuredText {
+				idc = 101;
+				text = "";
+				x = safeZoneX + 0.03;
+				y = 0.3;
+				w = 1;
+				h = 1;
+				size = 0.027;
+				class Attributes {
+					color = "#14cb00";
+					font = "EtelkaMonospaceProBold";
+					shadowColor = "#000000";
+				};
+			};
+			class SpectatorInfoControls: RscStructuredText {
+				idc = 102;
+				text = "";
+				x = safeZoneX + 0.03;
+				y = safeZoneY + 0.05;
+				w = 0.5;
+				h = 1;
+				size = 0.027;
+				class Attributes {
+					color = "#14cb00";
+					font = "EtelkaMonospaceProBold";
+					shadowColor = "#000000";
+				};
+			};
+			class SpectatorTarget: RscStructuredText {
+				idc = 103;
+				text = "";
+				x = safeZoneX + 0.03;
+				y = safeZoneY + safeZoneH - 0.19;
+				w = 0.5;
+				h = 0.03;
+				size = 0.027;
+				class Attributes {
+					color = "#14cb00";
+					font = "EtelkaMonospaceProBold";
+					shadowColor = "#000000";
+				};
+			};
+			class SpectatorMode: RscStructuredText {
+				idc = 104;
+				text = "";
+				x = safeZoneX + 0.03;
+				y = safeZoneY + safeZoneH - 0.16;
+				w = 0.5;
+				h = 0.03;
+				size = 0.027;
+				class Attributes {
+					color = "#14cb00";
+					font = "EtelkaMonospaceProBold";
+					shadowColor = "#000000";
+				};
+			};
+			class SpectatorSpeed: RscStructuredText {
+				idc = 105;
+				text = "";
+				x = safeZoneX + 0.03;
+				y = safeZoneY + safeZoneH - 0.13;
+				w = 0.5;
+				h = 0.03;
+				size = 0.027;
+				class Attributes {
+					color = "#14cb00";
+					font = "EtelkaMonospaceProBold";
+					shadowColor = "#000000";
+				};
+			};
+			class SpectatorZoom: RscStructuredText {
+				idc = 106;
+				text = "";
+				x = safeZoneX + 0.03;
+				y = safeZoneY + safeZoneH - 0.1;
+				w = 0.5;
+				h = 0.03;
+				size = 0.027;
+				class Attributes {
+					color = "#14cb00";
+					font = "EtelkaMonospaceProBold";
+					shadowColor = "#000000";
+				};
+			};
+			class SpectatorTime: RscStructuredText {
+				idc = 107;
+				text = "";
+				x = safeZoneX + 0.03;
+				y = safeZoneY + safeZoneH - 0.07;
+				w = 0.5;
+				h = 0.03;
+				size = 0.027;
+				class Attributes {
+					color = "#14cb00";
+					font = "EtelkaMonospaceProBold";
+					shadowColor = "#000000";
+				};
 			};
 		};
 	};
@@ -1048,7 +1137,7 @@ class RscTitles {
 			class RscWLTargetingDisplay_Center: RscStructuredText {
 				idc = 6004;
 				style = ST_MULTI;
-				x = 0.55;
+				x = 0.20;
 				y = 0.5 - (0.04 / 2);
 				w = 0.25;
 				h = 0.04;

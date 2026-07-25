@@ -16,10 +16,9 @@ private _demolishActionId = player addAction [
             } else {
                 [_demolishableTarget] call WL2_fnc_getAssetTypeName
             };
-            _displayText = format ["Demolishing %1", _displayText];
-            player setVariable ["WL2_sabotageTarget", [serverTime + 20, _displayText], true];
 
-            private _isStronghold = !isNull (_demolishableTarget getVariable ["WL_strongholdSector", objNull]);
+            private _strongholdSector = _demolishableTarget getVariable ["WL_strongholdSector", objNull];
+            private _isStronghold = !isNull _strongholdSector;
 
             private _cameraPlayerModelSpace = if (!_isStronghold) then {
                 private _targetDiff = (player worldToModel (_demolishableTarget modelToWorld [0, 0, 0])) vectorMultiply 2;
@@ -64,6 +63,9 @@ private _demolishActionId = player addAction [
                 ["", "ActionContext"],
                 ["", "navigateMenu"]
             ]], _demolitionStepTime, true] spawn WL2_fnc_showHint;
+            _displayText = format ["Demolishing %1... Tip: explosive charges (equip in Arsenal) can quickly demolish fortified structures.", _displayText];
+
+            [_displayText] call WL2_fnc_smoothText;
 
             private _endTime = serverTime + _demolitionStepTime;
             while { true } do {
@@ -107,13 +109,6 @@ private _demolishActionId = player addAction [
             [player, [""]] remoteExec ["switchMove", 0];
 
             cameraOn cameraEffect ["Terminate", "BACK"];
-
-            private _demolitionTargetSide = [_demolishableTarget] call WL2_fnc_getAssetSide;
-            if (_demolitionTargetSide == BIS_WL_playerSide) then {
-                player setVariable ["WL2_sabotageTarget", [serverTime, ""], true];
-            } else {
-                player setVariable ["WL2_sabotageTarget", [serverTime + WL_DEMOLITION_STEP_TIME, "Saboteur"], true];
-            };
         };
     },
     [],

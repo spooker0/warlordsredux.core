@@ -6,23 +6,23 @@ player createDiarySubject ["Warlords Redux", "Warlords Redux"];
 
 call GFE_fnc_credits;
 
-private _changeNotes = player createDiaryRecord ["Warlords Redux","", taskNull, "", false];
+private _changeNotes = player createDiaryRecord ["Warlords Redux", "", taskNull, "", false];
 private _changeNotesText = format ["<font color='#CCCCCC' size='18'>Changes Notes</font><br/><br/>%1", (loadfile "update.txt") regexReplace ["\n", "<br />"]];
 player setDiaryRecordText [["Warlords Redux", _changeNotes], ["Change Notes", _changeNotesText]];
 
-private _helpAA = player createDiaryRecord ["Warlords Redux","", taskNull, "", false];
+private _helpAA = player createDiaryRecord ["Warlords Redux", "", taskNull, "", false];
 player setDiaryRecordText [["Warlords Redux", _helpAA], ["Help: Air Defense", (loadfile localize "STR_WL_fileHelpAA") regexReplace ["\n", "<br />"]]];
 
-private _helpCap = player createDiaryRecord ["Warlords Redux","", taskNull, "", false];
+private _helpCap = player createDiaryRecord ["Warlords Redux", "", taskNull, "", false];
 player setDiaryRecordText [["Warlords Redux", _helpCap], ["Help: Capture Rules", (loadfile localize "STR_WL_fileHelpCapture") regexReplace ["\n", "<br />"]]];
 
 private _infoAssetKeys = createHashMapFromArray [
     ["airRadar", "AESA Radar Range"],
     ["aps", "APS Type"],
-    ["buys", "[Server Stats] Buys"],
+    ["buys", "<font color='#FF0000'>Buys</font>"],
     ["capValue", "Capture Strength"],
     ["conversion", "Replace Deployer"],
-    ["deaths", "[Server Stats] Deaths"],
+    ["deaths", "<font color='#FF0000'>Deaths</font>"],
     ["demolishable", "Demolish Health"],
     ["demolishStepTime", "Demolish Step Time"],
     ["detonate", "Explosion Damage (IED)"],
@@ -44,12 +44,11 @@ private _infoAssetKeys = createHashMapFromArray [
     ["hasSling", "Can Slingload Vehicles"],
     ["hasTurretVisualizer", "Has Turret Visualizer"],
     ["hideTurret", "Hide Main Turret"],
-    ["integralWeapon", "Integral Weapon Parameters"],
     ["isHeavyLift", "Can Lift Heavy Loads"],
     ["isLight", "Reduced Weight"],
     ["isRadar", "Has Auto Radar"],
-    ["killValue", "[Server Stats] Kill Value Total"],
-    ["kvr", "[Server Stats] KVR"],
+    ["killValue", "<font color='#FF0000'>Kill Value Total</font>"],
+    ["kvr", "<font color='#FF0000'>KVR</font>"],
     ["loadable", "Can Load On Helo/Flatbed"],
     ["loaded", "Can Deploy Item"],
     ["nameShort", "Shortened Name"],
@@ -75,6 +74,10 @@ private _infoAssetCategories = createHashMapFromArray [
     ["Rotary Wing", "Info: Rotary Wing"],
     ["Sector Defense", "Info: Sector Defense"],
     ["Structures", "Info: Structures"]
+];
+
+private _ignoredProperties = [
+    "allowPylonMagazines", "ammoOverrides", "category", "container", "disallowMagazines", "integralWeapon", "name", "spawn", "textures", "turretOverrides"
 ];
 
 private _assetData = +WL_ASSET_DATA;
@@ -148,7 +151,7 @@ private _infoPages = [];
             private _key = _x;
             private _value = _y;
 
-            if (_key in ["category", "name", "spawn", "textures", "turretOverrides"]) then {
+            if (_key in _ignoredProperties) then {
                 continue;
             };
 
@@ -178,6 +181,6 @@ private _infoPages = [];
 _infoPages = [_infoPages, [], { _x # 0 }, "DESCEND"] call BIS_fnc_sortBy;
 
 {
-    private _infoDiaryRecord = player createDiaryRecord ["Warlords Redux","", taskNull, "", false];
+    private _infoDiaryRecord = player createDiaryRecord ["Warlords Redux", "", taskNull, "", false];
     player setDiaryRecordText [["Warlords Redux", _infoDiaryRecord], _x];
 } forEach _infoPages;

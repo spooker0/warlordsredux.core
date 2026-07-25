@@ -105,6 +105,9 @@ _asset addEventHandler ["LandedTouchDown", {
     params ["_plane", "_airportID", "_airportObject"];
     if (cameraOn != _plane) exitWith {};
 
+    private _planeTakenOff = _plane getVariable ["WL2_planeTakenOff", false];
+    if (!_planeTakenOff) exitWith {};
+
     private _catapultsNearby = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) select {
         WL_ISUP(_x)
     } select {
@@ -114,6 +117,8 @@ _asset addEventHandler ["LandedTouchDown", {
     };
 
     if (count _catapultsNearby == 0 && _plane distance2D _airportObject > 500) exitWith {};
+
+    _plane setVariable ["WL2_planeTakenOff", false];
 
     private _arrestCables = [
         ropeCreate [_plane, [0, 0, 0], _plane, [25, 25, -3], 38],
@@ -141,3 +146,11 @@ _asset addEventHandler ["LandedTouchDown", {
         } forEach _arrestCables;
     };
 }];
+
+while { alive _asset } do {
+    private _altitude = _asset modelToWorld [0, 0, 0];
+    if (_altitude # 2 > 30) then {
+        _asset setVariable ["WL2_planeTakenOff", true];
+    };
+    uiSleep 5;
+};

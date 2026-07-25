@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_position", "_direction", "_paradropper", "_playerVehicle"];
 
-private _isControlling = driver _playerVehicle == player;
+private _isControlling = _playerVehicle == cameraOn;
 if (_isControlling) then {
     private _paradropKeyParams = ["PARADROP CONTROLS", [
         ["Move forward", "MoveForward"],
@@ -85,5 +85,6 @@ deleteVehicle _parachute;
 _playerVehicle setVelocity [0, 0, 0];
 
 if (_isControlling) then {
+    systemChat "Paradrop controls active";
     ["Paradrop"] spawn WL2_fnc_showHint;
 };

@@ -145,7 +145,7 @@ if (!isNull _responsiblePlayer && { isPlayer [_responsiblePlayer] }) then {
         private _killReward = if (_unit isKindOf "Man") then {
             if (_isUnitPlayer) then { 60 } else { 30 };
         } else {
-            round (0.5 * WL_ASSET(_assetActualType, "cost", 0) ^ 0.8);
+            WL_KILL_REWARD(_assetActualType);
         };
 
         private _spotReward = round (_killReward / 4.0);

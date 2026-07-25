@@ -98,14 +98,14 @@ private _squadsForMenu = [_squads, [_playerId], {
 
 private _unassignedPlayerText = _display displayCtrl SQD_UNASSIGNED_TEXT_IDC;
 private _unassignedPlayers = ["getUnsquaddedPlayers", [side group player]] call SQD_fnc_query;
-_unassignedPlayerText ctrlSetText format [" UNASSIGNED PLAYERS: %1", count _unassignedPlayers];
+_unassignedPlayerText ctrlSetText format [" " + localize "STR_WL_spawnUnassignedPlayer", count _unassignedPlayers];
 
 private _squadCreateButton = _display displayCtrl SQD_CREATE_SQUAD_IDC;
 _squadCreateButton ctrlRemoveAllEventHandlers "ButtonClick";
 
 private _playerSquad = ["getSquadForPlayer", [getPlayerID player]] call SQD_fnc_query;
 if (count _playerSquad == 0) then {
-    private _squadCreateText = ["CREATE SQUAD", SQD_LAYOUT_BUTTON_TEXT_SIZE, SQD_COLOR_TEXT, "center"] call SQD_fnc_renderText;
+    private _squadCreateText = [localize "STR_WL_spawnCreateSquad", SQD_LAYOUT_BUTTON_TEXT_SIZE, SQD_COLOR_TEXT, "center"] call SQD_fnc_renderText;
     _squadCreateButton ctrlSetStructuredText _squadCreateText;
 
     _squadCreateButton ctrlAddEventHandler ["ButtonClick", {
@@ -116,7 +116,7 @@ if (count _playerSquad == 0) then {
         ctrlSetFocus _dummyButton;
     }];
 } else {
-    private _squadInviteText = ["INVITE TO SQUAD", SQD_LAYOUT_BUTTON_TEXT_SIZE, SQD_COLOR_TEXT, "center"] call SQD_fnc_renderText;
+    private _squadInviteText = [localize "STR_WL_spawnInviteSquad", SQD_LAYOUT_BUTTON_TEXT_SIZE, SQD_COLOR_TEXT, "center"] call SQD_fnc_renderText;
     _squadCreateButton ctrlSetStructuredText _squadInviteText;
 
     _squadCreateButton ctrlAddEventHandler ["ButtonClick", SQD_fnc_contextInvite];
@@ -226,7 +226,7 @@ private _totalPointsMap = missionNamespace getVariable ["WL2_totalPointsEarned",
     _squadNameText ctrlSetStructuredText _squadNameTextStructured;
 
     private _squadVotingPower = ["getSquadVotingPower", [_squadLeader]] call SQD_fnc_query;
-    _squadNameText ctrlSetTooltip format ["Vote Power: %1", round _squadVotingPower];
+    _squadNameText ctrlSetTooltip format [localize "STR_WL_spawnVotePower", round _squadVotingPower];
 
     _squadNameText ctrlRemoveAllEventHandlers "ButtonClick";
 
@@ -249,7 +249,7 @@ private _totalPointsMap = missionNamespace getVariable ["WL2_totalPointsEarned",
 
     switch (true) do {
         case (_isPlayerSquad): {
-            private _squadBarButtonText = ["LEAVE", SQD_LAYOUT_BUTTON_TEXT_SIZE, SQD_COLOR_TEXT, "center"] call SQD_fnc_renderText;
+            private _squadBarButtonText = [localize "STR_WL_spawnLeave", SQD_LAYOUT_BUTTON_TEXT_SIZE, SQD_COLOR_TEXT, "center"] call SQD_fnc_renderText;
             _squadBarButton ctrlSetStructuredText _squadBarButtonText;
 
             _squadBarButton ctrlAddEventHandler ["ButtonClick", {
@@ -266,21 +266,21 @@ private _totalPointsMap = missionNamespace getVariable ["WL2_totalPointsEarned",
         };
 
         case (_locked): {
-            _lockedText ctrlSetText "LOCKED";
+            _lockedText ctrlSetText localize "STR_WL_spawnLocked";
 
             _lockedText ctrlShow true;
             _squadBarButton ctrlShow false;
         };
 
         case (_playerCount >= SQD_MAX_SQUAD_SIZE): {
-            _lockedText ctrlSetText "FULL";
+            _lockedText ctrlSetText localize "STR_WL_spawnFull";
 
             _lockedText ctrlShow true;
             _squadBarButton ctrlShow false;
         };
 
         default {
-            private _squadBarButtonText = ["JOIN", SQD_LAYOUT_BUTTON_TEXT_SIZE, SQD_COLOR_TEXT, "center"] call SQD_fnc_renderText;
+            private _squadBarButtonText = [localize "STR_WL_spawnJoin", SQD_LAYOUT_BUTTON_TEXT_SIZE, SQD_COLOR_TEXT, "center"] call SQD_fnc_renderText;
             _squadBarButton ctrlSetStructuredText _squadBarButtonText;
 
             _squadBarButton setVariable ["SQD_squadLeader", _squadLeader];

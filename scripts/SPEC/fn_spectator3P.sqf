@@ -16,8 +16,8 @@ _camera switchCamera "Internal";
 private _rotateSpeed = 100;
 private _rotateLeft = inputAction "BuldMoveLeft" - inputAction "BuldMoveRight";
 private _rotateUp = inputAction "BuldMoveForward" - inputAction "BuldMoveBack";
-private _zoomIn = inputAction "prevAction";
-private _zoomOut = inputAction "nextAction";
+private _zoomIn = if (inputAction "prevAction" > 0) then { 1 } else { 0 };
+private _zoomOut = if (inputAction "nextAction" > 0) then { 1 } else { 0 };
 
 if (_zoomIn != 0) then {
     private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
@@ -51,16 +51,15 @@ if (_resetRadius) then {
     uiNamespace setVariable ["SPEC_resetRadius", false];
 };
 
-if (_radius >= 10) then {
+if ((_radius + _zoomDelta) >= 10) then {
     _zoomDelta = _zoomDelta * 5;
 };
 _radius = (_radius + _zoomDelta) max 1 min _maxRadius;
 
 if (_zoomDelta != 0) then {
-    private _display = uiNamespace getVariable ["RscWLSpectatorMenu", displayNull];
-    private _texture = _display displayCtrl 5502;
-    private _zoomLevel = linearConversion [1, _maxRadius, _radius, 0, 1];
-    _texture ctrlWebBrowserAction ["ExecJS", format ["updateZoomLevel(%1);", _zoomLevel]];
+    private _spectatorInfo = uiNamespace getVariable ["RscWLSpectatorInfo", displayNull];
+    private _spectatorZoom = _spectatorInfo displayCtrl 106;
+    _spectatorZoom ctrlSetStructuredText parseText format ["<t shadow='2'>Orbit: %1 m</t>", round _radius];
 };
 
 private _cosP = cos _pitch;

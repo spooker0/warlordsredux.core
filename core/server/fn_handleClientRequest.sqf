@@ -224,7 +224,8 @@ if (_action == "immobilized") exitWith {
 	private _immobilizedUnit = _param1;
 
 	private _unitActualType = WL_ASSET_TYPE(_immobilizedUnit);
-	private _reward = round (0.2 * WL_ASSET(_unitActualType, "cost", 0) ^ 0.8);
+	private _reward = WL_KILL_REWARD(_unitActualType);
+	_reward = round (_reward / 2.5);
 
 	[_reward, "Vehicle disabled"] call _addFunds;
 	[objNull, _reward, "Vehicle disabled", WL_COLOR_KILL] remoteExec ["WL2_fnc_killRewardClient", _sender];

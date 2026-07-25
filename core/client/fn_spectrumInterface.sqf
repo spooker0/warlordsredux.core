@@ -95,10 +95,16 @@ addMissionEventHandler ["Draw3D", {
 
         private _lockRange = linearConversion [0, 1000, _friendlySignal, 50, WL_JAMMER_SPECTRUM_RANGE];
 
+        private _hasSpectrumJammedBefore = uiNamespace getVariable ["WL2_hasSpectrumJammedBefore", false];
+        private _instructionText = if (_hasSpectrumJammedBefore) then { "" } else {
+            "<br/>Look at flying drones to jam them."
+        };
+
         _indicator ctrlSetStructuredText parseText format [
-            "<t align='center' size='0.9' shadow='2'>Strength: %1%%<br/>Max Range: %2 M</t>",
+            "<t align='center' size='0.9' shadow='2'>Strength: %1%%<br/>Max Range: %2 M%3</t>",
             round (_friendlySignal / 10),
-            round _lockRange
+            round _lockRange,
+            _instructionText
         ];
 
         private _uavsInRange = vehicles select {
@@ -200,6 +206,7 @@ addMissionEventHandler ["Draw3D", {
                 if (_lockStatus > (4 * _lockDifficulty)) then {
                     // Effect
                     if (_lockedUav isKindOf "Air") then {
+                        uiNamespace setVariable ["WL2_hasSpectrumJammedBefore", true];
                         _lockedUav setVariable ["WL_lastHitter", player, 2];
                         [_lockedUav, player] remoteExec ["WL2_fnc_uavJammed", 2];
                         playSoundUI ["a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", 1, 1, true];

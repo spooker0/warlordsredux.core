@@ -107,17 +107,24 @@ if (_action == "newjoin") exitWith {
     private _joinerId = _params select 0;
     private _joiner = ["getPlayerForID", [_joinerId]] call SQD_fnc_query;
 
+    if (isNull _joiner) exitWith {};
+
     private _lastPlayedSound = uiNamespace getVariable ["WL2_lastSquadJoinSound", 0];
     if (serverTime - _lastPlayedSound > 10) then {
         uiNamespace setVariable ["WL2_lastSquadJoinSound", serverTime];
         playSoundUI ["a3\animals_f_beta\sheep\data\sound\sheep3.wss"];
-    };
 
-    if (isNull _joiner) exitWith {};
-    if (_joiner == player) then {
-        ["You have joined a squad."] call WL2_fnc_smoothText;
-    } else {
-        [format ["%1 has joined your squad.", name _joiner]] call WL2_fnc_smoothText;
+        if (_joiner == player) then {
+            ["You have joined a squad."] call WL2_fnc_smoothText;
+        } else {
+            private _alreadyNotifiedPlayers = uiNamespace getVariable ["WL2_alreadyNotifiedPlayers", []];
+            if (!_joinerId in _alreadyNotifiedPlayers) then {
+                _alreadyNotifiedPlayers pushBack _joinerId;
+                uiNamespace setVariable ["WL2_alreadyNotifiedPlayers", _alreadyNotifiedPlayers];
+
+                [format ["%1 has joined your squad.", name _joiner]] call WL2_fnc_smoothText;
+            };
+        };
     };
 };
 

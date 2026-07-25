@@ -59,7 +59,7 @@ uiNamespace setVariable ["WL2_inventoryClearButtons", _clearButtons];
 
 private _previousButton = _display ctrlCreate ["WLRscInventoryCenterButton", -1, _loadoutGroup];
 _previousButton ctrlSetPosition [_xPoint, 0, INV_BUTTON_WIDTH, 0.05];
-_previousButton ctrlSetStructuredText parseText "<t align='center'>Previous</t>";
+_previousButton ctrlSetStructuredText parseText format ["<t align='center'>%1</t>", localize "STR_WL_previous"];
 _previousButton ctrlSetFont "PuristaMedium";
 _previousButton ctrlSetFontHeight 0.04;
 _previousButton ctrlAddEventHandler ["ButtonClick", WL2_fnc_previousButtonClicked];
@@ -67,7 +67,7 @@ _previousButton ctrlCommit 0;
 
 private _arsenalButton = _display ctrlCreate ["WLRscInventoryCenterButton", -1, _loadoutGroup];
 _arsenalButton ctrlSetPosition [_xPoint, 0.06, INV_BUTTON_WIDTH, 0.1];
-_arsenalButton ctrlSetStructuredText parseText format ["<t align='center'>Arsenal</t>"];
+_arsenalButton ctrlSetStructuredText parseText format ["<t align='center'>%1</t>", localize "STR_A3_Arsenal"];
 _arsenalButton ctrlSetFont "PuristaMedium";
 _arsenalButton ctrlSetFontHeight 0.038;
 _arsenalButton ctrlAddEventHandler ["ButtonClick", {
@@ -87,7 +87,7 @@ _arsenalButton ctrlCommit 0;
 
 private _nextButton = _display ctrlCreate ["WLRscInventoryCenterButton", -1, _loadoutGroup];
 _nextButton ctrlSetPosition [_xPoint, 0.17, INV_BUTTON_WIDTH, 0.05];
-_nextButton ctrlSetStructuredText parseText "<t align='center'>Next</t>";
+_nextButton ctrlSetStructuredText parseText format ["<t align='center'>%1</t>", localize "STR_WL_next"];
 _nextButton ctrlSetFont "PuristaMedium";
 _nextButton ctrlSetFontHeight 0.04;
 _nextButton ctrlAddEventHandler ["ButtonClick", WL2_fnc_nextButtonClicked];

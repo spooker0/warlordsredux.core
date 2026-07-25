@@ -60,21 +60,21 @@ if (_travelPriorityResult) then {
 
     switch (_teamPriorityType) do {
         case "asset": {
-            _spawns pushBack ["PRIORITY", [_teamPriority] call WL2_fnc_getAssetTypeName, [_teamPriority], []];
+            _spawns pushBack [localize "STR_WL_spawnPriority", [_teamPriority] call WL2_fnc_getAssetTypeName, [_teamPriority], []];
         };
         case "fob": {
-            _spawns pushBack ["PRIORITY", "FORWARD BASE", [_teamPriority], []];
+            _spawns pushBack [localize "STR_WL_spawnPriority", localize "STR_WL_spawnFob", [_teamPriority], []];
         };
         case "stronghold": {
-            _spawns pushBack ["PRIORITY", "STRONGHOLD", [_teamPriority], []];
+            _spawns pushBack [localize "STR_WL_spawnPriority", localize "STR_WL_spawnStronghold", [_teamPriority], []];
         };
         case "sector": {
             private _sectorSpawns = [_teamPriority] call _generateSectorSpawns;
-            _spawns pushBack ["PRIORITY", _sectorSpawns # 0, _sectorSpawns # 1, _sectorSpawns # 2];
+            _spawns pushBack [localize "STR_WL_spawnPriority", _sectorSpawns # 0, _sectorSpawns # 1, _sectorSpawns # 2];
         };
         case "home": {
             private _sectorSpawns = [_teamPriority] call _generateSectorSpawns;
-            _spawns pushBack ["PRIORITY", _sectorSpawns # 0, _sectorSpawns # 1, _sectorSpawns # 2];
+            _spawns pushBack [localize "STR_WL_spawnPriority", _sectorSpawns # 0, _sectorSpawns # 1, _sectorSpawns # 2];
         };
 
         default {};
@@ -83,12 +83,12 @@ if (_travelPriorityResult) then {
 
 if !(WL_TARGET_FRIENDLY in _alreadyShownSectors) then {
     private _sectorSpawns = [WL_TARGET_FRIENDLY] call _generateSectorSpawns;
-    _spawns pushBack ["ATTACK", _sectorSpawns # 0, _sectorSpawns # 1, _sectorSpawns # 2];
+    _spawns pushBack [localize "STR_WL_spawnAttack", _sectorSpawns # 0, _sectorSpawns # 1, _sectorSpawns # 2];
 };
 
 if !(WL_TARGET_ENEMY in _alreadyShownSectors) then {
     private _sectorSpawns = [WL_TARGET_ENEMY] call _generateSectorSpawns;
-    _spawns pushBack ["DEFEND", _sectorSpawns # 0, _sectorSpawns # 1, _sectorSpawns # 2];
+    _spawns pushBack [localize "STR_WL_spawnDefend", _sectorSpawns # 0, _sectorSpawns # 1, _sectorSpawns # 2];
 };
 
 private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
@@ -99,7 +99,7 @@ private _forwardBaseSpawns = _friendlyFOBs apply {
     [_x, "fob"]
 };
 if (count _forwardBaseSpawns > 0) then {
-    _spawns pushBack ["FOB", "FORWARD BASES", [], _forwardBaseSpawns];
+    _spawns pushBack [localize "STR_WL_spawnFob", localize "STR_WL_spawnForwardBases", [], _forwardBaseSpawns];
 };
 
 private _squadmates = ["getSquadmates", [getPlayerID player, false]] call SQD_fnc_query;
@@ -112,13 +112,13 @@ if (count _eligibleSquadmates > 0) then {
     private _squadmateSpawns = _eligibleSquadmates apply {
         [_x, "squadmate"]
     };
-    _spawns pushBack ["SQUAD", "SQUADMATES", [], _squadmateSpawns];
+    _spawns pushBack [localize "STR_WL_spawnSquad", localize "STR_WL_spawnSquadmates", [], _squadmateSpawns];
 };
 
 private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
 if !(_homeBase in _alreadyShownSectors) then {
     private _homeSectorName = _homeBase getVariable ["WL2_name", "SECTOR"];
-    _spawns pushBack ["HOME", _homeSectorName, [], [[_homeBase, "home"]]];
+    _spawns pushBack [localize "STR_WL_spawnHome", _homeSectorName, [], [[_homeBase, "home"]]];
 };
 
 private _spawnListGroup = _display displayCtrl SQD_SPAWN_LIST_IDC;
@@ -216,13 +216,13 @@ if (!alive _selectedSpawnTarget && !alive (_selectedSpecialSpawnTarget # 0)) the
 
         private _specialSpawnInfo = switch (_specialSpawnType) do {
             case "airAssault": {
-                ["AIR ASSAULT", "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa"]
+                [localize "STR_WL_spawnAirAssault", "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa"]
             };
             case "seized": {
-                ["RANDOM", "a3\ui_f\data\map\markers\military\unknown_ca.paa"]
+                [localize "STR_WL_spawnRandom", "a3\ui_f\data\map\markers\military\unknown_ca.paa"]
             };
             case "stronghold": {
-                ["STRONGHOLD", "A3\ui_f\data\map\mapcontrol\Ruin_CA.paa"]
+                [localize "STR_WL_spawnStronghold", "A3\ui_f\data\map\mapcontrol\Ruin_CA.paa"]
             };
             case "fob": {
                 private _nearbySectors = BIS_WL_allSectors select {
@@ -239,7 +239,7 @@ if (!alive _selectedSpawnTarget && !alive (_selectedSpecialSpawnTarget # 0)) the
                 };
             };
             case "home": {
-                ["HOME BASE", "A3\ui_f_orange\data\cfgmarkers\redcrystal_ca.paa"]
+                [localize "STR_WL_spawnHomeBase", "A3\ui_f_orange\data\cfgmarkers\redcrystal_ca.paa"]
             };
             case "squadmate": {
                 private _squadmateName = if (alive _specialSpawnObject) then {

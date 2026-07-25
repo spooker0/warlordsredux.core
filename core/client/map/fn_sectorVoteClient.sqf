@@ -251,7 +251,7 @@ while { !BIS_WL_missionEnd } do {
                         [0.7, 0.6, 0, 1]
                     };
 
-                    [_sectorName, _voteCount, _ownerColor]
+                    [_sectorName, round _voteCount, _ownerColor]
                 };
 
                 [_display, _voteSectors, _captureSectionHeight, true] call WL2_fnc_renderVoteDisplay;

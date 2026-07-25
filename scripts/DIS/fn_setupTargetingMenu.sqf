@@ -491,7 +491,20 @@ while { !BIS_WL_missionEnd } do {
 		_statusText = _statusText + "<t color='#000000'>INTEGRAL AMMO: 0</t><br/>";
 	};
 	if (_weaponAmmoCount > 0) then {
-		_statusText = _statusText + format ["INTEGRAL AMMO: %1<br/>", _weaponAmmoCount];
+		if (driver cameraOn == player) then {
+			_statusText = _statusText + format ["INTEGRAL AMMO: %1<br/>", _weaponAmmoCount];
+			private _hasDeployedWeaponBefore = uiNamespace getVariable ["WL2_hasDeployedWeaponBefore", false];
+			if (!_hasDeployedWeaponBefore) then {
+				_statusText = format ["%1USE SCROLL WHEEL ACTION OR PRESS %2 TO DEPLOY<br/>", _statusText, (actionKeysNames "deployWeaponAuto") regexReplace ["""", ""]];
+			};
+		} else {
+			_statusText = _statusText + "DRIVER CONTROLLED WEAPON AVAILABLE<br/>";
+		};
+	};
+
+	private _apsReloading = cameraOn getVariable ["WL2_apsReloadStarted", false];
+	if (_apsReloading) then {
+		_statusText = _statusText + "RELOADING APS...<br/>";
 	};
 
 	private _hasECM = cameraOn getVariable ["WL2_hasECMSystem", false];
@@ -523,7 +536,7 @@ while { !BIS_WL_missionEnd } do {
 	};
 
 	private _centeredText = "";
-	if (currentWeapon cameraOn == "cannon_railgun_fake") then {
+	if (currentWeapon cameraOn == "cannon_railgun_fake" && !visibleMap) then {
 		private _barrelIntegrity = 1 - (cameraOn getHitPointDamage "HitGun");
 		_barrelIntegrity = round (_barrelIntegrity * 100);
 		private _barrelIntegrityColor = if (_barrelIntegrity > 75) then {
@@ -602,6 +615,12 @@ while { !BIS_WL_missionEnd } do {
 				_centeredText = format ["<t color='%1'>%2 %3%%</t>", _chargeColor, _chargeText, _chargeValue];
 			};
 		};
+	};
+
+	private _ammoConfig = cameraOn getVariable ["WL2_currentAmmoConfig", createHashMap];
+	private _manualSam = _ammoConfig getOrDefault ["manualSam", []];
+	if (count _manualSam > 0) then {
+		_statusText = _statusText + "<t color='#ff0000'>GUIDE MISSILE TO TARGET</t><br/>";
 	};
 
 	if (_statusText != "") then {

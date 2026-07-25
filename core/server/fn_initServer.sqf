@@ -70,7 +70,6 @@ call WL2_fnc_updateSectorsData;
 call WL2_fnc_processRunways;
 0 spawn WL2_fnc_combatAirServer;
 [true] spawn WL2_fnc_dumbMineHandler;
-0 spawn WL2_fnc_dumbMineAnnouncer;
 
 0 spawn WL2_fnc_cleanupCarrier;
 0 spawn WL2_fnc_laserTracker;

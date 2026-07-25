@@ -32,6 +32,7 @@ private _mapSectorModifierSize = _settingsMap getOrDefault ["mapSectorModifierSi
 private _mapMode = uiNamespace getVariable ["WL2_mapMode", 0];
 private _showDetailedMode = inputAction "lookAround" > 0 || _map getVariable ["WL2_showDetailedMode", false];
 private _showAirMode = _mapMode == 1;
+private _showMyMode = _mapMode == 2;
 private _showSectorLinks = _drawMode != 0 || WL_VotePhase != 0 || _showDetailedMode;
 
 private _sectorsInLinksShown = [];
@@ -106,7 +107,7 @@ if (uiNamespace getVariable ["WL2_isOrderingWater", false]) then {
 	private _mouseWorldPosition = _map ctrlMapScreenToWorld _mousePosition;
 
 	private _waterDropCost = uiNamespace getVariable ["WL2_waterDropCost", -1];
-	if (_waterDropCost >= 1000) then {
+	if (_waterDropCost >= 500) then {
 		private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		private _spawnLocations = _forwardBases select {
 			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side
@@ -116,13 +117,13 @@ if (uiNamespace getVariable ["WL2_isOrderingWater", false]) then {
 		_spawnLocations append _linkedSectors;
 
 		private _ownedSectorsInRange = _spawnLocations select {
-			_mouseWorldPosition distance _x < 1500;
+			_mouseWorldPosition distance _x < 500;
 		};
 		{
 			_drawEllipses pushBack [
 				getPosASL _x,
-				1500,
-				1500,
+				500,
+				500,
 				0,
 				[1, 1, 1, 1],
 				""
@@ -305,40 +306,6 @@ if (_showSectorLinks) then {
 		} forEach _regionIds;
 	};
 };
-
-// Draw waypoints
-private _currentGroup = group cameraOn;
-private _currentPosition = getPosASL cameraOn;
-{
-	private _waypointPosition = waypointPosition _x;
-	private _currentWaypointIndex = currentWaypoint _currentGroup;
-
-	if (_forEachIndex < _currentWaypointIndex) then {
-		continue;
-	};
-
-	_drawIcons pushBack [
-		"a3\ui_f\data\map\mapcontrol\waypointeditor_ca.paa",
-		[1, 1, 0, 1],
-		_waypointPosition,
-		20 * _mapIconScale,
-		20 * _mapIconScale,
-		0,
-		str (_forEachIndex - _currentWaypointIndex + 1),
-		0,
-		0.05 * _mapIconScale,
-		"PuristaBold"
-	];
-
-	_drawLines pushBack [
-		_currentPosition,
-		_waypointPosition,
-		[0.9, 0.9, 0.9, 1],
-		8
-	];
-
-	_currentPosition = _waypointPosition;
-} forEach (_mapData getOrDefault ["uavWaypoints", []]);
 
 // Draw forward bases
 private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
@@ -641,6 +608,8 @@ private _mapIconTextScale = _settingsMap getOrDefault ["mapIconTextScale", 1];
 private _iconTextSize = _mapIconTextScale * 0.043;
 private _mapIconTextSize = _iconTextSize * _mapIconScale;
 
+private _alwaysShowDetailedText = _settingsMap getOrDefault ["alwaysShowDetailedText", false];
+
 // Draw vehicles
 private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 {
@@ -649,14 +618,23 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 			continue;
 		};
 	};
-	private _position = getPosASL _x;
-	private _size = _x getVariable ["WL2_mapIconSize", 19];
-	private _hideMap = _x getVariable ["WL2_hideMap", 0];
-	if (_hideMap == 2 && !_showDetailedMode) then {
+	private _ownerUid = _x getVariable ["BIS_WL_ownerAsset", "123"];
+	private _playerOwned = _ownerUid == _playerUid;
+
+	if (_showMyMode && !_playerOwned) then {
 		continue;
 	};
+
+	private _hideMap = _x getVariable ["WL2_hideMap", 0];
+	if (_hideMap > 0 && !_showDetailedMode && !_playerOwned) then {
+		continue;
+	};
+
+	private _position = getPosASL _x;
+	private _size = _x getVariable ["WL2_mapIconSize", 19];
+
 	private _iconText = if (_hideMap == 0 && _draw) then {
-		if (_showDetailedMode) then {
+		if (_showDetailedMode || _alwaysShowDetailedText) then {
 			_x getVariable ["WL2_mapIconTextDetailed", ""]
 		} else {
 			_x getVariable ["WL2_mapIconText", ""]
@@ -681,20 +659,12 @@ private _sideVehicles = _mapData getOrDefault ["sideVehicles", []];
 	if (_x == player) then {
 		continue;
 	};
-	if (_hideMap == 1 && !_showDetailedMode) then {
-		private _ownerUid = _x getVariable ["BIS_WL_ownerAsset", "123"];
-		if (_ownerUid != _playerUid) then {
-			private _access = _x getVariable ["WL2_accessControl", -1];
-			if (_access != 0) then {
-				continue;
-			};
-		};
-	};
 	_drawIconsSelectable pushBack _x;
 } forEach _sideVehicles;
 
+private _visibleEnemyUnits = _mapData getOrDefault ["visibleEnemyUnits", []];
 private _checkForAirRadar = if (_showAirMode) then {
-	_sideVehicles
+	_sideVehicles + _visibleEnemyUnits
 } else {
 	_assetTargets + [cameraOn];
 };
@@ -703,7 +673,7 @@ private _checkForAirRadar = if (_showAirMode) then {
 	if (_airRadar > 0) then {
 		_drawSemiCircles pushBack [
 			60,
-			[1, 1, 1, 0.5],
+			_x getVariable ["WL2_mapIconColor", [1, 1, 1, 1]],
 			getPosASL _x,
 			_airRadar,
 			getDirVisual _x,
@@ -752,8 +722,7 @@ private _drawCirclesFor = if (_showAirMode) then {
 } forEach _drawCirclesFor;
 
 // Draw visible enemy units
-if (!_showAirMode) then {
-	private _visibleEnemyUnits = _mapData getOrDefault ["visibleEnemyUnits", []];
+if (!_showAirMode && !_showMyMode) then {
 	{
 		private _position = getPosASL _x;
 		private _size = _x getVariable ["WL2_mapIconSize", 19];
@@ -783,33 +752,43 @@ if (!_showAirMode) then {
 };
 
 // Draw plane wrecks
-private _airWrecks = _mapData getOrDefault ["airWrecks", []];
-{
-	private _position = getPosASL _x;
-	private _wreckValue = _x getVariable ["WL2_wreckValue", 0];
+if (!_showAirMode && !_showMyMode) then {
+	private _airWrecks = _mapData getOrDefault ["airWrecks", []];
+	{
+		private _position = getPosASL _x;
+		private _wreckValue = _x getVariable ["WL2_wreckValue", 0];
 
-	private _deadTime = _x getVariable ["WL2_timeOfDeath", -1];
-	private _wreckTime = if (_deadTime >= 0) then {
-		serverTime - _deadTime
-	} else {
-		_x getEntityInfo 3
-	};
+		private _deadTime = _x getVariable ["WL2_timeOfDeath", -1];
+		private _wreckTime = if (_deadTime >= 0) then {
+			serverTime - _deadTime
+		} else {
+			_x getEntityInfo 3
+		};
 
-	private _wreckTimer = [_wreckTime, "MM:SS"] call BIS_fnc_secondsToString;
-	_drawIcons pushBack [
-		"\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa",
-		[0, 0, 0, 1],
-		_position,
-		23 * _mapIconScale,
-		23 * _mapIconScale,
-		0,
-		format ["WRECK (%1%2, %3)", WL_MONEY_SIGN, _wreckValue, _wreckTimer],
-		1,
-		_mapIconTextSize,
-		"PuristaBold",
-		"right"
-	];
-} forEach _airWrecks;
+		private _wreckSide = [_x] call WL2_fnc_getAssetSide;
+		private _wreckColor = switch (_wreckSide) do {
+			case west: { [0, 0.3, 0.6, 0.9] };
+			case east: { [0.5, 0, 0, 0.9] };
+			case independent: { [0, 0.6, 0, 0.9] };
+			default { [1, 1, 1, 1] };
+		};
+
+		private _wreckTimer = [_wreckTime, "MM:SS"] call BIS_fnc_secondsToString;
+		_drawIcons pushBack [
+			"\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa",
+			_wreckColor,
+			_position,
+			23 * _mapIconScale,
+			23 * _mapIconScale,
+			0,
+			format ["WRECK (%1%2, %3)", WL_MONEY_SIGN, _wreckValue, _wreckTimer],
+			1,
+			_mapIconTextSize,
+			"PuristaBold",
+			"right"
+		];
+	} forEach _airWrecks;
+};
 
 // Draw advanced SAMs
 private _advancedSams = _mapData getOrDefault ["advancedSams", []];
@@ -876,7 +855,7 @@ private _advancedMines = _mapData getOrDefault ["advancedMines", []];
 } forEach _advancedMines;
 
 // Draw minefields
-if (!_showAirMode) then {
+if (!_showAirMode && !_showMyMode) then {
 	private _minefields = _mapData getOrDefault ["minefields", []];
 	{
 		if (!alive _x) then {

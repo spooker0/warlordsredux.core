@@ -65,33 +65,69 @@ private _mousePosition = getMousePosition;
 private _circleScale = 6.4 * worldSize / 8192 * _scale;
 {
 	_x params ["_sectorAngle", "_color", "_position", "_size", "_direction", "_scanLines"];
-	_m drawIcon [
-		format ["\a3\ui_f\data\IGUI\RscCustomInfo\Sensors\Sectors\sector%1_ca.paa", _sectorAngle],
-		_color,
+	// _m drawIcon [
+	// 	format ["\a3\ui_f\data\IGUI\RscCustomInfo\Sensors\Sectors\sector%1_ca.paa", _sectorAngle],
+	// 	_color,
+	// 	_position,
+	// 	_size / _circleScale,
+	// 	_size / _circleScale,
+	// 	_direction
+	// ];
+
+	private _scanAngleStart = _direction - (_sectorAngle / 2);
+	private _scanAngleEnd = _direction + (_sectorAngle / 2);
+
+	_m drawLine [
 		_position,
-		_size / _circleScale,
-		_size / _circleScale,
-		_direction
+		_position getPos [_size, _scanAngleStart],
+		_color,
+		6
+	];
+	_m drawLine [
+		_position,
+		_position getPos [_size, _scanAngleEnd],
+		_color,
+		6
 	];
 
-	// if (!_scanLines) then {
-	// 	continue;
-	// };
+	if (!_scanLines) then {
+		continue;
+	};
 
-	// private _scanAngleStart = _direction - (_sectorAngle / 2);
-	// private _scanAngleEnd = _direction + (_sectorAngle / 2);
-	// private _scanAngleActual = linearConversion [0, 2, serverTime % 2, _scanAngleStart, _scanAngleEnd, true];
-	// _m drawLine [
-	// 	_position,
-	// 	_position getPos [_size * 0.95, _scanAngleActual],
-	// 	[1, 1, 1, 0.3],
-	// 	6
-	// ];
+	private _scanPhase = abs ((serverTime % 2) - 1);
+	private _scanAngleActual = linearConversion [0, 1, _scanPhase, _scanAngleStart, _scanAngleEnd, true];
+	_m drawLine [
+		_position,
+		_position getPos [_size, _scanAngleActual],
+		_color,
+		10
+	];
 } forEach _drawSemiCircles;
 
 {
 	_m drawRectangle _x;
 } forEach _drawRectangles;
+
+// Draw mode indicator
+private _mapBottom = _m ctrlMapScreenToWorld [0.5, safeZoneY + safeZoneH - 0.2];
+private _mapMode = uiNamespace getVariable ["WL2_mapMode", 0];
+private _mapModeDisplays = [
+	["Regular", "\a3\ui_f\data\igui\cfg\simpletasks\types\move_ca.paa"],
+	["Air/Air Defense", "\a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa"],
+	["My Assets", "\a3\ui_f\data\igui\cfg\simpletasks\types\car_ca.paa"]
+];
+private _mapModeDisplay = _mapModeDisplays select _mapMode;
+_m drawIcon [
+	_mapModeDisplay # 1,
+	[0.1, 0.1, 0.1, 1],
+	_mapBottom,
+	20,
+	20,
+	0,
+	format [" Map mode: %1", _mapModeDisplay # 0],
+	0,
+	linearConversion [0.05, 0.1, _scale, 0.05, 0.1, true]
+];
 
 if (WL_IsReplaying) then {
 	private _drawSectorIcons = uiNamespace getVariable ["WL2_drawSectorIcons", []];

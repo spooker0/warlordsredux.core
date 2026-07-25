@@ -64,9 +64,6 @@
 		private _side = BIS_WL_playerSide;
 		_mapData set ["side", _side];
 
-		private _waypoints = waypoints group cameraOn;
-		_mapData set ["uavWaypoints", _waypoints];
-
 		private _strongholds = missionNamespace getVariable ["WL_strongholds", []];
 		private _visibleStrongholds = _strongholds select {
 			private _sector = _x getVariable ["WL_strongholdSector", objNull];

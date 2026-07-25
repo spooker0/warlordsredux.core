@@ -6,10 +6,13 @@ _vehicleUnits pushBack _vehicle;
 
 if (!_isStatic) then {
     private _group = createVehicleCrew _vehicle;
+    _vehicle setVariable ["WL2_sectorDefender", _sector];
+
     private _crew = crew _vehicle;
     {
         _x call WL2_fnc_newAssetHandle;
         _vehicleUnits pushBack _x;
+        _x setVariable ["WL2_sectorDefender", _sector];
     } forEach _crew;
 
     [_group, 0] setWaypointPosition [_sector, 100];

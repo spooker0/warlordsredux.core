@@ -1,5 +1,5 @@
 #include "includes.inc"
-private _settingsText = "<t color='#FF0000'>Settings</t>";
+private _settingsText = format ["<t color='#FF0000'>%1</t>", localize "str_a3_rscdisplaycampaignlobby_settings"];
 private _settingActionID = player addAction [
     _settingsText,
     {
@@ -51,6 +51,12 @@ while { alive player } do {
     private _playerThirdPersonDisabled = player getVariable ["WL2_3rdPersonDisabled", false];
     if (_playerThirdPersonDisabled != _thirdPersonDisabled) then {
         player setVariable ["WL2_3rdPersonDisabled", _thirdPersonDisabled, true];
+    };
+
+    private _spawnVehicleOwnershipTransfer = _settingsMap getOrDefault ["spawnVehicleOwnershipTransfer", true];
+    private _playerSpawnOwnershipTransfer = player getVariable ["WL2_transferVehicleOwner", false];
+    if (_spawnVehicleOwnershipTransfer != _playerSpawnOwnershipTransfer) then {
+        player setVariable ["WL2_transferVehicleOwner", _spawnVehicleOwnershipTransfer, true];
     };
 
     if (cameraView == "GROUP") then {

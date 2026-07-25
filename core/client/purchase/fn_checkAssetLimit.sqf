@@ -37,4 +37,23 @@ if (count _limitedVehicles >= _typeLimit) exitWith {
     [false, localize "STR_WL_assetLimitReached"];
 };
 
+private _teamLimit = WL_ASSET(_class, "teamLimit", 0);
+if (_teamLimit == 0) exitWith {
+    [true, ""];
+};
+
+private _teamUnits = switch (BIS_WL_playerSide) do {
+    case west: { BIS_WL_westOwnedVehicles };
+    case east: { BIS_WL_eastOwnedVehicles };
+    case independent: { BIS_WL_guerOwnedVehicles };
+    default { [] };
+};
+
+private _teamSameAsset = _teamUnits select {
+    WL_ASSET_TYPE(_x) == _class
+};
+if (count _teamSameAsset >= _teamLimit) exitWith {
+    [false, format ["Team asset limit reached. Limit: %1", _teamLimit]];
+};
+
 [true, ""];

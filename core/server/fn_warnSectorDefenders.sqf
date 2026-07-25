@@ -1,11 +1,11 @@
 #include "includes.inc"
-params ["_sector", "_mode"];
+params ["_sector", "_mode", ["_adderName", ""]];
 
 if (!isServer) exitWith {};
 
 private _sectorName = _sector getVariable ["WL2_name", "Sector"];
 private _message = switch (_mode) do {
-    case -1: { format ["%1 has been resupplied with reinforcements!", _sectorName] };
+    case -1: { format ["%1 has been resupplied with reinforcements by %2!", _sectorName, _adderName] };
     case 0: { format ["%1 has run out of reinforcements!", _sectorName] };
     case 25: { format ["%1 has 25%% reinforcements remaining!", _sectorName] };
     case 50: { format ["%1 has 50%% reinforcements remaining!", _sectorName] };

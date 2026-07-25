@@ -2,6 +2,18 @@
 params ["_projectile", "_unit", "_samParams"];
 _samParams params ["_speed", "_lead", "_maxRange"];
 
+private _isDeployedWeapon = _unit getVariable ["WL2_manualDrone", false];
+private _launcher = if (_isDeployedWeapon) then {
+    private _attachedTo = attachedTo _unit;
+    if (isNull _attachedTo) then {
+        _unit
+    } else {
+        _attachedTo
+    }
+} else {
+    _unit
+};
+
 _projectile setMissileTarget [objNull, true];
 
 private _assetSide = [_unit] call WL2_fnc_getAssetSide;
@@ -53,7 +65,7 @@ while { alive _projectile } do {
             continue;
         };
 
-        [_x, _unit, _projectile] remoteExec ["WL2_fnc_warnIncomingMissile", _x];
+        [_x, _launcher, _projectile] remoteExec ["WL2_fnc_warnIncomingMissile", _x];
         _enemiesHaveWarned pushBack _x;
     } forEach _enemiesInWarnRange;
 
