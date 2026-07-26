@@ -22,6 +22,8 @@ private _apsAmmoControl = _display displayCtrl 2107;
 private _captureProgressBar = _display displayCtrl 2108;
 private _captureText = _display displayCtrl 2109;
 
+private _reinforceProgressBar = _display displayCtrl 2112;
+
 private _subtitlesControl = _display displayCtrl 2110;
 _subtitlesControl ctrlShow false;
 
@@ -181,6 +183,7 @@ while { !BIS_WL_missionEnd } do {
 	if (_visitedSectorId == -1) then {
 		_captureText ctrlShow false;
 		_captureProgressBar ctrlShow false;
+		_reinforceProgressBar ctrlShow false;
 		continue;
 	};
 
@@ -218,6 +221,21 @@ while { !BIS_WL_missionEnd } do {
 	};
 
 	_captureText ctrlShow true;
+
+	private _isRevealed = _side in (_sector getVariable ["BIS_WL_revealedBy", []]);
+	if (_isRevealed) then {
+		private _sectorMaxReinforcements = if (_sectorOwner == independent) then {
+			_sector getVariable ["WL2_sectorPopMax", 1];
+		} else {
+			_sector getVariable ["WL2_maxDefenders", 0];
+		};
+		_sectorMaxReinforcements = _sectorMaxReinforcements max 1;
+		_reinforceProgressBar progressSetPosition (_sectorReinforcements / _sectorMaxReinforcements);
+		_reinforceProgressBar ctrlShow true;
+	} else {
+		_reinforceProgressBar ctrlShow false;
+	};
+
 	if (_sectorOwner == _side) then {
 		if (_captureProgress == 0) then {
 			_captureProgressBar ctrlShow false;

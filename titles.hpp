@@ -239,6 +239,15 @@ class RscTitles {
 				text = "";
 				size = 0.045;
 			};
+			class RscWarlordsHUD_ReinforceProgress: RscProgress {
+				idc = 2112;
+				x = 0.08;
+				y = safeZoneY + 0.088;
+				w = 0.84;
+				h = 0.01;
+				colorFrame[] = {0, 0, 0, 1};
+				colorBar[] = {0.2, 0.8, 0.2, 1};
+			};
 
 			class RscWarlordsHUD_Subtitles: RscStructuredText {
 				idc = 2110;
@@ -256,6 +265,16 @@ class RscTitles {
 				y = safeZoneH + safeZoneY - 0.13;
 				w = 0.5;
 				h = 0.05;
+				text = "";
+				size = 0.045;
+			};
+
+			class RscWarlordsHUD_MapMode: RscStructuredText {
+				idc = 2113;
+				x = 0.3;
+				y = safeZoneY + safeZoneH - 0.25;
+				w = 0.4;
+				h = 0.25;
 				text = "";
 				size = 0.045;
 			};

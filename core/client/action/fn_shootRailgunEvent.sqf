@@ -31,7 +31,13 @@ _asset addEventHandler ["Fired", {
             };
         };
 
-        private _chargingSound = playSoundUI ["a3\sounds_f_decade\assets\arsenal\railgun_01\railgun_01_charge_start.wss"];
+        private _playSounds = cameraOn == _asset;
+
+        private _chargingSound = if (_playSounds) then {
+            playSoundUI ["a3\sounds_f_decade\assets\arsenal\railgun_01\railgun_01_charge_start.wss", 1, 1, true]
+        } else {
+            -1
+        };
         [_asset, "CustomSoundController1", 0, 0.01] call BIS_fnc_setCustomSoundController;
 
         private _defaultRailgunDisplay = uiNamespace getVariable ["RscOptics_MBT_02_Railgun_gunner", displayNull];
@@ -74,29 +80,37 @@ _asset addEventHandler ["Fired", {
             _asset setUserMFDValue [1, _chargeVelocity];
             _chargeVelocity = linearConversion [_timeChargeStart, _timeChargeEnd, time, 0, 1.2, true];
 
-            private _soundParams = soundParams _chargingSound;
-            private _soundPlayPosition = if (count _soundParams > 1) then {
-                _soundParams # 1;
-            } else {
-                1;
-            };
-            if (_soundPlayPosition >= 1) then {
-                stopSound _chargingSound;
-                _chargingSound = playSoundUI ["a3\sounds_f_decade\assets\arsenal\railgun_01\railgun_01_charge_full_loop.wss"];
+            if (_playSounds) then {
+                private _soundParams = soundParams _chargingSound;
+                private _soundPlayPosition = if (count _soundParams > 1) then {
+                    _soundParams # 1;
+                } else {
+                    1;
+                };
+                if (_soundPlayPosition >= 1) then {
+                    stopSound _chargingSound;
+                    _chargingSound = playSoundUI ["a3\sounds_f_decade\assets\arsenal\railgun_01\railgun_01_charge_full_loop.wss", 1, 1, true];
+                };
             };
 
             uiSleep 0.001;
         };
-        stopSound _chargingSound;
+        if (_playSounds) then {
+            stopSound _chargingSound;
+        };
         if (!alive _asset) exitWith {};
 
-        playSoundUI ["a3\sounds_f_decade\assets\arsenal\railgun_01\railgun_01_charge_stop.wss"];
+        if (_playSounds) then {
+            playSoundUI ["a3\sounds_f_decade\assets\arsenal\railgun_01\railgun_01_charge_stop.wss", 1, 1, true];
+        };
         [_asset, "CustomSoundController1", 0, 0.01] call BIS_fnc_setCustomSoundController;
 
         _chargeVelocity = linearConversion [_timeChargeStart, _timeChargeEnd, time, 0, 1.2, true];
 
         if (_chargeVelocity <= 0.4) exitWith {
-            playSoundUI ["a3\sounds_f_decade\assets\arsenal\railgun_01\railgun_01_charge_stop.wss"];
+            if (_playSounds) then {
+                playSoundUI ["a3\sounds_f_decade\assets\arsenal\railgun_01\railgun_01_charge_stop.wss", 1, 1, true];
+            };
 
             _asset setWeaponReloadingTime [gunner _asset, "cannon_railgun_fake", 1];
             _asset setUserMFDValue [0, 0];

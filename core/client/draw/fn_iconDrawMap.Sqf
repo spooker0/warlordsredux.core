@@ -108,44 +108,6 @@ private _circleScale = 6.4 * worldSize / 8192 * _scale;
 	_m drawRectangle _x;
 } forEach _drawRectangles;
 
-// Draw mode indicator
-private _mapModeIconPosition = _m ctrlMapScreenToWorld [0.5, safeZoneY + safeZoneH - 0.25];
-private _mapModeTextPosition = _m ctrlMapScreenToWorld [0.5, safeZoneY + safeZoneH - 0.2];
-private _mapMode = uiNamespace getVariable ["WL2_mapMode", 0];
-private _mapModeDisplays = [
-	[localize "STR_WL_regular", "\a3\ui_f\data\igui\cfg\simpletasks\types\move_ca.paa"],
-	[localize "STR_WL_airAirDefense", "\a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa"],
-	[localize "STR_WL_myAssets", "\a3\ui_f\data\igui\cfg\simpletasks\types\car_ca.paa"]
-];
-private _mapModeDisplay = _mapModeDisplays select _mapMode;
-private _mapModeScale = linearConversion [0.05, 0.1, _scale, 0.05, 0.1, true];
-_m drawIcon [
-	"#(rgb,1,1,1)color(1,1,1,1)",
-	[0.1, 0.1, 0.1, 1],
-	_mapModeTextPosition,
-	0,
-	0,
-	0,
-	_mapModeDisplay # 0,
-	0,
-	_mapModeScale,
-	"RobotoCondensedBold",
-	"center"
-];
-_m drawIcon [
-	_mapModeDisplay # 1,
-	[0.1, 0.1, 0.1, 1],
-	_mapModeIconPosition,
-	20,
-	20,
-	0,
-	"",
-	0,
-	_mapModeScale,
-	"RobotoCondensedBold",
-	"center"
-];
-
 if (WL_IsReplaying) then {
 	private _drawSectorIcons = uiNamespace getVariable ["WL2_drawSectorIcons", []];
 	{

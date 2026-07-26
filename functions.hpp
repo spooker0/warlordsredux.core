@@ -343,6 +343,7 @@ class CfgFunctions {
 			class drawSectorMarker { headerType = WL_HEADER_LEVEL; };
 			class ecmJammer { headerType = WL_HEADER_LEVEL; };
 			class ewarResult { headerType = WL_HEADER_LEVEL; };
+			class fastHudUpdate { headerType = WL_HEADER_LEVEL; };
 			class helmetInterface { headerType = WL_HEADER_LEVEL; };
 			class iconColor { headerType = WL_HEADER_LEVEL; };
 			class iconDrawMap { headerType = WL_HEADER_LEVEL; };

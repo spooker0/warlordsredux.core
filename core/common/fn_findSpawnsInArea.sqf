@@ -22,7 +22,7 @@ for "_yCoord" from _startY to _endY step _axisStep do {
 
 _allPositions = _allPositions inAreaArray _area;
 _allPositions = _allPositions select { !surfaceIsWater _x } select {
-    private _result = _x isFlatEmpty [_allowDistance, -1, 0.35, _allowDistance, 0, false, objNull];
+    private _result = _x isFlatEmpty [_allowDistance, -1, -1, _allowDistance, 0, false, objNull];
     count _result > 0 || isOnRoad _x
 };
 

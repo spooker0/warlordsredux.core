@@ -28,6 +28,7 @@ if (isNull _stronghold) then {
 		_reserveSize = round (_garrisonSize * 4);
 	};
 	_sector setVariable ["WL2_sectorPop", _reserveSize, true];
+	_sector setVariable ["WL2_sectorPopMax", _reserveSize, true];
 };
 
 private _vehicleUnits = [];

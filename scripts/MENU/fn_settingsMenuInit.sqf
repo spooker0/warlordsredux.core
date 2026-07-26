@@ -144,7 +144,7 @@ _settingsMenu append [
     ["checkbox", localize "STR_WL_camperWarningProtection", ["camperWarning", true]],
     ["checkbox", localize "STR_WL_showStrongholdInstructions", ["showStrongholdInfo", true]],
     ["checkbox", localize "STR_WL_showPlayerLevelInsteadOfElo", ["showPlayerLevel", false]],
-    ["checkbox", localize "STR_WL_hideNonMandatoryConscriptionNotices", ["hideConscriptionNotices", false]],
+    ["checkbox", localize "STR_WL_hideNonMandatoryConscriptionNotices", ["hideConscriptionNotices", true]],
     ["checkbox", localize "STR_WL_railgunSecondClickToFire", ["railgunSecondClick", true]],
     ["checkbox", localize "STR_WL_additionalSubtitles", ["additionalSubs", false]],
     ["checkbox", localize "STR_WL_mapAlwaysShowDetailedText", ["alwaysShowDetailedText", false]],

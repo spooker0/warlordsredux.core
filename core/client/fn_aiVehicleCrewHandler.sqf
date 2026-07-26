@@ -35,6 +35,14 @@ while { !BIS_WL_missionEnd } do {
         private _subordinate = _x;
 
         private _assignedVehicle = assignedVehicle _subordinate;
+        if (isNull _assignedVehicle) then {
+            continue;
+        };
+
+        if !(_assignedVehicle in _ownedVehicles) then {
+            continue;
+        };
+
         private _assignedRole = assignedVehicleRole _subordinate;
 
         if (_assignedRole isEqualTo []) then {
@@ -44,19 +52,19 @@ while { !BIS_WL_missionEnd } do {
         private _assignRoleType = _assignedRole # 0;
         switch (_assignRoleType) do {
             case "driver": {
-                if (!isNull _assignedVehicle && local _assignedVehicle) then {
+                if (local _assignedVehicle) then {
                     _subordinate moveInDriver _assignedVehicle;
                     _hasMovedCrew = true;
                 };
             };
             case "cargo": {
-                if (!isNull _assignedVehicle && _assignedVehicle turretLocal [0]) then {
+                if (_assignedVehicle turretLocal [0]) then {
                     _subordinate moveInCargo _assignedVehicle;
                     _hasMovedCrew = true;
                 };
             };
             case "turret": {
-                if (!isNull _assignedVehicle && _assignedVehicle turretLocal [0]) then {
+                if (_assignedVehicle turretLocal [0]) then {
                     private _turretPath = _assignedRole # 1;
                     _subordinate moveInTurret [_assignedVehicle, _turretPath];
                     _hasMovedCrew = true;

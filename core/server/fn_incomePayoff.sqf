@@ -56,7 +56,7 @@ while { !BIS_WL_missionEnd } do {
 
 		private _defenders = _sector getVariable ["WL2_defenders", 0];
 		private _maxDefenders = _sector getVariable ["WL2_maxDefenders", 0];
-		_defenders = _defenders + _amountToGenerate;
+		_defenders = _defenders + (round _amountToGenerate);
 		_sector setVariable ["WL2_defenders", _defenders min _maxDefenders, true];
 	} forEach BIS_WL_allSectors;
 

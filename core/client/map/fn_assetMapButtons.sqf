@@ -157,6 +157,8 @@ if (_hasFullAccess) then {
                     playSoundUI ["assemble_target", 1];
                     ["Bulk deploy completed. Tip: You can use Strategy > Bulk remove to clean up your assets."] call WL2_fnc_smoothText;
                     deleteMarker _lastMarker;
+
+                    missionNamespace setVariable ["WL2_bulkDeployCooldown", serverTime + WL_COOLDOWN_BULKDEPLOY];
                 };
             };
         } else {

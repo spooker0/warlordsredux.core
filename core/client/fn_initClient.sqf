@@ -142,6 +142,7 @@ if !(isServer) then {
 WL_LoadingState = 8;
 
 0 spawn WL2_fnc_initHud;
+0 spawn WL2_fnc_fastHudUpdate;
 0 spawn {
 	while {!BIS_WL_missionEnd} do {
 		call WL2_fnc_teammatesAvailability;

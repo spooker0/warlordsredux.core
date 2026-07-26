@@ -3,10 +3,10 @@ params ["_vehicleType", "_spawnPos", "_direction", "_isStatic", "_isAircraft", "
 
 private _vehicle = [objNull, _spawnPos, _vehicleType, _direction, _isAircraft, _isAircraft] call WL2_fnc_orderGround;
 _vehicleUnits pushBack _vehicle;
+_vehicle setVariable ["WL2_sectorDefender", _sector];
 
 if (!_isStatic) then {
     private _group = createVehicleCrew _vehicle;
-    _vehicle setVariable ["WL2_sectorDefender", _sector];
 
     private _crew = crew _vehicle;
     {

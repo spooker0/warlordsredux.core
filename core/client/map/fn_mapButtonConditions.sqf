@@ -455,6 +455,12 @@ switch (_conditionName) do {
         if (_installable == "") exitWith { "" };
         if (WL_ASSET_TYPE(_target) != _installable) exitWith { "" };
 
+        private _bulkDeployCooldown = missionNamespace getVariable ["WL2_bulkDeployCooldown", 0];
+        private _timeRemaining = _bulkDeployCooldown - serverTime;
+        if (_timeRemaining > 0) exitWith {
+            format ["Bulk deploy is on cooldown: %1", [_timeRemaining, "MM:SS"] call BIS_fnc_secondsToString]
+        };
+
         if (cameraOn distance2D _target > 100) exitWith {
             "You are too far from this obstacle to use it for bulk deployment.";
         };
