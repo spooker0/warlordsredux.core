@@ -290,9 +290,9 @@ class RscTitles {
 		class controls {
 			class RscSpectrumIndicatorText: RscStructuredText {
 				idc = 17001;
-				x = 0.3;
+				x = 0;
 				y = safeZoneY + 0.15;
-				w = 0.4;
+				w = 1;
 				h = 0.15;
 				colorBackground[] = {0, 0, 0, 0};
 				colorText[] = {1, 1, 1, 1};

@@ -51,14 +51,6 @@ if (_immobile > 0) then {
 	_asset setFuelConsumptionCoef 1000;
 };
 
-private _transferVehicleOwner = _sender getVariable ["WL2_transferVehicleOwner", true];
-if (_transferVehicleOwner) then {
-	private _crewCount = count crew _asset;
-	if (_crewCount == 0) then {
-		_asset setOwner _owner;
-	};
-};
-
 private _isAircraft = _asset isKindOf "Air";
 private _variant = WL_ASSET(_orderedClass, "variant", 0);
 if (!_isAircraft && _variant > 0) then {
@@ -103,7 +95,6 @@ private _pylonInfo = getAllPylonsInfo _asset;
 	private _removeWeapons = _x getOrDefault ["removeWeapons", []];
 	private _addMagazines = _x getOrDefault ["addMagazines", []];
 	private _addWeapons = _x getOrDefault ["addWeapons", []];
-	private _reloadOverride = _x getOrDefault ["reloadOverride", 0];
 
 	{
 		_asset removeMagazinesTurret [_x, _turret];
@@ -161,21 +152,6 @@ private _pylonInfo = getAllPylonsInfo _asset;
 	{
 		_asset removeWeaponTurret [_x, _turret];
 	} forEach _removePylonWeapons;
-
-	if (_reloadOverride != 0) then {
-		_asset setVariable ["WL2_reloadOverride", [_reloadOverride, _turret]];
-		_asset addEventHandler ["Fired", {
-			params ["_unit", "_weapon", "_muzzle", "_mode", "_ammo", "_magazine", "_projectile", "_gunner"];
-			private _reloadOverride = _unit getVariable ["WL2_reloadOverride", []];
-			private _reloadTime = _reloadOverride # 0;
-			private _turret = _reloadOverride # 1;
-
-			private _weaponState = weaponState [_unit, _turret];
-			if (_weaponState # 6 > 0) then {
-				[_unit, _weapon, _turret, _reloadTime] remoteExec ["WL2_fnc_reloadOverride", _gunner];
-			};
-		}];
-	};
 } forEach _turretOverridesForVehicle;
 
 if (count (_pylonInfo) > 0) then {

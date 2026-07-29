@@ -118,7 +118,7 @@ if (_action == "newjoin") exitWith {
             ["You have joined a squad."] call WL2_fnc_smoothText;
         } else {
             private _alreadyNotifiedPlayers = uiNamespace getVariable ["WL2_alreadyNotifiedPlayers", []];
-            if (!_joinerId in _alreadyNotifiedPlayers) then {
+            if !(_joinerId in _alreadyNotifiedPlayers) then {
                 _alreadyNotifiedPlayers pushBack _joinerId;
                 uiNamespace setVariable ["WL2_alreadyNotifiedPlayers", _alreadyNotifiedPlayers];
 

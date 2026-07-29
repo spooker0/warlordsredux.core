@@ -195,11 +195,12 @@ if (count _ammoAPSConfig > 0) then {
 
     private _magDescAPSType = _ammoAPSConfig getOrDefault ["aps", []];
     private _typeString = _magDescAPSType apply {
-        switch (_magDescAPSType) do {
+        switch (_x) do {
             case 1: {"Light APS"};
             case 2: {"Medium APS"};
             case 3: {"Heavy APS"};
             case 4: {"Dazzler"};
+            case 5: {"Advanced APS"};
         };
     };
     if (count _magDescAPSType > 0) then {

@@ -104,4 +104,6 @@ private _ownedMines = missionNamespace getVariable [_ownedMineVar, []];
 	};
 } forEach _ownedMines;
 
+showChat true;
+
 player setVariable ["WL2_unconscious", false, true];

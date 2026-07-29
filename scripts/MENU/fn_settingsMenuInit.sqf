@@ -40,7 +40,7 @@ private _settingsMenu = [
     ["button", localize "STR_WL_badges", "a3\ui_f\data\gui\rsc\rscdisplayarsenal\insignia_ca.paa", "badges"],
     ["button", localize "STR_WL_report", "A3\ui_f\data\map\markers\handdrawn\warning_CA.paa", "report"],
     ["button", localize "STR_WL_poll", "A3\ui_f\data\map\markers\handdrawn\unknown_CA.paa", "poll"],
-    ["button", localize "STR_WL_performance", "a3\ui_f\data\gui\rsccommon\rscdebugconsole\performance_ca.paa", "performance"],
+    ["button", localize "STR_WL_perf", "a3\ui_f\data\gui\rsccommon\rscdebugconsole\performance_ca.paa", "performance"],
     ["button", localize "STR_WL_resetAll", "a3\modules_f_curator\data\portraitrespawntickets_ca.paa", "resetAll"]
 ];
 
@@ -148,7 +148,6 @@ _settingsMenu append [
     ["checkbox", localize "STR_WL_railgunSecondClickToFire", ["railgunSecondClick", true]],
     ["checkbox", localize "STR_WL_additionalSubtitles", ["additionalSubs", false]],
     ["checkbox", localize "STR_WL_mapAlwaysShowDetailedText", ["alwaysShowDetailedText", false]],
-    ["checkbox", localize "STR_WL_spawnVehicleOwnershipTransfer", ["spawnVehicleOwnershipTransfer", true]],
 
     ["category", localize "STR_WL_hideScrollMenus"],
     ["checkbox", localize "STR_WL_hideBuyMenu", ["hideBuyMenu", false]],

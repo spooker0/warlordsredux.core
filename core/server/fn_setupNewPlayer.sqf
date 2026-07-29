@@ -86,7 +86,7 @@ private _startSideCheck = serverTime;
 waitUntil {
     uiSleep 0.1;
     _currentSide = side group _warlord;
-    _startSideCheck - serverTime > 10 || _currentSide in [west, east];
+    serverTime - _startSideCheck > 30 || _currentSide in [west, east];
 };
 
 if !(_currentSide in [west, east]) exitWith {

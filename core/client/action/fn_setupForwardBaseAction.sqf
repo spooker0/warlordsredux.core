@@ -262,10 +262,13 @@ private _setupActionId = [
 
 			private _sectorStronghold = _sector getVariable ["WL_stronghold", objNull];
 			if (!isNull _sectorStronghold) then {
-				private _strongholdMaxHealth = _sectorStronghold getVariable ["WL2_demolitionMaxHealth", 0];
-				_strongholdMaxHealth = (_strongholdMaxHealth + 8) min 24;
-				_sectorStronghold setVariable ["WL2_demolitionMaxHealth", _strongholdMaxHealth, true];
-				_sectorStronghold setVariable ["WL2_demolitionHealth", _strongholdMaxHealth, true];
+				private _strongholdIntruders = _sectorStronghold getVariable ["WL2_strongholdIntruders", false];
+				if (!_strongholdIntruders) then {
+					private _strongholdMaxHealth = _sectorStronghold getVariable ["WL2_demolitionMaxHealth", 0];
+					_strongholdMaxHealth = (_strongholdMaxHealth + 8) min 24;
+					_sectorStronghold setVariable ["WL2_demolitionMaxHealth", _strongholdMaxHealth, true];
+					_sectorStronghold setVariable ["WL2_demolitionHealth", _strongholdMaxHealth, true];
+				};
 			};
 
 			[_sector, -1, name player] remoteExec ["WL2_fnc_warnSectorDefenders", 2];

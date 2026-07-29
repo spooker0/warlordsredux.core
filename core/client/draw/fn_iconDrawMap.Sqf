@@ -81,26 +81,13 @@ private _circleScale = 6.4 * worldSize / 8192 * _scale;
 		_position,
 		_position getPos [_size, _scanAngleStart],
 		_color,
-		6
+		12
 	];
 	_m drawLine [
 		_position,
 		_position getPos [_size, _scanAngleEnd],
 		_color,
-		6
-	];
-
-	if (!_scanLines) then {
-		continue;
-	};
-
-	private _scanPhase = abs ((serverTime % 2) - 1);
-	private _scanAngleActual = linearConversion [0, 1, _scanPhase, _scanAngleStart, _scanAngleEnd, true];
-	_m drawLine [
-		_position,
-		_position getPos [_size, _scanAngleActual],
-		_color,
-		10
+		12
 	];
 } forEach _drawSemiCircles;
 

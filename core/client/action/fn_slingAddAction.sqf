@@ -63,10 +63,10 @@ _asset addAction [
                 _asset setVariable ["WL2_shortRope", false, true];
             } else {
                 {
-                    ropeUnwind [_x, 5, 5];
+                    ropeUnwind [_x, 5, 10];
                 } forEach _ropes;
                 uiSleep 3;
-                _assetLoadedItem attachTo [_asset, [0, 0, -6]];
+                _assetLoadedItem attachTo [_asset, [0, 0, -10]];
                 _asset setVariable ["WL2_shortRope", true, true];
             };
         };

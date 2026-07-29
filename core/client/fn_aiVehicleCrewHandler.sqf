@@ -54,12 +54,14 @@ while { !BIS_WL_missionEnd } do {
             case "driver": {
                 if (local _assignedVehicle) then {
                     _subordinate moveInDriver _assignedVehicle;
+                    commandStop _subordinate;
                     _hasMovedCrew = true;
                 };
             };
             case "cargo": {
                 if (_assignedVehicle turretLocal [0]) then {
                     _subordinate moveInCargo _assignedVehicle;
+                    commandStop _subordinate;
                     _hasMovedCrew = true;
                 };
             };
@@ -67,6 +69,7 @@ while { !BIS_WL_missionEnd } do {
                 if (_assignedVehicle turretLocal [0]) then {
                     private _turretPath = _assignedRole # 1;
                     _subordinate moveInTurret [_assignedVehicle, _turretPath];
+                    commandStop _subordinate;
                     _hasMovedCrew = true;
                 };
             };

@@ -179,7 +179,8 @@ addMissionEventHandler ["ProjectileCreated", {
     if (_projectileShell != "") then {
         _projectile setVariable ["APS_subShell", _projectileShell];
         _projectile addEventHandler ["HitPart", {
-            params ["_projectile", "_hitEntity", "_projectileOwner", "_hitPos"];
+            params ["_projectile", "_hitEntity", "_projectileOwner", "_hitPos", "_velocity", "_normal", "_components", "_radius" ,"_surfaceType", "_instigator"];
+            if ("foliage" in _surfaceType) exitWith {};
             private _subShell = _projectile getVariable ["APS_subShell", ""];
             [_subShell, _hitPos, [vectorDir _projectile, vectorUp _projectile], 0, true] spawn DIS_fnc_bunkerBuster;
             _projectile removeEventHandler ["HitPart", _thisEventHandler];

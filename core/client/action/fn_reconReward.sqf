@@ -4,7 +4,10 @@ params ["_reconnedObjects"];
 private _newTargets = _reconnedObjects select { WL_ISUP(_x) } select {
     private _lastReconTime = _x getVariable ["WL_scannedByPlayer", -300];
     _lastReconTime < serverTime - 300
+} select {
+    WL_UNIT(_x, "reward", 0) == 0;
 };
+
 private _targetPoints = 0;
 {
     private _targetScore = if (_x isKindOf "Man") then {

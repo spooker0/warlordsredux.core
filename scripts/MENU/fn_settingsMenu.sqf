@@ -50,13 +50,7 @@ while { alive player } do {
 
     private _playerThirdPersonDisabled = player getVariable ["WL2_3rdPersonDisabled", false];
     if (_playerThirdPersonDisabled != _thirdPersonDisabled) then {
-        player setVariable ["WL2_3rdPersonDisabled", _thirdPersonDisabled, true];
-    };
-
-    private _spawnVehicleOwnershipTransfer = _settingsMap getOrDefault ["spawnVehicleOwnershipTransfer", true];
-    private _playerSpawnOwnershipTransfer = player getVariable ["WL2_transferVehicleOwner", false];
-    if (_spawnVehicleOwnershipTransfer != _playerSpawnOwnershipTransfer) then {
-        player setVariable ["WL2_transferVehicleOwner", _spawnVehicleOwnershipTransfer, true];
+        player setVariable ["WL2_3rdPersonDisabled", _thirdPersonDisabled, [2, clientOwner]];
     };
 
     if (cameraView == "GROUP") then {

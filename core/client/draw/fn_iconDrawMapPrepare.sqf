@@ -685,7 +685,7 @@ private _checkForAirRadar = if (_showAirMode) then {
 
 // Draw asset selector
 private _drawCirclesFor = if (_showAirMode) then {
-	_sideVehicles;
+	_sideVehicles + _visibleEnemyUnits;
 } else {
 	_assetTargets
 };
@@ -711,12 +711,13 @@ private _drawCirclesFor = if (_showAirMode) then {
 
 	private _mapCircleRadius = _x getVariable ["WL2_mapCircleRadius", 0];
 	if (_mapCircleRadius > 0) then {
+		private _mapCircleColor = _x getVariable ["WL2_mapIconColor", [1, 1, 1, 1]];
 		_drawEllipses pushBack [
 			getPosASL _x,
 			_mapCircleRadius,
 			_mapCircleRadius,
 			0,
-			_teamColor,
+			_mapCircleColor,
 			""
 		];
 	};

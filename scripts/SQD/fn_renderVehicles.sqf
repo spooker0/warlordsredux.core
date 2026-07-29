@@ -37,7 +37,9 @@ _vehicleListButton ctrlAddEventHandler ["ButtonClick", {
 private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
 private _playerVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
 
-_playerVehicles = _playerVehicles select { alive _x } select { _x != player };
+_playerVehicles = _playerVehicles select { alive _x } select { _x != player } select {
+    WL_UNIT(_x, "obstacle", 0) == 0
+};
 
 private _vehicles = [_playerVehicles, [], { _x distance cameraOn }, "ASCEND"] call BIS_fnc_sortBy;
 

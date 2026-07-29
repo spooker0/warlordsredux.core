@@ -38,23 +38,7 @@ if (!isNull _paradropper) then {
 private _altitude = (getPosVisual _playerVehicle) # 2;
 private _paradropMoveSpeed = 20;
 
-while { _altitude > 200 } do {
-    uiSleep 0.01;
-    _playerVehicle setVectorUp [0, 0, 1];
-    private _forward = if (_isControlling) then {
-        inputAction "MoveForward" + inputAction "CarFastForward" - inputAction "MoveBack";
-    } else {
-        0;
-    };
-    private _side = if (_isControlling) then {
-        inputAction "TurnRight" - inputAction "TurnLeft";
-    } else {
-        0;
-    };
-    _playerVehicle setVelocityModelSpace [_side * _paradropMoveSpeed, _forward * _paradropMoveSpeed, -150];
-
-    _altitude = (getPosVisual _playerVehicle) # 2;
-};
+uiSleep 3;
 
 private _parachute = createVehicle [_parachuteClass, _playerVehicle modelToWorld [0, 0, 20], [], 0, "NONE"];
 _parachute setDir _direction;
@@ -74,7 +58,9 @@ while { _altitude > 5 } do {
     } else {
         0;
     };
-    _parachute setVelocityModelSpace [_side * _paradropMoveSpeed, _forward * _paradropMoveSpeed, -25];
+
+    private _down = if (_altitude > 200) then { -150 } else { -25 };
+    _parachute setVelocityModelSpace [_side * _paradropMoveSpeed, _forward * _paradropMoveSpeed, _down];
 
     _altitude = (getPosVisual _playerVehicle) # 2;
 };
@@ -85,6 +71,5 @@ deleteVehicle _parachute;
 _playerVehicle setVelocity [0, 0, 0];
 
 if (_isControlling) then {
-    systemChat "Paradrop controls active";
     ["Paradrop"] spawn WL2_fnc_showHint;
 };

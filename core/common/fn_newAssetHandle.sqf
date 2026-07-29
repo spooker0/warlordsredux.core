@@ -7,12 +7,6 @@ if (isServer) then {
 	if !(unitIsUAV _asset) then {
 		_asset setSkill (0.2 + random 0.3);
 	};
-
-	if !(_asset isKindOf "Man") then {
-		private _defaultMags = magazinesAllTurrets _asset;
-		_asset setVariable ["BIS_WL_defaultMagazines", _defaultMags, true];
-		_asset setVariable ["WLM_savedDefaultMags", _defaultMags, true];
-	};
 };
 
 private _playerUID = if (isPlayer _owner) then {
@@ -64,9 +58,9 @@ if (_asset isKindOf "Man") then {
 	_asset setVariable ["WL2_nextRepair", 0, true];
 	_asset setVariable ["BIS_WL_ownerAssetSide", _side, true];
 
-	[_asset, true] remoteExec ["setVehicleReceiveRemoteTargets", _asset, true];
-	[_asset, true] remoteExec ["setVehicleReportRemoteTargets", _asset, true];
-	[_asset, true] remoteExec ["setVehicleReportOwnPosition", _asset, true];
+	[_asset, true] remoteExec ["setVehicleReceiveRemoteTargets", _asset];
+	[_asset, true] remoteExec ["setVehicleReportRemoteTargets", _asset];
+	[_asset, true] remoteExec ["setVehicleReportOwnPosition", _asset];
 
 	// HMD missile alert system
 	_asset addEventHandler ["IncomingMissile", {
@@ -286,7 +280,10 @@ if (_asset isKindOf "Man") then {
 			params ["_object1", "_object2", "_selection1", "_selection2", "_force", "_reactForce", "_worldPos"];
 			private _fragility = _object2 getVariable ["WL2_fragility", 0];
 			if (_fragility == 0) exitWith {};
+			private _collided = _object2 getVariable ["WL2_alreadyCollided", false];
+			if (_collided) exitWith {};
 			if (getMass _object1 > _fragility) then {
+				_object2 setVariable ["WL2_alreadyCollided", true];
 				[_object2, player] remoteExec ["WL2_fnc_demolishComplete", 2];
 			};
 		}];
