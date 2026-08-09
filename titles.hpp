@@ -248,6 +248,15 @@ class RscTitles {
 				colorFrame[] = {0, 0, 0, 1};
 				colorBar[] = {0.2, 0.8, 0.2, 1};
 			};
+			class RscWarlordsHUD_ReinforceSubtitle: RscStructuredText {
+				idc = 2114;
+				x = 0.93;
+				y = safeZoneY + 0.076;
+				w = 0.2;
+				h = 0.03;
+				text = "";
+				size = 0.03;
+			};
 
 			class RscWarlordsHUD_Subtitles: RscStructuredText {
 				idc = 2110;

@@ -31,12 +31,13 @@ private _mapSectorModifierSize = _settingsMap getOrDefault ["mapSectorModifierSi
 
 private _mapMode = uiNamespace getVariable ["WL2_mapMode", 0];
 private _showDetailedMode = inputAction "lookAround" > 0 || _map getVariable ["WL2_showDetailedMode", false];
+private _showRegularMode = _mapMode == 0;
 private _showAirMode = _mapMode == 1;
 private _showMyMode = _mapMode == 2;
 private _showSectorLinks = _drawMode != 0 || WL_VotePhase != 0 || _showDetailedMode;
 
 private _sectorsInLinksShown = [];
-if (_showSectorLinks) then {
+if (_showSectorLinks && _showRegularMode) then {
 	private _allRegionLines = uiNamespace getVariable ["WL2_drawRegionLines", []];
 	_drawLines append _allRegionLines;
 } else {
@@ -285,7 +286,7 @@ if (alive _teamPriority) then {
 };
 
 // Draw sector areas
-if (_showSectorLinks) then {
+if (_showSectorLinks && _showRegularMode) then {
 	private _regionMap = uiNamespace getVariable ["WL2_drawRegionMap", createHashMap];
 	{
 		_y params ["_regionText", "_regionShape"];
@@ -678,7 +679,7 @@ private _checkForAirRadar = if (_showAirMode) then {
 			getPosASL _x,
 			_airRadar,
 			getDirVisual _x,
-			true
+			false
 		];
 	};
 } forEach _checkForAirRadar;
@@ -814,47 +815,56 @@ private _advancedSams = _mapData getOrDefault ["advancedSams", []];
 	];
 } forEach _advancedSams;
 
-private _advancedMines = _mapData getOrDefault ["advancedMines", []];
-{
-	private _ownsMine = (_x getVariable ["BIS_WL_ownerAsset", "123"]) == _playerUid;
-	if !(_ownsMine || _x in _assetTargets) then {
-		continue;
-	};
+if (!_showAirMode) then {
+	private _advancedMines = _mapData getOrDefault ["advancedMines", []];
+	{
+		private _ownsMine = (_x getVariable ["BIS_WL_ownerAsset", "123"]) == _playerUid;
+		if !(_ownsMine || _x in _assetTargets) then {
+			continue;
+		};
 
-	private _position = getPosASL _x;
-	private _smartMineDistanceIndex = _x getVariable ["WL2_smartMineDistance", 0];
-	private _detonationDistance = WL_SMART_MINE_DISTANCES # _smartMineDistanceIndex;
-    private _angle = WL_SMART_MINE_ANGLES # _smartMineDistanceIndex;
+		private _position = getPosASL _x;
+		private _smartMineDistanceIndex = _x getVariable ["WL2_smartMineDistance", 0];
+		private _detonationDistance = WL_SMART_MINE_DISTANCES # _smartMineDistanceIndex;
+		private _angle = WL_SMART_MINE_ANGLES # _smartMineDistanceIndex;
 
-	private _iconPos = _x modelToWorld [0, _detonationDistance / 2, 0];
-	private _smartMinesAP = _x getVariable ["WL2_smartMinesAP", 0];
-	private _smartMinesAT = _x getVariable ["WL2_smartMinesAT", 0];
-	private _smartMines = format ["AP: %1 | AT: %2", _smartMinesAP, _smartMinesAT];
+		private _iconPos = _x modelToWorld [0, _detonationDistance / 2, 0];
+		private _smartMinesAP = _x getVariable ["WL2_smartMinesAP", 0];
+		private _smartMinesAT = _x getVariable ["WL2_smartMinesAT", 0];
 
-	_drawIcons pushBack [
-		"a3\ui_f_curator\data\cfgmarkers\minefieldap_ca.paa",
-		[1, 0, 0, 1],
-		_iconPos,
-		30 * _mapIconScale,
-		30 * _mapIconScale,
-		0,
-		_smartMines,
-		1,
-		0.038 * _mapIconScale,
-		"PuristaBold",
-		"right"
-	];
+		private _smartMineDisplay = [];
+		if (_smartMinesAP > 0) then {
+			_smartMineDisplay pushBack format ["AP: %1", _smartMinesAP];
+		};
+		if (_smartMinesAT > 0) then {
+			_smartMineDisplay pushBack format ["AT: %1", _smartMinesAT];
+		};
 
-	if (_detonationDistance <= 0) then { continue; };
-	_drawSemiCircles pushBack [
-		_angle,
-		[1, 1, 1, 0.3],
-		_position,
-		_detonationDistance,
-		getDirVisual _x,
-		false
-	];
-} forEach _advancedMines;
+		_drawIcons pushBack [
+			"a3\ui_f_curator\data\cfgmarkers\minefieldap_ca.paa",
+			[1, 0, 0, 1],
+			_iconPos,
+			30 * _mapIconScale,
+			30 * _mapIconScale,
+			0,
+			_smartMineDisplay joinString " | ",
+			1,
+			0.038 * _mapIconScale,
+			"PuristaBold",
+			"right"
+		];
+
+		if (_detonationDistance <= 0) then { continue; };
+		_drawSemiCircles pushBack [
+			_angle,
+			[1, 1, 1, 0.3],
+			_position,
+			_detonationDistance,
+			getDirVisual _x,
+			true
+		];
+	} forEach _advancedMines;
+};
 
 // Draw minefields
 if (!_showAirMode && !_showMyMode) then {

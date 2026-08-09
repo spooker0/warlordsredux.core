@@ -23,17 +23,14 @@ private _effectAGL = _asset modelToWorld [0, 0, 1];
 private _assetPos = getPosASL _asset;
 private _assetData = WL_ASSET_DATA;
 
-private _side = [_asset] call WL2_fnc_getAssetSide;
-if (_side == independent) then {
-    _asset setVariable ["WL2_smartMineDistance", 4];
-};
-
 while { alive _asset } do {
     uiSleep 1;
 
-    if (damage _asset > 0.05) then {
-        break;
-    };
+    private _side = [_asset] call WL2_fnc_getAssetSide;
+
+    // if (damage _asset > 0.05) then {
+    //     break;
+    // };
 
     if (!isNull attachedTo _asset) then {
         continue;
@@ -125,7 +122,11 @@ while { alive _asset } do {
 
     private _projectile = createVehicle [_projectileType, _asset modelToWorld [0, 0, 1], [], 0, "FLY"];
     _projectile setPosASL (AGLtoASL _startPos);
-    _projectile setVariable ["APS_ammoOverride", "ammo_SmartMine"];
+    if (_projectileType == "M_Titan_AT") then {
+        _projectile setVariable ["APS_ammoOverride", "ammo_SmartMineAT"];
+    } else {
+        _projectile setVariable ["APS_ammoOverride", "ammo_SmartMineAP"];
+    };
 
     private _initialVectorDirAndUp = [getPosASL _projectile, AGLtoASL _startPos] call BIS_fnc_findLookAt;
     _projectile setVectorDirAndUp _initialVectorDirAndUp;
@@ -181,10 +182,10 @@ while { alive _asset } do {
     uiSleep 5;
 };
 
-[ASLtoAGL _assetPos, [
-    ["DeminingExplosiveCircleDust", 0.3],
-    ["SecondaryExp", 0.2],
-    ["SecondarySmoke", 0.2]
-]] remoteExec ["WL2_fnc_particleEffect", 0];
-playSound3D [selectRandom _detonateSounds, objNull, false, _assetPos];
-deleteVehicle _asset;
+// [ASLtoAGL _assetPos, [
+//     ["DeminingExplosiveCircleDust", 0.3],
+//     ["SecondaryExp", 0.2],
+//     ["SecondarySmoke", 0.2]
+// ]] remoteExec ["WL2_fnc_particleEffect", 0];
+// playSound3D [selectRandom _detonateSounds, objNull, false, _assetPos];
+// deleteVehicle _asset;

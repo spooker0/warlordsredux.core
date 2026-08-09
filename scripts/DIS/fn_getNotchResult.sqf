@@ -20,13 +20,14 @@ private _flaresNearby = count (("CMflare_Chaff_Ammo" allObjects 2) select {
 if (_launcherNoLos) then {
     _flaresNearby = _flaresNearby * 10;
 };
+private _notchMaxRange = WL_SAM_NOTCH_MAX_RANGE min _distanceBeforeNotch;
 
 private _actualTrackSpeed = _targetTrackSpeed - (_flaresNearby * 15);           // 30 flares max
 private _actualTolerance = WL_SAM_NOTCH_TOLERANCE - (_flaresNearby * 0.012);    // 74 flares max
-private _actualMaxRange = WL_SAM_NOTCH_MAX_RANGE - (_flaresNearby * 50);        // 40 flares max
+private _actualMaxRange = _notchMaxRange - (_flaresNearby * 50);        // 40 flares max
 _actualTrackSpeed = _actualTrackSpeed max 1;
 _actualTolerance = _actualTolerance max 0.1;
-_actualMaxRange = _actualMaxRange max 500;
+_actualMaxRange = _actualMaxRange max 100;
 
 // systemChat format [
 //     "Target speed: %1, Tolerance: %2, Max range: %3",

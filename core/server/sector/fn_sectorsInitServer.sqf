@@ -222,8 +222,6 @@ private _slowestCapture = 180;
 };
 #endif
 
-
-
 private _faces = [];
 private _outNeighborsBySectorId = createHashMap;
 private _neighborIndexBySectorId = createHashMap;

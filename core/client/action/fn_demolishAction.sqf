@@ -63,7 +63,12 @@ private _demolishActionId = player addAction [
                 ["", "ActionContext"],
                 ["", "navigateMenu"]
             ]], _demolitionStepTime, true] spawn WL2_fnc_showHint;
-            _displayText = format ["Demolishing %1... Tip: explosive charges (equip in Arsenal) can quickly demolish fortified structures.", _displayText];
+            _displayText = format ["Demolishing %1...", _displayText];
+
+            private _isNotObstacle = WL_UNIT(_demolishableTarget, "obstacle", 0) == 0;
+            if (_isNotObstacle) then {
+                _displayText = format ["%1 Tip: explosive charges (equip in Arsenal) can quickly demolish fortified structures.", _displayText];
+            };
 
             [_displayText] call WL2_fnc_smoothText;
 

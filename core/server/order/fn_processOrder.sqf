@@ -35,6 +35,10 @@ if (_drone > 0) then {
     _assetGrp deleteGroupWhenEmpty true;
 };
 
+if (_asset isKindOf "Air") then {
+	[_asset] spawn WL2_fnc_airWreckHandler;
+};
+
 private _immobile = WL_ASSET(_orderedClass, "immobile", 0);
 if (_immobile > 0) then {
 	if (unitIsUAV _asset) then {

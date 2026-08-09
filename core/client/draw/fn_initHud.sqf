@@ -23,6 +23,7 @@ private _captureProgressBar = _display displayCtrl 2108;
 private _captureText = _display displayCtrl 2109;
 
 private _reinforceProgressBar = _display displayCtrl 2112;
+private _reinforceSubtitle = _display displayCtrl 2114;
 
 private _subtitlesControl = _display displayCtrl 2110;
 _subtitlesControl ctrlShow false;
@@ -184,6 +185,7 @@ while { !BIS_WL_missionEnd } do {
 		_captureText ctrlShow false;
 		_captureProgressBar ctrlShow false;
 		_reinforceProgressBar ctrlShow false;
+		_reinforceSubtitle ctrlShow false;
 		continue;
 	};
 
@@ -230,10 +232,34 @@ while { !BIS_WL_missionEnd } do {
 			_sector getVariable ["WL2_maxDefenders", 0];
 		};
 		_sectorMaxReinforcements = _sectorMaxReinforcements max 1;
-		_reinforceProgressBar progressSetPosition (_sectorReinforcements / _sectorMaxReinforcements);
+
+		private _sectorColorRGB = [_sectorOwner] call _getTeamColorRGB;
+		private _defenderModifier = linearConversion [1, _sectorMaxReinforcements, _sectorReinforcements, 0, 1, true];
+		_reinforceProgressBar progressSetPosition _defenderModifier;
+		_reinforceProgressBar ctrlSetTextColor _sectorColorRGB;
 		_reinforceProgressBar ctrlShow true;
+
+		if (_sectorOwner == independent) then {
+			_reinforceSubtitle ctrlShow false;
+		} else {
+			private _sectorColorHex = [_sectorOwner] call _getTeamColorHex;
+			if (_defenderModifier > 0) then {
+				_reinforceSubtitle ctrlSetStructuredText parseText format [
+					"<t shadow='2' align='center' color='%1'>DEFENSE +%2x</t>",
+					_sectorColorHex,
+					(_defenderModifier * 5) toFixed 1
+				];
+			} else {
+				_reinforceSubtitle ctrlSetStructuredText parseText format [
+					"<t shadow='2' align='center' color='%1'>DEFENSE -50%%</t>",
+					_sectorColorHex
+				];
+			};
+			_reinforceSubtitle ctrlShow true;
+		};
 	} else {
 		_reinforceProgressBar ctrlShow false;
+		_reinforceSubtitle ctrlShow false;
 	};
 
 	if (_sectorOwner == _side) then {

@@ -17,8 +17,15 @@ private _nearbyArea = [_pos, _radius, _radius, 0, false];
 private _nearbySectors = [];
 
 private _timedMarkerSize = -1;
+private _mapMode = uiNamespace getVariable ["WL2_mapMode", 0];
+private _hideSectors = _mapMode != 0;
 {
     private _marker = (_x getVariable "BIS_WL_markers") # 0;
+    if (_hideSectors) then {
+        _marker setMarkerAlphaLocal 0;
+        continue;
+    };
+    _marker setMarkerAlphaLocal 1;
     private _currentMarkerSize = if (_x getVariable ["WL2_sectorSelectionAvailable", false]) then {
         if (_timedMarkerSize == -1) then {
             private _timer = if (_serverTime <= 0.5) then {

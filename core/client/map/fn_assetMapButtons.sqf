@@ -232,8 +232,9 @@ if (_operateAccess && WL_ASSET(_assetActualType, "isRadar", 0) > 0) then {
 if (_operateAccess && WL_ASSET(_assetActualType, "smartMineAP", 0) > 0) then {
     private _smartMineNext = {
         params ["_asset"];
+        private _smartMineDistances = count WL_SMART_MINE_DISTANCES;
         private _smartMineDistance = _asset getVariable ["WL2_smartMineDistance", 0];
-        private _newSmartMineDistance = (_smartMineDistance - 1 + 6) % 6;
+        private _newSmartMineDistance = (_smartMineDistance - 1 + _smartMineDistances) % _smartMineDistances;
         _asset setVariable ["WL2_smartMineDistance", _newSmartMineDistance, true];
         playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss"];
 
@@ -243,8 +244,9 @@ if (_operateAccess && WL_ASSET(_assetActualType, "smartMineAP", 0) > 0) then {
     };
     private _smartMinePrevious = {
         params ["_asset"];
+        private _smartMineDistances = count WL_SMART_MINE_DISTANCES;
         private _smartMineDistance = _asset getVariable ["WL2_smartMineDistance", 0];
-        private _newSmartMineDistance = (_smartMineDistance + 1) % 6;
+        private _newSmartMineDistance = (_smartMineDistance + 1) % _smartMineDistances;
         _asset setVariable ["WL2_smartMineDistance", _newSmartMineDistance, true];
         playSoundUI ["a3\ui_f\data\sound\rscbutton\soundclick.wss"];
 

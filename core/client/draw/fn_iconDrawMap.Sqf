@@ -65,30 +65,52 @@ private _mousePosition = getMousePosition;
 private _circleScale = 6.4 * worldSize / 8192 * _scale;
 {
 	_x params ["_sectorAngle", "_color", "_position", "_size", "_direction", "_scanLines"];
-	// _m drawIcon [
-	// 	format ["\a3\ui_f\data\IGUI\RscCustomInfo\Sensors\Sectors\sector%1_ca.paa", _sectorAngle],
-	// 	_color,
-	// 	_position,
-	// 	_size / _circleScale,
-	// 	_size / _circleScale,
-	// 	_direction
-	// ];
+	if (_sectorAngle < 360) then {
+		private _scanAngleStart = _direction - (_sectorAngle / 2);
+		private _scanAngleEnd = _direction + (_sectorAngle / 2);
 
-	private _scanAngleStart = _direction - (_sectorAngle / 2);
-	private _scanAngleEnd = _direction + (_sectorAngle / 2);
+		_m drawLine [
+			_position,
+			_position getPos [_size, _scanAngleStart],
+			_color,
+			20
+		];
+		_m drawLine [
+			_position,
+			_position getPos [_size, _scanAngleEnd],
+			_color,
+			20
+		];
 
-	_m drawLine [
-		_position,
-		_position getPos [_size, _scanAngleStart],
-		_color,
-		12
-	];
-	_m drawLine [
-		_position,
-		_position getPos [_size, _scanAngleEnd],
-		_color,
-		12
-	];
+		if (_scanLines) then {
+			private _scanLinePosition = linearConversion [0, 1, time % 1, _scanAngleStart, _scanAngleEnd];
+			_m drawLine [
+				_position,
+				_position getPos [_size, _scanLinePosition],
+				_color,
+				20
+			];
+		};
+	} else {
+		_m drawEllipse [
+			_position,
+			_size,
+			_size,
+			0,
+			_color,
+			""
+		];
+
+		if (_scanLines) then {
+			private _scanLinePosition = linearConversion [0, 1, time % 1, 0, 360];
+			_m drawLine [
+				_position,
+				_position getPos [_size, _scanLinePosition],
+				_color,
+				20
+			];
+		};
+	};
 } forEach _drawSemiCircles;
 
 {

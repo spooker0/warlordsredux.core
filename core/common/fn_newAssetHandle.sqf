@@ -289,11 +289,6 @@ if (_asset isKindOf "Man") then {
 		}];
 	};
 
-	if (_asset isKindOf "Air") then {
-		// [_asset] remoteExec ["WL2_fnc_airRearmAction", 0, true];
-		[_asset] spawn WL2_fnc_airWreckHandler;
-	};
-
 	if (unitIsUAV _asset) then {
 		if (_settingsMap getOrDefault ["enableAuto", false] && !isDedicated) then {
 			[_asset, false] remoteExec ["setAutonomous", 0];
