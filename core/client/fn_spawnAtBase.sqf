@@ -7,32 +7,13 @@ private _homeBase = [_side] call WL2_fnc_getSideBase;
 private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 private _hideFrontlineMenu = _settingsMap getOrDefault ["hideFrontlineMenu", false];
 if (!_hideFrontlineMenu) then  {
-    private _frontlineActionId = player addAction [
-        format ["<t color='#4bff58'>%1</t>", localize "STR_WL_travelFrontline"],
-        {
-            params ["_target", "_caller", "_actionId", "_arguments"];
-            private _travelResult = [true] call WL2_fnc_travelTeamPriority;
-            if (_travelResult) then {
-                playSoundUI ["AddItemOk"];
-            } else {
-                playSoundUI ["AddItemFailed"];
-                [localize "STR_WL_conscriptFailed"] call WL2_fnc_smoothText;
-            };
-        },
-        [],
-        100,
-        false,
-        true,
-        "",
-        "!isWeaponDeployed player && vehicle player == player && player distance2D ([BIS_WL_playerSide] call WL2_fnc_getSideBase) < 100",
-        20,
-        false
-    ];
+    [player] call WL2_fnc_frontlineAction;
 };
 
-private _homeBaseLocation = _homeBase modelToWorld [0, 0, 0];
+private _baseFlag = _homeBase getVariable ["WL2_baseFlag", _homeBase];
+private _homeBaseLocation = _baseFlag modelToWorld [0, -5, 0];
 if (_firstSpawn) exitWith {
-    player setVehiclePosition [_homeBaseLocation, [], 5, "NONE"];
+    player setVehiclePosition [_homeBaseLocation, [], 0, "NONE"];
 };
 
 private _enemySector = WL_TARGET_ENEMY;
@@ -55,5 +36,5 @@ if (_isBaseVulnerable) then {
         [player] spawn WL2_fnc_parachuteSetup;
     };
 } else {
-    player setVehiclePosition [_homeBaseLocation, [], 5, "NONE"];
+    player setVehiclePosition [_homeBaseLocation, [], 0, "NONE"];
 };

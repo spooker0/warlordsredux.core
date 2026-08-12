@@ -23,16 +23,21 @@ while { !BIS_WL_missionEnd } do {
     private _unlockedSectors = _teamSectorsData getOrDefault ["unlocked", []];
     private _currentSector = objNull;
     {
-        if (_x in _unlockedSectors) then {
-            private _revealedBy = _x getVariable ["BIS_WL_revealedBy", []];
-            if !(_side in _revealedBy) then {
-                _revealedBy pushBackUnique _side;
-                _x setVariable ["BIS_WL_revealedBy", _revealedBy, true];
-                [player, "revealSector"] remoteExec ["WL2_fnc_handleClientRequest", 2];
-                [_x, _side] remoteExec ["WL2_fnc_sectorRevealHandle", 0];
-            };
-        } else {
+        private _sectorIsUnlocked = _x in _unlockedSectors;
+        if (!_sectorIsUnlocked) then {
             _currentSector = _x;
+        };
+
+        private _revealedBy = _x getVariable ["BIS_WL_revealedBy", []];
+        if (_side in _revealedBy) then {
+            continue;
+        };
+
+        if (_sectorIsUnlocked || _x == WL_TARGET_ENEMY || _x in WL_BASES) then {
+            _revealedBy pushBackUnique _side;
+            _x setVariable ["BIS_WL_revealedBy", _revealedBy, true];
+            [player, "revealSector"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+            [_x, _side] remoteExec ["WL2_fnc_sectorRevealHandle", 0];
         };
     } forEach _findCurrentSector;
 

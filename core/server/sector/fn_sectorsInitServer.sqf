@@ -77,19 +77,13 @@ waitUntil {!isNil "WL2_base1" && {!isNil "WL2_base2"}};
 	_base setVariable ["WL2_capturableBySides", [_side], true];
 	_base setVariable ["BIS_WL_revealedBy", [_side], true];
 
-	private _pos = (position _x) findEmptyPosition [0, 20, "FlagPole_F"];
-	private _posFinal = if (count _pos == 0) then {
-		position _x
-	} else {
-		_pos
-	};
-	private _flag = createVehicle ["FlagPole_F", _posFinal, [], 0, "CAN_COLLIDE"];
+	private _flag = createVehicle ["Land_MapBoard_F", position _base, [], 0, "CAN_COLLIDE"];
 	if (_side == west) then {
-		_flag setFlagTexture "\A3\Data_F\Flags\flag_NATO_CO.paa";
+		_flag setObjectTextureGlobal [0, "\A3\Data_F\Flags\flag_NATO_CO.paa"];
 	} else {
-		_flag setFlagTexture "\A3\Data_F\Flags\Flag_CSAT_CO.paa";
+		_flag setObjectTextureGlobal [0, "\A3\Data_F\Flags\Flag_CSAT_CO.paa"];
 	};
-	_flag setFlagSide _side;
+	_base setVariable ["WL2_flag", _flag, true];
 	[_flag] remoteExec ["WLC_fnc_action", 0, true];
 } forEach [_firstBase, _secondBase];
 

@@ -55,10 +55,6 @@ private _mousePosition = getMousePosition;
 } forEach _drawLines;
 
 {
-	_m drawIcon _x;
-} forEach _drawIcons;
-
-{
 	_m drawEllipse _x;
 } forEach _drawEllipses;
 
@@ -116,6 +112,10 @@ private _circleScale = 6.4 * worldSize / 8192 * _scale;
 {
 	_m drawRectangle _x;
 } forEach _drawRectangles;
+
+{
+	_m drawIcon _x;
+} forEach _drawIcons;
 
 if (WL_IsReplaying) then {
 	private _drawSectorIcons = uiNamespace getVariable ["WL2_drawSectorIcons", []];

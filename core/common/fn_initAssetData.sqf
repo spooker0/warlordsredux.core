@@ -8,6 +8,7 @@ if (isServer) then {
 	serverNamespace setVariable ["WL2_garbageCollector",
 		createHashMapFromArray [
 			["Steerable_Parachute_F", true],
+			["Land_FuelTank_UH80_F", true],
 			["Land_Cargo_Tower_V4_ruins_F", true],
 			["Land_Cargo_HQ_V4_ruins_F", true],
 			["Land_MobileRadar_01_radar_ruins_F", true],
@@ -92,6 +93,8 @@ private _requisitionPreset = missionConfigFile >> "CfgWLRequisitionPresets";
 	_requisitionData set [_className, _classMap];
 } forEach configProperties [_requisitionPreset];
 
+private _additionalReqData = missionNamespace getVariable ["WL2_additionalData", createHashMap];
+_requisitionData merge [_additionalReqData, true];
 missionNamespace setVariable ["WL2_assetData", _requisitionData];
 
 private _menuButtonIconMap = createHashMapFromArray [

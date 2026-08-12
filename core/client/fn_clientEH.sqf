@@ -172,11 +172,6 @@ addMissionEventHandler ["PlayerViewChanged", {
 	};
 
 	[_newCameraOn] spawn WL2_fnc_drawAssetName;
-
-	// private _ecmParameters = WL_UNIT(_newCameraOn, "ecm", []);
-	// if (count _ecmParameters >= 3) then {
-	// 	[_newCameraOn] spawn WL2_fnc_ecmJammer;
-	// };
 }];
 
 addMissionEventHandler ["MarkerCreated", {
@@ -199,11 +194,6 @@ addMissionEventHandler ["MarkerCreated", {
 		};
 	};
 #endif
-
-	// Global markers disabled
-	if (_channelNumber == 0) exitWith {
-		deleteMarker _marker;
-	};
 
 	if (_local) then {
 		missionNamespace setVariable ["WL2_lastMarker", _marker];

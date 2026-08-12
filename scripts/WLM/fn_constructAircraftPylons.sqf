@@ -36,7 +36,7 @@ private _currentAssetPylonInfo = _asset getVariable ["WLM_pylonInfo", getAllPylo
     private _assetActualType = WL_ASSET_TYPE(_asset);
     private _disallowListForAsset = WL_ASSET(_assetActualType, "disallowMagazines", []);
 
-    private _bannedWords = ["leaflet", "bombcluster"];
+    private _bannedWords = ["leaflet", "bombcluster", "pylonfueltank"];
     _allowedMagazines = _allowedMagazines select {
         private _mag = _x;
         private _isBannedByWord = false;

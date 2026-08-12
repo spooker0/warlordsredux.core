@@ -10,7 +10,7 @@ if (_isAircraft) then {
             private _maxAmmo = getNumber (configFile >> "CfgMagazines" >> _pylonName >> "count");
             private _currentAmmo = _x # 4;
 
-            if (_maxAmmo > _currentAmmo) then {
+            if (_currentAmmo != -1 && _maxAmmo > _currentAmmo) then {
                 _eligibleFreeRearm = false;
             };
         };

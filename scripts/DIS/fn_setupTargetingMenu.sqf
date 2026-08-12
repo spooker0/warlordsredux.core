@@ -617,6 +617,13 @@ while { !BIS_WL_missionEnd } do {
 		};
 	};
 
+	if (_currentMode == "sead") then {
+		private _pitch = (cameraOn call BIS_fnc_getPitchBank) # 0;
+		private _attackDistance = linearConversion [-15, 15, _pitch, 1000, 100, true];
+		private _angle = 500 atan2 _attackDistance;
+		_statusText = _statusText + format ["SEAD ANGLE: %1<br/>", round _angle];
+	};
+
 	private _ammoConfig = cameraOn getVariable ["WL2_currentAmmoConfig", createHashMap];
 	private _manualSam = _ammoConfig getOrDefault ["manualSam", []];
 	if (count _manualSam > 0) then {

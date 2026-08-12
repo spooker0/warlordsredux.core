@@ -98,7 +98,7 @@ private _sideCaptureModifier = if (_useCache) then {
 	_capModifiers;
 };
 
-private _relevantEntities = entities [["LandVehicle", "Man"], ["Logic"], true, true];
+private _relevantEntities = BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles;
 private _sectorAO = _sector getVariable "objectAreaComplete";
 private _allInArea = (_relevantEntities inAreaArray _sectorAO) select {
 	WL_ISUP(_x)
@@ -144,7 +144,7 @@ private _strongholdRadius = _stronghold getVariable ["WL_strongholdRadius", 0];
 private _sideCapValues = createHashMap;
 {
 	private _unit = _x;
-	private _side = side group _unit;
+	private _side = [_unit] call WL2_fnc_getAssetSide;
 
 	if (typeOf _unit in _disallowManList) then {
 		continue;
@@ -159,11 +159,11 @@ private _sideCapValues = createHashMap;
 	} else {
 		private _aliveCrew = (crew _unit) select { WL_ISUP(_x) && !(typeOf _x in _disallowManList) };
 		private _crewCount = count _aliveCrew;
+		private _assetActualType = WL_ASSET_TYPE(_unit);
 		if (_crewCount > 0) then {
-			private _assetActualType = WL_ASSET_TYPE(_unit);
 			WL_ASSET_FIELD(_assetData, _assetActualType, "capValue", 0);
 		} else {
-			0;
+			WL_ASSET_FIELD(_assetData, _assetActualType, "capValueEmpty", 0);
 		};
 	};
 

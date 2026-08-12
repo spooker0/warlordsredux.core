@@ -55,5 +55,14 @@ _asset addEventHandler ["HandleDamage", {
 		};
 	};
 
+	private _strongWheels = _unit getVariable ["WL2_strongWheels", false];
+	if (_strongWheels) then {
+		if (_projectile == "") then {
+			if (_hitPoint regexMatch "hit.*wheel") then {
+				_damage = _unit getHit _selection;
+			};
+		};
+	};
+
 	_damage;
 }];

@@ -24,7 +24,8 @@ switch (_fastTravelMode) do {
 	case 0: {
 		private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
 		if (_homeBase == _location && WL_TARGET_ENEMY != _homeBase) then {
-			_destination = _homeBase modelToWorld [0, 0, 0];
+			private _baseFlag = _homeBase getVariable ["WL2_baseFlag", _homeBase];
+			_destination = _baseFlag modelToWorld [0, -5, 0];
 			_playArrivalWarning = false;
 		} else {
 			_destination = selectRandom ([_location] call WL2_fnc_findSpawnsInSector);

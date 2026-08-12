@@ -31,6 +31,7 @@ _weapon setVariable ["WL2_orderedClass", _overrideClass, true];
 _weapon setVariable ["WL2_manualDrone", true, true];
 _weapon setVariable ["WL2_hasHMD", true];
 _weapon setVariable ["BIS_WL_ownerAsset", getPlayerUID player, true];
+_weapon setVariable ["WL2_parentType", WL_ASSET_TYPE(_asset), true];
 _weapon enableWeaponDisassembly false;
 
 _weapon setVehicleReceiveRemoteTargets true;

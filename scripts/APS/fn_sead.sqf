@@ -34,46 +34,36 @@ if (_target isKindOf "Air") exitWith {
 };
 
 private _terminal = false;
-private _lastTargetPos = getPosASL _target;
-private _laser = objNull;
 
 private _projectileSpeed = getNumber (configfile >> "CfgAmmo" >> typeof _projectile >> "maxSpeed");
 _projectileSpeed = _projectileSpeed max 250;
 
 private _pitch = (_unit call BIS_fnc_getPitchBank) # 0;
-private _attackDistance = linearConversion [-15, 15, _pitch, 500, 1000, true];
+private _attackDistance = linearConversion [-15, 15, _pitch, 1000, 100, true];
+
+private _targetPos = _target modelToWorldWorld [0, 0, 500];
 
 while { alive _projectile } do {
     if (alive _target) then {
-        private _targetPos = getPosASL _target;
-        if (_projectile distance _laser > _attackDistance && !_terminal) then {
-            if (!alive _laser) then {
-                _laser = createVehicleLocal ["LaserTargetC", [0, 0, 0], [], 0, "NONE"];
-            };
-
-            _laser setPosASL (_targetPos vectorAdd [0, 0, 500]);
+        if (_projectile distance2D _targetPos > _attackDistance && !_terminal) then {
+            private _targetVectorDirAndUp = [getPosASL _projectile, _targetPos] call BIS_fnc_findLookAt;
+            _projectile setVectorDirAndUp _targetVectorDirAndUp;
             _projectile setVelocityModelSpace [0, _projectileSpeed, 0];
-            _projectile setMissileTarget [_laser, true];
         } else {
+            _targetPos = getPosASL _target;
             private _targetVectorDirAndUp = [getPosASL _projectile, _targetPos] call BIS_fnc_findLookAt;
             _projectile setVectorDirAndUp _targetVectorDirAndUp;
 
             _projectile setVelocityModelSpace [0, 250, 0];
-
             _terminal = true;
-            deleteVehicle _laser;
-
             _projectile setMissileTarget [_target, true];
         };
-        _lastTargetPos = _targetPos;
     } else {
-        _laser setPosASL _lastTargetPos;
-        _projectile setMissileTarget [_laser, true];
+        break;
     };
 
     uiSleep 0.001;
 };
 
 uiSleep 3;
-deleteVehicle _laser;
 deleteVehicle _projectile;

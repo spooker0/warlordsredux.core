@@ -308,6 +308,44 @@ if (_showSectorLinks && _showRegularMode) then {
 	};
 };
 
+// Draw minefields
+if (!_showAirMode && !_showMyMode) then {
+	private _minefields = _mapData getOrDefault ["minefields", []];
+	{
+		if (!alive _x) then {
+			continue;
+		};
+
+		private _position = getPosASL _x;
+		private _mineData = _x getVariable ["WL2_minefield", []];
+
+		if (count _mineData < 3) then {
+			continue;
+		};
+
+		private _isRectangle = _mineData # 2 == 1;
+		if (_isRectangle) then {
+			_drawRectangles pushBack [
+				_position,
+				_mineData # 0,
+				_mineData # 1,
+				getDir _x,
+				[1, 1, 1, 1],
+				"#(rgb,1,1,1)color(1,0,0,0.15)"
+			];
+		} else {
+			_drawEllipses pushBack [
+				_position,
+				_mineData # 0,
+				_mineData # 1,
+				getDir _x,
+				[1, 1, 1, 1],
+				"#(rgb,1,1,1)color(1,0,0,0.15)"
+			];
+		};
+	} forEach _minefields;
+};
+
 // Draw forward bases
 private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 {
@@ -864,44 +902,6 @@ if (!_showAirMode) then {
 			true
 		];
 	} forEach _advancedMines;
-};
-
-// Draw minefields
-if (!_showAirMode && !_showMyMode) then {
-	private _minefields = _mapData getOrDefault ["minefields", []];
-	{
-		if (!alive _x) then {
-			continue;
-		};
-
-		private _position = getPosASL _x;
-		private _mineData = _x getVariable ["WL2_minefield", []];
-
-		if (count _mineData < 3) then {
-			continue;
-		};
-
-		private _isRectangle = _mineData # 2 == 1;
-		if (_isRectangle) then {
-			_drawRectangles pushBack [
-				_position,
-				_mineData # 0,
-				_mineData # 1,
-				getDir _x,
-				[1, 1, 1, 1],
-				"#(rgb,1,1,1)color(1,0,0,0.15)"
-			];
-		} else {
-			_drawEllipses pushBack [
-				_position,
-				_mineData # 0,
-				_mineData # 1,
-				getDir _x,
-				[1, 1, 1, 1],
-				"#(rgb,1,1,1)color(1,0,0,0.15)"
-			];
-		};
-	} forEach _minefields;
 };
 
 private _drawSectorMarkerThreshold = _mapData getOrDefault ["sectorMarkerThreshold", 0.4];

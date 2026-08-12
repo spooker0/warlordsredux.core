@@ -47,7 +47,7 @@ if (_key in actionKeys "Gear") then {
         if (_cursorObject distance player > 8) exitWith {
             player action ["Gear", objNull];
         };
-        if (_cursorObject isKindOf "House") exitWith {
+        if (maxLoad _cursorObject == 0) exitWith {
             player action ["Gear", objNull];
         };
         if (alive _cursorObject || _cursorObject isKindOf "Man") exitWith {

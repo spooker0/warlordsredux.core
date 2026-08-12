@@ -292,8 +292,6 @@ if (_action == "scan") exitWith {
 	_uav setFuelConsumptionCoef 20;
 	_uav setVariable ["WL2_accessControl", 7, true];
 
-	[_uav] spawn WL2_fnc_airWreckHandler;
-
 	private _waypoint = _uavGroup addWaypoint [_sector, 0];
 	_waypoint setWaypointLoiterType "CIRCLE";
 
@@ -312,6 +310,8 @@ if (_action == "scan") exitWith {
 
 		private _lastScannedVar = format ["WL2_lastScanned_%1", _side];
 		_sector setVariable [_lastScannedVar, serverTime, true];
+
+		deleteVehicle _uav;
 	};
 };
 
@@ -501,6 +501,26 @@ if (_action == "secure") exitWith {
 	private _reward = 50;
 	[_reward, "Secured"] call _addFunds;
 	[objNull, _reward, "Secured", WL_COLOR_KILL] remoteExec ["WL2_fnc_killRewardClient", _sender];
+
+	private _targetSide = side group _target;
+	if (_targetSide in [west, east]) then {
+		private _victimSectorsData = WL_SECTORS_DATA(_targetSide);
+		private _ownedSectors = _victimSectorsData getOrDefault ["owned", []];
+
+		private _sectorToReveal = if (count _ownedSectors > 0) then {
+			selectRandom _ownedSectors
+		} else {
+			objNull
+		};
+
+		private _sectorRevealedBy = _sectorToReveal getVariable ["BIS_WL_revealedBy", []];
+		if !(_side in _sectorRevealedBy) then {
+			_sectorRevealedBy pushBackUnique _side;
+			_sectorToReveal setVariable ["BIS_WL_revealedBy", _sectorRevealedBy, true];
+			[_sender, "revealSector"] spawn WL2_fnc_handleClientRequest;
+			[_sectorToReveal, _side] remoteExec ["WL2_fnc_sectorRevealHandle", 0];
+		};
+	};
 };
 
 if (_action == "droneRebate") exitWith {

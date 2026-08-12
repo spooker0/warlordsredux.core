@@ -4,7 +4,7 @@ _asset = vehicle _asset;
 
 if (_asset isKindOf "Man") exitWith {
 	if (isPlayer [_asset]) then {
-		if (side group _asset == BIS_WL_playerSide) then {
+		if (side group _asset == BIS_WL_playerSide || WL_IsSpectator) then {
 			private _nameTag = _asset getVariable ["WL_playerLevel", ""];
 			private _showPlayerUids = uiNamespace getVariable ["WL2_showPlayerUids", false];
 			private _assetOwnerName = [_asset] call WL2_fnc_getAssetOwnerName;
@@ -34,7 +34,7 @@ if (!_showDetailed) exitWith {
 
 private _vehicleDisplayName = [_asset] call WL2_fnc_getAssetTypeName;
 private _vehicleSide = [_asset] call WL2_fnc_getAssetSide;
-if (_vehicleSide == BIS_WL_playerSide) then {
+if (_vehicleSide == BIS_WL_playerSide || WL_IsSpectator) then {
 	private _crewCount = count crew _asset;
 	private _assetOwnerName = [_asset] call WL2_fnc_getAssetOwnerName;
 

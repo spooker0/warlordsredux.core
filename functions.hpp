@@ -277,6 +277,7 @@ class CfgFunctions {
 			class deployableEligibility { headerType = WL_HEADER_LEVEL; };
 			class ecmAction { headerType = WL_HEADER_LEVEL; };
 			class fieldRepairEligibility { headerType = WL_HEADER_LEVEL; };
+			class frontlineAction { headerType = WL_HEADER_LEVEL; };
 			class getVehicleLockStatus { headerType = WL_HEADER_LEVEL; };
 			class grapple { headerType = WL_HEADER_LEVEL; };
 			class hmdSendData { headerType = WL_HEADER_LEVEL; };
@@ -332,6 +333,7 @@ class CfgFunctions {
 			class smokeCurtainAction { headerType = WL_HEADER_LEVEL; };
 			class smokeCurtainParticles { headerType = WL_HEADER_LEVEL; };
 			class turretVisualizerAction { headerType = WL_HEADER_LEVEL; };
+			class unlockDoorAction { headerType = WL_HEADER_LEVEL; };
 			class vehicleLockAction { headerType = WL_HEADER_LEVEL; };
 			class vehicleLockUpdate { headerType = WL_HEADER_LEVEL; };
 		};
@@ -341,7 +343,6 @@ class CfgFunctions {
 			class drawAssetName { headerType = WL_HEADER_LEVEL; };
 			class drawRegions { headerType = WL_HEADER_LEVEL; };
 			class drawSectorMarker { headerType = WL_HEADER_LEVEL; };
-			class ecmJammer { headerType = WL_HEADER_LEVEL; };
 			class ewarResult { headerType = WL_HEADER_LEVEL; };
 			class fastHudUpdate { headerType = WL_HEADER_LEVEL; };
 			class helmetInterface { headerType = WL_HEADER_LEVEL; };
@@ -558,7 +559,6 @@ class CfgFunctions {
 			class initServer { headerType = WL_HEADER_LEVEL; };
 			class killRewardHandle { headerType = WL_HEADER_LEVEL; };
 			class lagMessageHandler { headerType = WL_HEADER_LEVEL; };
-			class laserTracker { headerType = WL_HEADER_LEVEL; };
 			class manageServer { headerType = WL_HEADER_LEVEL; };
 			class missileDestroy { headerType = WL_HEADER_LEVEL; };
 			class onDisconnect { headerType = WL_HEADER_LEVEL; };

@@ -290,7 +290,7 @@ if (_asset isKindOf "Man") then {
 	};
 
 	if (unitIsUAV _asset) then {
-		if (_settingsMap getOrDefault ["enableAuto", false] && !isDedicated) then {
+		if (_settingsMap getOrDefault ["enableAuto", false] && !isDedicated && !isNull _owner) then {
 			[_asset, false] remoteExec ["setAutonomous", 0];
 		} else {
 			[_asset, true] remoteExec ["setAutonomous", 0];
@@ -360,6 +360,10 @@ if (_asset isKindOf "Man") then {
 
 	if (WL_ASSET_GET(_data, "hasRearm", 0) > 0) then {
 		_asset setVariable ["WLM_ammoCargo", 10000, true];
+	};
+
+	if (WL_ASSET_GET(_data, "strongWheels", 0) > 0) then {
+		_asset setVariable ["WL2_strongWheels", true, true];
 	};
 
 	private _paradrops = WL_ASSET_GET(_data, "paradrops", 0);

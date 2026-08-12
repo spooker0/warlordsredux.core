@@ -20,7 +20,7 @@ private _sectors = uiNamespace getVariable ["WL2_spectatorDrawSectors", []];
         45,
         _playerName,
         0,
-        0.05,
+        0.035,
         "RobotoCondensedBold"
     ];
 } forEach _laserTargets;

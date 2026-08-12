@@ -134,13 +134,13 @@ private _interceptAction = {
                         if (_doorsDamaged > serverTime) then {
                             false;
                         } else {
-                            private _message = if (simulationEnabled _target) then {
-                                "Door locked. Open with explosive charges."
-                            } else {
-                                "Door locked."
-                            };
-                            [_message] call WL2_fnc_smoothText;
                             playSoundUI ["AddItemFailed"];
+                            private _message = if (simulationEnabled _target) then {
+                                [_target] spawn WL2_fnc_unlockDoorAction;
+                            } else {
+                                ["Door locked."] call WL2_fnc_smoothText;
+                            };
+
                             true;
                         };
                     };

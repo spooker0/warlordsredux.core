@@ -2,6 +2,7 @@
 params ["_flag"];
 
 [_flag] call WL2_fnc_restockAction;
+[_flag] call WL2_fnc_frontlineAction;
 
 #if WL_TEST_SERVER
 	_flag addAction ["<t color='#ffff00'>(Debug) Reset Score/Level to 0</t>", {

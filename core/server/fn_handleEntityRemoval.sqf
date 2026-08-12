@@ -118,11 +118,12 @@ private _unitCost = if (_unit isKindOf "Man") then {
     WL_ASSET(_assetActualType, "cost", 0);
 };
 
-private _killerStats = _stats getOrDefault [_killerActualType, createHashMap];
+private _killerStatActualType = _killer getVariable ["WL2_parentType", _killerActualType];
+private _killerStats = _stats getOrDefault [_killerStatActualType, createHashMap];
 private _killerKillValue = _killerStats getOrDefault ["killValue", 0];
 if (_unitCost > 0 && _responsiblePlayer != _unit) then {
     _killerStats set ["killValue", _killerKillValue + _unitCost];
-    _stats set [_killerActualType, _killerStats];
+    _stats set [_killerStatActualType, _killerStats];
 
     [_unit, _assetActualType, _killerEntry, _killerSide == _unitSide] call WL2_fnc_setScoreboardEntry;
 };

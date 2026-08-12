@@ -72,7 +72,6 @@ call WL2_fnc_processRunways;
 [true] spawn WL2_fnc_dumbMineHandler;
 
 0 spawn WL2_fnc_cleanupCarrier;
-0 spawn WL2_fnc_laserTracker;
 0 spawn WL2_fnc_assetRelevanceCheck;
 0 spawn WL2_fnc_sectorRespawner;
 0 spawn WL2_fnc_aircraftFlares;
@@ -92,7 +91,7 @@ call WL2_fnc_processRunways;
 	uiSleep 10;
 
 	while { !BIS_WL_missionEnd } do {
-		private _timeMultiplier = if (sunOrMoon < 0.99) then {
+		private _timeMultiplier = if (dayTime < 5.5 || dayTime > 18.5) then {
 			30;
 		} else {
 			1;

@@ -119,7 +119,7 @@ private _pylonInfo = getAllPylonsInfo _asset;
 	// 	count _intersection != 0;
 	// };
 
-	private _removePylonMagazines = _pylonInfo apply {_x # 3};
+	private _removePylonMagazines = _pylonInfo apply { _x # 3 };
 	private _removePylonWeapons = _existingWeapons select {
 		private _intersection = (compatibleMagazines _x) arrayIntersect _removePylonMagazines;
 		count _intersection != 0;

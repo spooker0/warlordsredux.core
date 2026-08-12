@@ -29,17 +29,16 @@ while { WL_IsSpectator } do {
     private _laserTargets = entities "LaserTarget";
     private _laserViewDistance = _settingProfileData getOrDefault ["LASER", 5000];
     _laserTargets = _laserTargets select {
-        alive _x &&
-        _x distance _cameraPos <= _laserViewDistance &&
-        !(isNull (_x getVariable ["WL_laserPlayer", objNull]));
+        alive _x
+    } select {
+        _x distance _cameraPos <= _laserViewDistance
     };
     _laserTargets = _laserTargets apply {
-        private _responsiblePlayer = _x getVariable ["WL_laserPlayer", objNull];
-        private _playerName = name _responsiblePlayer;
-        if (_playerName == "Error: No vehicle") then {
-            _playerName = "";
-        };
-        [_x, _playerName];
+        private _laserParent = objectParent _x;
+        private _assetName = [_laserParent] call WL2_fnc_getAssetTypeShortName;
+        private _assetOwnerName = [_laserParent] call WL2_fnc_getAssetOwnerName;
+        private _laserName = format ["%1 (%2)", _assetName, _assetOwnerName];
+        [_x, _laserName];
     };
 
     private _allVehicles = BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles;

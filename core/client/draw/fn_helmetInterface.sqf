@@ -227,17 +227,19 @@ addMissionEventHandler ["Draw3D", {
                 continue;
             };
 
-            private _responsiblePlayer = _target getVariable ["WL_laserPlayer", objNull];
-            if (isNull _responsiblePlayer) then {
+            private _laserParent = objectParent _target;
+            if ([_laserParent] call WL2_fnc_getAssetSide != _side) then {
                 continue;
             };
-            private _playerName = name _responsiblePlayer;
-            if (_playerName == "Error: No vehicle") then {
-                continue;
+
+            private _laserParentDisplay = if (_laserParent isKindOf "Man" && alive _laserParent) then {
+                name _laserParent
+            } else {
+                private _assetName = [_laserParent] call WL2_fnc_getAssetTypeShortName;
+                private _assetOwnerName = [_laserParent] call WL2_fnc_getAssetOwnerName;
+                format ["%1 (%2)", _assetName, _assetOwnerName]
             };
-            if ([_responsiblePlayer] call WL2_fnc_getAssetSide != _side) then {
-                continue;
-            };
+
             _laserIcons pushBack [
                 "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\LaserTarget_ca.paa",
                 [1, 0, 0, 1],
@@ -245,9 +247,9 @@ addMissionEventHandler ["Draw3D", {
                 1,
                 1,
                 45,
-                _playerName,
+                _laserParentDisplay,
                 0,
-                0.05,
+                0.035,
                 "RobotoCondensedBold"
             ];
         } forEach _laserTargets;
