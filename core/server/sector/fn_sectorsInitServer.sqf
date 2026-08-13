@@ -83,6 +83,8 @@ waitUntil {!isNil "WL2_base1" && {!isNil "WL2_base2"}};
 	} else {
 		_flag setObjectTextureGlobal [0, "\A3\Data_F\Flags\Flag_CSAT_CO.paa"];
 	};
+	_flag allowDamage false;
+	_flag enableSimulationGlobal false;
 	_base setVariable ["WL2_flag", _flag, true];
 	[_flag] remoteExec ["WLC_fnc_action", 0, true];
 } forEach [_firstBase, _secondBase];

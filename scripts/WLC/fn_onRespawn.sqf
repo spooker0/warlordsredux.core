@@ -1,6 +1,8 @@
 #include "includes.inc"
 params [["_unit", player]];
 
+private _unitSide = side group _unit;
+
 private _isItemVanilla = {
     params ["_item", "_itemType"];
     private _whitelist = getArray (missionConfigFile >> "CfgWLWhiteList" >> _itemType);
@@ -142,7 +144,7 @@ private _sanityChecks = {
         "Invalid magazines detected.";
     };
 
-    private _playerSide = str BIS_WL_playerSide;
+    private _playerSide = str _unitSide;
 
     private _validUniforms = getArray (missionConfigFile >> "arsenalConfig" >> _playerSide >> "Uniforms");
     if !(uniform _unit in _validUniforms) exitWith {
@@ -163,7 +165,7 @@ private _sanityChecks = {
 };
 
 private _savedLoadouts = missionProfileNamespace getVariable ["WL2_savedLoadouts", createHashMap];
-private _savedLoadoutsSide = _savedLoadouts getOrDefault [toLower str BIS_WL_playerSide, createHashMap];
+private _savedLoadoutsSide = _savedLoadouts getOrDefault [toLower str _unitSide, createHashMap];
 private _loadoutIndex = _savedLoadoutsSide getOrDefault ["index", 0];
 private _customizationLoadout = _savedLoadoutsSide getOrDefault [_loadoutIndex, []];
 if (count _customizationLoadout > 0) then {
@@ -180,7 +182,7 @@ if (count _customizationLoadout > 0) then {
 } else {
     private _loadoutConfigs = configProperties [missionConfigFile >> "WLDefaultLoadouts", "isClass _x", true];
     private _loadouts = createHashMap;
-    private _sideString = str BIS_WL_playerSide;
+    private _sideString = str _unitSide;
     private _ownedDlcs = getDLCs 1;
     {
         private _loadoutConfig = _x;
@@ -207,7 +209,7 @@ if (count _customizationLoadout > 0) then {
         _loadouts set [_loadoutName, _loadout];
     } forEach _loadoutConfigs;
 
-    private _defaultSideLoadout = if (BIS_WL_playerSide == west) then {
+    private _defaultSideLoadout = if (_unitSide == west) then {
         getArray (missionConfigFile >> "WLDefaultLoadouts" >> "WestLoadout1" >> "loadout")
     } else {
         getArray (missionConfigFile >> "WLDefaultLoadouts" >> "EastLoadout1" >> "loadout")

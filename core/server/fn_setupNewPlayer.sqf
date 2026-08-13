@@ -80,47 +80,51 @@ private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
 private _isModerator = _uid in (getArray (missionConfigFile >> "moderatorIDs"));
 private _isSpectator = _uid in (getArray (missionConfigFile >> "spectatorIDs"));
 
-private _currentSide = side group _warlord;
-
-private _startSideCheck = serverTime;
-waitUntil {
-    uiSleep 0.1;
-    _currentSide = side group _warlord;
-    serverTime - _startSideCheck > 30 || _currentSide in [west, east];
+private _skipTeamChecks = _isAdmin || _isModerator || _isSpectator;
+if (_skipTeamChecks) then {
+    _lockedToTeam = civilian;
+    _warlord setVariable ["WL2_playerEligibility", [west, east], [2, _owner]];
 };
 
-if !(_currentSide in [west, east]) exitWith {
-    _warlord setVariable ["WL2_playerSetupState", "Teamlocked", _owner];
-};
-
-private _isRightTeam = if (_isAdmin || _isModerator || _isSpectator) then { true } else {
-    _lockedToTeam in [_currentSide, civilian];
-};
-
-["Starting lockouts."] call _initLog;
-
-if (!_isRightTeam) exitWith {
-    _warlord setVariable ["WL2_playerSetupState", "Teamlocked", _owner];
-};
-
-private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
-private _exceedGracePeriod = _timeSinceStart > 60;
-private _isImbalanced = if (_exceedGracePeriod) then {
-    [_currentSide, _uid] call WL2_fnc_calcImbalance;
+private _playerGroup = if (_lockedToTeam in [west, east]) then {
+    _warlord setVariable ["WL2_sidePickerState", _lockedToTeam, _owner];
+    createGroup [_lockedToTeam, true];
 } else {
-    false
-};
-if (_isAdmin || _isModerator || _isSpectator) then {
-    _isImbalanced = false;
+    private _currentSide = independent;
+    _warlord setVariable ["WL2_sidePickerState", independent, _owner];
+
+    while { !isNull _warlord } do {
+        if (!_skipTeamChecks) then {
+            private _teamEligibility = [_warlord, _uid] call WL2_fnc_calcTeamEligibility;
+            private _existingEligibility = _warlord getVariable ["WL2_playerEligibility", []];
+
+            if (_existingEligibility isNotEqualTo _teamEligibility) then {
+                _warlord setVariable ["WL2_playerEligibility", _teamEligibility, [2, _owner]];
+            };
+        };
+
+        _currentSide = _warlord getVariable ["WL2_playerSide", independent];
+        if (_currentSide in [west, east]) then {
+            break;
+        };
+
+        uiSleep 0.5;
+    };
+    if (isNull _warlord) then {
+        grpNull
+    } else {
+        _playerList set [_uid, _currentSide];
+        createGroup [_currentSide, true]
+    };
 };
 
-if (_isImbalanced && _lockedToTeam == civilian) exitWith {
-    _warlord setVariable ["WL2_playerSetupState", "Imbalance", _owner];
+if (isNull _playerGroup) exitWith {
+    ["Cannot create player group. Aborting."] call _initLog;
+    _warlord setVariable ["WL2_playerSetupState", "Failed", _owner];
 };
+[_warlord] joinSilent _playerGroup;
 
 ["Lockouts complete."] call _initLog;
-
-_playerList set [_uid, _currentSide];
 
 private _scoreboard = missionNamespace getVariable ["WL2_scoreboardData", createHashMap];
 private _playerEntry = _scoreboard getOrDefault [_uid, createHashMap];
@@ -128,8 +132,6 @@ _scoreboard set [_uid, _playerEntry];
 missionNamespace setVariable ["WL2_scoreboardData", _scoreboard];
 
 ["Scoreboard setup complete."] call _initLog;
-
-["Imbalance calculations complete."] call _initLog;
 
 private _readyList = missionNamespace getVariable ["WL2_readyList", []];
 _readyList pushBackUnique _uid;

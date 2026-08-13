@@ -9,14 +9,11 @@ private _lastTargetEnemy = objNull;
 private _lastTargetReset = false;
 private _lastSoundTime = -1;
 
-private _playerSide = BIS_WL_playerSide;
-private _targetResetVar = format ["WL_targetReset_%1", _playerSide];
-private _voteEndVariable = format ["WL2_voteEnd_%1", _playerSide];
-private _voteTallyDisplayVariable = format ["BIS_WL_sectorVoteTallyDisplay_%1", _playerSide];
-
 while { !BIS_WL_missionEnd } do {
+    private _playerSide = BIS_WL_playerSide;
     if !(_playerSide in BIS_WL_competingSides) exitWith {};
 
+    private _targetResetVar = format ["WL_targetReset_%1", _playerSide];
     private _targetReset = missionNamespace getVariable [_targetResetVar, false];
 
     private _isVoting = isNull WL_TARGET_FRIENDLY || _targetReset;
@@ -209,7 +206,10 @@ while { !BIS_WL_missionEnd } do {
             if (_shouldShowVote) then {
                 private _titleControl = _display displayCtrl 4002;
 
+                private _voteEndVariable = format ["WL2_voteEnd_%1", _playerSide];
                 private _voteEndTime = missionNamespace getVariable [_voteEndVariable, -1];
+
+                private _voteTallyDisplayVariable = format ["BIS_WL_sectorVoteTallyDisplay_%1", _playerSide];
                 private _sortedVoteList = missionNamespace getVariable [_voteTallyDisplayVariable, []];
 
                 private _eta = if (count _sortedVoteList > 0) then {

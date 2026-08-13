@@ -2,7 +2,6 @@
 params ["_sector", ["_side", sideUnknown]];
 
 if (isDedicated) exitWith {};
-
 if (isNull _sector) exitWith {};
 
 private _revealedBy = _sector getVariable ["BIS_WL_revealedBy", []];

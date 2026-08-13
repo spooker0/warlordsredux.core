@@ -540,10 +540,10 @@ addMissionEventHandler ["Draw3D", {
                     };
                 };
 
-                private _lockPercentage = _vehicle getVariable [format ["WL2_selectedLockPercent%1", _x], 0];
-                _lockPercentage = if (_isInAngle) then {
+                private _lockPercentage = if (_isInAngle) then {
                     private _lockTimeElapsed = _timeSinceLastLoop / 0.1;
-                    (_lockPercentage + 5 * _lockTimeElapsed) min 100;
+                    private _existingLockPercentage = _vehicle getVariable [format ["WL2_selectedLockPercent%1", _x], 0];
+                    (_existingLockPercentage + 5 * _lockTimeElapsed) min 100;
                 } else {
                     0;
                 };

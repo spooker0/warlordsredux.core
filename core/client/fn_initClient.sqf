@@ -18,9 +18,7 @@ WL_LoadingState = 0;
 #endif
 
 waitUntil {
-	!isNull player && {
-		isPlayer player
-	}
+	!isNull player && { isPlayer player }
 };
 
 private _disallowList = getArray (missionConfigFile >> "adminFilter");
@@ -35,6 +33,21 @@ if (_playerName != _filteredText) exitWith {
 
 WL_LoadingState = 1;
 
+private _sidePickerState = civilian;
+waitUntil {
+	uiSleep 0.01;
+	_sidePickerState = player getVariable ["WL2_sidePickerState", civilian];
+	_sidePickerState != civilian
+};
+
+private _side = if (_sidePickerState == independent) then {
+	call WL2_fnc_sidePicker
+} else {
+	_sidePickerState
+};
+BIS_WL_playerSide = _side;
+BIS_WL_enemySide = (BIS_WL_competingSides - [_side]) # 0;
+
 private _setupState = "";
 waitUntil {
 	uiSleep 0.001;
@@ -42,15 +55,9 @@ waitUntil {
 	_setupState != ""
 };
 
-if (_setupState == "Teamlocked") exitWith {
-	private _lockTeamName = if (side group player == west) then { "OPFOR" } else { "BLUFOR" };
-    private _message = format ["You are locked to %1. Rejoin from lobby.", _lockTeamName];
-    [_message, "Team Locked"] call WL2_fnc_exitToLobby;
-};
-
-if (_setupState == "Imbalance") exitWith {
-	private _message = "Teams are imbalanced. Rejoin the other team from lobby.";
-	[_message, "Team Imbalance"] call WL2_fnc_exitToLobby;
+if (_setupState == "Failed") exitWith {
+	private _message = "Failed to create player group. Aborting. Rejoin from lobby.";
+    [_message, "Initialization Failed"] call WL2_fnc_exitToLobby;
 };
 
 WL_LoadingState = 2;
@@ -150,17 +157,14 @@ WL_LoadingState = 8;
 	};
 };
 
-private _mrkrTargetEnemy = createMarkerLocal ["BIS_WL_targetEnemy", getPosASL (BIS_WL_enemySide call WL2_fnc_getSideBase)];
-_mrkrTargetEnemy setMarkerColorLocal BIS_WL_colorMarkerEnemy;
+private _friendlyTargetMarker = "BIS_WL_targetFriendly";
+private _enemyTargetMarker = "BIS_WL_targetEnemy";
+createMarkerLocal [_friendlyTargetMarker, [0, 0, 0]];
+createMarkerLocal [_enemyTargetMarker, [0, 0, 0]];
+_friendlyTargetMarker setMarkerAlphaLocal 0;
+_enemyTargetMarker setMarkerAlphaLocal 0;
 
-private _mrkrTargetFriendly = createMarkerLocal ["BIS_WL_targetFriendly", getPosASL (BIS_WL_playerSide call WL2_fnc_getSideBase)];
-_mrkrTargetFriendly setMarkerColorLocal BIS_WL_colorMarkerFriendly;
-
-{
-	_x setMarkerAlphaLocal 0;
-	_x setMarkerSizeLocal [2, 2];
-	_x setMarkerTypeLocal "selector_selectedMission";
-} forEach [_mrkrTargetEnemy, _mrkrTargetFriendly];
+call WL2_fnc_drawTargetMarker;
 
 0 spawn WL2_fnc_clientEH;
 call WL2_fnc_arsenalSetup;

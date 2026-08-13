@@ -234,6 +234,7 @@ class CfgFunctions {
 			class setupCarrier { headerType = WL_HEADER_LEVEL; };
 			class showHint { headerType = WL_HEADER_LEVEL; };
 			class showRating { headerType = WL_HEADER_LEVEL; };
+			class sidePicker { headerType = WL_HEADER_LEVEL; };
 			class sideToFaction { headerType = WL_HEADER_LEVEL; };
 			class spawnAtBase { headerType = WL_HEADER_LEVEL; };
 			class smartMine { headerType = WL_HEADER_LEVEL; };
@@ -343,6 +344,7 @@ class CfgFunctions {
 			class drawAssetName { headerType = WL_HEADER_LEVEL; };
 			class drawRegions { headerType = WL_HEADER_LEVEL; };
 			class drawSectorMarker { headerType = WL_HEADER_LEVEL; };
+			class drawTargetMarker { headerType = WL_HEADER_LEVEL; };
 			class ewarResult { headerType = WL_HEADER_LEVEL; };
 			class fastHudUpdate { headerType = WL_HEADER_LEVEL; };
 			class helmetInterface { headerType = WL_HEADER_LEVEL; };
@@ -529,7 +531,7 @@ class CfgFunctions {
 			file = "src\core\server";
 			class assetRelevanceCheck { headerType = WL_HEADER_LEVEL; };
 			class attachDetach { headerType = WL_HEADER_LEVEL; };
-			class calcImbalance { headerType = WL_HEADER_LEVEL; };
+			class calcTeamEligibility { headerType = WL_HEADER_LEVEL; };
 			class calculateEndResults { headerType = WL_HEADER_LEVEL; };
 			class calculateRating { headerType = WL_HEADER_LEVEL; };
 			class changeSectorOwnership { headerType = WL_HEADER_LEVEL; };

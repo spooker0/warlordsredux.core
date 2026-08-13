@@ -106,6 +106,80 @@ class WL_WelcomeDisplay {
 	};
 };
 
+class RscWLSideButton: RscShortcutButton {
+	animTextureNormal = "#(argb,8,8,3)color(1,1,1,1)";
+	animTextureDisabled = "#(argb,8,8,3)color(1,1,1,1)";
+	animTextureOver = "#(argb,8,8,3)color(1,1,1,1)";
+	animTextureFocused = "#(argb,8,8,3)color(1,1,1,1)";
+	animTexturePressed = "#(argb,8,8,3)color(1,1,1,1)";
+	animTextureDefault = "#(argb,8,8,3)color(1,1,1,1)";
+	colorBackground[] = {0, 0, 0, 0.8};
+	color[] = {1, 1, 1, 1};
+	colorFocused[] = {1, 1, 1, 1};
+	color2[] = {1, 1, 1, 1};
+	colorText[] = {1, 1, 1, 1};
+	colorDisabled[] = {1, 1, 1, 0.25};
+
+	size = 0.03;
+	y = safeZoneY + safeZoneH * 0.1;
+	w = safeZoneW * 0.4;
+	h = safeZoneH * 0.75;
+
+	class TextPos {
+		left = 0.01;
+		top = 0.01;
+		right = 0.01;
+		bottom = 0.01;
+	};
+
+	class Attributes {
+		font = "EtelkaMonospacePro";
+	};
+};
+
+class RscWLSidePicker {
+	idd = -1;
+	movingEnable = false;
+	class controls {
+		class RscWLSidePicker_Background: RscText {
+			idc = 100;
+			x = safeZoneX;
+			y = safeZoneY;
+			w = safeZoneW;
+			h = safeZoneH;
+			colorBackground[] = {0.2, 0.2, 0.2, 1};
+		};
+		class RscWLSidePicker_SelectText: RscStructuredText {
+			idc = 101;
+			x = safeZoneX + safeZoneW * 0.05;
+			y = safeZoneY + safeZoneH * 0.02;
+			w = safeZoneW * 0.9;
+			h = safeZoneH * 0.06;
+			size = safeZoneH * 0.06;
+		};
+		class RscWLSidePicker_WestButton: RscWLSideButton {
+			idc = 102;
+			colorBackgroundFocused[] = {0.2, 0.2, 0.6, 0.4};
+			colorBackground2[] = {0.2, 0.2, 0.6, 0.4};
+			x = safeZoneX + safeZoneW * 0.05;
+		};
+		class RscWLSidePicker_EastButton: RscWLSideButton {
+			idc = 103;
+			colorBackgroundFocused[] = {0.6, 0.2, 0.2, 0.4};
+			colorBackground2[] = {0.6, 0.2, 0.2, 0.4};
+			x = safeZoneX + safeZoneW * 0.55;
+		};
+		class RscWLSidePicker_Reason: RscStructuredText {
+			idc = 104;
+			x = safeZoneX;
+			y = safeZoneY + safeZoneH * 0.87;
+			w = safeZoneW;
+			h = safeZoneH * 0.1;
+			size = 0.04;
+		};
+	};
+};
+
 class WL_MapButtonDisplay {
 	idd = -1;
 	movingEnable = false;
