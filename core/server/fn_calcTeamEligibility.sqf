@@ -22,18 +22,20 @@ if (_playerElo <= WL_RATING_GATE) exitWith {
     };
 };
 
-private _myUnit = squadParams _warlord # 3;
 private _eligibleSides = [];
-{
-    if (_x == _warlord) then {
-        continue;
-    };
-    private _playerUnit = squadParams _x # 3;
-    if (_playerUnit != _myUnit) then {
-        private _playerSide = side group _x;
-        _eligibleSides pushBackUnique _playerSide;
-    };
-} forEach allPlayers;
+private _myUnit = squadParams _warlord # 3;
+if (_myUnit != "") then {
+    {
+        if (_x == _warlord) then {
+            continue;
+        };
+        private _playerUnit = squadParams _x # 3;
+        if (_playerUnit == _myUnit) then {
+            private _playerSide = side group _x;
+            _eligibleSides pushBackUnique _playerSide;
+        };
+    } forEach allPlayers;
+};
 
 private _serverStats = profileNamespace getVariable ["WL_stats", createHashMap];
 
