@@ -453,7 +453,9 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
         private _playerOwner = if (_playerOwnerUid != "123") then {
             private _ownerPlayer = [_playerOwnerUid] call BIS_fnc_getUnitByUid;
             if (!isNull _ownerPlayer) then {
-                format ["Owner: %1", name _ownerPlayer];
+                private _fundsClient = missionNamespace getVariable ["fundsDatabaseClients", createHashMap];
+                private _playerFunds = _fundsClient getOrDefault [getPlayerUID _ownerPlayer, 0];
+                format ["Owner: %1 ($%2)", name _ownerPlayer, _playerFunds];
             } else {
                 "";
             };

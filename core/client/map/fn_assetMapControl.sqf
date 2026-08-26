@@ -4,6 +4,7 @@ addMissionEventHandler ["Map", {
 	if (WL_IsReplaying) exitWith {};
 
 	if (!_mapIsOpened) then {
+		deleteMarkerLocal "WL2_sectorStrongholdMarker";
 		["Map"] spawn WL2_fnc_showHint;
 		0 spawn {
 			uiSleep 1;

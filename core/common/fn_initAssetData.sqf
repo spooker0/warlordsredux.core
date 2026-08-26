@@ -140,6 +140,7 @@ private _menuButtonIconMap = createHashMapFromArray [
     ["repair-stronghold", "a3\ui_f\data\igui\cfg\actions\repair_ca.paa"],
     ["repair-structures", "a3\ui_f\data\igui\cfg\actions\repair_ca.paa"],
     ["rtb", "a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa"],
+    ["show-stronghold", "A3\ui_f\data\map\mapcontrol\Ruin_CA.paa"],
     ["sector-scan", "a3\drones_f\air_f_gamma\uav_02\data\ui\map_uav_02_ca.paa"],
     ["smart-mine-adjust", "a3\ui_f\data\map\vehicleicons\iconexplosiveuw_ca.paa"],
     ["target-altitude", "a3\ui_f\data\igui\cfg\simpletasks\types\Heli_ca.paa"],

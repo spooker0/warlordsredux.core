@@ -27,7 +27,7 @@ if (!isNull _captureTitleControl) then {
     _captureTitleControl ctrlSetStructuredText parseText format ["<t align='center'>%1</t>", localize "STR_WL_captureProgress"];
     _captureTitleControl ctrlSetPosition [
         WL_PANEL_X,
-        WL_PANEL_PAD_TOP,
+        WL_PANEL_Y + WL_PANEL_PAD_TOP,
         WL_PANEL_W,
         WL_PANEL_CAP_TITLE
     ];

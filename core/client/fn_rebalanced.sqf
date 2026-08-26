@@ -25,13 +25,5 @@ call WL2_fnc_drawTargetMarker;
 BIS_WL_colorFriendly = BIS_WL_colorsArray # (BIS_WL_sidesArray find BIS_WL_playerSide);
 WL_MoneySign = [BIS_WL_playerSide] call WL2_fnc_getMoneySign;
 
-missionNamespace setVariable ["WL2_prevSectorFriendly", objNull];
-missionNamespace setVariable ["WL2_prevSectorEnemy", objNull];
-private _friendlyTargetMarker = "BIS_WL_targetFriendly";
-private _enemyTargetMarker = "BIS_WL_targetEnemy";
-{
-    _x setMarkerAlphaLocal 0;
-} forEach [_friendlyTargetMarker, _enemyTargetMarker];
-
 WL_VotePhase = -1;
 ["leave", []] spawn SQD_fnc_client;

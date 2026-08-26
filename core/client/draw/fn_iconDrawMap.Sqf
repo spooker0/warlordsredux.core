@@ -58,7 +58,6 @@ private _mousePosition = getMousePosition;
 	_m drawEllipse _x;
 } forEach _drawEllipses;
 
-private _circleScale = 6.4 * worldSize / 8192 * _scale;
 {
 	_x params ["_sectorAngle", "_color", "_position", "_size", "_direction", "_scanLines"];
 	if (_sectorAngle < 360) then {

@@ -225,7 +225,8 @@ while { !BIS_WL_missionEnd } do {
 	_captureText ctrlShow true;
 
 	private _isRevealed = _side in (_sector getVariable ["BIS_WL_revealedBy", []]);
-	if (_isRevealed) then {
+	private _isHomeBase = _sector in WL_BASES;
+	if (_isRevealed && !_isHomeBase) then {
 		private _sectorMaxReinforcements = if (_sectorOwner == independent) then {
 			_sector getVariable ["WL2_sectorPopMax", 1];
 		} else {

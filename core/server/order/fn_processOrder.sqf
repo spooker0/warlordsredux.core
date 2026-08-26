@@ -55,34 +55,29 @@ if (_immobile > 0) then {
 	_asset setFuelConsumptionCoef 1000;
 };
 
-private _isAircraft = _asset isKindOf "Air";
-private _variant = WL_ASSET(_orderedClass, "variant", 0);
-if (!_isAircraft && _variant > 0) then {
-	private _sideFlag = switch (_side) do {
-		case west: {
-			"\A3\Ui_f\data\Map\Markers\Flags\nato_ca.paa"
-		};
-		case east: {
-			"\A3\Ui_f\data\Map\Markers\Flags\CSAT_ca.paa"
-		};
-		case independent: {
-			"\A3\Ui_f\data\Map\Markers\Flags\AAF_ca.paa"
-		};
+private _assetChildren = _asset getVariable ["WL2_children", []];
+private _attachments = WL_ASSET(_orderedClass, "attachments", []);
+{
+	_x params ["_attachClass", "_attachOffset", "_attachDir", "_attachMemoryPoint", "_attachScale"];
+	private _attachment = createSimpleObject [_attachClass, [0, 0, 0]];
+    if (_attachMemoryPoint == "") then {
+        _attachment attachTo [_asset, _attachOffset];
+    } else {
+        _attachment attachTo [_asset, _attachOffset, _attachMemoryPoint, true];
+    };
+	_attachment setDir _attachDir;
+	if (_attachScale != 1) then {
+		_attachment setObjectScale _attachScale;
 	};
+	_assetChildren pushBack _attachment;
+} forEach _attachments;
 
-	private _flagOffset = WL_ASSET(_orderedClass, "flagOffset", []);
-	if (count _flagOffset > 0) then {
-		private _flag = createVehicle ["FlagChecked_F", _asset, [], 0, "CAN_COLLIDE"];
-		_flag setFlagTexture _sideFlag;
-		_flag attachTo [_asset, _flagOffset, "otocvez", true];
-
-		private _assetChildren = _asset getVariable ["WL2_children", []];
-		_assetChildren pushBack _flag;
-		_asset setVariable ["WL2_children", _assetChildren, [2, _sender]];
-	} else {
-		_asset forceFlagTexture _sideFlag;
-	};
+private _hideTurret = WL_ASSET(_orderedClass, "hideTurret", 0);
+if (_hideTurret != 0) then {
+	_asset animateSource ["HideTurret", 1, true];
 };
+
+_asset setVariable ["WL2_children", _assetChildren, [2, _sender]];
 
 private _assetTextures = WL_ASSET(_orderedClass, "textures", []);
 {
@@ -110,14 +105,6 @@ private _pylonInfo = getAllPylonsInfo _asset;
 
 	private _existingMagazines = _asset magazinesTurret _turret;
 	private _existingWeapons = _asset weaponsTurret _turret;
-
-	// exclude pylons
-	// private _pylonInfo = getAllPylonsInfo _asset;
-	// _existingMagazines = _existingMagazines - (_pylonInfo apply {_x # 3});
-	// _existingWeapons = _existingWeapons select {
-	// 	private _intersection = (compatibleMagazines _x) arrayIntersect _existingMagazines;
-	// 	count _intersection != 0;
-	// };
 
 	private _removePylonMagazines = _pylonInfo apply { _x # 3 };
 	private _removePylonWeapons = _existingWeapons select {
@@ -159,10 +146,25 @@ private _pylonInfo = getAllPylonsInfo _asset;
 } forEach _turretOverridesForVehicle;
 
 if (count (_pylonInfo) > 0) then {
-	private _attachments = _pylonInfo apply {
-		[_x # 3, _x # 2];
+	private _pylonAttachments = _pylonInfo apply {
+		[_x # 1, _x # 3, _x # 2];
 	};
-	[_asset, _attachments, true] call WLM_fnc_applyPylon;
+
+	private _replacePylons = WL_ASSET(_orderedClass, "replacePylons", []);
+	{
+		_x params ["_pylonName", "_pylonTurret", "_pylonMagazine"];
+		private _indexToReplace = _pylonAttachments findIf { _x # 0 == _pylonName };
+		if (_indexToReplace == -1) then {
+			continue;
+		};
+		_pylonAttachments set [_indexToReplace, [_pylonName, _pylonMagazine, _pylonTurret]];
+	} forEach _replacePylons;
+
+	_pylonAttachments = _pylonAttachments apply {
+		[_x # 1, _x # 2];
+	};
+
+	[_asset, _pylonAttachments, true] call WLM_fnc_applyPylon;
 };
 
 private _disallowListForAsset = WL_ASSET(_orderedClass, "disallowMagazines", []);

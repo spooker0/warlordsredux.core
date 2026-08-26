@@ -16,10 +16,14 @@ if (isNull _stronghold) then {
 	private _findStrongholdBuildings = [getPosATL _sector, _maxRadius, true] call WL2_fnc_findStrongholdBuilding;
 
 	private _eligibleBuildings = _findStrongholdBuildings inAreaArray _objectArea;
+	_eligibleBuildings = _eligibleBuildings select {
+		damage _x < 0.99
+	};
 	_eligibleBuildings = [_eligibleBuildings, [_sector], {
-		private _cost = getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "cost");
-		private _distanceToSector = _x distance2D _input0;
-		_cost * 100 - _distanceToSector;
+        private _cost = getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "cost");
+		private _mapSize = getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "mapSize");
+        private _distanceToSector = _x distance2D _input0;
+		_cost * _mapSize - _distanceToSector
 	}, "DESCEND"] call BIS_fnc_sortBy;
 
 	if (count _eligibleBuildings > 0) then {
@@ -32,6 +36,7 @@ if (isNull _stronghold) then {
 };
 
 private _vehicleUnits = [];
+private _promises = [];
 
 private _presetVehicles = _sector getVariable ["WL2_vehiclesToSpawn", []];
 
@@ -74,7 +79,8 @@ if (count _presetVehicles == 0) then {
 		};
 
 		private _vehicleType = selectRandom _vehiclesPool;
-		[_vehicleType, _spawnPos, random 360, false, false, _vehicleUnits, _sector] call WL2_fnc_addGreenVehicle;
+		private _spawnPromise = [_vehicleType, _spawnPos, random 360, false, false, _vehicleUnits, _sector] spawn WL2_fnc_addGreenVehicle;
+		_promises pushBack _spawnPromise;
 	};
 } else {
 	{
@@ -83,7 +89,9 @@ if (count _presetVehicles == 0) then {
 		_data pushBack false;
 		_data pushBack _vehicleUnits;
 		_data pushBack _sector;
-		_data call WL2_fnc_addGreenVehicle;
+
+		private _spawnPromise = _data spawn WL2_fnc_addGreenVehicle;
+		_promises pushBack _spawnPromise;
 	} forEach _presetVehicles;
 };
 
@@ -93,7 +101,8 @@ private _numMinesToSpawn = floor (_sectorValue / 5);
 _numMinesToSpawn = _numMinesToSpawn min 2;
 private _mineLocations = [_sector] call WL2_fnc_findSpawnsInSector;
 for "_i" from 1 to _numMinesToSpawn do {
-	[selectRandom _mineTypes, selectRandom _mineLocations, random 360, true, false, _vehicleUnits, _sector] call WL2_fnc_addGreenVehicle;
+	private _spawnPromise = [selectRandom _mineTypes, selectRandom _mineLocations, random 360, true, false, _vehicleUnits, _sector] spawn WL2_fnc_addGreenVehicle;
+	_promises pushBack _spawnPromise;
 };
 
 private _services = _sector getVariable ["WL2_services", []];
@@ -116,10 +125,8 @@ if ("H" in _services && !_alreadySpawnedAircraft) then {
 		private _randomPos = _sector getPos [_randomDistance, _randomAngle];
 		_randomPos set [2, 1000];
 
-		private _aircraft = [selectRandom _aircraftPool, _randomPos, random 360, false, true, _vehicleUnits, _sector] call WL2_fnc_addGreenVehicle;
-		_aircraft setPosASL _randomPos;
-		_aircraft setVelocityModelSpace [0, 100, 0];
-		_aircraft flyInHeightASL [1000, 1000, 1000];
+		private _spawnPromise = [selectRandom _aircraftPool, _randomPos, random 360, false, true, _vehicleUnits, _sector] spawn WL2_fnc_addGreenVehicle;
+		_promises pushBack _spawnPromise;
 	};
 	_sector setVariable ["WL2_aircraftSpawned", true];
 };
@@ -142,22 +149,6 @@ private _infantryGroups = [];
 private _spawnedUnitCount = 0;
 while {_spawnedUnitCount < _garrisonSize} do {
 	private _pos = selectRandom _spawnPosArr;
-	/*
-	//***Spawning Diag code, visual tool for spawn points***
-	{
-       	private _posNumber = str _x;
-    	_mrkr = createMarkerLocal [_posNumber, _x];
-		_mrkr setMarkerColorLocal "ColorRed";
-    	_mrkr setMarkerTypeLocal "loc_LetterX";
-    	_mrkr setMarkerSizeLocal [1, 1];
-    } forEach _spawnPosArr;
-
-    private _posNumber = str _i;
-    _mrkr = createMarkerLocal [_posNumber, _pos];
-    _mrkr setMarkerTypeLocal "mil_dot_noShadow";
-    _mrkr setMarkerSizeLocal [1.5, 1.5];
-	//***end diag code block***
-	*/
 	private _infantryGroup = createGroup [independent, true];
 	_infantryGroups pushBack _infantryGroup;
 
@@ -167,7 +158,7 @@ while {_spawnedUnitCount < _garrisonSize} do {
 		private _posAboveGround = getPosATL _newUnit;
 		_posAboveGround set [2, 100];
 		_newUnit setVehiclePosition [_posAboveGround, [], 0, "CAN_COLLIDE"];
-		_newUnit call WL2_fnc_newAssetHandle;
+		[_newUnit] spawn WL2_fnc_newAssetHandle;
 
 		_newUnit setVariable ["WL2_sectorDefender", _sector];
 		doStop _newUnit;
@@ -177,9 +168,12 @@ while {_spawnedUnitCount < _garrisonSize} do {
 		if (_spawnedUnitCount >= _garrisonSize) then {
 			break;
 		};
-		uiSleep 0.001;
 	};
 };
+
+{
+	waitUntil [_x, 5];
+} forEach _promises;
 
 private _allUnits = _vehicleUnits + _infantryUnits;
 _sector setVariable ["WL2_sectorDefenders", _allUnits];

@@ -28,6 +28,9 @@ _buildings = _buildings select {
     } else {
         true
     };
+} select {
+    private _cost = getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "cost");
+    _cost > 100
 };
 
 _buildings = [_buildings, [], {

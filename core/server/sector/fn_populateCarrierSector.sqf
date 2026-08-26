@@ -23,6 +23,9 @@ private _presetVehicles = _sector getVariable ["WL2_vehiclesToSpawn", []];
 
 {
     private _location = +_x;
+    if (_location # 2 < 23) then {
+        continue;
+    };
     _location set [2, _location # 2 + 0.5];
     private _vehicle = [objNull, _location, "Land_Pallet_MilBoxes_F", random 360, true, false] call WL2_fnc_orderGround;
 	_vehicleUnits pushBack _vehicle;

@@ -203,7 +203,7 @@ if (_action == "getUnsquaddedPlayers") exitWith {
 
 if (_action == "getCreatedFreeChannel") exitWith {
     private _foundChannel = 0;
-    for "_i" from 1 to 10 do {
+    for "_i" from 1 to 50 do {
         private _channelInfo = radioChannelInfo _i;
         private _channelExists = _channelInfo # 5;
         if (_channelExists) then {

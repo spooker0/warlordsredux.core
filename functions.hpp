@@ -421,8 +421,6 @@ class CfgFunctions {
 			class sectorScanHandle { headerType = WL_HEADER_LEVEL; };
 			class sectorsInitClient { headerType = WL_HEADER_LEVEL; };
 			class sectorVoteClient { headerType = WL_HEADER_LEVEL; };
-			class selectedTargetsHandle { headerType = WL_HEADER_LEVEL; };
-			class targetSelected { headerType = WL_HEADER_LEVEL; };
 			class travelTeamPriority { headerType = WL_HEADER_LEVEL; };
 			class uavMapButtons { headerType = WL_HEADER_LEVEL; };
 		};
@@ -507,7 +505,6 @@ class CfgFunctions {
 			class handleDamage { headerType = WL_HEADER_LEVEL; };
 			class handleInstigator { headerType = WL_HEADER_LEVEL; };
 			class inAngleCheck { headerType = WL_HEADER_LEVEL; };
-			class income { headerType = WL_HEADER_LEVEL; };
 			class initAssetData { headerType = WL_HEADER_LEVEL; };
 			class initCommon { headerType = WL_HEADER_LEVEL; };
 			class initSectors { headerType = WL_HEADER_LEVEL; };

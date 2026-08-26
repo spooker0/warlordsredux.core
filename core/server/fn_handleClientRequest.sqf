@@ -506,15 +506,15 @@ if (_action == "secure") exitWith {
 	if (_targetSide in [west, east]) then {
 		private _victimSectorsData = WL_SECTORS_DATA(_targetSide);
 		private _ownedSectors = _victimSectorsData getOrDefault ["owned", []];
-
-		private _sectorToReveal = if (count _ownedSectors > 0) then {
-			selectRandom _ownedSectors
-		} else {
-			objNull
+		private _hiddenSectors = _ownedSectors select {
+			private _revealedBy = _x getVariable ["BIS_WL_revealedBy", []];
+			!(_side in _revealedBy)
 		};
 
-		private _sectorRevealedBy = _sectorToReveal getVariable ["BIS_WL_revealedBy", []];
-		if !(_side in _sectorRevealedBy) then {
+		if (count _hiddenSectors > 0) then {
+			private _sectorToReveal = selectRandom _hiddenSectors;
+			private _sectorRevealedBy = _sectorToReveal getVariable ["BIS_WL_revealedBy", []];
+
 			_sectorRevealedBy pushBackUnique _side;
 			_sectorToReveal setVariable ["BIS_WL_revealedBy", _sectorRevealedBy, true];
 			[_sender, "revealSector"] spawn WL2_fnc_handleClientRequest;

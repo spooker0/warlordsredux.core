@@ -123,7 +123,7 @@ player setVariable ["WL2_alreadyHandled", false, 2];
 player setVariable ["WL2_alreadyPunished", false, 2];
 player setVariable ["WL_unconsciousTime", 0];
 
-private _capAreaModifiers = missionNamespace getVariable ["WL2_capAreaModifiers", [0, 0, 0]];
+private _capAreaModifiers = missionNamespace getVariable ["WL2_capAreaModifiers", [0, 0]];
 private _sideIndex = if (BIS_WL_playerSide == west) then { 0 } else { 1 };
 private _controlledMod = _capAreaModifiers # _sideIndex;
 _controlledMod = ((_controlledMod min 1) max 0.5);

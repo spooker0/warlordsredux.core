@@ -52,8 +52,13 @@ if (_unit isKindOf "Man") then {
 private _children = _unit getVariable ["WL2_children", []];
 {
     if (alive _x) then {
-        _x setDamage [1, true, _killer, _instigator];
+        if (isSimpleObject _x) then {
+            deleteVehicle _x;
+        } else {
+            _x setDamage [1, true, _killer, _instigator];
+        };
     };
+    detach _x;
 } forEach _children;
 
 private _stats = missionNamespace getVariable ["WL_stats", createHashMap];

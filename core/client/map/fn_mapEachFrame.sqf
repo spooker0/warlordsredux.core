@@ -20,7 +20,7 @@ private _timedMarkerSize = -1;
 private _mapMode = uiNamespace getVariable ["WL2_mapMode", 0];
 private _hideSectors = _mapMode != 0;
 {
-    private _marker = (_x getVariable "BIS_WL_markers") # 0;
+    private _marker = _x getVariable ["WL2_markerMain", ""];
     if (_hideSectors) then {
         _marker setMarkerAlphaLocal 0;
         continue;

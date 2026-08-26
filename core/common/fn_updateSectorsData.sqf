@@ -7,6 +7,7 @@ _sectorsData set ["west", _westSectorsData];
 _sectorsData set ["east", _eastSectorsData];
 
 private _sectorPool = missionNamespace getVariable ["BIS_WL_allSectors", []];
+private _incomeModifiers = missionNamespace getVariable ["WL2_capAreaModifiers", [0, 0]];
 
 private _allLinkedSectors = [];
 {
@@ -75,7 +76,7 @@ private _allLinkedSectors = [];
             _income = _income + _area * WL_INCOME_M2;
         };
     } forEach _facesData;
-    _income = round _income;
+    _income = round (_income * (1 + (_incomeModifiers # _forEachIndex)));
     _sectorsDataSide set ["income", _income];
 
     private _voteable = [];

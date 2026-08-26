@@ -18,7 +18,7 @@ private _spawnParams = if (_sectorName == "Catapult") then {
 
 _spawnParams params ["_spawnPos", "_dir"];
 if (count _spawnPos == 0) exitWith {
-    ["No valid spawn position found at airbase!"] call WL2_fnc_smoothText;
+    ["No safe position found at airbase!"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 

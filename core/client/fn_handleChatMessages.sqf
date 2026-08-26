@@ -128,7 +128,7 @@ if (_channel == 2) exitWith {
     [_newFrom, _filteredText];
 };
 
-if (_channel > 5 && _channel < 16 && _filteredText != "") then {
+if (_channel > 5 && _channel != 16 && _filteredText != "") then {
     private _isPlayerSquadLeader = ["isSquadLeader", [getPlayerID player]] call SQD_fnc_query;
     private _isDirectNotification = (_isPlayerSquadLeader && "@SL" in (toUpper _filteredText)) || "@SQUAD" in (toUpper _filteredText);
 

@@ -30,6 +30,10 @@ if (!_isStatic) then {
 };
 
 if (_isAircraft) then {
+    _vehicle setPosASL _spawnPos;
+    _vehicle setVelocityModelSpace [0, 100, 0];
+    _vehicle flyInHeightASL [1000, 1000, 1000];
+
     private _cmLaunchers = (weapons _vehicle) select {
         _x isKindOf ["CMFlareLauncher", configFile >> "CfgWeapons"];
     };

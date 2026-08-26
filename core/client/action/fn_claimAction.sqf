@@ -53,14 +53,23 @@ _asset addAction [
 				[format ["%1 has been claimed.", _displayName]] call WL2_fnc_smoothText;
 				playSound3D ["\a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", _asset, false, getPosASL _asset, 2, 1, 200];
 
+                private _side = side group player;
+
 				_asset setVariable ["BIS_WL_ownerAsset", getPlayerUID player, true];
-				_asset setVariable ["BIS_WL_ownerAssetSide", side group player, true];
+				_asset setVariable ["BIS_WL_ownerAssetSide", _side, true];
                 _asset setVariable ["WL2_assetOwnerName", "", true];
 
 				private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
 				private _vehicles = missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], []];
 				_vehicles pushBack _asset;
 				missionNamespace setVariable [_ownedVehicleVar, _vehicles, true];
+
+                private _sideFlag = switch (_side) do {
+                    case west: { "\A3\Ui_f\data\Map\Markers\Flags\nato_ca.paa" };
+                    case east: { "\A3\Ui_f\data\Map\Markers\Flags\CSAT_ca.paa" };
+                    case independent: { "\A3\Ui_f\data\Map\Markers\Flags\AAF_ca.paa" };
+                };
+                _asset forceFlagTexture _sideFlag;
 			} else {
                 private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
                 private _hitmarkerVolume = _settingsMap getOrDefault ["hitmarkerVolume", 0.5];

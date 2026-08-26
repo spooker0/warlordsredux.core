@@ -5,11 +5,6 @@ Special Cases
 4x Green sector with reserves.
 2x Green sector without reserves.
 
-Area modifiers
-Up to +2.5x, applicable only for PvP sectors:
-+0.5x for team with more territory.
-+2.0x distributed based on territory ratio.
-
 Connection modifiers
 +1x Sector connection.
 +1x Home base connection (for a total of 2x).

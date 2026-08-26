@@ -236,6 +236,54 @@ private _markSectorExecuteNext = {
     "markSector"
 ] call WL2_fnc_addTargetMapButton;
 
+// Show sector stronghold button
+private _showSectorStrongholdExecute = {
+    params ["_sector"];
+    private _area = _sector getVariable "objectAreaComplete";
+    _area params ["_sectorPos", "_axisA", "_axisB", "_direction", "_isRectangle"];
+
+    private _maxRadius = (abs _axisA) max (abs _axisB);
+    private _findStrongholdBuildings = [_sectorPos, _maxRadius, true] call WL2_fnc_findStrongholdBuilding;
+
+    private _eligibleBuildings = _findStrongholdBuildings inAreaArray _area;
+    _eligibleBuildings = _eligibleBuildings select {
+		damage _x < 0.99
+	};
+    _eligibleBuildings = [_eligibleBuildings, [_sector], {
+        private _cost = getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "cost");
+		private _mapSize = getNumber (configFile >> "CfgVehicles" >> typeOf _x >> "mapSize");
+        private _distanceToSector = _x distance2D _input0;
+		_cost * _mapSize - _distanceToSector
+    }, "DESCEND"] call BIS_fnc_sortBy;
+
+    if (count _eligibleBuildings == 0) exitWith {};
+
+    private _strongholdBuilding = _eligibleBuildings # 0;
+
+    deleteMarkerLocal "WL2_sectorStrongholdMarker";
+
+    private _markerStronghold = createMarkerLocal ["WL2_sectorStrongholdMarker", getPosATL _strongholdBuilding];
+    _markerStronghold setMarkerShapeLocal "RECTANGLE";
+
+    private _strongholdMarkerSize = boundingBoxReal _strongholdBuilding;
+    _strongholdMarkerSize params ["_strongholdMin", "_strongholdMax"];
+
+    private _strongholdX = ((_strongholdMax # 0) - (_strongholdMin # 0)) / 2;
+    private _strongholdY = ((_strongholdMax # 1) - (_strongholdMin # 1)) / 2;
+    _markerStronghold setMarkerSizeLocal [_strongholdX, _strongholdY];
+
+    _markerStronghold setMarkerDirLocal (getDir _strongholdBuilding);
+    _markerStronghold setMarkerColorLocal "ColorRed";
+};
+[
+    _sector, _targetId,
+    "show-stronghold",
+    localize "STR_WL_showSectorStrongholdDefaultLocation",
+    _showSectorStrongholdExecute,
+    true,
+    "showSectorStronghold"
+] call WL2_fnc_addTargetMapButton;
+
 private _sectorFtAsset = [_sector, []] call WL2_fnc_getSectorFTAsset;
 private _teamSectorsData = WL_SECTORS_DATA(BIS_WL_playerSide);
 private _unlockedSectors = _teamSectorsData getOrDefault ["unlocked", []];

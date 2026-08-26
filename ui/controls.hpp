@@ -120,7 +120,7 @@ class RscWLSideButton: RscShortcutButton {
 	colorText[] = {1, 1, 1, 1};
 	colorDisabled[] = {1, 1, 1, 0.25};
 
-	size = 0.03;
+	size = 0.028;
 	y = safeZoneY + safeZoneH * 0.1;
 	w = safeZoneW * 0.4;
 	h = safeZoneH * 0.75;

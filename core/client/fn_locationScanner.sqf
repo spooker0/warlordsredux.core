@@ -286,19 +286,18 @@ uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
             private _target = _x;
             if (isNull _target) then { continue; };
 
-            private _revealedBy = _target getVariable ["BIS_WL_revealedBy", []];
-            private _isRevealed = BIS_WL_playerSide in _revealedBy;
-            if (!_isRevealed && _x != WL_TARGET_FRIENDLY) then { continue; };
+            private _targetOwner = _target getVariable ["BIS_WL_owner", independent];
+            if (_x == WL_TARGET_ENEMY && _targetOwner != BIS_WL_playerSide) then { continue; };
 
-            private _owner = _target getVariable ["BIS_WL_owner", independent];
-            private _color = if (_isRevealed) then {
-                BIS_WL_colorsArray # (BIS_WL_sidesArray find _owner);
+            private _revealedBy = _target getVariable ["BIS_WL_revealedBy", []];
+            private _color = if (BIS_WL_playerSide in _revealedBy) then {
+                BIS_WL_colorsArray # (BIS_WL_sidesArray find _targetOwner);
             } else {
                 BIS_WL_colorsArray # 3;
             };
             _color set [3, 0.5];
 
-            private _mapMarker = (_target getVariable ["BIS_WL_markers", []]) # 0;
+            private _mapMarker = _target getVariable ["WL2_markerMain", ""];
             private _mapMarkerType = markerType _mapMarker;
             private _mapMarkerPath = getText (configFile >> "CfgMarkers" >> _mapMarkerType >> "icon");
 
@@ -324,12 +323,12 @@ uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
             } else {
                 ""
             };
-            private _displayText = if (_owner == BIS_WL_playerSide) then {
+            private _displayText = if (_targetOwner == BIS_WL_playerSide) then {
                 format ["%1 %2", localize "STR_WL_defend", _distanceText]
             } else {
                 format ["%1 %2", localize "STR_WL_attack", _distanceText]
             };
-            private _sectorTextColor = if (_owner == BIS_WL_playerSide) then {
+            private _sectorTextColor = if (_targetOwner == BIS_WL_playerSide) then {
                 [0, 1, 0, 1]
             } else {
                 [1, 0, 0, 1]

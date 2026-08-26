@@ -2,50 +2,46 @@
 
 BIS_WL_allSectors = BIS_WL_allSectors select { !isNull _x };
 
-{
-	private _sector = _x;
-
-	private _sectorPos = position _sector;
-	private _area = _sector getVariable "WL2_objectArea";
-
-	private _mrkrArea = createMarkerLocal [format ["BIS_WL_sectorMarker_%1_area", _forEachIndex], _sectorPos];
-	_mrkrArea setMarkerShapeLocal (if (_area # 3) then {"RECTANGLE"} else {"ELLIPSE"});
-	_mrkrArea setMarkerDirLocal (_area # 2);
-	_mrkrArea setMarkerBrushLocal "Solid";
-	_mrkrArea setMarkerAlphaLocal 1;
-	_mrkrArea setMarkerSizeLocal [(_area # 0), (_area # 1)];
-} forEach BIS_WL_allSectors;
-
 private _allLinks = createHashMap;
 {
 	private _sector = _x;
 
 	private _owner = _sector getVariable "BIS_WL_owner";
 	private _revealedBy = _sector getVariable ["BIS_WL_revealedBy", []];
-	private _sectorPos = position _sector;
 
-	private _mrkrArea = format ["BIS_WL_sectorMarker_%1_area", _forEachIndex];
-	private _mrkrMain = createMarkerLocal [format ["BIS_WL_sectorMarker_%1_main", _forEachIndex], _sectorPos];
+	private _area = _sector getVariable "objectAreaComplete";
+	_area params ["_sectorPos", "_axisA", "_axisB", "_direction", "_isRectangle"];
 
-	_sector setVariable ["BIS_WL_markers", [_mrkrMain, _mrkrArea]];
+	private _markerArea = createMarkerLocal [format ["BIS_WL_sectorMarker_%1_area", _forEachIndex], _sectorPos];
+	_sector setVariable ["WL2_markerArea", _markerArea];
+
+	private _markerShape = if (_isRectangle) then { "RECTANGLE" } else { "ELLIPSE" };
+	_markerArea setMarkerShapeLocal _markerShape;
+	_markerArea setMarkerDirLocal _direction;
+	_markerArea setMarkerBrushLocal "Solid";
+	_markerArea setMarkerAlphaLocal 1;
+	_markerArea setMarkerSizeLocal [_axisA, _axisB];
+
+	private _markerMain = createMarkerLocal [format ["BIS_WL_sectorMarker_%1_main", _forEachIndex], _sectorPos];
+	_sector setVariable ["WL2_markerMain", _markerMain];
 
 	if !(BIS_WL_playerSide in _revealedBy) then {
 		private _sectorName = _sector getVariable ["WL2_name", "Sector"];
 		switch (_sectorName) do {
 			case "Wait": {
-				_mrkrMain setMarkerTypeLocal "respawn_unknown";
-				_mrkrMain setMarkerColorLocal "ColorWhite";
+				_markerMain setMarkerTypeLocal "respawn_unknown";
+				_markerMain setMarkerColorLocal "ColorWhite";
 				_sector setVariable ["BIS_WL_revealedBy", [west, east, independent]];
 			};
 			case "Surrender": {
-				_mrkrMain setMarkerTypeLocal "KIA";
-				_mrkrMain setMarkerColorLocal "ColorWhite";
+				_markerMain setMarkerTypeLocal "KIA";
+				_markerMain setMarkerColorLocal "ColorWhite";
 				_sector setVariable ["BIS_WL_revealedBy", [west, east, independent]];
 			};
 			default {
-				_mrkrMain setMarkerTypeLocal "u_installation";
-				_mrkrMain setMarkerColorLocal "ColorUnknown";
-				_mrkrArea setMarkerColorLocal "ColorGrey";
+				_markerMain setMarkerTypeLocal "u_installation";
+				_markerMain setMarkerColorLocal "ColorUnknown";
+				_markerArea setMarkerColorLocal "ColorGrey";
 			};
 		};
 	};
@@ -71,3 +67,31 @@ private _allLinks = createHashMap;
 } forEach BIS_WL_allSectors;
 
 missionNamespace setVariable ["WL2_linkSectorMarkers", _allLinks];
+
+private _menuKey = actionKeysNames ["gear", 1, "Combo"];
+private _pingKey = actionKeysNames ["TacticalPing", 1, "Combo"];
+private _pttKey = actionKeysNames ["pushToTalk", 1, "Combo"];
+private _chatKey = actionKeysNames ["chat", 1, "Combo"];
+private _infoMarkerTexts = [
+	localize "STR_WL_mapInfoText3",
+	localize "STR_WL_mapInfoText4",
+	localize "STR_WL_mapInfoText5",
+	format [localize "STR_WL_mapInfoText12", _menuKey],
+	format [localize "STR_WL_mapInfoText6", _pingKey],
+	format [localize "STR_WL_mapInfoText7", _pttKey, _chatKey]
+];
+
+private _flagBgColor = ["#0000ffff", "#ff0000ff"];
+{
+	private _base = _x;
+	private _flag = _base getVariable ["WL2_flag", objNull];
+	if (isNull _flag) then {
+		continue;
+	};
+	private _welcomeText = format [
+		"#(rgb,2048,2048,3)text(1,1,""PuristaBold"",0.03,""%1"",""#ffffff"",""%2"")",
+		_flagBgColor select _forEachIndex,
+		_infoMarkerTexts joinString "\n"
+	];
+	_flag setObjectTexture [0, _welcomeText];
+} forEach WL_BASES;

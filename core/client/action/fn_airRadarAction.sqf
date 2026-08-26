@@ -36,7 +36,7 @@ while { alive _asset } do {
     } select {
         _x distance2D _assetPos < _radius;
     } select {
-        private _vehiclePos = _x modelToWorldVisual [0, 0, 0];
+        private _vehiclePos = ASLtoAGL getPosASL _x;
         _vehiclePos # 2 > 50 &&
         [_assetPos, getDir _asset, 60, _vehiclePos] call WL2_fnc_inAngleCheck;
     };

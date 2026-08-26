@@ -35,7 +35,8 @@ _asset addEventHandler ["HandleDamage", {
 
 	if (_projectile isKindOf "FuelExplosion") then {
 		private _unitApsType = _unit call APS_fnc_getMaxAmmo;
-		if (_unitApsType > 0) then {
+		private _unitSide = [_unit] call WL2_fnc_getAssetSide;
+		if (_unitApsType > 0 && _unitSide != independent) then {
 			_damage = _unit getHit _selection;
 		};
 	};

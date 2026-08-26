@@ -14,13 +14,13 @@ while { !BIS_WL_missionEnd } do {
 		private _captureProgress = _sector getVariable ["BIS_WL_captureProgress", 0];
 		private _owner = _sector getVariable ["BIS_WL_owner", independent];
 
-		private _marker = (_sector getVariable ["BIS_WL_markers", []]) # 1;
+		private _markerArea = _sector getVariable ["WL2_markerArea", ""];
 		if (_captureProgress > 0 && _owner == _playerSide) then {
-			_marker setMarkerBrushLocal "Solid";
-			_marker setMarkerColorLocal _enemyColor;
+			_markerArea setMarkerBrushLocal "Solid";
+			_markerArea setMarkerColorLocal _enemyColor;
 		} else {
-			_marker setMarkerBrushLocal "Border";
-			_marker setMarkerColorLocal _friendlyColor;
+			_markerArea setMarkerBrushLocal "Border";
+			_markerArea setMarkerColorLocal _friendlyColor;
 		};
 	} forEach _ownedSectors;
 };

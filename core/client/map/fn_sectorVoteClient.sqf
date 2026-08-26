@@ -16,7 +16,10 @@ while { !BIS_WL_missionEnd } do {
     private _targetResetVar = format ["WL_targetReset_%1", _playerSide];
     private _targetReset = missionNamespace getVariable [_targetResetVar, false];
 
-    private _isVoting = isNull WL_TARGET_FRIENDLY || _targetReset;
+    private _currentFriendlyTarget = WL_TARGET_FRIENDLY;
+    private _currentEnemyTarget = WL_TARGET_ENEMY;
+
+    private _isVoting = isNull _currentFriendlyTarget || _targetReset;
     private _isVoted = !isNull BIS_WL_targetVote;
     private _isRegularSquadMember = ["isRegularSquadMember", [_playerId]] call SQD_fnc_query;
 
@@ -36,9 +39,9 @@ while { !BIS_WL_missionEnd } do {
             case 0: {
                 BIS_WL_targetVote = objNull;
 
-                if (!isNull WL_TARGET_FRIENDLY) then {
-                    private _currentOwner = WL_TARGET_FRIENDLY getVariable ["BIS_WL_owner", independent];
-                    [WL_TARGET_FRIENDLY, _currentOwner] call WL2_fnc_sectorMarkerUpdate;
+                if (!isNull _currentFriendlyTarget) then {
+                    private _currentOwner = _currentFriendlyTarget getVariable ["BIS_WL_owner", independent];
+                    [_currentFriendlyTarget, _currentOwner] call WL2_fnc_sectorMarkerUpdate;
                 };
 
                 {
@@ -52,7 +55,7 @@ while { !BIS_WL_missionEnd } do {
                 if (_targetReset) then {
                     "Reset" call WL2_fnc_announcer;
 
-                    private _enemySectorCapturableSides = WL_TARGET_ENEMY getVariable ["WL2_capturableBySides", []];
+                    private _enemySectorCapturableSides = _currentEnemyTarget getVariable ["WL2_capturableBySides", []];
 
                     if !(_playerSide in _enemySectorCapturableSides) then {
                         "BIS_WL_targetEnemy" setMarkerAlphaLocal 0;
@@ -189,7 +192,7 @@ while { !BIS_WL_missionEnd } do {
         ]
     };
 
-    private _shouldShowVote = isNull WL_TARGET_FRIENDLY || _targetReset;
+    private _shouldShowVote = isNull _currentFriendlyTarget || _targetReset;
     private _shouldShowCapture = count _sectorCaptureList > 0;
 
     if (_shouldShowVote || _shouldShowCapture) then {
@@ -276,37 +279,70 @@ while { !BIS_WL_missionEnd } do {
         "vote" cutText ["", "PLAIN"];
     };
 
-    if (_lastTargetFriendly isNotEqualTo WL_TARGET_FRIENDLY || _targetReset isNotEqualTo _lastTargetReset) then {
+    if (_lastTargetFriendly isNotEqualTo _currentFriendlyTarget || _targetReset isNotEqualTo _lastTargetReset) then {
         call WL2_fnc_updateSectorsData;
 
-        if (!isNull WL_TARGET_FRIENDLY && !_targetReset) then {
-            if (count _sectorCaptureList == 0) then {
-                "vote" cutText ["", "PLAIN"];
+        private _friendlyTargetMarker = "BIS_WL_targetFriendly";
+        if (isNull _currentFriendlyTarget) then {
+            _friendlyTargetMarker setMarkerAlphaLocal 0;
+        } else {
+            _friendlyTargetMarker setMarkerPosLocal getPosASL _currentFriendlyTarget;
+            _friendlyTargetMarker setMarkerAlphaLocal 1;
+
+            if (!_targetReset) then {
+                if (count _sectorCaptureList == 0) then {
+                    "vote" cutText ["", "PLAIN"];
+                };
+
+                "Selected" call WL2_fnc_announcer;
+
+                private _votedText = format [
+                    localize "STR_A3_WL_popup_voting_done",
+                    _currentFriendlyTarget getVariable ["WL2_name", "Sector"]
+                ];
+
+                [_votedText] call WL2_fnc_smoothText;
             };
-
-            "Selected" call WL2_fnc_announcer;
-
-            private _votedText = format [
-                localize "STR_A3_WL_popup_voting_done",
-                WL_TARGET_FRIENDLY getVariable ["WL2_name", "Sector"]
-            ];
-
-            [_votedText] call WL2_fnc_smoothText;
         };
     };
 
-    if (_lastTargetEnemy isNotEqualTo WL_TARGET_ENEMY) then {
-        if (!isNull _lastTargetEnemy) then {
-            private _enemySectorKnowers = _lastTargetEnemy getVariable ["BIS_WL_revealedBy", []];
+    if (_lastTargetEnemy isNotEqualTo _currentEnemyTarget) then {
+        private _lastEnemySectorKnowers = _lastTargetEnemy getVariable ["BIS_WL_revealedBy", []];
+        if (_playerSide in _lastEnemySectorKnowers) then {
+            [localize "STR_WL_enemyTargetSectorChanged"] call WL2_fnc_smoothText;
+        };
 
-            if (_playerSide in _enemySectorKnowers) then {
-                [localize "STR_WL_enemyTargetSectorChanged"] call WL2_fnc_smoothText;
+        private _enemyTargetMarker = "BIS_WL_targetEnemy";
+        _enemyTargetMarker setMarkerPosLocal getPosASL _currentEnemyTarget;
+
+        if (_currentEnemyTarget == _currentFriendlyTarget) then {
+            _enemyTargetMarker setMarkerDirLocal 45;
+        } else {
+            _enemyTargetMarker setMarkerDirLocal 0;
+        };
+
+        private _enemySectorKnowers = _currentEnemyTarget getVariable ["BIS_WL_revealedBy", []];
+        if (_playerSide in _enemySectorKnowers) then {
+            _enemyTargetMarker setMarkerAlphaLocal 1;
+
+            private _sectorOwner = _currentEnemyTarget getVariable ["BIS_WL_owner", independent];
+            if (_sectorOwner == BIS_WL_playerSide) then {
+                "Incoming" call WL2_fnc_announcer;
+                private _sectorName = _currentEnemyTarget getVariable ["WL2_name", "Sector"];
+                [format [localize "STR_A3_WL_incoming", _sectorName, BIS_WL_enemySide call WL2_fnc_sideToFaction]] call WL2_fnc_smoothText;
             };
+
+            if (_currentEnemyTarget == (BIS_WL_playerSide call WL2_fnc_getSideBase)) then {
+                playSoundUI ["air_raid", 2];
+                [localize "STR_A3_WL_popup_base_vulnerable"] call WL2_fnc_smoothText;
+            };
+        } else {
+            _enemyTargetMarker setMarkerAlphaLocal 0;
         };
     };
 
     _lastTargetFriendly = WL_TARGET_FRIENDLY;
-    _lastTargetEnemy = WL_TARGET_ENEMY;
+    _lastTargetEnemy = _currentEnemyTarget;
     _lastTargetReset = _targetReset;
 
     sleep WL_TIMEOUT_MIN;

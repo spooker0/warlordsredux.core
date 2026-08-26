@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_sectorName"];
+params ["_sector"];
 
 private _asset = cameraOn;
 if (WL_ISDOWN(_asset)) exitWith {};
@@ -14,7 +14,9 @@ if (isNull _warningTextDisplay) then {
 };
 
 private _sectorDisplay = _warningTextDisplay displayCtrl 35600;
-_sectorDisplay ctrlSetText _sectorName;
+private _targetName = _sector getVariable ["WL2_name", "Forward Airbase"];
+private _distanceToTarget = ((_sector distance2D cameraOn) / 1000) toFixed 1;
+_sectorDisplay ctrlSetText format ["%1 (%2 KM)", _targetName, _distanceToTarget];
 
 uiSleep 7;
 

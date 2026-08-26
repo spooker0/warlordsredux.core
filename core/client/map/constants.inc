@@ -1,5 +1,7 @@
 #define WL_PANEL_W 0.35
 #define WL_PANEL_X (safeZoneX + safeZoneW - WL_PANEL_W - 0.02)
+#define WL_PANEL_Y_SETTING ((missionProfileNamespace getVariable ["WL2_settings", createHashMap]) getOrDefault ["captureIndicatorTop", 18])
+#define WL_PANEL_Y ((WL_PANEL_Y_SETTING / 100 * (safeZoneH - safeZoneY)) + safeZoneY)
 #define WL_PANEL_PAD_X 0.005
 #define WL_PANEL_PAD_TOP 0.02
 #define WL_PANEL_PAD_BOTTOM 0.01
@@ -13,7 +15,7 @@
 #define WL_PANEL_CAP_ROW_W (WL_PANEL_W - (WL_PANEL_PAD_X * 2))
 #define WL_PANEL_CAP_ROW_H (WL_PANEL_CAP_NAME_H + WL_PANEL_CAP_BAR_H + 0.02)
 #define WL_PANEL_CAP_ROW_X (WL_PANEL_X + WL_PANEL_PAD_X)
-#define WL_PANEL_CAP_ROW_Y (WL_PANEL_PAD_TOP + WL_PANEL_CAP_TITLE)
+#define WL_PANEL_CAP_ROW_Y (WL_PANEL_Y + WL_PANEL_PAD_TOP + WL_PANEL_CAP_TITLE)
 #define WL_PANEL_CAP_BAR_X (WL_PANEL_CAP_ROW_X + WL_PANEL_CAP_BAR_GAP)
 #define WL_PANEL_CAP_BAR_W (WL_PANEL_CAP_ROW_W - (WL_PANEL_CAP_BAR_GAP * 2))
 #define WL_PANEL_CAP_PERCENT_W 0.1

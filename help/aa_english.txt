@@ -5,7 +5,7 @@ Cheap, powerful detection system. Can be turned on/off and designed to be operat
 <font color="#00ff00">Range:</font> dependent on aircraft, up to 16 km.
 <font color="#00ffff">Recommendation:</font> buy as many of these as you can and spread them out, and buy more when you lose them.
 
-RADOME
+LR RADAR
 Specialized detection system that spots enemy aircraft. Entirely passive. Used for finding high-altitude jets.
 Range: 20 km.
 <font color="#00ffff">Recommendation:</font> buy when radar is insufficient.

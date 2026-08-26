@@ -14,7 +14,7 @@ _unit setCaptive true;
 _unit setUnconscious true;
 _unit setVariable ["WL2_unconscious", true, true];
 
-private _capAreaModifiers = missionNamespace getVariable ["WL2_capAreaModifiers", [0, 0, 0]];
+private _capAreaModifiers = missionNamespace getVariable ["WL2_capAreaModifiers", [0, 0]];
 private _sideIndex = if (side group _unit == west) then { 0 } else { 1 };
 private _controlledMod = _capAreaModifiers # _sideIndex;
 _controlledMod = ((_controlledMod min 1) max 0.66);

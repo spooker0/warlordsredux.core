@@ -45,12 +45,13 @@ while { WL_IsSpectator } do {
     private _otherVehicles = (vehicles + allUnits) select {
         !(_x isKindOf "LaserTarget")
     };
-    _allVehicles insert [-1, _otherVehicles, true];
+    _allVehicles append _otherVehicles;
     _allVehicles = _allVehicles select {
         WL_ISUP(_x)
     } select {
         simulationEnabled _x
     };
+    _allVehicles = _allVehicles arrayIntersect _allVehicles;
 
     private _infantryViewDistance = _settingProfileData getOrDefault ["INFANTRY", 500];
     private _infantryNameViewDistance = _settingProfileData getOrDefault ["INFANTRY NAME", 250];

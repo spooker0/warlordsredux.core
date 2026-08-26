@@ -19,6 +19,9 @@ if (isDedicated) exitWith {};
         params ["_asset", "_caller", "_actionId"];
         WL2_lastLoadout = getUnitLoadout player;
         [_caller] call WLC_fnc_onRespawn;
+        if (player == _caller) then {
+            _caller setDamage 0;
+        };
     },
     {},
     [],

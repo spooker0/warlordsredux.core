@@ -44,6 +44,8 @@ private _enemiesHaveWarned = [];
 
 uiSleep 0.1;
 
+private _hasPilotCam = hasPilotCamera _unit;
+
 while { alive _projectile } do {
     if (cameraOn != _unit) then {
         triggerAmmo _projectile;
@@ -69,7 +71,11 @@ while { alive _projectile } do {
         _enemiesHaveWarned pushBack _x;
     } forEach _enemiesInWarnRange;
 
-    private _guideDirection = _unit weaponDirection (currentWeapon _unit);
+    private _guideDirection = if (_hasPilotCam) then {
+        _unit vectorModelToWorld (getPilotCameraDirection _unit);
+    } else {
+        _unit weaponDirection (currentWeapon _unit);
+    };
     private _guideOrigin = AGLtoASL (positionCameraToWorld [0, 0, 0]);
     private _guideSpot = _guideOrigin vectorAdd (_guideDirection vectorMultiply (_distanceToLauncher + _lead));
 

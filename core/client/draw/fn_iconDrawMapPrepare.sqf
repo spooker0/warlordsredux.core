@@ -519,40 +519,42 @@ if (_draw) then {
 };
 
 // Draw scanned units
-private _scannedUnits = _mapData getOrDefault ["scannedUnits", []];
-{
-	if (_showAirMode) then {
-		if !(_x isKindOf "Air" || WL_UNIT(_x, "category", "Other") == "Air Defense") then {
-			continue;
+if (!_showMyMode) then {
+	private _scannedUnits = _mapData getOrDefault ["scannedUnits", []];
+	{
+		if (_showAirMode) then {
+			if !(_x isKindOf "Air" || WL_UNIT(_x, "category", "Other") == "Air Defense") then {
+				continue;
+			};
 		};
-	};
-	private _hideMap = _x getVariable ["WL2_hideMap", 0];
-	private _scanText = if (_hideMap == 0 && _draw) then {
-		if (_showDetailedMode) then {
-			_x getVariable ["WL2_mapIconTextDetailed", ""]
+		private _hideMap = _x getVariable ["WL2_hideMap", 0];
+		private _scanText = if (_hideMap == 0 && _draw) then {
+			if (_showDetailedMode) then {
+				_x getVariable ["WL2_mapIconTextDetailed", ""]
+			} else {
+				_x getVariable ["WL2_mapIconText", ""]
+			};
 		} else {
-			_x getVariable ["WL2_mapIconText", ""]
+			""
 		};
-	} else {
-		""
-	};
-	private _position = getPosASL _x;
-	private _size = _x getVariable ["WL2_mapIconSize", 19];
-	private _textSize = if (_x isKindOf "Man") then { 0.025 } else { 0.043 };
-	_drawIcons pushBack [
-		_x getVariable ["WL2_mapIconType", ""],
-		_x getVariable ["WL2_mapIconColor", [1, 1, 1, 1]],
-		_position,
-		_size * _mapIconScale,
-		_size * _mapIconScale,
-		getDirVisual _x,
-		_scanText,
-		1,
-		_textSize * _mapIconScale,
-		"PuristaBold",
-		"right"
-	];
-} forEach _scannedUnits;
+		private _position = getPosASL _x;
+		private _size = _x getVariable ["WL2_mapIconSize", 19];
+		private _textSize = if (_x isKindOf "Man") then { 0.025 } else { 0.043 };
+		_drawIcons pushBack [
+			_x getVariable ["WL2_mapIconType", ""],
+			_x getVariable ["WL2_mapIconColor", [1, 1, 1, 1]],
+			_position,
+			_size * _mapIconScale,
+			_size * _mapIconScale,
+			getDirVisual _x,
+			_scanText,
+			1,
+			_textSize * _mapIconScale,
+			"PuristaBold",
+			"right"
+		];
+	} forEach _scannedUnits;
+};
 
 // Draw scanner
 private _assetData = WL_ASSET_DATA;

@@ -2,8 +2,6 @@
 params ["_sector"];
 
 private _ownerSide = _sector getVariable ["BIS_WL_owner", independent];
-private _modifiers = missionNamespace getVariable ["WL2_capAreaModifiers", [0, 0, 0]];
-
 private _sideArr = [west, east, independent];
 
 private _cacheTimers = missionNamespace getVariable ["WL2_capValuesCacheTimers", createHashMap];
@@ -73,11 +71,6 @@ private _sideCaptureModifier = if (_useCache) then {
 		private _isConnectedToHomeBase = _homeBase in _connectedNeighboringSectors;
 		if (_isConnectedToHomeBase) then {
 			_connections = _connections + 1;
-		};
-
-		if (_ownerSide != independent) then {
-			private _sideModifier = _modifiers # _forEachIndex;
-			_connections = _connections + _sideModifier;
 		};
 
 		if (_ownerSide == _side && _sector != _homeBase) then {

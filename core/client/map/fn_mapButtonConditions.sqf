@@ -263,6 +263,14 @@ switch (_conditionName) do {
             "Must be at least Level 50 to mark sectors on the map.";
         };
     };
+    case "showSectorStronghold": {
+        private _sectorRevealedBy = _target getVariable ["BIS_WL_revealedBy", []];
+        if (_side in _sectorRevealedBy) then {
+            "";
+        } else {
+            "ok";
+        };
+    };
     case "lockFOB": {
         private _fobPlacer = _target getVariable ["WL2_forwardBasePlacer", ""];
         if (_fobPlacer != getPlayerUID player) exitWith {
@@ -403,6 +411,11 @@ switch (_conditionName) do {
         if (!alive _target) exitWith { "" };
         if (_target isKindOf "Man") exitWith { "" };
 
+        private _altitude = (_target modelToWorld [0, 0, 0]) # 2;
+        if (_altitude > 20) exitWith {
+            "Vehicle must be below 20m altitude to be rearmed."
+        };
+
         private _cooldown = (_target getVariable ["BIS_WL_nextRearm", 0]) - serverTime;
         if (_cooldown > 0) exitWith {
             format ["Vehicle rearm is on cooldown: %1", [_cooldown, "MM:SS"] call BIS_fnc_secondsToString]
@@ -413,6 +426,7 @@ switch (_conditionName) do {
         } select {
             _x getVariable ["WLM_ammoCargo", 0] > 250
         };
+
         if (count _nearbyVehicles > 0) then {
             "ok";
         } else {

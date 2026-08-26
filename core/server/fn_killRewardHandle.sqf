@@ -56,6 +56,14 @@ if (_unitSide != independent && _unitSide != sideUnknown) then {
 	_killReward = _killReward * 1.75;
 };
 
+private _incomeModifiers = missionNamespace getVariable ["WL2_capAreaModifiers", [0, 0]];
+private _incomeModifier = switch (_killerSide) do {
+	case west: { _incomeModifiers # 0 };
+	case east: { _incomeModifiers # 1 };
+	default { 0 };
+};
+_killReward = _killReward * (1 + _incomeModifier);
+
 private _playerId = getPlayerID _responsibleLeader;
 private _squadmates = ["getSquadmates", [_playerId, false]] call SQD_fnc_query;
 private _squadReward = round (_killReward * 0.3 / (sqrt (count _squadmates) max 1));

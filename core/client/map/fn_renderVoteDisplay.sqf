@@ -24,7 +24,7 @@ private _shouldShowPanel = _totalContentHeight > 0;
 
 _backgroundControl ctrlSetPosition [
     WL_PANEL_X,
-    0,
+    WL_PANEL_Y,
     WL_PANEL_W,
     _totalContentHeight
 ];
@@ -32,7 +32,7 @@ _backgroundControl ctrlSetPosition [
 _backgroundControl ctrlShow _shouldShowPanel;
 _backgroundControl ctrlCommit 0;
 
-private _titleY = WL_PANEL_PAD_TOP + _captureSectionHeight;
+private _titleY = WL_PANEL_Y + WL_PANEL_PAD_TOP + _captureSectionHeight;
 
 _titleControl ctrlSetPosition [
     WL_PANEL_X,

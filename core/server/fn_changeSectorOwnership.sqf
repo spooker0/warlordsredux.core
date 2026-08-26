@@ -4,7 +4,7 @@ params ["_sector", "_owner"];
 private _sectorPreviousOwner = _sector getVariable ["BIS_WL_owner", independent];
 
 _sector setVariable ["BIS_WL_owner", _owner, true];
-[_sector] remoteExec ["WL2_fnc_sectorOwnershipHandleClient", [0, -2] select isDedicated];
+[_sector, _owner, _sectorPreviousOwner] remoteExec ["WL2_fnc_sectorOwnershipHandleClient", [0, -2] select isDedicated];
 
 private _capturableBySides = _sector getVariable ["WL2_capturableBySides", []];
 _capturableBySides pushBackUnique _owner;

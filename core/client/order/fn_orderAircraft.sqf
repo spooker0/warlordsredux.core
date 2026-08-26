@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_orderedClass", "_cost"];
+params ["_orderedClass", "_cost", "_offset"];
 
 private _teamSectorsData = WL_SECTORS_DATA(BIS_WL_playerSide);
 private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
@@ -17,6 +17,11 @@ if (count _findCurrentOwnedSector == 0) exitWith {
 };
 
 private _sector = _findCurrentOwnedSector # 0;
+private _services = _sector getVariable ["WL2_services", []];
+if ("NR" in _services) exitWith {
+	[_orderedClass, _cost, _offset] spawn WL2_fnc_orderVehicle;
+};
+
 private _sectorMarker = _sector getVariable [format ["WL2_MapMarker_%1", BIS_WL_playerSide], "unknown"];
 private _sectorIsCamped = _sectorMarker == "camped";
 

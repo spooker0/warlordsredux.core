@@ -27,7 +27,7 @@ private _enemySide = switch (_combatAirSide) do {
 };
 [_enemySide, _enemyMessage] call _broadcastActionToSide;
 
-[_targetName] remoteExec ["WL2_fnc_combatAirWarning", _enemySide];
+[_target] remoteExec ["WL2_fnc_combatAirWarning", _enemySide];
 
 _target setVariable ["WL2_combatAirActive", true, true];
 _target setVariable ["WL2_combatAirStart", serverTime, true];

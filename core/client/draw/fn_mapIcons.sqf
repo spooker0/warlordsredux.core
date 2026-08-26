@@ -162,6 +162,7 @@
 		_mapData set ["airWrecks", _airWrecks];
 
 		private _visibleUnits = _sideVehicles + _targetsOnDatalink + _visibleEnemyUnits;
+		_visibleUnits = _visibleUnits arrayIntersect _visibleUnits;
 
 		private _minefields = _visibleUnits select {
 			private _mineData = _x getVariable ["WL2_minefield", []];
@@ -226,7 +227,7 @@
 		_munitionList = _munitionList select { alive _x };
 		_mapData set ["trackedProjectiles", _munitionList];
 
-		private _capAreaModifiers = missionNamespace getVariable ["WL2_capAreaModifiers", [0, 0, 0]];
+		private _capAreaModifiers = missionNamespace getVariable ["WL2_capAreaModifiers", [0, 0]];
 		private _sideIndex = if (_side == west) then { 0 } else { 1 };
 		private _otherSideIndex = if (_side == west) then { 1 } else { 0 };
 		private _controlledMod = _capAreaModifiers # _sideIndex;
@@ -237,8 +238,8 @@
 		private _enemyControlledArea = _controlledAreas # _otherSideIndex;
 
 		private _areaControlData = [
-			format ["    %1 km² (Capture +%2x)", (_controlledArea / 1e6) toFixed 1, _controlledMod toFixed 1],
-			format ["    ~%1 km² (Capture +%2x)", round (_enemyControlledArea / 1e6), _enemyMod toFixed 1]
+			format ["    %1 km² (Income +%2x)", (_controlledArea / 1e6) toFixed 1, _controlledMod toFixed 1],
+			format ["    ~%1 km² (Income +%2x)", round (_enemyControlledArea / 1e6), _enemyMod toFixed 1]
 		];
 		_mapData set ["areaControlData", _areaControlData];
 

@@ -217,7 +217,8 @@ private _objectsToPreload = [
 	"Land_Cargo_HQ_V4_F",
 	"Land_HBarrierTower_F",
 	"Land_MedicalTent_01_NATO_generic_open_F",
-	"Land_MedicalTent_01_CSAT_brownhex_generic_open_F"
+	"Land_MedicalTent_01_CSAT_brownhex_generic_open_F",
+	"Land_MobileRadar_01_generator_F"
 ];
 {
 	private _dummy = createSimpleObject [_x, [0, 0, -1000], false];

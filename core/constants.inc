@@ -35,6 +35,7 @@
 // Live: set all to 1
 #define WL_STOP_TEAM_SWITCH 1
 #define WL_FOB_REQUIREMENTS 1
+#define WL_SKIP_LOBBY 1
 
 // Configuration
 #define WL_TIMEOUT_MIN 0.05

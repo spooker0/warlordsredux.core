@@ -18,6 +18,23 @@ _asset setAmmoCargo 0;
 _asset setVariable ["WL2_accessControl", 7];
 _asset setVariable ["WLM_ammoCargo", 0];
 
+private _assetChildren = [];
+private _attachments = WL_ASSET(_orderedClass, "attachments", []);
+{
+	_x params ["_attachClass", "_attachOffset", "_attachDir", "_attachMemoryPoint", "_attachScale"];
+	private _attachment = createSimpleObject [_attachClass, [0, 0, 0]];
+    if (_attachMemoryPoint == "") then {
+        _attachment attachTo [_asset, _attachOffset];
+    } else {
+        _attachment attachTo [_asset, _attachOffset, _attachMemoryPoint, true];
+    };
+	_attachment setDir _attachDir;
+    if (_attachScale != 1) then {
+        _attachment setObjectScale _attachScale;
+    };
+	_assetChildren pushBack _attachment;
+} forEach _attachments;
+
 uiNamespace setVariable ["WL2_vehicleOrderAsset", _asset];
 private _drawRestrictionId = addMissionEventHandler ["Draw3D", {
 	private _asset = uiNamespace getVariable ["WL2_vehicleOrderAsset", objNull];
@@ -209,6 +226,9 @@ private _canStillOrderVehicle = !(_finalCancel # 0);
 
 detach _asset;
 deleteVehicle _asset;
+{
+    deleteVehicle _x;
+} forEach _assetChildren;
 removeMissionEventHandler ["Draw3D", _drawRestrictionId];
 
 ["Deploy"] spawn WL2_fnc_showHint;

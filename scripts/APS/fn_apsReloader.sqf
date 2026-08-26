@@ -1,5 +1,7 @@
 #include "includes.inc"
 
+if (isDedicated) exitWith {};
+
 while { !BIS_WL_missionEnd } do {
     private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
     private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];

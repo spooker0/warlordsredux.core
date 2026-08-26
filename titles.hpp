@@ -1092,6 +1092,16 @@ class RscTitles {
 					shadowColor = "#000000";
 				};
 			};
+			class SpectatorCrosshair: RscText {
+				idc = 108;
+				text = "A3\ui_f\data\map\groupicons\waypoint.paa";
+				style = ST_CENTER + ST_PICTURE;
+				colorText[] = {0, 1, 0, 0.8};
+				x = 0.5 - 0.015;
+				y = 0.5 - 0.02;
+				w = 0.03;
+				h = 0.04;
+			};
 		};
 	};
 

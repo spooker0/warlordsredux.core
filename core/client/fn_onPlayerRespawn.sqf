@@ -39,7 +39,7 @@ player addAction [_spawnMenuText, { 0 spawn SQD_fnc_initSquadMenu; }, [], -100, 
 private _playerSquad = ["getSquadForPlayer", [getPlayerID player]] call SQD_fnc_query;
 if (count _playerSquad > 0) then {
 	private _squadChannelId = _playerSquad getOrDefault ["channel", 0];
-    if (_squadChannelId != 0) then {
+    if (_squadChannelId > 0) then {
         _squadChannelId radioChannelAdd [_newUnit];
     };
 };

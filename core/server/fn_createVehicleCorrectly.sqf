@@ -70,5 +70,4 @@ _asset setDamage 0;
 _asset lock true;
 _asset enableWeaponDisassembly false;
 
-uiSleep 0.5;
 _asset;

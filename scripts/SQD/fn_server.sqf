@@ -20,6 +20,7 @@ if (_action == "create") exitWith {
 
     private _freeChannel = ["getCreatedFreeChannel", []] call SQD_fnc_query;
     private _customChannelId = if (_freeChannel > 0) then {
+        _freeChannel radioChannelSetLabel _squadName;
         _freeChannel
     } else {
         radioChannelCreate [[0.56, 0.93, 0.56, 1], _squadName, "%UNIT_NAME", []];
@@ -36,7 +37,7 @@ if (_action == "create") exitWith {
     _squadManager pushBack _newSquad;
     call _propagateChanges;
 
-    if (_customChannelId != 0) then {
+    if (_customChannelId > 0) then {
         private _leaderPlayer = ["getPlayerForID", [_leader]] call SQD_fnc_query;
         _customChannelId radioChannelAdd [_leaderPlayer];
     };
@@ -94,7 +95,7 @@ if (_action == "add") exitWith {
 
     private _newPlayer = ["getPlayerForID", [_playerId]] call SQD_fnc_query;
     private _squadChannelId = _squad getOrDefault ["channel", 0];
-    if (_squadChannelId != 0) then {
+    if (_squadChannelId > 0) then {
         _squadChannelId radioChannelAdd [_newPlayer];
     };
 
@@ -117,7 +118,7 @@ if (_action == "remove") exitWith {
         _squad set ["members", _members];
 
         private _channel = _squad getOrDefault ["channel", 0];
-        if (_channel != 0) then {
+        if (_channel > 0) then {
             _channel radioChannelRemove [_player];
         };
 
@@ -168,6 +169,11 @@ if (_action == "rename") exitWith {
     if (count _squad == 0) exitWith {}; // player not in any squad
 
     _squad set ["name", _newName];
+
+    private _channel = _squad getOrDefault ["channel", 0];
+    if (_channel > 0) then {
+        _channel radioChannelSetLabel _newName;
+    };
     call _propagateChanges;
 };
 

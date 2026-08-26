@@ -192,11 +192,17 @@
 			if (_selectedSector != _previousTargetSelection) then {
 				private _selectedSectorSide = _selectedSector getVariable ["BIS_WL_owner", independent];
 				if (_selectedSectorSide in [west, east]) then {
+					call WL2_fnc_updateSectorsData;
+					private _selectedSectorsData = WL_SECTORS_DATA(_selectedSectorSide);
+					private _selectedSideLinked = _selectedSectorsData getOrDefault ["linked", []];
+
 					private _selectedTeamPriorityVar = format ["WL2_teamPriority_%1", _selectedSectorSide];
 					private _selectedTeamPriorityTypeVar = format ["WL2_teamPriorityType_%1", _selectedSectorSide];
 
-					missionNamespace setVariable [_selectedTeamPriorityVar, _selectedSector, true];
-					missionNamespace setVariable [_selectedTeamPriorityTypeVar, "sector", true];
+					if (_selectedSector in _selectedSideLinked) then {
+						missionNamespace setVariable [_selectedTeamPriorityVar, _selectedSector, true];
+						missionNamespace setVariable [_selectedTeamPriorityTypeVar, "sector", true];
+					};
 				};
 			};
 
