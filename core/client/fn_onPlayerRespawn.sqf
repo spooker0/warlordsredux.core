@@ -102,6 +102,14 @@ private _ownedMines = missionNamespace getVariable [_ownedMineVar, []];
 	};
 } forEach _ownedMines;
 
+private _activePolls = missionNamespace getVariable ["POLL_ActivePoll", []];
+if (count _activePolls > 0) then {
+	private _playerVoted = missionNamespace getVariable ["POLL_playerVoted", false];
+	if (!_playerVoted) then {
+		call POLL_fnc_pollMenu;
+	};
+};
+
 showChat true;
 
 player setVariable ["WL2_unconscious", false, true];

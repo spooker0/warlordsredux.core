@@ -120,7 +120,7 @@ _settingsMenu append [
     ["slider", localize "STR_WL_captureInterfaceFontSize", [8, 20, 1, 10, "captureInterfaceFontSize"]],
     ["slider", localize "STR_WL_incomingIndicatorPositionLeft", [0, 100, 1, 5, "incomingIndicatorLeft"]],
     ["slider", localize "STR_WL_incomingIndicatorPositionTop", [0, 100, 1, 20, "incomingIndicatorTop"]],
-    ["slider", "Capture indicator (top %)", [0, 100, 1, 18, "captureIndicatorTop"]],
+    ["slider", localize "STR_WL_captureIndicatorTop", [0, 100, 1, 18, "captureIndicatorTop"]],
     ["slider", localize "STR_WL_mapButtonScale", [0.75, 1.5, 0.05, 1, "mapButtonScale"]],
     ["slider", localize "STR_WL_mapSectorLineGrayscale", [0, 1, 0.05, 1, "mapSectorLineGrayscale"]],
     ["slider", localize "STR_WL_mapSectorLineRevealTime", [0, 1, 0.05, 0.25, "mapSectorLineSpeed"]],
@@ -149,6 +149,7 @@ _settingsMenu append [
     ["checkbox", localize "STR_WL_railgunSecondClickToFire", ["railgunSecondClick", true]],
     ["checkbox", localize "STR_WL_additionalSubtitles", ["additionalSubs", false]],
     ["checkbox", localize "STR_WL_mapAlwaysShowDetailedText", ["alwaysShowDetailedText", false]],
+    ["checkbox", localize "STR_WL_enableSteamRecordingEvents", ["enableSteamEvent", true]],
 
     ["category", localize "STR_WL_hideScrollMenus"],
     ["checkbox", localize "STR_WL_hideBuyMenu", ["hideBuyMenu", false]],

@@ -27,4 +27,10 @@ if (_isWeaponDeployed) exitWith {
     [false, "This vehicle's weapon is currently deployed."];
 };
 
+private _lastDamageTime = _vehicle getEntityInfo 5;
+if (damage _vehicle > 0 && _lastDamageTime > 0 && _lastDamageTime < WL_COOLDOWN_JETRTB_DMG) exitWith {
+    private _cooldownText = [WL_COOLDOWN_JETRTB_DMG - _lastDamageTime, "MM:SS"] call BIS_fnc_secondsToString;
+    [false, format ["Vehicle damaged too recently to paradrop: %1", _cooldownText]];
+};
+
 [true, ""];

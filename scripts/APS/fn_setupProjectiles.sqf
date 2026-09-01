@@ -182,7 +182,9 @@ addMissionEventHandler ["ProjectileCreated", {
             params ["_projectile", "_hitEntity", "_projectileOwner", "_hitPos", "_velocity", "_normal", "_components", "_radius" ,"_surfaceType", "_instigator"];
             if ("foliage" in _surfaceType) exitWith {};
             private _subShell = _projectile getVariable ["APS_subShell", ""];
-            [_subShell, _hitPos, [vectorDir _projectile, vectorUp _projectile], 0, true] spawn DIS_fnc_bunkerBuster;
+            private _muzzleVelocity = _projectileOwner getVariable ["BIS_MuzzleCoef", 0];
+            private _structureDamage = if (_muzzleVelocity >= 1.2) then { 1 } else { 0 };
+            [_subShell, _hitPos, [vectorDir _projectile, vectorUp _projectile], _structureDamage, true] spawn DIS_fnc_bunkerBuster;
             _projectile removeEventHandler ["HitPart", _thisEventHandler];
         }];
     };

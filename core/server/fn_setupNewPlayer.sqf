@@ -83,7 +83,9 @@ private _isSpectator = _uid in (getArray (missionConfigFile >> "spectatorIDs"));
 private _skipTeamChecks = _isAdmin || _isModerator || _isSpectator;
 if (_skipTeamChecks) then {
     _lockedToTeam = civilian;
-    _warlord setVariable ["WL2_playerEligibility", [west, east], [2, _owner]];
+    private _teamEligibility = [_warlord, _uid] call WL2_fnc_calcTeamEligibility;
+    _teamEligibility set [0, [west, east]];
+    _warlord setVariable ["WL2_playerEligibility", _teamEligibility, [2, _owner]];
 };
 
 private _playerGroup = if (_lockedToTeam in [west, east]) then {

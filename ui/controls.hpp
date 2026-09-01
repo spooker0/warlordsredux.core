@@ -120,10 +120,10 @@ class RscWLSideButton: RscShortcutButton {
 	colorText[] = {1, 1, 1, 1};
 	colorDisabled[] = {1, 1, 1, 0.25};
 
-	size = 0.028;
+	size = safeZoneW * 0.012;
 	y = safeZoneY + safeZoneH * 0.1;
 	w = safeZoneW * 0.4;
-	h = safeZoneH * 0.75;
+	h = safeZoneH * 0.85;
 
 	class TextPos {
 		left = 0.01;
@@ -133,49 +133,90 @@ class RscWLSideButton: RscShortcutButton {
 	};
 
 	class Attributes {
-		font = "EtelkaMonospacePro";
+		font = "PuristaMedium";
 	};
+};
+
+class RscWLVideo: RscVideo {
+	autoplay = 1;
+	loops = 1000;
 };
 
 class RscWLSidePicker {
 	idd = -1;
 	movingEnable = false;
-	class controls {
+	class controlsBackground {
 		class RscWLSidePicker_Background: RscText {
+			idc = -1;
+			x = safeZoneX;
+			y = safeZoneY;
+			w = safeZoneW;
+			h = safeZoneH;
+			colorBackground[] = {0, 0, 0, 1};
+		};
+	};
+	class controls {
+		class RscWLSidePicker_BackgroundVideos: RscControlsGroupNoScrollbars {
 			idc = 100;
 			x = safeZoneX;
 			y = safeZoneY;
 			w = safeZoneW;
 			h = safeZoneH;
-			colorBackground[] = {0.2, 0.2, 0.2, 1};
 		};
-		class RscWLSidePicker_SelectText: RscStructuredText {
+		class RscDummyButton: RscShortcutButton {
 			idc = 101;
+			x = safeZoneX;
+			y = safeZoneY;
+			w = 0;
+			h = 0;
+		};
+		class RscWLSidePicker_BackgroundText: RscText {
+			idc = -1;
 			x = safeZoneX + safeZoneW * 0.05;
-			y = safeZoneY + safeZoneH * 0.02;
+			y = safeZoneY;
 			w = safeZoneW * 0.9;
-			h = safeZoneH * 0.06;
-			size = safeZoneH * 0.06;
+			h = safeZoneH * 0.1;
+
+			font = "PuristaBold";
+			text = "$STR_WL_missionNameUpper";
+			style = ST_CENTER;
+			shadow = 0;
+			sizeEx = 0.0825 * safeZoneW;
 		};
 		class RscWLSidePicker_WestButton: RscWLSideButton {
 			idc = 102;
-			colorBackgroundFocused[] = {0.2, 0.2, 0.6, 0.4};
-			colorBackground2[] = {0.2, 0.2, 0.6, 0.4};
+			colorBackgroundFocused[] = {0.2, 0.2, 0.6, 0.7};
+			colorBackground2[] = {0.2, 0.2, 0.6, 0.7};
 			x = safeZoneX + safeZoneW * 0.05;
+			tooltip = "$STR_WL_joinBlufor";
 		};
 		class RscWLSidePicker_EastButton: RscWLSideButton {
 			idc = 103;
-			colorBackgroundFocused[] = {0.6, 0.2, 0.2, 0.4};
-			colorBackground2[] = {0.6, 0.2, 0.2, 0.4};
+			colorBackgroundFocused[] = {0.6, 0.2, 0.2, 0.7};
+			colorBackground2[] = {0.6, 0.2, 0.2, 0.7};
 			x = safeZoneX + safeZoneW * 0.55;
+			tooltip = "$STR_WL_joinOpfor";
 		};
 		class RscWLSidePicker_Reason: RscStructuredText {
 			idc = 104;
-			x = safeZoneX;
+			x = safeZoneX + safeZoneW * 0.1;
 			y = safeZoneY + safeZoneH * 0.87;
-			w = safeZoneW;
+			w = safeZoneW * 0.8;
 			h = safeZoneH * 0.1;
 			size = 0.04;
+			colorBackground[] = {0, 0, 0, 1};
+		};
+		class RscWLSidePicker_Unassigned: RscStructuredText {
+			idc = 105;
+			x = safeZoneX + safeZoneW * 0.455;
+			y = safeZoneY + safeZoneH * 0.12;
+			w = safeZoneW * 0.09;
+			h = safeZoneH * 0.3;
+			size = 0.023 * safeZoneW;
+
+			class Attributes {
+				font = "PuristaMedium";
+			};
 		};
 	};
 };

@@ -13,6 +13,7 @@ import RscProgress;
 import RscShortcutButton;
 import RscStructuredText;
 import RscText;
+import RscVideo;
 import RscActiveText;
 import RscActivePictureKeepAspect;
 import RscXSliderH;

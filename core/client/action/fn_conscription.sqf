@@ -3,6 +3,8 @@ params ["_conscripter"];
 
 private _side = side group player;
 if (side group _conscripter != _side) exitWith {};
+
+if (isNil "WL_IsSpectator") exitWith {};
 if (WL_IsSpectator) exitWith {};
 
 private _canBuy = uiNamespace getVariable ["WL2_canBuy", true];

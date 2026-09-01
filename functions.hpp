@@ -340,6 +340,7 @@ class CfgFunctions {
 		};
 		class ClientDraw {
 			file = "src\core\client\draw";
+			class bigExplosion { headerType = WL_HEADER_LEVEL; };
 			class cruiseMissileWarning { headerType = WL_HEADER_LEVEL; };
 			class drawAssetName { headerType = WL_HEADER_LEVEL; };
 			class drawRegions { headerType = WL_HEADER_LEVEL; };

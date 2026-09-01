@@ -14,6 +14,9 @@ if !(_isAdmin || _isModerator) exitWith {};
 
 private _playerList = serverNamespace getVariable ["playerList", createHashMap];
 private _currentSide = _playerList getOrDefault [_targetUid, sideUnknown];
+
+if !(_currentSide in [west, east]) exitWith {};
+
 private _newSide = if (_currentSide == west) then { east } else { west };
 _playerList set [_targetUid, _newSide];
 

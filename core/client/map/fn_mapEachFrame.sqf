@@ -51,7 +51,10 @@ private _hideSectors = _mapMode != 0;
     };
 
     if (_x in WL_BASES) then {
-        _currentMarkerSize = _currentMarkerSize vectorMultiply 1.3;
+        private _revealedBy = _x getVariable ["BIS_WL_revealedBy", []];
+        if (BIS_WL_playerSide in _revealedBy) then {
+            _currentMarkerSize = _currentMarkerSize vectorMultiply 1.3;
+        };
     };
 
     _marker setMarkerSizeLocal _currentMarkerSize;

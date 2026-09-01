@@ -77,6 +77,12 @@ class CfgSounds {
         titles[] = {};
     };
 
+    class endgame {
+        name="endgame";
+        sound[]={"src\sounds\endgame.ogg", 1, 1};
+        titles[] = {};
+    };
+
     class hitmarker {
         name = "hitmarker";
         sound[] = {"src\sounds\hitmarker.ogg", 1, 1};

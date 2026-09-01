@@ -94,6 +94,14 @@ if (_customColor == WL_COLOR_KILL) then {
 		playSoundUI ["AddItemOk", _hitmarkerVolume * 2, 1];
 	};
 
+	private _enableSteamEvent = _settingsMap getOrDefault ["enableSteamEvent", true];
+
+	private _lastSteamEvent = uiNamespace getVariable ["WL2_lastSteamEvent", 0];
+	if (_enableSteamEvent && _lastSteamEvent < serverTime) then {
+		steamGameRecordingEvent ["ScoreEvent", 0, [toUpper _displayText]];
+		uiNamespace setVariable ["WL2_lastSteamEvent", serverTime + 5];
+	};
+
 	if (missionNamespace getVariable ["WL_easterEggOverride", false]) then {
 		private _killsInRow = missionNamespace getVariable ["WL_killsInRow", 0];
 		_killsInRow = _killsInRow + 1;

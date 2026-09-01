@@ -4,6 +4,8 @@ if (isDedicated) exitWith {};
 private _activePoll = missionNamespace getVariable ["POLL_ActivePoll", []];
 if (count _activePoll == 0) exitWith {};
 
+missionNamespace setVariable ["POLL_playerVoted", false];
+
 player addAction [
     "<t color='#00ffff'>ACTIVE POLL</t>",
     {
@@ -16,5 +18,5 @@ player addAction [
     false,
     true,
     "",
-    "count (missionNamespace getVariable ['POLL_ActivePoll', []]) > 0"
+    "count (missionNamespace getVariable ['POLL_ActivePoll', []]) > 0 && !(missionNamespace getVariable ['POLL_playerVoted', false])"
 ];

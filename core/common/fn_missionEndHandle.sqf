@@ -23,10 +23,6 @@ if (_isClient) then {
 	openMap false;
 
 	BIS_WL_missionEnd = true;
-	private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
-	if (isNull _display) then {
-		0 spawn WL2_fnc_scoreboard;
-	};
 
 	if (_gameWinner == independent) exitWith {
 		"Victory" call WL2_fnc_announcer;
@@ -56,8 +52,8 @@ if (_isClient) then {
 
 		private _basePos = _base modelToWorld [0, 0, 0];
 
-		private _targetDistance = 400;
-		private _initialX = random 400;
+		private _targetDistance = 2000;
+		private _initialX = random 2000;
 		if (random 1 < 0.5) then {
 			_initialX = -1 * _initialX;
 		};
@@ -66,7 +62,7 @@ if (_isClient) then {
 			_initialY = -1 * _initialY;
 		};
 
-		private _initialVector = [_initialX, _initialY, 300];
+		private _initialVector = [_initialX, _initialY, 500];
 		private _cameraPos = _base modelToWorld _initialVector;
 
 		private _targetVectorDirAndUp = [_cameraPos, _basePos] call BIS_fnc_findLookAt;
@@ -75,85 +71,20 @@ if (_isClient) then {
 
 		_camera switchCamera "INTERNAL";
 
-		private _finalVector = _initialVector vectorMultiply 0.5;
-		private _endPos = _base modelToWorld _finalVector;
-		private _endTargetVectorDirAndUp = [_endPos, _basePos] call BIS_fnc_findLookAt;
-
-		private _startTime = serverTime;
-		private _interval = 0;
-
-		while { alive _camera && _interval < 5 } do {
-			uiSleep 0.001;
-			_camera setVelocityTransformation [
-				AGLtoASL _cameraPos,
-				AGLtoASL _endPos,
-				[0, 0, 0],
-				[0, 0, 0],
-				_targetVectorDirAndUp # 0,
-				_endTargetVectorDirAndUp # 0,
-				_targetVectorDirAndUp # 1,
-				_endTargetVectorDirAndUp # 1,
-				_interval / 5
-			];
-			_interval = serverTime - _startTime;
-		};
+		[_basePos] spawn WL2_fnc_bigExplosion;
 	};
-
-	[_base] spawn {
-		params ["_base"];
-		playSoundUI ["a3\sounds_f\ambient\battlefield\battlefield_explosions1.wss", 2];
-
-		private _detonateSounds = [
-			"a3\sounds_f\arsenal\explosives\shells\shellheavyb_distexp.wss",
-			"a3\sounds_f\arsenal\explosives\shells\shellheavyb_distexp_01.wss",
-			"a3\sounds_f\arsenal\explosives\shells\shellheavyb_distexp_02.wss",
-			"a3\sounds_f\arsenal\explosives\shells\shellheavyb_distexp_03.wss",
-			"a3\sounds_f\arsenal\explosives\shells\shelllighta_distexp_01.wss",
-			"a3\sounds_f\arsenal\explosives\shells\shelllighta_distexp_02.wss",
-			"a3\sounds_f\arsenal\explosives\shells\shelllighta_distexp_03.wss",
-			"a3\sounds_f\arsenal\explosives\shells\shellmedium_distexp_01.wss",
-			"a3\sounds_f\arsenal\explosives\shells\shellmedium_distexp_02.wss",
-			"a3\sounds_f\arsenal\explosives\shells\shellmedium_distexp_03.wss"
-		];
-
-		private _startPos = _base modelToWorldWorld [500, 500, 500];
-		private _targetBase = -300;
-		while { alive _base } do {
-			private _targetPos = _base modelToWorld [_targetBase + (random 20 - 10), random 300 - 150, 0];
-			_targetPos set [2, 1];
-
-			[_targetPos, [
-				["DeminingExplosiveCircleDust", 1],
-				["BombExp1", random 0.8],
-				["BombSmk1", random 0.2],
-				["SecondaryExp", 0.5],
-				["SecondarySmoke", 2]
-			]] spawn WL2_fnc_particleEffect;
-
-			playSound3D [
-				selectRandom _detonateSounds,
-				objNull,
-				false,
-				AGLtoASL _targetPos,
-				5,
-				1,
-				0,
-				0,
-				true
-			];
-
-			_targetBase = _targetBase + 5;
-
-			if (_targetBase > 300) then {
-				_targetBase = -300;
-			};
-			uiSleep (random 0.2);
-		};
-	};
-
-	uiSleep 15;
 
 	private _debriefing = format ["WL2_%1_%2_%3", _status, _playerSide, _surrender];
+
+	private _debriefingTitle = toUpper getText (missionConfigFile >> "CfgDebriefing" >> _debriefing >> "title");
+	private _debriefingSubtitle = toUpper getText (missionConfigFile >> "CfgDebriefing" >> _debriefing >> "subtitle");
+	[
+		parseText format ["<t size='2'>%1 - %2</t>", _debriefingTitle, _debriefingSubtitle],
+		parseText toUpper "Altis evacuation in progress. Elevated radiation levels detected. Head to nearest emergency shelter."
+	] spawn BIS_fnc_AAN;
+
+	uiSleep 25;
+
 	[_debriefing, true] call BIS_fnc_endMission;
 
 	while { true } do {
@@ -161,6 +92,6 @@ if (_isClient) then {
 		showScoretable 0;
 	};
 } else {
-	uiSleep 30;
+	uiSleep 35;
 	endMission "End1";
 };

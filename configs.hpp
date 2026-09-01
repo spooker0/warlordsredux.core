@@ -586,3 +586,14 @@ class CfgWorlds {
 		};
 	};
 };
+
+class SteamGameRecording {
+	class ScoreEvent {
+		scope = 2;
+		title = "Score";
+		description = "%1";
+		icon = "a3_steam_crown";
+		priority = 1000;
+		clipPriority = 3;
+	};
+};

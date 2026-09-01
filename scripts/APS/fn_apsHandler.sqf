@@ -108,6 +108,8 @@ while { alive _projectile } do {
 	private _eligibleNearbyVehicles = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) select {
 		_x distance _projectile < _safeRadius
 	} select {
+		alive _x
+	} select {
 		_x != _unit
     } select {  // active check
 		[_x] call APS_fnc_active;
@@ -127,7 +129,11 @@ while { alive _projectile } do {
         private _vectorToVehicle = (getPosASL _projectile) vectorFromTo (getPosASL _x);
         private _incomingAngle = acos (_projectileVector vectorDotProduct _vectorToVehicle);
         _incomingAngle < 30;
-    };
+    } select {
+		!(attachedTo _x isKindOf "Air")
+	} select {
+		!(ropeAttachedTo _x isKindOf "Air")
+	};
 
 	private _sortedEligibleList = [_eligibleNearbyVehicles, [_projectile], { _input0 distance _x }, "ASCEND"] call BIS_fnc_sortBy;
     if (!alive _projectile) then {

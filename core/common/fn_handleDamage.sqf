@@ -18,7 +18,7 @@ _asset addEventHandler ["HandleDamage", {
 	};
 
 	if (_selection == "") then {
-		if (_projectile == "ammo_Bomb_SDB") then {
+		if (_projectile == "ammo_Bomb_SDB" || _projectile == "ammo_Missile_HARM" || _projectile == "ammo_Missile_KH58") then {
 			private _instigator = [_source, _instigator] call WL2_fnc_handleInstigator;
 			private _unitSide = [_unit] call WL2_fnc_getAssetSide;
 			if (side group _instigator == _unitSide) then {

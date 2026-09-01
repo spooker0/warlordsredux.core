@@ -20,6 +20,11 @@ if (!isNull (missileTarget _projectile) || !alive _target || _lockPercent < 100)
     _projectile setVariable ["APS_ammoConsumptionOverride", 1];
 };
 
+private _attachedObject = attachedTo _target;
+if (!isNull _attachedObject) then {
+    _target = _attachedObject;
+};
+
 private _projectileOverride = _projectile getVariable ["APS_ammoOverride", typeof _projectile];
 if (!alive _target) exitWith {
     if (_projectileOverride != typeof _projectile) then {

@@ -135,6 +135,8 @@ private _vote = _activePoll # 2;
         private _optionIndex = _control getVariable ["POLL_Option", -1];
         [_optionIndex, player] remoteExec ["POLL_fnc_selectOption", 2];
 
+        missionNamespace setVariable ["POLL_playerVoted", true];
+
         private _activePoll = missionNamespace getVariable ["POLL_ActivePoll", []];
         _activePoll set [2, _optionIndex];
 

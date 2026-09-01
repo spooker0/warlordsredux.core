@@ -8,6 +8,7 @@ if (isNull _display) then {
     "killfeed" cutRsc ["RscWLKillfeedDisplay", "PLAIN", -1, true, true];
     _display = uiNamespace getVariable ["RscWLKillfeedDisplay", displayNull];
 };
+
 private _textControl = _display displayCtrl 8000;
 private _numbersControl = _display displayCtrl 8001;
 private _iconsControl = _display displayCtrl 8002;
@@ -17,21 +18,22 @@ private _badgeFrame = _display displayCtrl 8004;
 private _badgeTextControl = _display displayCtrl 8005;
 
 [_textControl, _numbersControl, _iconsControl, _totalControl] spawn {
-	params ["_textControl", "_numbersControl", "_iconsControl", "_totalControl"];
-	private _lastSettings = [];
-	while { !isNull _textControl } do {
-		private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
+    params ["_textControl", "_numbersControl", "_iconsControl", "_totalControl"];
+    private _lastSettings = [];
+    while { !isNull _textControl } do {
+        private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 
         private _killfeedLeft = _settingsMap getOrDefault ["killfeedLeft", 50];
         private _killfeedTop = _settingsMap getOrDefault ["killfeedTop", 95];
 
         private _currentSettings = [_killfeedLeft, _killfeedTop];
-		if (_lastSettings isEqualTo _currentSettings) then {
-			uiSleep 0.5;
-			continue;
-		};
 
-		_lastSettings = _currentSettings;
+        if (_lastSettings isEqualTo _currentSettings) then {
+            uiSleep 0.5;
+            continue;
+        };
+
+        _lastSettings = _currentSettings;
 
         private _killfeedWidth = 0.4;
         private _killfeedHeight = 0.2;
@@ -45,30 +47,38 @@ private _badgeTextControl = _display displayCtrl 8005;
         private _killfeedLeftControl = _killfeedLeft / 100 * safeZoneW + safeZoneX;
         private _killfeedTopControl = _killfeedTop / 100 * safeZoneH + safeZoneY;
 
-		_textControl ctrlSetPosition [
-			_killfeedLeftControl - (_killfeedWidth / 2),
-			_killfeedTopControl - _killfeedHeight,
-			_killfeedWidth, _killfeedHeight
-		];
-		_textControl ctrlCommit 0;
+        _textControl ctrlSetPosition [
+            _killfeedLeftControl - (_killfeedWidth / 2),
+            _killfeedTopControl - _killfeedHeight,
+            _killfeedWidth,
+            _killfeedHeight
+        ];
+        _textControl ctrlCommit 0;
 
         _numbersControl ctrlSetPosition [
             _killfeedLeftControl + (_killfeedWidth / 2),
             _killfeedTopControl - _killfeedHeight,
-            _killfeedNumberWidth, _killfeedHeight
+            _killfeedNumberWidth,
+            _killfeedHeight
         ];
         _numbersControl ctrlCommit 0;
 
         _iconsControl ctrlSetPosition [
             _killfeedLeftControl - (_killfeedIconWidth / 2),
             _killfeedTopControl - _killfeedHeight - _killfeedIconHeight,
-            _killfeedIconWidth, _killfeedIconHeight
+            _killfeedIconWidth,
+            _killfeedIconHeight
         ];
         _iconsControl ctrlCommit 0;
 
-        _totalControl ctrlSetPosition [0.5, 0.5 - (_killfeedTotalHeight / 2), _killfeedTotalWidth, _killfeedTotalHeight];
+        _totalControl ctrlSetPosition [
+            0.5,
+            0.5 - (_killfeedTotalHeight / 2),
+            _killfeedTotalWidth,
+            _killfeedTotalHeight
+        ];
         _totalControl ctrlCommit 0;
-	};
+    };
 };
 
 uiNamespace setVariable ["WL2_killfeedItems", []];
@@ -80,8 +90,6 @@ private _maxFeedTextLines = 5;
 
 private _fadeDuration = 1;
 private _stepDuration = 0.1;
-
-private _alphaSteps = ["08", "11", "22", "33", "44", "66", "88", "bb", "ff"];
 
 private _lastRevealedFeedTime = 0;
 private _lastFeedTextsShown = [];
@@ -99,23 +107,17 @@ private _currentBadge = [];
 private _badgeShownTime = 0;
 private _badgeFrameHiddenColor = [0, 0, 0, 0];
 
-private _fnc_applyAlpha = {
-    params ["_color", "_alpha"];
+private _killfeedFadeStarted = false;
+private _totalFadeStarted = false;
+private _badgeFadeStarted = false;
 
-    private _rgb = _color;
-
-    if (_rgb select [0, 1] == "#") then {
-        _rgb = _rgb select [1];
-    };
-
-    format ["#%1%2", _alpha, _rgb]
-};
+{
+    _x ctrlSetFade 0;
+    _x ctrlCommit 0;
+} forEach [_textControl, _numbersControl, _iconsControl, _totalControl, _badgeFrame, _badgeTextControl];
 
 private _fnc_formatKillfeedText = {
-    params ["_textLine", "_whiteColor", "_customColor", "_alpha", "_fnc_applyAlpha"];
-
-    private _whiteWithAlpha = [_whiteColor, _alpha] call _fnc_applyAlpha;
-    private _customWithAlpha = [_customColor, _alpha] call _fnc_applyAlpha;
+    params ["_textLine", "_whiteColor", "_customColor"];
 
     private _prefix = "";
     private _prefixLength = 0;
@@ -131,67 +133,11 @@ private _fnc_formatKillfeedText = {
     };
 
     if (_prefixLength == 0) exitWith {
-        format [
-            "<t color='%1'>%2</t>",
-            _whiteWithAlpha,
-            _textLine
-        ]
+        format ["<t color='%1'>%2</t>", _whiteColor, _textLine]
     };
 
     private _suffix = _textLine select [_prefixLength];
-
-    format [
-        "<t color='%1'>%2</t><t color='%3'>%4</t>",
-        _whiteWithAlpha,
-        _prefix,
-        _customWithAlpha,
-        _suffix
-    ]
-};
-
-private _fnc_capAlpha = {
-    params ["_baseAlpha", "_fadeAlpha", "_alphaSteps"];
-
-    private _baseIndex = _alphaSteps find _baseAlpha;
-    private _fadeIndex = _alphaSteps find _fadeAlpha;
-
-    if (_baseIndex == -1) then {
-        _baseIndex = (count _alphaSteps) - 1;
-    };
-
-    if (_fadeIndex == -1) then {
-        _fadeIndex = (count _alphaSteps) - 1;
-    };
-
-    _alphaSteps select (_baseIndex min _fadeIndex)
-};
-
-private _fnc_getFadeAlpha = {
-    params ["_timeSinceLastActivity", "_clearDelay", "_fadeDuration", "_alphaSteps"];
-
-    private _fullAlpha = _alphaSteps select ((count _alphaSteps) - 1);
-
-    if (_fadeDuration <= 0) exitWith {
-        _fullAlpha
-    };
-
-    if (_timeSinceLastActivity <= (_clearDelay - _fadeDuration)) exitWith {
-        _fullAlpha
-    };
-
-    private _fadeElapsed = _timeSinceLastActivity - (_clearDelay - _fadeDuration);
-    private _fadeProgress = (_fadeElapsed / _fadeDuration) max 0 min 1;
-
-    private _stepCount = count _alphaSteps;
-    private _fadeIndexFromHigh = floor (_fadeProgress * _stepCount);
-
-    if (_fadeIndexFromHigh >= _stepCount) then {
-        _fadeIndexFromHigh = _stepCount - 1;
-    };
-
-    private _alphaIndex = (_stepCount - 1) - _fadeIndexFromHigh;
-
-    _alphaSteps select _alphaIndex
+    format ["<t color='%1'>%2</t><t color='%3'>%4</t>", _whiteColor, _prefix, _customColor, _suffix]
 };
 
 while { !BIS_WL_missionEnd } do {
@@ -207,6 +153,12 @@ while { !BIS_WL_missionEnd } do {
 
         _lastRevealedFeedTime = _now;
 
+        {
+            _x ctrlSetFade 0;
+            _x ctrlCommit 0;
+        } forEach [_textControl, _numbersControl, _iconsControl];
+        _killfeedFadeStarted = false;
+
         _newItem params ["_newIconPath", "_newFeedText", "_newFeedPoints", "_newFeedColor"];
 
         if (_newIconPath != "") then {
@@ -220,6 +172,12 @@ while { !BIS_WL_missionEnd } do {
         if (_newFeedText != "") then {
             _feedTotalPoints = _feedTotalPoints + _newFeedPoints;
             _lastTotalPointsTime = _now;
+
+            _totalControl ctrlSetFade 0;
+            _totalControl ctrlCommit 0;
+
+            _totalFadeStarted = false;
+
             if (_newFeedColor == WL_COLOR_KILL) then {
                 _feedTotalColor = WL_COLOR_KILL;
             };
@@ -229,24 +187,14 @@ while { !BIS_WL_missionEnd } do {
             };
 
             if (_existingIndex == -1) then {
-                _feedTextRowsMemory insert [0, [[
-                    _newFeedText,
-                    1,
-                    _newFeedPoints,
-                    _newFeedColor
-                ]]];
+                _feedTextRowsMemory insert [0, [[_newFeedText, 1, _newFeedPoints, _newFeedColor]]];
             } else {
                 private _existing = _feedTextRowsMemory deleteAt _existingIndex;
 
                 private _oldCount = _existing param [1, 1];
                 private _oldPoints = _existing param [2, 0];
 
-                _feedTextRowsMemory insert [0, [[
-                    _newFeedText,
-                    _oldCount + 1,
-                    _oldPoints + _newFeedPoints,
-                    _newFeedColor
-                ]]];
+                _feedTextRowsMemory insert [0, [[_newFeedText, _oldCount + 1, _oldPoints + _newFeedPoints, _newFeedColor]]];
             };
         };
     };
@@ -256,17 +204,18 @@ while { !BIS_WL_missionEnd } do {
     private _lastInputTime = uiNamespace getVariable ["WL2_killfeedLastInputTime", 0];
     private _lastActivityTime = _lastInputTime max _lastRevealedFeedTime;
 
-    private _fadeAlpha = _alphaSteps select ((count _alphaSteps) - 1);
-
     if (_lastActivityTime > 0) then {
         private _timeSinceLastActivity = _now - _lastActivityTime;
+        private _fadeStartTime = (_clearDelay - _fadeDuration) max 0;
 
-        _fadeAlpha = [
-            _timeSinceLastActivity,
-            _clearDelay,
-            _fadeDuration,
-            _alphaSteps
-        ] call _fnc_getFadeAlpha;
+        if (!_hasPendingItems && !_killfeedFadeStarted && _timeSinceLastActivity >= _fadeStartTime) then {
+            {
+                _x ctrlSetFade 1;
+                _x ctrlCommit _fadeDuration;
+            } forEach [_textControl, _numbersControl, _iconsControl];
+
+            _killfeedFadeStarted = true;
+        };
     };
 
     if (!_hasPendingItems && _lastActivityTime > 0 && _now - _lastActivityTime > _clearDelay) then {
@@ -280,7 +229,7 @@ while { !BIS_WL_missionEnd } do {
         _lastTotalPointsTime = 0;
         _feedTotalColor = WL_COLOR_SUPPORT;
 
-        _fadeAlpha = _alphaSteps select ((count _alphaSteps) - 1);
+        _killfeedFadeStarted = false;
     };
 
     private _iconImages = "";
@@ -288,33 +237,11 @@ while { !BIS_WL_missionEnd } do {
     {
         _x params ["_iconPath", "_iconColor"];
 
-        private _iconAlpha = "ff";
-
-        if (count _iconRowsMemory == _maxIcons && _forEachIndex == 0) then {
-            _iconAlpha = "44";
-        };
-
-        _iconAlpha = [_iconAlpha, _fadeAlpha, _alphaSteps] call _fnc_capAlpha;
-
-        private _iconColorWithAlpha = [_iconColor, _iconAlpha] call _fnc_applyAlpha;
-
-        _iconImages = format [
-            "%1 <img color='%2' image='%3'/>",
-            _iconImages,
-            _iconColorWithAlpha,
-            _iconPath
-        ];
+        _iconImages = format ["%1 <img color='%2' image='%3'/>", _iconImages, _iconColor, _iconPath];
     } forEach _iconRowsMemory;
+    _iconsControl ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", _iconImages];
 
-    _iconsControl ctrlSetStructuredText parseText format [
-        "<t shadow='2'>%1</t>",
-        _iconImages
-    ];
-
-    private _feedTextRowsToShow = _feedTextRowsMemory select [
-        0,
-        (_maxFeedTextLines min count _feedTextRowsMemory)
-    ];
+    private _feedTextRowsToShow = _feedTextRowsMemory select [0, _maxFeedTextLines min count _feedTextRowsMemory];
 
     if (_lastFeedTextsShown isNotEqualTo _feedTextRowsToShow) then {
         private _killfeedNotificationVolume = _settingsMap getOrDefault ["killfeedNotification", 1.0];
@@ -333,19 +260,8 @@ while { !BIS_WL_missionEnd } do {
         private _textLine = _text;
         private _pointsLine = format ["+%1", _points];
 
-        private _lineAlpha = "ff";
-
-        if (_forEachIndex == _maxFeedTextLines - 1) then {
-            _lineAlpha = "44";
-        };
-
-        _lineAlpha = [_lineAlpha, _fadeAlpha, _alphaSteps] call _fnc_capAlpha;
-
-        private _countColor = [_whiteColor, _lineAlpha] call _fnc_applyAlpha;
-        private _pointsColor = [_numberColor, _lineAlpha] call _fnc_applyAlpha;
-
         if (_count > 1) then {
-            _textLine = format ["%1 <t size='0.8' align='right' color='%2'>x%3</t>", _textLine, _countColor, _count];
+            _textLine = format ["%1 <t size='0.8' align='right' color='%2'>x%3</t>", _textLine, _whiteColor, _count];
         };
 
         if (_forEachIndex > 0) then {
@@ -353,31 +269,13 @@ while { !BIS_WL_missionEnd } do {
             _numbersStructured = _numbersStructured + "<br/>";
         };
 
-        private _formattedText = [
-            _textLine,
-            _whiteColor,
-            _numberColor,
-            _lineAlpha,
-            _fnc_applyAlpha
-        ] call _fnc_formatKillfeedText;
+        private _formattedText = [_textLine, _whiteColor, _numberColor] call _fnc_formatKillfeedText;
         _feedTextStructured = _feedTextStructured + _formattedText;
-
-        _numbersStructured = _numbersStructured + format [
-            "<t color='%1'>%2</t>",
-            _pointsColor,
-            _pointsLine
-        ];
+        _numbersStructured = _numbersStructured + format ["<t color='%1'>%2</t>", _numberColor, _pointsLine];
     } forEach _feedTextRowsToShow;
 
-    _textControl ctrlSetStructuredText parseText format [
-        "<t shadow='2'>%1</t>",
-        _feedTextStructured
-    ];
-
-    _numbersControl ctrlSetStructuredText parseText format [
-        "<t shadow='2'>%1</t>",
-        _numbersStructured
-    ];
+    _textControl ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", _feedTextStructured];
+    _numbersControl ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", _numbersStructured];
 
     private _totalStructured = "";
 
@@ -385,28 +283,20 @@ while { !BIS_WL_missionEnd } do {
         private _timeSinceTotalPoints = _now - _lastTotalPointsTime;
 
         if (_timeSinceTotalPoints <= _totalDisplayDelay) then {
-            private _totalFadeAlpha = [
-                _timeSinceTotalPoints,
-                _totalDisplayDelay,
-                _fadeDuration,
-                _alphaSteps
-            ] call _fnc_getFadeAlpha;
+            private _totalFadeStartTime = (_totalDisplayDelay - _fadeDuration) max 0;
 
-            private _totalColor = [_feedTotalColor, _totalFadeAlpha] call _fnc_applyAlpha;
+            if (!_totalFadeStarted && _timeSinceTotalPoints >= _totalFadeStartTime) then {
+                _totalControl ctrlSetFade 1;
+                _totalControl ctrlCommit _fadeDuration;
 
-            _totalStructured = format [
-                "<t color='%1'>%2%3</t>",
-                _totalColor,
-                WL_MONEY_SIGN,
-                (_feedTotalPoints call BIS_fnc_numberText) regexReplace [" ", ","]
-            ];
+                _totalFadeStarted = true;
+            };
+
+            _totalStructured = format ["<t color='%1'>%2%3</t>", _feedTotalColor, WL_MONEY_SIGN, (_feedTotalPoints call BIS_fnc_numberText) regexReplace [" ", ","]];
         };
     };
 
-    _totalControl ctrlSetStructuredText parseText format [
-        "<t shadow='2'>%1</t>",
-        _totalStructured
-    ];
+    _totalControl ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", _totalStructured];
 
     private _badgeItems = uiNamespace getVariable ["WL2_badgeItems", []];
 
@@ -414,37 +304,75 @@ while { !BIS_WL_missionEnd } do {
         _currentBadge = _badgeItems deleteAt 0;
         _badgeShownTime = _now;
 
+        _badgeFrame ctrlSetFade 0;
+        _badgeFrame ctrlCommit 0;
+
+        _badgeTextControl ctrlSetFade 0;
+        _badgeTextControl ctrlCommit 0;
+
+        _badgeFadeStarted = false;
+
         private _badgeLevel = _currentBadge # 3;
 
         if (_badgeLevel == 3) then {
             private _killfeedCelebrationVolume = _settingsMap getOrDefault ["killfeedCelebration", 1.0];
-			playSoundUI ["a3\missions_f_exp\data\sounds\exp_m05_dramatic.wss", _killfeedCelebrationVolume * 5];
-		} else {
+            playSoundUI ["a3\missions_f_exp\data\sounds\exp_m05_dramatic.wss", _killfeedCelebrationVolume * 5];
+        } else {
             private _killfeedNotificationVolume = _settingsMap getOrDefault ["killfeedNotification", 1.0];
-			private _pitch = 0.5 + (random 0.5);
-			private _sound = [
-				"a3\sounds_f_orange\missionsfx\orange_destroy_01.wss",
-				"a3\sounds_f_orange\missionsfx\orange_destroy_02.wss",
-				"a3\sounds_f_orange\missionsfx\orange_destroy_03.wss"
-			];
-			playSoundUI [selectRandom _sound, _killfeedNotificationVolume, _pitch];
-		};
+            private _pitch = 0.5 + (random 0.5);
+
+            private _sound = [
+                "a3\sounds_f_orange\missionsfx\orange_destroy_01.wss",
+                "a3\sounds_f_orange\missionsfx\orange_destroy_02.wss",
+                "a3\sounds_f_orange\missionsfx\orange_destroy_03.wss"
+            ];
+
+            playSoundUI [selectRandom _sound, _killfeedNotificationVolume, _pitch];
+        };
+    };
+
+    if (count _currentBadge > 0) then {
+        private _badgeElapsed = _now - _badgeShownTime;
+
+        private _badgeFadeStartTime = (
+            _badgeDismissDelay - _fadeDuration
+        ) max 0;
+
+        if (!_badgeFadeStarted && _badgeElapsed >= _badgeFadeStartTime) then {
+            _badgeFrame ctrlSetFade 1;
+            _badgeFrame ctrlCommit _fadeDuration;
+
+            _badgeTextControl ctrlSetFade 1;
+            _badgeTextControl ctrlCommit _fadeDuration;
+
+            _badgeFadeStarted = true;
+        };
     };
 
     if (count _currentBadge > 0 && _now - _badgeShownTime > _badgeDismissDelay) then {
         _currentBadge = [];
         _badgeShownTime = 0;
+        _badgeFadeStarted = false;
     };
 
     if (count _currentBadge > 0) then {
         _currentBadge params ["_badgeName", "_badgeDescription", "_badgeIcon", "_badgeLevel"];
 
         private _badgeFrameColor = switch (_badgeLevel) do {
-            case 1: { [0.45, 0.62, 0.80, 0.9] };
-            case 2: { [0.80, 0.45, 0.45, 0.9] };
-            case 3: { [1, 0.85, 0, 0.9] };
-            default { [0, 0, 0, 0] };
+            case 1: {
+                [0.45, 0.62, 0.80, 1]
+            };
+            case 2: {
+                [0.80, 0.45, 0.45, 1]
+            };
+            case 3: {
+                [1, 0.85, 0, 1]
+            };
+            default {
+                [0, 0, 0, 0]
+            };
         };
+
         _badgeFrame ctrlSetBackgroundColor _badgeFrameColor;
 
         private _badgeStructured = format [
