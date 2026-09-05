@@ -4,7 +4,7 @@ params ["_asset"];
 if (isDedicated) exitWith {};
 waitUntil {
     uiSleep 1;
-    !isNil "BIS_WL_allSectors";
+    !isNil "BIS_WL_allSectors" && !isNil "BIS_WL_playerSide";
 };
 
 private _drawRestrictionId = addMissionEventHandler ["Draw3D", {

@@ -32,6 +32,11 @@ if (_playerName != _filteredText) exitWith {
 };
 
 WL_LoadingState = 1;
+showScoretable 0;
+
+addMissionEventHandler ["HandleChatMessage", {
+	_this call WL2_fnc_handleChatMessages;	// intentional
+}];
 
 private _sidePickerState = civilian;
 waitUntil {
@@ -352,7 +357,6 @@ uiNamespace setVariable ["WL2_damageSource", objNull];
 uiNamespace setVariable ["WL2_damagedWeapon", nil];
 uiNamespace setVariable ["WL2_surrenderWarningActive", false];
 
-showScoretable 0;
 "deathInfo" cutFadeOut 0;
 "missileCamera" cutFadeOut 0;
 

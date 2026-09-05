@@ -2,7 +2,7 @@
 params ["_target"];
 
 // start demolish
-[[0, 10, 5]] call WL2_fnc_actionLockCamera;
+private _camera = [[0, 10, 5]] call WL2_fnc_actionLockCamera;
 
 private _playerPosition = player modelToWorld [0, 0, 0];
 private _soundSource = createSoundSource ["WLDemolitionSound", _playerPosition, [], 0];
@@ -62,3 +62,4 @@ deleteVehicle _soundSource;
 [player, [""]] remoteExec ["switchMove", 0];
 
 cameraOn cameraEffect ["Terminate", "BACK"];
+camDestroy _camera;

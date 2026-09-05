@@ -13,6 +13,11 @@ private _unitsPool = [];
 while { !BIS_WL_missionEnd } do {
 	uiSleep 10;
 
+    private _targetedSectors = [
+		missionNamespace getVariable ["BIS_WL_currentTarget_west", objNull],
+		missionNamespace getVariable ["BIS_WL_currentTarget_east", objNull]
+	] select { !isNull _x };
+
     private _addedUnits = [];
 	{
         private _sector = _x;
@@ -118,7 +123,7 @@ while { !BIS_WL_missionEnd } do {
         if (_newSectorPop != _sectorPop) then {
             _sector setVariable ["WL2_sectorPop", _newSectorPop, true];
         };
-	} forEach BIS_WL_allSectors;
+	} forEach _targetedSectors;
 
     private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
     _ownedVehicles append _addedUnits;

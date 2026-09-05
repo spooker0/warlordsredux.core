@@ -10,7 +10,7 @@ private _actionId = _freshTent addAction [
             [player, [_animation]] remoteExec ["switchMove", 0];
 
             private _validHitPoints = _arguments select 0;
-            [[0, -3, 1]] call WL2_fnc_actionLockCamera;
+            private _camera = [[0, -3, 1]] call WL2_fnc_actionLockCamera;
 
             private _deployTime = 10;
             private _playerPosition = player modelToWorld [0, 0, 0];
@@ -46,6 +46,7 @@ private _actionId = _freshTent addAction [
             ["Animation"] spawn WL2_fnc_showHint;
 
             cameraOn cameraEffect ["Terminate", "BACK"];
+            camDestroy _camera;
             [player, [""]] remoteExec ["switchMove", 0];
 
             deleteVehicle _soundSource;

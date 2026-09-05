@@ -14,6 +14,8 @@ private _projectileAPSTypeMap = createHashMap;
     _projectileAPSTypeMap set [_x, true];
 } forEach _projectileAPSTypes;
 
+if (count _projectileAPSTypes == 0) exitWith {};
+
 private _projectileAPSConsumption = _apsProjectileConfig getOrDefault ["consumption", 1];
 
 private _radius = sqrt _maxDistSqr;
@@ -86,15 +88,6 @@ private _interception = {
 };
 
 while { alive _projectile } do {
-	if (_projectile getVariable ["WL2_jamDestroy", false]) then {
-		deleteVehicle _projectile;
-	};
-
-    if (count _projectileAPSTypes == 0) then {
-        uiSleep 0.001;
-        continue;
-    };
-
 	private _currentPos = getPosWorld _projectile;
 	private _displacement = _currentPos distance _previousPos;
 	if (_displacement > _maxAllowedDisplacement) then {

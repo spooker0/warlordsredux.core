@@ -221,6 +221,42 @@ class RscWLSidePicker {
 	};
 };
 
+class RscWLGulag {
+	idd = -1;
+	movingEnable = false;
+	class controlsBackground {
+		class RscWLGulag_Background: RscText {
+			idc = -1;
+			x = safeZoneX;
+			y = safeZoneY;
+			w = safeZoneW;
+			h = safeZoneH;
+			colorBackground[] = {0, 0, 0, 1};
+		};
+	};
+	class controls {
+		class RscDummyButton: RscShortcutButton {
+			idc = -1;
+			x = safeZoneX;
+			y = safeZoneY;
+			w = 0;
+			h = 0;
+		};
+		class RscWLGulag_BackgroundText: RscText {
+			idc = 100;
+			x = 0;
+			y = 0;
+			w = 1;
+			h = 1;
+			font = "PuristaBold";
+			style = ST_CENTER + ST_MULTI;
+			shadow = 0;
+			linespacing = 1;
+			sizeEx = 0.02 * safeZoneW;
+		};
+	};
+};
+
 class WL_MapButtonDisplay {
 	idd = -1;
 	movingEnable = false;

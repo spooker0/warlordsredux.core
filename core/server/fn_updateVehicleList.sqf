@@ -40,6 +40,7 @@ while { !BIS_WL_missionEnd } do {
     _serverVehicles = _serverVehicles select { alive _x } select {
         [_x] call WL2_fnc_getAssetSide == independent;
     };
+    missionNamespace setVariable ["BIS_WL_ownedVehicles_server", _serverVehicles];
     _guerOwnedVehicles append _serverVehicles;
 
     private _originalWestOwnedVehicles = missionNamespace getVariable ["BIS_WL_westOwnedVehicles", [objNull]];

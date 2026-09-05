@@ -47,7 +47,7 @@ while { WL_ISDBNO(_unit) } do {
     setPlayerRespawnTime ((WL_DURATION_RESPAWN * _controlledMod - _downTime) max 1);
 
     private _expirationTime = _unit getVariable ["WL2_expirationTime", serverTime + WL_DURATION_RESPAWN * _controlledMod];
-    if (serverTime > _expirationTime) then {
+    if (serverTime > _expirationTime && !BIS_WL_missionEnd) then {
         forceRespawn _unit;
         break;
     };

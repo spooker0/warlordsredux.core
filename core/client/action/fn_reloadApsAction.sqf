@@ -3,7 +3,7 @@ params ["_asset", "_caller", "_actionId", "_arguments"];
 private _animation = "Acts_TerminalOpen";
 [player, [_animation]] remoteExec ["switchMove", 0];
 
-[[0, -3, 1]] call WL2_fnc_actionLockCamera;
+private _camera = [[0, -3, 1]] call WL2_fnc_actionLockCamera;
 
 ["Animation", ["REPAIR", [
     ["Cancel", "Action"],
@@ -45,4 +45,5 @@ if (_actionSuccess) then {
 };
 
 cameraOn cameraEffect ["Terminate", "BACK"];
+camDestroy _camera;
 [player, [""]] remoteExec ["switchMove", 0];

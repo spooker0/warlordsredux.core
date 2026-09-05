@@ -36,6 +36,7 @@ while { !BIS_WL_missionEnd } do {
 	{
 		deleteVehicle _x;
 	} forEach _markedForDeletion;
+	_markedForDeletion = [];
 
 	private _collectables = (allMissionObjects "") select {
 		[_x] call _shouldGarbageCollect;

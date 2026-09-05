@@ -27,7 +27,7 @@ private _reviveActionId = player addAction [
                 "Acts_Executioner_Forehand"
             };
 
-            [[0, 8, 2]] call WL2_fnc_actionLockCamera;
+            private _camera = [[0, 8, 2]] call WL2_fnc_actionLockCamera;
 
             ["Animation", [_displayText, [
                 ["Cancel", "Action"],
@@ -103,6 +103,7 @@ private _reviveActionId = player addAction [
             player setVariable ["WL2_reviveTarget", objNull];
             [player, [""]] remoteExec ["switchMove", 0];
             cameraOn cameraEffect ["Terminate", "BACK"];
+            camDestroy _camera;
         };
     },
     [],

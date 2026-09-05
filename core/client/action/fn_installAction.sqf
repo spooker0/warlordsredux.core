@@ -23,7 +23,7 @@ private _installActionId = player addAction [
                 private _animation = "Acts_TerminalOpen";
                 [player, [_animation]] remoteExec ["switchMove", 0];
 
-                [[0, -3, 1]] call WL2_fnc_actionLockCamera;
+                private _camera = [[0, -3, 1]] call WL2_fnc_actionLockCamera;
 
                 private _deployTime = 3;
                 private _playerPosition = player modelToWorld [0, 0, 0];
@@ -59,6 +59,7 @@ private _installActionId = player addAction [
                 ["Animation"] spawn WL2_fnc_showHint;
 
                 cameraOn cameraEffect ["Terminate", "BACK"];
+                camDestroy _camera;
                 [player, [""]] remoteExec ["switchMove", 0];
 
                 deleteVehicle _soundSource;

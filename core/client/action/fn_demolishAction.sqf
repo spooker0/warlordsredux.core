@@ -29,7 +29,7 @@ private _demolishActionId = player addAction [
                 [0, 10, 5]
             };
 
-            [_cameraPlayerModelSpace] call WL2_fnc_actionLockCamera;
+            private _camera = [_cameraPlayerModelSpace] call WL2_fnc_actionLockCamera;
 
             private _playerPosition = player modelToWorld [0, 0, 0];
             private _soundSource = createSoundSource ["WLDemolitionSound", _playerPosition, [], 0];
@@ -114,6 +114,7 @@ private _demolishActionId = player addAction [
             [player, [""]] remoteExec ["switchMove", 0];
 
             cameraOn cameraEffect ["Terminate", "BACK"];
+            camDestroy _camera;
         };
     },
     [],

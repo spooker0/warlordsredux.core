@@ -157,7 +157,7 @@ private _refreshConfig = [
     [SQD_fnc_renderVehicles, 0.2, 0]
 ];
 
-while { !isNull _display } do {
+while { !isNull _display && !BIS_WL_missionEnd } do {
     {
         _x params ["_refreshFunction", "_interval", "_lastCall"];
         if (time > _lastCall + _interval) then {

@@ -55,6 +55,7 @@ private _flightMode = if (_projectileIsShell) then {
 };
 [_projectile, _flightMode] call DIS_fnc_controlMunition;
 
+camDestroy _camera;
 player setVariable ["WL_hmdOverride", -1];
 removeMissionEventHandler ["Draw3D", _waypointDrawer];
 switchCamera player;

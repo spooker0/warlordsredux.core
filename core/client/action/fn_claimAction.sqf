@@ -9,7 +9,7 @@ _asset addAction [
             private _animation = "Acts_TerminalOpen";
             [player, [_animation]] remoteExec ["switchMove", 0];
 
-            [[0, -3, 1]] call WL2_fnc_actionLockCamera;
+            private _camera = [[0, -3, 1]] call WL2_fnc_actionLockCamera;
 
             ["Animation", ["CLAIM", [
                 ["Cancel", "Action"],
@@ -79,6 +79,7 @@ _asset addAction [
             cameraOn cameraEffect ["Terminate", "BACK"];
             [player, [""]] remoteExec ["switchMove", 0];
 			deleteVehicle _soundSource;
+            camDestroy _camera;
         };
 	},
     [],

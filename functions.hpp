@@ -200,6 +200,7 @@ class CfgFunctions {
 			class earthquake { headerType = WL_HEADER_LEVEL; };
 			class exitToLobby { headerType = WL_HEADER_LEVEL; };
 			class factionBasedClientInit { headerType = WL_HEADER_LEVEL; };
+			class gulag { headerType = WL_HEADER_LEVEL; };
 			class handleAIDamage { headerType = WL_HEADER_LEVEL; };
 			class handleAIDown { headerType = WL_HEADER_LEVEL; };
 			class handleBuyMenuKeypress { headerType = WL_HEADER_LEVEL; };
@@ -503,6 +504,7 @@ class CfgFunctions {
 			class getMoneySign { headerType = WL_HEADER_LEVEL; };
 			class getVehicleWeapons { headerType = WL_HEADER_LEVEL; };
 			class grieferCheck { headerType = WL_HEADER_LEVEL; };
+			class guidToBeid { headerType = WL_HEADER_LEVEL; };
 			class handleDamage { headerType = WL_HEADER_LEVEL; };
 			class handleInstigator { headerType = WL_HEADER_LEVEL; };
 			class inAngleCheck { headerType = WL_HEADER_LEVEL; };

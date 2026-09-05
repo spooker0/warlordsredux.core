@@ -46,7 +46,7 @@ _projectile setVectorDirAndUp [vectorDir _projectile, _initialVectorUp];
 
 if (_overrideRange > 0) then {
     private _altitude = getPosASL _projectile select 2;
-    while { _altitude < (_overrideRange / 6) } do {
+    while { _altitude < (_overrideRange / 6) && alive _projectile } do {
         _altitude = getPosASL _projectile select 2;
         [_projectile, 90, 0] call BIS_fnc_setPitchBank;
         _projectile setVelocityModelSpace [0, 500, 0];

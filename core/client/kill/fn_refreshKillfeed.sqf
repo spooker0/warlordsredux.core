@@ -140,7 +140,7 @@ private _fnc_formatKillfeedText = {
     format ["<t color='%1'>%2</t><t color='%3'>%4</t>", _whiteColor, _prefix, _customColor, _suffix]
 };
 
-while { !BIS_WL_missionEnd } do {
+while { true } do {
     private _totalDisplayDelay = _settingsMap getOrDefault ["killfeedTotalTimeout", 3];
     private _clearDelay = _settingsMap getOrDefault ["killfeedTimeout", 10];
     private _badgeDismissDelay = _settingsMap getOrDefault ["ribbonMinShowTime", 5];

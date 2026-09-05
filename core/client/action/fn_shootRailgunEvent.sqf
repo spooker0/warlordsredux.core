@@ -8,13 +8,11 @@ _asset addEventHandler ["Fired", {
         if !(local _asset) exitWith {};
         if (_weapon != "cannon_railgun_fake") exitWith {};
 
-        private _existingPfHId = "bis_pfh_railgun_" + (str _asset);
-        private _timeWaitStart = time;
-        waitUntil {
-            uiSleep 0.001;
-            [_existingPfHId, "onEachFrame"] call BIS_fnc_removeStackedEventHandler ||
-            time - _timeWaitStart < 5;
-        };
+        private _efHandler = missionNamespace getVariable [format ["BIS_stackedEventHandlers_%1", "OnEachFrame"], []];
+        {
+            _x params ["_eventId", "_eventHandlerId"];
+            [_eventId, "onEachFrame"] call BIS_fnc_removeStackedEventHandler;
+        } forEach _efHandler;
 
         private _isAlreadyFiring = _asset getVariable ["WL2_railgunFiring", false];
         if (_isAlreadyFiring) exitWith {};

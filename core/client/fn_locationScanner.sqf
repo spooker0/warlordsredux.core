@@ -146,24 +146,16 @@ uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
         private _demolishIcons = [];
         {
             private _maxHealth = _x getVariable ["WL2_demolitionMaxHealth", 5];
-            _demolishIcons pushBack [
-                "\A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missileAlt_ca.paa",
-                [1, 1, 0, 1],
-                [_x, 0.5],
-                1.4,
-                1.4,
-                0,
-                format [
-                    "%1/%2",
-                    _x getVariable ["WL2_demolitionHealth", _maxHealth],
-                    _maxHealth
-                ],
-                true,
-                0.07,
-                "RobotoCondensedBold",
-                "center",
-                true
+            private _health = _x getVariable ["WL2_demolitionHealth", _maxHealth];
+            private _demolitionHealthPercent = _health / _maxHealth;
+            private _demolishIcon = createHashMapFromArray [
+                ["@texture", ""],
+                ["@progress", [0.005, 0.04, -0.01, 0, [1, 0, 0, 1], [1, 1, 1, 1]]],
+                ["@progressValue", _demolitionHealthPercent],
+                ["@texts", [[str _health, 0.04, 0, 0, [1, 0, 0, 1], true]]],
+                ["@position", [_x, 3]]
             ];
+            _demolishIcons pushBack _demolishIcon;
         } forEach _nearbyDamagedItems;
 
         uiNamespace setVariable ["WL2_damagedDrawIcons", _demolishIcons];
@@ -431,6 +423,10 @@ addMissionEventHandler ["Draw3D", {
     // };
 
     private _drawIcons = uiNamespace getVariable ["WL2_damagedDrawIcons", []];
+    {
+        drawIcon3D _x;
+    } forEach _drawIcons;
+
     private _playerIcons = uiNamespace getVariable ["WL2_drawPlayerIcons", []];
     {
         private _icon = +_x;
@@ -446,7 +442,7 @@ addMissionEventHandler ["Draw3D", {
         private _position = _target modelToWorldVisual _offset;
         _icon set [2, _position];
         drawIcon3D _icon;
-    } forEach (_drawIcons + _playerIcons);
+    } forEach _playerIcons;
 
     private _commIcons = uiNamespace getVariable ["WL2_drawCommIcons", []];
     {

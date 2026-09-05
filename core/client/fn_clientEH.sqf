@@ -1,10 +1,6 @@
 #include "includes.inc"
 call WL2_fnc_playerEventHandlers;
 
-addMissionEventHandler ["HandleChatMessage", {
-	_this call WL2_fnc_handleChatMessages;	// intentional
-}];
-
 0 spawn {
 	waituntil {uiSleep 0.1; !isnull (findDisplay 46)};
 	private _display = findDisplay 46;

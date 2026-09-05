@@ -55,7 +55,7 @@ _asset addAction [
             [player, [_animation]] remoteExec ["switchMove", 0];
 
             private _validHitPoints = _arguments select 0;
-            [[0, -3, 1]] call WL2_fnc_actionLockCamera;
+            private _camera = [[0, -3, 1]] call WL2_fnc_actionLockCamera;
 
             ["Animation", ["REPAIR", [
                 ["Cancel", "Action"],
@@ -67,6 +67,10 @@ _asset addAction [
             private _timeToRemove = serverTime + 5;
             private _timeToRepair = serverTime + 10;
             private _timeToStop = serverTime + 11;
+
+            private _removed = false;
+            private _repaired = false;
+
             while { _timeToStop > serverTime } do {
                 if (WL_ISDOWN(player)) then {
                     break;
@@ -80,15 +84,16 @@ _asset addAction [
                     _startCheckingUnhold = true;
                 };
 
-                if (_timeToRemove <= serverTime) then {
+                if (_timeToRemove <= serverTime && !_removed) then {
                     {
                         if (_asset getHitPointDamage _x != 0) then {
                             _asset setHitPointDamage [_x, 1];
                         };
                     } forEach _validHitPoints;
+                    _removed = true;
                 };
 
-                if (_timeToRepair <= serverTime) then {
+                if (_timeToRepair <= serverTime && !_repaired) then {
                     {
                         _asset setHitPointDamage [_x, 0];
                     } forEach _validHitPoints;
@@ -96,6 +101,7 @@ _asset addAction [
                     if (fuel _asset < 0.1) then {
                         _asset setFuel 0.1;
                     };
+                    _repaired = true;
                 };
 
                 if (_timeToStop <= serverTime) then {
@@ -108,6 +114,7 @@ _asset addAction [
             ["Animation"] spawn WL2_fnc_showHint;
 
             cameraOn cameraEffect ["Terminate", "BACK"];
+            camDestroy _camera;
             [player, [""]] remoteExec ["switchMove", 0];
         };
 	},

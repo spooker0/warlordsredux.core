@@ -5,6 +5,10 @@ if (!alive _target) exitWith {
     "Destroyed.";
 };
 
+if (!_finalCheck && _caller distance _target > 10) exitWith {
+    "You are too far away.";
+};
+
 if (!isNull attachedTo _target || !isNull ropeAttachedTo _target) exitWith {
     "Cannot be used while attached to another object.";
 };
@@ -53,9 +57,14 @@ if (!_isSquadLeader) exitWith {
     "You need to be a squad leader to set up a forward base.";
 };
 
-private _isQualifyingSL = ["isSquadLeaderOfSize", [getPlayerID _caller, 3]] call SQD_fnc_query;
+private _playerRating = _caller getVariable ["WL2_playerRating", WL_RATING_STARTER];
+private _isQualifyingSL = if (_playerRating >= 2000) then {
+    true
+} else {
+    ["isSquadLeaderOfSize", [getPlayerID _caller, 3]] call SQD_fnc_query;
+};
 if (!_isQualifyingSL) exitWith {
-    "You need at least 3 squad members to set up a forward base.";
+    "You need at least 3 squad members or 2,000 ELO to set up a forward base.";
 };
 #endif
 
@@ -146,10 +155,6 @@ private _nearbyTeamForwardBases = _teamForwardBases select {
 };
 if (count _nearbyTeamForwardBases > 0) exitWith {
     format ["Forward base must be deployed at least %1 M away from other forward bases.", WL_FOB_MIN_DISTANCE];
-};
-
-if (!_finalCheck && _caller distance _target > 10) exitWith {
-    "You are too far away.";
 };
 
 "";

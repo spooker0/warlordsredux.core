@@ -45,7 +45,9 @@ if (_projectile isKindOf "SubmunitionBase") then {
 private _targetDrawer = addMissionEventHandler ["Draw3D", {
     private _projectileNetId = _thisArgs select 0;
     private _projectile = objectFromNetId _projectileNetId;
-    if (isNull _projectile) exitWith {};
+    if (isNull _projectile) exitWith {
+        removeMissionEventHandler ["Draw3D", _thisEventHandler];
+    };
 
     private _targetPosATL = (missileTarget _projectile) modelToWorld [0, 0, 0];
     if (_targetPosATL isEqualTo [0, 0, 0]) exitWith {};
@@ -126,6 +128,7 @@ private _targetDrawer = addMissionEventHandler ["Draw3D", {
             _changed = false;
             missionNamespace setVariable ["DIS_missileCameraOpticsMode", _opticsMode];
         };
+        uiSleep 0.001;
     };
 };
 

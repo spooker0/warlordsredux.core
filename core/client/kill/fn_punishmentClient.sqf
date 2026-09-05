@@ -18,7 +18,14 @@ private _timeRemaining = [(_punishEndTime - serverTime) max 0, "HH:MM:SS"] call 
 
 ["main"] call BIS_fnc_endLoadingScreen;
 
-private _penaltyText = format ["You are blocked from rejoining the game for %1. To see rules or report mod abuse, visit <a href='https://discord.gg/grmzsZE4ua'>the WSV Discord.</a>", _timeRemaining];
-"BlockScreen" setDebriefingText ["Punished", _penaltyText, format ["Reason: %1", _punishReason]];
-endMission "BlockScreen";
-forceEnd;
+if ("kick" in _punishReason || "cheat" in _punishReason) exitWith {
+    private _penaltyText = format [
+        "You are blocked from rejoining the game for %1. To see rules or report mod abuse, visit <a href='https://discord.gg/grmzsZE4ua'>the WSV Discord.</a>",
+        _timeRemaining
+    ];
+    "BlockScreen" setDebriefingText ["Punished", _penaltyText, format ["Reason: %1", _punishReason]];
+    endMission "BlockScreen";
+    forceEnd;
+};
+
+[_punishEndTime, _punishReason] spawn WL2_fnc_gulag;

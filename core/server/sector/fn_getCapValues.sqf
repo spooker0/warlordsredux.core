@@ -4,14 +4,10 @@ params ["_sector"];
 private _ownerSide = _sector getVariable ["BIS_WL_owner", independent];
 private _sideArr = [west, east, independent];
 
-private _cacheTimers = missionNamespace getVariable ["WL2_capValuesCacheTimers", createHashMap];
-private _useCache = _cacheTimers getOrDefault [getObjectId _sector, 0] > serverTime;
+private _useCache = _sector getVariable ["WL2_capValuesCacheTimer", 0] > serverTime;
 
 private _sideCaptureModifier = if (_useCache) then {
-	_cacheTimers set [getObjectId _sector, serverTime + 5];
-	missionNamespace setVariable ["WL2_capValuesCacheTimers", _cacheTimers];
-
-	missionNamespace getVariable ["WL2_sideCaptureModifierCache", createHashMap];
+	_sector getVariable ["WL2_sideCaptureModifierCache", createHashMap];
 } else {
 	private _capModifiers = createHashMap;
 	{
@@ -87,7 +83,9 @@ private _sideCaptureModifier = if (_useCache) then {
 
 		_capModifiers set [_side, _connections];
 	} forEach _sideArr;
-	missionNamespace setVariable ["WL2_sideCaptureModifierCache", _capModifiers];
+	_sector setVariable ["WL2_sideCaptureModifierCache", _capModifiers];
+	_sector setVariable ["WL2_capValuesCacheTimer", serverTime + 5];
+
 	_capModifiers;
 };
 

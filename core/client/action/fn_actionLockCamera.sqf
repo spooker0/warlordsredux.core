@@ -37,3 +37,5 @@ switch (_visionMode # 0) do {
 
 showCinemaBorder false;
 cameraEffectEnableHUD true;
+
+_camera;
