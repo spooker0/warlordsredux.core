@@ -53,18 +53,28 @@ call WL2_fnc_playerEventHandlers;
 
 	_display displayAddEventHandler ["KeyDown", WL2_fnc_timedPromptKeyHandler];
 
-	_display displayAddEventHandler ["KeyUp", {
+	_display displayAddEventHandler ["KeyDown", {
 		params ["_display", "_key", "_shift", "_ctrl", "_alt"];
-		if (BIS_WL_missionEnd) exitWith {};
+		if (BIS_WL_missionEnd) exitWith { false };
 		private _isPressed = false;
 		{
 			_isPressed = _isPressed || [_x, _key, _shift, _ctrl, _alt] call WL2_fnc_isKeyPressed;
 		} forEach actionKeys ["networkStats"];
 
-		if (_isPressed) then {
-			0 spawn WL2_fnc_interceptAction;
-			0 spawn WL2_fnc_scoreboard;
-		};
+		if (!_isPressed) exitWith { false };
+		_display setVariable ["WL2_scoreboardKey", _key];
+		true;
+	}];
+
+	_display displayAddEventHandler ["KeyUp", {
+		params ["_display", "_key"];
+		private _scoreboardKey = _display getVariable ["WL2_scoreboardKey", -1];
+		if (_key != _scoreboardKey) exitWith {};
+		_display setVariable ["WL2_scoreboardKey", -1];
+		if (BIS_WL_missionEnd) exitWith {};
+
+		0 spawn WL2_fnc_interceptAction;
+		0 spawn WL2_fnc_scoreboard;
 	}];
 
 	// intentionally separate handler

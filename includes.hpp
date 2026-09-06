@@ -23,6 +23,7 @@ import ScrollBar;
 
 #include "ui\defines.hpp"
 #include "ui\controls.hpp"
+#include "core\client\scoreboard\ui.hpp"
 
 #include "mp_securityCommands.hpp"
 #include "mp_securityFunctions.hpp"

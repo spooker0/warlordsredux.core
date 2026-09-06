@@ -20,17 +20,15 @@ private _zoomIn = if (inputAction "prevAction" > 0) then { 1 } else { 0 };
 private _zoomOut = if (inputAction "nextAction" > 0) then { 1 } else { 0 };
 
 if (_zoomIn != 0) then {
-    private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
-    if (!isNull _display) then {
-        private _texture = _display displayCtrl 5502;
-        _texture ctrlWebBrowserAction ["ExecJS", "scrollUp();"];
+    private _scoreboardScrolled = [-1] call WL2_fnc_scoreboardScroll;
+    if (_scoreboardScrolled) then {
+        _zoomIn = 0;
     };
 };
 if (_zoomOut != 0) then {
-    private _display = uiNamespace getVariable ["RscWLScoreboardMenu", displayNull];
-    if (!isNull _display) then {
-        private _texture = _display displayCtrl 5502;
-        _texture ctrlWebBrowserAction ["ExecJS", "scrollDown();"];
+    private _scoreboardScrolled = [1] call WL2_fnc_scoreboardScroll;
+    if (_scoreboardScrolled) then {
+        _zoomOut = 0;
     };
 };
 

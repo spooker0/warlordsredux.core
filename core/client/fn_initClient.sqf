@@ -359,6 +359,7 @@ uiNamespace setVariable ["WL2_surrenderWarningActive", false];
 
 "deathInfo" cutFadeOut 0;
 "missileCamera" cutFadeOut 0;
+"SpectatorInfo" cutFadeOut 0;
 
 0 spawn WL2_fnc_ammoConfigChange;
 0 spawn DIS_fnc_setupTargetingMenu;

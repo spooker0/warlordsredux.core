@@ -369,7 +369,6 @@ class CfgFunctions {
 			class initHud { headerType = WL_HEADER_LEVEL; };
 			class isScannerMunition { headerType = WL_HEADER_LEVEL; };
 			class mapIcons { headerType = WL_HEADER_LEVEL; };
-			class scoreboard { headerType = WL_HEADER_LEVEL; };
 			class setupUI { headerType = WL_HEADER_LEVEL; };
 			class smoothText { headerType = WL_HEADER_LEVEL; };
 			class toggleTurretVisualizer { headerType = WL_HEADER_LEVEL; };
@@ -494,6 +493,13 @@ class CfgFunctions {
 			class purchaseMenuRefresh { headerType = WL_HEADER_LEVEL; };
 			class purchaseMenuSetAssetDetails { headerType = WL_HEADER_LEVEL; };
 			class purchaseMenuSetItemsList { headerType = WL_HEADER_LEVEL; };
+		};
+		class ClientScoreboard {
+			file = "src\core\client\scoreboard";
+			class scoreboard { headerType = WL_HEADER_LEVEL; };
+			class scoreboardRender { headerType = WL_HEADER_LEVEL; };
+			class scoreboardRow { headerType = WL_HEADER_LEVEL; };
+			class scoreboardScroll { headerType = WL_HEADER_LEVEL; };
 		};
 		class Common {
 			file = "src\core\common";

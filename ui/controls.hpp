@@ -244,15 +244,103 @@ class RscWLGulag {
 		};
 		class RscWLGulag_BackgroundText: RscText {
 			idc = 100;
-			x = 0;
-			y = 0;
-			w = 1;
-			h = 1;
+			x = safeZoneX + safeZoneW * 0.15;
+			y = safeZoneY + safeZoneH * 0.07;
+			w = safeZoneW * 0.7;
+			h = safeZoneH * 0.16;
 			font = "PuristaBold";
 			style = ST_CENTER + ST_MULTI;
 			shadow = 0;
 			linespacing = 1;
 			sizeEx = 0.02 * safeZoneW;
+		};
+		class RscWLGulag_Instructions: RscText {
+			idc = 101;
+			x = safeZoneX + safeZoneW * 0.1;
+			y = safeZoneY + safeZoneH * 0.25;
+			w = safeZoneW * 0.8;
+			h = safeZoneH * 0.06;
+			font = "PuristaBold";
+			style = ST_CENTER;
+			shadow = 0;
+			sizeEx = 0.025 * safeZoneH;
+			text = "Pick the enemy. Hold your cursor over a card to select it.";
+		};
+		class RscWLGulag_LeftCard: RscText {
+			idc = 110;
+			x = safeZoneX + safeZoneW * 0.18;
+			y = safeZoneY + safeZoneH * 0.34;
+			w = safeZoneW * 0.28;
+			h = safeZoneH * 0.4;
+			colorBackground[] = {0.11, 0.13, 0.16, 1};
+		};
+		class RscWLGulag_RightCard: RscWLGulag_LeftCard {
+			idc = 120;
+			x = safeZoneX + safeZoneW * 0.54;
+		};
+		class RscWLGulag_LeftPicture: RscPictureKeepAspect {
+			idc = 111;
+			x = safeZoneX + safeZoneW * 0.195;
+			y = safeZoneY + safeZoneH * 0.355;
+			w = safeZoneW * 0.25;
+			h = safeZoneH * 0.28;
+			text = "";
+			colorText[] = {1, 1, 1, 1};
+		};
+		class RscWLGulag_RightPicture: RscWLGulag_LeftPicture {
+			idc = 121;
+			x = safeZoneX + safeZoneW * 0.555;
+		};
+		class RscWLGulag_LeftCaption: RscText {
+			idc = 112;
+			x = safeZoneX + safeZoneW * 0.195;
+			y = safeZoneY + safeZoneH * 0.645;
+			w = safeZoneW * 0.25;
+			h = safeZoneH * 0.04;
+			font = "PuristaMedium";
+			style = ST_CENTER;
+			shadow = 0;
+			sizeEx = 0.022 * safeZoneH;
+			text = "Hold to select";
+		};
+		class RscWLGulag_RightCaption: RscWLGulag_LeftCaption {
+			idc = 122;
+			x = safeZoneX + safeZoneW * 0.555;
+		};
+		class RscWLGulag_LeftProgressTrack: RscText {
+			idc = 113;
+			x = safeZoneX + safeZoneW * 0.195;
+			y = safeZoneY + safeZoneH * 0.705;
+			w = safeZoneW * 0.25;
+			h = safeZoneH * 0.012;
+			colorBackground[] = {0.25, 0.28, 0.32, 1};
+		};
+		class RscWLGulag_RightProgressTrack: RscWLGulag_LeftProgressTrack {
+			idc = 123;
+			x = safeZoneX + safeZoneW * 0.555;
+		};
+		class RscWLGulag_LeftProgressFill: RscWLGulag_LeftProgressTrack {
+			idc = 114;
+			w = 0;
+			colorBackground[] = {0.9, 0.75, 0.35, 1};
+		};
+		class RscWLGulag_RightProgressFill: RscWLGulag_LeftProgressFill {
+			idc = 124;
+			x = safeZoneX + safeZoneW * 0.555;
+		};
+		class RscWLGulag_Feedback: RscWLGulag_Instructions {
+			idc = 102;
+			y = safeZoneY + safeZoneH * 0.79;
+			h = safeZoneH * 0.05;
+			text = "";
+		};
+		class RscWLGulag_Score: RscWLGulag_Instructions {
+			idc = 103;
+			y = safeZoneY + safeZoneH * 0.87;
+			h = safeZoneH * 0.035;
+			font = "PuristaMedium";
+			sizeEx = 0.022 * safeZoneH;
+			text = "";
 		};
 	};
 };

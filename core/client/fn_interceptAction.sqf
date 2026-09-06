@@ -175,8 +175,7 @@ private _interceptScrollUp = {
         private _squadMenu = uiNamespace getVariable ["SQD_Menu", displayNull];
         !isNull _squadMenu
     } else {
-        private _texture = _display displayCtrl 5502;
-        _texture ctrlWebBrowserAction ["ExecJS", "scrollUp();"];
+        [-1] call WL2_fnc_scoreboardScroll;
         true;
     };
 };
@@ -188,8 +187,7 @@ private _interceptScrollDown = {
         private _squadMenu = uiNamespace getVariable ["SQD_Menu", displayNull];
         !isNull _squadMenu
     } else {
-        private _texture = _display displayCtrl 5502;
-        _texture ctrlWebBrowserAction ["ExecJS", "scrollDown();"];
+        [1] call WL2_fnc_scoreboardScroll;
         true;
     };
 };
