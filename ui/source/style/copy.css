@@ -1,0 +1,38 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: transparent;
+}
+
+#copy-button {
+    width: 100%;
+    height: 100%;
+    padding: 0 6px;
+    border: 1px solid #4d4d52;
+    border-radius: 0;
+    background: #171718;
+    color: #fff;
+    font: 600 min(42vh, 18px)/1 "Roboto Condensed", Arial, sans-serif;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+#copy-button:hover,
+#copy-button:focus-visible {
+    border-color: #efbf05;
+    outline: none;
+}
+
+#copy-button:active {
+    background: #efbf05;
+    color: #111;
+}
+
+#copy-button:disabled {
+    border-color: #27272a;
+    color: #646467;
+    cursor: default;
+}

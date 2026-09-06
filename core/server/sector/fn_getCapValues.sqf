@@ -4,90 +4,80 @@ params ["_sector"];
 private _ownerSide = _sector getVariable ["BIS_WL_owner", independent];
 private _sideArr = [west, east, independent];
 
-private _useCache = _sector getVariable ["WL2_capValuesCacheTimer", 0] > serverTime;
+private _capModifiers = createHashMap;
+{
+	private _side = _x;
 
-private _sideCaptureModifier = if (_useCache) then {
-	_sector getVariable ["WL2_sideCaptureModifierCache", createHashMap];
-} else {
-	private _capModifiers = createHashMap;
-	{
-		private _side = _x;
-
-		if (_side == independent) then {
-			if (_ownerSide == independent) then {
-				private _reserves = _sector getVariable ["WL2_sectorPop", 0];
-				if (_reserves > 0) then {
-					_capModifiers set [_side, 4];
-				} else {
-					_capModifiers set [_side, 2];
-				};
+	if (_side == independent) then {
+		if (_ownerSide == independent) then {
+			private _reserves = _sector getVariable ["WL2_sectorPop", 0];
+			if (_reserves > 0) then {
+				_capModifiers set [_side, 4];
 			} else {
-				_capModifiers set [_side, 0];
+				_capModifiers set [_side, 2];
 			};
-			continue;
-		};
-
-		private _teamSectorsData = WL_SECTORS_DATA(_side);
-		private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
-
-		private _neighboringSectors = _sector getVariable ["WL2_connectedSectors", []];
-		private _connectedNeighboringSectors = _neighboringSectors select {
-			_side == _x getVariable ["BIS_WL_owner", independent] && _x in _linkedSectors;
-		};
-		private _hasConnection = count _connectedNeighboringSectors > 0;
-		if (!_hasConnection) then {
+		} else {
 			_capModifiers set [_side, 0];
-			continue;
 		};
+		continue;
+	};
 
-		private _capturableBySides = _sector getVariable ["WL2_capturableBySides", []];
-		private _isCapturableBySide = _side in _capturableBySides;
+	private _teamSectorsData = WL_SECTORS_DATA(_side);
+	private _linkedSectors = _teamSectorsData getOrDefault ["linked", []];
 
-		private _sideCurrentTarget = missionNamespace getVariable (format ["BIS_WL_currentTarget_%1", _side]);
-		private _isCurrentTarget = _sideCurrentTarget == _sector;
-		if (!_isCapturableBySide && !_isCurrentTarget) then {
-			_capModifiers set [_side, 0];
-			continue;
+	private _neighboringSectors = _sector getVariable ["WL2_connectedSectors", []];
+	private _connectedNeighboringSectors = _neighboringSectors select {
+		_side == _x getVariable ["BIS_WL_owner", independent] && _x in _linkedSectors;
+	};
+	private _hasConnection = count _connectedNeighboringSectors > 0;
+	if (!_hasConnection) then {
+		_capModifiers set [_side, 0];
+		continue;
+	};
+
+	private _capturableBySides = _sector getVariable ["WL2_capturableBySides", []];
+	private _isCapturableBySide = _side in _capturableBySides;
+
+	private _sideCurrentTarget = missionNamespace getVariable (format ["BIS_WL_currentTarget_%1", _side]);
+	private _isCurrentTarget = _sideCurrentTarget == _sector;
+	if (!_isCapturableBySide && !_isCurrentTarget) then {
+		_capModifiers set [_side, 0];
+		continue;
+	};
+
+	private _connections = count _connectedNeighboringSectors;
+
+	private _currentForwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
+	private _teamForwardBases = _currentForwardBases select {
+		_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side
+	};
+	private _inRangeTeamForwardBases = _teamForwardBases select {
+		_sector distance2D _x < WL_FOB_CAPTURE_RANGE
+	} select {
+		_x getVariable ["WL2_forwardBaseReady", false]
+	};
+	_connections = _connections + (count _inRangeTeamForwardBases) * WL_FOB_CAPMODIFIER;
+
+	private _homeBase = _side call WL2_fnc_getSideBase;
+	private _isConnectedToHomeBase = _homeBase in _connectedNeighboringSectors;
+	if (_isConnectedToHomeBase) then {
+		_connections = _connections + 1;
+	};
+
+	if (_ownerSide == _side && _sector != _homeBase) then {
+		private _sectorDefenders = _sector getVariable ["WL2_defenders", 0];
+		if (_sectorDefenders > 0) then {
+			private _sectorValue = _sector getVariable ["BIS_WL_value", 0];
+			private _maxDefenders = _sector getVariable ["WL2_maxDefenders", 0];
+			private _defenderModifier = linearConversion [1, _maxDefenders, _sectorDefenders, 0, 5, true];
+			_connections = _connections + _defenderModifier;
+		} else {
+			_connections = _connections * 0.5;
 		};
+	};
 
-		private _connections = count _connectedNeighboringSectors;
-
-		private _currentForwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
-		private _teamForwardBases = _currentForwardBases select {
-			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side
-		};
-		private _inRangeTeamForwardBases = _teamForwardBases select {
-			_sector distance2D _x < WL_FOB_CAPTURE_RANGE
-		} select {
-			_x getVariable ["WL2_forwardBaseReady", false]
-		};
-		_connections = _connections + (count _inRangeTeamForwardBases) * WL_FOB_CAPMODIFIER;
-
-		private _homeBase = _side call WL2_fnc_getSideBase;
-		private _isConnectedToHomeBase = _homeBase in _connectedNeighboringSectors;
-		if (_isConnectedToHomeBase) then {
-			_connections = _connections + 1;
-		};
-
-		if (_ownerSide == _side && _sector != _homeBase) then {
-			private _sectorDefenders = _sector getVariable ["WL2_defenders", 0];
-			if (_sectorDefenders > 0) then {
-				private _sectorValue = _sector getVariable ["BIS_WL_value", 0];
-				private _maxDefenders = _sector getVariable ["WL2_maxDefenders", 0];
-				private _defenderModifier = linearConversion [1, _maxDefenders, _sectorDefenders, 0, 5, true];
-				_connections = _connections + _defenderModifier;
-			} else {
-				_connections = _connections * 0.5;
-			};
-		};
-
-		_capModifiers set [_side, _connections];
-	} forEach _sideArr;
-	_sector setVariable ["WL2_sideCaptureModifierCache", _capModifiers];
-	_sector setVariable ["WL2_capValuesCacheTimer", serverTime + 5];
-
-	_capModifiers;
-};
+	_capModifiers set [_side, _connections];
+} forEach _sideArr;
 
 private _relevantEntities = BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles;
 private _sectorAO = _sector getVariable "objectAreaComplete";
@@ -173,8 +163,7 @@ private _info = _sideArr apply {
         0;
     };
     private _sideScore = _sideCapValues getOrDefault [_side, 0];
-
-	private _modifier = _sideCaptureModifier getOrDefault [_side, 0];
+	private _modifier = _capModifiers getOrDefault [_side, 0];
 
 	[_side, _sideScore * _modifier + _tiebreaker, _modifier];
 };

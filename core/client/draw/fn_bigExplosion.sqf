@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_base", "_debriefing"];
+params ["_base"];
 
 if (cameraOn distance2D _base < 500 && cameraOn isKindOf "Air") then {
     ["Glow in the Dark"] call RWD_fnc_addBadge;
@@ -32,7 +32,10 @@ _camera switchCamera "EXTERNAL";
 
 uiSleep 2;
 
-playSoundUI ["endgame", 5];
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
+private _endGameVolume = _settingsMap getOrDefault ["endGameVolume", 5];
+
+playSoundUI ["endgame", _endGameVolume];
 
 private _startPosition = _base getPos [500, random 360];
 _startPosition set [2, 2000];
@@ -238,11 +241,33 @@ while { _apertureSize < (_defaultAperture / 2) } do {
     _apertureSize = _apertureSize + _defaultAperture / 100;
 };
 
-private _debriefingTitle = toUpper getText (missionConfigFile >> "CfgDebriefing" >> _debriefing >> "title");
-private _debriefingSubtitle = toUpper getText (missionConfigFile >> "CfgDebriefing" >> _debriefing >> "subtitle");
+private _flavorTexts = [
+    "SCHOOLS CLOSED IN: KAVALA, PYRGOS, OREOKASTRO, ATHIRA, PAROS, MOLOS",
+    "POWER SERVICE OUTAGES REPORTED IN: NEGADES, SOFIA, DIDYMOS",
+    "THOUSANDS FEARED DEAD AS MASS GRAVES UNCOVERED IN EKALI",
+    "BLOOD AND PLASMA SHORTAGES AT KAVALA GENERAL",
+    "ATSALIS EVACUATED AFTER PORTS CLOSED",
+    "USS INDEPENDENCE SPOTTED BURNING OFF CAPE THELOS",
+    "EGINIO CANCELS SUMMER CAMP ACTIVITIES",
+    "DESECRATION OF ANCIENT SKOPOS RUINS IS A CRIME AGAINST HUMANITY, ARCHAEOLOGISTS WARN",
+    "LAKKA FACTORY CEASES PRODUCTION OF CHOCOLATE DUE TO SUPPLY SHORTAGES",
+    "9PM CURFEW IMPOSED IN KALOCHORI",
+    "NO PLANS TO RETURN TO LIMNI SWAMP, FORMER RESIDENTS SAY",
+    "ANTHRAKIA DECLARED MOST BORING CITY IN ALTIS IN ONLINE POLL",
+    "ALTIS FOOTBALL CHAMPIONSHIP LOCATIONS DOWN TO SYRTA AND ZAROS AFTER FIELD EQUIPMENT DAMAGED IN ATHIRA",
+    "IOANNINA RESIDENTS PROTEST UNSAFE NOISE LEVELS FROM NEARBY MILITARY BASE",
+    "XIROLIMNI DAM AT RISK OF COLLAPSE DUE TO RECENT EARTHQUAKES",
+    "SAGONISI FERRY CROSSING STOPPED DUE TO DANGEROUS WEATHER",
+    "WE DO NOT NEED A NEW AIRFIELD, EDESSA RESIDENTS COMPLAIN"
+];
+
+private _captions = _flavorTexts call BIS_fnc_arrayShuffle;
+private _captionText = _captions joinString " - ";
+
+private _firstCaption = missionNamespace getVariable ["WL2_endText", "BODIES OF ATTEMPTED DESERTERS FOUND NEAR ZELORAN MILITARY BASE"];
 [
-    parseText format ["<t size='2'>%1 - %2</t>", _debriefingTitle, _debriefingSubtitle],
-    parseText toUpper "Altis evacuation in progress. Elevated radiation levels detected. Head to your nearest emergency shelter."
+    parseText format ["<t size='2'>%1</t>", toUpper _firstCaption],
+    parseText toUpper _captionText
 ] spawn BIS_fnc_AAN;
 
 private _filmGrainHandle = ppEffectCreate ["FilmGrain", 500];

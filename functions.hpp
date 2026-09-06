@@ -82,18 +82,9 @@ class CfgFunctions {
 	class MENU {
 		class Default {
 			file = "src\scripts\MENU";
-			class copyChat { headerType = WL_HEADER_LEVEL; };
 			class debugMenu { headerType = WL_HEADER_LEVEL; };
 			class execCode { headerType = WL_HEADER_LEVEL; };
-			class modMenu { headerType = WL_HEADER_LEVEL; };
-			class playerDataRefresh { headerType = WL_HEADER_LEVEL; };
-			class playerReported { headerType = WL_HEADER_LEVEL; };
-			class printSystemTime { headerType = WL_HEADER_LEVEL; };
-			class reportMenu { headerType = WL_HEADER_LEVEL; };
-			class reportPlayer { headerType = WL_HEADER_LEVEL; };
 			class resetDefault { headerType = WL_HEADER_LEVEL; };
-			class sendModData { headerType = WL_HEADER_LEVEL; };
-			class sendReportData { headerType = WL_HEADER_LEVEL; };
 			class setReturnValue { headerType = WL_HEADER_LEVEL; };
 			class settingsMenu { headerType = WL_HEADER_LEVEL; };
 			class settingsMenuButton { headerType = WL_HEADER_LEVEL; };
@@ -117,6 +108,25 @@ class CfgFunctions {
 			class pollMenu { headerType = WL_HEADER_LEVEL; };
 			class selectOption { headerType = WL_HEADER_LEVEL; };
 			class updatePollMenu { headerType = WL_HEADER_LEVEL; };
+		};
+	};
+	class REP {
+		class Default {
+			file = "src\scripts\REP";
+			class action { headerType = WL_HEADER_LEVEL; };
+			class chat { headerType = WL_HEADER_LEVEL; };
+			class initMenu { headerType = WL_HEADER_LEVEL; };
+			class modMenu { headerType = WL_HEADER_LEVEL; };
+			class playerDataRefresh { headerType = WL_HEADER_LEVEL; };
+			class playerReported { headerType = WL_HEADER_LEVEL; };
+			class printSystemTime { headerType = WL_HEADER_LEVEL; };
+			class refresh { headerType = WL_HEADER_LEVEL; };
+			class reportMenu { headerType = WL_HEADER_LEVEL; };
+			class reportPlayer { headerType = WL_HEADER_LEVEL; };
+			class selectPlayer { headerType = WL_HEADER_LEVEL; };
+			class setCopyButton { headerType = WL_HEADER_LEVEL; };
+			class showLog { headerType = WL_HEADER_LEVEL; };
+			class updateTimeout { headerType = WL_HEADER_LEVEL; };
 		};
 	};
 	class RWD {

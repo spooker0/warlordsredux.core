@@ -324,20 +324,6 @@ class RscSpectatorDisplay {
 	};
 };
 
-class RscWLBrowserMenu {
-	idd = 5500;
-	class controls {
-		class RscWLBrowserMenu_Texture: RscText {
-			type = 106;
-			idc = 5501;
-			x = safeZoneX;
-			y = safeZoneY;
-			w = safeZoneW;
-			h = safeZoneH;
-		};
-	};
-};
-
 class RscWLSectorDisplay_SectorName: RscStructuredText {
 	font = "EtelkaMonospaceProBold";
 	colorText[] = {1, 1, 1, 1};

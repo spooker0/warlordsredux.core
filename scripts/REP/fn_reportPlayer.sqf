@@ -13,4 +13,4 @@ if (_reason == "") then {
 };
 
 private _senderName = [_sender, true] call BIS_fnc_getName;
-[_senderName, _reason] remoteExec ["MENU_fnc_playerReported", _targetPlayer];
+[_senderName, _reason] remoteExec ["REP_fnc_playerReported", _targetPlayer];

@@ -34,6 +34,7 @@ while { !BIS_WL_missionEnd } do {
         private _playerSide = side group _unit;
         if (_playerSide != sideUnknown) then {
             _entry set ["side", [_playerSide, false] call WL2_fnc_sideToFaction];
+            _entry set ["sideRaw", _playerSide];
         };
 
         _entry set ["points", _totalPointsMap getOrDefault [_playerUid, 0]];

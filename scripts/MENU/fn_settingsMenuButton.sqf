@@ -21,7 +21,7 @@ switch (_actionId) do {
         0 spawn RWD_fnc_badgeMenuInit;
     };
     case "report": {
-        0 spawn MENU_fnc_reportMenu;
+        0 spawn REP_fnc_reportMenu;
     };
     case "poll": {
         0 spawn POLL_fnc_pollMenu;
@@ -39,7 +39,7 @@ switch (_actionId) do {
         0 spawn SPEC_fnc_spectator;
     };
     case "moderate": {
-        0 spawn MENU_fnc_modMenu;
+        0 spawn REP_fnc_modMenu;
     };
     default {};
 };

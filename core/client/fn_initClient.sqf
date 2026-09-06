@@ -297,7 +297,7 @@ call SQD_fnc_initClient;
 call WL2_fnc_pingFixInit;
 
 0 spawn MENU_fnc_settingsMenu;
-0 spawn MENU_fnc_playerDataRefresh;
+0 spawn REP_fnc_playerDataRefresh;
 
 0 spawn {
 	while { !BIS_WL_missionEnd } do {
@@ -376,10 +376,6 @@ private _commMenuClasses = "true" configClasses (missionConfigFile >> "CfgCommun
 	[player, _name, nil, nil, ""] call BIS_fnc_addCommMenuItem;
 } forEach _commMenuClasses;
 
-private _showWelcomeMenu = _settingsMap getOrDefault ["showWelcomeMenu", true];
-if (_showWelcomeMenu) then {
-	0 spawn WL2_fnc_welcome;
-};
 0 spawn SQD_fnc_initSquadMenu;
 
 private _additionalSubs = _settingsMap getOrDefault ["additionalSubs", false];

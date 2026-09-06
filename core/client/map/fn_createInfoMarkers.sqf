@@ -36,3 +36,9 @@ private _infoMarkers = [
 } forEach _infoMarkers;
 
 uiNamespace setVariable ["WL2_infoMarkers", _infoMarkers];
+
+private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
+private _showWelcomeMenu = _settingsMap getOrDefault ["showWelcomeMenu", true];
+if (_showWelcomeMenu) then {
+	0 spawn WL2_fnc_welcome;
+};

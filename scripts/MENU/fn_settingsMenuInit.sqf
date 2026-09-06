@@ -99,6 +99,7 @@ _settingsMenu append [
     ["slider", localize "STR_WL_killfeedNotification", [0, 1, 0.1, 1, "killfeedNotification"]],
     ["slider", localize "STR_WL_killfeedCelebration", [0, 1, 0.1, 1, "killfeedCelebration"]],
     ["slider", localize "STR_WL_eventMusic", [0, 1, 0.1, 1, "eventMusicVolume"]],
+    ["slider", localize "STR_WL_endgameVolume", [1, 5, 0.1, 5, "endGameVolume"]],
 
     ["category", localize "STR_WL_adjustableSettings"],
     ["slider", localize "STR_WL_mineWarningTime", [0, 10, 1, 4, "mineWarnTime"]],

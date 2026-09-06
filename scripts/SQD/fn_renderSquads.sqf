@@ -226,7 +226,7 @@ private _totalPointsMap = missionNamespace getVariable ["WL2_totalPointsEarned",
     _squadNameText ctrlSetStructuredText _squadNameTextStructured;
 
     private _squadVotingPower = ["getSquadVotingPower", [_squadLeader]] call SQD_fnc_query;
-    _squadNameText ctrlSetTooltip format [localize "STR_WL_votePower", round _squadVotingPower];
+    _squadNameText ctrlSetTooltip format [localize "STR_WL_votePower", _squadVotingPower toFixed 0];
 
     _squadNameText ctrlRemoveAllEventHandlers "ButtonClick";
 
