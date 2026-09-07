@@ -102,8 +102,8 @@ if (_ret) then {
 			[
 				[WL2_fnc_checkIndependents],
 				[WL2_fnc_checkPlayerInVehicle],
+				[WL2_fnc_checkTargetAssault],
 				[WL2_fnc_checkTargetSelected],
-				[WL2_fnc_checkTargetEnemyBase],
 				[WL2_fnc_checkTargetUnlinked],
 				[WL2_fnc_checkNearbyEnemies]
 			]

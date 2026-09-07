@@ -32,7 +32,7 @@ if (_action == "pruneRating") then {
         private _uid = _x;
         private _rating = _y;
         private _newRating = round (_rating / 500) * 500;
-        if (_newRating == 1000) then { continue; };
+        if (_newRating <= 1000) then { continue; };
         _newRatingsMap set [_uid, _newRating];
     } forEach _ratings;
 

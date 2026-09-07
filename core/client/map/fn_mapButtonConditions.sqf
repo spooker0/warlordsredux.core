@@ -34,15 +34,16 @@ switch (_conditionName) do {
     };
     case "fastTravelConflict";
     case "airAssault": {
-        if (_target == WL_TARGET_FRIENDLY) then {
-            if (_target in WL_BASES) then {
-                "Can't fast travel to enemy home base.";
-            } else {
-                "ok";
-            };
-        } else {
-            "";
+        if (_target != WL_TARGET_FRIENDLY) exitWith { "" };
+
+        private _revealedBy = _target getVariable ["BIS_WL_revealedBy", []];
+        if !(BIS_WL_playerSide in _revealedBy) exitWith {
+            "Cannot air assault into unknown sector. Scout the area first.";
         };
+
+        if (_target in WL_BASES) exitWith { "Can't fast travel to enemy home base." };
+
+        "ok";
     };
     case "paradrop": {
         if (!alive _target) exitWith { "" };
@@ -60,6 +61,12 @@ switch (_conditionName) do {
 
         private _base = _teamSectorsData getOrDefault ["base", objNull];
         if (_base == _target) exitWith { "" };
+
+        private _nextParadropTime = cameraOn getVariable ["WL2_paradropTime", 0];
+        if (serverTime < _nextParadropTime) exitWith {
+            private _timeDisplay = [_nextParadropTime - serverTime, "HH:MM:SS"] call BIS_fnc_secondsToString;
+            format ["Vehicle sector paradrop is on cooldown: %1.", _timeDisplay];
+        };
 
         private _isCarrierSector = _target getVariable ["WL2_isAircraftCarrier", false];
         if (_isCarrierSector) exitWith { "Cannot paradrop onto aircraft carriers." };

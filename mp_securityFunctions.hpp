@@ -153,3 +153,9 @@ class CfgRemoteExec {
 		class systemChat {allowedTargets = 0;};
 	};
 };
+
+class CfgCommands {
+	allowedHTMLLoadURIs[] += {
+		"https://discord.gg/grmzsZE4ua"
+	};
+};

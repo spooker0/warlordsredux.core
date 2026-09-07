@@ -128,7 +128,12 @@ private _makeMunitionTextArray = {
 		} else {
 			private _projectileTarget = _projectile getVariable ["DIS_ultimateTarget", objNull];
 			if (!alive _projectileTarget) then {
-				format ["%1 -> N/A", _missileType]
+				if (_missileType == "Deployer") then {
+					private _altitude = (_projectile modelToWorld [0, 0, 0]) select 2;
+					format ["Deployer (ALT %1M)", round _altitude]
+				} else {
+					format ["%1 -> N/A", _missileType]
+				};
 			} else {
 				private _projectileTargetName = [_projectileTarget] call WL2_fnc_getAssetTypeName;
 				private _projectileDistance = _projectile distance _projectileTarget;

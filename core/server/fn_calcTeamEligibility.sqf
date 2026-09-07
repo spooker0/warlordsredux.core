@@ -27,13 +27,20 @@ if (_playerElo <= WL_RATING_GATE) exitWith {
 };
 
 private _eligibleSides = [];
-private _myUnit = squadParams _warlord # 3;
+private _squadParams = squadParams _warlord;
+private _myUnit = if (count _squadParams > 3) then { _squadParams # 3 } else { "" };
 if (_myUnit != "") then {
     {
         if (_x == _warlord) then {
             continue;
         };
-        private _playerUnit = squadParams _x # 3;
+
+        private _playerParams = squadParams _x;
+        if (count _playerParams <= 3) then {
+            continue;
+        };
+
+        private _playerUnit = _playerParams # 3;
         if (_playerUnit == _myUnit) then {
             private _playerSide = side group _x;
             _eligibleSides pushBackUnique _playerSide;

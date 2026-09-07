@@ -2,8 +2,8 @@
 private _previousAIMax = -1;
 missionNamespace setVariable ["WL2_readyList", []];
 while { !BIS_WL_missionEnd } do {
-	private _allPlayers = call BIS_fnc_listPlayers;
-	private _newPlayers = _allPlayers select {
+	private _allLivePlayers = allUnits select { isPlayer _x };
+	private _newPlayers = _allLivePlayers select {
 		!isNull _x;
 	} select {
 		!(_x getVariable ["WL2_playerSetupStarted", false]);
@@ -17,7 +17,7 @@ while { !BIS_WL_missionEnd } do {
 
 	private _thresholds = [8, 15, 20, 30, 40];
 
-	private _activePlayers = _allPlayers select {
+	private _activePlayers = allPlayers select {
 		!(_x getVariable ["WL2_afk", false])
 	};
 

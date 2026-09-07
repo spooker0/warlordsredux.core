@@ -480,7 +480,7 @@ class CfgFunctions {
 			class checkRequirements { headerType = WL_HEADER_LEVEL; };
 			class checkResetVehicle { headerType = WL_HEADER_LEVEL; };
 			class checkSelectedUnits { headerType = WL_HEADER_LEVEL; };
-			class checkTargetEnemyBase { headerType = WL_HEADER_LEVEL; };
+			class checkTargetAssault { headerType = WL_HEADER_LEVEL; };
 			class checkTargetReset { headerType = WL_HEADER_LEVEL; };
 			class checkTargetSelected { headerType = WL_HEADER_LEVEL; };
 			class checkTargetUnlinked { headerType = WL_HEADER_LEVEL; };

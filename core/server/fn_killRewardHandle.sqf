@@ -47,13 +47,13 @@ if (_unit isKindOf "Man" && !(_unit in _noRewardList)) then {
 private _targets = [missionNamespace getVariable "BIS_WL_currentTarget_west", missionNamespace getVariable "BIS_WL_currentTarget_east"] select {!(isNull _x)};
 
 if (_responsibleLeader getVariable ["WL2_3rdPersonDisabled", false]) then {
-	_killReward = _killReward * 2.0;
+	_killReward = _killReward * 1.5;
 };
 if ((_targets findIf {_unit inArea (_x getVariable "objectAreaComplete")}) != -1) then {
 	_killReward = _killReward * 1.2;
 };
 if (_unitSide != independent && _unitSide != sideUnknown) then {
-	_killReward = _killReward * 1.75;
+	_killReward = _killReward * 1.25;
 };
 
 private _incomeModifiers = missionNamespace getVariable ["WL2_capAreaModifiers", [0, 0]];

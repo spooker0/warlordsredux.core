@@ -129,7 +129,7 @@ private _strategyArr = [
 		0,
 		[],
 		localize "STR_WL_infoMenuInfo",
-		"src\img\wl_logo_ca.paa",
+		"src\img\reduxlogosmall.paa",
 		""
 	], [
 		"Surrender",

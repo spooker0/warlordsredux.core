@@ -29,12 +29,14 @@ if (isServer) then {
 	];
 };
 
-private _staticProps = synchronizedObjects WL2_StaticProps;
-private _staticPropMap = createHashMap;
-{
-	_staticPropMap set [getObjectID _x, true];
-} forEach _staticProps;
-missionNamespace setVariable ["WL2_staticPropMap", _staticPropMap];
+if (isServer) then {
+	private _staticProps = getMissionLayerEntities "Static Props" # 0;
+	private _staticPropMap = createHashMap;
+	{
+		_staticPropMap set [getObjectID _x, true];
+	} forEach _staticProps;
+	missionNamespace setVariable ["WL2_staticPropMap", _staticPropMap, true];
+};
 
 private _requisitionData = createHashMap;
 private _requisitionPreset = missionConfigFile >> "CfgWLRequisitionPresets";

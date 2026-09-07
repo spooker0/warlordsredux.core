@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_targetVehicle", ["_forceParadrop", false]];
+params ["_targetVehicle", ["_forceParadrop", false], ["_isSpawning", false]];
 
 "RequestMenu_close" call WL2_fnc_setupUI;
 
@@ -25,12 +25,12 @@ if (_altitude < -1 && surfaceIsWater _assetPos) exitWith {
     playSoundUI ["AddItemFailed"];
 };
 
-titleCut ["", "BLACK OUT", 1];
-openMap false;
-
-"Fast_travel" call WL2_fnc_announcer;
-
-uiSleep 1;
+if (!_isSpawning) then {
+    titleCut ["", "BLACK OUT", 1];
+    openMap false;
+    "Fast_travel" call WL2_fnc_announcer;
+    uiSleep 1;
+};
 
 private _unitsToMove = (units player) select {
     isNull objectParent _x
@@ -86,8 +86,10 @@ private _unitsToMove = (units player) select {
 
 [player, "rewardTransport", _targetVehicle, _unitsToMove] remoteExec ["WL2_fnc_handleClientRequest", 2];
 
-uiSleep 1;
-titleCut ["", "BLACK IN", 1];
+if (!_isSpawning) then {
+    uiSleep 1;
+    titleCut ["", "BLACK IN", 1];
+};
 
 private _position = getPosASL player;
 private _playersToPlay = allPlayers select {

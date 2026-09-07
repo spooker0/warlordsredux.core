@@ -103,6 +103,15 @@ class WL_WelcomeDisplay {
 			w = 0.05;
 			h = 0.05 * 4 / 3;
 		};
+		class WL_WelcomeDisplay_DiscordButton: RscButton {
+			idc = 102;
+			text = "Discord";
+			url = "https://discord.gg/grmzsZE4ua";
+			x = 0.1;
+			y = 0.9;
+			w = 0.8;
+			h = 0.05;
+		};
 	};
 };
 
@@ -121,9 +130,9 @@ class RscWLSideButton: RscShortcutButton {
 	colorDisabled[] = {1, 1, 1, 0.25};
 
 	size = safeZoneW * 0.012;
-	y = safeZoneY + safeZoneH * 0.1;
+	y = safeZoneY + safeZoneH * 0.2;
 	w = safeZoneW * 0.4;
-	h = safeZoneH * 0.85;
+	h = safeZoneH * 0.75;
 
 	class TextPos {
 		left = 0.01;
@@ -170,18 +179,13 @@ class RscWLSidePicker {
 			w = 0;
 			h = 0;
 		};
-		class RscWLSidePicker_BackgroundText: RscText {
+		class RscWLSidePicker_BackgroundText: RscPictureKeepAspect {
 			idc = -1;
 			x = safeZoneX + safeZoneW * 0.05;
 			y = safeZoneY;
 			w = safeZoneW * 0.9;
-			h = safeZoneH * 0.1;
-
-			font = "PuristaBold";
-			text = "$STR_WL_missionNameUpper";
-			style = ST_CENTER;
-			shadow = 0;
-			sizeEx = 0.0825 * safeZoneW;
+			h = safeZoneH * 0.2;
+			text = "src\img\reduxlogosmall.paa";
 		};
 		class RscWLSidePicker_WestButton: RscWLSideButton {
 			idc = 102;
@@ -209,7 +213,7 @@ class RscWLSidePicker {
 		class RscWLSidePicker_Unassigned: RscStructuredText {
 			idc = 105;
 			x = safeZoneX + safeZoneW * 0.455;
-			y = safeZoneY + safeZoneH * 0.12;
+			y = safeZoneY + safeZoneH * 0.22;
 			w = safeZoneW * 0.09;
 			h = safeZoneH * 0.3;
 			size = 0.023 * safeZoneW;

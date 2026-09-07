@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_fastTravelMode", "_location"];
+params ["_fastTravelMode", "_location", ["_isSpawning", false]];
 
 // Fast Travel Modes
 // 0: Seized Sector
@@ -12,9 +12,10 @@ params ["_fastTravelMode", "_location"];
 // 7: Vehicle Paradrop FOB (disabled)
 // 8: Near Stronghold
 
-openMap [false, false];
-
-"Fast_travel" call WL2_fnc_announcer;
+if (!_isSpawning) then {
+	openMap [false, false];
+	"Fast_travel" call WL2_fnc_announcer;
+};
 
 private _destination = [];
 private _strongholdHasSpot = false;
@@ -123,9 +124,10 @@ private _directionToSector = if (isNil "_location") then {
 	};
 };
 
-titleCut ["", "BLACK OUT", 1];
-
-uiSleep 1;
+if (!_isSpawning) then {
+	titleCut ["", "BLACK OUT", 1];
+	uiSleep 1;
+};
 
 switch (_fastTravelMode) do {
 	case 0;
@@ -185,7 +187,9 @@ switch (_fastTravelMode) do {
 	};
 };
 
-titleCut ["", "BLACK IN", 1];
+if (!_isSpawning) then {
+	titleCut ["", "BLACK IN", 1];
+};
 
 if (_playArrivalWarning) then {
 	private _position = getPosASL player;

@@ -90,6 +90,8 @@ private _vehicleParadropExecute = {
     params ["_sector"];
     private _safeSpot = selectRandom ([_sector] call WL2_fnc_findSpawnsInSector);
     _safeSpot set [2, 500];
+    [player, "paradrop"] remoteExec ["WL2_fnc_handleClientRequest", 2];
+    cameraOn setVariable ["WL2_paradropTime", serverTime + WL_COOLDOWN_PARADROP];
     [_safeSpot, getDir cameraOn, objNull, cameraOn] spawn WL2_fnc_executeParadrop;
 };
 [
@@ -100,7 +102,7 @@ private _vehicleParadropExecute = {
     true,
     "vehicleParadrop",
     [
-        0,
+        WL_COST_PARADROP,
         "FTParadropVehicle",
         "Fast Travel"
     ]

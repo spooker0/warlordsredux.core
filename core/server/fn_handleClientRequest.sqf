@@ -49,6 +49,7 @@ private _actionCost = switch (_action) do {
 	case "equip" : { _param1 max 0 };
 	case "buyStronghold" : { WL_COST_STRONGHOLD };
 	case "fortifyStronghold" : { WL_COST_FORTIFY };
+	case "paradrop" : { WL_COST_PARADROP };
 	case "callParadrop" : { WL_COST_PARADROPCALL };
 	case "orderArsenal" : { WL_COST_ARSENAL };
 	case "fastTravelContested" : { WL_COST_FTCONTESTED };

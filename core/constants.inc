@@ -106,6 +106,7 @@
 #define WL_COST_STRONGHOLD 200
 #define WL_COST_FORTIFY 1000
 #define WL_COST_SUPPLIES 1000
+#define WL_COST_PARADROP 500
 #define WL_COST_PARADROPCALL 2000
 #define WL_COST_REPAIRALL 2000
 
@@ -125,7 +126,7 @@
 #define WL_COOLDOWN_REPAIR 300
 #define WL_COOLDOWN_GC 60
 #define WL_COOLDOWN_GC_LONG 600
-#define WL_COOLDOWN_PARADROP 300
+#define WL_COOLDOWN_PARADROP 180
 #define WL_COOLDOWN_PARADROP_DMG 30
 #define WL_COOLDOWN_JETRTB_DMG 120
 #define WL_COOLDOWN_APS_RELOAD 5
@@ -190,4 +191,4 @@
 #define WL_ISDBNO(unit) (alive (unit) && WL_ISUNCONSCIOUS(unit))
 #define WL_ISUP(unit) (alive (unit) && !WL_ISUNCONSCIOUS(unit))
 #define WL_ISDOWN(unit) !(WL_ISUP(unit))
-#define WL_KILL_REWARD(type) (WL_ASSET(type, "reward", (round (0.5 * WL_ASSET(type, "cost", 0) ^ 0.8))))
+#define WL_KILL_REWARD(type) (WL_ASSET(type, "reward", (round (0.4 * WL_ASSET(type, "cost", 0) ^ 0.8))))
