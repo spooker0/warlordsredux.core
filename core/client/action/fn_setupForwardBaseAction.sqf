@@ -200,7 +200,7 @@ private _setupActionId = [
 
 [
 	_asset,
-	"<t color='#00ff00'>Add Supplies</t>",
+	"<t color='#00ff00'>Activate Supplies</t>",
 	"\A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_loadDevice_ca.paa",
 	"\A3\Ui_f\data\IGUI\Cfg\HoldActions\holdAction_loadDevice_ca.paa",
 	"([_target, _this, true] call WL2_fnc_setupForwardBaseEligibility) == ''",
@@ -247,7 +247,7 @@ private _setupActionId = [
 		};
 
 		private _teamSectorsData = WL_SECTORS_DATA(_side);
-		private _ownedSectors = _teamSectorsData getOrDefault ["owned", []];
+		private _ownedSectors = _teamSectorsData getOrDefault ["unlocked", []];
 		private _sectorsInRange = _ownedSectors select {
 			_target inArea (_x getVariable "objectAreaComplete")
 		};
@@ -255,23 +255,29 @@ private _setupActionId = [
 			deleteVehicle _target;
 
 			private _sector = _sectorsInRange # 0;
+			private _isFriendlySector = _sector getVariable ["BIS_WL_owner", independent] == _side;
+
 			private _currentDefenders = _sector getVariable ["WL2_defenders", 0];
-			private _maxDefenders = _sector getVariable ["WL2_maxDefenders", 0];
-			_sector setVariable ["WL2_defenders", (_currentDefenders + WL_DEFENDER_ADD) min _maxDefenders, true];
-			_sector setVariable ["WL2_strongholdAllowTime", 0, true];
+			if (_isFriendlySector) then {
+				private _maxDefenders = _sector getVariable ["WL2_maxDefenders", 0];
+				_sector setVariable ["WL2_defenders", (_currentDefenders + WL_DEFENDER_ADD) min _maxDefenders, true];
+				_sector setVariable ["WL2_strongholdAllowTime", 0, true];
 
-			private _sectorStronghold = _sector getVariable ["WL_stronghold", objNull];
-			if (!isNull _sectorStronghold) then {
-				private _strongholdIntruders = _sectorStronghold getVariable ["WL2_strongholdIntruders", false];
-				if (!_strongholdIntruders) then {
-					private _strongholdMaxHealth = _sectorStronghold getVariable ["WL2_demolitionMaxHealth", 0];
-					_strongholdMaxHealth = (_strongholdMaxHealth + 8) min 24;
-					_sectorStronghold setVariable ["WL2_demolitionMaxHealth", _strongholdMaxHealth, true];
-					_sectorStronghold setVariable ["WL2_demolitionHealth", _strongholdMaxHealth, true];
+				private _sectorStronghold = _sector getVariable ["WL_stronghold", objNull];
+				if (!isNull _sectorStronghold) then {
+					private _strongholdIntruders = _sectorStronghold getVariable ["WL2_strongholdIntruders", false];
+					if (!_strongholdIntruders) then {
+						private _strongholdMaxHealth = _sectorStronghold getVariable ["WL2_demolitionMaxHealth", 0];
+						_strongholdMaxHealth = (_strongholdMaxHealth + 8) min 24;
+						_sectorStronghold setVariable ["WL2_demolitionMaxHealth", _strongholdMaxHealth, true];
+						_sectorStronghold setVariable ["WL2_demolitionHealth", _strongholdMaxHealth, true];
+					};
 				};
+				[_sector, -1, name player] remoteExec ["WL2_fnc_warnSectorDefenders", 2];
+			} else {
+				_sector setVariable ["WL2_defenders", (_currentDefenders - WL_DEFENDER_MINUS) max 0, true];
+				[_sector, -2, name player] remoteExec ["WL2_fnc_warnSectorDefenders", 2];
 			};
-
-			[_sector, -1, name player] remoteExec ["WL2_fnc_warnSectorDefenders", 2];
 		};
 
 		["No friendly forward base or sector in range!"] call WL2_fnc_smoothText;

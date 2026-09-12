@@ -29,7 +29,7 @@ private _progressWidths = [113, 123] apply {
 };
 
 private _natoUnits = [
-    "B_Soldier_F", "B_Soldier_GL_F", "B_medic_F",
+    "B_Soldier_GL_F", "B_ghillie_ard_F", "B_recon_TL_F", "B_T_Recon_Exp_F",
     "B_MRAP_01_F", "B_Truck_01_medical_F", "B_LSV_01_armed_F",
     "B_T_APC_Wheeled_01_cannon_F", "B_APC_Tracked_01_rcws_F", "B_AFV_Wheeled_01_cannon_F", "B_APC_Tracked_01_AA_F",
     "B_MBT_01_TUSK_F", "B_T_MBT_01_mlrs_F", "B_MBT_01_arty_F",
@@ -37,7 +37,7 @@ private _natoUnits = [
     "B_Plane_CAS_01_dynamicLoadout_F", "B_Plane_Fighter_01_Stealth_F"
 ];
 private _csatUnits = [
-    "O_Soldier_F", "O_Soldier_GL_F", "O_medic_F",
+    "O_Soldier_GL_F", "O_ghillie_ard_F", "O_R_JTAC_F", "O_V_Soldier_Exp_hex_F",
     "O_T_MRAP_02_ghex_F", "O_Truck_03_medical_F", "O_LSV_02_armed_F",
     "O_APC_Tracked_02_cannon_F", "O_APC_Wheeled_02_rcws_v2_F", "O_APC_Wheeled_02_rcws_v2_F", "O_APC_Tracked_02_AA_F",
     "O_T_MBT_04_command_F", "O_MBT_02_cannon_F", "O_MBT_02_arty_F",
@@ -45,7 +45,7 @@ private _csatUnits = [
     "O_Plane_CAS_02_dynamicLoadout_F", "O_Plane_Fighter_02_Stealth_F"
 ];
 private _aafUnits = [
-    "I_soldier_F", "I_Soldier_GL_F", "I_medic_F",
+    "I_Soldier_GL_F", "I_medic_F", "I_ghillie_ard_F", "I_officer_F", "I_Soldier_LAT2_F",
     "I_MRAP_03_F", "I_MRAP_03_hmg_F", "I_MRAP_03_gmg_F",
     "I_APC_Wheeled_03_cannon_F", "I_APC_tracked_03_cannon_F", "I_APC_tracked_03_cannon_F", "I_LT_01_AA_F",
     "I_MBT_03_cannon_F", "I_APC_tracked_03_cannon_F", "I_LT_01_AT_F",
@@ -180,6 +180,8 @@ while { serverTime < _timeout && !(isNull _dialog) } do {
         private _friendlyName = _friendlyFaction # 1;
         private _instructionText = format ["%1: %2. Identify the enemy.", _teamLabel, _friendlyName];
         _instructionControl ctrlSetText _instructionText;
+
+        setMousePosition [0.5, 0.5];
 
         private _feedbackText = if (_waitingForExit) then {
             "Move your cursor off the cards to start the next round.";

@@ -113,3 +113,4 @@ if (count _activePolls > 0) then {
 showChat true;
 
 player setVariable ["WL2_unconscious", false, true];
+player setVariable ["WL2_navalTeleported", false];

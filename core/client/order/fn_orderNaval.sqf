@@ -27,7 +27,7 @@ private _mapClickEH = addMissionEventHandler ["MapSingleClick", {
 			["Boat must be placed within 300 meters from your current position."] call WL2_fnc_smoothText;
 			false;
 		};
-		if (_cost < 500) exitWith {
+		if (_cost <= 500) exitWith {
 			true;
 		};
 

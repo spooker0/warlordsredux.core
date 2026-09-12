@@ -312,7 +312,11 @@ if (_asset isKindOf "Man") then {
 		if (unitIsUAV _asset) then {
 			_asset setVariable ["WL2_accessControl", 6, true];
 		} else {
-			_asset setVariable ["WL2_accessControl", 4, true];
+			if (_asset isKindOf "Land_Cargo10_military_green_F") then {
+				_asset setVariable ["WL2_accessControl", -1, true];
+			} else {
+				_asset setVariable ["WL2_accessControl", 4, true];
+			};
 		};
 	};
 	[_asset] remoteExec ["WL2_fnc_vehicleLockAction", 0, true];
@@ -502,11 +506,13 @@ if (_asset isKindOf "Man") then {
 
 	private _drone = WL_ASSET_GET(_data, "drone", 0);
 	private _category = WL_ASSET_GET(_data, "category", "");
-	if (_drone == 0 && _category == "Naval") then {
+	private _navalTeleported = player getVariable ["WL2_navalTeleported", false];
+	if (_drone == 0 && _category == "Naval" && !_navalTeleported) then {
 		private _playerPosition = getPosASL player;
 		_playerPosition set [2, -1];
 		player setPosATL _playerPosition;
 		player moveInDriver _asset;
+		player setVariable ["WL2_navalTeleported", true];
 	};
 };
 

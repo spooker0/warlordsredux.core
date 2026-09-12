@@ -16,4 +16,5 @@ if (cursorObject != _target && vehicle _caller != _target) exitWith {
     false
 };
 
-true;
+private _accessControl = _target getVariable ["WL2_accessControl", -1];
+_accessControl != -1

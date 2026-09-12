@@ -33,7 +33,7 @@ private _inRangeTeamFob = if (count _inRangeTeamForwardBases > 0) then {
     true
 } else {
     private _teamSectorsData = WL_SECTORS_DATA(_side);
-    private _ownedSectors = _teamSectorsData getOrDefault ["owned", []];
+    private _ownedSectors = _teamSectorsData getOrDefault ["unlocked", []];
     private _sectorsInRange = _ownedSectors select {
         _target inArea (_x getVariable "objectAreaComplete")
     };

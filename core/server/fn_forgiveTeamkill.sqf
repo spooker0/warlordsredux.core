@@ -1,27 +1,23 @@
 #include "includes.inc"
-params ["_teamkiller", "_forgiver", "_victim"];
+params ["_teamkiller", "_forgiver", "_victimTypeName", "_victimCost"];
 
 if (!isServer) exitWith {};
 
 private _teamkillerOwner = owner _teamkiller;
+#if WL_TEST_SERVER == 0
 if (_teamkillerOwner < 3) exitWith {};
+#endif
 
 private _teamkillerUid = getPlayerUID _teamkiller;
-private _itemCost = WL_UNIT(_victim, "cost", 100);
 
 private _fundsDB = serverNamespace getVariable "fundsDatabase";
 private _teamkillerFunds = _fundsDB getOrDefault [_teamkillerUid, 0];
 
-private _compensation = round (_itemCost min _teamkillerFunds);
+private _compensation = round (_victimCost min _teamkillerFunds);
 [-_compensation, _teamkillerUid, false, ""] call WL2_fnc_fundsDatabaseWrite;
 [round (_compensation * 0.5), getPlayerUID _forgiver, false, "TK compensation"] call WL2_fnc_fundsDatabaseWrite;
 
-private _assetType = if (isPlayer [_victim]) then {
-	name _victim
-} else {
-	[_victim] call WL2_fnc_getAssetTypeName;
-};
-private _displayMsgTeamkiller = format ["You have been punished for killing friendly %1. [-%2]", _assetType, _compensation];
+private _displayMsgTeamkiller = format ["You have been punished for killing %1. [-%2]", _victimTypeName, _compensation];
 [_displayMsgTeamkiller] remoteExec ["WL2_fnc_smoothText", _teamkillerOwner];
 [["a3\dubbing_f_bootcamp\boot_m04\50_friendly\boot_m04_50_friendly_ada_0.ogg"]] remoteExec ["playSoundUI", _teamkillerOwner];
 

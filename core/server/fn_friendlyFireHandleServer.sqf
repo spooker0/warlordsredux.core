@@ -5,31 +5,31 @@ private _alreadyPunished = _unit getVariable ["WL2_alreadyPunished", false];
 if (_alreadyPunished) exitWith {};
 _unit setVariable ["WL2_alreadyPunished", true];
 
-private _uid = _unit getVariable ["BIS_WL_ownerAsset", "123"];
-if (_uid == "123" || {_uid == (getPlayerUID _responsibleLeader)}) exitWith {};
-private _victim = _uid call BIS_fnc_getUnitByUid;
+private _victimUid = _unit getVariable ["BIS_WL_ownerAsset", "123"];
+private _victim = [_victimUid] call BIS_fnc_getUnitByUid;
 private _owner = owner _victim;
+
+#if WL_TEST_SERVER == 0
 if (_owner <= 2) exitWith {};
+if (_victimUid == "123" || _victimUid == getPlayerUID _responsibleLeader) exitWith {};
+#endif
 
 if (WL_UNIT(_unit, "obstacle", 0) > 0) exitWith {};
 
+private _responsibleLeaderSide = side group _responsibleLeader;
+private _unitSide = [_unit] call WL2_fnc_getAssetSide;
+if (_responsibleLeaderSide != _unitSide) exitWith {};
+
 if (_unit isKindOf "Man") then {
-	if (side group _unit == side group _responsibleLeader) then {
-		[_responsibleLeader, _unit] remoteExec ["WL2_fnc_askForgiveness", _owner];
+	if (isPlayer _unit) then {
+		[_responsibleLeader, name _responsibleLeader, 100] remoteExec ["WL2_fnc_askForgiveness", _owner];
+	} else {
+		private _assetName = format ["%1's AI", name _responsibleLeader];
+		[_responsibleLeader, _assetName, 100] remoteExec ["WL2_fnc_askForgiveness", _owner];
 	};
 } else {
-	private _typeSide = switch (getNumber (configFile >> "CfgVehicles" >> typeOf _unit >> "side")) do {
-		case 0: { east };
-		case 1: { west };
-		case 2: { independent };
-		default { independent };
-	};
-	private _sideOwner = _unit getVariable ["BIS_WL_ownerAssetSide", _typeSide];
-
-	private _crew = (crew _unit) select { alive _x };
-	private _sideCrew = (if ((count _crew) > 0) then {side (group (_crew # 0))} else {_sideOwner});
-
-	if (_sideOwner == side (group _responsibleLeader) && {_sideOwner == _sideCrew}) then {
-		[_responsibleLeader, _unit] remoteExec ["WL2_fnc_askForgiveness", _owner];
-	};
+	private _assetType = [_unit] call WL2_fnc_getAssetTypeName;
+	private _itemCost = WL_UNIT(_unit, "cost", 100);
+	private _assetTypeName = format ["%1's %2", name _responsibleLeader, _assetType];
+	[_responsibleLeader, _assetTypeName, _itemCost] remoteExec ["WL2_fnc_askForgiveness", _owner];
 };

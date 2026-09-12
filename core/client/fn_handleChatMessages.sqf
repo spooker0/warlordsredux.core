@@ -114,9 +114,14 @@ if (_channel == 0) exitWith {
 };
 
 if (_channel == 1) exitWith {
-    private _playerLevel = _person getVariable ["WL_playerLevel", "Recruit"];
-    private _newFrom = format ["%1 [%2]", _name, _playerLevel];
-    [_newFrom, _filteredText];
+    if (isPlayer _person && side group _person == independent) then {
+        private _newFrom = format ["Lobby (%1)", _name];
+        [_newFrom, _filteredText];
+    } else {
+        private _playerLevel = _person getVariable ["WL_playerLevel", "Recruit"];
+        private _newFrom = format ["%1 [%2]", _name, _playerLevel];
+        [_newFrom, _filteredText];
+    };
 };
 
 if (_channel == 2) exitWith {

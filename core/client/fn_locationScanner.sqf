@@ -346,8 +346,8 @@ uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
 
         private _showStrongholdInfo = _settingsMap getOrDefault ["showStrongholdInfo", true];
         private _strongholdIconSize = _settingsMap getOrDefault ["strongholdIconSize", 1];
+        private _playerCurrentSector = player getVariable ["WL2_currentSector", objNull];
         if (_showStrongholdInfo || _strongholdIconSize > 0) then {
-            private _playerCurrentSector = player getVariable ["WL2_currentSector", objNull];
             private _sectorRevealed = _playerCurrentSector getVariable ["BIS_WL_revealedBy", []];
             if (_side in _sectorRevealed) then {
                 private _sectorStronghold = _playerCurrentSector getVariable ["WL_stronghold", objNull];
@@ -392,6 +392,31 @@ uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
                     ];
                 };
             };
+        };
+
+        if (!isNull _playerCurrentSector) then {
+            private _nearbySupplies = _nearbyItems select {
+                _x isKindOf "Land_Cargo10_military_green_F"
+            } select {
+                _x getVariable ["WL_spawnedAsset", false]
+            };
+
+            {
+                _sectorIcons pushBack [
+                    "a3\ui_f\data\map\vehicleicons\iconparachute_ca.paa",
+                    [1, 1, 1, 1],
+                    _x modelToWorldVisual [0, 0, 2],
+                    1.2,
+                    1.2,
+                    0,
+                    "Capture and activate sector supplies",
+                    2,
+                    0.05,
+                    "RobotoCondensedBold",
+                    "center",
+                    true
+                ];
+            } forEach _nearbySupplies;
         };
 
         uiNamespace setVariable ["WL2_drawSectorHudIcons", _sectorIcons];

@@ -10,6 +10,11 @@ private _targetData = [];
         continue;
     };
 
+    private _hideMap = _vehicle getVariable ["WL2_hideMap", 0];
+    if (_hideMap > 0) then {
+        continue;
+    };
+
     private _vehicleName = [_vehicle] call WL2_fnc_getAssetTypeShortName;
     private _ownerUid = _vehicle getVariable ["BIS_WL_ownerAsset", ""];
     private _owner = _ownerUid call BIS_fnc_getUnitByUid;
@@ -24,6 +29,11 @@ private _targetData = [];
         continue;
     };
 
+    private _hideMap = _vehicle getVariable ["WL2_hideMap", 0];
+    if (_hideMap > 0) then {
+        continue;
+    };
+
     private _vehicleName = [_vehicle] call WL2_fnc_getAssetTypeShortName;
     private _ownerUid = _vehicle getVariable ["BIS_WL_ownerAsset", ""];
     private _owner = _ownerUid call BIS_fnc_getUnitByUid;
@@ -35,6 +45,11 @@ private _targetData = [];
 {
     private _vehicle = _x;
     if (isNull _vehicle) then {
+        continue;
+    };
+
+    private _hideMap = _vehicle getVariable ["WL2_hideMap", 0];
+    if (_hideMap > 0) then {
         continue;
     };
 

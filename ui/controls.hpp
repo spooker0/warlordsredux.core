@@ -184,7 +184,7 @@ class RscWLSidePicker {
 			x = safeZoneX + safeZoneW * 0.05;
 			y = safeZoneY;
 			w = safeZoneW * 0.9;
-			h = safeZoneH * 0.2;
+			h = safeZoneH * 0.18;
 			text = "src\img\reduxlogosmall.paa";
 		};
 		class RscWLSidePicker_WestButton: RscWLSideButton {

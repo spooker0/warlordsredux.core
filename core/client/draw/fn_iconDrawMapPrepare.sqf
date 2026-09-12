@@ -108,7 +108,7 @@ if (uiNamespace getVariable ["WL2_isOrderingWater", false]) then {
 	private _mouseWorldPosition = _map ctrlMapScreenToWorld _mousePosition;
 
 	private _waterDropCost = uiNamespace getVariable ["WL2_waterDropCost", -1];
-	if (_waterDropCost >= 500) then {
+	if (_waterDropCost > 500) then {
 		private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 		private _spawnLocations = _forwardBases select {
 			_x getVariable ["WL2_forwardBaseOwner", sideUnknown] == _side

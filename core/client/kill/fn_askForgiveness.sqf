@@ -1,18 +1,13 @@
 #include "includes.inc"
-params ["_killer", "_victim"];
+params ["_killer", "_assetTypeName", "_assetCost"];
 
-private _assetType = [_victim] call WL2_fnc_getAssetTypeName;
-private _forgiveText = if (isPlayer [_victim]) then {
-	format ["Choose to forgive %1?", name _killer]
-} else {
-	format ["Choose to forgive %1 for killing %2?", name _killer, _assetType]
-};
+private _forgiveText = format ["Choose to forgive %1 for killing %2?", name _killer, _assetTypeName];
 
 private _callbackConfirm = {};
 
 private _callbackCancel = {
-	params ["_killer", "_victim"];
-    [_killer, player, _victim] remoteExec ["WL2_fnc_forgiveTeamkill", 2];
+	params ["_killer", "_assetTypeName", "_assetCost"];
+    [_killer, player, _assetTypeName, _assetCost] remoteExec ["WL2_fnc_forgiveTeamkill", 2];
 };
 
 [
@@ -20,6 +15,6 @@ private _callbackCancel = {
     _forgiveText,
     "\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa",
     "Forgive", "Don't forgive",
-    _callbackConfirm, _callbackCancel, [_killer, _victim],
+    _callbackConfirm, _callbackCancel, [_killer, _assetTypeName, _assetCost],
     20, false
 ] spawn WL2_fnc_timedPrompt;
