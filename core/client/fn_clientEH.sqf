@@ -77,6 +77,23 @@ call WL2_fnc_playerEventHandlers;
 		0 spawn WL2_fnc_scoreboard;
 	}];
 
+	_display displayAddEventHandler ["KeyDown", {
+		params ["_display", "_key"];
+		if (!visibleMap) exitWith {};
+		if (inputAction "headlights" > 0) then {
+			private _mapRulerOn = uiNamespace getVariable ["WL2_mapRulerOn", false];
+			uiNamespace setVariable ["WL2_mapRulerOn", !_mapRulerOn];
+		};
+		if (inputAction "ListLeftVehicleDisplay" > 0) then {
+			private _radius = uiNamespace getVariable ["WL2_mapRulerRadius", 3000];
+			uiNamespace setVariable ["WL2_mapRulerRadius", (_radius - 500) max 500];
+		};
+		if (inputAction "ListRightVehicleDisplay" > 0) then {
+			private _radius = uiNamespace getVariable ["WL2_mapRulerRadius", 3000];
+			uiNamespace setVariable ["WL2_mapRulerRadius", (_radius + 500) min 20000];
+		};
+	}];
+
 	// intentionally separate handler
 	_display displayAddEventHandler ["KeyDown", {
 		private _key = _this # 1;

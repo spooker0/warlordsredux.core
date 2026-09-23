@@ -3,13 +3,19 @@ params ["_camera", "_deltaTime", "_currentTarget"];
 
 private _targetCamMode = uiNamespace getVariable ["SPEC_TargetCameraMode", 0];
 if (_targetCamMode == 1) exitWith {
-    _currentTarget switchCamera "Internal";
+    if (cameraView != "Internal" || cameraOn != _currentTarget) then {
+        _currentTarget switchCamera "Internal";
+    };
 };
 if (_targetCamMode == 2) exitWith {
-    _currentTarget switchCamera "External";
+    if (cameraView != "External" || cameraOn != _currentTarget) then {
+        _currentTarget switchCamera "External";
+    };
 };
 if (_targetCamMode == 3) exitWith {
-    _currentTarget switchCamera "Gunner";
+    if (cameraView != "Gunner" || cameraOn != _currentTarget) then {
+        _currentTarget switchCamera "Gunner";
+    };
 };
 _camera switchCamera "Internal";
 

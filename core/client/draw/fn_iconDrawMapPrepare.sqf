@@ -142,6 +142,39 @@ if (uiNamespace getVariable ["WL2_isOrderingWater", false]) then {
 	];
 };
 
+private _mapMarkerCircles = _mapData getOrDefault ["mapMarkerCircles", []];
+{
+	_x params ["_marker", "_radius"];
+	if (markerText _marker == "") then {
+		continue;
+	};
+	private _markerColor = markerColor _marker;
+	private _colorRGBA = getArray (configFile >> "CfgMarkerColors" >> _markerColor >> "color");
+	_colorRGBA = _colorRGBA apply {
+		private _color = if (_x isEqualType "") then {
+			call compile _x
+		} else {
+			_x
+		};
+		if (_color isEqualType 0) then {
+			_color;
+		} else {
+			0;
+		};
+	};
+	if (count _colorRGBA != 4) then {
+		_colorRGBA = [0, 0, 0, 1];
+	};
+	_drawEllipses pushBack [
+		getMarkerPos _marker,
+		_radius,
+		_radius,
+		0,
+		_colorRGBA,
+		"#(rgb,8,8,3)color(1,1,1,0.2)"
+	];
+} forEach _mapMarkerCircles;
+
 private _assetTargets = WL_AssetActionTargets;
 
 // Draw sector selector

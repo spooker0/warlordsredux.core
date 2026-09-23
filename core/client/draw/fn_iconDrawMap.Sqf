@@ -116,6 +116,36 @@ private _mousePosition = getMousePosition;
 	_m drawIcon _x;
 } forEach _drawIcons;
 
+private _mapRulerOn = uiNamespace getVariable ["WL2_mapRulerOn", false];
+if (_mapRulerOn) then {
+	private _mousePosition = getMousePosition;
+	private _mouseWorldPosition = _m ctrlMapScreenToWorld _mousePosition;
+
+	private _radius = uiNamespace getVariable ["WL2_mapRulerRadius", 3000];
+	_m drawEllipse [
+		_mouseWorldPosition,
+		_radius,
+		_radius,
+		0,
+		[1, 1, 1, 1],
+		"#(rgb,8,8,3)color(0,0,0,0.2)"
+	];
+
+	_m drawIcon [
+		"#(rgb,1,1,1)color(1,1,1,1)",
+		[1, 1, 1, 1],
+		_mouseWorldPosition,
+		0,
+		0,
+		0,
+		format ["%1  ", _radius],
+		1,
+		0.08,
+		"TahomaB",
+		"left"
+	]
+};
+
 if (WL_IsReplaying) then {
 	private _drawSectorIcons = uiNamespace getVariable ["WL2_drawSectorIcons", []];
 	{

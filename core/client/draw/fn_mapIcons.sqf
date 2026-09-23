@@ -175,6 +175,36 @@
 		};
 		_mapData set ["scanners", _scanners];
 
+		private _mapMarkerCircles = [];
+		{
+			private _marker = _x;
+			if !("_USER_DEFINED #" in _marker) then {
+				continue;
+			};
+
+			if (markerText _marker == "") then {
+				continue;
+			};
+
+			if (markerAlpha _marker == 0) then {
+				continue;
+			};
+
+			private _markerText = toLower markerText _marker;
+			if (_markerText select [0, 1] != "c") then {
+				continue;
+			};
+
+			private _numericRadius = _markerText select [1];
+			private _radius = parseNumber _numericRadius;
+			if (_radius <= 0 || _radius > 20000) then {
+				continue;
+			};
+
+			_mapMarkerCircles pushBack [_marker, _radius];
+		} forEach allMapMarkers;
+		_mapData set ["mapMarkerCircles", _mapMarkerCircles];
+
 		private _isMapBeingDrawn = uiNamespace getVariable ["WL2_drawingMap", false];
 		if (_isMapBeingDrawn) then {
 			private _mapColorCache = createHashMap;

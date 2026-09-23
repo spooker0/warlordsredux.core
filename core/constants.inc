@@ -28,6 +28,7 @@
 #define WL_SQUAD_DEBUG 0
 #define WL_SUPPORT_DEBUG 0
 #define WL_CUSTOM_GPS 0
+#define WL_FF_TEST 0
 
 // Live: set to -1 for performance
 #define WL_HEADER_LEVEL -1

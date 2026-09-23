@@ -64,15 +64,11 @@ addMissionEventHandler ["EachFrame", {
 
     private _currentTarget = uiNamespace getVariable ["SPEC_CameraTarget", objNull];
 
-    if (cameraView != "Internal") then {
-        _camera switchCamera "Internal";
-    };
-
     private _lastFrameTime = uiNamespace getVariable ["SPEC_LastFrameTime", serverTime];
     private _deltaTime = (serverTime - _lastFrameTime) min 1;
 
     if (isNull _currentTarget) then {
-        if (cameraOn != _camera) then {
+        if (cameraOn != _camera || cameraView != "Internal") then {
             _camera switchCamera "Internal";
         };
         [_camera, _deltaTime] call SPEC_fnc_spectatorFree;

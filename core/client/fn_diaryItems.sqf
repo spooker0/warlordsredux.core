@@ -79,7 +79,7 @@ private _infoAssetCategories = createHashMapFromArray [
 ];
 
 private _ignoredProperties = [
-    "allowPylonMagazines", "ammoOverrides", "category", "container", "disallowMagazines", "integralWeapon", "name", "spawn", "textures", "turretOverrides"
+    "allowPylonMagazines", "ammoOverrides", "attachments", "category", "container", "disallowMagazines", "integralWeapon", "name", "spawn", "textures", "turretOverrides"
 ];
 
 private _assetData = +WL_ASSET_DATA;

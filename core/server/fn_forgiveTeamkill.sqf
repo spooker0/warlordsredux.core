@@ -4,7 +4,7 @@ params ["_teamkiller", "_forgiver", "_victimTypeName", "_victimCost"];
 if (!isServer) exitWith {};
 
 private _teamkillerOwner = owner _teamkiller;
-#if WL_TEST_SERVER == 0
+#if WL_FF_TEST == 0
 if (_teamkillerOwner < 3) exitWith {};
 #endif
 
@@ -19,7 +19,7 @@ private _compensation = round (_victimCost min _teamkillerFunds);
 
 private _displayMsgTeamkiller = format ["You have been punished for killing %1. [-%2]", _victimTypeName, _compensation];
 [_displayMsgTeamkiller] remoteExec ["WL2_fnc_smoothText", _teamkillerOwner];
-[["a3\dubbing_f_bootcamp\boot_m04\50_friendly\boot_m04_50_friendly_ada_0.ogg"]] remoteExec ["playSoundUI", _teamkillerOwner];
+[["a3\dubbing_f_bootcamp\boot_m04\50_friendly\boot_m04_50_friendly_ada_0.ogg", 5]] remoteExec ["playSoundUI", _teamkillerOwner];
 
 private _displayMsgForgiver = format ["You have been compensated for teamkill. [+%1]", round (_compensation * 0.5)];
 [_displayMsgForgiver] remoteExec ["WL2_fnc_smoothText", _forgiver];

@@ -1,9 +1,18 @@
 #include "includes.inc"
 params ["_projectile", "_unit", "_mineLayerType"];
+private _dispenseSounds = [
+    "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_01.wss",
+    "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_02.wss",
+    "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_03.wss",
+    "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_04.wss"
+];
 
 private _projectilePosition = getPosATL _projectile;
 private _projectileDirection = getDir _projectile;
 deleteVehicle _projectile;
+
+private _startPosition = getPosASL _unit;
+playSound3D [selectRandom _dispenseSounds, objNull, false, _startPosition, 3];
 
 uiSleep 3;
 
@@ -13,8 +22,8 @@ private _parachuteClass = switch (BIS_WL_playerSide) do {
     case independent: { "I_Parachute_02_F" };
 };
 
-if (_projectilePosition # 2 < 50) then {
-    _projectilePosition set [2, 50];
+if (_projectilePosition # 2 < 200) then {
+    _projectilePosition set [2, 200];
 };
 
 private _container = createVehicle ["SpaceshipCapsule_01_container_F", _projectilePosition, [], 0, "NONE"];
@@ -43,12 +52,6 @@ while { _altitude > 5 && alive _container && alive _parachute } do {
     _altitude = (getPosVisual _container) # 2;
 };
 
-private _dispenseSounds = [
-    "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_01.wss",
-    "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_02.wss",
-    "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_03.wss",
-    "a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_launch_04.wss"
-];
 private _finalPosition = [_projectilePosition # 0, _projectilePosition # 1, 0];
 playSound3D [selectRandom _dispenseSounds, objNull, false, _finalPosition, 3];
 

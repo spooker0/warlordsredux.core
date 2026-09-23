@@ -9,7 +9,7 @@ private _victimUid = _unit getVariable ["BIS_WL_ownerAsset", "123"];
 private _victim = [_victimUid] call BIS_fnc_getUnitByUid;
 private _owner = owner _victim;
 
-#if WL_TEST_SERVER == 0
+#if WL_FF_TEST == 0
 if (_owner <= 2) exitWith {};
 if (_victimUid == "123" || _victimUid == getPlayerUID _responsibleLeader) exitWith {};
 #endif

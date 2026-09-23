@@ -26,7 +26,10 @@ while { !BIS_WL_missionEnd } do {
         continue;
     };
 
-    private _repairCooldown = ((_cursorObject getVariable ["WL2_nextRepair", 0]) - serverTime) max 0;
+    private _canRepairTime = _cursorObject getVariable ["WL2_canRepairTime", 0];
+    private _nextRepairTime = _cursorObject getVariable ["WL2_nextRepair", 0];
+
+    private _repairCooldown = ((_nextRepairTime max _canRepairTime) - serverTime) max 0;
     private _cursorObjectTypeName = [_cursorObject] call WL2_fnc_getAssetTypeName;
     private _actionText = if (_repairCooldown == 0) then {
         format ["<t color='#4bff58'>%1 %2</t>", localize "STR_repair", _cursorObjectTypeName];
