@@ -5,6 +5,7 @@ class CfgRemoteExec {
 		jip = 1;
 
 		class APS_fnc_friendlyWarning {allowedTargets = 0;};
+		class APS_fnc_enemyFeedback {allowedTargets = 1; jip = 0;};
 		class APS_fnc_lagProtectionServer {allowedTargets = 2;};
 		class APS_fnc_projectileStateUpdate {allowedTargets = 0;};
 		class APS_fnc_report {allowedTargets = 0;};
@@ -156,6 +157,7 @@ class CfgRemoteExec {
 
 class CfgCommands {
 	allowedHTMLLoadURIs[] += {
-		"https://discord.gg/grmzsZE4ua"
+		"https://discord.gg/grmzsZE4ua",
+		"https://discord.gg/arma"
 	};
 };

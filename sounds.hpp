@@ -106,6 +106,22 @@ class CfgSounds {
         sound[] = {"src\sounds\vlslaunch_03.ogg", 1, 1};
         titles[] = {};
     };
+
+    class INTRO_Narration {
+        name = "Intro Cinematic narration";
+        sound[] = {"src\sounds\narration.ogg", 1, 1};
+        titles[] = {};
+    };
+    class INTRO_Narration_RUS {
+        name = "Intro Cinematic narration (Russian)";
+        sound[] = {"src\sounds\narration_rus.ogg", 1, 1};
+        titles[] = {};
+    };
+    class INTRO_Narration_ZH {
+        name = "Intro Cinematic narration (Chinese)";
+        sound[] = {"src\sounds\narration_zh.ogg", 1, 1};
+        titles[] = {};
+    };
 };
 
 class CfgSFX {

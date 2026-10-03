@@ -105,11 +105,21 @@ class WL_WelcomeDisplay {
 		};
 		class WL_WelcomeDisplay_DiscordButton: RscButton {
 			idc = 102;
-			text = "Discord";
+			text = "WSV Discord";
 			url = "https://discord.gg/grmzsZE4ua";
 			x = 0.1;
 			y = 0.9;
-			w = 0.8;
+			w = 0.39;
+			h = 0.05;
+			colorBackground[] = {1, 0.8, 0, 1};
+		};
+		class WL_WelcomeDisplay_ArmaDiscordButton: RscButton {
+			idc = 103;
+			text = "ArmA Discord";
+			url = "https://discord.gg/arma";
+			x = 0.51;
+			y = 0.9;
+			w = 0.39;
 			h = 0.05;
 		};
 	};

@@ -226,7 +226,18 @@ private _totalPointsMap = missionNamespace getVariable ["WL2_totalPointsEarned",
     _squadNameText ctrlSetStructuredText _squadNameTextStructured;
 
     private _squadVotingPower = ["getSquadVotingPower", [_squadLeader]] call SQD_fnc_query;
-    _squadNameText ctrlSetTooltip format [localize "STR_WL_votePower", _squadVotingPower toFixed 0];
+    private _squadVotingPowerDisplay = switch (true) do {
+        case (_squadVotingPower >= 1000000): {
+            format ["%1M", (_squadVotingPower / 1000000) toFixed 1]
+        };
+        case (_squadVotingPower >= 1000): {
+            format ["%1K", (_squadVotingPower / 1000) toFixed 1]
+        };
+        default {
+            str _squadVotingPower
+        };
+    };
+    _squadNameText ctrlSetTooltip format [localize "STR_WL_votePower", _squadVotingPowerDisplay];
 
     _squadNameText ctrlRemoveAllEventHandlers "ButtonClick";
 
@@ -361,7 +372,21 @@ private _totalPointsMap = missionNamespace getVariable ["WL2_totalPointsEarned",
         _playerNameText ctrlSetStructuredText _playerNameTextStructured;
 
         private _playerScore = _totalPointsMap getOrDefault [getPlayerUID _player, 0];
-        _playerNameText ctrlSetTooltip format [localize "STR_WL_scoreLabel", _playerScore];
+        private _playerScoreDisplay = switch (true) do {
+            case (_playerScore >= 1000000): {
+                format ["%1M", (_playerScore / 1000000) toFixed 1]
+            };
+            case (_playerScore >= 1000): {
+                format ["%1K", (_playerScore / 1000) toFixed 1]
+            };
+            default {
+                str _playerScore
+            };
+        };
+        _playerNameText ctrlSetTooltip ([
+            format ["%1 (%2)", name _player, _player getVariable ["WL2_playerRating", WL_RATING_STARTER]],
+            format [localize "STR_WL_scoreLabel", _playerScoreDisplay]
+        ] joinString "\n");
 
         private _badgeIconCtrl = _playerSlot controlsGroupCtrl SQD_BADGE_ICON_IDC;
         _badgeIconCtrl ctrlSetText "";

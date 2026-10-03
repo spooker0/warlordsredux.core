@@ -1,9 +1,0 @@
-#include "includes.inc"
-private _selectedUnits = groupSelectedUnits player;
-private _ownedSelectedUnits = _selectedUnits select {
-    _x != player && (_x getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player
-};
-
-if (count _ownedSelectedUnits == 0) exitWith {
-    [false, localize "STR_WL_noUnitsSelected"];
-};

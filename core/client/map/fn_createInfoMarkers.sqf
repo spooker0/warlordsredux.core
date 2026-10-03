@@ -38,7 +38,18 @@ private _infoMarkers = [
 uiNamespace setVariable ["WL2_infoMarkers", _infoMarkers];
 
 private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
-private _showWelcomeMenu = _settingsMap getOrDefault ["showWelcomeMenu", true];
-if (_showWelcomeMenu) then {
-	0 spawn WL2_fnc_welcome;
+private _showIntroCinematic = _settingsMap getOrDefault ["showIntroCinematic", true];
+if (_showIntroCinematic) then {
+	waitUntil {
+		uiSleep 0.1;
+		(missionNamespace getVariable ["BIS_WL_missionEnd", false]) || {
+			(missionNamespace getVariable ["WL_Server_LoadingState", 0]) >= 12 &&
+			{ !isNull (findDisplay 46) } &&
+			{ !isNil { uiNamespace getVariable "SQD_Menu" } } &&
+			{ "additionalSubs" in (missionProfileNamespace getVariable ["WL2_settings", createHashMap]) }
+		}
+	};
+	if (missionNamespace getVariable ["BIS_WL_missionEnd", false]) exitWith {};
+	"RequestMenu_close" call WL2_fnc_setupUI;
+	[] spawn INTRO_fnc_play;
 };

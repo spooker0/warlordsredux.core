@@ -1,4 +1,48 @@
 class RscTitles {
+	class RscWLEnemyAPS {
+		idd = -1;
+		duration = 1000000000;
+		fadein = 0;
+		fadeout = 0;
+		onLoad = "uiNamespace setVariable ['WL_enemyAPSDisplay', _this select 0];";
+		class controls {
+			class Number: RscStructuredText {
+				idc = 7801;
+				x = 0.309;
+				y = 0.475;
+				w = 0.13;
+				h = 0.05;
+				size = 0.045;
+				colorBackground[] = {0, 0, 0, 0};
+				text = "";
+				class Attributes {
+					align = "left";
+					font = "RobotoCondensed";
+					shadow = 2;
+				};
+			};
+			class Ghost: Number {
+				idc = 7802;
+			};
+			class Delta: Number {
+				idc = 7803;
+				x = 0.44;
+				w = 0.06;
+			};
+			class Number2: Number {
+				idc = 7811;
+				y = 0.53;
+			};
+			class Ghost2: Ghost {
+				idc = 7812;
+				y = 0.53;
+			};
+			class Delta2: Delta {
+				idc = 7813;
+				y = 0.53;
+			};
+		};
+	};
 	class RscGFEarplugs {
 		idd = -1;
 		duration = 1000000000;

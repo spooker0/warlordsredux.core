@@ -62,6 +62,7 @@ if !(isDedicated) then {
 	} forEach BIS_WL_sidesArray;
 };
 0 spawn WL2_fnc_detectNewPlayers;
+0 spawn WL2_fnc_repairPlayerGroups;
 call WL2_fnc_updateSectorsData;
 0 spawn WL2_fnc_targetSelectionHandleServer;
 0 spawn WL2_fnc_incomePayoff;

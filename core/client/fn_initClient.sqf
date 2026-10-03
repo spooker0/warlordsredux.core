@@ -186,18 +186,6 @@ WL_LoadingState = 9;
 
 WL_LoadingState = 10;
 
-0 spawn {
-	while { !BIS_WL_missionEnd } do {
-		private _buyMenuDisplay = uiNamespace getVariable ["BIS_WL_purchaseMenuDisplay", displayNull];
-		if (isNull _buyMenuDisplay) then {
-			uiSleep 1;
-			continue;
-		};
-
-		call WL2_fnc_purchaseMenuRefresh;
-		uiSleep 0.5;
-	};
-};
 
 0 spawn WL2_fnc_aiVehicleCrewHandler;
 0 spawn WL2_fnc_sectorVoteClient;
@@ -263,14 +251,16 @@ if !(isDedicated) then {
 		private _curator = _x;
 		_curator addEventHandler ["CuratorObjectPlaced", {
 			params ["_curator", "_entity"];
+			private _zeusVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_zeus", []];
 			[_entity] call WL2_fnc_newAssetHandle;
+			_zeusVehicles pushBack _entity;
+			_entity setVariable ["BIS_WL_ownerAssetSide", side group _entity, true];
 			{
 				[_x] call WL2_fnc_newAssetHandle;
+				_zeusVehicles pushBack _x;
+				_x setVariable ["BIS_WL_ownerAssetSide", side group _x, true];
 			} forEach (crew _entity);
-
-			private _ownedVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
-			_ownedVehicles pushBack _entity;
-			missionNamespace setVariable ["BIS_WL_ownedVehicles_server", _ownedVehicles, true];
+			missionNamespace setVariable ["BIS_WL_ownedVehicles_zeus", _zeusVehicles];
 		}];
 	} forEach allCurators;
 #endif

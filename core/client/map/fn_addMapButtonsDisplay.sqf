@@ -1,10 +1,11 @@
 #include "includes.inc"
-params ["_display", "_mousePosition"];
+params ["_display", "_mousePosition", ["_presentationData", []], ["_readOnly", false], ["_buttonClass", "WLRscButtonMenu"]];
 
 private _menuButtonIconMap = uiNamespace getVariable ["WL2_mapMenuButtonIcons", createHashMap];
 private _allMenuButtons = uiNamespace getVariable ["WL2_mapButtons", []];
 
-private _allButtonsData = [];
+// Cinematic previews pass display-local rows, without selecting real assets.
+private _allButtonsData = +_presentationData;
 {
     private _targetId = _x # 0;
     private _menuButtons = _x # 1;
@@ -37,7 +38,7 @@ private _allButtonsData = [];
     private _mapButtonText = _actionTarget getVariable ["WL2_mapButtonText", "Asset"];
 
     _allButtonsData pushBack [_targetId, _mapButtonText, _buttonsData];
-} forEach _allMenuButtons;
+} forEach (if (_readOnly) then { [] } else { _allMenuButtons });
 
 _mousePosition params ["_mouseX", "_mouseY"];
 
@@ -51,13 +52,18 @@ private _buttonHeight = 0.045 * _buttonScale;
 private _iconWidth = _buttonHeight * 0.8 *  3 / 4;
 private _iconHeight = _buttonHeight * 0.8;
 
-private _dummyButton = _display ctrlCreate ["WLDummyButton", 1338];
-_dummyButton ctrlCommit 0;
+private _createdControls = [];
+if (!_readOnly) then {
+    private _dummyButton = _display ctrlCreate ["WLDummyButton", 1338];
+    _dummyButton ctrlCommit 0;
+    _createdControls pushBack _dummyButton;
+};
 
 private _numpadData = [];
 {
     _x params ["_targetId", "_targetText", "_buttonsData"];
     private _targetLabel = _display ctrlCreate ["RscStructuredText", -1];
+    _createdControls pushBack _targetLabel;
     _targetLabel ctrlSetPosition [
         _xPos,
         _yPos,
@@ -73,7 +79,8 @@ private _numpadData = [];
     {
         _x params ["_buttonId", "_buttonLabel", "_buttonCost", "_buttonCanAfford", "_buttonEnabled", "_buttonIcon"];
 
-        private _button = _display ctrlCreate ["WLRscButtonMenu", -1];
+        private _button = _display ctrlCreate [_buttonClass, -1];
+        _createdControls pushBack _button;
         _button ctrlSetPosition [
             _xPos,
             _yPos,
@@ -98,19 +105,25 @@ private _numpadData = [];
         _button setVariable ["WL2_mapButtonTargetId", _targetId];
         _button setVariable ["WL2_mapButtonId", _buttonId];
 
-        _button ctrlAddEventHandler ["MouseButtonDown", {
-            params ["_control", "_button", "_xPos", "_yPos", "_shift", "_ctrl", "_alt"];
-            private _display = ctrlParent _control;
-            playSoundUI ["a3\ui_f\data\sound\rsclistbox\soundselect.wss", 0.5];
+        if (_readOnly) then {
+            _button ctrlEnable false;
+        } else {
+            _button ctrlAddEventHandler ["MouseButtonDown", {
+                params ["_control", "_button", "_xPos", "_yPos", "_shift", "_ctrl", "_alt"];
+                private _display = ctrlParent _control;
+                playSoundUI ["a3\ui_f\data\sound\rsclistbox\soundselect.wss", 0.5];
 
-            private _buttonId = _control getVariable ["WL2_mapButtonId", 0];
-            private _targetId = _control getVariable ["WL2_mapButtonTargetId", 0];
-            private _clickType = if (_button == 0) then { _button } else { 1 };
+                private _buttonId = _control getVariable ["WL2_mapButtonId", 0];
+                private _targetId = _control getVariable ["WL2_mapButtonTargetId", 0];
+                private _clickType = if (_button == 0) then { _button } else { 1 };
 
-            [_display, _control, _clickType, _buttonId, _targetId] spawn WL2_fnc_mapButtonClick;
-        }];
+                [_display, _control, _clickType, _buttonId, _targetId] spawn WL2_fnc_mapButtonClick;
+            }];
+        };
 
         private _icon = _display ctrlCreate ["RscPicture", -1];
+        _createdControls pushBack _icon;
+        _icon setVariable ["WL2_mapButtonId", _buttonId];
         _icon ctrlSetPosition [
             _xPos + _iconWidth * 0.1,
             _yPos + _iconHeight * 0.1,
@@ -129,6 +142,9 @@ private _numpadData = [];
 
     _yPos = _yPos + 0.01 * _buttonScale;
 } forEach _allButtonsData;
+
+// No click/keyboard handlers, shortcut data, or live menu state in a preview.
+if (_readOnly) exitWith { _createdControls };
 
 _display setVariable ["WL2_mapButtonNumpadData", _numpadData];
 
@@ -197,3 +213,5 @@ _display displayAddEventHandler ["KeyDown", {
     [_display, _entry # 2, 0, _entry # 1, _entry # 0] call WL2_fnc_mapButtonClick;
     uiNamespace setVariable ["WL2_mapButtonLastClickTime", serverTime + 0.3];
 }];
+
+_createdControls

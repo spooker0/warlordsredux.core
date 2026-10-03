@@ -418,9 +418,9 @@ switch (_conditionName) do {
         if (!alive _target) exitWith { "" };
         if (_target isKindOf "Man") exitWith { "" };
 
-        private _altitude = (_target modelToWorld [0, 0, 0]) # 2;
-        if (_altitude > 20) exitWith {
-            "Vehicle must be below 20m altitude to be rearmed."
+        private _altitude = (ASLtoAGL getPosASL _target) # 2;
+        if (_altitude > 25) exitWith {
+            "Vehicle must be below 25m altitude to be rearmed."
         };
 
         private _cooldown = (_target getVariable ["BIS_WL_nextRearm", 0]) - serverTime;

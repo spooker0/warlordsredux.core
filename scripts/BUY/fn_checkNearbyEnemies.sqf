@@ -1,0 +1,37 @@
+#include "includes.inc"
+params [["_category", ""]];
+
+if (_category isEqualTo "Naval") exitWith {
+    [true, ""];
+};
+
+if (isWeaponDeployed player) exitWith {
+    [false, "Bipod must not be deployed."];
+};
+
+// Make sure to update cancelVehicleOrder as well
+private _enemiesNearPlayer = (allPlayers inAreaArray [player, WL_ENEMIES_NEAR_RADIUS, WL_ENEMIES_NEAR_RADIUS]) select {
+    _x isKindOf "Man"
+} select {
+    BIS_WL_playerSide != side group _x
+} select {
+    _x != player
+} select {
+    WL_ISUP(_x)
+} select {
+    private _position = getPosASL _x;
+    !(surfaceIsWater _position) || (_position # 2 > 20 && _position # 2 < 30)
+} select {
+    private _position = getPosATL _x;
+    _position # 2 < 20;
+};
+
+private _homeBase = BIS_WL_playerSide call WL2_fnc_getSideBase;
+private _isInHomeBase = player inArea (_homeBase getVariable "objectAreaComplete");
+private _nearbyEnemies = count _enemiesNearPlayer > 0 && !_isInHomeBase;
+
+if (_nearbyEnemies) then {
+    [false, "There are enemies nearby."];
+} else {
+    [true, ""];
+};

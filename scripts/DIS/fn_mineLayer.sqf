@@ -28,6 +28,13 @@ if (_projectilePosition # 2 < 200) then {
 
 private _container = createVehicle ["SpaceshipCapsule_01_container_F", _projectilePosition, [], 0, "NONE"];
 _container setPosATL _projectilePosition;
+
+[_container, player] remoteExec ["WL2_fnc_setupSimpleAsset", 0, true];
+private _ownedVehicleVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];
+private _ownedVehicles = missionNamespace getVariable [_ownedVehicleVar, []];
+_ownedVehicles pushBack _container;
+missionNamespace setVariable [_ownedVehicleVar, _ownedVehicles, true];
+
 private _altitude = (getPosVisual _container) # 2;
 
 private _munitionList = _unit getVariable ["DIS_munitionList", []];
@@ -46,7 +53,7 @@ while { _altitude > 5 && alive _container && alive _parachute } do {
     uiSleep 0.01;
     _parachute setVectorUp [0, 0, 1];
 
-    private _speed = if (_altitude < 100) then { 5 } else { 50 };
+    private _speed = if (_altitude < 100) then { 5 } else { 25 };
     _parachute setVelocityModelSpace [0, 0, -_speed];
 
     _altitude = (getPosVisual _container) # 2;

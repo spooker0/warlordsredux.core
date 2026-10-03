@@ -34,7 +34,7 @@ private _interception = {
 		_projectileAPSConsumption = _overrideAmmoConsumption;
 	};
 
-	private _apsAmmo = _target getVariable "apsAmmo";
+	private _apsAmmo = _target getVariable ["apsAmmo", 0];
 	_target setVariable ["apsAmmo", (_apsAmmo - _projectileAPSConsumption) max 0, true];
 
 	private _projectilePosition = _projectile modelToWorld [0, 0, 0];
@@ -83,7 +83,7 @@ private _interception = {
 		};
 	} else {
 		private _actualAmmoUsed = _apsAmmo min _projectileAPSConsumption;
-		[_unit, _actualAmmoUsed, _target] remoteExec ["APS_fnc_serverHandleAPS", 2];
+		[_unit, _actualAmmoUsed, _target, _apsAmmo, (_apsAmmo - _projectileAPSConsumption) max 0, _target call APS_fnc_getMaxAmmo] remoteExec ["APS_fnc_serverHandleAPS", 2];
 	};
 };
 

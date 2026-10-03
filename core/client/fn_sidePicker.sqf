@@ -122,11 +122,15 @@ private _updatePlayers = {
 
     private _westPlayersText = [];
     private _eastPlayersText = [];
+    private _spaces = "               ";
     {
         _x params ["_sidePlayers", "_playersText"];
         {
             private _index = _forEachIndex % 3;
-            private _playerName = format ["%1 (%2)", (name _x) select [0, 15], _x getVariable ["WL2_playerRating", WL_RATING_STARTER]];
+            // private _playerName = format ["%1 (%2)", (name _x) select [0, 15], _x getVariable ["WL2_playerRating", WL_RATING_STARTER]];
+            private _playerName = (name _x) select [0, 15];
+            private _paddingLength = 15 - count _playerName;
+            _playerName = _playerName + (_spaces select [0, _paddingLength]);
             if (_index == 0) then {
                 _playersText pushBack format ["<t align='left'>%1</t>", _playerName];
             };

@@ -39,21 +39,21 @@ Multi-purpose, mobile system with a beam-rider missile. Has all-aspect radar.
 
 SPARTAN
 Short-range infrared missile designed to be operated by AI.
-<font color="#00ff00">Guarantee track range:</font> 3 km.
+<font color="#00ff00">Guarantee track range:</font> 2.5 km.
 <font color="#00ff00">Good against:</font> any aircraft within visual range.
 <font color="#ff0000">Bad against:</font> high-flying aircraft.
 <font color="#00ffff">Recommendation:</font> use to protect frontline against enemy close air support and to augment no-fly zones. Since most aircraft you can launch missiles at are already going to be in its guaranteed track range, you can rely on the default AI. Highly effective for farming passive income from careless pilots.
 
 CENTURION
 Medium-range radar missile. Can deploy decoy from it to confuse pilots.
-<font color="#00ff00">Guarantee track range:</font> 3.5 km.
+<font color="#00ff00">Guarantee track range:</font> 3 km.
 <font color="#00ff00">Good against:</font> any aircraft near visual range.
 <font color="#ff0000">Bad against:</font> high-flying aircraft.
 <font color="#00ffff">Recommendation:</font> use to maintain long-term air-defense after enemy frontline close-air support has been cleared. Ineffective with AI, should always configure auto-sam to limit engagement range. Not recommended when under heavy air attack. Never, ever turn on its built-in radar.
 
 DEFENDER/RHEA
 Longest range radar missile.
-<font color="#00ff00">Guarantee track range:</font> 3.8 km.
+<font color="#00ff00">Guarantee track range:</font> 3.2 km.
 <font color="#00ff00">Good against:</font> any aircraft near visual range.
 <font color="#ff0000">Bad against:</font> high-flying aircraft.
 <font color="#00ffff">Recommendation:</font> use to maintain long-term air-defense after enemy frontline close-air support has been cleared. Ineffective with AI, should always configure auto-sam to limit engagement range. Not recommended when under heavy air attack.

@@ -73,6 +73,11 @@ private _sectorOverlap = {
 
     private _area = _sector getVariable "WL2_objectArea";
     _area params ["_axisA", "_axisB", "_angle", "_rectangle"];
+    if (!_rectangle && _axisA < 0 && _axisB < 0) then {
+        _axisA = abs _axisA;
+        _axisB = abs _axisB;
+    };
+
     if (_axisA <= 0 || _axisB <= 0) exitWith { -1 };
 
     private _sectorPos = getPosWorld _sector;

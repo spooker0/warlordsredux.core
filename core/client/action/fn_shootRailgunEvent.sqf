@@ -19,6 +19,12 @@ _asset addEventHandler ["Fired", {
 
         _asset setVariable ["WL2_railgunFiring", true];
 
+        private _restoreAIFiring = false;
+        if (!isPlayer _gunner) then {
+            _restoreAIFiring = _gunner checkAIFeature "FIREWEAPON";
+            _gunner disableAI "FIREWEAPON";
+        };
+
         private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
         private _railgunSecondClick = _settingsMap getOrDefault ["railgunSecondClick", true];
 
@@ -92,6 +98,9 @@ _asset addEventHandler ["Fired", {
             };
 
             uiSleep 0.001;
+        };
+        if (_restoreAIFiring) then {
+            _gunner enableAI "FIREWEAPON";
         };
         if (_playSounds) then {
             stopSound _chargingSound;

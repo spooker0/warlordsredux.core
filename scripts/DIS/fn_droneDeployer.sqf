@@ -23,6 +23,6 @@ private _projectileDirection = getDir _projectile;
 
 deleteVehicle _projectile;
 
-uiSleep 1;
+uiSleep 3;
 
 [player, "deployDrone", _projectilePosition, _projectileDirection] remoteExec ["WL2_fnc_handleClientRequest", 2];

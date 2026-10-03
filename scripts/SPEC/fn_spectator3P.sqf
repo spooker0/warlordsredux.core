@@ -2,18 +2,20 @@
 params ["_camera", "_deltaTime", "_currentTarget"];
 
 private _targetCamMode = uiNamespace getVariable ["SPEC_TargetCameraMode", 0];
+// cameraOn returns the vehicle when the selected unit is inside one.
+private _targetCameraObject = vehicle _currentTarget;
 if (_targetCamMode == 1) exitWith {
-    if (cameraView != "Internal" || cameraOn != _currentTarget) then {
+    if (cameraView != "Internal" || cameraOn != _targetCameraObject) then {
         _currentTarget switchCamera "Internal";
     };
 };
 if (_targetCamMode == 2) exitWith {
-    if (cameraView != "External" || cameraOn != _currentTarget) then {
+    if (cameraView != "External" || cameraOn != _targetCameraObject) then {
         _currentTarget switchCamera "External";
     };
 };
 if (_targetCamMode == 3) exitWith {
-    if (cameraView != "Gunner" || cameraOn != _currentTarget) then {
+    if (cameraView != "Gunner" || cameraOn != _targetCameraObject) then {
         _currentTarget switchCamera "Gunner";
     };
 };

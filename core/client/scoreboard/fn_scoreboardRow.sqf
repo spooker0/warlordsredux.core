@@ -50,6 +50,14 @@ private _cells = [];
 
 _row setVariable ["WL2_scoreboardCells", _cells];
 
+if (!_isSummary) then {
+    private _strike = _display ctrlCreate ["RscText", -1, _row];
+
+    _strike ctrlSetBackgroundColor [0.65, 0.65, 0.65, 1];
+    _strike ctrlShow false;
+    _row setVariable ["WL2_scoreboardStrike", _strike];
+};
+
 private _separatorPosition = [0, 0, _width, pixelH];
 private _separator = _display ctrlCreate ["RscText", -1, _row];
 

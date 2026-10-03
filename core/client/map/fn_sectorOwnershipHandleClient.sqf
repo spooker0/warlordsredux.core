@@ -8,21 +8,23 @@ if (_owner == BIS_WL_enemySide) then {
 	if (_sector in WL_BASES) then {
 		"Defeat" call WL2_fnc_announcer;
 	} else {
+		private _sectorRevealedSides = _sector getVariable ["BIS_WL_revealedBy", []];
 		if (_playerSide == _previousOwner) then {
 			"Lost" call WL2_fnc_announcer;
 		} else {
-			private _sectorRevealedSides = _sector getVariable ["BIS_WL_revealedBy", []];
 			if (_playerSide in _sectorRevealedSides) then {
 				"Enemy_advancing" call WL2_fnc_announcer;
 			};
 		};
 
-		private _message = format [
-			localize "STR_A3_WL_popup_sector_seized",
-			_sector getVariable ["WL2_name", "Sector"],
-			_owner call WL2_fnc_sideToFaction
-		];
-		[_message] call WL2_fnc_smoothText;
+		if (_playerSide == _previousOwner || _playerSide in _sectorRevealedSides) then {
+			private _message = format [
+				localize "STR_A3_WL_popup_sector_seized",
+				_sector getVariable ["WL2_name", "Sector"],
+				_owner call WL2_fnc_sideToFaction
+			];
+			[_message] call WL2_fnc_smoothText;
+		};
 	};
 };
 if (_owner == _playerSide) then {

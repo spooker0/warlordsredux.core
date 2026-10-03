@@ -80,7 +80,7 @@ if (_isClient) then {
 		private _scoreboardData = missionNamespace getVariable ["WL2_scoreboardData", createHashMap];
 		{
 			private _entry = _y;
-			private _side = _entry getOrDefault ["sideEnd", independent];
+			private _side = _entry getOrDefault ["sideRaw", independent];
 			if (_side != _gameWinner) then {
 				private _deaths = _entry getOrDefault ["deaths", 0];
 				_losses = _losses + _deaths;
@@ -88,8 +88,8 @@ if (_isClient) then {
 		} forEach _scoreboardData;
 
 		private _textPossibilities = switch (_gameWinner) do {
-			case west: { _natoLosses + _neutralLosses };
-			case east: { _csatLosses + _neutralLosses };
+			case west: { _csatLosses + _neutralLosses };
+			case east: { _natoLosses + _neutralLosses };
 			default { [""] };
 		};
 

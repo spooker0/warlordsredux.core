@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_shooter", "_ammoConsumption", "_target"];
+params ["_shooter", "_ammoConsumption", "_target", "_previousAmmo", "_remainingAmmo", "_maxAmmo"];
 
 private _reward = 50;
 _reward = _reward * _ammoConsumption;
@@ -11,9 +11,10 @@ private _responsiblePlayer = _shooterUid call BIS_fnc_getUnitByUID;
 if (isPlayer _responsiblePlayer) then {
     [_reward, _shooterUid, true, _rewardText] call WL2_fnc_fundsDatabaseWrite;
     [objNull, _reward, _rewardText, WL_COLOR_KILL] remoteExec ["WL2_fnc_killRewardClient", _responsiblePlayer];
+    [_target, _previousAmmo, _remainingAmmo, _maxAmmo, _ammoConsumption] remoteExec ["APS_fnc_enemyFeedback", _responsiblePlayer];
 
     _target setVariable ["WL_lastHitter", _responsiblePlayer, 2];
-	{
-		_x setVariable ["WL_lastHitter", _responsiblePlayer, 2];
-	} forEach (crew _target);
+    {
+        _x setVariable ["WL_lastHitter", _responsiblePlayer, 2];
+    } forEach (crew _target);
 };

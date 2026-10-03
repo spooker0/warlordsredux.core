@@ -1,0 +1,20 @@
+#include "includes.inc"
+params ["_category", "_cost"];
+
+if (_cost < 10000) exitWith {
+    [true, ""]
+};
+
+if (!(_category in ["Fixed Wing", "Rotary Wing", "Remote Control"])) exitWith {
+    [true, ""]
+};
+
+#if WL_AIR_POP_LIMIT
+
+if (count allPlayers < 14) exitWith {
+    [false, "Player count is too low to deploy heavily armed aerial assets."];
+};
+
+#endif
+
+[true, ""];

@@ -47,12 +47,25 @@ private _currentAssetPylonInfo = _asset getVariable ["WLM_pylonInfo", getAllPylo
         !_isBannedByWord && !_isDisallowed;
     };
 
+    private _hasAllowedVanillaMagazines = count _allowedMagazines > 0;
+    private _replacePylons = WL_ASSET(_assetActualType, "replacePylons", []);
+    {
+        _x params ["_replacementPylon", "_replacementTurret", "_replacementMagazine"];
+        if (_replacementPylon == _pylonConfigName && _replacementMagazine != "") then {
+            _allowedMagazines pushBackUnique _replacementMagazine;
+        };
+    } forEach _replacePylons;
+
     if (count _allowedMagazines == 0) then {
         _selectBox ctrlShow false;
         continue;
     };
 
-    private _allowListForPylon = WL_ASSET(_assetActualType, "allowPylonMagazines", []);
+    private _allowListForPylon = if (_hasAllowedVanillaMagazines) then {
+        WL_ASSET(_assetActualType, "allowPylonMagazines", [])
+    } else {
+        []
+    };
     {
         if (typeName _x == "STRING") then {
             if !(_x in _allowedMagazines) then {

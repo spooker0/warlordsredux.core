@@ -10,6 +10,10 @@ missionNamespace setVariable ["WL2_sectorsInPlay", _sectorsInPlay];
 private _prevSector = missionNamespace getVariable format ["BIS_WL_currentTarget_%1", _side];
 missionNamespace setVariable [format ["BIS_WL_currentTarget_%1", _side], _sector, true];
 
+if (_prevSector != _sector) then {
+	[_sector, _sector getVariable ["BIS_WL_owner", independent]] remoteExec ["WL2_fnc_sectorMarkerUpdate", 0];
+};
+
 private _isHomeBase = _sector in WL_BASES;
 if (!_isHomeBase) then {
 	private _owner = _sector getVariable ["BIS_WL_owner", sideUnknown];

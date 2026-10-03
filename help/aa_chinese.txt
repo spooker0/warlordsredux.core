@@ -38,21 +38,21 @@ CHEETAH / TIGRIS
 
 SPARTAN
 短程红外导弹，设计为可由 AI 操作。
-<font color="#00ff00">保证锁定距离：</font>3 公里。
+<font color="#00ff00">保证锁定距离：</font>2.5 公里。
 <font color="#00ff00">擅长对付：</font>目视范围内的任何飞机。
 <font color="#ff0000">不擅长对付：</font>高空飞行的飞机。
 <font color="#00ffff">推荐：</font>用于保护前线免受敌方近距空中支援，并强化禁飞区。由于大多数能够发射导弹攻击的目标本身就已处于保证锁定距离内，因此可以依赖默认 AI。对于粗心飞行员，能高效获取被动收益。
 
 CENTURION
 中程雷达制导导弹。可部署诱饵干扰飞行员。
-<font color="#00ff00">保证锁定距离：</font>3.5 公里。
+<font color="#00ff00">保证锁定距离：</font>3 公里。
 <font color="#00ff00">擅长对付：</font>接近目视范围内的任何飞机。
 <font color="#ff0000">不擅长对付：</font>高空飞行的飞机。
 <font color="#00ffff">推荐：</font>在敌方前线近距空中支援被清除后，用于维持长期防空。AI 使用效果较差，应始终配置自动防空导弹（Auto-SAM）限制交战距离。不建议在遭受大规模空袭时使用。绝对不要开启其内置雷达。
 
 DEFENDER / RHEA
 射程最长的雷达制导导弹。
-<font color="#00ff00">保证锁定距离：</font>3.8 公里。
+<font color="#00ff00">保证锁定距离：</font>3.2 公里。
 <font color="#00ff00">擅长对付：</font>接近目视范围内的任何飞机。
 <font color="#ff0000">不擅长对付：</font>高空飞行的飞机。
 <font color="#00ffff">推荐：</font>在敌方前线近距空中支援被清除后，用于维持长期防空。AI 使用效果较差，应始终配置自动防空导弹限制交战距离。不建议在遭受大规模空袭时使用。

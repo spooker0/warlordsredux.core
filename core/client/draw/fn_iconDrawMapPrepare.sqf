@@ -356,6 +356,14 @@ if (!_showAirMode && !_showMyMode) then {
 			continue;
 		};
 
+		private _mineOwner = _x getVariable ["BIS_WL_ownerAssetSide", independent];
+		private _mineTexture = switch (_mineOwner) do {
+			case west: { "#(rgb,1,1,1)color(0,0,1,0.15)" };
+			case east: { "#(rgb,1,1,1)color(1,0,0,0.15)" };
+			case independent: { "#(rgb,1,1,1)color(0,1,0,0.15)" };
+			default { "#(rgb,1,1,1)color(1,0,1,0.15)" };
+		};
+
 		private _isRectangle = _mineData # 2 == 1;
 		if (_isRectangle) then {
 			_drawRectangles pushBack [
@@ -364,7 +372,7 @@ if (!_showAirMode && !_showMyMode) then {
 				_mineData # 1,
 				getDir _x,
 				[1, 1, 1, 1],
-				"#(rgb,1,1,1)color(1,0,0,0.15)"
+				_mineTexture
 			];
 		} else {
 			_drawEllipses pushBack [
@@ -373,7 +381,7 @@ if (!_showAirMode && !_showMyMode) then {
 				_mineData # 1,
 				getDir _x,
 				[1, 1, 1, 1],
-				"#(rgb,1,1,1)color(1,0,0,0.15)"
+				_mineTexture
 			];
 		};
 	} forEach _minefields;

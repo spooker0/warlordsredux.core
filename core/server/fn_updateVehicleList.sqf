@@ -36,6 +36,23 @@ while { !BIS_WL_missionEnd } do {
         };
     } forEach (call BIS_fnc_listPlayers);
 
+    #if WL_ZEUS_ENABLED
+    private _zeusVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_zeus", []];
+    {
+        switch (side group _x) do {
+            case west: {
+                _westOwnedVehicles pushBack _x;
+            };
+            case east: {
+                _eastOwnedVehicles pushBack _x;
+            };
+            case independent: {
+                _guerOwnedVehicles pushBack _x;
+            };
+        };
+    } forEach _zeusVehicles;
+    #endif
+
     private _serverVehicles = missionNamespace getVariable ["BIS_WL_ownedVehicles_server", []];
     _serverVehicles = _serverVehicles select { alive _x } select {
         [_x] call WL2_fnc_getAssetSide == independent;

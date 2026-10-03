@@ -78,11 +78,6 @@ waitUntil {!isNil "WL2_base1" && {!isNil "WL2_base2"}};
 	_base setVariable ["BIS_WL_revealedBy", [_side], true];
 
 	private _flag = createVehicle ["Land_MapBoard_F", position _base, [], 0, "CAN_COLLIDE"];
-	if (_side == west) then {
-		_flag setObjectTextureGlobal [0, "\A3\Data_F\Flags\flag_NATO_CO.paa"];
-	} else {
-		_flag setObjectTextureGlobal [0, "\A3\Data_F\Flags\Flag_CSAT_CO.paa"];
-	};
 	_flag allowDamage false;
 	_flag enableSimulationGlobal false;
 	_base setVariable ["WL2_flag", _flag, true];

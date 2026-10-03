@@ -186,7 +186,11 @@ switch (_className) do {
         [4] spawn WL2_fnc_executeFastTravel;
         "RequestMenu_close" call WL2_fnc_setupUI;
     };
-    case "WelcomeScreen": { 0 spawn WL2_fnc_welcome };
+    case "WelcomeScreen": {
+        // Close the parent display before the cinematic creates its own overlay.
+        "RequestMenu_close" call WL2_fnc_setupUI;
+        [] spawn INTRO_fnc_play;
+    };
     case "Surrender": {
         0 spawn {
             private _message = "Are you sure you want to surrender? You will ruin the game for people who still want to play :(<br/>Votes needed: 1";

@@ -22,14 +22,14 @@ if (_responsibleLeaderSide != _unitSide) exitWith {};
 
 if (_unit isKindOf "Man") then {
 	if (isPlayer _unit) then {
-		[_responsibleLeader, name _responsibleLeader, 100] remoteExec ["WL2_fnc_askForgiveness", _owner];
+		[_responsibleLeader, name _unit, 100] remoteExec ["WL2_fnc_askForgiveness", _owner];
 	} else {
-		private _assetName = format ["%1's AI", name _responsibleLeader];
+		private _assetName = format ["%1's AI", name _victim];
 		[_responsibleLeader, _assetName, 100] remoteExec ["WL2_fnc_askForgiveness", _owner];
 	};
 } else {
 	private _assetType = [_unit] call WL2_fnc_getAssetTypeName;
 	private _itemCost = WL_UNIT(_unit, "cost", 100);
-	private _assetTypeName = format ["%1's %2", name _responsibleLeader, _assetType];
+	private _assetTypeName = format ["%1's %2", name _victim, _assetType];
 	[_responsibleLeader, _assetTypeName, _itemCost] remoteExec ["WL2_fnc_askForgiveness", _owner];
 };

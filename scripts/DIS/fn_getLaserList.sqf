@@ -42,7 +42,7 @@ private _allLasedTargets = [];
     } select {
         (_x distance2D _lasePosition) < 250;
     } select {
-        _x distance cameraOn < 20000;
+        _x distance cameraOn < 12000;
     } select {
         !(_x isKindOf "Man");
     } select {

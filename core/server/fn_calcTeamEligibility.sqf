@@ -29,7 +29,7 @@ if (_playerElo <= WL_RATING_GATE) exitWith {
 private _eligibleSides = [];
 private _squadParams = squadParams _warlord;
 private _myUnit = if (count _squadParams > 3) then { _squadParams # 3 } else { "" };
-if (_myUnit != "") then {
+if (_myUnit != "" && { parseNumber _myUnit > 0 }) then {
     {
         if (_x == _warlord) then {
             continue;

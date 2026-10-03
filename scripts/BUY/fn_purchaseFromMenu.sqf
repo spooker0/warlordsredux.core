@@ -1,0 +1,30 @@
+#include "includes.inc"
+params [
+    "_className",
+    "_requirements",
+    "_displayName",
+    "_picture",
+    "_text",
+    "_offset",
+    "_cost",
+    "_category"
+];
+
+if (_requirements isEqualType "") then {
+    _requirements = parseSimpleArray _requirements;
+};
+
+private _purchaseDetails = [_className, _requirements, _displayName, _picture, _text, _offset, _cost, _category];
+private _availability = _purchaseDetails call WL2_fnc_purchaseMenuAssetAvailability;
+if (_availability # 0) then {
+    _purchaseDetails call WL2_fnc_triggerPurchase;
+    playSound "AddItemOK";
+
+    private _tasksRequireUIList = ["FundsTransfer"];
+    if (!(_className in _tasksRequireUIList)) then {
+        "RequestMenu_close" call WL2_fnc_setupUI;
+    };
+} else {
+    [format ["Invalid buy action: %1", (_availability # 1) joinString ", "]] call WL2_fnc_smoothText;
+    playSound "AddItemFailed";
+};

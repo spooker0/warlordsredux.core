@@ -8,6 +8,7 @@ class CfgFunctions {
 			class ciws { headerType = WL_HEADER_LEVEL; };
 			class cram { headerType = WL_HEADER_LEVEL; };
 			class defineVehicles { headerType = WL_HEADER_LEVEL; };
+			class enemyFeedback { headerType = WL_HEADER_LEVEL; };
 			class friendlyWarning { headerType = WL_HEADER_LEVEL; };
 			class getDirection { headerType = WL_HEADER_LEVEL; };
 			class getMaxAmmo { headerType = WL_HEADER_LEVEL; };
@@ -66,6 +67,23 @@ class CfgFunctions {
 			file = "src\scripts\GFE";
 			class credits { headerType = WL_HEADER_LEVEL; };
 			class earplugs { headerType = WL_HEADER_LEVEL; };
+		};
+	};
+	class INTRO {
+		class Default {
+			file = "src\scripts\INTRO";
+			class cleanup { headerType = WL_HEADER_LEVEL; };
+			class drawIncome { headerType = WL_HEADER_LEVEL; };
+			class drawMap { headerType = WL_HEADER_LEVEL; };
+			class incomeData { headerType = WL_HEADER_LEVEL; };
+			class label { headerType = WL_HEADER_LEVEL; };
+			class menuScene { headerType = WL_HEADER_LEVEL; };
+			class narrationData { headerType = WL_HEADER_LEVEL; };
+			class play { headerType = WL_HEADER_LEVEL; };
+			class sectorData { headerType = WL_HEADER_LEVEL; };
+			class soundCue { headerType = WL_HEADER_LEVEL; };
+			class updateEnding { headerType = WL_HEADER_LEVEL; };
+			class updateSkip { headerType = WL_HEADER_LEVEL; };
 		};
 	};
 	class KST {
@@ -213,7 +231,6 @@ class CfgFunctions {
 			class gulag { headerType = WL_HEADER_LEVEL; };
 			class handleAIDamage { headerType = WL_HEADER_LEVEL; };
 			class handleAIDown { headerType = WL_HEADER_LEVEL; };
-			class handleBuyMenuKeypress { headerType = WL_HEADER_LEVEL; };
 			class handleChatMessages { headerType = WL_HEADER_LEVEL; };
 			class handleKeypress { headerType = WL_HEADER_LEVEL; };
 			class handlePlayerDamage { headerType = WL_HEADER_LEVEL; };
@@ -446,14 +463,24 @@ class CfgFunctions {
 			class orderAircraft { headerType = WL_HEADER_LEVEL; };
 			class orderArsenal { headerType = WL_HEADER_LEVEL; };
 			class orderCruiseMissile { headerType = WL_HEADER_LEVEL; };
-			class orderFundsTransfer { headerType = WL_HEADER_LEVEL; };
 			class orderNaval { headerType = WL_HEADER_LEVEL; };
 			class orderStronghold { headerType = WL_HEADER_LEVEL; };
 			class orderVehicle { headerType = WL_HEADER_LEVEL; };
 			class requestPurchase { headerType = WL_HEADER_LEVEL; };
 		};
 		class ClientPurchase {
-			file = "src\core\client\purchase";
+			class purchaseMenuBuildCatalog { headerType = WL_HEADER_LEVEL; };
+			class purchaseMenuSetCategories { headerType = WL_HEADER_LEVEL; };
+			class purchaseMenuSearch { headerType = WL_HEADER_LEVEL; };
+			class purchaseMenuRequest { headerType = WL_HEADER_LEVEL; };
+			class purchaseMenuBindButton { headerType = WL_HEADER_LEVEL; };
+			class purchaseMenuConfirmTransfer { headerType = WL_HEADER_LEVEL; };
+			class purchaseMenuRefreshTransfer { headerType = WL_HEADER_LEVEL; };
+			class purchaseMenuKeyDown { headerType = WL_HEADER_LEVEL; };
+			class initPurchaseMenu { headerType = WL_HEADER_LEVEL; };
+			class handleBuyMenuKeypress { headerType = WL_HEADER_LEVEL; };
+			class orderFundsTransfer { headerType = WL_HEADER_LEVEL; };
+			file = "src\scripts\BUY";
 			class checkAAPlacement { headerType = WL_HEADER_LEVEL; };
 			class checkPlayerCountForAirSpawn { headerType = WL_HEADER_LEVEL; };
 			class checkAlliedPlayers { headerType = WL_HEADER_LEVEL; };
@@ -488,8 +515,10 @@ class CfgFunctions {
 			class checkUAVLimit { headerType = WL_HEADER_LEVEL; };
 			class purchaseFromMenu { headerType = WL_HEADER_LEVEL; };
 			class purchaseMenuAssetAvailability { headerType = WL_HEADER_LEVEL; };
-			class purchaseMenuGetUIScale { headerType = WL_HEADER_LEVEL; };
-			class purchaseMenuHandleDLC { headerType = WL_HEADER_LEVEL; };
+			class purchaseMenuGetDLCInfo { headerType = WL_HEADER_LEVEL; };
+			class purchaseMenuSetButtonColor { headerType = WL_HEADER_LEVEL; };
+			class purchaseMenuSetTransferMode { headerType = WL_HEADER_LEVEL; };
+			class purchaseMenuUpdateCategoryTooltips { headerType = WL_HEADER_LEVEL; };
 			class purchaseMenuRefresh { headerType = WL_HEADER_LEVEL; };
 			class purchaseMenuSetAssetDetails { headerType = WL_HEADER_LEVEL; };
 			class purchaseMenuSetItemsList { headerType = WL_HEADER_LEVEL; };
@@ -560,6 +589,7 @@ class CfgFunctions {
 			class demolishComplete { headerType = WL_HEADER_LEVEL; };
 			class destroyStronghold { headerType = WL_HEADER_LEVEL; };
 			class detectNewPlayers { headerType = WL_HEADER_LEVEL; };
+			class repairPlayerGroups { headerType = WL_HEADER_LEVEL; };
 			class factory { headerType = WL_HEADER_LEVEL; };
 			class forgiveTeamkill { headerType = WL_HEADER_LEVEL; };
 			class forwardBaseUpgrade { headerType = WL_HEADER_LEVEL; };

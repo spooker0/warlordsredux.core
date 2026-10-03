@@ -29,6 +29,7 @@
 #define WL_SUPPORT_DEBUG 0
 #define WL_CUSTOM_GPS 0
 #define WL_FF_TEST 0
+#define WL_SCOREBOARD_TEST 0
 
 // Live: set to -1 for performance
 #define WL_HEADER_LEVEL -1
@@ -156,7 +157,7 @@
 #define WL_RATING_KFACTOR 256
 #define WL_RATING_ELOSCALE 400
 #define WL_RATING_STARTER 1000
-#define WL_RATING_EMAX 4000
+#define WL_RATING_EMAX 8000
 #define WL_RATING_GATE 1250
 #define WL_RATING_NUMBALANCE 4
 
