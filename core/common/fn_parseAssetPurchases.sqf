@@ -48,7 +48,12 @@ private _assetData = WL_ASSET_DATA;
 
     private _requirements = _classData getOrDefault ["requirements", []];
     private _offset = _classData getOrDefault ["offset", []];
+
+    private _decoy = _classData getOrDefault ["decoy", 0];
     private _displayName = [objNull, _className] call WL2_fnc_getAssetTypeName;
+    if (_decoy > 0) then {
+        _displayName = format ["%1 (Decoy)", _displayName];
+    };
 
     private _actualClassName = _classData getOrDefault ["spawn", _className];
     private _config = configFile >> "CfgVehicles" >> _actualClassName;

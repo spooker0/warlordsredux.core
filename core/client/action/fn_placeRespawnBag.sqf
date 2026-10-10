@@ -35,9 +35,14 @@ _freshTent setVehiclePosition [_pos, [], 0, "CAN_COLLIDE"];
 player setVariable ["WL2_respawnBag", _freshTent];
 
 _freshTent enableWeaponDisassembly false;
+_freshTent setVariable ["WL2_tentSide", BIS_WL_playerSide];
 playSoundUI ["a3\ui_f\data\sound\cfgnotifications\communicationmenuitemadded.wss"];
 
-_freshTent addEventHandler ["HandleDamage", { 1 }];
+_freshTent addEventHandler ["HandleDamage", {
+    params ["_unit", "_selection", "_damage", "_source", "_projectile", "_hitPartIndex", "_instigator"];
+    private _tentSide = _unit getVariable ["WL2_tentSide", sideUnknown];
+    if (side group _instigator == _tentSide) then { 0 } else { 1 };
+}];
 [_freshTent, false] remoteExec ["setPhysicsCollisionFlag", 0];
 
 [_freshTent, player] remoteExec ["WL2_fnc_setupSimpleAsset", 0, true];

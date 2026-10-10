@@ -653,12 +653,12 @@ class RscTitles {
 				idc = 35600;
 				type = CT_STATIC;
 				style = ST_CENTER;
-				x = 0;
+				x = safeZoneX;
 				y = safeZoneY + 0.1;
-				w = 1;
+				w = safeZoneW;
 				h = 0.3;
 				font = "EtelkaNarrowMediumPro";
-				sizeEx = 0.15;
+				sizeEx = 0.08;
 				colorBackground[] = {0, 0, 0, 0};
 				colorText[] = {1, 1, 1, 1};
 				text = "SECTOR";
@@ -1217,24 +1217,15 @@ class RscTitles {
 		};
 	};
 
-	class RscWLTurretMenu {
+	class RscWLTurretVisualizer {
 		idd = -1;
 		duration = 1000000000;
 		fadein = 0;
 		fadeout = 0;
-		name = "RscWLTurretMenu";
-		onLoad = "uiNamespace setVariable ['RscWLTurretMenu', _this select 0];";
-		class controls {
-			class RscWLTurretMenu_Texture: RscText {
-				type = 106;
-				idc = 5502;
-				x = safeZoneX;
-				y = safeZoneY;
-				w = safeZoneW;
-				h = safeZoneH;
-				url = "file://src/ui/gen/turret.html";
-			};
-		};
+		name = "RscWLTurretVisualizer";
+		onLoad = "uiNamespace setVariable ['RscWLTurretVisualizer', _this select 0];";
+		onUnload = "uiNamespace setVariable ['RscWLTurretVisualizer', nil];";
+		class controls {};
 	};
 
 	class RscWLMissileCameraDisplay {

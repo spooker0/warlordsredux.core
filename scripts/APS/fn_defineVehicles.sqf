@@ -15,8 +15,9 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
     private _projectileDeployDrone = getNumber (_x >> "deployDrone") == 1;
     private _projectileESam = getNumber (_x >> "esam") == 1;
     private _projectileExplosive = getNumber (_x >> "explosive") == 1;
+    private _projectileFlareMin = getNumber (_x >> "flareMin");
+    private _projectileFlareMax = getNumber (_x >> "flareMax");
     private _projectileGPS = getNumber (_x >> "gps") == 1;
-    private _projectileImmunity = getNumber (_x >> "immunity");
     private _projectileIncendiary = getNumber (_x >> "incendiary") == 1;
     private _projectileLaser = getNumber (_x >> "laser") == 1;
     private _projectileLoal = getNumber (_x >> "loal") == 1;
@@ -45,8 +46,9 @@ private _projectileClasses = "inheritsFrom _x == (missionConfigFile >> 'WLProjec
             ["deployDrone", _projectileDeployDrone],
             ["esam", _projectileESam],
             ["explosive", _projectileExplosive],
+            ["flareMin", _projectileFlareMin],
+            ["flareMax", _projectileFlareMax],
             ["gps", _projectileGPS],
-            ["immunity", _projectileImmunity],
             ["incendiary", _projectileIncendiary],
             ["laser", _projectileLaser],
             ["loal", _projectileLoal],

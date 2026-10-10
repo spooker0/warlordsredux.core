@@ -116,6 +116,19 @@ addMissionEventHandler ["Draw3D", {
             };
         };
 
+        private _lagWarning = _missile getVariable ["WL_lagWarning", 0];
+        if (_lagWarning < 5) then {
+            if (_distance > 300 && (_missilePos isNotEqualTo [0, 0, 0]) && speed _missile == 0) then {
+                _lagWarning = _lagWarning + 1;
+                _missile setVariable ["WL_lagWarning", _lagWarning];
+
+                if (_lagWarning == 5) then {
+                    private _message = "Incoming missile appears to be lagging. Check your connection, or theirs.";
+                    [_message] call WL2_fnc_smoothText;
+                };
+            };
+        };
+
         private _missileStateText = if (_missileState == "") then {
             ""
         } else {
@@ -567,27 +580,13 @@ addMissionEventHandler ["Draw3D", {
                     "\A3\ui_f\data\IGUI\Cfg\Targeting\Seeker_ca.paa"
                 };
 
-                private _iconAngle = if (_x == "AA") then {
-                    private _currentSpeed = speed _vehicle;
-                    if (_currentSpeed < WL_SAM_FAST_THRESHOLD) then {
-                        0;
-                    } else {
-                        private _targetSpeed = speed _selectedTarget;
-                        if (_currentSpeed > _targetSpeed) then {
-                            45;
-                        } else {
-                            0;
-                        };
-                    };
-                } else { 0 };
-
                 _targetVehicleIcons pushBack [
                     _lockIcon,
                     [1, 1, 1, 1],
                     _selectedTarget,
                     1.75,
                     1.75,
-                    _iconAngle,
+                    0,
                     "",
                     false,
                     0.035,
@@ -683,31 +682,75 @@ addMissionEventHandler ["Draw3D", {
             player setVariable ["WL_missileWarningPlayed", serverTime];
         };
 
-        // private _missileData = uiNamespace getVariable ["WL_missileData", []];
-        // if (count _missileData > 0) then {
-        //     private _topMissileData = _missileData # 0;
-        //     private _topProjectile = _topMissileData # 5;
+        private _immuneIcons = [];
+        {
+            private _target = _x # 2;
+            if (_target isEqualType []) then {
+                continue;
+            };
 
-        //     private _relDir = cameraOn getRelDir _topProjectile;
-        //     private _adjustedDir = getDir cameraOn + _relDir + 90;
-        //     private _notchVector = cameraOn getPos [10000, _adjustedDir];
-        //     _notchVector set [2, getPosASL cameraOn # 2];
+            private _immunityUntil = _target getVariable ["DIS_flareImmunityUntil", 0];
+            if (_immunityUntil <= serverTime) then {
+                continue;
+            };
 
-        //     _targetVehicleIcons pushBack [
-        //         "A3\ui_f\data\IGUI\RscCustomInfo\Sensors\Targets\missile_ca.paa",
-        //         [1, 1, 1, 1],
-        //         _notchVector,
-        //         1.75,
-        //         1.75,
-        //         0,
-        //         "NOTCH VECTOR",
-        //         true,
-        //         0.035,
-        //         "RobotoCondensedBold",
-        //         "center",
-        //         true
-        //     ];
-        // };
+            private _targetSide = [_target] call WL2_fnc_getAssetSide;
+            if (_targetSide == _side) then {
+                continue;
+            };
+
+            private _randomizer = _target getVariable ["DIS_hmdFlareRandomizer", [0, _target, [0, 0, 0]]];
+            _randomizer params ["_nextUpdate", "_randomTarget", "_offset"];
+
+            private _flareParticles = _target getVariable ["DIS_flareParticles", []];
+            _flareParticles = _flareParticles select {
+                !isNull _x;
+            };
+
+            private _flaresAvailable = count _flareParticles > 0;
+            private _needsFlare = _randomTarget == _target && _flaresAvailable;
+            if (serverTime >= _nextUpdate || isNull _randomTarget || _needsFlare) then {
+                _randomTarget = _target;
+                _offset = [0, 0, 0];
+
+                if (_flaresAvailable) then {
+                    _randomTarget = selectRandom _flareParticles;
+                } else {
+                    private _angle = random 360;
+                    private _z = random 2 - 1;
+                    private _horizontal = sqrt (1 - _z * _z);
+                    private _radius = 100 * ((random 1) ^ (1 / 3));
+
+                    _offset = [
+                        _horizontal * cos _angle,
+                        _horizontal * sin _angle,
+                        _z
+                    ] vectorMultiply _radius;
+                };
+
+                _target setVariable ["DIS_hmdFlareRandomizer", [serverTime + 0.3, _randomTarget, _offset]];
+            };
+
+            private _randomPosition = _randomTarget modelToWorldVisual _offset;
+            _x set [2, _randomPosition];
+
+            _immuneIcons pushBackUnique [
+                "a3\ui_f\data\igui\rsctitles\rschvtphase\jac_a3_signal_4_ca.paa",
+                [1, 1, 1, 1],
+                _randomPosition,
+                4,
+                2,
+                0,
+                "",
+                true,
+                0.035,
+                "RobotoCondensedBold",
+                "center",
+                true
+            ];
+        } forEach _targetVehicleIcons;
+
+        _targetVehicleIcons append _immuneIcons;
 
         uiNamespace setVariable ["WL_HelmetInterfaceTargetInfantryIcons", _targetInfantryIcons];
         uiNamespace setVariable ["WL_HelmetInterfaceTargetVehicleIcons", _targetVehicleIcons];

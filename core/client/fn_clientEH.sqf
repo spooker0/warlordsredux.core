@@ -159,6 +159,10 @@ call WL2_fnc_playerEventHandlers;
 	}];
 #endif
 
+	addUserActionEventHandler ["launchCM", "Activate", {
+		[cameraOn, player] call DIS_fnc_useFlareBurst;
+	}];
+
 	addUserActionEventHandler ["Eject", "Activate", {
 		if !(cameraOn isKindOf "Air") exitWith {};
 		private _altitude = (player modelToWorld [0, 0, 0]) # 2;
@@ -190,6 +194,12 @@ addMissionEventHandler ["EntityRespawned", {
 
 addMissionEventHandler ["PlayerViewChanged", {
 	params ["_oldUnit", "_newUnit", "_vehicleIn", "_oldCameraOn", "_newCameraOn", "_uav"];
+	private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
+	private _disableTurretVisualizer = _settingsMap getOrDefault ["disableTurretVisualizer", false];
+	if (!_disableTurretVisualizer) then {
+		[] call WL2_fnc_updateTurretVisualizer;
+	};
+
 	if (isNull _newCameraOn) exitWith {
 		switchCamera player;
 	};

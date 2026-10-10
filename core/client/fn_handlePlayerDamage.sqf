@@ -59,7 +59,7 @@ switchCamera player;
 private _unconsciousTime = _unit getVariable ["WL_unconsciousTime", 0];
 if (_unconsciousTime == 0) then {
     _unit setVariable ["WL_unconsciousTime", 0.1];
-    [_unit] spawn WL2_fnc_handlePlayerDown;
+    [_unit, _source] spawn WL2_fnc_handlePlayerDown;
 };
 
 [_unit, _source, _instigator] remoteExec ["WL2_fnc_handleEntityRemoval", 2];

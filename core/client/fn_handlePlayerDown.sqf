@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_unit"];
+params ["_unit", "_source"];
 if (_unit getVariable ["WL2_unconscious", false]) exitWith {};
 
 private _originalDeathPos = getPosWorld _unit;
@@ -33,7 +33,29 @@ private _deadAnimations = [
 private _deadAnimation = selectRandom _deadAnimations;
 
 private _startTime = serverTime;
-private _downTime = 0;
+
+// Killcam
+if (!isNull _source) then {
+    private _camera = "camera" camCreate (ASLToAGL (getPosASL _unit vectorAdd [0, 0, 2]));
+    _camera camSetTarget _source;
+    showCinemaBorder false;
+
+    private _sourceBounds = boundingBoxReal _source;
+    private _sourceRadius = (_sourceBounds # 2) max 0.5;
+    private _sourceDistance = (_camera distance _source) max 1;
+    private _targetFov = ((_sourceRadius * 1.5 / _sourceDistance) max 0.01) min 8.5;
+
+    _camera camSetFov _targetFov;
+    _camera camCommit 3;
+    _camera cameraEffect ["Internal", "BACK"];
+
+    uiSleep 5;
+
+    _camera cameraEffect ["Terminate", "BACK"];
+    camDestroy _camera;
+};
+
+private _downTime = serverTime - _startTime;
 while { WL_ISDBNO(_unit) } do {
     if (animationState _unit != _deadAnimation) then {
         [_unit, [_deadAnimation]] remoteExec ["switchMove", 0];

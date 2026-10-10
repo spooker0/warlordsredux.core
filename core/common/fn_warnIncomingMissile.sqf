@@ -3,6 +3,7 @@ params ["_target", "_vehicle", "_missile"];
 
 if (isNull _missile) exitWith {};
 _missile setVariable ["WL_launcher", _vehicle];
+
 private _incomingMissiles = _target getVariable ["WL_incomingMissiles", []];
 private _originalIncomingMissiles = +_incomingMissiles;
 _incomingMissiles pushBackUnique _missile;

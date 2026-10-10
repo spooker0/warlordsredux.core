@@ -136,7 +136,7 @@ addMissionEventHandler ["ProjectileCreated", {
     private _projectileSam = _projectileConfig getOrDefault ["sam", 0];
     if (_projectileSam > 0) then {
         [_projectile, _unit, _projectileSam] spawn DIS_fnc_frag;
-        [_projectile, _unit] spawn DIS_fnc_maneuver;
+        [_projectile, _unit] spawn DIS_fnc_flareMissile;
     };
 
     private _projectileManualSam = _projectileConfig getOrDefault ["manualSam", []];

@@ -36,10 +36,12 @@ class CfgFunctions {
 			class controlMunition { headerType = WL_HEADER_LEVEL; };
 			class droneDeployer { headerType = WL_HEADER_LEVEL; };
 			class extendedSam { headerType = WL_HEADER_LEVEL; };
+			class flareEffects { headerType = WL_HEADER_LEVEL; };
+			class flareMissile { headerType = WL_HEADER_LEVEL; };
 			class frag { headerType = WL_HEADER_LEVEL; };
+			class getFlareWindow { headerType = WL_HEADER_LEVEL; };
 			class getLaserList { headerType = WL_HEADER_LEVEL; };
 			class getMissileType { headerType = WL_HEADER_LEVEL; };
-			class getNotchResult { headerType = WL_HEADER_LEVEL; };
 			class getSamTarget { headerType = WL_HEADER_LEVEL; };
 			class getSeadTarget { headerType = WL_HEADER_LEVEL; };
 			class getSquadList { headerType = WL_HEADER_LEVEL; };
@@ -49,10 +51,10 @@ class CfgFunctions {
 			class handleKeypress { headerType = WL_HEADER_LEVEL; };
 			class laserMunition { headerType = WL_HEADER_LEVEL; };
 			class loalAuto { headerType = WL_HEADER_LEVEL; };
-			class maneuver { headerType = WL_HEADER_LEVEL; };
 			class manualSam { headerType = WL_HEADER_LEVEL; };
 			class mineLayer { headerType = WL_HEADER_LEVEL; };
 			class missileCamera { headerType = WL_HEADER_LEVEL; };
+			class rearmFlares { headerType = WL_HEADER_LEVEL; };
 			class remoteMunition { headerType = WL_HEADER_LEVEL; };
 			class seekTerminal { headerType = WL_HEADER_LEVEL; };
 			class setupExtendedSam { headerType = WL_HEADER_LEVEL; };
@@ -60,6 +62,8 @@ class CfgFunctions {
 			class startMissileCamera { headerType = WL_HEADER_LEVEL; };
 			class terminalGuidance { headerType = WL_HEADER_LEVEL; };
 			class tvMunition { headerType = WL_HEADER_LEVEL; };
+			class updateFlareDisplay { headerType = WL_HEADER_LEVEL; };
+			class useFlareBurst { headerType = WL_HEADER_LEVEL; };
 		};
 	};
 	class GFE {
@@ -361,7 +365,6 @@ class CfgFunctions {
 			class slingAddAction { headerType = WL_HEADER_LEVEL; };
 			class smokeCurtainAction { headerType = WL_HEADER_LEVEL; };
 			class smokeCurtainParticles { headerType = WL_HEADER_LEVEL; };
-			class turretVisualizerAction { headerType = WL_HEADER_LEVEL; };
 			class unlockDoorAction { headerType = WL_HEADER_LEVEL; };
 			class vehicleLockAction { headerType = WL_HEADER_LEVEL; };
 			class vehicleLockUpdate { headerType = WL_HEADER_LEVEL; };
@@ -374,6 +377,7 @@ class CfgFunctions {
 			class drawRegions { headerType = WL_HEADER_LEVEL; };
 			class drawSectorMarker { headerType = WL_HEADER_LEVEL; };
 			class drawTargetMarker { headerType = WL_HEADER_LEVEL; };
+			class drawTurretVisualizer { headerType = WL_HEADER_LEVEL; };
 			class ewarResult { headerType = WL_HEADER_LEVEL; };
 			class fastHudUpdate { headerType = WL_HEADER_LEVEL; };
 			class helmetInterface { headerType = WL_HEADER_LEVEL; };
@@ -388,8 +392,10 @@ class CfgFunctions {
 			class mapIcons { headerType = WL_HEADER_LEVEL; };
 			class setupUI { headerType = WL_HEADER_LEVEL; };
 			class smoothText { headerType = WL_HEADER_LEVEL; };
-			class toggleTurretVisualizer { headerType = WL_HEADER_LEVEL; };
 			class turretLimits { headerType = WL_HEADER_LEVEL; };
+			class turretVisualizerLine { headerType = WL_HEADER_LEVEL; };
+			class turretVisualizerProject { headerType = WL_HEADER_LEVEL; };
+			class updateTurretVisualizer { headerType = WL_HEADER_LEVEL; };
 		};
 		class ClientInventory {
 			file = "src\core\client\inventory";
@@ -501,6 +507,7 @@ class CfgFunctions {
 			class checkInfantryAvailable { headerType = WL_HEADER_LEVEL; };
 			class checkInFriendlySector { headerType = WL_HEADER_LEVEL; };
 			class checkIsOrdering { headerType = WL_HEADER_LEVEL; };
+			class checkMinElo { headerType = WL_HEADER_LEVEL; };
 			class checkNearbyEnemies { headerType = WL_HEADER_LEVEL; };
 			class checkNoStronghold { headerType = WL_HEADER_LEVEL; };
 			class checkPlayerInVehicle { headerType = WL_HEADER_LEVEL; };

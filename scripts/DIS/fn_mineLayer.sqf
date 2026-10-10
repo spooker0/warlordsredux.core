@@ -22,10 +22,6 @@ private _parachuteClass = switch (BIS_WL_playerSide) do {
     case independent: { "I_Parachute_02_F" };
 };
 
-if (_projectilePosition # 2 < 200) then {
-    _projectilePosition set [2, 200];
-};
-
 private _container = createVehicle ["SpaceshipCapsule_01_container_F", _projectilePosition, [], 0, "NONE"];
 _container setPosATL _projectilePosition;
 

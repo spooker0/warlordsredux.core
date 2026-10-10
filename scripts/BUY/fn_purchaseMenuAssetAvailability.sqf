@@ -217,6 +217,7 @@ private _conditions = switch (_className) do {
         } else {
             private _assetConditions = [
                 [WL2_fnc_checkRequirements, [_sector, _requirements]],
+                [WL2_fnc_checkMinElo, [_className]],
                 [WL2_fnc_checkInfantryAvailable, [_className]],
                 [WL2_fnc_checkAssetLimit, [_className]],
                 [WL2_fnc_checkNearbyEnemies, [_category]],

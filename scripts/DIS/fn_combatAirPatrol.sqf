@@ -41,6 +41,8 @@ private _projectilePos = if (_distanceToTop < _distanceToBottom) then {
 private _projectile = createVehicle ["ammo_Missile_AMRAAM_D", _projectilePos, [], 0, "NONE"];
 _projectile setVariable ["APS_ammoOverride", "ammo_Missile_CAP"];
 
+_projectile setVariable ["DIS_ultimateTarget", _asset];
+
 private _targetOwner = if (typeof _target == "RuggedTerminal_01_communications_hub_F") then {
     _target getVariable ["WL2_forwardBaseOwner", independent];
 } else {
@@ -58,18 +60,19 @@ _projectile setVariable ["WL2_missileNameOverride", _missileName, true];
 if (!isNull _combatAirRequester) then {
     [_projectile, [objNull, _combatAirRequester]] remoteExec ["setShotParents", 2];
 };
-[_asset, objNull, _projectile] call WL2_fnc_warnIncomingMissile;
-[_projectile, _combatAirRequester, 1] spawn DIS_fnc_frag;
+
+_projectile setMissileTarget [_asset, true];
+private _assetVectorDirAndUp = [getPosASL _projectile, getPosASL _asset] call BIS_fnc_findLookAt;
+_projectile setVectorDirAndUp _assetVectorDirAndUp;
+
+[_projectile, _target, worldSize * 2] spawn DIS_fnc_flareMissile;
+[_projectile, _combatAirRequester, 0.45] spawn DIS_fnc_frag;
 
 while { alive _projectile && alive _asset } do {
-    _projectile setMissileTarget [_asset, true];
-
-    _projectile setVelocityModelSpace [0, 1800, 0];
-    private _currentPosition = getPosASL _projectile;
-    private _finalPosition = getPosASL _asset;
-
-    private _assetVectorDirAndUp = [_currentPosition, _finalPosition] call BIS_fnc_findLookAt;
-    _projectile setVectorDirAndUp _assetVectorDirAndUp;
+    private _missileDefeated = _projectile getVariable ["DIS_missileDefeated", false];
+    if (_missileDefeated) then {
+        break;
+    };
 
     private _projectileAGL = _projectile modelToWorld [0, 0, 0];
     if (_projectileAGL # 2 < WL_COMBAT_AIR_MINALT && _avoidable) then {

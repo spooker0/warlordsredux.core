@@ -59,6 +59,7 @@ private _assetTurrets = (allTurrets _asset) + [[-1]];
 
 if (_rearm) then {
     _asset setVehicleAmmo 1;
+    [_asset] call DIS_fnc_rearmFlares;
 
     private _ecmMaxCharges = _asset getVariable ["WL2_ecmMaxCharges", -100];
     if (_ecmMaxCharges != -100) then {

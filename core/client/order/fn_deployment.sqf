@@ -21,7 +21,7 @@ _asset setVariable ["WLM_ammoCargo", 0];
 private _assetChildren = [];
 private _attachments = WL_ASSET(_orderedClass, "attachments", []);
 {
-	_x params ["_attachClass", "_attachOffset", "_attachDir", "_attachMemoryPoint", "_attachScale"];
+	_x params ["_attachClass", "_attachOffset", "_attachDir", "_attachMemoryPoint"];
 	private _attachment = createSimpleObject [_attachClass, [0, 0, 0]];
     if (_attachMemoryPoint == "") then {
         _attachment attachTo [_asset, _attachOffset];
@@ -29,9 +29,6 @@ private _attachments = WL_ASSET(_orderedClass, "attachments", []);
         _attachment attachTo [_asset, _attachOffset, _attachMemoryPoint, true];
     };
 	_attachment setDir _attachDir;
-    if (_attachScale != 1) then {
-        _attachment setObjectScale _attachScale;
-    };
 	_assetChildren pushBack _attachment;
 } forEach _attachments;
 

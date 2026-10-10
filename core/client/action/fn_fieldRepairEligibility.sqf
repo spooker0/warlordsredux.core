@@ -21,8 +21,12 @@ if (vehicle _caller != _caller) exitWith {
     false
 };
 
-if (WL_UNIT(cursorObject, "immobile", 0) > 0) exitWith {
+if (WL_UNIT(_target, "immobile", 0) > 0) exitWith {
     false
+};
+
+if (fuel _target < 0.1) exitWith {
+    true
 };
 
 private _allHitPoints = getAllHitPointsDamage _target;

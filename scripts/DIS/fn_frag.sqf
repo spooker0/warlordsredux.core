@@ -13,16 +13,28 @@ if (_rangeOverride > -1) then {
 };
 
 private _objectsNearby = [];
+
+#if WL_FF_TEST
+private _playerSide = sideUnknown;
+#else
 private _playerSide = side group _unit;
+#endif
+
 while { alive _projectile } do {
 	uiSleep 0.01;
+
+	private _missileDefeated = _projectile getVariable ["DIS_missileDefeated", false];
+	if (!alive _projectile || _missileDefeated) then {
+		break;
+	};
 
 	private _enemyUnits = switch (_playerSide) do {
         case west: { BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles };
         case east: { BIS_WL_westOwnedVehicles + BIS_WL_guerOwnedVehicles };
         case independent: { BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles };
-        default { [] };
+        default { (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) - [_unit] };
     };
+
 	_objectsNearby = _enemyUnits select {
 		_x isKindOf "Air"
 	} select {
@@ -37,6 +49,9 @@ while { alive _projectile } do {
 };
 
 if (count _objectsNearby == 0) exitWith {};
+
+private _missileDefeated = _projectile getVariable ["DIS_missileDefeated", false];
+if (!alive _projectile || _missileDefeated) exitWith {};
 
 if (!isNull _responsiblePlayer) then {
 	{

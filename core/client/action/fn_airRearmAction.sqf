@@ -13,6 +13,7 @@ _asset addAction [
         };
 
         _asset setVehicleAmmo 1;
+        [_asset] call DIS_fnc_rearmFlares;
 
         private _rearmTime = WL_UNIT(_asset, "rearm", 600);
         _asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];

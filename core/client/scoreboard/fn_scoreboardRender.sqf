@@ -267,8 +267,12 @@ _teamCounts = [0, 0];
         private _isDisconnected = _entryUid != "" && { !(_entryUid in _connectedUids) };
         private _strike = _row getVariable ["WL2_scoreboardStrike", controlNull];
 
+        private _cells = _row getVariable ["WL2_scoreboardCells", []];
+        if (count _cells < 2) then {
+            continue;
+        };
+
         if (_isDisconnected) then {
-            private _cells = _row getVariable ["WL2_scoreboardCells", []];
             private _nameCell = _cells # 1;
             private _namePosition = ctrlPosition _nameCell;
             private _strikeWidth = (ctrlTextWidth _nameCell - 2 * WL_SCOREBOARD_TEXT_MARGIN) max 0;

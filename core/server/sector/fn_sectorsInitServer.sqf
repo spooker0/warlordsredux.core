@@ -154,26 +154,25 @@ private _slowestCapture = 180;
 [_firstBase, _secondBase] spawn {
 	private _airDefenseToSpawn = [
 		[
-			["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_F"],
-			["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_F"],
-			["B_APC_Tracked_01_AA_F", "B_APC_Tracked_01_AA_F"]
+			["B_SAM_System_01_F", "B_Spartan"],
+			["B_SAM_System_01_F", "B_Spartan"],
+			["B_SAM_System_01_F", "B_Spartan"]
 		],
 		[
-			["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_F"],
-			["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_F"],
-			["O_APC_Tracked_02_AA_F", "O_APC_Tracked_02_AA_F"]
+			["B_SAM_System_01_F", "O_Spartan"],
+			["B_SAM_System_01_F", "O_Spartan"],
+			["B_SAM_System_01_F", "O_Spartan"]
 		]
 	];
 	{
 		private _sector = _x;
 		private _randomSpots = [_sector] call WL2_fnc_findSpawnsInSector;
 		{
+			_x params ["_realClass", "_orderedClass"];
 			private _pos = selectRandom _randomSpots;
 			private _direction = [[0, 0, 1], [0, 1, 0]];
-			private _realClass = _x # 0;
-			private _orderedClass = _x # 1;
 
-			private _asset = [_realClass, _orderedClass, _pos, _direction, false, _spawnInAir] call WL2_fnc_createVehicleCorrectly;
+			private _asset = [_realClass, _orderedClass, _pos, _direction, false, false] call WL2_fnc_createVehicleCorrectly;
 			waitUntil {
 				uiSleep 0.1;
 				!(isNull _asset)
@@ -187,7 +186,7 @@ private _slowestCapture = 180;
 
 			[_asset] spawn {
 				params ["_asset"];
-				while {alive _asset} do {
+				while { alive _asset } do {
 					_asset setVehicleAmmo 1;
 					{
 						(side _asset) reportRemoteTarget [_x, 10];

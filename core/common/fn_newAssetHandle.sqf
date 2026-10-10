@@ -50,6 +50,12 @@ if (_asset isKindOf "Man") then {
 
 	[_asset] call APS_fnc_registerVehicle;
 
+	private _flareCapacity = WL_ASSET_GET(_data, "flareBursts", 0);
+	private _flareBursts = _asset getVariable ["DIS_flareBursts", -1];
+	if (_flareCapacity > 0 && _flareBursts < 0) then {
+		[_asset] call DIS_fnc_rearmFlares;
+	};
+
 	[_asset] remoteExec ["WL2_fnc_rearmAction", 0, true];
 	[_asset] remoteExec ["WL2_fnc_repairAction", 0, true];
 	[_asset] remoteExec ["WL2_fnc_refuelAction", 0, true];
@@ -362,6 +368,10 @@ if (_asset isKindOf "Man") then {
 		[_asset, 0] remoteExec ["setFuelCargo", _asset];
 	};
 
+	private _maxSpeed = getNumber (configFile >> "CfgVehicles" >> typeOf _asset >> "maxSpeed");
+	_maxSpeed = _maxSpeed / 3.6;
+	_asset setVariable ["WL2_maxSpeed", _maxSpeed, true];
+
 	if (WL_ASSET_GET(_data, "hasRearm", 0) > 0) then {
 		_asset setVariable ["WLM_ammoCargo", 10000, true];
 	};
@@ -475,10 +485,6 @@ if (_asset isKindOf "Man") then {
 		} forEach _sortedLimitedVehicles;
 
 		_asset setVariable ["WL2_singletonCreationTime", serverTime, true];
-	};
-
-	if (WL_ASSET_GET(_data, "hasTurretVisualizer", 0) > 0) then {
-		[_asset] remoteExec ["WL2_fnc_turretVisualizerAction", 0, true];
 	};
 
 	if ("hide_rail" in (animationNames _asset)) then {

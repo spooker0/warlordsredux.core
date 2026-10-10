@@ -10,21 +10,22 @@ if (_missileUpdateInitialized) exitWith {
 
 private _projectileNotify = [remoteExecutedOwner, clientOwner];
 while { alive _projectile } do {
-    if (_projectile getVariable ["WL2_missileStateOverride", ""] != "") then {
+    private _missileDefeated = _projectile getVariable ["DIS_missileDefeated", false];
+    if (_missileDefeated) then {
+        break;
+    };
+
+    private _missileStateOverride = _projectile getVariable ["WL2_missileStateOverride", ""];
+    if (_missileStateOverride != "") then {
         uiSleep 0.1;
         continue;
     };
 
     private _currentState = (missileState _projectile) # 1;
-    private _notched = _projectile getVariable ["DIS_notched", false];
-    if (_notched) then {
-        _currentState = "BLIND";
-        _projectile setMissileTarget objNull;
-    } else {
-        if (_currentState == "LOST") then {
-            _currentState = "SEARCH";
-        };
+    if (_currentState == "LOST") then {
+        _currentState = "SEARCH";
     };
+
     private _missileVarState = _projectile getVariable ["APS_missileState", "LOCKED"];
     if (_currentState != _missileVarState) then {
         _projectile setVariable ["APS_missileState", _currentState, _projectileNotify];

@@ -1,5 +1,7 @@
 #include "includes.inc"
 
+disableSerialization;
+
 private _display = uiNamespace getVariable ["RscWLTargetingDisplay", displayNull];
 if (isNull _display) then {
 	"targetingMenu" cutRsc ["RscWLTargetingDisplay", "PLAIN", -1, true, true];
@@ -10,6 +12,7 @@ private _incomingTextControl = _display displayCtrl 6001;
 private _statusTextControl = _display displayCtrl 6002;
 private _weaponTextControl = _display displayCtrl 6003;
 private _centeredTextControl = _display displayCtrl 6004;
+private _flareControls = [];
 
 uiNamespace setVariable ["DIS_currentTargetingMode", "none"];
 uiNamespace setVariable ["WL2_usingVLS", false];
@@ -406,76 +409,44 @@ while { !BIS_WL_missionEnd } do {
 	_mainTextControl ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", _text];
 
 	private _disableIncomingMissileDisplay = _settingsMap getOrDefault ["disableIncomingMissileDisplay", false];
-    if (WL_HelmetInterface != 0 && !_disableIncomingMissileDisplay) then {
+	private _showIncoming = WL_HelmetInterface != 0 && !_disableIncomingMissileDisplay;
+	private _hasFlares = alive cameraOn && WL_UNIT(cameraOn, "flareBursts", 0) > 0;
+	_flareControls = [_display, _incomingTextControl, _flareControls, !_disableIncomingMissileDisplay] call DIS_fnc_updateFlareDisplay;
+    if (!_hasFlares && _showIncoming) then {
 		private _incomingMissiles = cameraOn getVariable ["WL_incomingMissiles", []];
 		_incomingMissiles = _incomingMissiles select { alive _x };
 
-		private _targetVector = velocity cameraOn;
 		private _missilesData = _incomingMissiles apply {
 			private _missile = _x;
-			private _missileState = _missile getVariable ["APS_missileState", "LOCKED"];
 			private _distance = _missile distance cameraOn;
-			private _relDir = _missile getRelDir cameraOn;
-			private _missileApproaching = (_relDir < 90 || _relDir > 270) && !(_missileState == "BLIND");
 			private _missileType = _missile getVariable ["WL2_missileNameOverride", _missileTypeData getOrDefault [typeof _missile, "MISSILE"]];
 
-			private _launchParams = _missile getVariable ["DIS_launchParams", [objNull, 1]];
-			private _notchResult = [cameraOn, _launchParams # 0, _missile, _launchParams # 1] call DIS_fnc_getNotchResult;
-
-			[_missileState, _distance, _missileApproaching, _missileType, _notchResult];
+			[_distance, _missileType];
 		};
 
 		_missilesData = [_missilesData, [], {
-			if (_x # 2) then {
-				_x # 1
-			} else {
-				_x # 1 + 10000
-			};
+			_x # 0;
 		}, "ASCEND"] call BIS_fnc_sortBy;
 
-		private _countermeasures = count (("CMflare_Chaff_Ammo" allObjects 2) select {
-			(getShotParents _x) # 0 == cameraOn && _x distance cameraOn < 4000;
-		});
-
 		private _incomingText = "";
-		if (_countermeasures > 0) then {
-			_incomingText = _incomingText + format ["CM %1<br/>", _countermeasures];
-		};
-
 		{
-			_x params ["_missileState", "_distance", "_missileApproaching", "_missileType", "_notchResult"];
+			_x params ["_distance", "_missileType"];
 
-			private _color = switch (true) do {
-				case (!_missileApproaching): {
-					"#000000";
-				};
-				case (_distance > 5000): {
-					"#ffffff";
-				};
-				case (_distance > 2500): {
-					"#ffff00";
-				};
-				default { "#ff0000" };
-			};
-
-			private _distanceText = (_distance / 1000) toFixed 1;
-			if (_missileState != "BLIND") then {
-				_distanceText = format ["%1 (%2%%)", _distanceText, (round (_notchResult * 25)) min 100];
-			};
+			private _distanceText = format ["%1 KM", (_distance / 1000) toFixed 1];
 
 			_incomingText = format [
-				"%1<br/><t color='%2'><t align='left'>%3</t><t align='center'>%4</t><t align='right'>%5</t></t>",
+				"%1<br/><t align='left'>%2</t><t align='right'>%3</t>",
 				_incomingText,
-				_color,
 				_missileType,
-				_missileState,
 				_distanceText
 			];
 		} forEach _missilesData;
 
 		_incomingTextControl ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", _incomingText];
 	} else {
-		_incomingTextControl ctrlSetText "";
+		if (!_hasFlares) then {
+			_incomingTextControl ctrlSetText "";
+		};
 	};
 
 	private _statusText = "";
@@ -630,6 +601,12 @@ while { !BIS_WL_missionEnd } do {
 	};
 
 	private _ammoConfig = cameraOn getVariable ["WL2_currentAmmoConfig", createHashMap];
+	private _flareMin = _ammoConfig getOrDefault ["flareMin", 0];
+	private _flareMax = _ammoConfig getOrDefault ["flareMax", 0];
+	if (_flareMax > _flareMin) then {
+		_statusText = _statusText + format ["FLARE MIN %1 M / MAX %2 M<br/>", round (_flareMin max 0), round _flareMax];
+	};
+
 	private _manualSam = _ammoConfig getOrDefault ["manualSam", []];
 	if (count _manualSam > 0) then {
 		_statusText = _statusText + "<t color='#ff0000'>GUIDE MISSILE TO TARGET</t><br/>";

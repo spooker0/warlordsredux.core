@@ -42,11 +42,6 @@ while { alive player } do {
             cameraOn switchCamera "Internal";
         };
     };
-    if (_isManualDrone) then {
-        if (!(unitIsUAV cameraOn) && cameraView == "INTERNAL") then {
-            cameraOn switchCamera "External";
-        };
-    };
 
     private _playerThirdPersonDisabled = player getVariable ["WL2_3rdPersonDisabled", false];
     if (_playerThirdPersonDisabled != _thirdPersonDisabled) then {

@@ -36,6 +36,7 @@ private _weaponsByTurret = createHashMap;
 } forEach _weaponsByTurret;
 
 _asset spawn APS_fnc_rearmAPS;
+[_asset] call DIS_fnc_rearmFlares;
 _asset setVariable ['WL2_smokeCurtains', 2];
 
 if (_asset getVariable ["WL2_deployedWeaponAmmo", -1] != -1) then {

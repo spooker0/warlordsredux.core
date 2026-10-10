@@ -19,17 +19,11 @@ private _demolishTarget = _demolishableItems # 0;
 
 private _strongholdSector = _demolishTarget getVariable ["WL_strongholdSector", objNull];
 if (isNull _strongholdSector) exitWith {
-    private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
-    private _enableAlliedDemolition = _settingsMap getOrDefault ["enableAlliedDemolition", false];
-    if (_enableAlliedDemolition) then {
-        _demolishTarget
+    private _assetSide = [_demolishTarget] call WL2_fnc_getAssetSide;
+    if (_assetSide == BIS_WL_playerSide) then {
+        objNull
     } else {
-        private _assetSide = [_demolishTarget] call WL2_fnc_getAssetSide;
-        if (_assetSide == BIS_WL_playerSide) then {
-            objNull
-        } else {
-            _demolishTarget
-        };
+        _demolishTarget
     };
 };
 private _sectorOwner = _strongholdSector getVariable ["BIS_WL_owner", independent];

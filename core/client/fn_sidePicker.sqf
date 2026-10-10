@@ -120,36 +120,20 @@ private _updatePlayers = {
         };
     } forEach _players;
 
-    private _westPlayersText = [];
-    private _eastPlayersText = [];
-    private _spaces = "               ";
+    private _westPlayersText = _westPlayers apply { name _x };
+    private _eastPlayersText = _eastPlayers apply { name _x };
+    private _unassignedPlayersText = _unassignedPlayers apply { name _x };
     {
-        _x params ["_sidePlayers", "_playersText"];
-        {
-            private _index = _forEachIndex % 3;
-            // private _playerName = format ["%1 (%2)", (name _x) select [0, 15], _x getVariable ["WL2_playerRating", WL_RATING_STARTER]];
-            private _playerName = (name _x) select [0, 15];
-            private _paddingLength = 15 - count _playerName;
-            _playerName = _playerName + (_spaces select [0, _paddingLength]);
-            if (_index == 0) then {
-                _playersText pushBack format ["<t align='left'>%1</t>", _playerName];
-            };
-            if (_index == 1) then {
-                _playersText pushBack format ["<t align='center'>%1</t>", _playerName];
-            };
-            if (_index == 2) then {
-                _playersText pushBack format ["<t align='right'>%1</t><br/>", _playerName];
-            };
-        } forEach _sidePlayers;
-    } forEach [[_westPlayers, _westPlayersText], [_eastPlayers, _eastPlayersText]];
+        _x sort true;
+    } forEach [_westPlayersText, _eastPlayersText, _unassignedPlayersText];
 
     _westButton ctrlSetStructuredText parseText format [
         "<t align='center' shadow='0'><t size='2.5'><img size='5' image='\A3\ui_f\data\map\markers\flags\nato_ca.paa'/><br/>BLUFOR (%1)</t><br/><br/><t align='center'>%2</t></t>",
-        _displayCounts # 0, _westPlayersText joinString ""
+        _displayCounts # 0, _westPlayersText joinString ", "
     ];
     _eastButton ctrlSetStructuredText parseText format [
         "<t align='center' shadow='0'><t size='2.5'><img size='5' image='\A3\ui_f\data\map\markers\flags\CSAT_ca.paa'/><br/>OPFOR (%1)</t><br/><br/><t align='center'>%2</t></t>",
-        _displayCounts # 1, _eastPlayersText joinString ""
+        _displayCounts # 1, _eastPlayersText joinString ", "
     ];
 
     private _endTime = [(estimatedEndServerTime - serverTime) max 0, "HH:MM:SS"] call BIS_fnc_secondsToString;
@@ -161,6 +145,7 @@ private _updatePlayers = {
         format ["<t shadow='2' color='#33ff33' align='right'>%1</t>", count _unassignedPlayers]
     ];
     _unassignedText ctrlSetStructuredText parseText (_centerTextArray joinString "");
+    _unassignedText ctrlSetTooltip format ["Lobby: %1", _unassignedPlayersText joinString ", "];
 };
 
 [[0, 0]] call _updatePlayers;

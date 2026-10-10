@@ -58,6 +58,7 @@ private _displayIcon = switch (_iconText) do {
 	case "SQUAD ASSIST": { "a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa" };
 	case "BOOSTED SIGNAL": { "a3\modules_f_curator\data\portraitlightning_ca.paa" };
 	case "DRONE REBATE": { "A3\Air_F_Jets\UAV_05\Data\UI\uav_05_icon_ca.paa" };
+	case "MISSILE FLARED": { "a3\ui_f\data\igui\rsctitles\rschvtphase\jac_a3_signal_4_ca.paa" };
 	default {
 		if ("KILL" in _iconText) then {
 			"a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa";

@@ -10,6 +10,7 @@ class CfgRemoteExec {
 		class APS_fnc_projectileStateUpdate {allowedTargets = 0;};
 		class APS_fnc_report {allowedTargets = 0;};
 		class APS_fnc_serverHandleAPS {allowedTargets = 2;};
+		class DIS_fnc_flareEffects {allowedTargets = 0; jip = 0;};
 		class DIS_fnc_remoteMunition {allowedTargets = 0;};
 		class DIS_fnc_setupExtendedSam {allowedTargets = 0;};
 		class DIS_fnc_startMissileCamera {allowedTargets = 0;};
@@ -93,7 +94,6 @@ class CfgRemoteExec {
 		class WL2_fnc_smokeCurtainParticles {allowedTargets = 0;};
 		class WL2_fnc_smoothText {allowedTargets = 0;};
 		class WL2_fnc_punishMessage {allowedTargets = 0;};
-		class WL2_fnc_turretVisualizerAction {allowedTargets = 0;};
 		class WL2_fnc_uavConnectRefresh {allowedTargets = 0;};
 		class WL2_fnc_uavJammed {allowedTargets = 2;};
 		class WL2_fnc_updateVehicleList {allowedTargets = 2;};

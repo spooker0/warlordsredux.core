@@ -225,7 +225,7 @@ class RscWLSidePicker {
 			x = safeZoneX + safeZoneW * 0.455;
 			y = safeZoneY + safeZoneH * 0.22;
 			w = safeZoneW * 0.09;
-			h = safeZoneH * 0.3;
+			h = safeZoneH * 0.1;
 			size = 0.023 * safeZoneW;
 
 			class Attributes {

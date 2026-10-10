@@ -57,6 +57,7 @@ if (_sector == (missionNamespace getVariable format ["BIS_WL_currentTarget_%1", 
 
 private _sectorDefenders = _sector getVariable ["WL2_defenders", 0];
 _sectorDefenders = (_sectorDefenders * 0.2) max 0;
+_sectorDefenders = round _sectorDefenders;
 _sector setVariable ["WL2_defenders", _sectorDefenders, true];
 
 call WL2_fnc_updateSectorsData;
