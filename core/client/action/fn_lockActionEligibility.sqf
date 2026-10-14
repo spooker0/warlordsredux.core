@@ -1,20 +1,17 @@
 #include "includes.inc"
 params ["_target", "_caller"];
 
-if (!alive _target) exitWith {
+if (!alive _target) exitWith { false };
+if (WL_ISDOWN(_caller)) exitWith { false };
+
+private _accessControl = _target getVariable ["WL2_accessControl", 0];
+if (_accessControl != 2 && _accessControl != 3) exitWith {
     false
 };
 
-private _playerUid = getPlayerUID _caller;
-private _targetOwnerUid = _target getVariable ['BIS_WL_ownerAsset', '123'];
-
-if (_playerUid != _targetOwnerUid) exitWith {
+private _ownerUid = _target getVariable ["BIS_WL_ownerAsset", "123"];
+if (getPlayerUID _caller != _ownerUid) exitWith {
     false
 };
 
-if (cursorObject != _target && vehicle _caller != _target) exitWith {
-    false
-};
-
-private _accessControl = _target getVariable ["WL2_accessControl", -1];
-_accessControl != -1
+cameraOn == _target

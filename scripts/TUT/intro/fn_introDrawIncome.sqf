@@ -1,10 +1,10 @@
-#include "includes.inc"
+#include "..\includes.inc"
 params ["_map", "_scene", "_elapsed"];
 
 private _display = ctrlParent _map;
 if (isNull _display || !(_scene in [9, 10])) exitWith {};
 
-private _data = _display getVariable ["INTRO_incomeData", createHashMap];
+private _data = _display getVariable ["TUT_incomeData", createHashMap];
 if (count _data == 0) exitWith {};
 
 private _suffix = if (_scene == 10) then { "10" } else { "" };
@@ -43,7 +43,7 @@ private _offsetPosition = {
 };
 private _text = {
     params ["_position", "_label", "_color", ["_offset", [0, 0]], ["_size", 0.055]];
-    [_display, _map, _position, _label, _color, _offset, _size] call INTRO_fnc_label;
+    [_display, _map, _position, _label, _color, _offset, _size] call TUT_fnc_label;
 };
 private _floatingMoney = {
     params ["_position", "_at", ["_offset", [0, 0]]];
@@ -78,8 +78,10 @@ private _bar = {
 private _cross = {
     params ["_position", "_progress", ["_vehicle", false]];
     private _screen = _map ctrlMapWorldToScreen _position;
-    private _halfW = safeZoneW * (if (_vehicle) then { 0.035 } else { 0.008 });
-    private _halfH = safeZoneH * (if (_vehicle) then { 0.035 } else { 0.015 });
+    private _width = if (_vehicle) then { 0.035 } else { 0.008 };
+    private _height = if (_vehicle) then { 0.035 } else { 0.015 };
+    private _halfW = safeZoneW * _width;
+    private _halfH = safeZoneH * _height;
     {
         _x params ["_from", "_to"];
         private _end = _from vectorAdd ((_to vectorDiff _from) vectorMultiply _progress);
@@ -137,7 +139,11 @@ if (_scene == 9) then {
     private _color = if (_captured) then { _blue } else { _uncapturedColor };
     private _area = _sector get "area";
     private _zone = [_position, _area # 0, _area # 1, _area # 2, _color, "#(rgb,1,1,1)color(1,1,1,0.1)"];
-    if (_area # 3) then { _map drawRectangle _zone; } else { _map drawEllipse _zone; };
+    if (_area # 3) then {
+        _map drawRectangle _zone;
+    } else {
+        _map drawEllipse _zone;
+    };
     private _icon = format [
         "\A3\ui_f\data\map\markers\nato\%1_%2.paa",
         if (_captured) then { "b" } else { if (_independent) then { "n" } else { "o" } }, _sector get "iconType"
@@ -157,8 +163,10 @@ if (_scene == 9) then {
             private _enemyPosition = [_position, _offset] call _offsetPosition;
             private _killedAt = (_arrivals # _index) + (_killOffsets # _enemy);
             private _killed = _elapsed >= _killedAt;
-            private _enemyColor = +(if ((_route # _index) == "Anthrakia") then { _green } else { _red });
-            if (_killed) then { _enemyColor set [3, 0.25]; };
+            private _enemyColor = if ((_route # _index) == "Anthrakia") then { +_green } else { +_red };
+            if (_killed) then {
+                _enemyColor set [3, 0.25];
+            };
             _map drawIcon [
                 if (_isTank) then { _varsuk } else { _infantry },
                 _enemyColor, _enemyPosition,
@@ -172,7 +180,7 @@ if (_scene == 9) then {
                 } else {
                     "a3\sounds_f\arsenal\weapons\machineguns\mk200\silencer_mk200_03.wss"
                 };
-                [_display, format ["kill-%1-%2", _index, _enemy], [_shot, 1, 1, false]] call INTRO_fnc_soundCue;
+                [_display, format ["kill-%1-%2", _index, _enemy], [_shot, 1, 1, false]] call TUT_fnc_soundCue;
                 [_enemyPosition, linearConversion [_killedAt, _killedAt + 0.13, _elapsed, 0, 1, true], _isTank] call _cross;
             };
             [_position, _killedAt, _offset] call _floatingMoney;
@@ -183,7 +191,9 @@ if (_scene == 9) then {
 
 private _leg = 0;
 {
-    if (_elapsed >= _x) then { _leg = _forEachIndex; };
+    if (_elapsed >= _x) then {
+        _leg = _forEachIndex;
+    };
 } forEach _departures;
 private _end = _positions # _leg;
 
@@ -197,7 +207,8 @@ private _progress = linearConversion [_departures # _leg, _arrivals # _leg, _ela
 _progress = _progress * _progress * (3 - 2 * _progress);
 
 private _travelHeading = _start getDir _end;
-private _curve = (_start distance2D _end) * 0.12 * (if (_leg % 2 == 0) then { 1 } else { -1 });
+private _direction = if (_leg % 2 == 0) then { 1 } else { -1 };
+private _curve = (_start distance2D _end) * 0.12 * _direction;
 private _control = ((_start vectorAdd _end) vectorMultiply 0.5) vectorAdd [
     sin (_travelHeading + 90) * _curve, cos (_travelHeading + 90) * _curve, 0
 ];

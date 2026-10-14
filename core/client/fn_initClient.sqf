@@ -17,8 +17,11 @@ WL_LoadingState = 0;
 };
 #endif
 
+private _playerId = "";
 waitUntil {
-	!isNull player && { isPlayer player }
+	uiSleep 0.1;
+	_playerId = getPlayerID player;
+	!(_playerId in ["", "-1"])
 };
 
 private _disallowList = getArray (missionConfigFile >> "adminFilter");
@@ -39,14 +42,15 @@ addMissionEventHandler ["HandleChatMessage", {
 }];
 
 private _sidePickerState = civilian;
+private _sidePickerStateVar = format ["WL2_sidePickerState_%1", _playerId];
 waitUntil {
 	uiSleep 0.01;
-	_sidePickerState = player getVariable ["WL2_sidePickerState", civilian];
+	_sidePickerState = missionNamespace getVariable [_sidePickerStateVar, civilian];
 	_sidePickerState != civilian
 };
 
 private _side = if (_sidePickerState == independent) then {
-	call WL2_fnc_sidePicker
+	[_playerId] call WL2_fnc_sidePicker
 } else {
 	_sidePickerState
 };
@@ -54,20 +58,21 @@ BIS_WL_playerSide = _side;
 BIS_WL_enemySide = (BIS_WL_competingSides - [_side]) # 0;
 
 private _setupState = "";
+private _setupStateVar = format ["WL2_playerSetupState_%1", _playerId];
 waitUntil {
-	uiSleep 0.001;
-	_setupState = player getVariable ["WL2_playerSetupState", ""];
-	_setupState != ""
+	uiSleep 0.1;
+	_setupState = missionNamespace getVariable [_setupStateVar, ""];
+	private _playerReady = !isNull player && alive player && side group player == _side;
+	_setupState == "Failed" || (_setupState == "Complete" && _playerReady)
 };
 
 if (_setupState == "Failed") exitWith {
-	private _message = "Failed to create player group. Aborting. Rejoin from lobby.";
+	private _message = "Failed to create player group. Aborting. Rejoin.";
     [_message, "Initialization Failed"] call WL2_fnc_exitToLobby;
 };
 
 WL_LoadingState = 2;
 
-private _uid = getPlayerUID player;
 call WL2_fnc_varsInit;
 
 WL_LoadingState = 3;
@@ -155,12 +160,6 @@ WL_LoadingState = 8;
 
 0 spawn WL2_fnc_initHud;
 0 spawn WL2_fnc_fastHudUpdate;
-0 spawn {
-	while {!BIS_WL_missionEnd} do {
-		call WL2_fnc_teammatesAvailability;
-		uiSleep 5;
-	};
-};
 
 private _friendlyTargetMarker = "BIS_WL_targetFriendly";
 private _enemyTargetMarker = "BIS_WL_targetEnemy";
@@ -315,7 +314,6 @@ if (!isServer) then {
 0 spawn WL2_fnc_installAction;
 0 spawn WL2_fnc_helmetInterface;
 0 spawn WL2_fnc_repairActionUpdate;
-0 spawn WL2_fnc_lockActionUpdate;
 
 ["Player", true] call RWD_fnc_addBadge;
 player setVariable ["WL2_currentBadge", missionProfileNamespace getVariable ["WL2_currentBadge", "Player"], true];
@@ -328,6 +326,7 @@ call WL2_fnc_buyMenuAction;
 call WL2_fnc_demolishAction;
 call WL2_fnc_rappelAction;
 call WL2_fnc_hmdSettingsAction;
+call WL2_fnc_lockActionToggle;
 
 0 spawn WL2_fnc_createInfoMarkers;
 0 spawn WL2_fnc_drawRegions;

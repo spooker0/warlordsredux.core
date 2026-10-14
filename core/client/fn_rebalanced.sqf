@@ -9,12 +9,12 @@ private _lockTeamName = if (_newSide == west) then { "BLUFOR" } else { "OPFOR" }
 private _message = format ["You have been rebalanced to %1.", _lockTeamName];
 [_message] call WL2_fnc_smoothText;
 
+BIS_WL_playerSide = _newSide;
+BIS_WL_enemySide = (BIS_WL_competingSides - [_newSide]) # 0;
+
 waitUntil {
     alive player || isNull player;
 };
-
-BIS_WL_playerSide = _newSide;
-BIS_WL_enemySide = (BIS_WL_competingSides - [_newSide]) # 0;
 
 call WL2_fnc_updateSectorsData;
 {

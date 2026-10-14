@@ -40,7 +40,7 @@ waitUntil {
 
     _sector setVariable ["WL2_detectedUnits", _allDetected];
 
-    _uav setVariable ["WL2_accessControl", 7];
+    _uav setVariable ["WL2_accessControl", 1];
 
     player disableUAVConnectability [_uav, true];
     !alive _uav

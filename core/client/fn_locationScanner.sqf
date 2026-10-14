@@ -60,7 +60,7 @@ uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
         } select {
             [getPosASL cameraOn, getDir cameraOn, 90, getPosASL _x] call WL2_fnc_inAngleCheck;
         } select {
-            private _access = [_x, player, "full"] call WL2_fnc_accessControl;
+            private _access = [_x, player] call WL2_fnc_accessControl;
             _access # 0;
         } select {
             private _installable = _x getVariable ["WL2_installable", ""];

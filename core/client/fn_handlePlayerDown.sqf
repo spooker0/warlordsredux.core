@@ -35,7 +35,7 @@ private _deadAnimation = selectRandom _deadAnimations;
 private _startTime = serverTime;
 
 // Killcam
-if (!isNull _source) then {
+if (!isNull _source && alive player) then {
     private _camera = "camera" camCreate (ASLToAGL (getPosASL _unit vectorAdd [0, 0, 2]));
     _camera camSetTarget _source;
     showCinemaBorder false;

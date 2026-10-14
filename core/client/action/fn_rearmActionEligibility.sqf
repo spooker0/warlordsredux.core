@@ -9,7 +9,7 @@ if (!alive _target) exitWith {
     false
 };
 
-private _hasAccess = ([_target, _caller, "full"] call WL2_fnc_accessControl) # 0;
+private _hasAccess = ([_target, _caller] call WL2_fnc_accessControl) # 0;
 if (!_hasAccess) exitWith {
     false
 };

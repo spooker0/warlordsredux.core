@@ -10,7 +10,7 @@ private _actionConditions = {
 	private _paradrops = _target getVariable ["WL2_paradrops", 0];
 	if (_paradrops <= 0) exitWith { false };
 
-    private _accessControl = [_target, _this, "full"] call WL2_fnc_accessControl;
+    private _accessControl = [_target, _this] call WL2_fnc_accessControl;
 	if (!(_accessControl # 0)) exitWith { false };
 
 	private _position = _target modelToWorld [0, 0, 0];

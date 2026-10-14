@@ -51,5 +51,5 @@ if (_showIntroCinematic) then {
 	};
 	if (missionNamespace getVariable ["BIS_WL_missionEnd", false]) exitWith {};
 	"RequestMenu_close" call WL2_fnc_setupUI;
-	[] spawn INTRO_fnc_play;
+	[] spawn TUT_fnc_play;
 };

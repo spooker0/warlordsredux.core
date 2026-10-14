@@ -88,6 +88,15 @@ private _flagBgColor = ["#0000ffff", "#ff0000ff"];
 	if (isNull _flag) then {
 		continue;
 	};
+
+	private _objectsNearFlag = nearestTerrainObjects [_base, [], 30, false, true];
+	{
+		if (_x == _base) then {
+			continue;
+		};
+		hideObject _x;
+	} forEach _objectsNearFlag;
+
 	private _welcomeText = format [
 		"#(rgb,2048,2048,3)text(1,1,""PuristaBold"",0.03,""%1"",""#ffffff"",""%2"")",
 		_flagBgColor select _forEachIndex,

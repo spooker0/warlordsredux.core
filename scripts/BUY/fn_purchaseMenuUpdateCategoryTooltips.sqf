@@ -25,30 +25,8 @@ for "_row" from 0 to (lbSize _categories - 1) do {
 
 if (_infantryRow < 0) exitWith {};
 
-private _maxSubordinates = missionNamespace getVariable [format ["BIS_WL_maxSubordinates_%1", BIS_WL_playerSide], 1];
-private _timerKey = format ["WL2_manpowerRefreshTimers_%1", getPlayerUID player];
-private _timers = missionNamespace getVariable [_timerKey, []];
-private _slots = [];
-{
-    _x params ["_readyTime", "_unit"];
-
-    if (alive _unit) then {
-        private _remaining = _readyTime - serverTime;
-        private _timerText = if (_remaining < 0) then { "Ready" } else { [_remaining, "MM:SS"] call BIS_fnc_secondsToString };
-
-        _slots pushBack format ["%1 (%2)", name _unit, _timerText];
-    };
-
-} forEach _timers;
-
-{
-    _x params ["_readyTime", "_unit"];
-
-    if (!alive _unit && _readyTime > serverTime) then {
-        _slots pushBack format ["Waiting (%1)", [_readyTime - serverTime, "MM:SS"] call BIS_fnc_secondsToString];
-    };
-
-} forEach _timers;
+private _maxSubordinates = missionNamespace getVariable ["WL2_maxSubordinates", 1];
+private _slots = ((units group player) - [player]) apply { name _x };
 
 for "_slot" from 1 to (_maxSubordinates - count _slots) do {
     _slots pushBack "Ready";

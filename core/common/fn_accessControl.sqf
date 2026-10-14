@@ -1,72 +1,24 @@
 #include "includes.inc"
-params ["_asset", "_unit", "_role"];
+params ["_asset", "_unit"];
 
-private _accessControl = _asset getVariable ["WL2_accessControl", -1];
-if (_accessControl == -1) exitWith {
-    [true, "Access: Not Set"];
+private _accessControl = _asset getVariable ["WL2_accessControl", 0];
+if (_accessControl == 0) exitWith {
+    [true, ""];
+};
+if (_accessControl == 1) exitWith {
+    [false, "Access denied"];
+};
+if (_accessControl != 2 && _accessControl != 3) exitWith {
+    [false, "Access denied"];
 };
 
-private _ownerUID = _asset getVariable ["BIS_WL_ownerUavAsset", _asset getVariable ["BIS_WL_ownerAsset", "123"]];
-private _owner = _ownerUID call BIS_fnc_getUnitByUid;
-private _ownerID = getPlayerID _owner;
-private _callerID = getPlayerID (leader _unit);
-private _isOwner = _ownerUID == getPlayerUID (leader _unit);
-
-private _isEnemy = (side group _unit) != [_asset] call WL2_fnc_getAssetSide;
-if (_isEnemy && !(_asset isKindOf "Man")) exitWith {
-    [false, "Access: Enemy (Claim to Capture)"];
+if (side group _unit != [_asset] call WL2_fnc_getAssetSide) exitWith {
+    [false, "Enemy vehicle (claim vehicle to capture)"];
+};
+if (_accessControl == 3) exitWith {
+    [true, ""];
 };
 
-private _access = false;
-private _message = "";
-switch (_accessControl) do {
-    case 0: {
-        // All (Full)
-        _access = true;
-        _message = "Access: All (Full)";
-    };
-    case 1: {
-        // All (Operate)
-        _access = _isOwner || _role != "full";
-        _message = "Access: All (Operate)";
-    };
-    case 2: {
-        // All (Passenger Only)
-        _access = _isOwner || (_role == "cargo");
-        _message = "Access: All (Passenger Only)";
-    };
-    case 3: {
-        // Squad (Full)
-        private _areInSquad = ["areInSquad", [_callerID, _ownerID]] call SQD_fnc_query;
-        _access = _isOwner || _areInSquad;
-        _message = "Access: Squad (Full)";
-    };
-    case 4: {
-        // Squad (Operate)
-        private _areInSquad = ["areInSquad", [_callerID, _ownerID]] call SQD_fnc_query;
-        _access = _isOwner || (_areInSquad && _role != "full");
-        _message = "Access: Squad (Operate)";
-    };
-    case 5: {
-        // Squad (Passenger Only)
-        private _areInSquad = ["areInSquad", [_callerID, _ownerID]] call SQD_fnc_query;
-        _access = _isOwner || (_areInSquad && _role == "cargo");
-        _message = "Access: Squad (Passenger Only)";
-    };
-    case 6: {
-        // Personal
-        _access = _isOwner;
-        _message = "Access: Personal";
-    };
-    case 7: {
-        // Locked
-        _access = false;
-        _message = "Access: Locked";
-    };
-    default {
-        _access = false;
-        _message = "Access: Locked";
-    };
-};
-
-[_access, _message];
+private _ownerUid = _asset getVariable ["BIS_WL_ownerAsset", "123"];
+private _isOwner = getPlayerUID _unit == _ownerUid;
+[_isOwner, "Vehicle locked"];

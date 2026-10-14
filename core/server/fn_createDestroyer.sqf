@@ -84,7 +84,7 @@ private _createMrls = {
     _mrls setMagazineTurretAmmo ["magazine_Missiles_Cruise_01_x18", 1, [0]];
     _controller setObjectTextureGlobal [3, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""AMMO\n1"")"];
 
-    _mrls setVariable ["WL2_accessControl", 7, true];
+    _mrls setVariable ["WL2_accessControl", 1, true];
 };
 
 private _outlineMarkerLocation = _destroyerBase modelToWorld [0, -10, 0];

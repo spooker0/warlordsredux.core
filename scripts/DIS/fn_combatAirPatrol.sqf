@@ -64,6 +64,7 @@ if (!isNull _combatAirRequester) then {
 _projectile setMissileTarget [_asset, true];
 private _assetVectorDirAndUp = [getPosASL _projectile, getPosASL _asset] call BIS_fnc_findLookAt;
 _projectile setVectorDirAndUp _assetVectorDirAndUp;
+_projectile setVariable ["DIS_flareDeltaBonus", 0.1];
 
 [_projectile, _target, worldSize * 2] spawn DIS_fnc_flareMissile;
 [_projectile, _combatAirRequester, 0.45] spawn DIS_fnc_frag;

@@ -6,10 +6,9 @@ private _canRemoveAsset = {
         "You are incapacitated!";
     };
 
-    private _access = [_asset, player, "full"] call WL2_fnc_accessControl;
-    private _hasFullAccess = _access # 0;
-    if (!_hasFullAccess) exitWith {
-        format ["Can't remove: %1", _access # 1];
+    private _ownerUid = _asset getVariable ["BIS_WL_ownerAsset", "123"];
+    if (getPlayerUID player != _ownerUid) exitWith {
+        "Can't remove: You do not own this asset";
     };
 
     if (alive _asset && _asset isKindOf "Air" && speed _asset > 5 && !(unitIsUAV _asset)) exitWith {

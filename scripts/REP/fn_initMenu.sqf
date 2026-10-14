@@ -64,6 +64,7 @@ if (_moderate) then {
         [REP_REWARDS_IDC, "seeRewardLog"],
         [REP_SCRIPTS_IDC, "downloadScriptLog"],
         [REP_DEPUTIZE_IDC, "deputize"],
+        [REP_TUTORIAL_IDC, "playTutorial"],
         [REP_CLEAR_REPORTS_IDC, "clearReports"],
         [REP_CLEAR_TIMEOUT_IDC, "clearTimeout"]
     ];
@@ -185,15 +186,12 @@ if (_moderate) then {
 [_display] call REP_fnc_refresh;
 ctrlSetFocus _searchControl;
 
-[_display] spawn {
-    params ["_display"];
-    disableSerialization;
+while { !isNull _display } do {
+    uiSleep REP_REFRESH_INTERVAL;
 
-    while { !isNull _display } do {
-        uiSleep REP_REFRESH_INTERVAL;
-
-        if (!isNull _display) then {
-            [_display] call REP_fnc_refresh;
-        };
+    if (!isNull _display) then {
+        [_display] call REP_fnc_refresh;
     };
 };
+
+ppEffectDestroy _blur;

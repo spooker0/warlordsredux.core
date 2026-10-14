@@ -79,6 +79,9 @@ private _ammoType = _projectile getVariable ["APS_ammoOverride", typeOf _project
 _newProjectile setVariable ["APS_ammoOverride", _ammoType];
 _newProjectile setVariable ["DIS_ultimateTarget", _target];
 
+private _deltaBonus = _projectile getVariable ["DIS_flareDeltaBonus", 0];
+_newProjectile setVariable ["DIS_flareDeltaBonus", _deltaBonus];
+
 _newProjectile setVariable ["WL2_missileNameOverride", _missileName, true];
 [_newProjectile] remoteExec ["WL2_fnc_hideObjectOnAll", 2];
 [_newProjectile, [player, player]] remoteExec ["setShotParents", 2];

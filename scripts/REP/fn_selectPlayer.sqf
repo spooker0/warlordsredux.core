@@ -65,6 +65,7 @@ if (_moderate) then {
         REP_TRANSFERS_IDC,
         REP_AFK_IDC,
         REP_REWARDS_IDC,
+        REP_TUTORIAL_IDC,
         REP_CLEAR_REPORTS_IDC
     ];
 

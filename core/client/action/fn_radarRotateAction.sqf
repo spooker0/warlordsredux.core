@@ -13,7 +13,7 @@ private _radarActionID = _asset addAction [
     false,
     false,
     "",
-    "alive _target && ([_target, _this, ""full""] call WL2_fnc_accessControl) # 0 && (cursorObject == _target || vehicle _this == _target)",
+    "alive _target && ([_target, _this] call WL2_fnc_accessControl) # 0 && (cursorObject == _target || vehicle _this == _target)",
     30,
     true
 ];

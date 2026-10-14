@@ -200,6 +200,11 @@ switch (_action) do {
         _refresh = true;
     };
 
+    case "playTutorial": {
+        [] remoteExec ["TUT_fnc_play", _selectedPlayer];
+        _status = format ["Requested tutorial playback for %1.", _playerName];
+    };
+
     case "clearReports": {
         [] remoteExec ["WL2_fnc_clearPlayerReports", _selectedPlayer];
         _status = format ["Cleared reports, transfers and AFK log for %1.", _playerName];

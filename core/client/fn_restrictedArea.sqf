@@ -28,6 +28,10 @@ while { !BIS_WL_missionEnd } do {
             _currentSector = _x;
         };
 
+        if (!alive player) then {
+            continue;
+        };
+
         private _revealedBy = _x getVariable ["BIS_WL_revealedBy", []];
         if (_side in _revealedBy) then {
             continue;

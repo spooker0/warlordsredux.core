@@ -80,6 +80,7 @@ _settingsMenu append [
     ["category", localize "STR_WL_volumeSettings"],
     ["slider", localize "STR_WL_announcer", [0, 1, 0.1, 1, "announcerVolume"]],
     ["slider", localize "STR_WL_apsWarning", [0, 1, 0.1, 1, "apsVolume"]],
+    ["slider", localize "STR_WL_flareWindowBeeps", [0, 1, 0.1, 1, "flareWindowVolume"]],
     ["slider", localize "STR_WL_earplugs", [0, 0.5, 0.05, 0.1, "earplugVolume"]],
     ["slider", localize "STR_WL_hitmarker", [0, 1, 0.1, 0.5, "hitmarkerVolume"]],
     ["slider", localize "STR_WL_levelUpMusic", [0, 1, 0.1, 0.8, "levelUpMusic"]],
@@ -138,7 +139,6 @@ _settingsMenu append [
     ["checkbox", localize "STR_WL_deleteSmallTransportsOnExit", ["deleteSmallTransports", true]],
     ["checkbox", localize "STR_WL_addKillfeedToChat", ["addKillfeedToChat", false]],
     ["checkbox", localize "STR_WL_useNewKillSound", ["useNewKillSound", true]],
-    ["checkbox", localize "STR_WL_showIntroCinematic", ["showIntroCinematic", true]],
     ["checkbox", localize "STR_WL_spawnWithUavTerminal", ["spawnWithUAVTerminal", true]],
     ["checkbox", localize "STR_WL_spawnWithRangefinder", ["spawnWithRangefinder", true]],
     ["checkbox", localize "STR_WL_aiFollowDefault", ["aiFollowDefault", true]],
@@ -156,6 +156,10 @@ _settingsMenu append [
     ["category", localize "STR_WL_hideScrollMenus"],
     ["checkbox", localize "STR_WL_hideBuyMenu", ["hideBuyMenu", false]],
     ["checkbox", localize "STR_WL_hideFrontlineAction", ["hideFrontlineMenu", false]],
+
+    ["category", localize "STR_WL_tutorials"],
+    ["checkbox", localize "STR_WL_showIntroCinematic", ["showIntroCinematic", true]],
+    ["checkbox", localize "STR_WL_showPilotSurvival", ["showPilotSurvival", true]],
 
     ["category", localize "STR_WL_controlHints"],
     ["checkbox", localize "STR_WL_showHintDeployment", ["showHintDeploy", true]],

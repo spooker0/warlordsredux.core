@@ -8,6 +8,15 @@ player addEventHandler ["GetInMan", {
 	params ["_unit", "_role", "_vehicle", "_turret"];
 	if (_vehicle isKindOf "Air" && typeof _vehicle != "Steerable_Parachute_F") then {
 		0 spawn WL2_fnc_betty;
+
+		private _flareConfig = WL_UNIT(_vehicle, "flares", []);
+		private _flareCapacity = _flareConfig param [0, 0];
+		private _shown = uiNamespace getVariable ["TUT_pilotSurvivalShown", false];
+		private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
+		private _showPilotSurvival = _settingsMap getOrDefault ["showPilotSurvival", true];
+		if (_unit == player && _flareCapacity > 0 && !_shown && _showPilotSurvival) then {
+			["pilot"] spawn TUT_fnc_carousel;
+		};
 	};
 
 	if (_vehicle isKindOf "VTOL_Base_F") then {
@@ -69,7 +78,7 @@ player addEventHandler ["GetOutMan", {
 player addEventHandler ["InventoryOpened", {
 	params ["_unit", "_container", "_secondaryContainer"];
 
-    private _access = [_container, player, "cargo"] call WL2_fnc_accessControl;
+    private _access = [_container, player] call WL2_fnc_accessControl;
     if !(_access # 0) then {
         [format ["Inventory locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
         playSoundUI ["AddItemFailed"];

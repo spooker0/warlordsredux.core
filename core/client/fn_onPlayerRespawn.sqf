@@ -77,6 +77,7 @@ call WL2_fnc_buyMenuAction;
 call WL2_fnc_rappelAction;
 call WL2_fnc_demolishAction;
 call WL2_fnc_hmdSettingsAction;
+call WL2_fnc_lockActionToggle;
 
 0 spawn WL2_fnc_interceptAction;	// just in case it's overridden
 0 spawn WL2_fnc_secureWreckAction;

@@ -1,4 +1,5 @@
 #include "includes.inc"
+params ["_playerId"];
 ["main"] call BIS_fnc_endLoadingScreen;
 
 disableSerialization;
@@ -17,11 +18,12 @@ _dialog displayAddEventHandler ["KeyDown", {
 
 _dialog displayAddEventHandler ["Unload", {
     params ["_display", "_exitCode"];
+    private _backgroundControls = uiNamespace getVariable ["WL2_sidePickerBackgroundControls", []];
     {
-        if !(isNull _x) then {
+        if (!isNull _x) then {
             _x ctrlSetText "";
         };
-    } forEach (uiNamespace getVariable ["WL2_sidePickerBackgroundControls", []]);
+    } forEach _backgroundControls;
     uiNamespace setVariable ["WL2_sidePickerBackgroundControls", nil];
 }];
 
@@ -176,8 +178,9 @@ private _dummyButton = _dialog displayCtrl 101;
 ctrlSetFocus _dummyButton;
 
 private _lastUpdateTime = time;
+private _playerEligibilityVar = format ["WL2_playerEligibility_%1", _playerId];
 while { _sidePicked == independent && !(isNull _dialog) } do {
-    private _playerEligibility = player getVariable ["WL2_playerEligibility", []];
+    private _playerEligibility = missionNamespace getVariable [_playerEligibilityVar, [[], [0, 0]]];
     _playerEligibility params ["_eligibleSides", "_playerCounts"];
 
     _westButton ctrlEnable (west in _eligibleSides);
@@ -212,5 +215,5 @@ closeDialog 0;
 stopSound _soundtrack;
 0 fadeEnvironment 1;
 
-player setVariable ["WL2_playerSide", _sidePicked, [2, clientOwner]];
+missionNamespace setVariable [format ["WL2_playerSide_%1", _playerId], _sidePicked, [2, clientOwner]];
 _sidePicked;

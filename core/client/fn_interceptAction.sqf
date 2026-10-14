@@ -2,91 +2,19 @@
 private _interceptAction = {
     params ["_target", "_caller", "_index", "_name", "_text", "_priority", "_showWindow", "_hideOnUse", "_shortcut", "_visibility", "_eventName"];
     switch (_name) do {
-        case "MoveToPilot": {
-            private _access = [_target, _caller, "driver"] call WL2_fnc_accessControl;
-            if !(_access # 0) then {
-                [format ["Pilot seat locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
-                playSoundUI ["AddItemFailed"];
-                true;
-            } else {
-                false;
-            };
-        };
-        case "MoveToDriver": {
-            private _access = [_target, _caller, "driver"] call WL2_fnc_accessControl;
-            if !(_access # 0) then {
-                [format ["Driver seat locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
-                playSoundUI ["AddItemFailed"];
-                true;
-            } else {
-                false;
-            };
-        };
-        case "MoveToTurret": {
-            private _access = [_target, _caller, "gunner"] call WL2_fnc_accessControl;
-            if !(_access # 0) then {
-                [format ["Turret seat locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
-                playSoundUI ["AddItemFailed"];
-                true;
-            } else {
-                false;
-            };
-        };
-        case "MoveToCargo": {
-            private _access = [_target, _caller, "cargo"] call WL2_fnc_accessControl;
-            if !(_access # 0) then {
-                [format ["Passenger seat locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
-                playSoundUI ["AddItemFailed"];
-                true;
-            } else {
-                false;
-            };
-        };
-        case "GetInPilot": {
-            private _access = [_target, _caller, "driver"] call WL2_fnc_accessControl;
-            if !(_access # 0) then {
-                [format ["Pilot seat locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
-                playSoundUI ["AddItemFailed"];
-                true;
-            } else {
-                false;
-            };
-        };
-        case "GetInDriver": {
-            private _access = [_target, _caller, "driver"] call WL2_fnc_accessControl;
-            if !(_access # 0) then {
-                [format ["Driver seat locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
-                playSoundUI ["AddItemFailed"];
-                true;
-            } else {
-                false;
-            };
-        };
-        case "GetInTurret": {
-            private _access = [_target, _caller, "gunner"] call WL2_fnc_accessControl;
-            if !(_access # 0) then {
-                [format ["Turret seat locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
-                playSoundUI ["AddItemFailed"];
-                true;
-            } else {
-                false;
-            };
-        };
-        case "GetInCargo": {
-            private _access = [_target, _caller, "cargo"] call WL2_fnc_accessControl;
-            if !(_access # 0) then {
-                [format ["Passenger seat locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
-                playSoundUI ["AddItemFailed"];
-                true;
-            } else {
-                false;
-            };
-        };
+        case "MoveToPilot";
+        case "MoveToDriver";
+        case "MoveToTurret";
+        case "MoveToCargo";
+        case "GetInPilot";
+        case "GetInDriver";
+        case "GetInTurret";
+        case "GetInCargo";
         case "Gear";
         case "Rearm": {
-            private _access = [_target, _caller, "cargo"] call WL2_fnc_accessControl;
+            private _access = [_target, _caller] call WL2_fnc_accessControl;
             if !(_access # 0) then {
-                [format ["Inventory locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
+                [format ["Vehicle locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
                 true;
             } else {
@@ -128,10 +56,12 @@ private _interceptAction = {
                 case (localize "STR_DN_OUT_C_DOOR"): {
                     private _doorLocked = _target getVariable ["WL2_doorsLocked", BIS_WL_playerSide];
                     if (_doorLocked == BIS_WL_playerSide) then {
+                        [_target] spawn WL2_fnc_autoCloseDoor;
                         false;
                     } else {
                         private _doorsDamaged = _target getVariable ["WL2_doorsDamaged", 0];
                         if (_doorsDamaged > serverTime) then {
+                            [_target] spawn WL2_fnc_autoCloseDoor;
                             false;
                         } else {
                             playSoundUI ["AddItemFailed"];

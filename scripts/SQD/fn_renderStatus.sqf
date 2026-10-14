@@ -59,5 +59,5 @@ _statusHelpButton ctrlAddEventHandler ["ButtonClick", {
     private _display = ctrlParent _control;
     _display closeDisplay 0;
     "RequestMenu_close" call WL2_fnc_setupUI;
-    [] spawn INTRO_fnc_play;
+    [] spawn TUT_fnc_play;
 }];

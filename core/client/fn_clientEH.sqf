@@ -159,10 +159,6 @@ call WL2_fnc_playerEventHandlers;
 	}];
 #endif
 
-	addUserActionEventHandler ["launchCM", "Activate", {
-		[cameraOn, player] call DIS_fnc_useFlareBurst;
-	}];
-
 	addUserActionEventHandler ["Eject", "Activate", {
 		if !(cameraOn isKindOf "Air") exitWith {};
 		private _altitude = (player modelToWorld [0, 0, 0]) # 2;
@@ -257,4 +253,37 @@ addMissionEventHandler ["EachFrame", {
 	private _thermals = getVehicleTIPars cameraOn;
 	_thermals set [2, 0];
 	cameraOn setVehicleTIPars _thermals;
+}];
+
+addMissionEventHandler ["EachFrame", {
+	if (!alive player) exitWith {};
+
+	private _asset = cameraOn;
+	if (!alive _asset || !local _asset) exitWith {};
+
+	private _flareConfig = WL_UNIT(_asset, "flares", []);
+	if (count _flareConfig == 0) exitWith {};
+
+	private _capacity = _flareConfig # 0;
+	if (_capacity <= 0) exitWith {};
+
+	private _modePressed = inputAction "nextCM" > 0;
+	private _modeWasPressed = uiNamespace getVariable ["DIS_flareModePressed", false];
+	uiNamespace setVariable ["DIS_flareModePressed", _modePressed];
+	if (_modePressed) exitWith {
+		uiNamespace setVariable ["DIS_flareLaunchPressed", true];
+
+		if (!_modeWasPressed) then {
+			private _singlesMode = _asset getVariable ["DIS_flareSinglesMode", false];
+			_asset setVariable ["DIS_flareSinglesMode", !_singlesMode];
+			playSoundUI ["a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_mine_trigger_01.wss"];
+		};
+	};
+
+	private _launchPressed = inputAction "launchCM" > 0;
+	private _launchWasPressed = uiNamespace getVariable ["DIS_flareLaunchPressed", false];
+	uiNamespace setVariable ["DIS_flareLaunchPressed", _launchPressed];
+	if (_launchPressed && !_launchWasPressed) then {
+		[_asset, player] call DIS_fnc_useFlareBurst;
+	};
 }];

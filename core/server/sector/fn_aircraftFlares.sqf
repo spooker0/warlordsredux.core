@@ -24,7 +24,12 @@ while { !BIS_WL_missionEnd } do {
             continue;
         };
 
-        private _flareCapacity = WL_UNIT(_aircraft, "flareBursts", 0);
+        private _flareConfig = WL_UNIT(_aircraft, "flares", []);
+        if (count _flareConfig == 0) then {
+            continue;
+        };
+
+        private _flareCapacity = _flareConfig # 0;
         if (_flareCapacity <= 0) then {
             continue;
         };
@@ -36,15 +41,33 @@ while { !BIS_WL_missionEnd } do {
         };
 
         private _incomingMissiles = _aircraft getVariable ["WL_incomingMissiles", []];
+        _incomingMissiles = _incomingMissiles select {
+            private _missileDefeated = _x getVariable ["DIS_missileDefeated", false];
+            alive _x && !_missileDefeated && isNull attachedTo _x;
+        };
+
+        if (count _incomingMissiles == 0) then {
+            private _sensorThreats = getSensorThreats _aircraft;
+            if (count _sensorThreats > 0) then {
+                _aircraft setVariable ["DIS_flareSinglesMode", true];
+                [_aircraft, _pilot] call DIS_fnc_useFlareBurst;
+            };
+
+            continue;
+        };
+
         {
             private _window = [_aircraft, _x] call DIS_fnc_getFlareWindow;
             if (count _window == 0) then {
-                continue;
+                _aircraft setVariable ["DIS_flareSinglesMode", true];
+                [_aircraft, _pilot] call DIS_fnc_useFlareBurst;
+                break;
             };
 
             _window params ["_windowMin", "_windowMid", "_windowMax", "_windowDistance", "_windowInRange"];
 
             if (_windowInRange) then {
+                _aircraft setVariable ["DIS_flareSinglesMode", false];
                 [_aircraft, _pilot] call DIS_fnc_useFlareBurst;
                 break;
             };

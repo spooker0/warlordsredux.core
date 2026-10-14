@@ -19,6 +19,7 @@ WL_IsSpectator = true;
 
 // hide spectator on land
 player setPosASL [2304.97, 9243.11, 11.5];
+player setVariable ["WL2_isSpectator", true, 2];
 
 private _missionSpectators = missionNamespace getVariable ["WL2_spectators", []];
 _missionSpectators pushBackUnique player;

@@ -35,7 +35,7 @@ import ScrollBar;
 #include "briefings.hpp"
 
 #include "scripts\BUY\ui.hpp"
-#include "scripts\INTRO\ui.hpp"
+#include "scripts\TUT\ui.hpp"
 #include "scripts\MENU\ui.hpp"
 #include "scripts\PERF\ui.hpp"
 #include "scripts\POLL\ui.hpp"

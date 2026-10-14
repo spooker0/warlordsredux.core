@@ -1,16 +1,15 @@
-#include "includes.inc"
+#include "..\includes.inc"
 params ["_map"];
 
 private _display = ctrlParent _map;
 if (isNull _display) exitWith {};
 
-private _scene = _display getVariable ["INTRO_scene", 0];
-private _animationScale = _display getVariable ["INTRO_animationScale", 1];
-private _elapsed = (diag_tickTime - (_display getVariable ["INTRO_sceneStart", diag_tickTime])) * _animationScale;
-private _sectors = _display getVariable ["INTRO_sectors", createHashMap];
+private _scene = _display getVariable ["TUT_scene", 0];
+private _animationScale = _display getVariable ["TUT_animationScale", 1];
+private _elapsed = (diag_tickTime - (_display getVariable ["TUT_sceneStart", diag_tickTime])) * _animationScale;
+private _sectors = _display getVariable ["TUT_sectors", createHashMap];
 
 if (count _sectors == 0) exitWith {};
-_display setVariable ["INTRO_labelCount", 0];
 
 private _blue = [0.15, 0.56, 1, 1];
 private _red = [1, 0.24, 0.22, 1];
@@ -26,7 +25,7 @@ private _offsetPosition = {
 };
 private _text = {
     params ["_position", "_label", "_color", ["_offset", [0, 0]], ["_size", 0.045]];
-    [_display, _map, _position, _label, _color, _offset, _size] call INTRO_fnc_label;
+    [_display, _map, _position, _label, _color, _offset, _size] call TUT_fnc_label;
 };
 private _zone = {
     params ["_data", "_color"];
@@ -34,7 +33,11 @@ private _zone = {
     private _position = _data getOrDefault ["position", []];
     if (count _area < 4 || { count _position < 2 }) exitWith {};
     private _args = [_position, _area # 0, _area # 1, _area # 2, _color, "#(rgb,1,1,1)color(1,1,1,0.12)"];
-    if (_area # 3) then { _map drawRectangle _args; } else { _map drawEllipse _args; };
+    if (_area # 3) then {
+        _map drawRectangle _args;
+    } else {
+        _map drawEllipse _args;
+    };
 };
 private _sector = {
     params ["_data", "_side", ["_alpha", 1], ["_offset", [0, 0]]];
@@ -102,7 +105,7 @@ switch (_scene) do {
                     ((_end vectorDiff _control) vectorMultiply (2 * _progress));
                 private _heading = if (_isInfantry) then { _position getDir (_position vectorAdd _tangent) } else { 0 };
                 private _texture = if (_isInfantry) then { _infantry } else {
-                    ((_display getVariable "INTRO_assets") # (_index + 1)) # 0
+                    ((_display getVariable ["TUT_assets", []]) # (_index + 1)) # 0
                 };
                 _map drawIcon [_texture, _blue, _position, if (_isInfantry) then { 32 } else { 75 }, if (_isInfantry) then { 32 } else { 45 }, _heading];
             };
@@ -120,7 +123,9 @@ switch (_scene) do {
             _map drawTriangle [[_points # 0, _points # 2, _points # 3], _color, _solid];
         };
         [_left, _right, _red] call _bar;
-        if (_capture > 0) then { [_left, _left + (_right - _left) * _capture, _blue] call _bar; };
+        if (_capture > 0) then {
+            [_left, _left + (_right - _left) * _capture, _blue] call _bar;
+        };
     };
     case 4: {
         [_sectors get "MainPower", 2, linearConversion [0.35, 0.65, _elapsed, 0, 1, true]] call _sector;
@@ -134,12 +139,12 @@ switch (_scene) do {
     };
     case 7: {
         [_airbase, 1, 1, [0, -safeZoneH * 0.12]] call _sector;
-        private _assets = _display getVariable ["INTRO_assets", []];
+        private _assets = _display getVariable ["TUT_assets", []];
         private _index = if (_elapsed < 2) then { 0 } else { if (_elapsed < 3.25) then { 1 } else { if (_elapsed < 4.35) then { 2 } else { 3 } } };
         (_assets # _index) params ["_picture", "_name", "_power", "_width", "_height"];
         private _changedAt = [0.5, 2, 3.25, 4.35] # _index;
         if (_index > 0) then {
-            [_display, "transport", ["a3\sounds_f_tank\vehicles\armor\afv_wheeled_01\afv_wheeled_01_engine_int_start.wss", 1, 1, false]] call INTRO_fnc_soundCue;
+            [_display, "transport", ["a3\sounds_f_tank\vehicles\armor\afv_wheeled_01\afv_wheeled_01_engine_int_start.wss", 1, 1, false]] call TUT_fnc_soundCue;
         };
         private _appear = linearConversion [_changedAt, _changedAt + 0.2, _elapsed, 0, 1, true];
         private _pictureColor = if (_index == 0) then { +_blue } else { +_white };
@@ -149,12 +154,12 @@ switch (_scene) do {
         [_target, _name, _white, [0, safeZoneH * 0.13], 0.045] call _text;
     };
     case 8: {
-        private _links = _display getVariable ["INTRO_links", []];
+        private _links = _display getVariable ["TUT_links", []];
         private _linkPositions = _links apply { (_sectors get _x) get "position" };
 
         private _connectionStarts = [0, 0.45 * _animationScale, 0.9 * _animationScale];
         private _linkDuration = 0.25 * _animationScale;
-        private _cutAt = _display getVariable ["INTRO_cutTime", 3.8];
+        private _cutAt = _display getVariable ["TUT_cutTime", 3.8];
         private _cut = _elapsed >= _cutAt;
         private _linkColor = if (_cut) then { [0.3, 0.34, 0.38, 0.75] } else { _blue };
         private _connectedCount = 0;
@@ -188,7 +193,7 @@ switch (_scene) do {
         [_target, _power, if (_cut) then { _red } else { _blue }, [0, safeZoneH * 0.045], 0.065] call _text;
 
         if (_cut) then {
-            [_display, "cut-off", ["AddItemFailed", 1, 1, false]] call INTRO_fnc_soundCue;
+            [_display, "cut-off", ["AddItemFailed", 1, 1, false]] call TUT_fnc_soundCue;
             // Mark each severed connection, leaving the target and its zero readable.
             private _progress = linearConversion [_cutAt, _cutAt + 0.45 * _animationScale, _elapsed, 0, 1, true];
             {
@@ -210,19 +215,15 @@ switch (_scene) do {
     };
     case 9;
     case 10: {
-        [_map, _scene, _elapsed] call INTRO_fnc_drawIncome;
+        [_map, _scene, _elapsed] call TUT_fnc_introDrawIncome;
     };
     case 11: {
-        private _home = _display getVariable ["INTRO_homeSectorData", createHashMap];
-        private _position = _home getOrDefault ["position", _display getVariable ["INTRO_homePosition", []]];
+        private _home = _display getVariable ["TUT_homeSectorData", createHashMap];
+        private _position = _home getOrDefault ["position", _display getVariable ["TUT_homePosition", []]];
         if (count _position > 0) then {
-            [_home, _display getVariable ["INTRO_homeColor", _blue]] call _zone;
-            _map drawIcon [_display getVariable "INTRO_homeFlag", _white, _position, 64, 64, 0];
+            [_home, _display getVariable ["TUT_homeColor", _blue]] call _zone;
+            _map drawIcon [_display getVariable ["TUT_homeFlag", ""], _white, _position, 64, 64, 0];
         };
     };
 };
 
-private _used = _display getVariable ["INTRO_labelCount", 0];
-{
-    if (_forEachIndex >= _used) then { _x ctrlShow false; };
-} forEach (_display getVariable ["INTRO_labelPool", []]);

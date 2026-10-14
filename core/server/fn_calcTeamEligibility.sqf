@@ -55,6 +55,12 @@ private _eastPlayersCount = 0;
 {
     private _playerRating = _ratings getOrDefault [getPlayerUID _x, WL_RATING_STARTER];
     private _side = side group _x;
+
+    private _isSpectator = _x getVariable ["WL2_isSpectator", false];
+    if (_isSpectator) then {
+        continue;
+    };
+
     if (_side == west) then {
         _westElo = _westElo + (_playerRating min WL_RATING_EMAX);
         _westPlayersCount = _westPlayersCount + 1;

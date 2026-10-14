@@ -15,7 +15,6 @@ class CfgFunctions {
 			class lagProtection { headerType = WL_HEADER_LEVEL; };
 			class lagProtectionServer { headerType = WL_HEADER_LEVEL; };
 			class limitMines { headerType = WL_HEADER_LEVEL; };
-			class projectileStateUpdate { headerType = WL_HEADER_LEVEL; };
 			class rearmAPS { headerType = WL_HEADER_LEVEL; };
 			class registerVehicle { headerType = WL_HEADER_LEVEL; };
 			class relDir2 { headerType = WL_HEADER_LEVEL; };
@@ -34,9 +33,11 @@ class CfgFunctions {
 			class calculateInRange { headerType = WL_HEADER_LEVEL; };
 			class combatAirPatrol { headerType = WL_HEADER_LEVEL; };
 			class controlMunition { headerType = WL_HEADER_LEVEL; };
+			class drawFlareDisplay { headerType = WL_HEADER_LEVEL; };
 			class droneDeployer { headerType = WL_HEADER_LEVEL; };
 			class extendedSam { headerType = WL_HEADER_LEVEL; };
 			class flareEffects { headerType = WL_HEADER_LEVEL; };
+			class flareHeaderText { headerType = WL_HEADER_LEVEL; };
 			class flareMissile { headerType = WL_HEADER_LEVEL; };
 			class frag { headerType = WL_HEADER_LEVEL; };
 			class getFlareWindow { headerType = WL_HEADER_LEVEL; };
@@ -71,23 +72,6 @@ class CfgFunctions {
 			file = "src\scripts\GFE";
 			class credits { headerType = WL_HEADER_LEVEL; };
 			class earplugs { headerType = WL_HEADER_LEVEL; };
-		};
-	};
-	class INTRO {
-		class Default {
-			file = "src\scripts\INTRO";
-			class cleanup { headerType = WL_HEADER_LEVEL; };
-			class drawIncome { headerType = WL_HEADER_LEVEL; };
-			class drawMap { headerType = WL_HEADER_LEVEL; };
-			class incomeData { headerType = WL_HEADER_LEVEL; };
-			class label { headerType = WL_HEADER_LEVEL; };
-			class menuScene { headerType = WL_HEADER_LEVEL; };
-			class narrationData { headerType = WL_HEADER_LEVEL; };
-			class play { headerType = WL_HEADER_LEVEL; };
-			class sectorData { headerType = WL_HEADER_LEVEL; };
-			class soundCue { headerType = WL_HEADER_LEVEL; };
-			class updateEnding { headerType = WL_HEADER_LEVEL; };
-			class updateSkip { headerType = WL_HEADER_LEVEL; };
 		};
 	};
 	class KST {
@@ -209,6 +193,40 @@ class CfgFunctions {
 			class setSpawnCam { headerType = WL_HEADER_LEVEL; };
 		};
 	};
+	class TUT {
+		class Default {
+			file = "src\scripts\TUT";
+			class carousel { headerType = WL_HEADER_LEVEL; };
+			class carouselPage { headerType = WL_HEADER_LEVEL; };
+			class cleanup { headerType = WL_HEADER_LEVEL; };
+			class drawMap { headerType = WL_HEADER_LEVEL; };
+			class fitMap { headerType = WL_HEADER_LEVEL; };
+			class keyName { headerType = WL_HEADER_LEVEL; };
+			class label { headerType = WL_HEADER_LEVEL; };
+			class play { headerType = WL_HEADER_LEVEL; };
+			class sectorData { headerType = WL_HEADER_LEVEL; };
+			class soundCue { headerType = WL_HEADER_LEVEL; };
+			class updateEnding { headerType = WL_HEADER_LEVEL; };
+			class updateSkip { headerType = WL_HEADER_LEVEL; };
+		};
+		class Intro {
+			file = "src\scripts\TUT\intro";
+			class introData { headerType = WL_HEADER_LEVEL; };
+			class introDrawIncome { headerType = WL_HEADER_LEVEL; };
+			class introDrawMap { headerType = WL_HEADER_LEVEL; };
+			class introEnter { headerType = WL_HEADER_LEVEL; };
+			class introIncomeData { headerType = WL_HEADER_LEVEL; };
+			class introMenuScene { headerType = WL_HEADER_LEVEL; };
+			class introNarrationData { headerType = WL_HEADER_LEVEL; };
+		};
+		class Pilot {
+			file = "src\scripts\TUT\pilot";
+			class pilotData { headerType = WL_HEADER_LEVEL; };
+			class pilotDraw { headerType = WL_HEADER_LEVEL; };
+			class pilotEnter { headerType = WL_HEADER_LEVEL; };
+			class pilotUpdate { headerType = WL_HEADER_LEVEL; };
+		};
+	};
 	class WL2 {
 		class Client {
 			file = "src\core\client";
@@ -232,6 +250,7 @@ class CfgFunctions {
 			class earthquake { headerType = WL_HEADER_LEVEL; };
 			class exitToLobby { headerType = WL_HEADER_LEVEL; };
 			class factionBasedClientInit { headerType = WL_HEADER_LEVEL; };
+			class fundsDatabaseClient { headerType = WL_HEADER_LEVEL; };
 			class gulag { headerType = WL_HEADER_LEVEL; };
 			class handleAIDamage { headerType = WL_HEADER_LEVEL; };
 			class handleAIDown { headerType = WL_HEADER_LEVEL; };
@@ -273,7 +292,6 @@ class CfgFunctions {
 			class spectrumInterface { headerType = WL_HEADER_LEVEL; };
 			class surrenderWarning { headerType = WL_HEADER_LEVEL; };
 			class surveillance { headerType = WL_HEADER_LEVEL; };
-			class teammatesAvailability { headerType = WL_HEADER_LEVEL; };
 			class timedPrompt { headerType = WL_HEADER_LEVEL; };
 			class timedPromptKeyHandler { headerType = WL_HEADER_LEVEL; };
 			class triggerPurchase { headerType = WL_HEADER_LEVEL; };
@@ -290,6 +308,7 @@ class CfgFunctions {
 			class airWreckHandler { headerType = WL_HEADER_LEVEL; };
 			class arsenalSetup { headerType = WL_HEADER_LEVEL; };
 			class attachVehicle { headerType = WL_HEADER_LEVEL; };
+			class autoCloseDoor { headerType = WL_HEADER_LEVEL; };
 			class autoSam { headerType = WL_HEADER_LEVEL; };
 			class buyMenuAction { headerType = WL_HEADER_LEVEL; };
 			class catapultAction { headerType = WL_HEADER_LEVEL; };
@@ -308,7 +327,6 @@ class CfgFunctions {
 			class demolishStep { headerType = WL_HEADER_LEVEL; };
 			class deployableAddAction { headerType = WL_HEADER_LEVEL; };
 			class deployableEligibility { headerType = WL_HEADER_LEVEL; };
-			class ecmAction { headerType = WL_HEADER_LEVEL; };
 			class fieldRepairEligibility { headerType = WL_HEADER_LEVEL; };
 			class frontlineAction { headerType = WL_HEADER_LEVEL; };
 			class getVehicleLockStatus { headerType = WL_HEADER_LEVEL; };
@@ -320,15 +338,13 @@ class CfgFunctions {
 			class integralWeaponAction { headerType = WL_HEADER_LEVEL; };
 			class laserWeapon { headerType = WL_HEADER_LEVEL; };
 			class lockActionEligibility { headerType = WL_HEADER_LEVEL; };
-			class lockActionUpdate { headerType = WL_HEADER_LEVEL; };
+			class lockActionToggle { headerType = WL_HEADER_LEVEL; };
 			class mineClearAction { headerType = WL_HEADER_LEVEL; };
 			class nearestCombatAir { headerType = WL_HEADER_LEVEL; };
 			class parachuteAction { headerType = WL_HEADER_LEVEL; };
 			class parachuteSetup { headerType = WL_HEADER_LEVEL; };
 			class paradropperAction { headerType = WL_HEADER_LEVEL; };
 			class placeRespawnBag { headerType = WL_HEADER_LEVEL; };
-			class radarOperateAction { headerType = WL_HEADER_LEVEL; };
-			class radarOperateUpdate { headerType = WL_HEADER_LEVEL; };
 			class radarRotateAction { headerType = WL_HEADER_LEVEL; };
 			class radarRotateUpdate { headerType = WL_HEADER_LEVEL; };
 			class rappelAction { headerType = WL_HEADER_LEVEL; };
@@ -367,7 +383,6 @@ class CfgFunctions {
 			class smokeCurtainParticles { headerType = WL_HEADER_LEVEL; };
 			class unlockDoorAction { headerType = WL_HEADER_LEVEL; };
 			class vehicleLockAction { headerType = WL_HEADER_LEVEL; };
-			class vehicleLockUpdate { headerType = WL_HEADER_LEVEL; };
 		};
 		class ClientDraw {
 			file = "src\core\client\draw";
@@ -428,7 +443,6 @@ class CfgFunctions {
 			class addTargetMapButton { headerType = WL_HEADER_LEVEL; };
 			class assetButtonAccessControl { headerType = WL_HEADER_LEVEL; };
 			class assetButtonFollow { headerType = WL_HEADER_LEVEL; };
-			class assetButtonRadarOperate { headerType = WL_HEADER_LEVEL; };
 			class assetButtonRadarRotate { headerType = WL_HEADER_LEVEL; };
 			class assetMapButtons { headerType = WL_HEADER_LEVEL; };
 			class assetMapControl { headerType = WL_HEADER_LEVEL; };

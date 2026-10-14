@@ -15,15 +15,15 @@ private _assetName = if (isPlayer _asset) then {
 _asset setVariable ["WL2_mapButtonText", _assetName];
 
 private _ownsVehicle = (_asset getVariable ["BIS_WL_ownerAsset", "123"]) == getPlayerUID player;
-private _hasFullAccess = _asset getVariable ["WL2_accessControl", -1] == 0 || _ownsVehicle;
-if (!isPlayer _asset && _hasFullAccess) then {
+private _operateAccess = ([_asset, player] call WL2_fnc_accessControl) # 0;
+if (!isPlayer _asset && _ownsVehicle) then {
     [_asset, _targetId, "remove", format ["<t color='#ff0000'>%1</t>", localize "STR_WL_remove"], {
         params ["_asset"];
         [_asset] spawn WL2_fnc_removeAsset;
     }, true] call WL2_fnc_addTargetMapButton;
 };
 
-if (_hasFullAccess) then {
+if (_operateAccess) then {
     [_asset, _targetId, "vehicle-rearm", localize "STR_WL_rearm", {
         params ["_asset"];
         private _rearmTime = WL_UNIT(_asset, "rearm", 600);
@@ -168,32 +168,16 @@ if (_hasFullAccess) then {
     }, true, "bulkDeploy",  [2500, "BulkDeploy", "Strategy"]] call WL2_fnc_addTargetMapButton;
 };
 
-private _accessControl = _asset getVariable ["WL2_accessControl", -1];
-if (_ownsVehicle && _accessControl != -1 && !(_asset isKindOf "Man")) then {
+private _accessControl = _asset getVariable ["WL2_accessControl", 0];
+if (_ownsVehicle && (_accessControl == 2 || _accessControl == 3)) then {
     private _lockText = [_accessControl] call WL2_fnc_assetButtonAccessControl;
-
-    private _accessControlNext = {
+    private _toggleAccessControl = {
         params ["_asset"];
-        private _accessControl = _asset getVariable ["WL2_accessControl", 0];
-        private _newAccess = (_accessControl - 1 + 8) % 8;
-        _asset setVariable ["WL2_accessControl", _newAccess, true];
-        playSound3D ["a3\sounds_f\sfx\objects\upload_terminal\terminal_lock_close.wss", _asset, false, getPosASL _asset, 1, 1, 0, 0];
-
-        // return
-        [_newAccess] call WL2_fnc_assetButtonAccessControl;
-    };
-    private _accessControlPrevious = {
-        params ["_asset"];
-        private _accessControl = _asset getVariable ["WL2_accessControl", 0];
-        private _newAccess = (_accessControl + 1) % 8;
-        _asset setVariable ["WL2_accessControl", _newAccess, true];
-        playSound3D ["a3\sounds_f\sfx\objects\upload_terminal\terminal_lock_close.wss", _asset, false, getPosASL _asset, 1, 1, 0, 0];
-
-        // return
-        [_newAccess] call WL2_fnc_assetButtonAccessControl;
+        [_asset] call WL2_fnc_vehicleLockAction;
+        [_asset getVariable ["WL2_accessControl", 0]] call WL2_fnc_assetButtonAccessControl;
     };
 
-    [_asset, _targetId, "lock-access-control", _lockText, [_accessControlNext, _accessControlPrevious], false] call WL2_fnc_addTargetMapButton;
+    [_asset, _targetId, "lock-access-control", _lockText, [_toggleAccessControl, _toggleAccessControl], false] call WL2_fnc_addTargetMapButton;
 };
 
 private _hasCrew = count ((crew _asset) select {
@@ -213,8 +197,6 @@ if (_hasCrew && _isNotFlying && !(_asset isKindOf "Man") && _ownsVehicle) then {
         };
     }, true] call WL2_fnc_addTargetMapButton;
 };
-
-private _operateAccess = ([_asset, player, "driver"] call WL2_fnc_accessControl) # 0;
 
 if (_operateAccess && WL_ASSET(_assetActualType, "isRadar", 0) > 0) then {
     private _radarRotateText = [_asset] call WL2_fnc_assetButtonRadarRotate;
@@ -260,22 +242,6 @@ if (_operateAccess && WL_ASSET(_assetActualType, "smartMineAP", 0) > 0) then {
     private _smartDistanceText = format ["<t color='%1'>Trigger distance: %2m</t>", _detonationDistanceColor, _detonationDistance];
 
     [_asset, _targetId, "smart-mine-adjust", _smartDistanceText, [_smartMineNext, _smartMinePrevious], false] call WL2_fnc_addTargetMapButton;
-};
-
-private _crewPosition = (fullCrew [_asset, "", true]) select {!("cargo" in _x)};
-private _radarSensor = (listVehicleSensors _asset) select {{"ActiveRadarSensorComponent" in _x} forEach _x};
-private _hasRadar = count _radarSensor > 0 && (count _crewPosition > 1 || unitIsUAV _asset);
-if (_operateAccess && _hasRadar) then {
-    private _radarOperateText = [_asset] call WL2_fnc_assetButtonRadarOperate;
-
-    [_asset, _targetId, "radar-operate", _radarOperateText, {
-        params ["_asset"];
-        _asset setVariable ["radarOperation", !(_asset getVariable ["radarOperation", false]), true];
-        playSoundUI ["AddItemOK"];
-
-        // return
-        [_asset] call WL2_fnc_assetButtonRadarOperate;
-    }, false] call WL2_fnc_addTargetMapButton;
 };
 
 if (_asset in units player) then {
@@ -632,7 +598,7 @@ if (_operateAccess && _isUav) then {
     if (alive driver _asset) then {
         [_asset, _targetId, "control-driver", localize "STR_WL_controlDriver", {
             params ["_asset"];
-            private _access = [_asset, player, "driver"] call WL2_fnc_accessControl;
+            private _access = [_asset, player] call WL2_fnc_accessControl;
             if (_access # 0) then {
                 openMap false;
                 switchCamera _asset;
@@ -651,7 +617,7 @@ if (_operateAccess && _isUav) then {
     if (alive gunner _asset) then {
         [_asset, _targetId, "control-gunner", localize "STR_WL_controlGunner", {
             params ["_asset"];
-            private _access = [_asset, player, "driver"] call WL2_fnc_accessControl;
+            private _access = [_asset, player] call WL2_fnc_accessControl;
             if (_access # 0) then {
                 openMap false;
                 switchCamera _asset;

@@ -1,11 +1,12 @@
 #include "includes.inc"
 params ["_className"];
 
-if (_className isKindOf "Man" && BIS_WL_matesAvailable <= 0) exitWith {
-    [false, localize "STR_A3_WL_airdrop_restr2"]
+if !(_className isKindOf "Man" || _className == "BuildABear") exitWith {
+    [true, ""]
 };
 
-if (_className == "BuildABear" && BIS_WL_matesAvailable <= 0) exitWith {
+private _maxSubordinates = missionNamespace getVariable ["WL2_maxSubordinates", 1];
+if ((count units player - 1) >= _maxSubordinates) exitWith {
     [false, localize "STR_A3_WL_airdrop_restr2"]
 };
 

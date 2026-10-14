@@ -37,12 +37,17 @@ while { !BIS_WL_missionEnd } do {
         } select {
             !(_x isKindOf "StaticWeapon")
         };
-        [_reportDrones, 10] remoteExec ["WL2_fnc_reportTargets", BIS_WL_enemySide];
+        if (count _reportDrones > 0) then {
+            [_reportDrones, 10] remoteExec ["WL2_fnc_reportTargets", BIS_WL_enemySide];
+        };
     };
 
     if (_friendlySignal >= 350 || call _shouldDisableJamEffect) then {
         _filmGrain ppEffectEnable false;
-        _asset disableTIEquipment false;
+        (equipmentDisabled _asset) params ["_nvgDisabled", "_thermalDisabled"];
+        if (_thermalDisabled) then {
+            _asset disableTIEquipment false;
+        };
         continue;
     };
 
@@ -50,7 +55,11 @@ while { !BIS_WL_missionEnd } do {
         call _initFilmGrain;
     };
     _filmGrain ppEffectEnable true;
-    _asset disableTIEquipment true;
+
+    (equipmentDisabled _asset) params ["_nvgDisabled", "_thermalDisabled"];
+    if (!_thermalDisabled) then {
+        _asset disableTIEquipment true;
+    };
 
     _filmGrain ppEffectAdjust [1, 0.5];
     _filmGrain ppEffectCommit 0;

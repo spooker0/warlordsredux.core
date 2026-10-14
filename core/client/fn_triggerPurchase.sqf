@@ -95,16 +95,18 @@ switch (_className) do {
     };
     case "LockVehicles": {
         private _ownedVehicles = missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], []];
+        _ownedVehicles = _ownedVehicles select { alive _x };
         {
-            _x setVariable ["WL2_accessControl", 6, true];
-        } forEach (_ownedVehicles select { alive _x });
+            [_x, 2, false] call WL2_fnc_vehicleLockAction;
+        } forEach _ownedVehicles;
         [localize "STR_A3_WL_feature_lock_all_msg"] call WL2_fnc_smoothText;
     };
     case "UnlockVehicles": {
         private _ownedVehicles = missionNamespace getVariable [format ["BIS_WL_ownedVehicles_%1", getPlayerUID player], []];
+        _ownedVehicles = _ownedVehicles select { alive _x };
         {
-            _x setVariable ["WL2_accessControl", 1, true];
-        } forEach (_ownedVehicles select { alive _x });
+            [_x, 3, false] call WL2_fnc_vehicleLockAction;
+        } forEach _ownedVehicles;
         [localize "STR_A3_WL_feature_unlock_all_msg"] call WL2_fnc_smoothText;
     };
     case "ClearVehicles": {
@@ -189,7 +191,7 @@ switch (_className) do {
     case "WelcomeScreen": {
         // Close the parent display before the cinematic creates its own overlay.
         "RequestMenu_close" call WL2_fnc_setupUI;
-        [] spawn INTRO_fnc_play;
+        [] spawn TUT_fnc_play;
     };
     case "Surrender": {
         0 spawn {

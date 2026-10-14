@@ -95,6 +95,16 @@ private _requisitionPreset = missionConfigFile >> "CfgWLRequisitionPresets";
 	_requisitionData set [_className, _classMap];
 } forEach configProperties [_requisitionPreset];
 
+#if WL_TEST_SERVER
+private _factoryAssets = getArray (missionConfigFile >> "CfgWarlordFactories" >> "factoryTypes");
+{
+	_x params ["_factoryAsset"];
+
+	private _requisitionDataEntry = _requisitionData getOrDefault [_factoryAsset, createHashMap];
+	_requisitionDataEntry set ["side", ["west", "east"]];
+} forEach _factoryAssets;
+#endif
+
 private _additionalReqData = missionNamespace getVariable ["WL2_additionalData", createHashMap];
 _requisitionData merge [_additionalReqData, true];
 missionNamespace setVariable ["WL2_assetData", _requisitionData];

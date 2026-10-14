@@ -7,7 +7,6 @@ class CfgRemoteExec {
 		class APS_fnc_friendlyWarning {allowedTargets = 0;};
 		class APS_fnc_enemyFeedback {allowedTargets = 1; jip = 0;};
 		class APS_fnc_lagProtectionServer {allowedTargets = 2;};
-		class APS_fnc_projectileStateUpdate {allowedTargets = 0;};
 		class APS_fnc_report {allowedTargets = 0;};
 		class APS_fnc_serverHandleAPS {allowedTargets = 2;};
 		class DIS_fnc_flareEffects {allowedTargets = 0; jip = 0;};
@@ -23,6 +22,7 @@ class CfgRemoteExec {
 		class REP_fnc_playerReported {allowedTargets = 0;};
 		class REP_fnc_reportPlayer {allowedTargets = 2;};
 		class SQD_fnc_server {allowedTargets = 2;};
+		class TUT_fnc_play {allowedTargets = 0;};
 		class WL2_fnc_addMissileToMag {allowedTargets = 0;};
 		class WL2_fnc_airRadarAction {allowedTargets = 0;};
 		class WL2_fnc_airRearmAction {allowedTargets = 0;};
@@ -44,8 +44,8 @@ class CfgRemoteExec {
 		class WL2_fnc_deployableAddAction {allowedTargets = 1;};
 		class WL2_fnc_destroyStronghold {allowedTargets = 0;};
 		class WL2_fnc_earthquake {allowedTargets = 0;};
-		class WL2_fnc_ecmAction {allowedTargets = 0;};
 		class WL2_fnc_forgiveTeamkill {allowedTargets = 2;};
+		class WL2_fnc_fundsDatabaseClient {allowedTargets = 0; jip = 0;};
 		class WL2_fnc_handleAIDown {allowedTargets = 0;};
 		class WL2_fnc_handleClientRequest {allowedTargets = 2;};
 		class WL2_fnc_handleDamage {allowedTargets = 0;};
@@ -98,8 +98,6 @@ class CfgRemoteExec {
 		class WL2_fnc_uavJammed {allowedTargets = 2;};
 		class WL2_fnc_updateVehicleList {allowedTargets = 2;};
 		class WL2_fnc_vehicleImmobilized {allowedTargets = 0;};
-		class WL2_fnc_vehicleLockAction {allowedTargets = 1;};
-		class WL2_fnc_vehicleLockUpdate {allowedTargets = 0;};
 		class WL2_fnc_warnIncomingMissile {allowedTargets = 0;};
 		class WL2_fnc_writeResult {allowedTargets = 0;};
 		class WLM_fnc_applyPylon {allowedTargets = 0;};

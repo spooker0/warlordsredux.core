@@ -1,20 +1,20 @@
 #include "includes.inc"
 params ["_display"];
-private _elapsed = diag_tickTime - (_display getVariable ["INTRO_sceneStart", diag_tickTime]);
-private _step = _display getVariable ["INTRO_endingStep", 0];
-private _logo = _display displayCtrl INTRO_ENDLOGO_IDC;
-private _duration = _display getVariable ["INTRO_sceneDuration", 6];
-private _flashAt = _display getVariable ["INTRO_endingFlashAt", 3];
-private _logoFadeAt = (_display getVariable ["INTRO_speechEnd", 3.55]) max (_flashAt + 0.45);
+private _elapsed = diag_tickTime - (_display getVariable ["TUT_sceneStart", diag_tickTime]);
+private _step = _display getVariable ["TUT_endingStep", 0];
+private _logo = _display displayCtrl TUT_ENDLOGO_IDC;
+private _duration = _display getVariable ["TUT_sceneDuration", 6];
+private _flashAt = _display getVariable ["TUT_endingFlashAt", 3];
+private _logoFadeAt = (_display getVariable ["TUT_speechEnd", 3.55]) max (_flashAt + 0.45);
 private _fadeAt = _duration - 1.3;
 
 if (_elapsed >= _flashAt && _step < 1) then {
-    private _black = _display displayCtrl INTRO_BLACKOUT_IDC;
-    private _caption = _display displayCtrl INTRO_CAPTION_IDC;
+    private _black = _display displayCtrl TUT_BLACKOUT_IDC;
+    private _caption = _display displayCtrl TUT_CAPTION_IDC;
     private _visible = [_black, _logo, _caption,
-        _display displayCtrl INTRO_SKIP_BACKGROUND_IDC,
-        _display displayCtrl INTRO_SKIP_FILL_IDC,
-        _display displayCtrl INTRO_SKIP_IDC
+        _display displayCtrl TUT_SKIP_BACKGROUND_IDC,
+        _display displayCtrl TUT_SKIP_FILL_IDC,
+        _display displayCtrl TUT_SKIP_IDC
     ];
     {
         if !(_x in _visible) then {
@@ -46,4 +46,4 @@ if (_elapsed >= _fadeAt && _step < 3) then {
     _step = 3;
 };
 
-_display setVariable ["INTRO_endingStep", _step];
+_display setVariable ["TUT_endingStep", _step];

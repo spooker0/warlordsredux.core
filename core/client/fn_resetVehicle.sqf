@@ -8,7 +8,7 @@ private _vehicles = (nearestObjects [player, [], 20, true]) select {
 } select {
     !(_x isKindOf "Man");
 } select {
-    private _access = [_x, player, "driver"] call WL2_fnc_accessControl;
+    private _access = [_x, player] call WL2_fnc_accessControl;
     _access # 0;
 };
 

@@ -12,7 +12,7 @@ if (_isPosInWater && local _uav) then {
     deleteVehicle _uav;
 };
 
-private _access = [_uav, player, "driver"] call WL2_fnc_accessControl;
+private _access = [_uav, player] call WL2_fnc_accessControl;
 private _disableConnection = !(_access # 0) || _isTransporting || _isPosInWater;
 private _isConnectable = player isUAVConnectable [_uav, true];
 

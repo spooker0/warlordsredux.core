@@ -1,7 +1,8 @@
 #include "includes.inc"
 params ["_asset", "_isAircraft"];
 
-private _flareCapacity = WL_UNIT(_asset, "flareBursts", 0);
+private _flareConfig = WL_UNIT(_asset, "flares", []);
+private _flareCapacity = if (count _flareConfig > 0) then { _flareConfig # 0 } else { 0 };
 private _flareBursts = _asset getVariable ["DIS_flareBursts", _flareCapacity];
 if (_flareBursts < _flareCapacity) exitWith {
     false;

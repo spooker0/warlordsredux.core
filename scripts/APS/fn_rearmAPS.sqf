@@ -2,10 +2,6 @@
 params ["_asset"];
 
 if !(local _asset) exitWith {};
-private _ecmMaxCharges = _asset getVariable ["WL2_ecmMaxCharges", -100];
-if (_ecmMaxCharges != -100) then {
-    _asset setVariable ["WL2_ecmCharges", _ecmMaxCharges];
-};
 
 private _apsType = WL_UNIT(_asset, "aps", 0);
 if (_apsType <= 0) exitWith {};

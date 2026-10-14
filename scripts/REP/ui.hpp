@@ -322,9 +322,15 @@ class REP_ModMenu {
                             y = safeZoneH * 0.655;
                             text = "DEPUTIZE";
                         };
+                        class Tutorial: Rebalance {
+                            idc = REP_TUTORIAL_IDC;
+                            y = safeZoneH * 0.702;
+                            text = "PLAY TUTORIAL";
+                            tooltip = "Play the tutorial on this player's client";
+                        };
                         class ReportsLabel: REP_Label {
                             x = 0;
-                            y = safeZoneH * 0.705;
+                            y = safeZoneH * 0.752;
                             w = safeZoneW * 0.299;
                             h = safeZoneH * 0.028;
                             text = "PLAYER REPORTS";
@@ -332,14 +338,14 @@ class REP_ModMenu {
                         class Reports: REP_ReadOnly {
                             idc = REP_REPORTS_IDC;
                             x = 0;
-                            y = safeZoneH * 0.741;
+                            y = safeZoneH * 0.788;
                             w = safeZoneW * 0.299;
                             h = safeZoneH * 0.145;
                         };
                         class ClearReports: REP_Button {
                             idc = REP_CLEAR_REPORTS_IDC;
                             x = 0;
-                            y = safeZoneH * 0.895;
+                            y = safeZoneH * 0.942;
                             w = safeZoneW * 0.299;
                             text = "CLEAR REPORTS AND LOGS";
                             tooltip = "Clear this player's reports, transfer log and AFK log";
@@ -347,7 +353,7 @@ class REP_ModMenu {
                         class Log: RscControlsGroupNoScrollbars {
                             idc = REP_LOG_GROUP_IDC;
                             x = 0;
-                            y = safeZoneH * 0.949;
+                            y = safeZoneH * 0.996;
                             w = safeZoneW * 0.299;
                             h = 0;
                             class controls {

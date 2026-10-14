@@ -26,14 +26,8 @@ if (isPlayer _owner) then {
 
 private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 if (_asset isKindOf "Man") then {
+	_asset setVariable ["WL2_accessControl", 0, true];
 	if (isPlayer _owner) then {
-		private _refreshTimerVar = format ["WL2_manpowerRefreshTimers_%1", getPlayerUID player];
-		private _manpowerRefreshTimers = missionNamespace getVariable [_refreshTimerVar, []];
-		_manpowerRefreshTimers pushBack [serverTime + WL_COOLDOWN_AIREFRESH, _asset];
-		missionNamespace setVariable [_refreshTimerVar, _manpowerRefreshTimers, true];
-
-		call WL2_fnc_teammatesAvailability;
-
 		private _aiFollowDefault = _settingsMap getOrDefault ["aiFollowDefault", true];
 		_asset setVariable ["WL2_aiFollow", _aiFollowDefault];
 	};
@@ -50,10 +44,13 @@ if (_asset isKindOf "Man") then {
 
 	[_asset] call APS_fnc_registerVehicle;
 
-	private _flareCapacity = WL_ASSET_GET(_data, "flareBursts", 0);
-	private _flareBursts = _asset getVariable ["DIS_flareBursts", -1];
-	if (_flareCapacity > 0 && _flareBursts < 0) then {
-		[_asset] call DIS_fnc_rearmFlares;
+	private _flareConfig = WL_ASSET_GET(_data, "flares", []);
+	if (count _flareConfig > 0) then {
+		private _flareCapacity = _flareConfig # 0;
+		private _flareBursts = _asset getVariable ["DIS_flareBursts", -1];
+		if (_flareCapacity > 0 && _flareBursts < 0) then {
+			[_asset] call DIS_fnc_rearmFlares;
+		};
 	};
 
 	[_asset] remoteExec ["WL2_fnc_rearmAction", 0, true];
@@ -97,12 +94,6 @@ if (_asset isKindOf "Man") then {
 
 	if (WL_ASSET_GET(_data, "hasGunnerAction", 0) > 0) then {
 		[_asset] remoteExec ["WL2_fnc_controlGunnerAction", 0, true];
-	};
-
-	if (WL_ASSET_GET(_data, "hasECM", 0) > 0) then {
-		_asset setVariable ["WL2_ecmActive", false, true];
-		_asset setVariable ["WL2_hasECMSystem", true, true];
-		[_asset] remoteExec ["WL2_fnc_ecmAction", 0, true];
 	};
 
 	if (WL_ASSET_GET(_data, "hasHMD", 0) > 0) then {
@@ -312,20 +303,14 @@ if (_asset isKindOf "Man") then {
 		_asset setBehaviourStrong "COMBAT";
 	};
 
+	private _accessControl = 2;
 	if (_asset isKindOf "ReammoBox_F") then {
-		_asset setVariable ["WL2_accessControl", 2, true];
-	} else {
-		if (unitIsUAV _asset) then {
-			_asset setVariable ["WL2_accessControl", 6, true];
-		} else {
-			if (_asset isKindOf "Land_Cargo10_military_green_F") then {
-				_asset setVariable ["WL2_accessControl", -1, true];
-			} else {
-				_asset setVariable ["WL2_accessControl", 4, true];
-			};
-		};
+		_accessControl = 3;
 	};
-	[_asset] remoteExec ["WL2_fnc_vehicleLockAction", 0, true];
+	if (_asset isKindOf "Land_Cargo10_military_green_F") then {
+		_accessControl = 0;
+	};
+	_asset setVariable ["WL2_accessControl", _accessControl, true];
 
 	if (_asset isKindOf "Plane") then {
 		[_asset] remoteExec ["WL2_fnc_catapultAction", 0, true];
@@ -392,34 +377,6 @@ if (_asset isKindOf "Man") then {
 
 	private _rearmTime = WL_ASSET_GET(_data, "rearm", 600);
 	_asset setVariable ["BIS_WL_nextRearm", serverTime + _rearmTime, true];
-
-	private _radarSensor = (listVehicleSensors _asset) select { _x # 0 == "ActiveRadarSensorComponent" };
-	private _hasRadar = count _radarSensor > 0 && unitIsUAV _asset;
-	if (_hasRadar) then {
-		_asset setVariable ["radarOperation", false, true];
-		_asset setVehicleRadar 2;
-		[_asset] spawn WL2_fnc_radarOperateAction;
-
-		_asset spawn {
-			params ["_asset"];
-
-			while {alive _asset} do {
-				private _radarValue = if (_asset getVariable "radarOperation") then {
-					1;
-				} else {
-					0;
-				};
-
-				if (local _asset) then {
-					_asset setVehicleRadar _radarValue;
-				} else {
-					[_asset, _radarValue] remoteExec ["setVehicleRadar", _asset];
-				};
-
-				uiSleep 10;
-			};
-		};
-	};
 
 	if (typeOf _asset == "B_APC_Tracked_01_AA_F" || typeOf _asset == "O_APC_Tracked_02_AA_F") then {
 		_asset addEventHandler ["Fired", {

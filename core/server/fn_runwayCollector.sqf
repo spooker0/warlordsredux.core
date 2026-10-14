@@ -35,10 +35,11 @@ while { !BIS_WL_missionEnd } do {
 
 		{
             private _asset = _x;
-            if (_asset getVariable ["WL2_accessControl", 0] == 0) then {
+			private _accessControl = _asset getVariable ["WL2_accessControl", 0];
+            if (_accessControl != 2) then {
                 continue;
             };
-            _asset setVariable ["WL2_accessControl", 0, true];
+            _asset setVariable ["WL2_accessControl", 3, true];
             playSound3D ["a3\sounds_f\sfx\objects\upload_terminal\terminal_lock_close.wss", _asset, false, getPosASL _asset, 1, 1, 0, 0];
 		} forEach _assetsInArea;
 	} forEach _runwayAreas;

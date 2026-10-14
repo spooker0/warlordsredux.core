@@ -16,7 +16,6 @@ private _flareControls = [];
 
 uiNamespace setVariable ["DIS_currentTargetingMode", "none"];
 uiNamespace setVariable ["WL2_usingVLS", false];
-uiNamespace setVariable ["WL2_lastPlayedEcmSound", 0];
 uiNamespace setVariable ["WL2_railgunReady", false];
 uiNamespace setVariable ["WL2_railgunCharged", false];
 
@@ -410,7 +409,13 @@ while { !BIS_WL_missionEnd } do {
 
 	private _disableIncomingMissileDisplay = _settingsMap getOrDefault ["disableIncomingMissileDisplay", false];
 	private _showIncoming = WL_HelmetInterface != 0 && !_disableIncomingMissileDisplay;
-	private _hasFlares = alive cameraOn && WL_UNIT(cameraOn, "flareBursts", 0) > 0;
+	private _flareConfig = WL_UNIT(cameraOn, "flares", []);
+	private _hasFlares = if (count _flareConfig > 0) then {
+		private _flareCapacity = _flareConfig # 0;
+		alive cameraOn && _flareCapacity > 0
+	} else {
+		false
+	};
 	_flareControls = [_display, _incomingTextControl, _flareControls, !_disableIncomingMissileDisplay] call DIS_fnc_updateFlareDisplay;
     if (!_hasFlares && _showIncoming) then {
 		private _incomingMissiles = cameraOn getVariable ["WL_incomingMissiles", []];
@@ -455,7 +460,9 @@ while { !BIS_WL_missionEnd } do {
 	if (_reconOptics) then {
 		private _isReady = cameraOn getVariable ["WL2_reconOpticsReady", false];
 		private _reconText = if (_isReady) then {
-			"RECON OPTICS READY<br/>"
+			private _reconKeyText = (actionKeysNames "lockTarget") regexReplace ["""", ""];
+			_reconKeyText = toUpper _reconKeyText;
+			format ["RECON OPTICS (%1)<br/>", _reconKeyText];
 		} else {
 			"<t color='#000000'>RECON OPTICS WAIT</t><br/>"
 		};
@@ -481,34 +488,6 @@ while { !BIS_WL_missionEnd } do {
 	private _apsReloading = cameraOn getVariable ["WL2_apsReloadStarted", false];
 	if (_apsReloading) then {
 		_statusText = _statusText + "RELOADING APS...<br/>";
-	};
-
-	private _hasECM = cameraOn getVariable ["WL2_hasECMSystem", false];
-	if (_hasECM) then {
-		private _ecmOn = cameraOn getVariable ["WL2_ecmActive", false];
-		private _ecmEffectiveTime = cameraOn getVariable ["WL2_ecmStartEffectTime", 0];
-		private _ecmStatusText = if (_ecmOn && fuel cameraOn > 0) then {
-			if (serverTime > _ecmEffectiveTime) then {
-				private _ecmPercent = (linearConversion [0, 500, speed cameraOn, 0, 1, true]) * 100;
-				private _ecmColor = if (_ecmPercent >= 85) then {
-					"#00ff00"
-				} else {
-					"#00ffff"
-				};
-
-				private _lastPlayedEcmSound = uiNamespace getVariable ["WL2_lastPlayedEcmSound", 0];
-				if (time - _lastPlayedEcmSound > 0.75) then {
-					playSoundUI ["a3\sounds_f\arsenal\weapons\launchers\titan\locking_titan.wss", 1, _ecmPercent / 100 + 0.5];
-					uiNamespace setVariable ["WL2_lastPlayedEcmSound", time];
-				};
-				format ["<t color='%1'>ECM ACTIVE STRENGTH: %2%%</t><br/>", _ecmColor, round _ecmPercent]
-			} else {
-				"<t color='#ff0000'>ECM STARTING</t><br/>"
-			};
-		} else {
-			"<t color='#000000'>ECM OFF</t><br/>"
-		};
-		_statusText = _statusText + _ecmStatusText;
 	};
 
 	private _centeredText = "";

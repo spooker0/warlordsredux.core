@@ -77,6 +77,12 @@ class CfgSounds {
         titles[] = {};
     };
 
+    class launchBeep {
+        name="launch beep";
+        sound[]={"src\sounds\launchbeep.ogg", 1, 1};
+        titles[] = {};
+    };
+
     class endgame {
         name="endgame";
         sound[]={"src\sounds\endgame.ogg", 1, 1};
@@ -107,17 +113,17 @@ class CfgSounds {
         titles[] = {};
     };
 
-    class INTRO_Narration {
+    class TUT_IntroNarration {
         name = "Intro Cinematic narration";
         sound[] = {"src\sounds\narration.ogg", 1, 1};
         titles[] = {};
     };
-    class INTRO_Narration_RUS {
+    class TUT_IntroNarration_RUS {
         name = "Intro Cinematic narration (Russian)";
         sound[] = {"src\sounds\narration_rus.ogg", 1, 1};
         titles[] = {};
     };
-    class INTRO_Narration_ZH {
+    class TUT_IntroNarration_ZH {
         name = "Intro Cinematic narration (Chinese)";
         sound[] = {"src\sounds\narration_zh.ogg", 1, 1};
         titles[] = {};

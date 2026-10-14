@@ -18,7 +18,7 @@ while { alive player } do {
     _eligibleDrones = _eligibleDrones select {
         alive _x;
     } select {
-        private _access = [_x, player, "driver"] call WL2_fnc_accessControl;
+        private _access = [_x, player] call WL2_fnc_accessControl;
         _access # 0
     };
 
@@ -67,7 +67,7 @@ while { alive player } do {
                 params ["_target", "_caller", "_actionId", "_args"];
 
                 _args params ["_actionType", "_drone"];
-                private _accessControl = [_drone, _caller, "driver"] call WL2_fnc_accessControl;
+                private _accessControl = [_drone, _caller] call WL2_fnc_accessControl;
                 if !(_accessControl # 0) exitWith { false };
 
                 private _remoteControlTarget = _drone;

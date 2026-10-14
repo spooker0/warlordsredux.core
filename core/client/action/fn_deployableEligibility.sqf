@@ -14,7 +14,7 @@ if (!_isPointing) exitWith {
     [false, [], [0, 0, 0]];
 };
 
-private _hasAccess = ([_asset, _caller, "full"] call WL2_fnc_accessControl) # 0;
+private _hasAccess = ([_asset, _caller] call WL2_fnc_accessControl) # 0;
 if (!_hasAccess) exitWith {
     [false, [], [0, 0, 0]];
 };
@@ -35,7 +35,7 @@ private _assetData = WL_ASSET_DATA;
 private _nearLoadable = _nearLoadableEntities select {
     if (alive _x) then {
         private _assetActualType = WL_ASSET_TYPE(_x);
-        private _access = [_x, _caller, "full"] call WL2_fnc_accessControl;
+        private _access = [_x, _caller] call WL2_fnc_accessControl;
         private _isHeavyLift = WL_UNIT(_asset, "isHeavyLift", 0) > 0;
         if (_isHeavyLift) then {
             private _cost = WL_ASSET_FIELD(_assetData, _assetActualType, "cost", -1);

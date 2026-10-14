@@ -1,153 +1,106 @@
 #include "includes.inc"
-params ["_warlord"];
+params ["_playerId"];
+if (!isServer) exitWith { 0 };
 
-if (_warlord getVariable ["WL2_playerSetupStarted", false]) exitWith {};
-_warlord setVariable ["WL2_playerSetupStarted", true];
-
-private _initLog = {
-    params ["_error"];
-#if WL_DEBUG_INIT
-    private _message = format ["[Warlord Init] %1", _error];
-    diag_log _message;
-    [_error] remoteExec ["diag_log", _warlord];
-#endif
-};
-
-private _startTime = serverTime;
-private _uid = "";
-
-while { _uid == "" } do {
-    if (serverTime - _startTime > 30) then {
-        ["Cannot find player UID for over 30 seconds. Aborting."] call _initLog;
-		break;
-	};
-
-	if (isNull _warlord) then {
-        ["Cannot find player UID, warlord is null. Aborting."] call _initLog;
-		break;
-	};
-
-    private _playerUid = _warlord getVariable ["BIS_WL_ownerAsset", ""];
-	private _playerUid = getPlayerUID _warlord;
-	if (!isNil "_playerUid" && {_playerUid != ""}) then {
-		_uid = _playerUid;
-	} else {
-        [format ["Cannot find player UID for %1.", _warlord]] call _initLog;
-
-        private _playerId = getPlayerID _warlord;
-        private _playerUidFromId = _playerId getUserInfo 2;
-        if (!isNil "_playerUidFromId" && {_playerUidFromId != ""}) then {
-            _uid = _playerUidFromId;
-        } else {
-            [format ["Cannot find player UID from player ID %1.", _playerId]] call _initLog;
-        };
-	};
-
-    uiSleep 1;
-};
-
-if (_uid == "") exitWith {
-    ["Aborted player setup due to not finding player UID."] call _initLog;
-};
+private _connectedPlayerIds = serverNamespace getVariable ["WL2_connectedPlayerIds", []];
+if !(_playerId in _connectedPlayerIds) exitWith { 0 };
 
 private _playerFundsDB = serverNamespace getVariable "fundsDatabase";
-if (isNil "_playerFundsDB") exitWith {
-    ["Cannot find fundsDatabase. Aborting."] call _initLog;
-};
-
 private _playerList = serverNamespace getVariable "playerList";
-if (isNil "_playerList") exitWith {
-    ["Cannot find playerList. Aborting."] call _initLog;
+if (isNil "_playerFundsDB" || isNil "_playerList") exitWith { 3 };
+
+private _allPlayers = call BIS_fnc_listPlayers;
+private _players = _allPlayers select {
+    alive _x
+} select {
+    getPlayerID _x == _playerId
+} select {
+    private _owner = owner _x;
+    _owner > 2 || (!isDedicated && _owner == 2)
 };
+if (count _players == 0) exitWith { 2 };
 
-[format ["Player UID found: %1", _uid]] call _initLog;
-
-private _lockedToTeam = _playerList getOrDefault [_uid, civilian];
+private _warlord = _players # 0;
 private _owner = owner _warlord;
+private _uid = getPlayerUID _warlord;
+if (_uid == "") exitWith { 2 };
 
-_warlord setVariable ["BIS_WL_ownerAsset", _uid, true];
-_warlord setVariable ["WL2_accessControl", 0, true];
-[_warlord] remoteExec ["WL2_fnc_handleDamage", 0];
+private _sidePickerStateVar = format ["WL2_sidePickerState_%1", _playerId];
+private _eligibilityVar = format ["WL2_playerEligibility_%1", _playerId];
+private _playerSideVar = format ["WL2_playerSide_%1", _playerId];
+private _setupStateVar = format ["WL2_playerSetupState_%1", _playerId];
 
-private _punishmentMap = missionNamespace getVariable ["WL2_punishmentMap", createHashMap];
-private _punishIncident = _punishmentMap getOrDefault [_uid, []];
+private _setupObject = _warlord getVariable ["WL2_playerSetupObject", objNull];
+if (_setupObject isNotEqualTo _warlord) then {
+    _warlord setVariable ["WL2_playerSetupObject", _warlord];
+    _warlord setVariable ["BIS_WL_ownerAsset", _uid, true];
+    _warlord setVariable ["WL2_accessControl", 0, true];
+    [_warlord] remoteExec ["WL2_fnc_handleDamage", 0];
 
-if (count _punishIncident > 0) then {
-    [_punishIncident] remoteExec ["WL2_fnc_punishmentClient", _owner];
+    private _ratings = profileNamespace getVariable ["WL2_playerRatings", createHashMap];
+    _warlord setVariable ["WL2_playerRating", _ratings getOrDefault [_uid, WL_RATING_STARTER], true];
 };
 
 private _isAdmin = _uid in (getArray (missionConfigFile >> "adminIDs"));
 private _isModerator = _uid in (getArray (missionConfigFile >> "moderatorIDs"));
 private _isSpectator = _uid in (getArray (missionConfigFile >> "spectatorIDs"));
-
 private _skipTeamChecks = _isAdmin || _isModerator || _isSpectator;
-if (_skipTeamChecks) then {
-    _lockedToTeam = civilian;
+private _sidePickerState = missionNamespace getVariable [_sidePickerStateVar, civilian];
+if (_sidePickerState == civilian) then {
+    private _lockedToTeam = if (_skipTeamChecks) then { civilian } else {
+        _playerList getOrDefault [_uid, civilian]
+    };
+    _sidePickerState = if (_lockedToTeam in [west, east]) then { _lockedToTeam } else { independent };
+
+    private _punishmentMap = missionNamespace getVariable ["WL2_punishmentMap", createHashMap];
+    private _punishIncident = _punishmentMap getOrDefault [_uid, []];
+    if (count _punishIncident > 0) then {
+        [_punishIncident] remoteExec ["WL2_fnc_punishmentClient", _owner];
+    };
+    missionNamespace setVariable [_sidePickerStateVar, _sidePickerState, [2, _owner]];
+};
+
+private _selectedSide = missionNamespace getVariable [_playerSideVar, independent];
+private _currentSide = if (_sidePickerState in [west, east]) then { _sidePickerState } else { _selectedSide };
+if !(_currentSide in [west, east]) exitWith {
     private _teamEligibility = [_warlord, _uid] call WL2_fnc_calcTeamEligibility;
-    _teamEligibility set [0, [west, east]];
-    _warlord setVariable ["WL2_playerEligibility", _teamEligibility, [2, _owner]];
+    if (_skipTeamChecks) then {
+        _teamEligibility set [0, [west, east]];
+    };
+    private _existingEligibility = missionNamespace getVariable [_eligibilityVar, []];
+    if (_existingEligibility isNotEqualTo _teamEligibility) then {
+        missionNamespace setVariable [_eligibilityVar, _teamEligibility, [2, _owner]];
+    };
+    0.5
 };
 
-private _playerGroup = if (_lockedToTeam in [west, east]) then {
-    _warlord setVariable ["WL2_sidePickerState", _lockedToTeam, _owner];
-    createGroup [_lockedToTeam, true];
-} else {
-    private _currentSide = independent;
-    _warlord setVariable ["WL2_sidePickerState", independent, _owner];
-
-    while { !isNull _warlord } do {
-        if (!_skipTeamChecks) then {
-            private _teamEligibility = [_warlord, _uid] call WL2_fnc_calcTeamEligibility;
-            private _existingEligibility = _warlord getVariable ["WL2_playerEligibility", []];
-
-            if (_existingEligibility isNotEqualTo _teamEligibility) then {
-                _warlord setVariable ["WL2_playerEligibility", _teamEligibility, [2, _owner]];
-            };
+private _oldGroup = group _warlord;
+if (isNull _oldGroup || side _oldGroup != _currentSide) then {
+    private _newGroup = createGroup [_currentSide, true];
+    if (!isNull _newGroup) then {
+        [_warlord] joinSilent _newGroup;
+        if (local _oldGroup && count units _oldGroup == 0) then {
+            deleteGroup _oldGroup;
         };
-
-        _currentSide = _warlord getVariable ["WL2_playerSide", independent];
-        if (_currentSide in [west, east]) then {
-            break;
-        };
-
-        uiSleep 0.5;
-    };
-    if (isNull _warlord) then {
-        grpNull
-    } else {
-        _playerList set [_uid, _currentSide];
-        createGroup [_currentSide, true]
     };
 };
 
-if (isNull _playerGroup) exitWith {
-    ["Cannot create player group. Aborting."] call _initLog;
-    _warlord setVariable ["WL2_playerSetupState", "Failed", _owner];
-};
-[_warlord] joinSilent _playerGroup;
-
-["Lockouts complete."] call _initLog;
-
+_playerList set [_uid, _currentSide];
 private _scoreboard = missionNamespace getVariable ["WL2_scoreboardData", createHashMap];
 private _playerEntry = _scoreboard getOrDefault [_uid, createHashMap];
 _scoreboard set [_uid, _playerEntry];
 missionNamespace setVariable ["WL2_scoreboardData", _scoreboard];
 
-["Scoreboard setup complete."] call _initLog;
-
 private _readyList = missionNamespace getVariable ["WL2_readyList", []];
 _readyList pushBackUnique _uid;
-
-private _playerFunds = _playerFundsDB getOrDefault [_uid, -1];
-if (_playerFunds == -1) then {
+if !(_uid in _playerFundsDB) then {
     [1000, _uid, false, "Setup"] call WL2_fnc_fundsDatabaseWrite;
 };
-[_playerFundsDB, _uid] call WL2_fnc_fundsDatabaseUpdate;
 
-["Database writes complete."] call _initLog;
+missionNamespace setVariable [_setupStateVar, "Complete", [2, _owner]];
 
-private _ratings = profileNamespace getVariable ["WL2_playerRatings", createHashMap];
-private _playerElo = _ratings getOrDefault [_uid, WL_RATING_STARTER];
-_warlord setVariable ["WL2_playerRating", _playerElo, true];
+#if WL_DEBUG_INIT
+diag_log format ["[Warlord Init] %1: Setup complete.", _playerId];
+#endif
 
-_warlord setVariable ["WL2_playerSetupState", "Complete", _owner];
+0;

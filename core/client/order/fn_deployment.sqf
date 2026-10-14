@@ -15,7 +15,7 @@ _asset enableWeaponDisassembly false;
 _asset setRepairCargo 0;
 _asset setFuelCargo 0;
 _asset setAmmoCargo 0;
-_asset setVariable ["WL2_accessControl", 7];
+_asset setVariable ["WL2_accessControl", 1];
 _asset setVariable ["WLM_ammoCargo", 0];
 
 private _assetChildren = [];

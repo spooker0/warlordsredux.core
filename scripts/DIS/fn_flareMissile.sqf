@@ -63,14 +63,16 @@ private _launchPosition = getPosASL _unit;
 private _launcherSpeed = speed _unit;
 private _flareMin = _ammoConfig getOrDefault ["flareMin", 0];
 private _flareMax = _ammoConfig getOrDefault ["flareMax", 0];
-private _optimalRange = (_flareMin + _flareMax) / 2;
-private _halfWidth = ((_flareMax - _flareMin) / 2) max 0;
+private _deltaBonus = 0;
 
 if (!isNull _originalTarget) then {
     private _targetPosition = getPosASL _originalTarget;
     private _altitudeDifference = (_launchPosition # 2) - (_targetPosition # 2);
-    private _minimumHalfWidth = 20 min _halfWidth;
-    _halfWidth = linearConversion [0, 5000, _altitudeDifference, _halfWidth, _minimumHalfWidth, true];
+    private _speedDifference = abs _launcherSpeed - abs (speed _originalTarget);
+
+    private _launcherAltBonus = floor (_altitudeDifference / 1000) * 0.1;
+    private _launcherSpeedBonus = floor (_speedDifference / 100) * 0.2;
+    _deltaBonus = _launcherAltBonus + _launcherSpeedBonus;
 
     if (_isAirLauncher) then {
         private _angleToEnemy = [_launchPosition, getDir _unit, _targetPosition] call WL2_fnc_getAngle;
@@ -79,8 +81,7 @@ if (!isNull _originalTarget) then {
     };
 };
 
-_flareMin = _optimalRange - _halfWidth;
-_flareMax = _optimalRange + _halfWidth;
+_deltaBonus = _projectile getVariable ["DIS_flareDeltaBonus", _deltaBonus];
 
 private _speedFactor = if (_isCombatAirPatrol) then {
     2
@@ -92,6 +93,7 @@ private _missileSpeed = getNumber (_missileConfig >> "missileLockMaxSpeed") * _s
 
 _projectile setVariable ["DIS_flareMin", _flareMin, true];
 _projectile setVariable ["DIS_flareMax", _flareMax, true];
+_projectile setVariable ["DIS_flareDeltaBonus", _deltaBonus, true];
 _projectile setVariable ["DIS_ultimateTarget", _originalTarget];
 
 private _munitionList = _unit getVariable ["DIS_munitionList", []];

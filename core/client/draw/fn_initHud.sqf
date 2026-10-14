@@ -15,6 +15,7 @@ private _squadControl = _display displayCtrl 2103;
 
 private _rearmControl = _display displayCtrl 2104;
 private _repairControl = _display displayCtrl 2105;
+private _lockControl = _display displayCtrl 2115;
 
 private _apsTypeControl = _display displayCtrl 2106;
 private _apsAmmoControl = _display displayCtrl 2107;
@@ -72,16 +73,26 @@ while { !BIS_WL_missionEnd } do {
 		_income
 	];
 
+	private _maxSubordinates = missionNamespace getVariable ["WL2_maxSubordinates", 1];
 	_subordinateControl ctrlSetStructuredText parseText format [
 		"<t shadow='2' size ='1.1'>AI: %1/%2</t>",
-		BIS_WL_matesAvailable,
-		missionNamespace getVariable [format ["BIS_WL_maxSubordinates_%1", _side], 1]
+		(_maxSubordinates - (count units player - 1)) max 0,
+		_maxSubordinates
 	];
 
 	_squadControl ctrlSetStructuredText parseText format [
 		"<t shadow='2' size ='1.1'><img image='\a3\ui_f\data\igui\cfg\simpletasks\types\meet_ca.paa' /> %1</t>",
 		count (["getSquadmates", [_playerId, true]] call SQD_fnc_query)
 	];
+
+	private _lockText = "";
+	if ([cameraOn, player] call WL2_fnc_lockActionEligibility) then {
+		private _accessControl = cameraOn getVariable ["WL2_accessControl", 0];
+		([_accessControl] call WL2_fnc_getVehicleLockStatus) params ["_lockColor", "_lockLabel"];
+		private _lockKey = actionKeysNames ["Salute", 1, "Combo"] regexReplace ["""", ""];
+		_lockText = format ["<t color='%1' shadow='2' size='1.1'>%2 (%3)</t>", _lockColor, toUpper _lockLabel, _lockKey];
+	};
+	_lockControl ctrlSetStructuredText parseText _lockText;
 
 	private _rearmText = if (cameraOn isKindOf "Man") then {
 		"";

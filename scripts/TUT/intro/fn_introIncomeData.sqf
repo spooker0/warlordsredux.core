@@ -1,4 +1,4 @@
-#include "includes.inc"
+#include "..\includes.inc"
 params [["_sectors", createHashMap]];
 
 private _route = ["Airbase", "AirbaseCompound", "MainPower", "SouthTelos"];
@@ -6,8 +6,13 @@ private _routeData = createHashMap;
 private _positions = [];
 {
     private _data = _sectors getOrDefault [_x, createHashMap];
-    if (count _data == 0) then { _data = [_x] call INTRO_fnc_sectorData; };
-    if (count _data == 0) exitWith { _positions = []; };
+    if (count _data == 0) then {
+        _data = [_x] call TUT_fnc_sectorData;
+    };
+    if (count _data == 0) then {
+        _positions = [];
+        break;
+    };
     _routeData set [_x, _data];
     _positions pushBack (_data get "position");
 } forEach _route;
@@ -26,12 +31,16 @@ private _regions = [];
         if ((_links findIf {
             ((_x # 0) == _from && { (_x # 1) == _to }) ||
             { (_x # 0) == _to && { (_x # 1) == _from } }
-        }) == -1) then { _closed = false; };
+        }) == -1) then {
+            _closed = false;
+        };
     };
     if (_closed) then {
         private _points = _members apply { (_routeData get _x) get "position" };
         private _center = [0, 0, 0];
-        { _center = _center vectorAdd _x; } forEach _points;
+        {
+            _center = _center vectorAdd _x;
+        } forEach _points;
         _regions pushBack (createHashMapFromArray [
             ["members", _members],
             ["positions", _points],
@@ -48,8 +57,13 @@ private _routeData10 = createHashMap;
 private _positions10 = [];
 {
     private _data = _sectors getOrDefault [_x, createHashMap];
-    if (count _data == 0) then { _data = [_x] call INTRO_fnc_sectorData; };
-    if (count _data == 0) exitWith { _positions10 = []; };
+    if (count _data == 0) then {
+        _data = [_x] call TUT_fnc_sectorData;
+    };
+    if (count _data == 0) then {
+        _positions10 = [];
+        break;
+    };
     _routeData10 set [_x, _data];
     _positions10 pushBack (_data get "position");
 } forEach _route10;

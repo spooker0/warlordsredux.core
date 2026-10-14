@@ -1,61 +1,68 @@
-#include "includes.inc"
-#include "..\BUY\includes.inc"
+#include "..\includes.inc"
+#include "..\..\BUY\includes.inc"
 params ["_display", "_mode"];
 disableSerialization;
 if (isNull _display) exitWith {};
 
 if (_mode == "update") exitWith {
-    if ((_display getVariable ["INTRO_menuMode", ""]) != "travel") exitWith {};
-    private _map = _display displayCtrl INTRO_MAP_IDC;
-    private _sector = (_display getVariable ["INTRO_sectors", createHashMap]) getOrDefault ["MainPower", createHashMap];
+    private _menuMode = _display getVariable ["TUT_menuMode", ""];
+    if (_menuMode != "travel") exitWith {};
+    private _map = _display displayCtrl TUT_MAP_IDC;
+    private _sector = (_display getVariable ["TUT_sectors", createHashMap]) getOrDefault ["MainPower", createHashMap];
     if (isNull _map || count _sector == 0) exitWith {};
 
     private _screen = _map ctrlMapWorldToScreen (_sector get "position");
     if (count _screen != 2) exitWith {};
-    private _menuSize = _display getVariable ["INTRO_menuSize", [0.5, 0.225]];
+    private _menuSize = _display getVariable ["TUT_menuSize", [0.5, 0.225]];
     private _anchorX = ((_screen # 0) + safeZoneW * 0.04) max (safeZoneX + safeZoneW * 0.03);
     private _anchorY = ((_screen # 1) - safeZoneH * 0.03) max (safeZoneY + safeZoneH * 0.18);
     _anchorX = _anchorX min (safeZoneX + safeZoneW * 0.97 - (_menuSize # 0));
     _anchorY = _anchorY min (safeZoneY + safeZoneH * 0.85 - (_menuSize # 1));
-    private _time = (diag_tickTime - (_display getVariable ["INTRO_sceneStart", diag_tickTime])) * (_display getVariable ["INTRO_animationScale", 1]);
+    private _time = (diag_tickTime - (_display getVariable ["TUT_sceneStart", diag_tickTime])) * (_display getVariable ["TUT_animationScale", 1]);
 
-    private _buttonOrder = _display getVariable ["INTRO_menuButtonOrder", []];
+    private _buttonOrder = _display getVariable ["TUT_menuButtonOrder", []];
     private _highlightId = "";
     if (count _buttonOrder > 0) then {
         private _index = ((count _buttonOrder - 1) - floor (((_time - 0.5) max 0) / 0.2)) max 0;
         _highlightId = _buttonOrder # _index;
     };
     {
-        private _position = +(_x getVariable ["INTRO_menuPosition", [0, 0, 0, 0]]);
+        private _position = +(_x getVariable ["TUT_menuPosition", [0, 0, 0, 0]]);
         _position set [0, (_position # 0) + _anchorX];
         _position set [1, (_position # 1) + _anchorY];
         _x ctrlSetPosition _position;
-        if (_x getVariable ["INTRO_menuBackground", false]) then {
-            _x ctrlSetBackgroundColor (if ((_x getVariable ["WL2_mapButtonId", ""]) == _highlightId) then {
+        private _background = _x getVariable ["TUT_menuBackground", false];
+        if (_background) then {
+            private _buttonId = _x getVariable ["WL2_mapButtonId", ""];
+            private _color = if (_buttonId == _highlightId) then {
                 [0.55, 0.55, 0.55, 1]
             } else {
                 [0, 0, 0, 1]
-            });
+            };
+            _x ctrlSetBackgroundColor _color;
         };
-        _x ctrlSetFade (if (_time < 0.5) then { 1 } else { 0 });
+        private _fade = if (_time < 0.5) then { 1 } else { 0 };
+        _x ctrlSetFade _fade;
         _x ctrlCommit 0;
-    } forEach (_display getVariable ["INTRO_menuControls", []]);
+    } forEach (_display getVariable ["TUT_menuControls", []]);
     if (_time >= 0.5 && { _highlightId != "" }) then {
         private _sound = if (_highlightId == (_buttonOrder # 0)) then {
             ["a3\ui_f\data\sound\rscbuttonmenu\soundclick.wss", 1]
         } else {
             ["a3\ui_f\data\sound\rsccombo\soundexpand.wss", 1]
         };
-        [_display, format ["menu-%1", _highlightId], _sound] call INTRO_fnc_soundCue;
+        [_display, format ["menu-%1", _highlightId], _sound] call TUT_fnc_soundCue;
     };
 };
 
 {
-    if (!isNull _x) then { ctrlDelete _x; };
-} forEach (_display getVariable ["INTRO_menuControls", []]);
-_display setVariable ["INTRO_menuControls", []];
-_display setVariable ["INTRO_menuButtonOrder", []];
-_display setVariable ["INTRO_menuMode", _mode];
+    if (!isNull _x) then {
+        ctrlDelete _x;
+    };
+} forEach (_display getVariable ["TUT_menuControls", []]);
+_display setVariable ["TUT_menuControls", []];
+_display setVariable ["TUT_menuButtonOrder", []];
+_display setVariable ["TUT_menuMode", _mode];
 if (_mode == "hide") exitWith {};
 
 if (_mode == "purchase") exitWith {
@@ -80,7 +87,7 @@ if (_mode == "purchase") exitWith {
         _control ctrlEnable false;
         _control ctrlCommit 0;
     } forEach ["Background", "Search", "Categories", "Items", "Picture", "Details", "RequestBackground", "Request"];
-    _display setVariable ["INTRO_menuControls", _created];
+    _display setVariable ["TUT_menuControls", _created];
 
     (_display displayCtrl BUY_SEARCH_IDC) ctrlSetText localize "STR_WL_introSearch";
 
@@ -91,7 +98,9 @@ if (_mode == "purchase") exitWith {
         _x params ["_name", "_categoryIndex", "_code"];
         private _row = _categories lbAdd format ["%1 [%2]", _name, _code];
         _categories lbSetValue [_row, _categoryIndex];
-        if (_categoryIndex == 1) then { _categorySelection = _row; };
+        if (_categoryIndex == 1) then {
+            _categorySelection = _row;
+        };
     } forEach (_display getVariable ["BUY_categories", []]);
     _categories lbSetCurSel _categorySelection;
 
@@ -101,13 +110,16 @@ if (_mode == "purchase") exitWith {
         _x params ["_details", "_code", "", "_icon"];
         private _row = _items lbAdd format ["%1 [%2]", _details # 2, _code];
         _items lbSetValue [_row, _details # 6];
-        if (_icon != "" && "\" in _icon) then { _items lbSetPictureRight [_row, _icon]; };
+        if (_icon != "" && "\" in _icon) then {
+            _items lbSetPictureRight [_row, _icon];
+        };
         _items lbSetTooltip [_row, format ["%1%2", WL_MONEY_SIGN, _details # 6]];
     } forEach _entries;
 
     private _selection = _entries findIf { "hmg" in toLower ((_x # 0) # 0) };
     _selection = _selection max 0;
-    _items lbSetCurSel (if (count _entries > 0) then { _selection } else { -1 });
+    private _selectedRow = if (count _entries > 0) then { _selection } else { -1 };
+    _items lbSetCurSel _selectedRow;
     if (count _entries > 0) then {
         ((_entries # _selection) # 0) params ["", "", "_name", "_picture", "_text", "", "_cost"];
         (_display displayCtrl BUY_PICTURE_IDC) ctrlSetText _picture;
@@ -136,13 +148,13 @@ if (_mode == "purchase") exitWith {
         _requestLabel ctrlEnable false;
         _requestLabel ctrlCommit 0;
         _created pushBack _requestLabel;
-        _display setVariable ["INTRO_menuControls", _created];
+        _display setVariable ["TUT_menuControls", _created];
         (_display displayCtrl BUY_REQUEST_BACKGROUND_IDC) ctrlSetBackgroundColor (missionNamespace getVariable ["BIS_WL_colorFriendly", [0.1, 0.35, 0.7, 1]]);
     };
 };
 
 if (_mode == "travel") exitWith {
-    private _sector = (_display getVariable ["INTRO_sectors", createHashMap]) getOrDefault ["MainPower", createHashMap];
+    private _sector = (_display getVariable ["TUT_sectors", createHashMap]) getOrDefault ["MainPower", createHashMap];
     if (count _sector == 0) exitWith {};
     private _iconMap = uiNamespace getVariable ["WL2_mapMenuButtonIcons", createHashMap];
 
@@ -152,7 +164,7 @@ if (_mode == "travel") exitWith {
         ["ft-parachute", localize "STR_WL_fastTravelAirAssault", WL_COST_AIRASSAULT, true, true, _iconMap getOrDefault ["ft-parachute", ""]],
         ["sector-scan", localize "STR_WL_sectorScan", WL_COST_SCAN, true, true, _iconMap getOrDefault ["sector-scan", ""]]
     ];
-    _display setVariable ["INTRO_menuButtonOrder", _buttons apply { _x # 0 }];
+    _display setVariable ["TUT_menuButtonOrder", _buttons apply { _x # 0 }];
 
     private _settings = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
     private _rowHeight = 0.045 * (_settings getOrDefault ["mapButtonScale", 1.0]);
@@ -164,27 +176,27 @@ if (_mode == "travel") exitWith {
         _backplate ctrlEnable false;
         _backplate ctrlCommit 0;
         _backplate setVariable ["WL2_mapButtonId", _x # 0];
-        _backplate setVariable ["INTRO_menuBackground", true];
+        _backplate setVariable ["TUT_menuBackground", true];
         _backplates pushBack _backplate;
     } forEach _buttons;
     private _data = [[0, localize "STR_WL_introSector", _buttons]];
-    private _menuControls = [_display, [0, 0], _data, true, "INTRO_MenuButton"] call WL2_fnc_addMapButtonsDisplay;
+    private _menuControls = [_display, [0, 0], _data, true, "TUT_MenuButton"] call WL2_fnc_addMapButtonsDisplay;
     {
-        (_menuControls # (1 + _forEachIndex * 2)) setVariable ["INTRO_menuBackground", true];
+        (_menuControls # (1 + _forEachIndex * 2)) setVariable ["TUT_menuBackground", true];
     } forEach _buttons;
     private _created = _backplates + _menuControls;
     private _width = 0;
     private _height = 0;
     {
         private _position = ctrlPosition _x;
-        _x setVariable ["INTRO_menuPosition", _position];
+        _x setVariable ["TUT_menuPosition", _position];
         _x ctrlEnable false;
         _x ctrlSetFade 1;
         _x ctrlCommit 0;
         _width = _width max ((_position # 0) + (_position # 2));
         _height = _height max ((_position # 1) + (_position # 3));
     } forEach _created;
-    _display setVariable ["INTRO_menuControls", _created];
-    _display setVariable ["INTRO_menuSize", [_width, _height]];
-    [_display, "update"] call INTRO_fnc_menuScene;
+    _display setVariable ["TUT_menuControls", _created];
+    _display setVariable ["TUT_menuSize", [_width, _height]];
+    [_display, "update"] call TUT_fnc_introMenuScene;
 };

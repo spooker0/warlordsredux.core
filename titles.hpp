@@ -227,6 +227,16 @@ class RscTitles {
 				size = 0.045;
 			};
 
+			class RscWarlordsHUD_VehicleLock: RscStructuredText {
+				idc = 2115;
+				x = safeZoneW + safeZoneX - 0.45;
+				y = safeZoneH + safeZoneY - 0.41;
+				w = 0.4;
+				h = 0.05;
+				text = "";
+				size = 0.045;
+			};
+
 			class RscWarlordsHUD_Rearm: RscStructuredText {
 				idc = 2104;
 				x = safeZoneW + safeZoneX - 0.45;

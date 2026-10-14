@@ -36,7 +36,7 @@ private _cost = if (count _costCondition > 0) then {
     -1;
 };
 
-private _funds = (missionNamespace getVariable "fundsDatabaseClients") getOrDefault [getPlayerUID player, 0];
+private _funds = (missionNamespace getVariable ["fundsDatabaseClients", createHashMap]) getOrDefault [getPlayerUID player, 0];
 private _canAfford = _funds >= _cost;
 
 private _buttonData = createHashMap;

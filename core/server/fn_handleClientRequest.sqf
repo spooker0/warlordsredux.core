@@ -297,7 +297,7 @@ if (_action == "scan") exitWith {
 
 	_uav lock 2;
 	_uav setFuelConsumptionCoef 20;
-	_uav setVariable ["WL2_accessControl", 7, true];
+	_uav setVariable ["WL2_accessControl", 1, true];
 
 	private _waypoint = _uavGroup addWaypoint [_sector, 0];
 	_waypoint setWaypointLoiterType "CIRCLE";

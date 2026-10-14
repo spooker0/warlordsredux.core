@@ -1,11 +1,15 @@
 #include "includes.inc"
-params ["_unit"];
+params ["_unit", ["_singlesMode", false]];
 
 if (!hasInterface || isNull _unit) exitWith {};
 if (cameraOn distance _unit > viewDistance) exitWith {};
 
 private _pairCount = 10;
-private _pairInterval = 0.06;
+private _pairInterval = if (_singlesMode) then {
+    0.75;
+} else {
+    0.06;
+};
 private _smokeInterval = 0.05;
 private _smokeDuration = 0.8;
 private _riseSpeed = 12;
@@ -33,8 +37,13 @@ private _bounds = boundingBoxReal _unit;
 private _halfWidth = abs ((_bounds # 0) # 0) max abs ((_bounds # 1) # 0);
 private _wingOffset = (_halfWidth * 0.35) max 1.5;
 private _burstOffset = [0, -3, -0.5];
+private _flareObjects = [];
 
 for "_pair" from 0 to (_pairCount - 1) do {
+    if (!alive _unit) then {
+        break;
+    };
+
     private _unitVelocity = velocity _unit;
     private _angle = linearConversion [0, _pairCount - 1, _pair, 15, 75, true];
     private _ejectionSpeed = linearConversion [0, _pairCount - 1, _pair, 100, 150, true];
@@ -65,7 +74,7 @@ for "_pair" from 0 to (_pairCount - 1) do {
             _flareLife,
             _position,
             _velocity,
-            0,
+            random 2000 - 1000,
             _coreWeight,
             _coreVolume,
             _coreRubbing,
@@ -94,11 +103,30 @@ for "_pair" from 0 to (_pairCount - 1) do {
         _light setLightIntensity 1500;
 
         private _unitFlareParticles = _unit getVariable ["DIS_flareParticles", []];
+        _unitFlareParticles = _unitFlareParticles select {
+            !isNull _x;
+        };
         _unitFlareParticles pushBack _flareParticle;
         _unit setVariable ["DIS_flareParticles", _unitFlareParticles];
+
+        _flareObjects pushBack [serverTime + _flareLife, _flareParticle, _light];
     } forEach [-1, 1];
 
     if (_pair < _pairCount - 1) then {
         uiSleep _pairInterval;
     };
 };
+
+
+_flareObjects = [_flareObjects, [], {
+    _x # 0;
+}, "ASCEND"] call BIS_fnc_sortBy;
+
+{
+    _x params ["_deleteAt", "_flareParticle", "_light"];
+
+    uiSleep ((_deleteAt - serverTime) max 0);
+
+    deleteVehicle _light;
+    deleteVehicle _flareParticle;
+} forEach _flareObjects;

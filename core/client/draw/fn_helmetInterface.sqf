@@ -89,20 +89,14 @@ addMissionEventHandler ["Draw3D", {
 
         private _relDir = _missile getRelDir _vehicle;
         private _missileApproaching = _relDir < 90 || _relDir > 270;
-        private _missileUpdateInitialized = _missile getVariable ["WL_missileUpdateInitialized", false];
-        if (!_missileUpdateInitialized) then {
-            _missile setVariable ["WL_missileUpdateInitialized", true];
-            private _launcher = _missile getVariable ["WL_launcher", objNull];
-            [_missile] remoteExec ["APS_fnc_projectileStateUpdate", _launcher];
-        };
         _missile setVariable ["WL_missileApproaching", _missileApproaching];
 
-        private _missileState = _missile getVariable ["APS_missileState", "LOCKED"];
+        private _missileState = _missile getVariable ["APS_missileState", ""];
         private _color = switch true do {
             case (_missileState == "BOOST"): {
                 [0, 0, 1, 1]
             };
-            case (!_missileApproaching || _missileState == "BLIND"): {
+            case (!_missileApproaching): {
                 [0, 0, 0, 1]
             };
             case (_distance > 5000): {
@@ -154,7 +148,11 @@ addMissionEventHandler ["Draw3D", {
     } forEach _incomingMissiles;
 
     private _approachingMissiles = _incomingMissiles select {
-        alive _x && _x getVariable ["WL_missileApproaching", false]
+        alive _x
+    } select {
+        _x getVariable ["WL_missileApproaching", false]
+    } select {
+        !(_x getVariable ["DIS_missileDefeated", false])
     };
     private _lastKnownLauncher = _vehicle getVariable ["WL_incomingLauncherLastKnown", objNull];
     if (count _approachingMissiles > 0 && alive _lastKnownLauncher) then {
@@ -654,7 +652,11 @@ addMissionEventHandler ["Draw3D", {
         private _incomingMissiles = _vehicle getVariable ["WL_incomingMissiles", []];
         private _warningPlayed = player getVariable ["WL_missileWarningPlayed", -100];
         private _lockedMissiles = _incomingMissiles select {
-            alive _x && _x getVariable ["WL_missileApproaching", true];
+            alive _x
+        } select {
+            _x getVariable ["WL_missileApproaching", true]
+        } select {
+            !(_x getVariable ["DIS_missileDefeated", false])
         };
         private _threatVolume = _settingsMap getOrDefault ["rwr5", 1];
         if (count _lockedMissiles > 0 && serverTime - _warningPlayed > 1.5 && _threatVolume > 0) then {
@@ -735,10 +737,10 @@ addMissionEventHandler ["Draw3D", {
             _x set [2, _randomPosition];
 
             _immuneIcons pushBackUnique [
-                "a3\ui_f\data\igui\rsctitles\rschvtphase\jac_a3_signal_4_ca.paa",
+                "a3\data_f\map_unknown_ca.paa",
                 [1, 1, 1, 1],
                 _randomPosition,
-                4,
+                2,
                 2,
                 0,
                 "",
