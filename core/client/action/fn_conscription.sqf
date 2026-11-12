@@ -41,7 +41,7 @@ private _travelPriorityText = switch (_teamPriorityType) do {
         localize "STR_WL_stronghold"
     };
     case "sector": {
-        _teamPriority getVariable ["WL2_name", "Unknown"]
+        _teamPriority getVariable ["WL2_name", localize "STR_WL_unknown"]
     };
     default {
         "???"

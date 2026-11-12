@@ -3,16 +3,16 @@ params ["_asset"];
 
 private _canRemoveAsset = {
     if (WL_ISDOWN(player)) exitWith {
-        "You are incapacitated!";
+        localize "STR_WL_youAreIncapacitated";
     };
 
     private _ownerUid = _asset getVariable ["BIS_WL_ownerAsset", "123"];
     if (getPlayerUID player != _ownerUid) exitWith {
-        "Can't remove: You do not own this asset";
+        localize "STR_WL_cannotRemoveNotOwner";
     };
 
     if (alive _asset && _asset isKindOf "Air" && speed _asset > 5 && !(unitIsUAV _asset)) exitWith {
-        "Can't remove flying aircraft!";
+        localize "STR_WL_cannotRemoveFlying";
     };
 
     "ok";
@@ -36,9 +36,9 @@ if (_isBulkRemoveActive) then {
 
     private _displayName = [_asset] call WL2_fnc_getAssetTypeName;
     private _result = [
-        "Bulk remove assets",
-        format ["Are you sure you would like to DELETE ALL %1? This will remove %2 assets!", _displayName, count _sameTypeVehicles],
-        "Yes", "Cancel"
+        localize "STR_WL_bulkRemoveAssets",
+        format [localize "STR_WL_deleteAllConfirm", _displayName, count _sameTypeVehicles],
+        localize "STR_WL_yes", localize "STR_WL_cancel"
     ] call WL2_fnc_prompt;
 
     if (_result) then {
@@ -54,7 +54,7 @@ if (_isBulkRemoveActive) then {
         missionNamespace setVariable [_ownedVehiclesVar, _ownedVehicles, true];
 
         playSoundUI ["AddItemOK", 1];
-        [format ["All %1 deleted!", _displayName]] call WL2_fnc_smoothText;
+        [format [localize "STR_WL_allAssetsDeleted", _displayName]] call WL2_fnc_smoothText;
     } else {
         playSoundUI ["AddItemFailed", 1];
     };
@@ -63,7 +63,7 @@ if (_isBulkRemoveActive) then {
 } else {
     private _displayName = [_asset] call WL2_fnc_getAssetTypeName;
 
-    private _result = ["Delete asset", format ["Are you sure you would like to delete: %1?", _displayName], "Yes", "Cancel"] call WL2_fnc_prompt;
+    private _result = [localize "STR_WL_deleteAsset", format [localize "STR_WL_deleteAssetConfirm", _displayName], localize "STR_WL_yes", localize "STR_WL_cancel"] call WL2_fnc_prompt;
 
     if (_result) then {
         private _ownedVehiclesVar = format ["BIS_WL_ownedVehicles_%1", getPlayerUID player];

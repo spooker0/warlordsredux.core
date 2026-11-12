@@ -9,7 +9,7 @@ private _targetPlayer = _targetUid call BIS_fnc_getUnitByUID;
 if (isNull _targetPlayer) exitWith {};
 
 if (_reason == "") then {
-    _reason = "No reason given.";
+    _reason = localize "STR_WL_reportNoReason";
 };
 
 private _senderName = [_sender, true] call BIS_fnc_getName;

@@ -123,10 +123,10 @@ private _currentAssetPylonInfo = _asset getVariable ["WLM_pylonInfo", getAllPylo
 
     if (_currentPylonInfo # 2 isEqualTo [0]) then {
         _selectUserBox ctrlSetText "a3\ui_f\data\IGUI\Cfg\CommandBar\imageGunner_ca.paa";
-        _selectUserBox ctrlSetTooltip "Control: Gunner";
+        _selectUserBox ctrlSetTooltip (localize "STR_WL_wlmControlGunner");
     } else {
         _selectUserBox ctrlSetText "a3\ui_f\data\IGUI\Cfg\CommandBar\imageDriver_ca.paa";
-        _selectUserBox ctrlSetTooltip "Control: Pilot";
+        _selectUserBox ctrlSetTooltip (localize "STR_WL_wlmControlPilot");
     };
 
     _selectUserBox ctrlAddEventHandler ["ButtonClick", "_this call WLM_fnc_switchUser"];

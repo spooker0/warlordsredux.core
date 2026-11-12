@@ -1,5 +1,5 @@
 #include "includes.inc"
-params ["_unit", "_reward", ["_customText", ""], ["_customColor", WL_COLOR_KILL], ["_unitTypeName", ""]];
+params ["_unit", "_reward", ["_customText", ""], ["_customColor", WL_COLOR_KILL], ["_unitTypeName", ""], ["_customTextData", ""]];
 
 if (isDedicated) exitWith {};
 
@@ -9,30 +9,77 @@ private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", crea
 
 private _displayText = "";
 private _displayName = "";
+private _originalDisplayText = _customText;
+private _rewardType = toUpper _customText;
+private _isSpectatorReward = _rewardType select [0, 10] == "SPECTATE: ";
+if (_isSpectatorReward) then {
+	_rewardType = _rewardType select [10];
+};
 
 private _side = BIS_WL_playerSide;
 
 private _unitType = typeOf _unit;
 if (_customText != "") then {
-	_displayText = format ["%1", _customText];
+	if (_rewardType == "PLAYER KILL" && _customTextData != "") then {
+		_originalDisplayText = format ["Kill %1", _customTextData];
+		_displayText = format [localize "STR_WL_rewardKillPlayer", _customTextData];
+	} else {
+		_displayText = switch (_rewardType) do {
+			case "KILL": { localize "STR_WL_rewardKill" };
+			case "PLAYER KILL": { localize "STR_WL_rewardPlayerKill" };
+			case "SQUAD ASSIST": { localize "STR_WL_rewardSquadAssist" };
+			case "CREW ASSIST": { localize "STR_WL_rewardCrewAssist" };
+			case "AIRCRAFT DAMAGED": { localize "STR_WL_rewardAircraftDamaged" };
+			case "SPOT ASSIST": { localize "STR_WL_rewardSpotAssist" };
+			case "DESTROYED STRONGHOLD": { localize "STR_WL_rewardDestroyedStronghold" };
+			case "REVIVED TEAMMATE": { localize "STR_WL_rewardRevivedTeammate" };
+			case "RECON": { localize "STR_WL_rewardRecon" };
+			case "REVEAL SECTOR": { localize "STR_WL_rewardRevealSector" };
+			case "DEMOLITION": { localize "STR_WL_rewardDemolition" };
+			case "MISSILE FLARED": { localize "STR_WL_rewardMissileFlared" };
+			case "VEHICLE DISABLED": { localize "STR_WL_rewardVehicleDisabled" };
+			case "REGION CAPTURED": { localize "STR_WL_rewardRegionCaptured" };
+			case "SECTOR CAPTURED": { localize "STR_WL_rewardSectorCaptured" };
+			case "PROJECTILE DESTROYED": { localize "STR_WL_rewardProjectileDestroyed" };
+			case "PROJECTILE JAMMED": { localize "STR_WL_rewardProjectileJammed" };
+			case "ATTACKING SECTOR": { localize "STR_WL_rewardAttackingSector" };
+			case "DEFENDING SECTOR": { localize "STR_WL_rewardDefendingSector" };
+			case "ACTIVE PROTECTION SYSTEM": { localize "STR_WL_rewardActiveProtectionSystem" };
+			case "MINE DESTROYED": { localize "STR_WL_rewardMineDestroyed" };
+			case "SECURED": { localize "STR_WL_rewardSecured" };
+			case "DRONE REBATE": { localize "STR_WL_rewardDroneRebate" };
+			case "AIRCRAFT SECURED": { localize "STR_WL_rewardAircraftSecured" };
+			case "TRANSPORT": { localize "STR_WL_rewardTransport" };
+			case "RESUPPLY": { localize "STR_WL_rewardResupply" };
+			case "BOOSTED SIGNAL": { localize "STR_WL_rewardBoostedSignal" };
+			case "TK COMPENSATION": { localize "STR_WL_rewardTeamkillCompensation" };
+			case "BONUS": { localize "STR_WL_rewardBonus" };
+			case "SETUP": { localize "STR_WL_rewardSetup" };
+			case "INCOME": { localize "STR_WL_rewardIncome" };
+			default { _customText };
+		};
+	};
+	if (_isSpectatorReward) then {
+		_displayText = format [localize "STR_WL_rewardSpectate", _displayText];
+	};
 } else {
 	if (_unitType == "") then {
 		_unitType = _unitTypeName;
 	};
 
 	if (_unitType isKindOf "Man") then {
-		_displayText = "KILL";
+		_rewardType = "KILL";
+		_originalDisplayText = "KILL";
+		_displayText = localize "STR_WL_rewardKill";
 	} else {
 		_displayName = [_unit, _unitType] call WL2_fnc_getAssetTypeShortName;
-		_displayText = format ["DESTROYED %1", _displayName];
+		_rewardType = "DESTROYED";
+		_originalDisplayText = format ["DESTROYED %1", _displayName];
+		_displayText = format [localize "STR_WL_rewardDestroyed", _displayName];
 	};
 };
 
-private _iconText = if ("SPECTATE" in _displayText) then {
-	(toUpper _displayText) select [10]
-} else {
-	toUpper _displayText
-};
+private _iconText = _rewardType;
 private _displayIcon = switch (_iconText) do {
 	case "KILL";
 	case "PLAYER KILL": { "a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa" };
@@ -79,9 +126,9 @@ if (_addKillfeedToChat) then {
 };
 
 [_displayText, _reward, _customColor, _displayIcon] call WL2_fnc_updateKillFeed;
-[_displayText, _unitType, _reward] call RWD_fnc_handleReward;
+[_originalDisplayText, _unitType, _reward] call RWD_fnc_handleReward;
 
-if !(toUpper _displayText in ["SQUAD ASSIST", "SECTOR CAPTURED"]) then {
+if !(_rewardType in ["SQUAD ASSIST", "SECTOR CAPTURED"]) then {
 	missionNamespace setVariable ["WL2_afkTimer", serverTime + WL_DURATION_AFKTIME];
 };
 

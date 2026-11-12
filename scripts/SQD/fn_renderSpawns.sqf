@@ -21,7 +21,7 @@ private _generateSectorSpawns = {
     params ["_sector"];
     _alreadyShownSectors pushBack _sector;
 
-    private _sectorName = _sector getVariable ["WL2_name", "SECTOR"];
+    private _sectorName = _sector getVariable ["WL2_name", localize "STR_WL_sector"];
     private _sectorAssets = [_sector, [], true] call WL2_fnc_getSectorFTAsset;
 
     private _specialSpawnables = [];
@@ -117,7 +117,7 @@ if (count _eligibleSquadmates > 0) then {
 
 private _homeBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
 if !(_homeBase in _alreadyShownSectors) then {
-    private _homeSectorName = _homeBase getVariable ["WL2_name", "SECTOR"];
+    private _homeSectorName = _homeBase getVariable ["WL2_name", localize "STR_WL_sector"];
     _spawns pushBack [localize "STR_WL_spawnHome", _homeSectorName, [], [[_homeBase, "home"]]];
 };
 
@@ -232,10 +232,10 @@ if (!alive _selectedSpawnTarget && !alive (_selectedSpecialSpawnTarget # 0)) the
                 if (count _nearbySectors > 0) then {
                     _nearbySectors = [_nearbySectors, [_specialSpawnObject], { _x distance2D _input0 }, "ASCEND"] call BIS_fnc_sortBy;
                     private _nearestSector = _nearbySectors # 0;
-                    private _nearestSectorName = _nearestSector getVariable ["WL2_name", "SECTOR"];
-                    [format ["NEAR %1", toUpper _nearestSectorName], _icon]
+                    private _nearestSectorName = _nearestSector getVariable ["WL2_name", localize "STR_WL_sector"];
+                    [format [localize "STR_WL_nearestSector", toUpper _nearestSectorName], _icon]
                 } else {
-                    ["WILDERNESS", _icon]
+                    [localize "STR_WL_wilderness", _icon]
                 };
             };
             case "home": {

@@ -74,10 +74,10 @@ while { !BIS_WL_missionEnd } do {
 	];
 
 	private _maxSubordinates = missionNamespace getVariable ["WL2_maxSubordinates", 1];
+	private _currentAiCount = (_maxSubordinates - (count units player - 1)) max 0;
 	_subordinateControl ctrlSetStructuredText parseText format [
-		"<t shadow='2' size ='1.1'>AI: %1/%2</t>",
-		(_maxSubordinates - (count units player - 1)) max 0,
-		_maxSubordinates
+		"<t shadow='2' size ='1.1'>%1</t>",
+		format [localize "STR_WL_hudAiStatus", _currentAiCount, _maxSubordinates]
 	];
 
 	_squadControl ctrlSetStructuredText parseText format [
@@ -99,9 +99,9 @@ while { !BIS_WL_missionEnd } do {
 	} else {
 		private _cooldown = ((cameraOn getVariable ["BIS_WL_nextRearm", 0]) - serverTime) max 0;
 		if (_cooldown > 0) then {
-			format ["<t color='#ff0000' shadow='2' size='1.1'>REARM: %1</t>", [_cooldown, "MM:SS"] call BIS_fnc_secondsToString];
+			format ["<t color='#ff0000' shadow='2' size='1.1'>%1</t>", format [localize "STR_WL_hudRearm", [_cooldown, "MM:SS"] call BIS_fnc_secondsToString]];
 		} else {
-			format ["<t color='#00ff00' shadow='2' size='1.1'>REARM: READY</t>"];
+			format ["<t color='#00ff00' shadow='2' size='1.1'>%1</t>", localize "STR_WL_hudRearmReady"];
 		};
 	};
 	_rearmControl ctrlSetStructuredText parseText _rearmText;
@@ -111,9 +111,9 @@ while { !BIS_WL_missionEnd } do {
 	} else {
 		private _cooldown = ((cameraOn getVariable ["WL2_nextRepair", 0]) - serverTime) max 0;
 		if (_cooldown > 0) then {
-			format ["<t color='#ff0000' shadow='2' size='1.1'>REPAIR: %1</t>", [_cooldown, "MM:SS"] call BIS_fnc_secondsToString];
+			format ["<t color='#ff0000' shadow='2' size='1.1'>%1</t>", format [localize "STR_WL_hudRepair", [_cooldown, "MM:SS"] call BIS_fnc_secondsToString]];
 		} else {
-			format ["<t color='#00ff00' shadow='2' size='1.1'>REPAIR: READY</t>"];
+			format ["<t color='#00ff00' shadow='2' size='1.1'>%1</t>", localize "STR_WL_hudRepairReady"];
 		};
 	};
 	_repairControl ctrlSetStructuredText parseText _repairText;
@@ -137,17 +137,17 @@ while { !BIS_WL_missionEnd } do {
 			"#ff0000";
 		};
 		private _apsTypeName = switch (_apsType) do {
-			case 5: { "ADV" };
-			case 4: { "DEVICE" };
-			case 3: { "HEAVY" };
-			case 2: { "MEDIUM" };
-			case 1: { "LIGHT" };
-			default { "NONE" };
+			case 5: { localize "STR_WL_hudApsAdv" };
+			case 4: { localize "STR_WL_hudApsDevice" };
+			case 3: { localize "STR_WL_hudApsHeavy" };
+			case 2: { localize "STR_WL_hudApsMedium" };
+			case 1: { localize "STR_WL_hudApsLight" };
+			default { localize "STR_WL_hudApsNone" };
 		};
 		_apsTypeControl ctrlSetStructuredText parseText format ["<t shadow='2' size='1.1' color='%1'>APS: %2</t>", _apsActiveColor, _apsTypeName];
 		_apsTypeControl ctrlShow true;
 
-		_apsAmmoControl ctrlSetStructuredText parseText format ["<t shadow='2' size='1.1' color='%1'>AMMO: %2</t>", _apsAmmoColor, _apsAmmo max 0];
+		_apsAmmoControl ctrlSetStructuredText parseText format ["<t shadow='2' size='1.1' color='%1'>%2</t>", _apsAmmoColor, format [localize "STR_WL_hudApsAmmo", _apsAmmo max 0]];
 		_apsAmmoControl ctrlShow true;
 	};
 
@@ -169,7 +169,7 @@ while { !BIS_WL_missionEnd } do {
 				localize "STR_WL_stronghold"
 			};
 			case "sector": {
-				_teamPriority getVariable ["WL2_name", "UNKNOWN"]
+				_teamPriority getVariable ["WL2_name", localize "STR_WL_hudUnknown"]
 			};
 			default {
 				localize "STR_WL_none"
@@ -201,7 +201,7 @@ while { !BIS_WL_missionEnd } do {
 	};
 
 	private _sector = BIS_WL_allSectors # _visitedSectorId;
-	private _sectorName = _sector getVariable ["WL2_name", "Unknown"];
+	private _sectorName = _sector getVariable ["WL2_name", localize "STR_WL_hudUnknown"];
 
 	private _captureProgress = _sector getVariable ["BIS_WL_captureProgress", 0];
 	private _sectorOwner = _sector getVariable ["BIS_WL_owner", independent];
@@ -257,14 +257,15 @@ while { !BIS_WL_missionEnd } do {
 			private _sectorColorHex = [_sectorOwner] call _getTeamColorHex;
 			if (_defenderModifier > 0) then {
 				_reinforceSubtitle ctrlSetStructuredText parseText format [
-					"<t shadow='2' align='center' color='%1'>DEFENSE +%2x</t>",
+					"<t shadow='2' align='center' color='%1'>%2</t>",
 					_sectorColorHex,
-					(_defenderModifier * 5) toFixed 1
+					format [localize "STR_WL_hudDefensePlus", (_defenderModifier * 5) toFixed 1]
 				];
 			} else {
 				_reinforceSubtitle ctrlSetStructuredText parseText format [
-					"<t shadow='2' align='center' color='%1'>DEFENSE -50%%</t>",
-					_sectorColorHex
+					"<t shadow='2' align='center' color='%1'>%2</t>",
+					_sectorColorHex,
+					localize "STR_WL_hudDefenseMinus50"
 				];
 			};
 			_reinforceSubtitle ctrlShow true;
@@ -287,9 +288,10 @@ while { !BIS_WL_missionEnd } do {
 			_captureProgressBar ctrlSetTextColor ([_capturingTeam] call _getTeamColorRGB);
 
 			_captureText ctrlSetStructuredText parseText format [
-				"<t shadow='2' size='1'><t align='left' color='%1'>%2</t><t align='center'>DEFENDING %3</t><t align='right' color='%4'>%5</t></t>",
+				"<t shadow='2' size='1'><t align='left' color='%1'>%2</t><t align='center'>%3 %4</t><t align='right' color='%5'>%6</t></t>",
 				[_sectorOwner] call _getTeamColorHex,
 				floor _sectorOwnerCap,
+				localize "STR_WL_hudDefending",
 				toUpper _sectorNameDisplay,
 				[_capturingTeam] call _getTeamColorHex,
 				floor _capturingTeamCap
@@ -303,9 +305,10 @@ while { !BIS_WL_missionEnd } do {
 			_captureProgressBar ctrlSetTextColor ([_capturingTeam] call _getTeamColorRGB);
 
 			_captureText ctrlSetStructuredText parseText format [
-				"<t shadow='2' size='1'><t align='left' color='%1'>%2</t><t align='center'>ATTACKING %3</t><t align='right' color='%4'>%5</t></t>",
+				"<t shadow='2' size='1'><t align='left' color='%1'>%2</t><t align='center'>%3 %4</t><t align='right' color='%5'>%6</t></t>",
 				[_sectorOwner] call _getTeamColorHex,
 				floor _sectorOwnerCap,
+				localize "STR_WL_hudAttacking",
 				toUpper _sectorNameDisplay,
 				[_capturingTeam] call _getTeamColorHex,
 				floor _capturingTeamCap
@@ -314,8 +317,8 @@ while { !BIS_WL_missionEnd } do {
 			_captureProgressBar ctrlShow false;
 			_captureProgressBar progressSetPosition _captureProgress;
 			_captureText ctrlSetStructuredText parseText format [
-				"<t shadow='2' size ='1' align='center'>RESTRICTED: %1</t>",
-				toUpper _sectorName
+				"<t shadow='2' size ='1' align='center'>%1</t>",
+				format [localize "STR_WL_hudRestricted", toUpper _sectorName]
 			];
 		};
 	};

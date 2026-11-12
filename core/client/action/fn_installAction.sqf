@@ -1,20 +1,20 @@
 #include "includes.inc"
 
 private _installActionId = player addAction [
-	"<t color='#ADD8E6'>Deploy Item</t>",
+	format ["<t color='#ADD8E6'>%1</t>", localize "STR_WL_deployItem"],
 	{
         _this spawn {
             params ["_target", "_caller", "_actionId", "_arguments"];
             private _installableTarget = player getVariable ["WL2_installableTarget", objNull];
             if (!alive _installableTarget) exitWith {
                 playSound "AddItemFailed";
-                ["Not available!"] call WL2_fnc_smoothText;
+                [localize "STR_WL_notAvailable"] call WL2_fnc_smoothText;
             };
 
             private _installable = _installableTarget getVariable ["WL2_installable", ""];
             if (_installable == "") exitWith {
                 playSound "AddItemFailed";
-                ["Not available!"] call WL2_fnc_smoothText;
+                [localize "STR_WL_notAvailable"] call WL2_fnc_smoothText;
             };
 
             private _isConversion = WL_ASSET(_installable, "conversion", 0) != 0;
@@ -29,8 +29,8 @@ private _installActionId = player addAction [
                 private _playerPosition = player modelToWorld [0, 0, 0];
                 private _soundSource = createSoundSource ["WLDemolitionSound", _playerPosition, [], 0];
 
-                ["Animation", ["CONSTRUCTION", [
-                    ["Cancel", "Action"],
+                ["Animation", [localize "STR_WL_construction", [
+                    [localize "STR_WL_cancel", "Action"],
                     ["", "ActionContext"],
                     ["", "navigateMenu"]
                 ]], _deployTime, true] spawn WL2_fnc_showHint;
@@ -70,7 +70,7 @@ private _installActionId = player addAction [
             };
 
             if (!_success) exitWith {
-                ["Construction cancelled."] call WL2_fnc_smoothText;
+                [localize "STR_WL_constructionCancelled"] call WL2_fnc_smoothText;
             };
 
             private _deployClass = WL_ASSET(_installable, "spawn", _installable);
@@ -92,14 +92,14 @@ private _installActionId = player addAction [
 
             if (count _nearbyEntities > 0) exitWith {
                 private _nearbyObjectName = [_nearbyEntities # 0] call WL2_fnc_getAssetTypeName;
-                [format ["Deploying too close to %1!", _nearbyObjectName]] call WL2_fnc_smoothText;
+                [format [localize "STR_WL_deployingTooClose", _nearbyObjectName]] call WL2_fnc_smoothText;
                 playSound "AddItemFailed";
             };
 
             private _installableAfter = _installableTarget getVariable ["WL2_installable", ""];
             if (_installableAfter == "") exitWith {
                 playSound "AddItemFailed";
-                ["Installation not available!"] call WL2_fnc_smoothText;
+                [localize "STR_WL_installationNotAvailable"] call WL2_fnc_smoothText;
             };
 
             if (_installableAfter != WL_ASSET_TYPE(_installableTarget)) then {

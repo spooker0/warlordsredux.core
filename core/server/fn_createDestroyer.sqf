@@ -43,9 +43,17 @@ if (_destroyerType == 2) then {
     deleteVehicle _controller;
     _controller = objNull;
 } else {
-    _controller setObjectTextureGlobal [1, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.2,""#000000"",""#ffffff"",""MISSILE\nBATTERY\nCONTROL"")"];
+    private _missileBatteryControlImage = format [
+        "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.2,""#000000"",""#ffffff"",""%1"")",
+        localize "STR_WL_missileBatteryControlTexture"
+    ];
+    private _ammoControllerImage = format [
+        "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""%1"")",
+        format [localize "STR_WL_ammoTexture", "-"]
+    ];
+    _controller setObjectTextureGlobal [1, _missileBatteryControlImage];
     _controller setObjectTextureGlobal [2, "\A3\Static_F_Destroyer\Ship_MRLS_01\Data\Ui\Ship_MRLS_01_picture_CA.paa"];
-    _controller setObjectTextureGlobal [3, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""AMMO\n-"")"];
+    _controller setObjectTextureGlobal [3, _ammoControllerImage];
 };
 
 _destroyerBase setVariable ["WL2_destroyerController", _controller, true];
@@ -82,7 +90,10 @@ private _createMrls = {
 
     _mrls removeMagazineTurret ["magazine_Missiles_Cruise_01_Cluster_x18", [0]];
     _mrls setMagazineTurretAmmo ["magazine_Missiles_Cruise_01_x18", 1, [0]];
-    _controller setObjectTextureGlobal [3, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""AMMO\n1"")"];
+    _controller setObjectTextureGlobal [3, format [
+        "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""%1"")",
+        format [localize "STR_WL_ammoTexture", 1]
+    ]];
 
     _mrls setVariable ["WL2_accessControl", 1, true];
 };
@@ -128,14 +139,20 @@ while { alive _destroyerBase } do {
             call _createMrls;
             [_destroyerBase, _mrls, objNull, false] remoteExec ["WL2_fnc_createDestroyerClient", 0, true];
             _nextRespawnTime = serverTime + WL_DESTROYER_RESPAWN;
-            "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.2,""#000000"",""#ffffff"",""MISSILE\nBATTERY\nCONTROL"")"
+            format [
+                "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.2,""#000000"",""#ffffff"",""%1"")",
+                localize "STR_WL_missileBatteryControlTexture"
+            ]
         } else {
-            private _ammoControllerImage = "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""AMMO\n-"")";
+            private _ammoControllerImage = format [
+                "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""%1"")",
+                format [localize "STR_WL_ammoTexture", "-"]
+            ];
             _controller setObjectTextureGlobal [3, _ammoControllerImage];
 
             format [
-                "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.2,""#000000"",""#ffffff"",""RESPAWN\n%1 MIN"")",
-                ceil ((_nextRespawnTime - serverTime) / 60)
+                "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.2,""#000000"",""#ffffff"",""%1"")",
+                format [localize "STR_WL_respawnTexture", ceil ((_nextRespawnTime - serverTime) / 60)]
             ];
         };
 
@@ -147,7 +164,7 @@ deleteVehicle _controller;
 deleteVehicle _mrls;
 
 _outlineMarker setMarkerColor "ColorBlack";
-_destroyerMarker setMarkerText format ["%1 (DDG-%2) - SINKING", _destroyerName, _hullNumber];
+_destroyerMarker setMarkerText format [localize "STR_WL_destroyerSinking", _destroyerName, _hullNumber];
 
 uiSleep 60;
 

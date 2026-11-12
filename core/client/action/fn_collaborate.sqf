@@ -14,7 +14,7 @@ if !(WL_ISUP(player)) then {
 private _sideBase = [BIS_WL_playerSide] call WL2_fnc_getSideBase;
 [0, _sideBase] spawn WL2_fnc_executeFastTravel;
 
-["Resist!"] call WL2_fnc_smoothText;
+[localize "STR_WL_resist"] call WL2_fnc_smoothText;
 
 uiNamespace setVariable ["WL2_canBuy", false];
 

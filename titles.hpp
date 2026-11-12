@@ -201,7 +201,7 @@ class RscTitles {
 
 			class RscWarlordsHUD_Money: RscStructuredText {
 				idc = 2101;
-				x = safeZoneW + safeZoneX - 0.45;
+				x = safeZoneW + safeZoneX - 0.55;
 				y = safeZoneH + safeZoneY - 0.2;
 				w = 0.2;
 				h = 0.05;
@@ -210,9 +210,9 @@ class RscTitles {
 			};
 			class RscWarlordsHUD_AI: RscStructuredText {
 				idc = 2102;
-				x = safeZoneW + safeZoneX - 0.25;
+				x = safeZoneW + safeZoneX - 0.35;
 				y = safeZoneH + safeZoneY - 0.2;
-				w = 0.1;
+				w = 0.2;
 				h = 0.05;
 				text = "";
 				size = 0.045;
@@ -582,7 +582,7 @@ class RscTitles {
 				sizeEx = 0.08;
 				colorBackground[] = {0, 0, 0, 0};
 				colorText[] = {1, 1, 1, 1};
-				text = "YOU ARE TRESPASSING! TURN AROUND OR DIE!";
+				text = $STR_WL_trespassing;
 				lineSpacing = 0;
 			};
 			class RscWLZoneRestrictionDisplay_Time: RscText {
@@ -656,7 +656,7 @@ class RscTitles {
 				sizeEx = 0.08;
 				colorBackground[] = {0, 0, 0, 0};
 				colorText[] = {1, 1, 1, 1};
-				text = "ENEMY NO FLY ZONE DETECTED!";
+				text = $STR_WL_noFlyZone;
 				lineSpacing = 0;
 			};
 			class RscWLExtendedSamWarningDisplay_Sector: RscText {
@@ -671,7 +671,7 @@ class RscTitles {
 				sizeEx = 0.08;
 				colorBackground[] = {0, 0, 0, 0};
 				colorText[] = {1, 1, 1, 1};
-				text = "SECTOR";
+				text = $STR_WL_sqdSector;
 				lineSpacing = 0;
 			};
 		};
@@ -1254,7 +1254,7 @@ class RscTitles {
 				h = 0.05;
 				colorBackground[] = {0, 0, 0, 0.9};
 				colorText[] = {1, 1, 1, 1};
-				text = "MISSILE CAMERA";
+				text = $STR_WL_missileCamera;
 			};
 			class RscWLMissileCameraDisplay_Picture: RscPicture {
 				idc = 5111;

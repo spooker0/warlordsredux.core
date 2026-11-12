@@ -8,7 +8,7 @@ if (_minElo <= 0) exitWith {
 
 private _playerRating = player getVariable ["WL2_playerRating", WL_RATING_STARTER];
 if (_playerRating < _minElo) exitWith {
-    [false, format ["This asset requires you to have at least %1 ELO.", _minElo]];
+    [false, format [localize "STR_WL_minEloRequired", _minElo]];
 };
 
 [true, ""];

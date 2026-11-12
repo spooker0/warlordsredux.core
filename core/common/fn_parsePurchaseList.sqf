@@ -88,28 +88,28 @@ private _strategyArr = [
 		[],
 		localize "STR_WL_kickPlayers",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"This doesn't include you or your AI."
+		localize "STR_WL_kickPlayersInfo"
 	], [
 		"PruneMines",
 		0,
 		[],
 		localize "STR_WL_clearPersonalExplosives",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"Deletes all deployed mines and explosives."
+		localize "STR_WL_clearPersonalExplosivesInfo"
 	], [
 		"ResetVehicle",
 		0,
 		[],
 		localize "STR_WL_resetVehicle",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"Reset vehicle. Must be within 15m and looking at the vehicle."
+		localize "STR_WL_resetVehicleInfo"
 	], [
 		"SwitchToCollaborator",
 		WL_COST_COLLABORATOR,
 		[],
 		localize "STR_WL_controlCollaborator",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"Find and control a collaborator in the local population."
+		localize "STR_WL_controlCollaboratorInfo"
 	], [
 		"RemoveUnits",
 		0,
@@ -123,7 +123,7 @@ private _strategyArr = [
 		[],
 		localize "STR_WL_bulkRemove",
 		"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-		"Once activated, you will have 30 seconds in which any asset you remove will not prompt you for confirmation."
+		localize "STR_WL_bulkRemoveInfo"
 	], [
 		"WelcomeScreen",
 		0,
@@ -137,14 +137,14 @@ private _strategyArr = [
 		[],
 		localize "STR_WL_surrender",
 		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
-		"Begin surrender vote. If enough people on your team vote for surrender, the game will end and the other team will win."
+		localize "STR_WL_surrenderInfo"
 	], [
 		"SeeChangelog",
 		0,
 		[],
 		localize "STR_WL_seeChangelog",
 		"\A3\Data_F_Warlords\Data\preview_scan.jpg",
-		"View the latest patch changelog."
+		localize "STR_WL_seeChangelogInfo"
 	]
 ];
 
@@ -153,9 +153,9 @@ _strategyArr pushBack [
 	"CruiseMissiles",
 	15000,
 	[],
-	"Call missile strike",
+	localize "STR_WL_callMissileStrike",
 	"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-	"Call a volley of cruise missiles on your designation. Requires all targets (vehicles or infantry) to be on datalink."
+	localize "STR_WL_cruiseMissilesInfo"
 ];
 #endif
 
@@ -164,9 +164,9 @@ _strategyArr pushBack [
 	"Camouflage",
 	500,
 	[],
-	"Camouflage",
+	localize "STR_WL_camouflage",
 	"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-	"Camouflage your current position with tall plants. Disappears after 5 minutes."
+	localize "STR_WL_camouflageInfo"
 ];
 #endif
 
@@ -175,41 +175,41 @@ _strategyArr pushBack [
 	"StressTestSector",
 	0,
 	[],
-	"Stress test: assets in current sector",
+	localize "STR_WL_stressTestSector",
 	"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-	"Order up to 50 vehicles in current sector to test performance under stress."
+	localize "STR_WL_stressTestSectorInfo"
 ];
 _strategyArr pushBack [
 	"StressTestMap",
 	0,
 	[],
-	"Stress test: assets in every sector",
+	localize "STR_WL_stressTestMap",
 	"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-	"Order up to 5 vehicles in every sector to test performance under stress."
+	localize "STR_WL_stressTestMapInfo"
 ];
 _strategyArr pushBack [
 	"StressTestKillfeed",
 	0,
 	[],
-	"Stress test: killfeed",
+	localize "STR_WL_stressTestKillfeed",
 	"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-	"Add some random killfeed items."
+	localize "STR_WL_stressTestKillfeedInfo"
 ];
 _strategyArr pushBack [
 	"StressTestSpawns",
 	0,
 	[],
-	"Stress test: show sector spawns",
+	localize "STR_WL_stressTestSpawns",
 	"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-	"Show all possible sector spawns."
+	localize "STR_WL_stressTestSpawnsInfo"
 ];
 _strategyArr pushBack [
 	"TestRebalance",
 	0,
 	[],
-	"Test: rebalance me",
+	localize "STR_WL_testRebalance",
 	"\A3\Data_F_Warlords\Data\preview_empty.jpg",
-	"Rebalance me to the other team."
+	localize "STR_WL_testRebalanceInfo"
 ];
 #endif
 
@@ -218,9 +218,9 @@ _strategyArr pushBack [
 	"SwitchToGreen",
 	0,
 	[],
-	"Switch to green",
+	localize "STR_WL_switchToGreen",
 	"\a3\data_f\flags\flag_green_co.paa",
-	"Switch to Green side"
+	localize "STR_WL_switchToGreenInfo"
 ];
 #endif
 

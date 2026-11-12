@@ -55,7 +55,7 @@ while { alive _projectile } do {
     private _distanceToLauncher = _projectile distance _unit;
     if (_distanceToLauncher > _maxRange) then {
         triggerAmmo _projectile;
-        [format ["Missile out of range. Max range: %1M", _maxRange]] call WL2_fnc_smoothText;
+        [format [localize "STR_WL_missileOutOfRange", _maxRange]] call WL2_fnc_smoothText;
         break;
     };
 

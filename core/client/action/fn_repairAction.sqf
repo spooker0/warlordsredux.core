@@ -47,7 +47,7 @@ private _validHitPoints = _allHitPoints select 0 select {
 if (count _validHitPoints == 0) exitWith {};
 
 _asset addAction [
-	"<t color='#4bff58'>Field Repairs</t>",
+	format ["<t color='#4bff58'>%1</t>", localize "STR_WL_fieldRepairs"],
 	{
         _this spawn {
             params ["_asset", "_caller", "_actionId", "_arguments"];
@@ -57,8 +57,8 @@ _asset addAction [
             private _validHitPoints = _arguments select 0;
             private _camera = [[0, -3, 1]] call WL2_fnc_actionLockCamera;
 
-            ["Animation", ["REPAIR", [
-                ["Cancel", "Action"],
+            ["Animation", [localize "STR_WL_repair", [
+                [localize "STR_WL_cancel", "Action"],
                 ["", "ActionContext"],
                 ["", "navigateMenu"]
             ]], 10, true] spawn WL2_fnc_showHint;

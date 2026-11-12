@@ -111,11 +111,11 @@ if (_hideTurret != 0) then {
     };
 };
 
-private _deployParams = ["DEPLOYMENT CONTROLS", [
+private _deployParams = [localize "STR_WL_deploymentControls", [
     [localize "STR_A3_assemble", "BuldSelect"],
-    ["Lock position", "lockTarget"],
-    ["Rotate left", "prevAction"],
-    ["Rotate right", "nextAction"],
+    [localize "STR_WL_lockPosition", "lockTarget"],
+    [localize "STR_WL_rotateLeft", "prevAction"],
+    [localize "STR_WL_rotateRight", "nextAction"],
     [localize "STR_ca_cancel", "navigateMenu"]
 ]];
 ["Deploy", _deployParams] spawn WL2_fnc_showHint;

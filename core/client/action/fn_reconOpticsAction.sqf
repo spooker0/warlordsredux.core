@@ -4,8 +4,8 @@ params ["_asset", "_playerUID", "_reconType"];
 if (isDedicated) exitWith {};
 
 if (_playerUID == getPlayerUID player) then {
-    ["Recon", ["RECON CONTROLS", [
-        ["Scan", "lockTarget"]
+    ["Recon", [localize "STR_WL_reconControls", [
+        [localize "STR_WL_scanAction", "lockTarget"]
     ]], 10] spawn WL2_fnc_showHint;
 };
 

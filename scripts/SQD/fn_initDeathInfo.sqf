@@ -36,11 +36,11 @@ if (count _gameData >= 5) then {
     };
 
     private _statusInfoArr = [
-        "<t size='2'>DOWNED</t>",
+        format ["<t size='2'>%1</t>", localize "STR_WL_downed"],
         "",
-        "<t size='0.6'>KILLED BY</t>",
+        format ["<t size='0.6'>%1</t>", localize "STR_WL_killedBy"],
         "<t size='0.6'>%1</t>",
-        "<t size='0.8'><t size='0.5'>YOU</t> %2 - %3 <t size='0.5'>THEM</t></t>",
+        format ["<t size='0.8'><t size='0.5'>%1</t> %%2 - %%3 <t size='0.5'>%2</t></t>", localize "STR_WL_pilotYou", localize "STR_WL_themLabel"],
         "",
         "<t size='0.6'>%4</t>",
         "<t size='0.4'>%5</t>"
@@ -61,7 +61,7 @@ if (count _gameData >= 5) then {
 
     _killStatusText ctrlSetStructuredText parseText _statusInfo;
 } else {
-    _killStatusText ctrlSetStructuredText parseText "<t size='2' shadow='2'>DOWNED</t>";
+    _killStatusText ctrlSetStructuredText parseText format ["<t size='2' shadow='2'>%1</t>", localize "STR_WL_downed"];
 };
 
 uiNamespace setVariable ["WL2_deathInfoData", []];
@@ -81,7 +81,7 @@ private _tipsControl = _display displayCtrl 11002;
 
 private _allTips = getArray (missionConfigFile >> "CfgWorlds" >> "Altis" >> "loadingTexts");
 private _tip = selectRandom _allTips;
-_tipsControl ctrlSetStructuredText parseText format ["<t size='0.6' shadow='2'>Tip: %1</t>", _tip];
+_tipsControl ctrlSetStructuredText parseText format ["<t size='0.6' shadow='2'>%1</t>", format [localize "STR_WL_deathTip", _tip]];
 
 while { !isNull _display } do {
     uiSleep 0.05;

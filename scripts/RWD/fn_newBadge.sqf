@@ -6,7 +6,7 @@ private _badgeData = _badgeConfigs getOrDefault [_badgeName, []];
 if (count _badgeData == 0) exitWith {};
 private _badges = uiNamespace getVariable ["WL2_badgeItems", []];
 _badges pushBack [
-	_badgeName,
+	_badgeData # 3,
 	_badgeData # 2,
 	_badgeData # 0,
 	_badgeData # 1

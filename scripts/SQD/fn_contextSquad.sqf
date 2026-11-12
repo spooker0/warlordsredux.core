@@ -19,9 +19,9 @@ _contextMenu ctrlCommit 0;
 private _mySquad = ["getSquadForPlayer", [getPlayerID player]] call SQD_fnc_query;
 private _isLocked = _mySquad getOrDefault ["locked", false];
 private _lockText = if (_isLocked) then {
-    "UNLOCK SQUAD"
+    localize "STR_WL_sqdUnlockSquad"
 } else {
-    "LOCK SQUAD"
+    localize "STR_WL_sqdLockSquad"
 };
 
 private _lockButton = _display ctrlCreate ["SQD_Menu_ContextualButton", -1, _contextMenu];
@@ -43,7 +43,7 @@ _lockButton ctrlAddEventHandler ["ButtonClick", {
 
 private _renameButton = _display ctrlCreate ["SQD_Menu_ContextualButton", -1, _contextMenu];
 _renameButton ctrlSetPosition [0, SQD_LAYOUT_CONTEXT_H, SQD_LAYOUT_CONTEXT_W, SQD_LAYOUT_CONTEXT_H];
-_renameButton ctrlSetText "RENAME SQUAD";
+_renameButton ctrlSetText localize "STR_WL_sqdRenameSquad";
 _renameButton ctrlCommit 0;
 
 _renameButton setVariable ["SQD_squadControl", _control];
@@ -98,7 +98,7 @@ _renameButton ctrlAddEventHandler ["ButtonClick", {
 
 private _disbandButton = _display ctrlCreate ["SQD_Menu_ContextualButton", -1, _contextMenu];
 _disbandButton ctrlSetPosition [0, SQD_LAYOUT_CONTEXT_H * 2, SQD_LAYOUT_CONTEXT_W, SQD_LAYOUT_CONTEXT_H];
-_disbandButton ctrlSetText "DISBAND SQUAD";
+_disbandButton ctrlSetText localize "STR_WL_sqdDisbandSquad";
 _disbandButton ctrlCommit 0;
 
 _disbandButton ctrlAddEventHandler ["ButtonClick", {
@@ -116,7 +116,7 @@ _disbandButton ctrlAddEventHandler ["ButtonClick", {
     };
 
     _button setVariable ["SQD_disbanding", true];
-    _button ctrlSetText "CONFIRM: DISBAND SQUAD";
+    _button ctrlSetText localize "STR_WL_sqdConfirmDisband";
 }];
 
 private _dummyButton = _display displayCtrl SQD_DUMMY_IDC;

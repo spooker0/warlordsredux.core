@@ -171,13 +171,13 @@ if (_moderate) then {
             _reason = _reason # 0;
         };
 
-        _reportLines pushBack format ["By: %1 (%2)", _x, _reportTime];
+        _reportLines pushBack format [localize "STR_WL_reportBy", _x, _reportTime];
         _reportLines pushBack _reason;
         _reportLines pushBack "";
     } forEach _reports;
 
     private _reportText = if (count _reportLines == 0) then {
-        "No reports."
+        localize "STR_WL_noReports"
     } else {
         _reportLines joinString toString [10]
     };
@@ -187,7 +187,7 @@ if (_moderate) then {
     };
 
     private _canTalk = _selectedPlayer getVariable ["WL2_canTalk", true];
-    private _muteText = if (_canTalk) then { "Mute player" } else { "Unmute player" };
+    private _muteText = if (_canTalk) then { localize "STR_WL_mutePlayer" } else { localize "STR_WL_unmutePlayer" };
     _muteButton ctrlSetText _muteText;
 
     [_display] call REP_fnc_updateTimeout;

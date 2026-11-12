@@ -19,7 +19,7 @@ private _lowfpsDisplay = _display displayCtrl PERF_LOWFPS_TEXT;
 private _msLabel = _display displayCtrl PERF_CAPTURE_MS_LABEL;
 
 if (productVersion # 4 != "Profile") exitWith {
-    _errorText ctrlSetStructuredText parseText "Profile build not detected. This feature is only available for Profiling builds. If you are using the launcher, you need to replace the arma3_x64.exe with the arma3profiling_x64.exe file in your ArmA 3 folder.";
+    _errorText ctrlSetStructuredText parseText (localize "STR_WL_perfProfileNotDetected");
     _clearFrameButton ctrlShow false;
     _captureButton ctrlShow false;
     _captureEntry ctrlShow false;
@@ -35,7 +35,7 @@ uiNamespace setVariable ["PERF_longestFrame", 0];
         private _longestFrame = uiNamespace getVariable ["PERF_longestFrame", 0];
         _longestFrame = _longestFrame max (1000 / diag_fps);
         uiNamespace setVariable ["PERF_longestFrame", _longestFrame];
-        _lowfpsDisplay ctrlSetText format ["Longest Frame: %1ms", _longestFrame toFixed 3];
+        _lowfpsDisplay ctrlSetText format [localize "STR_WL_perfLongestFrame", _longestFrame toFixed 3];
         uiSleep 0.001;
     };
 };
@@ -46,7 +46,7 @@ _clearFrameButton ctrlAddEventHandler ["ButtonClick", {
 
 _captureButton ctrlAddEventHandler ["ButtonClick", {
     params ["_control"];
-    systemChat "Disabled for multiplayer.";
+    systemChat localize "STR_WL_perfDisabled";
     // private _display = ctrlParent _control;
     // private _captureEntry = _display displayCtrl PERF_CAPTURE_ENTRY_TEXT;
     // private _captureFrameTime = parseNumber (ctrlText _captureEntry);

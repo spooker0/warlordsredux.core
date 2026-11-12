@@ -29,13 +29,13 @@ if (_code == "") exitWith {};
 private _compiledCode = compile _code;
 private _return = call _compiledCode;
 if (isNil {_return}) then {
-    _return = "No return value";
+    _return = localize "STR_WL_noReturnValue";
 };
 
 if (isDedicated) then {
-    _return = format ["Server (Uptime %1s): %2", serverTime, _return];
+    _return = format [localize "STR_WL_execServerResult", serverTime, _return];
     [_return] remoteExec ["MENU_fnc_setReturnValue", remoteExecutedOwner];
 } else {
-    _return = format ["Local (Uptime %1s): %2", serverTime, _return];
+    _return = format [localize "STR_WL_execLocalResult", serverTime, _return];
     [_return] spawn MENU_fnc_setReturnValue;
 };

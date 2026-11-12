@@ -6,14 +6,14 @@ private _display = findDisplay WLM_DISPLAY;
 
 private _access = [_asset, player] call WL2_fnc_accessControl;
 if !(_access # 0) exitWith {
-    [format ["Cannot rearm: %1", _access # 1]] call WL2_fnc_smoothText;
+    [format [localize "STR_WL_cannotRearm", _access # 1]] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
     _display closeDisplay 1;
 };
 
 private _cooldown = ((_asset getVariable "BIS_WL_nextRearm") - serverTime) max 0;
 if (_cooldown > 0) exitWith {
-    ["Rearm on cooldown."] call WL2_fnc_smoothText;
+    [localize "STR_WL_wlmRearmCooldown"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
@@ -21,7 +21,7 @@ private _nearbyVehicles = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles +
     _x distance2D _asset < WL_MAINTENANCE_RADIUS
 };
 if (count _nearbyVehicles == 0) exitWith {
-    ["No rearm sources nearby."] call WL2_fnc_smoothText;
+    [localize "STR_WL_wlmNoRearmSourcesNearby"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
@@ -29,12 +29,12 @@ _nearbyVehicles = [_nearbyVehicles, [], { _x getVariable ["WLM_ammoCargo", 0] },
 private _rearmSource = _nearbyVehicles # 0;
 private _amount = _rearmSource getVariable ["WLM_ammoCargo", 0];
 if (_amount <= 0) exitWith {
-    ["No ammo remaining."] call WL2_fnc_smoothText;
+    [localize "STR_WL_wlmNoAmmoRemaining"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
 if (player distance _asset > WL_MAINTENANCE_RADIUS) exitWith {
-    ["You are too far away from the vehicle to rearm it."] call WL2_fnc_smoothText;
+    [localize "STR_WL_wlmTooFarToRearm"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 

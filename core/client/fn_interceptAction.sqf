@@ -14,7 +14,7 @@ private _interceptAction = {
         case "Rearm": {
             private _access = [_target, _caller] call WL2_fnc_accessControl;
             if !(_access # 0) then {
-                [format ["Vehicle locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
+                [format [localize "STR_WL_vehicleLocked", _access # 1]] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
                 true;
             } else {
@@ -24,7 +24,7 @@ private _interceptAction = {
         case "TakeVehicleControl": {
             private _bannedVehicles = ["C_Plane_Civil_01_F", "I_C_Plane_Civil_01_F"];
             if (typeof _target in _bannedVehicles) then {
-                ["You cannot take control of this vehicle."] call WL2_fnc_smoothText;
+                [localize "STR_WL_cannotTakeVehicleControl"] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
                 true;
             } else {
@@ -68,7 +68,7 @@ private _interceptAction = {
                             private _message = if (simulationEnabled _target) then {
                                 [_target] spawn WL2_fnc_unlockDoorAction;
                             } else {
-                                ["Door locked."] call WL2_fnc_smoothText;
+                                [localize "STR_WL_doorLocked"] call WL2_fnc_smoothText;
                             };
 
                             true;

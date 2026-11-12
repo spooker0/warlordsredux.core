@@ -28,7 +28,7 @@ if (_storedMockTransfers) exitWith {
     _display setVariable ["BUY_mockTransferRoster", _roster];
     _display setVariable ["BUY_mockTransferFunds", _senderFunds - _transferAmount - WL_COST_FUNDTRANSFER];
     playSound "AddItemOK";
-    [format ["TEST: Transferred %1%2 to %3. Remaining: %1%4", WL_MONEY_SIGN, _transferAmount, _recipientName, _senderFunds - _transferAmount - WL_COST_FUNDTRANSFER]] call WL2_fnc_smoothText;
+    [format [localize "STR_WL_testFundsTransferred", WL_MONEY_SIGN, _transferAmount, _recipientName, _senderFunds - _transferAmount - WL_COST_FUNDTRANSFER]] call WL2_fnc_smoothText;
 };
 
 #endif

@@ -12,7 +12,7 @@ if (_key in _tempBuyKey && _canBuy) exitWith {
         ctrlSetFocus (_menu displayCtrl BUY_ITEMS_IDC);
     };
 
-    hint "Entering buy code...";
+    hint localize "STR_WL_buyEnteringCode";
     true;
 };
 
@@ -101,7 +101,7 @@ if (!_isNumberKey) exitWith {
 
 private _newCode = _existingCode + _addToCode;
 uiNamespace setVariable ["WL_BuyMenuCode", _newCode];
-hintSilent format ["Code: %1", _newCode];
+hintSilent format [localize "STR_WL_buyCodeDisplay", _newCode];
 
 // process code
 private _categoryCode = 0;
@@ -141,7 +141,7 @@ if (_itemDone) then {
     WL_TEMP_BUY_MENU = false;
 
     if (_categoryCode < 0 || _categoryCode >= count WL_PLAYER_REQUISITION_LIST) exitWith {
-        ["Invalid buy code category."] call WL2_fnc_smoothText;
+        [localize "STR_WL_invalidBuyCodeCategory"] call WL2_fnc_smoothText;
         playSound "AddItemFailed";
         true;
     };
@@ -149,7 +149,7 @@ if (_itemDone) then {
     private _selectedCategory = WL_PLAYER_REQUISITION_LIST # _categoryCode;
 
     if (_itemCode < 0 || _itemCode > (count _selectedCategory - 1)) exitWith {
-        ["Invalid buy code item."] call WL2_fnc_smoothText;
+        [localize "STR_WL_invalidBuyCodeItem"] call WL2_fnc_smoothText;
         playSound "AddItemFailed";
         WL_TEMP_BUY_MENU = false;
         true;
@@ -169,7 +169,7 @@ if (_itemDone) then {
 
     private _tasksRequireUIList = ["FundsTransfer"];
     if (_className in _tasksRequireUIList) exitWith {
-        [format ["Invalid task requires UI: %1", _displayName]] call WL2_fnc_smoothText;
+        [format [localize "STR_WL_invalidTaskUI", _displayName]] call WL2_fnc_smoothText;
         playSound "AddItemFailed";
     };
 
@@ -183,11 +183,11 @@ if (_itemDone) then {
     private _availability = _assetDetails call WL2_fnc_purchaseMenuAssetAvailability;
     if (_availability # 0) then {
         _assetDetails call WL2_fnc_triggerPurchase;
-        [format ["Selected [%1]: %2", _newCode, _displayName]] call WL2_fnc_smoothText;
+        [format [localize "STR_WL_selectedAsset", _newCode, _displayName]] call WL2_fnc_smoothText;
         playSound "AddItemOK";
         "RequestMenu_close" call WL2_fnc_setupUI;
     } else {
-        [format ["Invalid buy action: %1", (_availability # 1) joinString ", "]] call WL2_fnc_smoothText;
+        [format [localize "STR_WL_invalidBuyAction", (_availability # 1) joinString ", "]] call WL2_fnc_smoothText;
         playSound "AddItemFailed";
     };
 } else {
@@ -195,7 +195,7 @@ if (_itemDone) then {
         if (_categoryCode > (count WL_PLAYER_REQUISITION_LIST - 1)) exitWith {
             hintSilent "";
             uiNamespace setVariable ["WL_BuyMenuCode", ""];
-            ["Invalid buy code category."] call WL2_fnc_smoothText;
+            [localize "STR_WL_invalidBuyCodeCategory"] call WL2_fnc_smoothText;
             playSound "AddItemFailed";
             WL_TEMP_BUY_MENU = false;
             true;

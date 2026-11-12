@@ -54,7 +54,7 @@ private _callbackConfirm = {
 
     if (!_canDrop) exitWith {
         playSoundUI ["AddItemFailed"];
-        ["No longer able to paradrop."] call WL2_fnc_smoothText;
+        [localize "STR_WL_paradropNoLongerAvailable"] call WL2_fnc_smoothText;
     };
 
     playSoundUI ["AddItemOk"];

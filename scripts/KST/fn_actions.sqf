@@ -7,7 +7,7 @@ if !(missionNamespace getVariable ["WL_easterEggOverride", false]) exitWith {};
 
 if (_kills == 3) then {
 	player addAction [
-		"<t color='#ff0000'>Call UAV</t>",
+		format ["<t color='#ff0000'>%1</t>", localize "STR_WL_callUav"],
 		{
 			params ["_target", "_caller", "_actionId"];
 			player removeAction _actionId;
@@ -26,7 +26,7 @@ if (_kills == 3) then {
 			waitUntil {
 				uiSleep 0.2;
 				[_uav, 2000, 1] call WL2_fnc_scanner;
-				hintSilent format ["UAV - Fuel: %1%%", round (100 * (_fuel - (serverTime - _startTime)) / _fuel)];
+				hintSilent format [localize "STR_WL_uavFuel", round (100 * (_fuel - (serverTime - _startTime)) / _fuel)];
 				!alive player || serverTime - _startTime > _fuel
 			};
 			hintSilent "";
@@ -42,7 +42,7 @@ if (_kills == 3) then {
 
 if (_kills == 5) then {
 	player addAction [
-		"<t color='#ff0000'>Predator Missile</t>",
+		format ["<t color='#ff0000'>%1</t>", localize "STR_WL_predatorMissile"],
 		{
 			params ["_target", "_caller", "_actionId"];
 			player removeAction _actionId;
@@ -77,7 +77,7 @@ if (_kills == 5) then {
 			_instructionsDisplay ctrlSetPosition [0.7, 0.9, 0.5, 0.2];
 			_instructionsDisplay ctrlSetTextColor [1, 1, 1, 1];
 			_instructionsDisplay ctrlSetStructuredText parseText format [
-				"<t align='left' size='1.2'>[%1] Boost<br/>[%2] Thermal Vision</t>",
+				("<t align='left' size='1.2'>" + localize "STR_WL_kstBoostThermalInstructions" + "</t>"),
 				(actionKeysNames "defaultAction") regexReplace ["""", ""],
 				(actionKeysNames "nightVision") regexReplace ["""", ""]
 			];
@@ -169,7 +169,7 @@ if (_kills == 5) then {
 			waitUntil {
 				uiSleep 0.2;
 				[_uav, 8000, 1] call WL2_fnc_scanner;
-				_fuelDisplay ctrlSetStructuredText parseText format ["<t align='center' size='2'>Fuel: %1%%</t>", round (100 * (_fuel - (serverTime - _startTime)) / _fuel)];
+				_fuelDisplay ctrlSetStructuredText parseText format [("<t align='center' size='2'>" + localize "STR_WL_fuelPercent" + "</t>"), round (100 * (_fuel - (serverTime - _startTime)) / _fuel)];
 				!alive _missile || serverTime - _startTime > _fuel
 			};
 			if (alive _missile) then {
@@ -196,7 +196,7 @@ if (_kills == 5) then {
 
 if (_kills == 7) then {
 	player addAction [
-		"<t color='#ff0000'>Chopper Gunner</t>",
+		format ["<t color='#ff0000'>%1</t>", localize "STR_WL_chopperGunner"],
 		{
 			params ["_target", "_caller", "_actionId"];
 			player removeAction _actionId;
@@ -225,7 +225,7 @@ if (_kills == 7) then {
 			_instructionsDisplay ctrlSetPosition [0.7, 0.9, 0.5, 0.4];
 			_instructionsDisplay ctrlSetTextColor [1, 1, 1, 1];
 			_instructionsDisplay ctrlSetStructuredText parseText format [
-				"<t align='left' size='1.2'>[%1/%2] Forward/Backward<br/>[%3/%4] Strafe<br/>[%5/%6] Turn<br/>[%7] Fire<br/>[%8] Missile</t>",
+				("<t align='left' size='1.2'>" + localize "STR_WL_kstChopperControls" + "</t>"),
 				(actionKeysNames ["MoveForward", 1, "Combo"]) regexReplace ["""", ""],
 				(actionKeysNames ["MoveBack", 1, "Combo"]) regexReplace ["""", ""],
 				(actionKeysNames ["LeanLeft", 1, "Combo"]) regexReplace ["""", ""],
@@ -346,7 +346,7 @@ if (_kills == 7) then {
 				_gunnerUnit selectWeapon ["autocannon_40mm_VTOL_01", "HE", "player"];
 				[_chopper, 4000, 1] call WL2_fnc_scanner;
 				_fuelDisplay ctrlSetStructuredText parseText format [
-					"<t align='center' size='2'>Fuel: %1%%<br/>Missiles: %2</t>",
+					("<t align='center' size='2'>" + localize "STR_WL_kstFuelAndMissiles" + "</t>"),
 					round (100 * (_fuel - (serverTime - _startTime)) / _fuel),
 					_chopper getVariable ["WL_missiles", 0]
 				];

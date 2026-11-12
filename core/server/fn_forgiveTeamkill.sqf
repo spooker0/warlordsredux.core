@@ -17,11 +17,11 @@ private _compensation = round (_victimCost min _teamkillerFunds);
 [-_compensation, _teamkillerUid, false, ""] call WL2_fnc_fundsDatabaseWrite;
 [round (_compensation * 0.5), getPlayerUID _forgiver, false, "TK compensation"] call WL2_fnc_fundsDatabaseWrite;
 
-private _displayMsgTeamkiller = format ["You have been punished for killing %1. [-%2]", _victimTypeName, _compensation];
+private _displayMsgTeamkiller = format [localize "STR_WL_teamkillPunished", _victimTypeName, _compensation];
 [_displayMsgTeamkiller] remoteExec ["WL2_fnc_smoothText", _teamkillerOwner];
 [["a3\dubbing_f_bootcamp\boot_m04\50_friendly\boot_m04_50_friendly_ada_0.ogg", 5]] remoteExec ["playSoundUI", _teamkillerOwner];
 
-private _displayMsgForgiver = format ["You have been compensated for teamkill. [+%1]", round (_compensation * 0.5)];
+private _displayMsgForgiver = format [localize "STR_WL_teamkillCompensated", round (_compensation * 0.5)];
 [_displayMsgForgiver] remoteExec ["WL2_fnc_smoothText", _forgiver];
 
 private _friendlyFireMap = serverNamespace getVariable ["WL2_friendlyFireMap", createHashMap];

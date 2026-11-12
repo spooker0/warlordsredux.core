@@ -1,6 +1,6 @@
 #include "includes.inc"
 private _reviveActionId = player addAction [
-    "<t color='#00ff00'>Revive</t>",
+    format ["<t color='#00ff00'>%1</t>", localize "STR_WL_revive"],
     {
         _this spawn {
             params ["_target", "_caller", "_actionId", "_arguments"];
@@ -12,9 +12,9 @@ private _reviveActionId = player addAction [
             private _isRevive = side group _reviveTarget == BIS_WL_playerSide;
 
             private _displayText = if (_isRevive) then {
-                "REVIVE"
+                localize "STR_WL_revive"
             } else {
-                "SECURE"
+                localize "STR_WL_secure"
             };
             private _duration = if (_isRevive) then {
                 WL_DURATION_REVIVE
@@ -30,7 +30,7 @@ private _reviveActionId = player addAction [
             private _camera = [[0, 8, 2]] call WL2_fnc_actionLockCamera;
 
             ["Animation", [_displayText, [
-                ["Cancel", "Action"],
+                [localize "STR_WL_cancel", "Action"],
                 ["", "ActionContext"],
                 ["", "navigateMenu"]
             ]], _duration, true] spawn WL2_fnc_showHint;

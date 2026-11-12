@@ -164,22 +164,22 @@ switch (_className) do {
     };
     case "BulkRemove": {
         missionNamespace setVariable ["WL2_bulkRemoveActive", true];
-        ["Bulk remove activated."] call WL2_fnc_smoothText;
+        [localize "STR_WL_bulkRemoveActivated"] call WL2_fnc_smoothText;
         0 spawn {
             uiSleep 30;
             missionNamespace setVariable ["WL2_bulkRemoveActive", false];
-            ["Bulk remove deactivated."] call WL2_fnc_smoothText;
+            [localize "STR_WL_bulkRemoveDeactivated"] call WL2_fnc_smoothText;
         };
     };
     case "SwitchToCollaborator": {
         private _sectorCollaboratorVar = format ["WL2_sectorCollaborator_%1", BIS_WL_enemySide];
         private _nextSectorCollaborator = missionNamespace getVariable [_sectorCollaboratorVar, ""];
         if (_nextSectorCollaborator != "") exitWith {
-            ["Someone on your team has already applied to be collaborator for the next sector."] call WL2_fnc_smoothText;
+            [localize "STR_WL_collaboratorAlreadyApplied"] call WL2_fnc_smoothText;
         };
 
         missionNamespace setVariable [_sectorCollaboratorVar, getPlayerUID player, true];
-        ["You have applied to be the next sector collaborator."] call WL2_fnc_smoothText;
+        [localize "STR_WL_collaboratorApplied"] call WL2_fnc_smoothText;
 
         missionNamespace setVariable ["WL2_collaboratorCooldown", serverTime + 60];
         [player, "controlCollaborator"] remoteExec ["WL2_fnc_handleClientRequest", 2];
@@ -195,8 +195,8 @@ switch (_className) do {
     };
     case "Surrender": {
         0 spawn {
-            private _message = "Are you sure you want to surrender? You will ruin the game for people who still want to play :(<br/>Votes needed: 1";
-            private _result = ["Surrender", _message, "OK", "Cancel"] call WL2_fnc_prompt;
+            private _message = localize "STR_WL_surrenderConfirm";
+            private _result = [localize "STR_WL_surrender", _message, localize "STR_WL_ok", localize "STR_WL_cancel"] call WL2_fnc_prompt;
             if (_result) then {
                 [player, "surrender"] remoteExec ["WL2_fnc_handleClientRequest", 2];
                 [BIS_WL_enemySide, true, true] spawn WL2_fnc_missionEndHandle;
@@ -257,13 +257,13 @@ switch (_className) do {
         0 spawn {
             private _spawns = [];
             {
-                private _sectorName = _x getVariable ["WL2_name", "Unknown"];
-                (format ["Finding spawns in sector: %1", _sectorName]) call WL2_fnc_smoothText;
+                private _sectorName = _x getVariable ["WL2_name", localize "STR_WL_unknown"];
+                (format [localize "STR_WL_findingSpawns", _sectorName]) call WL2_fnc_smoothText;
                 private _spawnsForSector = [_x] call WL2_fnc_findSpawnsInSector;
                 _spawns append _spawnsForSector;
             } forEach BIS_WL_allSectors;
 
-            (format ["Found %1 spawns on map. Painting sector spawns. This can take a while...", count _spawns]) call WL2_fnc_smoothText;
+            (format [localize "STR_WL_foundSpawnsDebug", count _spawns]) call WL2_fnc_smoothText;
 
             private _markers = [];
             {
@@ -275,7 +275,7 @@ switch (_className) do {
                 _markers pushBack _marker;
             } forEach _spawns;
 
-            (format ["%1 markers painted.", count _markers]) call WL2_fnc_smoothText;
+            (format [localize "STR_WL_markersPaintedDebug", count _markers]) call WL2_fnc_smoothText;
 
             openMap true;
         };

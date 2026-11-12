@@ -14,7 +14,7 @@ private _vehicles = (nearestObjects [player, [], 20, true]) select {
 };
 
 if (count _vehicles == 0) exitWith {
-    [false, "No valid, accessible vehicles within 20 meters."];
+    [false, localize "STR_WL_resetVehicleNoAccessible"];
 };
 
 [true, ""];

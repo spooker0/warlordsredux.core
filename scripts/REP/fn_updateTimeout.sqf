@@ -30,7 +30,7 @@ if (_normalize) then {
 };
 
 private _playerName = _display getVariable ["REP_selectedName", ""];
-private _caption = format ["Timeout %1 for %2 minutes", _playerName, _duration];
+private _caption = format [localize "STR_WL_timeoutPlayerForMinutes", _playerName, _duration];
 private _captionText = text _caption;
 _captionText setAttributes ["color", "#080809", "font", "RobotoCondensed", "align", "left", "shadow", "false"];
 

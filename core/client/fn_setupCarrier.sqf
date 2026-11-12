@@ -30,7 +30,7 @@ private _ropeMinLevel = [0, 0, 0, 0, 24, 0, 11];
     createMarkerLocal [_marker, _ropePosition];
     _marker setMarkerTypeLocal "loc_Quay";
     if (_forEachIndex == 0) then {
-        _marker setMarkerTextLocal "Rappels";
+        _marker setMarkerTextLocal localize "STR_WL_rappelPoints";
     };
     _marker setMarkerAlphaLocal 0.4;
     _marker setMarkerSizeLocal [0.7, 0.7];

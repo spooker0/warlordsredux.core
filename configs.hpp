@@ -389,7 +389,7 @@ class WLDefaultLoadouts {
 			{"Laserdesignator", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
 		};
-		name = "Blufor Default";
+		name = "$STR_WL_presetBluforDefault";
 		side = "WEST";
 	};
 	class WestLoadout2 {
@@ -406,7 +406,7 @@ class WLDefaultLoadouts {
 			{"Laserdesignator", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
 		};
-		name = "Nazgul's Blufor Rifleman";
+		name = "$STR_WL_presetBluforRifleman";
 		side = "WEST";
 	};
 	class WestLoadout3 {
@@ -423,7 +423,7 @@ class WLDefaultLoadouts {
 			{"Laserdesignator", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
 		};
-		name = "Nazgul's Blufor Light Anti-Tank";
+		name = "$STR_WL_presetBluforLightAntiTank";
 		side = "WEST";
 	};
 	class WestLoadout4 {
@@ -440,7 +440,7 @@ class WLDefaultLoadouts {
 			{"Laserdesignator", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
 		};
-		name = "Nazgul's Blufor Heavy Anti-Tank";
+		name = "$STR_WL_presetBluforHeavyAntiTank";
 		side = "WEST";
 	};
 	class WestLoadout5 {
@@ -457,7 +457,7 @@ class WLDefaultLoadouts {
 			{"Laserdesignator", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
 		};
-		name = "Nazgul's Blufor SMG";
+		name = "$STR_WL_presetBluforSmg";
 		side = "WEST";
 	};
 	class EastLoadout1 {
@@ -474,7 +474,7 @@ class WLDefaultLoadouts {
 			{"Laserdesignator_02", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
 		};
-		name = "Opfor Default";
+		name = "$STR_WL_presetOpforDefault";
 		side = "EAST";
 	};
 	class EastLoadout2 {
@@ -491,7 +491,7 @@ class WLDefaultLoadouts {
 			{"Laserdesignator_02", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
 		};
-		name = "Nazgul's Opfor Rifleman";
+		name = "$STR_WL_presetOpforRifleman";
 		side = "EAST";
 	};
 	class EastLoadout3 {
@@ -508,7 +508,7 @@ class WLDefaultLoadouts {
 			{"Laserdesignator_02", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", "Integrated_NVG_TI_0_F"}
 		};
-		name = "Nazgul's Opfor Light Anti-Tank";
+		name = "$STR_WL_presetOpforLightAntiTank";
 		side = "EAST";
 	};
 	class EastLoadout4 {
@@ -525,7 +525,7 @@ class WLDefaultLoadouts {
 			{"Laserdesignator_02", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", ""}
 		};
-		name = "Nazgul's Opfor Max Firepower";
+		name = "$STR_WL_presetOpforMaxFirepower";
 		side = "EAST";
 	};
 	class EastLoadout5 {
@@ -542,7 +542,7 @@ class WLDefaultLoadouts {
 			{"Laserdesignator_02", "", "", "", {"Laserbatteries", 1}, {}, ""},
 			{"ItemMap", "ItemGPS", "ItemRadio", "ItemCompass", "", ""}
 		};
-		name = "Nazgul's Opfor Heavy Anti-Tank";
+		name = "$STR_WL_presetOpforHeavyAntiTank";
 		side = "EAST";
 	};
 };
@@ -590,7 +590,7 @@ class CfgWorlds {
 class SteamGameRecording {
 	class ScoreEvent {
 		scope = 2;
-		title = "Score";
+		title = "$STR_WL_score";
 		description = "%1";
 		icon = "a3_steam_crown";
 		priority = 1000;

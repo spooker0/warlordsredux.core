@@ -100,7 +100,7 @@ class WL2_BadgeMenu {
     class controls {
         class Title: RscText {
             idc = BADGE_TITLE_ID;
-            text = "Badges";
+            text = $STR_WL_rwdBadges;
             moving = true;
             x = BADGE_MENU_X;
             y = BADGE_MENU_Y;
@@ -128,7 +128,7 @@ class WL2_BadgeMenu {
         };
         class EmptyText: RscText {
             idc = BADGE_EMPTY_TEXT_ID;
-            text = "No badges earned yet.";
+            text = $STR_WL_rwdNoBadges;
             x = BADGE_CONTENT_X;
             y = BADGE_CONTENT_Y + BADGE_CONTENT_H * 0.4;
             w = BADGE_CONTENT_W;

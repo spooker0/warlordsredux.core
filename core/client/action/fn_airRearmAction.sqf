@@ -9,7 +9,7 @@ _asset addAction [
         private _rearmSourcePos = _rearmSource modelToWorld [0, 0, 0];
         if (_rearmSourcePos # 2 < 75) exitWith {
             playSoundUI ["AddItemFailed"];
-            ["Rearm source is not flying above 75M!"] call WL2_fnc_smoothText;
+            [localize "STR_WL_airRearmSourceTooLow"] call WL2_fnc_smoothText;
         };
 
         _asset setVehicleAmmo 1;

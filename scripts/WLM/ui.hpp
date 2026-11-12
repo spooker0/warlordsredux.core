@@ -190,7 +190,7 @@ class WLM_PylonUI {
         };
         class WLM_CamoSelect: RscCombo {
             idc = 5311;
-            text = "Camo";
+            text = "$STR_WL_camo";
             tooltip = $STR_WL_selectTextureInfo;
             sizeEx = 0.035;
             colorBackground[] = {0, 0, 0, 1};
@@ -437,7 +437,7 @@ class WLM_Modal_Dialog {
             h = 0.109;
             font = "PuristaMedium";
             colorText[] = {1, 1, 1, 1};
-            tooltip = "Enter new loadout name";
+            tooltip = $STR_WL_wlmEnterName;
             onLoad = "(_this # 0) ctrlShow false;";
             maxChars = 30;
         };

@@ -6,11 +6,11 @@ private _spectatorTarget = _spectatorInfo displayCtrl 103;
 
 if (isNull _target) exitWith {
     uiNamespace setVariable ["SPEC_CameraTarget", objNull];
-    uiNamespace setVariable ["SPEC_CameraTargetName", "Free Camera"];
+    uiNamespace setVariable ["SPEC_CameraTargetName", localize "STR_WL_spectatorFreeCamera"];
     player setVariable ["SPEC_CameraTargetUid", "", true];
     uiNamespace setVariable ["SPEC_TargetCameraMode", 0];
 
-    _spectatorTarget ctrlSetStructuredText parseText format ["<t shadow='2'>Target: %1</t>", "Free Camera"];
+    _spectatorTarget ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", format [localize "STR_WL_spectatorTarget", localize "STR_WL_spectatorFreeCamera"]];
 };
 
 private _getName = {
@@ -40,7 +40,7 @@ private _getName = {
 private _typeName = [_target] call _getName;
 uiNamespace setVariable ["SPEC_CameraTarget", _target];
 uiNamespace setVariable ["SPEC_CameraTargetName", _typeName];
-_spectatorTarget ctrlSetStructuredText parseText format ["<t shadow='2'>Target: %1</t>", _typeName];
+_spectatorTarget ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", format [localize "STR_WL_spectatorTarget", _typeName]];
 
 private _isProjectile = {
     params ["_projectile"];

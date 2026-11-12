@@ -117,7 +117,7 @@ addMissionEventHandler ["Draw3D", {
                 _missile setVariable ["WL_lagWarning", _lagWarning];
 
                 if (_lagWarning == 5) then {
-                    private _message = "Incoming missile appears to be lagging. Check your connection, or theirs.";
+                    private _message = localize "STR_WL_missileLagWarning";
                     [_message] call WL2_fnc_smoothText;
                 };
             };
@@ -679,7 +679,7 @@ addMissionEventHandler ["Draw3D", {
 
             private _soundFile = format ["incMissile_%1", _angleReadout];
             playSoundUI [_soundFile, 5 * _threatVolume];
-            ["(Missile incoming warning.)", true] call WL2_fnc_smoothText;
+            [localize "STR_WL_missileIncomingWarningCaption", true] call WL2_fnc_smoothText;
 
             player setVariable ["WL_missileWarningPlayed", serverTime];
         };

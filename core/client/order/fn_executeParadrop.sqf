@@ -3,11 +3,11 @@ params ["_position", "_direction", "_paradropper", "_playerVehicle"];
 
 private _isControlling = _playerVehicle == cameraOn;
 if (_isControlling) then {
-    private _paradropKeyParams = ["PARADROP CONTROLS", [
-        ["Move forward", "MoveForward"],
-        ["Move backward", "MoveBack"],
-        ["Move left", "TurnLeft"],
-        ["Move right", "TurnRight"]
+    private _paradropKeyParams = [localize "STR_WL_paradropControls", [
+        [localize "STR_WL_moveForward", "MoveForward"],
+        [localize "STR_WL_moveBackward", "MoveBack"],
+        [localize "STR_WL_moveLeft", "TurnLeft"],
+        [localize "STR_WL_moveRight", "TurnRight"]
     ]];
     ["Paradrop", _paradropKeyParams] spawn WL2_fnc_showHint;
 };

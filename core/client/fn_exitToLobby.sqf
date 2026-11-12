@@ -7,6 +7,6 @@ if (_isAdmin) exitWith {};
 
 ["main"] call BIS_fnc_endLoadingScreen;
 
-"BlockScreen" setDebriefingText ["Exit to Lobby", _exitTitle, _exitSubtitle];
+"BlockScreen" setDebriefingText [localize "STR_WL_exitToLobby", _exitTitle, _exitSubtitle];
 endMission "BlockScreen";
 forceEnd;

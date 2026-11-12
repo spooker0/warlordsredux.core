@@ -46,6 +46,20 @@ private _channelName = {
     };
 };
 
+private _channelDisplayName = {
+    params ["_channel"];
+    switch (_channel) do {
+        case "GLOBAL": { localize "STR_WL_chatGlobal" };
+        case "SIDE": { localize "STR_WL_chatSide" };
+        case "COMMAND": { localize "STR_WL_chatCommand" };
+        case "GROUP": { localize "STR_WL_chatGroup" };
+        case "VEHICLE": { localize "STR_WL_chatVehicle" };
+        case "DIRECT": { localize "STR_WL_chatDirect" };
+        case "SYSTEM": { localize "STR_WL_chatSystem" };
+        default { localize "STR_WL_chatSquad" };
+    };
+};
+
 _display setVariable ["REP_chatRefreshing", true];
 
 private _channelIndex = lbCurSel _channelControl;
@@ -60,7 +74,7 @@ if (count _history != (_display getVariable ["REP_chatHistoryCount", -1])) then 
     _names sort true;
 
     lbClear _playerControl;
-    _playerControl lbAdd "All players";
+    _playerControl lbAdd localize "STR_WL_sqdAllPlayers";
     _playerControl lbSetData [0, ""];
     _playerControl lbSetCurSel 0;
 
@@ -107,7 +121,7 @@ if (_rebuild) then {
         };
 
         private _time = [_systemTime, false] call REP_fnc_printSystemTime;
-        private _line = format ["%1 [%2] %3: %4", _time, _channelText, _name, _text];
+        private _line = format ["%1 [%2] %3: %4", _time, [_channelText] call _channelDisplayName, _name, _text];
         private _row = _list lbAdd _line;
         _list lbSetData [_row, str _index];
         _list lbSetTooltip [_row, _line];
@@ -136,10 +150,10 @@ private _preview = _selected apply {
     (_history # _x) params ["_channel", "_name", "_text", "_systemTime"];
     private _time = [_systemTime, false] call REP_fnc_printSystemTime;
     private _channelText = [_channel] call _channelName;
-    format ["%1 [%2] %3: %4", _time, _channelText, _name, _text];
+    format ["%1 [%2] %3: %4", _time, [_channelText] call _channelDisplayName, _name, _text];
 };
 private _previewText = if (count _preview == 0) then {
-    "Select messages to view and copy. Use Ctrl or Shift to select multiple messages."
+    localize "STR_WL_selectChatMessages"
 } else {
     _preview joinString toString [10]
 };
@@ -161,7 +175,7 @@ private _copyLines = _selected apply {
     };
 };
 private _copyText = _copyLines joinString toString [10];
-private _copyLabel = format ["COPY CHAT (%1)", count _selected];
+private _copyLabel = format [localize "STR_WL_copyChat", count _selected];
 
 private _onCopy = {
     params ["_control", "_text", "_copied"];

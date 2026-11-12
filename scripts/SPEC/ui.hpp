@@ -95,7 +95,7 @@ class SPEC_TargetMenu {
     class controls {
         class Title: RscText {
             idc = SPEC_TARGET_TITLE_ID;
-            text = "SPECTATOR MENU";
+            text = $STR_WL_specMenu;
             moving = true;
             x = SPEC_TARGET_MENU_X;
             y = SPEC_TARGET_MENU_Y;
@@ -116,7 +116,7 @@ class SPEC_TargetMenu {
         class Search: RscEdit {
             idc = SPEC_TARGET_SEARCH_ID;
             text = "";
-            tooltip = "Search owner, vehicle, or munition type";
+            tooltip = "$STR_WL_specSearchTooltip";
             x = SPEC_TARGET_INNER_X;
             y = SPEC_TARGET_SEARCH_Y;
             w = SPEC_TARGET_INNER_W;
@@ -134,7 +134,7 @@ class SPEC_TargetMenu {
         };
         class EmptyText: RscText {
             idc = SPEC_TARGET_EMPTY_TEXT_ID;
-            text = "No targets.";
+            text = $STR_WL_specNoTargets;
             x = SPEC_TARGET_CONTENT_X;
             y = SPEC_TARGET_CONTENT_Y + SPEC_TARGET_CONTENT_H * 0.4;
             w = SPEC_TARGET_CONTENT_W;

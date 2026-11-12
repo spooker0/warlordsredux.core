@@ -4,24 +4,24 @@ params ["_targetVehicle", ["_forceParadrop", false], ["_isSpawning", false]];
 "RequestMenu_close" call WL2_fnc_setupUI;
 
 if (WL_ISDOWN(player)) exitWith {
-    ["Cannot fast travel while dead."] call WL2_fnc_smoothText;
+    [localize "STR_WL_fastTravelVehicleDead"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
 if (isWeaponDeployed player) exitWith {
-    ["Cannot fast travel while weapon is deployed."] call WL2_fnc_smoothText;
+    [localize "STR_WL_fastTravelVehicleWeaponDeployed"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
 if (!alive _targetVehicle) exitWith {
-    ["Cannot fast travel to a destroyed vehicle."] call WL2_fnc_smoothText;
+    [localize "STR_WL_fastTravelVehicleDestroyed"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
 private _assetPos = _targetVehicle modelToWorld [0, 0, 0];
 private _altitude = _assetPos # 2;
 if (_altitude < -1 && surfaceIsWater _assetPos) exitWith {
-    ["Cannot fast travel to a submerged vehicle."] call WL2_fnc_smoothText;
+    [localize "STR_WL_fastTravelVehicleSubmerged"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 

@@ -65,7 +65,7 @@ _radius = (_radius + _zoomDelta) max 1 min _maxRadius;
 if (_zoomDelta != 0) then {
     private _spectatorInfo = uiNamespace getVariable ["RscWLSpectatorInfo", displayNull];
     private _spectatorZoom = _spectatorInfo displayCtrl 106;
-    _spectatorZoom ctrlSetStructuredText parseText format ["<t shadow='2'>Orbit: %1 m</t>", round _radius];
+    _spectatorZoom ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", format [localize "STR_WL_spectatorOrbit", round _radius]];
 };
 
 private _cosP = cos _pitch;

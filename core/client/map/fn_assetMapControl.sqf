@@ -22,11 +22,11 @@ addMissionEventHandler ["Map", {
 			} forEach _allMaps;
 		};
 	} else {
-		private _mapLayerParams = ["MAP LAYERS", [
-			["Detailed info", "lookAround"],
-			["Circle tool", "headlights"],
-			["Circle radius -", "ListLeftVehicleDisplay"],
-			["Circle radius +", "ListRightVehicleDisplay"],
+		private _mapLayerParams = [localize "STR_WL_mapLayers", [
+			[localize "STR_WL_mapDetailedInfo", "lookAround"],
+			[localize "STR_WL_mapCircleTool", "headlights"],
+			[localize "STR_WL_mapCircleRadiusMinus", "ListLeftVehicleDisplay"],
+			[localize "STR_WL_mapCircleRadiusPlus", "ListRightVehicleDisplay"],
 			[localize "STR_WL_mapMode", "nightVision"]
 		]];
 		["Map", _mapLayerParams] spawn WL2_fnc_showHint;

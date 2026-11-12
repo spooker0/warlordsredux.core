@@ -3,8 +3,8 @@ params ["_asset", "_targetRTB"];
 
 private _sectorName = _targetRTB getVariable ["WL2_name", "Catapult"];
 
-private _message = format ["Are you sure you want to return to %1 for %2%3?<br/>Make sure your landing gear is functional!", _sectorName, WL_MONEY_SIGN, WL_COST_JETRTB];
-private _result = ["Return to Base", _message, "Rebase", "Cancel"] call WL2_fnc_prompt;
+private _message = format [localize "STR_WL_rebaseConfirm", _sectorName, WL_MONEY_SIGN, WL_COST_JETRTB];
+private _result = [localize "STR_WL_returnToBase", _message, localize "STR_WL_rebase", localize "STR_WL_cancel"] call WL2_fnc_prompt;
 
 if (!_result) exitWith {
     playSoundUI ["AddItemFailed"];
@@ -18,7 +18,7 @@ private _spawnParams = if (_sectorName == "Catapult") then {
 
 _spawnParams params ["_spawnPos", "_dir"];
 if (count _spawnPos == 0) exitWith {
-    ["No safe position found at airbase!"] call WL2_fnc_smoothText;
+    [localize "STR_WL_rebaseNoSafeAirbasePosition"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
@@ -29,7 +29,7 @@ titleCut ["", "BLACK OUT", 1];
 uiSleep 1;
 
 private _startWaitTime = serverTime;
-["Returning to base..."] call WL2_fnc_smoothText;
+[localize "STR_WL_returningToBase"] call WL2_fnc_smoothText;
 while { (serverTime - _startWaitTime) < 5 } do {
     _asset setAirplaneThrottle 0;
     _asset engineOn false;

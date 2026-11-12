@@ -7,7 +7,7 @@ private _isLasing = _currentMode == "lasing";
 private _laserTargetList = if (_isLasing) then {
     []
 } else {
-    [["none", "NO TARGET", false]]
+    [["none", localize "STR_WL_noTarget", false]]
 };
 
 private _targetInList = false;
@@ -73,7 +73,7 @@ if (!_targetInList) then {
             _autoOption set [2, true];
         };
     } else {
-        _laserTargetList pushBack [netid _selectedLaserTarget, format ["SELECTED: %1", [_selectedLaserTarget] call WL2_fnc_getAssetTypeName], true];
+        _laserTargetList pushBack [netid _selectedLaserTarget, format [localize "STR_WL_targetSelected", [_selectedLaserTarget] call WL2_fnc_getAssetTypeName], true];
     };
 };
 

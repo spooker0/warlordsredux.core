@@ -21,14 +21,14 @@ private _deployActionId = _asset addAction [
                     [_destination, getDir _asset, objNull, _vehicle] spawn WL2_fnc_executeParadrop;
                 };
             } else {
-                ["Too low to unload!"] call WL2_fnc_smoothText;
+                [localize "STR_WL_deployableTooLowToUnload"] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
             };
         };
 
         private _speed = abs (speed _asset);
         if (_speed > 5) exitWith {
-            ["Cannot load/unload deployable while moving!"] call WL2_fnc_smoothText;
+            [localize "STR_WL_deployableCannotLoadUnloadWhileMoving"] call WL2_fnc_smoothText;
             playSoundUI ["AddItemFailed"];
         };
 
@@ -68,7 +68,7 @@ private _deployActionId = _asset addAction [
 
                     if (count _nearbyEntities > 0) exitWith {
                         private _nearbyObjectName = [_nearbyEntities # 0] call WL2_fnc_getAssetTypeName;
-                        [format ["Deploying too close to %1!", _nearbyObjectName]] call WL2_fnc_smoothText;
+                        [format [localize "STR_WL_deployingTooClose", _nearbyObjectName]] call WL2_fnc_smoothText;
                         playSound "AddItemFailed";
                         _asset setVariable ["WL2_loadingAsset", false, true];
                         false;

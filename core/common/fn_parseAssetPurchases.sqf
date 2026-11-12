@@ -52,7 +52,7 @@ private _assetData = WL_ASSET_DATA;
     private _decoy = _classData getOrDefault ["decoy", 0];
     private _displayName = [objNull, _className] call WL2_fnc_getAssetTypeName;
     if (_decoy > 0) then {
-        _displayName = format ["%1 (Decoy)", _displayName];
+        _displayName = format [localize "STR_WL_decoy", _displayName];
     };
 
     private _actualClassName = _classData getOrDefault ["spawn", _className];

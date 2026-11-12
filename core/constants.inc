@@ -1,16 +1,16 @@
 // Live: set all to 0
-#define WL_FREE_MONEY 0
-#define WL_TEST_SERVER 0
+#define WL_FREE_MONEY 1
+#define WL_TEST_SERVER 1
 #define WL_EMPTY_SECTORS 0
 #define WL_CLEAR_SECTOR_DEBUG 0
 #define WL_FACTION_THREE_ENABLED 0
-#define WL_AIRPORT_BASES 0
+#define WL_AIRPORT_BASES 1
 #define WL_OVERRIDE_BASES 0
 #define WL_BASE_SELECTION_DEBUG 0
 #define WL_STRONGHOLD_DEBUG 0
 #define WL_AA_TEST 0
 #define WL_QUICK_CAPTURE 0
-#define WL_ZEUS_ENABLED 0
+#define WL_ZEUS_ENABLED 1
 #define WL_EASTER_EGG 0
 #define WL_REPLAYS 0
 #define WL_PERF_TEST 0
@@ -34,7 +34,7 @@
 #define WL_HEADER_LEVEL -1
 
 // Live: set all to 1
-#define WL_STOP_TEAM_SWITCH 1
+#define WL_STOP_TEAM_SWITCH 0
 #define WL_FOB_REQUIREMENTS 1
 #define WL_SKIP_LOBBY 1
 
@@ -51,7 +51,7 @@
 #define WL_INCOME_M2 (8 / 1e6)
 #define WL_INCOME_CAPBONUS 8
 
-#define WL_SECTOR_GARRISON 1.3
+#define WL_SECTOR_GARRISON 1.5
 
 #define WL_ENEMIES_NEAR_RADIUS 100
 #define WL_FAST_TRAVEL_OFFSET 200

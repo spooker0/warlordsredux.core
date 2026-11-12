@@ -30,7 +30,7 @@ _asset addAction [
 	"<t color='#ff0000'>Reset Vehicle</t>",
 	{
 		params ["_asset"];
-		["You can call Reset Vehicle in the Strategy menu at any time."] call WL2_fnc_smoothText;
+		[localize "STR_WL_resetVehicleStrategyMenuTip"] call WL2_fnc_smoothText;
 		0 spawn WL2_fnc_resetVehicle;
 	},
 	[],

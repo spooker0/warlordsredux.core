@@ -120,20 +120,19 @@ if (_moderate) then {
 
     private _channel = _display displayCtrl REP_CHAT_CHANNEL_IDC;
     {
-        private _index = _channel lbAdd _x;
-        private _channelData = if (_forEachIndex == 0) then { "" } else { _x };
-
+        _x params ["_channelLabel", "_channelData"];
+        private _index = _channel lbAdd _channelLabel;
         _channel lbSetData [_index, _channelData];
     } forEach [
-        "All channels",
-        "GLOBAL",
-        "SIDE",
-        "COMMAND",
-        "GROUP",
-        "VEHICLE",
-        "DIRECT",
-        "SYSTEM",
-        "SQUAD"
+        [localize "STR_WL_allChannels", ""],
+        [localize "STR_WL_chatGlobal", "GLOBAL"],
+        [localize "STR_WL_chatSide", "SIDE"],
+        [localize "STR_WL_chatCommand", "COMMAND"],
+        [localize "STR_WL_chatGroup", "GROUP"],
+        [localize "STR_WL_chatVehicle", "VEHICLE"],
+        [localize "STR_WL_chatDirect", "DIRECT"],
+        [localize "STR_WL_chatSystem", "SYSTEM"],
+        [localize "STR_WL_chatSquad", "SQUAD"]
     ];
 
     _channel lbSetCurSel 0;

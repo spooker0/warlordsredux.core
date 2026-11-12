@@ -68,7 +68,7 @@ class WLC_MenuUI {
             y = -0.05;
             w = 0.9;
             h = 0.05;
-            text = "Redux Customization Menu";
+            text = $STR_WL_wlcCustomMenu;
             style = ST_LEFT;
         };
         class WLC_Background: IGUIBackMRTM {
@@ -192,7 +192,7 @@ class WLC_MenuUI {
 
         class WLC_PrimarySelectButton: WLCSelectButton {
             idc = WLC_PRIMARY_SELECT_BUTTON;
-            text = "Primary";
+            text = $STR_WL_wlcPrimary;
             x = 0.015;
             w = 0.15 - 0.015;
         };
@@ -202,7 +202,7 @@ class WLC_MenuUI {
 
         class WLC_SecondarySelectButton: WLCSelectButton {
             idc = WLC_SECONDARY_SELECT_BUTTON;
-            text = "Secondary";
+            text = $STR_WL_wlcSecondary;
             x = 0.15 + 0.015;
             w = 0.15 - 0.015;
         };
@@ -212,7 +212,7 @@ class WLC_MenuUI {
 
         class WLC_LauncherSelectButton: WLCSelectButton {
             idc = WLC_LAUNCHER_SELECT_BUTTON;
-            text = "Launcher";
+            text = $STR_WL_wlcLauncher;
             x = 0.3 + 0.015;
             w = 0.15 - 0.015;
         };
@@ -222,7 +222,7 @@ class WLC_MenuUI {
 
         class WLC_UniformSelectButton: WLCSelectButton {
             idc = WLC_UNIFORM_SELECT_BUTTON;
-            text = "Uniform";
+            text = $STR_WL_wlcUniform;
             x = 0.45 + 0.015;
             w = 0.15 - 0.015;
         };
@@ -232,7 +232,7 @@ class WLC_MenuUI {
 
         class WLC_VestSelectButton: WLCSelectButton {
             idc = WLC_VEST_SELECT_BUTTON;
-            text = "Vest";
+            text = $STR_WL_wlcVest;
             x = 0.6 + 0.015;
             w = 0.15 - 0.015;
         };
@@ -242,7 +242,7 @@ class WLC_MenuUI {
 
         class WLC_HelmetSelectButton: WLCSelectButton {
             idc = WLC_HELMET_SELECT_BUTTON;
-            text = "Helmet";
+            text = $STR_WL_wlcHelmet;
             x = 0.75 + 0.015;
             w = 0.15 - 0.015;
         };

@@ -85,7 +85,7 @@ if (_action == "add") exitWith {
     private _playersInSquad = _squad getOrDefault ["members", []];
     private _squadSize = count _playersInSquad;
     if (_squadSize >= SQD_MAX_SQUAD_SIZE) exitWith {
-        private _message = format ["Squad ""%1"" is full: %2/%3", _squad getOrDefault ["name", ""], _squadSize, SQD_MAX_SQUAD_SIZE];
+        private _message = format [localize "STR_WL_squadFull", _squad getOrDefault ["name", ""], _squadSize, SQD_MAX_SQUAD_SIZE];
         [_message] remoteExec ["WL2_fnc_smoothText", remoteExecutedOwner];
     };
 

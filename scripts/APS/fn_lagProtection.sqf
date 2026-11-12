@@ -14,7 +14,7 @@ while { alive _projectile } do {
 
     if ((_projectile getVariable ["APS_heartbeat", -1]) != _sequence) then {
         deleteVehicle _projectile;
-        ["Lag Protection: Projectile deleted due to lag."] call WL2_fnc_smoothText;
+        [localize "STR_WL_lagProtectionProjectileDeleted"] call WL2_fnc_smoothText;
         break;
     };
     _sequence = _sequence + 1;

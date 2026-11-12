@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_newLevel"];
 
-[format ["You have reached level %1!", _newLevel]] call WL2_fnc_smoothText;
+[format [localize "STR_WL_reachedLevel", _newLevel]] call WL2_fnc_smoothText;
 
 private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 private _musicSound = _settingsMap getOrDefault ["levelUpMusic", 0.8];

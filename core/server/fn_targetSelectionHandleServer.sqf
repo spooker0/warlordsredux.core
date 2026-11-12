@@ -42,7 +42,7 @@
 				_firstSector = _sortedVoteList # 0;
 				_maxVotedSector = _firstSector # 0; // return sector object
 
-				private _sectorName = _maxVotedSector getVariable ["WL2_name", "Sector"];
+				private _sectorName = _maxVotedSector getVariable ["WL2_sectorClass", ""];
 				if (_sectorName == "Wait") then {
 					private _waitsInRow = missionNamespace getVariable [_waitVar, 0];
 
@@ -122,7 +122,7 @@
 			private _calculation = call _calculateMostVotedSector;
 			private _selectedSector = _calculation # 0;
 
-			private _selectedSectorName = _selectedSector getVariable ["WL2_name", "Sector"];
+			private _selectedSectorName = _selectedSector getVariable ["WL2_sectorClass", ""];
 			switch (_selectedSectorName) do {
 				case "Wait": {
 					private _waitsInRow = missionNamespace getVariable [_waitVar, 0];

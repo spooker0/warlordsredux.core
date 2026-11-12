@@ -36,7 +36,7 @@ private _loadoutSanitize = {
         if (_x isEqualType "") then {
             private _itemValid = [_x] call _isItemValid;
             if (!_itemValid) then {
-                [format ["Removed invalid item from loadout: %1", _x]] call WL2_fnc_smoothText;
+                [format [localize "STR_WL_removedInvalidItem", _x]] call WL2_fnc_smoothText;
                 _loadout set [_forEachIndex, ""];
             };
         } else {
@@ -100,13 +100,13 @@ private _sanityChecks = {
     params ["_unit"];
 
     if (loadBackpack _unit > 1) exitWith {
-        format ["Backpack items exceed weight capacity: %1", loadBackpack _unit];
+        format [localize "STR_WL_backpackOverweight", loadBackpack _unit];
     };
     if (loadVest _unit > 1) exitWith {
-        format ["Vest items exceed weight capacity: %1", loadVest _unit];
+        format [localize "STR_WL_vestOverweight", loadVest _unit];
     };
     if (loadUniform _unit > 1) exitWith {
-        format ["Uniform items exceed weight capacity: %1", loadUniform _unit];
+        format [localize "STR_WL_uniformOverweight", loadUniform _unit];
     };
 
     private _primaryCompatibleMagazines = compatibleMagazines (primaryWeapon _unit);
@@ -141,24 +141,24 @@ private _sanityChecks = {
     } forEach _handgunMagazines;
 
     if (_invalidMagazines) exitWith {
-        "Invalid magazines detected.";
+        localize "STR_WL_invalidMagazines";
     };
 
     private _playerSide = str _unitSide;
 
     private _validUniforms = getArray (missionConfigFile >> "arsenalConfig" >> _playerSide >> "Uniforms");
     if !(uniform _unit in _validUniforms) exitWith {
-        format ["Invalid uniform: %1", uniform _unit];
+        format [localize "STR_WL_invalidUniform", uniform _unit];
     };
 
     private _validVests = getArray (missionConfigFile >> "arsenalConfig" >> _playerSide >> "Vests");
     if !(vest _unit in _validVests) exitWith {
-        format ["Invalid vest: %1", vest _unit];
+        format [localize "STR_WL_invalidVest", vest _unit];
     };
 
     private _validBackpacks = getArray (missionConfigFile >> "arsenalConfig" >> _playerSide >> "Backpacks");
     if !(backpack _unit in _validBackpacks) exitWith {
-        format ["Invalid backpack: %1", backpack _unit];
+        format [localize "STR_WL_invalidBackpack", backpack _unit];
     };
 
     "";
@@ -204,7 +204,7 @@ if (count _customizationLoadout > 0) then {
             continue;
         };
 
-        private _loadoutName = getText (_loadoutConfig >> "name");
+        private _loadoutName = localize getText (_loadoutConfig >> "name");
         private _loadout = getArray (_loadoutConfig >> "loadout");
         _loadouts set [_loadoutName, _loadout];
     } forEach _loadoutConfigs;
@@ -215,13 +215,13 @@ if (count _customizationLoadout > 0) then {
         getArray (missionConfigFile >> "WLDefaultLoadouts" >> "EastLoadout1" >> "loadout")
     };
     if (count _loadouts == 0) then {
-        _loadouts set ["Default", _defaultSideLoadout];
+        _loadouts set [localize "STR_WL_default", _defaultSideLoadout];
     };
 
     private _randomLoadoutName = selectRandom (keys _loadouts);
     _unit setUnitLoadout (_loadouts getOrDefault [_randomLoadoutName, _defaultSideLoadout]);
     private _gearKeyDisplay = (actionKeysNames "gear") regexReplace ["""", ""];
-    [format ["Assigned preset loadout: %1. Create and save your own loadouts by pressing the Gear key (%2).", _randomLoadoutName, _gearKeyDisplay]] call WL2_fnc_smoothText;
+    [format [localize "STR_WL_assignedPresetLoadout", _randomLoadoutName, _gearKeyDisplay]] call WL2_fnc_smoothText;
 };
 
 _unit enableStamina false;

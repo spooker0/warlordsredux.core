@@ -91,7 +91,7 @@ if (isServer) then {
 
 		{
 			private _sector = _x;
-			private _sectorName = _sector getVariable ["WL2_name", "Sector"];
+			private _sectorName = _sector getVariable ["WL2_name", localize "STR_WL_sector"];
 			if (isNil {_sector getVariable "BIS_WL_owner"}) then {
 				_initComplete = false;
 				diag_log format ["Missing BIS_WL_owner on sector %1", _sectorName];

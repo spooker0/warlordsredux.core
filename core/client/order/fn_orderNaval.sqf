@@ -20,11 +20,11 @@ private _mapClickEH = addMissionEventHandler ["MapSingleClick", {
 	private _checkBoat = {
 		params ["_cost", "_pos"];
 		if (!surfaceIsWater _pos) exitWith {
-			["Boat must be placed on water surface."] call WL2_fnc_smoothText;
+			[localize "STR_WL_orderNavalWaterOnly"] call WL2_fnc_smoothText;
 			false;
 		};
 		if (player distance2D _pos > 300) exitWith {
-			["Boat must be placed within 300 meters from your current position."] call WL2_fnc_smoothText;
+			[localize "STR_WL_orderNavalDistanceLimit"] call WL2_fnc_smoothText;
 			false;
 		};
 		if (_cost <= 500) exitWith {
@@ -46,7 +46,7 @@ private _mapClickEH = addMissionEventHandler ["MapSingleClick", {
 		};
 		private _invalidPlacement = count _sectorsInRange == 0;
 		if (_invalidPlacement) then {
-			["Boat must be placed within 1.5 km of an owned sector or forward base."] call WL2_fnc_smoothText;
+			[localize "STR_WL_orderNavalOwnedSectorRequired"] call WL2_fnc_smoothText;
 		};
 		!_invalidPlacement;
 	};

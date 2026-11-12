@@ -20,6 +20,6 @@ private _assetName = if (_sectorName == "Not Sector") then {
 } else {
     _sectorName
 };
-[format ["Team priority set to %1.", _assetName]] call WL2_fnc_smoothText;
+[format [localize "STR_WL_teamPrioritySet", _assetName]] call WL2_fnc_smoothText;
 
 playSoundUI ["AddItemOK"];

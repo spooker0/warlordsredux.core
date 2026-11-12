@@ -12,7 +12,7 @@ private _loadouts = call WL2_fnc_getLoadouts;
 private _loadout = _loadouts # _index;
 
 private _result = if (count _loadout > 0) then {
-    ["SAVE SLOT", format ["Save loadout into slot %1?", _index + 1], "Yes", "Cancel"] call WL2_fnc_prompt;
+    [localize "STR_WL_saveSlot", format [localize "STR_WL_saveSlotConfirm", _index + 1], localize "STR_WL_yes", localize "STR_WL_cancel"] call WL2_fnc_prompt;
 } else {
     true;
 };

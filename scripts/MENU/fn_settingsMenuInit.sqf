@@ -180,9 +180,9 @@ _settingsMenu append [
 
 if (_isAdmin || _isModerator) then {
     _settingsMenu append [
-        ["category", "Moderator Options"],
-        ["checkbox", "Show player uids (requires respawn)", ["showPlayerUids", false]],
-        ["checkbox", "Hide my identity (requires respawn)", ["hideMyIdentity", false]]
+        ["category", localize "STR_WL_settingsModeratorOptions"],
+        ["checkbox", localize "STR_WL_showPlayerUids", ["showPlayerUids", false]],
+        ["checkbox", localize "STR_WL_hideMyIdentity", ["hideMyIdentity", false]]
     ];
 };
 

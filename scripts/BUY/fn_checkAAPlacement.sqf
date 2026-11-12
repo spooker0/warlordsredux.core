@@ -32,7 +32,7 @@ private _entitiesInRange = _enemyUnits select {
 };
 
 if (count _entitiesInRange > 0) then {
-    [false, "Cannot deploy heavy air defense in contested airspace."]
+    [false, localize "STR_WL_aaContestedAirspace"]
 } else {
     [true, ""]
 };

@@ -34,7 +34,7 @@ private _speed = _speedCurve select _freeCamSpeed;
 if (_mouseWheelUp != 0 || _mouseWheelDown != 0) then {
     private _spectatorInfo = uiNamespace getVariable ["RscWLSpectatorInfo", displayNull];
     private _spectatorSpeed = _spectatorInfo displayCtrl 105;
-    _spectatorSpeed ctrlSetStructuredText parseText format ["<t shadow='2'>Speed: %1 m/s</t>", _speed];
+    _spectatorSpeed ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", format [localize "STR_WL_spectatorSpeedMps", _speed]];
 };
 
 private _newPosition = _camera modelToWorld [

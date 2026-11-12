@@ -115,14 +115,14 @@ if (_action == "newjoin") exitWith {
         playSoundUI ["a3\animals_f_beta\sheep\data\sound\sheep3.wss"];
 
         if (_joiner == player) then {
-            ["You have joined a squad."] call WL2_fnc_smoothText;
+            [localize "STR_WL_joinedSquad"] call WL2_fnc_smoothText;
         } else {
             private _alreadyNotifiedPlayers = uiNamespace getVariable ["WL2_alreadyNotifiedPlayers", []];
             if !(_joinerId in _alreadyNotifiedPlayers) then {
                 _alreadyNotifiedPlayers pushBack _joinerId;
                 uiNamespace setVariable ["WL2_alreadyNotifiedPlayers", _alreadyNotifiedPlayers];
 
-                [format ["%1 has joined your squad.", name _joiner]] call WL2_fnc_smoothText;
+                [format [localize "STR_WL_playerJoinedSquad", name _joiner]] call WL2_fnc_smoothText;
             };
         };
     };
@@ -134,7 +134,7 @@ if (_action == "promote") exitWith {
 };
 
 if (_action == "promoted") exitWith {
-    ["You have been promoted to squad leader."] call WL2_fnc_smoothText;
+    [localize "STR_WL_promotedSquadLeader"] call WL2_fnc_smoothText;
 
     private _sound = playSoundUI ["a3\music_f_tank\maintheme_f_tank.ogg", 1, 1, false, 1.7];
     uiSleep 2.8;
@@ -151,7 +151,7 @@ private _ftAction = {
     if (WL_ISDOWN(player)) exitWith {};
 
     if (WL_ISDOWN(_targetPlayer)) exitWith {
-        ["Squad fast travel target is not valid."] call WL2_fnc_smoothText;
+        [localize "STR_WL_squadFastTravelTargetInvalid"] call WL2_fnc_smoothText;
     };
 
     titleCut ["", "BLACK OUT", 1];
@@ -160,7 +160,7 @@ private _ftAction = {
     uiSleep 1;
 
     if (WL_ISDOWN(_targetPlayer)) exitWith {
-        ["Squad fast travel target is no longer valid."] call WL2_fnc_smoothText;
+        [localize "STR_WL_squadFastTravelTargetNoLongerValid"] call WL2_fnc_smoothText;
         titleCut ["", "BLACK IN", 1];
     };
 

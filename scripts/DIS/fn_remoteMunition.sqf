@@ -35,7 +35,7 @@ private _callbackConfirm = {
             0.3,
             0.3,
             0,
-            format ["WAYPOINT %1KM", (_distance / 1000) toFixed 1],
+            format [localize "STR_WL_waypointDistance", (_distance / 1000) toFixed 1],
             0,
             0.02,
             "TahomaB",
@@ -89,9 +89,9 @@ private _assetName = [_asset] call WL2_fnc_getAssetTypeName;
 
 [
     "remoteMunition",
-    format ["Control remote munition for %1 (Pilot: %2)?", _assetName, name driver _asset],
+    format [localize "STR_WL_controlMunitionConfirm", _assetName, name driver _asset],
     "\a3\ui_f\data\igui\cfg\simpletasks\types\Plane_ca.paa",
-    "Control", "Don't Control",
+    localize "STR_WL_control", localize "STR_WL_dontControl",
     _callbackConfirm, _callbackCancel, _this,
     15, false
 ] spawn WL2_fnc_timedPrompt;

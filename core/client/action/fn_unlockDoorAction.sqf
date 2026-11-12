@@ -12,12 +12,12 @@ private _demolishSuccess = false;
 private _startCheckingUnhold = false;
 private _demolitionStepTime = 10;
 
-["Animation", ["DEMOLITION", [
-    ["Cancel", "Action"],
+["Animation", [localize "STR_WL_demolish", [
+    [localize "STR_WL_cancel", "Action"],
     ["", "ActionContext"],
     ["", "navigateMenu"]
 ]], _demolitionStepTime, true] spawn WL2_fnc_showHint;
-["Demolishing hostile door lock... Tip: explosive charges (equip in Arsenal) can quickly unlock hostile doors."] call WL2_fnc_smoothText;
+[localize "STR_WL_unlockingDoor"] call WL2_fnc_smoothText;
 
 private _endTime = serverTime + _demolitionStepTime;
 while { true } do {

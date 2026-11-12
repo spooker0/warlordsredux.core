@@ -6,14 +6,14 @@ if (_accessControl == 0) exitWith {
     [true, ""];
 };
 if (_accessControl == 1) exitWith {
-    [false, "Access denied"];
+    [false, localize "STR_WL_accessDenied"];
 };
 if (_accessControl != 2 && _accessControl != 3) exitWith {
-    [false, "Access denied"];
+    [false, localize "STR_WL_accessDenied"];
 };
 
 if (side group _unit != [_asset] call WL2_fnc_getAssetSide) exitWith {
-    [false, "Enemy vehicle (claim vehicle to capture)"];
+    [false, localize "STR_WL_enemyVehicleClaim"];
 };
 if (_accessControl == 3) exitWith {
     [true, ""];
@@ -21,4 +21,4 @@ if (_accessControl == 3) exitWith {
 
 private _ownerUid = _asset getVariable ["BIS_WL_ownerAsset", "123"];
 private _isOwner = getPlayerUID _unit == _ownerUid;
-[_isOwner, "Vehicle locked"];
+[_isOwner, localize "STR_WL_vehicleLockedReason"];

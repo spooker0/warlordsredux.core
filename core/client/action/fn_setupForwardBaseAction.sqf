@@ -100,7 +100,7 @@ private _setupActionId = [
 
 				if (count _nearbyEntities > 0) exitWith {
 					private _nearbyObjectName = [_nearbyEntities # 0] call WL2_fnc_getAssetTypeName;
-					[format ["Deploying too close to %1!", _nearbyObjectName]] call WL2_fnc_smoothText;
+					[format [localize "STR_WL_deployingTooClose", _nearbyObjectName]] call WL2_fnc_smoothText;
 					playSound "AddItemFailed";
 					_target setVariable ["WL2_deploying", false];
 					false;
@@ -131,7 +131,7 @@ private _setupActionId = [
 
 			if (_exit) exitWith {};
 
-			[format ["Forward base under construction. %1 seconds remaining.", WL_FOB_SETUP_TIME]] call WL2_fnc_smoothText;
+			[format [localize "STR_WL_fobUnderConstruction", WL_FOB_SETUP_TIME]] call WL2_fnc_smoothText;
 
 			private _forwardBase = createVehicle [_terminalClass, _position, [], 0, "CAN_COLLIDE"];
 			_forwardBase setVectorDirAndUp _direction;
@@ -280,7 +280,7 @@ private _setupActionId = [
 			};
 		};
 
-		["No friendly forward base or sector in range!"] call WL2_fnc_smoothText;
+		[localize "STR_WL_noFriendlyForwardBaseOrSectorInRange"] call WL2_fnc_smoothText;
 		playSoundUI ["AddItemFailed"];
 	},
 	{},

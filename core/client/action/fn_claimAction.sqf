@@ -2,7 +2,7 @@
 params ["_asset"];
 
 _asset addAction [
-    "<t color='#ff4b4b'>Claim Vehicle</t>",
+    format ["<t color='#ff4b4b'>%1</t>", localize "STR_WL_claimVehicle"],
 	{
         _this spawn {
             params ["_asset", "_caller", "_actionId", "_arguments"];
@@ -11,8 +11,8 @@ _asset addAction [
 
             private _camera = [[0, -3, 1]] call WL2_fnc_actionLockCamera;
 
-            ["Animation", ["CLAIM", [
-                ["Cancel", "Action"],
+            ["Animation", [localize "STR_WL_claim", [
+                [localize "STR_WL_cancel", "Action"],
                 ["", "ActionContext"],
                 ["", "navigateMenu"]
             ]], WL_DURATION_CLAIM, true] spawn WL2_fnc_showHint;
@@ -50,7 +50,7 @@ _asset addAction [
 
 			if (_claimSuccess) then {
 				private _displayName = [_asset] call WL2_fnc_getAssetTypeName;
-				[format ["%1 has been claimed.", _displayName]] call WL2_fnc_smoothText;
+				[format [localize "STR_WL_assetClaimed", _displayName]] call WL2_fnc_smoothText;
 				playSound3D ["\a3\sounds_f_decade\assets\props\linkterminal_01_node_1_f\terminal_captured.wss", _asset, false, getPosASL _asset, 2, 1, 200];
 
                 private _side = side group player;

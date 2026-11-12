@@ -36,8 +36,8 @@ private _badgeDisplayData = [];
         continue;
     };
 
-    _badgeData params ["_badgeIcon", "_badgeTier", "_badgeDescription"];
-    _badgeDisplayData pushBack [_badgeName, _badgeCount, _badgeIcon, _badgeTier, _badgeDescription];
+    _badgeData params ["_badgeIcon", "_badgeTier", "_badgeDescription", "_badgeDisplayName"];
+    _badgeDisplayData pushBack [_badgeName, _badgeDisplayName, _badgeCount, _badgeIcon, _badgeTier, _badgeDescription];
 } forEach _badgeArray;
 
 private _emptyControl = _display displayCtrl BADGE_EMPTY_TEXT_ID;
@@ -48,7 +48,7 @@ private _currentBadge = player getVariable ["WL2_currentBadge", "Player"];
 
 private _badgeRows = [];
 {
-    _x params ["_badgeName", "_badgeCount", "_badgeIcon", "_badgeTier", "_badgeDescription"];
+    _x params ["_badgeName", "_badgeDisplayName", "_badgeCount", "_badgeIcon", "_badgeTier", "_badgeDescription"];
 
     private _column = _forEachIndex mod BADGE_COLUMNS;
     private _row = floor (_forEachIndex / BADGE_COLUMNS);
@@ -71,10 +71,10 @@ private _badgeRows = [];
     private _selectedControl = _cardControl controlsGroupCtrl BADGE_CARD_SELECTED_ID;
 
     _iconControl ctrlSetText _badgeIcon;
-    _nameControl ctrlSetText _badgeName;
+    _nameControl ctrlSetText _badgeDisplayName;
     _descriptionControl ctrlSetStructuredText parseText format ["<t size='1'>%1</t>", _badgeDescription];
     _descriptionControl ctrlEnable false;
-    _countControl ctrlSetText format ["Earned: %1", _badgeCount];
+    _countControl ctrlSetText format [localize "STR_WL_rwdEarned", _badgeCount];
 
     private _badgeColor = switch (_badgeTier) do {
         case 1: { [BADGE_RGBA_TIER_1] };
@@ -96,7 +96,7 @@ private _badgeRows = [];
 
     _buttonControl setVariable ["RWD_badgeName", _badgeName];
     _buttonControl ctrlAddEventHandler ["MouseButtonDown", RWD_fnc_badgeMenuSelect];
-    _buttonControl ctrlSetTooltip format ["Select %1", _badgeName];
+    _buttonControl ctrlSetTooltip format [localize "STR_WL_rwdSelectBadge", _badgeDisplayName];
 
     _badgeRows pushBack [_badgeName, _backgroundControl, _selectedControl];
 } forEach _badgeDisplayData;

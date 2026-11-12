@@ -6,11 +6,11 @@ player addAction [
         private _display = uiNamespace getVariable ["RscWLHmdSettingDisplay", displayNull];
         if (isNull _display) then {
             0 spawn WL2_fnc_hmdSettings;
-            ["HMDSettings", ["HMD SETTINGS", [
-                ["Decrease value", "BuldLeft"],
-                ["Increase value", "BuldRight"],
-                ["Next setting", "BuldBack"],
-                ["Previous setting", "BuldForward"]
+            ["HMDSettings", [localize "STR_WL_hmdSettings", [
+                [localize "STR_WL_hmdDecrease", "BuldLeft"],
+                [localize "STR_WL_hmdIncrease", "BuldRight"],
+                [localize "STR_WL_hmdNext", "BuldBack"],
+                [localize "STR_WL_hmdPrev", "BuldForward"]
             ]], 10] spawn WL2_fnc_showHint;
         } else {
             "hmd" cutText ["", "PLAIN"];

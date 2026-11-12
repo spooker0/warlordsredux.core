@@ -13,7 +13,7 @@ private _broadcastActionToSide = {
 	[_message] remoteExec ["WL2_fnc_broadcastAction", _sidePlayers];
 };
 
-private _targetName = _target getVariable ["WL2_name", "Forward Airbase"];
+private _targetName = _target getVariable ["WL2_name", localize "STR_WL_forwardAirbase"];
 private _sideName = [_combatAirSide] call WL2_fnc_sideToFaction;
 
 private _friendlyMessage = format ["%1 has established a no-fly zone over %2.", _senderName, _targetName];

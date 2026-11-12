@@ -18,7 +18,7 @@ private _squadLocked = _squad getOrDefault ["locked", false];
 private _isSquadLeader = ["isSquadLeader", [_playerId]] call SQD_fnc_query;
 if (!_isSquadLeader && _squadLocked) exitWith {
     playSoundUI ["AddItemFailed", 1];
-    ["Only squad leader can invite to a locked squad."] call WL2_fnc_smoothText;
+    [localize "STR_WL_sqdOnlyLeaderInvite"] call WL2_fnc_smoothText;
 };
 
 private _contextMenu = _display ctrlCreate ["SQD_Menu_Contextual", -1];
@@ -37,7 +37,7 @@ _contextMenu ctrlCommit 0;
     _inviteButton ctrlSetPosition [0, SQD_LAYOUT_CONTEXT_H * _forEachIndex, SQD_LAYOUT_CONTEXT_W, SQD_LAYOUT_CONTEXT_H];
 
     private _nameDisplay = format ["%1 (%2)", name _player, _player getVariable ["WL2_playerRating", WL_RATING_STARTER]];
-    _inviteButton ctrlSetText format ["INVITE %1", _nameDisplay];
+    _inviteButton ctrlSetText format [localize "STR_WL_sqdInvite", _nameDisplay];
     _inviteButton ctrlCommit 0;
 
     _inviteButton setVariable ["SQD_member", getPlayerID _player];

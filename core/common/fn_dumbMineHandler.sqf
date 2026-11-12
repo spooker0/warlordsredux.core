@@ -135,7 +135,7 @@ while { !BIS_WL_missionEnd } do {
 
     if (_playVO && serverTime - _lastPlayedVO > 10) then {
         playSoundUI ["a3\dubbing_f_epb\b_in\x15_mines\b_in_x15_mines_jam_0.ogg", 5, 1, false, 0.31];
-        ["You've hit an AT minefield! Do NOT attempt to keep driving before clearing the minefield."] call WL2_fnc_smoothText;
+        [localize "STR_WL_atMinefieldHitWarning"] call WL2_fnc_smoothText;
         _lastPlayedVO = serverTime;
     };
 
@@ -144,7 +144,7 @@ while { !BIS_WL_missionEnd } do {
         playSoundUI ["a3\sounds_f\vehicles\air\heli_light_01\warning.wss", _mineWarnVolume];
 
         if (serverTime - _lastWarnTime > 5) then {
-            ["Minefield warning! Check map!"] call WL2_fnc_smoothText;
+            [localize "STR_WL_minefieldMapWarning"] call WL2_fnc_smoothText;
             _lastWarnTime = serverTime;
         };
     };

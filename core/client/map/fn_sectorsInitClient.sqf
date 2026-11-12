@@ -26,8 +26,8 @@ private _allLinks = createHashMap;
 	_sector setVariable ["WL2_markerMain", _markerMain];
 
 	if !(BIS_WL_playerSide in _revealedBy) then {
-		private _sectorName = _sector getVariable ["WL2_name", "Sector"];
-		switch (_sectorName) do {
+		private _sectorClass = _sector getVariable ["WL2_sectorClass", ""];
+		switch (_sectorClass) do {
 			case "Wait": {
 				_markerMain setMarkerTypeLocal "respawn_unknown";
 				_markerMain setMarkerColorLocal "ColorWhite";

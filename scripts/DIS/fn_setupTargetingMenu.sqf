@@ -27,7 +27,7 @@ private _getCurrentMode = {
 	};
 
 	if (cameraOn == player && currentMagazine cameraOn == "Laserbatteries") exitWith {
-		["lasing", "LASER DESIGNATOR"]
+		["lasing", localize "STR_WL_laserDesignator"]
 	};
 
 	private _turret = cameraOn unitTurret focusOn;
@@ -73,35 +73,35 @@ private _getCurrentMode = {
 };
 
 private _targetingControls = [
-	["Previous", "gunElevUp"],
-	["Next", "gunElevDown"]
+	[localize "STR_WL_previous", "gunElevUp"],
+	[localize "STR_WL_next", "gunElevDown"]
 ];
 
 private _gpsControls = +_targetingControls;
-_gpsControls pushBack ["Enter coordinates", "0-9"];
+_gpsControls pushBack [localize "STR_WL_enterCoordinates", "0-9"];
 
 private _hintMap = createHashMapFromArray [
 	[
 		"asam",
-		["AdvancedSam", ["ADVANCED SAM CONTROLS", _targetingControls], false]
+		["AdvancedSam", [localize "STR_WL_advSamControls", _targetingControls], false]
 	], [
 		"esam",
-		["ESam", ["ESAM CONTROLS", _targetingControls], false]
+		["ESam", [localize "STR_WL_esamControls", _targetingControls], false]
 	], [
 		"laser",
-		["Laser", ["LASER CONTROLS", _targetingControls], false]
+		["Laser", [localize "STR_WL_laserControls", _targetingControls], false]
 	], [
 		"loal",
-		["LOAL", ["LOAL CONTROLS", _targetingControls], false]
+		["LOAL", [localize "STR_WL_loalControls", _targetingControls], false]
 	], [
 		"gps",
-		["GPS", ["GPS CONTROLS", _gpsControls], false]
+		["GPS", [localize "STR_WL_gpsControls", _gpsControls], false]
 	], [
 		"remote",
-		["Remote", ["REMOTE MUNITION CONTROLS", _targetingControls], false]
+		["Remote", [localize "STR_WL_remoteMunitionControls", _targetingControls], false]
 	], [
 		"sead",
-		["SEAD", ["SEAD CONTROLS", _targetingControls], false]
+		["SEAD", [localize "STR_WL_seadControls", _targetingControls], false]
 	]
 ];
 
@@ -123,23 +123,23 @@ private _makeMunitionTextArray = {
 			if (_terminalTarget == "") then {
 				private _target = _projectile getVariable ["DIS_targetCoordinates", [0, 0, 0]];
 				private _distance = _projectile distance _target;
-				format ["GPS -> AREA [%1KM]", (_distance / 1000) toFixed 1];
+				format [localize "STR_WL_gpsArea", (_distance / 1000) toFixed 1];
 			} else {
-				format ["GPS -> %1 [TERMINAL]", toUpper _terminalTarget];
+				format [localize "STR_WL_gpsTerminal", toUpper _terminalTarget];
 			};
 		} else {
 			private _projectileTarget = _projectile getVariable ["DIS_ultimateTarget", objNull];
 			if (!alive _projectileTarget) then {
 				if (_missileType == "Deployer") then {
 					private _altitude = (_projectile modelToWorld [0, 0, 0]) select 2;
-					format ["Deployer (ALT %1M)", round _altitude]
+					format [localize "STR_WL_deployerAlt", round _altitude]
 				} else {
-					format ["%1 -> N/A", _missileType]
+					format [localize "STR_WL_targetNA", _missileType]
 				};
 			} else {
 				private _projectileTargetName = [_projectileTarget] call WL2_fnc_getAssetTypeName;
 				private _projectileDistance = _projectile distance _projectileTarget;
-				format ["%1 -> %2 [%3KM]", _missileType, toUpper _projectileTargetName, (_projectileDistance / 1000) toFixed 1]
+				format [localize "STR_WL_targetInfo", _missileType, toUpper _projectileTargetName, (_projectileDistance / 1000) toFixed 1]
 			};
 		};
 
@@ -263,7 +263,7 @@ while { !BIS_WL_missionEnd } do {
 		case "asam";
 		case "esam";
 		case "loal": {
-			private _targetList = [DIS_fnc_getSamTarget, "MANUAL LOCK", "WL2_selectedTargetAA"] call DIS_fnc_getTargetList;
+			private _targetList = [DIS_fnc_getSamTarget, localize "STR_WL_manualLock", "WL2_selectedTargetAA"] call DIS_fnc_getTargetList;
 			private _targetText = [_currentModeTitle, _targetList, true] call _makeTargetingText;
 			_text = _text + _targetText;
 		};
@@ -276,14 +276,14 @@ while { !BIS_WL_missionEnd } do {
 			private _inRangeCalculation = [cameraOn] call DIS_fnc_calculateInRange;
 
 			private _gridText = if (_gpsCord isEqualTo "") then {
-				"GRID 000 000";
+				localize "STR_WL_gridDefault";
 			} else {
 				while { count _gpsCord < 6 } do {
 					_gpsCord = "0" + _gpsCord;
 				};
 				private _easting = _gpsCord select [0, 3];
 				private _northing = _gpsCord select [3, 3];
-				format ["GRID %1 %2", _easting, _northing];
+				format [localize "STR_WL_gridFmt", _easting, _northing];
 			};
 
 			_inRangeCalculation params ["_inRange", "_effectiveRange", "_targetDistance"];
@@ -297,32 +297,32 @@ while { !BIS_WL_missionEnd } do {
 			private _gpsText = [
 				format ["<t size='2'>%1</t>", _gridText],
 				"",
-				format ["<t%1>TARGET DISTANCE: %2</t>", _color, (_targetDistance / 1000) toFixed 1],
-				format ["<t%1>EFFECTIVE RANGE: %2</t>", _color, (_effectiveRange / 1000) toFixed 1]
+				format ["<t%1>%2</t>", _color, format [localize "STR_WL_targetDistance", (_targetDistance / 1000) toFixed 1]],
+				format ["<t%1>%2</t>", _color, format [localize "STR_WL_effectiveRange", (_effectiveRange / 1000) toFixed 1]]
 			];
 
 			if (_inRange) then {
-				_gpsText pushBack "<t size='0.8'>READY TO FIRE</t>";
+				_gpsText pushBack format ["<t size='0.8'>%1</t>", localize "STR_WL_readyToFire"];
 			} else {
 				if (_targetDistance < 500) then {
-					_gpsText pushBack "<t color='#ff0000' size='0.8'>TOO CLOSE TO TARGET</t>";
+					_gpsText pushBack format ["<t color='#ff0000' size='0.8'>%1</t>", localize "STR_WL_tooCloseToTarget"];
 				} else {
-					_gpsText pushBack "<t color='#ff0000' size='0.8'>ALIGN HEADING AND GET CLOSER / HIGHER / FASTER</t>";
+					_gpsText pushBack format ["<t color='#ff0000' size='0.8'>%1</t>", localize "STR_WL_alignHeading"];
 				};
 			};
 
 			_gpsText pushBack "";
-			_gpsText pushBack "CONTROLS";
+			_gpsText pushBack localize "STR_WL_controlsLabel";
 
 			private _allOptions = [
-				format ["PRESS [%1] TO ENTER GRID", _nextActionText],
-				"ENTER CORDS WITH [0-9] KEYS"
+				format [localize "STR_WL_pressEnterGrid", _nextActionText],
+				localize "STR_WL_enterCords"
 			];
 			_allOptions append _savedCords;
 			{
 				private _option = _x;
 				if (_forEachIndex >= 2) then {
-					_option = format ["SAVED GRID %1 %2", _option select [0, 3], _option select [3, 3]];
+					_option = format [localize "STR_WL_savedGrid", _option select [0, 3], _option select [3, 3]];
 				};
 				if (_forEachIndex == _gpsSelectionIndex) then {
 					_gpsText pushBack format ["|&gt;| %1", _option];
@@ -352,28 +352,28 @@ while { !BIS_WL_missionEnd } do {
 				private _category = _x;
 				_category = switch (_category) do {
 					case "Light Vehicles": {
-						"LIGHT";
+						localize "STR_WL_catLight";
 					};
 					case "Heavy Vehicles": {
-						"HEAVY";
+						localize "STR_WL_catHeavy";
 					};
 					case "Naval": {
-						"NAVAL";
+						localize "STR_WL_catNaval";
 					};
 					case "Rotary Wing";
 					case "Fixed Wing": {
-						"AIR";
+						localize "STR_WL_catAir";
 					};
 					case "Air Defense": {
-						"AA";
+						localize "STR_WL_catAA";
 					};
 					case "Remote Control": {
-						"REMOTE";
+						localize "STR_WL_catRemote";
 					};
 					case "Gear";
 					case "Sector Defense";
 					case "Structures": {
-						"STATIC";
+						localize "STR_WL_catStatic";
 					};
 					default {
 						"???"
@@ -390,7 +390,7 @@ while { !BIS_WL_missionEnd } do {
 			_text = _text + _targetText;
 		};
 		case "sead": {
-			private _targetList = [DIS_fnc_getSeadTarget, "TARGET: AUTO", "WL2_selectedTargetSEAD"] call DIS_fnc_getTargetList;
+			private _targetList = [DIS_fnc_getSeadTarget, localize "STR_WL_targetAuto", "WL2_selectedTargetSEAD"] call DIS_fnc_getTargetList;
 			private _targetText = [_currentModeTitle, _targetList, true] call _makeTargetingText;
 			_text = _text + _targetText;
 		};
@@ -424,7 +424,7 @@ while { !BIS_WL_missionEnd } do {
 		private _missilesData = _incomingMissiles apply {
 			private _missile = _x;
 			private _distance = _missile distance cameraOn;
-			private _missileType = _missile getVariable ["WL2_missileNameOverride", _missileTypeData getOrDefault [typeof _missile, "MISSILE"]];
+			private _missileType = _missile getVariable ["WL2_missileNameOverride", _missileTypeData getOrDefault [typeof _missile, localize "STR_WL_missileType"]];
 
 			[_distance, _missileType];
 		};
@@ -437,7 +437,7 @@ while { !BIS_WL_missionEnd } do {
 		{
 			_x params ["_distance", "_missileType"];
 
-			private _distanceText = format ["%1 KM", (_distance / 1000) toFixed 1];
+			private _distanceText = format [localize "STR_WL_kmFmt", (_distance / 1000) toFixed 1];
 
 			_incomingText = format [
 				"%1<br/><t align='left'>%2</t><t align='right'>%3</t>",
@@ -462,32 +462,32 @@ while { !BIS_WL_missionEnd } do {
 		private _reconText = if (_isReady) then {
 			private _reconKeyText = (actionKeysNames "lockTarget") regexReplace ["""", ""];
 			_reconKeyText = toUpper _reconKeyText;
-			format ["RECON OPTICS (%1)<br/>", _reconKeyText];
+			format ["%1 (%2)<br/>", localize "STR_WL_reconOptics", _reconKeyText];
 		} else {
-			"<t color='#000000'>RECON OPTICS WAIT</t><br/>"
+			format ["<t color='#000000'>%1</t><br/>", localize "STR_WL_reconOpticsWait"]
 		};
 		_statusText = _statusText + _reconText;
 	};
 
 	private _weaponAmmoCount = cameraOn getVariable ["WL2_deployedWeaponAmmo", -100];
 	if (_weaponAmmoCount == 0) then {
-		_statusText = _statusText + "<t color='#000000'>INTEGRAL AMMO: 0</t><br/>";
+		_statusText = _statusText + format ["<t color='#000000'>%1</t><br/>", format [localize "STR_WL_integralAmmo", 0]];
 	};
 	if (_weaponAmmoCount > 0) then {
 		if (driver cameraOn == player) then {
-			_statusText = _statusText + format ["INTEGRAL AMMO: %1<br/>", _weaponAmmoCount];
+			_statusText = _statusText + format ["%1<br/>", format [localize "STR_WL_integralAmmo", _weaponAmmoCount]];
 			private _hasDeployedWeaponBefore = uiNamespace getVariable ["WL2_hasDeployedWeaponBefore", false];
 			if (!_hasDeployedWeaponBefore) then {
-				_statusText = format ["%1USE SCROLL WHEEL ACTION OR PRESS %2 TO DEPLOY<br/>", _statusText, (actionKeysNames "deployWeaponAuto") regexReplace ["""", ""]];
+				_statusText = format ["%1%2<br/>", _statusText, format [localize "STR_WL_deployWeaponHint", (actionKeysNames "deployWeaponAuto") regexReplace ["""", ""]]];
 			};
 		} else {
-			_statusText = _statusText + "DRIVER CONTROLLED WEAPON AVAILABLE<br/>";
+			_statusText = _statusText + localize "STR_WL_driverControlledWeapon" + "<br/>";
 		};
 	};
 
 	private _apsReloading = cameraOn getVariable ["WL2_apsReloadStarted", false];
 	if (_apsReloading) then {
-		_statusText = _statusText + "RELOADING APS...<br/>";
+		_statusText = _statusText + localize "STR_WL_reloadingAPS" + "<br/>";
 	};
 
 	private _centeredText = "";
@@ -507,12 +507,12 @@ while { !BIS_WL_missionEnd } do {
 				};
 			};
 		};
-		_statusText = _statusText + format ["<t color='%1'>BARREL INTEGRITY: %2%%</t><br/>", _barrelIntegrityColor, _barrelIntegrity];
+		_statusText = _statusText + format ["<t color='%1'>%2</t><br/>", _barrelIntegrityColor, format [localize "STR_WL_barrelIntegrity", _barrelIntegrity]];
 		if (_barrelIntegrity <= 50) then {
 			if (_barrelIntegrity <= 10) then {
-				_statusText = _statusText + "<t color='#000000'>FIELD REPAIR REQUIRED</t><br/>";
+				_statusText = _statusText + "<t color='#000000'>" + localize "STR_WL_fieldRepairRequired" + "</t><br/>";
 			} else {
-				_statusText = _statusText + "<t color='#ff0000'>RECOMMEND FIELD REPAIR</t><br/>";
+				_statusText = _statusText + "<t color='#ff0000'>" + localize "STR_WL_recommendFieldRepair" + "</t><br/>";
 			};
 		};
 
@@ -523,9 +523,9 @@ while { !BIS_WL_missionEnd } do {
 				_chargeValue = 0;
 				private _reloadingTime = cameraOn weaponReloadingTime [gunner cameraOn, "cannon_railgun_fake"];
 				if (_reloadingTime > 0) then {
-					_centeredText = "POWER CYCLE";
+					_centeredText = localize "STR_WL_powerCycle";
 				} else {
-					_centeredText = "READY";
+					_centeredText = localize "STR_WL_readyStatus";
 				};
 			};
 
@@ -563,9 +563,9 @@ while { !BIS_WL_missionEnd } do {
 					};
 				};
 				private _chargeText = if (_chargeValue <= 115) then {
-					"CHARGING"
+					localize "STR_WL_charging"
 				} else {
-					"OVERHEAT"
+					localize "STR_WL_overheat"
 				};
 				_centeredText = format ["<t color='%1'>%2 %3%%</t>", _chargeColor, _chargeText, _chargeValue];
 			};
@@ -576,19 +576,19 @@ while { !BIS_WL_missionEnd } do {
 		private _pitch = (cameraOn call BIS_fnc_getPitchBank) # 0;
 		private _attackDistance = linearConversion [-15, 15, _pitch, 1000, 100, true];
 		private _angle = 500 atan2 _attackDistance;
-		_statusText = _statusText + format ["SEAD ANGLE: %1<br/>", round _angle];
+		_statusText = _statusText + format ["%1<br/>", format [localize "STR_WL_seadAngle", round _angle]];
 	};
 
 	private _ammoConfig = cameraOn getVariable ["WL2_currentAmmoConfig", createHashMap];
 	private _flareMin = _ammoConfig getOrDefault ["flareMin", 0];
 	private _flareMax = _ammoConfig getOrDefault ["flareMax", 0];
 	if (_flareMax > _flareMin) then {
-		_statusText = _statusText + format ["FLARE MIN %1 M / MAX %2 M<br/>", round (_flareMin max 0), round _flareMax];
+		_statusText = _statusText + format ["%1<br/>", format [localize "STR_WL_flareMinMax", round (_flareMin max 0), round _flareMax]];
 	};
 
 	private _manualSam = _ammoConfig getOrDefault ["manualSam", []];
 	if (count _manualSam > 0) then {
-		_statusText = _statusText + "<t color='#ff0000'>GUIDE MISSILE TO TARGET</t><br/>";
+		_statusText = _statusText + format ["<t color='#ff0000'>%1</t><br/>", localize "STR_WL_guideMissileToTarget"];
 	};
 
 	if (_statusText != "") then {

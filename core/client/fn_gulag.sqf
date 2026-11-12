@@ -61,7 +61,7 @@ private _factions = [
 
 private _holdDuration = 0.5;
 private _feedbackDuration = 2;
-private _hoverInstructionText = "Hover over an identification card to select it.";
+private _hoverInstructionText = localize "STR_WL_gulagHoverInstruction";
 
 private _textColor = [1, 1, 1, 1];
 private _neutralColor = [0.11, 0.13, 0.16, 1];
@@ -100,7 +100,7 @@ private _newRound = true;
 private _feedbackUntil = 0;
 private _nextCountdownUpdate = 0;
 
-_scoreControl ctrlSetText "Correct: 0 / 0";
+_scoreControl ctrlSetText format [localize "STR_WL_gulagCorrect", 0, 0];
 
 while { serverTime < _timeout && !(isNull _dialog) } do {
     private _now = diag_tickTime;
@@ -108,7 +108,7 @@ while { serverTime < _timeout && !(isNull _dialog) } do {
     if (_now >= _nextCountdownUpdate) then {
         private _secondsLeft = (_timeout - serverTime) max 0;
         private _timeLeft = [_secondsLeft, "HH:MM:SS"] call BIS_fnc_secondsToString;
-        private _timeoutText = format ["You have been timed out.\nReason: %1\nTimeout: %2", _reason, _timeLeft];
+        private _timeoutText = format [localize "STR_WL_timedOut", _reason, _timeLeft];
 
         _backgroundControl ctrlSetText _timeoutText;
         _nextCountdownUpdate = _now + 0.2;
@@ -124,9 +124,9 @@ while { serverTime < _timeout && !(isNull _dialog) } do {
 
         // A reconnect can reach this screen before team selection has completed.
         private _teamLabel = if (_friendlyFactionIndex < 0) then {
-            "Training team";
+            localize "STR_WL_gulagTrainingTeam";
         } else {
-            "Your team";
+            localize "STR_WL_gulagYourTeam";
         };
         _friendlyFactionIndex = _friendlyFactionIndex max 0;
 
@@ -169,7 +169,7 @@ while { serverTime < _timeout && !(isNull _dialog) } do {
             };
 
             _pictureControl ctrlSetText _picturePath;
-            _captionControl ctrlSetText "Hold to select";
+            _captionControl ctrlSetText localize "STR_WL_gulagHoldSelect";
             _captionControl ctrlSetTextColor _textColor;
 
             _cardControl ctrlSetBackgroundColor _neutralColor;
@@ -178,13 +178,13 @@ while { serverTime < _timeout && !(isNull _dialog) } do {
         } forEach _cardControls;
 
         private _friendlyName = _friendlyFaction # 1;
-        private _instructionText = format ["%1: %2. Identify the enemy.", _teamLabel, _friendlyName];
+        private _instructionText = format [localize "STR_WL_gulagInstruction", _teamLabel, _friendlyName];
         _instructionControl ctrlSetText _instructionText;
 
         setMousePosition [0.5, 0.5];
 
         private _feedbackText = if (_waitingForExit) then {
-            "Move your cursor off the cards to start the next round.";
+            localize "STR_WL_gulagMoveOffCards";
         } else {
             _hoverInstructionText;
         };
@@ -253,13 +253,13 @@ while { serverTime < _timeout && !(isNull _dialog) } do {
                         playSoundUI ["AddItemFailed", 2];
                     };
 
-                    private _scoreText = format ["Correct: %1 / %2", _correctAnswers, _answers];
+                    private _scoreText = format [localize "STR_WL_gulagCorrect", _correctAnswers, _answers];
                     _scoreControl ctrlSetText _scoreText;
 
                     private _feedbackText = if (_correct) then {
-                        "Correct! You picked the enemy.";
+                        localize "STR_WL_gulagCorrectPick";
                     } else {
-                        "Wrong! You picked a friendly.";
+                        localize "STR_WL_gulagWrongPick";
                     };
 
                     private _feedbackColor = if (_correct) then {
@@ -284,9 +284,9 @@ while { serverTime < _timeout && !(isNull _dialog) } do {
                         private _isEnemy = _cardIndex == _enemyIndex;
 
                         private _relationshipText = if (_isEnemy) then {
-                            "ENEMY";
+                            localize "STR_WL_gulagEnemyLabel";
                         } else {
-                            "FRIENDLY";
+                            localize "STR_WL_gulagFriendlyLabel";
                         };
 
                         private _captionColor = if (_isEnemy) then {

@@ -14,9 +14,9 @@ if (isNull _warningTextDisplay) then {
 };
 
 private _sectorDisplay = _warningTextDisplay displayCtrl 35600;
-private _targetName = _sector getVariable ["WL2_name", "Forward Airbase"];
+private _targetName = _sector getVariable ["WL2_name", localize "STR_WL_forwardAirbase"];
 private _distanceToTarget = ((_sector distance2D cameraOn) / 1000) toFixed 1;
-_sectorDisplay ctrlSetText format ["%1 (%2 KM)", _targetName, _distanceToTarget];
+_sectorDisplay ctrlSetText format ["%1 %2", _targetName, format [localize "STR_WL_kmFormat", _distanceToTarget]];
 
 uiSleep 7;
 

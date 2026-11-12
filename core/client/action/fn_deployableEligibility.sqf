@@ -61,13 +61,13 @@ private _sortedNearLoadable = if (_hasNearLoadable) then {
 
 private _actionText = if (!isNull _loadedItem) then {
     private _loadableType = [_loadedItem] call WL2_fnc_getAssetTypeName;
-    format ["Unload %1", _loadableType];
+    format [localize "STR_WL_deployableUnload", _loadableType];
 } else {
     if (count _sortedNearLoadable == 0) then {
-        "Load deployable";
+        localize "STR_WL_deployableLoadGeneric";
     } else {
         private _loadableType = [_sortedNearLoadable # 0] call WL2_fnc_getAssetTypeName;
-        format ["Load %1", _loadableType];
+        format [localize "STR_WL_deployableLoad", _loadableType];
     };
 };
 

@@ -1,7 +1,7 @@
 #include "includes.inc"
 params ["_killer", "_assetTypeName", "_assetCost"];
 
-private _forgiveText = format ["Choose to forgive %1 for killing %2?", name _killer, _assetTypeName];
+private _forgiveText = format [localize "STR_WL_forgiveConfirm", name _killer, _assetTypeName];
 
 private _callbackConfirm = {};
 
@@ -14,7 +14,7 @@ private _callbackCancel = {
     "teamkill",
     _forgiveText,
     "\a3\Ui_F_Curator\Data\CfgMarkers\kia_ca.paa",
-    "Forgive", "Don't forgive",
+    localize "STR_WL_forgiveButton", localize "STR_WL_dontForgiveButton",
     _callbackConfirm, _callbackCancel, [_killer, _assetTypeName, _assetCost],
     20, false
 ] spawn WL2_fnc_timedPrompt;
