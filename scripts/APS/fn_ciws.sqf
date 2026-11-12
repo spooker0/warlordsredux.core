@@ -108,9 +108,9 @@ addMissionEventHandler ["Draw3D", {
 
     private _interceptChance = _target getVariable ["WL2_interceptChance", -1];
     private _displayText = if (_interceptChance == -1) then {
-        "INCOMING"
+        localize "STR_WL_incoming"
     } else {
-        format ["INTERCEPT %1%%", round (_interceptChance * 10 / 3)];
+        format [localize "STR_WL_interceptChance", round (_interceptChance * 10 / 3)];
     };
 
     drawIcon3D [

@@ -48,7 +48,7 @@ private _vehiclesForMenu = _vehicles apply {
     private _type = typeOf _vehicle;
 
     private _displayName = if (_type isKindOf "Man") then {
-        format ["AI: %1", name _vehicle]
+        format [localize "STR_WL_aiVehicle", name _vehicle]
     } else {
         [_vehicle] call WL2_fnc_getAssetTypeShortName
     };

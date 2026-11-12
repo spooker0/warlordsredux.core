@@ -75,12 +75,12 @@ private _munitions = (8 allObjects 2) select {
     private _instigator = _shotParents call WL2_fnc_handleInstigator;
 
     private _launchVehicleName = if (isNull _launchVehicle) then {
-        "Unknown launcher"
+        localize "STR_WL_spectatorUnknownLauncher"
     } else {
         [_launchVehicle] call WL2_fnc_getAssetTypeShortName
     };
 
-    private _ownerName = if (isNull _instigator) then { "Unknown" } else { name _instigator };
+    private _ownerName = if (isNull _instigator) then { localize "STR_WL_spectatorUnknown" } else { name _instigator };
     private _launchDescription = format ["%1 (%2)", _launchVehicleName, _ownerName];
     _targetData pushBack ["MUNITION", _munitionType, _launchDescription, _munition, getObjectID _munition];
 } forEach _munitions;

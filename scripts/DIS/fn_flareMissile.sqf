@@ -159,7 +159,7 @@ while { alive _projectile } do {
     if (_currentTargetSide == _playerSide) then {
         _projectile setVariable ["DIS_missileDefeated", true];
         triggerAmmo _projectile;
-        ["Missile detonated to avoid seeking friendly target."] call WL2_fnc_smoothText;
+        [localize "STR_WL_missileDetonatedFriendlyTarget"] call WL2_fnc_smoothText;
         break;
     };
 
@@ -186,7 +186,7 @@ while { alive _projectile } do {
     // Ghost missile relocking check.
     if (_isLOAL && alive _currentMissileTarget && _currentMissileTarget != _originalTarget) then {
         if (alive _originalTarget) then {
-            ["Missile lost track on multiple targets."] call WL2_fnc_smoothText;
+            [localize "STR_WL_missileLostTrackMultipleTargets"] call WL2_fnc_smoothText;
         };
 
         _projectile setVariable ["DIS_missileDefeated", true];
@@ -196,7 +196,7 @@ while { alive _projectile } do {
 
     if (_unit distance _projectilePosition > _samMaxDistance) then {
         if (alive _originalTarget && !(_projectilePosition isEqualTo [0, 0, 0])) then {
-            ["Missile lost track past maximum control distance from launcher."] call WL2_fnc_smoothText;
+            [localize "STR_WL_missileLostTrackControlDistance"] call WL2_fnc_smoothText;
         };
 
         _projectile setVariable ["DIS_missileDefeated", true];

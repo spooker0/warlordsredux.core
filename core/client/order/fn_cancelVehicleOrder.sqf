@@ -2,13 +2,13 @@
 params ["_originalPosition", "_limitDistance", "_ignoreSector", "_asset"];
 
 if (vehicle player != player) exitWith {
-    [true, "Player is in vehicle."];
+    [true, localize "STR_WL_playerInVehicle"];
 };
 if (WL_ISDOWN(player)) exitWith {
-    [true, "Player is down."];
+    [true, localize "STR_WL_playerIsDown"];
 };
 if ((_originalPosition distance2D _asset) > _limitDistance) exitWith {
-    [true, "Asset moved too far from original position."];
+    [true, localize "STR_WL_assetMovedTooFar"];
 };
 
 private _side = BIS_WL_playerSide;
@@ -26,7 +26,7 @@ private _forwardBases = _potentialBases select {
 private _inRange = count _forwardBases > 0 || count _sectors > 0;
 
 if (!_inRange && !_ignoreSector) exitWith {
-    [true, "Asset must be within a sector or forward base."];
+    [true, localize "STR_WL_assetMustBeInSectorOrFob"];
 };
 
 private _sector = if (count _sectors > 0) then {
@@ -62,7 +62,7 @@ private _nearbyEnemies = if (_isInHomeBase || _ignoreSector) then {
     count _enemiesNearPlayer > 0
 };
 if (_nearbyEnemies) exitWith {
-    [true, "There are enemies nearby."];
+    [true, localize "STR_WL_enemiesNearby"];
 };
 
 // any sector regardless
@@ -91,7 +91,7 @@ private _isInWaterSector = _sector getVariable ["WL2_isAircraftCarrier", false] 
     } count WL_DESTROYER_OUTLINES > 0
 };
 if (_isInWaterSector && ((getPosASL _asset) # 2) < 5) exitWith {
-    [true, "Asset cannot be deployed so close to water."];
+    [true, localize "STR_WL_assetTooCloseToWater"];
 };
 
 if (_isInWaterSector) exitWith {
@@ -99,7 +99,7 @@ if (_isInWaterSector) exitWith {
 };
 
 if (surfaceIsWater (getPosATL _asset) && !(_asset isKindOf "Boat_F")) exitWith {
-    [true, "Asset cannot be deployed on water."];
+    [true, localize "STR_WL_assetOnWater"];
 };
 
 [false, ""]

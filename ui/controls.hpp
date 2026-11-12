@@ -105,7 +105,7 @@ class WL_WelcomeDisplay {
 		};
 		class WL_WelcomeDisplay_DiscordButton: RscButton {
 			idc = 102;
-			text = "WSV Discord";
+			text = $STR_WL_wsvDiscord;
 			url = "https://discord.gg/grmzsZE4ua";
 			x = 0.1;
 			y = 0.9;
@@ -115,7 +115,7 @@ class WL_WelcomeDisplay {
 		};
 		class WL_WelcomeDisplay_ArmaDiscordButton: RscButton {
 			idc = 103;
-			text = "ArmA Discord";
+			text = $STR_WL_armaDiscord;
 			url = "https://discord.gg/arma";
 			x = 0.51;
 			y = 0.9;
@@ -278,7 +278,7 @@ class RscWLGulag {
 			style = ST_CENTER;
 			shadow = 0;
 			sizeEx = 0.025 * safeZoneH;
-			text = "Pick the enemy. Hold your cursor over a card to select it.";
+			text = $STR_WL_gulagPickEnemy;
 		};
 		class RscWLGulag_LeftCard: RscText {
 			idc = 110;
@@ -315,7 +315,7 @@ class RscWLGulag {
 			style = ST_CENTER;
 			shadow = 0;
 			sizeEx = 0.022 * safeZoneH;
-			text = "Hold to select";
+			text = $STR_WL_gulagHoldSelect;
 		};
 		class RscWLGulag_RightCaption: RscWLGulag_LeftCaption {
 			idc = 122;

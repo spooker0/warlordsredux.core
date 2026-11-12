@@ -93,8 +93,8 @@ private _allLinkedSectors = [];
             continue;
         };
 
-        private _sectorName = _sector getVariable ["WL2_name", "Sector"];
-        if (_sectorName == "Wait") then {
+        private _sectorClass = _sector getVariable ["WL2_sectorClass", ""];
+        if (_sectorClass == "Wait") then {
             _voteable pushBack _sector;
         };
     } forEach _sectorPool;

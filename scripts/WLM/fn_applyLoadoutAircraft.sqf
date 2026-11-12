@@ -6,7 +6,7 @@ private _display = findDisplay WLM_DISPLAY;
 
 private _access = [_asset, player] call WL2_fnc_accessControl;
 if !(_access # 0) exitWith {
-    [format ["Cannot apply loadout: %1", _access # 1]] call WL2_fnc_smoothText;
+    [format [localize "STR_WL_cannotApplyLoadout", _access # 1]] call WL2_fnc_smoothText;
     playSound "AddItemFailed";
     _display closeDisplay 1;
 };

@@ -22,7 +22,7 @@ _contextMenu ctrlCommit 0;
 
 private _kickButton = _display ctrlCreate ["SQD_Menu_ContextualButton", -1, _contextMenu];
 _kickButton ctrlSetPosition [0, 0, SQD_LAYOUT_CONTEXT_W, SQD_LAYOUT_CONTEXT_H];
-_kickButton ctrlSetText "KICK PLAYER";
+_kickButton ctrlSetText localize "STR_WL_sqdKickPlayer";
 _kickButton ctrlCommit 0;
 
 _kickButton setVariable ["SQD_member", _player];
@@ -44,12 +44,12 @@ _kickButton ctrlAddEventHandler ["ButtonClick", {
     };
 
     _button setVariable ["SQD_kicking", true];
-    _button ctrlSetText format ["CONFIRM: KICK %1", name _player];
+    _button ctrlSetText format [localize "STR_WL_sqdConfirmKick", name _player];
 }];
 
 private _promoteButton = _display ctrlCreate ["SQD_Menu_ContextualButton", -1, _contextMenu];
 _promoteButton ctrlSetPosition [0, SQD_LAYOUT_CONTEXT_H, SQD_LAYOUT_CONTEXT_W, SQD_LAYOUT_CONTEXT_H];
-_promoteButton ctrlSetText "PROMOTE TO LEADER";
+_promoteButton ctrlSetText localize "STR_WL_sqdPromoteLeader";
 _promoteButton ctrlCommit 0;
 
 _promoteButton setVariable ["SQD_member", _player];
@@ -71,7 +71,7 @@ _promoteButton ctrlAddEventHandler ["ButtonClick", {
     };
 
     _button setVariable ["SQD_promoting", true];
-    _button ctrlSetText format ["CONFIRM: PROMOTE %1", name _player];
+    _button ctrlSetText format [localize "STR_WL_sqdConfirmPromote", name _player];
 }];
 
 private _dummyButton = _display displayCtrl SQD_DUMMY_IDC;

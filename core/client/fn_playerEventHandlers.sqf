@@ -28,7 +28,7 @@ player addEventHandler ["GetInMan", {
 			if (_defaultOffVtolAuto) then {
 				_unit action ["VTOLVectoring", _vehicle];
 				playSoundUI ["AddItemOK"];
-				["(VTOL auto vectoring enabled.)", true] call WL2_fnc_smoothText;
+				[localize "STR_WL_vtolAutoVectoringEnabledCaption", true] call WL2_fnc_smoothText;
 			};
 		};
 	};
@@ -80,7 +80,7 @@ player addEventHandler ["InventoryOpened", {
 
     private _access = [_container, player] call WL2_fnc_accessControl;
     if !(_access # 0) then {
-        [format ["Inventory locked. (%1)", _access # 1]] call WL2_fnc_smoothText;
+        [format [localize "STR_WL_inventoryLocked", _access # 1]] call WL2_fnc_smoothText;
         playSoundUI ["AddItemFailed"];
         true;
     } else {

@@ -31,7 +31,7 @@ private _filteredText = _playerName;
     _filteredText = _filteredText regexReplace [_x, "\*\*\*"];
 } forEach _disallowList;
 if (_playerName != _filteredText) exitWith {
-	[localize "STR_WL_badNameInfo", format ["Name: %1", _filteredText]] call WL2_fnc_exitToLobby;
+	[localize "STR_WL_badNameInfo", format [localize "STR_WL_badNameLabel", _filteredText]] call WL2_fnc_exitToLobby;
 };
 
 WL_LoadingState = 1;
@@ -67,8 +67,8 @@ waitUntil {
 };
 
 if (_setupState == "Failed") exitWith {
-	private _message = "Failed to create player group. Aborting. Rejoin.";
-    [_message, "Initialization Failed"] call WL2_fnc_exitToLobby;
+	private _message = localize "STR_WL_playerGroupFailed";
+    [_message, localize "STR_WL_initFailedTitle"] call WL2_fnc_exitToLobby;
 };
 
 WL_LoadingState = 2;
@@ -78,7 +78,7 @@ call WL2_fnc_varsInit;
 WL_LoadingState = 3;
 
 if !(BIS_WL_playerSide in BIS_WL_sidesArray) exitWith {
-	["Your unit is not a Warlords competitor", "Warlords Mission Error."] call WL2_fnc_exitToLobby;
+	[localize "STR_WL_notWarlordsCompetitor", localize "STR_WL_missionError"] call WL2_fnc_exitToLobby;
 };
 
 enableRadio true;
@@ -371,7 +371,7 @@ private _commMenuClasses = "true" configClasses (missionConfigFile >> "CfgCommun
 private _additionalSubs = _settingsMap getOrDefault ["additionalSubs", false];
 if !("additionalSubs" in _settingsMap) then {
 	0 spawn {
-		private _result = ["Subtitles", "Would you like to turn on additional subtitles for the hearing impaired? This can be turned on/off in settings.", "Yes", "No"] call WL2_fnc_prompt;
+		private _result = [localize "STR_WL_subtitles", localize "STR_WL_additionalSubtitlesConfirm", localize "STR_WL_yes", localize "STR_WL_no"] call WL2_fnc_prompt;
 		private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", createHashMap];
 		_settingsMap set ["additionalSubs", _result];
 	};

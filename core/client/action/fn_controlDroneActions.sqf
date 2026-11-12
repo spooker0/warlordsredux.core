@@ -55,14 +55,12 @@ while { alive player } do {
         private _droneName = [_drone] call WL2_fnc_getAssetTypeName;
 
         private _droneDecoy = WL_UNIT(_drone, "decoy", 0) > 0;
-        private _decoyText = if (_droneDecoy) then {
-            " (Decoy)"
-        } else {
-            ""
+        if (_droneDecoy) then {
+            _droneName = format [localize "STR_WL_decoy", _droneName];
         };
 
         player addAction [
-            format ["Control %1%2", _droneName, _decoyText],
+            format [localize "STR_WL_controlDrone", _droneName],
             {
                 params ["_target", "_caller", "_actionId", "_args"];
 

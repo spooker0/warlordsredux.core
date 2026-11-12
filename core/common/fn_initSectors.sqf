@@ -40,6 +40,7 @@ private _destroyerId = 0;
     };
 
     private _logic = createSimpleObject ["core\empty\empty.p3d", AGLtoASL _location];
+    _logic setVariable ["WL2_sectorClass", _sectorClass, true];
     _logic setVariable ["WL2_name", _name, true];
 
     private _services = getArray (_sector >> "services");

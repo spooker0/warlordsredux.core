@@ -26,10 +26,10 @@ if (_currentCount >= _maxAmount) then {
         private _oldestMineType = getText (configFile >> "CfgMagazines" >> _oldestMineDefaultMag >> "displayName");
 
         if (_oldestMineType == "") then {
-            _oldestMineType = "Deployed Mine";
+            _oldestMineType = localize "STR_WL_deployedMine";
         };
 
-        [format ["Maximum of %1 deployed explosives reached. Removing oldest %2", _maxAmount, _oldestMineType]] call WL2_fnc_smoothText;
+        [format [localize "STR_WL_maxExplosives", _maxAmount, _oldestMineType]] call WL2_fnc_smoothText;
 
         deleteVehicle _x;
     } forEach _overflowMines;

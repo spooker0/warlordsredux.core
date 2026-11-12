@@ -16,7 +16,7 @@ private _sector = if (count _findCurrentOwnedSector > 0) then {
 };
 
 if (isNull _sector) exitWith {
-	["Ordering aircraft failed. No sector found."] remoteExec ["WL2_fnc_smoothText", _owner];
+	[localize "STR_WL_orderAirNoSector"] remoteExec ["WL2_fnc_smoothText", _owner];
 	_sender setVariable ["BIS_WL_isOrdering", false, [2, _owner]];
 	[_cost, getPlayerUID _sender, false, ""] call WL2_fnc_fundsDatabaseWrite;
 };
@@ -26,7 +26,7 @@ _spawnParams params ["_spawnPos", "_dir"];
 
 if (count _spawnPos == 0) exitWith {
 	diag_log format ["Ordering aircraft failed. Spawn position not found in sector %1.", _sector getVariable "WL2_name"];
-	["No suitable spawn position found. Clear the runways."] remoteExec ["WL2_fnc_smoothText", _owner];
+	[localize "STR_WL_orderAirNoRunway"] remoteExec ["WL2_fnc_smoothText", _owner];
 	_sender setVariable ["BIS_WL_isOrdering", false, [2, _owner]];
 
 	// refund if nothing spawned

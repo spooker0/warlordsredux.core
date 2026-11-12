@@ -7,7 +7,7 @@ if (_pos # 0 > -WL_MAP_RESTRICTION_BUFFER &&
 	_pos # 0 < worldSize + WL_MAP_RESTRICTION_BUFFER &&
 	_pos # 1 > -WL_MAP_RESTRICTION_BUFFER &&
 	_pos # 1 < worldSize + WL_MAP_RESTRICTION_BUFFER) exitWith {
-	"Fly further away from the battlefield. You must fly 5km outside map boundaries to return to base.";
+	localize "STR_WL_rebaseFlyAway";
 };
 
 private _allUnits = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) select {
@@ -25,12 +25,12 @@ private _enemyAir = _allUnits select {
 	_alt > 50 && speed _x > 50
 };
 if (count _enemyAir > 0) exitWith {
-	"Enemy jets in the air. You can't return to base when enemy jets are in the air.";
+	localize "STR_WL_rebaseEnemyJets";
 };
 
 private _lastDamageTime = _asset getEntityInfo 5;
 if (damage _asset > 0.1 && _lastDamageTime > 0 && _lastDamageTime < WL_COOLDOWN_JETRTB_DMG) exitWith {
-	"Damaged too recently to return to base.";
+	localize "STR_WL_rebaseDamaged";
 };
 
 "ok";

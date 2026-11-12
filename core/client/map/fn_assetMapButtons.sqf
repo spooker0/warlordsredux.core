@@ -7,7 +7,7 @@ private _assetName = if (isPlayer _asset) then {
 } else {
     private _isStronghold = !isNull (_asset getVariable ["WL_strongholdSector", objNull]);
     if (_isStronghold) then {
-        "Stronghold";
+        localize "STR_WL_strongholdName";
     } else {
         [_asset] call WL2_fnc_getAssetTypeName;
     };
@@ -85,13 +85,13 @@ if (_operateAccess) then {
         private _markerPolyline = markerPolyline _lastMarker;
 
         if (count _markerPolyline < 2) exitWith {
-            ["No marker found. Draw a line on the map before bulk deploying assets."] call WL2_fnc_smoothText;
+            [localize "STR_WL_bulkDeployMarkerRequired"] call WL2_fnc_smoothText;
             playSoundUI ["AddItemFailed"];
         };
 
         private _installable = _asset getVariable ["WL2_installable", ""];
         if (WL_ASSET_TYPE(_asset) != _installable) exitWith {
-            ["Asset type mismatch."] call WL2_fnc_smoothText;
+            [localize "STR_WL_assetTypeMismatch"] call WL2_fnc_smoothText;
             playSoundUI ["AddItemFailed"];
         };
 
@@ -141,31 +141,31 @@ if (_operateAccess) then {
         private _bulkPositions = count _placedPositions;
         if (_bulkPositions > 0) then {
             if (_bulkPositions > 50) then {
-                [format ["Too many positions (%1x) found. Max: 50. Draw a shorter line on the map before bulk deploying assets.", _bulkPositions]] call WL2_fnc_smoothText;
+                [format [localize "STR_WL_tooManyPositions", _bulkPositions]] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
             } else {
                 private _installableType = [_asset] call WL2_fnc_getAssetTypeName;
                 private _costEstimate = _bulkPositions * 50;
                 private _result = [
-                    "Bulk deploy assets",
-                    format ["Would you like to bulk deploy %1x %2 along your last map-drawn line/marker? This will cost %3%4.", _bulkPositions, _installableType, WL_MONEY_SIGN, _costEstimate],
-                    "Yes", "No"
+                    localize "STR_WL_bulkDeployAssets",
+                    format [localize "STR_WL_bulkDeployConfirm", _bulkPositions, _installableType, WL_MONEY_SIGN, _costEstimate],
+                    localize "STR_WL_yes", localize "STR_WL_no"
                 ] call WL2_fnc_prompt;
 
                 if (_result) then {
                     [player, "bulkOrderAssets", _installable, _placedPositions, _placedDirections] remoteExec ["WL2_fnc_handleClientRequest", 2];
                     playSoundUI ["assemble_target", 1];
-                    ["Bulk deploy completed. Tip: You can use Strategy > Bulk remove to clean up your assets."] call WL2_fnc_smoothText;
+                    [localize "STR_WL_bulkDeployCompleted"] call WL2_fnc_smoothText;
                     deleteMarker _lastMarker;
 
                     missionNamespace setVariable ["WL2_bulkDeployCooldown", serverTime + WL_COOLDOWN_BULKDEPLOY];
                 };
             };
         } else {
-            ["No positions found. Draw a line on the map before bulk deploying assets."] call WL2_fnc_smoothText;
+            [localize "STR_WL_bulkDeployNoPositions"] call WL2_fnc_smoothText;
             playSoundUI ["AddItemFailed"];
         };
-    }, true, "bulkDeploy",  [2500, "BulkDeploy", "Strategy"]] call WL2_fnc_addTargetMapButton;
+    }, true, "bulkDeploy",  [2500, "BulkDeploy", localize "STR_WL_strategy"]] call WL2_fnc_addTargetMapButton;
 };
 
 private _accessControl = _asset getVariable ["WL2_accessControl", 0];
@@ -222,7 +222,7 @@ if (_operateAccess && WL_ASSET(_assetActualType, "smartMineAP", 0) > 0) then {
 
         private _distanceText = WL_SMART_MINE_DISTANCES # _newSmartMineDistance;
         private _distanceColor = if (_distanceText == 0) then { "#ff0000" } else { "#00ff00" };
-        format ["<t color='%1'>Trigger distance: %2 m</t>", _distanceColor, _distanceText];
+        format ["<t color='%1'>%2</t>", _distanceColor, format [localize "STR_WL_triggerDistance", _distanceText]];
     };
     private _smartMinePrevious = {
         params ["_asset"];
@@ -234,12 +234,12 @@ if (_operateAccess && WL_ASSET(_assetActualType, "smartMineAP", 0) > 0) then {
 
         private _distanceText = WL_SMART_MINE_DISTANCES # _newSmartMineDistance;
         private _distanceColor = if (_distanceText == 0) then { "#ff0000" } else { "#00ff00" };
-        format ["<t color='%1'>Trigger distance: %2 m</t>", _distanceColor, _distanceText];
+        format ["<t color='%1'>%2</t>", _distanceColor, format [localize "STR_WL_triggerDistance", _distanceText]];
     };
 
     private _detonationDistance = WL_SMART_MINE_DISTANCES # (_asset getVariable ["WL2_smartMineDistance", 0]);
     private _detonationDistanceColor = if (_detonationDistance == 0) then { "#ff0000" } else { "#00ff00" };
-    private _smartDistanceText = format ["<t color='%1'>Trigger distance: %2m</t>", _detonationDistanceColor, _detonationDistance];
+    private _smartDistanceText = format ["<t color='%1'>%2</t>", _detonationDistanceColor, format [localize "STR_WL_triggerDistance", _detonationDistance]];
 
     [_asset, _targetId, "smart-mine-adjust", _smartDistanceText, [_smartMineNext, _smartMinePrevious], false] call WL2_fnc_addTargetMapButton;
 };
@@ -271,7 +271,7 @@ if (_asset in units player) then {
         [
             0,
             "FTAI",
-            "Fast Travel"
+            localize "STR_WL_fastTravel"
         ]
     ] call WL2_fnc_addTargetMapButton;
 };
@@ -280,11 +280,11 @@ private _isTent = typeof _asset in ["Land_TentSolar_01_bluewhite_F", "Land_TentD
 if (_ownsVehicle && _isTent) then {
     [_asset, _targetId, "ft-tent", localize "STR_WL_fastTravelTent", {
         if (WL_ISDOWN(player)) exitWith {
-            ["Cannot fast travel."] call WL2_fnc_smoothText;
+            [localize "STR_WL_cannotFastTravel"] call WL2_fnc_smoothText;
             playSoundUI ["AddItemFailed"];
         };
         [4] spawn WL2_fnc_executeFastTravel;
-    }, true, "", [0, "RespawnBagFT", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
+    }, true, "", [0, "RespawnBagFT", localize "STR_WL_fastTravel"]] call WL2_fnc_addTargetMapButton;
 };
 
 private _canFastTravel = WL_ASSET(_assetActualType, "hasFastTravel", 0) > 0;
@@ -292,12 +292,12 @@ if (_canFastTravel) then {
     [_asset, _targetId, "ft-asset", localize "STR_WL_fastTravel", {
         params ["_asset"];
         [_asset] spawn WL2_fnc_executeFastTravelVehicle;
-    }, true, "", [0, "FTSeized", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
+    }, true, "", [0, "FTSeized", localize "STR_WL_fastTravel"]] call WL2_fnc_addTargetMapButton;
 
-    [_asset, _targetId, "team-designate", "Designate team priority", {
+    [_asset, _targetId, "team-designate", localize "STR_WL_designateTeamPriority", {
         params ["_asset"];
         [_asset, "asset"] call WL2_fnc_designateTeamPriority;
-    }, true, "designateTeamPriority", [0, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
+    }, true, "designateTeamPriority", [0, "DesignatePriority", localize "STR_WL_strategy"]] call WL2_fnc_addTargetMapButton;
 };
 
 private _canParadrop = WL_ASSET(_assetActualType, "paradrops", 0) > 0;
@@ -306,7 +306,7 @@ if (_canParadrop) then {
         params ["_asset"];
         private _destination = _asset modelToWorldWorld [random 200 - 100, random 200 - 100, -30];
         [_destination, getDir _asset, _asset, cameraOn] spawn WL2_fnc_executeParadrop;
-    }, true, "paradrop", [0, "FTParadropVehicle", "Fast Travel"]] call WL2_fnc_addTargetMapButton;
+    }, true, "paradrop", [0, "FTParadropVehicle", localize "STR_WL_fastTravel"]] call WL2_fnc_addTargetMapButton;
 };
 
 if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
@@ -331,7 +331,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         [
             0,
             "FTSeized",
-            "Fast Travel"
+            localize "STR_WL_fastTravel"
         ]
     ] call WL2_fnc_addTargetMapButton;
 
@@ -351,16 +351,16 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         [
             0,
             "FTParadropVehicle",
-            "Fast Travel"
+            localize "STR_WL_fastTravel"
         ]
     ] call WL2_fnc_addTargetMapButton;
 
     // Lock FOB Button
     private _isLocked = _asset getVariable ["WL2_forwardBaseLocked", false];
     private _lockText = if (_isLocked) then {
-        "<t color='#ff0000'>Forward base: Locked</t>";
+        format ["<t color='#ff0000'>%1</t>", localize "STR_WL_forwardBaseLocked"];
     } else {
-        "<t color='#00ff00'>Forward base: Unlocked</t>";
+        format ["<t color='#00ff00'>%1</t>", localize "STR_WL_forwardBaseUnlocked"];
     };
     private _lockFOBExecute = {
         params ["_asset"];
@@ -368,9 +368,9 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         _isLocked = !_isLocked;
         _asset setVariable ["WL2_forwardBaseLocked", _isLocked, true];
         if (_isLocked) then {
-            "<t color='#ff0000'>Forward base: Locked</t>";
+            format ["<t color='#ff0000'>%1</t>", localize "STR_WL_forwardBaseLocked"];
         } else {
-            "<t color='#00ff00'>Forward base: Unlocked</t>";
+            format ["<t color='#00ff00'>%1</t>", localize "STR_WL_forwardBaseUnlocked"];
         };
     };
     [
@@ -385,7 +385,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     // Delete FOB Button
     private _deleteFOBExecute = {
         params ["_asset"];
-        private _result = ["Delete FOB", "Are you sure you would like to delete your FOB?", "Yes", "Cancel"] call WL2_fnc_prompt;
+        private _result = [localize "STR_WL_deleteFob", localize "STR_WL_deleteFobConfirm", localize "STR_WL_yes", localize "STR_WL_cancel"] call WL2_fnc_prompt;
         if (!_result) exitWith {
             playSoundUI ["AddItemFailed"];
         };
@@ -394,7 +394,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     [
         _asset, _targetId,
         "remove-fob",
-        "<t color='#ff0000'>Remove forward base</t>",
+        format ["<t color='#ff0000'>%1</t>", localize "STR_WL_removeForwardBase"],
         _deleteFOBExecute,
         true,
         "deleteFOB"
@@ -415,14 +415,14 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     [
         _asset, _targetId,
         "repair-fob",
-        "Repair forward base",
+        localize "STR_WL_repairForwardBase",
         _repairFOBExecute,
         true,
         "repairFOB",
         [
             500,
             "RepairFOB",
-            "Strategy"
+            localize "STR_WL_strategy"
         ]
     ] call WL2_fnc_addTargetMapButton;
 
@@ -446,21 +446,21 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     [
         _asset, _targetId,
         "upgrade-defend-fob",
-        format ["Upgrade forward base [%1K Supplies]", WL_FOB_UPGRADE_COST / 1000 toFixed 0],
+        format [localize "STR_WL_upgradeFob", WL_FOB_UPGRADE_COST / 1000 toFixed 0],
         _defendFOBExecute,
         true,
         "defendFOB",
         [
             0,
             "DefendFOB",
-            "Strategy"
+            localize "STR_WL_strategy"
         ]
     ] call WL2_fnc_addTargetMapButton;
 
-    [_asset, _targetId, "team-designate", "Designate team priority", {
+    [_asset, _targetId, "team-designate", localize "STR_WL_designateTeamPriority", {
         params ["_asset"];
         [_asset, "fob"] call WL2_fnc_designateTeamPriority;
-    }, true, "designateTeamPriority", [0, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
+    }, true, "designateTeamPriority", [0, "DesignatePriority", localize "STR_WL_strategy"]] call WL2_fnc_addTargetMapButton;
 
     // Combat air patrol button
     private _combatAirExecute = {
@@ -468,10 +468,10 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         [_asset] spawn {
             params ["_asset"];
             private _message = format [
-                "Are you sure you want to establish a no-fly zone? This will cost you %1%2 and put it on a %3 minute cooldown.",
+                localize "STR_WL_combatAirConfirm",
                 WL_MONEY_SIGN, WL_COST_COMBATAIR, round (WL_COOLDOWN_CAP / 60)
             ];
-            private _result = [localize "STR_WL_combatAirPatrol", _message, "OK", "Cancel"] call WL2_fnc_prompt;
+            private _result = [localize "STR_WL_combatAirPatrol", _message, localize "STR_WL_ok", localize "STR_WL_cancel"] call WL2_fnc_prompt;
 
             if (!_result) exitWith {
                 playSoundUI ["AddItemFailed"];
@@ -491,7 +491,7 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         [
             WL_COST_COMBATAIR,
             "CombatAir",
-            "Fast Travel"
+            localize "STR_WL_fastTravel"
         ]
     ] call WL2_fnc_addTargetMapButton;
 
@@ -501,10 +501,10 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
         [_asset] spawn {
             params ["_asset"];
             private _message = format [
-                "Are you sure you want to call in a paradrop? This will cost you %1%2.",
+                localize "STR_WL_paradropConfirm",
                 WL_MONEY_SIGN, WL_COST_PARADROPCALL
             ];
-            private _result = ["Paradrop", _message, "OK", "Cancel"] call WL2_fnc_prompt;
+            private _result = [localize "STR_WL_paradrop", _message, localize "STR_WL_ok", localize "STR_WL_cancel"] call WL2_fnc_prompt;
 
             if (!_result) exitWith {
                 playSoundUI ["AddItemFailed"];
@@ -517,14 +517,14 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     [
         _asset, _targetId,
         "order-paradrop",
-        "Order paradrop",
+        localize "STR_WL_orderParadrop",
         _paradropExecute,
         true,
         "orderParadropFOB",
         [
             WL_COST_PARADROPCALL,
             "Paradrop",
-            "Fast Travel"
+            localize "STR_WL_fastTravel"
         ]
     ] call WL2_fnc_addTargetMapButton;
 
@@ -563,14 +563,14 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     //     _repairStructuresExecute,
     //     true,
     //     "repairStructuresFob",
-    //     [WL_COST_REPAIRALL, "Repair", "Strategy"]
+    //     [WL_COST_REPAIRALL, "Repair", localize "STR_WL_strategy"]
     // ] call WL2_fnc_addTargetMapButton;
 
 #if WL_STRONGHOLD_DEBUG
     // Fast Travel FOB Test
     private _fastTravelFOBTestExecute = {
         params ["_asset"];
-        ["Testing Sector Stronghold spawns. Force respawn to end test."] call WL2_fnc_smoothText;
+        [localize "STR_WL_testingStrongholdSpawns"] call WL2_fnc_smoothText;
         while { alive player } do {
             private _forwardBaseArea = [getPosASL _asset, WL_FOB_RANGE, WL_FOB_RANGE, 0, false];
             [6, _forwardBaseArea] spawn WL2_fnc_executeFastTravel;
@@ -580,14 +580,14 @@ if (typeof _asset == "RuggedTerminal_01_communications_hub_F") then {
     [
         _asset, _targetId,
         "ft-fob-test",
-        "Forward base test fast travel",
+        localize "STR_WL_forwardBaseTestFastTravel",
         _fastTravelFOBTestExecute,
         true,
         "fastTravelFOB",
         [
             0,
             "FTSeized",
-            "Fast Travel"
+            localize "STR_WL_fastTravel"
         ]
     ] call WL2_fnc_addTargetMapButton;
 #endif
@@ -635,9 +635,9 @@ if (_operateAccess && _isUav) then {
     };
 
     private _isAutoText = if (isAutonomous _asset) then {
-        "<t color='#00ff00'>AI Controller: On</t>";
+        format ["<t color='#00ff00'>%1</t>", localize "STR_WL_aiControllerOn"];
     } else {
-        "<t color='#ff0000'>AI Controller: Off</t>";
+        format ["<t color='#ff0000'>%1</t>", localize "STR_WL_aiControllerOff"];
     };
 
     [_asset, _targetId, "auto-set", _isAutoText, {
@@ -653,9 +653,9 @@ if (_operateAccess && _isUav) then {
 
         // return
         if (isAutonomous _asset) then {
-            "<t color='#ff0000'>AI Controller: Off</t>";
+            format ["<t color='#ff0000'>%1</t>", localize "STR_WL_aiControllerOff"];
         } else {
-            "<t color='#00ff00'>AI Controller: On</t>";
+            format ["<t color='#00ff00'>%1</t>", localize "STR_WL_aiControllerOn"];
         }
     }, false] call WL2_fnc_addTargetMapButton;
 };
@@ -668,14 +668,14 @@ private _fastTravelSquadmateExecute = {
 [
     _asset, _targetId,
     "ft-squad",
-    "Fast travel",
+    localize "STR_WL_fastTravel",
     _fastTravelSquadmateExecute,
     true,
     "fastTravelSquad",
     [
         0,
         "FTSquad",
-        "Fast Travel"
+        localize "STR_WL_fastTravel"
     ]
 ] call WL2_fnc_addTargetMapButton;
 
@@ -691,7 +691,7 @@ private _rtbExecute = {
     _rtbExecute,
     true,
     "rtb",
-    [WL_COST_JETRTB, "RTB", "Strategy"]
+    [WL_COST_JETRTB, "RTB", localize "STR_WL_strategy"]
 ] call WL2_fnc_addTargetMapButton;
 
 private _teamSectorsData = WL_SECTORS_DATA(BIS_WL_playerSide);
@@ -724,7 +724,7 @@ if (count _findIsStronghold > 0) then {
         [
             0,
             "StrongholdFT",
-            "Fast Travel"
+            localize "STR_WL_fastTravel"
         ]
     ] call WL2_fnc_addTargetMapButton;
 
@@ -751,7 +751,7 @@ if (count _findIsStronghold > 0) then {
         [
             0,
             "StrongholdFTNear",
-            "Fast Travel"
+            localize "STR_WL_fastTravel"
         ]
     ] call WL2_fnc_addTargetMapButton;
 
@@ -767,8 +767,8 @@ if (count _findIsStronghold > 0) then {
         private _sector = (_findSector # 0);
 
         private _sectorName = _sector getVariable ["WL2_name", ""];
-        private _message = format ["Are you sure you want to pay to remove the Sector Stronghold in %1?", _sectorName];
-        private _result = ["Remove Sector Stronghold", _message, "Remove", "Cancel"] call WL2_fnc_prompt;
+        private _message = format [localize "STR_WL_removeStrongholdConfirm", _sectorName];
+        private _result = [localize "STR_WL_removeSectorStronghold", _message, localize "STR_WL_remove", localize "STR_WL_cancel"] call WL2_fnc_prompt;
         if (!_result) exitWith {
             playSoundUI ["AddItemFailed"];
         };
@@ -779,14 +779,14 @@ if (count _findIsStronghold > 0) then {
     [
         _asset, _targetId,
         "remove-stronghold",
-        "<t color='#ff0000'>Remove stronghold</t>",
+        format ["<t color='#ff0000'>%1</t>", localize "STR_WL_removeStronghold"],
         _removeStrongholdExecute,
         true,
         "removeStronghold",
         [
             WL_COST_STRONGHOLD,
             "RemoveStronghold",
-            "Strategy"
+            localize "STR_WL_strategy"
         ]
     ] call WL2_fnc_addTargetMapButton;
 
@@ -801,21 +801,21 @@ if (count _findIsStronghold > 0) then {
     [
         _asset, _targetId,
         "repair-stronghold",
-        "Repair stronghold",
+        localize "STR_WL_repairStronghold",
         _repairStrongholdExecute,
         true,
         "repairStronghold",
         [
             WL_COST_STRONGHOLD / 2,
             "RepairStronghold",
-            "Strategy"
+            localize "STR_WL_strategy"
         ]
     ] call WL2_fnc_addTargetMapButton;
 
-    [_asset, _targetId, "team-designate", "Designate team priority", {
+    [_asset, _targetId, "team-designate", localize "STR_WL_designateTeamPriority", {
         params ["_asset"];
         [_asset, "stronghold"] call WL2_fnc_designateTeamPriority;
-    }, true, "designateTeamPriority", [0, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
+    }, true, "designateTeamPriority", [0, "DesignatePriority", localize "STR_WL_strategy"]] call WL2_fnc_addTargetMapButton;
 
     #if WL_STRONGHOLD_DEBUG
     // Fast Travel Stronghold Test
@@ -827,7 +827,7 @@ if (count _findIsStronghold > 0) then {
             (_x getVariable ["WL_stronghold", objNull]) == _asset
         };
         private _sector = (_findSector # 0);
-        ["Testing Sector Stronghold spawns. Force respawn to end test."] call WL2_fnc_smoothText;
+        [localize "STR_WL_testingStrongholdSpawns"] call WL2_fnc_smoothText;
         while { alive player } do {
             [5, _sector] spawn WL2_fnc_executeFastTravel;
             uiSleep 3;
@@ -836,14 +836,14 @@ if (count _findIsStronghold > 0) then {
     [
         _asset, _targetId,
         "ft-stronghold-test",
-        "Stronghold test fast travel",
+        localize "STR_WL_strongholdTestFastTravel",
         _fastTravelStrongholdTestExecute,
         true,
         "fastTravelStronghold",
         [
             0,
             "StrongholdFT",
-            "Fast Travel"
+            localize "STR_WL_fastTravel"
         ]
     ] call WL2_fnc_addTargetMapButton;
     #endif

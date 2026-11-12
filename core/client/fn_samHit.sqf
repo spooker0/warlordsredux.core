@@ -2,12 +2,12 @@
 params ["_amount", "_target"];
 if (isDedicated) exitWith {};
 
-private _message = format ["Proximity detonation! Damage sustained: %1%%", round (_amount * 100)];
+private _message = format [localize "STR_WL_proxDetonationSelf", round (_amount * 100)];
 [_message] call WL2_fnc_smoothText;
 
 if (WL_ISUP(player) && cameraOn != _target && !(cameraOn in _target) && !(player in _target)) exitWith {};
 
-["(Missile hit sounds.)", true] call WL2_fnc_smoothText;
+[localize "STR_WL_missileHitSoundsCaption", true] call WL2_fnc_smoothText;
 
 private _sounds = [
     "a3\sounds_f\weapons\hits\glass_arm_1.wss",

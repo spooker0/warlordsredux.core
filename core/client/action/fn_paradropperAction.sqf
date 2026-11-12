@@ -28,7 +28,7 @@ _asset addAction [
 		private _paradrops = _target getVariable ["WL2_paradrops", 0];
 		if (_paradrops <= 0) exitWith {
 			playSoundUI ["AddItemFailed"];
-			["No paradrops available!"] call WL2_fnc_smoothText;
+			[localize "STR_WL_noParadropsAvailable"] call WL2_fnc_smoothText;
 		};
         _target setVariable ["WL2_paradrops", _paradrops - 1, true];
 

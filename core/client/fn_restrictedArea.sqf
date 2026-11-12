@@ -98,7 +98,7 @@ while { !BIS_WL_missionEnd } do {
     if (cameraOn isKindOf "Plane") then {
         private _eligible = call WL2_fnc_rebaseActionEligibility;
         if (_eligible == "ok") then {
-            _rtbTextControl ctrlSetText "YOU CAN RETURN TO BASE BY CLICKING ON A FRIENDLY AIRFIELD OR CATAPULT ON THE MAP.";
+            _rtbTextControl ctrlSetText localize "STR_WL_restrictedReturnBase";
         } else {
             _rtbTextControl ctrlSetText "";
         };

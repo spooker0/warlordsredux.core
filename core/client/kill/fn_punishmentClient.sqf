@@ -20,10 +20,10 @@ private _timeRemaining = [(_punishEndTime - serverTime) max 0, "HH:MM:SS"] call 
 
 if ("kick" in _punishReason || "cheat" in _punishReason) exitWith {
     private _penaltyText = format [
-        "You are blocked from rejoining the game for %1. To see rules or report mod abuse, visit <a href='https://discord.gg/grmzsZE4ua'>the WSV Discord.</a>",
+        localize "STR_WL_punishedBlockText",
         _timeRemaining
     ];
-    "BlockScreen" setDebriefingText ["Punished", _penaltyText, format ["Reason: %1", _punishReason]];
+    "BlockScreen" setDebriefingText [localize "STR_WL_punishedTitle", _penaltyText, format [localize "STR_WL_punishedReason", _punishReason]];
     endMission "BlockScreen";
     forceEnd;
 };

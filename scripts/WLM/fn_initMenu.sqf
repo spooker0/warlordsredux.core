@@ -75,7 +75,7 @@ _applyButtonControl ctrlAddEventHandler ["ButtonClick", {
     };
 }];
 
-_rearmButtonControl ctrlSetText "Rearm";
+_rearmButtonControl ctrlSetText localize "STR_WL_wlmRearm";
 _rearmButtonControl ctrlAddEventHandler ["ButtonClick", {
     private _isAircraft = uiNamespace getVariable "WLM_assetIsAircraft";
     if (_isAircraft) then {
@@ -270,15 +270,15 @@ private _hasSmoke = [];
 } forEach _assetTurrets;
 if (count _hasSmoke > 0) then {
     if ([0] in _assetTurrets) then {
-        private _smokeGunnerItem = _customizationSelectControl lbAdd "Give Smoke to Gunner";
+        private _smokeGunnerItem = _customizationSelectControl lbAdd (localize "STR_WL_wlmGiveSmokeGunner");
         _customizationSelectControl lbSetData [_smokeGunnerItem, "setSmokeToGunner"];
     };
     if ([0, 0] in _assetTurrets) then {
-        private _smokeCommanderItem = _customizationSelectControl lbAdd "Give Smoke to Commander";
+        private _smokeCommanderItem = _customizationSelectControl lbAdd (localize "STR_WL_wlmGiveSmokeCommander");
         _customizationSelectControl lbSetData [_smokeCommanderItem, "setSmokeToCommander"];
     };
     if ([-1] in _assetTurrets) then {
-        private _smokeDriverItem = _customizationSelectControl lbAdd "Give Smoke to Driver";
+        private _smokeDriverItem = _customizationSelectControl lbAdd (localize "STR_WL_wlmGiveSmokeDriver");
         _customizationSelectControl lbSetData [_smokeDriverItem, "setSmokeToDriver"];
     };
 };
@@ -287,7 +287,7 @@ private _hornWeapons = ["AmbulanceHorn", "CarHorn", "TruckHorn", "TruckHorn2", "
 private _turretWeapons = _asset weaponsTurret [-1];
 if (count (_hornWeapons arrayIntersect _turretWeapons) > 0) then {
     {
-        private _hornItem = _customizationSelectControl lbAdd (format ["Set Horn to %1", _x]);
+        private _hornItem = _customizationSelectControl lbAdd (format [localize "STR_WL_wlmSetHorn", _x]);
         _customizationSelectControl lbSetData [_hornItem, format ["setHornTo%1", _x]];
     } forEach _hornWeapons;
 };

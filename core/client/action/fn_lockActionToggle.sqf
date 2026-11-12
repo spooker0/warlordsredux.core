@@ -2,7 +2,7 @@
 if (!hasInterface) exitWith {};
 
 player addAction [
-    "Toggle vehicle lock",
+    localize "STR_WL_toggleVehicleLock",
     {
         [cameraOn] call WL2_fnc_vehicleLockAction;
     },

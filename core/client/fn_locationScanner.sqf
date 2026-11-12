@@ -293,7 +293,7 @@ uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
             private _mapMarkerType = markerType _mapMarker;
             private _mapMarkerPath = getText (configFile >> "CfgMarkers" >> _mapMarkerType >> "icon");
 
-            private _sectorName = _target getVariable ["WL2_name", "Sector"];
+            private _sectorName = _target getVariable ["WL2_name", localize "STR_WL_sector"];
 
             _sectorIcons pushBack [
                 _mapMarkerPath,
@@ -409,7 +409,7 @@ uiNamespace setVariable ["WL2_drawSectorHudIcons", []];
                     1.2,
                     1.2,
                     0,
-                    "Capture and activate sector supplies",
+                    localize "STR_WL_captureActivateSupplies",
                     2,
                     0.05,
                     "RobotoCondensedBold",
@@ -540,8 +540,8 @@ while { !BIS_WL_missionEnd } do {
             _stronghold setVariable ["WL2_strongholdIntruders", true];
             if (serverTime >= _strongholdNextWarn) then {
                 _strongholdNextWarn = serverTime + 30;
-                private _sectorName = _sector getVariable ["WL2_name", "Unknown"];
-                [format ["Stronghold intrusion: %1", _sectorName]] call WL2_fnc_smoothText;
+                private _sectorName = _sector getVariable ["WL2_name", localize "STR_WL_unknown"];
+                [format [localize "STR_WL_strongholdIntrusion", _sectorName]] call WL2_fnc_smoothText;
             };
         } else {
             _stronghold setVariable ["WL2_strongholdIntruders", false];
@@ -568,7 +568,7 @@ while { !BIS_WL_missionEnd } do {
                 _forwardBase setVariable ["WL2_forwardBaseIntruders", true];
                 if (serverTime >= _fobNextWarn) then {
                     _fobNextWarn = serverTime + 30;
-                    ["Forward base intrusion."] call WL2_fnc_smoothText;
+                    [localize "STR_WL_forwardBaseIntrusion"] call WL2_fnc_smoothText;
                 };
             } else {
                 _forwardBase setVariable ["WL2_forwardBaseIntruders", false];

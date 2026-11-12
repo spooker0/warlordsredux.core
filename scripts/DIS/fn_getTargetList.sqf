@@ -35,7 +35,7 @@ if (!_targetInList) then {
         private _autoOption = _targetList # 0;
         _autoOption set [2, true];
     } else {
-        _targetList pushBack [netid _selectedTarget, format ["SELECTED: %1", [_selectedTarget] call WL2_fnc_getAssetTypeName], true];
+        _targetList pushBack [netid _selectedTarget, format [localize "STR_WL_targetSelected", [_selectedTarget] call WL2_fnc_getAssetTypeName], true];
     };
 };
 

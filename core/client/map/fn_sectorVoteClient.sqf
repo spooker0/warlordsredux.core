@@ -105,7 +105,7 @@ while { !BIS_WL_missionEnd } do {
     private _sectorCaptureList = _sectorsBeingCaptured apply {
         private _sector = _x;
 
-        private _sectorName = _sector getVariable ["WL2_name", "Sector"];
+        private _sectorName = _sector getVariable ["WL2_name", localize "STR_WL_sector"];
         private _sectorOwner = _sector getVariable ["BIS_WL_owner", independent];
         private _sectorReinforcements = if (_sectorOwner == independent) then {
             _sector getVariable ["WL2_sectorPop", 0];
@@ -239,7 +239,7 @@ while { !BIS_WL_missionEnd } do {
                     private _vote = _x # 0;
                     private _voteCount = _x # 1;
 
-                    private _sectorName = _vote getVariable ["WL2_name", "Sector"];
+                    private _sectorName = _vote getVariable ["WL2_name", localize "STR_WL_sector"];
                     private _isSectorRevealed = _playerSide in (_vote getVariable ["BIS_WL_revealedBy", []]);
 
                     private _ownerColor = if (_isSectorRevealed) then {
@@ -298,7 +298,7 @@ while { !BIS_WL_missionEnd } do {
 
                 private _votedText = format [
                     localize "STR_A3_WL_popup_voting_done",
-                    _currentFriendlyTarget getVariable ["WL2_name", "Sector"]
+                    _currentFriendlyTarget getVariable ["WL2_name", localize "STR_WL_sector"]
                 ];
 
                 [_votedText] call WL2_fnc_smoothText;
@@ -328,7 +328,7 @@ while { !BIS_WL_missionEnd } do {
             private _sectorOwner = _currentEnemyTarget getVariable ["BIS_WL_owner", independent];
             if (_sectorOwner == BIS_WL_playerSide) then {
                 "Incoming" call WL2_fnc_announcer;
-                private _sectorName = _currentEnemyTarget getVariable ["WL2_name", "Sector"];
+                private _sectorName = _currentEnemyTarget getVariable ["WL2_name", localize "STR_WL_sector"];
                 [format [localize "STR_A3_WL_incoming", _sectorName, BIS_WL_enemySide call WL2_fnc_sideToFaction]] call WL2_fnc_smoothText;
             };
 

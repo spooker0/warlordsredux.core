@@ -5,7 +5,7 @@ private _target = _unit getVariable ["WL2_selectedTargetAA", objNull];
 _target setVariable ["WL_incomingExtendedSam", _unit, true];
 
 if (isNull _target) exitWith {
-    ["No target found! Launch using the Extended SAM interface."] call WL2_fnc_smoothText;
+    [localize "STR_WL_extendedSamNoTarget"] call WL2_fnc_smoothText;
     deleteVehicle _projectile;
 };
 

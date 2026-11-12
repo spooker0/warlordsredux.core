@@ -104,7 +104,7 @@ if (isNull _person) exitWith {
 
 if (_channel == 0) exitWith {
     if (isPlayer _person && side group _person == independent) then {
-        private _newFrom = format ["Lobby (%1)", _name];
+        private _newFrom = format [localize "STR_WL_lobbyChat", _name];
         [_newFrom, _filteredText];
     } else {
         private _playerLevel = _person getVariable ["WL_playerLevel", "Recruit"];
@@ -115,7 +115,7 @@ if (_channel == 0) exitWith {
 
 if (_channel == 1) exitWith {
     if (isPlayer _person && side group _person == independent) then {
-        private _newFrom = format ["Lobby (%1)", _name];
+        private _newFrom = format [localize "STR_WL_lobbyChat", _name];
         [_newFrom, _filteredText];
     } else {
         private _playerLevel = _person getVariable ["WL_playerLevel", "Recruit"];

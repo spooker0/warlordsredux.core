@@ -20,7 +20,7 @@ if (_owner == BIS_WL_enemySide) then {
 		if (_playerSide == _previousOwner || _playerSide in _sectorRevealedSides) then {
 			private _message = format [
 				localize "STR_A3_WL_popup_sector_seized",
-				_sector getVariable ["WL2_name", "Sector"],
+				_sector getVariable ["WL2_name", localize "STR_WL_sector"],
 				_owner call WL2_fnc_sideToFaction
 			];
 			[_message] call WL2_fnc_smoothText;

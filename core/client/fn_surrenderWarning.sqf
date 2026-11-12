@@ -1,6 +1,6 @@
 #include "includes.inc"
 if (isDedicated) exitWith {};
-["Surrender vote active."] call WL2_fnc_smoothText;
+[localize "STR_WL_surrenderVoteActive"] call WL2_fnc_smoothText;
 playSoundUI ["air_raid", 3];
 uiNamespace setVariable ["WL2_surrenderWarningActive", true];
 

@@ -15,7 +15,7 @@ private _hasOldStronghold = !isNull _oldStronghold;
 if (_hasOldStronghold && {
     _oldStronghold getVariable ["WL2_strongholdIntruders", false];
 }) exitWith {
-    ["You cannot create a new sector stronghold while there are intruders in the current one!"] call WL2_fnc_smoothText;
+    [localize "STR_WL_strongholdIntruders"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
@@ -46,11 +46,11 @@ private _drawIconId = addMissionEventHandler ["draw3D", {
 
 private _sectorName = _currentSector getVariable ["WL2_name", "sector"];
 private _strongholdType = getText (configFile >> "CfgVehicles" >> typeOf _stronghold >> "displayName");
-private _message = format ["Are you sure you want to create a Sector Stronghold in %1 from: %2?", _sectorName, _strongholdType];
+private _message = format [localize "STR_WL_createStrongholdConfirm", _sectorName, _strongholdType];
 if (_hasOldStronghold) then {
-    _message = format ["%1<br/><br/><t color='#ff0000'>This will replace the current Sector Stronghold.</t>", _message];
+    _message = format ["%1<br/><br/><t color='#ff0000'>%2</t>", _message, localize "STR_WL_replaceStrongholdWarning"];
 };
-private _result = ["Create Sector Stronghold", _message, "Create", "Cancel"] call WL2_fnc_prompt;
+private _result = [localize "STR_WL_createSectorStronghold", _message, localize "STR_WL_create", localize "STR_WL_cancel"] call WL2_fnc_prompt;
 removeMissionEventHandler ["draw3D", _drawIconId];
 if (!_result) exitWith {
     playSoundUI ["AddItemFailed"];

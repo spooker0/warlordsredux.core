@@ -29,7 +29,7 @@ if (_selection < 0 || _selection >= count _rows) exitWith {
 _requestButton ctrlEnable !(_display getVariable ["BUY_transferActive", false]);
 (_rows # _selection) params ["_className", "_requirements", "_displayName", "_picture", "_text", "_offset", "_cost"];
 _pictureControl ctrlSetText _picture;
-_detailsControl ctrlSetStructuredText parseText format ["<t align='left' size='%2'>%1</t>", _text, 0.75];
+_detailsControl ctrlSetStructuredText parseText format ["<t align='left' size='%2'>%1</t>", _text, 1];
 
 private _detailsHeight = ctrlTextHeight _detailsControl;
 _detailsControl ctrlSetPositionH ((_detailsHeight + BUY_GRID_H) max ((ctrlPosition _detailsGroup) # 3));

@@ -13,11 +13,11 @@ private _forwardBases = _potentialBases select {
 };
 
 if ("NF" in _requirements && count _forwardBases > 0) exitWith {
-    [false, "Must not be in a forward base."];
+    [false, localize "STR_WL_requirementNoForwardBase"];
 };
 
 if ("F" in _requirements && count _forwardBases == 0) exitWith {
-    [false, "Must be in a forward base."];
+    [false, localize "STR_WL_requirementForwardBase"];
 };
 
 if (count _forwardBases > 0) then {
@@ -28,24 +28,24 @@ private _defenders = _sector getVariable ["WL2_defenders", 0];
 private _sectorUnderAttack = _sector == WL_TARGET_ENEMY;
 
 if (_sectorUnderAttack && _defenders <= 0) exitWith {
-    [false, "Sector has run out of reinforcements. Resupply the sector to enable vehicle purchases."];
+    [false, localize "STR_WL_sectorNoReinforcementsBuy"];
 };
 
 private _servicesInSector = _sector getVariable ["WL2_services", []];
 if ("A" in _requirements && !("A" in _servicesInSector)) exitWith {
-    [false, "Must be in a sector with a runway."];
+    [false, localize "STR_WL_requirementRunway"];
 };
 
 if ("H" in _requirements && !("H" in _servicesInSector)) exitWith {
-    [false, "Must be in a sector with a helipad."];
+    [false, localize "STR_WL_requirementHelipad"];
 };
 
 if ("FA" in _requirements && !("FA" in _servicesInSector)) exitWith {
-    [false, "Must be in a forward airbase."];
+    [false, localize "STR_WL_requirementForwardAirbase"];
 };
 
 if ("S" in _requirements && _sectorUnderAttack) exitWith {
-    [false, "Cannot spawn in a sector under attack."];
+    [false, localize "STR_WL_spawnUnderAttack"];
 };
 
 [true, ""];

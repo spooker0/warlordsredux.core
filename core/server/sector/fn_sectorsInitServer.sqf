@@ -2,7 +2,7 @@
 private _baseData =
 #if WL_OVERRIDE_BASES
 	BIS_WL_allSectors select {
-		_x getVariable ["WL2_name", ""] in ["AAC Airfield", "Airbase"];
+		_x getVariable ["WL2_sectorClass", ""] in ["AACAirfield", "Airbase"];
 	};
 #else
 	[] call WL2_fnc_calcHomeBases;
@@ -59,8 +59,8 @@ private _firstBase = _baseData # 0;
 private _secondBase = _baseData # 1;
 
 #if WL_BASE_SELECTION_DEBUG
-systemChat format ["First base: %1", _firstBase getVariable ["WL2_name", ""]];
-systemChat format ["Second base: %1", _secondBase getVariable ["WL2_name", ""]];
+systemChat format [localize "STR_WL_firstBase", _firstBase getVariable ["WL2_name", ""]];
+systemChat format [localize "STR_WL_secondBase", _secondBase getVariable ["WL2_name", ""]];
 #endif
 
 createMarker ["respawn_west", getPosATL _firstBase];

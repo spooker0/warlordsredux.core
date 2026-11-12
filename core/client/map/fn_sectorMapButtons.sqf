@@ -1,6 +1,6 @@
 #include "includes.inc"
 params ["_sector", "_targetId"];
-private _sectorName = _sector getVariable ["WL2_name", "Sector"];
+private _sectorName = _sector getVariable ["WL2_name", localize "STR_WL_sector"];
 _sector setVariable ["WL2_mapButtonText", _sectorName];
 
 // Fast Travel Frontline Button
@@ -23,7 +23,7 @@ private _fastTravelAssetExecute = {
     [
         0,
         "FTSeized",
-        "Fast Travel"
+        localize "STR_WL_fastTravel"
     ]
 ] call WL2_fnc_addTargetMapButton;
 
@@ -42,7 +42,7 @@ private _fastTravelSeizedExecute = {
     [
         0,
         "FTSeized",
-        "Fast Travel"
+        localize "STR_WL_fastTravel"
     ]
 ] call WL2_fnc_addTargetMapButton;
 
@@ -62,7 +62,7 @@ private _fastTravelHomeExecute = {
     [
         0,
         "FTHome",
-        "Fast Travel"
+        localize "STR_WL_fastTravel"
     ]
 ] call WL2_fnc_addTargetMapButton;
 
@@ -81,7 +81,7 @@ private _airAssaultExecute = {
     [
         WL_COST_AIRASSAULT,
         "FTAirAssault",
-        "Fast Travel"
+        localize "STR_WL_fastTravel"
     ]
 ] call WL2_fnc_addTargetMapButton;
 
@@ -104,7 +104,7 @@ private _vehicleParadropExecute = {
     [
         WL_COST_PARADROP,
         "FTParadropVehicle",
-        "Fast Travel"
+        localize "STR_WL_fastTravel"
     ]
 ] call WL2_fnc_addTargetMapButton;
 
@@ -123,7 +123,7 @@ private _scanExecute = {
     [
         WL_COST_SCAN,
         "Scan",
-        "Fast Travel"
+        localize "STR_WL_fastTravel"
     ]
 ] call WL2_fnc_addTargetMapButton;
 
@@ -132,12 +132,12 @@ private _combatAirExecute = {
     params ["_sector"];
     [_sector] spawn {
         params ["_sector"];
-        private _sectorName = _sector getVariable ["WL2_name", "Sector"];
+        private _sectorName = _sector getVariable ["WL2_name", localize "STR_WL_sector"];
         private _message = format [
-            "Are you sure you want to establish a no-fly zone over %1? This will cost you %2%3 and put it on a %4 minute cooldown.",
+            localize "STR_WL_combatAirTargetConfirm",
             _sectorName, WL_MONEY_SIGN, WL_COST_COMBATAIR, round (WL_COOLDOWN_CAP / 60)
         ];
-        private _result = [localize "STR_WL_combatAirPatrol", _message, "OK", "Cancel"] call WL2_fnc_prompt;
+        private _result = [localize "STR_WL_combatAirPatrol", _message, localize "STR_WL_ok", localize "STR_WL_cancel"] call WL2_fnc_prompt;
 
         if (!_result) exitWith {
             playSoundUI ["AddItemFailed"];
@@ -157,7 +157,7 @@ private _combatAirExecute = {
     [
         WL_COST_COMBATAIR,
         "CombatAir",
-        "Fast Travel"
+        localize "STR_WL_fastTravel"
     ]
 ] call WL2_fnc_addTargetMapButton;
 
@@ -167,10 +167,10 @@ private _combatAirHomeExecute = {
     [_sector] spawn {
         params ["_sector"];
         private _message = format [
-            "Are you sure you want to establish a no-fly zone over home base? This will cost you %1%2 and put it on a %3 minute cooldown. It will also reveal your home base to the enemy.",
+            localize "STR_WL_combatAirHomeRevealConfirm",
             WL_MONEY_SIGN, WL_COST_COMBATAIR / 5, round (WL_COOLDOWN_CAPHOME / 60)
         ];
-        private _result = [localize "STR_WL_combatAirPatrolHome", _message, "OK", "Cancel"] call WL2_fnc_prompt;
+        private _result = [localize "STR_WL_combatAirPatrolHome", _message, localize "STR_WL_ok", localize "STR_WL_cancel"] call WL2_fnc_prompt;
 
         if (!_result) exitWith {
             playSoundUI ["AddItemFailed"];
@@ -190,7 +190,7 @@ private _combatAirHomeExecute = {
     [
         WL_COST_COMBATAIR / 5,
         "CombatAir",
-        "Fast Travel"
+        localize "STR_WL_fastTravel"
     ]
 ] call WL2_fnc_addTargetMapButton;
 
@@ -207,14 +207,14 @@ private _clearSectorExecute = {
 [
     _sector, _targetId,
     "order-clear-sector",
-    "Debug: clear sector",
+    localize "STR_WL_debugClearSector",
     _clearSectorExecute,
     true,
     "airAssault",
     [
         0,
         "ClearSectorDebug",
-        "Fast Travel"
+        localize "STR_WL_fastTravel"
     ]
 ] call WL2_fnc_addTargetMapButton;
 #endif
@@ -293,14 +293,14 @@ if (_sector in _unlockedSectors || (!isNull _sectorFtAsset)) then {
     [_sector, _targetId, "team-designate", localize "STR_WL_designateTeamPriority", {
         params ["_sector"];
         [_sector, "sector"] call WL2_fnc_designateTeamPriority;
-    }, true, "designateTeamPriority", [0, "DesignatePriority", "Strategy"]] call WL2_fnc_addTargetMapButton;
+    }, true, "designateTeamPriority", [0, "DesignatePriority", localize "STR_WL_strategy"]] call WL2_fnc_addTargetMapButton;
 
     [_sector, _targetId, "team-conscript", localize "STR_WL_conscriptTeamToSector", {
         params ["_sector"];
         [_sector, "sector"] call WL2_fnc_designateTeamPriority;
         [player] remoteExec ["WL2_fnc_conscription", BIS_WL_playerSide];
         [player, "conscript"] remoteExec ["WL2_fnc_handleClientRequest", 2];
-    }, true, "conscriptTeam", [WL_COST_CONSCRIPT, "", "Strategy"]] call WL2_fnc_addTargetMapButton;
+    }, true, "conscriptTeam", [WL_COST_CONSCRIPT, "", localize "STR_WL_strategy"]] call WL2_fnc_addTargetMapButton;
 };
 
 // Return to base button
@@ -315,7 +315,7 @@ private _rtbExecute = {
     _rtbExecute,
     true,
     "rtbSector",
-    [WL_COST_JETRTB, "RTB", "Strategy"]
+    [WL_COST_JETRTB, "RTB", localize "STR_WL_strategy"]
 ] call WL2_fnc_addTargetMapButton;
 
 // Repair structures button
@@ -353,5 +353,5 @@ private _rtbExecute = {
 //     _repairStructuresExecute,
 //     true,
 //     "repairStructures",
-//     [WL_COST_REPAIRALL, "Repair", "Strategy"]
+//     [WL_COST_REPAIRALL, "Repair", localize "STR_WL_strategy"]
 // ] call WL2_fnc_addTargetMapButton;

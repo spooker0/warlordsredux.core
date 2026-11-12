@@ -141,7 +141,7 @@ _search ctrlAddEventHandler ["KillFocus", {
     private _query = ctrlText _search;
     if (_query == "") then {
         _search setVariable ["BUY_searchPlaceholder", true];
-        _search ctrlSetText "Search...";
+        _search ctrlSetText localize "STR_WL_searchPlaceholder";
     };
 }];
 _search ctrlAddEventHandler ["KeyUp", WL2_fnc_purchaseMenuSearch];

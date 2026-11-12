@@ -49,7 +49,11 @@ private _requisitionPreset = missionConfigFile >> "CfgWLRequisitionPresets";
 		private _entry = _x;
 		private _key = configName _entry;
 		if (isText _entry) then {
-			_classMap set [_key, getText _entry];
+			private _text = getText _entry;
+			if (_text select [0, 7] == "STR_WL_") then {
+				_text = localize _text;
+			};
+			_classMap set [_key, _text];
 			continue;
 		};
 		if (isNumber _entry) then {

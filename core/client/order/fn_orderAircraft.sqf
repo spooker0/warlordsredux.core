@@ -13,7 +13,7 @@ private _findCurrentOwnedSector = _linkedSectors select {
 
 if (count _findCurrentOwnedSector == 0) exitWith {
 	playSoundUI ["AddItemFailed", 1];
-	["Must be in a sector with a runway."] call WL2_fnc_smoothText;
+	[localize "STR_WL_orderAircraftRunwayRequired"] call WL2_fnc_smoothText;
 };
 
 private _sector = _findCurrentOwnedSector # 0;
@@ -29,12 +29,12 @@ private _settingsMap = missionProfileNamespace getVariable ["WL2_settings", crea
 private _camperWarning = _settingsMap getOrDefault ["camperWarning", true];
 if (_sectorIsCamped && _camperWarning) exitWith {
 	playSoundUI ["AddItemFailed", 1];
-	["Your team has marked this airbase as camped! Enemies may be near. Remove the marker on the map or disable airbase camper warning in settings to spawn aircraft here."] call WL2_fnc_smoothText;
+	[localize "STR_WL_orderAircraftCampedWarning"] call WL2_fnc_smoothText;
 };
 
 private _campResult = if (_sectorIsCamped) then {
 	playSoundUI ["AddItemFailed", 1];
-	["Camped airbase", "Your team has marked this airbase as camped! Enemies may be near. Are you sure you would like to spawn your aircraft here?", "Yes", "Cancel"] call WL2_fnc_prompt;
+	[localize "STR_WL_campedAirbase", localize "STR_WL_campedAirbaseConfirm", localize "STR_WL_yes", localize "STR_WL_cancel"] call WL2_fnc_prompt;
 } else {
 	true;
 };
@@ -46,9 +46,9 @@ if (_sectorIsCamped) then {
 	uiSleep 1;
 };
 
-private _sectorName = _sector getVariable ["WL2_name", "Sector"];
+private _sectorName = _sector getVariable ["WL2_name", localize "STR_WL_sector"];
 private _displayName = [objNull, _orderedClass] call WL2_fnc_getAssetTypeName;
-private _result = ["Purchase Aircraft", format ["You are about to purchase a %1 for %2%3 at %4.", _displayName, WL_MONEY_SIGN, _cost, _sectorName], "Yes", "Cancel"] call WL2_fnc_prompt;
+private _result = [localize "STR_WL_purchaseAircraft", format [localize "STR_WL_purchaseAircraftConfirm", _displayName, WL_MONEY_SIGN, _cost, _sectorName], localize "STR_WL_yes", localize "STR_WL_cancel"] call WL2_fnc_prompt;
 
 if (_result) then {
 	playSoundUI ["AddItemOK", 1];

@@ -133,7 +133,7 @@ class REP_ModMenu {
     };
     class controls {
         class Title: REP_Header {
-            text = "Moderator";
+            text = $STR_WL_repModerator;
             x = safeZoneX + safeZoneW * 0.02;
             y = safeZoneY + safeZoneH * 0.04;
             w = safeZoneW * 0.96;
@@ -150,7 +150,7 @@ class REP_ModMenu {
             y = safeZoneY + safeZoneH * 0.111;
             w = safeZoneW * 0.219;
             h = REP_LAYOUT_BUTTON_H;
-            tooltip = "Search players by name, alias or Steam ID";
+            tooltip = $STR_WL_repSearchPlayers;
         };
         class Players: REP_ControlsGroup {
             idc = REP_PLAYERS_IDC;
@@ -165,7 +165,7 @@ class REP_ModMenu {
             y = safeZoneY + safeZoneH * 0.62;
             w = safeZoneW * 0.219;
             h = safeZoneH * 0.03;
-            text = "ACTIVE TIMEOUTS";
+            text = $STR_WL_repActiveTimeouts;
         };
         class Timeouts: REP_ListBox {
             idc = REP_TIMEOUTS_IDC;
@@ -174,14 +174,14 @@ class REP_ModMenu {
             w = safeZoneW * 0.219;
             h = safeZoneH * 0.218;
             sizeEx = REP_LAYOUT_SMALL_TEXT_SIZE;
-            tooltip = "Select a timeout to clear it. Hover a row to read its reason.";
+            tooltip = $STR_WL_repTimeoutHint;
         };
         class ClearTimeout: REP_Button {
             idc = REP_CLEAR_TIMEOUT_IDC;
             x = safeZoneX + safeZoneW * 0.038;
             y = safeZoneY + safeZoneH * 0.895;
             w = safeZoneW * 0.219;
-            text = "CLEAR SELECTED TIMEOUT";
+            text = $STR_WL_repClearTimeout;
         };
         class Details: RscControlsGroupNoScrollbars {
             idc = REP_DETAILS_IDC;
@@ -228,7 +228,7 @@ class REP_ModMenu {
                             y = safeZoneH * 0.209;
                             w = safeZoneW * 0.299;
                             h = safeZoneH * 0.03;
-                            text = "TIMEOUT REASON";
+                            text = $STR_WL_repTimeoutReason;
                         };
                         class Reason: REP_MultilineEdit {
                             idc = REP_REASON_IDC;
@@ -237,14 +237,14 @@ class REP_ModMenu {
                             w = safeZoneW * 0.299;
                             h = safeZoneH * 0.05;
                             text = REP_DEFAULT_REASON;
-                            tooltip = "Reason shown to the timed out player. Add 'kick' or 'cheat' to kick the player from the server.";
+                            tooltip = $STR_WL_repReasonHint;
                         };
                         class DurationLabel: REP_Label {
                             x = 0;
                             y = safeZoneH * 0.308;
                             w = safeZoneW * 0.195;
                             h = safeZoneH * 0.032;
-                            text = "DURATION (MINUTES)";
+                            text = $STR_WL_repDuration;
                         };
                         class Duration: REP_Edit {
                             idc = REP_DURATION_IDC;
@@ -253,7 +253,7 @@ class REP_ModMenu {
                             w = safeZoneW * 0.074;
                             h = safeZoneH * 0.032;
                             text = "15";
-                            tooltip = "Timeout duration in minutes";
+                            tooltip = $STR_WL_repDurationHint;
                         };
                         class Slider: REP_Slider {
                             idc = REP_SLIDER_IDC;
@@ -268,7 +268,7 @@ class REP_ModMenu {
                             y = safeZoneH * 0.389;
                             w = safeZoneW * 0.299;
                             h = safeZoneH * 0.035;
-                            text = "TIMEOUT PLAYER";
+                            text = $STR_WL_repTimeoutPlayer;
                             class TextPos: TextPos {
                                 right = safeZoneW * 0.004;
                             };
@@ -278,62 +278,62 @@ class REP_ModMenu {
                             y = safeZoneH * 0.476;
                             w = safeZoneW * 0.299;
                             h = safeZoneH * 0.028;
-                            text = "PLAYER ACTIONS";
+                            text = $STR_WL_repPlayerActions;
                         };
                         class Rebalance: REP_Button {
                             idc = REP_REBALANCE_IDC;
                             x = 0;
                             y = safeZoneH * 0.514;
                             w = safeZoneW * 0.145;
-                            text = "REBALANCE";
+                            text = $STR_WL_repRebalance;
                         };
                         class Goto: Rebalance {
                             idc = REP_GOTO_IDC;
                             x = safeZoneW * 0.154;
-                            text = "GO TO PLAYER";
+                            text = $STR_WL_repGotoPlayer;
                         };
                         class Mute: Rebalance {
                             idc = REP_MUTE_IDC;
                             y = safeZoneH * 0.561;
-                            text = "MUTE";
+                            text = $STR_WL_repMute;
                         };
                         class Transfers: Goto {
                             idc = REP_TRANSFERS_IDC;
                             y = safeZoneH * 0.561;
-                            text = "TRANSFER LOG";
+                            text = $STR_WL_repTransferLog;
                         };
                         class Afk: Rebalance {
                             idc = REP_AFK_IDC;
                             y = safeZoneH * 0.608;
-                            text = "AFK LOG";
+                            text = $STR_WL_repAfkLog;
                         };
                         class Rewards: Goto {
                             idc = REP_REWARDS_IDC;
                             y = safeZoneH * 0.608;
-                            text = "REWARDS";
+                            text = $STR_WL_repRewards;
                         };
                         class Scripts: Rebalance {
                             idc = REP_SCRIPTS_IDC;
                             y = safeZoneH * 0.655;
-                            text = "ACTIVE SCRIPTS";
+                            text = $STR_WL_repActiveScripts;
                         };
                         class Deputize: Goto {
                             idc = REP_DEPUTIZE_IDC;
                             y = safeZoneH * 0.655;
-                            text = "DEPUTIZE";
+                            text = $STR_WL_repDeputize;
                         };
                         class Tutorial: Rebalance {
                             idc = REP_TUTORIAL_IDC;
                             y = safeZoneH * 0.702;
-                            text = "PLAY TUTORIAL";
-                            tooltip = "Play the tutorial on this player's client";
+                            text = $STR_WL_repPlayTutorial;
+                            tooltip = $STR_WL_repTutorialHint;
                         };
                         class ReportsLabel: REP_Label {
                             x = 0;
                             y = safeZoneH * 0.752;
                             w = safeZoneW * 0.299;
                             h = safeZoneH * 0.028;
-                            text = "PLAYER REPORTS";
+                            text = $STR_WL_repPlayerReports;
                         };
                         class Reports: REP_ReadOnly {
                             idc = REP_REPORTS_IDC;
@@ -347,8 +347,8 @@ class REP_ModMenu {
                             x = 0;
                             y = safeZoneH * 0.942;
                             w = safeZoneW * 0.299;
-                            text = "CLEAR REPORTS AND LOGS";
-                            tooltip = "Clear this player's reports, transfer log and AFK log";
+                            text = $STR_WL_repClearReports;
+                            tooltip = $STR_WL_repClearHint;
                         };
                         class Log: RscControlsGroupNoScrollbars {
                             idc = REP_LOG_GROUP_IDC;
@@ -389,7 +389,7 @@ class REP_ModMenu {
             y = safeZoneY + safeZoneH * 0.111;
             w = safeZoneW * 0.34;
             h = safeZoneH * 0.03;
-            text = "CHAT LOG";
+            text = $STR_WL_repChatLog;
         };
         class ChatChannel: REP_Combo {
             idc = REP_CHAT_CHANNEL_IDC;
@@ -397,7 +397,7 @@ class REP_ModMenu {
             y = safeZoneY + safeZoneH * 0.151;
             w = safeZoneW * 0.145;
             h = safeZoneH * 0.025;
-            tooltip = "Filter chat by channel";
+            tooltip = $STR_WL_repFilterChannel;
         };
         class ChatPlayer: REP_Combo {
             idc = REP_CHAT_PLAYER_IDC;
@@ -405,7 +405,7 @@ class REP_ModMenu {
             y = safeZoneY + safeZoneH * 0.151;
             w = safeZoneW * 0.186;
             h = safeZoneH * 0.025;
-            tooltip = "Filter chat by player";
+            tooltip = $STR_WL_repFilterPlayer;
         };
         class ChatReset: REP_Button {
             idc = REP_CHAT_RESET_IDC;
@@ -413,7 +413,7 @@ class REP_ModMenu {
             y = safeZoneY + safeZoneH * 0.184;
             w = safeZoneW * 0.34;
             h = safeZoneH * 0.027;
-            text = "RESET CHAT FILTERS";
+            text = $STR_WL_repResetFilters;
             size = REP_LAYOUT_SMALL_TEXT_SIZE;
         };
         class Chat: REP_ListBox {
@@ -424,7 +424,7 @@ class REP_ModMenu {
             h = safeZoneH * 0.412;
             sizeEx = REP_LAYOUT_SMALL_TEXT_SIZE;
             style = LB_TEXTURES + LB_MULTI;
-            tooltip = "Ctrl-click or Shift-click to select messages. Full text appears below.";
+            tooltip = $STR_WL_repSelectHint;
         };
         class ChatPreview: REP_ReadOnly {
             idc = REP_CHAT_PREVIEW_IDC;
@@ -432,7 +432,7 @@ class REP_ModMenu {
             y = safeZoneY + safeZoneH * 0.644;
             w = safeZoneW * 0.34;
             h = safeZoneH * 0.237;
-            tooltip = "Full text of selected messages";
+            tooltip = $STR_WL_repFullTextHint;
         };
         class CopyChat: REP_CopyButton {
             idc = REP_COPY_CHAT_IDC;

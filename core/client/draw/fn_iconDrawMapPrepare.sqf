@@ -439,12 +439,12 @@ private _forwardBases = missionNamespace getVariable ["WL2_forwardBases", []];
 
 	private _defenseLevel = _base getVariable ["WL2_forwardBaseDefenseLevel", 0];
 	private _baseTypeText = switch (_defenseLevel) do {
-		case 0: { "Forward Base" };
-		case 1: { "Forward Base 1/4" };
-		case 2: { "Forward Base 2/4" };
-		case 3: { "Forward Base 3/4" };
-		case 4: { "Forward Airbase" };
-		default { "Forward Base" };
+		case 0: { localize "STR_WL_forwardBase" };
+		case 1: { localize "STR_WL_forwardBase" };
+		case 2: { localize "STR_WL_forwardBase" };
+		case 3: { localize "STR_WL_forwardBase" };
+		case 4: { localize "STR_WL_forwardAirbase" };
+		default { localize "STR_WL_forwardBase" };
 	};
 
 	_drawIcons pushBack [
@@ -865,7 +865,7 @@ if (!_showAirMode && !_showMyMode) then {
 			23 * _mapIconScale,
 			23 * _mapIconScale,
 			0,
-			format ["WRECK (%1%2, %3)", WL_MONEY_SIGN, _wreckValue, _wreckTimer],
+			format [localize "STR_WL_wreckIcon", WL_MONEY_SIGN, _wreckValue, _wreckTimer],
 			1,
 			_mapIconTextSize,
 			"PuristaBold",
@@ -888,7 +888,7 @@ private _advancedSams = _mapData getOrDefault ["advancedSams", []];
 		40 * _mapIconScale,
 		40 * _mapIconScale,
 		0,
-		"ENEMY HEAVY SAM",
+		localize "STR_WL_enemyHeavySam",
 		1,
 		0.08 * _mapIconScale,
 		"PuristaBold",
@@ -915,10 +915,10 @@ if (!_showAirMode) then {
 
 		private _smartMineDisplay = [];
 		if (_smartMinesAP > 0) then {
-			_smartMineDisplay pushBack format ["AP: %1", _smartMinesAP];
+			_smartMineDisplay pushBack format [localize "STR_WL_apMine", _smartMinesAP];
 		};
 		if (_smartMinesAT > 0) then {
-			_smartMineDisplay pushBack format ["AT: %1", _smartMinesAT];
+			_smartMineDisplay pushBack format [localize "STR_WL_atMine", _smartMinesAT];
 		};
 
 		_drawIcons pushBack [

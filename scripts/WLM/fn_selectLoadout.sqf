@@ -57,10 +57,10 @@ if (_isAircraft) then {
                 _pylonControl lbSetCurSel _i;
 
                 if (_presetItem # 1 isEqualTo [0]) then {
-                    _pylonUserControl ctrlSetTooltip "Control: Gunner";
+                    _pylonUserControl ctrlSetTooltip (localize "STR_WL_wlmControlGunner");
                     _pylonUserControl ctrlSetText "a3\ui_f\data\IGUI\Cfg\CommandBar\imageGunner_ca.paa";
                 } else {
-                    _pylonUserControl ctrlSetTooltip "Control: Pilot";
+                    _pylonUserControl ctrlSetTooltip (localize "STR_WL_wlmControlPilot");
                     _pylonUserControl ctrlSetText "a3\ui_f\data\IGUI\Cfg\CommandBar\imageDriver_ca.paa";
                 };
             };

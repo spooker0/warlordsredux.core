@@ -30,7 +30,7 @@ private _waypointDrawer = addMissionEventHandler ["Draw3D", {
         0.3,
         0.3,
         0,
-        format ["WAYPOINT %1KM", (_distance / 1000) toFixed 1],
+        format [localize "STR_WL_waypointDistance", (_distance / 1000) toFixed 1],
         0,
         0.02,
         "TahomaB",

@@ -22,11 +22,11 @@ _display displayAddEventHandler ["KeyDown", {
 
 		if (soundVolume == 1) then {
 			"GF_Earplugs" cutRsc ["RscGFEarplugs", "PLAIN"];
-			titleText ["<t color='#339933' size='2'font='PuristaBold'>EARPLUGS IN</t>", "PLAIN DOWN", -1, true, true];
+			titleText [format ["<t color='#339933' size='2'font='PuristaBold'>%1</t>", localize "STR_WL_earplugsIn"], "PLAIN DOWN", -1, true, true];
 			0 fadeSound _earplugVolume;
 		} else {
 			"GF_Earplugs" cutText ["", "PLAIN"];
-			titleText ["<t color='#FF3333' size='2'font='PuristaBold'>EARPLUGS OUT</t>", "PLAIN DOWN", -1, true, true];
+			titleText [format ["<t color='#FF3333' size='2'font='PuristaBold'>%1</t>", localize "STR_WL_earplugsOut"], "PLAIN DOWN", -1, true, true];
 			0 fadeSound 1;
 		};
 	};
@@ -35,12 +35,12 @@ _display displayAddEventHandler ["KeyDown", {
 		private _oldValue = player getVariable ["WL_ViewRangeReduced", false];
 		if (_oldValue) then {
 			"ViewRange" cutText ["", "PLAIN"];
-			titleText ["<t color='#339933' size='2'font='PuristaBold'>CQB MODE OFF</t>", "PLAIN DOWN", -1, true, true];
+			titleText [format ["<t color='#339933' size='2'font='PuristaBold'>%1</t>", localize "STR_WL_cqbModeOff"], "PLAIN DOWN", -1, true, true];
 			player setVariable ["WL_ViewRangeReduced", false];
 			0 spawn MENU_fnc_updateViewDistance;
 		} else {
 			"ViewRange" cutRsc ["RscViewRangeReduce", "PLAIN"];
-			titleText ["<t color='#FF3333' size='2'font='PuristaBold'>CQB MODE ON</t>", "PLAIN DOWN", -1, true, true];
+			titleText [format ["<t color='#FF3333' size='2'font='PuristaBold'>%1</t>", localize "STR_WL_cqbModeOn"], "PLAIN DOWN", -1, true, true];
 			player setVariable ["WL_ViewRangeReduced", true];
 			0 spawn MENU_fnc_updateViewDistance;
 		};

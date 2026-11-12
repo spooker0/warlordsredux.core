@@ -25,6 +25,6 @@ if (_availability # 0) then {
         "RequestMenu_close" call WL2_fnc_setupUI;
     };
 } else {
-    [format ["Invalid buy action: %1", (_availability # 1) joinString ", "]] call WL2_fnc_smoothText;
+    [format [localize "STR_WL_invalidBuyAction", (_availability # 1) joinString ", "]] call WL2_fnc_smoothText;
     playSound "AddItemFailed";
 };

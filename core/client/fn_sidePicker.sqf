@@ -147,7 +147,7 @@ private _updatePlayers = {
         format ["<t shadow='2' color='#33ff33' align='right'>%1</t>", count _unassignedPlayers]
     ];
     _unassignedText ctrlSetStructuredText parseText (_centerTextArray joinString "");
-    _unassignedText ctrlSetTooltip format ["Lobby: %1", _unassignedPlayersText joinString ", "];
+    _unassignedText ctrlSetTooltip format [localize "STR_WL_lobbyTooltip", _unassignedPlayersText joinString ", "];
 };
 
 [[0, 0]] call _updatePlayers;

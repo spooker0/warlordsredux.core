@@ -140,8 +140,8 @@ private _incompatibleMagazines = WL_ASSET(_assetActualType, "disallowMagazines",
             private _magazineClass = _x;
             private _selectBox = _display ctrlCreate ["WLM_PylonSelect", WLM_PYLON_START + _index, _ctrlGroup];
 
-            private _firstSelectBoxItem = _selectBox lbAdd "EMPTY";
-            _selectBox lbSetTooltip [_firstSelectBoxItem, "EMPTY"];
+            private _firstSelectBoxItem = _selectBox lbAdd (localize "STR_WL_wlmEmpty");
+            _selectBox lbSetTooltip [_firstSelectBoxItem, localize "STR_WL_wlmEmpty"];
             _selectBox lbSetData [_firstSelectBoxItem, "EMPTY"];
 
             if (_magazineClass == "EMPTY") then {

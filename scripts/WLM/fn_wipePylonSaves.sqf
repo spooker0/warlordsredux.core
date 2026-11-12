@@ -2,7 +2,7 @@
 private _lastSelectedLoadoutIndex = uiNamespace getVariable ["WLM_lastSelectedLoadoutIndex", -1];
 
 if (_lastSelectedLoadoutIndex == -1) exitWith {
-    ["Select a loadout first."] call WL2_fnc_smoothText;
+    [localize "STR_WL_wlmSelectLoadoutFirst"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
@@ -18,7 +18,7 @@ private _display = findDisplay WLM_DISPLAY;
 _display closeDisplay 0;
 
 private _message = format [localize "STR_WL_wipeLoadoutWarning", _selectedLoadout # 0];
-private _results = [localize "STR_WL_wipeLoadout", _message, "Delete", "Cancel"] call WL2_fnc_prompt;
+private _results = [localize "STR_WL_wipeLoadout", _message, localize "STR_WL_delete", localize "STR_WL_cancel"] call WL2_fnc_prompt;
 
 if (_results) then {
     uiNamespace setVariable ["WLM_lastSelectedLoadoutIndex", -1];

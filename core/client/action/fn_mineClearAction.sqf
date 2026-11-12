@@ -9,7 +9,7 @@ private _actionId = _asset addAction [
         private _mineClearCharges = _asset getVariable ["WL2_mineClearCharges", 0];
         if (_mineClearCharges <= 0) exitWith {
             playSound "AddItemFailed";
-            ["No mine clearing charges available!"] call WL2_fnc_smoothText;
+            [localize "STR_WL_noMineClearingCharges"] call WL2_fnc_smoothText;
         };
 
         private _isFirstShot = WL_UNIT(_asset, "mineClear", 0) == _mineClearCharges;

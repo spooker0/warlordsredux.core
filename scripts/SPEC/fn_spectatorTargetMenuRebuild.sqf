@@ -42,7 +42,7 @@ private _categoryColumn = 0;
             case "BLUFOR": { "BLUFOR" };
             case "OPFOR": { "OPFOR" };
             case "INDFOR": { "INDFOR" };
-            case "MUNITION": { "MUNITIONS" };
+            case "MUNITION": { localize "STR_WL_spectatorMunitions" };
             default { _category };
         };
 
@@ -76,14 +76,18 @@ private _categoryColumn = 0;
 
     _primaryControl ctrlSetText _primaryText;
 
-    private _secondaryPrefix = if (_category == "MUNITION") then { "Launcher" } else { "Owner" };
+    private _secondaryFormat = if (_category == "MUNITION") then {
+        localize "STR_WL_spectatorTargetLauncher"
+    } else {
+        localize "STR_WL_spectatorTargetOwner"
+    };
 
-    _secondaryControl ctrlSetText format ["%1: %2", _secondaryPrefix, _secondaryText];
+    _secondaryControl ctrlSetText format [_secondaryFormat, _secondaryText];
 
     _buttonControl setVariable ["SPEC_target", _target];
     _buttonControl setVariable ["SPEC_targetObjectId", _objectId];
 
-    _buttonControl ctrlSetTooltip format ["Spectate %1", _primaryText];
+    _buttonControl ctrlSetTooltip format [localize "STR_WL_spectatorSpectateTarget", _primaryText];
     _buttonControl ctrlAddEventHandler ["ButtonClick", SPEC_fnc_spectatorTargetMenuSelect];
 
     private _searchText = toLower format ["%1 %2", _primaryText, _secondaryText];

@@ -23,12 +23,12 @@ _fuelDisplay ctrlSetPosition [0, 0, 1, 0.2];
 _fuelDisplay ctrlSetTextColor [1, 1, 1, 1];
 _fuelDisplay ctrlCommit 0;
 
-private _controlParams = ["TV GUIDED MUNITION", [
-    ["Boost", "turbo"],
-    ["Detonate", "defaultAction"]
+private _controlParams = [localize "STR_WL_tvGuidedMunition", [
+    [localize "STR_WL_boostAction", "turbo"],
+    [localize "STR_WL_detonateAction", "defaultAction"]
 ]];
 if (_flightMode in [1, 2]) then {
-    _controlParams pushBack ["Lock/Unlock Controls", "lockTarget"];
+    _controlParams pushBack [localize "STR_WL_lockUnlockControls", "lockTarget"];
 };
 ["TV", _controlParams] spawn WL2_fnc_showHint;
 

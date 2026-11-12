@@ -24,16 +24,16 @@ private _unitSide = [_unit] call WL2_fnc_getAssetSide;
 if (_killerSide == _unitSide) exitWith {};
 
 private _customText = "";
+private _customTextData = "";
 
 private _noRewardList = ["B_UAV_AI", "O_UAV_AI", "I_UAV_AI"];
 if (_unit isKindOf "Man" && !(_unit in _noRewardList)) then {
 	if (isPlayer _unit) then {
 		_killReward = 60;
 		private _unitName = name _unit;
-		_customText = if ("Error" in _unitName) then {
-			"Player kill";
-		} else {
-			format ["Kill %1", name _unit];
+		_customText = "Player kill";
+		if !("Error" in _unitName) then {
+			_customTextData = _unitName;
 		};
 
 		[getPlayerUID _unit] remoteExec ["WL2_fnc_killNotify", _responsibleLeader];
@@ -70,7 +70,7 @@ private _killerUid = getPlayerUID _responsibleLeader;
 _killReward = round _killReward;
 [_killReward, _killerUid, true, "Kill"] call WL2_fnc_fundsDatabaseWrite;
 
-[_unit, _killReward, _customText, WL_COLOR_KILL, _assetActualType] remoteExec ["WL2_fnc_killRewardClient", _responsibleLeader];
+[_unit, _killReward, _customText, WL_COLOR_KILL, _assetActualType, _customTextData] remoteExec ["WL2_fnc_killRewardClient", _responsibleLeader];
 
 // Vehicle crew reward
 private _reward = round (_killReward / 4);

@@ -6,7 +6,7 @@ private _greenPlayers = _allPlayers select {
 };
 
 if (count _greenPlayers > 3) then {
-    [false, "There are too many Independent players."];
+    [false, localize "STR_WL_tooManyIndependents"];
 } else {
     [true, ""];
 };

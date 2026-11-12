@@ -5,8 +5,8 @@ private _animation = "Acts_TerminalOpen";
 
 private _camera = [[0, -3, 1]] call WL2_fnc_actionLockCamera;
 
-["Animation", ["REPAIR", [
-    ["Cancel", "Action"],
+["Animation", [localize "STR_WL_repair", [
+    [localize "STR_WL_cancel", "Action"],
     ["", "ActionContext"],
     ["", "navigateMenu"]
 ]], WL_DURATION_REARMAPS, true] spawn WL2_fnc_showHint;

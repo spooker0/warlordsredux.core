@@ -29,7 +29,7 @@ if (_action == "clearTimeout") exitWith {
     missionNamespace setVariable ["WL2_punishmentMap", _punishmentMap, true];
 
     [_display] call REP_fnc_refresh;
-    systemChat format ["Cleared timeout for %1.", _uid];
+    systemChat format [localize "STR_WL_repClearedTimeout", _uid];
 };
 
 private _uid = _display getVariable ["REP_selectedUid", ""];
@@ -87,17 +87,17 @@ switch (_action) do {
         missionProfileNamespace setVariable ["WL2_infoDisplay", _receipts + _receipt];
 
         [player, _uid, _reason, _duration * 60] remoteExec ["WL2_fnc_punishPlayer", 2];
-        _status = format ["Timed out %1 for %2 minutes.", _playerName, _duration];
+        _status = format [localize "STR_WL_repTimedOut", _playerName, _duration];
         _refresh = true;
     };
 
     case "rebalance": {
         if !(side group _selectedPlayer in [west, east]) exitWith {
-            _status = "Only BLUFOR and OPFOR players can be rebalanced.";
+            _status = localize "STR_WL_repOnlyBluforOpfor";
         };
 
         [player, _uid] remoteExec ["WL2_fnc_rebalance", 2];
-        _status = format ["Requested rebalance for %1.", _playerName];
+        _status = format [localize "STR_WL_repRebalanceRequested", _playerName];
         _refresh = true;
     };
 
@@ -106,7 +106,7 @@ switch (_action) do {
 
         private _position = _selectedPlayer modelToWorld [0, 0, 0];
         cameraOn setVehiclePosition [_position, [], 3, "NONE"];
-        _status = format ["Moved to %1.", _playerName];
+        _status = format [localize "STR_WL_repMoved", _playerName];
     };
 
     case "mutePlayer": {
@@ -115,7 +115,7 @@ switch (_action) do {
         [!_canTalk] remoteExec ["WL2_fnc_mutePlayer", _selectedPlayer];
         _selectedPlayer setVariable ["WL2_canTalk", !_canTalk, true];
 
-        private _muteText = if (_canTalk) then { "Muted" } else { "Unmuted" };
+        private _muteText = if (_canTalk) then { localize "STR_WL_repMuted" } else { localize "STR_WL_repUnmuted" };
         _status = format ["%1 %2.", _muteText, _playerName];
         _refresh = true;
     };
@@ -123,10 +123,10 @@ switch (_action) do {
     case "seeTransfers": {
         private _transfers = _selectedPlayer getVariable ["WL2_playerTransfers", []];
         private _logText = str _transfers;
-        private _logTitle = format ["Transfers: %1", _playerName];
+        private _logTitle = format [localize "STR_WL_repTransfersLogTitle", _playerName];
 
         [_display, _logText, _logTitle] call REP_fnc_showLog;
-        _status = format ["Showing transfers for %1.", _playerName];
+        _status = format [localize "STR_WL_repTransfers", _playerName];
     };
 
     case "seeAFKLog": {
@@ -135,24 +135,24 @@ switch (_action) do {
         _afkLogArray = [_afkLogArray, [], { _x # 0 }, "ASCEND"] call BIS_fnc_sortBy;
 
         private _logText = str _afkLogArray;
-        private _logTitle = format ["AFK log: %1", _playerName];
+        private _logTitle = format [localize "STR_WL_repAfkLogTitle", _playerName];
 
         [_display, _logText, _logTitle] call REP_fnc_showLog;
-        _status = format ["Showing AFK log for %1.", _playerName];
+        _status = format [localize "STR_WL_repShowingAfkLog", _playerName];
     };
 
     case "seeRewardLog": {
         [_uid] remoteExec ["WL2_fnc_publishRewards", 2];
-        _status = format ["Requested reward log for %1 in your RPT file.", _playerName];
+        _status = format [localize "STR_WL_repRewardLog", _playerName];
     };
 
     case "downloadScriptLog": {
         if (_uid in _adminIds) exitWith {
-            _status = "Script logs are unavailable for administrators.";
+            _status = localize "STR_WL_repScriptLogsUnavailable";
         };
 
         if (missionNamespace getVariable ["REP_scriptLogPending", false]) exitWith {
-            _status = "A script log request is already pending.";
+            _status = localize "STR_WL_repScriptLogPending";
         };
 
         missionNamespace setVariable ["REP_scriptLogPending", true];
@@ -161,7 +161,7 @@ switch (_action) do {
 
         [_requester, clientOwner] remoteExec ["WL2_fnc_publishSelfLog", _selectedPlayer];
         [_display] call REP_fnc_refresh;
-        systemChat format ["Requesting script log from %1...", _playerName];
+        systemChat format [localize "STR_WL_repRequestingLog", _playerName];
 
         private _deadline = diag_tickTime + 15;
         waitUntil {
@@ -180,7 +180,7 @@ switch (_action) do {
         private _selectedUid = _display getVariable ["REP_selectedUid", ""];
         if (_selectedUid != _uid) exitWith {};
         if (_response isEqualTo []) exitWith {
-            _status = format ["No script log was received from %1.", _playerName];
+            _status = format [localize "STR_WL_repNoScriptLog", _playerName];
         };
 
         private _logText = if (_response isEqualType []) then {
@@ -189,25 +189,25 @@ switch (_action) do {
             if (_response isEqualType "") then { _response } else { str _response }
         };
 
-        private _logTitle = format ["Script log: %1", _playerName];
+        private _logTitle = format [localize "STR_WL_repScriptLogTitle", _playerName];
         [_display, _logText, _logTitle] call REP_fnc_showLog;
-        _status = format ["Received script log from %1.", _playerName];
+        _status = format [localize "STR_WL_repReceivedScriptLog", _playerName];
     };
 
     case "deputize": {
         missionNamespace setVariable ["WL2_tempSpectatorUID", _uid, true];
-        _status = format ["Deputized %1.", _playerName];
+        _status = format [localize "STR_WL_repDeputized", _playerName];
         _refresh = true;
     };
 
     case "playTutorial": {
         [] remoteExec ["TUT_fnc_play", _selectedPlayer];
-        _status = format ["Requested tutorial playback for %1.", _playerName];
+        _status = format [localize "STR_WL_repTutorialPlayback", _playerName];
     };
 
     case "clearReports": {
         [] remoteExec ["WL2_fnc_clearPlayerReports", _selectedPlayer];
-        _status = format ["Cleared reports, transfers and AFK log for %1.", _playerName];
+        _status = format [localize "STR_WL_repClearedLogs", _playerName];
         _refresh = true;
     };
 };

@@ -75,7 +75,7 @@ private _eventHandlers = [
 _state set ["handlers", _eventHandlers];
 
 if (typeOf _vehicle == "B_T_VTOL_01_armed_F") then {
-    ["Blackfish", ["BLACKFISH CONTROLS", [
-        ["Set Reference Point", "headlights"]
+    ["Blackfish", [localize "STR_WL_blackfishControls", [
+        [localize "STR_WL_setReferencePoint", "headlights"]
     ]], 10] spawn WL2_fnc_showHint;
 };

@@ -249,14 +249,14 @@ if (_action == "scan") exitWith {
 	private _lastScanCallVar = format ["WL2_lastScanCall_%1", _side];
 	private _lastScanCall = _sector getVariable [_lastScanCallVar, 0];
 	if (serverTime < _lastScanCall + 30) exitWith {
-		private _message = "Someone else on your team is already calling sector scan for this sector.";
+		private _message = localize "STR_WL_scanAlreadyCalled";
 		[_message] remoteExec ["WL2_fnc_broadcastAction", _sender];
 	};
 	_sector setVariable [_lastScanCallVar, serverTime];
 	[WL_COST_SCAN] call _deductFunds;
 
 	private _sectorName = _sector getVariable ["WL2_name", "???"];
-	private _message = format ["%1 has initiated sector scan on %2.", name _sender, _sectorName];
+	private _message = format [localize "STR_WL_scanInitiated", name _sender, _sectorName];
 	[_side, _message] call _broadcastActionToSide;
 
 	private _spawnPos = getPosATL _sector;

@@ -89,7 +89,7 @@ while { alive _asset } do {
     private _obstructionsAbove = lineIntersects [_assetPos, AGLtoASL _startPos, _asset];
     if (_obstructionsAbove) then {
         playSound3D ["a3\sounds_f_orange\arsenal\explosives\minedispenser\minedispenser_mine_trigger_01.wss", _asset];
-        ["No clear line of sight above to deploy mine."] call WL2_fnc_smoothText;
+        [localize "STR_WL_mineDeploymentNoOverheadLineOfSight"] call WL2_fnc_smoothText;
         uiSleep 10;
         continue;
     };

@@ -27,7 +27,7 @@ private _camperWarningBypass = {
 
 	private _campResult = if (_sectorIsCamped) then {
 		playSoundUI ["AddItemFailed", 1];
-		["Camped sector", "Your team has marked this sector as camped! Enemies may be near. Are you sure you would like to spawn your vehicle here?", "Yes", "Cancel"] call WL2_fnc_prompt;
+		[localize "STR_WL_campedSector", localize "STR_WL_campedSectorConfirm", localize "STR_WL_yes", localize "STR_WL_cancel"] call WL2_fnc_prompt;
 	} else {
 		true;
 	};
@@ -76,7 +76,7 @@ if (_class isKindOf "Man") then {
 			private _nearbyObjectPosition = getPosASL _nearbyObject;
 
 			playSound3D ["a3\3den\data\sound\cfgsound\notificationwarning.wss", objNull, false, _nearbyObjectPosition, 5];
-			[format ["Too close to another %1!", _nearbyObjectName]] call WL2_fnc_smoothText;
+			[format [localize "STR_WL_tooCloseToAnother", _nearbyObjectName]] call WL2_fnc_smoothText;
 			player setVariable ["BIS_WL_isOrdering", false, [2, clientOwner]];
 		} else {
 			playSound "assemble_target";

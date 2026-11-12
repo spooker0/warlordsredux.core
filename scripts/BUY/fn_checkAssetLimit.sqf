@@ -61,7 +61,7 @@ private _teamSameAsset = _teamUnits select {
 };
 
 if (count _teamSameAsset >= _teamLimit) exitWith {
-    [false, format ["Team asset limit reached. Limit: %1", _teamLimit]];
+    [false, format [localize "STR_WL_teamAssetLimit", _teamLimit]];
 };
 
 [true, ""];

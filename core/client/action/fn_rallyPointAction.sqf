@@ -2,7 +2,7 @@
 params ["_freshTent"];
 
 private _actionId = _freshTent addAction [
-    "<t color='#00FF00'>Construct Rally Point</t>",
+    format ["<t color='#00FF00'>%1</t>", localize "STR_WL_constructRallyPoint"],
     {
         _this spawn {
             params ["_target", "_caller", "_actionId", "_arguments"];
@@ -16,8 +16,8 @@ private _actionId = _freshTent addAction [
             private _playerPosition = player modelToWorld [0, 0, 0];
             private _soundSource = createSoundSource ["WLDemolitionSound", _playerPosition, [], 0];
 
-            ["Animation", ["CONSTRUCTION", [
-                ["Cancel", "Action"],
+            ["Animation", [localize "STR_WL_construction", [
+                [localize "STR_WL_cancel", "Action"],
                 ["", "ActionContext"],
                 ["", "navigateMenu"]
             ]], _deployTime, true] spawn WL2_fnc_showHint;
@@ -54,7 +54,7 @@ private _actionId = _freshTent addAction [
             if (_constructionSuccess) then {
                 [_target] call WL2_fnc_constructRallyPoint;
             } else {
-                ["Construction cancelled."] call WL2_fnc_smoothText;
+                [localize "STR_WL_constructionCancelled"] call WL2_fnc_smoothText;
             };
         };
     },
@@ -68,6 +68,6 @@ private _actionId = _freshTent addAction [
     false
 ];
 
-private _rallyText = "<t color='#00FF00'>Construct Rally Point</t>";
-private _rallyImage = "<img size='2' color='#00FF00' image='A3\ui_f\data\map\mapcontrol\Ruin_CA.paa'/> <t size='1.5' color='#00FF00'>Construct Rally Point</t>";
+private _rallyText = format ["<t color='#00FF00'>%1</t>", localize "STR_WL_constructRallyPoint"];
+private _rallyImage = format ["<img size='2' color='#00FF00' image='A3\ui_f\data\map\mapcontrol\Ruin_CA.paa'/> <t size='1.5' color='#00FF00'>%1</t>", localize "STR_WL_constructRallyPoint"];
 _freshTent setUserActionText [_actionId, _rallyText, _rallyImage];

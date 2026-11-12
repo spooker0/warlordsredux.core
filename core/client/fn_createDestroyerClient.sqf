@@ -19,8 +19,8 @@ _mrls addEventHandler ["Fired", {
 
         private _currentAmmo = _unit magazineTurretAmmo ["magazine_Missiles_Cruise_01_x18", [0]];
         private _newControllerImage = format [
-            "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""AMMO\n%1"")",
-            _currentAmmo
+            "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.3,""#000000"",""#ffffff"",""%1"")",
+            format [localize "STR_WL_ammoTexture", _currentAmmo]
         ];
 
         private _controller = _unit getVariable ["WL2_destroyerController", objNull];
@@ -162,13 +162,13 @@ private _ropeMarkers = [];
 } forEach _ropeLocations;
 
 _controller addAction [
-    "<t color='#FF0000'>Control Missile Battery</t>",
+    format ["<t color='#FF0000'>%1</t>", localize "STR_WL_controlMissileBattery"],
     {
         _this spawn {
             params ["_target", "_caller", "_actionId"];
             private _mrls = _target getVariable ["WL2_destroyerVLS", objNull];
             if (isNull _mrls) exitWith {
-                ["Missile Battery not found."] call WL2_fnc_smoothText;
+                [localize "STR_WL_missileBatteryNotFound"] call WL2_fnc_smoothText;
                 playSoundUI ["AddItemFailed"];
             };
             _target setVariable ["WL2_controller", _caller, true];

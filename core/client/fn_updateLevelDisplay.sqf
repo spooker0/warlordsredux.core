@@ -67,5 +67,7 @@ if !(_currentBadge in _badgeConfigs) then {
 };
 
 private _level = ["getLevel"] call WLC_fnc_getLevelInfo;
-private _playerLevel = format ["%1 | %2", _level, _currentBadge];
+private _badgeData = _badgeConfigs getOrDefault [_currentBadge, []];
+private _badgeDisplayName = _badgeData param [3, _currentBadge];
+private _playerLevel = format ["%1 | %2", _level, _badgeDisplayName];
 [_playerLevel, _level] call _setLevel;

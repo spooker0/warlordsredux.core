@@ -58,7 +58,10 @@ private _factoryTypes = getArray (_factoriesConfig >> "factoryTypes");
 
     _computer setObjectTextureGlobal [1, format ["#(rgb,512,512,3)text(1,1,""PuristaBold"",0.1,""#000000"",""#ffffff"",""%1"")", _factoryTypeName]];
     _computer setObjectTextureGlobal [2, _spawnClassIcon];
-    _computer setObjectTextureGlobal [3, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.15,""#000000"",""#ff0000"",""CAPTURE\nSECTOR"")"];
+    _computer setObjectTextureGlobal [3, format [
+        "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.15,""#000000"",""#ff0000"",""%1"")",
+        localize "STR_WL_captureSectorTexture"
+    ]];
 
     _factory setVariable ["WL2_factoryComputer", _computer];
 
@@ -102,14 +105,20 @@ while { !BIS_WL_missionEnd } do {
             private _cachedSpawnTime = _factory getVariable ["WL2_cachedSpawnTime", -1];
             if (_spawnTime != _cachedSpawnTime) then {
                 _factory setVariable ["WL2_cachedSpawnTime", _spawnTime];
-                _computer setObjectTextureGlobal [3, format ["#(rgb,512,512,3)text(1,1,""PuristaBold"",0.15,""#000000"",""#ff0000"",""PRODUCING\n%1 MIN"")", _spawnTime]];
+                _computer setObjectTextureGlobal [3, format [
+                    "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.15,""#000000"",""#ff0000"",""%1"")",
+                    format [localize "STR_WL_producingTexture", _spawnTime]
+                ]];
                 private _marker = _factory getVariable ["WL2_factoryMarker", ""];
                 _marker setMarkerColor "ColorRed";
             };
         } else {
             _factory setVariable ["WL2_lastProduced", serverTime];
             _factory setVariable ["WL2_installable", _className, true];
-            _computer setObjectTextureGlobal [3, "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.2,""#000000"",""#00ff00"",""READY"")"];
+            _computer setObjectTextureGlobal [3, format [
+                "#(rgb,512,512,3)text(1,1,""PuristaBold"",0.2,""#000000"",""#00ff00"",""%1"")",
+                localize "STR_WL_readyStatus"
+            ]];
             private _marker = _factory getVariable ["WL2_factoryMarker", ""];
             _marker setMarkerColor "ColorBlack";
         };

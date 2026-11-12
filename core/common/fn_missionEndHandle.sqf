@@ -58,22 +58,22 @@ if (_isClient) then {
 	};
 } else {
 	private _firstCaption = if (_gameWinner == independent) then {
-		"INDEPENDENT FORCES CLAIM VICTORY IN ALTIS AFTER HEAVY CASUALTIES TO BOTH NATO AND CSAT FORCES"
+		localize "STR_WL_endIndependentWin"
 	} else {
 		private _natoLosses = [
-			"PENTAGON REFUSES TO CONFIRM REPORTS OF %1 NATO CASUALTIES IN ALTIS",
-			"DOVER AFB RECEIVES BODIES OF %1 FALLEN NATO TROOPS",
-			"GENERAL MILLER TO BE REPLACED AFTER %1 NATO TROOPS KILLED IN ALTIS"
+			localize "STR_WL_endNatoLosses1",
+			localize "STR_WL_endNatoLosses2",
+			localize "STR_WL_endNatoLosses3"
 		];
 		private _csatLosses = [
-			"DEFENSE MINISTRY DENIES CLAIM %1 CSAT TROOPS KILLED IN ALTIS BATTLE",
-			"PLANS TO RENEW MOBILIZATION RUMORED AFTER BATTLE KILLS %1 CSAT SOLDIERS",
-			"SOCIAL MEDIA REPORTS CONFIRM MORE THAN %1 CSAT SOLDIERS KILLED IN ALTIS"
+			localize "STR_WL_endCsatLosses1",
+			localize "STR_WL_endCsatLosses2",
+			localize "STR_WL_endCsatLosses3"
 		];
 		private _neutralLosses = [
-			"MILLION MARCH IN BERLIN AND PARIS, DEMAND END TO ILLEGAL %2 OCCUPATION OF ALTIS AFTER %1 KILLED IN BATTLE",
-			"REBELS DRAG BODIES OF %2 SOLDIERS THROUGH STREETS OF KAVALA AFTER MASSIVE BATTLE LEAVES %1 DEAD",
-			"UNKNOWN NUMBER OF TROOPS CAPTURED AND MISSING AS %2 ADMITS %1 SOLDIERS CONFIRMED KIA"
+			localize "STR_WL_endNeutralLosses1",
+			localize "STR_WL_endNeutralLosses2",
+			localize "STR_WL_endNeutralLosses3"
 		];
 
 		private _losses = 0;

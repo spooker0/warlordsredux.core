@@ -206,7 +206,7 @@ class SQD_Menu_SquadBar: RscControlsGroupNoScrollbars {
             w = 0.25;
             h = 0.1;
             size = 0.1;
-            text = "SQUAD NAME";
+            text = $STR_WL_sqdSquadName;
         };
         class SquadBar_Name_Edit: RscEdit {
             idc = SQD_NAME_EDIT_IDC;
@@ -215,7 +215,7 @@ class SQD_Menu_SquadBar: RscControlsGroupNoScrollbars {
             w = 0.25;
             h = 0.1;
             size = 0.1;
-            text = "SQUAD NAME";
+            text = $STR_WL_sqdSquadName;
         };
         class SquadBar_Count: RscText {
             idc = SQD_COUNT_IDC;
@@ -296,7 +296,7 @@ class SQD_Menu_SquadBar_Player: RscControlsGroupNoScrollbars {
             w = 0.22;
             h = 0.077;
             size = 0.077;
-            text = "PLAYER NAME";
+            text = $STR_WL_sqdPlayerName;
         };
     };
 };
@@ -358,7 +358,7 @@ class SQD_Menu_SpawnBar: RscControlsGroupNoScrollbars {
             colorBackground[] = {SQD_RGBA_DARKER};
             sizeEx = 0.05;
             style = ST_CENTER;
-            text = "ATTACK";
+            text = $STR_WL_sqdAttack;
         };
         class SpawnBar_Name: RscStructuredText {
             idc = SQD_SPAWN_NAME_IDC;
@@ -367,7 +367,7 @@ class SQD_Menu_SpawnBar: RscControlsGroupNoScrollbars {
             w = 0.48;
             h = 0.1;
             size = 0.1;
-            text = "SECTOR";
+            text = $STR_WL_sqdSector;
         };
     };
 };
@@ -397,7 +397,7 @@ class SQD_Menu_SpawnBar_Location: RscControlsGroupNoScrollbars {
             w = 0.195;
             h = 0.05;
             colorText[] = {SQD_RGBA_TEXT};
-            text = "HELI PAD";
+            text = $STR_WL_sqdHeliPad;
             style = ST_CENTER;
             sizeEx = 0.03;
         };

@@ -1,7 +1,7 @@
 #include "includes.inc"
 
 private _demolishActionId = player addAction [
-    "<t color='#ff0000'>Demolish</t>",
+    format ["<t color='#ff0000'>%1</t>", localize "STR_WL_demolish"],
     {
         _this spawn {
             params ["_target", "_caller", "_actionId", "_arguments"];
@@ -58,16 +58,16 @@ private _demolishActionId = player addAction [
                 _demolitionStepTime = _demolitionStepTime * 0.3;
             };
 
-            ["Animation", ["DEMOLITION", [
-                ["Cancel", "Action"],
+            ["Animation", [localize "STR_WL_demolish", [
+                [localize "STR_WL_cancel", "Action"],
                 ["", "ActionContext"],
                 ["", "navigateMenu"]
             ]], _demolitionStepTime, true] spawn WL2_fnc_showHint;
-            _displayText = format ["Demolishing %1...", _displayText];
+            _displayText = format [localize "STR_WL_demolishingAsset", _displayText];
 
             private _isNotObstacle = WL_UNIT(_demolishableTarget, "obstacle", 0) == 0;
             if (_isNotObstacle) then {
-                _displayText = format ["%1 Tip: explosive charges (equip in Arsenal) can quickly demolish fortified structures.", _displayText];
+                _displayText = format [localize "STR_WL_demolishingTip", _displayText];
             };
 
             [_displayText] call WL2_fnc_smoothText;

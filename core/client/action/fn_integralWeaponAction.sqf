@@ -3,19 +3,19 @@ params ["_asset", "_caller"];
 
 private _assetPosition = _asset modelToWorld [0, 0, 0];
 if (_assetPosition # 2 > 50) exitWith {
-    ["Cannot deploy weapon while paradropping."] call WL2_fnc_smoothText;
+    [localize "STR_WL_cannotDeployWeaponWhileParadropping"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
 private _attachedObject = attachedTo _asset;
 if (_attachedObject isKindOf "Parachute_02_base_F") exitWith {
-    ["Cannot deploy weapon while paradropping."] call WL2_fnc_smoothText;
+    [localize "STR_WL_cannotDeployWeaponWhileParadropping"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
 private _isDeployed = _asset getVariable ["WL2_isWeaponDeployed", false];
 if (_isDeployed) exitWith {
-    ["Weapon already deployed."] call WL2_fnc_smoothText;
+    [localize "STR_WL_weaponAlreadyDeployed"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 _asset setVariable ["WL2_isWeaponDeployed", true, true];
@@ -119,4 +119,4 @@ deleteVehicle _unit;
 switchCamera player;
 player remoteControl objNull;
 
-["Weapon recovered."] call WL2_fnc_smoothText;
+[localize "STR_WL_weaponRecovered"] call WL2_fnc_smoothText;

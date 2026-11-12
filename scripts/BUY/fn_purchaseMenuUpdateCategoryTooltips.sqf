@@ -29,10 +29,10 @@ private _maxSubordinates = missionNamespace getVariable ["WL2_maxSubordinates", 
 private _slots = ((units group player) - [player]) apply { name _x };
 
 for "_slot" from 1 to (_maxSubordinates - count _slots) do {
-    _slots pushBack "Ready";
+    _slots pushBack localize "STR_WL_slotReady";
 };
 
-private _tooltip = format ["Subordinates (Max: %1)\n%2", _maxSubordinates, _slots joinString ", "];
+private _tooltip = format [localize "STR_WL_subordinatesTooltip", _maxSubordinates, _slots joinString ", "];
 private _storedInfantryTooltip = _display getVariable ["BUY_infantryTooltip", ""];
 if (_tooltip != _storedInfantryTooltip) then {
     _categories lbSetTooltip [_infantryRow, _tooltip];

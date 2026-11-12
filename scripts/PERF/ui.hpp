@@ -18,7 +18,7 @@ class PERF_Menu {
             y = -0.05;
             w = 0.9;
             h = 0.05;
-            text = "Performance Menu";
+            text = $STR_WL_perfMenu;
             style = ST_LEFT;
         };
         class PERF_Background: IGUIBackMRTM {
@@ -167,7 +167,7 @@ class PERF_Menu {
             y = 0.1;
             w = 0.30;
             h = 0.12;
-            text = "Clear Longest Frame";
+            text = $STR_WL_perfClearFrame;
             colorText[] = {1, 1, 1, 1};
             colorBackground[] = {0.2, 0.2, 0.2, 1};
         };
@@ -200,7 +200,7 @@ class PERF_Menu {
             y = 0.35;
             w = 0.5;
             h = 0.08;
-            text = "Capture Frame";
+            text = $STR_WL_perfCaptureFrame;
             colorText[] = {1, 1, 1, 1};
             colorBackground[] = {0.2, 0.2, 0.2, 1};
         };

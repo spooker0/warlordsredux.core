@@ -6,7 +6,7 @@ if (_category isEqualTo "Naval") exitWith {
 };
 
 if (isWeaponDeployed player) exitWith {
-    [false, "Bipod must not be deployed."];
+    [false, localize "STR_WL_bipodMustBeRetracted"];
 };
 
 // Make sure to update cancelVehicleOrder as well
@@ -31,7 +31,7 @@ private _isInHomeBase = player inArea (_homeBase getVariable "objectAreaComplete
 private _nearbyEnemies = count _enemiesNearPlayer > 0 && !_isInHomeBase;
 
 if (_nearbyEnemies) then {
-    [false, "There are enemies nearby."];
+    [false, localize "STR_WL_enemiesNearby"];
 } else {
     [true, ""];
 };

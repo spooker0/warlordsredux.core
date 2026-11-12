@@ -10,7 +10,7 @@ private _loadSelectControl = _display displayCtrl WLM_LOAD_SELECT;
 lbClear _loadSelectControl;
 
 private _presets = configProperties [_pylonConfig >> "Presets"];
-_loadSelectControl lbAdd "Loadouts";
+_loadSelectControl lbAdd localize "STR_WL_wlmLoadouts";
 
 if (!_isAircraft) then {
     private _defaultSelection = _loadSelectControl lbAdd (localize "STR_WL_reset");
@@ -24,14 +24,14 @@ private _savedLoadouts = _vehicleLoadouts getOrDefault [_assetActualType, []];
 
 {
     private _loadoutName = _x # 0;
-    private _loadoutNameDisplay = format ["Custom: %1", _loadoutName];
+    private _loadoutNameDisplay = format [localize "STR_WL_wlmCustom", _loadoutName];
     private _presetItem = _loadSelectControl lbAdd _loadoutNameDisplay;
     _loadSelectControl lbSetData [_presetItem, ""];
 } forEach _savedLoadouts;
 
 {
     private _presetName = getText (_x >> "displayName");
-    private _presetItem = _loadSelectControl lbAdd format ["Preset: %1", _presetName];
+    private _presetItem = _loadSelectControl lbAdd format [localize "STR_WL_wlmPreset", _presetName];
     _loadSelectControl lbSetData [_presetItem, configName _x];
 } forEach _presets;
 

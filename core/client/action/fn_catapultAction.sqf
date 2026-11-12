@@ -32,7 +32,7 @@ private _catapultActionID = _asset addAction [
         };
         _asset setVelocity [0, 0, 0];
 
-        ["Launching in 5 seconds!"] call WL2_fnc_smoothText;
+        [localize "STR_WL_catapultLaunchingInFiveSeconds"] call WL2_fnc_smoothText;
         playSoundUI ["AddItemOk"];
 
         _asset engineOn true;

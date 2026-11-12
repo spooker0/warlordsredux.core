@@ -11,51 +11,51 @@ class WL2_DebriefingEastBase {
 
 class CfgDebriefing {
 	class WL2_Victory_WEST_Surrender: WL2_DebriefingWestBase {
-		title = "Victory - Surrender";
-		subtitle = "The enemy team has surrendered.";
+		title = "$STR_WL_debriefVictorySurrender";
+		subtitle = "$STR_WL_debriefEnemySurrendered";
 	};
 
 	class WL2_Victory_WEST_Normal: WL2_DebriefingWestBase {
-		title = "Victory";
-		subtitle = "Your team has taken the enemy base.";
+		title = "$STR_WL_debriefVictory";
+		subtitle = "$STR_WL_debriefTeamTookEnemyBase";
 	};
 
 	class WL2_Defeat_WEST_Surrender : WL2_DebriefingWestBase {
-		title = "Defeat - Surrender";
-		subtitle = "Your team has surrendered.";
+		title = "$STR_WL_debriefDefeatSurrender";
+		subtitle = "$STR_WL_debriefTeamSurrendered";
 	};
 
 	class WL2_Defeat_WEST_Normal : WL2_DebriefingWestBase {
-		title = "Defeat";
-		subtitle = "The enemy team has taken your base.";
+		title = "$STR_WL_debriefDefeat";
+		subtitle = "$STR_WL_debriefEnemyTookYourBase";
 	};
 
 	class WL2_Victory_EAST_Surrender : WL2_DebriefingEastBase {
-		title = "Victory - Surrender";
-		subtitle = "The enemy team has surrendered.";
+		title = "$STR_WL_debriefVictorySurrender";
+		subtitle = "$STR_WL_debriefEnemySurrendered";
 	};
 
 	class WL2_Victory_EAST_Normal : WL2_DebriefingEastBase {
-		title = "Victory";
-		subtitle = "Your team has taken the enemy base.";
+		title = "$STR_WL_debriefVictory";
+		subtitle = "$STR_WL_debriefTeamTookEnemyBase";
 	};
 
 	class WL2_Defeat_EAST_Surrender : WL2_DebriefingEastBase {
-		title = "Defeat - Surrender";
-		subtitle = "Your team has surrendered.";
+		title = "$STR_WL_debriefDefeatSurrender";
+		subtitle = "$STR_WL_debriefTeamSurrendered";
 	};
 
 	class WL2_Defeat_EAST_Normal : WL2_DebriefingEastBase {
-		title = "Defeat";
-		subtitle = "The enemy team has taken your base.";
+		title = "$STR_WL_debriefDefeat";
+		subtitle = "$STR_WL_debriefEnemyTookYourBase";
 	};
 
 	class WL2_End_Timeout : WL2_DebriefingEastBase {
 		picture = "n_installation";
 		pictureBackground = "\A3\Map_Altis\data\ui_Altis_ca.paa";
 		pictureColor[] = {0, 0.5, 0, 1};
-		title = "Mission Ended";
-		subtitle = "Time has expired.";
+		title = "$STR_WL_debriefMissionEnded";
+		subtitle = "$STR_WL_debriefTimeExpired";
 	};
 
 	class BlockScreen {};
@@ -63,11 +63,11 @@ class CfgDebriefing {
 
 class CfgDebriefingSections {
 	class CfgWLRoundStats {
-		title = "Round Stats";
+		title = "$STR_WL_debriefRoundStats";
 		variable = "WL_endScreen";
 	};
 	class CfgWLTotalStats {
-		title = "Total Stats";
+		title = "$STR_WL_debriefTotalStats";
 		variable = "WL_endScreen2";
 	};
 };

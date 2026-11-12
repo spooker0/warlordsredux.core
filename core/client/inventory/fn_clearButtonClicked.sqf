@@ -12,7 +12,7 @@ private _loadouts = call WL2_fnc_getLoadouts;
 private _loadout = _loadouts # _index;
 private _text = _loadout joinString ", ";
 
-private _result = ["CLEAR SLOT", format ["Clear slot %1?<br/>%2", _index + 1, _text], "Yes", "Cancel"] call WL2_fnc_prompt;
+private _result = [localize "STR_WL_clearSlot", format [localize "STR_WL_clearSlotConfirm", _index + 1, _text], localize "STR_WL_yes", localize "STR_WL_cancel"] call WL2_fnc_prompt;
 if (!_result) exitWith {
     private _dummyButton = _display displayCtrl 1338;
     uiSleep 0.1;

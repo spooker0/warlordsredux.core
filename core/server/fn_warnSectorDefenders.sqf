@@ -3,14 +3,14 @@ params ["_sector", "_mode", ["_adderName", ""]];
 
 if (!isServer) exitWith {};
 
-private _sectorName = _sector getVariable ["WL2_name", "Sector"];
+private _sectorName = _sector getVariable ["WL2_name", localize "STR_WL_sector"];
 private _message = switch (_mode) do {
-    case -2: { format ["%2 has sabotaged defender reinforcements in %1!", _sectorName, _adderName] };
-    case -1: { format ["%1 has been resupplied with reinforcements by %2!", _sectorName, _adderName] };
-    case 0: { format ["%1 has run out of reinforcements!", _sectorName] };
-    case 25: { format ["%1 has 25%% reinforcements remaining!", _sectorName] };
-    case 50: { format ["%1 has 50%% reinforcements remaining!", _sectorName] };
-    case 75: { format ["%1 has 75%% reinforcements remaining!", _sectorName] };
+    case -2: { format [localize "STR_WL_sectorReinforcementsSabotaged", _sectorName, _adderName] };
+    case -1: { format [localize "STR_WL_sectorReinforcementsResupplied", _sectorName, _adderName] };
+    case 0: { format [localize "STR_WL_sectorReinforcementsDepleted", _sectorName] };
+    case 25: { format [localize "STR_WL_sectorReinforcements25", _sectorName] };
+    case 50: { format [localize "STR_WL_sectorReinforcements50", _sectorName] };
+    case 75: { format [localize "STR_WL_sectorReinforcements75", _sectorName] };
     default { "" };
 };
 

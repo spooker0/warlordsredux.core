@@ -173,7 +173,7 @@ _clearTimeoutButton ctrlEnable _hasTimeout;
 private _receipts = missionProfileNamespace getVariable ["WL2_infoDisplay", ""];
 private _receiptLines = _receipts splitString toString [10];
 private _receiptCount = { _x select [0, 6] == "[NAME]" } count _receiptLines;
-private _receiptLabel = format ["Copy receipts (%1)", _receiptCount];
+private _receiptLabel = format [localize "STR_WL_copyReceipts", _receiptCount];
 private _receiptsButton = _display displayCtrl REP_RECEIPTS_IDC;
 
 [_receiptsButton, _receipts, _receiptLabel, {

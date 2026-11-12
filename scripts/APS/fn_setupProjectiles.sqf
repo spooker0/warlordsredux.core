@@ -93,7 +93,7 @@ addMissionEventHandler ["ProjectileCreated", {
             _projectile setVariable ["DIS_targetCoordinates", _coordinates];
             [_projectile, _unit] spawn DIS_fnc_gpsMunition;
         } else {
-            ["GPS target out of range."] call WL2_fnc_smoothText;
+            [localize "STR_WL_gpsTargetOutOfRange"] call WL2_fnc_smoothText;
         };
 
         private _overrideRange = _unit getVariable ["WL2_overrideRange", 0];

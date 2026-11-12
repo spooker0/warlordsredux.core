@@ -32,21 +32,21 @@ private _eligibleCombatAirTargets = (_ownedAirfieldSectors + _ownedAirFobs) sele
 
 if (count _eligibleCombatAirTargets == 0) exitWith {
     playSoundUI ["AddItemFailed"];
-    ["No eligible sectors or forward bases for no-fly zone!"] call WL2_fnc_smoothText;
+    [localize "STR_WL_noFlyZoneNoEligibleLocations"] call WL2_fnc_smoothText;
 };
 
 _eligibleCombatAirTargets = [_eligibleCombatAirTargets, [], { cameraOn distance _x }, "ASCEND"] call BIS_fnc_sortBy;
 private _closestTarget = _eligibleCombatAirTargets # 0;
-private _closestTargetName = _closestTarget getVariable ["WL2_name", "Forward Airbase"];
+private _closestTargetName = _closestTarget getVariable ["WL2_name", localize "STR_WL_forwardAirbase"];
 
 private _cost = WL_COST_COMBATAIR;
 private _cooldown = WL_COOLDOWN_CAP;
 
 private _message = format [
-    "Are you sure you want to establish a no-fly zone over %1? This will cost you %2%3 and put it on a %4 minute cooldown.",
+    localize "STR_WL_combatAirTargetConfirm",
     _closestTargetName, WL_MONEY_SIGN, _cost, round (_cooldown / 60)
 ];
-private _result = [localize "STR_WL_combatAirPatrol", _message, "OK", "Cancel"] call WL2_fnc_prompt;
+private _result = [localize "STR_WL_combatAirPatrol", _message, localize "STR_WL_ok", localize "STR_WL_cancel"] call WL2_fnc_prompt;
 if (!_result) exitWith {
     playSoundUI ["AddItemFailed"];
 };

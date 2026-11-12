@@ -23,17 +23,17 @@ private _forwardBase = if (count _forwardBases > 0) then {
 
 private _baseReady = _forwardBase getVariable ["WL2_forwardBaseReady", false];
 if (!isNull _forwardBase && !_baseReady) exitWith {
-    [false, "Forward base is still under construction."];
+    [false, localize "STR_WL_fobStillUnderConstruction"];
 };
 
 private _insufficientSupplies = _forwardBase getVariable ["WL2_forwardBaseSupplies", -1] < _cost;
 if (!isNull _forwardBase && _insufficientSupplies) exitWith {
-    [false, "Insufficient supplies in forward base."];
+    [false, localize "STR_WL_fobInsufficientSupplies"];
 };
 
 private _isLocked = _forwardBase getVariable ["WL2_forwardBaseLocked", false];
 if (!isNull _forwardBase && _isLocked) exitWith {
-    [false, "Forward base is locked."];
+    [false, localize "STR_WL_fobLocked"];
 };
 
 private _inRange = count _forwardBases > 0 || count _findCurrentSector > 0;

@@ -38,10 +38,10 @@ switch (_conditionName) do {
 
         private _revealedBy = _target getVariable ["BIS_WL_revealedBy", []];
         if !(BIS_WL_playerSide in _revealedBy) exitWith {
-            "Cannot air assault into unknown sector. Scout the area first.";
+            localize "STR_WL_cantAirAssaultUnknown";
         };
 
-        if (_target in WL_BASES) exitWith { "Can't fast travel to enemy home base." };
+        if (_target in WL_BASES) exitWith { localize "STR_WL_cantFastTravelEnemy" };
 
         "ok";
     };
@@ -50,7 +50,7 @@ switch (_conditionName) do {
 
         private _position = _target modelToWorld [0, 0, 0];
         private _altitude = _position # 2;
-        if (_altitude < 200) exitWith { "Target not high enough for paradrop." };
+        if (_altitude < 200) exitWith { localize "STR_WL_targetNotHighEnough" };
 
         "ok";
     };
@@ -65,23 +65,23 @@ switch (_conditionName) do {
         private _nextParadropTime = cameraOn getVariable ["WL2_paradropTime", 0];
         if (serverTime < _nextParadropTime) exitWith {
             private _timeDisplay = [_nextParadropTime - serverTime, "HH:MM:SS"] call BIS_fnc_secondsToString;
-            format ["Vehicle sector paradrop is on cooldown: %1.", _timeDisplay];
+            format [localize "STR_WL_paradropCooldown", _timeDisplay];
         };
 
         private _isCarrierSector = _target getVariable ["WL2_isAircraftCarrier", false];
-        if (_isCarrierSector) exitWith { "Cannot paradrop onto aircraft carriers." };
+        if (_isCarrierSector) exitWith { localize "STR_WL_cantParadropCarrier" };
 
         private _defenders = _target getVariable ["WL2_defenders", 0];
         if (_defenders <= 0 && _target == WL_TARGET_ENEMY) then {
-            "Sector has run out of reinforements. Resupply the sector to enable vehicle paradrop there.";
+            localize "STR_WL_sectorOutOfReinforcements";
         } else {
             "ok";
         };
     };
     case "vehicleParadropFOB": {
-        if (!alive _target) exitWith { "Forward base has been destroyed." };
+        if (!alive _target) exitWith { localize "STR_WL_fobDestroyed" };
         if (_target getVariable ["WL2_forwardBaseOwner", sideUnknown] != _side) exitWith { "" };
-        if !(_target getVariable ["WL2_forwardBaseReady", false]) exitWith { "Forward base under construction." };
+        if !(_target getVariable ["WL2_forwardBaseReady", false]) exitWith { localize "STR_WL_fobUnderConstructionShort" };
         "ok";
     };
     case "scan": {
@@ -91,17 +91,17 @@ switch (_conditionName) do {
         if !(_target in _unlockedSectors) exitWith { "" };
 
         private _scanningSectors = missionNamespace getVariable ["WL2_scanningSectors", []];
-        if (_target in _scanningSectors) exitWith { "Sector is already being scanned."};
+        if (_target in _scanningSectors) exitWith { localize "STR_WL_sectorAlreadyScanning" };
 
         private _lastScanEligible = serverTime - WL_COOLDOWN_SCAN;
         private _lastScannedVar = format ["WL2_lastScanned_%1", _side];
         private _lastScan = _target getVariable [_lastScannedVar, -9999];
 
-        if (_lastScan > _lastScanEligible) exitWith { "Sector scan is on cooldown." };
+        if (_lastScan > _lastScanEligible) exitWith { localize "STR_WL_sectorScanCooldown" };
 
         private _defenders = _target getVariable ["WL2_defenders", 0];
         if (_defenders <= 0 && _target == WL_TARGET_ENEMY) then {
-            "Sector has run out of reinforements. Resupply the sector to enable sector scan.";
+            localize "STR_WL_sectorScanNoReinforcements";
         } else {
             "ok";
         };
@@ -119,10 +119,10 @@ switch (_conditionName) do {
         if !(_target in _airfieldSectors) exitWith { "" };
 
         private _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
-        if (_combatAirActive) exitWith { "No-fly zone is already active for this airbase." };
+        if (_combatAirActive) exitWith { localize "STR_WL_noflyZoneActive" };
 
         private _nextCombatAirTime = _target getVariable ["WL2_nextCombatAir", -9999];
-        if (_nextCombatAirTime > serverTime) exitWith { "No-fly zone is on cooldown for this airbase." };
+        if (_nextCombatAirTime > serverTime) exitWith { localize "STR_WL_noflyZoneCooldown" };
 
         "ok";
     };
@@ -132,14 +132,14 @@ switch (_conditionName) do {
 
         private _timeSinceStart = WL_DURATION_MISSION - (estimatedEndServerTime - serverTime);
         if (_timeSinceStart < WL_COMBAT_AIR_HOME_TIME) exitWith {
-            format ["No-fly zone for home base locked: %1", [WL_COMBAT_AIR_HOME_TIME - _timeSinceStart, "MM:SS"] call BIS_fnc_secondsToString]
+            format [localize "STR_WL_noflyZoneHomeLocked", [WL_COMBAT_AIR_HOME_TIME - _timeSinceStart, "MM:SS"] call BIS_fnc_secondsToString]
         };
 
         private _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
-        if (_combatAirActive) exitWith { "No-fly zone is already active for this airbase." };
+        if (_combatAirActive) exitWith { localize "STR_WL_noflyZoneActive" };
 
         private _nextCombatAirTime = _target getVariable ["WL2_nextCombatAir", -9999];
-        if (_nextCombatAirTime > serverTime) exitWith { "No-fly zone is on cooldown for this airbase." };
+        if (_nextCombatAirTime > serverTime) exitWith { localize "STR_WL_noflyZoneCooldown" };
 
         "ok";
     };
@@ -153,7 +153,7 @@ switch (_conditionName) do {
         if !(_target in _airfieldSectors) exitWith { "" };
 
         private _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
-        if (_combatAirActive) exitWith { "No-fly zone is already active for this airbase." };
+        if (_combatAirActive) exitWith { localize "STR_WL_noflyZoneActive" };
 
         "ok";
     };
@@ -164,10 +164,10 @@ switch (_conditionName) do {
         if (_target isKindOf "Man") then {
             if (_target != _mySquadLeader) exitWith { "" };
 
-            if (WL_ISDOWN(_target)) exitWith { "Squad leader is down." };
+            if (WL_ISDOWN(_target)) exitWith { localize "STR_WL_squadLeaderDown" };
 
             private _position = getPosASL _target;
-            if (surfaceIsWater _position && _position # 2 < 5) exitWith { "Squad leader is in water." };
+            if (surfaceIsWater _position && _position # 2 < 5) exitWith { localize "STR_WL_squadLeaderWater" };
 
             "ok";
         } else {
@@ -177,10 +177,10 @@ switch (_conditionName) do {
             if (count _crewSL == 0) exitWith { "" };
 
             private _squadLeader = _crewSL # 0;
-            if (WL_ISDOWN(_squadLeader)) exitWith { "Squad leader is down." };
+            if (WL_ISDOWN(_squadLeader)) exitWith { localize "STR_WL_squadLeaderDown" };
 
             private _position = getPosASL _squadLeader;
-            if (surfaceIsWater _position && _position # 2 < 5) exitWith { "Squad leader is in water." };
+            if (surfaceIsWater _position && _position # 2 < 5) exitWith { localize "STR_WL_squadLeaderWater" };
 
             "ok";
         };
@@ -194,10 +194,10 @@ switch (_conditionName) do {
 
             if (!_areInSquad) exitWith { "" };
 
-            if (WL_ISDOWN(_target)) exitWith { "Squad member is down." };
+            if (WL_ISDOWN(_target)) exitWith { localize "STR_WL_squadMemberDown" };
 
             private _position = getPosASL _target;
-            if (surfaceIsWater _position && _position # 2 < 5) exitWith { "Squad member is in water." };
+            if (surfaceIsWater _position && _position # 2 < 5) exitWith { localize "STR_WL_squadMemberWater" };
 
             "ok";
         } else {
@@ -213,13 +213,13 @@ switch (_conditionName) do {
             private _aliveCrewMembersInSquad = _crewMembersInSquad select {
                 WL_ISUP(_x)
             };
-            if (count _aliveCrewMembersInSquad == 0) exitWith { "Squad member is down." };
+            if (count _aliveCrewMembersInSquad == 0) exitWith { localize "STR_WL_squadMemberDown" };
 
             _aliveCrewMembersInSquad = _aliveCrewMembersInSquad select {
                 private _position = getPosASL _x;
                 !(surfaceIsWater _position) || (_position # 2 >= 5);
             };
-            if (count _aliveCrewMembersInSquad == 0) exitWith { "Squad member is in water." };
+            if (count _aliveCrewMembersInSquad == 0) exitWith { localize "STR_WL_squadMemberWater" };
 
             "ok";
         };
@@ -249,17 +249,17 @@ switch (_conditionName) do {
 
         private _strongholdSector = _target getVariable ["WL_strongholdSector", objNull];
         private _isTargetedSector = _strongholdSector == WL_TARGET_ENEMY;
-        if (_isTargetedSector) exitWith { "Cannot remove stronghold from map in contested sector." };
+        if (_isTargetedSector) exitWith { localize "STR_WL_cantRemoveStrongholdContested" };
 
         private _hasIntruders = _target getVariable ["WL2_strongholdIntruders", false];
-        if (_hasIntruders) exitWith { "Cannot remove stronghold with intruders present." };;
+        if (_hasIntruders) exitWith { localize "STR_WL_cantRemoveStrongholdIntruders" };;
 
         "ok";
     };
     case "fastTravelFOB": {
-        if (!alive _target) exitWith { "Forward base has been destroyed." };
+        if (!alive _target) exitWith { localize "STR_WL_fobDestroyed" };
         if (_target getVariable ["WL2_forwardBaseOwner", sideUnknown] != _side) exitWith { "" };
-        if !(_target getVariable ["WL2_forwardBaseReady", false]) exitWith { "Forward base under construction." };
+        if !(_target getVariable ["WL2_forwardBaseReady", false]) exitWith { localize "STR_WL_fobUnderConstructionShort" };
         "ok";
     };
     case "markSector": {
@@ -267,7 +267,7 @@ switch (_conditionName) do {
         if (_playerLevel >= 50) then {
             "ok";
         } else {
-            "Must be at least Level 50 to mark sectors on the map.";
+            localize "STR_WL_markSectorLevelRequired";
         };
     };
     case "showSectorStronghold": {
@@ -282,7 +282,7 @@ switch (_conditionName) do {
         private _fobPlacer = _target getVariable ["WL2_forwardBasePlacer", ""];
         if (_fobPlacer != getPlayerUID player) exitWith {
             private _fobPlacerPlayer = _fobPlacer call BIS_fnc_getUnitByUid;
-            format ["This forward base was placed by: %1", name _fobPlacerPlayer]
+            format [localize "STR_WL_fobPlacedBy", name _fobPlacerPlayer]
         };
         "ok";
     };
@@ -291,7 +291,7 @@ switch (_conditionName) do {
         if (_fobPlacer == "") exitWith { "ok" };
         if (_fobPlacer != getPlayerUID player) exitWith {
             private _fobPlacerPlayer = _fobPlacer call BIS_fnc_getUnitByUid;
-            format ["This forward base was placed by: %1", name _fobPlacerPlayer]
+            format [localize "STR_WL_fobPlacedBy", name _fobPlacerPlayer]
         };
         "ok";
     };
@@ -299,21 +299,21 @@ switch (_conditionName) do {
         private _fobOwner = _target getVariable ["WL2_forwardBaseOwner", sideUnknown];
         if (_fobOwner != _side) exitWith { "" };
 
-        if (!alive _target) exitWith { "Forward base has been destroyed." };
+        if (!alive _target) exitWith { localize "STR_WL_fobDestroyed" };
 
         private _maxHealth = _target getVariable ["WL2_demolitionMaxHealth", 12];
         private _currentHealth = _target getVariable ["WL2_demolitionHealth", _maxHealth];
-        if (_currentHealth >= _maxHealth) exitWith { "Forward base is undamaged." };
+        if (_currentHealth >= _maxHealth) exitWith { localize "STR_WL_fobUndamaged" };
 
         private _hasIntruders = _target getVariable ["WL2_forwardBaseIntruders", false];
-        if (_hasIntruders) exitWith { "Cannot repair forward base with intruders present." };
+        if (_hasIntruders) exitWith { localize "STR_WL_cantRepairFobIntruders" };
 
         private _supplies = _target getVariable ["WL2_forwardBaseSupplies", -1];
-        if (_supplies < WL_FOB_REPAIR_COST) exitWith { format ["Need %1 supplies to repair forward base.", WL_FOB_REPAIR_COST] };
+        if (_supplies < WL_FOB_REPAIR_COST) exitWith { format [localize "STR_WL_needSuppliesRepairFob", WL_FOB_REPAIR_COST] };
 
         private _canRepairTime = _target getVariable ["WL2_canRepairTime", 0];
         if (serverTime < _canRepairTime) exitWith {
-            format ["Forward base damaged too recently for repairs: %1", [_canRepairTime - serverTime, "MM:SS"] call BIS_fnc_secondsToString]
+            format [localize "STR_WL_fobRepairCooldown", [_canRepairTime - serverTime, "MM:SS"] call BIS_fnc_secondsToString]
         };
 
         "ok";
@@ -325,27 +325,27 @@ switch (_conditionName) do {
         private _defenseLevel = _target getVariable ["WL2_forwardBaseDefenseLevel", 0];
         if (_defenseLevel < 4) exitWith { "" };
 
-        if (!alive _target) exitWith { "Forward base has been destroyed." };
+        if (!alive _target) exitWith { localize "STR_WL_fobDestroyed" };
 
         private _combatAirActive = _target getVariable ["WL2_combatAirActive", false];
-        if (_combatAirActive) exitWith { "No-fly zone is already active for this airbase." };
+        if (_combatAirActive) exitWith { localize "STR_WL_noflyZoneActive" };
 
         private _nextCombatAirTime = _target getVariable ["WL2_nextCombatAir", -9999];
         if (_nextCombatAirTime > serverTime) exitWith {
             private _timeRemaining = [(_nextCombatAirTime - serverTime) max 0, "MM:SS"] call BIS_fnc_secondsToString;
-            format ["No-fly zone is on cooldown for this airbase: %1", _timeRemaining]
+            format [localize "STR_WL_noflyZoneCooldownTime", _timeRemaining]
         };
 
         "ok";
     };
     case "orderParadropFOB": {
-        if (!alive _target) exitWith { "Forward base has been destroyed." };
-        if !(_target getVariable ["WL2_forwardBaseReady", false]) exitWith { "Forward base under construction." };
+        if (!alive _target) exitWith { localize "STR_WL_fobDestroyed" };
+        if !(_target getVariable ["WL2_forwardBaseReady", false]) exitWith { localize "STR_WL_fobUnderConstructionShort" };
         private _fobPlacer = _target getVariable ["WL2_forwardBasePlacer", ""];
         if (_fobPlacer == "") exitWith { "ok" };
         if (_fobPlacer != getPlayerUID player) exitWith {
             private _fobPlacerPlayer = _fobPlacer call BIS_fnc_getUnitByUid;
-            format ["Only the owner can call for a paradrop. This forward base was placed by: %1", name _fobPlacerPlayer]
+            format [localize "STR_WL_paradropOwnerOnly", name _fobPlacerPlayer]
         };
         "ok";
     };
@@ -357,18 +357,18 @@ switch (_conditionName) do {
         if (_defenseLevel >= 4) exitWith { "" };
 
         private _hasIntruders = _target getVariable ["WL2_forwardBaseIntruders", false];
-        if (_hasIntruders) exitWith { "Cannot upgrade forward base with intruders present." };
+        if (_hasIntruders) exitWith { localize "STR_WL_cantUpgradeFobIntruders" };
 
         private _fobPlacer = _target getVariable ["WL2_forwardBasePlacer", ""];
         if (_fobPlacer != "" && _fobPlacer != getPlayerUID player) exitWith {
             private _fobPlacerPlayer = _fobPlacer call BIS_fnc_getUnitByUid;
-            format ["This forward base was placed by: %1", name _fobPlacerPlayer]
+            format [localize "STR_WL_fobPlacedBy", name _fobPlacerPlayer]
         };
 
-        if (!alive _target) exitWith { "Forward base has been destroyed." };
+        if (!alive _target) exitWith { localize "STR_WL_fobDestroyed" };
 
         private _supplies = _target getVariable ["WL2_forwardBaseSupplies", -1];
-        if (_supplies < WL_FOB_UPGRADE_COST) exitWith { format ["Need %1 supplies to add defenses to forward base.", WL_FOB_UPGRADE_COST] };
+        if (_supplies < WL_FOB_UPGRADE_COST) exitWith { format [localize "STR_WL_needSuppliesUpgradeFob", WL_FOB_UPGRADE_COST] };
 
         "ok";
     };
@@ -376,18 +376,18 @@ switch (_conditionName) do {
         private _strongholdSector = _target getVariable ["WL_strongholdSector", objNull];
         if (isNull _strongholdSector) exitWith { "" };
 
-        if (!alive _target) exitWith { "Stronghold has been destroyed." };
+        if (!alive _target) exitWith { localize "STR_WL_strongholdDestroyed" };
 
         private _maxHealth = _target getVariable ["WL2_demolitionMaxHealth", 8];
         private _currentHealth = _target getVariable ["WL2_demolitionHealth", _maxHealth];
-        if (_currentHealth >= _maxHealth) exitWith { "Stronghold is undamaged." };
+        if (_currentHealth >= _maxHealth) exitWith { localize "STR_WL_strongholdUndamaged" };
 
         private _hasIntruders = _target getVariable ["WL2_strongholdIntruders", false];
-        if (_hasIntruders) exitWith { "Cannot repair stronghold with intruders present." };
+        if (_hasIntruders) exitWith { localize "STR_WL_cantRepairStrongholdIntruders" };
 
         private _canRepairTime = _target getVariable ["WL2_canRepairTime", 0];
         if (serverTime < _canRepairTime) exitWith {
-            format ["Stronghold damaged too recently for repairs: %1", [_canRepairTime - serverTime, "MM:SS"] call BIS_fnc_secondsToString]
+            format [localize "STR_WL_strongholdRepairCooldown", [_canRepairTime - serverTime, "MM:SS"] call BIS_fnc_secondsToString]
         };
 
         "ok";
@@ -395,7 +395,7 @@ switch (_conditionName) do {
     case "conscriptTeam": {
         private _isSquadLeader = ["isSquadLeader", [getPlayerID player]] call SQD_fnc_query;
         if (!_isSquadLeader) exitWith {
-            "Must be squad leader to designate team priority for conscription.";
+            localize "STR_WL_conscriptSquadLeaderOnly";
         };
 
         "ok";
@@ -403,13 +403,13 @@ switch (_conditionName) do {
     case "designateTeamPriority": {
         private _isSquadLeader = ["isSquadLeader", [getPlayerID player]] call SQD_fnc_query;
         if (!_isSquadLeader) exitWith {
-            "Must be squad leader to designate team priority.";
+            localize "STR_WL_designateSquadLeaderOnly";
         };
 
         private _teamPriorityVar = format ["WL2_teamPriority_%1", _side];
         private _currentPriority = missionNamespace getVariable [_teamPriorityVar, objNull];
         if (_target == _currentPriority) exitWith {
-            "This is already designated as your team's priority target.";
+            localize "STR_WL_alreadyTeamPriority";
         };
 
         "ok";
@@ -420,12 +420,12 @@ switch (_conditionName) do {
 
         private _altitude = (ASLtoAGL getPosASL _target) # 2;
         if (_altitude > 25) exitWith {
-            "Vehicle must be below 25m altitude to be rearmed."
+            localize "STR_WL_rearmAltitudeTooHigh"
         };
 
         private _cooldown = (_target getVariable ["BIS_WL_nextRearm", 0]) - serverTime;
         if (_cooldown > 0) exitWith {
-            format ["Vehicle rearm is on cooldown: %1", [_cooldown, "MM:SS"] call BIS_fnc_secondsToString]
+            format [localize "STR_WL_rearmCooldown", [_cooldown, "MM:SS"] call BIS_fnc_secondsToString]
         };
 
         private _nearbyVehicles = (BIS_WL_westOwnedVehicles + BIS_WL_eastOwnedVehicles + BIS_WL_guerOwnedVehicles) select { alive _x } select {
@@ -437,7 +437,7 @@ switch (_conditionName) do {
         if (count _nearbyVehicles > 0) then {
             "ok";
         } else {
-            "No nearby vehicles available for rearm.";
+            localize "STR_WL_noNearbyRearmVehicles";
         };
     };
     case "assetRefuel": {
@@ -448,7 +448,7 @@ switch (_conditionName) do {
 
         private _canRefuel = [_target, player] call WL2_fnc_refuelActionEligibility;
         if (!_canRefuel) exitWith {
-            "Vehicle must be stopped near fuel tank to be eligible for refuel."
+            localize "STR_WL_refuelEligibility"
         };
 
         "ok";
@@ -459,12 +459,12 @@ switch (_conditionName) do {
 
         private _nextRepairTime = _target getVariable ["WL2_nextRepair", 0];
         if (serverTime < _nextRepairTime) exitWith {
-            format ["Vehicle repair is on cooldown: %1", [_nextRepairTime - serverTime, "MM:SS"] call BIS_fnc_secondsToString]
+            format [localize "STR_WL_repairCooldown", [_nextRepairTime - serverTime, "MM:SS"] call BIS_fnc_secondsToString]
         };
 
         private _canRepair = [_target, player] call WL2_fnc_repairActionEligibility;
         if (!_canRepair) exitWith {
-            "Vehicle must be near repair asset."
+            localize "STR_WL_repairAssetRequired"
         };
 
         "ok";
@@ -479,22 +479,22 @@ switch (_conditionName) do {
         private _bulkDeployCooldown = missionNamespace getVariable ["WL2_bulkDeployCooldown", 0];
         private _timeRemaining = _bulkDeployCooldown - serverTime;
         if (_timeRemaining > 0) exitWith {
-            format ["Bulk deploy is on cooldown: %1", [_timeRemaining, "MM:SS"] call BIS_fnc_secondsToString]
+            format [localize "STR_WL_bulkDeployCooldown", [_timeRemaining, "MM:SS"] call BIS_fnc_secondsToString]
         };
 
         if (cameraOn distance2D _target > 100) exitWith {
-            "You are too far from this obstacle to use it for bulk deployment.";
+            localize "STR_WL_tooFarFromObstacle";
         };
 
         private _lastMarker = missionNamespace getVariable ["WL2_lastMarker", ""];
         private _markerPolyline = markerPolyline _lastMarker;
         if (count _markerPolyline == 0) exitWith {
-            "No map marker found. Draw a line on the map to bulk deploy assets."
+            localize "STR_WL_bulkDeployNoMarker"
         };
 
         private _firstPoint = [_markerPolyline # 0, _markerPolyline # 1, 0];
         if (cameraOn distance2D _firstPoint > 200) exitWith {
-            "You are too far from the marker start position. Move closer before bulk deploying assets.";
+            localize "STR_WL_bulkDeployMarkerTooFar";
         };
 
         "ok";
@@ -528,7 +528,7 @@ switch (_conditionName) do {
             _canRepairTime < serverTime;
         };
         if (count _structuresInSector == 0) exitWith {
-            "No demolishable structures ready for repair."
+            localize "STR_WL_noStructuresReadyForRepair"
         };
 
         "ok";
@@ -552,7 +552,7 @@ switch (_conditionName) do {
             _canRepairTime < serverTime;
         };
         if (count _structuresInFob == 0) exitWith {
-            "No demolishable structures ready for repair."
+            localize "STR_WL_noStructuresReadyForRepair"
         };
 
         "ok";

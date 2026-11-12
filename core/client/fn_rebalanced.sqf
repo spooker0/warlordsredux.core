@@ -6,7 +6,7 @@ setPlayerRespawnTime 5;
 forceRespawn player;
 
 private _lockTeamName = if (_newSide == west) then { "BLUFOR" } else { "OPFOR" };
-private _message = format ["You have been rebalanced to %1.", _lockTeamName];
+private _message = format [localize "STR_WL_rebalanced", _lockTeamName];
 [_message] call WL2_fnc_smoothText;
 
 BIS_WL_playerSide = _newSide;

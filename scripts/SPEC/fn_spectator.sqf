@@ -1,9 +1,9 @@
 #include "includes.inc"
 
 private _result = [
-	"Enter spectator mode",
-	"Once you enter spectator mode, you will no longer be able to go back without logging out and back in again. Do you wish to proceed?",
-	"Spectate", "Don't spectate"
+	localize "STR_WL_enterSpectatorMode",
+	localize "STR_WL_enterSpectatorModeConfirm",
+	localize "STR_WL_spectate", localize "STR_WL_dontSpectate"
 ] call WL2_fnc_prompt;
 if (!_result) exitWith {
     private _uid = getPlayerUID player;
@@ -137,9 +137,14 @@ _mainDisplay displayAddEventHandler ["KeyDown", {
 
         private _spectatorInfo = uiNamespace getVariable ["RscWLSpectatorInfo", displayNull];
         private _spectatorMode = _spectatorInfo displayCtrl 104;
-        private _modes = ["Bird Eye", "First Person", "Third Person", "Gunner"];
+        private _modes = [
+            localize "STR_WL_spectatorBirdEye",
+            localize "STR_WL_spectatorFirstPerson",
+            localize "STR_WL_spectatorThirdPerson",
+            localize "STR_WL_spectatorGunner"
+        ];
         private _modeText = _modes select _targetCamMode;
-        _spectatorMode ctrlSetStructuredText parseText format ["<t shadow='2'>Mode: %1</t>", _modeText];
+        _spectatorMode ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", format [localize "STR_WL_spectatorMode", _modeText]];
         true;
     };
 
@@ -360,11 +365,11 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
     private _spectatorZoom = _spectatorInfo displayCtrl 106;
     private _spectatorTime = _spectatorInfo displayCtrl 107;
 
-    _spectatorTarget ctrlSetStructuredText parseText "<t shadow='2'>Target: Free Camera</t>";
-    _spectatorMode ctrlSetStructuredText parseText "<t shadow='2'>Mode: Bird Eye</t>";
-    _spectatorSpeed ctrlSetStructuredText parseText "<t shadow='2'>Speed: 5 m/s</t>";
-    _spectatorZoom ctrlSetStructuredText parseText "<t shadow='2'>Orbit: 1 m</t>";
-    _spectatorTime ctrlSetStructuredText parseText "<t shadow='2'>Time: 00:00:00</t>";
+    _spectatorTarget ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", format [localize "STR_WL_spectatorTarget", localize "STR_WL_spectatorFreeCamera"]];
+    _spectatorMode ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", format [localize "STR_WL_spectatorMode", localize "STR_WL_spectatorBirdEye"]];
+    _spectatorSpeed ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", format [localize "STR_WL_spectatorSpeedMps", 5]];
+    _spectatorZoom ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", format [localize "STR_WL_spectatorOrbit", 1]];
+    _spectatorTime ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", format [localize "STR_WL_spectatorTime", "00:00:00"]];
 
     while { WL_IsSpectator } do {
         uiSleep 0.2;
@@ -374,35 +379,35 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
         if (_showControlsInfo) then {
             private _spectatorParams = if (isNull _target) then {
                 [
-                    ["Move forward", "cameraMoveForward"],
-                    ["Move backward", "cameraMoveBackward"],
-                    ["Move left", "cameraMoveLeft"],
-                    ["Move right", "cameraMoveRight"],
-                    ["Move up", "cameraMoveUp"],
-                    ["Move down", "cameraMoveDown"],
-                    ["Increase speed", "prevAction"],
-                    ["Decrease speed", "nextAction"],
-                    ["Select target", "lockTarget"]
+                    [localize "STR_WL_spectatorMoveForward", "cameraMoveForward"],
+                    [localize "STR_WL_spectatorMoveBackward", "cameraMoveBackward"],
+                    [localize "STR_WL_spectatorMoveLeft", "cameraMoveLeft"],
+                    [localize "STR_WL_spectatorMoveRight", "cameraMoveRight"],
+                    [localize "STR_WL_spectatorMoveUp", "cameraMoveUp"],
+                    [localize "STR_WL_spectatorMoveDown", "cameraMoveDown"],
+                    [localize "STR_WL_spectatorIncreaseSpeed", "prevAction"],
+                    [localize "STR_WL_spectatorDecreaseSpeed", "nextAction"],
+                    [localize "STR_WL_spectatorSelectTarget", "lockTarget"]
                 ];
             } else {
                 [
-                    ["Zoom in", "prevAction"],
-                    ["Zoom out", "nextAction"],
-                    ["Cycle target camera view", "personView"],
-                    ["Unselect target", "lockTarget"],
-                    ["Select projectile", "MoveUp"]
+                    [localize "STR_WL_spectatorZoomIn", "prevAction"],
+                    [localize "STR_WL_spectatorZoomOut", "nextAction"],
+                    [localize "STR_WL_spectatorCycleCameraView", "personView"],
+                    [localize "STR_WL_spectatorUnselectTarget", "lockTarget"],
+                    [localize "STR_WL_spectatorSelectProjectile", "MoveUp"]
                 ];
             };
             private _commonControls = [
-                ["Target menu", "nextWeapon"],
-                ["Show this help", "ListLeftVehicleDisplay"],
-                ["Target details", "ListRightVehicleDisplay"],
-                ["Vision mode", "nightVision"],
-                ["HMD settings", "binocular"],
-                ["Map", "showMap"],
-                ["Deafen voice", "getOver"],
-                ["Hide interface", "SelectGroupUnit1"],
-                ["Settings menu", "compass"]
+                [localize "STR_WL_spectatorTargetMenu", "nextWeapon"],
+                [localize "STR_WL_spectatorShowHelp", "ListLeftVehicleDisplay"],
+                [localize "STR_WL_spectatorTargetDetails", "ListRightVehicleDisplay"],
+                [localize "STR_WL_spectatorVisionMode", "nightVision"],
+                [localize "STR_WL_spectatorHmdSettings", "binocular"],
+                [localize "STR_WL_spectatorMap", "showMap"],
+                [localize "STR_WL_spectatorDeafenVoice", "getOver"],
+                [localize "STR_WL_spectatorHideInterface", "SelectGroupUnit1"],
+                [localize "STR_WL_spectatorSettingsMenu", "compass"]
             ];
             _spectatorParams append _commonControls;
 
@@ -425,7 +430,7 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
         };
 
         private _timeRemaining = [(estimatedEndServerTime - serverTime) max 0, "HH:MM:SS"] call BIS_fnc_secondsToString;
-        _spectatorTime ctrlSetStructuredText parseText format ["<t shadow='2'>Time: %1</t>", _timeRemaining];
+        _spectatorTime ctrlSetStructuredText parseText format ["<t shadow='2'>%1</t>", format [localize "STR_WL_spectatorTime", _timeRemaining]];
 
         private _showTargetInfo = uiNamespace getVariable ["SPEC_ShowTargetInfo", true];
         if (!_showTargetInfo) then {
@@ -444,7 +449,7 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
             continue;
         };
 
-        private _typeName = uiNamespace getVariable ["SPEC_CameraTargetName", "Unknown"];
+        private _typeName = uiNamespace getVariable ["SPEC_CameraTargetName", localize "STR_WL_spectatorUnknown"];
 
         private _playerOwnerUid = _target getVariable ["BIS_WL_ownerAsset", "123"];
         private _playerOwner = if (_playerOwnerUid != "123") then {
@@ -452,7 +457,7 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
             if (!isNull _ownerPlayer) then {
                 private _fundsClient = missionNamespace getVariable ["fundsDatabaseClients", createHashMap];
                 private _playerFunds = _fundsClient getOrDefault [getPlayerUID _ownerPlayer, 0];
-                format ["Owner: %1 ($%2)", name _ownerPlayer, _playerFunds];
+                format [localize "STR_WL_spectatorOwner", name _ownerPlayer, _playerFunds];
             } else {
                 "";
             };
@@ -466,12 +471,12 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
         private _currentWeapon = currentWeapon _targetVehicle;
         private _currentWeaponType = getText (configfile >> "CfgWeapons" >> _currentWeapon >> "displayName");
         if (_currentWeaponType != "") then {
-            _currentWeaponType = format ["Weapon: %1", _currentWeaponType];
+            _currentWeaponType = format [localize "STR_WL_spectatorWeapon", _currentWeaponType];
         };
         private _currentMagazine = currentMagazine _targetVehicle;
         private _currentMagazineType = [_currentMagazine] call WL2_fnc_getMagazineName;
         if (_currentMagazineType != "") then {
-            _currentMagazineType = format ["Magazine: %1", _currentMagazineType];
+            _currentMagazineType = format [localize "STR_WL_spectatorMagazine", _currentMagazineType];
         };
 
 		private _rearmCooldown = _targetVehicle getVariable ["BIS_WL_nextRearm", -9999];
@@ -481,9 +486,9 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
         } else {
             _rearmCooldown = (_rearmCooldown - serverTime) max 0;
             if (_rearmCooldown > 0) then {
-                format ["Rearm: %1", [_rearmCooldown, "MM:SS"] call BIS_fnc_secondsToString];
+                format [localize "STR_WL_spectatorRearm", [_rearmCooldown, "MM:SS"] call BIS_fnc_secondsToString];
             } else {
-                "Rearm: Ready";
+                localize "STR_WL_spectatorRearmReady";
             };
         };
 
@@ -493,9 +498,9 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
         } else {
             _repairCooldown = (_repairCooldown - serverTime) max 0;
             if (_repairCooldown > 0) then {
-                format ["Repair: %1", [_repairCooldown, "MM:SS"] call BIS_fnc_secondsToString];
+                format [localize "STR_WL_spectatorRepair", [_repairCooldown, "MM:SS"] call BIS_fnc_secondsToString];
             } else {
-                "Repair: Ready";
+                localize "STR_WL_spectatorRepairReady";
             };
         };
 
@@ -509,18 +514,18 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
         private _maxDemolitionHealth = _targetVehicle getVariable ["WL2_demolitionMaxHealth", 0];
         private _demoHealth = if (_maxDemolitionHealth > 0) then {
             private _currentDemolitionHealth = _targetVehicle getVariable ["WL2_demolitionHealth", 0];
-            format ["Demolition: %1/%2", _currentDemolitionHealth, _maxDemolitionHealth];
+            format [localize "STR_WL_spectatorDemolition", _currentDemolitionHealth, _maxDemolitionHealth];
         } else {
             "";
         };
 
         private _targetInfo = [
             _typeName,
-            format ["Position: [%1, %2]", (_targetPosition # 0 / 100) toFixed 2, (_targetPosition # 1 / 100) toFixed 2],
-            format ["Altitude (AGL): %1 M", round (_targetPosition # 2)],
-            format ["Health: %1%%", ((1 - damage _target) * 100) toFixed 1],
+            format [localize "STR_WL_spectatorPosition", (_targetPosition # 0 / 100) toFixed 2, (_targetPosition # 1 / 100) toFixed 2],
+            format [localize "STR_WL_spectatorAltitude", round (_targetPosition # 2)],
+            format [localize "STR_WL_spectatorHealth", ((1 - damage _target) * 100) toFixed 1],
             _demoHealth,
-            format ["Speed: %1 KPH", (speed _targetVehicle) toFixed 1],
+            format [localize "STR_WL_spectatorSpeed", (speed _targetVehicle) toFixed 1],
             _currentWeaponType,
             _currentMagazineType,
             _rearmTimer,
@@ -537,9 +542,9 @@ addMissionEventHandler ["Draw3D", SPEC_fnc_spectatorDraw3d];
                 _x params ["_side", "_score", "_multiplier"];
                 if (_side == independent) then {
                     private _reserves = _targetVehicle getVariable ["WL2_sectorPop", 0];
-                    private _reserveText = if (_reserves > 0) then { _reserves } else { "depleted" };
+                    private _reserveText = if (_reserves > 0) then { _reserves } else { localize "STR_WL_depleted" };
                     if (_sectorOwner != independent) then { "" } else {
-                        format ["%1 (%2x): %3 (Reserves: %4)", _side, _multiplier toFixed 1, _score toFixed 0, _reserveText]
+                        format [localize "STR_WL_sectorCaptureReserves", _side, _multiplier toFixed 1, _score toFixed 0, _reserveText]
                     };
                 } else {
                     if (_score < 1) then { "" } else {

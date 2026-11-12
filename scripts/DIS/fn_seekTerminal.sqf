@@ -32,7 +32,7 @@ private _closestEnemyName = if (_closestEnemy isKindOf "Man") then {
 } else {
     [_closestEnemy] call WL2_fnc_getAssetTypeName;
 };
-[format ["Terminal projectile target: %1", _closestEnemyName]] call WL2_fnc_smoothText;
+[format [localize "STR_WL_terminalTarget", _closestEnemyName]] call WL2_fnc_smoothText;
 
 private _terminalSpeed = velocityModelSpace _projectile # 1;
 while { alive _projectile } do {

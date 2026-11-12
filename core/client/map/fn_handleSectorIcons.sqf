@@ -64,7 +64,7 @@ if (serverTime - _sectorInfoTime > 0.5) then {
     private _isScanning = _sector in _currentScannedSectors;
 
     private _scanCooldown = if (_isScanning) then {
-        ["Scan active", [0, 1, 0, 1]]
+        [localize "STR_WL_scanActive", [0, 1, 0, 1]]
     } else {
         if (_scanCD > 0) then {
             [
@@ -87,13 +87,13 @@ if (serverTime - _sectorInfoTime > 0.5) then {
     };
     private _combatAirText = if (_isCombatAirActive) then {
         [
-            format ["No-fly zone active: %1", [_nextCombatAir - _cooldown - serverTime, "MM:SS"] call BIS_fnc_secondsToString],
+            format [localize "STR_WL_noFlyZoneActiveTime", [_nextCombatAir - _cooldown - serverTime, "MM:SS"] call BIS_fnc_secondsToString],
             [0, 1, 0, 1]
         ]
     } else {
         if (_combatAirCD > 0) then {
             [
-                format ["%1: %2", "No fly-zone timeout", [ceil _combatAirCD, "MM:SS"] call BIS_fnc_secondsToString],
+                format ["%1: %2", localize "STR_WL_noFlyZoneTimeout", [ceil _combatAirCD, "MM:SS"] call BIS_fnc_secondsToString],
                 [1, 0, 0, 1]
             ];
         } else {
@@ -108,7 +108,7 @@ if (serverTime - _sectorInfoTime > 0.5) then {
             private _fortificationETA = ceil (_fortificationTime - serverTime);
             _fortificationETA = _fortificationETA max 0;
             [
-                format ["Fortifying %1", [_fortificationETA, "MM:SS"] call BIS_fnc_secondsToString],
+                format [localize "STR_WL_fortifying", [_fortificationETA, "MM:SS"] call BIS_fnc_secondsToString],
                 [0.4, 0, 0.5, 1]
             ]
         } else {
@@ -120,8 +120,9 @@ if (serverTime - _sectorInfoTime > 0.5) then {
 
     private _sectorOwner = _sector getVariable ["BIS_WL_owner", independent];
 
-    private _sectorName = _sector getVariable ["WL2_name", "Sector"];
-    private _sectorSize = if !(_sectorName in WL_SPECIAL_SECTORS) then {
+    private _sectorName = _sector getVariable ["WL2_name", localize "STR_WL_sector"];
+    private _sectorClass = _sector getVariable ["WL2_sectorClass", ""];
+    private _sectorSize = if !(_sectorClass in WL_SPECIAL_SECTORS) then {
         private _size = _sector getVariable ["BIS_WL_value", 0];
         private _isNotHome = !(_sector in  WL_BASES);
 
@@ -166,13 +167,13 @@ if (serverTime - _sectorInfoTime > 0.5) then {
                 private _reserveText = if (_reserves > 0) then {
                     _reserves
                 } else {
-                    "depleted"
+                    localize "STR_WL_depleted"
                 };
                 if (_sectorOwner != independent) then {
                     "";
                 } else {
                     [
-                        format ["%1 (%2x): %3 (Reserves: %4)", _sideName, _multiplier toFixed 1, _score toFixed 0, _reserveText],
+                        format [localize "STR_WL_sectorCaptureReserves", _sideName, _multiplier toFixed 1, _score toFixed 0, _reserveText],
                         [independent] call _getTeamColor
                     ];
                 };

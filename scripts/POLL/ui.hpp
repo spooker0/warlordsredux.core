@@ -59,7 +59,7 @@ class POLL_MenuUI {
             y = -0.05;
             w = 0.9;
             h = 0.05;
-            text = "OFFICIAL POLL";
+            text = $STR_WL_pollOfficial;
             style = ST_LEFT;
         };
         class POLL_Background: IGUIBackMRTM {
@@ -187,7 +187,7 @@ class POLL_MenuUI {
             y = 0.02;
             w = 0.9;
             h = 0.15;
-            text = "Question:";
+            text = $STR_WL_pollQuestionColon;
             sizeEx = 0.05;
             style = ST_MULTI;
         };
@@ -196,56 +196,56 @@ class POLL_MenuUI {
             idc = POLL_OPTION_1;
             x = 0.05;
             y = 0.20;
-            text = "Option 1";
+            text = $STR_WL_pollOption1;
         };
         class POLL_Option2: RscPollOption {
             idc = POLL_OPTION_2;
             x = 0.05;
             y = 0.35;
-            text = "Option 2";
+            text = $STR_WL_pollOption2;
         };
         class POLL_Option3: RscPollOption {
             idc = POLL_OPTION_3;
             x = 0.05;
             y = 0.50;
-            text = "Option 3";
+            text = $STR_WL_pollOption3;
         };
         class POLL_Option4: RscPollOption {
             idc = POLL_OPTION_4;
             x = 0.05;
             y = 0.65;
-            text = "Option 4";
+            text = $STR_WL_pollOption4;
         };
 
         class POLL_EditQuestion: RscPollEdit {
             idc = POLL_OPTION_EDIT_QUESTION;
             x = 0.05;
             y = 0.02;
-            text = "Question";
+            text = $STR_WL_pollQuestion;
         };
         class POLL_EditOption1: RscPollEdit {
             idc = POLL_OPTION_EDIT_1;
             x = 0.05;
             y = 0.20;
-            text = "Option 1";
+            text = $STR_WL_pollOption1;
         };
         class POLL_EditOption2: RscPollEdit {
             idc = POLL_OPTION_EDIT_2;
             x = 0.05;
             y = 0.35;
-            text = "Option 2";
+            text = $STR_WL_pollOption2;
         };
         class POLL_EditOption3: RscPollEdit {
             idc = POLL_OPTION_EDIT_3;
             x = 0.05;
             y = 0.50;
-            text = "Option 3";
+            text = $STR_WL_pollOption3;
         };
         class POLL_EditOption4: RscPollEdit {
             idc = POLL_OPTION_EDIT_4;
             x = 0.05;
             y = 0.65;
-            text = "Option 4";
+            text = $STR_WL_pollOption4;
         };
         class POLL_EditOptionSubmit: RscButton {
             idc = POLL_OPTION_EDIT_SUBMIT;
@@ -254,7 +254,7 @@ class POLL_MenuUI {
             w = 0.4;
             h = 0.08;
             sizeEx = 0.05;
-            text = "Create Poll";
+            text = $STR_WL_pollCreate;
         };
     };
 };

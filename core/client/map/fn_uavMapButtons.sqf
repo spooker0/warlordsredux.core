@@ -30,7 +30,7 @@ if (_asset isKindOf "Air") then {
             _x setWaypointPosition [AGLtoASL _waypointPosition, -1];
         } forEach (waypoints group _asset);
 
-        format ["Target altitude: %1m", _newAlt];
+        format [localize "STR_WL_targetAltitude", _newAlt];
     };
     private _targetAltExecuteLast = {
         params ["_asset"];
@@ -59,14 +59,14 @@ if (_asset isKindOf "Air") then {
             _x setWaypointPosition [AGLtoASL _waypointPosition, -1];
         } forEach (waypoints group _asset);
 
-        format ["Target altitude: %1m", _newAlt];
+        format [localize "STR_WL_targetAltitude", _newAlt];
     };
 
     private _targetAlt = _asset getVariable ["WL2_assetTargetAlt", 0];
     [
         _asset, _targetId,
         "target-altitude",
-        format ["Target altitude: %1m", WL_UAV_ALT_VALUES # _targetAlt],
+        format [localize "STR_WL_targetAltitude", WL_UAV_ALT_VALUES # _targetAlt],
         [_targetAltExecuteNext, _targetAltExecuteLast],
         false,
         "setTargetAlt"
@@ -95,7 +95,7 @@ if (_asset isKindOf "Air") then {
     };
 }, true] call WL2_fnc_addTargetMapButton;
 
-[_asset, _targetId, "add-waypoint", "Add waypoint", {
+[_asset, _targetId, "add-waypoint", localize "STR_WL_addWaypoint", {
     params ["_asset"];
     private _mouseClickPos = uiNamespace getVariable ["WL2_mapMouseClickPosition", [0.5, 0.5]];
     private _worldPos = WL_CONTROL_MAP ctrlMapScreenToWorld _mouseClickPos;
@@ -140,7 +140,7 @@ private _loiterRadiusExecuteNext = {
     _asset setVariable ["WL2_assetLoiterRadius", _newLoiter];
 
     _newLoiter = WL_UAV_LOITER_VALUES # _newLoiter;
-    format ["Loiter radius: %1m", _newLoiter];
+    format [localize "STR_WL_loiterRadius", _newLoiter];
 };
 private _loiterRadiusExecuteLast = {
     params ["_asset"];
@@ -156,13 +156,13 @@ private _targetLoiterRadius = _asset getVariable ["WL2_assetLoiterRadius", 0];
 [
     _asset, _targetId,
     "target-loiter-radius",
-    format ["Loiter radius: %1m", WL_UAV_LOITER_VALUES # _targetLoiterRadius],
+    format [localize "STR_WL_loiterRadius", WL_UAV_LOITER_VALUES # _targetLoiterRadius],
     [_loiterRadiusExecuteNext, _loiterRadiusExecuteLast],
     false,
     "setLoiterRadius"
 ] call WL2_fnc_addTargetMapButton;
 
-[_asset, _targetId, "cycle-waypoint", "Cycle waypoint", {
+[_asset, _targetId, "cycle-waypoint", localize "STR_WL_cycleWaypoint", {
     params ["_asset"];
     private _mouseClickPos = uiNamespace getVariable ["WL2_mapMouseClickPosition", [0.5, 0.5]];
     private _worldPos = WL_CONTROL_MAP ctrlMapScreenToWorld _mouseClickPos;

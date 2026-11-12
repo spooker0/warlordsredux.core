@@ -22,7 +22,7 @@ _contextMenu ctrlCommit 0;
 
 private _changeBadgeButton = _display ctrlCreate ["SQD_Menu_ContextualButton", -1, _contextMenu];
 _changeBadgeButton ctrlSetPosition [0, 0, SQD_LAYOUT_CONTEXT_W, SQD_LAYOUT_CONTEXT_H];
-_changeBadgeButton ctrlSetText "CHANGE MY BADGE";
+_changeBadgeButton ctrlSetText localize "STR_WL_sqdChangeBadge";
 _changeBadgeButton ctrlCommit 0;
 
 _changeBadgeButton ctrlAddEventHandler ["ButtonClick", {

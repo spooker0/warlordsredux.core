@@ -69,7 +69,7 @@ class BUY_Menu {
         };
         class Search: RscEdit {
             idc = BUY_SEARCH_IDC;
-            text = "Search...";
+            text = "$STR_WL_searchPlaceholder";
             tooltip = "$STR_WL_buySearchHint";
             x = BUY_POS_X(0.5);
             y = BUY_POS_Y(0.5);
@@ -112,6 +112,7 @@ class BUY_Menu {
                     y = 0;
                     w = 20 * BUY_GRID_W;
                     h = 18 * BUY_GRID_H;
+                    size = BUY_GRID_H * 1.25;
                 };
             };
         };

@@ -2,20 +2,20 @@
 private _asset = getCursorObjectParams # 0;
 
 if (isNull _asset || !(_asset isKindOf "Air")) exitWith {
-    ["No aircraft wreck targeted."] call WL2_fnc_smoothText;
+    [localize "STR_WL_noAircraftWreckTargeted"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
 private _isSecured = _asset getVariable ["WL2_isSecured", false];
 if (_isSecured) exitWith {
-    ["This wreck has already been secured."] call WL2_fnc_smoothText;
+    [localize "STR_WL_wreckAlreadySecured"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
 private _value = _asset getVariable ["WL2_wreckValue", 0];
 private _inFriendlySector = ([-2, []] call WL2_fnc_checkInFriendlySector) # 0;
 if (!_inFriendlySector && _value > 2000) exitWith {
-    ["This wreck is too valuable to be secured on site. You can secure it by moving it to a friendly sector or forward base with a flatbed or via helicopter slingloading."] call WL2_fnc_smoothText;
+    [localize "STR_WL_wreckTooValuableToSecureOnSite"] call WL2_fnc_smoothText;
     playSoundUI ["AddItemFailed"];
 };
 
@@ -44,7 +44,7 @@ _asset setVariable ["WL2_isSecured", true];
 deleteVehicle _asset;
 
 if (_boostsSignal) then {
-    private _boostMessage = format ["Electronic warfare signal boosted (%1%%).", (_value * WL_JAMMER_BOOST_FACTOR / 10) toFixed 1];
+    private _boostMessage = format [localize "STR_WL_signalBoosted", (_value * WL_JAMMER_BOOST_FACTOR / 10) toFixed 1];
     [_boostMessage] call WL2_fnc_smoothText;
 };
 

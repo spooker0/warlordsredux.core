@@ -18,7 +18,7 @@ class MENU_DebugConsole {
             y = -0.05;
             w = 0.9;
             h = 0.05;
-            text = "Debug Menu";
+            text = $STR_WL_menuDebug;
             style = ST_LEFT;
         };
         class DEBUG_Background: IGUIBackMRTM {
@@ -146,7 +146,7 @@ class MENU_DebugConsole {
 			y = 0;
 			w = 0.9;
 			h = 0.05;
-			text = "Execute";
+			text = $STR_WL_menuExecute;
 			colorBackground[] = {0, 0, 0, 0};
 		};
 		class DEBUG_ExecEdit: RscEdit {
@@ -166,7 +166,7 @@ class MENU_DebugConsole {
 			y = 0.7;
 			w = 0.9;
 			h = 0.05;
-			text = "Return value";
+			text = $STR_WL_menuReturnValue;
 			colorBackground[] = {0, 0, 0, 0};
 		};
 		class DEBUG_ReturnReadOnly: RscEdit {
@@ -187,7 +187,7 @@ class MENU_DebugConsole {
 			y = 0.95;
 			w = 0.4;
 			h = 0.05;
-			text = "SERVER";
+			text = $STR_WL_menuServer;
 			sizeEx = "0.04";
 			colorBackground[] = {1, 0, 0, 1};
 		};
@@ -197,7 +197,7 @@ class MENU_DebugConsole {
 			y = 0.95;
 			w = 0.4;
 			h = 0.05;
-			text = "LOCAL";
+			text = $STR_WL_menuLocal;
 			sizeEx = "0.04";
 			colorBackground[] = {0, 1, 0, 1};
 		};
@@ -340,7 +340,7 @@ class WL2_SettingsMenu {
     class controls {
         class Title: RscText {
             idc = SETTINGS_TITLE_ID;
-            text = "Settings";
+            text = $STR_WL_menuSettings;
             x = SETTINGS_MENU_X;
             y = SETTINGS_MENU_Y;
             w = SETTINGS_MENU_W;
@@ -368,7 +368,7 @@ class WL2_SettingsMenu {
         class Search: RscEdit {
             idc = SETTINGS_SEARCH_ID;
             text = "";
-            tooltip = "Search";
+            tooltip = $STR_WL_menuSearch;
             x = SETTINGS_INNER_X;
             y = SETTINGS_BUTTONS_Y + SETTINGS_BUTTON_H + SETTINGS_CONTENT_GAP;
             w = SETTINGS_INNER_W;

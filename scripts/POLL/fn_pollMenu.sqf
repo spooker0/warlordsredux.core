@@ -69,7 +69,7 @@ if (count _activePoll == 0) exitWith {
         _option4Text ctrlShow false;
 
         _submitPoll ctrlShow true;
-        _submitPoll ctrlSetText "Create Poll";
+        _submitPoll ctrlSetText localize "STR_WL_pollCreate";
         _submitPoll ctrlAddEventHandler ["ButtonClick", {
             params ["_control"];
             private _display = ctrlParent _control;
@@ -96,13 +96,13 @@ if (count _activePoll == 0) exitWith {
             closeDialog 0;
         }];
     } else {
-        _questionText ctrlSetText "No active poll.";
+        _questionText ctrlSetText localize "STR_WL_noActivePoll";
     };
 };
 
 if (_isAdmin || _isModerator) then {
     _submitPoll ctrlShow true;
-    _submitPoll ctrlSetText "Reset Poll";
+    _submitPoll ctrlSetText localize "STR_WL_resetPoll";
     _submitPoll ctrlAddEventHandler ["ButtonClick", {
         missionNamespace setVariable ["POLL_PollResults", createHashMap, true];
         missionNamespace setVariable ["POLL_ActivePoll", [], true];
@@ -119,7 +119,7 @@ private _vote = _activePoll # 2;
     private _optionTextControl = _optionsTexts # _forEachIndex;
 
     if (_vote == _forEachIndex) then {
-        _optionTextControl ctrlSetText format ["%1 (Selected)", _x];
+        _optionTextControl ctrlSetText format [localize "STR_WL_pollSelected", _x];
         _optionTextControl ctrlEnable false;
     } else {
         _optionTextControl ctrlSetText _x;
